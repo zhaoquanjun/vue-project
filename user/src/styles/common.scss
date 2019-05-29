@@ -1,0 +1,22 @@
+$blue : "#00c1de";
+$black : "#262626";
+$white : "#fff";
+$green : "#35B24B";
+$red : "#F54743";
+$yello : "#FFDE03";
+$link : "#DD70CC";
+$blue-gray: "#657C99";
+$blue09c : "#0099cc";
+$gray: "#e5f8fa";
+
+
+
+.bigarea {
+    position: relative;
+   }
+   .bigarea::before {
+    content: '';
+    position: absolute;
+    top: -10px; right: -10px;
+    bottom: -10px; left: -10px;
+   }

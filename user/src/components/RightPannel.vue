@@ -1,0 +1,71 @@
+<template>
+  <div class="right-pannel" >
+    <div class="pannel-head">
+      <span>
+        <i class="auth-title">
+          <slot name="title-text"></slot>
+        </i>
+        <!-- <b>x</b> -->
+      </span>
+      <span class="close-pannel" @click="closePanel">X</span>
+    </div>
+    <slot></slot>
+  </div>
+</template>
+<script>
+import { mapMutations } from "vuex";
+export default {
+  name: "right-pannel",
+  props:{
+    pannelWidth:{
+      type:String,
+      default:"534"
+    }
+  },
+ 
+  methods: {
+    ...mapMutations(["CLOSERIGHTPANNEL"]),
+    closePanel() {
+      this.CLOSERIGHTPANNEL(false);
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.auth-title {
+  height: 40px;
+  line-height: 40px;
+  margin-right: 10px;
+}
+.right-pannel {
+  background: #ffffff;
+  position: fixed;
+  z-index: 2200;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow:  0 0 3px #ccc;
+   transition: width .2s linear;
+  background-color:'#fff';
+ // width: 200px;
+  color: #262626;
+  .pannel-head {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    overflow: hidden;
+    border-bottom: 1px solid #efefef;
+    span {
+      padding: 0 10px;
+    }
+    .auth-title {
+      margin-right: 10px;
+    }
+    .close-pannel {
+      float: right;
+      cursor: pointer;
+    }
+  }
+}
+</style>
