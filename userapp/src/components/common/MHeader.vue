@@ -17,7 +17,7 @@
              @mouseenter="dropdownAvatarShow"
              @mouseleave="dropdownAvatarhide"
           >
-            <p class="avatar"><img src="http://cdn.duitang.com/uploads/item/201610/03/20161003000301_Wfm5X.jpeg" alt></p>
+            <p class="avatar"><img src="" alt></p>
             <dl class="login-set dropdown-avatar-menu" v-show = "isdropdownAvatarShow">
               <dd @click="pannelShow">个人设置</dd>
               <dd>退出控制台</dd>

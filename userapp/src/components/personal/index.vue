@@ -56,11 +56,13 @@ import RightPannel from "../RightPannel";
 import SetPhoneNumber from "./SetPhoneNumber";
 import { mapState, mapGetters } from "vuex";
 import { getAuth } from "@/api/index.js";
+import securityService from "@/services/authentication/securityService";
+import {getUserCurrentAppPolicy} from "@/api/index"
 export default {
   data() {
     return {
       input: "",
-      flag: true
+      flag: true,
     };
   },
   components: {
@@ -68,9 +70,38 @@ export default {
     SetPhoneNumber
   },
   created() {
-    this._getAuth();
+   // this._getUserCurrentAppPolicy()
+
+    // let aa =undefined;
+     let location = window.location.href;
+
+    // if(aa!=undefined){
+    //    let aa = securityService.signIn(location);
+    //    console.log(aa)
+    // }
+    // console.log(aa,'2388888')
+    //let aa = securityService.signIn(location);
+   // console.log(aa)
+  securityService.getUser().then((data)=>{
+    if(!data){
+
+        let aa = securityService.signIn(location);
+       
+        console.log(aa)
+        console.log(data,"user--------------")
+    }else{
+        this.$store.commit("SET_USER",data)
+    }
+    console.log(data,'2222222222222')
+  })
+  
+    // console.log(securityService.getUser(),'22222')
+    //this._getAuth();
   },
   methods: {
+    async _getUserCurrentAppPolicy(){
+      let a = await getUserCurrentAppPolicy();
+    },
     setName() {
       this.flag = false;
     },
@@ -81,7 +112,7 @@ export default {
     async _getAuth() {
       let loginInfo = await getAuth();
       console.log(loginInfo)
-      console.log(`http://192.168.199.154:8002${loginInfo.data}http://192.168.199.101:8080/accountManagement`);
+      console.log(`http://192.168.199.154:8001${loginInfo.data}http://192.168.199.101:8082/personal`);
       if(loginInfo.code === 403){
         // window.location.href = `http://192.168.199.154:8002${loginInfo.data}http://192.168.199.101:8080/accountManagement`
         

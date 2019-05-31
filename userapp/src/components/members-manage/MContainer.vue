@@ -20,18 +20,19 @@
         </el-col>
       </div>
       <m-table></m-table>
-      <el-dialog width="0" :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow" :before-close="handleClose"></el-dialog>
-
-      <transition name="pannel">
-        <right-pannel v-if="isRightPanelShow">
-           <span slot="title-text">权限配置</span>
-          <AuthConfig/>
-        </right-pannel>
-        <right-pannel v-else-if="isInvitationPanelShow">
-          <span slot="title-text">邀请成员</span>
-          <InvitationLink></InvitationLink>
-        </right-pannel>
-      </transition>
+      <el-dialog
+        width="0"
+        :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
+        :before-close="handleClose"
+      ></el-dialog>
+      <right-pannel :style="{width:pannelWidth+'px'}">
+        <span slot="title-text">权限配置</span>
+        <AuthConfig/>
+      </right-pannel>
+      <right-pannel :style="{width:isInvitationlWidth+'px'}">
+        <span slot="title-text">邀请成员</span>
+        <InvitationLink></InvitationLink>
+      </right-pannel>
     </el-main>
   </div>
 </template>
@@ -39,8 +40,9 @@
 import MTable from "./MTable";
 import RightPannel from "../RightPannel";
 import AuthConfig from "./AuthConfig";
-import InvitationLink from "./InvitationLink"
+import InvitationLink from "./InvitationLink";
 import { mapMutations, mapState } from "vuex";
+import { getAppPolicies, getUserInfo } from "@/api/index"
 export default {
   name: "homeMain",
   components: {
@@ -55,27 +57,45 @@ export default {
       dialogVisible: true
     };
   },
+  created(){
+    this._getAppPolicies();
+    this._getUserInfo();
+  },
   methods: {
     ...mapMutations(["ISRIGHTPANNELSHOW", "ISINVITATIONPANELSHOW"]),
     /**
-     * 权限配置
+     * 权限配置展开
      */
     authorization() {
       this.ISRIGHTPANNELSHOW(true);
     },
     /**
-     * 邀请成员 链接
+     * 邀请成员面板-链接
      */
     invitation() {
       this.ISINVITATIONPANELSHOW(true);
     },
-     handleClose() {
-        this.ISRIGHTPANNELSHOW(false);
-        this.ISINVITATIONPANELSHOW(false);
-      }
+    handleClose() {
+      this.ISRIGHTPANNELSHOW(false);
+      this.ISINVITATIONPANELSHOW(false);
+    },
+    async _getAppPolicies(){
+        let allPolicies = await getAppPolicies();
+        console.log(allPolicies)
+    },
+    async _getUserInfo(){
+       let userInfo = await getUserInfo();
+        console.log(getUserInfo)
+    }
   },
   computed: {
-    ...mapState(["isRightPanelShow", "isInvitationPanelShow"])
+    ...mapState(["isRightPanelShow", "isInvitationPanelShow"]),
+    pannelWidth() {
+      return this.$store.state.isRightPanelShow === true ? 500 : 0;
+    },
+    isInvitationlWidth() {
+      return this.isInvitationPanelShow === true ? 500 : 0;
+    }
   }
 };
 </script>

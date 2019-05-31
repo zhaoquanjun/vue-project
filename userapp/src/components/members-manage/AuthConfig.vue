@@ -47,39 +47,24 @@
       </div>
     </div>
     <div class="footer">
-      <el-button type="primary">确认</el-button>
-      <el-button type="primary" plain>取消</el-button>
+      <el-button size="small" class="confirm footer-btn" type="primary">确认</el-button>
+      <el-button size="small" class="cancel footer-btn" type="primary" plain>取消</el-button>
     </div>
   </div>
 </template>
 <script>
 import AuthList from "./AuthList";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "right-pannel",
   components: { AuthList },
-  created() {},
+  created() {
+    this._getAppPolicies()
+  },
   data() {
     return {
       input: "",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎"
-        }
-      ]
+     
     };
   },
   methods: {
@@ -89,6 +74,7 @@ export default {
       "EMPTYSELECTEDAUTJ",
       "ISRIGHTPANNELSHOW"
     ]),
+    ...mapActions(["_getAppPolicies"]),
     chooseAuth(obj) {
       this.CHOOSEAUTH(obj);
     },
@@ -215,7 +201,20 @@ export default {
 }
 
 .footer {
-  padding-left: 15px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left:0;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  .footer-btn{
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .confirm{
+    margin-right: 20px;
+  }
+
 }
 </style>
 

@@ -1,7 +1,11 @@
 import axios from 'axios';
+import {getLocal} from "@/libs/local.js"
+// import store from "../store/index";
 class AjaxRequest {
     constructor() {
+
         this.baseURL = process.env.NODE_ENV == 'production' ? '/' : '/api';
+
         this.timeout = 3000; // 超时时间
         this.queue = {}; // 存放每次的请求
     }
@@ -9,14 +13,14 @@ class AjaxRequest {
         return { ...options, baseURL: this.baseURL, timeout: this.timeout }
     }
     setInterceptor(instance, url) {
-
+     
         instance.interceptors.request.use((config) => {
-            // config.headers.Authorization = getLocal('token');
+            config.headers.Authorization = "Bearer"+ getLocal('token');
             // if(Object.keys(this.queue).length === 0){
             //     store.commit('showLoading');
             // }
           
-            config.headers["x-requested-with"] = "XMLHttpRequest";
+            //config.headers["x-requested-with"] = "XMLHttpRequest";
             this.queue[url] = url;
             return config;
         });
@@ -34,6 +38,7 @@ class AjaxRequest {
         let instance = axios.create();
         this.setInterceptor(instance, options.url);
         let config = this.merge(options);
+        console.log(config)
         return instance(config);
     }
 }
