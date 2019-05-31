@@ -16,7 +16,7 @@
           </div>
         </el-col>
         <el-col :span="3" :offset="6">
-          <button class="btn-item invite-friends" @click="invitation">邀请成员</button>
+          <button class="btn-item invite-member" @click="invitation">邀请成员</button>
         </el-col>
       </div>
       <m-table></m-table>
@@ -41,8 +41,8 @@ import MTable from "./MTable";
 import RightPannel from "../RightPannel";
 import AuthConfig from "./AuthConfig";
 import InvitationLink from "./InvitationLink";
-import { mapMutations, mapState } from "vuex";
-import { getAppPolicies, getUserInfo } from "@/api/index"
+import { mapMutations, mapState, mapActions } from "vuex";
+import { getUserCurrentAppPolicy } from "@/api/index"
 export default {
   name: "homeMain",
   components: {
@@ -58,10 +58,11 @@ export default {
     };
   },
   created(){
-    this._getAppPolicies();
-    this._getUserInfo();
+   this._getAppPolicies();
+   this._getUserCurrentAppPolicy();
   },
   methods: {
+    ...mapActions(["_getAppPolicies","_getUserInfo"]),
     ...mapMutations(["ISRIGHTPANNELSHOW", "ISINVITATIONPANELSHOW"]),
     /**
      * 权限配置展开
@@ -79,17 +80,14 @@ export default {
       this.ISRIGHTPANNELSHOW(false);
       this.ISINVITATIONPANELSHOW(false);
     },
-    async _getAppPolicies(){
-        let allPolicies = await getAppPolicies();
-        console.log(allPolicies)
-    },
-    async _getUserInfo(){
-       let userInfo = await getUserInfo();
-        console.log(getUserInfo)
+    async _getUserCurrentAppPolicy(){
+      let aa = await getUserCurrentAppPolicy();
     }
+   
   },
   computed: {
     ...mapState(["isRightPanelShow", "isInvitationPanelShow"]),
+    
     pannelWidth() {
       return this.$store.state.isRightPanelShow === true ? 500 : 0;
     },
@@ -126,7 +124,7 @@ export default {
     border-radius: 3px;
     margin-right: 10px;
   }
-  .invite-friends {
+  .invite-member {
     margin: 0;
     float: right;
     cursor: pointer;

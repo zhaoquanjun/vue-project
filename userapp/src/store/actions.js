@@ -1,4 +1,9 @@
+
+import {getUserCurrentAppPolicy} from "@/api/index"
 const actions = {
-  // myFunc({ state, commit }) { },
+  async _getUserCurrentAppPolicy({commit}){
+    let userCurrentAppPolicy =await getUserCurrentAppPolicy();
+    commit("")
+  }
 };
 export default actions;

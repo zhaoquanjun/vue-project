@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import LeftNavComponents from "../Aside/LeftNavComponents";
+import LeftNavComponents from "../aside/LeftNavComponents";
 
 export default {
   data() {

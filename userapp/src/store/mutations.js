@@ -39,6 +39,12 @@ const mutations = {
      * @param {*} state 
      * @param {*} flag 
      */
-    [types.ISINVITATIONPANELSHOW](state, flag) { state.isInvitationPanelShow = flag; }
+    [types.ISINVITATIONPANELSHOW](state, flag) { state.isInvitationPanelShow = flag; },
+    /**
+     * 
+     * @param {*} state 
+     * @param {获取到用户信息} payload 
+     */
+    [types.USERCURRENTAPPPOLICY] (state, payload) { state.userCurAppPolicy=payload },
 };
 export default mutations;

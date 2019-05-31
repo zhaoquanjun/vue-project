@@ -1,26 +1,35 @@
 <template>
   <div>
     <div class="auth-name-title">
-      <span class="item-left">权限名称{{memberManager}}</span>
+      <span class="item-left">权限名称</span>
       <span v-if="isSelect" class="item-right explain">说明</span>
       <span v-else class="item-right empty" @click="empty">清空</span>
     </div>
     <ul class="auth-list">
-      <!-- <li class="list-item" v-for="(item,index) in authList" :key="index" @click="curAuth(item)">
+      <li class="list-item" v-for="item in authList" :key="item.id" @click="curAuth(item)">
         <span class="item-left">{{item.name}}</span>
-        <span class="item-right" v-if="isSelect">{{item.desc}}</span>
+        <span class="item-right" v-if="isSelect">{{item.mark}}</span>
         <span class="item-right auth-icon" v-else @click="removeAuth(item)">
           <i class="iconfont icon-weibiaoti-"></i>
         </span>
-      </li> -->
+      </li>
     </ul>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
+// ["isSelect","authList"]
 export default {
-  name: "auth-list",
-  props: ["isSelect"],
+  name: "AuthList",
+  props: {
+    isSelect:{
+      type:Boolean
+    },
+    authList: {
+     
+      default: () => ([])
+    }
+  },
   created() {
   },
   methods: {
@@ -36,9 +45,9 @@ export default {
   },
   computed: {
     memberManager() {
-      return this.$store.state.memberManager
-    },
-  //  ...mapState(["authList"])
+      return this.$store.state.memberManager;
+    }
+    //  ...mapState(["authList"])
     // ...mapState("memberManager", {
     //   curmemberInfo: state => {
     //     alert(state);

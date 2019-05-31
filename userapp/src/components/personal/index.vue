@@ -70,72 +70,17 @@ export default {
     SetPhoneNumber
   },
   created() {
-   // this._getUserCurrentAppPolicy()
-
-    // let aa =undefined;
-     let location = window.location.href;
-
-    // if(aa!=undefined){
-    //    let aa = securityService.signIn(location);
-    //    console.log(aa)
-    // }
-    // console.log(aa,'2388888')
-    //let aa = securityService.signIn(location);
-   // console.log(aa)
-  securityService.getUser().then((data)=>{
-    if(!data){
-
-        let aa = securityService.signIn(location);
-       
-        console.log(aa)
-        console.log(data,"user--------------")
-    }else{
-        this.$store.commit("SET_USER",data)
-    }
-    console.log(data,'2222222222222')
-  })
-  
-    // console.log(securityService.getUser(),'22222')
-    //this._getAuth();
+    
   },
   methods: {
     async _getUserCurrentAppPolicy(){
       let a = await getUserCurrentAppPolicy();
     },
-    setName() {
-      this.flag = false;
-    },
-    blur() {
-      console.log(1);
-      this.flag = true;
-    },
+    setName() {this.flag = false;},
+    blur() {this.flag = true; },
     async _getAuth() {
       let loginInfo = await getAuth();
-      console.log(loginInfo)
-      console.log(`http://192.168.199.154:8001${loginInfo.data}http://192.168.199.101:8082/personal`);
-      if(loginInfo.code === 403){
-        // window.location.href = `http://192.168.199.154:8002${loginInfo.data}http://192.168.199.101:8080/accountManagement`
-        
-      }
-      //window.location.href ="http://192.168.199.154:8002" 
-      // switch (loginInfo.code) {
-      //   case 200: {
-      //     document.body.innerHTML = JSON.stringify(loginInfo.data);
-      //     break;
-      //   }
-      //   case 400: {
-      //     alert(loginInfo.msg);
-      //     break;
-      //   }
-      //   case 403: {
-          
-      //     break;
-      //   }
-      //   default: {
-      //     alert("未知的返回状态");
-      //     break;
-      //   }
-      
+    
     }
   },
   computed: {

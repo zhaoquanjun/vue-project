@@ -1,11 +1,9 @@
 import oidcMgr from '@/services/authentication/oidcService';
-
-
 const globalAuthData = {
   isAuthenticated: false,
   token: ''
 }
-console.log(oidcMgr)
+
 class SecurityService {
   async authenticate(returnPath) {
     const user = await this.getUser() // see if the user details are in local storage
@@ -18,7 +16,6 @@ class SecurityService {
   }
   async getUser() {
     const user = await oidcMgr.getUser();
-    console.log(user)
     if (user) {
       globalAuthData.isAuthenticated = true
       globalAuthData.token = user.access_token

@@ -1,18 +1,12 @@
-// 基于node的 node不支持import语法
-// 默认环境变量 NODE_ENV production development
 let path = require('path');
 module.exports = {
-    // baseURL
-    publicPath:process.env.NODE_ENV === 'production'? '/wezhan':'/',
+    publicPath:process.env.NODE_ENV === 'production'? '/':'/',
     assetsDir:'asserts',
     outputDir:'./dist',
-    // 使用模版方式 一般不使用
     runtimeCompiler:false,
     // 打包 不再使用sourcemap
     productionSourceMap:false,
     chainWebpack:config=>{
-        // 可以获取到webpack的配置 在增加一些自己的逻辑
-        // 配置目录别名 别名叫+
         config.resolve.alias.set('_c',path.resolve(__dirname,'src/components'));
         config.resolve.alias.set('_v',path.resolve(__dirname,'src/views'));
     },
@@ -23,27 +17,27 @@ module.exports = {
     devServer:{ // 开发 服务时使用
         port:8082,
         proxy:{
-            '/api/xieao':{
+            '/api':{
                 target:'http://192.168.199.154:8002',
                 changeOrigin: true,
                 pathRewrite:{
                     '/api':''
                 }
             },
-            '/api/hengdong':{
-                target:'http://192.168.199.103:8100',
-                changeOrigin: true,
-                pathRewrite:{
-                    '/api':''
-                }
-            },
-            '/fuquan':{
-                target:'http://192.168.199.245:5000',
-                changeOrigin: true,
-                pathRewrite:{
-                    '/fuquan':''
-                }
-            }
+            // '/api/hengdong':{
+            //     target:'http://192.168.199.103:8100',
+            //     changeOrigin: true,
+            //     pathRewrite:{
+            //         '/api':''
+            //     }
+            // },
+            // '/fuquan':{
+            //     target:'http://192.168.199.245:5000',
+            //     changeOrigin: true,
+            //     pathRewrite:{
+            //         '/fuquan':''
+            //     }
+            // }
         }
     },
     pluginOptions: {

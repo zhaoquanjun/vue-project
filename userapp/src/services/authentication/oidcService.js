@@ -1,16 +1,13 @@
 import Oidc from 'oidc-client';
-
+import enbironmemy from "@/environment/index";
+console.log(enbironmemy)
 const config = {
-  authority: "http://192.168.199.154:8001",
+  authority: enbironmemy.authorityUrl,
   client_id: "js",
-  redirect_uri: "http://192.168.199.101:8082/callback",
+  redirect_uri: enbironmemy.redirectUrl,
   response_type: 'code',
   scope: 'openid profile content.api',
-  post_logout_redirect_uri: "http://192.168.199.101:8082/index.html",
+  post_logout_redirect_uri: enbironmemy.logoutRedirectUri,
 };
 const mgr = new Oidc.UserManager(config);
-// login()
-// function login() {
-//   mgr.signinRedirect();
-// }
 export default mgr;

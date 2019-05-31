@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import HomeContainer from "@/components/members-manage/MContainer"
+import HomeContainer from "@/components/members-management/MContainer"
 
 
 export default {

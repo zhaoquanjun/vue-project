@@ -32,17 +32,17 @@
           <button class="auth-btn">搜索</button>
         </div>
         <div class="auth-name">
-          <auth-list @chooseAuth="chooseAuth" :authList="authList" :isSelect="true"></auth-list>
+          <auth-list @chooseAuth="chooseAuth" :authList="userPermission" :isSelect="true"></auth-list>
         </div>
       </div>
       <div class="pannel-left-item">
         <h3 class="auth-title">已选权限</h3>
         <div class="selected-auth">
-          <auth-list
+          <!-- <auth-list
             @emptySelected="emptySelected"
             @removeSelected="removeSelected"
             :authList="selectedAuth"
-          ></auth-list>
+          ></auth-list> -->
         </div>
       </div>
     </div>
@@ -59,12 +59,10 @@ export default {
   name: "right-pannel",
   components: { AuthList },
   created() {
-    this._getAppPolicies()
   },
   data() {
     return {
       input: "",
-     
     };
   },
   methods: {
@@ -74,7 +72,6 @@ export default {
       "EMPTYSELECTEDAUTJ",
       "ISRIGHTPANNELSHOW"
     ]),
-    ...mapActions(["_getAppPolicies"]),
     chooseAuth(obj) {
       this.CHOOSEAUTH(obj);
     },
@@ -89,7 +86,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(["authList", "selectedAuth", "isRightPanelShow"])
+     ...mapState({ 
+        userPermission: state => state.memberManager.userPermission,
+      }), 
+    ...mapState(["authList", "selectedAuth", "isRightPanelShow"]),
+ 
   }
 };
 </script>
@@ -204,17 +205,16 @@ export default {
   width: 100%;
   position: absolute;
   bottom: 0;
-  left:0;
+  left: 0;
   padding: 10px;
   border-top: 1px solid #ccc;
-  .footer-btn{
+  .footer-btn {
     font-weight: 400;
     font-size: 12px;
   }
-  .confirm{
+  .confirm {
     margin-right: 20px;
   }
-
 }
 </style>
 

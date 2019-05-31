@@ -13,13 +13,8 @@ export default [
     component: () => import("@/components/personal/index.vue")
   },
   {
-    path: "/signcallback",
-    name: "signcallback",
-    component: () => import("@/views/login/signcallback.vue")
-  },
-  {
     path: "/callback",
-    name: "signcallback",
+    name: "callback",
     component: () => import("@/views/login/signcallback.vue")
   },
   {

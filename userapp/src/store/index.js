@@ -6,9 +6,9 @@ import actions from "./actions";
 import * as getters from "./getters";
 import login from "./modules/login";
 import user from "./modules/user";
-import memberManager from "./modules/member-manager"
+import memberManager from "./modules/member-manager";
 Vue.use(Vuex);
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     login,
     user,
@@ -19,3 +19,14 @@ export default new Vuex.Store({
   actions,
   getters
 });
+export default store;
+
+/**
+ * 页面刷新再将local中的token 写入store中
+ */
+if(localStorage.getItem("token")){
+  let obj = {
+    access_token:localStorage.getItem("token")
+  }
+  store.commit("SET_USER", obj)
+}

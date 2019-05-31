@@ -1,25 +1,4 @@
 import ajaxRequest from "./ajaxRequest"
-
-export const GetCaptcha = () => {
-    return ajaxRequest.request({
-        url: '/Verification/GetCaptcha',
-        method: 'get'
-    });
-};
-
-export const login = () => {
-    return ajaxRequest.request({
-        url: '/login',
-        method: 'get'
-    });
-};
-export const getAuth = () => {
-    return ajaxRequest.request({
-        url: '/api/test/TestIsLogin',
-        method: 'get'
-    });
-}
-
 /**
  *  InterfaceAuthor : 福全
  * 获取个人信息含权限
@@ -70,7 +49,7 @@ export const getUserCurrentAppPolicy = () => {
         params: {
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
         },
-        url: '/api/appInfo/GetUserCurrentAppPolicy',
+        url: 'http://192.168.199.103:9100/api/appInfo/GetUserCurrentAppPolicy',
         method: 'get'
     });
 }

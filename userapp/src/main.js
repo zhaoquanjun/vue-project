@@ -6,33 +6,31 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/reset.css";
 import "./styles/common.scss";
-import Mgr from './services/authentication/securityService';
+import securityService from "@/services/authentication/securityService";
+import { getLocal } from "./libs/local"
 Vue.use(ElementUI)
 Vue.config.productionTip = false;
-
+router.beforeEach((to, from, next) => {
+  if (getLocal("token")) {
+        next()
+  } else {
+    if (to.name !== "callback") {
+      securityService.getUser().then((data) => {
+        if (!data) {
+          securityService.signIn();
+          next()
+        } else {
+          store.commit("SET_USER", data)
+          next()
+        }      
+      })
+    }else{
+      next()
+    }
+  }
+});
 new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount("#app");
-
-
-router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  if (requiresAuth) {
-    Mgr.getRole().then(
-        sucess => {
-          if (to.meta.role == sucess){
-            next();
-          }else {
-            next('/accessdenied');
-          }
-        },
-        err => {
-          console.log(err);
-        }
-      );    
-  } else {
-    next();
-  }
-});

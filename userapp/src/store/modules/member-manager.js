@@ -1,26 +1,35 @@
 import { getAppPolicies, getUserInfo } from "@/api/index"
-const login = {
+const memberManager = {
+    namespaced: false,
     state: {
-        curmemberInfo: null,
+        userInfo: null,
+        userPermission: "",
     },
     mutations: {
-        CURMEMBERINFO: (state, info) => {
-            state.curmemberInfo = info;
-        }
+        CURLOGININFO: (state, info) => {
+            state.userInfo = info;
+        },
+
+        USERPERMISSION: (state, info) => {
+            state.userPermission = info;
+        },
     },
     actions: {
-        async _getAppPolicies({commit}) {
+        /**
+        * 获取当前用户应用下的可配置的权限
+        */
+        async _getAppPolicies({ commit }) {
             let allPolicies = await getAppPolicies();
-            commit("CURMEMBERINFO",allPolicies)
-           // console.log(allPolicies)
+            commit("USERPERMISSION", allPolicies)
         },
-        async _getUserInfo() {
-            let allPolicies = await getUserInfo();
-          //  console.log(allPolicies)
+        /**
+         * 当前登录用户用户信息 与 权限 
+        */
+        async _getUserInfo({ commit }) {
+            let userInfo = await getUserInfo();
+            commit("CURLOGININFO", userInfo)
         }
     },
-    getters: {
-
-    }
+    getters: {}
 };
-export default login;
+export default memberManager;
