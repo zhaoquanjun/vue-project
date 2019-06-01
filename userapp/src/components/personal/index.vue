@@ -3,7 +3,7 @@
     <h3>个人账号管理</h3>
     <dl class="user-account clear">
       <dt class="avatar">
-        <img src="http://cdn.duitang.com/uploads/item/201610/03/20161003000301_Wfm5X.jpeg" alt>
+        <img src="http://b-ssl.duitang.com/uploads/item/201501/20/20150120193442_FyadA.jpeg" alt>
       </dt>
       <dd class="account-info">
         <p>
@@ -28,6 +28,74 @@
     </dl>
     <ul class="social-list">
       <li>
+        <div class="fleft">
+          <span>
+            <i>x</i>
+            <b>手机号</b>
+          </span>
+          <span class="pd-left social-desc">手机号</span>
+        </div>
+        <div class="fright">
+          <span>13011011746</span>
+
+          <span class="pd-left">
+            <i>已绑定</i> |
+            <i>修改</i>
+          </span>
+        </div>
+      </li>
+          <li>
+        <div class="fleft">
+          <span>
+            <i>x</i>
+            <b>手机号</b>
+          </span>
+          <span class="pd-left social-desc">手机号</span>
+        </div>
+        <div class="fright">
+          <span>13011011746</span>
+
+          <span class="pd-left">
+            <i>已绑定</i> |
+            <i>修改</i>
+          </span>
+        </div>
+      </li>
+          <li>
+        <div class="fleft">
+          <span>
+            <i>x</i>
+            <b>手机号</b>
+          </span>
+          <span class="pd-left social-desc">手机号</span>
+        </div>
+        <div class="fright">
+          <span>13011011746</span>
+
+          <span class="pd-left">
+            <i>已绑定</i> |
+            <i>修改</i>
+          </span>
+        </div>
+      </li>
+          <li>
+        <div class="fleft">
+          <span>
+            <i>x</i>
+            <b>手机号</b>
+          </span>
+          <span class="pd-left social-desc">手机号</span>
+        </div>
+        <div class="fright">
+          <span>13011011746</span>
+
+          <span class="pd-left">
+            <i>已绑定</i> |
+            <i>修改</i>
+          </span>
+        </div>
+      </li>
+          <li>
         <div class="fleft">
           <span>
             <i>x</i>

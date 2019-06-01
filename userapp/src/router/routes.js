@@ -1,7 +1,7 @@
-
 import Home from "../views/Home";
 
-export default [
+// 默认访问的路由
+export const defaultRoutes = [
   {
     path: "/",
     name: "home",
@@ -24,3 +24,7 @@ export default [
   },
 ];
 
+// 有权限才可访问的路由
+export const authRoutes = [
+
+];

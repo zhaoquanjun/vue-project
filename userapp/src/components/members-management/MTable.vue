@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table
-      :data="tableData"
+      :data="memberList"
       style="width: 100%"
       :header-cell-style="{background:'#F5F5F5'}"
       @selection-change="handleSelectionChange"
@@ -9,10 +9,15 @@
       <el-table-column type="selection" :selectable="handleDisable"></el-table-column>
       <el-table-column prop="name" label="姓名" width="180"></el-table-column>
       <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
-      <el-table-column prop="count" label="权限数量(项)"></el-table-column>
+      <el-table-column prop="policies" label="权限数量(项)"></el-table-column>
       <el-table-column prop="remark" label="备注">
         <template slot-scope="scope">
-          <el-popover :ref="`popover-${scope.$index}`" placement="bottom" width="400" trigger="click">
+          <el-popover
+            :ref="`popover-${scope.$index}`"
+            placement="bottom"
+            width="400"
+            trigger="click"
+          >
             <span slot="reference">{{scope.row.remark}} {{scope.$index}}</span>
             <div class="textareaWrap">
               <el-input
@@ -48,63 +53,44 @@
 </template>
 <script>
 export default {
+  props: {
+    memberList: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       textarea3: "123,",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: "13520303156",
-          remark: "备注",
-          count: 5,
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          phone: "13520303156",
-          remark: "备注",
-          count: 5,
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          phone: "13520303156",
-          remark: "备注",
-          count: 5,
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          phone: "13520303156",
-          remark: "备注",
-          count: 5,
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ],
-      multipleSelection: []
+    //  multipleSelection: []
     };
   },
   methods: {
     handleDisable(row, index) {
+       return true;
       // 函数需要一个返回值,true为可选,false为不可选择
-      if (index == 0) {
-        return false;
-      } else {
-        return true;
-      }
+      // if (index == 0) {
+      //   return false;
+      // } else {
+      //   return true;
+      // }
     },
+    /**
+     * 编辑操作
+     */
     handleEdit(index, row) {
       console.log(index, row);
+     this.$emit("authEdit",row)
     },
+    /**
+     * 删除操作
+     */
     handleDelete(index, row) {
       console.log(index, row);
-        this.tableData = this.tableData.filter((item)=>{
-        return item !== row
-      })
+      this.$emit("deleteCurMember",row)
+      this.tableData = this.tableData.filter(item => {
+        return item !== row;
+      });
     },
     toggleSelection(rows) {
       if (rows) {
@@ -117,14 +103,15 @@ export default {
     },
     handleSelectionChange(val) {
       console.log(val);
-      this.multipleSelection = val;
+     // this.multipleSelection = val;
+      this.$emit("tabSelection",val)
     },
     cancelInput(id) {
       this.$refs[`popover-${id}`].doClose();
-    },
+    }
     // deleteMemberListItem(){
     //   this.tableData = this.tableData.filter((item)=>{
-    //     return 
+    //     return
     //   })
     // }
   }

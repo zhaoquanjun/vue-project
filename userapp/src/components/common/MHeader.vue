@@ -17,7 +17,7 @@
              @mouseenter="dropdownAvatarShow"
              @mouseleave="dropdownAvatarhide"
           >
-            <p class="avatar"><img src="" alt></p>
+            <p class="avatar"><img src="http://b-ssl.duitang.com/uploads/item/201501/20/20150120193442_FyadA.jpeg" alt></p>
             <dl class="login-set dropdown-avatar-menu" v-show = "isdropdownAvatarShow">
               <dd @click="pannelShow">个人设置</dd>
               <dd>退出控制台</dd>
@@ -37,7 +37,10 @@ export default {
   },
   methods:{
     pannelShow(){
-      this.$store.commit("CLOSERIGHTPANNEL",true)
+      this.$router.push({
+        name:"personal"
+      })
+      //this.$store.commit("CLOSERIGHTPANNEL",true)
     },
     dropdownAvatarShow(){
       this.isdropdownAvatarShow =true;

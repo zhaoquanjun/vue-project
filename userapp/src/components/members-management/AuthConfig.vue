@@ -1,29 +1,6 @@
 <template>
   <div>
-    <div>
-      <dl class="members—info">
-        <dt class="avatar">
-          <img
-            src="http://img3.duitang.com/uploads/item/201605/07/20160507191419_J2m8R.thumb.700_0.jpeg"
-            alt
-          >
-        </dt>
-        <dd class="basic">
-          <span>
-            姓名 :
-            <i>张先生</i>
-          </span>
-          <span>
-            手机 :
-            <i>13520303156</i>
-          </span>
-          <span>
-            备注 :
-            <i>暂无备注</i>
-          </span>
-        </dd>
-      </dl>
-    </div>
+    <member-info v-if="Object.keys(memberInfo).length>0" :memberInfo="memberInfo"></member-info>
     <div class="panel-main">
       <div class="pannel-right-item">
         <h3 class="auth-title">选择权限</h3>
@@ -38,40 +15,46 @@
       <div class="pannel-left-item">
         <h3 class="auth-title">已选权限</h3>
         <div class="selected-auth">
-          <!-- <auth-list
+          <auth-list
             @emptySelected="emptySelected"
             @removeSelected="removeSelected"
-            :authList="selectedAuth"
-          ></auth-list> -->
+            :authList="memberPolicy"
+          ></auth-list>
         </div>
       </div>
     </div>
     <div class="footer">
-      <el-button size="small" class="confirm footer-btn" type="primary">确认</el-button>
+      <el-button size="small" class="confirm footer-btn" type="primary" @click="primary">确认</el-button>
       <el-button size="small" class="cancel footer-btn" type="primary" plain>取消</el-button>
     </div>
   </div>
 </template>
 <script>
 import AuthList from "./AuthList";
-import { mapState, mapMutations, mapActions } from "vuex";
+import MemberInfo from "./MemberInfo";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 export default {
   name: "right-pannel",
-  components: { AuthList },
+  components: { AuthList, MemberInfo },
   created() {
+  
   },
   data() {
     return {
-      input: "",
+      input: ""
     };
   },
   methods: {
     ...mapMutations([
       "CHOOSEAUTH",
       "REMOVESELECTEDAUTH",
-      "EMPTYSELECTEDAUTJ",
+      "EMPTYSELECTEDAUTH",
       "ISRIGHTPANNELSHOW"
     ]),
+    ...mapActions(["_updateUserPolicy"]),
+    primary(){
+      this._updateUserPolicy(this.getSelectedAuthId)
+    },
     chooseAuth(obj) {
       this.CHOOSEAUTH(obj);
     },
@@ -79,18 +62,20 @@ export default {
       this.REMOVESELECTEDAUTH(item);
     },
     emptySelected() {
-      this.EMPTYSELECTEDAUTJ();
+      this.EMPTYSELECTEDAUTH()
     },
     closePanel() {
       this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
     }
   },
   computed: {
-     ...mapState({ 
-        userPermission: state => state.memberManager.userPermission,
-      }), 
+    ...mapState({
+      userPermission: state => state.memberManager.userPermission,
+      memberInfo: state => state.memberManager.memberInfo,
+      memberPolicy: state => state.memberManager.memberPolicy
+    }),
     ...mapState(["authList", "selectedAuth", "isRightPanelShow"]),
- 
+    ...mapGetters(["formatAuthList","getSelectedAuthId"])
   }
 };
 </script>
@@ -170,34 +155,6 @@ export default {
   .selected-auth {
     border: 1px solid #efefef;
     padding: 0 10px;
-  }
-}
-// 成员信息
-.members—info {
-  padding: 0 15px;
-  margin-top: 20px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  .avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    vertical-align: middle;
-    margin-right: 15px;
-    float: left;
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-  }
-  .basic {
-    float: left;
-    span {
-      display: block;
-      line-height: 20px;
-    }
   }
 }
 

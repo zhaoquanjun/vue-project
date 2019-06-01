@@ -13,8 +13,6 @@
         </el-main>
       </el-container>
     </el-container>
-
-    <!-- <m-aside></m-aside> -->
   </div>
 </template>
 <script>
@@ -28,7 +26,7 @@ export default {
 };
 </script>
 <style scope>
-.el-container /deep/ .el-header {
+.el-container .el-header {
   padding: 0;
 }
 </style>

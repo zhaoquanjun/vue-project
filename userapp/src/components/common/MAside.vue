@@ -8,14 +8,14 @@
     <el-aside class="m-asideleft" :style="{width:width+'px'}">
       <el-menu default-active="1-4-1" class="el-menu-vertical-demo">
         <el-menu-item
-         v-for="(item) in navList"
-         @mouseenter="collapseOpen(150,0)" :index="item.uid"
-         :key="item.uid"
-         >
+          v-for="(item) in navList"
+          @mouseenter="collapseOpen(150,0)"
+          :index="item.id"
+          :key="item.id"
+        >
           <i class="el-icon-menu"></i>
-          <span>{{item.content}}</span>
+          <span>{{item.name}}</span>
         </el-menu-item>
-       
       </el-menu>
     </el-aside>
     <LeftNavComponents
@@ -36,14 +36,15 @@ export default {
       width1: 0,
       time: "0.8s",
       navList: [
-        { content: "网站管理1", uid: '1' },
-        { content: "网站管理1", uid: '2' },
-        { content: "网站管理1", uid: '3' },
-        { content: "网站管理1", uid: '4' },
-        { content: "网站管理1", uid: '5' },
-        { content: "网站管理1", uid: '6' },
-        { content: "网站管理1", uid: '7' },
-        { content: "网站管理1", uid: '8' }
+        { name: "控制台", id: "1" },
+        { name: "内容管理", id: "2" },
+        { name: "网站管理", id: "3" },
+        { name: "小程序管理", id: "4" },
+        { name: "微信公众号", id: "5" },
+        { name: "表单管理", id: "6" },
+        { name: "电商会员", id: "7" },
+        { name: "系统设置", id: "8" },
+        { name: "回收站", id: "9" }
       ]
     };
   },
@@ -55,17 +56,17 @@ export default {
       this.width = width;
       this.width1 = width;
       this.time = time + "s";
-
-      this.navList =  [
-        { content: "网站管理1", uid: '1' },
-        { content: "网站管理1", uid: '2' },
-        { content: "网站管理1", uid: '3' },
-        { content: "网站管理1", uid: '4' },
-        { content: "网站管理1", uid: '5' },
-        { content: "网站管理1", uid: '6' },
-        { content: "网站管理1", uid: '7' },
-        { content: "网站管理1", uid: '8' }
-      ]
+      this.navList = [
+        { name: "控制台", id: "1" },
+        { name: "内容管理", id: "2" },
+        { name: "网站管理", id: "3" },
+        { name: "小程序管理", id: "4" },
+        { name: "微信公众号", id: "5" },
+        { name: "表单管理", id: "6" },
+        { name: "电商会员", id: "7" },
+        { name: "系统设置", id: "8" },
+        { name: "回收站", id: "9" }
+      ];
     },
     collapseClose() {
       this.width = 50;
@@ -81,10 +82,9 @@ export default {
   position: absolute;
   left: 0;
   z-index: 10;
- 
 }
-.m-asideleft{
-  overflow: hidden; 
+.m-asideleft {
+  overflow: hidden;
 }
 .m-asideright {
   width: 0px !important;
@@ -93,7 +93,7 @@ export default {
   z-index: 10;
   top: 0;
   text-align: center;
-   overflow: hidden; 
+  overflow: hidden;
 }
 .el-menu /deep/ .el-menu-item {
   padding: 0 !important;

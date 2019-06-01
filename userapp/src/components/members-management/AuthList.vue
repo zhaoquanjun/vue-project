@@ -6,19 +6,21 @@
       <span v-else class="item-right empty" @click="empty">清空</span>
     </div>
     <ul class="auth-list">
-      <li class="list-item" v-for="item in authList" :key="item.id" @click="curAuth(item)">
+      <template v-if="authList.length>0">
+        <li class="list-item" v-for="item in authList" :key="item.id" @click="curAuth(item)">
         <span class="item-left">{{item.name}}</span>
         <span class="item-right" v-if="isSelect">{{item.mark}}</span>
         <span class="item-right auth-icon" v-else @click="removeAuth(item)">
           <i class="iconfont icon-weibiaoti-"></i>
         </span>
       </li>
+      </template>
+    
     </ul>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
-// ["isSelect","authList"]
 export default {
   name: "AuthList",
   props: {
@@ -26,17 +28,19 @@ export default {
       type:Boolean
     },
     authList: {
-     
+      type:Array,
       default: () => ([])
     }
   },
   created() {
+    console.log(this.authList,'00000000')
   },
   methods: {
     curAuth(item) {
       this.$emit("chooseAuth", item);
     },
     removeAuth(item) {
+      console.log(item)
       this.$emit("removeSelected", item);
     },
     empty() {
@@ -63,7 +67,9 @@ export default {
   line-height: 40px;
   border-bottom: 1px solid #efefef;
 }
-
+.auth-list{
+  min-height: 200px;
+}
 .auth-list .list-item {
   height: 40px;
   line-height: 40px;

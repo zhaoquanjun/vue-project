@@ -1,17 +1,13 @@
 <template>
-
-    <home-container></home-container>
-
+    <member-management></member-management>
 </template>
 
 <script>
-import HomeContainer from "@/components/members-management/MContainer"
-
-
+import MemberManagement from "@/components/members-management"
 export default {
   name: "home",
   components: {
-    HomeContainer
+    MemberManagement
   }
 };
 </script>

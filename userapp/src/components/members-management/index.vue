@@ -7,8 +7,8 @@
       <div class="user-set">
         <el-col :span="15">
           <span class="user-count">成员 (12人)</span>
-          <button class="btn-item" @click="authorization">权限配置</button>
-          <button class="btn-item">删除</button>
+          <button class="btn-item" :disabled="disabled" @click="authorization">权限配置</button>
+          <button class="btn-item" :disabled="disabled">删除</button>
           <div class="seachInput">
             <el-input size="medium" placeholder="请输入内容" v-model="input5" class="input-with-select">
               <el-button slot="append" icon="el-icon-search"></el-button>
@@ -19,7 +19,7 @@
           <button class="btn-item invite-member" @click="invitation">邀请成员</button>
         </el-col>
       </div>
-      <m-table></m-table>
+      <m-table @tabSelection="tabSelection" @deleteCurMember = "_deleteCurMember" @authEdit="authEdit" :member-list="memberList"></m-table>
       <el-dialog
         width="0"
         :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
@@ -27,7 +27,7 @@
       ></el-dialog>
       <right-pannel :style="{width:pannelWidth+'px'}">
         <span slot="title-text">权限配置</span>
-        <AuthConfig/>
+        <auth-config/>
       </right-pannel>
       <right-pannel :style="{width:isInvitationlWidth+'px'}">
         <span slot="title-text">邀请成员</span>
@@ -42,7 +42,8 @@ import RightPannel from "../RightPannel";
 import AuthConfig from "./AuthConfig";
 import InvitationLink from "./InvitationLink";
 import { mapMutations, mapState, mapActions } from "vuex";
-import { getUserCurrentAppPolicy } from "@/api/index"
+import { testLogin, getUserCurrentAppPolicy,deleteCurMember, batchUpdateUserPolicy } from "@/api/index";
+
 export default {
   name: "homeMain",
   components: {
@@ -54,45 +55,97 @@ export default {
   data() {
     return {
       input5: 11,
-      dialogVisible: true
+      dialogVisible: true,
+      memberList: [],
+     
+      multipleSelection:[],
     };
   },
-  created(){
-   this._getAppPolicies();
-   this._getUserCurrentAppPolicy();
+  created() {
+   
+    // this._getUserCurrentAppPolicy();
+    this._getAuth()
+    //this._getBeInvitedUsers()
+    
+  },
+  mounted() {
+    this._getBeInvitedUsers().then(jsonData => {
+      this.memberList = jsonData.data;
+    });
   },
   methods: {
-    ...mapActions(["_getAppPolicies","_getUserInfo"]),
-    ...mapMutations(["ISRIGHTPANNELSHOW", "ISINVITATIONPANELSHOW"]),
+    ...mapActions(["_getAppPolicies", "_getUserInfo", "_getBeInvitedUsers"]),
+    ...mapMutations(["ISRIGHTPANNELSHOW", "ISINVITATIONPANELSHOW","CURMEMBVERINFO"]),
+    /**
+     * 删除成员列表中其中一项
+     */
+    async _deleteCurMember(){
+       await deleteCurMember(1)
+    },
     /**
      * 权限配置展开
+     * 多人权限配置
      */
     authorization() {
       this.ISRIGHTPANNELSHOW(true);
+        this._getAppPolicies();
+        this.CURMEMBVERINFO({})
+
     },
     /**
      * 邀请成员面板-链接
      */
     invitation() {
       this.ISINVITATIONPANELSHOW(true);
-    },
+    }, 
+    /**
+     * dialog 关闭
+     */
     handleClose() {
       this.ISRIGHTPANNELSHOW(false);
       this.ISINVITATIONPANELSHOW(false);
     },
-    async _getUserCurrentAppPolicy(){
-      let aa = await getUserCurrentAppPolicy();
+    /**
+     * table组件 点击编辑后触发此方法
+     */
+    authEdit(data){
+        this.ISRIGHTPANNELSHOW(true);
+        this._getAppPolicies();
+        this._getUserInfo();
+       
+    },
+    /**
+     * table组件点击多选框触发此方法
+     */
+    tabSelection(val){
+      console.log(val,"val")
+      this.multipleSelection = val;
+    },
+    /**
+     * test
+     */
+    async _getUserCurrentAppPolicy() {
+      await getUserCurrentAppPolicy();
+    },
+    /**
+     * test
+     */
+    async _getAuth() {
+      await testLogin();
     }
-   
   },
   computed: {
-    ...mapState(["isRightPanelShow", "isInvitationPanelShow"]),
-    
+    ...mapState(["isRightPanelShow", "isInvitationPanelShow",""]),
+
     pannelWidth() {
       return this.$store.state.isRightPanelShow === true ? 500 : 0;
     },
     isInvitationlWidth() {
       return this.isInvitationPanelShow === true ? 500 : 0;
+    },
+    disabled(){
+      return this.multipleSelection.length>0 ?  false :true;
+     
     }
   }
 };
@@ -115,6 +168,7 @@ export default {
   padding: 15px 0;
   overflow: hidden;
   .btn-item {
+    cursor: pointer;
     height: 34px;
     line-height: 34px;
     padding: 0 10px;

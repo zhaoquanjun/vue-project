@@ -1,4 +1,14 @@
-import ajaxRequest from "./ajaxRequest"
+import ajaxRequest from "./ajaxRequest";
+
+/**
+ * 谢奥
+ */
+export const testLogin = () => {
+    return ajaxRequest.request({
+        url:'http://192.168.199.99:8200/api/test/TestIsLogin',
+        method:'get'
+    });
+}
 /**
  *  InterfaceAuthor : 福全
  * 获取个人信息含权限
@@ -6,10 +16,10 @@ import ajaxRequest from "./ajaxRequest"
 export const getUserInfo = () => {
     return ajaxRequest.request({
         params: {
-            userId: "e90bced5-c809-4926-8198-b7dd967b5bd1",
+            userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
         },
-        url: 'http://192.168.199.245:5000/api/userInfo/GetUserInfo',
+        url: 'http://192.168.199.99:8100/api/userInfo/GetUserInfo',
         method: 'get'
     });
 }
@@ -22,7 +32,53 @@ export const getAppPolicies = () => {
         params: {
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
         },
-        url: 'http://192.168.199.245:5000/api/appInfo/GetAppPolicies',
+        url: 'api/appInfo/GetAppPolicies',
+        method: 'get'
+    });
+}
+/**
+ * 更新当前成员权限
+ * @param {*} arrId 
+ */
+export const updateUserPolicy = (arrId) => {
+    console.log(arrId,'23456765445')
+    return ajaxRequest.request({
+        params: {
+            userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+            appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+            policies:JSON.stringify(arrId)
+        },
+        url: '/api/userInfo/UpdateUserPolicy',
+        method: 'get'
+    });
+};
+/**
+ * 批量更新所选择成员的权限
+ * @param {权限id集合} arrId 
+ */
+export const batchUpdateUserPolicy = (arrId) => {
+    console.log(arrId,'23456765445')
+    return ajaxRequest.request({
+        params: {
+            userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+            appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+            policyIds:JSON.stringify(arrId)
+        },
+        url: '/api/userInfo/BatchUpdateUserPolicy',
+        method: 'get'
+    });
+};
+
+/**
+ * 删除当前成员列表中其中一个
+ * @param {列表id} curId 
+ */
+export const deleteCurMember = (curId) => {
+    return ajaxRequest.request({
+        params: {
+            id: curId, 
+        },
+        url: '/api/userInfo/DeleteUser',
         method: 'get'
     });
 }
@@ -34,7 +90,8 @@ export const getBeInvitedUsers = () => {
     return ajaxRequest.request({
         params:{
             userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-            appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
+            appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+            phone:''
         },
         url: '/api/userInfo/GetBeInvitedUsers',
         method: 'get'

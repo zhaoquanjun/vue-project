@@ -7,7 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/reset.css";
 import "./styles/common.scss";
 import securityService from "@/services/authentication/securityService";
-import { getLocal } from "./libs/local"
+import { getLocal } from "./libs/local";
+//import '@/icons'
 Vue.use(ElementUI)
 Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
