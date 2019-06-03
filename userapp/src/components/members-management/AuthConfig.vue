@@ -1,6 +1,6 @@
 <template>
   <div>
-    <member-info v-if="Object.keys(memberInfo).length>0" :memberInfo="memberInfo"></member-info>
+    <member-info v-if="memberInfo && Object.keys(memberInfo).length>0" :memberInfo="memberInfo"></member-info>
     <div class="panel-main">
       <div class="pannel-right-item">
         <h3 class="auth-title">选择权限</h3>
@@ -33,12 +33,17 @@
 import AuthList from "./AuthList";
 import MemberInfo from "./MemberInfo";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+
 export default {
   name: "right-pannel",
-  components: { AuthList, MemberInfo },
-  created() {
-  
+  props: {
+    isBatch: {
+      type: Boolean,
+      default: false
+    }
   },
+  components: { AuthList, MemberInfo },
+  created() {},
   data() {
     return {
       input: ""
@@ -51,9 +56,16 @@ export default {
       "EMPTYSELECTEDAUTH",
       "ISRIGHTPANNELSHOW"
     ]),
-    ...mapActions(["_updateUserPolicy"]),
-    primary(){
-      this._updateUserPolicy(this.getSelectedAuthId)
+    ...mapActions(["_updateUserPolicy","_batchUpdateUserPolicy"]),
+    primary() {
+      let ids = this.getSelectedAuthId;
+      if (this.isBatch) {
+        console.log(ids,'1')
+        this._batchUpdateUserPolicy(ids)
+      } else {
+         console.log(ids,'2')
+        this._updateUserPolicy(ids);
+      }
     },
     chooseAuth(obj) {
       this.CHOOSEAUTH(obj);
@@ -62,11 +74,12 @@ export default {
       this.REMOVESELECTEDAUTH(item);
     },
     emptySelected() {
-      this.EMPTYSELECTEDAUTH()
+      this.EMPTYSELECTEDAUTH();
     },
     closePanel() {
       this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
-    }
+    },
+  
   },
   computed: {
     ...mapState({
@@ -75,7 +88,7 @@ export default {
       memberPolicy: state => state.memberManager.memberPolicy
     }),
     ...mapState(["authList", "selectedAuth", "isRightPanelShow"]),
-    ...mapGetters(["formatAuthList","getSelectedAuthId"])
+    ...mapGetters(["formatAuthList", "getSelectedAuthId"])
   }
 };
 </script>

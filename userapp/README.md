@@ -32,3 +32,7 @@ npm run test:unit
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+#### SVG使用
+- icon-class svg的名称
+<svg-icon  icon-class="arrow-down"></svg-icon>

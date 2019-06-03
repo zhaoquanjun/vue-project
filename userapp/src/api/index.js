@@ -5,7 +5,7 @@ import ajaxRequest from "./ajaxRequest";
  */
 export const testLogin = () => {
     return ajaxRequest.request({
-        url:'http://192.168.199.99:8200/api/test/TestIsLogin',
+        url:'/api/test/TestIsLogin',
         method:'get'
     });
 }
@@ -19,7 +19,7 @@ export const getUserInfo = () => {
             userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
         },
-        url: 'http://192.168.199.99:8100/api/userInfo/GetUserInfo',
+        url: '/api/userInfo/GetUserInfo',
         method: 'get'
     });
 }
@@ -32,40 +32,39 @@ export const getAppPolicies = () => {
         params: {
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
         },
-        url: 'api/appInfo/GetAppPolicies',
+        url: '/api/appInfo/GetAppPolicies',
         method: 'get'
     });
 }
 /**
  * 更新当前成员权限
- * @param {*} arrId 
+ * @param {*} ids 
  */
-export const updateUserPolicy = (arrId) => {
-    console.log(arrId,'23456765445')
+export const updateUserPolicy = (ids) => {
     return ajaxRequest.request({
         params: {
             userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-            policies:JSON.stringify(arrId)
+            policies:JSON.stringify(ids)
         },
         url: '/api/userInfo/UpdateUserPolicy',
-        method: 'get'
+        method: 'post'
     });
 };
 /**
  * 批量更新所选择成员的权限
- * @param {权限id集合} arrId 
+ * @param {权限id集合} idList 
  */
-export const batchUpdateUserPolicy = (arrId) => {
-    console.log(arrId,'23456765445')
+export const batchUpdateUserPolicy = (idList) => {
+    console.log(idList,'23456765445')
     return ajaxRequest.request({
         params: {
             userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-            policyIds:JSON.stringify(arrId)
+            policyIds:JSON.stringify(idList)
         },
         url: '/api/userInfo/BatchUpdateUserPolicy',
-        method: 'get'
+        method: 'post'
     });
 };
 
@@ -79,7 +78,20 @@ export const deleteCurMember = (curId) => {
             id: curId, 
         },
         url: '/api/userInfo/DeleteUser',
-        method: 'get'
+        method: 'post'
+    });
+}
+/**
+ * 批量删除成员列表
+ * @param {id集合} ids 
+ */
+export const batchDeleteUsers = (ids) => {
+    return ajaxRequest.request({
+        params: {
+            id: ids, 
+        },
+        url: '/api/userInfo/BatchDeleteUsers',
+        method: 'post'
     });
 }
 /**
@@ -106,7 +118,7 @@ export const getUserCurrentAppPolicy = () => {
         params: {
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
         },
-        url: 'http://192.168.199.103:9100/api/appInfo/GetUserCurrentAppPolicy',
+        url: '/api/appInfo/GetUserCurrentAppPolicy',
         method: 'get'
     });
 }

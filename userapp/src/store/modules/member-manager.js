@@ -1,4 +1,4 @@
-import { getAppPolicies, getUserInfo, getBeInvitedUsers, updateUserPolicy } from "@/api/index";
+import { getAppPolicies, getUserInfo, getBeInvitedUsers, updateUserPolicy ,batchUpdateUserPolicy,batchDeleteUsers} from "@/api/index";
 const memberManager = {
     namespaced: false,
     state: {
@@ -12,7 +12,9 @@ const memberManager = {
          */
         CURMEMBVERINFO: (state, info) => {
             state.memberInfo = info;
-            state.memberPolicy = info.policy;
+            if(info["policy"]){
+                state.memberPolicy = info["policy"];
+            }
         },
         /**
          * 用户权限信息
@@ -57,10 +59,10 @@ const memberManager = {
         /**
         * 获取当前登录用户应用下的可配置的权限
         */
-        async _getAppPolicies({ commit }) {
+        async _getAppPolicies({ commit },isBatch) {
             let allPolicies = await getAppPolicies();
-            console.log(allPolicies,"123111")
             commit("USERPERMISSION", allPolicies.data)
+            isBatch && commit("CURMEMBVERINFO", [])
         },
         /**
          * 当前成员的 信息 与 权限 
@@ -85,7 +87,22 @@ const memberManager = {
          */
         async _updateUserPolicy({ commit }, arrId) {
             let updatedMemberPoliy = await updateUserPolicy(arrId);
-        }
+        },
+        /**
+         * 批量更新成员的权限
+         * @param {更新的权限集合id} ids 
+         */
+        async _batchUpdateUserPolicy({commit},ids){
+            let jsonData = await batchUpdateUserPolicy(ids);
+         },
+        /**
+         * 批量删除成员列表
+         * @param {*} context 
+         * @param {*} ids 
+         */ 
+        async _batchDeleteUsers(context,ids){
+            let jsonData = await batchDeleteUsers(ids);
+        } 
     },
     getters: {
         /**
@@ -93,7 +110,6 @@ const memberManager = {
          * @param {*} state 
          */
         formatAuthList(state) {
-            console.log(state, '-----------s')
             return [...new Set(state.userPermission)].filter((item) => {
                 return new Set(state.memberPolicy).has(item.id);
             })
@@ -103,11 +119,11 @@ const memberManager = {
          * @param {*} state 
          */
         getSelectedAuthId(state) {
-            let aryId = []
+            let ids = []
             state.memberPolicy && state.memberPolicy.forEach((item) => {
-                aryId.push(item.id)
+                ids.push(item.id)
             });
-            return aryId;
+            return ids;
         }
     }
 };

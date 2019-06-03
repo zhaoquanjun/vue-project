@@ -88,9 +88,9 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
       this.$emit("deleteCurMember",row)
-      this.tableData = this.tableData.filter(item => {
-        return item !== row;
-      });
+      // this.tableData = this.tableData.filter(item => {
+      //   return item !== row;
+      // });
     },
     toggleSelection(rows) {
       if (rows) {

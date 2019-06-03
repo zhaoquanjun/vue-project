@@ -1,7 +1,7 @@
 let path = require('path');
 function resolve(dir) {
     return path.join(__dirname, '.', dir)
-   }
+}
 module.exports = {
     publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
     assetsDir: 'asserts',
@@ -26,12 +26,12 @@ module.exports = {
             .options({
                 symbolId: 'icon-[name]'
             })
-             // 修改images loader 添加svg处理
+        // 修改images loader 添加svg处理
         const imagesRule = config.module.rule('images')
         imagesRule.exclude.add(resolve('src/icons'))
         config.module
-          .rule('images')
-          .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
+            .rule('images')
+            .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
 
     },
     configureWebpack: { // webpack-merge
