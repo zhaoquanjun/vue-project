@@ -32,9 +32,11 @@
             ></m-table>
             <el-dialog
                 width="0"
+                style="z-index:10"
                 :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
                 :before-close="handleClose"
             ></el-dialog>
+            <div class></div>
             <right-pannel :style="{width:pannelWidth+'px'}">
                 <span slot="title-text">权限配置</span>
                 <auth-config :is-batch="isBatch"/>
@@ -46,7 +48,7 @@
         </el-main>
         <!-- <div class="svg-container">
             <svg-icon  icon-class="arrow-down"></svg-icon>
-        </div> -->
+        </div>-->
     </div>
 </template>
 <script>
@@ -67,7 +69,7 @@ export default {
         MTable,
         RightPannel,
         AuthConfig,
-        InvitationLink,
+        InvitationLink
     },
     data() {
         return {
@@ -76,17 +78,19 @@ export default {
             memberList: [],
             multipleSelection: [],
             isBatch: false,
-            svg:"arrow-down"
+            svg: "arrow-down",
+            isInvite:1,
         };
     },
     created() {
         // this._getUserCurrentAppPolicy();
-        this._getAuth();
+        //this._getAuth();
         //this._getBeInvitedUsers()
+        // 进入页面后执行  获取当前app下的权限
     },
     mounted() {
         this._getBeInvitedUsers().then(jsonData => {
-            this.memberList = jsonData.data;
+            this.memberList = jsonData.items;
         });
     },
     methods: {
@@ -98,8 +102,14 @@ export default {
         ...mapMutations([
             "ISRIGHTPANNELSHOW",
             "ISINVITATIONPANELSHOW",
-            "CURMEMBVERINFO"
+            "CURMEMBVERINFO",           
         ]),
+        getBeInvitedUsers(page){
+            this._getBeInvitedUsers().then(jsonData => {
+            this.memberList = jsonData.items;
+        })
+        },
+       
         /**
          * 删除成员列表中其中一项
          */
@@ -122,7 +132,9 @@ export default {
          * 邀请成员面板-链接
          */
         invitation() {
+             this._getAppPolicies();
             this.ISINVITATIONPANELSHOW(true);
+            this.CURMEMBVERINFO(this.isInvite);
         },
         /**
          * dialog 关闭
@@ -160,10 +172,10 @@ export default {
         }
     },
     computed: {
-        ...mapState(["isRightPanelShow", "isInvitationPanelShow", ""]),
+        ...mapState(["isRightPanelShow", "isInvitationPanelShow"]),
 
         pannelWidth() {
-            return this.$store.state.isRightPanelShow === true ? 500 : 0;
+            return this.isRightPanelShow === true ? 500 : 0;
         },
         isInvitationlWidth() {
             return this.isInvitationPanelShow === true ? 500 : 0;
@@ -175,7 +187,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 .container {
     width: 90%;
     margin-left: 50px;

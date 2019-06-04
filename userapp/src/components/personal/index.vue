@@ -3,7 +3,7 @@
     <h3>个人账号管理</h3>
     <dl class="user-account clear">
       <dt class="avatar">
-        <img src="http://b-ssl.duitang.com/uploads/item/201501/20/20150120193442_FyadA.jpeg" alt>
+        <img src="../../assets/avatar.jpeg" alt>
       </dt>
       <dd class="account-info">
         <p>

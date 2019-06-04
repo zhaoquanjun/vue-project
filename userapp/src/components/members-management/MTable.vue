@@ -59,6 +59,9 @@ export default {
       default: () => []
     }
   },
+  created(){
+    console.log(this.memberList)
+  },
   data() {
     return {
       textarea3: "123,",

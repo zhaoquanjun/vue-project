@@ -9,6 +9,8 @@ import "./styles/common.scss";
 import '@/icons'
 import securityService from "@/services/authentication/securityService";
 import { getLocal } from "./libs/local";
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 //import '@/icons'
 Vue.use(ElementUI)
 Vue.config.productionTip = false;

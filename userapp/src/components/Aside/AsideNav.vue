@@ -5,10 +5,16 @@
     :class="{'active':flag==1}"
   >
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo">
-      <el-menu-item :index="item.id" v-for="item in menuList" :key="item.id">
-        <i class="el-icon-menu"></i>
+       <el-menu-item index="1" >
+        <i>
+          <svg-icon  icon-class="l-home"></svg-icon>
+        </i>
         <span>控制台</span>
       </el-menu-item>
+      <!-- <el-menu-item :index="item.id" v-for="item in menuList" :key="item.id">
+        <i class="el-icon-menu"></i>
+        <span>控制台</span>
+      </el-menu-item> -->
      
     </el-menu>
   </el-aside>

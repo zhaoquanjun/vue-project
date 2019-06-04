@@ -9,6 +9,20 @@ class AjaxRequest {
     merge(options) {
         return { ...options, baseURL: this.baseURL, timeout: this.timeout }
     }
+    errorHandle  (error){
+         // 对http 状态码做一些处理
+         switch (error.response.status) {
+            case 401:
+                // 未登录
+                break;
+            case 403:
+                // token过期
+                break;
+            case 404:
+                //请求报错
+                break;
+        }
+    }   
     setInterceptor(instance, url) {
         instance.interceptors.request.use(
             (config) => {
@@ -23,37 +37,27 @@ class AjaxRequest {
                 // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据     
                 // 否则的话抛出错误
                 if (res.status === 200) {
-                    return Promise.resolve(res.data);
+                    console.log(res)
+                    return Promise.resolve(res);
                 } else {
                     return Promise.reject(res);
                 }
             },
             error => {
-                // 对http 状态码做一些处理
-                switch (error.response.status) {
-                    case 401:
-                        // 未登录
-                        break;
-                    case 403:
-                        // token过期
-                        break;
-                    case 404:
-                        //请求报错
-                        break;
-                }
+                this.errorHandle(error)
+                return Promise.reject(error.response);
 
             }
         );
     }
     request(options) {
         let instance = axios.create();
+        instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
         this.setInterceptor(instance, options.url);
         let config = this.merge(options);
         return instance(config);
     }
 }
 export default new AjaxRequest;
-
-
 
 

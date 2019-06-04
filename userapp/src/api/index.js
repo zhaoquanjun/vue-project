@@ -1,11 +1,11 @@
 import ajaxRequest from "./ajaxRequest";
-
+import axios from "axios"
 /**
  * 谢奥
  */
 export const testLogin = () => {
     return ajaxRequest.request({
-        url:'/api/test/TestIsLogin',
+        url:'http://192.168.199.99:8200/api/test/TestIsLogin',
         method:'get'
     });
 }
@@ -45,23 +45,30 @@ export const updateUserPolicy = (ids) => {
         params: {
             userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-            policies:JSON.stringify(ids)
+            policies:JSON.stringify(['面板读','面板写','容器读','容器写'])
         },
         url: '/api/userInfo/UpdateUserPolicy',
         method: 'post'
     });
 };
+
+
 /**
  * 批量更新所选择成员的权限
  * @param {权限id集合} idList 
  */
 export const batchUpdateUserPolicy = (idList) => {
-    console.log(idList,'23456765445')
+    // let params=  {
+    //     userId: "[823EB3BD-93F4-4655-B833-D604A6EF2032]",
+    //     appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+    //     policyNames:'[面板读,面板写,容器读,容器写]'
+    // };
+    // axios.post("http://192.168.199.99:8100/api/userInfo/BatchUpdateUserPolicy",params)
     return ajaxRequest.request({
         params: {
-            userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+            userId: "['823EB3BD-93F4-4655-B833-D604A6EF2032']",
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-            policyIds:JSON.stringify(idList)
+            policyNames:JSON.stringify(['面板读','面板写','容器读','容器写'])
         },
         url: '/api/userInfo/BatchUpdateUserPolicy',
         method: 'post'
@@ -103,7 +110,9 @@ export const getBeInvitedUsers = () => {
         params:{
             userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-            phone:''
+            phone:'',
+            pageIndex:0,
+            pageSize:3,
         },
         url: '/api/userInfo/GetBeInvitedUsers',
         method: 'get'
@@ -119,6 +128,24 @@ export const getUserCurrentAppPolicy = () => {
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
         },
         url: '/api/appInfo/GetUserCurrentAppPolicy',
+        method: 'get'
+    });
+}
+
+
+/**
+ * InterfaceAuthor : li tao
+ * 获取权限所有权限
+ */
+export const getShortUrlByInviation = (names) => {
+    return ajaxRequest.request({
+        params: {
+            appId: "123EB3BD-93F4-4655-B833-D604A6EF2022",
+            userId: "823EB3BD-93F4-4655-B833-D604A6EF2032 &" + Math.random(),   
+              
+            permissionIds:"内容读,内容写"
+        },
+        url: '/api/ShortUrl/GetShortUrlByInviation',
         method: 'get'
     });
 }

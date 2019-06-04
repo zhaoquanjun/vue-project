@@ -24,9 +24,8 @@ export default {
   },
  
   methods: {
-    ...mapMutations(["CLOSERIGHTPANNEL"]),
-    closePanel() {
-      this.CLOSERIGHTPANNEL(false);
+     closePanel() {
+       this.$store.commit("CLOSERIGHTPANNEL",false);      
     }
   }
 };

@@ -1,18 +1,25 @@
-import { getAppPolicies, getUserInfo, getBeInvitedUsers, updateUserPolicy ,batchUpdateUserPolicy,batchDeleteUsers} from "@/api/index";
+import { getAppPolicies, getUserInfo, getBeInvitedUsers, updateUserPolicy, batchUpdateUserPolicy, batchDeleteUsers } from "@/api/index";
 const memberManager = {
     namespaced: false,
     state: {
         memberInfo: null,
         memberPolicy: [],
         userPermission: [],
+        
+       
     },
     mutations: {
         /**
          * 当前成员的信息 含 权限
          */
         CURMEMBVERINFO: (state, info) => {
+            if (info === 1) {
+                state.memberInfo = null;
+                state.memberPolicy = [];
+                return
+            }
             state.memberInfo = info;
-            if(info["policy"]){
+            if (info["policy"]) {
                 state.memberPolicy = info["policy"];
             }
         },
@@ -59,17 +66,17 @@ const memberManager = {
         /**
         * 获取当前登录用户应用下的可配置的权限
         */
-        async _getAppPolicies({ commit },isBatch) {
-            let allPolicies = await getAppPolicies();
-            commit("USERPERMISSION", allPolicies.data)
+        async _getAppPolicies({ commit }, isBatch) {
+            let {data:allPolicies,status} = await getAppPolicies();
+            commit("USERPERMISSION", allPolicies)
             isBatch && commit("CURMEMBVERINFO", [])
         },
         /**
          * 当前成员的 信息 与 权限 
         */
         async _getUserInfo({ commit }) {
-            let userInfo = await getUserInfo();
-            commit("CURMEMBVERINFO", userInfo.data)
+            let {data:userInfo,status} = await getUserInfo();
+            commit("CURMEMBVERINFO", userInfo)
         },
 
         /**
@@ -77,7 +84,7 @@ const memberManager = {
          * @param {} param0 
          */
         async _getBeInvitedUsers({ commit }) {
-            let beInvitedUsers = await getBeInvitedUsers();
+            let {data:beInvitedUsers,status} = await getBeInvitedUsers();
             return beInvitedUsers
         },
         /**
@@ -86,34 +93,42 @@ const memberManager = {
          * @param {*} arrId 
          */
         async _updateUserPolicy({ commit }, arrId) {
-            let updatedMemberPoliy = await updateUserPolicy(arrId);
+            let {status} = await updateUserPolicy(arrId);
+            console.log(status,'jsonDatajsonData')
         },
         /**
          * 批量更新成员的权限
          * @param {更新的权限集合id} ids 
          */
-        async _batchUpdateUserPolicy({commit},ids){
-            let jsonData = await batchUpdateUserPolicy(ids);
-         },
+        async _batchUpdateUserPolicy({ commit }, ids) {
+            let {status} = await batchUpdateUserPolicy(ids);
+        },
         /**
          * 批量删除成员列表
          * @param {*} context 
          * @param {*} ids 
-         */ 
-        async _batchDeleteUsers(context,ids){
+         */
+        async _batchDeleteUsers(context, ids) {
             let jsonData = await batchDeleteUsers(ids);
-        } 
+        }
     },
     getters: {
         /**
          * 权限配置面板中   左边可选面板与右侧面板取差集
          * @param {*} state 
          */
-        formatAuthList(state) {
-            return [...new Set(state.userPermission)].filter((item) => {
-                return new Set(state.memberPolicy).has(item.id);
-            })
-        },
+        // formatAuthList(state) {
+        //     let stateMem = new Set(state.memberPolicy);
+        //     console.log(state.memberPolicy)
+        //     console.log(stateMem)
+        //     console.log(state.userPermission[0])
+        //     console.log(stateMem.has(state.userPermission[0]))
+        //     // return [...new Set(state.userPermission)].filter((item) => {
+        //     //     console.log(state.memberPolicy,'state.memberPolicy',stateMem)
+        //     //     console.log(new Set(state.memberPolicy).has(item))
+        //     //     return new Set(state.memberPolicy).has(item);
+        //     // })
+        // },
         /**
          * 计算已选权限的ID
          * @param {*} state 
