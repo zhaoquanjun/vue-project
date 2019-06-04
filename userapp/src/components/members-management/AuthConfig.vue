@@ -3,7 +3,7 @@
         <member-info v-if="memberInfo && Object.keys(memberInfo).length>0" :memberInfo="memberInfo"></member-info>
         <div class="panel-main">
             <div class="pannel-right-item">
-                <h3 class="auth-title">选择权限</h3>
+                <h5 class="auth-title">选择权限</h5>
                 <div class="search-auth">
                     <input
                         class="auth-input"
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="pannel-left-item">
-                <h3 class="auth-title">已选权限</h3>
+                <h5 class="auth-title">已选权限</h5>
                 <div class="selected-auth">
                     <auth-list
                         @emptySelected="emptySelected"
@@ -29,8 +29,8 @@
             </div>
         </div>
         <div class="footer">
-            <el-button size="small" class="confirm footer-btn" type="primary" @click="primary">确认</el-button>
-            <el-button size="small" class="cancel footer-btn" type="primary" plain>取消</el-button>
+            <button  class="confirm footer-btn"  @click="primary">确认</button>
+            <button  class="cancel footer-btn">取消</button>
         </div>
     </div>
 </template>
@@ -45,6 +45,10 @@ export default {
         isBatch: {
             type: Boolean,
             default: false
+        },
+        userIds:{
+            type:Array,
+            default: ()=> ([])
         }
     },
     components: { AuthList, MemberInfo },
@@ -63,13 +67,13 @@ export default {
         ]),
         ...mapActions(["_updateUserPolicy", "_batchUpdateUserPolicy"]),
         primary() {
-            let ids = this.getSelectedAuthId;
+            //let ids = this.getSelectedAuthId;
             if (this.isBatch) {
-                console.log(ids, "1");
-                this._batchUpdateUserPolicy(ids);
+                console.log("1");
+                this._batchUpdateUserPolicy(this.userIds);
             } else {
-                console.log(ids, "2");
-                this._updateUserPolicy(ids);
+                console.log( "2");
+                this._updateUserPolicy();
             }
         },
         chooseAuth(obj) {
@@ -86,18 +90,14 @@ export default {
         },
         searchAuth() {
             this.oldUserPermission = JSON.stringify(this.userPermission);
-            console.log(this.userPermission);
             let ary = [];
             this.userPermission.forEach(item => {
-                if (item.name == this.input) ary.push(item);
+                if (item.description.includes(this.input) ) ary.push(item);
             });
             this.$store.commit("USERPERMISSION", ary);
         },
         changeInput() {
-            console.log(this);
-            console.log(this.oldUserPermission, "233");
-            console.log(this.input);
-            if (this.input === "") {
+            if (this.input === "" && this.oldUserPermission ) {
                 this.$store.commit(
                     "USERPERMISSION",
                     JSON.parse(this.oldUserPermission)
@@ -201,14 +201,19 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
-    padding: 10px;
-    border-top: 1px solid #ccc;
+    padding: 15px 17px;
+    border-top: 1px solid #efefef;
     .footer-btn {
-        font-weight: 400;
-        font-size: 12px;
+        width: 63px;
+        height: 32px;
+        background: rgba(0, 193, 222, 1);
+        color: #fff;
     }
-    .confirm {
-        margin-right: 20px;
+    .cancel{
+          margin-left: 20px;
+        background: #fff;
+        border: 1px solid  rgba(0, 193, 222, 1);
+        color: rgba(0, 193, 222, 1);
     }
 }
 </style>

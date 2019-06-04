@@ -37,7 +37,7 @@ class AjaxRequest {
                 // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据     
                 // 否则的话抛出错误
                 if (res.status === 200) {
-                    console.log(res)
+                    //console.log(res)
                     return Promise.resolve(res);
                 } else {
                     return Promise.reject(res);
@@ -54,6 +54,7 @@ class AjaxRequest {
         let instance = axios.create();
         instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
         this.setInterceptor(instance, options.url);
+        console.log(options,'---------')
         let config = this.merge(options);
         return instance(config);
     }

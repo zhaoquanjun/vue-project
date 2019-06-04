@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :span="8">
                 <div class="head-left head-item">
-                    <span>Logo</span>
+                    <span><svg-icon  icon-class="logo"></svg-icon></span>
                     <span>云～速成美站</span>
                     <span
                         class="designTitle"
@@ -93,7 +93,7 @@ export default {
     .head-item {
         span {
             display: inline-block;
-            vertical-align: middle;
+           // vertical-align: middle;
             padding: 0 15px;
             // margin-right: 10px;
             .item-btn {

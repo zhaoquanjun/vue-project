@@ -2,8 +2,8 @@
     <div>
         <div class="auth-name-title">
             <span class="item-left">权限名称</span>
-            <span v-if="isSelect" class="item-right explain">说明</span>
-            <span v-else class="item-right empty" @click="empty">清空</span>
+            <span v-if="isSelect" class="item-right color-black">说明</span>
+            <span v-else class="item-right empty" @click="empty()">清空</span>
         </div>
         <ul class="auth-list">
             <template v-if="authList.length>0">
@@ -13,7 +13,7 @@
                     :key="item.id"
                     @click="curAuth(item)"
                 >
-                    <span class="item-left">{{item.name}}</span>
+                    <span class="item-left">{{item.description}}</span>
                     <span class="item-right" v-if="isSelect">{{item.mark}}</span>
                     <span class="item-right auth-icon" v-else @click="removeAuth(item)">
                         <i class="iconfont icon-weibiaoti-"></i>
@@ -35,9 +35,6 @@ export default {
             type: Array,
             default: () => []
         }
-    },
-    created() {
-        console.log(this.authList, "00000000");
     },
     methods: {
         curAuth(item) {
@@ -66,6 +63,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
 .auth-name-title {
     height: 40px;
     line-height: 40px;
@@ -78,13 +77,17 @@ export default {
     height: 40px;
     line-height: 40px;
     width: 100%;
-    span {
-        display: inline-block;
+    padding: 0 5px;
+    span {display: inline-block;}
+    &:hover{
+        background: #E5F8FA;
+        color: #fff;
     }
 }
 .item-left {
     width: 40%;
     float: left;
+    color: #262626;
 }
 .item-right {
     width: 60%;
@@ -95,9 +98,6 @@ export default {
     white-space: nowrap;
     box-sizing: border-box;
     color: #8c8c8c;
-}
-.explain {
-    color: #262626;
 }
 .empty {
     width: 30%;

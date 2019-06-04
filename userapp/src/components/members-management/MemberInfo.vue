@@ -2,7 +2,7 @@
   <dl class="members—info">
     <dt class="avatar">
       <img
-        src="http://b-ssl.duitang.com/uploads/item/201510/23/20151023111035_AcCun.thumb.700_0.jpeg"
+        src="../../assets/avatar.jpeg"
         onerror
       >
     </dt>
