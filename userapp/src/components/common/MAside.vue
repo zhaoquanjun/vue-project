@@ -22,9 +22,21 @@
                     <svg-icon icon-class="l-website"></svg-icon>
                     <span class="menu-item-content">网站管理</span>
                 </li>
+                 <li class="left-menu-item">
+                    <svg-icon icon-class="l-smallprogram"></svg-icon>
+                    <span class="menu-item-content">小程序</span>
+                </li>
+                 <li class="left-menu-item">
+                    <svg-icon icon-class="l-weixin"></svg-icon>
+                    <span class="menu-item-content">微信公众号</span>
+                </li>
                 <li class="left-menu-item">
                     <svg-icon icon-class="l-form"></svg-icon>
                     <span class="menu-item-content">表单管理</span>
+                </li>
+                <li class="left-menu-item">
+                    <svg-icon icon-class="l-member"></svg-icon>
+                    <span class="menu-item-content">电商会员</span>
                 </li>
                 <li class="left-menu-item">
                     <svg-icon icon-class="l-system"></svg-icon>
@@ -90,7 +102,7 @@
     </div>
 </template>
 <script>
-import LeftNavComponents from "../aside/LeftNavComponents";
+import LeftNavComponents from "../Aside/LeftNavComponents";
 
 export default {
     data() {
@@ -142,6 +154,17 @@ export default {
 </script>
 
 <style scoped>
+.left-menu-item:hover{
+    background: #E5F8FA
+}
+.left-menu-item .svg-icon {
+      stroke: #5F9EE9 !important;
+    fill: #5F9EE9 !important;
+}
+.svg-icon:hover path{
+	fill:red;
+}
+
 .m-aside {
     position: absolute;
     left: 0;

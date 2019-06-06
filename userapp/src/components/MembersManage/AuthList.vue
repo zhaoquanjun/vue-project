@@ -5,17 +5,18 @@
             <span v-if="isSelect" class="item-right color-black">说明</span>
             <span v-else class="item-right empty" @click="empty()">清空</span>
         </div>
-        <ul class="auth-list">
+        <ul class="auth-list" :class="{'right-authname':!isSelect}">
             <template v-if="authList.length>0">
                 <li
                     class="list-item"
-                    v-for="item in authList"
+                    v-for="(item,index) in authList"
                     :key="item.id"
-                    @click="curAuth(item)"
+                    @click="curAuth(item,index)"
+                    :class="{'choose-bg':item.show == true && isSelect}"
                 >
                     <span class="item-left">{{item.description}}</span>
                     <span class="item-right" v-if="isSelect">{{item.mark}}</span>
-                    <span class="item-right auth-icon" v-else @click="removeAuth(item)">
+                    <span class="item-right auth-icon" v-else @click.stop="removeAuth(item,index)">
                         <i class="iconfont icon-weibiaoti-"></i>
                     </span>
                 </li>
@@ -36,13 +37,22 @@ export default {
             default: () => []
         }
     },
+    data() {
+        return {};
+    },
     methods: {
-        curAuth(item) {
-            this.$emit("chooseAuth", item);
+        curAuth(item, index) {
+            let cur = this.authList[index];
+            if (cur.show) {
+                this.$set(this.authList[index], "show", false);
+            } else {
+                this.$set(this.authList[index], "show", true);
+                this.$emit("chooseAuth", item);
+            }
         },
-        removeAuth(item) {
-            console.log(item);
-            this.$emit("removeSelected", item);
+        removeAuth(curitem,index) {
+            
+           this.$emit("removeSelected", curitem);
         },
         empty() {
             this.$emit("emptySelected");
@@ -63,7 +73,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.choose-bg {
+    background: #e8f8fb;
+}
 
 .auth-name-title {
     height: 40px;
@@ -71,16 +83,21 @@ export default {
     border-bottom: 1px solid #efefef;
 }
 .auth-list {
-    min-height: 200px;
+    min-height: 242px;
+}
+.right-authname{
+    min-height: 274px;
 }
 .auth-list .list-item {
     height: 40px;
     line-height: 40px;
     width: 100%;
     padding: 0 5px;
-    span {display: inline-block;}
-    &:hover{
-        background: #E5F8FA;
+    span {
+        display: inline-block;
+    }
+    &:hover {
+        background: #e5f8fa;
         color: #fff;
     }
 }

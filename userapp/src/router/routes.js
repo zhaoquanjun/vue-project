@@ -22,6 +22,11 @@ export const defaultRoutes = [
     component: () => import('@/views/login/index.vue'),
     hidden: true
   },
+  {
+    path:'/contentManage',
+    name:"contentManage",
+    component : () => import('@/views/content-manage.vue')
+  }
 ];
 
 // 有权限才可访问的路由

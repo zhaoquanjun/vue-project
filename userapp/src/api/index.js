@@ -1,14 +1,7 @@
 import ajaxRequest from "./ajaxRequest";
-import QS from "qs"
-/**
- * 谢奥
- */
-export const testLogin = () => {
-    return ajaxRequest.request({
-        url: 'http://192.168.199.99:8200/api/test/TestIsLogin',
-        method: 'get'
-    });
-}
+import axios from "axios"
+//import QS from "qs"
+
 /**
  *  InterfaceAuthor : 福全
  * 获取个人信息含权限
@@ -41,15 +34,21 @@ export const getAppPolicies = () => {
  * @param {*} ids 
  */
 export const updateUserPolicy = (names) => {
-    return ajaxRequest.request({
-        params: {
-            userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-            appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-            policyNames: JSON.stringify(names)
-        },
-        url: '/api/userInfo/UpdateUserPolicy',
-        method: 'post'
-    });
+    let  params =  {
+        userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+        policyNames: names
+    };
+    axios.post("http://192.168.199.99:8100/api/userInfo/UpdateUserPolicy",params)
+    // return ajaxRequest.request({
+    //     params: {
+    //         userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+    //         appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+    //         policyNames: JSON.stringify(names)
+    //     },
+    //     url: '/api/userInfo/UpdateUserPolicy',
+    //     method: 'post'
+    // });
 };
 
 
@@ -58,22 +57,22 @@ export const updateUserPolicy = (names) => {
  * @param {权限id集合} idList 
  */
 export const batchUpdateUserPolicy = (options) => {
-    // let params=  {
-    //     userId: "[823EB3BD-93F4-4655-B833-D604A6EF2032]",
-    //     appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-    //     policyNames:'[面板读,面板写,容器读,容器写]'
-    // };
-    // axios.post("http://192.168.199.99:8100/api/userInfo/BatchUpdateUserPolicy",params)
+    let  params =  {
+        userIds: options.userids,
+        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+        policyNames: options.names
+    };
+    axios.post("http://192.168.199.99:8100/api/userInfo/BatchUpdateUserPolicy",params)
 
-    return ajaxRequest.request({
-        params: {
-            userIds: JSON.stringify(options.userids),
-            appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-            policyNames: JSON.stringify(options.names)
-        },
-        url: '/api/userInfo/BatchUpdateUserPolicy',
-        method: 'post'
-    });
+    // return ajaxRequest.request({
+    //     params: {
+    //         userIds: JSON.stringify(options.userids),
+    //         appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+    //         policyNames: JSON.stringify(options.names)
+    //     },
+    //     url: '/api/userInfo/BatchUpdateUserPolicy',
+    //     method: 'post'
+    // });
 };
 
 
@@ -95,13 +94,25 @@ export const deleteCurMember = (curId) => {
  * @param {id集合} ids 
  */
 export const batchDeletMember = (ids) => {
-    return ajaxRequest.request({
-        params: {
-            ids: JSON.stringify([10000,10037]),
-        },
-        url: '/api/userInfo/BatchDeleteUserPolicyAppMap',
-        method: 'DELETE'
-    });
+    let params ={
+        sourceUserId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        targetUserIds: [
+          "823EB3BD-93F4-4655-B833-D604A6EF1171","823EB3BD-93F4-4655-B833-D604A6EF2132"
+        ],
+        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
+      }
+
+    //   
+     axios.delete("http://192.168.199.99:8100/api/userInfo/BatchDeleteUserPolicyAppMap",{data:params})
+
+    // return ajaxRequest.request({
+    //     data:{
+    //         params
+    //     },
+       
+    //     url: '/api/userInfo/BatchDeleteUserPolicyAppMap',
+    //     method: 'delete'
+    // });
 }
 /**
  * InterfaceAuthor : 徐专
@@ -112,7 +123,7 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
         params: {
             userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-            phone: options.phone,
+           
             pageIndex: options.page,
             pageSize: 3,
         },
@@ -144,7 +155,6 @@ export const getShortUrlByInviation = (names) => {
         params: {
             appId: "123EB3BD-93F4-4655-B833-D604A6EF2022",
             userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-
             permissionIds: names
         },
         url: '/api/ShortUrl/GetShortUrlByInviation',

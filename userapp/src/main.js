@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/reset.css";
 import "./styles/common.scss";
-import '@/icons'
+import './icons'
 import securityService from "@/services/authentication/securityService";
 import { getLocal } from "./libs/local";
 import VueClipboard from 'vue-clipboard2'

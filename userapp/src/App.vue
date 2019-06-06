@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header>
+      <el-header style="height:50px;">
         <m-header></m-header>
       </el-header>
       <el-container>
@@ -26,6 +26,9 @@ export default {
 };
 </script>
 <style scope>
+.el-main{
+  padding: 0;
+}
 .el-container .el-header {
   padding: 0;
 }

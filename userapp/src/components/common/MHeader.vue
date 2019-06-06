@@ -1,5 +1,5 @@
 <template>
-    <div class="header">
+    <div class="header" >
         <el-row :gutter="20">
             <el-col :span="8">
                 <div class="head-left head-item">

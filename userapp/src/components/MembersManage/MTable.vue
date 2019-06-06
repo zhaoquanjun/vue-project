@@ -41,14 +41,17 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button style="border:none;margin-right:20px;" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button
-                        style="border:none"
-                        size="small"
+                    <button 
+                    class="handle-btn"
+                    @click="handleEdit(scope.$index, scope.row)">
+                         <svg-icon  icon-class="editor"></svg-icon>
+                        </button>
+                    <button
+                       class="handle-btn"
                         @click="handleDelete(scope.$index, scope.row)"
                     >
                     <svg-icon  icon-class="l-recyclebin"></svg-icon>
-                    </el-button>
+                    </button>
                 </template>
             </el-table-column>
         </el-table>
@@ -138,6 +141,33 @@ export default {
     }
 };
 </script>
+<style scoped>
+    .el-table /deep/ th{
+        padding: 10px 0;
+        background: #EEEEEE !important;
+    }
+    .el-table /deep/ td{
+        padding: 10px 0;
+    }
+    .el-table /deep/ th>.cell{
+        color: #333;
+        font-size: 12px;
+    }
+    .el-table /deep/ .cell{
+        color: #333;
+    }
+    .el-checkbox__input.is-checked /deep/ .el-checkbox__inner{
+        background-color: #00C1DE !important;
+        border-color: #00C1DE !important;
+    }
+    .el-pagination.is-background .el-pager /deep/ li:not(.disabled).active{
+        background-color: #01C0DE !important;
+    }
+    .el-pager /deep/ .active{
+          background-color: #01C0DE !important;
+    }
+</style>
+
 <style lang="scss" scoped>
 .textareaWrap {
     padding: 10px;
@@ -178,7 +208,9 @@ export default {
 .myCell .el-checkbox__input {
     display: none;
 }
+.handle-btn{
+    padding-right:54px; 
+}
 </style>
-{"items":[
-  {"sourceUserId":"823EB3BD-93F4-4655-B833-D604A6EF2032","userId":"823EB3BD-93F4-4655-B833-D604A6EF2135","name":"赵全军","phone":"18212952274","policies":1,"remark":null,"isSystem":false,"appId":"823EB3BD-93F4-4655-B833-D604A6EF2022"},{"sourceUserId":"823EB3BD-93F4-4655-B833-D604A6EF2032","userId":"823EB3BD-93F4-4655-B833-D604A6EF2133","name":"杨成林","phone":"13332901941","policies":1,"remark":null,"isSystem":false,"appId":"823EB3BD-93F4-4655-B833-D604A6EF2022"},{"sourceUserId":"823EB3BD-93F4-4655-B833-D604A6EF2032","userId":"823EB3BD-93F4-4655-B833-D604A6EF2132","name":"徐专","phone":"13332902841","policies":1,"remark":null,"isSystem":false,"appId":"823EB3BD-93F4-4655-B833-D604A6EF2022"}],"totalPages":2,"totalCount":5,"pageIndex":0,"pageSize":3}
+
 

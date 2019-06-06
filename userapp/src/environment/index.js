@@ -1,22 +1,25 @@
 
 /**
- * 生产环境的URL
+ * 开发环境的URL
  */
-
+let memberManageApi = 'http://192.168.199.99:8100';
 let authorityUrl = "http://192.168.199.99:8000";
 let redirectUrl = "http://192.168.199.101:8082/callback";
 let logoutRedirectUri = "http://192.168.199.101:8082/index.html"
+if (process.env.NODE_ENV === 'development') {
+  
+}
+
 
 /**
- * 开发环境的URL
+ * 环境的URL
  */
 
-if (process.env.NODE_ENV === 'development') {
 
-}
 const enbironmemy = {
   authorityUrl,
   redirectUrl,
-  logoutRedirectUri
+  logoutRedirectUri,
+  memberManageApi
 };
 export default enbironmemy;

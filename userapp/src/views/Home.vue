@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import MemberManagement from "@/components/members-management"
+import MemberManagement from "@/components/MembersManage"
 export default {
   name: "home",
   components: {

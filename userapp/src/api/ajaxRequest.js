@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { getLocal } from "@/libs/local.js"
+import environment from "@/environment/index.js"
 // import store from "../store/index";
 class AjaxRequest {
     constructor() {
-        this.baseURL = process.env.NODE_ENV == 'production' ? '/' : 'http://192.168.199.99:8100';
+        this.baseURL = process.env.NODE_ENV == 'production' ? '/' : environment.memberManageApi;
         this.timeout = 3000; // 超时时间
     }
     merge(options) {

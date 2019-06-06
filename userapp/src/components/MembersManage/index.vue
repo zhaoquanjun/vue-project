@@ -1,5 +1,9 @@
 <template>
-    <div class="container">
+    <el-container >
+        <el-aside style="width:120px">
+            <page-submenu></page-submenu>
+        </el-aside>
+
         <el-main>
             <el-row class="user-list">
                 <span class="member-list-title fs14">成员列表</span>
@@ -41,25 +45,24 @@
             <div class></div>
             <right-pannel :style="{width:pannelWidth+'px'}">
                 <span slot="title-text">权限配置</span>
-               
+                <i slot="icon-tip">
+                    <svg-icon icon-class="tip-icon"></svg-icon>
+                </i>
                 <auth-config :userIds="userIds" :is-batch="isBatch"/>
             </right-pannel>
             <right-pannel :style="{width:isInvitationlWidth+'px'}">
-                <!-- <i v-if="backCreated" slot="back" @click="back">返回</i> -->
                 <span slot="title-text">邀请成员</span>
-                 <i slot="icon-tip">
-                  <svg-icon  icon-class="tip-icon"></svg-icon>
-                </i>
                 <invitation-link></invitation-link>
             </right-pannel>
         </el-main>
-    </div>
+    </el-container>
 </template>
 <script>
 import MTable from "./MTable";
 import RightPannel from "../RightPannel";
 import AuthConfig from "./AuthConfig";
 import InvitationLink from "./InvitationLink";
+import PageSubmenu from "@/components/common/PageSubmenu";
 import { mapMutations, mapState, mapActions } from "vuex";
 export default {
     name: "homeMain",
@@ -67,7 +70,8 @@ export default {
         MTable,
         RightPannel,
         AuthConfig,
-        InvitationLink
+        InvitationLink,
+        PageSubmenu
     },
     data() {
         return {
@@ -78,8 +82,7 @@ export default {
             multipleSelection: [],
             isBatch: false,
             svg: "arrow-down",
-            isInvite: 1,
-          
+            isInvite: 1
         };
     },
     mounted() {
@@ -182,17 +185,16 @@ export default {
                 this.memberList = jsonData.items;
                 this.memberInfo = jsonData;
             });
-        },
-      
+        }
     },
     computed: {
         ...mapState(["isRightPanelShow", "isInvitationPanelShow"]),
 
         pannelWidth() {
-            return this.isRightPanelShow === true ? 500 : 0;
+            return this.isRightPanelShow === true ? 543 : 0;
         },
         isInvitationlWidth() {
-            return this.isInvitationPanelShow === true ? 500 : 0;
+            return this.isInvitationPanelShow === true ? 543 : 0;
         },
         disabled() {
             return this.multipleSelection.length > 0 ? false : true;
@@ -203,11 +205,9 @@ export default {
         /**
          * 批量配置权限的成员userid集合
          */
-        userIds(){
+        userIds() {
             let ids = [];
-            this.multipleSelection.forEach((item)=>[
-                ids.push(item.userId)
-            ]);
+            this.multipleSelection.forEach(item => [ids.push(item.userId)]);
             return ids;
         }
     }
@@ -239,7 +239,7 @@ export default {
         height: 34px;
         line-height: 34px;
         width: 90px;
-        background: #EEEEEE;
+        background: #eeeeee;
         border-radius: 3px;
         margin-right: 10px;
     }

@@ -29,8 +29,8 @@
             </div>
         </div>
         <div class="footer">
-            <button  class="confirm footer-btn"  @click="primary">确认</button>
-            <button  class="cancel footer-btn">取消</button>
+            <button class="confirm footer-btn" @click="primary">确认</button>
+            <button class="cancel footer-btn">取消</button>
         </div>
     </div>
 </template>
@@ -46,16 +46,16 @@ export default {
             type: Boolean,
             default: false
         },
-        userIds:{
-            type:Array,
-            default: ()=> ([])
+        userIds: {
+            type: Array,
+            default: () => []
         }
     },
     components: { AuthList, MemberInfo },
     created() {},
     data() {
         return {
-            input: "面板读"
+            input: ""
         };
     },
     methods: {
@@ -72,7 +72,7 @@ export default {
                 console.log("1");
                 this._batchUpdateUserPolicy(this.userIds);
             } else {
-                console.log( "2");
+                console.log("2");
                 this._updateUserPolicy();
             }
         },
@@ -92,12 +92,12 @@ export default {
             this.oldUserPermission = JSON.stringify(this.userPermission);
             let ary = [];
             this.userPermission.forEach(item => {
-                if (item.description.includes(this.input) ) ary.push(item);
+                if (item.description.includes(this.input)) ary.push(item);
             });
             this.$store.commit("USERPERMISSION", ary);
         },
         changeInput() {
-            if (this.input === "" && this.oldUserPermission ) {
+            if (this.input === "" && this.oldUserPermission) {
                 this.$store.commit(
                     "USERPERMISSION",
                     JSON.parse(this.oldUserPermission)
@@ -151,11 +151,11 @@ export default {
     }
 }
 .panel-main {
-    padding: 20px 10px;
+    padding: 20px 16px;
     overflow: hidden;
     .search-auth {
+        display: flex;
         height: 32px;
-        border: 1px solid #e5e5e5;
         box-sizing: border-box;
         position: relative;
         input,
@@ -165,13 +165,15 @@ export default {
             background: #fff;
         }
         .auth-input {
-            width: 100%;
             text-indent: 10px;
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid #E5E5E5;
         }
         .auth-btn {
-            position: absolute;
-            right: 0;
-            top: 0;
+            // position: absolute;
+            // right: 0;
+            // top: 0;
             width: 58px;
             background: #00c1de;
             color: #fff;
@@ -185,10 +187,10 @@ export default {
 }
 .pannel-right-item {
     float: left;
-    width: 50%;
+    width: 275px;
 }
 .pannel-left-item {
-    width: 40%;
+    width: 199px;
     float: right;
     .selected-auth {
         border: 1px solid #efefef;
@@ -209,10 +211,10 @@ export default {
         background: rgba(0, 193, 222, 1);
         color: #fff;
     }
-    .cancel{
-          margin-left: 20px;
+    .cancel {
+        margin-left: 20px;
         background: #fff;
-        border: 1px solid  rgba(0, 193, 222, 1);
+        border: 1px solid rgba(0, 193, 222, 1);
         color: rgba(0, 193, 222, 1);
     }
 }
