@@ -26,6 +26,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { stat } from 'fs';
 export default {
     name: "AuthList",
     props: {
@@ -37,37 +38,60 @@ export default {
             default: () => []
         }
     },
+    created(){
+        console.log(JSON.stringify(this.userPermission))
+        /**
+         * [{"pluginId":1,"name":"BoardRead","description":"面板读权限","mark":"这是策略描述的文字","nameSpace":"board","isDeleted":false,"id":10000,"show":false},{"pluginId":2,"name":"BoardWrite","description":"面板写权限","mark":"这是策略描述的文字","nameSpace":"board","isDeleted":false,"id":10001,"show":false},{"pluginId":3,"name":"ContainerRead","description":"容器读权限","mark":"这是策略描述的文字","nameSpace":"container","isDeleted":false,"id":10002,"show":false},{"pluginId":4,"name":"ContainerWrite","description":"容器写权限","mark":"这是策略描述的文字","nameSpace":"container","isDeleted":false,"id":10005,"show":false}]
+         */
+    },
     data() {
         return {};
     },
+
     methods: {
         curAuth(item, index) {
             let cur = this.authList[index];
             if (cur.show) {
                 this.$set(this.authList[index], "show", false);
+                this.$emit("removeSelected", item);
             } else {
                 this.$set(this.authList[index], "show", true);
                 this.$emit("chooseAuth", item);
             }
         },
-        removeAuth(curitem,index) {
-            
-           this.$emit("removeSelected", curitem);
+        removeAuth(curitem, index) {
+            this.$set(this.authList[index], "show", false);
+            this.$emit("removeSelected", curitem);
         },
         empty() {
+            this.authList.forEach((item, index) => {
+                this.$set(this.authList[index], "show", false);
+            });
             this.$emit("emptySelected");
         }
     },
+    mounted() {
+   
+    },
+    watch:{
+         
+        // if (this.memberPolicy.length > 0) {
+        //      console.log(this.memberPolicy);
+        //     for (let i = 0; i < this.userPermission.length; i++) {
+        //         for (let j = 0; j < this.memberPolicy.length; j++) {
+        //             if (this.userPermission[i] == this.memberPolicy[i]) {
+        //                 console.log("真的吗");
+        //             }
+        //         }
+        //     }
+        // }
+    },
     computed: {
-        memberManager() {
-            return this.$store.state.memberManager;
-        }
-        //  ...mapState(["authList"])
-        // ...mapState("memberManager", {
-        //   curmemberInfo: state => {
-        //     alert(state);
-        //   }
-        // })
+         ...mapState({
+            userPermission: state => state.memberManager.userPermission,
+            memberPolicy: state => state.memberManager.memberPolicy
+        }),
+        
     }
 };
 </script>
@@ -85,7 +109,7 @@ export default {
 .auth-list {
     min-height: 242px;
 }
-.right-authname{
+.right-authname {
     min-height: 274px;
 }
 .auth-list .list-item {

@@ -1,10 +1,11 @@
 <template>
-    <el-container >
+    <el-container class="member-container">
         <el-aside style="width:120px">
-            <page-submenu></page-submenu>
+            <page-submenu :submenu-list="submenuList">
+                <template v-slot:title>系统设置</template>
+            </page-submenu>
         </el-aside>
-
-        <el-main>
+        <el-main class="member-content">
             <el-row class="user-list">
                 <span class="member-list-title fs14">成员列表</span>
             </el-row>
@@ -20,7 +21,9 @@
                             v-model="memberPhone"
                             class="input-with-select"
                         >
-                            <el-button slot="append" icon="el-icon-search" @click="memberSearch"></el-button>
+                            <el-button slot="append" @click="memberSearch">
+                                <svg-icon icon-class="search-icon"></svg-icon>
+                            </el-button>
                         </el-input>
                     </div>
                 </el-col>
@@ -39,10 +42,12 @@
             <el-dialog
                 width="0"
                 style="z-index:10"
+                :close-on-click-modal="false"
+                :show-close="false"
                 :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
                 :before-close="handleClose"
+
             ></el-dialog>
-            <div class></div>
             <right-pannel :style="{width:pannelWidth+'px'}">
                 <span slot="title-text">权限配置</span>
                 <i slot="icon-tip">
@@ -51,7 +56,7 @@
                 <auth-config :userIds="userIds" :is-batch="isBatch"/>
             </right-pannel>
             <right-pannel :style="{width:isInvitationlWidth+'px'}">
-                <span slot="title-text">邀请成员</span>
+                <span slot="title-text" id="title-text">邀请成员</span>
                 <invitation-link></invitation-link>
             </right-pannel>
         </el-main>
@@ -75,6 +80,11 @@ export default {
     },
     data() {
         return {
+            submenuList: [
+                { name: "企业信息", url: "enterprise" },
+                { name: "显示设置", url: "url" },
+                { name: "成员列表", url: "url" }
+            ],
             memberPhone: "",
             dialogVisible: true,
             memberInfo: {},
@@ -109,13 +119,37 @@ export default {
          * 删除成员列表中其中一项
          */
         async deleteCurMember(curItem) {
-            console.log(curItem, "删除单个");
-            let { status } = await this._deleteCurMember(curItem);
-            if (status === 200) {
-                this.memberList = this.memberList.filter(
-                    item => item !== curItem
-                );
-            }
+            this.$confirm(
+                "删除后,成员将不再管理您的站点, 确定要删除吗?",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let { status } = await this._deleteCurMember(
+                                curItem
+                            );
+                            if (status === 200) {
+                                this.memberList = this.memberList.filter(
+                                    item => item !== curItem
+                                );
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消删除"
+                            });
+                        }
+                    }
+                }
+            );
         },
         /**
          * 批量删除成员
@@ -207,18 +241,17 @@ export default {
          */
         userIds() {
             let ids = [];
-            this.multipleSelection.forEach(item => [ids.push(item.userId)]);
+            this.multipleSelection.forEach(item => ids.push(item.userId));
             return ids;
         }
     }
 };
 </script>
 <style lang="scss" scoped>
-.container {
-    width: 90%;
-    margin-left: 50px;
-    margin: 0 auto;
-    box-sizing: 100%;
+.member-container {
+    .member-content {
+        padding: 21px 14px;
+    }
     .user-list {
         border-bottom: 1px solid #eee;
         padding-bottom: 10px;
@@ -252,7 +285,7 @@ export default {
 }
 .seachInput {
     display: inline-block;
-    width: 240px;
+    width: 248px;
     height: 36px;
     box-sizing: border-box;
 }

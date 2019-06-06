@@ -15,25 +15,33 @@
                     <el-popover
                         :ref="`popover-${scope.$index}`"
                         placement="bottom"
-                        width="400"
+                        width="317"
                         trigger="click"
+                        style="padding:0"
                     >
-                        <span slot="reference">{{scope.row.remark}} {{scope.$index}}</span>
+                        <span slot="reference">
+                            {{scope.row.remark}} {{scope.$index}}
+                            <svg-icon icon-class="remark"></svg-icon>
+                        </span>
                         <div class="textareaWrap">
                             <el-input
                                 type="textarea"
-                                :autosize="{ minRows: 2, maxRows: 4}"
+                                :autosize="{ minRows: 3, maxRows: 3}"
                                 placeholder="请输入内容"
-                                v-model="textarea3"
+                                v-model="remarkValue"
+                                maxlength="100"
+                                show-word-limit
+                                resize="none"
+                                @blur="remarkBlur"
                             ></el-input>
                             <div class="btn-wrap">
                                 <button
-                                    class="cancel"
+                                    class="popover-btn cancel"
                                     slot="refenrence"
                                     type="primary"
                                     @click="cancelInput(scope.$index)"
                                 >取消</button>
-                                <button class="save">保存</button>
+                                <button class="popover-btn save" @click="saveInputValue">保存</button>
                             </div>
                         </div>
                     </el-popover>
@@ -41,16 +49,14 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <button 
-                    class="handle-btn"
-                    @click="handleEdit(scope.$index, scope.row)">
-                         <svg-icon  icon-class="editor"></svg-icon>
-                        </button>
                     <button
-                       class="handle-btn"
-                        @click="handleDelete(scope.$index, scope.row)"
+                        class="handle-btn handle-btn-item"
+                        @click="handleEdit(scope.$index, scope.row)"
                     >
-                    <svg-icon  icon-class="l-recyclebin"></svg-icon>
+                        <svg-icon icon-class="editor"></svg-icon>
+                    </button>
+                    <button class="handle-btn" @click="handleDelete(scope.$index, scope.row)">
+                        <svg-icon icon-class="l-recyclebin"></svg-icon>
                     </button>
                 </template>
             </el-table-column>
@@ -58,11 +64,11 @@
         <div class="pageing">
             <el-pagination
                 background
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="total, sizes, prev, pager, next"
                 :total="memberInfo.totalCount"
                 :page-count="memberInfo.totalPages"
                 :page-size="3"
-                 :page-sizes="[3, 4, 5, 6]"
+                :page-sizes="[3, 4, 5, 6]"
                 @current-change="changePage"
             ></el-pagination>
         </div>
@@ -77,7 +83,7 @@ export default {
         },
         memberList: {
             type: Array,
-            default: () => ([])
+            default: () => []
         }
     },
     created() {
@@ -85,7 +91,7 @@ export default {
     },
     data() {
         return {
-            textarea3: "123,"
+            remarkValue: ""
             //  multipleSelection: []
         };
     },
@@ -126,12 +132,22 @@ export default {
             console.log(val);
             this.$emit("tabSelection", val);
         },
+        changePage(page) {
+            console.log(page, "当前页码");
+            this.$emit("changePageNum", page);
+        },
         cancelInput(id) {
             this.$refs[`popover-${id}`].doClose();
+            this.remarkValue= ""
         },
-        changePage(page) {
-            console.log(page,'当前页码');
-            this.$emit("changePageNum",page)
+
+        saveInputValue(e) {
+            // console.log(e)
+            console.log(this.remarkValue);
+        },
+
+        remarkBlur(e) {
+            console.log(e.target.className);
         }
         // deleteMemberListItem(){
         //   this.tableData = this.tableData.filter((item)=>{
@@ -142,43 +158,54 @@ export default {
 };
 </script>
 <style scoped>
-    .el-table /deep/ th{
-        padding: 10px 0;
-        background: #EEEEEE !important;
-    }
-    .el-table /deep/ td{
-        padding: 10px 0;
-    }
-    .el-table /deep/ th>.cell{
-        color: #333;
-        font-size: 12px;
-    }
-    .el-table /deep/ .cell{
-        color: #333;
-    }
-    .el-checkbox__input.is-checked /deep/ .el-checkbox__inner{
-        background-color: #00C1DE !important;
-        border-color: #00C1DE !important;
-    }
-    .el-pagination.is-background .el-pager /deep/ li:not(.disabled).active{
-        background-color: #01C0DE !important;
-    }
-    .el-pager /deep/ .active{
-          background-color: #01C0DE !important;
-    }
+.el-table /deep/ th {
+    padding: 10px 0;
+    background: #eeeeee !important;
+}
+.el-table /deep/ td {
+    padding: 10px 0;
+}
+.el-table /deep/ th > .cell {
+    color: #333;
+    font-size: 12px;
+}
+.el-table /deep/ .cell {
+    color: #333;
+}
+.el-checkbox__input.is-checked /deep/ .el-checkbox__inner {
+    background-color: #00c1de !important;
+    border-color: #00c1de !important;
+}
+.el-pagination.is-background .el-pager /deep/ li:not(.disabled).active {
+    background-color: #01c0de !important;
+}
+.el-pager /deep/ .active {
+    background-color: #01c0de !important;
+}
+.el-pagination /deep/ .el-pagination__total {
+    color: #8c8c8c;
+}
+.el-pagination /deep/ .el-pager li {
+    font-weight: 400;
+    color: #252525;
+}
 </style>
 
 <style lang="scss" scoped>
 .textareaWrap {
-    padding: 10px;
-    box-shadow: 0 0 5px #ccc;
+    // padding: 10px;
+    // box-shadow: 0 0 5px #ccc;
+
     background: #fff;
     position: relative;
     .btn-wrap {
         text-align: right;
         padding-top: 10px;
         button {
-            padding: 5px 10px;
+            width: 63px;
+            height: 25px;
+            line-height: 25px;
+            font-size: 12px;
             border: none;
         }
         .cancel {
@@ -187,6 +214,7 @@ export default {
         }
         .save {
             background: #00c1de;
+            color: #fff;
         }
     }
 }
@@ -208,8 +236,8 @@ export default {
 .myCell .el-checkbox__input {
     display: none;
 }
-.handle-btn{
-    padding-right:54px; 
+.handle-btn-item {
+    margin-right: 54px;
 }
 </style>
 

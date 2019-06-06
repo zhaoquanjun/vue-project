@@ -1,26 +1,37 @@
 <template>
     <div class="submenu">
-        <h4 class="submenu-title">内容管理</h4>
+        <h4 class="submenu-title"><slot name="title"></slot></h4>
         <ul class="submenu-list">
-            <li>内容管理</li>
-            <li>产品管理</li>
-            <li>图片管理</li>
-            <li>文件管理</li>
-            <li>站点迁移</li>
+            <li v-for="(item,index) in submenuList" :key="index">{{item.name}}</li>
+           
         </ul>
     </div>
 </template>
 <script>
-export default {};
+export default {
+    props:{
+        submenuList:{
+            type:Array,
+            default:() =>([
+                 {name:"企业信息",url:'enterprise'},
+                {name:"显示设置",url:'url'},
+                {name:'成员列表',url:'url'}
+            ])
+        }
+    }
+};
 </script>
 <style lang="scss" scoped>
 .submenu {
+    max-width: 120px;
+    height: 100vh;
+    background: #fff;
+    border-right: 1px solid #E5E5E5;
     .submenu-title {
         height: 40px;
         line-height: 40px;
          padding-left: 12px;
     }
-    max-width: 120px;
     .submenu-list {
         padding-top: 7px;
         li {

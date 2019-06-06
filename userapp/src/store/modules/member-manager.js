@@ -1,6 +1,6 @@
 import { getAppPolicies, getUserInfo, getBeInvitedUsers, updateUserPolicy, batchUpdateUserPolicy, deleteCurMember, batchDeletMember, getShortUrlByInviation } from "@/api/index";
 const memberManager = {
-    namespaced: false,
+   // namespaced: false,
     state: {
         memberInfo: null,
         memberPolicy: [],
@@ -44,8 +44,9 @@ const memberManager = {
          * @param {*} payload 
          */
         REMOVESELECTEDAUTH(state, payload) {
+            console.log(payload)
             state.memberPolicy = state.memberPolicy.filter((item) => {
-                return item.nameSpace != payload.nameSpace
+                return item.name != payload.name
             });
             // state.userPermission.forEach((item,index)=>{
             //     if(item.nameSpace === payload.nameSpace){
@@ -103,9 +104,7 @@ const memberManager = {
          * @param {*} 
          */
         async _updateUserPolicy({ getters }) {
-
            await updateUserPolicy(getters.getSelectedAuthNames);
-
         },
         /**
          * 批量更新成员的权限

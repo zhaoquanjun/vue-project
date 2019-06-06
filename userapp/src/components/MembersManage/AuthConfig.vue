@@ -1,20 +1,25 @@
 <template>
     <div>
-        <member-info v-if="memberInfo && Object.keys(memberInfo).length>0" :memberInfo="memberInfo"></member-info>
+        <member-info 
+       v-model="value"
+        v-if="memberInfo && Object.keys(memberInfo).length>0" 
+        :memberInfo="memberInfo"
+        ></member-info>
         <div class="panel-main">
             <div class="pannel-right-item">
                 <h5 class="auth-title">选择权限</h5>
                 <div class="search-auth">
                     <input
-                        class="auth-input"
+                        class="auth-input input-hover"
                         v-model="input"
                         placeholder="请输入权限名称"
                         @input="changeInput"
+                        
                     >
                     <button class="auth-btn" @click="searchAuth">搜索</button>
                 </div>
                 <div class="auth-name">
-                    <auth-list @chooseAuth="chooseAuth" :authList="userPermission" :isSelect="true"></auth-list>
+                    <auth-list @chooseAuth="chooseAuth" :authList="userPermission" @removeSelected="removeSelected" :isSelect="true"></auth-list>
                 </div>
             </div>
             <div class="pannel-left-item">
@@ -55,7 +60,8 @@ export default {
     created() {},
     data() {
         return {
-            input: ""
+            input: "",
+            value:""
         };
     },
     methods: {
@@ -66,7 +72,12 @@ export default {
             "ISRIGHTPANNELSHOW"
         ]),
         ...mapActions(["_updateUserPolicy", "_batchUpdateUserPolicy"]),
+        /**
+         * 点击权限配置 "确认" 按钮
+         */
         primary() {
+           
+           return
             //let ids = this.getSelectedAuthId;
             if (this.isBatch) {
                 console.log("1");
@@ -80,6 +91,7 @@ export default {
             this.CHOOSEAUTH(obj);
         },
         removeSelected(item) {
+            console.log(item,'itemitemitemitem')
             this.REMOVESELECTEDAUTH(item);
         },
         emptySelected() {
@@ -113,7 +125,7 @@ export default {
             memberPolicy: state => state.memberManager.memberPolicy
         }),
         ...mapState(["authList", "selectedAuth", "isRightPanelShow"]),
-        ...mapGetters(["getSelectedAuthId"])
+        ...mapGetters(["getSelectedAuthNames"])
     }
 };
 </script>
@@ -169,6 +181,9 @@ export default {
             box-sizing: border-box;
             width: 100%;
             border: 1px solid #E5E5E5;
+            &:hover{
+                border: 1px solid #00C1DE;
+            }
         }
         .auth-btn {
             // position: absolute;
@@ -218,5 +233,6 @@ export default {
         color: rgba(0, 193, 222, 1);
     }
 }
+
 </style>
 
