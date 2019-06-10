@@ -18,9 +18,10 @@
                         width="317"
                         trigger="click"
                         style="padding:0"
+                        @show="showRemark(scope.row)"
                     >
                         <span slot="reference">
-                            {{scope.row.remark}} {{scope.$index}}
+                            {{scope.row.remark}}
                             <svg-icon icon-class="remark"></svg-icon>
                         </span>
                         <div class="textareaWrap">
@@ -41,7 +42,7 @@
                                     type="primary"
                                     @click="cancelInput(scope.$index)"
                                 >取消</button>
-                                <button class="popover-btn save" @click="saveInputValue">保存</button>
+                                <button class="popover-btn save" @click="saveInputValue(scope.$index)">保存</button>
                             </div>
                         </div>
                     </el-popover>
@@ -91,7 +92,7 @@ export default {
     },
     data() {
         return {
-            remarkValue: ""
+            remarkValue: "123"
             //  multipleSelection: []
         };
     },
@@ -141,13 +142,25 @@ export default {
             this.remarkValue= ""
         },
 
-        saveInputValue(e) {
+        saveInputValue(id) {
             // console.log(e)
             console.log(this.remarkValue);
+            if(this.remarkValue == ""){
+                 this.$message.error({
+                                    message: "备注不能为空!"
+                                });
+                return false;
+            }
+            this.$emit("updateUserRemark",this.remarkValue)
+            this.$refs[`popover-${id}`].doClose();
+           
         },
 
         remarkBlur(e) {
             console.log(e.target.className);
+        },
+        showRemark(row){
+            this.remarkValue = row.remark?row.remark:""
         }
         // deleteMemberListItem(){
         //   this.tableData = this.tableData.filter((item)=>{

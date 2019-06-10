@@ -1,4 +1,4 @@
-import { getAppPolicies, getUserInfo, getBeInvitedUsers, updateUserPolicy, batchUpdateUserPolicy, deleteCurMember, batchDeletMember, getShortUrlByInviation } from "@/api/index";
+import { getAppPolicies, getUserPolicy, getBeInvitedUsers, updateUserPolicy, batchUpdateUserPolicy, deleteCurMember, batchDeletMember, getShortUrlByInviation ,updateUserRemark} from "@/api/index";
 const memberManager = {
    // namespaced: false,
     state: {
@@ -17,8 +17,8 @@ const memberManager = {
                 return
             };
             state.memberInfo = info;
-            if (info["policy"]) {
-                state.memberPolicy = info["policy"];
+            if (info["policyNames"]) {
+                state.memberPolicy = info["policyNames"];
             }
         },
         /**
@@ -26,6 +26,25 @@ const memberManager = {
          */
         USERPERMISSION: (state, info) => {
             state.userPermission = info;
+            
+            // 当前成员已有的权限
+            let memberPolicy = state.memberPolicy;
+            let userPermission =  state.userPermission;
+            userPermission.forEach((item)=>{
+                if(memberPolicy.includes(item.name)){
+                    console.log('哈哈哈哈哈哈')
+                    item.show = true;
+                }
+            })
+//             let A=[1,2,3,4,5,6],
+//     B=[8,10,6,7,8];
+//    A.find(item=>B.includes(item)) //如果没有相同项，结果是undefined
+
+
+
+
+
+
         },
         /**
          * 点击选择权限
@@ -36,7 +55,7 @@ const memberManager = {
             // state.userPermission = state.userPermission.filter((item) => {
             //     return item !== payload
             // })
-            state.memberPolicy.push(payload);
+            state.memberPolicy.push(payload.name);
         },
         /**
          * 删除已选的某一项权限 && 添加到管理者的权限中去
@@ -44,28 +63,27 @@ const memberManager = {
          * @param {*} payload 
          */
         REMOVESELECTEDAUTH(state, payload) {
-            console.log(payload)
+            payload = payload.name||payload;// 选择权限 或 者已选权限  数据结构不通
             state.memberPolicy = state.memberPolicy.filter((item) => {
-                return item.name != payload.name
+                // return item.name != payload.name
+                //修改 0610 
+                return item != payload
             });
-            // state.userPermission.forEach((item,index)=>{
-            //     if(item.nameSpace === payload.nameSpace){
-            //         console.log()
-            //         state.userPermission[index].show =false;
-            //     }
-            // })
-
-            // state.userPermission.push(payload)
+            // 取消默认选择背景颜色
+            state.userPermission.forEach((item)=>{
+                if(item.name == payload){
+                    item.show = false
+                }
+            })
         },
         /**
          * 清空 已有的权限
          * @param {*} state 
         */
         EMPTYSELECTEDAUTH(state) {
-            // state.memberPolicy.forEach((item) => {
-            //     state.userPermission.push(item);
-            // })
-
+            state.userPermission.forEach((item, index) => {
+                item.show = false
+            });
             state.memberPolicy = [];
         },
 
@@ -86,7 +104,8 @@ const memberManager = {
          * 当前成员的 信息 与 权限 
         */
         async _getUserInfo({ commit }) {
-            let { data: userInfo, status } = await getUserInfo();
+            let { data: userInfo, status } = await getUserPolicy();
+            console.log(userInfo,'000---------')
             commit("CURMEMBVERINFO", userInfo)
         },
 
@@ -103,8 +122,13 @@ const memberManager = {
          * @param {*} param0 
          * @param {*} 
          */
-        async _updateUserPolicy({ getters }) {
-           await updateUserPolicy(getters.getSelectedAuthNames);
+        async _updateUserPolicy({ getters },remark) {
+            let options = {
+                names:getters.getSelectedAuthNames,
+                remark,
+            }
+           let jsonData = await updateUserPolicy(options);
+           console.log(jsonData,'2222')
         },
         /**
          * 批量更新成员的权限
@@ -125,9 +149,10 @@ const memberManager = {
          * @param {*} ids 
          */
         async _deleteCurMember({ commit }, item) {
-            let jsonData = await deleteCurMember();
+            let jsonData = await batchDeletMember();
+            console.log(jsonData,'22333333')
             return jsonData
-            console.log(jsonData)
+           
         },
         /**
          * 批量删除成员
@@ -140,6 +165,10 @@ const memberManager = {
         async _getShortUrlByInviation() {
             let jsonData = await getShortUrlByInviation(getters.getSelectedAuthNames)
         },
+        async _updateUserRemark (context,options){
+            
+            await updateUserRemark(options)
+        }
     },
     getters: {
         /**
@@ -166,7 +195,8 @@ const memberManager = {
         getSelectedAuthNames(state) {
             let names = []
             state.memberPolicy && state.memberPolicy.forEach((item) => {
-                names.push(item.name)
+               // names.push(item.name)
+               names.push(item)
             });
             return names;
         }

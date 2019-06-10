@@ -36,6 +36,7 @@
                 @deleteCurMember="deleteCurMember"
                 @authEdit="authEdit"
                 @changePageNum="changePageNum"
+                @updateUserRemark="updateUserRemark"
                 :member-info="memberInfo"
                 :member-list="memberList"
             ></m-table>
@@ -97,6 +98,7 @@ export default {
     },
     mounted() {
         this._getBeInvitedUsers().then(jsonData => {
+            console.log(jsonData)
             this.memberInfo = jsonData;
             this.memberList = jsonData.items;
         });
@@ -107,13 +109,15 @@ export default {
             "_getUserInfo",
             "_getBeInvitedUsers",
             "_deleteCurMember",
-            "_batchDeletMember"
+            "_batchDeletMember",
+            "_updateUserRemark"
         ]),
         ...mapMutations([
             "ISRIGHTPANNELSHOW",
             "ISINVITATIONPANELSHOW",
             "CURMEMBVERINFO"
         ]),
+
 
         /**
          * 删除成员列表中其中一项
@@ -167,6 +171,7 @@ export default {
         memberSearch() {
             let options = { phone: this.memberPhone };
             this._getBeInvitedUsers(options).then(jsonData => {
+                console.log(jsonData,'jsondata')
                 this.memberInfo = jsonData;
                 this.memberList = jsonData.items;
             });
@@ -216,9 +221,16 @@ export default {
         changePageNum(page) {
             let options = { page: page };
             this._getBeInvitedUsers(options).then(jsonData => {
+               
                 this.memberList = jsonData.items;
                 this.memberInfo = jsonData;
             });
+        },
+        updateUserRemark(value){
+            let options = {
+                value,
+            }
+            this._updateUserRemark(options)
         }
     },
     computed: {

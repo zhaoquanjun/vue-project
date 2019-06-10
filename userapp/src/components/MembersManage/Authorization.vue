@@ -13,11 +13,11 @@
         <div class="pannel-left-item">
             <h5 class="auth-title">已选权限</h5>
             <div class="selected-auth">
-                <auth-list
+                <selected-auth
                     @emptySelected="emptySelected"
                     @removeSelected="removeSelected"
                     :authList="memberPolicy"
-                ></auth-list>
+                ></selected-auth>
             </div>
         </div>
     </div>
@@ -25,9 +25,10 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import AuthList from "./AuthList";
+import SelectedAuth from "./SelectedAuth"
 export default {
     components: {
-        AuthList
+        AuthList,SelectedAuth
     },
     data() {
         return {

@@ -2,21 +2,18 @@
     <div>
         <div class="auth-name-title">
             <span class="item-left">权限名称</span>
-            <span v-if="isSelect" class="item-right color-black">说明</span>
-            <span v-else class="item-right empty" @click="empty()">清空</span>
+            <span class="item-right empty" @click="empty">清空</span>
         </div>
-        <ul class="auth-list" :class="{'right-authname':!isSelect}">
-            <template v-if="authList.length>0">
+        <ul class="auth-list">
+            <template v-if="authList&&authList.length>0">
                 <li
                     class="list-item"
                     v-for="(item,index) in authList"
-                    :key="item.id"
-                    @click="curAuth(item,index)"
-                    :class="{'choose-bg':item.show == true && isSelect}"
+                    :key="item"
                 >
-                    <span class="item-left">{{item.name}}</span>
-                    <span class="item-right" v-if="isSelect">{{item.mark}}</span>
-                    <span class="item-right auth-icon" v-else @click.stop="removeAuth(item,index)">
+                   
+                    <span class="item-left">{{item}}</span>
+                    <span class="item-right auth-icon" @click.stop="removeAuth(item,index)">
                         <i class="iconfont icon-weibiaoti-"></i>
                     </span>
                 </li>
@@ -26,7 +23,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { stat } from 'fs';
 export default {
     name: "AuthList",
     props: {
@@ -50,11 +46,13 @@ export default {
             }
         },
         removeAuth(curitem, index) {
-            this.$set(this.authList[index], "show", false);
-            this.$emit("removeSelected", curitem);
+            
+            console.log(curitem)
+           // this.$set(this.authList[index], "show", false);
+           
+            this.$emit("removeSelected", curitem,index);
         },
         empty() {
-          
             this.$emit("emptySelected");
         }
     },
@@ -129,7 +127,7 @@ export default {
     color: #8c8c8c;
 }
 .empty {
-      cursor: pointer;
+    cursor: pointer;
     width: 30%;
     color: #00c1de;
     text-align: right;

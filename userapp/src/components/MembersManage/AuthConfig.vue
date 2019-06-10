@@ -25,22 +25,28 @@
             <div class="pannel-left-item">
                 <h5 class="auth-title">已选权限</h5>
                 <div class="selected-auth">
-                    <auth-list
+                    <selected-auth
+                         :authList="memberPolicy"
+                         @removeSelected="removeSelected"
+                          @emptySelected="emptySelected"
+                    ></selected-auth>
+                    <!-- <auth-list
                         @emptySelected="emptySelected"
                         @removeSelected="removeSelected"
                         :authList="memberPolicy"
-                    ></auth-list>
+                    ></auth-list> -->
                 </div>
             </div>
         </div>
         <div class="footer">
             <button class="confirm footer-btn" @click="primary">确认</button>
-            <button class="cancel footer-btn">取消</button>
+            <button class="cancel footer-btn" @click="cancel">取消</button>
         </div>
     </div>
 </template>
 <script>
 import AuthList from "./AuthList";
+import SelectedAuth from "./SelectedAuth"
 import MemberInfo from "./MemberInfo";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 
@@ -56,7 +62,7 @@ export default {
             default: () => []
         }
     },
-    components: { AuthList, MemberInfo },
+    components: { AuthList,SelectedAuth, MemberInfo },
     created() {},
     data() {
         return {
@@ -76,22 +82,20 @@ export default {
          * 点击权限配置 "确认" 按钮
          */
         primary() {
-           
-           return
-            //let ids = this.getSelectedAuthId;
             if (this.isBatch) {
-                console.log("1");
                 this._batchUpdateUserPolicy(this.userIds);
             } else {
-                console.log("2");
-                this._updateUserPolicy();
+                this._updateUserPolicy(this.value);
             }
+             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+        },
+        cancel(){
+            this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
         },
         chooseAuth(obj) {
             this.CHOOSEAUTH(obj);
         },
         removeSelected(item) {
-            console.log(item,'itemitemitemitem')
             this.REMOVESELECTEDAUTH(item);
         },
         emptySelected() {

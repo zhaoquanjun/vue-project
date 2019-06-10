@@ -50,7 +50,7 @@ export default {
         async _getShortUrlByInviation(names) {
             names = names.join(",");
             let { data } = await getShortUrlByInviation(names);
-            this.link = data.result;
+            this.link = data;
         },
         generate() {
             let names = this.$store.getters.getSelectedAuthNames;
