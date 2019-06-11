@@ -1,0 +1,44 @@
+$blue : #00c1de;
+$black :#262626;
+$white : #fff;
+$green : #35B24B;
+$red : #F54743;
+$yello : #FFDE03;
+$link : #DD70CC;
+$blue-gray: #657C99;
+$blue09c : #0099cc;
+$gray: #e5f8fa;
+body{
+    background: #F9FAFC;
+    min-width: 960px;;
+}
+h1{font-size: 28px}
+h2{font-size: 18px}
+h3{font-size: 16px}
+h4{font-size: 14px}
+h5{font-size: 12px}
+
+.color-black{
+    color: $black !important;
+}
+button{
+    border: none;
+    cursor: pointer;
+}
+.fs12{
+    font-size: 12px;
+}
+.fs14{
+    font-size: 14px
+}
+
+.bigarea {
+    position: relative;
+   }
+   .bigarea::before {
+    content: '';
+    position: absolute;
+    top: -10px; right: -10px;
+    bottom: -10px; left: -10px;
+   }
+
