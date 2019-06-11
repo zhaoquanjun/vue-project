@@ -20,14 +20,22 @@
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
+import {getList} from "@/api/request/imgManageApi";
+
 export default {
     components: {
         MTree,
         ContentHeader,
         ContentTable
     },
+    mounted(){
+        this._getList()
+    },
     methods:{
-        
+        async _getList(){
+            let imgList = await getList();
+            console.log(imgList)
+        }
     }
 };
 </script>

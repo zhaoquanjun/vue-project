@@ -1,4 +1,4 @@
-import ajaxRequest from "../ajaxRequest";
+import * as ajaxRequest from "../ajaxRequest";
 
 // case
 
@@ -8,8 +8,8 @@ export const getList = () => {
         orderByType:"",
         isDescending:"",
         picCategoryId:"",
-        pageIndex: "1",
-        pageSize: "12"
+        // pageIndex: "1",
+        // pageSize: "12"
     };
-    return ajaxRequest.get('/api/Picture/GetList', params);
+    return ajaxRequest.get('/api/Picture/', params);
 }
