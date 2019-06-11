@@ -8,14 +8,14 @@ import * as ajaxRequest from "../ajaxRequest";
 
 
 export const getPicList = (option) => {
-    console.log(option)
+    console.log(option.keyword)
     let params = {
-        keyword: option[keyword] || "",
+        keyword: option.keyword || "",
         orderByType: option.orderByType|| "",
         isDescending:option.isDescending || true,
         picCategoryId: option.picCategoryId || "",
-        // pageIndex: "1",
-        // pageSize: "12"
+        pageIndex: "1",
+        pageSize: "12"
     };
     let page ={
         pageIndex:option.pageIndex || 1,
