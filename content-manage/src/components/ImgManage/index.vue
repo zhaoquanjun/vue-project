@@ -11,7 +11,10 @@
         <el-main>
             <content-header></content-header>
             <el-main>
-                 <content-table></content-table>
+                 <content-table 
+                 :img-list="imgList"
+                 @changePageNum="changePageNum"
+                 ></content-table>
             </el-main>
         </el-main>
     </el-container>
@@ -20,7 +23,7 @@
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
-import {getList} from "@/api/request/imgManageApi";
+import {getPicList} from "@/api/request/imgManageApi";
 
 export default {
     components: {
@@ -28,13 +31,25 @@ export default {
         ContentHeader,
         ContentTable
     },
+    data(){
+        return {
+            imgList:null
+        }
+    },
     mounted(){
-        this._getList()
+        this._getPicList()
     },
     methods:{
-        async _getList(){
-            let imgList = await getList();
-            console.log(imgList)
+        async _getPicList(options){
+            let {data,status} = await getPicList(options={});
+            this.imgList = data;
+        },
+        changePageNum(page){
+            console.log(page,'index页面')
+            let options = {
+                pageIndex:page
+            }
+            this._getPicList(options)
         }
     }
 };

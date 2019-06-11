@@ -46,7 +46,7 @@
                 :page-count="5"
                 :page-size="3"
                 :page-sizes="[3, 4, 5, 6]"
-                @current-change="1"
+                @current-change="changePage"
             ></el-pagination>
         </div>
         <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
@@ -59,6 +59,13 @@
 
 <script>
 export default {
+    // props:{
+    //     imgList:{
+    //         type:Object,
+    //         default:()=>({})
+    //     }
+    // },
+    props: ["imgList"],
     data() {
         return {
             imgVisible: false,
@@ -150,6 +157,13 @@ export default {
          */
         handleDelete(index, row) {
             console.log(index, row);
+        },
+        /**
+         * 改变页码
+         */
+        changePage(page) {
+            console.log(page, "当前页码");
+            this.$emit("changePageNum", page);
         }
     }
 };
