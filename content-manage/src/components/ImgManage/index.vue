@@ -40,7 +40,8 @@ export default {
     },
     data() {
         return {
-            imgList: null
+            imgList: null,
+            dialogTableVisible:false,
         };
     },
     mounted() {
