@@ -11,11 +11,11 @@
         <el-main>
             <content-header></content-header>
             <el-main>
-                <grid-list></grid-list>
-                <!-- <content-table 
+                <!-- <grid-list></grid-list> -->
+                <content-table 
                  :img-list="imgList"
                 @changePageNum="changePageNum"
-                ></content-table>-->
+                ></content-table>
             </el-main>
         </el-main>
 
