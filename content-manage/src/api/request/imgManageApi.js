@@ -6,7 +6,10 @@ import * as ajaxRequest from "../ajaxRequest";
 //PUT  ajaxRequest.put(`url`,params);
 //DELETE  ajaxRequest._delete(`url`,params);
 
-
+/**
+ * 获取图片列表
+ * @param {*} option 
+ */
 export const getPicList = (option) => {
     console.log(option.keyword)
     let params = {
@@ -14,8 +17,7 @@ export const getPicList = (option) => {
         orderByType: option.orderByType|| "",
         isDescending:option.isDescending || true,
         picCategoryId: option.picCategoryId || "",
-        pageIndex: "1",
-        pageSize: "12"
+    
     };
     let page ={
         pageIndex:option.pageIndex || 1,

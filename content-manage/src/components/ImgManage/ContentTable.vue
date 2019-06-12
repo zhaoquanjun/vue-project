@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-left:20px">
+    <div class="table-wrap">
         <el-table
             ref="multipleTable"
             :data="tableData"
@@ -26,7 +26,7 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn" @click="handleMove(scope.$index, scope.row)">
-                            <svg-icon icon-class="tab-move"></svg-icon>
+                            <svg-icon style="width:27px;height:27px" icon-class="tab-move"></svg-icon>
                         </button>
                         <button class="handle-btn" @click="handleLook(scope.$index, scope.row)">
                             <svg-icon icon-class="tab-look"></svg-icon>
@@ -204,6 +204,9 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.table-wrap {
+    margin: 0 21px;
+}
 .content-table {
     width: 100%;
     box-sizing: border-box;
@@ -211,10 +214,12 @@ export default {
 .handle-btn-wrap {
     display: flex;
     justify-content: space-between;
+    .handle-btn {
+        background: #fff;
+        //padding-right: 54px;
+    }
 }
-.handle-btn {
-    //padding-right: 54px;
-}
+
 .cover {
     width: 32px;
     height: 32px;

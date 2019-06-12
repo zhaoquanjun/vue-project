@@ -12,8 +12,8 @@
 - git clone https://tfsnew.andni.net/tfs/DefaultCollection/NewWezhan/_git/NewWezhanFront
 
 - cd content-manage
-1. npm install
-2. npm run serve
+1. 安装依赖 npm install
+2. 启动项目 npm run serve
 
 
 ## vue 教程

@@ -11,45 +11,52 @@
         <el-main>
             <content-header></content-header>
             <el-main>
-                 <content-table 
+                <grid-list></grid-list>
+                <!-- <content-table 
                  :img-list="imgList"
-                 @changePageNum="changePageNum"
-                 ></content-table>
+                @changePageNum="changePageNum"
+                ></content-table>-->
             </el-main>
         </el-main>
+
+        <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+            
+        </el-dialog>
     </el-container>
 </template>
 <script>
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
-import {getPicList} from "@/api/request/imgManageApi";
+import GridList from "./GridList";
+import { getPicList } from "@/api/request/imgManageApi";
 
 export default {
     components: {
         MTree,
         ContentHeader,
-        ContentTable
+        ContentTable,
+        GridList
     },
-    data(){
+    data() {
         return {
-            imgList:null
-        }
+            imgList: null
+        };
     },
-    mounted(){
-        this._getPicList()
+    mounted() {
+        this._getPicList();
     },
-    methods:{
-        async _getPicList(options){
-            let {data,status} = await getPicList(options={});
+    methods: {
+        async _getPicList(options) {
+            let { data } = await getPicList((options = {}));
             this.imgList = data;
         },
-        changePageNum(page){
-            console.log(page,'index页面')
+        changePageNum(page) {
+            console.log(page, "index页面");
             let options = {
-                pageIndex:page
-            }
-            this._getPicList(options)
+                pageIndex: page
+            };
+            this._getPicList(options);
         }
     }
 };
