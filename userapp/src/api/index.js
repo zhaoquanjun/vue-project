@@ -135,4 +135,13 @@ export const getShortUrlByInviation = (names) => {
     return ajaxRequest.get('/api/ShortUrl/GetShortUrlByInviation', params);
 }
 
-
+/**
+ * InterfaceAuthor : xuzhuan
+ * 修改用户名称
+ */
+export const updateUserName = (userName) => {
+    let params = {
+        name: userName
+    }
+    return ajaxRequest.put('/api/userInfo/UpdateUserName', params);
+}

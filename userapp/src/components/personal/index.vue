@@ -125,7 +125,9 @@ import SetPhoneNumber from "./SetPhoneNumber";
 import { mapState, mapGetters } from "vuex";
 import { getAuth } from "@/api/index.js";
 import securityService from "@/services/authentication/securityService";
-import {getUserCurrentAppPolicy} from "@/api/index"
+import { getUserCurrentAppPolicy } from "@/api/index.js";
+import { updateUserName } from "@/api/index.js";
+
 export default {
   data() {
     return {
@@ -144,8 +146,24 @@ export default {
     async _getUserCurrentAppPolicy(){
       let a = await getUserCurrentAppPolicy();
     },
-    setName() {this.flag = false;},
-    blur() {this.flag = true; },
+      setName() {
+        this.flag = false;
+      },
+      async blur() {
+        this.flag = true;
+          let { status } =await updateUserName(this.input);
+          if (status === 200) {
+              this.$message({
+                  type: "success",
+                  message: "设置成功!"
+              });
+          } else {
+              this.$message({
+                  type: "failed",
+                  message: "设置失败!"
+              });
+          }
+      },
     async _getAuth() {
       let loginInfo = await getAuth();
     
