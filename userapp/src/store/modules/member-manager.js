@@ -32,7 +32,7 @@ const memberManager = {
             let userPermission =  state.userPermission;
             userPermission.forEach((item)=>{
                 if(memberPolicy.includes(item.name)){
-                    console.log('哈哈哈哈哈哈')
+                 
                     item.show = true;
                 }
             })
@@ -58,7 +58,7 @@ const memberManager = {
             state.memberPolicy.push(payload.name);
         },
         /**
-         * 删除已选的某一项权限 && 添加到管理者的权限中去
+         * 删除已选的某一项权限 && 
          * @param {*} state 
          * @param {*} payload 
          */

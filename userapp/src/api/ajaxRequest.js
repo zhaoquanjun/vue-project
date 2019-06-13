@@ -6,12 +6,11 @@ import QS from 'qs';
 import { getLocal } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 // 环境的切换
-if (process.env.NODE_ENV == 'development') {    
-    //axios.defaults.baseURL = environment.memberManageApi;
-    axios.defaults.baseURL = environment.xuzhuanUrl;
-}  else if (process.env.NODE_ENV == 'production') {    
-    axios.defaults.baseURL = '/';
-}
+// if (process.env.NODE_ENV == 'development') {    
+//     axios.defaults.baseURL = environment.memberManageApi;
+// }  else if (process.env.NODE_ENV == 'production') {    
+//     axios.defaults.baseURL = '/';
+// }
 //axios.defaults.baseURL = environment.memberManageApi;
 axios.defaults.baseURL = environment.xuzhuanUrl;
 // 请求超时时间

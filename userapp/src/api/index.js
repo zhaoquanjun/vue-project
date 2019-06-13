@@ -70,7 +70,7 @@ export const batchDeletMember = (ids) => {
     let params = {
         sourceUserId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
         targetUserIds: [
-            "823EB3BD-93F4-4655-B833-D604A6EF1171", "823EB3BD-93F4-4655-B833-D604A6EF2132"
+            "823EB3BD-93F4-4655-B833-D604A6EF1171", 
         ],
         appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
     }

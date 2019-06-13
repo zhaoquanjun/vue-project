@@ -28,5 +28,10 @@ export const defaultRoutes = [
     name: "article",
     component:  () => import('@/views/product-manage.vue')
   },
+  {
+    path: "/test",
+    name: "test",
+    component:  () => import('@/views/test.vue')
+  },
   
 ];
