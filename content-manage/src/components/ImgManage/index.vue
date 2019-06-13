@@ -78,8 +78,8 @@
                 await imgCategoryManageApi.rename(id, newName);
                 this.getTree();
             },
-            async modifyNodeCategory(id, sort, parentId) {
-                await imgCategoryManageApi.modifyNode(id, sort, parentId);
+            async modifyNodeCategory(id, parentId, idOrderByArr) {
+                await imgCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
                 this.getTree();
             },
             changePageNum(page) {

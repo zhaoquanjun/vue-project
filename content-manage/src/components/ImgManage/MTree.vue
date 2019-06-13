@@ -33,7 +33,11 @@
                                @click="batchRemove( node,data)">
                         删除
                     </el-button>
-
+                    <el-button type="text"
+                               size="mini"
+                               @click=" test(node,data)">
+                        test
+                    </el-button>
                 </span>
             </span>
         </el-tree>
@@ -52,36 +56,63 @@
                 //  console.log("tree drag enter: ", draggingNode, dropNode);
             },
             handleDragLeave(draggingNode, dropNode, ev) {
-                //  console.log("tree drag leave: ", dropNode.label);
+                //    console.log("tree drag leave: ", dropNode.label);
             },
             handleDragOver(draggingNode, dropNode, ev) {
                 //     console.log("tree drag over: ", dropNode.label);
             },
-            handleDragEnd(draggingNode, dropNode, dropType, ev) {
-                console.log(draggingNode, dropNode, "1111111111111");
-                if (dropNode.parent) {
-                    draggingNode.data.parentId = Array.isArray(dropNode.parent.data) ? dropNode.parent.data[0].id : dropNode.parent.data.id;
+            handleDragEnd(draggingNodeDom, targetNodeDom, dropType, ev) {
+                var draggingNode = draggingNodeDom.data;
+                var targetNode = targetNodeDom.data;
+                console.clear();
+                console.log(`模式${dropType}`);
+                console.log(`拖动的节点 label:${draggingNode.label}|id:${draggingNode.id}|sort:${draggingNode.sort}|parentId:${draggingNode.parentId}|level:${draggingNode.level}`);
+                console.log(`目标节点的 label:${targetNode.label}|id:${targetNode.id}|sort:${targetNode.sort}|parentId:${targetNode.parentId}|level:${targetNode.level}`);
+
+                if (dropType === "none") {
+                    return;
                 }
-                else {
-                    draggingNode.data.parentId = 0;
+                switch (dropType) {
+                    case "inner":
+                        {
+                            draggingNode.parentId = targetNode.id;
+                            break;
+                        }
+                    case "before":
+                    case "after":
+                        {
+                            draggingNode.parentId = targetNode.parentId;
+                            break;
+                        }
+                    case "none":
+                    default:
+                        {
+                            return;
+                        }
                 }
-                console.log(dropNode.data.sort);
-                draggingNode.data.sort = (dropNode.data.sort + (dropType === "before" ? 1 : -1)) ;
-                this.modifyNode(draggingNode.data.id, draggingNode.data.sort, draggingNode.data.parentId);
+                var idOrderByArr = [];
+                for (var i = targetNodeDom.parent.childNodes.length - 1; i >= 0; i--) {
+                    var childNode = targetNodeDom.parent.childNodes[i];
+                    idOrderByArr.push(childNode.data.id);
+                }
+                console.log(idOrderByArr);
+                this.modifyNode(draggingNode.id, draggingNode.parentId, idOrderByArr);
 
             },
             handleDrop(draggingNode, dropNode, dropType, ev) {
-                //    console.log("tree drop: ", dropNode.label, dropType);
+                console.log("tree drop: ", dropNode.label, dropType);
             },
-            allowDrop(draggingNode, dropNode, type) {
-                if (dropNode.data.label === "二级分类 3-1") {
-                    return type !== "inner";
-                } else {
-                    return true;
+            allowDrop(draggingNode, targetNode, dropType) {
+                draggingNode = draggingNode.data;
+                targetNode = targetNode.data;
+                //判断是否大于三层
+                if (dropType === "inner" || draggingNode.parentId !== targetNode.parentId) {
+                    return this.getLevel(draggingNode, 1) + targetNode.level <= 3;
                 }
+                return true;
             },
             allowDrag(draggingNode) {
-                return draggingNode.data.label.indexOf("三级分类 3-2-2") === -1;
+                return draggingNode.label.indexOf("三级分类 3-2-2") === -1;
             },
             create(data) {
                 console.log(data, "新建");
@@ -96,15 +127,27 @@
                 }
                 return idList;
             },
+            getLevel(node, level) {
+                var localLevel = level;
+                for (var i in node.children) {
+                    let child = node.children[i];
+                    var childLevel = this.getLevel(child, localLevel + 1);
+                    level = level < childLevel ? childLevel : level;
+                }
+                return level;
+            },
             rename(data) {
                 this.$emit("rename", data.id, data.label);
             },
-            modifyNode(id, sort, parentId) {
-                this.$emit("modifyNode", id, sort, parentId);
+            modifyNode(id, parentId, idOrderByArr) {
+                this.$emit("modifyNode", id, parentId, idOrderByArr);
             },
             batchRemove(node, data) {
                 this.$emit("batchRemove", this.getAllNodeIds(data));
             },
+            test(node, data) {
+                console.log(node, data);
+            }
         }
     };
 </script>

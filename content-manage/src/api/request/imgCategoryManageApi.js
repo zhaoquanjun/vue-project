@@ -12,6 +12,7 @@ export const batchRemove = idList => {
 export const rename = (id, newName) => {
     return ajaxRequest.put(`/api/PictureCategory/${id}`, JSON.stringify(newName));
 }
-export const modifyNode = (id, sort, parentId) => {
-    return ajaxRequest.put(`/api/PictureCategory/ModifyNode/${id}/${sort}/${parentId}`);
+export const modifyNode = (id, parentId, idOrderByArr) => {
+    return ajaxRequest.put(`/api/PictureCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);
 }
+
