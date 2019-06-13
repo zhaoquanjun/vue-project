@@ -163,7 +163,8 @@ import {
     Select,
     Option,
     Dialog,
-    Card
+    Card,
+    Upload
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
@@ -183,4 +184,5 @@ Vue.use(Container)
     .use(Option)
     .use(Dialog)
     .use(Card)
+    .use(Upload)
 ;

@@ -10,6 +10,7 @@
                  @node-drag-over="handleDragOver"
                  @node-drag-end="handleDragEnd"
                  @node-drop="handleDrop"
+                 accordion
                  ref="tree"
                  draggable
                  :allow-drop="allowDrop"
@@ -33,15 +34,9 @@
                                @click="batchRemove( node,data)">
                         删除
                     </el-button>
-                    <el-button type="text"
-                               size="mini"
-                               @click=" test(node,data)">
-                        test
-                    </el-button>
                 </span>
             </span>
         </el-tree>
-        <!--<input v-model="name" /> <button @click="add">新增</button>-->
     </div>
 </template>
 <script>
@@ -160,60 +155,3 @@
         font-size: 12px;
     }
 </style>
-
-<!--data() {
-        const data = [
-            {
-                id: 1,
-                label: "一级分类 3133",
-                children: [
-                    {
-                        id: 4,
-                        label: "二级分类 1-1",
-                        children: [
-                            {
-                                id: 9,
-                                label: "三级分类 1-1-1"
-                            },
-                            {
-                                id: 10,
-                                label: "三级分类 1-1-2"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                id: 2,
-                label: "一级分类 2",
-                children: [
-                    {
-                        id: 5,
-                        label: "二级分类 2-1"
-                    },
-                    {
-                        id: 6,
-                        label: "二级分类 2-2"
-                    }
-                ]
-            },
-            {
-                id: 3,
-                label: "一级分类 3",
-                children: [
-                    {
-                        id: 7,
-                        label: "二级分类 3-1"
-                    },
-                    {
-                        id: 8,
-                        label: "二级分类 3-2"
-                    }
-                ]
-            }
-        ];
-        return {
-            data: this.treeResult,
-            name: "test",
-        };
-    },-->

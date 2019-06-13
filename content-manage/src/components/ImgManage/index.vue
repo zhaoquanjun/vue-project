@@ -13,51 +13,63 @@
                     @modifyNode="modifyNodeCategory"></m-tree>
         </el-aside>
         <el-main>
-            <content-header></content-header>
+            <img-list-header :pic-search-options="picSearchOptions"
+                             @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
+                             @getPicList="getPicList"></img-list-header>
+
             <el-main>
-                <!-- <grid-list></grid-list> -->
-                <content-table :img-list="imgList"
-                               @changePageNum="changePageNum"></content-table>
+                <img-list :img-page-result="imgPageResult"
+                          :pic-search-options="picSearchOptions"
+                          @getPicList="getPicList"
+                          @batchRemove="batchRemovePic"></img-list>
             </el-main>
         </el-main>
 
-        <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
-
+        <el-dialog title="上传图片" :visible.sync="dialogTableVisible">
+            <upload-pic :tree-result="treeResult" :upload-pic-url="uploadPicUrl" />
         </el-dialog>
     </el-container>
 </template>
 <script>
     import MTree from "./MTree";
-    import ContentHeader from "./ContentHeader";
-    import ContentTable from "./ContentTable";
+    import UploadPic from "./UploadPic";
+    import ImgListHeader from "./ImgListHeader";
+    import ImgList from "./ImgList";
     import GridList from "./GridList";
-    import { getPicList } from "@/api/request/imgManageApi";
+    import * as imgManageApi from "@/api/request/imgManageApi";
     import * as imgCategoryManageApi from "@/api/request/imgCategoryManageApi";
-
+    import environment from "@/environment/index.js"
 
     export default {
         components: {
             MTree,
-            ContentHeader,
-            ContentTable,
-            GridList
+            ImgListHeader,
+            ImgList,
+            GridList,
+            UploadPic
         },
         data() {
             return {
-                imgList: null,
+                imgPageResult: {},
                 treeResult: null,
                 dialogTableVisible: false,
-                totalSum: 0
+                totalSum: 0,
+                uploadPicUrl: environment.uploadPicUrl,
+                picSearchOptions: { pageSize: 10, pageIndex: 1, orderByType: 1, isDescending: true, picCategoryId: null, keyword: "" }
             };
         },
         mounted() {
-            this._getPicList();
+            this.getPicList({});
             this.getTree();
         },
         methods: {
-            async _getPicList(options) {
-                let { data } = await getPicList((options = {}));
-                this.imgList = data;
+            async getPicList() {
+                let { data } = await imgManageApi.getPicList(this.picSearchOptions);
+                this.imgPageResult = data;
+            },
+            async batchRemovePic(idlist) {
+                let { data } = await imgManageApi.batchRemove(idlist);
+                this.getPicList();
             },
             async getTree() {
                 let { data } = await imgCategoryManageApi.get();
@@ -82,12 +94,8 @@
                 await imgCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
                 this.getTree();
             },
-            changePageNum(page) {
-                console.log(page, "index页面");
-                let options = {
-                    pageIndex: page
-                };
-                this._getPicList(options);
+            switchUploadBoxShowStatus() {
+                this.dialogTableVisible = !this.dialogTableVisible;
             }
         }
     };
