@@ -60,7 +60,7 @@
                 dialogTableVisible: false,
                 totalSum: 0,
                 uploadPicUrl: environment.uploadPicUrl,
-                picSearchOptions: { pageSize: 10, pageIndex: 1, orderByType: 1, isDescending: true, picCategoryId: null, keyword: "" }
+                picSearchOptions: { pageSize: 10, pageIndex: 1, orderByType: 1, isDescending: true, picCategoryId: null, keyword: "", isDelete: false }
             };
         },
         mounted() {
@@ -73,7 +73,7 @@
                 this.imgPageResult = data;
             },
             async batchRemovePic(idlist) {
-                let { data } = await imgManageApi.batchRemove(idlist);
+                let { data } = await imgManageApi.batchRemove(true, idlist);
                 this.getPicList();
             },
             resetCategoryId() {

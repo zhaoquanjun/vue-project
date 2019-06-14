@@ -13,8 +13,8 @@ import * as ajaxRequest from "../ajaxRequest";
 export const getPicList = options => {
     return ajaxRequest.get(`/api/Picture/${options.pageIndex}/${options.pageSize}`, options);
 }
-export const batchRemove = idList => {
-    return ajaxRequest._delete(`/api/Picture`, { data: idList });
+export const batchRemove = (isDelete, idList) => {
+    return ajaxRequest.put(`/api/Picture/ChangeDeleteStatus/${isDelete}`, idList);
 }
 
 export const changeCategory = (categoryId, idList) => {
