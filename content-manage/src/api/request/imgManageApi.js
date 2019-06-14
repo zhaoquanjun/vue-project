@@ -10,9 +10,17 @@ import * as ajaxRequest from "../ajaxRequest";
  * 获取图片列表
  * @param {*} option 
  */
-export const getPicList = (options) => {
+export const getPicList = options => {
     return ajaxRequest.get(`/api/Picture/${options.pageIndex}/${options.pageSize}`, options);
 }
-export const batchRemove = (idList) => {
-    return ajaxRequest._delete(`/api/Picture`, idList);
+export const batchRemove = idList => {
+    return ajaxRequest._delete(`/api/Picture`, { data: idList });
+}
+
+export const changeCategory = (categoryId, idList) => {
+    return ajaxRequest.put(`/api/Picture/ChangeCategory/${categoryId}`, idList);
+}
+
+export const rename = (id, newName) => {
+    return ajaxRequest.put(`/api/Picture/${id}`, JSON.stringify(newName));
 }

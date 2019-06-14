@@ -6,9 +6,9 @@ import QS from 'qs';
 import { getLocal } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 // 环境的切换
-if (process.env.NODE_ENV == 'development') {    
+if (process.env.NODE_ENV == 'development') {
     axios.defaults.baseURL = environment.memberManageApi;
-}  else if (process.env.NODE_ENV == 'production') {    
+} else if (process.env.NODE_ENV == 'production') {
     axios.defaults.baseURL = '/';
 }
 axios.defaults.baseURL = environment.memberManageApi;
@@ -18,6 +18,8 @@ axios.defaults.timeout = 5000;
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
+axios.defaults.headers.put['Content-Type'] = 'application/json-patch+json;charset=UTF-8';
+
 // 请求拦截器
 axios.interceptors.request.use(
     config => {
@@ -25,6 +27,10 @@ axios.interceptors.request.use(
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');
         token && (config.headers.Authorization = "Bearer " + token);
+
+        //todo 测试阶段写死
+        config.headers.appIdJust4Test = '823EB3BD-93F4-4655-B833-D604A6EF2022';
+        config.headers.userIdJust4Test = '9d0062ea-b906-4061-b0ce-0c236d25a916';
         return config;
     },
     error => {
@@ -43,7 +49,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
-        console.log(err)
+        console.log(error,"error");
         if (error.response.status) {
             switch (error.response.status) {
                 // 401: 未登录                
@@ -65,7 +71,7 @@ axios.interceptors.response.use(
                     break;
                 // 其他错误，直接抛出错误提示                
                 default:
-                   
+
             }
             return Promise.reject(error.response);
         }
@@ -113,7 +119,7 @@ export function post(url, params) {
  */
 export function put(url, params) {
     return new Promise((resolve, reject) => {
-        axios.put(url,params)
+        axios.put(url, params)
             .then(res => {
                 resolve(res);
             })

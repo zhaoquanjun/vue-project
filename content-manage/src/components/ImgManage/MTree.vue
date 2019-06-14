@@ -10,13 +10,15 @@
                  @node-drag-over="handleDragOver"
                  @node-drag-end="handleDragEnd"
                  @node-drop="handleDrop"
+                 @node-click="changeCategory"
                  accordion
                  ref="tree"
                  draggable
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
             <span class="custom-tree-node" slot-scope="{ node, data }">
-                <input v-model="data.label" /> <span>({{data.leafSum }})</span>
+                <input v-model="data.label" />
+                <span>({{data.leafSum }})</span>
                 <span>
                     <el-button type="text"
                                size="mini"
@@ -41,7 +43,7 @@
 </template>
 <script>
     export default {
-        props: ["treeResult"],
+        props: ["treeResult", "picSearchOptions"],
         methods: {
             add() { console.log(this.treeResult, "3312121212"); },
             handleDragStart(node, ev) {
@@ -140,8 +142,10 @@
             batchRemove(node, data) {
                 this.$emit("batchRemove", this.getAllNodeIds(data));
             },
-            test(node, data) {
-                console.log(node, data);
+            changeCategory(data) {
+                console.log(data);
+                this.picSearchOptions.picCategoryId = data.id;
+                this.$emit("getPicList");
             }
         }
     };

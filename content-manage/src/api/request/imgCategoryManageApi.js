@@ -16,3 +16,4 @@ export const modifyNode = (id, parentId, idOrderByArr) => {
     return ajaxRequest.put(`/api/PictureCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);
 }
 
+

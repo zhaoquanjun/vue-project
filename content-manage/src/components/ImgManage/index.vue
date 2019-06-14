@@ -5,8 +5,10 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
-            <h5 class="title-item">全部分类({{totalSum}}) <button @click="newCategory({DisplayName:'Test'})">新增</button></h5>
+            <h5 class="title-item" @click="resetCategoryId">全部分类({{totalSum}}) </h5><button @click="newCategory({DisplayName:'Test'})">新增</button>
             <m-tree :tree-result="treeResult"
+                    :pic-search-options="picSearchOptions"
+                    @getPicList="getPicList"
                     @create="newCategory"
                     @batchRemove="batchRemoveCategory"
                     @rename="renameCategory"
@@ -20,7 +22,10 @@
             <el-main>
                 <img-list :img-page-result="imgPageResult"
                           :pic-search-options="picSearchOptions"
+                          :tree-result="treeResult"
                           @getPicList="getPicList"
+                          @changeCategory="changeCategoryPic"
+                          @rename="renamePic"
                           @batchRemove="batchRemovePic"></img-list>
             </el-main>
         </el-main>
@@ -71,6 +76,18 @@
                 let { data } = await imgManageApi.batchRemove(idlist);
                 this.getPicList();
             },
+            resetCategoryId() {
+                this.picSearchOptions.picCategoryId = null;
+                this.getPicList();
+            },
+            async changeCategoryPic(categoryId, idList) {
+                await imgManageApi.changeCategory(categoryId, idList);
+                this.getPicList();
+            },
+            async renamePic(id, newname) {
+                await imgManageApi.rename(id, newname);
+                this.getPicList();
+            },
             async getTree() {
                 let { data } = await imgCategoryManageApi.get();
                 this.treeResult = data.treeArray;
@@ -79,7 +96,6 @@
             async newCategory(entity) {
                 console.log(entity);
                 await imgCategoryManageApi.create(entity);
-
                 this.getTree();
             },
             async batchRemoveCategory(idList) {
