@@ -5,7 +5,8 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
-            <h5 class="title-item" @click="resetCategoryId">全部分类({{totalSum}}) </h5><button @click="newCategory({DisplayName:'Test'})">新增</button>
+            <h5 class="title-item" @click="resetCategoryId">全部分类</h5>
+            <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree :tree-result="treeResult"
                     :pic-search-options="picSearchOptions"
                     @getPicList="getPicList"
@@ -73,8 +74,11 @@
                 this.imgPageResult = data;
             },
             async batchRemovePic(idlist) {
-                let { data } = await imgManageApi.batchRemove(true, idlist);
-                this.getPicList();
+                let { status,data } = await imgManageApi.batchRemove(true, idlist);
+                 this.getPicList();
+                
+            
+               
             },
             resetCategoryId() {
                 this.picSearchOptions.picCategoryId = null;
@@ -99,8 +103,32 @@
                 this.getTree();
             },
             async batchRemoveCategory(idList) {
-                await imgCategoryManageApi.batchRemove(idList);
-                this.getTree();
+                this.$confirm("若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                  callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                          
+                            let  {status} = await imgCategoryManageApi.batchRemove(idList);
+                            if (status === 200) {
+                                  this.getTree();
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消删除"
+                            });
+                        }
+                    }
+            })
+               
+               
             },
             async renameCategory(id, newName) {
                 await imgCategoryManageApi.rename(id, newName);
@@ -120,9 +148,11 @@
     .el-main {
         /* padding: 0; */
     }
-
+    .el-container /deep/ .el-aside{
+        overflow: visible !important;
+    }
     .el-container /deep/ .tree-aside {
-        width: 664px !important;
+        width:220px !important;
         height: 100vh;
         background: #fff;
         margin: 0 0 0 13px;

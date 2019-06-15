@@ -3,7 +3,7 @@ function resolve(dir) {
     return path.join(__dirname, '.', dir)
 }
 module.exports = {
-  
+    publicPath: './',
     // 打包 不再使用sourcemap
     productionSourceMap: false,
     chainWebpack: config => {
