@@ -82,9 +82,9 @@ export default {
     data() {
         return {
             submenuList: [
-                { name: "企业信息", url: "enterprise" },
-                { name: "显示设置", url: "url" },
-                { name: "成员列表", url: "url" }
+                 {name:"企业信息",url:'/xx'},
+                {name:"显示设置",url:'/xx'},
+                {name:'成员列表',url:'/memberManage'}
             ],
             memberPhone: "",
             dialogVisible: true,

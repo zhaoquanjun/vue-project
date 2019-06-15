@@ -7,13 +7,12 @@ const user = {
 
   mutations: {
     SET_USER: (state, user) => {
-      state.user = user
       if (user) {
-        state.accessToken.Authorization = 'Bearer ' + state.token;
-        setLocal('token',user.access_token);
+        state.accessToken.Authorization = 'Bearer ' + user.access_token;
+        setLocal('token','Bearer ' +user.access_token);
       } else {
         state.accessToken.Authorization = '';
-        removeLocal('token',user.access_token);
+        removeLocal('token');
       }
     }
   },
