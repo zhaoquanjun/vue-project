@@ -29,7 +29,7 @@ export const updateUserPolicy = (options) => {
     let params = {
         userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
         appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-        remark: '121',
+        remark: options.remark,
         policyNames: options.names
     };
     return ajaxRequest.put('/api/userInfo/UpdateUserPolicy', params);
@@ -56,18 +56,17 @@ export const batchUpdateUserPolicy = (options) => {
  * 删除当前成员列表中其中一个
  * @param {列表id} curId 
  */
-export const deleteCurMember = (curId) => {
-    let params = {
-        id: 10000,
-    };
-    return ajaxRequest._delete("/api/userInfo/DeleteUserPolicyAppMap", {data:params})
-}
+// export const deleteCurMember = (curId) => {
+//     let params = {
+//         id: 10000,
+//     };
+//     return ajaxRequest._delete("/api/userInfo/DeleteUserPolicyAppMap", {data:params})
+// }
 /**
  * 批量删除成员列表
  * @param {id集合} ids 
  */
 export const batchDeletMember = (options) => {
-    console.log(options,"index文件")
     let params = options;
     return ajaxRequest._delete("/api/userInfo/BatchDeleteUserPolicyAppMap", {data:params})
 }
@@ -110,7 +109,7 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
 
 export const updateUserRemark = (options) => {
     let params = {
-        targetUserId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        targetUserId: options.targetUserId,
         remark: options.value
     };
     return ajaxRequest.put('/api/userInfo/UpdateUserRemark', params);

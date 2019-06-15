@@ -92,12 +92,16 @@ export default {
             multipleSelection: [],
             isBatch: false,
             svg: "arrow-down",
-            isInvite: 1
+            isInvite: 1,
+            memberListParams:{
+                phone:"",
+                pageNum:"",
+                pageSize:3,
+            }
         };
     },
     mounted() {
         this._getBeInvitedUsers().then(jsonData => {
-            console.log(jsonData);
             this.memberInfo = jsonData;
             this.memberList = jsonData.items;
         });
@@ -258,16 +262,15 @@ export default {
          * 改变table页码
          */
         changePageNum(page) {
+            this.memberListParams.pageNum = page;
             let options = { page: page };
             this._getBeInvitedUsers(options).then(jsonData => {
                 this.memberList = jsonData.items;
                 this.memberInfo = jsonData;
             });
         },
-        updateUserRemark(value) {
-            let options = {
-                value
-            };
+        updateUserRemark(options) {
+           
             this._updateUserRemark(options);
         }
     },

@@ -142,7 +142,7 @@ const memberManager = {
                 userids: userids
             }
             let jsonData = await batchUpdateUserPolicy(options);
-            console.log(jsonData, '------0')
+           
         },
 
         /**
