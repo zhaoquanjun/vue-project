@@ -16,7 +16,7 @@
         <product-table
           :product-list-data="productListData"
           :search-option="searchOption"
-          :tree-result="categoryTreeData"
+          :category-tree-data="categoryTreeData"
           @getProductList="_getProductList"
         ></product-table>
       </el-main>
@@ -45,7 +45,7 @@ export default {
       productListData: {},
       categoryTreeData: null,
       searchOption: {
-        pageSize: 10,
+        pageSize: 5,
         pageIndex: 1,
         sortOrder: "name_asc",
         categoryId: null,

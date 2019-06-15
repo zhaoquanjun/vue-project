@@ -31,7 +31,11 @@
 let id = 1000;
 export default {
   props: ["categoryTreeData", "searchOption"],
-  data() {},
+  data() {
+    return {
+      flag:false
+    }
+  },
   methods: {
     handleDragStart(node, ev) {
       console.log("drag start", node);

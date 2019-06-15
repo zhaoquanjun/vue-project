@@ -48,16 +48,6 @@ export const defaultRoutes = [
     
   },
   {
-    path: "/product",
-    name: "product",
-    component:  () => import('@/views/product-manage.vue')
-  },
-  {
-    path: "/test",
-    name: "test",
-    component:  () => import('@/views/test.vue')
-  },
-  
     path:'*',
     component:()=>import('@/views/error-page/404.vue')
   } 

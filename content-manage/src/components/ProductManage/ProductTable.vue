@@ -24,7 +24,7 @@
       <!-- <el-table-column prop="isDeleted" label="是否上架" show-overflow-tooltip>
         <span v-if="{isDeleted}">上架</span>
         <span v-else>下架</span>
-      </el-table-column> -->
+      </el-table-column>-->
 
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -40,11 +40,12 @@
       <el-pagination
         background
         layout="total, sizes, prev, pager, next, jumper"
-        :total="100"
-        :page-count="5"
-        :page-size="3"
-        :page-sizes="[3, 4, 5, 6]"
-        @current-change="1"
+        :total="productListData.totalCount"
+        :page-count="productListData.totalPages"
+        :page-size="productListData.pageSize"
+        :page-sizes="[5, 10, 15]"
+        @current-change="changePage"
+        @size-change="changeSize"
       ></el-pagination>
     </div>
     <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
@@ -57,7 +58,7 @@
 
 <script>
 export default {
-  props: ["productListData", "searchOption","treeResult"],
+  props: ["productListData", "searchOption", "treeResult"],
   data() {
     return {
       imgVisible: false,
@@ -84,6 +85,14 @@ export default {
      */
     handleDelete(index, row) {
       console.log(index, row);
+    },
+    changePage(page) {
+      this.searchOption.pageIndex = page;
+      this.$emit("getProductList");
+    },
+    changeSize(size) {
+      this.searchOption.pageSize = size;
+      this.$emit("getProductList");
     }
   }
 };

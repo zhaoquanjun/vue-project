@@ -19,8 +19,10 @@
           ></el-option>
         </el-select>
       </span>
-      <svg-icon icon-class="top-arrow"></svg-icon>
-      <svg-icon icon-class="off-arrow"></svg-icon>
+      <span @click="swithOrder">
+        <svg-icon v-if="(this.order ==='asc')" icon-class="top-arrow"></svg-icon>
+        <svg-icon v-else icon-class="off-arrow"></svg-icon>
+      </span>
       <span class="list-mode mode-item">
         <svg-icon icon-class="list-mode "></svg-icon>
       </span>
@@ -37,36 +39,37 @@
 </template>
 <script>
 export default {
+  props: ["searchOption"],
   data() {
     return {
       options: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: "name",
+          label: "产品名"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
+          value: "price",
+          label: "价格"
         },
         {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
+          value: "time",
+          label: "时间"
         }
       ],
-      value: ""
+      value: "name",
+      order: "asc"
     };
   },
   methods: {
     changeSelected(value) {
-      console.log(value, "value=====");
+      this.value = value;
+    },
+    swithOrder() {
+      this.order = this.order === "asc" ? "desc" : "asc";
+    },
+    getList() {
+      this.searchOption.sortOrder = this.value + "_" + this.order;
+      this.$emit("getProductList");
     }
   }
 };
