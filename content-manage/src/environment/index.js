@@ -1,3 +1,9 @@
+/**
+ *系统配置管理
+ *
+ */
+
+
 /**生产环境 */
 let memberManageApi = "";
 let uploadPicUrl = "";
@@ -14,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
     authorityUrl = "http://192.168.199.99:8000";
     redirectUrl = "http://192.168.199.101:8082/callback";
     logoutRedirectUri = "http://192.168.199.101:8082/index.html"
-}
+};
 const enbironmemy = {
     authorityUrl,
     redirectUrl,

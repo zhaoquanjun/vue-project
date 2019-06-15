@@ -19,8 +19,7 @@ import {
     Dialog,
     Card,
     Upload,
-    Message,
-    
+    Message,    
     MessageBox
 } from 'element-ui';
 Vue.use(Container)
@@ -42,6 +41,7 @@ Vue.use(Container)
     .use(Dialog)
     .use(Card)
     .use(Upload)
+   
 ;
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
