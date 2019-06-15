@@ -3,14 +3,11 @@ function resolve(dir) {
     return path.join(__dirname, '.', dir)
 }
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
-    assetsDir: 'asserts',
+    publicPath: process.env.NODE_ENV === 'production' ? './' : './',
     outputDir: './dist',
     runtimeCompiler: false,
     // 打包 不再使用sourcemap
     productionSourceMap: false,
-   
-
     chainWebpack: config => {
         config.resolve.alias.set('_c', path.resolve(__dirname, 'src/components'));
         config.resolve.alias.set('_v', path.resolve(__dirname, 'src/views'));

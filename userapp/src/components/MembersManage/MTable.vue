@@ -42,7 +42,10 @@
                                     type="primary"
                                     @click="cancelInput(scope.$index)"
                                 >取消</button>
-                                <button class="popover-btn save" @click="saveInputValue(scope.$index)">保存</button>
+                                <button
+                                    class="popover-btn save"
+                                    @click="saveInputValue(scope.row,scope.$index)"
+                                >保存</button>
                             </div>
                         </div>
                     </el-popover>
@@ -139,28 +142,29 @@ export default {
         },
         cancelInput(id) {
             this.$refs[`popover-${id}`].doClose();
-            this.remarkValue= ""
+            this.remarkValue = "";
         },
 
-        saveInputValue(id) {
-            // console.log(e)
-            console.log(this.remarkValue);
-            if(this.remarkValue == ""){
-                 this.$message.error({
-                                    message: "备注不能为空!"
-                                });
+        saveInputValue(row,id) {
+            if (this.remarkValue == "") {
+                this.$message.error({
+                    message: "备注不能为空!"
+                });
                 return false;
             }
-            this.$emit("updateUserRemark",this.remarkValue)
+            let options = {
+                targetUserId:row.targetUserId,
+                remarkValue:this.remarkValue
+            };
+            this.$emit("updateUserRemark", options);
             this.$refs[`popover-${id}`].doClose();
-           
         },
 
         remarkBlur(e) {
             console.log(e.target.className);
         },
-        showRemark(row){
-            this.remarkValue = row.remark?row.remark:""
+        showRemark(row) {
+            this.remarkValue = row.remark ? row.remark : "";
         }
         // deleteMemberListItem(){
         //   this.tableData = this.tableData.filter((item)=>{

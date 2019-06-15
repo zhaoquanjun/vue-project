@@ -5,6 +5,7 @@ const memberManager = {
         memberInfo: null,
         memberPolicy: [],
         userPermission: [],
+        userId:'823EB3BD-93F4-4655-B833-D604A6EF2032',
     },
     mutations: {
         /**
@@ -115,6 +116,7 @@ const memberManager = {
          */
         async _getBeInvitedUsers({ commit }, options) {
             let { data: beInvitedUsers, status } = await getBeInvitedUsers(options);
+            console.log(status,'------')
             return beInvitedUsers
         },
         /**
@@ -140,7 +142,7 @@ const memberManager = {
                 userids: userids
             }
             let jsonData = await batchUpdateUserPolicy(options);
-            console.log(jsonData, '------0')
+           
         },
 
         /**
@@ -148,19 +150,31 @@ const memberManager = {
          * @param {*} context 
          * @param {*} ids 
          */
-        async _deleteCurMember({ commit }, item) {
-            let jsonData = await batchDeletMember();
-            console.log(jsonData,'22333333')
+        async _deleteCurMember({state,commit }, item) {
+            let options = {
+                sourceUserId: state.userId,
+                targetUserIds:[item.userId],
+                appId: item.appId
+            }
+            let jsonData = await batchDeletMember(options);
+            console.log(jsonData,'member文件')
             return jsonData
            
         },
         /**
          * 批量删除成员
-         * @param {*} context 
+         * @param {*} state 
          * @param {*} ids 
          */
-        async _batchDeletMember(context, ids) {
-            let jsonData = await batchDeletMember(ids);
+        async _batchDeletMember({state}, params) {
+            console.log(params)
+            let options = {
+                sourceUserId: state.userId,
+                targetUserIds:params.ids,
+                appId: params.appId
+            }
+            let jsonData = await batchDeletMember(options);
+            return jsonData;
         },
         async _getShortUrlByInviation() {
             let jsonData = await getShortUrlByInviation(getters.getSelectedAuthNames)

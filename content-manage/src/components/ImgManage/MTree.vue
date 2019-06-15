@@ -27,14 +27,15 @@
             >
                 <div style="display: inline-block;" v-if="renameShowId === data.id || data.isNewAdd">
                     <input
-                        style="width: 86px;height: 30px;border:none;border:1px solid rgba(229,229,229,1)"
+                        class="category-name"
                         v-model="data.label"
                         v-filter-special-char
+                        @input="changeCategoryInput"
                     >
                     <span class="enter" @click.stop="hadnleTreeInput(data,data.isNewAdd)">
                         <svg-icon icon-class="tree-yes"></svg-icon>
                     </span>
-                    <span class="cancel">
+                    <span class="cancel" @click.stop="cancelhadnleTreeInput(data)">
                         <svg-icon icon-class="tree-no"></svg-icon>
                     </span>
                 </div>
@@ -120,6 +121,10 @@ export default {
                 this.renameShowId = this.curId = null;
             }
              this.treeNodeId =null;
+        },
+        //
+        cancelhadnleTreeInput(){
+
         },
         add() {
             console.log(this.treeResult, "3312121212");
@@ -259,6 +264,9 @@ export default {
         handleShow(node, val) {
             console.log((node.checked = true));
             this.curId = node.data.id;
+        },
+        changeCategoryInput(){
+            console.log(234)
         }
     }
 };
@@ -291,6 +299,12 @@ export default {
     align-items: center;
     .enter {
         margin: 0 5px;
+    }
+    .category-name{
+        width: 86px;
+        height: 30px;
+        border:none;
+        border:1px solid rgba(229,229,229,1)
     }
 }
 .tree-handle {
