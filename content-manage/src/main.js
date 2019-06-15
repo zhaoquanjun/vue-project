@@ -11,6 +11,7 @@ import { getLocal } from "./libs/local";
 import './icons';
 import securityService from "@/services/authentication/securityService";
 Vue.config.productionTip = false;
+
 router.beforeEach((to, from, next) => {
   if (getLocal("token")) {
         next()
@@ -30,6 +31,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 });
+
 new Vue({
   router,
   store,
