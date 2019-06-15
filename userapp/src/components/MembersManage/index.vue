@@ -123,6 +123,7 @@ export default {
          * 删除成员列表中其中一项
          */
         async deleteCurMember(curItem) {
+            console.log(curItem)
             this.$confirm(
                 "删除后,成员将不再管理您的站点, 确定要删除吗?",
                 "提示",
@@ -136,6 +137,8 @@ export default {
                             let { status } = await this._deleteCurMember(
                                 curItem
                             );
+                            console.log(status)
+                            console.log(status === 200)
                             if (status === 200) {
                                 this.memberList = this.memberList.filter(
                                     item => item !== curItem

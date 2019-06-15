@@ -66,14 +66,9 @@ export const deleteCurMember = (curId) => {
  * 批量删除成员列表
  * @param {id集合} ids 
  */
-export const batchDeletMember = (ids) => {
-    let params = {
-        sourceUserId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-        targetUserIds: [
-            "823EB3BD-93F4-4655-B833-D604A6EF1171", 
-        ],
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
-    }
+export const batchDeletMember = (options) => {
+    console.log(options,"index文件")
+    let params = options;
     ajaxRequest._delete("/api/userInfo/BatchDeleteUserPolicyAppMap", {data:params})
 }
 /**
