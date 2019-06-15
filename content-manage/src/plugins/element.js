@@ -1,4 +1,54 @@
 import Vue from "vue";
+import {
+    Container,
+    Aside,
+    Main,
+    Tree,
+    Header,
+    Col,
+    Row,
+    Menu,
+    MenuItem,
+    Input,
+    Button,
+    Table,
+    TableColumn,
+    Pagination,
+    Select,
+    Option,
+    Dialog,
+    Card,
+    Upload,
+    Message,
+    
+    MessageBox
+} from 'element-ui';
+Vue.use(Container)
+    .use(Aside)
+    .use(Main)
+    .use(Tree)
+    .use(Header)
+    .use(Col)
+    .use(Row)
+    .use(Menu)
+    .use(MenuItem)
+    .use(Input)
+    .use(Button)
+    .use(Table)
+    .use(TableColumn)
+    .use(Pagination)
+    .use(Select)
+    .use(Option)
+    .use(Dialog)
+    .use(Card)
+    .use(Upload)
+;
+Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
+
+
+
+
 
 // import {
 //     Pagination,
@@ -142,47 +192,3 @@ import Vue from "vue";
 //   Vue.prototype.$confirm = MessageBox.confirm;
 //   Vue.prototype.$prompt = MessageBox.prompt;
 //   Vue.prototype.$notify = Notification;
-//   Vue.prototype.$message = Message;
-
-
-import {
-    Container,
-    Aside,
-    Main,
-    Tree,
-    Header,
-    Col,
-    Row,
-    Menu,
-    MenuItem,
-    Input,
-    Button,
-    Table,
-    TableColumn,
-    Pagination,
-    Select,
-    Option,
-    Dialog,
-    Card,
-    Upload
-} from 'element-ui';
-Vue.use(Container)
-    .use(Aside)
-    .use(Main)
-    .use(Tree)
-    .use(Header)
-    .use(Col)
-    .use(Row)
-    .use(Menu)
-    .use(MenuItem)
-    .use(Input)
-    .use(Button)
-    .use(Table)
-    .use(TableColumn)
-    .use(Pagination)
-    .use(Select)
-    .use(Option)
-    .use(Dialog)
-    .use(Card)
-    .use(Upload)
-;
