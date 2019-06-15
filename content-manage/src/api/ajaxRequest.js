@@ -22,8 +22,8 @@ axios.interceptors.request.use(
     config => {
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-        const token = store.getter.token;
-        token && (config.headers.Authorization = "Bearer " + token);
+        const token = store.getters.token;
+        token && (config.headers.Authorization = token);
 
         //todo 测试阶段写死
         config.headers.appIdJust4Test = '823EB3BD-93F4-4655-B833-D604A6EF2022';
@@ -69,7 +69,7 @@ axios.interceptors.response.use(
                 // 其他错误，直接抛出错误提示                
                 default:
                     Message({
-                        message: status + error.response.data,
+                        message: status +"   "+ error.response.statusText,
                         type: 'error',
                         duration: 5 * 1000
                     })
