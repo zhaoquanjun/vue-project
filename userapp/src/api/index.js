@@ -47,7 +47,7 @@ export const batchUpdateUserPolicy = (options) => {
         appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
         policyNames: options.names
     };
-    ajaxRequest.post("/api/userInfo/BatchUpdateUserPolicy", params)
+    return ajaxRequest.post("/api/userInfo/BatchUpdateUserPolicy", params)
 
 };
 
@@ -60,7 +60,7 @@ export const deleteCurMember = (curId) => {
     let params = {
         id: 10000,
     };
-  ajaxRequest._delete("/api/userInfo/DeleteUserPolicyAppMap", {data:params})
+    return ajaxRequest._delete("/api/userInfo/DeleteUserPolicyAppMap", {data:params})
 }
 /**
  * 批量删除成员列表
@@ -69,7 +69,7 @@ export const deleteCurMember = (curId) => {
 export const batchDeletMember = (options) => {
     console.log(options,"index文件")
     let params = options;
-    ajaxRequest._delete("/api/userInfo/BatchDeleteUserPolicyAppMap", {data:params})
+    return ajaxRequest._delete("/api/userInfo/BatchDeleteUserPolicyAppMap", {data:params})
 }
 /**
  * InterfaceAuthor : 徐专

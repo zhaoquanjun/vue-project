@@ -2,7 +2,7 @@
  * 请求拦截、相应拦截、错误统一处理
  */
 import axios from 'axios';
-import QS from 'qs';
+import { MessageBox, Message } from 'element-ui';
 import { getLocal } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 // 环境的切换
@@ -43,7 +43,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
-        
+        let status = error.response.status;
         if (error.response.status) {
             switch (error.response.status) {
                 // 401: 未登录                
@@ -65,6 +65,11 @@ axios.interceptors.response.use(
                     break;
                 // 其他错误，直接抛出错误提示                
                 default:
+                        Message({
+                            message: status +"   "+ error.response.data,
+                            type: 'error',
+                            duration: 5 * 1000
+                        })
                    
             }
             return Promise.reject(error.response);

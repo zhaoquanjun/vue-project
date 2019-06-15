@@ -163,11 +163,18 @@ const memberManager = {
         },
         /**
          * 批量删除成员
-         * @param {*} context 
+         * @param {*} state 
          * @param {*} ids 
          */
-        async _batchDeletMember(context, ids) {
-            let jsonData = await batchDeletMember(ids);
+        async _batchDeletMember({state}, params) {
+            console.log(params)
+            let options = {
+                sourceUserId: state.userId,
+                targetUserIds:params.ids,
+                appId: params.appId
+            }
+            let jsonData = await batchDeletMember(options);
+            return jsonData;
         },
         async _getShortUrlByInviation() {
             let jsonData = await getShortUrlByInviation(getters.getSelectedAuthNames)
