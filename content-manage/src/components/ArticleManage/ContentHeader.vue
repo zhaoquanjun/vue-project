@@ -1,26 +1,43 @@
 <template>
     <el-header class="content-header">
         <div class="seachInput head-item">
-            <el-input size="small" placeholder="输入成员手机号搜索" class="input-with-select">
+            <el-input size="small" placeholder="输入文章标题搜索" class="input-with-select">
                 <el-button slot="append">
                     <svg-icon icon-class="search-icon"></svg-icon>
                 </el-button>
             </el-input>
         </div>
         <div class="head-item head-middle">
-            <span>排序</span>
+            <span>状态</span>
             <span class="select-sort">
                 <el-select 
                 size="small" 
-                v-model="value"
+                v-model="statusValue"
                  placeholder="请选择"
                  @change="changeSelected"
                  >
                     <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="item in statusOptions"
+                        :key="item.statusValue"
+                        :label="item.statusLabel"
+                        :value="item.statusValue"
+                    ></el-option>
+                </el-select>
+            </span>
+
+            <span>排序</span>
+            <span class="select-sort">
+                <el-select 
+                size="small" 
+                v-model="orderValue"
+                 placeholder="请选择"
+                 @change="changeSelected"
+                 >
+                    <el-option
+                        v-for="item in orderOptions"
+                        :key="item.orderValue"
+                        :label="item.orderLabel"
+                        :value="item.orderValue"
                     ></el-option>
                 </el-select>
             </span>
@@ -44,29 +61,32 @@
 export default {
     data() {
         return {
-            options: [
+            statusOptions: [
                 {
-                    value: "选项1",
-                    label: "黄金糕"
+                    statusValue: "",
+                    statusLabel: "全部"
                 },
                 {
-                    value: "选项2",
-                    label: "双皮奶"
+                    statusValue: "true",
+                    statusLabel: "上线"
                 },
                 {
-                    value: "选项3",
-                    label: "蚵仔煎"
-                },
-                {
-                    value: "选项4",
-                    label: "龙须面"
-                },
-                {
-                    value: "选项5",
-                    label: "北京烤鸭"
+                    statusValue: "false",
+                    statusLabel: "下线"
                 }
             ],
-            value: ""
+            statusValue: "",
+            orderOptions: [
+                {
+                    orderValue: "0",
+                    orderLabel: "创建时间"
+                },
+                {
+                    orderValue: "1",
+                    orderLabel: "标题"
+                }
+            ],
+            orderValue: "0"
         };
     },
     methods:{

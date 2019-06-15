@@ -11,7 +11,9 @@
         <el-main>
             <content-header></content-header>
             <el-main>
-                 <content-table></content-table>
+                 <content-table
+                 :article-list="articleList"
+                @changePageNum="changePageNum"></content-table>
             </el-main>
         </el-main>
     </el-container>
@@ -20,14 +22,34 @@
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
+import { getArticalList } from "@/api/request/articleManageApi";
 export default {
     components: {
         MTree,
         ContentHeader,
         ContentTable
     },
-    methods:{
-        
+    data() {
+        return {
+            articleList: null,
+            dialogTableVisible:false,
+        };
+    },
+    mounted() {
+        this._getArticalList();
+    },
+    methods: {
+        async _getArticalList(options) {
+            let { data } = await getArticalList((options = {}));
+            this.articleList = data.list;
+        },
+        changePageNum(page) {
+            console.log(page, "index页面");
+            let options = {
+                pageIndex: page
+            };
+            this._getArticalList(options);
+        }
     }
 };
 </script>
