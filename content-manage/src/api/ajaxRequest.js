@@ -26,7 +26,7 @@ axios.interceptors.request.use(
         token && (config.headers.Authorization = token);
 
         //todo 测试阶段写死
-        config.headers.appIdJust4Test = '823EB3BD-93F4-4655-B833-D604A6EF2022';
+        config.headers.AppId = '823EB3BD-93F4-4655-B833-D604A6EF2032';
         return config;
     },
     error => {
