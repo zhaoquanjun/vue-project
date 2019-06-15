@@ -6,11 +6,11 @@ import QS from 'qs';
 import { getLocal } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 // 环境的切换
-if (process.env.NODE_ENV == 'development') {    
-    axios.defaults.baseURL = environment.memberManageApi;
-}  else if (process.env.NODE_ENV == 'production') {    
-    axios.defaults.baseURL = '/';
-}
+// if (process.env.NODE_ENV == 'development') {    
+//     axios.defaults.baseURL = environment.memberManageApi;
+// }  else if (process.env.NODE_ENV == 'production') {    
+//     axios.defaults.baseURL = '/';
+// }
 axios.defaults.baseURL = environment.memberManageApi;
 // 请求超时时间
 axios.defaults.timeout = 5000;
@@ -43,7 +43,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
-        console.log(err)
+        
         if (error.response.status) {
             switch (error.response.status) {
                 // 401: 未登录                

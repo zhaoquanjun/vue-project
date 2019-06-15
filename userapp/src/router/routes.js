@@ -1,32 +1,48 @@
-import Home from "../views/Home";
+//import Home from "../views/Home";
 
 // 默认访问的路由
 export const defaultRoutes = [
   {
     path: "/",
-    name: "home",
-    component: Home
+    redirect:{path:'/memberManage'},
+    component: ()=>import('@/components/index.vue'),
+    children:[
+      {
+        path: "/memberManage",
+        name: "memberManage",
+        component:  () => import("@/views/member-manage.vue")
+      },
+      {
+        path: "/personal",
+        name: "personal",
+        component: () => import("@/views/personal.vue")
+      },
+    ]
   },
-  {
-    path: "/personal",
-    name: "personal",
-    component: () => import("@/components/personal/index.vue")
-  },
+  
   {
     path: "/callback",
     name: "callback",
     component: () => import("@/views/login/signcallback.vue")
   },
   {
-    path: '/login',
-    component: () => import('@/views/login/index.vue'),
-    hidden: true
+    path: '/401',
+    component: () => import('@/views/error-page/401.vue'),
+    name: '401',
+   
   },
   {
-    path:'/contentManage',
-    name:"contentManage",
-    component : () => import('@/views/content-manage.vue')
-  }
+    path: '/404',
+    component: () => import('@/views/error-page/404.vue'),
+    name: '404',
+    
+  },
+  {
+    path:'*',
+    component:()=>import('@/views/error-page/404.vue')
+  } 
+  
+  
 ];
 
 // 有权限才可访问的路由
