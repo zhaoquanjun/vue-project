@@ -1,3 +1,9 @@
+/**
+ *系统配置管理
+ *
+ */
+
+
 /**生产环境 */
 let memberManageApi = 'http://api.content.newwezhan.cn';
 let uploadPicUrl = 'http://api.content.newwezhan.cn/api/picture';
@@ -14,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
     authorityUrl = "http://api.identity.newwezhan.cn";
     redirectUrl = "http://content.newwezhan.cn/callback";
     logoutRedirectUri = "http://content.newwezhan.cn/index.html";
-}
+};
 const enbironmemy = {
     authorityUrl,
     redirectUrl,

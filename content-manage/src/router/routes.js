@@ -1,4 +1,4 @@
-import imgManage from "../views/img-manage";
+//import imgManage from "../views/img-manage";
 
 // 默认访问的路由
 export const defaultRoutes = [
@@ -6,47 +6,46 @@ export const defaultRoutes = [
   {
     path: "/",
     redirect:{path:'/image'},
+    component: ()=>import('@/components/index.vue'),
     children:[
       {
         path: "/article",
         name: "article",
-        component:  () => import('@/views/article-manage.vue')
+        component:  () => import('@/views/content-manage/article-manage.vue')
       },
       {
         path: "/image",
         name: "image",
-        component:  () => import('@/views/img-manage.vue')
+        component:  () => import('@/views/content-manage/img-manage.vue')
       },
       {
         path: "/file",
         name: "file",
-        component:  () => import('@/views/file-manage.vue')
+        component:  () => import('@/views/content-manage/file-manage.vue')
       },
       {
         path: "/product",
         name: "product",
-        component:  () => import('@/views/product-manage.vue')
+        component:  () => import('@/views/content-manage/product-manage.vue')
       },
     ]
   },
-  
   {
-    path:"/error",
+    path: "/callback",
+    name: "callback",
+    component: () => import("@/views/login/signcallback.vue")
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/error-page/401.vue'),
+    name: '401',
+   
+  },
+  {
+    path: '/404',
     component: () => import('@/views/error-page/404.vue'),
-    children:[
-      {
-        path: '401',
-        component: () => import('@/views/error-page/401.vue'),
-        name: '401',
-       
-      },
-      {
-        path: '404',
-        component: () => import('@/views/error-page/404.vue'),
-        name: '404',
-        
-      }
-    ]
+    name: '404',
+    
   },
   {
     path:'*',
