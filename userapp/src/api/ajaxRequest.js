@@ -15,7 +15,8 @@ import environment from "@/environment/index.js"
 axios.defaults.baseURL = environment.xuzhuanUrl;
 // 请求超时时间
 axios.defaults.timeout = 5000;
-
+//设置put请求传输内容的格式
+axios.defaults.headers.put['Content-Type'] = 'application/json-patch+json;charset=UTF-8';
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
@@ -112,6 +113,7 @@ export function post(url, params) {
  * @param {String} url [请求的url地址] 
  * @param {Object} params [请求时携带的参数] 
  */
+
 export function put(url, params) {
     return new Promise((resolve, reject) => {
         axios.put(url,params)

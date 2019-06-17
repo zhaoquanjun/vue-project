@@ -165,9 +165,8 @@ const memberManager = {
         async _getShortUrlByInviation() {
             let jsonData = await getShortUrlByInviation(getters.getSelectedAuthNames)
         },
-        async _updateUserRemark (context,options){
-            
-            await updateUserRemark(options)
+        async _updateUserRemark(context,data){
+            await updateUserRemark(data.targetUserId,data.remark);
         }
     },
     getters: {

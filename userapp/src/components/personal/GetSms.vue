@@ -65,7 +65,8 @@
 </template>
  
 <script>
-import { watch } from "fs";
+    import { watch } from "fs"; 
+    import { updateUserPhone } from "@/api/index.js";
 const TIME_COUNT = 60; //更改倒计时时间
 export default {
     props: ["isModifi"],
@@ -159,7 +160,9 @@ export default {
 
     methods: {
         send() {
+            this.$emit("getSmsCode")
             if (!this.timer) {
+
                 this.count = TIME_COUNT;
                 this.show = false;
                 this.timer = setInterval(() => {
@@ -178,13 +181,26 @@ export default {
         },
         changeInput() {
             console.log(this.ruleForm.verification);
-            this.$emit("getSmsCode", this.ruleForm.verification);
+            //this.$emit("getSmsCode", this.ruleForm.verification);
         },
         submitForm(formName) {
             console.log(111)
-            this.$refs[formName].validate(valid => {
+            this.$refs[formName].validate(async valid => {
                 if (valid) {
-                    console.log("submit!");
+                    console.log(this.$refs[formName]); 
+                    //let { status } = await updateUserPhone(this.ruleForm.phone, this.ruleForm.verification);
+                    let { status } = await updateUserPhone('13332902841','1234');
+                    if (status === 200) {
+                        this.$message({
+                            type: "success",
+                            message: "修改成功!"
+                        });
+                    } else {
+                        this.$message({
+                            type: "failed",
+                            message: "改失败!"
+                        });
+                    }
                 } else {
                     console.log("error submit!!");
                     return false;

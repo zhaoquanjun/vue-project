@@ -113,12 +113,13 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
  * @param {*} names 
  */
 
-export const updateUserRemark = (options) => {
+export const updateUserRemark = (targetUserId, remark) => {
+    console.log(targetUserId, remark);
     let params = {
-        targetUserId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-        remark: options.value
+        targetUserId: targetUserId,
+        remark: remark
     };
-    return ajaxRequest.put('/api/userInfo/UpdateUserRemark', params);
+    return ajaxRequest.put(`/api/userInfo/UpdateUserRemark/${targetUserId}/${remark}`, params);
 
 }
 
@@ -140,8 +141,57 @@ export const getShortUrlByInviation = (names) => {
  * 修改用户名称
  */
 export const updateUserName = (userName) => {
+    
+    return ajaxRequest.put('/api/userInfo/UpdateUserName', JSON.stringify(userName));
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 验证用户已绑定的号码
+ */
+export const sendSourcePhoneCode = (phone) => {
+    return ajaxRequest.put('/api/phone/SendSourcePhoneCode', JSON.stringify(phone));
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 验证用户要更改绑定的新的号码
+ */
+export const sendTargetPhoneCode = (oldPhone, newPhone) => {
     let params = {
-        name: userName
+        oldPhone: oldPhone,
+        newPhone: newPhone
     }
-    return ajaxRequest.put('/api/userInfo/UpdateUserName', params);
+    return ajaxRequest.put(`/api/phone/SendTargetPhoneCode/${oldPhone}/${newPhone}`, params);
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 验证用户的（原绑定的手机的）验证码是否正确
+ */
+export const isInvalidCode = (phone, code) => {
+    let params = {
+        phone: phone,
+        code: code
+    }
+    return ajaxRequest.put(`/api/phone/IsInvalidCode/${phone}/${code}`, params);
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 获取用户的账户信息
+ */
+export const getUserProfile = (id) => {
+    let params = {
+        userId: id
+    }
+    return ajaxRequest.get('/api/userInfo/GetUserProfile', params);
+}
+
+/**
+ * InterfaceAuthor : xuzhuan
+ * 修改用户绑定的手机号码
+ */
+export const updateUserPhone = (phone,code) => {
+    let params = {
+        phone: phone,
+        code: code
+    }
+    return ajaxRequest.put(`/api/userInfo/UpdateUserPhone/${phone}/${code}`, params);
 }

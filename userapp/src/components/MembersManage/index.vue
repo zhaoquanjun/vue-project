@@ -226,11 +226,8 @@ export default {
                 this.memberInfo = jsonData;
             });
         },
-        updateUserRemark(value){
-            let options = {
-                value,
-            }
-            this._updateUserRemark(options)
+        updateUserRemark(data){           
+            this._updateUserRemark(data);
         }
     },
     computed: {

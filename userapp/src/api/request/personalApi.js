@@ -3,12 +3,12 @@ import * as ajaxRequest from "../ajaxRequest";
 /**
  * 获取用户信息
  */
-export const getUserProfileAsync = () => {
+export const getUserProfile = () => {
     let params = {
         userid: "823EB3BD-93F4-4655-B833-D604A6EF1171",     
 
     };
-    return ajaxRequest.get('/api/userInfo/GetUserProfileAsync', params);
+    return ajaxRequest.get('/api/userInfo/GetUserProfile', params);
 }
 /**
  * 更新用户头像

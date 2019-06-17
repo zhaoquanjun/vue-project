@@ -36,7 +36,7 @@
                     <span class="pd-left social-desc">手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net.cn</span>
                 </div>
                 <div class="fright">
-                    <span>13011011746</span>
+                    <span>{{userInfo.phoneNumber}}</span>
 
                     <span class="pd-left">
                         <button>已绑定</button> |
@@ -134,7 +134,7 @@
         </ul>
         <right-pannel :style="{width:pannelWidth+'px'}">
             <span slot="title-text">{{titText}}</span>
-             <component :is="curComponent"></component>
+             <component :is="curComponent" :sourcePhone="userInfo.phoneNumber"></component>
         </right-pannel>
          <el-dialog
                 width="0"
@@ -153,82 +153,74 @@ import RightPannel from "../RightPannel";
 import SetPhoneNumber from "./SetPhoneNumber";
 import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import { getUserCurrentAppPolicy } from "@/api/index.js";
+import { getUserProfile } from "@/api/index.js"; 
 import { updateUserName } from "@/api/index.js";
 
-export default {
-    data() {
-        return {
-            input: "",
-            flag: true,
-            userInfo: "",
-            curComponent:"",
-            titText:"手机号修改",
-        };
-    },
-    components: {
-        RightPannel,
-        SetPhoneNumber
-    },
-    created() {
-        this._getUserProfileAsync();
-    },
-    methods: {
-      ...mapMutations(["ISRIGHTPANNELSHOW"]),
-        async _getUserProfileAsync() {
-            let { data } = await getUserProfileAsync();
-            this.userInfo = data;
+    export default {
+        data() {
+            return {
+                input: "",
+                flag: true,
+                userInfo: "",
+                curComponent: "",
+                titText: "手机号修改",
+            };
         },
-        // 修改手机号
-        modifiPhoneNum(){
-          this.curComponent= SetPhoneNumber;
-          this.ISRIGHTPANNELSHOW(true)
+        components: {
+            RightPannel,
+            SetPhoneNumber
         },
-        //修改邮箱
-        modifiEmail(){},
-        //修改密码
-        modifiPwd(){},
-        // 微信操作
-        modifiWeixin(){},
-        //钉钉操作
-        modifiDing(){},
-        //支付宝操作
-        modifAlipay(){},
-        setName() {
-            this.flag = false;
+        created() {
+            this._getUserProfileAsync();
         },
-        blur() {
-            this.flag = true;
+        methods: {
+            ...mapMutations(["ISRIGHTPANNELSHOW"]),
+            async _getUserProfileAsync() {
+                let { data } = await getUserProfile('E90BCED5-C809-4926-8198-B7DD967B5BD1');
+                this.userInfo = data;
+                this.input = data.displayName;
+            },
+            // 修改手机号
+            modifiPhoneNum() {
+                this.curComponent = SetPhoneNumber;
+                this.ISRIGHTPANNELSHOW(true)
+            },
+            //修改邮箱
+            modifiEmail() { },
+            //修改密码
+            modifiPwd() { },
+            // 微信操作
+            modifiWeixin() { },
+            //钉钉操作
+            modifiDing() { },
+            //支付宝操作
+            modifAlipay() { },
+            setName() {
+                this.flag = false;
+            },
+            async blur() {
+                this.flag = true;
+                let { status } = await updateUserName(this.input);
+                if (status === 200) {
+                    this.$message({
+                        type: "success",
+                        message: "设置成功!"
+                    });
+                } else {
+                    this.$message({
+                        type: "failed",
+                        message: "设置失败!"
+                    });
+                }
+            },
+
         },
-      
-    },
-    computed: {
-        pannelWidth() {
-            return this.$store.state.isRightPanelShow === true ? 390 : 0;
+        computed: {
+            pannelWidth() {
+                return this.$store.state.isRightPanelShow === true ? 390 : 0;
+            }
         }
-      setName() {
-        this.flag = false;
-      },
-      async blur() {
-        this.flag = true;
-          let { status } =await updateUserName(this.input);
-          if (status === 200) {
-              this.$message({
-                  type: "success",
-                  message: "设置成功!"
-              });
-          } else {
-              this.$message({
-                  type: "failed",
-                  message: "设置失败!"
-              });
-          }
-      },
-    async _getAuth() {
-      let loginInfo = await getAuth();
-    
-    }
-};
+    };
 </script>
 <style scoped>
 </style>
