@@ -5,8 +5,11 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
-            <h5 class="title-item">全部分类({{totalSum}}) <button @click="newCategory({DisplayName:'Test'})">新增</button></h5>
+            <h5 class="title-item" @click="resetCategoryId">全部分类</h5>
+            <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree :tree-result="treeResult"
+                    :pic-search-options="picSearchOptions"
+                    @getPicList="getPicList"
                     @create="newCategory"
                     @batchRemove="batchRemoveCategory"
                     @rename="renameCategory"
@@ -20,7 +23,10 @@
             <el-main>
                 <img-list :img-page-result="imgPageResult"
                           :pic-search-options="picSearchOptions"
+                          :tree-result="treeResult"
                           @getPicList="getPicList"
+                          @changeCategory="changeCategoryPic"
+                          @rename="renamePic"
                           @batchRemove="batchRemovePic"></img-list>
             </el-main>
         </el-main>
@@ -55,7 +61,7 @@
                 dialogTableVisible: false,
                 totalSum: 0,
                 uploadPicUrl: environment.uploadPicUrl,
-                picSearchOptions: { pageSize: 10, pageIndex: 1, orderByType: 1, isDescending: true, picCategoryId: null, keyword: "" }
+                picSearchOptions: { pageSize: 10, pageIndex: 1, orderByType: 1, isDescending: true, picCategoryId: null, keyword: "", isDelete: false }
             };
         },
         mounted() {
@@ -68,7 +74,22 @@
                 this.imgPageResult = data;
             },
             async batchRemovePic(idlist) {
-                let { data } = await imgManageApi.batchRemove(idlist);
+                let { status,data } = await imgManageApi.batchRemove(true, idlist);
+                 this.getPicList();
+                
+            
+               
+            },
+            resetCategoryId() {
+                this.picSearchOptions.picCategoryId = null;
+                this.getPicList();
+            },
+            async changeCategoryPic(categoryId, idList) {
+                await imgManageApi.changeCategory(categoryId, idList);
+                this.getPicList();
+            },
+            async renamePic(id, newname) {
+                await imgManageApi.rename(id, newname);
                 this.getPicList();
             },
             async getTree() {
@@ -79,12 +100,35 @@
             async newCategory(entity) {
                 console.log(entity);
                 await imgCategoryManageApi.create(entity);
-
                 this.getTree();
             },
             async batchRemoveCategory(idList) {
-                await imgCategoryManageApi.batchRemove(idList);
-                this.getTree();
+                this.$confirm("若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                  callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                          
+                            let  {status} = await imgCategoryManageApi.batchRemove(idList);
+                            if (status === 200) {
+                                  this.getTree();
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消删除"
+                            });
+                        }
+                    }
+            })
+               
+               
             },
             async renameCategory(id, newName) {
                 await imgCategoryManageApi.rename(id, newName);
@@ -104,9 +148,11 @@
     .el-main {
         /* padding: 0; */
     }
-
+    .el-container /deep/ .el-aside{
+        overflow: visible !important;
+    }
     .el-container /deep/ .tree-aside {
-        width: 664px !important;
+        width:220px !important;
         height: 100vh;
         background: #fff;
         margin: 0 0 0 13px;

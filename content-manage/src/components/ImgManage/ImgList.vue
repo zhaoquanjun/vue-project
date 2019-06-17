@@ -10,7 +10,9 @@
             <el-table-column label="图片名称">
                 <template slot-scope="scope">
                     <img :src="scope.row.zoomOssUrl" class="cover">
-                    <span>{{ scope.row.title }}</span>
+                    <input v-model="scope.row.title" />
+                    <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>
+
                 </template>
             </el-table-column>
 
@@ -24,13 +26,13 @@
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn" @click="handleMove(scope.$index, scope.row)">
+                        <button class="handle-btn" @click="handleMove(scope.row)">
                             <svg-icon style="width:27px;height:27px" icon-class="tab-move"></svg-icon>
                         </button>
-                        <button class="handle-btn" @click="handleLook(scope.$index, scope.row)">
+                        <button class="handle-btn" @click="viewPic( scope.row)">
                             <svg-icon icon-class="tab-look"></svg-icon>
                         </button>
-                        <button class="handle-btn" @click="batchRemove(scope.$index, scope.row)">
+                        <button class="handle-btn" @click="batchRemove( scope.row)">
                             <svg-icon icon-class="l-recyclebin"></svg-icon>
                         </button>
                     </div>
@@ -47,6 +49,17 @@
                            @current-change="changePage"
                            @size-change="changeSize"></el-pagination>
         </div>
+        <el-dialog :title="picTitle" :visible.sync="imgVisible ">
+            <img :src="picUrl" />
+        </el-dialog>
+        <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
+            <el-tree :data="treeResult"
+                     node-key="id"
+                     accordion
+                     :expand-on-click-node="false"
+                     @node-click="changeCategory">
+            </el-tree>
+        </el-dialog>
     </div>
 </template>
 
@@ -58,11 +71,15 @@
         //         default:()=>({})
         //     }
         // },
-        props: ["imgPageResult", "picSearchOptions"],
+        props: ["imgPageResult", "picSearchOptions", "treeResult"],
         data() {
             return {
                 imgVisible: false,
-                multipleSelection: []
+                multipleSelection: [],
+                picUrl: null,
+                picTitle: null,
+                categoryVisable: false,
+                changeCategoryPicId: null
             };
         },
 
@@ -77,22 +94,26 @@
             /**
              * 移动分类
              */
-            handleMove(index, row) {
-                console.log(index, row);
+            handleMove(row) {
+                this.categoryVisable = true;
+                this.changeCategoryPicId = row.id;
+            },
+            changeCategory(data) {
+                this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
+                this.categoryVisable = false;
+            },
+            rename(id, newName) {
+                this.$emit("rename", id, newName);
             },
             /**
              * 查看大图
              */
-            handleLook(index, row) {
-                console.log(index, row);
+            viewPic(row) {
+                this.picUrl = row.fullOssUrl;
+                this.picTitle = row.title;
                 this.imgVisible = true;
             },
-            /**
-             * 删除操作
-             */
-            handleDelete(index, row) {
-                console.log(index, row);
-            },
+
             changePage(page) {
                 this.picSearchOptions.pageIndex = page;
                 this.$emit("getPicList");
@@ -101,8 +122,8 @@
                 this.picSearchOptions.pageSize = size;
                 this.$emit("getPicList");
             },
-            batchRemove(idList) {
-                this.$emit("batchRemove", idList);
+            batchRemove(row) {
+                this.$emit("batchRemove", [row.id]);
             }
         }
     };

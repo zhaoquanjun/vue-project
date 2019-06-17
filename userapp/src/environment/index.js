@@ -2,13 +2,16 @@
 /**
  * 开发环境的URL
  */
-let memberManageApi = 'http://192.168.199.99:8100';
-let authorityUrl = "http://localhost:8000";//"http://192.168.199.99:8000";
-let redirectUrl = "http://192.168.199.101:8082/callback";
-let logoutRedirectUri = "http://192.168.199.101:8082/index.html";
+let memberManageApi = 'http://api.dashboard.newwezhan.cn';
+let authorityUrl = "http://localhost:8000";//"http://api.identity.newwezhan.cn";
+let redirectUrl = "http://www.newwezhan.cn/callback";
+let logoutRedirectUri = "http://www.newwezhan.cn/index.html";
 let xuzhuanUrl = "http://localhost:8100/"
 if (process.env.NODE_ENV === 'development') {
-  
+    memberManageApi = 'http://api.dashboard.newwezhan.cn';
+    authorityUrl = "http://api.identity.newwezhan.cn";
+    redirectUrl = "http://www.newwezhan.cn/callback";
+    logoutRedirectUri = "http://www.newwezhan.cn/index.html";
 }
 
 

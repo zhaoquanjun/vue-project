@@ -1,12 +1,14 @@
 let path = require('path');
 function resolve(dir) {
+    console.log(dir);
     return path.join(__dirname, '.', dir)
 }
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
-    assetsDir: 'asserts',
+    publicPath: process.env.NODE_ENV === 'production' ? './' : './',
     outputDir: './dist',
+    indexPath: 'index.html',
     runtimeCompiler: false,
+
     // 打包 不再使用sourcemap
     productionSourceMap: false,
     chainWebpack: config => {

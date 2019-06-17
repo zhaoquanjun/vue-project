@@ -139,7 +139,7 @@ export default {
         },
         cancelInput(id) {
             this.$refs[`popover-${id}`].doClose();
-            this.remarkValue= ""
+            this.remarkValue = "";
         },
 
         saveInputValue(id,row) {
@@ -155,14 +155,13 @@ export default {
             };
             this.$emit("updateUserRemark", data)
             this.$refs[`popover-${id}`].doClose();
-           
         },
 
         remarkBlur(e) {
             console.log(e.target.className);
         },
-        showRemark(row){
-            this.remarkValue = row.remark?row.remark:""
+        showRemark(row) {
+            this.remarkValue = row.remark ? row.remark : "";
         }
         // deleteMemberListItem(){
         //   this.tableData = this.tableData.filter((item)=>{
