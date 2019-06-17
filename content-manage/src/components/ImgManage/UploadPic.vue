@@ -33,14 +33,16 @@
 <script>
     export default {
         props: ["treeResult", "uploadPicUrl"],
+       
         data() {
             return {
+
                 fileList: [],
                 upload2Category: { label: "全部分类", id: 0 },
                 uploadPicAction: `${this.uploadPicUrl}/0`,
                 headers: {
-                    appIdJust4Test: "823EB3BD-93F4-4655-B833-D604A6EF2022",
-                    userIdJust4Test: "9d0062ea-b906-4061-b0ce-0c236d25a916"
+                    appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+                    Authorization: ""
                 }
             };
         },
@@ -57,6 +59,8 @@
                 this.uploadPicAction = `${this.uploadPicUrl}/${this.upload2Category.id}`;
             },
             submitUpload() {
+                
+                this.headers.Authorization ='Bearer ' + this.$store.state.accessToken.Authorization;
                 this.$refs.upload.submit();
             },
             beforeUpload(file) {

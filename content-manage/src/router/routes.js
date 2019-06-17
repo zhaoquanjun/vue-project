@@ -52,3 +52,4 @@ export const defaultRoutes = [
     component:()=>import('@/views/error-page/404.vue')
   } 
 ];
+
