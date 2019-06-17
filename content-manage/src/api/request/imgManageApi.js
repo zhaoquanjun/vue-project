@@ -10,18 +10,17 @@ import * as ajaxRequest from "../ajaxRequest";
  * 获取图片列表
  * @param {*} option 
  */
-export const getPicList = (option) => {
-    console.log(option.keyword)
-    let params = {
-        keyword: option.keyword || "",
-        orderByType: option.orderByType|| "",
-        isDescending:option.isDescending || true,
-        picCategoryId: option.picCategoryId || "",
-    
-    };
-    let page ={
-        pageIndex:option.pageIndex || 1,
-        pageSize:option.pageSize|| 9
-    }
-    return ajaxRequest.get(`/api/Picture/${page.pageIndex}/${page.pageSize}`,params);
+export const getPicList = options => {
+    return ajaxRequest.get(`/api/Picture/${options.pageIndex}/${options.pageSize}`, options);
+}
+export const batchRemove = (isDelete, idList) => {
+    return ajaxRequest.put(`/api/Picture/ChangeDeleteStatus/${isDelete}`, idList);
+}
+
+export const changeCategory = (categoryId, idList) => {
+    return ajaxRequest.put(`/api/Picture/ChangeCategory/${categoryId}`, idList);
+}
+
+export const rename = (id, newName) => {
+    return ajaxRequest.put(`/api/Picture/${id}`, JSON.stringify(newName));
 }

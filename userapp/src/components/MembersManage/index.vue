@@ -47,7 +47,6 @@
                 :show-close="false"
                 :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
                 :before-close="handleClose"
-
             ></el-dialog>
             <right-pannel :style="{width:pannelWidth+'px'}">
                 <span slot="title-text">权限配置</span>
@@ -82,9 +81,9 @@ export default {
     data() {
         return {
             submenuList: [
-                { name: "企业信息", url: "enterprise" },
-                { name: "显示设置", url: "url" },
-                { name: "成员列表", url: "url" }
+                { name: "企业信息", url: "/xx" },
+                { name: "显示设置", url: "/xx" },
+                { name: "成员列表", url: "/memberManage" }
             ],
             memberPhone: "",
             dialogVisible: true,
@@ -93,12 +92,16 @@ export default {
             multipleSelection: [],
             isBatch: false,
             svg: "arrow-down",
-            isInvite: 1
+            isInvite: 1,
+            memberListParams:{
+                phone:"",
+                pageNum:"",
+                pageSize:3,
+            }
         };
     },
     mounted() {
         this._getBeInvitedUsers().then(jsonData => {
-            console.log(jsonData)
             this.memberInfo = jsonData;
             this.memberList = jsonData.items;
         });
@@ -118,11 +121,11 @@ export default {
             "CURMEMBVERINFO"
         ]),
 
-
         /**
          * 删除成员列表中其中一项
          */
         async deleteCurMember(curItem) {
+            console.log(curItem);
             this.$confirm(
                 "删除后,成员将不再管理您的站点, 确定要删除吗?",
                 "提示",
@@ -136,6 +139,8 @@ export default {
                             let { status } = await this._deleteCurMember(
                                 curItem
                             );
+                            console.log(status);
+                            console.log(status === 200);
                             if (status === 200) {
                                 this.memberList = this.memberList.filter(
                                     item => item !== curItem
@@ -159,11 +164,49 @@ export default {
          * 批量删除成员
          */
         async batchDeletMember() {
-            console.log(this.multipleSelection, "批量删除");
+            let appId = this.multipleSelection[0].appId;
             let ids = [];
-            this.multipleSelection.forEach(item => ids.push(item.id));
-            let data = await this._batchDeletMember(ids);
-            console.log(data);
+            this.multipleSelection.forEach(item => ids.push(item.userId));
+            let params = {
+                ids: ids,
+                appId: appId
+            };
+            this.$confirm(
+                "删除后,成员将不再管理您的站点, 确定要删除吗?",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        if (action === "confirm") {
+                            let { status } = await this._batchDeletMember(
+                                params
+                            );
+                            if (status === 200) {
+                                this.getMemberList();
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消删除"
+                            });
+                        }
+                    }
+                }
+            );
+        },
+        getMemberList(){
+             let options = { phone: this.memberPhone };
+            this._getBeInvitedUsers(options).then(jsonData => {
+                
+                this.memberInfo = jsonData;
+                this.memberList = jsonData.items;
+            });
         },
         /**
          * 搜索成员
@@ -171,7 +214,7 @@ export default {
         memberSearch() {
             let options = { phone: this.memberPhone };
             this._getBeInvitedUsers(options).then(jsonData => {
-                console.log(jsonData,'jsondata')
+                console.log(jsonData, "jsondata");
                 this.memberInfo = jsonData;
                 this.memberList = jsonData.items;
             });
@@ -219,18 +262,16 @@ export default {
          * 改变table页码
          */
         changePageNum(page) {
+            this.memberListParams.pageNum = page;
             let options = { page: page };
             this._getBeInvitedUsers(options).then(jsonData => {
-               
                 this.memberList = jsonData.items;
                 this.memberInfo = jsonData;
             });
         },
-        updateUserRemark(value){
-            let options = {
-                value,
-            }
-            this._updateUserRemark(options)
+        updateUserRemark(options) {
+           
+            this._updateUserRemark(options);
         }
     },
     computed: {

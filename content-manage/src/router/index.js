@@ -8,3 +8,4 @@ export default new VueRouter({
     base: process.env.BASE_URL,
     routes: defaultRoutes
 });
+
