@@ -6,12 +6,19 @@
         <span>产品分类</span>
       </h4>
       <h5 class="title-item">全部分类{{totalSum}}</h5>
-      <category-tree :category-tree-data="categoryTreeData" :search-option="searchOption"
-      @getProductList="_getProductList"
-      @rename="renameCategory"></category-tree>
+      <category-tree
+        :category-tree-data="categoryTreeData"
+        :search-option="searchOption"
+        @getProductList="_getProductList"
+        @rename="renameCategory"
+      ></category-tree>
     </el-aside>
     <el-main>
-      <product-header :search-option="searchOption" @getProductList="_getProductList"/>
+      <product-header
+        :search-option="searchOption"
+        @getProductList="_getProductList"
+        @showAddDialog="_showAddDialog"
+      />
       <el-main>
         <product-table
           :product-list-data="productListData"
@@ -21,9 +28,9 @@
         ></product-table>
       </el-main>
     </el-main>
-    <!-- <el-dialog>
+     <el-dialog>
       <add-product :tree-result="categoryTreeData"/>
-    </el-dialog> -->
+    </el-dialog>
   </el-container>
 </template>
 <script>
@@ -51,7 +58,8 @@ export default {
         categoryId: null,
         name: ""
       },
-      totalSum: 0
+      totalSum: 0,
+      addDialogVisible: true
     };
   },
   mounted() {
@@ -67,9 +75,8 @@ export default {
       let { data } = await productManageApi.getCategoryTree();
       this.categoryTreeData = data.categoryTree;
     },
-    async renameCategory(id,newName){
-      
-    }
+    async renameCategory(id, newName) {},
+    async _showAddDialog() {}
   }
 };
 </script>

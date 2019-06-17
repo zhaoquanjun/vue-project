@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left:20px">
+  <div class="table-wrap">
     <el-table
       ref="multipleTable"
       :data="productListData.data"
@@ -11,7 +11,8 @@
 
       <el-table-column label="产品图片">
         <template slot-scope="scope">
-          <img src="../../assets/avatar.jpeg" class="cover" alt>
+          <img src="../../assets/avatar.jpeg" class="cover">
+          <!-- <img :src="scope.row.thumbnailPicUrl" class="cover"> -->
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
@@ -21,10 +22,12 @@
 
       <el-table-column prop="orginalPrice" label="原始价格" show-overflow-tooltip></el-table-column>
 
-      <!-- <el-table-column prop="isDeleted" label="是否上架" show-overflow-tooltip>
-        <span v-if="{isDeleted}">上架</span>
-        <span v-else>下架</span>
-      </el-table-column>-->
+      <el-table-column label="是否上架" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span v-if="scope.row.isDeleted">上架</span>
+          <span v-else>下架</span>
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -111,6 +114,9 @@ export default {
 .el-table .el-table__row {
   height: 60px;
   /* line-height: 60px; */
+}
+.table-wrap {
+  margin: 0 21px;
 }
 </style>
 <style >
