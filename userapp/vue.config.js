@@ -38,30 +38,8 @@ module.exports = {
         module: {}
     },
     devServer: { // 开发 服务时使用
-        port: 8082,
-        proxy: {
-            '/api': {
-                target: 'http://192.168.199.99:8100',
-                changeOrigin: true,
-                pathRewrite: {
-                    '/api': ''
-                }
-            },
-            // '/api/hengdong':{
-            //     target:'http://192.168.199.103:8100',
-            //     changeOrigin: true,
-            //     pathRewrite:{
-            //         '/api':''
-            //     }
-            // },
-            // '/fuquan':{
-            //     target:'http://192.168.199.245:5000',
-            //     changeOrigin: true,
-            //     pathRewrite:{
-            //         '/fuquan':''
-            //     }
-            // }
-        }
+        disableHostCheck: true,
+        port: 80,
     },
     pluginOptions: {
 
