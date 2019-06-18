@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
     memberManageApi = 'http://api.content.newwezhan.cn';
     uploadPicUrl = 'http://api.content.newwezhan.cn/api/picture';
     authorityUrl = "http://api.identity.newwezhan.cn";
-    redirectUrl = "http://content.newwezhan.cn/callback";
+    redirectUrl = "http://localhost:8081/callback";
     logoutRedirectUri = "http://content.newwezhan.cn/index.html";
 };
 const enbironmemy = {
