@@ -36,10 +36,11 @@ export default {
     /* padding: 0; */
 }
 .el-container /deep/ .tree-aside {
-    width: 164px !important;
+    width: 220px !important;
     height: 100vh;
     background: #fff;
     margin: 0 0 0 13px;
+    
 }
 </style>
 <style lang="scss" scoped>
