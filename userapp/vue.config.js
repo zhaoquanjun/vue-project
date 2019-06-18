@@ -1,16 +1,16 @@
 let path = require('path');
 function resolve(dir) {
+    console.log(dir);
     return path.join(__dirname, '.', dir)
 }
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
-    assetsDir: 'asserts',
+    publicPath: process.env.NODE_ENV === 'production' ? './' : './',
     outputDir: './dist',
+    indexPath: 'index.html',
     runtimeCompiler: false,
+
     // 打包 不再使用sourcemap
     productionSourceMap: false,
-   
-
     chainWebpack: config => {
         config.resolve.alias.set('_c', path.resolve(__dirname, 'src/components'));
         config.resolve.alias.set('_v', path.resolve(__dirname, 'src/views'));
@@ -41,30 +41,8 @@ module.exports = {
         module: {}
     },
     devServer: { // 开发 服务时使用
-        port: 8082,
-        proxy: {
-            '/api': {
-                target: 'http://192.168.199.99:8100',
-                changeOrigin: true,
-                pathRewrite: {
-                    '/api': ''
-                }
-            },
-            // '/api/hengdong':{
-            //     target:'http://192.168.199.103:8100',
-            //     changeOrigin: true,
-            //     pathRewrite:{
-            //         '/api':''
-            //     }
-            // },
-            // '/fuquan':{
-            //     target:'http://192.168.199.245:5000',
-            //     changeOrigin: true,
-            //     pathRewrite:{
-            //         '/fuquan':''
-            //     }
-            // }
-        }
+        disableHostCheck: true,
+        port: 80,
     },
     pluginOptions: {
 

@@ -3,12 +3,15 @@ function resolve(dir) {
     return path.join(__dirname, '.', dir)
 }
 module.exports = {
+   
+
     publicPath: './',
     // 打包 不再使用sourcemap
     productionSourceMap: false,
     chainWebpack: config => {
         config.resolve.alias.set('_c', path.resolve(__dirname, 'src/components'));
         config.resolve.alias.set('_v', path.resolve(__dirname, 'src/views'));
+        config.resolve.alias.set('img', path.resolve(__dirname, 'static/images'));
         config.module.rules.delete("svg"); //重点:删除默认配置中处理svg,
         //const svgRule = config.module.rule('svg')
         //svgRule.uses.clear()
@@ -30,8 +33,11 @@ module.exports = {
             .rule('images')
             .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
 
+    },
+    devServer: {
+        disableHostCheck: true,
+        port: 80,
     }
-
 }
 
 

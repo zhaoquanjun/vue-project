@@ -22,12 +22,11 @@ axios.interceptors.request.use(
     config => {
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-        const token = store.getter.token;
-        token && (config.headers.Authorization = "Bearer " + token);
+        const token = store.getters.token;
+        token && (config.headers.Authorization = 'Bearer ' +token);
 
         //todo 测试阶段写死
-        config.headers.appIdJust4Test = '823EB3BD-93F4-4655-B833-D604A6EF2022';
-        config.headers.userIdJust4Test = '9d0062ea-b906-4061-b0ce-0c236d25a916';
+        config.headers.AppId = '823EB3BD-93F4-4655-B833-D604A6EF2032';
         return config;
     },
     error => {
@@ -37,7 +36,7 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
-        console.log(response,'不一定成功吧')
+        console.log(response, '不一定成功吧')
         if (response.status === 200) {
             return Promise.resolve(response);
         } else {
@@ -46,7 +45,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
-        console.log(error,"error");
+        console.log(error, "error");
         let status = error.response.status;
         if (error.response.status) {
             switch (error.response.status) {
@@ -54,7 +53,7 @@ axios.interceptors.response.use(
                 // 未登录则跳转登录页面，并携带当前页面的路径                
                 // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                 case 401:
-                    router.push({path: '/401'})
+                    router.push({ path: '/401' })
                     break;
                 // 403 token过期                
                 // 登录过期对用户进行提示                
@@ -65,15 +64,15 @@ axios.interceptors.response.use(
                     break;
                 // 404请求不存在                
                 case 404:
-                    router.push({path: '/404'})
+                    router.push({ path: '/404' })
                     break;
                 // 其他错误，直接抛出错误提示                
                 default:
                     Message({
-                        message: status + error.response.data,
+                        message: status +"   "+ error.response.statusText,
                         type: 'error',
                         duration: 5 * 1000
-                      })
+                    })
             }
             return Promise.reject(error.response);
         }

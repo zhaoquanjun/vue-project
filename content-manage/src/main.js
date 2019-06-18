@@ -12,8 +12,9 @@ import './icons';
 import securityService from "@/services/authentication/securityService";
 Vue.config.productionTip = false;
 
+let accessToken = store.state.accessToken.Authorization
 router.beforeEach((to, from, next) => {
-  if (getLocal("token")) {
+  if (accessToken) {
         next()
   } else {
     if (to.name !== "callback") {
