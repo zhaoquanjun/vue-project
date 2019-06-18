@@ -33,11 +33,27 @@
                     @changeCategory="changeCategoryPic"
                     @rename="renamePic"
                     @batchRemove="batchRemovePic"
+                    @moveClassify="moveClassify"
                 ></img-list>
+                <right-pannel
+                    :style="{width:isInvitationlWidth+'px'}"
+                    @closeRightPanel="closeRightPanel"
+                >
+                    <span slot="title-text">移动图片分类</span>
+                    <m-tree 
+                    :isright-pannel="true"
+                    :tree-result="treeResult"
+                    @chooseNode="chooseNode"
+                    ></m-tree>
+                </right-pannel>
             </el-main>
         </el-main>
         <el-dialog title="上传图片" :visible.sync="dialogTableVisible">
-            <upload-pic :tree-result="treeResult" :upload-pic-url="uploadPicUrl"/>
+            <upload-pic
+                @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
+                :tree-result="treeResult"
+                :upload-pic-url="uploadPicUrl"
+            />
         </el-dialog>
     </el-container>
 </template>
@@ -47,6 +63,7 @@ import UploadPic from "./UploadPic";
 import ImgListHeader from "./ImgListHeader";
 import ImgList from "./ImgList";
 import GridList from "./GridList";
+import RightPannel from "./RightPannel";
 import * as imgManageApi from "@/api/request/imgManageApi";
 import * as imgCategoryManageApi from "@/api/request/imgCategoryManageApi";
 import environment from "@/environment/index.js";
@@ -57,10 +74,12 @@ export default {
         ImgListHeader,
         ImgList,
         GridList,
-        UploadPic
+        UploadPic,
+        RightPannel
     },
     data() {
         return {
+            isInvitationPanelShow: false,
             imgPageResult: {},
             treeResult: null,
             dialogTableVisible: false,
@@ -82,13 +101,12 @@ export default {
         this.getTree();
     },
     methods: {
-
         async getPicList() {
             let { data } = await imgManageApi.getPicList(this.picSearchOptions);
             this.imgPageResult = data;
         },
         async batchRemovePic(idlist) {
-              this.$confirm(
+            this.$confirm(
                 "删除后，图片将被移动到回收站，可在回收站？",
                 "提示",
                 {
@@ -98,14 +116,17 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                           let { status, data } = await imgManageApi.batchRemove(true, idlist);
+                            let {
+                                status,
+                                data
+                            } = await imgManageApi.batchRemove(true, idlist);
                             if (status === 200) {
                                 this.getTree();
                                 this.$message({
                                     type: "success",
                                     message: "删除成功!"
                                 });
-                                   this.getPicList();
+                                this.getPicList();
                             }
                         } else {
                             this.$message({
@@ -116,7 +137,6 @@ export default {
                     }
                 }
             );
-            
         },
         resetCategoryId() {
             this.picSearchOptions.picCategoryId = null;
@@ -179,14 +199,29 @@ export default {
             await imgCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTree();
         },
-        switchUploadBoxShowStatus() {
+        switchUploadBoxShowStatus(uploadImg) {
+            if (uploadImg === "uploadImg") this.getPicList({});
             this.dialogTableVisible = !this.dialogTableVisible;
+        },
+        moveClassify(b) {
+            this.isInvitationPanelShow = b;
+        },
+        closeRightPanel(b) {
+            this.isInvitationPanelShow = b;
+        },
+        chooseNode(node){
+            console.log(node,'000000')
+        }
+    },
+    computed: {
+        isInvitationlWidth() {
+            return this.isInvitationPanelShow === true ? 331 : 0;
         }
     }
 };
 </script>
 <style >
-#image-manage{
+#image-manage {
     padding-bottom: 30px;
 }
 #image-manage .el-aside {
@@ -197,6 +232,9 @@ export default {
     height: 100vh;
     background: #fff;
     margin: 0 0 0 13px;
+}
+#image-manage .el-dialog__body {
+    padding-top: 0;
 }
 </style>
 <style lang="scss" scoped>

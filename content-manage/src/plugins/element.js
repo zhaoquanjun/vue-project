@@ -20,7 +20,10 @@ import {
     Card,
     Upload,
     Message,    
-    MessageBox
+    MessageBox,
+    Carousel,
+    CarouselItem,
+    Tooltip,
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
@@ -39,8 +42,12 @@ Vue.use(Container)
     .use(Select)
     .use(Option)
     .use(Dialog)
-    .use(Card)
     .use(Upload)
+    .use(Card)
+    .use(Carousel)
+    .use(CarouselItem)
+    .use(Tooltip)
+    
    
 ;
 Vue.prototype.$message = Message;

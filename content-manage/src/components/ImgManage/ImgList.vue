@@ -53,8 +53,16 @@
                 @size-change="changeSize"
             ></el-pagination>
         </div>
-        <el-dialog :title="picTitle" :visible.sync="imgVisible ">
-            <img :src="picUrl">
+        <!-- :title="picTitle" -->
+        <el-dialog  :visible.sync="imgVisible ">
+            <!-- //<img :src="picUrl"> -->
+            <el-carousel :autoplay="false" arrow="always" indicator-position="none" :loop="false">
+                <el-carousel-item v-for="item in imgPageResult.list" :key="item.id">
+                    <h3>
+                        <img :src="item.fullOssUrl">
+                    </h3>
+                </el-carousel-item>
+            </el-carousel>
         </el-dialog>
         <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
             <el-tree
@@ -100,8 +108,10 @@ export default {
          * 移动分类
          */
         handleMove(row) {
+         
             this.categoryVisable = true;
             this.changeCategoryPicId = row.id;
+            this.$emit("moveClassify",true)
         },
         changeCategory(data) {
             this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
@@ -133,9 +143,29 @@ export default {
     }
 };
 </script>
->
-<style>
 
+<style>
+#table-imgList .el-dialog {
+    background: transparent;
+    box-shadow: none;
+}
+#table-imgList .el-dialog__body {
+    text-align: center;
+}
+#table-imgList .el-dialog__headerbtn{
+    right: 0;
+}
+#table-imgList .el-dialog__headerbtn .el-dialog__close {
+    color: #fff;
+    font-size: 30px;
+}
+
+#table-imgList .el-carousel__arrow--right,#table-imgList .el-carousel__arrow--left {
+    background: none;
+}
+#table-imgList .el-carousel__arrow i {
+    font-size: 40px;
+}
 #table-imgList .el-table .has-gutter th {
     padding: 0;
     height: 32px;
@@ -150,20 +180,27 @@ export default {
 #table-imgList .el-table .el-table__row {
     height: 60px;
 }
-#table-imgList .el-pagination.is-background .el-pager /deep/ li:not(.disabled).active {
-    background-color: #01c0de !important;
+#table-imgList .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #01c0de;
 }
-#table-imgList .el-pagination /deep/ .el-pagination__total {
+#table-imgList .el-pagination .el-pagination__total {
     color: #8c8c8c;
 }
-#table-imgList .el-pagination.is-background .el-pager /deep/ li {
+#table-imgList .el-pager li {
     font-weight: 400;
     color: #252525;
-    background-color: #fff !important;
+    background-color: #fff;
     border: 1px solid rgba(229, 229, 229, 1);
 }
-#table-imgList .el-pager /deep/ .active {
-    background-color: #01c0de !important;
+#table-imgList .el-pager .active {
+    background-color: #01c0de;
+    color: #fff;
+}
+
+#table-imgList .el-carousel__item.is-animating{
+        display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>
 
@@ -182,13 +219,13 @@ export default {
         width: 17px;
         height: 16px;
     }
-    .move-btn{
+    .move-btn {
         background: url("~img/move.png") no-repeat center;
-        background-size:100%;
+        background-size: 100%;
         &:hover {
-       background: url("~img/move-selected.png") no-repeat center;
-        background-size:100%;
-    }
+            background: url("~img/move-selected.png") no-repeat center;
+            background-size: 100%;
+        }
     }
 }
 
@@ -204,3 +241,6 @@ export default {
     margin-top: 24px;
 }
 </style>
+<style lang="scss" scoped>
+</style>
+

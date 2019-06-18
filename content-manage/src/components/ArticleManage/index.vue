@@ -9,9 +9,15 @@
             <m-tree></m-tree>
         </el-aside>
         <el-main>
-            <content-header></content-header>
+            <content-header  :article-search-options="articleSearchOptions"
+                             @getArticleList="getArticleList"></content-header>
             <el-main>
-                 <content-table></content-table>
+                 <content-table
+                 v-if="articlePageResult !== null"
+                 :article-page-result="articlePageResult"
+                 :article-search-options="articleSearchOptions"
+                 :tree-result="treeResult"
+                 @getArticleList="getArticleList"></content-table>
             </el-main>
         </el-main>
     </el-container>
@@ -20,14 +26,51 @@
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
+import { getArticalList } from "@/api/request/articleManageApi";
 export default {
     components: {
         MTree,
         ContentHeader,
         ContentTable
     },
-    methods:{
-        
+    data() {
+        return {
+            articlePageResult: null,
+            treeResult: null,
+            dialogTableVisible:false,
+            articleSearchOptions: { title: "", categoryId: 0, orderCondition: 0, OrderByTopOrder: null, publishStatus: null, pageIndex: 1, pageSize: 10, isDescending: true }
+        };
+    },
+    mounted() {
+        this.getArticleList();
+    },
+    methods: {
+        async getArticleList(options) {
+            let { data } = await getArticalList((options = this.articleSearchOptions));
+            this.articlePageResult = data;
+        },
+        // resetCategoryId() {
+        //     this.picSearchOptions.picCategoryId = null;
+        //     this.getPicList();
+        // },
+        // async changeCategoryPic(categoryId, idList) {
+        //     await imgManageApi.changeCategory(categoryId, idList);
+        //     this.getPicList();
+        // },
+        // async renamePic(id, newname) {
+        //     await imgManageApi.rename(id, newname);
+        //     this.getPicList();
+        // },
+        // async getTree() {
+        //     let { data } = await imgCategoryManageApi.get();
+        //     this.treeResult = data.treeArray;
+        //     this.totalSum = data.totalSum;
+        // },
+        // async newCategory(entity) {
+        //     console.log(entity);
+        //     await imgCategoryManageApi.create(entity);
+        //     this.getTree();
+        //     }
     }
 };
 </script>

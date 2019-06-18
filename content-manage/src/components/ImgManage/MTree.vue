@@ -75,7 +75,7 @@
 <script>
 let id = 1000;
 export default {
-    props: ["treeResult", "picSearchOptions"],
+    props: ["treeResult", "picSearchOptions","isrightPannel"],
     data() {
         return {
             flag: false,
@@ -239,6 +239,12 @@ export default {
             this.$emit("batchRemove", this.getAllNodeIds(data));
         },
         changeCategory(data) {
+            if(this.isrightPannel){
+                console.log(data)
+                this.$emit("chooseNode",data)
+                return false
+            }
+            alert(this.isrightPannel)
             if(data.isNewAdd) return;
             this.curlabelName = data.label;
             this.picSearchOptions.picCategoryId = data.id;
