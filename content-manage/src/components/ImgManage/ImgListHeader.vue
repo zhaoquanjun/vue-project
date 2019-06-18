@@ -1,84 +1,107 @@
 <template>
     <el-header class="content-header">
-        <div class="seachInput head-item">
-            <el-input size="small" v-model="picSearchOptions.keyword" placeholder="输入图片名称搜索" class="input-with-select">
-                <el-button slot="append" @click="getPicList">
-                    <svg-icon icon-class="search-icon"></svg-icon>
-                </el-button>
-            </el-input>
-        </div>
-        <div class="head-item head-middle">
-            <span>排序</span>
-            <span class="select-sort">
-                <el-select size="small"
-                           v-model="orderByLabel"
-                           placeholder="请选择"
-                           @change="changeSelected">
-                    <el-option v-for="item in options"
-                               :key="item.value"
-                               :label="item.label"
-                               :value="item.value"></el-option>
-                </el-select>
-            </span>
-            <span @click="switchIsDesc">
-                <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                <svg-icon v-else icon-class="top-arrow"></svg-icon>
+        <template v-if="!isBatchHeaderShow">
+            <div class="seachInput head-item">
+                <el-input
+                    size="small"
+                    v-model="picSearchOptions.keyword"
+                    placeholder="输入图片名称搜索"
+                    class="input-with-select"
+                >
+                    <el-button slot="append" @click="getPicList">
+                        <svg-icon icon-class="search-icon"></svg-icon>
+                    </el-button>
+                </el-input>
+            </div>
+            <div class="head-item head-middle">
+                <span>排序</span>
+                <span class="select-sort">
+                    <el-select
+                        size="small"
+                        v-model="orderByLabel"
+                        placeholder="请选择"
+                        @change="changeSelected"
+                    >
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </span>
+                <span @click="switchIsDesc">
+                    <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
+                    <svg-icon v-else icon-class="top-arrow"></svg-icon>
+                </span>
 
-            </span>
-
-            <span class="list-mode mode-item">
-                <svg-icon icon-class="list-mode "></svg-icon>
-            </span>
-            <span class="grid-mode mode-item">
-                <svg-icon icon-class="grid-mode"></svg-icon>
-            </span>
-        </div>
-        <div class="head-item head-right">
-            <span class="upload-wrap" @click="switchUploadBoxShowStatus">
-                <svg-icon icon-class="upload-img"></svg-icon>
-            </span>
-        </div>
+                <span class="list-mode mode-item">
+                    <svg-icon icon-class="list-mode "></svg-icon>
+                </span>
+                <span class="grid-mode mode-item">
+                    <svg-icon icon-class="grid-mode"></svg-icon>
+                </span>
+            </div>
+            <div class="head-item head-right">
+                <span class="upload-wrap" @click="switchUploadBoxShowStatus">
+                    <svg-icon icon-class="upload-img"></svg-icon>
+                </span>
+            </div>
+        </template>
+        <template v-else>
+           <div style="padding:0 21px">
+            <span>已选 <i>{{countPic}}</i> 张图片</span>
+            <el-button style="margin:0 16px" size="small" @click="batchMove"><svg-icon  icon-class="tab-moved"></svg-icon></el-button>
+            <el-button size="small" @click="batchDelete"><svg-icon icon-class="l-recyclebin"></svg-icon></el-button></div>
+        </template>
     </el-header>
 </template>
 <script>
-    export default {
-        props: ["picSearchOptions"],
-        data() {
-            return {
-                options: [
-                    {
-                        value: "1",
-                        label: "创建时间"
-                    },
-                    {
-                        value: "2",
-                        label: "文件大小"
-                    },
-                    {
-                        value: "3",
-                        label: "文件名"
-                    }
-                ],
-                orderByLabel: ""
-            };
+export default {
+    props: ["picSearchOptions", "isBatchHeaderShow","countPic"],
+    data() {
+        return {
+            options: [
+                {
+                    value: "1",
+                    label: "创建时间"
+                },
+                {
+                    value: "2",
+                    label: "文件大小"
+                },
+                {
+                    value: "3",
+                    label: "文件名"
+                }
+            ],
+            orderByLabel: ""
+        };
+    },
+    methods: {
+        changeSelected(value) {
+            this.picSearchOptions.orderByType = value;
+            this.getPicList();
         },
-        methods: {
-            changeSelected(value) {
-                this.picSearchOptions.orderByType = value;
-                this.getPicList();
-            },
-            getPicList() {
-                this.$emit("getPicList");
-            },
-            switchUploadBoxShowStatus() {
-                this.$emit("switchUploadBoxShowStatus");
-            },
-            switchIsDesc() {
-                this.picSearchOptions.isDescending = !this.picSearchOptions.isDescending;
-                this.getPicList();
-            }
+        getPicList() {
+            this.$emit("getPicList");
         },
-    };
+        switchUploadBoxShowStatus() {
+            this.$emit("switchUploadBoxShowStatus");
+        },
+        switchIsDesc() {
+            this.picSearchOptions.isDescending = !this.picSearchOptions
+                .isDescending;
+            this.getPicList();
+        },
+        batchMove() {
+            this.$emit("batchMove");
+        },
+        batchDelete() {
+            this.$emit("batchDelete");
+        }
+    }
+};
 </script>
 <style <style lang="scss" scoped>
 .content-header {
@@ -103,9 +126,9 @@
     height: 32px;
     margin: 0 16px 0 7px;
 }
-.head-item{
-  display: inline-block;
-  flex: none;
+.head-item {
+    display: inline-block;
+    flex: none;
 }
 .mode-item {
     display: inline-block;
@@ -118,8 +141,9 @@
 .list-mode {
     border-right: none;
 }
-.head-right,.head-middle{
-  float: right;
+.head-right,
+.head-middle {
+    float: right;
 }
 .upload-wrap {
     margin-right: 25px;
