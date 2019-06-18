@@ -1,73 +1,84 @@
 <template>
-   <div>
-        <div @click="handleClick" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave" class="img-item">
-        <span class="img-wrap">
-            <div class="mask" :class="isMaskShow"></div>
-            <img src="../../assets/avatar.jpeg" alt>
-        </span>
-        <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
-            <span @click.stop="handleMove">
-                <svg-icon icon-class="img-move"></svg-icon>
+    <div>
+        <div
+            @click="handleClick"
+            @mousemove="handleMouseMove"
+            @mouseleave="handleMouseLeave"
+            class="img-item"
+        >
+            <span class="img-wrap">
+                <div class="mask" :class="isMaskShow"></div>
+                <img :src="curItem.zoomOssUrl" alt>
             </span>
-            <span @click.stop="handleLook">
-                <svg-icon icon-class="img-look"></svg-icon>
-            </span>
-            <span @click.stop="handleDelete">
-                <svg-icon icon-class="img-delete"></svg-icon>
-            </span>
+            <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
+                <span @click.stop="handleMove">
+                    <svg-icon icon-class="img-move"></svg-icon>
+                </span>
+                <span @click.stop="handleLook">
+                    <svg-icon icon-class="img-look"></svg-icon>
+                </span>
+                <span @click.stop="handleDelete">
+                    <svg-icon icon-class="img-delete"></svg-icon>
+                </span>
+            </div>
+            <div class="img-handle-btn" :class="[isSelectedShow?'show':'hide']">
+                <span class="item-selected" style="float:right">
+                    <svg-icon icon-class="img-selected"></svg-icon>
+                </span>
+            </div>
         </div>
-        <div class="img-handle-btn" :class="[isSelectedShow?'show':'hide']">
-            <span class="item-selected" style="float:right">
-                <svg-icon icon-class="img-selected"></svg-icon>
-            </span>
-        </div>
+        <p class="img-desc">{{curItem.title}}</p>
     </div>
-    <p class="img-desc">这是一张图片这是一张图片这是一张图片这是一张图片</p>
-   </div>
 </template>
 <script>
 export default {
+    props: ["curItem"],
     data() {
         return {
             isHandleBtnShow: false,
-            isSelectedShow: false
+            isSelectedShow: false,
+          
         };
     },
     methods: {
         handleClick() {
             this.isHandleBtnShow = false;
             this.isSelectedShow = !this.isSelectedShow;
+            this.$emit("handleSelected",this.curItem,this.isSelectedShow)
         },
         handleMouseMove() {
-            if(this.isSelectedShow || this.isHandleBtnShow ) return
+            if (this.isSelectedShow || this.isHandleBtnShow) return;
             this.isHandleBtnShow = true;
         },
         handleMouseLeave() {
-           
-                this.isHandleBtnShow = false;
-           
+            this.isHandleBtnShow = false;
         },
-        handleMove(){
-            this.isHandleBtnShow = true
-            console.log("move")
+        handleMove() {
+            this.isHandleBtnShow = true;
+            console.log("move");
         },
-        handleLook(){
-             this.isHandleBtnShow = true
-            console.log("look")
+        handleLook() {
+            this.isHandleBtnShow = true;
+            console.log("look");
         },
-        handleDelete(){
-             this.isHandleBtnShow = true
-            console.log("删除")
+        handleDelete() {
+            this.isHandleBtnShow = true;
+            console.log("删除");
         }
     },
-    computed:{
-        isMaskShow(){
-            if(this.isHandleBtnShow|| this.isSelectedShow){
-                return "show"
-            }else{
-                return "hide"
+    computed: {
+        isMaskShow() {
+            if (this.isHandleBtnShow || this.isSelectedShow) {
+                return "show";
+            } else {
+                return "hide";
             }
         }
+    },
+    watch:{
+       curItem(){
+           alert(1)
+       } 
     }
 };
 </script>
@@ -130,10 +141,11 @@ export default {
         }
     }
 }
- .img-desc {
-            padding: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+.img-desc {
+    text-align: center;
+    padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 </style>

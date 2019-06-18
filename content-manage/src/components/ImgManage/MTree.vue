@@ -3,8 +3,9 @@
         <el-tree
             :data="treeResult"
             node-key="id"
-            default-expand-all
+            :default-expand-all="isexpand"
             :expand-on-click-node="false"
+            :indent="10"
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
             accordion
@@ -48,7 +49,7 @@
                     <svg-icon icon-class="tree-handler"></svg-icon>
                 </span>
                 <div class="tree-handle" v-show="node.data.id === curId">
-                     <button
+                    <button
                         v-if="node.data.level <3"
                         type="text"
                         size="mini"
@@ -60,7 +61,7 @@
                         size="mini"
                         @click.stop="rename(data)"
                     >修改名称</button>
-                   
+
                     <button
                         v-if="node.data.level>0"
                         type="text"
@@ -75,24 +76,24 @@
 <script>
 let id = 1000;
 export default {
-    props: ["treeResult", "picSearchOptions","isrightPannel"],
+    props: ["treeResult", "picSearchOptions", "isrightPannel","isexpand"],
     data() {
         return {
             flag: false,
             curId: null,
             treeNodeId: null,
             renameShowId: null,
-            isNewAdd: false,// false 允许创建子节点
+            isNewAdd: false, // false 允许创建子节点
             curlabelName: "",
-            isRename:false,
-            newAddNode:"",
-            renameData:"",
+            isRename: false,
+            newAddNode: "",
+            renameData: ""
         };
     },
     methods: {
         handlerOver(data) {
-            if(data.id) this.treeNodeId = data.id;
-            if(this.isNewAdd) this.treeNodeId =null;
+            if (!isNaN(data.id)) this.treeNodeId = data.id;
+            if (this.isNewAdd) this.treeNodeId = null;
         },
         handlerMouseLeave() {
             this.treeNodeId = this.curId = null;
@@ -108,7 +109,7 @@ export default {
             }
             if (isNewAdd) {
                 this.$emit("create", {
-                    DisplayName: data.label + "的子集",
+                    DisplayName: data.label,
                     ParentId: data.parentId
                 });
                 return;
@@ -120,25 +121,23 @@ export default {
             this.treeNodeId = null;
         },
         //
-        cancelhadnleTreeInput(data,node) {
-         if(this.isRename){
-               if (data.label == "") {
-                this.$message({
-                    message: "分类名称不能为空",
-                    type: "warning"
-                });
-                return
+        cancelhadnleTreeInput(data, node) {
+            if (this.isRename) {
+                if (data.label == "") {
+                    this.$message({
+                        message: "分类名称不能为空",
+                        type: "warning"
+                    });
+                    return;
+                }
+                if (this.curlabelName != "") {
+                    data.label = this.curlabelName;
+                }
+            } else {
+                node.parent.childNodes.splice(0, 1);
+                this.isRename = false;
+                this.isNewAdd = false;
             }
-            if(this.curlabelName != ""){
-                 data.label = this.curlabelName;
-            }
-             
-         }else{   
-             
-             node.parent.childNodes.splice(0,1)
-             this.isRename = false;
-             this.isNewAdd= false;           
-         }          
             // 点击取消按钮 关闭input框
             this.renameShowId = this.curId = null;
         },
@@ -190,8 +189,8 @@ export default {
             }
             return true;
         },
-       
-        create(data,node) {
+
+        create(data, node) {
             if (!this.isNewAdd) {
                 this.isNewAdd = true;
                 const newChild = {
@@ -199,11 +198,10 @@ export default {
                     label: "",
                     isNewAdd: true
                 };
-                data.children.unshift(newChild);               
+                data.children.unshift(newChild);
             }
             this.curId = null;
             this.newAddData = data;
-            
         },
         getAllNodeIds(node, isChildNode) {
             var idList = isChildNode ? [] : [node.id];
@@ -235,27 +233,36 @@ export default {
         },
         // 描述：
         batchRemove(node, data) {
-            console.log(data,'remove-----')
+            console.log(data, "remove-----");
             this.$emit("batchRemove", this.getAllNodeIds(data));
         },
         changeCategory(data) {
-            if(this.isrightPannel){
-                console.log(data)
-                this.$emit("chooseNode",data)
-                return false
+            if (this.isrightPannel) {
+                console.log(data);
+                this.$emit("chooseNode", data);
+                for (
+                    var i = 0;
+                    i < this.$refs.tree.store._getAllNodes().length;
+                    i++
+                ) {
+                    this.$refs.tree.store._getAllNodes()[
+                        i
+                    ].expanded = this.isexpand;
+                }
+                return false;
             }
-            alert(this.isrightPannel)
-            if(data.isNewAdd) return;
+         
+            if (data.isNewAdd) return;
             this.curlabelName = data.label;
             this.picSearchOptions.picCategoryId = data.id;
             this.$emit("getPicList");
             // 点击其他区域 把当前新增但未确定的节点删除掉
-            this.newAddData && this.newAddData.children.shift()
-            if(this.renameShowId !== data.id) this.isNewAdd = false;
-            
+            this.newAddData && this.newAddData.children.shift();
+            if (this.renameShowId !== data.id) this.isNewAdd = false;
+
             //  // 点击其他区域 把当前重命名但未确定的，恢复重命名之前label
-           if (this.renameData && this.renameShowId !== data.id) {
-               this.renameData.label = this.curlabelName;
+            if (this.renameData && this.renameShowId !== data.id) {
+                this.renameData.label = this.curlabelName;
                 this.renameShowId = null;
             }
         },
@@ -267,7 +274,7 @@ export default {
             console.log(label);
         }
     },
-    mounted(){
+    mounted() {
         // document.addEventListener("click",()=>{
         //    this.curId = null;
         // })

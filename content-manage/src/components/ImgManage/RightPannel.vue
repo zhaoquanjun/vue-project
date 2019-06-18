@@ -16,9 +16,13 @@
             </span>
             <span class="close-pannel" @click="closePanel">X</span>
         </div>
-        <div>当前分类</div>
-        <div>移动至 </div>
+        <div class="category-content">
+            <p style="padding:5px 10px ">当前分类: <slot name="cur-name"></slot></p> 
+             <p style="padding:5px 10px  ">移动至 : <slot name="move-to-name"></slot> </p> 
+        </div>
+        
         <slot></slot>
+        <slot name="footer"></slot>
     </div>
 </template>
 <script>
@@ -30,7 +34,7 @@ export default {
             type: String,
             default: "331"
         },
-        
+
     },
     data(){
         return {
@@ -69,7 +73,7 @@ export default {
         font-size: 14px;
         overflow: hidden;
         border-bottom: 1px solid #efefef;
-        span {
+        >span {
             padding: 0 10px;
         }
         .auth-title {
@@ -80,5 +84,9 @@ export default {
             cursor: pointer;
         }
     }
+}
+
+.category-content{
+    padding-top: 20px;
 }
 </style>

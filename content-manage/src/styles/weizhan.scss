@@ -1,0 +1,15 @@
+#content-manage {
+    padding-bottom: 30px;
+    .el-aside {
+        overflow: visible !important;
+    }
+    .tree-aside {
+        width: 220px !important;
+        height: 100vh;
+        background: #fff;
+        margin: 0 0 0 13px;
+    }
+    .el-dialog__body {
+        padding-top: 0;
+    }
+}
