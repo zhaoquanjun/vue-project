@@ -17,7 +17,10 @@
                  :article-page-result="articlePageResult"
                  :article-search-options="articleSearchOptions"
                  :tree-result="treeResult"
-                 @getArticleList="getArticleList"></content-table>
+                 @getArticleList="getArticleList"
+                 @batchRemove="batchRemoveNews"
+                 @batchTop="batchTopNews"
+                 @batchPublish="batchPublishNews"></content-table>
             </el-main>
         </el-main>
     </el-container>
@@ -26,7 +29,7 @@
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
-import { getArticalList } from "@/api/request/articleManageApi";
+import * as aritcleManageApi from "@/api/request/articleManageApi";
 export default {
     components: {
         MTree,
@@ -46,31 +49,149 @@ export default {
     },
     methods: {
         async getArticleList(options) {
-            let { data } = await getArticalList((options = this.articleSearchOptions));
+            let { data } = await aritcleManageApi.getArticleList((options = this.articleSearchOptions));
             this.articlePageResult = data;
         },
-        // resetCategoryId() {
-        //     this.picSearchOptions.picCategoryId = null;
-        //     this.getPicList();
-        // },
-        // async changeCategoryPic(categoryId, idList) {
-        //     await imgManageApi.changeCategory(categoryId, idList);
-        //     this.getPicList();
-        // },
-        // async renamePic(id, newname) {
-        //     await imgManageApi.rename(id, newname);
-        //     this.getPicList();
-        // },
-        // async getTree() {
-        //     let { data } = await imgCategoryManageApi.get();
-        //     this.treeResult = data.treeArray;
-        //     this.totalSum = data.totalSum;
-        // },
-        // async newCategory(entity) {
-        //     console.log(entity);
-        //     await imgCategoryManageApi.create(entity);
-        //     this.getTree();
-        //     }
+        // 批量删除
+        async batchRemoveNews(idlist) {
+            this.$confirm(
+                "删除后，网站中引用的文章列表将不再显示该文章，是否确定删除？",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let {
+                                status,
+                                data
+                            } = await aritcleManageApi.batchRemove(true, idlist);
+                            if (status === 200) {
+                                // this.getTree();
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                                this.getArticleList();
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消删除"
+                            });
+                        }
+                    }
+                }
+            );
+        },
+        // 批量置顶
+        async batchTopNews(idlist, isTop) {
+            var message = "置顶";
+            if(isTop) message = "取消置顶";
+            this.$confirm(
+                "您确定要" + message + "文章吗？",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let {
+                                status,
+                                data
+                            } = await aritcleManageApi.batchTop(!isTop, idlist);
+                            if (status === 200) {
+                                // this.getTree();
+                                this.$message({
+                                    type: "success",
+                                    message: message + "成功!"
+                                });
+                                this.getArticleList();
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消" + message
+                            });
+                        }
+                    }
+                }
+            );
+        },
+        // 批量上下线
+        async batchPublishNews(idlist, isPublish) {
+            var message = "上线";
+            if(isPublish) message = "下线";
+            this.$confirm(
+                "您确认要"+ message +"文章吗？",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let {
+                                status,
+                                data
+                            } = await aritcleManageApi.batchPublish(!isPublish, idlist);
+                            if (status === 200) {
+                                // this.getTree();
+                                this.$message({
+                                    type: "success",
+                                    message: message + "成功!"
+                                });
+                                this.getArticleList();
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消" + message
+                            });
+                        }
+                    }
+                }
+            );
+        },
+        // 批量移动
+        async batchMoveNews(idlist) {
+            this.$confirm(
+                "删除后，网站中引用的文章列表将不再显示该文章，是否确定删除？",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let {
+                                status,
+                                data
+                            } = await aritcleManageApi.batchMove(true, idlist);
+                            if (status === 200) {
+                                // this.getTree();
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                                this.getArticleList();
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消删除"
+                            });
+                        }
+                    }
+                }
+            );
+        }
     }
 };
 </script>
