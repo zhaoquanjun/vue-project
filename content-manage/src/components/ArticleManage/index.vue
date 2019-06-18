@@ -9,11 +9,15 @@
             <m-tree></m-tree>
         </el-aside>
         <el-main>
-            <content-header></content-header>
+            <content-header  :article-search-options="articleSearchOptions"
+                             @getArticleList="getArticleList"></content-header>
             <el-main>
                  <content-table
-                 :article-list="articleList"
-                @changePageNum="changePageNum"></content-table>
+                 v-if="articlePageResult !== null"
+                 :article-page-result="articlePageResult"
+                 :article-search-options="articleSearchOptions"
+                 :tree-result="treeResult"
+                 @getArticleList="getArticleList"></content-table>
             </el-main>
         </el-main>
     </el-container>
@@ -31,25 +35,42 @@ export default {
     },
     data() {
         return {
-            articleList: null,
+            articlePageResult: null,
+            treeResult: null,
             dialogTableVisible:false,
+            articleSearchOptions: { title: "", categoryId: 0, orderCondition: 0, OrderByTopOrder: null, publishStatus: null, pageIndex: 1, pageSize: 10, isDescending: true }
         };
     },
     mounted() {
-        this._getArticalList();
+        this.getArticleList();
     },
     methods: {
-        async _getArticalList(options) {
-            let { data } = await getArticalList((options = {}));
-            this.articleList = data.list;
+        async getArticleList(options) {
+            let { data } = await getArticalList((options = this.articleSearchOptions));
+            this.articlePageResult = data;
         },
-        changePageNum(page) {
-            console.log(page, "index页面");
-            let options = {
-                pageIndex: page
-            };
-            this._getArticalList(options);
-        }
+        // resetCategoryId() {
+        //     this.picSearchOptions.picCategoryId = null;
+        //     this.getPicList();
+        // },
+        // async changeCategoryPic(categoryId, idList) {
+        //     await imgManageApi.changeCategory(categoryId, idList);
+        //     this.getPicList();
+        // },
+        // async renamePic(id, newname) {
+        //     await imgManageApi.rename(id, newname);
+        //     this.getPicList();
+        // },
+        // async getTree() {
+        //     let { data } = await imgCategoryManageApi.get();
+        //     this.treeResult = data.treeArray;
+        //     this.totalSum = data.totalSum;
+        // },
+        // async newCategory(entity) {
+        //     console.log(entity);
+        //     await imgCategoryManageApi.create(entity);
+        //     this.getTree();
+        //     }
     }
 };
 </script>

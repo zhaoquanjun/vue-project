@@ -1,8 +1,8 @@
 <template>
     <el-header class="content-header">
         <div class="seachInput head-item">
-            <el-input size="small" placeholder="输入文章标题搜索" class="input-with-select">
-                <el-button slot="append">
+            <el-input size="small" v-model="articleSearchOptions.title" placeholder="输入文章标题搜索" class="input-with-select">
+                <el-button slot="append" @click="getArticleList">
                     <svg-icon icon-class="search-icon"></svg-icon>
                 </el-button>
             </el-input>
@@ -14,7 +14,7 @@
                 size="small" 
                 v-model="statusValue"
                  placeholder="请选择"
-                 @change="changeSelected"
+                 @change="changeStatus"
                  >
                     <el-option
                         v-for="item in statusOptions"
@@ -31,7 +31,7 @@
                 size="small" 
                 v-model="orderValue"
                  placeholder="请选择"
-                 @change="changeSelected"
+                 @change="changeOrderCondition"
                  >
                     <el-option
                         v-for="item in orderOptions"
@@ -41,8 +41,12 @@
                     ></el-option>
                 </el-select>
             </span>
-            <svg-icon icon-class="top-arrow"></svg-icon>
-            <svg-icon icon-class="off-arrow"></svg-icon>
+
+            <span @click="switchIsDesc">
+                <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
+                <svg-icon v-else icon-class="top-arrow"></svg-icon>
+
+            </span>
             <span class="list-mode mode-item">
                 <svg-icon icon-class="list-mode "></svg-icon>
             </span>
@@ -59,6 +63,7 @@
 </template>
 <script>
 export default {
+    props: ["articleSearchOptions"],
     data() {
         return {
             statusOptions: [
@@ -90,9 +95,21 @@ export default {
         };
     },
     methods:{
-      changeSelected(value){
-        console.log(value,'value=====')
-      }
+        getArticleList() {
+            this.$emit("getArticleList");
+        },
+        changeStatus(value){
+            this.articleSearchOptions.publishStatus = value;
+            this.getArticleList();
+        },
+        changeOrderCondition(value){
+            this.articleSearchOptions.orderCondition = value;
+            this.getArticleList();
+        },
+        switchIsDesc() {
+            this.articleSearchOptions.isDescending = !this.articleSearchOptions.isDescending;
+            this.getArticleList();
+        }
     },
 };
 </script>

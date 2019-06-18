@@ -10,18 +10,6 @@ import * as ajaxRequest from "../ajaxRequest";
  * 获取文章列表
  * @param {*} option 
  */
-export const getArticalList = (option) => {
-    let params = {
-        title: option.title || "",
-        categoryId: option.categoryId|| 0,
-        orderCondition: option.orderCondition || 0,
-        publishStatus: option.publishStatus || null,
-        isDescending:option.isDescending || true
-    
-    };
-    let page ={
-        pageIndex:option.pageIndex || 1,
-        pageSize:option.pageSize|| 10
-    };
-    return ajaxRequest.get(`/api/News/GetCategoryTree/${page.pageIndex}/${page.pageSize}`,params);
+export const getArticalList = (options) => {
+    return ajaxRequest.get(`/api/News/GetCategoryTree/${options.pageIndex}/${options.pageSize}`,options);
 }

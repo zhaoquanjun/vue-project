@@ -2,17 +2,18 @@
     <div style="margin-left:20px">
         <el-table
             ref="multipleTable"
-            :data="articleList"
+            :data="articlePageResult.list"
             tooltip-effect="dark"
             class="content-table"
             @selection-change="handleSelectionChange"
+            @sort-change='sortByTopStatus'
         >
             <el-table-column type="selection"></el-table-column>
 
             <el-table-column prop="title" label="文章标题">
                 <template slot-scope="scope">
-                    <img src="../../assets/avatar.jpeg" class="cover" alt>
-                    <span>{{ scope.row.name }}</span>
+                    <img :src="scope.row.pictureUrl" class="cover" alt>
+                    <span>{{ scope.row.title }}</span>
                 </template>
             </el-table-column>
 
@@ -20,7 +21,7 @@
 
             <el-table-column prop="isPublishPrt" label="状态" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="isTopPrt" label="置顶" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="isTopPrt" sortable="custom" label="置顶" show-overflow-tooltip></el-table-column>
 
             <el-table-column prop="createUser" label="作者" show-overflow-tooltip></el-table-column>
 
@@ -46,11 +47,12 @@
             <el-pagination
                 background
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="100"
-                :page-count="5"
-                :page-size="3"
-                :page-sizes="[3, 4, 5, 6]"
-                @current-change="1"
+                :total="articlePageResult.totalRecord"
+                :page-count="articlePageResult.totalPage"
+                :page-size="articlePageResult.pageSize"
+                :page-sizes="[1,5,10,15,20,50,100]"
+                @current-change="changePageNum"
+                @size-change="changePageSize"
             ></el-pagination>
         </div>
         <!-- <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
@@ -63,9 +65,21 @@
 
 <script>
 export default {
-    props: ["articleList"],
-
+    props: ["articlePageResult", "articleSearchOptions", "treeResult"],
     methods: {
+        changePageNum(page) {
+            this.articleSearchOptions.pageIndex = page;
+            this.$emit("getArticleList");
+        },
+        changePageSize(size) {
+            this.articleSearchOptions.pageSize = size;
+            this.$emit("getArticleList");
+        },
+        sortByTopStatus: function(column, prop, order) {
+            // descending ascending
+            this.articleSearchOptions.OrderByTopOrder = column.order == "ascending" ? true : column.order == "descending" ? false : null;
+            this.$emit("getArticleList");
+        },
         /**
          * 单选或全选操作
          */
