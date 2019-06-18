@@ -11,7 +11,7 @@
                            @getProList="getProList"
                            @create="newCategory"
                            @batchRemove="batchRemoveCategory"
-                           @rename="renameCategory"
+                           @update="updateCategory"
                            @modifyNode="modifyNodeCategory"></category-tree>
         </el-aside>
         <el-main>
@@ -112,8 +112,8 @@
                     }
                 );
             },
-            async renameCategory(id, newName) {
-                await productCategoryManageApi.rename(id, newName);
+            async updateCategory(id, newName, thumbnailPicUrl) {
+                await productCategoryManageApi.update(id, newName, thumbnailPicUrl);
                 this.getTree();
             },
             async modifyNodeCategory(id, parentId, idOrderByArr) {

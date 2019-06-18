@@ -9,8 +9,8 @@ export const create = entity => {
 export const batchRemove = idList => {
     return ajaxRequest._delete(`/api/ProductCategory`, { data: idList });
 }
-export const rename = (id, newName) => {
-    return ajaxRequest.put(`/api/ProductCategory/${id}`, JSON.stringify(newName));
+export const update = (id, newName, thumbnailPicUrl) => {
+    return ajaxRequest.put(`/api/ProductCategory/${id}`, { DisplayName: newName, ThumbnailPicUrl: thumbnailPicUrl });
 }
 export const modifyNode = (id, parentId, idOrderByArr) => {
     return ajaxRequest.put(`/api/ProductCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);

@@ -28,6 +28,7 @@
                     </span>
                 </div>
                 <template v-else>
+                    <img v-if="data.thumbnailPicUrl" :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"/>
                     <span>{{data.label}}</span>
                     <span v-if="data.level<=1">({{data.leafSum }})</span>
                 </template>
@@ -63,7 +64,6 @@
     </div>
 </template>
 <script>
-    let id = 1000;
     export default {
         props: ["treeResult", "productSearchOptions", "isrightPannel"],
         data() {
@@ -104,7 +104,7 @@
                     return;
                 }
                 if (data.label != "") {
-                    this.$emit("rename", data.id, data.label);
+                    this.$emit("update", data.id, data.label, data.thumbnailPicUrl);
                     this.renameShowId = this.curId = null;
                 }
                 this.treeNodeId = null;
