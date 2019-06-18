@@ -3,7 +3,7 @@ import enbironmemy from "@/environment/index";
 console.log(enbironmemy)
 const config = {
   authority: enbironmemy.authorityUrl,
-  client_id: "dashboard.api",
+  client_id: "dev.dashboard.api",
   //client_id: "content.api",
   redirect_uri: enbironmemy.redirectUrl,
   response_type: 'code',

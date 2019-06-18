@@ -270,7 +270,7 @@ export default {
             });
         },
         updateUserRemark(options) {
-           
+           console.log(options)
             this._updateUserRemark(options);
         }
     },
