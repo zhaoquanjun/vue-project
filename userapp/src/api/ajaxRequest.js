@@ -1,10 +1,13 @@
 /**axios封装
  * 请求拦截、相应拦截、错误统一处理
  */
+
 import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import { getLocal } from "@/libs/local.js"
-import environment from "@/environment/index.js"
+import environment from "@/environment/index.js";
+import store from "../store/state"
+console.log(store,'stttttt')
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = environment.memberManageApi;

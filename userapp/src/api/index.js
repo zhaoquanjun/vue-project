@@ -1,5 +1,4 @@
 import * as ajaxRequest from "./ajaxRequest";
-
 /**
  *  InterfaceAuthor : 福全
  * 获取个人信息含权限
