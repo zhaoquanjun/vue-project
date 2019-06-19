@@ -11,7 +11,12 @@ export const defaultRoutes = [
       {
         path: "/article",
         name: "article",
-        component:  () => import('@/views/content-manage/article-manage.vue')
+        component:  () => import('@/views/content-manage/article-manage.vue'),
+      },
+      {
+        path: '/create',
+        name: "articlecreate",
+        component: () => import('@/components/ArticleManage/ContentDetail.vue')
       },
       {
         path: "/image",

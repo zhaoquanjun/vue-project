@@ -74,7 +74,7 @@
 <script>
 let id = 1000;
 export default {  
-    props: ["treeResult", "articleSearchOptions"],
+    props: ["treeResult", "articleSearchOptions", "isrightPannel"],
     data() {
         return {
             flag: false,
@@ -242,6 +242,21 @@ export default {
             this.$emit("batchRemove", this.getAllNodeIds(data));
         },
         changeCategory(data) {
+            if (this.isrightPannel) {
+                console.log(data);
+                this.$emit("chooseNode", data);
+                for (
+                    var i = 0;
+                    i < this.$refs.tree.store._getAllNodes().length;
+                    i++
+                ) {
+                    this.$refs.tree.store._getAllNodes()[
+                        i
+                    ].expanded = this.isexpand;
+                }
+                return false;
+            }
+
             if(data.isNewAdd) return;
             this.curlabelName = data.lable;
             this.articleSearchOptions.categoryId = data.id;

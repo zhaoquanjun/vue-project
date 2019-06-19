@@ -1,5 +1,23 @@
 <template>
     <div style="margin-left:20px">
+        <el-button type="danger" @click="batchRemove(null)">
+            批量删除
+        </el-button>
+        <el-button type="danger" @click="batchTop(null, false)">
+            批量置顶
+        </el-button>
+        <el-button type="danger" @click="batchTop(null, true)">
+            批量取消置顶
+        </el-button>
+        <el-button type="danger" @click="batchPublish(null,false)">
+            批量上线
+        </el-button>
+        <el-button type="danger" @click="batchPublish(null,true)">
+            批量下线
+        </el-button>
+        <el-button type="danger" @click="batchMove(null)">
+            批量移动
+        </el-button>
         <el-table
             ref="multipleTable"
             :data="articlePageResult.list"
@@ -30,13 +48,19 @@
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn" @click="handleMove(scope.$index, scope.row)">
+                        <button class="handle-btn" @click="handleMove(scope.row)">
                             <svg-icon icon-class="tab-move"></svg-icon>
                         </button>
                         <button class="handle-btn" @click="handleLook(scope.$index, scope.row)">
                             <svg-icon icon-class="tab-look"></svg-icon>
                         </button>
-                        <button class="handle-btn" @click="handleDelete(scope.$index, scope.row)">
+                        <button class="handle-btn" @click="batchRemove( scope.row)">
+                            <svg-icon icon-class="l-recyclebin"></svg-icon>
+                        </button>
+                        <button class="handle-btn" @click="batchTop( scope.row)">
+                            <svg-icon icon-class="l-recyclebin"></svg-icon>
+                        </button>
+                        <button class="handle-btn" @click="batchPublish( scope.row)">
                             <svg-icon icon-class="l-recyclebin"></svg-icon>
                         </button>
                     </div>
@@ -66,6 +90,11 @@
 <script>
 export default {
     props: ["articlePageResult", "articleSearchOptions", "treeResult"],
+    data() {
+        return {
+            multipleSelection: []
+        };
+    },
     methods: {
         changePageNum(page) {
             this.articleSearchOptions.pageIndex = page;
@@ -84,13 +113,21 @@ export default {
          * 单选或全选操作
          */
         handleSelectionChange(val) {
-            console.log(val);
             this.multipleSelection = val;
+        },
+        getCheckArr(){
+            let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+            let params = [];
+            let self = this;
+            checkArr.forEach(function (item) {     
+                params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+            });
+            return params;
         },
         /**
          * 移动分类
          */
-        handleMove(index, row) {
+        handleMove(row) {
             console.log(index, row);
         },
         /**
@@ -103,8 +140,46 @@ export default {
         /**
          * 删除操作
          */
-        handleDelete(index, row) {
-            console.log(index, row);
+        batchRemove(row) {
+            if(row == null || row == undefined){
+                var idList = this.getCheckArr();
+                this.$emit("batchRemove", idList);
+            }else{
+                this.$emit("batchRemove", [row.id]);
+            }
+        },
+        /**
+         * 置顶操作
+         */
+        batchTop(row, isTop) {
+            if(row == null || row == undefined){
+                var idList = this.getCheckArr();
+                this.$emit("batchTop", idList, isTop);
+            }else{
+                this.$emit("batchTop", [row.id], row.isTop);
+            }
+        },
+        /**
+         * 上下线操作
+         */
+        batchPublish(row, isPublish) {
+            if(row == null || row == undefined){
+                var idList = this.getCheckArr();
+                this.$emit("batchPublish", idList, isPublish);
+            }else{
+                this.$emit("batchPublish", [row.id], row.isPublish);
+            }
+        },
+        /**
+         * 移动分类操作
+         */
+        batchMove(row){
+            if(row == null || row == undefined){
+                var idList = this.getCheckArr();
+                this.$emit("batchMove", idList);
+            }else{
+                this.$emit("batchMove", [row.id]);
+            }
         }
     }
 };
