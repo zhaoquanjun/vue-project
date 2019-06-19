@@ -3,16 +3,18 @@
  */
 import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
-import { getLocal } from "@/libs/local.js"
-import environment from "@/environment/index.js"
+import { getLocal } from "@/libs/local.js";
+import environment from "@/environment/index.js";
+import store  from "@/store/state";
+
+
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = environment.memberManageApi;
 // }  else if (process.env.NODE_ENV == 'production') {    
 //     axios.defaults.baseURL = '/';
 // }
-//axios.defaults.baseURL = environment.memberManageApi;
-axios.defaults.baseURL = environment.xuzhuanUrl;
+axios.defaults.baseURL = environment.memberManageApi;
 // 请求超时时间
 axios.defaults.timeout = 5000;
 //设置put请求传输内容的格式
@@ -29,7 +31,9 @@ axios.interceptors.request.use(
       
         token && (config.headers.Authorization = "Bearer " + token);
         //todo 测试阶段写死
-        config.headers.AppId = '823EB3BD-93F4-4655-B833-D604A6EF2032';
+        //let dashbord = get("api/userinfo/GetUserDashboard");
+        console.log(store.appid,'33333333333333333333');
+        config.headers.appid = store.appid;
         return config;
     },
     error => {
@@ -48,6 +52,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
+        console.log(error,'999999')
         let status = error.response.status;
         if (error.response.status) {
             switch (error.response.status) {

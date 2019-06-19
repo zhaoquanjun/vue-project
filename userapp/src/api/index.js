@@ -76,8 +76,6 @@ export const batchDeletMember = (options) => {
  */
 export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
     let params = {
-        userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
         pageIndex: options.page,
         phone:options.phone,
         pageSize: 3,
@@ -172,10 +170,7 @@ export const isInvalidCode = (phone, code) => {
  * 获取用户的账户信息
  */
 export const getUserProfile = (id) => {
-    let params = {
-        userId: id
-    }
-    return ajaxRequest.get('/api/userInfo/GetUserProfile', params);
+    return ajaxRequest.get('/api/userInfo/GetUserProfile');
 }
 
 /**
@@ -188,4 +183,15 @@ export const updateUserPhone = (phone,code) => {
         code: code
     }
     return ajaxRequest.put(`/api/userInfo/UpdateUserPhone/${phone}/${code}`, params);
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 获取dashbord
+ */
+export const getUserDashboard = () => {  
+  
+    let params = {
+        appId: ''
+    }
+    return ajaxRequest.get('api/userInfo/GetUserDashboard', params);
 }

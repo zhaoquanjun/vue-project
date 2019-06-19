@@ -1,4 +1,4 @@
-import { getAppPolicies, getUserPolicy, getBeInvitedUsers, updateUserPolicy, batchUpdateUserPolicy, deleteCurMember, batchDeletMember, getShortUrlByInviation ,updateUserRemark} from "@/api/index";
+import { getAppPolicies, getUserPolicy, getBeInvitedUsers, updateUserPolicy, batchUpdateUserPolicy, deleteCurMember, batchDeletMember, getShortUrlByInviation, updateUserRemark, getUserDashboard} from "@/api/index";
 const memberManager = {
    // namespaced: false,
     state: {
