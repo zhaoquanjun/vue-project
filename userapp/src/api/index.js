@@ -119,15 +119,14 @@ export const updateUserRemark = (options) => {
 
 /**
  * InterfaceAuthor : li tao
- * 获取权限所有权限
+ * 邀请生成短链接
  */
 export const getShortUrlByInviation = (names) => {
     let params = {
         appId: "123EB3BD-93F4-4655-B833-D604A6EF2022",
-        userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
         permissionIds: names
     }
-    return ajaxRequest.get('/api/ShortUrl/GetShortUrlByInviation', params);
+    return ajaxRequest.post('/api/ShortUrl/GetShortUrlByInviation',  params );
 }
 
 

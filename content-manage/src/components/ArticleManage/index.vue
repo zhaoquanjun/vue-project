@@ -5,8 +5,15 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>文章分类</span>
             </h4>
-            <h5 class="title-item">全部分类(12)</h5>
-            <m-tree></m-tree>
+            <h5 class="title-item" @click="resetCategoryId">全部分类</h5>
+            <m-tree 
+            :treeResult="treeResult"
+            :articleSearchOptions="articleSearchOptions"
+            @getList="getArticleListAsync"
+            @create="newCategory"
+            @batchRemove="batchRemoveCategory"
+            @rename="renameCategory"
+            ></m-tree>
         </el-aside>
         <el-main>
             <content-header  :article-search-options="articleSearchOptions"
@@ -26,7 +33,7 @@
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
-import { getArticalList } from "@/api/request/articleManageApi";
+import * as articleManageApi from "@/api/request/articleManageApi";
 export default {
     components: {
         MTree,
@@ -42,35 +49,63 @@ export default {
         };
     },
     mounted() {
-        this.getArticleList();
+        this.getArticleListAsync();
+        this.getTreeAsync();
     },
     methods: {
-        async getArticleList(options) {
-            let { data } = await getArticalList((options = this.articleSearchOptions));
+        async getArticleListAsync(options) {
+            let { data } = await articleManageApi.getArticleList((options = this.articleSearchOptions));
             this.articlePageResult = data;
         },
-        // resetCategoryId() {
-        //     this.picSearchOptions.picCategoryId = null;
-        //     this.getPicList();
-        // },
-        // async changeCategoryPic(categoryId, idList) {
-        //     await imgManageApi.changeCategory(categoryId, idList);
-        //     this.getPicList();
-        // },
-        // async renamePic(id, newname) {
-        //     await imgManageApi.rename(id, newname);
-        //     this.getPicList();
-        // },
-        // async getTree() {
-        //     let { data } = await imgCategoryManageApi.get();
-        //     this.treeResult = data.treeArray;
-        //     this.totalSum = data.totalSum;
-        // },
-        // async newCategory(entity) {
-        //     console.log(entity);
-        //     await imgCategoryManageApi.create(entity);
-        //     this.getTree();
-        //     }
+        async getTreeAsync() {
+            let { data } = await articleManageApi.getArticleCategory();
+            this.treeResult = data;
+        },
+        resetCategoryId() {
+            this.articleSearchOptions.categoryId = null;
+            this.getArticleListAsync();
+        },
+        async renameCategory(id, newName) {
+            await articleManageApi.reName(id, newName);
+            this.getTreeAsync();
+        },
+        async newCategory(entity) {
+             await articleManageApi.create(entity);
+             this.getTreeAsync();
+        },
+        async modifyNodeCategory(id, parentId, idOrderByArr) {
+            await articleManageApi.modifyNode(id, parentId, idOrderByArr);
+            this.getTreeAsync();
+        },
+        async batchRemoveCategory(idList) {
+            this.$confirm(
+                "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let { status } = await articleManageApi.deleteNewsCategory(idList);
+                            if (status === 200) {
+                                this.getTreeAsync();
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消删除"
+                            });
+                        }
+                    }
+                }
+            );
+        },
     }
 };
 </script>
@@ -78,12 +113,20 @@ export default {
 .el-main {
     /* padding: 0; */
 }
-.el-container /deep/ .tree-aside {
+.el-container {
+    padding-bottom: 30px;
+}
+.el-container .el-aside {
+    overflow: visible !important;
+}
+.el-container .tree-aside {
     width: 220px !important;
     height: 100vh;
     background: #fff;
     margin: 0 0 0 13px;
-    
+}
+.el-container .el-dialog__body {
+    padding-top: 0;
 }
 </style>
 <style lang="scss" scoped>
