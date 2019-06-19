@@ -12,7 +12,19 @@ import * as ajaxRequest from "../ajaxRequest";
  */
 // 获取文章列表
 export const getArticleList = (options) => {
-    return ajaxRequest.get(`/api/News/GetCategoryTree/${options.pageIndex}/${options.pageSize}`,options);
+    return ajaxRequest.get(`/api/News/GetNewsList/${options.pageIndex}/${options.pageSize}`,options);
+}
+// 获取文章詳情
+export const getArticleDetail = (options) => {
+    return ajaxRequest.get(`/api/News/GetNewDetail/${options}`);
+}
+// 创建文章
+export const createArticle = (options) => {
+    return ajaxRequest.post(`/api/News/CreateNews`, options);
+}
+// 创建文章
+export const editArticle = (options) => {
+    return ajaxRequest.put(`/api/News/EditNews`, options);
 }
 // 批量删除
 export const batchRemove = (isDelete, idList) => {

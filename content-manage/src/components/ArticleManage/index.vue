@@ -25,39 +25,74 @@
                  :article-search-options="articleSearchOptions"
                  :tree-result="treeResult"
                  @getArticleList="getArticleList"
+                 @batchMove="batchMoveNews"
                  @batchRemove="batchRemoveNews"
                  @batchTop="batchTopNews"
                  @batchPublish="batchPublishNews"></content-table>
+               
+                <el-dialog
+                    width="0"
+                    style="z-index:10"
+                    :close-on-click-modal="false"
+                    :show-close="false"
+                    :visible.sync="isInvitationPanelShow"
+                ></el-dialog>
+                <right-pannel
+                    :style="{width:isInvitationlWidth+'px'}"
+                    @closeRightPanel="closeRightPanel"
+                >
+                    <span slot="title-text">移动文章分类</span>
+                    <m-tree
+                        :isright-pannel="true"
+                        :tree-result="treeResult"
+                        @chooseNode="chooseNode"
+                    ></m-tree>
+                    <div slot="footer" class="pannle-footer">
+                        <button @click="updateCategoryArticle" class="sure">确定</button>
+                        <button @click="cancelUpdateCategory" class="cancel">取消</button>
+                    </div>
+                </right-pannel>
             </el-main>
         </el-main>
+      
     </el-container>
 </template>
 <script>
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
+import RightPannel from "../ImgManage/RightPannel";
 import * as articleManageApi from "@/api/request/articleManageApi";
 export default {
     components: {
         MTree,
         ContentHeader,
-        ContentTable
+        ContentTable,
+        RightPannel
     },
     data() {
         return {
             articlePageResult: null,
             treeResult: null,
-            dialogTableVisible:false,
+            curArticleInfo:"",
+            moveToClassiFy: "",
+            newsIdList:"",
+            isInvitationPanelShow: false,
             articleSearchOptions: { title: "", categoryId: 0, orderCondition: 0, OrderByTopOrder: null, publishStatus: null, pageIndex: 1, pageSize: 10, isDescending: true }
         };
     },
     mounted() {
-        this.getArticleListAsync();
+        this.getArticleList();
         this.getTreeAsync();
+    },
+    computed: {
+        isInvitationlWidth() {
+            return this.isInvitationPanelShow === true ? 331 : 0;
+        }
     },
     methods: {
         async getArticleList(options) {
-            let { data } = await aritcleManageApi.getArticleList((options = this.articleSearchOptions));
+            let { data } = await articleManageApi.getArticleList((options = this.articleSearchOptions));
             this.articlePageResult = data;
         },
         // 批量删除
@@ -75,7 +110,7 @@ export default {
                             let {
                                 status,
                                 data
-                            } = await aritcleManageApi.batchRemove(true, idlist);
+                            } = await articleManageApi.batchRemove(true, idlist);
                             if (status === 200) {
                                 // this.getTree();
                                 this.$message({
@@ -111,7 +146,7 @@ export default {
                             let {
                                 status,
                                 data
-                            } = await aritcleManageApi.batchTop(!isTop, idlist);
+                            } = await articleManageApi.batchTop(!isTop, idlist);
                             if (status === 200) {
                                 // this.getTree();
                                 this.$message({
@@ -147,7 +182,7 @@ export default {
                             let {
                                 status,
                                 data
-                            } = await aritcleManageApi.batchPublish(!isPublish, idlist);
+                            } = await articleManageApi.batchPublish(!isPublish, idlist);
                             if (status === 200) {
                                 // this.getTree();
                                 this.$message({
@@ -165,6 +200,48 @@ export default {
                     }
                 }
             );
+        },
+        // 批量移动分类
+        async batchMoveNews(idlist) {
+            this.isInvitationPanelShow = true;
+            this.newsIdList = idlist;
+        },
+        //选择移动分类时的节点
+        chooseNode(node) {
+            console.log(node);
+            this.moveToClassiFy = node;
+        },
+        cancelUpdateCategory() {
+            this.isInvitationPanelShow = false;
+        },
+        moveClassify(b, data) {
+            this.isInvitationPanelShow = b;
+        },
+        // 点击确定按钮 更新文章分类
+        async updateCategoryArticle() {
+            if (!this.moveToClassiFy) {
+                this.$message({
+                    type: "error",
+                    message: "请选择移动的分类!"
+                });
+                return;
+            }
+            let cateId = this.moveToClassiFy.id;
+            let { data, status } = await articleManageApi.batchMove(
+                cateId,
+                this.newsIdList
+            );
+            if (status == 200) {
+                this.$message({
+                    type: "success",
+                    message: "移动成功!"
+                });
+                this.isInvitationPanelShow = false;
+                this.getArticleList();
+            }
+        },
+        closeRightPanel() {
+            this.isInvitationPanelShow = true;
         },
         async getArticleListAsync(options) {
             let { data } = await articleManageApi.getArticleList((options = this.articleSearchOptions));

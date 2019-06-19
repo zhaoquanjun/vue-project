@@ -24,6 +24,10 @@ import {
     Carousel,
     CarouselItem,
     Tooltip,
+    Switch,
+    DatePicker,
+    Form,
+    FormItem
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
@@ -47,6 +51,10 @@ Vue.use(Container)
     .use(Carousel)
     .use(CarouselItem)
     .use(Tooltip)
+    .use(Switch)
+    .use(DatePicker)
+    .use(Form)
+    .use(FormItem)
     
    
 ;

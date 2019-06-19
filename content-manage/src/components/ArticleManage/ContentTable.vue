@@ -15,6 +15,9 @@
         <el-button type="danger" @click="batchPublish(null,true)">
             批量下线
         </el-button>
+        <el-button type="danger" @click="batchMove(null)">
+            批量移动
+        </el-button>
         <el-table
             ref="multipleTable"
             :data="articlePageResult.list"
@@ -165,6 +168,17 @@ export default {
                 this.$emit("batchPublish", idList, isPublish);
             }else{
                 this.$emit("batchPublish", [row.id], row.isPublish);
+            }
+        },
+        /**
+         * 移动分类操作
+         */
+        batchMove(row){
+            if(row == null || row == undefined){
+                var idList = this.getCheckArr();
+                this.$emit("batchMove", idList);
+            }else{
+                this.$emit("batchMove", [row.id]);
             }
         }
     }

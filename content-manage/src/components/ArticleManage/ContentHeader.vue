@@ -96,7 +96,7 @@ export default {
     },
     methods:{
         getArticleList() {
-            this.$emit("getArticleListAsync");
+            this.$emit("getArticleList");
         },
         changeStatus(value){
             this.articleSearchOptions.publishStatus = value;
