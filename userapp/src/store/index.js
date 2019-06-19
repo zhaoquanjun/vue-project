@@ -7,6 +7,7 @@ import * as getters from "./getters";
 import login from "./modules/login";
 import user from "./modules/user";
 import memberManager from "./modules/member-manager";
+
 Vue.use(Vuex);
 const store = new Vuex.Store({
   modules: {
@@ -26,7 +27,11 @@ export default store;
  */
 if(localStorage.getItem("token")){
   let obj = {
-    access_token:localStorage.getItem("token")
-  }
+      access_token: localStorage.getItem("token"),
+     
+
+    }
+    let appid = localStorage.getItem("appid")
+    store.commit("GETUSERDASHBOARD", appid)
   store.commit("SET_USER", obj)
 }

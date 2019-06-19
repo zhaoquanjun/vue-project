@@ -75,8 +75,6 @@ export const batchDeletMember = (options) => {
  */
 export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
     let params = {
-        userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
         pageIndex: options.page,
         phone:options.phone,
         pageSize: 3,
@@ -106,13 +104,14 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
  * @param {*} names 
  */
 
-export const updateUserRemark = (options) => {
+export const updateUserRemark = (targetUserId, remark) => {
+    console.log(targetUserId, remark);
     console.log(options)
     let params = {
-        targetUserId: options.targetUserId,
-        remark: options.remarkValue
+        targetUserId: targetUserId,
+        remark: remark
     };
-    return ajaxRequest.put('/api/userInfo/UpdateUserRemark', params);
+    return ajaxRequest.put(`/api/userInfo/UpdateUserRemark/${targetUserId}/${remark}`, params);
 
 }
 
@@ -128,4 +127,70 @@ export const getShortUrlByInviation = (names) => {
     return ajaxRequest.post('/api/ShortUrl/GetShortUrlByInviation',  params );
 }
 
+/**
+ * InterfaceAuthor : xuzhuan
+ * 修改用户名称
+ */
+export const updateUserName = (userName) => {
+    
+    return ajaxRequest.put('/api/userInfo/UpdateUserName', JSON.stringify(userName));
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 验证用户已绑定的号码
+ */
+export const sendSourcePhoneCode = (phone) => {
+    return ajaxRequest.put('/api/phone/SendSourcePhoneCode', JSON.stringify(phone));
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 验证用户要更改绑定的新的号码
+ */
+export const sendTargetPhoneCode = (oldPhone, newPhone) => {
+    let params = {
+        oldPhone: oldPhone,
+        newPhone: newPhone
+    }
+    return ajaxRequest.put(`/api/phone/SendTargetPhoneCode/${oldPhone}/${newPhone}`, params);
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 验证用户的（原绑定的手机的）验证码是否正确
+ */
+export const isInvalidCode = (phone, code) => {
+    let params = {
+        phone: phone,
+        code: code
+    }
+    return ajaxRequest.put(`/api/phone/IsInvalidCode/${phone}/${code}`, params);
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 获取用户的账户信息
+ */
+export const getUserProfile = (id) => {
+    return ajaxRequest.get('/api/userInfo/GetUserProfile');
+}
 
+/**
+ * InterfaceAuthor : xuzhuan
+ * 修改用户绑定的手机号码
+ */
+export const updateUserPhone = (phone,code) => {
+    let params = {
+        phone: phone,
+        code: code
+    }
+    return ajaxRequest.put(`/api/userInfo/UpdateUserPhone/${phone}/${code}`, params);
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 获取dashbord
+ */
+export const getUserDashboard = () => {  
+  
+    let params = {
+        appId: ''
+    }
+    return ajaxRequest.get('api/userInfo/GetUserDashboard', params);
+}

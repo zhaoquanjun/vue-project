@@ -105,6 +105,7 @@ export default {
             this.memberInfo = jsonData;
             this.memberList = jsonData.items;
         });
+       // this._getUserDashboard()
     },
     methods: {
         ...mapActions([
@@ -113,7 +114,8 @@ export default {
             "_getBeInvitedUsers",
             "_deleteCurMember",
             "_batchDeletMember",
-            "_updateUserRemark"
+            "_updateUserRemark",
+            "_getUserDashboard"
         ]),
         ...mapMutations([
             "ISRIGHTPANNELSHOW",
