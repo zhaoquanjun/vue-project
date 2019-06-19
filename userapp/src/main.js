@@ -25,9 +25,9 @@ router.beforeEach( (to, from, next) => {
           securityService.signIn();
           next()
         } else {
-           alert(1)
             store.commit("SET_USER", data)
-            await store.dispatch('_getUserDashboard')
+           await store.dispatch('_getUserDashboard')
+            console.log(data)
           next()
         }      
       })

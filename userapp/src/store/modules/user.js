@@ -1,4 +1,4 @@
-import {setLocal} from '@/libs/local'
+import {setLocal,removeLocal} from '@/libs/local'
 
 const user = {
   state: {
