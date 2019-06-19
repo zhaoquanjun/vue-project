@@ -66,7 +66,8 @@ export default {
             headers: {
                 appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
                 Authorization: ""
-            }
+            },
+            uploadSucess:false,
         };
     },
     methods: {
@@ -80,14 +81,18 @@ export default {
             //     return
             // }
         },
-        handleSucess() {
-            this.$message({
+        handleSucess(response, file, fileList) {
+           
+           if(!this.uploadSucess){
+                this.$message({
                 type: "success",
                 message: "上传成功!"
             });
             setTimeout(() => {
-                this.$emit("switchUploadBoxShowStatus",'uploadImg');
+                this.$emit("switchUploadBoxShowStatus", "uploadImg");
             }, 500);
+             this.uploadSucess=true;
+           }
         },
         handleRemove(file, fileList) {
             console.log(file, fileList);

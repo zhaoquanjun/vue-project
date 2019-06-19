@@ -35,10 +35,10 @@
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>
                 </span>
 
-                <span class="list-mode mode-item">
+                <span class="list-mode mode-item" @click="showType('list')">
                     <svg-icon icon-class="list-mode "></svg-icon>
                 </span>
-                <span class="grid-mode mode-item">
+                <span class="grid-mode mode-item" @click="showType('grid')">
                     <svg-icon icon-class="grid-mode"></svg-icon>
                 </span>
             </div>
@@ -99,6 +99,9 @@ export default {
         },
         batchDelete() {
             this.$emit("batchDelete");
+        },
+        showType(value){
+            this.$emit("showType",value)
         }
     }
 };

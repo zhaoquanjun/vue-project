@@ -41,7 +41,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing">
+        <div class="pageing" id="pageing">
             <el-pagination
                 background
                 layout="total, sizes, prev, pager, next, jumper"
@@ -54,7 +54,8 @@
             ></el-pagination>
         </div>
         <!-- :title="picTitle" -->
-        <el-dialog  :visible.sync="imgVisible ">
+        <div id="img-list-dialog">
+             <el-dialog  :visible.sync="imgVisible"  :modal-append-to-body="false">
             <!-- //<img :src="picUrl"> -->
             <el-carousel :autoplay="false" arrow="always" indicator-position="none" :loop="false">
                 <el-carousel-item v-for="item in imgPageResult.list" :key="item.id">
@@ -64,6 +65,8 @@
                 </el-carousel-item>
             </el-carousel>
         </el-dialog>
+        </div>
+       
         <!-- <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
             <el-tree
                 :data="treeResult"
@@ -146,27 +149,9 @@ export default {
 </script>
 
 <style>
-#table-imgList .el-dialog {
-    background: transparent;
-    box-shadow: none;
-}
-#table-imgList .el-dialog__body {
-    text-align: center;
-}
-#table-imgList .el-dialog__headerbtn{
-    right: 0;
-}
-#table-imgList .el-dialog__headerbtn .el-dialog__close {
-    color: #fff;
-    font-size: 30px;
-}
 
-#table-imgList .el-carousel__arrow--right,#table-imgList .el-carousel__arrow--left {
-    background: none;
-}
-#table-imgList .el-carousel__arrow i {
-    font-size: 40px;
-}
+
+
 #table-imgList .el-table .has-gutter th {
     padding: 0;
     height: 32px;
@@ -203,45 +188,5 @@ export default {
     align-items: center;
     justify-content: center;
 }
-</style>
-
-<style lang="scss" scoped>
-.table-wrap {
-    margin: 0 21px;
-}
-.content-table {
-    width: 100%;
-    box-sizing: border-box;
-}
-.handle-btn-wrap {
-    display: flex;
-    justify-content: space-between;
-    .handle-btn {
-        width: 17px;
-        height: 16px;
-    }
-    .move-btn {
-        background: url("~img/move.png") no-repeat center;
-        background-size: 100%;
-        &:hover {
-            background: url("~img/move-selected.png") no-repeat center;
-            background-size: 100%;
-        }
-    }
-}
-
-.cover {
-    width: 32px;
-    height: 32px;
-    vertical-align: middle;
-    margin-right: 10px;
-}
-
-.pageing {
-    float: right;
-    margin-top: 24px;
-}
-</style>
-<style lang="scss" scoped>
 </style>
 

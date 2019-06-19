@@ -1,5 +1,6 @@
 <template>
     <el-container id="content-manage">
+        
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
                 <svg-icon icon-class="img-type-title"></svg-icon>
@@ -18,7 +19,9 @@
                 @modifyNode="modifyNodeCategory"
             ></m-tree>
         </el-aside>
+        
         <el-main>
+            
             <img-list-header
                 :count-pic="countPic"
                 :pic-search-options="picSearchOptions"
@@ -27,10 +30,24 @@
                 @getPicList="getPicList"
                 @batchMove="batchMove"
                 @batchDelete="batchDelete"
+                @showType="showType"
             ></img-list-header>
 
             <el-main>
-               <template v-if="isImgList">
+                <component
+                    :is="componentId"
+                    :img-page-result="imgPageResult"
+                    :pic-search-options="picSearchOptions"
+                    :tree-result="treeResult"
+                    @getPicList="getPicList"
+                    @changeCategory="changeCategoryPic"
+                    @rename="renamePic"
+                    @batchRemove="batchRemovePic"
+                    @moveClassify="moveClassify"
+                    @handleSelectionChange="handleSelectionChange"
+                ></component>
+
+                <!-- <template v-if="isImgList">
                     <img-list
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
@@ -55,14 +72,15 @@
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
                    ></grid-list>
-               </template>
-               
+                </template>-->
+
                 <el-dialog
                     width="0"
                     style="z-index:10"
                     :close-on-click-modal="false"
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
+                    :modal-append-to-body="false"
                 ></el-dialog>
                 <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
@@ -81,15 +99,20 @@
                         <button @click="cancelUpdateCategor" class="cancel">取消</button>
                     </div>
                 </right-pannel>
+                
             </el-main>
+            <el-footer><slot name="modal-footer"></slot></el-footer>
         </el-main>
-        <el-dialog title="上传图片" :visible.sync="dialogTableVisible">
+        <el-dialog title="上传图片" 
+        :visible.sync="dialogTableVisible" 
+        :modal-append-to-body="false" >
             <upload-pic
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 :tree-result="treeResult"
                 :upload-pic-url="uploadPicUrl"
             />
         </el-dialog>
+       
     </el-container>
 </template>
 <script>
@@ -104,6 +127,12 @@ import * as imgCategoryManageApi from "@/api/request/imgCategoryManageApi";
 import environment from "@/environment/index.js";
 
 export default {
+    props: {
+        isGrid: {
+            type: Boolean,
+            default: false
+        }
+    },
     components: {
         MTree,
         ImgListHeader,
@@ -114,11 +143,13 @@ export default {
     },
     data() {
         return {
-            isImgList:true,
-            countPic:0,
+            componentId: "ImgList",
+            isImgList: false,
+            countPic: 0,
             curImgInfo: "",
             moveToClassiFy: "",
             idsList: [],
+            selectedImg:[],
             isInvitationPanelShow: false,
             imgPageResult: {},
             treeResult: null,
@@ -137,6 +168,9 @@ export default {
         };
     },
     mounted() {
+        if (this.isGrid) {
+            this.componentId = "GridList";
+        }
         this.getPicList({});
         this.getTree();
     },
@@ -251,8 +285,8 @@ export default {
         },
 
         switchUploadBoxShowStatus(uploadImg) {
-            if (uploadImg === "uploadImg") this.getPicList({});
             this.dialogTableVisible = !this.dialogTableVisible;
+            if (uploadImg === "uploadImg") this.getPicList({});
         },
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
@@ -268,13 +302,14 @@ export default {
         },
         // 批量更新的选中数量
         handleSelectionChange(list) {
-            console.log(list,'000000000000000')
             this.idsList = [];
             this.countPic = list.length;
             if (list.length < 1) return;
             list.forEach(item => {
                 this.idsList.push(item.id);
             });
+            this.selectedImg = list
+            this.$emit("getImgInfo",list)
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
@@ -300,12 +335,19 @@ export default {
         },
         //批量移动
         batchMove() {
-          
             this.isInvitationPanelShow = true;
         },
         //批量删除
         batchDelete() {
-            this.batchRemovePic(this.idsList)
+            this.batchRemovePic(this.idsList);
+        },
+        //展示方式
+        showType(val) {
+            if (val === "list") {
+                this.componentId = "ImgList";
+            } else {
+                this.componentId = "GridList";
+            }
         }
     },
     computed: {
@@ -316,7 +358,8 @@ export default {
             console.log(this.idsList.length);
             return this.idsList.length > 1 ? true : false;
         }
-    }
+    },
+    watch: {}
 };
 </script>
 
@@ -350,9 +393,9 @@ export default {
         margin-right: 8px;
         color: #fff;
     }
-    .cancel{
+    .cancel {
         color: #262626;
-        background:rgba(238,238,238,1);
+        background: rgba(238, 238, 238, 1);
     }
 }
 </style>

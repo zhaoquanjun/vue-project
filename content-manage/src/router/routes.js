@@ -28,6 +28,11 @@ export const defaultRoutes = [
         name: "product",
         component:  () => import('@/views/content-manage/product-manage.vue')
       },
+      {
+        path: "/content",
+        name: "content",
+        component:  () => import('@/views/content-manage/content-manage.vue')
+      },
     ]
   },
   {
