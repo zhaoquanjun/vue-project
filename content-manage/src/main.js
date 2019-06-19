@@ -12,18 +12,21 @@ import { getLocal } from "./libs/local";
 import './icons';
 import securityService from "@/services/authentication/securityService";
 Vue.config.productionTip = false;
+let accessToken = store.state.accessToken.Authorization;
 
-let accessToken = store.state.accessToken.Authorization
 router.beforeEach((to, from, next) => {
+
   if (accessToken) {
         next()
   } else {
     if (to.name !== "callback") {
       securityService.getUser().then((data) => {
+    
         if (!data) {
           securityService.signIn();
           next()
         } else {
+          console.log(data)
           store.commit("SET_USER", data)
           next()
         }      
