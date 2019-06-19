@@ -4,54 +4,58 @@
         <el-alert title="修改手机号后，可以使用新手机登录管理平台，您关联的账户下的成员列表中的手机号会一同修改" type="success"></el-alert>
         <!-- <no-captcha></no-captcha> -->
         <!-- <div class="modifi-phone">
-           
-            <div class="smsCodeWrap">
-                <el-input
-                    class="smsInput"
-                    prefix-icon="el-icon-date"
-                    size="small"
-                    v-model="input"
-                    placeholder="请输入内容"
-                >
-                  <el-select
-                  slot="prefix"
-                    style="z-index:10000"
-                    size="small"
-                    @change="change"
-                    v-model="value"
-                    placeholder="请选择"
-                >
-                    <el-option
-                        popper-class="dropdown__item"
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    >
-                        <span style="float: left">{{ item.label }}</span>
-                        <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-                    </el-option>
-                </el-select>
-                </el-input>
 
-              
-        <!-- <button class="sendSms">发送验证码</button>-->
+        <div class="smsCodeWrap">
+            <el-input
+                class="smsInput"
+                prefix-icon="el-icon-date"
+                size="small"
+                v-model="input"
+                placeholder="请输入内容"
+            >
+              <el-select
+              slot="prefix"
+                style="z-index:10000"
+                size="small"
+                @change="change"
+                v-model="value"
+                placeholder="请选择"
+            >
+                <el-option
+                    popper-class="dropdown__item"
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                >
+                    <span style="float: left">{{ item.label }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+                </el-option>
+            </el-select>
+            </el-input>
+
+
+    <!-- <button class="sendSms">发送验证码</button>-->
         <!-- </div>
-        </div>-->
+    </div>-->
         <div class="from-row">
             <get-sms ref="getSms" @getSmsCode="getSmsCode" :is-modifi="isModifi"></get-sms>
         </div>
         <div class="footer">
             <button class="confirm footer-btn" v-if="!isModifi" @click="nextStep">下一步</button>
-             <button class="confirm footer-btn" v-else @click="modify ">确认修改</button>
+            <button class="confirm footer-btn" v-else @click="modify ">确认修改</button>
             <button class="cancel footer-btn">取消</button>
         </div>
     </div>
 </template>
 <script>
 import NoCaptcha from "../common/no-captcha";
-import GetSms from "./GetSms";
-export default {
+    import GetSms from "./GetSms";
+    import { sendSourcePhoneCode } from "@/api/index.js";
+    import { sendTargetPhoneCode } from "@/api/index.js"; 
+    import { isInvalidCode } from "@/api/index.js";
+    export default {
+    props: ["sourcePhone"],
     components: { NoCaptcha, GetSms },
     data() {
         return {
@@ -99,20 +103,45 @@ export default {
         change(item) {
             console.log(item);
         },
-        getSmsCode(code) {
+        async getSmsCode() {
+            console.log(this.sourcePhone);
+            let { status } = await sendSourcePhoneCode(this.sourcePhone);
+            if (status === 200) {
+                this.$message({
+                    type: "success",
+                    message: "发送成功!"
+                });
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "发送失败!"
+                });
+            }
             console.log(code, "验证码");
         },
-        nextStep() {
+        async nextStep() {
+            //let { status } = await isInvalidCode(this.sourcePhone, this.code);
+            //if (status === 200) {
+            //    this.$message({
+            //        type: "success",
+            //        message: "验证成功!"
+            //    });
+            //} else {
+            //    this.$message({
+            //        type: "failed",
+            //        message: "验证失败!"
+            //    });
+            //}
             this.isModifi = true;
             if (!this.isModifi) {
                 this.$store.commit("CLOSERIGHTPANNEL", false);
                 this.timer = setTimeout(() => {
                     this.$store.commit("CLOSERIGHTPANNEL", true);
                 }, 500);
-            }
+            }           
         },
-        modify(){
-          this.$refs.getSms.submitForm("ruleForm");
+        async modify(){
+            this.$refs.getSms.submitForm("ruleForm");            
           // alert('确认修改')
         }
     },

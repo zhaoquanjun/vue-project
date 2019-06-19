@@ -28,6 +28,7 @@
             </div>
         </div>
         <p class="img-desc">{{curItem.title}}</p>
+       
     </div>
 </template>
 <script>
@@ -54,16 +55,19 @@ export default {
             this.isHandleBtnShow = false;
         },
         handleMove() {
+        
             this.isHandleBtnShow = true;
-            console.log("move");
+            this.$emit("handleMove",this.curItem)
         },
         handleLook() {
+            
             this.isHandleBtnShow = true;
-            console.log("look");
+            this.$emit("viewPic",this.curItem)
         },
         handleDelete() {
+           
             this.isHandleBtnShow = true;
-            console.log("删除");
+            this.$emit("batchRemovePic",this.curItem)
         }
     },
     computed: {
@@ -76,9 +80,9 @@ export default {
         }
     },
     watch:{
-       curItem(){
-           alert(1)
-       } 
+    //    curItem(){
+    //        alert(1)
+    //    } 
     }
 };
 </script>
@@ -117,6 +121,7 @@ export default {
         position: absolute;
         left: 0;
         bottom: 10px;
+        z-index: 1000;
         .item-selected {
             width: 27px;
             height: 27px;

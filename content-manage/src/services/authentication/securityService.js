@@ -1,8 +1,4 @@
 import oidcMgr from '@/services/authentication/oidcService';
-const globalAuthData = {
-  isAuthenticated: false,
-  token: ''
-}
 
 class SecurityService {
   async authenticate(returnPath) {
@@ -16,10 +12,6 @@ class SecurityService {
   }
   async getUser() {
     const user = await oidcMgr.getUser();
-    if (user) {
-      globalAuthData.isAuthenticated = true
-      globalAuthData.token = user.access_token
-    }
     return user
   }
   signIn(returnPath) {
@@ -27,25 +19,13 @@ class SecurityService {
       : oidcMgr.signinRedirect()
   }
   signOut() {
-    globalAuthData.isAuthenticated = false
-    globalAuthData.token = ''
     oidcMgr.signoutRedirect().then(function(resp) {
       console.log('signed out', resp)
     }).catch(function(err) {
       console.log(err)
     })
   }
-  isAuthenticated() {
-    return globalAuthData.isAuthenticated
-  }
-  getAccessToken() {
-    let token = null
-    if (globalAuthData.isAuthenticated) {
-      token = 'Bearer ' + globalAuthData.token
-    }
-    return {
-      Authorization: token
-    }
-  }
+
+
 }
 export default new SecurityService

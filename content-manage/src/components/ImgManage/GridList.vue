@@ -1,8 +1,14 @@
 <template>
-    <div class="grid-img-list">
+    <div class="table-wrap" id="img-list">
         <ul class="img-list">
             <li class="item" v-for="(item) in imgPageResult.list" :key="item.id">
-                <grid-list-item :curItem="item" @handleSelected="handleSelected"></grid-list-item>
+                <grid-list-item 
+                :curItem="item" 
+                @handleSelected="handleSelected"
+                @viewPic="viewPic"
+                @handleMove="handleMove"
+                @batchRemovePic="batchRemovePic"
+                ></grid-list-item>
             </li>
         </ul>
         <div class="pageing">
@@ -17,6 +23,18 @@
                 @size-change="changeSize"
             ></el-pagination>
         </div>
+        <div id="img-list-dialog">
+           <el-dialog  :visible.sync="imgVisible"  :modal-append-to-body="false">
+            <!-- //<img :src="picUrl"> -->
+            <el-carousel :autoplay="false" arrow="always" indicator-position="none" :loop="false">
+                <el-carousel-item v-for="item in imgPageResult.list" :key="item.id">
+                    <h3>
+                        <img :src="item.fullOssUrl">
+                    </h3>
+                </el-carousel-item>
+            </el-carousel>
+        </el-dialog>
+        </div>
     </div>
 </template>
 <script>
@@ -25,6 +43,7 @@ export default {
     props: ["imgPageResult", "picSearchOptions"],
     data() {
         return {
+              imgVisible: false,
             seletedList: []
         };
     },
@@ -47,15 +66,25 @@ export default {
         changeSize(size) {
             this.picSearchOptions.pageSize = size;
             this.$emit("getPicList");
-        }
+        },
+        viewPic() {
+            this.imgVisible = true;
+        },
+         /**
+         * 移动分类
+         */
+        handleMove(item) {
+            console.log(item)
+            this.$emit("moveClassify",true,item)
+        },
+        batchRemovePic(item){
+             this.$emit("batchRemove",[item.id])
+        },
     }
 };
 </script>
 <style lang="scss" scoped>
-.grid-img-list {
-    margin: 0 auto;
-    box-sizing: border-box;
-}
+
 .img-list {
     width: 100%;
     box-sizing: border-box;

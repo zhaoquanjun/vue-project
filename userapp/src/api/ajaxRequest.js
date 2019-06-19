@@ -1,10 +1,14 @@
 /**axios封装
  * 请求拦截、相应拦截、错误统一处理
  */
+
 import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
-import { getLocal } from "@/libs/local.js"
-import environment from "@/environment/index.js"
+import { getLocal } from "@/libs/local.js";
+import environment from "@/environment/index.js";
+import store  from "@/store/state";
+
+
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = environment.memberManageApi;
@@ -14,7 +18,8 @@ import environment from "@/environment/index.js"
 axios.defaults.baseURL = environment.memberManageApi;
 // 请求超时时间
 axios.defaults.timeout = 5000;
-
+//设置put请求传输内容的格式
+axios.defaults.headers.put['Content-Type'] = 'application/json-patch+json;charset=UTF-8';
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
@@ -27,7 +32,9 @@ axios.interceptors.request.use(
     
         token && (config.headers.Authorization = "Bearer " + token);
         //todo 测试阶段写死
-        config.headers.AppId = '823EB3BD-93F4-4655-B833-D604A6EF2032';
+        //let dashbord = get("api/userinfo/GetUserDashboard");
+        console.log(store.appid,'33333333333333333333');
+        config.headers.appid = store.appid;
         return config;
     },
     error => {
@@ -46,6 +53,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
+        console.log(error,'999999')
         let status = error.response.status;
         if (error.response.status) {
             switch (error.response.status) {
@@ -119,6 +127,7 @@ export function post(url, params) {
  * @param {String} url [请求的url地址] 
  * @param {Object} params [请求时携带的参数] 
  */
+
 export function put(url, params) {
     return new Promise((resolve, reject) => {
         axios.put(url,params)

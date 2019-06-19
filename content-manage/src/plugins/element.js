@@ -5,6 +5,7 @@ import {
     Main,
     Tree,
     Header,
+    Footer,
     Col,
     Row,
     Menu,
@@ -34,6 +35,7 @@ Vue.use(Container)
     .use(Main)
     .use(Tree)
     .use(Header)
+    .use(Footer)
     .use(Col)
     .use(Row)
     .use(Menu)

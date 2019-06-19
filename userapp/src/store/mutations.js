@@ -1,4 +1,5 @@
 import * as types from "./mutation-types.js"
+import { setLocal } from '@/libs/local'
 const mutations = {
    
     /**
@@ -28,6 +29,12 @@ const mutations = {
      * @param {*} state 
      * @param {获取到用户信息} payload 
      */
-    [types.USERCURRENTAPPPOLICY] (state, payload) { state.userCurAppPolicy=payload },
+    [types.USERCURRENTAPPPOLICY](state, payload) { state.userCurAppPolicy = payload },
+
+    [types.GETUSERDASHBOARD](state, payload) {
+
+        state.appid = payload;
+        setLocal('appid', payload);
+    },
 };
 export default mutations;

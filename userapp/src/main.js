@@ -14,17 +14,20 @@ Vue.use(VueClipboard)
 //import '@/icons'
 Vue.use(ElementUI)
 Vue.config.productionTip = false;
-router.beforeEach((to, from, next) => {
+
+router.beforeEach( (to, from, next) => {
   if (getLocal("token")) {
         next()
   } else {
     if (to.name !== "callback") {
-      securityService.getUser().then((data) => {
+        securityService.getUser().then(async (data) => {
         if (!data) {
           securityService.signIn();
           next()
         } else {
-          store.commit("SET_USER", data)
+           alert(1)
+            store.commit("SET_USER", data)
+            await store.dispatch('_getUserDashboard')
           next()
         }      
       })

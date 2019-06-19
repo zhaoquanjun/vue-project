@@ -41,10 +41,7 @@
                                     type="primary"
                                     @click="cancelInput(scope.$index)"
                                 >取消</button>
-                                <button
-                                    class="popover-btn save"
-                                    @click="saveInputValue(scope.row,scope.$index)"
-                                >保存</button>
+                                <button class="popover-btn save" @click="saveInputValue(scope.$index,scope.row)">保存</button>
                             </div>
                         </div>
                     </el-popover>
@@ -144,19 +141,18 @@ export default {
             this.remarkValue = "";
         },
 
-        saveInputValue(row,id) {
-            if (this.remarkValue == "") {
-                this.$message.error({
-                    message: "备注不能为空!"
-                });
+        saveInputValue(id,row) {
+            if(this.remarkValue == ""){
+                 this.$message.error({
+                                    message: "备注不能为空!"
+                                });
                 return false;
             }
-            console.log(row)
-            let options = {
+            let data = {
                 targetUserId:row.userId,
-                remarkValue:this.remarkValue
+                remark:this.remarkValue
             };
-            this.$emit("updateUserRemark", options);
+            this.$emit("updateUserRemark", data)
             this.$refs[`popover-${id}`].doClose();
         },
 

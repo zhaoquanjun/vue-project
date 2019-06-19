@@ -32,3 +32,62 @@
         }
     }
 }
+
+#img-list-dialog{
+   .el-dialog {
+        background: transparent;
+        box-shadow: none;
+    }
+   .el-dialog__body {
+        text-align: center;
+    }
+    .el-dialog__headerbtn{
+        right: 0;
+    }
+   .el-dialog__headerbtn .el-dialog__close {
+        color: #fff;
+        font-size: 30px;
+    }
+   .el-carousel__arrow--right,#table-imgList .el-carousel__arrow--left {
+        background: none;
+    }
+   .el-carousel__arrow i {
+        font-size: 40px;
+    }
+}
+
+.pageing {
+    float: right;
+    margin-top: 24px;
+}
+
+.table-wrap {
+    margin: 0 21px;
+}
+.content-table {
+    width: 100%;
+    box-sizing: border-box;
+}
+.handle-btn-wrap {
+    display: flex;
+    justify-content: space-between;
+    .handle-btn {
+        width: 17px;
+        height: 16px;
+    }
+    .move-btn {
+        background: url("~img/move.png") no-repeat center;
+        background-size: 100%;
+        &:hover {
+            background: url("~img/move-selected.png") no-repeat center;
+            background-size: 100%;
+        }
+    }
+}
+
+.cover {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
