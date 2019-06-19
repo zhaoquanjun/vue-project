@@ -5,6 +5,7 @@ import {
     Main,
     Tree,
     Header,
+    Footer,
     Col,
     Row,
     Menu,
@@ -20,13 +21,17 @@ import {
     Card,
     Upload,
     Message,    
-    MessageBox
+    MessageBox,
+    Carousel,
+    CarouselItem,
+    Tooltip,
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
     .use(Main)
     .use(Tree)
     .use(Header)
+    .use(Footer)
     .use(Col)
     .use(Row)
     .use(Menu)
@@ -39,8 +44,12 @@ Vue.use(Container)
     .use(Select)
     .use(Option)
     .use(Dialog)
-    .use(Card)
     .use(Upload)
+    .use(Card)
+    .use(Carousel)
+    .use(CarouselItem)
+    .use(Tooltip)
+    
    
 ;
 Vue.prototype.$message = Message;

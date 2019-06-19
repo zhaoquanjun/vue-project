@@ -1,10 +1,9 @@
 <template>
-    <div>
+    <div id="member-table">
         <el-table
             :data="memberList"
             style="width: 100%"
             :header-cell-style="{background:'#F5F5F5'}"
-            @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection" :selectable="handleDisable"></el-table-column>
             <el-table-column prop="name" label="姓名" width="180"></el-table-column>
@@ -171,45 +170,44 @@ export default {
     }
 };
 </script>
-<style scoped>
-.el-table /deep/ th {
+<style>
+#member-table .el-table th {
     padding: 10px 0;
-    background: #eeeeee !important;
+    background: #f5f5f5;
 }
-.el-table /deep/ td {
+#member-table .el-table td {
     padding: 10px 0;
 }
-.el-table /deep/ th > .cell {
+#member-table .el-table th > .cell {
     color: #333;
     font-size: 12px;
 }
-.el-table /deep/ .cell {
+#member-table .el-table .cell {
     color: #333;
 }
-.el-checkbox__input.is-checked /deep/ .el-checkbox__inner {
-    background-color: #00c1de !important;
-    border-color: #00c1de !important;
+#member-table  .el-checkbox__input.is-checked  .el-checkbox__inner {
+    background-color: #00c1de;
+    border-color: #00c1de;
 }
-.el-pagination.is-background .el-pager /deep/ li:not(.disabled).active {
-    background-color: #01c0de !important;
+#member-table  .el-pagination.is-background .el-pager li:not(.disabled)#member-table .active {
+    background-color: #01c0de;
 }
-.el-pager /deep/ .active {
-    background-color: #01c0de !important;
-}
-.el-pagination /deep/ .el-pagination__total {
-    color: #8c8c8c;
-}
-.el-pagination /deep/ .el-pager li {
+#member-table .el-pagination .el-pager li {
     font-weight: 400;
     color: #252525;
 }
+#member-table .el-pagination .el-pager .active {
+    background-color: #01c0de;
+    color: #fff;
+}
+#member-table .el-pagination .el-pagination__total {
+    color: #8c8c8c;
+}
+
 </style>
 
 <style lang="scss" scoped>
 .textareaWrap {
-    // padding: 10px;
-    // box-shadow: 0 0 5px #ccc;
-
     background: #fff;
     position: relative;
     .btn-wrap {

@@ -1,5 +1,4 @@
 import * as ajaxRequest from "./ajaxRequest";
-
 /**
  *  InterfaceAuthor : 福全
  * 获取个人信息含权限
@@ -107,6 +106,7 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
 
 export const updateUserRemark = (targetUserId, remark) => {
     console.log(targetUserId, remark);
+    console.log(options)
     let params = {
         targetUserId: targetUserId,
         remark: remark
@@ -117,15 +117,14 @@ export const updateUserRemark = (targetUserId, remark) => {
 
 /**
  * InterfaceAuthor : li tao
- * 获取权限所有权限
+ * 邀请生成短链接
  */
 export const getShortUrlByInviation = (names) => {
     let params = {
         appId: "123EB3BD-93F4-4655-B833-D604A6EF2022",
-        userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
         permissionIds: names
     }
-    return ajaxRequest.get('/api/ShortUrl/GetShortUrlByInviation', params);
+    return ajaxRequest.post('/api/ShortUrl/GetShortUrlByInviation',  params );
 }
 
 /**

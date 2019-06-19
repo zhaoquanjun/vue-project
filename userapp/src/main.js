@@ -15,8 +15,6 @@ Vue.use(VueClipboard)
 Vue.use(ElementUI)
 Vue.config.productionTip = false;
 router.beforeEach( (to, from, next) => {
-  
-    //await store.dispatch('getUserDashboard')
   if (getLocal("token")) {
         next()
   } else {

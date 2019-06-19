@@ -2,25 +2,30 @@
     <div style="margin-left:20px">
         <el-table
             ref="multipleTable"
-            :data="tableData"
+            :data="articlePageResult.list"
             tooltip-effect="dark"
             class="content-table"
             @selection-change="handleSelectionChange"
+            @sort-change='sortByTopStatus'
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="图片名称">
+            <el-table-column prop="title" label="文章标题">
                 <template slot-scope="scope">
-                    <img src="../../assets/avatar.jpeg" class="cover" alt>
-                    <span>{{ scope.row.name }}</span>
+                    <img :src="scope.row.pictureUrl" class="cover" alt>
+                    <span>{{ scope.row.title }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="type" label="分类"></el-table-column>
+            <el-table-column prop="categoryName" label="分类"></el-table-column>
 
-            <el-table-column prop="size" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="isPublishPrt" label="状态" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="isTopPrt" sortable="custom" label="置顶" show-overflow-tooltip></el-table-column>
+
+            <el-table-column prop="createUser" label="作者" show-overflow-tooltip></el-table-column>
+
+            <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -42,89 +47,39 @@
             <el-pagination
                 background
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="100"
-                :page-count="5"
-                :page-size="3"
-                :page-sizes="[3, 4, 5, 6]"
-                @current-change="1"
+                :total="articlePageResult.totalRecord"
+                :page-count="articlePageResult.totalPage"
+                :page-size="articlePageResult.pageSize"
+                :page-sizes="[1,5,10,15,20,50,100]"
+                @current-change="changePageNum"
+                @size-change="changePageSize"
             ></el-pagination>
         </div>
-        <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
+        <!-- <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
             <el-card :body-style="{ padding: '0px' }">
                 <img src="../../assets/avatar.jpeg" width="100%" height="100%">
             </el-card>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            imgVisible: false,
-            tableData: [
-                {
-                    date: "2016-05-03",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1518 弄",
-                    type: "默认分类",
-                    size: "2.4M",
-                    wideHigh: "200*200"
-                },
-                {
-                    date: "2016-05-02",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1518 弄",
-                    type: "默认分类",
-                    size: "2.4M",
-                    wideHigh: "200*200"
-                },
-                {
-                    date: "2016-05-04",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1518 弄",
-                    type: "默认分类",
-                    size: "2.4M",
-                    wideHigh: "200*200"
-                },
-                {
-                    date: "2016-05-01",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1518 弄",
-                    type: "默认分类",
-                    size: "2.4M",
-                    wideHigh: "200*200"
-                },
-                {
-                    date: "2016-05-08",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1518 弄",
-                    type: "默认分类",
-                    size: "2.4M",
-                    wideHigh: "200*200"
-                },
-                {
-                    date: "2016-05-06",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1518 弄",
-                    type: "默认分类",
-                    size: "2.4M",
-                    wideHigh: "200*200"
-                },
-                {
-                    date: "2016-05-07",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1518 弄",
-                    type: "默认分类",
-                    size: "2.4M",
-                    wideHigh: "200*200"
-                }
-            ],
-            multipleSelection: []
-        };
-    },
-
+    props: ["articlePageResult", "articleSearchOptions", "treeResult"],
     methods: {
+        changePageNum(page) {
+            this.articleSearchOptions.pageIndex = page;
+            this.$emit("getArticleList");
+        },
+        changePageSize(size) {
+            this.articleSearchOptions.pageSize = size;
+            this.$emit("getArticleList");
+        },
+        sortByTopStatus: function(column, prop, order) {
+            // descending ascending
+            this.articleSearchOptions.OrderByTopOrder = column.order == "ascending" ? true : column.order == "descending" ? false : null;
+            this.$emit("getArticleList");
+        },
         /**
          * 单选或全选操作
          */

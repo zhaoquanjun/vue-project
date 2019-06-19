@@ -1,6 +1,7 @@
 /**axios封装
  * 请求拦截、相应拦截、错误统一处理
  */
+
 import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import { getLocal } from "@/libs/local.js";
@@ -28,7 +29,7 @@ axios.interceptors.request.use(
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');
-      
+    
         token && (config.headers.Authorization = "Bearer " + token);
         //todo 测试阶段写死
         //let dashbord = get("api/userinfo/GetUserDashboard");
