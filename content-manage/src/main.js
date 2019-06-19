@@ -6,6 +6,7 @@ import './plugins/element';
 import "./plugins/element-reset.css"
 import "./assets/reset.css";
 import "./styles/common.scss";
+import "./styles/weizhan.scss";
 import "@/directive/index.js"
 import { getLocal } from "./libs/local";
 import './icons';

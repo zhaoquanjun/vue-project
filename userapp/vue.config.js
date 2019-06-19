@@ -42,7 +42,7 @@ module.exports = {
     },
     devServer: { // 开发 服务时使用
         disableHostCheck: true,
-        port: 80,
+        port: 8082,
     },
     pluginOptions: {
 

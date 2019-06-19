@@ -15,9 +15,9 @@ let logoutRedirectUri = "http://content.newwezhan.cn/index.html";
  */
 
 if (process.env.NODE_ENV === 'development') {
-    memberManageApi = 'http://api.content.newwezhan.cn';
+    memberManageApi = 'http://localhost:8200';
     uploadPicUrl = 'http://api.content.newwezhan.cn/api/picture';
-    authorityUrl = "http://api.identity.newwezhan.cn";
+    authorityUrl = "http://localhost:8000";
     redirectUrl = "http://localhost:8081/callback";
     logoutRedirectUri = "http://content.newwezhan.cn/index.html";
 };

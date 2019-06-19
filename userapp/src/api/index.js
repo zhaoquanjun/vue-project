@@ -108,9 +108,10 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
  */
 
 export const updateUserRemark = (options) => {
+    console.log(options)
     let params = {
         targetUserId: options.targetUserId,
-        remark: options.value
+        remark: options.remarkValue
     };
     return ajaxRequest.put('/api/userInfo/UpdateUserRemark', params);
 

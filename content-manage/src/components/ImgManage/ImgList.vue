@@ -64,7 +64,7 @@
                 </el-carousel-item>
             </el-carousel>
         </el-dialog>
-        <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
+        <!-- <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
             <el-tree
                 :data="treeResult"
                 node-key="id"
@@ -72,7 +72,7 @@
                 :expand-on-click-node="false"
                 @node-click="changeCategory"
             ></el-tree>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -100,9 +100,10 @@ export default {
         /**
          * 单选或全选操作
          */
-        handleSelectionChange(val) {
-            console.log(val);
-            this.multipleSelection = val;
+        handleSelectionChange(list) {
+            console.log(list);
+            this.multipleSelection = list;
+            this.$emit("handleSelectionChange",list)
         },
         /**
          * 移动分类
@@ -111,7 +112,7 @@ export default {
          
             this.categoryVisable = true;
             this.changeCategoryPicId = row.id;
-            this.$emit("moveClassify",true)
+            this.$emit("moveClassify",true,row)
         },
         changeCategory(data) {
             this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);

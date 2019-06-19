@@ -16,25 +16,18 @@
             </span>
             <span class="close-pannel" @click="closePanel">X</span>
         </div>
-        <div class="category-content">
-            <p style="padding:5px 10px ">当前分类: <slot name="cur-name"></slot></p> 
-             <p style="padding:5px 10px  ">移动至 : <slot name="move-to-name"></slot> </p> 
-        </div>
-        
         <slot></slot>
-        <slot name="footer"></slot>
     </div>
 </template>
 <script>
-
+import { mapMutations } from "vuex";
 export default {
     name: "right-pannel",
     props: {
         pannelWidth: {
             type: String,
-            default: "331"
-        },
-
+            default: "534"
+        }
     },
     data(){
         return {
@@ -43,8 +36,7 @@ export default {
     },
     methods: {
         closePanel() {
-            this.$emit("closeRightPanel",false)
-            // this.$store.commit("CLOSERIGHTPANNEL", false);
+            this.$store.commit("CLOSERIGHTPANNEL", false);
         }
     }
 };
@@ -73,7 +65,7 @@ export default {
         font-size: 14px;
         overflow: hidden;
         border-bottom: 1px solid #efefef;
-        >span {
+        span {
             padding: 0 10px;
         }
         .auth-title {
@@ -84,9 +76,5 @@ export default {
             cursor: pointer;
         }
     }
-}
-
-.category-content{
-    padding-top: 20px;
 }
 </style>
