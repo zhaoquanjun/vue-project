@@ -5,7 +5,7 @@
                 <span>文章封面</span>
             </div>
             <div>
-                <el-upload
+                <!-- <el-upload
                     class="upload-pic"
                     :action="uploadPicAction"
                     :headers="headers"
@@ -20,10 +20,23 @@
                     :before-upload="beforeUpload"
                 >
                     <i class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>-->
+            </div>
+            <div>
+                <el-upload
+                    class="avatar-uploader"
+                    :action="uploadPicAction"
+                    :headers="headers"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload"
+                >
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </div>
         </el-card>
-        <el-col>
+        <el-col style="margin-top:20px">
             <el-collapse v-model="activeName" accordion>
                 <el-collapse-item title="模版样式" name="1">
                     <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
@@ -34,15 +47,17 @@
     </div>
 </template>
 <script>
+import environment from "@/environment/index.js";
+
 export default {
     data() {
         return {
-             activeName:"",
+            activeName: "",
             imageUrl: "",
             uoloadDisabled: true,
             fileList: [],
             upload2Category: { label: "全部分类", id: 0 },
-            uploadPicAction: `${this.uploadPicUrl}/0`,
+            uploadPicAction: `${environment.uploadPicUrl}/0`,
             headers: {
                 appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
                 Authorization: ""
@@ -124,6 +139,29 @@ export default {
                 alert(`上传图片大小不能超过 ${maxMb}MB!`);
             }
             return isPic && isSizeOk;
+        },
+
+        ///////
+        handleAvatarSuccess(res, file) {
+            
+            this.imageUrl = URL.createObjectURL(file.raw);
+        },
+        beforeAvatarUpload(file) {
+            this.headers.Authorization =
+                "Bearer " + this.$store.state.accessToken.Authorization;
+            const isPic =
+                ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
+                -1;
+            const maxMb = 10;
+            const isSizeOk = file.size / 1024 / 1024 < maxMb;
+
+            if (!isPic) {
+                this.$message.error("上传头像图片只能是 图片 格式!");
+            }
+            if (!isSizeOk) {
+                this.$message.error(`上传图片大小不能超过 ${maxMb}MB!`);
+            }
+            return isPic && isSizeOk;
         }
     }
 };
@@ -132,10 +170,35 @@ export default {
 .el-card /deep/ .el-card__body {
     text-align: center;
 }
-.el-collapse /deep/ .el-collapse-item__header{
-  padding: 0 10px;
+.el-collapse /deep/ .el-collapse-item__header {
+    padding: 0 10px;
 }
-.el-collapse /deep/ .el-collapse-item__content{
-  padding: 0 10px;
+.el-collapse /deep/ .el-collapse-item__content {
+    padding: 0 10px;
 }
+.avatar-uploader /deep/ .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+}
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+}
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+}
+</style>
+<style lang="scss" scoped>
 </style>

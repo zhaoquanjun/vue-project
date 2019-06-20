@@ -60,7 +60,7 @@
         </div>
         <div class="head-item head-right">
             <button @click="importArticle">导入文章</button>
-            <button class="add-article">新增文章</button>
+            <button class="add-article" @click="addArticle">新增文章</button>
             <!-- <span class="upload-wrap">
                 <svg-icon icon-class="upload-img"></svg-icon>
             </span>-->
@@ -121,6 +121,9 @@ export default {
             // this.push({
             //     path:''
             // })
+        },
+        addArticle(){
+            this.$emit("addArticle")
         }
     }
 };

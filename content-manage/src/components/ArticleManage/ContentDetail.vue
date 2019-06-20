@@ -5,7 +5,7 @@
               <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item>内容管理</el-breadcrumb-item>
-                <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/article' }">文章管理</el-breadcrumb-item>
                 <el-breadcrumb-item>新增文章</el-breadcrumb-item>
             </el-breadcrumb>
            </div>
@@ -58,7 +58,8 @@ export default {
     methods:{
       submitForm(){
         this.$refs.articleContent.submitForm('articleDetail')
-      }
+      },
+     
     },
     mounted() {
       

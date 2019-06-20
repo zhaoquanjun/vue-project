@@ -1,4 +1,4 @@
-//import imgManage from "../views/img-manage";
+import ContentDetail from "@/components/ArticleManage/ContentDetail.vue";
 
 // 默认访问的路由
 export const defaultRoutes = [
@@ -9,11 +9,11 @@ export const defaultRoutes = [
     component: ()=>import('@/components/index.vue'),
     children:[
       {
-        path: "/article",
+        path: "article",
         name: "article",
         component:  () => import('@/views/content-manage/article-manage.vue'),
         meta:{title:"文章管理",isSub:true},
-        children:[]
+      
       },
       {
         path: 'create',
