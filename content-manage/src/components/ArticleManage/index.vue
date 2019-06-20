@@ -18,7 +18,7 @@
         <el-main>
             <content-header  :article-search-options="articleSearchOptions"
                              @getArticleList="getArticleList"></content-header>
-            <el-main>
+            <el-main style="padding: 0 24px;">
                  <content-table
                  v-if="articlePageResult !== null"
                  :article-page-result="articlePageResult"
