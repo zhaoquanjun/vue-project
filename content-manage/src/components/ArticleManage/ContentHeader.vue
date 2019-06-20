@@ -1,7 +1,12 @@
 <template>
     <el-header class="content-header">
         <div class="seachInput head-item">
-            <el-input size="small" v-model="articleSearchOptions.title" placeholder="输入文章标题搜索" class="input-with-select">
+            <el-input
+                size="small"
+                v-model="articleSearchOptions.title"
+                placeholder="输入文章标题搜索"
+                class="input-with-select"
+            >
                 <el-button slot="append" @click="getArticleList">
                     <svg-icon icon-class="search-icon"></svg-icon>
                 </el-button>
@@ -10,12 +15,12 @@
         <div class="head-item head-middle">
             <span>状态</span>
             <span class="select-sort">
-                <el-select 
-                size="small" 
-                v-model="statusValue"
-                 placeholder="请选择"
-                 @change="changeStatus"
-                 >
+                <el-select
+                    size="small"
+                    v-model="statusValue"
+                    placeholder="请选择"
+                    @change="changeStatus"
+                >
                     <el-option
                         v-for="item in statusOptions"
                         :key="item.statusValue"
@@ -27,12 +32,12 @@
 
             <span>排序</span>
             <span class="select-sort">
-                <el-select 
-                size="small" 
-                v-model="orderValue"
-                 placeholder="请选择"
-                 @change="changeOrderCondition"
-                 >
+                <el-select
+                    size="small"
+                    v-model="orderValue"
+                    placeholder="请选择"
+                    @change="changeOrderCondition"
+                >
                     <el-option
                         v-for="item in orderOptions"
                         :key="item.orderValue"
@@ -45,7 +50,6 @@
             <span @click="switchIsDesc">
                 <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                 <svg-icon v-else icon-class="top-arrow"></svg-icon>
-
             </span>
             <span class="list-mode mode-item">
                 <svg-icon icon-class="list-mode "></svg-icon>
@@ -55,9 +59,11 @@
             </span>
         </div>
         <div class="head-item head-right">
-            <span class="upload-wrap">
+            <button @click="importArticle">导入文章</button>
+            <button class="add-article">新增文章</button>
+            <!-- <span class="upload-wrap">
                 <svg-icon icon-class="upload-img"></svg-icon>
-            </span>
+            </span>-->
         </div>
     </el-header>
 </template>
@@ -94,23 +100,29 @@ export default {
             orderValue: "0"
         };
     },
-    methods:{
+    methods: {
         getArticleList() {
             this.$emit("getArticleList");
         },
-        changeStatus(value){
+        changeStatus(value) {
             this.articleSearchOptions.publishStatus = value;
             this.getArticleList();
         },
-        changeOrderCondition(value){
+        changeOrderCondition(value) {
             this.articleSearchOptions.orderCondition = value;
             this.getArticleList();
         },
         switchIsDesc() {
-            this.articleSearchOptions.isDescending = !this.articleSearchOptions.isDescending;
+            this.articleSearchOptions.isDescending = !this.articleSearchOptions
+                .isDescending;
             this.getArticleList();
+        },
+        importArticle(){
+            // this.push({
+            //     path:''
+            // })
         }
-    },
+    }
 };
 </script>
 <style <style lang="scss" scoped>
@@ -136,9 +148,9 @@ export default {
     height: 32px;
     margin: 0 16px 0 7px;
 }
-.head-item{
-  display: inline-block;
-  flex: none;
+.head-item {
+    display: inline-block;
+    flex: none;
 }
 .mode-item {
     display: inline-block;
@@ -151,17 +163,22 @@ export default {
 .list-mode {
     border-right: none;
 }
-.head-right,.head-middle{
-  float: right;
+.head-right,
+.head-middle {
+    float: right;
 }
-.upload-wrap {
-    margin-right: 25px;
-    cursor: pointer;
-    display: inline-block;
-    width: 45px;
-    height: 32px;
-    line-height: 32px;
-    text-align: center;
-    background: #00c1de;
+.head-right {
+    button {
+        width: 70px;
+        height: 32px;
+        border: 1px solid rgba(1, 192, 222, 1);
+        margin-right: 8px;
+        box-sizing: border-box;
+        color: #01c0de;
+    }
+    .add-article {
+        background: rgba(1, 192, 222, 1);
+        color: #fff;
+    }
 }
 </style>

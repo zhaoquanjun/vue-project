@@ -28,6 +28,7 @@ const enbironmemy = {
     redirectUrl,
     logoutRedirectUri,
     memberManageApi,
-    uploadPicUrl
+    uploadPicUrl,
+    silentRedirectUri
 };
 export default enbironmemy;
