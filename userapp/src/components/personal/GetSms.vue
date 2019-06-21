@@ -162,12 +162,12 @@ export default {
 
     methods: {
         async send() {
-            //let { status } = await sendSourcePhoneCode(this.sourcePhone);
-            //if (status === 200) {
-            //    this.$message({
-            //        type: "success",
-            //        message: "发送成功!"
-            //    });
+            let { status } = await sendSourcePhoneCode(this.sourcePhone);
+            if (status === 200) {
+                this.$message({
+                    type: "success",
+                    message: "发送成功!"
+                });
                 if (!this.timer) {
 
                     this.count = TIME_COUNT;
@@ -182,12 +182,12 @@ export default {
                         }
                     }, 1000);
                 }
-            //} else {
-            //    this.$message({
-            //        type: "failed",
-            //        message: "发送失败!"
-            //    });
-            //}           
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "发送失败!"
+                });
+            }           
         },
         async sendChangePhoneCode() {
             console.log(this.value+this.ruleForm.phone);
@@ -236,7 +236,7 @@ export default {
             this.$refs[formName].validate(async valid => {
                 if (valid) {
                     console.log(this.$refs[formName]); 
-                    let { status } = await updateUserPhone(this.ruleForm.phone,'12323');//this.ruleForm.verification);
+                    let { status } = await updateUserPhone(this.ruleForm.phone,this.ruleForm.verification);
                     if (status === 200) {
                         this.$message({
                             type: "success",

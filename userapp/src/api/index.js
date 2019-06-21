@@ -178,13 +178,7 @@ export const updateUserPhone = (phone,code) => {
         phone: phone,
         code: code
     }
-    let pa = {
-        PassWrod: '123',
-        BeSurePwd:'123'
-    }
-    //let url = environment.authorityUrl+
-    ajaxRequest.put('http://localhost:8000/UpdateUserPwd', pa);
-    return ajaxRequest.put(`http://localhost:8000/UpdateUserPhone/${phone}/${code}`, params);
+    return ajaxRequest.put(`api/userInfo/UpdateUserPhone/${phone}/${code}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan

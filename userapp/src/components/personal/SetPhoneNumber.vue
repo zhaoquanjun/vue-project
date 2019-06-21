@@ -99,15 +99,15 @@ import NoCaptcha from "../common/no-captcha";
     },
     methods: {       
         async nextStep() {
-            //let code = this.$refs.getSms.ruleForm.verification
-            //if (code==null) {
-            //    this.$message({
-            //        type: "failed",
-            //        message: "请输入验证码!"
-            //    });
-            //} else {
-            //let { status } = await isInvalidCode(this.sourcePhone, code);
-            //if (status === 200) {
+            let code = this.$refs.getSms.ruleForm.verification
+            if (code==null) {
+                this.$message({
+                    type: "failed",
+                    message: "请输入验证码!"
+                });
+            } else {
+            let { status } = await isInvalidCode(this.sourcePhone, code);
+            if (status === 200) {
                 this.isModifi = true;
                 if (!this.isModifi) {
                     this.$store.commit("CLOSERIGHTPANNEL", false);
@@ -115,13 +115,13 @@ import NoCaptcha from "../common/no-captcha";
                         this.$store.commit("CLOSERIGHTPANNEL", true);
                     }, 500);
                 }  
-            //} else {
-            //    this.$message({
-            //        type: "failed",
-            //        message: "验证失败!"
-            //    });
-            //    }
-            //}                    
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "验证失败!"
+                });
+                }
+            }                    
         },
         async modify(){
             this.$refs.getSms.submitForm("ruleForm");            
