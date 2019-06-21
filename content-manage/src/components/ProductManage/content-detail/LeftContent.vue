@@ -39,7 +39,7 @@
                             </span>
                         </div>
                         <div style="float:right">
-                            <span style="font-size:12px">排序</span>
+                            <span style="font-size:12px">状态</span>
                             <span class="select-sort">
                                 <el-select size="small" v-model="value" placeholder="请选择">
                                     <el-option
@@ -100,6 +100,13 @@
                                 v-model="articleDetail.searchKeywords"
                             ></el-input>
                         </el-form-item>
+                        <el-form-item>
+                             <el-checkbox
+                                    v-for="item in viewAuth"
+                                    :label="item.name"
+                                    :key="item.id"
+                                >{{item.name}}</el-checkbox>
+                        </el-form-item>
                         <el-form-item label="置頂" prop="delivery">
                             <el-switch v-model="articleDetail.isTop"></el-switch>
                         </el-form-item>
@@ -150,9 +157,14 @@
 </template>
 <script>
 import * as articleManageApi from "@/api/request/articleManageApi";
+const viewAuth = [{name:"全选",id:0}, {name:"登录用户",id:1},{name:"未登录用户",id:2}];
 export default {
     data() {
         return {
+            checkAll: false,
+            checkedviewAuth: [{name:"登录用户",id:1}],
+            viewAuth: viewAuth,
+            isIndeterminate: true,
             options: [
                 {
                     value: "选项1",
@@ -177,7 +189,7 @@ export default {
             value2: "全部分类",
 
             activeName: "",
-            activeName1:"",
+            activeName1: "",
             articleDetail: {
                 NewId: "",
                 title: "",
@@ -189,7 +201,43 @@ export default {
                 metaTitle: "",
                 metaKeywords: "",
                 metaDescription: "",
-                pictureUrl:"",
+                pictureUrl: ""
+            },
+            detailData: {
+                name: "",
+                description: "",
+                detailContent: "",
+                price: 0, //
+                costPrice: 0, //
+                originalPrice: 0, //
+                seoKeyword: "",
+                seoDescription: "",
+                searchKeyword: "",
+                skuId: "", //
+                publishTime: "2019-06-21T09:40:11.856Z",
+                customUrl: "",
+                accessRoleList: [1],
+                thumbnailPicUrlList: [],
+                relatedProductList: [
+                    {
+                        id: "string",
+                        name: "string"
+                    }
+                ],
+                productCategoryList: [
+                    {
+                        id: 0,
+                        displayName: "string", //
+                        thumbnailPicUrl: "string" //
+                    }
+                ],
+                params: {}, //
+                isTop: true,
+                isOnSell: true,
+                isTemplate: false, //
+                isSkuSwitchOn: false, //
+                isNeedShipping: false, //
+                isAllowComment: true
             },
             rules: {
                 title: [
@@ -223,7 +271,7 @@ export default {
             this.articleDetail.NewId = data.id;
         },
         // 新建保存
-        submitForm(formName,imageUrl) {
+        submitForm(formName, imageUrl) {
             this.articleDetail.pictureUrl = imageUrl;
             console.log(this.title);
             this.$refs[formName].validate(valid => {
@@ -275,6 +323,16 @@ export default {
                     message: "保存成功!"
                 });
             }
+        },
+        handleCheckAllChange(val) {
+            // this.checkedCities = val ? cityOptions : [];
+            // this.isIndeterminate = false;
+        },
+        handleCheckedCitiesChange(value) {
+            // let checkedCount = value.length;
+            // this.checkAll = checkedCount === this.cities.length;
+            // this.isIndeterminate =
+            //     checkedCount > 0 && checkedCount < this.cities.length;
         }
     }
 };

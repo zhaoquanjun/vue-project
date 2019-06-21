@@ -333,13 +333,13 @@ export default {
         },
         addArticle() {
             this.$router.push({
-                path: "/create"
+                path: "/createProduct"
             });
         },
         handleEditArticle(row) {
             console.log(row);
             this.$router.push({
-                path: "/create",
+                path: "/createProduct",
                 query: { id: row.id }
             });
         },
