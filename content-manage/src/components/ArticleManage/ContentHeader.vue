@@ -1,76 +1,100 @@
 <template>
     <el-header class="content-header">
-        <div class="seachInput head-item">
-            <el-input
-                size="small"
-                v-model="articleSearchOptions.title"
-                placeholder="请输入名称或ID进行精准查询"
-                class="input-with-select"
-            >
-                <el-button slot="append" @click="getArticleList">
-                    <svg-icon icon-class="search-icon"></svg-icon>
-                </el-button>
-            </el-input>
-        </div>
-
-        <div class="head-item head-right">
-            <div class="head-item">
-                <span>状态</span>
-                <span class="select-sort">
-                    <el-select
-                        size="small"
-                        v-model="statusValue"
-                        placeholder="请选择"
-                        @change="changeStatus"
-                    >
-                        <el-option
-                            v-for="item in statusOptions"
-                            :key="item.statusValue"
-                            :label="item.statusLabel"
-                            :value="item.statusValue"
-                        ></el-option>
-                    </el-select>
-                </span>
-                <span>排序</span>
-            <span class="select-sort">
-                <el-select
+        <template v-if="true">
+            <div class="seachInput head-item">
+                <el-input
                     size="small"
-                    v-model="orderValue"
-                    placeholder="请选择"
-                    @change="changeOrderCondition"
+                    v-model="articleSearchOptions.title"
+                    placeholder="请输入名称或ID进行精准查询"
+                    class="input-with-select"
                 >
-                    <el-option
-                        v-for="item in orderOptions"
-                        :key="item.orderValue"
-                        :label="item.orderLabel"
-                        :value="item.orderValue"
-                    ></el-option>
-                </el-select>
-            </span>
-                <span @click="switchIsDesc">
-                    <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                    <svg-icon v-else icon-class="top-arrow"></svg-icon>
-                </span>
-                <!-- <span class="list-mode mode-item">
+                    <el-button slot="append" @click="getArticleList">
+                        <svg-icon icon-class="search-icon"></svg-icon>
+                    </el-button>
+                </el-input>
+            </div>
+            <div class="head-item head-right">
+                <div class="head-item">
+                    <span>状态</span>
+                    <span class="select-sort">
+                        <el-select
+                            size="small"
+                            v-model="statusValue"
+                            placeholder="请选择"
+                            @change="changeStatus"
+                        >
+                            <el-option
+                                v-for="item in statusOptions"
+                                :key="item.statusValue"
+                                :label="item.statusLabel"
+                                :value="item.statusValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
+                    <span>排序</span>
+                    <span class="select-sort">
+                        <el-select
+                            size="small"
+                            v-model="orderValue"
+                            placeholder="请选择"
+                            @change="changeOrderCondition"
+                        >
+                            <el-option
+                                v-for="item in orderOptions"
+                                :key="item.orderValue"
+                                :label="item.orderLabel"
+                                :value="item.orderValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
+                    <span @click="switchIsDesc">
+                        <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
+                        <svg-icon v-else icon-class="top-arrow"></svg-icon>
+                    </span>
+                    <!-- <span class="list-mode mode-item">
                     <svg-icon icon-class="list-mode "></svg-icon>
                 </span>
                 <span class="grid-mode mode-item">
                     <svg-icon icon-class="grid-mode"></svg-icon>
-                </span> -->
-            </div>
-            <div class="head-item head-right">
-                <button @click="importArticle">导入文章</button>
-                <button class="add-article" @click="addArticle">新增文章</button>
-                <!-- <span class="upload-wrap">
+                    </span>-->
+                </div>
+                <div class="head-item head-right">
+                    <button @click="importArticle">导入文章</button>
+                    <button class="add-article" @click="addArticle">新增文章</button>
+                    <!-- <span class="upload-wrap">
                 <svg-icon icon-class="upload-img"></svg-icon>
-                </span>-->
+                    </span>-->
+                </div>
             </div>
-        </div>
+        </template>
+        <template v-else>
+            <div style="padding:0 21px">
+                <span>
+                    已选
+                    <i>{{count}}</i> 个产品
+                </span>
+                <el-button size="small" @click="batchPublish(null, false)">上架</el-button>
+                <el-button size="small" @click="batchPublish(null, false)">下架</el-button>
+                <el-button size="small" >复制</el-button>
+                <el-button size="small"  @click="batchRemove(null)">删除</el-button>
+                <el-button size="small" @click="batchDelete">分类设置</el-button>
+                <el-button size="small" @click="batchTop(null, false)">置顶</el-button>
+                <el-button size="small" @click="batchTop(null, true)">取消置顶</el-button>
+                <el-button size="small" @click="batchDelete">访问权限</el-button>
+
+                 <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
+        <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
+        <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
+        <el-button type="danger" @click="batchPublish(null,false)">批量上线</el-button>
+        <el-button type="danger" @click="batchPublish(null,true)">批量下线</el-button>
+        <el-button type="danger" @click="batchMove(null)">批量移动</el-button> -->
+            </div>
+        </template>
     </el-header>
 </template>
 <script>
 export default {
-    props: ["articleSearchOptions"],
+    props: ["articleSearchOptions", "isBatchHeaderShow", "count"],
     data() {
         return {
             statusOptions: [
@@ -123,15 +147,15 @@ export default {
             //     path:''
             // })
         },
-        addArticle(){
-          this.$emit("addArticle")
+        addArticle() {
+            this.$emit("addArticle");
         }
     }
 };
 </script>
 <style>
-.seachInput .el-input__inner{
-  font-size: 12px;
+.seachInput .el-input__inner {
+    font-size: 12px;
 }
 </style>
 
@@ -178,18 +202,17 @@ export default {
     justify-content: flex-end;
     align-items: center;
     padding-left: 42px;
-        button {
-            width: 70px;
-            height: 32px;
-            border: 1px solid rgba(1, 192, 222, 1);
-            margin-right: 8px;
-            box-sizing: border-box;
-            color: #01c0de;
-        }
-        .add-article {
-            background: rgba(1, 192, 222, 1);
-            color: #fff;
-        }
-    
+    button {
+        width: 70px;
+        height: 32px;
+        border: 1px solid rgba(1, 192, 222, 1);
+        margin-right: 8px;
+        box-sizing: border-box;
+        color: #01c0de;
+    }
+    .add-article {
+        background: rgba(1, 192, 222, 1);
+        color: #fff;
+    }
 }
 </style>

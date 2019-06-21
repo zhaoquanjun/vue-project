@@ -11,6 +11,7 @@
             ref="tree"
             draggable
             :allow-drop="allowDrop"
+            :show-checkbox="true"
         >
             <div
                 class="custom-tree-node"
