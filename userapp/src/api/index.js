@@ -3,11 +3,12 @@ import * as ajaxRequest from "./ajaxRequest";
  *  InterfaceAuthor : 福全
  * 获取个人信息含权限
  */
-export const getUserPolicy = () => {
+export const getUserPolicy = (userId) => {
+    console.log(userId, '获取用户的policy');
     let params = {
-        userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
+        userId: userId
     };
+    console.log(userId,'获取用户的policy');
     return ajaxRequest.get('/api/userInfo/GetUserPolicy', params);
 }
 /**
@@ -15,10 +16,7 @@ export const getUserPolicy = () => {
  * 获取当前用户应用可配置的权限
  */
 export const getAppPolicies = () => {
-    let params = {
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
-    };
-    return ajaxRequest.get('/api/appInfo/GetAppPolicies', params);
+    return ajaxRequest.get('/api/appInfo/GetAppPolicies');
 }
 /**
  * 更新当前成员权限
@@ -26,8 +24,8 @@ export const getAppPolicies = () => {
  */
 export const updateUserPolicy = (options) => {
     let params = {
-        userId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+        userId: options.userId,
+        appId: options.appId,
         remark: options.remark,
         policyNames: options.names
     };
@@ -43,10 +41,10 @@ export const updateUserPolicy = (options) => {
 export const batchUpdateUserPolicy = (options) => {
     let params = {
         userIds: options.userids,
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2022",
+        appId: '',
         policyNames: options.names
     };
-    return ajaxRequest.post("/api/userInfo/BatchUpdateUserPolicy", params)
+    return ajaxRequest.put("/api/userInfo/BatchUpdateUserPolicy", params)
 
 };
 
@@ -106,7 +104,6 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
 
 export const updateUserRemark = (targetUserId, remark) => {
     console.log(targetUserId, remark);
-    console.log(options)
     let params = {
         targetUserId: targetUserId,
         remark: remark
@@ -168,7 +165,7 @@ export const isInvalidCode = (phone, code) => {
  * InterfaceAuthor : xuzhuan
  * 获取用户的账户信息
  */
-export const getUserProfile = (id) => {
+export const getUserProfile = () => {
     return ajaxRequest.get('/api/userInfo/GetUserProfile');
 }
 
@@ -181,7 +178,13 @@ export const updateUserPhone = (phone,code) => {
         phone: phone,
         code: code
     }
-    return ajaxRequest.put(`/api/userInfo/UpdateUserPhone/${phone}/${code}`, params);
+    let pa = {
+        PassWrod: '123',
+        BeSurePwd:'123'
+    }
+    //let url = environment.authorityUrl+
+    ajaxRequest.put('http://localhost:8000/UpdateUserPwd', pa);
+    return ajaxRequest.put(`http://localhost:8000/UpdateUserPhone/${phone}/${code}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan

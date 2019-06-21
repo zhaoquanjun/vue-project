@@ -110,7 +110,7 @@ export default {
     methods: {
         ...mapActions([
             "_getAppPolicies",
-            "_getUserInfo",
+            "_getUserPolicy",
             "_getBeInvitedUsers",
             "_deleteCurMember",
             "_batchDeletMember",
@@ -249,9 +249,10 @@ export default {
          * table组件 点击编辑后触发此方法
          */
         authEdit(data) {
+            console.log(data);
             this.ISRIGHTPANNELSHOW(true);
             this._getAppPolicies();
-            this._getUserInfo();
+            this._getUserPolicy(data.userId);
         },
         /**
          * table组件点击多选框触发此方法

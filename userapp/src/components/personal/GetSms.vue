@@ -54,7 +54,7 @@
                         placeholder="验证码"
                         @input="changeInput"
                     ></el-input>
-                    <el-button class="verification-text" @click="send" :disabled="disabled=!show">
+                    <el-button class="verification-text" @click="sendChangePhoneCode" :disabled="disabled=!show">
                         <span v-show="show">获取验证码</span>
                         <span v-show="!show" class="count">{{count}} s</span>
                     </el-button>
@@ -67,9 +67,11 @@
 <script>
     import { watch } from "fs"; 
     import { updateUserPhone } from "@/api/index.js";
+    import { sendSourcePhoneCode } from "@/api/index.js";
+    import { sendTargetPhoneCode } from "@/api/index.js"; 
 const TIME_COUNT = 60; //更改倒计时时间
-export default {
-    props: ["isModifi"],
+export default {        
+    props: ["sourcePhone","isModifi"],
     created() {},
     data() {
         var checkPhone = (rule, value, callback) => {
@@ -108,88 +110,133 @@ export default {
                         message: "长度在 6 到 16 个字符",
                         trigger: "blur"
                     }
-                ],
-                verification: [
-                    {
-                        required: true,
-                        message: "请输入验证码",
-                        trigger: "blur"
-                    },
-                    { trigger: "blur" }
                 ]
+                //verification: [
+                //    {
+                //        required: true,
+                //        message: "请输入验证码",
+                //        trigger: "blur"
+                //    },
+                //    { trigger: "blur" }
+                //]
             },
             checked: false,
             isPwd: true,
             options: [
                 {
-                    value: "中国大陆",
-                    label: "+86"
+                    value: "+86" ,
+                    label: "中国大陆"
                 },
                 {
-                    value: "香港",
-                    label: "+852"
+                    value: "+852",
+                    label: "香港"
                 },
                 {
-                    value: "台湾",
-                    label: "+886"
+                    value: "+886",
+                    label: "台湾"
                 },
                 {
-                    value: "美国",
-                    label: "+1"
+                    value: "+1",
+                    label: "美国"
                 },
                 {
-                    value: "英国",
-                    label: "+44"
+                    value:"+44",
+                    label: "英国" 
                 },
                 {
-                    value: "日本",
-                    label: "+81"
+                    value: "+81" ,
+                    label: "日本"
                 },
                 {
-                    value: "俄罗斯",
-                    label: "+7"
+                    value: "+7",
+                    label: "俄罗斯"
                 },
                 {
-                    value: "意大利",
-                    label: "+39"
+                    value: "+39",
+                    label: "意大利"
                 }
             ],
-            value: "中国大陆"
+            value: "+86"
         };
     },
 
     methods: {
-        send() {
-            this.$emit("getSmsCode")
-            if (!this.timer) {
+        async send() {
+            //let { status } = await sendSourcePhoneCode(this.sourcePhone);
+            //if (status === 200) {
+            //    this.$message({
+            //        type: "success",
+            //        message: "发送成功!"
+            //    });
+                if (!this.timer) {
 
-                this.count = TIME_COUNT;
-                this.show = false;
-                this.timer = setInterval(() => {
-                    if (this.count > 0 && this.count <= TIME_COUNT) {
-                        this.count--;
-                    } else {
-                        this.show = true;
-                        clearInterval(this.timer); // 清除定时器
-                        this.timer = null;
-                    }
-                }, 1000);
+                    this.count = TIME_COUNT;
+                    this.show = false;
+                    this.timer = setInterval(() => {
+                        if (this.count > 0 && this.count <= TIME_COUNT) {
+                            this.count--;
+                        } else {
+                            this.show = true;
+                            clearInterval(this.timer); // 清除定时器
+                            this.timer = null;
+                        }
+                    }, 1000);
+                }
+            //} else {
+            //    this.$message({
+            //        type: "failed",
+            //        message: "发送失败!"
+            //    });
+            //}           
+        },
+        async sendChangePhoneCode() {
+            console.log(this.value+this.ruleForm.phone);
+            let targetPhone = this.ruleForm.phone;//this.value + this.ruleForm.phone;
+            if (this.ruleForm.phone == null) {
+                this.$message({
+                    type: "failed",
+                    message: "请先填写要绑定的手机号码!"
+                });
+            }else{
+                let { status } = await sendTargetPhoneCode(this.sourcePhone,targetPhone);
+            if (status === 200) {
+                this.$message({
+                    type: "success",
+                    message: "发送成功!"
+                });
+                if (!this.timer) {
+
+                    this.count = TIME_COUNT;
+                    this.show = false;
+                    this.timer = setInterval(() => {
+                        if (this.count > 0 && this.count <= TIME_COUNT) {
+                            this.count--;
+                        } else {
+                            this.show = true;
+                            clearInterval(this.timer); // 清除定时器
+                            this.timer = null;
+                        }
+                    }, 1000);
+                }
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "发送失败!"
+                });
+                }
             }
         },
         change(item) {
-            console.log(item);
+            this.value = item;
         },
         changeInput() {
-            console.log(this.ruleForm.verification);
-            //this.$emit("getSmsCode", this.ruleForm.verification);
+            this.$emit("getSmsCode", this.ruleForm.verification);
         },
         submitForm(formName) {
-            console.log(111)
             this.$refs[formName].validate(async valid => {
                 if (valid) {
                     console.log(this.$refs[formName]); 
-                    //let { status } = await updateUserPhone(this.ruleForm.phone, this.ruleForm.verification);
-                    let { status } = await updateUserPhone('13332902841','1234');
+                    let { status } = await updateUserPhone(this.ruleForm.phone,'12323');//this.ruleForm.verification);
                     if (status === 200) {
                         this.$message({
                             type: "success",

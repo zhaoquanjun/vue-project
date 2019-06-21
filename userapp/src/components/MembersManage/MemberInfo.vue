@@ -16,13 +16,13 @@
                 备注 :
                 <template v-if="isRemarkShow">
                     <span @click="handleRemark" style="display: inline-block;">
-                        <i>暂无备注</i>
+                        <i>{{ remarkValue}}</i>
                         <svg-icon icon-class="remark"></svg-icon>
                     </span>
                 </template>
                 <template v-else>
                     <input type="text" 
-                    :value="remarkValue"
+                    :value="memberInfo.remark"
                      @input="change" 
                       @blur="handlerblur"
                      class="remark-input input-hover">
@@ -49,25 +49,31 @@ export default {
     },
     data() {
         return {
-            remarkValue: "",
             isRemarkShow: true
         };
-    },
+        },
+        created() {
+            
+        },
     methods: {
         handleRemark() {
             this.isRemarkShow = false;
         },
         handlerblur(){
-           if(this.remarkValue == ""){
              this.isRemarkShow = true;
-           }
         },
         change(e) {
-            this.remarkValue=e.target.value;
+            this.memberInfo.remark=e.target.value;
             //this.$emit("update:value", e.target.value);
             this.$emit("input", e.target.value);
         }
-    }
+    },
+        computed : {
+            remarkValue() {
+                return this.memberInfo.remark ? this.memberInfo.remark:""
+            }
+        }
+
 };
 </script>
 
