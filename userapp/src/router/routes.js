@@ -4,22 +4,18 @@
 export const defaultRoutes = [
   {
     path: "/",
-    redirect:{path:'/memberManage'},
-    component: ()=>import('@/components/index.vue'),
-    children:[
-      {
-        path: "/memberManage",
-        name: "memberManage",
-        component:  () => import("@/views/member-manage.vue")
-      },
-      {
-        path: "/personal",
-        name: "personal",
-        component: () => import("@/views/personal.vue")
-      },
-    ]
+    component: ()=>import('@/views/index.vue'),
   },
-  
+  {
+    path: "/memberManage",
+    name: "memberManage",
+    component: () => import("@/views/member-manage.vue")
+  },
+  {
+    path: "/personal",
+    name: "personal",
+    component: () => import("@/views/personal.vue")
+  },
   {
     path: "/callback",
     name: "callback",
