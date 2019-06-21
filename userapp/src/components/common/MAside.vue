@@ -255,12 +255,13 @@ export default {
     LeftNavComponents
   },
   created() {
-    // this.getMenuListData();
-    this.filterMenuListData(this.menuData.menuList);
+    this.getMenuListData();
+    // this.filterMenuListData(this.menuData.menuList);
   },
   methods: {
     async getMenuListData() {
       let { data } = await getSliderMenuList();
+      console.log(data)
       this.filterMenuListData(data.menuList);
     },
     filterMenuListData(data) {
