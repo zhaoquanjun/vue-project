@@ -11,6 +11,7 @@ let authorityUrl = "http://api.identity.newwezhan.cn";
 let redirectUrl = "http://content.newwezhan.cn/callback";
 let logoutRedirectUri = "http://content.newwezhan.cn/index.html";
 let silentRedirectUri = 'http://content.newwezhan.cn/static/silent-renew.html';
+let clientId = 'content.api';
 /**
  * 开发环境的URL
  */
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === 'development') {
     redirectUrl = "http://localhost:8081/callback";
     logoutRedirectUri = "http://content.newwezhan.cn/index.html";
     silentRedirectUri = 'http://localhost:8081/static/silent-renew.html';
+    clientId = 'dev.content.api';
 };
 const enbironmemy = {
     authorityUrl,
@@ -29,6 +31,7 @@ const enbironmemy = {
     logoutRedirectUri,
     memberManageApi,
     uploadPicUrl,
-    silentRedirectUri
+    silentRedirectUri,
+    clientId
 };
 export default enbironmemy;
