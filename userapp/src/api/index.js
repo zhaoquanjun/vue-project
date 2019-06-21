@@ -197,3 +197,30 @@ export const getUserDashboard = () => {
     }
     return ajaxRequest.get('api/userInfo/GetUserDashboard', params);
 }
+
+/**
+ * @name 获取左侧菜单列表信息
+ * @method GET
+ */
+export const getSliderMenuList = () => {
+    return ajaxRequest.get('')
+}
+
+/**
+ * InterfaceAuthor : litao
+ * 获取用户的第三方绑定信息
+ */
+export const getExternalUserInfo = () => {
+    return ajaxRequest.get('/api/userInfo/GetExternalUserInfo');
+}
+
+/**
+ * InterfaceAuthor : litao
+ * 解除第三方登陆
+ */
+export const removeExternalUser = (provider) => {
+    let params = {
+        provider: provider
+    }
+    return ajaxRequest._delete(`/api/userInfo/RemoveExternalUser/${provider}`, params);
+}

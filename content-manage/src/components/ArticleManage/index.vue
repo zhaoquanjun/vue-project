@@ -6,25 +6,62 @@
                 <span>文章分类</span>
             </h4>
             <h5 class="title-item" @click="resetCategoryId">全部分类</h5>
-            <m-tree 
-            :treeResult="treeResult"
-            :articleSearchOptions="articleSearchOptions"
-            @getList="getArticleListAsync"
-            @create="newCategory"
-            @batchRemove="batchRemoveCategory"
-            @rename="renameCategory"
+            <m-tree
+                :treeResult="treeResult"
+                :articleSearchOptions="articleSearchOptions"
+                @getList="getArticleListAsync"
+                @create="newCategory"
+                @batchRemove="batchRemoveCategory"
+                @rename="renameCategory"
             ></m-tree>
         </el-aside>
         <el-main>
-            <content-header  :article-search-options="articleSearchOptions"
-                             @getArticleList="getArticleList"></content-header>
+          
+            <content-header
+                :article-search-options="articleSearchOptions"
+                @getArticleList="getArticleList"
+                @addArticle="addArticle"
+            ></content-header>
             <el-main>
-                 <content-table
-                 v-if="articlePageResult !== null"
-                 :article-page-result="articlePageResult"
-                 :article-search-options="articleSearchOptions"
-                 :tree-result="treeResult"
-                 @getArticleList="getArticleList"></content-table>
+                
+                <content-table
+                    v-if="articlePageResult !== null"
+                    :article-page-result="articlePageResult"
+                    :article-search-options="articleSearchOptions"
+                    :tree-result="treeResult"
+                    @getArticleList="getArticleList"
+                    @batchMove="batchMoveNews"
+                    @batchRemove="batchRemoveNews"
+                    @batchTop="batchTopNews"
+                    @batchPublish="batchPublishNews"
+                    @handleEditArticle="handleEditArticle"
+                    @moveClassify="moveClassify"
+                ></content-table>
+
+                <el-dialog
+                    width="0"
+                    style="z-index:10"
+                    :close-on-click-modal="false"
+                    :show-close="false"
+                    :visible.sync="isInvitationPanelShow"
+                ></el-dialog>
+                <right-pannel
+                    :style="{width:isInvitationlWidth+'px'}"
+                    @closeRightPanel="closeRightPanel"
+                >
+                    <span slot="title-text">移动文章分类</span>
+                    <span slot="cur-name">{{curArticleInfo.categoryName}}</span>
+                    <span slot="move-to-name">{{moveToClassiFy.lable}}</span>
+                    <m-tree
+                        :isright-pannel="true"
+                        :tree-result="treeResult"
+                        @chooseNode="chooseNode"
+                    ></m-tree>
+                    <div slot="footer" class="pannle-footer">
+                        <button @click="updateCategoryArticle" class="sure">确定 </button>
+                        <button @click="cancelUpdateCategory" class="cancel">取消</button>
+                    </div>
+                </right-pannel>
             </el-main>
         </el-main>
     </el-container>
@@ -33,28 +70,203 @@
 import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
+import RightPannel from "../ImgManage/RightPannel";
 import * as articleManageApi from "@/api/request/articleManageApi";
 export default {
     components: {
         MTree,
         ContentHeader,
-        ContentTable
+        ContentTable,
+        RightPannel
     },
     data() {
         return {
             articlePageResult: null,
             treeResult: null,
-            dialogTableVisible:false,
-            articleSearchOptions: { title: "", categoryId: 0, orderCondition: 0, OrderByTopOrder: null, publishStatus: null, pageIndex: 1, pageSize: 10, isDescending: true }
+            curArticleInfo: "",
+            moveToClassiFy: "",
+            newsIdList: "",
+            isInvitationPanelShow: false,
+            articleSearchOptions: {
+                title: "",
+                categoryId: 0,
+                orderCondition: 0,
+                OrderByTopOrder: null,
+                publishStatus: null,
+                pageIndex: 1,
+                pageSize: 10,
+                isDescending: true
+            }
         };
     },
     mounted() {
-        this.getArticleListAsync();
+        this.getArticleList();
         this.getTreeAsync();
     },
+    computed: {
+        isInvitationlWidth() {
+            return this.isInvitationPanelShow === true ? 331 : 0;
+        }
+    },
     methods: {
+        async getArticleList(options) {
+            let { data } = await articleManageApi.getArticleList(
+                (options = this.articleSearchOptions)
+            );
+            this.articlePageResult = data;
+        },
+        // 批量删除
+        async batchRemoveNews(idlist) {
+            this.$confirm(
+                "删除后，网站中引用的文章列表将不再显示该文章，是否确定删除？",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let {
+                                status,
+                                data
+                            } = await articleManageApi.batchRemove(
+                                true,
+                                idlist
+                            );
+                            if (status === 200) {
+                                // this.getTree();
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                                this.getArticleList();
+                            }
+                        } else {
+                            this.$message({
+                                type: "info",
+                                message: "已取消删除"
+                            });
+                        }
+                    }
+                }
+            );
+        },
+        // 批量置顶
+        async batchTopNews(idlist, isTop) {
+            var message = "置顶";
+            if (isTop) message = "取消置顶";
+            this.$confirm("您确定要" + message + "文章吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                callback: async action => {
+                    console.log(action);
+                    if (action === "confirm") {
+                        let { status, data } = await articleManageApi.batchTop(
+                            !isTop,
+                            idlist
+                        );
+                        if (status === 200) {
+                            // this.getTree();
+                            this.$message({
+                                type: "success",
+                                message: message + "成功!"
+                            });
+                            this.getArticleList();
+                        }
+                    } else {
+                        this.$message({
+                            type: "info",
+                            message: "已取消" + message
+                        });
+                    }
+                }
+            });
+        },
+        // 批量上下线
+        async batchPublishNews(idlist, isPublish) {
+            var message = "上线";
+            if (isPublish) message = "下线";
+            this.$confirm("您确认要" + message + "文章吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                callback: async action => {
+                    console.log(action);
+                    if (action === "confirm") {
+                        let {
+                            status,
+                            data
+                        } = await articleManageApi.batchPublish(
+                            !isPublish,
+                            idlist
+                        );
+                        if (status === 200) {
+                            // this.getTree();
+                            this.$message({
+                                type: "success",
+                                message: message + "成功!"
+                            });
+                            this.getArticleList();
+                        }
+                    } else {
+                        this.$message({
+                            type: "info",
+                            message: "已取消" + message
+                        });
+                    }
+                }
+            });
+        },
+        // 批量移动分类
+        async batchMoveNews(idlist) {
+            this.isInvitationPanelShow = true;
+            this.newsIdList = idlist;
+        },
+        //选择移动分类时的节点
+        chooseNode(node) {
+            console.log(node)
+            this.moveToClassiFy = node;
+        },
+        cancelUpdateCategory() {
+            this.isInvitationPanelShow = false;
+        },
+        moveClassify(b, data) {
+            this.isInvitationPanelShow = b;
+            this.curArticleInfo = data;
+        },
+        // 点击确定按钮 更新文章分类
+        async updateCategoryArticle() {
+            if (!this.moveToClassiFy) {
+                this.$message({
+                    type: "error",
+                    message: "请选择移动的分类!"
+                });
+                return;
+            }
+            let cateId = this.moveToClassiFy.id;
+
+            let { data, status } = await articleManageApi.batchMove(
+                cateId,
+                this.newsIdList
+            );
+            if (status == 200) {
+                this.$message({
+                    type: "success",
+                    message: "移动成功!"
+                });
+                this.isInvitationPanelShow = false;
+                this.getArticleList();
+            }
+        },
+        closeRightPanel() {
+            this.isInvitationPanelShow = true;
+        },
         async getArticleListAsync(options) {
-            let { data } = await articleManageApi.getArticleList((options = this.articleSearchOptions));
+            let { data } = await articleManageApi.getArticleList(
+                (options = this.articleSearchOptions)
+            );
             this.articlePageResult = data;
         },
         async getTreeAsync() {
@@ -70,8 +282,8 @@ export default {
             this.getTreeAsync();
         },
         async newCategory(entity) {
-             await articleManageApi.create(entity);
-             this.getTreeAsync();
+            await articleManageApi.create(entity);
+            this.getTreeAsync();
         },
         async modifyNodeCategory(id, parentId, idOrderByArr) {
             await articleManageApi.modifyNode(id, parentId, idOrderByArr);
@@ -88,7 +300,11 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            let { status } = await articleManageApi.deleteNewsCategory(idList);
+                            let {
+                                status
+                            } = await articleManageApi.deleteNewsCategory(
+                                idList
+                            );
                             if (status === 200) {
                                 this.getTreeAsync();
                                 this.$message({
@@ -106,6 +322,25 @@ export default {
                 }
             );
         },
+        /**获取编辑产品详情 */
+        async getArticleDetail(id) {
+            let { data } = await articleManageApi.getArticleDetail(id);
+            this.articleDetail = data;
+            this.articleDetail.NewId = data.id;
+            this.imageUrl = data.pictureUrl;
+        },
+        addArticle() {
+            this.$router.push({
+                path: "/create"
+            });
+        },
+        handleEditArticle(row) {
+            console.log(row);
+            this.$router.push({
+                path: "/create",
+                query: { id: row.id }
+            });
+        }
     }
 };
 </script>

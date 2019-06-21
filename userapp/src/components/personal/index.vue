@@ -89,11 +89,15 @@
                     <span class="pd-left social-desc">绑定微信，可使用微信登录管理平台</span>
                 </div>
                 <div class="fright">
-                    <span>13011011746</span>
+                    <span v-if="WeChatUser">{{WeChatUser.externalName}}</span>
+                    <span v-else></span>
 
                     <span class="pd-left">
-                        <button>已绑定</button> |
-                        <button @click="modifiWeixin">修改</button>
+                        <button v-if="WeChatUser">已绑定</button>
+                        <button v-else>未绑定</button>
+                         |
+                        <button v-if="WeChatUser" @click="modifiWeixin(WeChatUser.provider)">解绑</button> 
+                        <button v-else @click="modifiWeixin">绑定</button>
                     </span>
                 </div>
             </li>
@@ -123,11 +127,15 @@
                     <span class="pd-left social-desc">绑定支付宝，可使用支付宝登录管理平台</span>
                 </div>
                 <div class="fright">
-                    <span>13011011746</span>
+                    <span v-if="AlipayUser">{{AlipayUser.externalName}}</span>
+                    <span v-else></span>
 
                     <span class="pd-left">
-                        <button>已绑定</button> |
-                        <button @click="modifAlipay">修改</button>
+                        <button v-if="AlipayUser">已绑定</button>
+                        <button v-else>未绑定</button>
+                         |
+                        <button v-if="AlipayUser" @click="modifAlipay(AlipayUser.provider)">解绑</button> 
+                        <button v-else @click="modifiWeixin">绑定</button>
                     </span>
                 </div>
             </li>
@@ -154,7 +162,7 @@ import SetPhoneNumber from "./SetPhoneNumber";
 import GetSms from "./GetSms";
 import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import { getUserProfile } from "@/api/index.js"; 
+import { getUserProfile,getExternalUserInfo,removeExternalUser } from "@/api/index.js"; 
 import { updateUserName } from "@/api/index.js";
 
     export default {
@@ -165,6 +173,10 @@ import { updateUserName } from "@/api/index.js";
                 userInfo: {},
                 curComponent: "",
                 titText: "手机号修改",
+                ExternalUsers:null,
+                WeChatUser: null,
+                AlipayUser: null,
+                DingDingUser: null,
             };
         },
         components: {
@@ -173,6 +185,7 @@ import { updateUserName } from "@/api/index.js";
         },
         created() {
             this._getUserProfileAsync();
+            this._getExternalUserAsync();
         },
         methods: {
             ...mapMutations(["ISRIGHTPANNELSHOW"]),
@@ -181,6 +194,37 @@ import { updateUserName } from "@/api/index.js";
                 this.userInfo = data;
                 this.input = data.displayName;
                 console.log(this.userInfo)
+            },
+            async _getExternalUserAsync() {
+                this.WeChatUser=null;
+                this.AlipayUser=null;
+                this.DingDingUser=null;
+                let { data } = await getExternalUserInfo();
+                this.ExternalUsers = data; 
+                if(this.ExternalUsers && this.ExternalUsers.length>0  ){
+                    this.ExternalUsers.forEach(element => {
+                        if(element.provider=="Weixin"){
+                            this.WeChatUser=element;
+                        }else if(element.provider=="Alipay"){
+                            this.AlipayUser=element;
+                        }else if(element.provider=="DingDing"){
+                            this.DingDingUser=element;
+                        }
+                    });
+                }
+            },
+            async _removeExternalUserAsync(provider){
+                let { data } = await removeExternalUser(provider);
+                console.log(data);
+                if(data){
+                    this._getExternalUserAsync();
+                }else
+                {
+                    this.$message({
+                        type: "failed",
+                        message: "解绑失败!"
+                    });
+                }
             },
             // 修改手机号
             modifiPhoneNum() {
@@ -192,11 +236,17 @@ import { updateUserName } from "@/api/index.js";
             //修改密码
             modifiPwd() { },
             // 微信操作
-            modifiWeixin() { },
+            modifiWeixin(provider) { 
+                console.log(provider);
+                this._removeExternalUserAsync(provider);
+            },
             //钉钉操作
             modifiDing() { },
             //支付宝操作
-            modifAlipay() { },
+            modifAlipay(provider) {
+                console.log(provider);
+                this._removeExternalUserAsync(provider);  
+             },
             setName() {
                 this.flag = false;
             },

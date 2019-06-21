@@ -1,4 +1,4 @@
-//import imgManage from "../views/img-manage";
+import ContentDetail from "@/components/ArticleManage/ContentDetail.vue";
 
 // 默认访问的路由
 export const defaultRoutes = [
@@ -9,14 +9,24 @@ export const defaultRoutes = [
     component: ()=>import('@/components/index.vue'),
     children:[
       {
-        path: "/article",
+        path: "article",
         name: "article",
-        component:  () => import('@/views/content-manage/article-manage.vue')
+        component:  () => import('@/views/content-manage/article-manage.vue'),
+        meta:{title:"文章管理",isSub:true},
+      
       },
+      {
+        path: 'create',
+        name: "articlecreate",
+        component: () => import('@/components/ArticleManage/ContentDetail.vue'),
+        meta:{title:"新增文章"}
+      },
+     
       {
         path: "/image",
         name: "image",
-        component:  () => import('@/views/content-manage/img-manage.vue')
+        component:  () => import('@/views/content-manage/img-manage.vue'),
+        meta:{title:"图片管理",isSub:true}
       },
       {
         path: "/file",
@@ -26,12 +36,14 @@ export const defaultRoutes = [
       {
         path: "/product",
         name: "product",
-        component:  () => import('@/views/content-manage/product-manage.vue')
+        component:  () => import('@/views/content-manage/product-manage.vue'),
+        meta:{title:"产品管理",isSub:true}
       },
       {
         path: "/content",
         name: "content",
-        component:  () => import('@/views/content-manage/content-manage.vue')
+        component:  () => import('@/views/content-manage/content-manage.vue'),
+        meta:{title:"内容管理",isSub:true}
       },
     ]
   },
