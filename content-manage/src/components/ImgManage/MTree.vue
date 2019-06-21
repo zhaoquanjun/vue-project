@@ -92,6 +92,7 @@ export default {
     },
     methods: {
         handlerOver(data) {
+            
             if (!isNaN(data.id)) this.treeNodeId = data.id;
             if (this.isNewAdd) this.treeNodeId = null;
         },
@@ -268,6 +269,7 @@ export default {
         },
         handleShow(node, val) {
             node.checked = true;
+        
             this.curId = node.data.id;
         },
         changeCategoryInput(label) {

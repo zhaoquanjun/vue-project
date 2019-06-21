@@ -202,3 +202,22 @@ export const getUserDashboard = () => {
 export const getSliderMenuList = () => {
     return ajaxRequest.get('')
 }
+
+/**
+ * InterfaceAuthor : litao
+ * 获取用户的第三方绑定信息
+ */
+export const getExternalUserInfo = () => {
+    return ajaxRequest.get('/api/userInfo/GetExternalUserInfo');
+}
+
+/**
+ * InterfaceAuthor : litao
+ * 解除第三方登陆
+ */
+export const removeExternalUser = (provider) => {
+    let params = {
+        provider: provider
+    }
+    return ajaxRequest._delete(`/api/userInfo/RemoveExternalUser/${provider}`, params);
+}

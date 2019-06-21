@@ -16,7 +16,7 @@ const store =  new Vuex.Store({
         state.accessToken.Authorization = '';
         removeLocal('token');
       }
-    }
+    },
   },
   actions: {
     // 前端 登出

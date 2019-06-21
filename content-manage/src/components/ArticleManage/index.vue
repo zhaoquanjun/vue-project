@@ -16,12 +16,14 @@
             ></m-tree>
         </el-aside>
         <el-main>
+          
             <content-header
                 :article-search-options="articleSearchOptions"
                 @getArticleList="getArticleList"
                 @addArticle="addArticle"
             ></content-header>
             <el-main>
+                
                 <content-table
                     v-if="articlePageResult !== null"
                     :article-page-result="articlePageResult"
@@ -32,6 +34,8 @@
                     @batchRemove="batchRemoveNews"
                     @batchTop="batchTopNews"
                     @batchPublish="batchPublishNews"
+                    @handleEditArticle="handleEditArticle"
+                    @moveClassify="moveClassify"
                 ></content-table>
 
                 <el-dialog
@@ -46,13 +50,15 @@
                     @closeRightPanel="closeRightPanel"
                 >
                     <span slot="title-text">移动文章分类</span>
+                    <span slot="cur-name">{{curArticleInfo.categoryName}}</span>
+                    <span slot="move-to-name">{{moveToClassiFy.lable}}</span>
                     <m-tree
                         :isright-pannel="true"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
                     ></m-tree>
                     <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryArticle" class="sure">确定</button>
+                        <button @click="updateCategoryArticle" class="sure">确定 </button>
                         <button @click="cancelUpdateCategory" class="cancel">取消</button>
                     </div>
                 </right-pannel>
@@ -220,7 +226,7 @@ export default {
         },
         //选择移动分类时的节点
         chooseNode(node) {
-            console.log(node);
+            console.log(node)
             this.moveToClassiFy = node;
         },
         cancelUpdateCategory() {
@@ -228,6 +234,7 @@ export default {
         },
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
+            this.curArticleInfo = data;
         },
         // 点击确定按钮 更新文章分类
         async updateCategoryArticle() {
@@ -239,6 +246,7 @@ export default {
                 return;
             }
             let cateId = this.moveToClassiFy.id;
+
             let { data, status } = await articleManageApi.batchMove(
                 cateId,
                 this.newsIdList
@@ -314,9 +322,23 @@ export default {
                 }
             );
         },
+        /**获取编辑产品详情 */
+        async getArticleDetail(id) {
+            let { data } = await articleManageApi.getArticleDetail(id);
+            this.articleDetail = data;
+            this.articleDetail.NewId = data.id;
+            this.imageUrl = data.pictureUrl;
+        },
         addArticle() {
             this.$router.push({
                 path: "/create"
+            });
+        },
+        handleEditArticle(row) {
+            console.log(row);
+            this.$router.push({
+                path: "/create",
+                query: { id: row.id }
             });
         }
     }
