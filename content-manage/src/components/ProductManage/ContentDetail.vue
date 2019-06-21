@@ -16,7 +16,7 @@
                     <el-col :span="13" :offset="3" style=" font-size: 22px;">新增产品</el-col>
                     <el-col :span="6">
                         <div class="article-btn">
-                            <button>返回</button>
+                            <button  @click="()=>$router.go(-1)">返回</button>
                             <button>预览</button>
                             <button @click="submitForm">保存</button>
                         </div>
@@ -76,7 +76,7 @@ export default {
     mounted() {
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
-            this.getArticleDetail(id);
+           // this.getArticleDetail(id);
         }
     }
 };

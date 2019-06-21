@@ -22,7 +22,25 @@ export const getProductList = options => {
 export const batchSwitchStatus = options => {
     return ajaxRequest.put(`/api/product/BatchSwitchStatus/${options.switchType}/${options.flag}`, options.idList);
 }
-
+/**
+ * 修改分类
+ * @param {*} options 
+ */
 export const batchChangeCategory = options => {
     return ajaxRequest.put(`/api/product/BatchChangeCategory`, options);
+}
+/**
+ * 新建产品
+ * @param {*} options 
+ */
+export const createProduct = options => {
+    return ajaxRequest.post(`/api/Product`, options);
+}
+
+/**
+ * 获取产品详情
+ * @param {*} options 
+ */
+export const getProductDetail = id => {
+    return ajaxRequest.get(`/api/Product/${id}`);
 }

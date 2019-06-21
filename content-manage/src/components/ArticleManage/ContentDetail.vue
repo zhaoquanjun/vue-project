@@ -16,7 +16,7 @@
                     <el-col :span="13" :offset="3" style=" font-size: 22px;">新增文章</el-col>
                     <el-col :span="6">
                         <div class="article-btn">
-                            <button>返回</button>
+                            <button @click="()=>$router.go(-1)">返回</button>
                             <button>预览</button>
                             <button @click="submitForm">保存</button>
                         </div>
@@ -63,8 +63,15 @@ export default {
     },
     methods:{
       submitForm(){
+
         let imageUrl = this.$refs.articleRight.imageUrl1;
-        this.$refs.articleContent.submitForm('articleDetail',imageUrl)
+      
+        if(this.$route.query.id){
+            this.$refs.articleContent.editArticle('articleDetail',imageUrl)
+        }else{
+            this.$refs.articleContent.submitForm('articleDetail',imageUrl)
+        }
+        
       },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);

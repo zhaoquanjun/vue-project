@@ -60,8 +60,8 @@
                     </span>-->
                 </div>
                 <div class="head-item head-right">
-                    <button @click="importArticle">导入文章</button>
-                    <button class="add-article" @click="addArticle">新增文章</button>
+                    <button @click="importArticle">导入产品</button>
+                    <button class="add-article" @click="addArticle">新增产品</button>
                     <!-- <span class="upload-wrap">
                 <svg-icon icon-class="upload-img"></svg-icon>
                     </span>-->

@@ -224,10 +224,10 @@ export default {
         },
         // 新建保存
         submitForm(formName,imageUrl) {
+            alert(imageUrl)
             this.articleDetail.pictureUrl = imageUrl;
             console.log(this.title);
             this.$refs[formName].validate(valid => {
-                console.log(valid, "[[[[[[[[[");
                 if (valid) {
                     this.insertArticle();
                 } else {
@@ -254,7 +254,8 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName) {
+        editArticle(formName,imageUrl) {
+            this.articleDetail.pictureUrl = imageUrl;
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle();

@@ -2,7 +2,7 @@
     <div>
         <el-card class="box-card">
             <div slot="header">
-                <span>文章封面</span>
+                <span>产品封面</span>
             </div>
             <div>
                 <!-- <el-upload
