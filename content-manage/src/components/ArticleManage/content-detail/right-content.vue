@@ -30,8 +30,10 @@
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload"
-                >
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                     :on-preview="handlePreview"
+  :on-remove="handleRemove"
+                    >
+                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </div>
@@ -50,10 +52,10 @@
 import environment from "@/environment/index.js";
 
 export default {
+    props: ["imageUrl"],
     data() {
         return {
             activeName: "",
-            imageUrl: "",
             uoloadDisabled: true,
             fileList: [],
             upload2Category: { label: "全部分类", id: 0 },
@@ -62,27 +64,18 @@ export default {
                 appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
                 Authorization: ""
             },
-            uploadSucess: false
+            uploadSucess: false,
+            imageUrl1: ""
         };
     },
+    watch: {
+        imageUrl() {
+            this.imageUrl1 = this.imageUrl;
+        }
+    },
     methods: {
-        handleChange(file) {
-            this.uoloadDisabled = false;
-            //  const isPic =
-            //     ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
-            //     -1;
-            //  if (!isPic) {
-            //     alert("上传头像图片只能是 图片 格式!");
-            //     return
-            // }
-        },
-        handleAvatarSuccess(res, file) {
-            console.log(res, file);
-            this.imageUrl = URL.createObjectURL(file.raw);
-        },
-
         handleSucess(response, file, fileList) {
-            this.imageUrl = file.response;
+            this.imageUrl1 = file.response;
             if (!this.uploadSucess) {
                 this.$message({
                     type: "success",
@@ -94,57 +87,18 @@ export default {
                 this.uploadSucess = true;
             }
         },
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-            if (fileList < 1) this.uoloadDisabled = true;
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        chooseNode(data) {
-            this.upload2Category = data;
-            console.log(this.upload2Category);
-            this.uploadPicAction = `${this.uploadPicUrl}/${
-                this.upload2Category.id
-            }`;
-
-            for (
-                var i = 0;
-                i < this.$refs.treeX.store._getAllNodes().length;
-                i++
-            ) {
-                this.$refs.treeX.store._getAllNodes()[
-                    i
-                ].expanded = this.isexpand;
-            }
-        },
-        submitUpload() {
-            this.headers.Authorization =
-                "Bearer " + this.$store.state.accessToken.Authorization;
-            this.$refs.upload.submit();
-        },
-        beforeUpload(file) {
-            this.headers.Authorization =
-                "Bearer " + this.$store.state.accessToken.Authorization;
-            const isPic =
-                ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
-                -1;
-            const maxMb = 10;
-            const isSizeOk = file.size / 1024 / 1024 < maxMb;
-
-            if (!isPic) {
-                alert("上传头像图片只能是 图片 格式!");
-            }
-            if (!isSizeOk) {
-                alert(`上传图片大小不能超过 ${maxMb}MB!`);
-            }
-            return isPic && isSizeOk;
-        },
+       handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
 
         ///////
         handleAvatarSuccess(res, file) {
-            
-            this.imageUrl = URL.createObjectURL(file.raw);
+            console.log(file);
+            // this.imageUrl = URL.createObjectURL(file.raw);
+            this.imageUrl1 = file.response;
         },
         beforeAvatarUpload(file) {
             this.headers.Authorization =

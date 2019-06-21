@@ -380,24 +380,7 @@ export default {
     padding: 28px 0 12px 12px;
 }
 
-.pannle-footer {
-    position: absolute;
-    bottom: 17px;
-    width: 100%;
-    border-top: 1px solid #eee;
-    padding: 17px 17px 0 17px;
-    button {
-        width: 66px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        margin-right: 8px;
-        color: #fff;
-    }
-    .cancel {
-        color: #262626;
-        background: rgba(238, 238, 238, 1);
-    }
-}
+
 </style>
 
 

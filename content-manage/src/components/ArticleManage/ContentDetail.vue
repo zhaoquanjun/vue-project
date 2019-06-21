@@ -30,7 +30,7 @@
                             <ArticleContent ref="articleContent" />
                         </el-col>
                         <el-col :span="6" style="margin-left: 16px;">
-                            <RightContent/>
+                            <RightContent :imageUrl="imageUrl" ref="articleRight" />
                         </el-col>
                     </el-row>
                 </div>
@@ -51,18 +51,33 @@ export default {
             default: environment.uploadPicUrl
         }
     },
+    data(){
+        return {
+            imageUrl:"",
+            detailData:{},
+        }
+    },
     components: {
         RightContent,
         ArticleContent
     },
     methods:{
       submitForm(){
-        this.$refs.articleContent.submitForm('articleDetail')
+        let imageUrl = this.$refs.articleRight.imageUrl1;
+        this.$refs.articleContent.submitForm('articleDetail',imageUrl)
       },
+        async getArticleDetail(id) {
+            let { data } = await articleManageApi.getArticleDetail(id);
+            this.imageUrl =  data.pictureUrl;
+           
+        },
      
     },
     mounted() {
-      
+        var id = this.$route.query.id;
+        if (id != null || id != undefined) {
+            this.getArticleDetail(id);
+        }
     }
 };
 </script>

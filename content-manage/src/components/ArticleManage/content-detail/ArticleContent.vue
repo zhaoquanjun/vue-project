@@ -188,7 +188,8 @@ export default {
                 isTop: false,
                 metaTitle: "",
                 metaKeywords: "",
-                metaDescription: ""
+                metaDescription: "",
+                pictureUrl:"",
             },
             rules: {
                 title: [
@@ -209,6 +210,7 @@ export default {
     },
 
     created() {
+        // console.log(this.$route.query)
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
@@ -221,7 +223,8 @@ export default {
             this.articleDetail.NewId = data.id;
         },
         // 新建保存
-        submitForm(formName) {
+        submitForm(formName,imageUrl) {
+            this.articleDetail.pictureUrl = imageUrl;
             console.log(this.title);
             this.$refs[formName].validate(valid => {
                 console.log(valid, "[[[[[[[[[");
