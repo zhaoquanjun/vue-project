@@ -39,20 +39,18 @@
         <!-- </div>
     </div>-->
         <div class="from-row">
-            <get-sms ref="getSms" @getSmsCode="getSmsCode" :is-modifi="isModifi"></get-sms>
+            <get-sms ref="getSms" :sourcePhone="sourcePhone"  :is-modifi="isModifi"></get-sms>
         </div>
         <div class="footer">
             <button class="confirm footer-btn" v-if="!isModifi" @click="nextStep">下一步</button>
             <button class="confirm footer-btn" v-else @click="modify ">确认修改</button>
-            <button class="cancel footer-btn">取消</button>
+            <button class="cancel footer-btn" @click="close">取消</button>
         </div>
     </div>
 </template>
 <script>
 import NoCaptcha from "../common/no-captcha";
-    import GetSms from "./GetSms";
-    import { sendSourcePhoneCode } from "@/api/index.js";
-    import { sendTargetPhoneCode } from "@/api/index.js"; 
+    import GetSms from "./GetSms";    
     import { isInvalidCode } from "@/api/index.js";
     export default {
     props: ["sourcePhone"],
@@ -99,52 +97,40 @@ import NoCaptcha from "../common/no-captcha";
             value: "中国大陆"
         };
     },
-    methods: {
-        change(item) {
-            console.log(item);
-        },
-        async getSmsCode() {
-            console.log(this.sourcePhone);
-            let { status } = await sendSourcePhoneCode(this.sourcePhone);
-            if (status === 200) {
+    methods: {       
+        async nextStep() {
+            let code = this.$refs.getSms.ruleForm.verification
+            if (code==null) {
                 this.$message({
-                    type: "success",
-                    message: "发送成功!"
+                    type: "failed",
+                    message: "请输入验证码!"
                 });
+            } else {
+            let { status } = await isInvalidCode(this.sourcePhone, code);
+            if (status === 200) {
+                this.isModifi = true;
+                if (!this.isModifi) {
+                    this.$store.commit("CLOSERIGHTPANNEL", false);
+                    this.timer = setTimeout(() => {
+                        this.$store.commit("CLOSERIGHTPANNEL", true);
+                    }, 500);
+                }  
             } else {
                 this.$message({
                     type: "failed",
-                    message: "发送失败!"
+                    message: "验证失败!"
                 });
-            }
-            console.log(code, "验证码");
-        },
-        async nextStep() {
-            //let { status } = await isInvalidCode(this.sourcePhone, this.code);
-            //if (status === 200) {
-            //    this.$message({
-            //        type: "success",
-            //        message: "验证成功!"
-            //    });
-            //} else {
-            //    this.$message({
-            //        type: "failed",
-            //        message: "验证失败!"
-            //    });
-            //}
-            this.isModifi = true;
-            if (!this.isModifi) {
-                this.$store.commit("CLOSERIGHTPANNEL", false);
-                this.timer = setTimeout(() => {
-                    this.$store.commit("CLOSERIGHTPANNEL", true);
-                }, 500);
-            }           
+                }
+            }                    
         },
         async modify(){
             this.$refs.getSms.submitForm("ruleForm");            
           // alert('确认修改')
+        },
+        close() {            
+            this.$store.commit("CLOSERIGHTPANNEL", false);
         }
-    },
+     },
     mounted() {}
 };
 </script>

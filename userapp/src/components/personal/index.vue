@@ -159,6 +159,7 @@
 
 import RightPannel from "../RightPannel";
 import SetPhoneNumber from "./SetPhoneNumber";
+import GetSms from "./GetSms";
 import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
 import { getUserProfile,getExternalUserInfo,removeExternalUser } from "@/api/index.js"; 
@@ -169,7 +170,7 @@ import { updateUserName } from "@/api/index.js";
             return {
                 input: "",
                 flag: true,
-                userInfo: "",
+                userInfo: {},
                 curComponent: "",
                 titText: "手机号修改",
                 ExternalUsers:null,
@@ -189,9 +190,10 @@ import { updateUserName } from "@/api/index.js";
         methods: {
             ...mapMutations(["ISRIGHTPANNELSHOW"]),
             async _getUserProfileAsync() {
-                let { data } = await getUserProfile('E90BCED5-C809-4926-8198-B7DD967B5BD1');
+                let { data } = await getUserProfile();
                 this.userInfo = data;
                 this.input = data.displayName;
+                console.log(this.userInfo)
             },
             async _getExternalUserAsync() {
                 this.WeChatUser=null;

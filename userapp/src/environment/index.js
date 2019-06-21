@@ -7,13 +7,15 @@ let authorityUrl = "http://api.identity.newwezhan.cn";
 let redirectUrl = "http://dashboard.newwezhan.cn/callback";
 let logoutRedirectUri = "http://dashboard.newwezhan.cn/index.html";
 let silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
+let clientId = 'dashboard.api';
 
 if (process.env.NODE_ENV === 'development') {
     memberManageApi = 'http://api.dashboard.newwezhan.cn';
     authorityUrl = "http://api.identity.newwezhan.cn";
-    redirectUrl = "http://localhost:8082/callback";
+    redirectUrl = "http://dashboard.newwezhan.cn/callback";
     logoutRedirectUri = "http://dashboard.newwezhan.cn/index.html";
     silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
+    clientId = 'dev.dashboard.api';
 }
 
 /**
@@ -22,9 +24,11 @@ if (process.env.NODE_ENV === 'development') {
 
 
 const enbironmemy = {
-  authorityUrl,
-  redirectUrl,
-  logoutRedirectUri,
-  memberManageApi
+    authorityUrl,
+    redirectUrl,
+    logoutRedirectUri,
+    memberManageApi,
+    silentRedirectUri,
+    clientId
 };
 export default enbironmemy;
