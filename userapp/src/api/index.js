@@ -194,3 +194,11 @@ export const getUserDashboard = () => {
     }
     return ajaxRequest.get('api/userInfo/GetUserDashboard', params);
 }
+
+/**
+ * @name 获取左侧菜单列表信息
+ * @method GET
+ */
+export const getSliderMenuList = () => {
+    return ajaxRequest.get('')
+}
