@@ -6,30 +6,34 @@
                 <span>文章分类</span>
             </h4>
             <h5 class="title-item" @click="resetCategoryId">全部分类</h5>
-            <m-tree 
-            :treeResult="treeResult"
-            :articleSearchOptions="articleSearchOptions"
-            @getList="getArticleListAsync"
-            @create="newCategory"
-            @batchRemove="batchRemoveCategory"
-            @rename="renameCategory"
+            <m-tree
+                :treeResult="treeResult"
+                :articleSearchOptions="articleSearchOptions"
+                @getList="getArticleListAsync"
+                @create="newCategory"
+                @batchRemove="batchRemoveCategory"
+                @rename="renameCategory"
             ></m-tree>
         </el-aside>
         <el-main>
-            <content-header  :article-search-options="articleSearchOptions"
-                             @getArticleList="getArticleList"></content-header>
+            <content-header
+                :article-search-options="articleSearchOptions"
+                @getArticleList="getArticleList"
+                @addArticle="addArticle"
+            ></content-header>
             <el-main>
-                 <content-table
-                 v-if="articlePageResult !== null"
-                 :article-page-result="articlePageResult"
-                 :article-search-options="articleSearchOptions"
-                 :tree-result="treeResult"
-                 @getArticleList="getArticleList"
-                 @batchMove="batchMoveNews"
-                 @batchRemove="batchRemoveNews"
-                 @batchTop="batchTopNews"
-                 @batchPublish="batchPublishNews"></content-table>
-               
+                <content-table
+                    v-if="articlePageResult !== null"
+                    :article-page-result="articlePageResult"
+                    :article-search-options="articleSearchOptions"
+                    :tree-result="treeResult"
+                    @getArticleList="getArticleList"
+                    @batchMove="batchMoveNews"
+                    @batchRemove="batchRemoveNews"
+                    @batchTop="batchTopNews"
+                    @batchPublish="batchPublishNews"
+                ></content-table>
+
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -54,7 +58,6 @@
                 </right-pannel>
             </el-main>
         </el-main>
-      
     </el-container>
 </template>
 <script>
@@ -74,11 +77,20 @@ export default {
         return {
             articlePageResult: null,
             treeResult: null,
-            curArticleInfo:"",
+            curArticleInfo: "",
             moveToClassiFy: "",
-            newsIdList:"",
+            newsIdList: "",
             isInvitationPanelShow: false,
-            articleSearchOptions: { title: "", categoryId: 0, orderCondition: 0, OrderByTopOrder: null, publishStatus: null, pageIndex: 1, pageSize: 10, isDescending: true }
+            articleSearchOptions: {
+                title: "",
+                categoryId: 0,
+                orderCondition: 0,
+                OrderByTopOrder: null,
+                publishStatus: null,
+                pageIndex: 1,
+                pageSize: 10,
+                isDescending: true
+            }
         };
     },
     mounted() {
@@ -92,7 +104,9 @@ export default {
     },
     methods: {
         async getArticleList(options) {
-            let { data } = await articleManageApi.getArticleList((options = this.articleSearchOptions));
+            let { data } = await articleManageApi.getArticleList(
+                (options = this.articleSearchOptions)
+            );
             this.articlePageResult = data;
         },
         // 批量删除
@@ -110,7 +124,10 @@ export default {
                             let {
                                 status,
                                 data
-                            } = await articleManageApi.batchRemove(true, idlist);
+                            } = await articleManageApi.batchRemove(
+                                true,
+                                idlist
+                            );
                             if (status === 200) {
                                 // this.getTree();
                                 this.$message({
@@ -132,74 +149,69 @@ export default {
         // 批量置顶
         async batchTopNews(idlist, isTop) {
             var message = "置顶";
-            if(isTop) message = "取消置顶";
-            this.$confirm(
-                "您确定要" + message + "文章吗？",
-                "提示",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            let {
-                                status,
-                                data
-                            } = await articleManageApi.batchTop(!isTop, idlist);
-                            if (status === 200) {
-                                // this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: message + "成功!"
-                                });
-                                this.getArticleList();
-                            }
-                        } else {
+            if (isTop) message = "取消置顶";
+            this.$confirm("您确定要" + message + "文章吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                callback: async action => {
+                    console.log(action);
+                    if (action === "confirm") {
+                        let { status, data } = await articleManageApi.batchTop(
+                            !isTop,
+                            idlist
+                        );
+                        if (status === 200) {
+                            // this.getTree();
                             this.$message({
-                                type: "info",
-                                message: "已取消" + message
+                                type: "success",
+                                message: message + "成功!"
                             });
+                            this.getArticleList();
                         }
+                    } else {
+                        this.$message({
+                            type: "info",
+                            message: "已取消" + message
+                        });
                     }
                 }
-            );
+            });
         },
         // 批量上下线
         async batchPublishNews(idlist, isPublish) {
             var message = "上线";
-            if(isPublish) message = "下线";
-            this.$confirm(
-                "您确认要"+ message +"文章吗？",
-                "提示",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            let {
-                                status,
-                                data
-                            } = await articleManageApi.batchPublish(!isPublish, idlist);
-                            if (status === 200) {
-                                // this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: message + "成功!"
-                                });
-                                this.getArticleList();
-                            }
-                        } else {
+            if (isPublish) message = "下线";
+            this.$confirm("您确认要" + message + "文章吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                callback: async action => {
+                    console.log(action);
+                    if (action === "confirm") {
+                        let {
+                            status,
+                            data
+                        } = await articleManageApi.batchPublish(
+                            !isPublish,
+                            idlist
+                        );
+                        if (status === 200) {
+                            // this.getTree();
                             this.$message({
-                                type: "info",
-                                message: "已取消" + message
+                                type: "success",
+                                message: message + "成功!"
                             });
+                            this.getArticleList();
                         }
+                    } else {
+                        this.$message({
+                            type: "info",
+                            message: "已取消" + message
+                        });
                     }
                 }
-            );
+            });
         },
         // 批量移动分类
         async batchMoveNews(idlist) {
@@ -244,7 +256,9 @@ export default {
             this.isInvitationPanelShow = true;
         },
         async getArticleListAsync(options) {
-            let { data } = await articleManageApi.getArticleList((options = this.articleSearchOptions));
+            let { data } = await articleManageApi.getArticleList(
+                (options = this.articleSearchOptions)
+            );
             this.articlePageResult = data;
         },
         async getTreeAsync() {
@@ -260,8 +274,8 @@ export default {
             this.getTreeAsync();
         },
         async newCategory(entity) {
-             await articleManageApi.create(entity);
-             this.getTreeAsync();
+            await articleManageApi.create(entity);
+            this.getTreeAsync();
         },
         async modifyNodeCategory(id, parentId, idOrderByArr) {
             await articleManageApi.modifyNode(id, parentId, idOrderByArr);
@@ -278,7 +292,11 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            let { status } = await articleManageApi.deleteNewsCategory(idList);
+                            let {
+                                status
+                            } = await articleManageApi.deleteNewsCategory(
+                                idList
+                            );
                             if (status === 200) {
                                 this.getTreeAsync();
                                 this.$message({
@@ -295,6 +313,11 @@ export default {
                     }
                 }
             );
+        },
+        addArticle() {
+            this.$router.push({
+                path: "/create"
+            });
         }
     }
 };

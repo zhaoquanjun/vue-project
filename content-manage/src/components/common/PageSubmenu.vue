@@ -25,7 +25,8 @@ export default {
                 { name: "文件管理", url: "/file" }
             ]
         }
-    }
+    },
+   
 };
 </script>
 <style lang="scss" scoped>

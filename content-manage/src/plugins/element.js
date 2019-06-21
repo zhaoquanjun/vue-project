@@ -28,7 +28,11 @@ import {
     Switch,
     DatePicker,
     Form,
-    FormItem
+    FormItem,
+    Collapse,
+    CollapseItem,
+    Breadcrumb,
+    BreadcrumbItem,
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
@@ -57,6 +61,10 @@ Vue.use(Container)
     .use(DatePicker)
     .use(Form)
     .use(FormItem)
+    .use(Collapse)
+    .use(CollapseItem)
+    .use(Breadcrumb)
+    .use(BreadcrumbItem)
     
    
 ;

@@ -12,8 +12,7 @@ const config = {
   post_logout_redirect_uri: enbironmemy.logoutRedirectUri,
   automaticSilentRenew: true,
   silent_redirect_uri: enbironmemy.silentRedirectUri,
-  accessTokenExpiringNotificationTime: 10,
+  accessTokenExpiringNotificationTime: 5,
 };
 const mgr = new Oidc.UserManager(config);
-console.log(mgr)
 export default mgr;
