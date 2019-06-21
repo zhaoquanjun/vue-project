@@ -33,6 +33,8 @@ import {
     CollapseItem,
     Breadcrumb,
     BreadcrumbItem,
+    Checkbox,
+    CheckboxGroup
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
@@ -65,6 +67,8 @@ Vue.use(Container)
     .use(CollapseItem)
     .use(Breadcrumb)
     .use(BreadcrumbItem)
+    .use(Checkbox)
+    .use(CheckboxGroup)
     
    
 ;

@@ -40,6 +40,12 @@ export const defaultRoutes = [
         meta:{title:"产品管理",isSub:true}
       },
       {
+        path: 'createProduct',
+        name: "createProduct",
+        component: () => import('@/components/ProductManage/ContentDetail.vue'),
+        meta:{title:"新增产品"}
+      },
+      {
         path: "/content",
         name: "content",
         component:  () => import('@/views/content-manage/content-manage.vue'),

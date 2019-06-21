@@ -118,7 +118,6 @@ export const updateUserRemark = (targetUserId, remark) => {
  */
 export const getShortUrlByInviation = (names) => {
     let params = {
-        appId: "123EB3BD-93F4-4655-B833-D604A6EF2022",
         permissionIds: names
     }
     return ajaxRequest.post('/api/ShortUrl/GetShortUrlByInviation',  params );
