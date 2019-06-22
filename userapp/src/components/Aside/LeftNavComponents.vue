@@ -8,15 +8,19 @@
   </el-aside>
 </template>
 <script>
+import { checkHasRootSkip } from "@/api/index";
 export default {
   props: ["menuList"],
   mounted() {
     console.log(this.menuList)
   },
   methods: {
-    skipPage(it) {
-      let path = it.menuUrl.split('/')[1]
-      this.$router.push(`${path}`)
+    async skipPage(it) {
+      let { data, status } = await checkHasRootSkip({url: it.menuUrl});
+      if (status == 200) {
+        let path = it.menuUrl.split('/')[1]
+        this.$router.push(`${path}`)
+      }
     }
   }
 };

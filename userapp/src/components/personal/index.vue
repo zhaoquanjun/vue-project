@@ -96,8 +96,8 @@
                         <button v-if="WeChatUser">已绑定</button>
                         <button v-else>未绑定</button>
                          |
-                        <button v-if="WeChatUser" @click="modifiWeixin(WeChatUser.provider)">解绑</button> 
-                        <button v-else @click="modifiWeixin">绑定</button>
+                        <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button> 
+                        <button v-else @click="_bindingWeixin">绑定</button>
                     </span>
                 </div>
             </li>
@@ -134,14 +134,17 @@
                         <button v-else>未绑定</button>
                          |
                         <button v-if="AlipayUser" @click="modifAlipay(AlipayUser.provider)">解绑</button> 
-                        <button v-else @click="modifiWeixin">绑定</button>
+                        <button v-else @click="modifAlipay(AlipayUser.provider)">绑定</button>
                     </span>
                 </div>
             </li>
         </ul>
         <right-pannel :style="{width:pannelWidth+'px'}">
             <span slot="title-text">{{titText}}</span>
-             <component :is="curComponent" :sourcePhone="userInfo.phoneNumber"></component>
+            <component :is="curComponent" :sourcePhone="userInfo.phoneNumber" :provider="CurrentProvider" 
+            @removeExternalUserAsync="_removeExternalUserAsync" 
+            @updateWeiXinHtml="updateWeiXinHtml" 
+            :weixinHtml="weixinHtml"></component>
         </right-pannel>
          <el-dialog
                 width="0"
@@ -158,6 +161,8 @@
 
 import RightPannel from "../RightPannel";
 import SetPhoneNumber from "./SetPhoneNumber";
+import BindingWeChat from "./BindingWeChat";
+import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
 import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
@@ -168,18 +173,22 @@ import { updateUserName } from "@/api/index.js";
             return {
                 input: "",
                 flag: true,
-                userInfo: {},
+                userInfo: {phoneNumber:"15801566482"},
                 curComponent: "",
                 titText: "手机号修改",
                 ExternalUsers:null,
                 WeChatUser: null,
                 AlipayUser: null,
                 DingDingUser: null,
+                CurrentProvider:"",
+                weixinHtml:"",
             };
         },
         components: {
             RightPannel,
-            SetPhoneNumber
+            SetPhoneNumber,
+            UntyingWeChat,
+            BindingWeChat,
         },
         created() {
             this._getUserProfileAsync();
@@ -211,14 +220,15 @@ import { updateUserName } from "@/api/index.js";
                     });
                 }
             },
+
             async _removeExternalUserAsync(provider){
                 let { data } = await removeExternalUser(provider);
-                console.log(data);
-                if(data){
+                if(data == "true"){
                     this.$message({
                         type: "success",
                         message: "解绑成功!"
                     });
+                    this.ISRIGHTPANNELSHOW(false)
                     this._getExternalUserAsync();
                 }else
                 {
@@ -227,6 +237,9 @@ import { updateUserName } from "@/api/index.js";
                         message: "解绑失败!"
                     });
                 }
+            },
+            updateWeiXinHtml(){
+               this.weixinHtml="绑定微信" +new Date;
             },
             // 修改手机号
             modifiPhoneNum() {
@@ -237,11 +250,20 @@ import { updateUserName } from "@/api/index.js";
             modifiEmail() { },
             //修改密码
             modifiPwd() { },
-            // 微信操作
-            modifiWeixin(provider) { 
-                console.log(provider);
-                this._removeExternalUserAsync(provider);
+            // 解绑微信
+            _untyingWeixin(provider) { 
+                this.titText="解绑微信";
+                this.CurrentProvider=provider;
+                this.curComponent = UntyingWeChat;
+                this.ISRIGHTPANNELSHOW(true)
             },
+            _bindingWeixin(provider){
+                this.titText="绑定微信";
+                this.weixinHtml="绑定微信" +new Date;
+                this.CurrentProvider=provider;
+                this.curComponent = BindingWeChat;
+                this.ISRIGHTPANNELSHOW(true)
+            }, 
             //钉钉操作
             modifiDing() { 
                  console.log(provider);

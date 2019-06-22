@@ -14,7 +14,6 @@ Vue.use(VueClipboard)
 //import '@/icons'
 Vue.use(ElementUI)
 Vue.config.productionTip = false;
-
 router.beforeEach( (to, from, next) => {
   if (getLocal("token")) {
         next()

@@ -196,7 +196,15 @@ export const getUserDashboard = () => {
  * @method GET
  */
 export const getSliderMenuList = () => {
-    return ajaxRequest.get('/api/appinfo/GetPluginMenuResource')
+    return ajaxRequest.get('/api/appinfo/GetAppsMenuResource')
+}
+
+/**
+ * @name 跳转权限
+ * @method GET
+ */
+export const checkHasRootSkip = url => {
+    return ajaxRequest.get('/api/menu/ValidateMenu', url)
 }
 
 /**
