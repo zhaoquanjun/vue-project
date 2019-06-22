@@ -196,7 +196,7 @@ export const getUserDashboard = () => {
  * @method GET
  */
 export const getSliderMenuList = () => {
-    return ajaxRequest.get('/api/appinfo/GetPluginMenuResource')
+    return ajaxRequest.get('/api/appinfo/GetAppsMenuResource')
 }
 
 /**
