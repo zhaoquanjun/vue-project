@@ -12,7 +12,7 @@ let clientId = 'dashboard.api';
 if (process.env.NODE_ENV === 'development') {
     memberManageApi = 'http://api.dashboard.newwezhan.cn';
     authorityUrl = "http://api.identity.newwezhan.cn";
-    redirectUrl = "http://dashboard.newwezhan.cn/callback";
+    redirectUrl = "http://localhost:8082/callback";
     logoutRedirectUri = "http://dashboard.newwezhan.cn/index.html";
     silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
     clientId = 'dev.dashboard.api';
