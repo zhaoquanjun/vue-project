@@ -110,12 +110,11 @@
                     <span class="pd-left social-desc">绑定钉钉，可使用钉钉登录管理平台</span>
                 </div>
                 <div class="fright">
-                    <span>13011011746</span>
-
-                    <span class="pd-left">
-                        <button>已绑定</button> |
-                        <button @click="modifiDing">修改</button>
-                    </span>
+                    <button v-if="DingDingUser">已绑定</button>
+                    <button v-else>未绑定</button>
+                        |
+                    <button v-if="DingDingUser" @click="modifiDing(DingDingUser.provider)">解绑</button> 
+                    <button v-else @click="modifiDing">绑定</button>
                 </div>
             </li>
             <li>
@@ -164,7 +163,6 @@ import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
 import { getUserProfile,getExternalUserInfo,removeExternalUser } from "@/api/index.js"; 
 import { updateUserName } from "@/api/index.js";
-
     export default {
         data() {
             return {
@@ -217,6 +215,10 @@ import { updateUserName } from "@/api/index.js";
                 let { data } = await removeExternalUser(provider);
                 console.log(data);
                 if(data){
+                    this.$message({
+                        type: "success",
+                        message: "解绑成功!"
+                    });
                     this._getExternalUserAsync();
                 }else
                 {
@@ -241,7 +243,10 @@ import { updateUserName } from "@/api/index.js";
                 this._removeExternalUserAsync(provider);
             },
             //钉钉操作
-            modifiDing() { },
+            modifiDing() { 
+                 console.log(provider);
+                this._removeExternalUserAsync(provider);
+            },
             //支付宝操作
             modifAlipay(provider) {
                 console.log(provider);
