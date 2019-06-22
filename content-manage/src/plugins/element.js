@@ -34,7 +34,10 @@ import {
     Breadcrumb,
     BreadcrumbItem,
     Checkbox,
-    CheckboxGroup
+    CheckboxGroup,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
@@ -69,8 +72,9 @@ Vue.use(Container)
     .use(BreadcrumbItem)
     .use(Checkbox)
     .use(CheckboxGroup)
-    
-   
+    .use(Dropdown)
+    .use(DropdownItem)
+    .use(DropdownMenu)
 ;
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

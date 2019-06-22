@@ -11,7 +11,7 @@
                 :tree-result="treeResult"
                 :product-search-options="productSearchOptions"
                 @create="newCategory"
-                @batchSwitchStatus="batchRemoveCategory"
+                @batchRemove="batchRemoveCategory"
                 @update="updateCategory"
                 @modifyNode="modifyNodeCategory"
             ></category-tree>
@@ -122,7 +122,7 @@ export default {
                 keyword: "", //1
                 isDelete: false, //1
                 isOnSell: null, //is 上架
-                categoryId: null //1
+                categoryId: null, //1,
             }
         };
     },

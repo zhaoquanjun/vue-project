@@ -22,5 +22,12 @@ export default {
      }
 }
 </script>
+<style scoped>
+.el-tree  {
+      max-height: 65vh;
+     overflow-y: auto;
+}
+</style>
+
 
 
