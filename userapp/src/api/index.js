@@ -200,6 +200,14 @@ export const getSliderMenuList = () => {
 }
 
 /**
+ * @name 跳转权限
+ * @method GET
+ */
+export const checkHasRootSkip = url => {
+    return ajaxRequest.get('/api/menu/ValidateMenu', url)
+}
+
+/**
  * InterfaceAuthor : litao
  * 获取用户的第三方绑定信息
  */

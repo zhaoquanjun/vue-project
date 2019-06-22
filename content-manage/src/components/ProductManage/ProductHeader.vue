@@ -79,7 +79,7 @@
                 <el-button size="small" @click="batchPublish(3, true)">下架</el-button>
                 <el-button size="small" @click="batchCopy">复制</el-button>
                 <el-button size="small" @click="batchRemove(1,true)">删除</el-button>
-                <el-button size="small" @click="batchclassifySet">分类设置</el-button>
+                <el-button size="small" @click="batchclassifySet">移动</el-button>
                 <el-button size="small" @click="batchTop(2, false)">置顶</el-button>
                 <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button>
                 <el-button size="small" @click="batchViewAuth">访问权限</el-button>
@@ -171,10 +171,7 @@ export default {
             };
             this.$emit("batchSwitchStatus", options);
         },
-        // 批量分类设置
-        batchclassifySet() {
-            this.$emit("batchclassifySet");
-        },
+      
         // 批量置顶 or 取消置顶
         batchTop(type,flag) {
             let options = {
@@ -184,13 +181,18 @@ export default {
             };
             this.$emit("batchSwitchStatus", options);
         },
+
+          // 批量分类设置 移动  ok
+        batchclassifySet() {
+            this.$emit("batchMove",'batchmove');
+        },
         // 批量设置访问权限
         batchViewAuth() {
-            this.$emit("batchViewAuth");
+            this.$emit("batchMove","permission");
         },
         // 批量复制
         batchCopy() {
-            this.$emit("batchCopy");
+            this.$emit("batchMove",'batchCopy');
         }
     }
 };

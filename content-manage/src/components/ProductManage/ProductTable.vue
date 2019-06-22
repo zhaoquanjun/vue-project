@@ -49,7 +49,7 @@
 
             <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" label="创建时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -105,7 +105,7 @@
 
 <script>
 export default {
-    props: ["articlePageResult", "articleSearchOptions", "treeResult"],
+    props: ["articlePageResult", "articleSearchOptions"],
     data() {
         return {
             multipleSelection: [],
@@ -170,6 +170,7 @@ export default {
             this.$emit("handleEditArticle", row);
         },
         _handleShowMoreOperate(ev, row) {
+            console.log(ev)
             this.row = row;
             this.operateList = [
                 { name: "移动", flag: "move" },
@@ -204,26 +205,22 @@ export default {
             }
         },
 
+      
         /**
-         * 移动分类操作
+         * 复制 操作
          */
-        batchMove(row) {
-            if (row == null || row == undefined) {
-                var idList = this.getCheckArr();
-                this.$emit("batchMove", idList);
-            } else {
-                this.$emit("batchMove", [row.id]);
-            }
+        batchCopy(row,type){
+           this.$emit("batchMove",type);
         },
-
         handleMoreOperate(flag) {
+            this.clearSelection();
             let row = this.row;
             switch (flag) {
                 case "move":
-                    this.$emit("moveClassify", true, row);
-                    this.batchMove(row);
+                    this.$emit("moveClassify", row,flag);
                     break;
                 case "copy":
+                     this.$emit("moveClassify", row,flag);
                     break;
                 case "isOnSell":
                     this.batchSwitchStatus(row, 3, row.isOnSell);
@@ -235,6 +232,9 @@ export default {
                     this.batchSwitchStatus(row, 1, row.isDelete);
                     break;
             }
+        },
+        clearSelection(){
+            this.$refs.multipleTable.clearSelection();
         }
     }
 };
