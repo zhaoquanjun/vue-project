@@ -24,7 +24,7 @@
                 :idsList="idsList"
                 @contentTableList="contentTableList"
                 @addArticle="addArticle"
-                @batchPublish="batchSwitchStatus"
+                @batchSwitchStatus="batchSwitchStatus"
             ></content-header>
             <el-main>
                 <content-table

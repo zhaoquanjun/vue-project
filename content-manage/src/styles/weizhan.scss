@@ -33,28 +33,7 @@
     }
 }
 
-#img-list-dialog{
-   .el-dialog {
-        background: transparent;
-        box-shadow: none;
-    }
-   .el-dialog__body {
-        text-align: center;
-    }
-    .el-dialog__headerbtn{
-        right: 0;
-    }
-   .el-dialog__headerbtn .el-dialog__close {
-        color: #fff;
-        font-size: 30px;
-    }
-   .el-carousel__arrow--right,#table-imgList .el-carousel__arrow--left {
-        background: none;
-    }
-   .el-carousel__arrow i {
-        font-size: 40px;
-    }
-}
+
 
 .pageing {
     float: right;
@@ -69,6 +48,7 @@
     box-sizing: border-box;
 }
 .handle-btn-wrap {
+    width: 70%;
     display: flex;
     justify-content: space-between;
     .handle-btn {

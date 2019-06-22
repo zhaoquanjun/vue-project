@@ -1,5 +1,5 @@
 <template>
-    <div class="table-wrap" id="table-imgList">
+    <div class="table-wrap" id="table-list">
         <el-table
             ref="multipleTable"
             :data="imgPageResult.list"
@@ -42,6 +42,7 @@
             </el-table-column>
         </el-table>
         <div class="pageing" id="pageing">
+            <slot name="paging"></slot>
             <el-pagination
                 background
                 layout="total, sizes, prev, pager, next, jumper"
@@ -152,41 +153,22 @@ export default {
 
 
 
-#table-imgList .el-table .has-gutter th {
+#table-list .el-table .el-table__header .has-gutter th {
     padding: 0;
     height: 32px;
     background: #00c1de !important;
 }
 
-#table-imgList .el-table th > .cell {
+#table-list .el-table th > .cell {
     color: #fff;
     font-weight: 400;
     font-size: 12px;
 }
-#table-imgList .el-table .el-table__row {
+#table-list .el-table .el-table__row {
     height: 60px;
 }
-#table-imgList .el-pagination.is-background .el-pager li:not(.disabled).active {
-    background-color: #01c0de;
-}
-#table-imgList .el-pagination .el-pagination__total {
-    color: #8c8c8c;
-}
-#table-imgList .el-pager li {
-    font-weight: 400;
-    color: #252525;
-    background-color: #fff;
-    border: 1px solid rgba(229, 229, 229, 1);
-}
-#table-imgList .el-pager .active {
-    background-color: #01c0de;
-    color: #fff;
-}
 
-#table-imgList .el-carousel__item.is-animating{
-        display: flex;
-    align-items: center;
-    justify-content: center;
-}
+
+
 </style>
 

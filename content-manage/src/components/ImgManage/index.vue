@@ -31,7 +31,9 @@
                 @batchMove="batchMove"
                 @batchDelete="batchDelete"
                 @showType="showType"
-            ></img-list-header>
+            >
+              
+            </img-list-header>
 
             <el-main>
                 <component
@@ -46,34 +48,6 @@
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
                 ></component>
-
-                <!-- <template v-if="isImgList">
-                    <img-list
-                    :img-page-result="imgPageResult"
-                    :pic-search-options="picSearchOptions"
-                    :tree-result="treeResult"
-                    @getPicList="getPicList"
-                    @changeCategory="changeCategoryPic"
-                    @rename="renamePic"
-                    @batchRemove="batchRemovePic"
-                    @moveClassify="moveClassify"
-                    @handleSelectionChange="handleSelectionChange"
-                ></img-list>
-               </template>
-               <template v-else>
-                   <grid-list
-                     :img-page-result="imgPageResult"
-                    :pic-search-options="picSearchOptions"
-                    :tree-result="treeResult"
-                    @getPicList="getPicList"
-                    @changeCategory="changeCategoryPic"
-                    @rename="renamePic"
-                    @batchRemove="batchRemovePic"
-                    @moveClassify="moveClassify"
-                    @handleSelectionChange="handleSelectionChange"
-                   ></grid-list>
-                </template>-->
-
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -85,15 +59,21 @@
                 <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="closeRightPanel"
+                     :tree-result="treeResult"
                 >
                     <span slot="title-text">移动图片分类</span>
                     <span slot="cur-name">{{curImgInfo.categoryName}}</span>
                     <span slot="move-to-name">{{moveToClassiFy.label}}</span>
-                    <m-tree
+                    <!-- <m-tree
                         :isright-pannel="true"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
-                    ></m-tree>
+                    ></m-tree> -->
+                    <SelectTree
+                   :categoryName="curImgInfo.categoryName"
+                    :tree-result="treeResult"
+                     @chooseNode="chooseNode"
+                     />
                     <div slot="footer" class="pannle-footer">
                         <button @click="updateCategoryPic" class="sure">确定</button>
                         <button @click="cancelUpdateCategor" class="cancel">取消</button>
@@ -122,6 +102,7 @@ import ImgListHeader from "./ImgListHeader";
 import ImgList from "./ImgList";
 import GridList from "./GridList";
 import RightPannel from "./RightPannel";
+import SelectTree from "@/components/common/SelectTree"
 import * as imgManageApi from "@/api/request/imgManageApi";
 import * as imgCategoryManageApi from "@/api/request/imgCategoryManageApi";
 import environment from "@/environment/index.js";
@@ -139,15 +120,17 @@ export default {
         ImgList,
         GridList,
         UploadPic,
-        RightPannel
+        RightPannel,
+        SelectTree
     },
     data() {
         return {
             componentId: "ImgList",
             isImgList: false,
             countPic: 0,
-            curImgInfo: "",
+            curImgInfo:{},
             moveToClassiFy: "",
+            categoryName:"",//当前选中的分类名字
             idsList: [],
             selectedImg:[],
             isInvitationPanelShow: false,
@@ -164,7 +147,8 @@ export default {
                 picCategoryId: null,
                 keyword: "",
                 isDelete: false
-            }
+            },
+          
         };
     },
     mounted() {
@@ -175,10 +159,13 @@ export default {
         this.getTree();
     },
     methods: {
+        // 获取列表
         async getPicList() {
             let { data } = await imgManageApi.getPicList(this.picSearchOptions);
             this.imgPageResult = data;
+          
         },
+        // 批量删除列表
         async batchRemovePic(idlist) {
             this.$confirm(
                 "删除后，图片将被移动到回收站，可在回收站？",
@@ -245,6 +232,7 @@ export default {
             this.getTree();
         },
         async batchRemoveCategory(idList) {
+           
             this.$confirm(
                 "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
                 "提示",
@@ -298,6 +286,7 @@ export default {
         },
         //选择移动分类时的节点
         chooseNode(node) {
+        
             this.moveToClassiFy = node;
         },
         // 批量更新的选中数量
@@ -329,6 +318,7 @@ export default {
             }
             this.changeCategoryPic(categoryId, idList);
         },
+        // 取消移动分类 关闭panel    
         cancelUpdateCategor() {
             this.isInvitationPanelShow = false;
             this.moveToClassiFy = this.curImgInfo = "";
@@ -345,8 +335,12 @@ export default {
         showType(val) {
             if (val === "list") {
                 this.componentId = "ImgList";
+                 this.picSearchOptions.pageSize = 10;
+                 this.getPicList();
             } else {
                 this.componentId = "GridList";
+                this.picSearchOptions.pageSize = 18;
+                 this.getPicList();
             }
         }
     },

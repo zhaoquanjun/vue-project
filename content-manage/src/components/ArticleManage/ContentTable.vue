@@ -1,5 +1,5 @@
 <template>
-    <div class="table-content" id="content-table-list">
+    <div class="table-content" id="table-list">
         <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
         <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
         <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
@@ -163,7 +163,7 @@ export default {
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
             this.$refs.operateSection.style.display = "block";
         },
-      
+  
         /**
          * 删除操作
          */
@@ -322,41 +322,37 @@ export default {
   text-align: left;
 } */
 
-#content-table-list .el-table .has-gutter th {
-    padding: 0;
-    height: 32px;
-    background: #00c1de !important;
-}
 
-#content-table-list .el-table th > .cell {
+
+#table-list .el-table th > .cell {
     color: #fff;
     font-weight: 400;
     font-size: 12px;
 }
-#content-table-list .el-table .el-table__row {
+#table-list .el-table .el-table__row {
     height: 60px;
 }
-#content-table-list
+#table-list
     .el-pagination.is-background
     .el-pager
     li:not(.disabled).active {
     background-color: #01c0de;
 }
-#content-table-list .el-pagination .el-pagination__total {
+#table-list .el-pagination .el-pagination__total {
     color: #8c8c8c;
 }
-#content-table-list .el-pager li {
+#table-list .el-pager li {
     font-weight: 400;
     color: #252525;
     background-color: #fff;
     border: 1px solid rgba(229, 229, 229, 1);
 }
-#content-table-list .el-pager .active {
+#table-list .el-pager .active {
     background-color: #01c0de;
     color: #fff;
 }
 
-#content-table-list .el-carousel__item.is-animating {
+#table-list .el-carousel__item.is-animating {
     display: flex;
     align-items: center;
     justify-content: center;

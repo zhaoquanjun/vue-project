@@ -23,7 +23,7 @@
                     style="display: inline-block;"
                     v-if="renameShowId === data.id || data.isNewAdd"
                 >
-                    <input class="category-name" v-model="data.lable" v-filter-special-char>
+                    <input class="category-name" v-model="data.label" v-filter-special-char>
                     <span class="enter" @click.stop="hadnleTreeInput(data,data.isNewAdd)">
                         <svg-icon icon-class="tree-yes"></svg-icon>
                     </span>
@@ -32,7 +32,7 @@
                     </span>
                 </div>
                 <template v-else>
-                    <span>{{data.lable}}</span>
+                    <span>{{data.label}}</span>
                     <span v-if="data.level<=1">({{data.childrenSum }})</span>
                 </template>
                 <!-- 三个点 分类操作 -->
@@ -99,7 +99,7 @@ export default {
         //修改节点名称 OR 新增节点
         hadnleTreeInput(data, isNewAdd) {
             this.isNewAdd = false; //点击确定修改后 开启允许创建子节点
-            if (data.lable == "") {
+            if (data.label == "") {
                 this.$message({
                     message: "分类名称不能为空",
                     type: "warning"
@@ -107,12 +107,12 @@ export default {
                 return;
             } else if (isNewAdd) {
                 this.$emit("create", {
-                    CategoryName: data.lable,
+                    CategoryName: data.label,
                     ParentId: data.parentId
                 });
             } else if (data.label != "") {
                 console.log("rename");
-                this.$emit("rename", data.id, data.lable);
+                this.$emit("rename", data.id, data.label);
             }
             this.isNewAdd = isNewAdd;
             this.renameShowId = this.curId = null;
@@ -120,7 +120,7 @@ export default {
         //
         cancelhadnleTreeInput(data, node) {
             if (this.isRename) {
-                if (data.lable == "") {
+                if (data.label == "") {
                     this.$message({
                         message: "分类名称不能为空",
                         type: "warning"
@@ -128,7 +128,7 @@ export default {
                     return;
                 }
                 if (this.curlabelName != "") {
-                    data.lable = this.curlabelName;
+                    data.label = this.curlabelName;
                 }
             } else {
                 node.parent.childNodes.splice(0, 1);
@@ -192,7 +192,7 @@ export default {
                 this.isNewAdd = true;
                 const newChild = {
                     parentId: data.id,
-                    lable: "",
+                    label: "",
                     isNewAdd: true
                 };
                 data.children.unshift(newChild);
@@ -250,7 +250,7 @@ export default {
             }
 
             if (data.isNewAdd) return;
-            this.curlabelName = data.lable;
+            this.curlabelName = data.label;
             this.articleSearchOptions.categoryId = data.id;
             this.$emit("getList");
             // 点击其他区域 把当前新增但未确定的节点删除掉

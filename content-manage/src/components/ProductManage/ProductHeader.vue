@@ -106,11 +106,11 @@ export default {
                 },
                 {
                     statusValue: "true",
-                    statusLabel: "上线"
+                    statusLabel: "上架"
                 },
                 {
                     statusValue: "false",
-                    statusLabel: "下线"
+                    statusLabel: "下架"
                 }
             ],
             statusValue: "",

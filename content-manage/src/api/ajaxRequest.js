@@ -7,7 +7,7 @@ import environment from "@/environment/index.js"
 import store from "@/store/index"
 import router from '@/router/index'
 import { MessageBox, Message } from 'element-ui';
-console.log(store)
+
 axios.defaults.baseURL = environment.memberManageApi;
 // 请求超时时间
 axios.defaults.timeout = 5000;
@@ -36,7 +36,7 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
-        console.log(response, '不一定成功吧')
+       
         if (response.status === 200) {
             return Promise.resolve(response);
         } else {
