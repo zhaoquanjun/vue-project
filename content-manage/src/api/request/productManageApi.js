@@ -10,13 +10,37 @@ import * as ajaxRequest from "../ajaxRequest";
  * 获取产品列表
  * @param {*} option 
  */
-export const getProductList = (option) => {
-    console.log("产品管理：调用 getProductList");
-    return ajaxRequest.get(`http://localhost:8200/api/product/items/${option.pageIndex}/${option.pageSize}`,option);
+export const getProductList = options => {
+    return ajaxRequest.get(`/api/product/${options.pageIndex}/${options.pageSize}`, options);
 }
 
-export const getCategoryTree=() =>{
-    console.log("产品管理：调用 getCategoryTree");
-    return ajaxRequest.get(`http://localhost:8200/api/productcategory/gettree`);
-    
+/**
+ * 
+批量切换产品的状态  删除| 置顶状态 |  上下架状态
+ */
+
+export const batchSwitchStatus = options => {
+    return ajaxRequest.put(`/api/product/BatchSwitchStatus/${options.switchType}/${options.flag}`, options.idList);
+}
+/**
+ * 修改分类
+ * @param {*} options 
+ */
+export const batchChangeCategory = options => {
+    return ajaxRequest.put(`/api/product/BatchChangeCategory`, options);
+}
+/**
+ * 新建产品
+ * @param {*} options 
+ */
+export const createProduct = options => {
+    return ajaxRequest.post(`/api/Product`, options);
+}
+
+/**
+ * 获取产品详情
+ * @param {*} options 
+ */
+export const getProductDetail = id => {
+    return ajaxRequest.get(`/api/Product/${id}`);
 }

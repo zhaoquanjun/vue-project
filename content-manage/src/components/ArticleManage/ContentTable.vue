@@ -91,7 +91,7 @@ export default {
             operateList: [
                 { name: "移动", flag: "move" },
                 { name: "复制", flag: "copy" },
-                { name: "下线", flag: "downLin" },
+                { name: "下线", flag: "isOnsell" },
                 { name: "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ],
@@ -149,6 +149,14 @@ export default {
 
         },
         _handleShowMoreOperate(ev, row) {
+            console.log(row,'00000')
+            this. operateList =  [
+                { name: "移动", flag: "move" },
+                { name: "复制", flag: "copy" },
+                { name: row.isPublish ?"下线": "上线", flag: "isOnSell" },
+                { name: row.isTop ?"取消置顶": "置顶",  flag: "stick" },
+                { name: "删除", flag: "delete" }
+            ],
             this.row = row;
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 11 + "px";
@@ -205,6 +213,7 @@ export default {
         },
 
         handleMoreOperate(flag){
+           
             let row = this.row;
             switch(flag){
                 case "move":
@@ -214,8 +223,9 @@ export default {
                 case "copy":
 
                     break;
-                 case "downLin":
-
+                 case "isOnSell":
+                    
+                    this.batchPublish(row, row.isPublish) 
                     break;
                 case "stick":
                     this.batchTop(row)    

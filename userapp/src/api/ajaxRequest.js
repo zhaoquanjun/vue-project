@@ -31,9 +31,7 @@ axios.interceptors.request.use(
         const token = getLocal('token');
     
         token && (config.headers.Authorization = "Bearer " + token);
-        //todo 测试阶段写死
-        //let dashbord = get("api/userinfo/GetUserDashboard");
-        console.log(store.appid,'33333333333333333333');
+        console.log(store.appid,'appid');
         config.headers.appid = store.appid;
         return config;
     },

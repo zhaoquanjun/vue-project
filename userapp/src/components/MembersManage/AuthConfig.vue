@@ -85,7 +85,12 @@ export default {
             if (this.isBatch) {
                 this._batchUpdateUserPolicy(this.userIds);
             } else {
-                this._updateUserPolicy(this.value);
+                console.log(this.memberInfo, '提交');
+                let para = {
+                    remark: this.value,
+                    userId: this.memberInfo.id
+                };
+                this._updateUserPolicy(para);
             }
              this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
         },

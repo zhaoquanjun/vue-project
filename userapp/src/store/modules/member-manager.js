@@ -104,8 +104,8 @@ const memberManager = {
         /**
          * 当前成员的 信息 与 权限 
         */
-        async _getUserInfo({ commit }) {
-            let { data: userInfo, status } = await getUserPolicy();
+        async _getUserPolicy({ commit },userId) {
+            let { data: userInfo, status } = await getUserPolicy(userId);
             console.log(userInfo,'000---------')
             commit("CURMEMBVERINFO", userInfo)
         },
@@ -124,10 +124,13 @@ const memberManager = {
          * @param {*} param0 
          * @param {*} 
          */
-        async _updateUserPolicy({ getters },remark) {
+        async _updateUserPolicy({ getters }, datas) {
+            console.log(datas);
             let options = {
                 names:getters.getSelectedAuthNames,
-                remark,
+                remark: datas.remark,
+                userId: datas.userId,
+                appId:'',
             }
            let jsonData = await updateUserPolicy(options);
            console.log(jsonData,'2222')

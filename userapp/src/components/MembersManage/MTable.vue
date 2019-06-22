@@ -4,8 +4,9 @@
             :data="memberList"
             style="width: 100%"
             :header-cell-style="{background:'#F5F5F5'}"
+                  @selection-change="handleSelectionChange"
         >
-            <el-table-column type="selection" :selectable="handleDisable"></el-table-column>
+            <el-table-column type="selection" :selectable="handleDisable" ></el-table-column>
             <el-table-column prop="name" label="姓名" width="180"></el-table-column>
             <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
             <el-table-column prop="policies" label="权限数量(项)"></el-table-column>
