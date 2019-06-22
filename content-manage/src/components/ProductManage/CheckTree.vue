@@ -16,6 +16,9 @@ export default {
       getCheckedNodes() {
         return this.$refs.tree.getCheckedNodes();
       },
+      resetChecked() {
+        this.$refs.tree.setCheckedKeys([]);
+      }
      }
 }
 </script>

@@ -25,9 +25,11 @@
                 @contentTableList="contentTableList"
                 @addArticle="addArticle"
                 @batchSwitchStatus="batchSwitchStatus"
+                @batchMove="batchMoveNews"
             ></content-header>
             <el-main>
                 <content-table
+                    ref="table"
                     v-if="articlePageResult !== null"
                     :article-page-result="articlePageResult"
                     :article-search-options="productSearchOptions"
@@ -51,15 +53,29 @@
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="closeRightPanel"
                 >
-                    <span slot="title-text">移动文章分类</span>
-                    <span slot="cur-name">{{curArticleInfo.categoryName}}</span>
-                    <span slot="move-to-name">{{moveToClassiFy.label}}</span>
-                    <CheckTree
-                        ref="checkTree"
-                        :isright-pannel="true"
-                        :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    ></CheckTree>
+                    <!-- 分类设置 -->
+                    <span slot="title-text">分类设置</span>
+
+                    <template v-if="clickType === 'permission'">
+                        <div class="category-content">
+                            <span name="cur-tip">{{switchVal?"仅登录用户可访问":"全部用户可访问"}}</span>
+                        </div>
+
+                        <el-switch v-model="switchVal"></el-switch>
+                    </template>
+                    <template v-else>
+                        <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
+
+                        <CheckTree
+                            ref="checkTree"
+                            :isright-pannel="true"
+                            :tree-result="treeResult"
+                            @chooseNode="chooseNode"
+                        ></CheckTree>
+                    </template>
+
                     <div slot="footer" class="pannle-footer">
                         <button @click="updateCategoryArticle" class="sure">确定</button>
                         <button @click="cancelUpdateCategory" class="cancel">取消</button>
@@ -78,7 +94,6 @@ import RightPannel from "../ImgManage/RightPannel";
 import * as productManageApi from "@/api/request/productManageApi";
 import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
 
-
 export default {
     components: {
         CategoryTree,
@@ -89,13 +104,15 @@ export default {
     },
     data() {
         return {
+            clickType: "", // 选择的是那种类型  移动 | 复制 ……
+            panelTitle: "分类设置", // 右侧面板提示title
+            switchVal: true, // 是否仅登录用户可看
             articlePageResult: null,
             treeResult: null,
             curArticleInfo: "",
             moveToClassiFy: "",
-            newsIdList: "",
-            count:0,
-             idsList: [],
+            count: 0,
+            idsList: [],
             isInvitationPanelShow: false,
             productSearchOptions: {
                 pageSize: 10, //11
@@ -118,13 +135,13 @@ export default {
         isInvitationlWidth() {
             return this.isInvitationPanelShow === true ? 331 : 0;
         },
-         isBatchHeaderShow() {
+        isBatchHeaderShow() {
             console.log(this.idsList.length);
             return this.idsList.length > 1 ? true : false;
         }
     },
     methods: {
-        // zxb 获取table列表 
+        // zxb 获取table列表
         async contentTableList(options) {
             let { data } = await productManageApi.getProductList(
                 (options = this.productSearchOptions)
@@ -133,57 +150,60 @@ export default {
         },
         //z 批量删除 批量置顶 批量上下线
         async batchSwitchStatus(options) {
-             let stateTip;
-            if(options.switchType === 1){
+            let stateTip;
+            if (options.switchType === 1) {
                 stateTip = `删除后，网站中引用的文章列表将不再显示该文章，是否确定删除？`;
-            }else if(options.switchType === 2){
-                console.log(options)
-                 var message = options.flag ? "取消置顶": "置顶";
-                    
-                    stateTip = "您确定要" + message + "文章吗？";
-                     options.flag = !options.flag;
-                  
-            }else if(options.switchType === 3){
-                 var message = options.flag? "下架": "上架";
-                     options.flag = !options.flag;
-                    stateTip = "您确定要" + message + "产品吗？";
+            } else if (options.switchType === 2) {
+                console.log(options);
+                var message = options.flag ? "取消置顶" : "置顶";
+
+                stateTip = "您确定要" + message + "文章吗？";
+                options.flag = !options.flag;
+            } else if (options.switchType === 3) {
+                var message = options.flag ? "下架" : "上架";
+                options.flag = !options.flag;
+                stateTip = "您确定要" + message + "产品吗？";
+            } else if (options.switchType === 4) {
+                var message = options.flag ? "全部" : "仅登录";
+                options.flag = options.flag;
+                stateTip = "您确定要设置" + message + "用户可访问吗？";
             }
-            
-            this.$confirm(stateTip,"提示",{
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            let {
-                                status,
-                                data
-                            } = await productManageApi.batchSwitchStatus(options);
-                            if (status === 200) {
-                                // this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "成功!"
-                                });
-                                this.contentTableList();
-                            }
-                        } else {
+
+            this.$confirm(stateTip, "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                callback: async action => {
+                    console.log(action);
+                    if (action === "confirm") {
+                        let {
+                            status,
+                            data
+                        } = await productManageApi.batchSwitchStatus(options);
+                        if (status === 200) {
+                            // this.getTree();
                             this.$message({
-                                type: "info",
-                                message: "已取消"
+                                type: "success",
+                                message: "成功!"
                             });
+                            this.contentTableList();
                         }
+                    } else {
+                        this.$message({
+                            type: "info",
+                            message: "已取消"
+                        });
                     }
                 }
-            );
-            
-          
+            });
         },
         // 批量移动分类
-        async batchMoveNews(idlist) {
+        async batchMoveNews(type) {
             this.isInvitationPanelShow = true;
-            this.newsIdList = idlist;
+            this.clickType = type;
+            if (type === "permission") {
+                this.panelTitle = "访问权限";
+            }
         },
         //选择移动分类时的节点
         chooseNode(node) {
@@ -191,18 +211,27 @@ export default {
             this.moveToClassiFy = node;
         },
         cancelUpdateCategory() {
+            // this.$refs.checkTree.resetChecked(); // 清空选中的 树结构
             this.isInvitationPanelShow = false;
         },
-        moveClassify(b, data) {
-            this.isInvitationPanelShow = b;
+        moveClassify(data, flag) {
+            this.isInvitationPanelShow = true;
             this.curArticleInfo = data;
+            this.type = flag;
         },
-        // 点击确定按钮 移动更新文章分类  
-        async updateCategoryArticle() {
-            console.log(this.curArticleInfo)
-            let checkNodes = this.$refs.checkTree.getCheckedNodes()
-            console.log(checkNodes)
-            if (!checkNodes || checkNodes.length<1) {
+        // 点击确定按钮 移动更新文章分类
+        async updateCategoryArticle(params) {
+            if (this.clickType === "permission") {
+                let options = {
+                    switchType: 4,
+                    flag: this.switchVal,
+                    idList: this.idsList
+                };
+                this.batchSwitchStatus(options);
+                return;
+            }
+            let checkNodes = this.$refs.checkTree.getCheckedNodes();
+            if (!checkNodes || checkNodes.length < 1) {
                 this.$message({
                     type: "error",
                     message: "请选择移动的分类!"
@@ -210,22 +239,52 @@ export default {
                 return;
             }
             let cateId = this.curArticleInfo.id;
-            let CategoryIdList=[];
-             checkNodes.forEach((item)=>{
-                 CategoryIdList.push(item.id)
-            })
-            let options = {
-                IdList:[cateId],
-                CategoryIdList:CategoryIdList
+            console.log(this.curArticleInfo);
+            let categoryIdList = [];
+            checkNodes.forEach(item => {
+                categoryIdList.push(item.id);
+            });
+            let cateIdsAry = [];
+            if (this.idsList.length > 1) {
+                cateIdsAry = this.idsList;
+            } else {
+                cateIdsAry.push(cateId);
             }
-            let { data, status } = await productManageApi.batchChangeCategory(options);
+            let options = {
+                idList: cateIdsAry,
+                categoryIdList: categoryIdList
+            };
+            console.log(options);
+            if (this.type === "copy") {
+                this.copy(options);
+                return;
+            }
+
+            let { data, status } = await productManageApi.batchChangeCategory(
+                options
+            );
             if (status == 200) {
+                this.$refs.checkTree.resetChecked(); // 清空选中的 树结构
                 this.$message({
                     type: "success",
                     message: "移动成功!"
                 });
                 this.isInvitationPanelShow = false;
                 this.contentTableList();
+            }
+        },
+        async copy(options) {
+            let { data, status } = await productManageApi.copyBatchProduct(
+                options
+            );
+            if (status == 200) {
+                this.$message({
+                    type: "success",
+                    message: "成功!"
+                });
+                this.isInvitationPanelShow = false;
+                this.contentTableList();
+                this.$refs.checkTree.resetChecked();
             }
         },
 
@@ -235,9 +294,9 @@ export default {
             );
             this.articlePageResult = data;
         },
-       /**
-        * z 点击 全部分类 刷新树结构
-        */
+        /**
+         * z 点击 全部分类 刷新树结构
+         */
         resetCategoryId() {
             this.productSearchOptions.categoryId = null;
             this.getArticleListAsync();
@@ -245,10 +304,10 @@ export default {
         /**
          * 获取 tree 结构
          */
-         async getTreeAsync() {
+        async getTreeAsync() {
             let { data } = await productCategoryManageApi.get();
-             this.treeResult = data.treeArray;
-                this.totalSum = data.totalSum;
+            this.treeResult = data.treeArray;
+            this.totalSum = data.totalSum;
         },
         /**
          * z新增分类
@@ -323,7 +382,7 @@ export default {
         /**
          * 获取多选的列表
          */
-        handleSelectionChange(list){
+        handleSelectionChange(list) {
             this.idsList = [];
             this.count = list.length;
             if (list.length < 1) return;
@@ -346,9 +405,12 @@ export default {
         /**
          * 关闭右侧面板
          */
-         closeRightPanel() {
+        closeRightPanel() {
             this.isInvitationPanelShow = true;
         },
+        getIdsList() {
+            return this.idList;
+        }
     }
 };
 </script>
