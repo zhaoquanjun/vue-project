@@ -69,7 +69,7 @@
   </div>
 </template>
 <script>
-import { getSliderMenuList } from "@/api/index";
+import { getSliderMenuList, checkHasRootSkip } from "@/api/index";
 import LeftNavComponents from "../Aside/LeftNavComponents";
 
 export default {
@@ -261,8 +261,11 @@ export default {
   methods: {
     async getMenuListData() {
       let { data } = await getSliderMenuList();
-      console.log(data)
-      this.filterMenuListData(data.menuList);
+      if (data.isAdmin) {
+        this.menuList = data.menuList;
+      } else {
+        this.menuList = this.filterMenuListData(data.menuList);
+      }
     },
     filterMenuListData(data) {
       let filterList = [];
@@ -296,16 +299,20 @@ export default {
             }
           }
         });
-      this.menuList = Object.values(obj).sort((c, d) => {
+      let result = Object.values(obj).sort((c, d) => {
         return c.orderId - d.orderId;
       });
+      return result;
     },
     changeCurHoverItem(i) {
       this.curIndex = i;
     },
-    skipPages(it) {
-        if (it.children) return;
-        location.href = `${it.menuUrl}`
+    async skipPages(it) {
+      if (it.children) return;
+      let { data, status } = await checkHasRootSkip({ url: it.menuUrl });
+      if (status == 200) {
+        location.href = `${it.menuUrl}`;
+      }
     },
     collapseOpen(width, time) {
       this.width = width;
