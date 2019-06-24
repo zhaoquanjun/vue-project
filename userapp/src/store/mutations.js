@@ -36,5 +36,10 @@ const mutations = {
         state.appid = payload;
         setLocal('appid', payload);
     },
+    [types.GETVALIDATEMENU](state, payload) {
+
+        state.validateMenu = payload;
+        // setLocal('validateMenu', payload);
+    },
 };
 export default mutations;

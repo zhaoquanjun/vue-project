@@ -3,6 +3,7 @@ const state = {
   isRightPanelShow:false,
   isInvitationPanelShow:false,
   userCurAppPolicy:"",
+  validateMenu:"",
   authList: [
     {
       name: "网站设计权1",

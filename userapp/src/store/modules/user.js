@@ -14,16 +14,11 @@ const user = {
         state.accessToken.Authorization = '';
         removeLocal('token');
       }
-    }
+    },
+   
   },
   actions: {
-    // 前端 登出
-    FedLogOut({ commit }) {
-      return new Promise(resolve => {
-        commit('SET_USER', null)
-        resolve()
-      })
-    }
+   
   }
 }
 
