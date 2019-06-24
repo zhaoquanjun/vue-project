@@ -12,7 +12,6 @@
             tooltip-effect="dark"
             class="content-table"
             @selection-change="handleSelectionChange"
-            @sort-change="sortByTopStatus"
         >
             <el-table-column type="selection"></el-table-column>
 
@@ -27,7 +26,7 @@
 
             <el-table-column prop="isPublishPrt" label="状态" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="isTopPrt" sortable="custom" label="置顶" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="isTopPrt" label="置顶" show-overflow-tooltip></el-table-column>
 
             <el-table-column prop="createUser" label="作者" show-overflow-tooltip></el-table-column>
 
@@ -115,16 +114,16 @@ export default {
             this.articleSearchOptions.pageSize = size;
             this.$emit("getArticleList");
         },
-        sortByTopStatus: function(column, prop, order) {
-            // descending ascending
-            this.articleSearchOptions.OrderByTopOrder =
-                column.order == "ascending"
-                    ? true
-                    : column.order == "descending"
-                    ? false
-                    : null;
-            this.$emit("getArticleList");
-        },
+        // sortByTopStatus: function(column, prop, order) {
+        //     // descending ascending
+        //     this.articleSearchOptions.OrderByTopOrder =
+        //         column.order == "ascending"
+        //             ? true
+        //             : column.order == "descending"
+        //             ? false
+        //             : null;
+        //     this.$emit("getArticleList");
+        // },
         /**
          * 单选或全选操作
          */
@@ -211,6 +210,18 @@ export default {
                 this.$emit("batchMove", [row.id]);
             }
         },
+        /**
+         * 复制操作
+         */
+        batchCopy(row) {
+            if (row == null || row == undefined) {
+                var idList = this.getCheckArr();
+                this.$emit("batchCopy", idList);
+            } else {
+                
+                this.$emit("batchCopy", [row.id]);
+            }
+        },
 
         handleMoreOperate(flag){
            
@@ -221,7 +232,8 @@ export default {
                     this.batchMove(row) 
                     break;
                 case "copy":
-
+                     this.$emit("moveClassify",true,row)
+                    this.batchCopy(row) 
                     break;
                  case "isOnSell":
                     
