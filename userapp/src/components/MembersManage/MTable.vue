@@ -142,13 +142,7 @@ export default {
             this.remarkValue = "";
         },
 
-        saveInputValue(id,row) {
-            if(this.remarkValue == ""){
-                 this.$message.error({
-                                    message: "备注不能为空!"
-                                });
-                return false;
-            }
+        saveInputValue(id,row) {            
             let data = {
                 targetUserId:row.userId,
                 remark:this.remarkValue

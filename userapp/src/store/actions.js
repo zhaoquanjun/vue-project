@@ -8,6 +8,9 @@ const actions = {
     async _getUserDashboard({ commit }) {
       
         let { data } = await getUserDashboard();
+        if (data == null) {
+            data = await getUserDashboard();
+        }
         console.log(data);
         data && commit("GETUSERDASHBOARD", data.lastLoginOutAppId)
     }

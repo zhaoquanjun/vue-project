@@ -6,8 +6,7 @@ import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import { getLocal } from "@/libs/local.js";
 import environment from "@/environment/index.js";
-import store  from "@/store/state";
-
+import store from "@/store/state";
 
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
@@ -25,11 +24,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 // 请求拦截器
 axios.interceptors.request.use(
-    config => {
+    config =>{
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-        const token = getLocal('token');
-    
+        const token = getLocal('token');       
         token && (config.headers.Authorization = "Bearer " + token);
         console.log(store.appid,'appid');
         config.headers.appid = store.appid;
