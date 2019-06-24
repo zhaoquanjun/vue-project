@@ -72,7 +72,7 @@
                     <span class="pd-left social-desc">设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码</span>
                 </div>
                 <div class="fright">
-                    <span>13011011746</span>
+                    <span>********</span>
 
                     <span class="pd-left">
                         <button>已绑定</button> |
@@ -161,6 +161,7 @@
 
 import RightPannel from "../RightPannel";
 import SetPhoneNumber from "./SetPhoneNumber";
+import SetPwd from "./SetPwd";
 import BindingWeChat from "./BindingWeChat";
 import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
@@ -189,6 +190,8 @@ import { updateUserName } from "@/api/index.js";
             SetPhoneNumber,
             UntyingWeChat,
             BindingWeChat,
+            SetPhoneNumber,
+            SetPwd
         },
         created() {
             this._getUserProfileAsync();
@@ -249,7 +252,11 @@ import { updateUserName } from "@/api/index.js";
             //修改邮箱
             modifiEmail() { },
             //修改密码
-            modifiPwd() { },
+            modifiPwd() {
+                this.curComponent = SetPwd;
+                this.titText = "设置密码";
+                this.ISRIGHTPANNELSHOW(true)
+            },
             // 解绑微信
             _untyingWeixin(provider) { 
                 this.titText="解绑微信";

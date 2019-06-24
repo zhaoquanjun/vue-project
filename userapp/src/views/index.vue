@@ -3,8 +3,8 @@
     <p class="welcome-words">今日，2019年6月22日星期六，欢迎您回到云速成美站控制台。</p>
     <el-row>
       <el-col :span="16">
-        <plugins :plugins="dashboardData.pluginList" />
-        <content-num :contentNum="contentNum" />
+        <plugins :plugins="dashboardData.pluginList" v-if="dashboardData.pluginList && dashboardData.pluginList.length > 0" />
+        <content-num :contentNumber="contentNumber" v-if="Object.keys(contentNumber).length > 0" />
       </el-col>
       <el-col :span="8">
 
@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       dashboardData: {},
-      contentNum: {}
+      contentNumber: {}
     }
   },
   components: {
@@ -35,12 +35,12 @@ export default {
     async getDashboardData() {
       let {data, status} = await getUserDashboard();
       this.dashboardData = data
-      this.contentNum = {
+        this.contentNumber = {
         newsCount: data.newsCount,
         filesCount: data.filesCount,
         picturesCount: data.picturesCount,
         productsCount: data.productsCount
-      }
+        }
     }
   }
 }

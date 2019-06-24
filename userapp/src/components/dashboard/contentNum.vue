@@ -17,18 +17,19 @@
 
 <script>
 export default {
-  props: ['contentNum'],
+        props: ['contentNumber'],
   data() {
     return {
       content: []
     };
   },
-  created() {
+        created() {
+            console.log(this.contentNum);
     this.content = [
-      {name: '文章', num: this.contentNum.newsCount},
-      {name: '产品', num: this.contentNum.productsCount},
-      {name: '图片', num: this.contentNum.picturesCount},
-      {name: '文件', num: this.contentNum.filesCount},
+        { name: '文章', num: this.contentNumber.newsCount},
+        { name: '产品', num: this.contentNumber.productsCount},
+        { name: '图片', num: this.contentNumber.picturesCount},
+        { name: '文件', num: this.contentNumber.filesCount},
     ]
   }
 };
