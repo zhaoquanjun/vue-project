@@ -16,10 +16,8 @@
             <span class="close-pannel" @click="closePanel">X</span>
         </div>
         <div style="padding:0 17px">
-            <div class="category-content">
-                移动至
-            </div>
-            <slot></slot>
+            <slot slot="cur-tip"></slot>
+            <div><slot></slot></div>
         </div>
         <slot name="footer"></slot>
     </div>

@@ -193,16 +193,16 @@ export default {
 .head-middle {
     float: right;
 }
-.upload-wrap {
-    margin-right: 25px;
-    cursor: pointer;
-    display: inline-block;
-    width: 45px;
-    height: 32px;
-    line-height: 32px;
-    text-align: center;
-    background: #00c1de;
-}
+// .upload-wrap {
+//     margin-right: 25px;
+//     cursor: pointer;
+//     display: inline-block;
+//     width: 45px;
+//     height: 32px;
+//     line-height: 32px;
+//     text-align: center;
+//     background: #00c1de;
+// }
 .upload-wrap{
     margin-right: 25px;
     cursor: pointer;

@@ -44,3 +44,13 @@ export const createProduct = options => {
 export const getProductDetail = id => {
     return ajaxRequest.get(`/api/Product/${id}`);
 }
+
+
+
+/**
+ * 复制产品
+ * @param {*} options 
+ */
+export const copyBatchProduct = options => {
+    return ajaxRequest.post(`/api/Product/BatchCopy`,options);
+}

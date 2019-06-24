@@ -30,7 +30,7 @@
                             <leftContent ref="articleContent" />
                         </el-col>
                         <el-col :span="6" style="margin-left: 16px;">
-                            <RightContent :imageUrl="imageUrl" ref="articleRight" />
+                            <RightContent :fileList="fileList" ref="articleRight" />
                         </el-col>
                     </el-row>
                 </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import * as articleManageApi from "@/api/request/articleManageApi";
+import * as productManageApi from "@/api/request/productManageApi";
 import environment from "@/environment/index.js";
 import RightContent from "./content-detail/RightContent";
 import leftContent from "./content-detail/LeftContent";
@@ -53,7 +53,7 @@ export default {
     },
     data(){
         return {
-            imageUrl:"",
+            fileList:[],
             detailData:{},
         }
     },
@@ -63,12 +63,26 @@ export default {
     },
     methods:{
       submitForm(){
-        let imageUrl = this.$refs.articleRight.imageUrl1;
-        this.$refs.articleContent.submitForm('articleDetail',imageUrl)
+          console.log(this.$refs.articleRight.fileList1)
+        
+        let fileList = this.$refs.articleRight.fileList1.map(item=>{
+            return item.response
+        });
+        this.$refs.articleContent.submitForm('articleDetail',fileList)
       },
         async getArticleDetail(id) {
-            let { data } = await articleManageApi.getArticleDetail(id);
-            this.imageUrl =  data.pictureUrl;
+            let { data } = await productManageApi.getProductDetail(id);
+            let thumbnailPicUrlList = data.thumbnailPicUrlList;
+            
+            thumbnailPicUrlList.forEach(item => {
+                this.fileList.push({
+                    name:"123",
+                    response:item
+                })
+            })
+            console.log(this.fileList)
+
+
            
         },
      
@@ -76,7 +90,7 @@ export default {
     mounted() {
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
-           // this.getArticleDetail(id);
+            this.getArticleDetail(id);
         }
     }
 };

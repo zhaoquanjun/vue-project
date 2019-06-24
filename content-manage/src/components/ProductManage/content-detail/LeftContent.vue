@@ -238,12 +238,12 @@ export default {
                 ],
                 productCategoryList: [
                     {
-                        id: 0,
-                        displayName: "string", //
-                        thumbnailPicUrl: "string" //
+                        id: 1,
+                        displayName: "1", //
+                        thumbnailPicUrl: "2" //
                     }
                 ],
-                params: {}, //
+                params: {name:1}, //
                 isTop: true,
                 isOnSell: true,
                 isTemplate: false, //
@@ -281,13 +281,14 @@ export default {
         async getArticleDetail(id) {
            
             let { data } = await productManageApi.getProductDetail(id);
-            this.detailData = data;
+             this.detailData = data;
             //this.detailData.NewId = data.id;
         },
         // 新建保存
-        submitForm(formName, imageUrl) {
+        submitForm(formName, fileList) {
          //   this.detailData.pictureUrl = imageUrl;
-            console.log(this.title);
+         console.log(fileList)
+            this.detailData.thumbnailPicUrlList = fileList
             this.$refs[formName].validate(valid => {
                 console.log(valid, "[[[[[[[[[");
                 if (valid) {
