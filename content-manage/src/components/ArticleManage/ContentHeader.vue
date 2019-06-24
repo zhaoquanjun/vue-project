@@ -33,6 +33,22 @@
                             ></el-option>
                         </el-select>
                     </span>
+                    <span>置顶</span>
+                    <span class="select-sort">
+                        <el-select
+                            size="small"
+                            v-model="topValue"
+                            placeholder="请选择"
+                            @change="changeTopStatus"
+                        >
+                            <el-option
+                                v-for="item in topOptions"
+                                :key="item.topValue"
+                                :label="item.topLabel"
+                                :value="item.topValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
                     <span>排序</span>
                     <span class="select-sort select-item">
                         <el-select
@@ -136,6 +152,21 @@ export default {
                 }
             ],
             statusValue: "",
+            topOptions: [
+                {
+                    topValue: "",
+                    topLabel: "全部"
+                },
+                {
+                    topValue: "true",
+                    topLabel: "是"
+                },
+                {
+                    topValue: "false",
+                    topLabel: "否"
+                }
+            ],
+            topValue: "",
             orderOptions: [
                 {
                     orderValue: "1",
@@ -170,6 +201,10 @@ export default {
         },
         changeStatus(value) {
             this.articleSearchOptions.isOnSell = value;
+            this.getArticleList();
+        },
+        changeTopStatus(value){
+            this.articleSearchOptions.topStatus = value;
             this.getArticleList();
         },
         changeOrderCondition(value) {

@@ -42,6 +42,10 @@ export const batchPublish = (publishStatus, idList) => {
 export const batchMove = (targetCategoryId, idList) => {
     return ajaxRequest.put(`/api/News/MoveNews/${targetCategoryId}`, idList);
 }
+// 批量复制
+export const batchCopy = (targetCategoryId, idList) => {
+    return ajaxRequest.post(`/api/News/CopyNews/${targetCategoryId}`, idList);
+}
 
 /**
  * 获取文章分类

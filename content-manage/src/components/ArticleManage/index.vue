@@ -31,6 +31,7 @@
                     :tree-result="treeResult"
                     @getArticleList="getArticleList"
                     @batchMove="batchMoveNews"
+                    @batchCopy="batchCopyNews"
                     @batchRemove="batchRemoveNews"
                     @batchTop="batchTopNews"
                     @batchPublish="batchPublishNews"
@@ -58,7 +59,7 @@
                     />
 
                     <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryArticle" class="sure">确定</button>
+                        <button @click="handOperateArticle" class="sure">确定</button>
                         <button @click="cancelUpdateCategory" class="cancel">取消</button>
                     </div>
                 </right-pannel>
@@ -90,12 +91,14 @@ export default {
             newsIdList: "",
             count: 0,
             idsList: [],
+            rightPanelType: 1, // 1 移动文章 2 复制文章
+
             isInvitationPanelShow: false,
             articleSearchOptions: {
                 title: "",
                 categoryId: 0,
                 orderCondition: 0,
-                OrderByTopOrder: null,
+                topStatus: null,
                 publishStatus: null,
                 pageIndex: 1,
                 pageSize: 10,
@@ -242,6 +245,13 @@ export default {
         // 批量移动分类
         async batchMoveNews(idlist) {
             this.isInvitationPanelShow = true;
+            this.rightPanelType = 1;
+            this.newsIdList = idlist;
+        },
+        // 批量复制分类
+        async batchCopyNews(idlist) {
+            this.isInvitationPanelShow = true;
+            this.rightPanelType = 2;
             this.newsIdList = idlist;
         },
         //选择移动分类时的节点
@@ -256,7 +266,18 @@ export default {
             this.isInvitationPanelShow = b;
             this.curArticleInfo = data;
         },
-        // 点击确定按钮 更新文章分类
+        // 判断是 移动还是复制
+        handOperateArticle(){
+            switch(this.rightPanelType){
+                case 1:
+                    this.updateCategoryArticle();
+                    break;
+                case 2:
+                    this.copyArticle(); 
+                    break; 
+            }
+        },
+        // 点击确定按钮 更新文章所属分类
         async updateCategoryArticle() {
             if (!this.moveToClassiFy) {
                 this.$message({
@@ -275,6 +296,30 @@ export default {
                 this.$message({
                     type: "success",
                     message: "移动成功!"
+                });
+                this.isInvitationPanelShow = false;
+                this.getArticleList();
+            }
+        },
+        // 点击确定按钮 复制
+        async copyArticle() {
+            if (!this.moveToClassiFy) {
+                this.$message({
+                    type: "error",
+                    message: "请选择要复制到的分类!"
+                });
+                return;
+            }
+            let cateId = this.moveToClassiFy.id;
+
+            let { data, status } = await articleManageApi.batchCopy(
+                cateId,
+                this.newsIdList
+            );
+            if (status == 200) {
+                this.$message({
+                    type: "success",
+                    message: "复制成功!"
                 });
                 this.isInvitationPanelShow = false;
                 this.getArticleList();
