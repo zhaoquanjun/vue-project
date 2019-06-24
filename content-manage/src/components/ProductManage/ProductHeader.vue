@@ -17,7 +17,7 @@
             <div class="head-item head-right">
                 <div class="head-item">
                     <span>状态</span>
-                    <span class="select-sort">
+                    <span class="select-item">
                         <el-select
                             size="small"
                             v-model="statusValue"
@@ -33,7 +33,7 @@
                         </el-select>
                     </span>
                     <span>排序</span>
-                    <span class="select-sort">
+                    <span class="select-sort select-item">
                         <el-select
                             size="small"
                             v-model="orderValue"
@@ -49,7 +49,7 @@
                         </el-select>
                     </span>
                     <span>置顶</span>
-                    <span class="select-sort">
+                    <span class="select-item">
                         <el-select
                             size="small"
                             v-model="topValue"
@@ -68,25 +68,16 @@
                         <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                         <svg-icon v-else icon-class="top-arrow"></svg-icon>
                     </span>
-                    <!-- <span class="list-mode mode-item">
-                    <svg-icon icon-class="list-mode "></svg-icon>
-                </span>
-                <span class="grid-mode mode-item">
-                    <svg-icon icon-class="grid-mode"></svg-icon>
-                    </span>-->
                 </div>
-                <div class="head-item head-right">
+                <div class="head-item head-handle-btn">
                     <button @click="importArticle">导入产品</button>
                     <button class="add-article" @click="addArticle">新增产品</button>
-                    <!-- <span class="upload-wrap">
-                <svg-icon icon-class="upload-img"></svg-icon>
-                    </span>-->
                 </div>
             </div>
         </template>
 
         <template v-else>
-            <div style="padding:0 21px;width: 100%;">
+            <div class="bach-header">
                 <span>
                     已选
                     <i>{{count}}</i> 个产品
@@ -291,28 +282,24 @@ export default {
     /* height: 36px; */
     box-sizing: border-box;
 }
-.select-sort {
+.select-item{
     display: inline-block;
-    width: 117px;
+    width: 80px;
     box-sizing: border-box;
     height: 32px;
     margin: 0 16px 0 7px;
+}
+.select-sort {
+  width: 117px;
 }
 .head-item {
     display: inline-block;
     flex: none;
 }
-.mode-item {
-    display: inline-block;
-    width: 45px;
-    padding: 8px 0;
-    text-align: center;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
+.head-handle-btn{
+    padding-left: 40px;
 }
-.list-mode {
-    border-right: none;
-}
+
 .head-right {
     display: flex;
     justify-content: flex-end;
@@ -330,5 +317,13 @@ export default {
         background: rgba(1, 192, 222, 1);
         color: #fff;
     }
+}
+
+.bach-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // padding:0 21px;
+    width: 100%;
 }
 </style>

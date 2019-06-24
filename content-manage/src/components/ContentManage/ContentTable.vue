@@ -160,11 +160,11 @@ export default {
     height: 32px;
     background: #00c1de !important;
 }
-.el-table th > .cell {
+/* .el-table th > .cell {
     color: #fff;
     font-weight: 400;
     font-size: 12px;
-}
+} */
 .el-table .el-table__row {
     height: 60px;
     /* line-height: 60px; */

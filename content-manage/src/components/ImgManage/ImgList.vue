@@ -159,11 +159,11 @@ export default {
     background: #00c1de !important;
 }
 
-#table-list .el-table th > .cell {
+/* #table-list .el-table th > .cell {
     color: #fff;
     font-weight: 400;
     font-size: 12px;
-}
+} */
 #table-list .el-table .el-table__row {
     height: 60px;
 }

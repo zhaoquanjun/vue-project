@@ -54,9 +54,10 @@ axios.interceptors.response.use(
                 // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                 case 401:
                    // router.push({ path: '/401' })
-                   securityService.signIn();
                    store.commit("SET_USER")
                    window.localStorage.clear()
+                   securityService.signIn();
+                  
                     break;
                 // 403 token过期                
                 // 登录过期对用户进行提示                
