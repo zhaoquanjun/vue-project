@@ -6,7 +6,7 @@ export const defaultRoutes = [
   {
     path: "/",
     redirect:{path:'/image'},
-    component: ()=>import('@/components/index.vue'),
+    //component: ()=>import('@/components/index.vue'),
     children:[
       {
         path: "article",

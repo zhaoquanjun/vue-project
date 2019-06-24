@@ -51,7 +51,9 @@
                     @closeRightPanel="closeRightPanel"
                 >
                     <span slot="title-text">移动文章分类</span>
-                    <span slot="cur-name">{{curArticleInfo.categoryName}}</span>
+                    <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
                     <SelectTree
                         :categoryName="curArticleInfo.categoryName"
                         :tree-result="treeResult"
