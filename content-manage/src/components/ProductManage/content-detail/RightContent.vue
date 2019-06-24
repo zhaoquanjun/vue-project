@@ -2,7 +2,7 @@
     <div>
         <el-card class="box-card">
             <div slot="header">
-                <span>文章封面</span>
+                <span>产品封面</span>
             </div>
             <div>
                 <!-- <el-upload
@@ -27,14 +27,16 @@
                     class="avatar-uploader"
                     :action="uploadPicAction"
                     :headers="headers"
-                    :show-file-list="false"
+                    list-type="picture-card"
+                    :file-list="fileList1"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload"
-                     :on-preview="handlePreview"
-  :on-remove="handleRemove"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                     :multiple="true"
                     >
-                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <!-- <img v-if="imageUrl1" :src="imageUrl1" class="avatar"> -->
+                    <i class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </div>
         </el-card>
@@ -52,12 +54,12 @@
 import environment from "@/environment/index.js";
 
 export default {
-    props: ["imageUrl"],
+    props: ["fileList"],
     data() {
         return {
             activeName: "",
             uoloadDisabled: true,
-            fileList: [],
+            fileList1: [],
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
             headers: {
@@ -69,12 +71,13 @@ export default {
         };
     },
     watch: {
-        imageUrl() {
-            this.imageUrl1 = this.imageUrl;
+        fileList() {
+            this.fileList1 = this.fileList;
         }
     },
     methods: {
         handleSucess(response, file, fileList) {
+            console.log(fileList)
             this.imageUrl1 = file.response;
             if (!this.uploadSucess) {
                 this.$message({
@@ -96,11 +99,10 @@ export default {
 
         ///////
         handleAvatarSuccess(res, file) {
-            console.log(file);
-            // this.imageUrl = URL.createObjectURL(file.raw);
-            this.imageUrl1 = file.response;
+            console.log(file,'--00000')
+            this.fileList1.push(file);
         },
-        beforeAvatarUpload(file) {
+        beforeAvatarUpload(file,fileList) {
             this.headers.Authorization =
                 "Bearer " + this.$store.state.accessToken.Authorization;
             const isPic =

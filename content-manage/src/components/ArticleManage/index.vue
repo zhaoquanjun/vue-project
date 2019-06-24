@@ -16,14 +16,14 @@
             ></m-tree>
         </el-aside>
         <el-main>
-          
             <content-header
+                :count="count"
+                :is-batch-header-show="isBatchHeaderShow"
                 :article-search-options="articleSearchOptions"
                 @getArticleList="getArticleList"
                 @addArticle="addArticle"
             ></content-header>
             <el-main>
-                
                 <content-table
                     v-if="articlePageResult !== null"
                     :article-page-result="articlePageResult"
@@ -31,13 +31,14 @@
                     :tree-result="treeResult"
                     @getArticleList="getArticleList"
                     @batchMove="batchMoveNews"
+                    @batchCopy="batchCopyNews"
                     @batchRemove="batchRemoveNews"
                     @batchTop="batchTopNews"
                     @batchPublish="batchPublishNews"
                     @handleEditArticle="handleEditArticle"
                     @moveClassify="moveClassify"
+                     @handleSelectionChange="handleSelectionChange"
                 ></content-table>
-
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -51,14 +52,14 @@
                 >
                     <span slot="title-text">移动文章分类</span>
                     <span slot="cur-name">{{curArticleInfo.categoryName}}</span>
-                    <span slot="move-to-name">{{moveToClassiFy.lable}}</span>
-                    <m-tree
-                        :isright-pannel="true"
+                    <SelectTree
+                        :categoryName="curArticleInfo.categoryName"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
-                    ></m-tree>
+                    />
+
                     <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryArticle" class="sure">确定 </button>
+                        <button @click="handOperateArticle" class="sure">确定</button>
                         <button @click="cancelUpdateCategory" class="cancel">取消</button>
                     </div>
                 </right-pannel>
@@ -71,13 +72,15 @@ import MTree from "./MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
 import RightPannel from "../ImgManage/RightPannel";
+import SelectTree from "@/components/common/SelectTree";
 import * as articleManageApi from "@/api/request/articleManageApi";
 export default {
     components: {
         MTree,
         ContentHeader,
         ContentTable,
-        RightPannel
+        RightPannel,
+        SelectTree
     },
     data() {
         return {
@@ -86,12 +89,16 @@ export default {
             curArticleInfo: "",
             moveToClassiFy: "",
             newsIdList: "",
+            count: 0,
+            idsList: [],
+            rightPanelType: 1, // 1 移动文章 2 复制文章
+
             isInvitationPanelShow: false,
             articleSearchOptions: {
                 title: "",
                 categoryId: 0,
                 orderCondition: 0,
-                OrderByTopOrder: null,
+                topStatus: null,
                 publishStatus: null,
                 pageIndex: 1,
                 pageSize: 10,
@@ -106,9 +113,25 @@ export default {
     computed: {
         isInvitationlWidth() {
             return this.isInvitationPanelShow === true ? 331 : 0;
+        },
+        isBatchHeaderShow() {
+            console.log(this.idsList)
+            return this.idsList.length > 1 ? true : false;
         }
     },
     methods: {
+        /**
+         * 获取多选的列表
+         */
+        handleSelectionChange(list) {
+            console.log(list)
+            this.idsList = [];
+            this.count = list.length;
+            if (list.length < 1) return;
+            list.forEach(item => {
+                this.idsList.push(item.id);
+            });
+        },
         async getArticleList(options) {
             let { data } = await articleManageApi.getArticleList(
                 (options = this.articleSearchOptions)
@@ -222,11 +245,18 @@ export default {
         // 批量移动分类
         async batchMoveNews(idlist) {
             this.isInvitationPanelShow = true;
+            this.rightPanelType = 1;
+            this.newsIdList = idlist;
+        },
+        // 批量复制分类
+        async batchCopyNews(idlist) {
+            this.isInvitationPanelShow = true;
+            this.rightPanelType = 2;
             this.newsIdList = idlist;
         },
         //选择移动分类时的节点
         chooseNode(node) {
-            console.log(node)
+            console.log(node);
             this.moveToClassiFy = node;
         },
         cancelUpdateCategory() {
@@ -236,7 +266,18 @@ export default {
             this.isInvitationPanelShow = b;
             this.curArticleInfo = data;
         },
-        // 点击确定按钮 更新文章分类
+        // 判断是 移动还是复制
+        handOperateArticle(){
+            switch(this.rightPanelType){
+                case 1:
+                    this.updateCategoryArticle();
+                    break;
+                case 2:
+                    this.copyArticle(); 
+                    break; 
+            }
+        },
+        // 点击确定按钮 更新文章所属分类
         async updateCategoryArticle() {
             if (!this.moveToClassiFy) {
                 this.$message({
@@ -255,6 +296,30 @@ export default {
                 this.$message({
                     type: "success",
                     message: "移动成功!"
+                });
+                this.isInvitationPanelShow = false;
+                this.getArticleList();
+            }
+        },
+        // 点击确定按钮 复制
+        async copyArticle() {
+            if (!this.moveToClassiFy) {
+                this.$message({
+                    type: "error",
+                    message: "请选择要复制到的分类!"
+                });
+                return;
+            }
+            let cateId = this.moveToClassiFy.id;
+
+            let { data, status } = await articleManageApi.batchCopy(
+                cateId,
+                this.newsIdList
+            );
+            if (status == 200) {
+                this.$message({
+                    type: "success",
+                    message: "复制成功!"
                 });
                 this.isInvitationPanelShow = false;
                 this.getArticleList();

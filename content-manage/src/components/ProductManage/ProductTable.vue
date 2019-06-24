@@ -1,5 +1,5 @@
 <template>
-    <div class="table-content" id="content-table-list">
+    <div class="table-content" id="table-list">
         <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
         <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
         <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
@@ -49,7 +49,7 @@
 
             <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" label="创建时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -105,7 +105,7 @@
 
 <script>
 export default {
-    props: ["articlePageResult", "articleSearchOptions", "treeResult"],
+    props: ["articlePageResult", "articleSearchOptions"],
     data() {
         return {
             multipleSelection: [],
@@ -170,6 +170,7 @@ export default {
             this.$emit("handleEditArticle", row);
         },
         _handleShowMoreOperate(ev, row) {
+            console.log(ev)
             this.row = row;
             this.operateList = [
                 { name: "移动", flag: "move" },
@@ -204,26 +205,22 @@ export default {
             }
         },
 
+      
         /**
-         * 移动分类操作
+         * 复制 操作
          */
-        batchMove(row) {
-            if (row == null || row == undefined) {
-                var idList = this.getCheckArr();
-                this.$emit("batchMove", idList);
-            } else {
-                this.$emit("batchMove", [row.id]);
-            }
+        batchCopy(row,type){
+           this.$emit("batchMove",type);
         },
-
         handleMoreOperate(flag) {
+            this.clearSelection();
             let row = this.row;
             switch (flag) {
                 case "move":
-                    this.$emit("moveClassify", true, row);
-                    this.batchMove(row);
+                    this.$emit("moveClassify", row,flag);
                     break;
                 case "copy":
+                     this.$emit("moveClassify", row,flag);
                     break;
                 case "isOnSell":
                     this.batchSwitchStatus(row, 3, row.isOnSell);
@@ -235,6 +232,9 @@ export default {
                     this.batchSwitchStatus(row, 1, row.isDelete);
                     break;
             }
+        },
+        clearSelection(){
+            this.$refs.multipleTable.clearSelection();
         }
     }
 };
@@ -323,41 +323,41 @@ export default {
   text-align: left;
 } */
 
-#content-table-list .el-table .has-gutter th {
+#table-list .el-table .has-gutter th {
     padding: 0;
     height: 32px;
     background: #00c1de !important;
 }
 
-#content-table-list .el-table th > .cell {
+#table-list .el-table th > .cell {
     color: #fff;
     font-weight: 400;
     font-size: 12px;
 }
-#content-table-list .el-table .el-table__row {
+#table-list .el-table .el-table__row {
     height: 60px;
 }
-#content-table-list
+#table-list
     .el-pagination.is-background
     .el-pager
     li:not(.disabled).active {
     background-color: #01c0de;
 }
-#content-table-list .el-pagination .el-pagination__total {
+#table-list .el-pagination .el-pagination__total {
     color: #8c8c8c;
 }
-#content-table-list .el-pager li {
+#table-list .el-pager li {
     font-weight: 400;
     color: #252525;
     background-color: #fff;
     border: 1px solid rgba(229, 229, 229, 1);
 }
-#content-table-list .el-pager .active {
+#table-list .el-pager .active {
     background-color: #01c0de;
     color: #fff;
 }
 
-#content-table-list .el-carousel__item.is-animating {
+#table-list .el-carousel__item.is-animating {
     display: flex;
     align-items: center;
     justify-content: center;

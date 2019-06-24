@@ -1,16 +1,16 @@
 <template>
     <div class="article-content" id="article-content">
-        <el-form class="base-ariticle" :model="articleDetail" :rules="rules" ref="articleDetail">
+        <el-form class="base-ariticle" :model="detailData" :rules="rules" ref="articleDetail">
             <div class="content-item">
                 <el-row>
                     <el-col :span="24">
                         <div class="content-title">基本信息</div>
                     </el-col>
                 </el-row>
-                <el-form-item label prop="title">
+                <el-form-item label prop="name">
                     <el-input
                         placeholder="请输入文章标题（必填）"
-                        v-model="articleDetail.title"
+                        v-model="detailData.name"
                         maxlength="100"
                         show-word-limit
                     ></el-input>
@@ -20,7 +20,7 @@
                         type="textarea"
                         :rows="5"
                         placeholder="请输入文章简介"
-                        v-model="articleDetail.summary"
+                        v-model="detailData.description"
                     ></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -65,7 +65,7 @@
                         type="textarea"
                         :rows="10"
                         placeholder="请输入文章详情"
-                        v-model="articleDetail.contentDetail"
+                        v-model="detailData.detailContent"
                     ></el-input>
                 </el-form-item>
             </div>
@@ -77,7 +77,7 @@
                                 <el-form-item prop="createTime">
                                     <el-date-picker
                                         type="datetime"
-                                        v-model="articleDetail.createTime"
+                                        v-model="detailData.publishTime"
                                         placeholder="选择日期时间"
                                         style="width: 100%;"
                                     ></el-date-picker>
@@ -97,18 +97,23 @@
 
                             <el-input
                                 placeholder="每个关键词之间用会车键分离"
-                                v-model="articleDetail.searchKeywords"
+                                v-model="detailData.searchKeywords"
                             ></el-input>
                         </el-form-item>
                         <el-form-item>
-                             <el-checkbox
+                            <el-checkbox-group
+                                v-model="checkedviewAuth"
+                                @change="handleCheckedCitiesChange"
+                            >
+                                <el-checkbox
                                     v-for="item in viewAuth"
-                                    :label="item.name"
+                                    :label="item"
                                     :key="item.id"
                                 >{{item.name}}</el-checkbox>
+                            </el-checkbox-group>
                         </el-form-item>
                         <el-form-item label="置頂" prop="delivery">
-                            <el-switch v-model="articleDetail.isTop"></el-switch>
+                            <el-switch v-model="detailData.isTop"></el-switch>
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -116,32 +121,48 @@
             <div class="content-item seo-key">
                 <el-collapse v-model="activeName1" accordion>
                     <el-collapse-item title="搜索引擎优化" name="1">
-                        <el-form-item label="seo标题" prop="metaTitle">
+                        <el-form-item label="seo标题" prop="searchKeyword">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">不填写则默认使用文章标题</div>
                                 <span>
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
                             </el-tooltip>
-                            <el-input placeholder="seo标题" v-model="articleDetail.metaTitle"></el-input>
+                            <el-input placeholder="seo标题" v-model="detailData.searchKeyword"></el-input>
                         </el-form-item>
-                        <el-form-item label="seo关键词" prop="metaKeywords">
-                            <el-input placeholder="seo关键词" v-model="articleDetail.metaKeywords"></el-input>
+                        <el-form-item label="seo关键词" prop="seoKeyword">
+                            <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input>
                         </el-form-item>
 
-                        <el-form-item label="文章描述" prop="metaDescription">
+                        <el-form-item label="文章描述" prop="seoDescription">
                             <el-input
                                 type="textarea"
                                 :rows="5"
                                 placeholder
-                                v-model="articleDetail.metaDescription"
+                                v-model="detailData.seoDescription"
                             ></el-input>
                         </el-form-item>
-                        <!-- <el-form-item label="自定义地址" prop="metaDescription">
-                        <el-input placeholder="请输入自定义地址" v-model="articleDetail.metaDescription"></el-input>
-                        </el-form-item>-->
+                        <el-form-item label="自定义地址" prop="customUrl">
+                            <el-input
+                                placeholder="请输入自定义地址"
+                                v-model="detailData.customUrl"
+                            ></el-input>
+                        </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
+            </div>
+            <div class="content-item seo-key">
+                 <!-- <el-form-item label prop="contentDetail">
+                <el-collapse v-model="activeName1" accordion>
+                    <el-collapse-item title="相关产品" name="2">
+                          <el-table >
+                               <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
+                                  <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
+                                     <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
+                        </el-table >
+                    </el-collapse-item>
+                </el-collapse>
+                 </el-form-item > -->
             </div>
         </el-form>
 
@@ -156,26 +177,30 @@
     </div>
 </template>
 <script>
-import * as articleManageApi from "@/api/request/articleManageApi";
-const viewAuth = [{name:"全选",id:0}, {name:"登录用户",id:1},{name:"未登录用户",id:2}];
+import * as productManageApi from "@/api/request/productManageApi";
+const viewAuth = [
+    { name: "全选", id: 0 },
+    { name: "登录用户", id: 1 },
+    { name: "未登录用户", id: 2 }
+];
 export default {
     data() {
         return {
             checkAll: false,
-            checkedviewAuth: [{name:"登录用户",id:1}],
+            checkedviewAuth: [{ name: "登录用户", id: 1 }],
             viewAuth: viewAuth,
             isIndeterminate: true,
             options: [
                 {
                     value: "选项1",
-                    label: "上线"
+                    label: "上架"
                 },
                 {
                     value: "选项2",
-                    label: "下线"
+                    label: "下架"
                 }
             ],
-            value: "上线",
+            value: "上架",
             options1: [
                 {
                     value: "选项1",
@@ -189,32 +214,19 @@ export default {
             value2: "全部分类",
 
             activeName: "",
-            activeName1: "",
-            articleDetail: {
-                NewId: "",
-                title: "",
-                summary: "",
-                contentDetail: "",
-                searchKeywords: "",
-                createTime: new Date(),
-                isTop: false,
-                metaTitle: "",
-                metaKeywords: "",
-                metaDescription: "",
-                pictureUrl: ""
-            },
+            activeName1: "",       
             detailData: {
                 name: "",
                 description: "",
                 detailContent: "",
-                price: 0, //
-                costPrice: 0, //
-                originalPrice: 0, //
+                price: 1, //
+                costPrice: 1, //
+                originalPrice: 1, //
                 seoKeyword: "",
                 seoDescription: "",
                 searchKeyword: "",
                 skuId: "", //
-                publishTime: "2019-06-21T09:40:11.856Z",
+                publishTime:  new Date(),
                 customUrl: "",
                 accessRoleList: [1],
                 thumbnailPicUrlList: [],
@@ -226,12 +238,12 @@ export default {
                 ],
                 productCategoryList: [
                     {
-                        id: 0,
-                        displayName: "string", //
-                        thumbnailPicUrl: "string" //
+                        id: 1,
+                        displayName: "1", //
+                        thumbnailPicUrl: "2" //
                     }
                 ],
-                params: {}, //
+                params: {name:1}, //
                 isTop: true,
                 isOnSell: true,
                 isTemplate: false, //
@@ -240,7 +252,7 @@ export default {
                 isAllowComment: true
             },
             rules: {
-                title: [
+                name: [
                     {
                         required: true,
                         message: "请输入文章标题",
@@ -258,7 +270,8 @@ export default {
     },
 
     created() {
-        // console.log(this.$route.query)
+       
+        console.log(this.$route.query)
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
@@ -266,14 +279,16 @@ export default {
     },
     methods: {
         async getArticleDetail(id) {
-            let { data } = await articleManageApi.getArticleDetail(id);
-            this.articleDetail = data;
-            this.articleDetail.NewId = data.id;
+           
+            let { data } = await productManageApi.getProductDetail(id);
+             this.detailData = data;
+            //this.detailData.NewId = data.id;
         },
         // 新建保存
-        submitForm(formName, imageUrl) {
-            this.articleDetail.pictureUrl = imageUrl;
-            console.log(this.title);
+        submitForm(formName, fileList) {
+         //   this.detailData.pictureUrl = imageUrl;
+         console.log(fileList)
+            this.detailData.thumbnailPicUrlList = fileList
             this.$refs[formName].validate(valid => {
                 console.log(valid, "[[[[[[[[[");
                 if (valid) {
@@ -288,17 +303,17 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
-        //插入文章
+        //新建产品
         async insertArticle() {
-            let { status, data } = await articleManageApi.createArticle(
-                this.articleDetail
+            let { status, data } = await productManageApi.createProduct(
+                this.detailData
             );
             if (status === 200) {
                 this.$message({
                     type: "success",
                     message: "添加成功!"
                 });
-                this.$router.push(`/create?id=${data}`);
+               this.$router.push(`/createProduct?id=${data}`);
             }
         },
         // 编辑提交
@@ -329,6 +344,7 @@ export default {
             // this.isIndeterminate = false;
         },
         handleCheckedCitiesChange(value) {
+            console.log(value);
             // let checkedCount = value.length;
             // this.checkAll = checkedCount === this.cities.length;
             // this.isIndeterminate =

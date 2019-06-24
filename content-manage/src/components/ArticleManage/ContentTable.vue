@@ -1,5 +1,5 @@
 <template>
-    <div class="table-content" id="content-table-list">
+    <div class="table-content" id="table-list">
         <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
         <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
         <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
@@ -12,7 +12,6 @@
             tooltip-effect="dark"
             class="content-table"
             @selection-change="handleSelectionChange"
-            @sort-change="sortByTopStatus"
         >
             <el-table-column type="selection"></el-table-column>
 
@@ -27,7 +26,7 @@
 
             <el-table-column prop="isPublishPrt" label="状态" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="isTopPrt" sortable="custom" label="置顶" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="isTopPrt" label="置顶" show-overflow-tooltip></el-table-column>
 
             <el-table-column prop="createUser" label="作者" show-overflow-tooltip></el-table-column>
 
@@ -91,7 +90,7 @@ export default {
             operateList: [
                 { name: "移动", flag: "move" },
                 { name: "复制", flag: "copy" },
-                { name: "下线", flag: "downLin" },
+                { name: "下线", flag: "isOnsell" },
                 { name: "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ],
@@ -115,21 +114,22 @@ export default {
             this.articleSearchOptions.pageSize = size;
             this.$emit("getArticleList");
         },
-        sortByTopStatus: function(column, prop, order) {
-            // descending ascending
-            this.articleSearchOptions.OrderByTopOrder =
-                column.order == "ascending"
-                    ? true
-                    : column.order == "descending"
-                    ? false
-                    : null;
-            this.$emit("getArticleList");
-        },
+        // sortByTopStatus: function(column, prop, order) {
+        //     // descending ascending
+        //     this.articleSearchOptions.OrderByTopOrder =
+        //         column.order == "ascending"
+        //             ? true
+        //             : column.order == "descending"
+        //             ? false
+        //             : null;
+        //     this.$emit("getArticleList");
+        // },
         /**
          * 单选或全选操作
          */
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            this.$emit("handleSelectionChange",val)
         },
         getCheckArr() {
             let checkArr = this.multipleSelection; // multipleSelection存储了勾选到的数据
@@ -149,13 +149,21 @@ export default {
 
         },
         _handleShowMoreOperate(ev, row) {
+            console.log(row,'00000')
+            this. operateList =  [
+                { name: "移动", flag: "move" },
+                { name: "复制", flag: "copy" },
+                { name: row.isPublish ?"下线": "上线", flag: "isOnSell" },
+                { name: row.isTop ?"取消置顶": "置顶",  flag: "stick" },
+                { name: "删除", flag: "delete" }
+            ],
             this.row = row;
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 11 + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
             this.$refs.operateSection.style.display = "block";
         },
-      
+  
         /**
          * 删除操作
          */
@@ -203,8 +211,21 @@ export default {
                 this.$emit("batchMove", [row.id]);
             }
         },
+        /**
+         * 复制操作
+         */
+        batchCopy(row) {
+            if (row == null || row == undefined) {
+                var idList = this.getCheckArr();
+                this.$emit("batchCopy", idList);
+            } else {
+                
+                this.$emit("batchCopy", [row.id]);
+            }
+        },
 
         handleMoreOperate(flag){
+           
             let row = this.row;
             switch(flag){
                 case "move":
@@ -212,10 +233,12 @@ export default {
                     this.batchMove(row) 
                     break;
                 case "copy":
-
+                     this.$emit("moveClassify",true,row)
+                    this.batchCopy(row) 
                     break;
-                 case "downLin":
-
+                 case "isOnSell":
+                    
+                    this.batchPublish(row, row.isPublish) 
                     break;
                 case "stick":
                     this.batchTop(row)    
@@ -312,41 +335,37 @@ export default {
   text-align: left;
 } */
 
-#content-table-list .el-table .has-gutter th {
-    padding: 0;
-    height: 32px;
-    background: #00c1de !important;
-}
 
-#content-table-list .el-table th > .cell {
+
+#table-list .el-table th > .cell {
     color: #fff;
     font-weight: 400;
     font-size: 12px;
 }
-#content-table-list .el-table .el-table__row {
+#table-list .el-table .el-table__row {
     height: 60px;
 }
-#content-table-list
+#table-list
     .el-pagination.is-background
     .el-pager
     li:not(.disabled).active {
     background-color: #01c0de;
 }
-#content-table-list .el-pagination .el-pagination__total {
+#table-list .el-pagination .el-pagination__total {
     color: #8c8c8c;
 }
-#content-table-list .el-pager li {
+#table-list .el-pager li {
     font-weight: 400;
     color: #252525;
     background-color: #fff;
     border: 1px solid rgba(229, 229, 229, 1);
 }
-#content-table-list .el-pager .active {
+#table-list .el-pager .active {
     background-color: #01c0de;
     color: #fff;
 }
 
-#content-table-list .el-carousel__item.is-animating {
+#table-list .el-carousel__item.is-animating {
     display: flex;
     align-items: center;
     justify-content: center;

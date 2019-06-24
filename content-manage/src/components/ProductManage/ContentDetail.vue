@@ -16,7 +16,7 @@
                     <el-col :span="13" :offset="3" style=" font-size: 22px;">新增产品</el-col>
                     <el-col :span="6">
                         <div class="article-btn">
-                            <button>返回</button>
+                            <button  @click="()=>$router.go(-1)">返回</button>
                             <button>预览</button>
                             <button @click="submitForm">保存</button>
                         </div>
@@ -30,7 +30,7 @@
                             <leftContent ref="articleContent" />
                         </el-col>
                         <el-col :span="6" style="margin-left: 16px;">
-                            <RightContent :imageUrl="imageUrl" ref="articleRight" />
+                            <RightContent :fileList="fileList" ref="articleRight" />
                         </el-col>
                     </el-row>
                 </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import * as articleManageApi from "@/api/request/articleManageApi";
+import * as productManageApi from "@/api/request/productManageApi";
 import environment from "@/environment/index.js";
 import RightContent from "./content-detail/RightContent";
 import leftContent from "./content-detail/LeftContent";
@@ -53,7 +53,7 @@ export default {
     },
     data(){
         return {
-            imageUrl:"",
+            fileList:[],
             detailData:{},
         }
     },
@@ -63,12 +63,26 @@ export default {
     },
     methods:{
       submitForm(){
-        let imageUrl = this.$refs.articleRight.imageUrl1;
-        this.$refs.articleContent.submitForm('articleDetail',imageUrl)
+          console.log(this.$refs.articleRight.fileList1)
+        
+        let fileList = this.$refs.articleRight.fileList1.map(item=>{
+            return item.response
+        });
+        this.$refs.articleContent.submitForm('articleDetail',fileList)
       },
         async getArticleDetail(id) {
-            let { data } = await articleManageApi.getArticleDetail(id);
-            this.imageUrl =  data.pictureUrl;
+            let { data } = await productManageApi.getProductDetail(id);
+            let thumbnailPicUrlList = data.thumbnailPicUrlList;
+            
+            thumbnailPicUrlList.forEach(item => {
+                this.fileList.push({
+                    name:"123",
+                    response:item
+                })
+            })
+            console.log(this.fileList)
+
+
            
         },
      

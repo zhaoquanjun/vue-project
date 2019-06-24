@@ -45,9 +45,10 @@
                 </span>
             </div>
             <div class="head-item head-right">
-                <span class="upload-wrap" @click="switchUploadBoxShowStatus">
-                    <svg-icon icon-class="upload-img"></svg-icon>
-                </span>
+                <el-button class="upload-wrap" @click="switchUploadBoxShowStatus">
+                    <!-- <svg-icon icon-class="upload-img"></svg-icon> -->
+                    上传图片
+                </el-button>
             </div>
         </template>
         <template v-else>
@@ -57,10 +58,12 @@
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <el-button style="margin:0 16px" size="small" @click="batchMove">
-                    <svg-icon icon-class="tab-moved"></svg-icon>
+                    <!-- <svg-icon icon-class="tab-moved"></svg-icon> -->
+                    移动
                 </el-button>
                 <el-button size="small" @click="batchDelete">
-                    <svg-icon icon-class="l-recyclebin"></svg-icon>
+                    <!-- <svg-icon icon-class="l-recyclebin"></svg-icon> -->
+                    删除
                 </el-button>
             </div>
         </template>
@@ -190,14 +193,24 @@ export default {
 .head-middle {
     float: right;
 }
-.upload-wrap {
+// .upload-wrap {
+//     margin-right: 25px;
+//     cursor: pointer;
+//     display: inline-block;
+//     width: 45px;
+//     height: 32px;
+//     line-height: 32px;
+//     text-align: center;
+//     background: #00c1de;
+// }
+.upload-wrap{
     margin-right: 25px;
     cursor: pointer;
     display: inline-block;
-    width: 45px;
-    height: 32px;
-    line-height: 32px;
     text-align: center;
     background: #00c1de;
+    color: #fff;
+    font-weight: 400;
 }
+  
 </style>
