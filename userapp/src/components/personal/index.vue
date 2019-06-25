@@ -97,7 +97,7 @@
                         <button v-else>未绑定</button>
                          |
                         <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button> 
-                        <button v-else @click="_bindingWeixin">绑定</button>
+                        <button v-else @click="_bindingWeixin(WeChatUser.provider)">绑定</button>
                     </span>
                 </div>
             </li>
@@ -114,7 +114,7 @@
                     <button v-else>未绑定</button>
                         |
                     <button v-if="DingDingUser" @click="modifiDing(DingDingUser.provider)">解绑</button> 
-                    <button v-else @click="modifiDing">绑定</button>
+                    <button v-else @click="modifiDing(WeChatUser.provider)">绑定</button>
                 </div>
             </li>
             <li>
@@ -144,7 +144,7 @@
             <component :is="curComponent" :sourcePhone="userInfo.phoneNumber" :provider="CurrentProvider" 
             @removeExternalUserAsync="_removeExternalUserAsync" 
             @updateWeiXinHtml="updateWeiXinHtml" 
-            :weixinHtml="weixinHtml"></component>
+            :weixinHtml="weixinHtml" :weChatJsLogin="weChatJsLogin"></component>
         </right-pannel>
          <el-dialog
                 width="0"
@@ -167,7 +167,7 @@ import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
 import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import { getUserProfile,getExternalUserInfo,removeExternalUser } from "@/api/index.js"; 
+import { getUserProfile,getExternalUserInfo,removeExternalUser,getWeChatJsLoginParams } from "@/api/index.js"; 
 import { updateUserName } from "@/api/index.js";
     export default {
         data() {
@@ -181,6 +181,7 @@ import { updateUserName } from "@/api/index.js";
                 WeChatUser: null,
                 AlipayUser: null,
                 DingDingUser: null,
+                WeChatJsLogin:null,
                 CurrentProvider:"",
                 weixinHtml:"",
             };
@@ -196,6 +197,7 @@ import { updateUserName } from "@/api/index.js";
         created() {
             this._getUserProfileAsync();
             this._getExternalUserAsync();
+            this._getWeChatJsLoginParams();
         },
         methods: {
             ...mapMutations(["ISRIGHTPANNELSHOW"]),
@@ -223,7 +225,10 @@ import { updateUserName } from "@/api/index.js";
                     });
                 }
             },
-
+            async _getWeChatJsLoginParams(){
+                let { data } = await getWeChatJsLoginParams();
+                this.WeChatJsLogin = data;
+            },
             async _removeExternalUserAsync(provider){
                 let { data } = await removeExternalUser(provider);
                 if(data == "true"){

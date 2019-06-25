@@ -225,3 +225,11 @@ export const removeExternalUser = (provider) => {
     }
     return ajaxRequest._delete(`/api/userInfo/RemoveExternalUser/${provider}`, params);
 }
+
+/**
+ * InterfaceAuthor : litao
+ * 获取微信JsLogin参数
+ */
+export const getWeChatJsLoginParams = (provider) => {
+    return ajaxRequest.get('/api/userInfo/GetWeChatJsLoginParams');
+}
