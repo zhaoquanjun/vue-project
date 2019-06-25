@@ -30,6 +30,11 @@ const state = {
     {
       name:"网站设计权1"
     }
-  ]
+  ],
+ 
+  menuList:[],
+  authList:[], 
+  buttonAuth:{},
+  hasRules:false 
 };
 export default state;

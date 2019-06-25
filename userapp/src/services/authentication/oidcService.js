@@ -1,6 +1,5 @@
 import Oidc from 'oidc-client';
 import enbironmemy from "@/environment/index";
-console.log(enbironmemy)
 const config = {
     authority: enbironmemy.authorityUrl,
     client_id: enbironmemy.clientId,

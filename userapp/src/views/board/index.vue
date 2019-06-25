@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import Plugins from '../components/dashboard/plugins';
-import ContentNum from '../components/dashboard/contentNum';
+import Plugins from '@/components/dashboard/plugins';
+import ContentNum from '@/components/dashboard/contentNum';
 import { getUserDashboard } from "@/api/index";
 export default {
   data() {

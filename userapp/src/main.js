@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/reset.css";
 import "./styles/common.scss";
 import './icons'
-
+import { getLocal } from "@/libs/local";
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 //import '@/icons'

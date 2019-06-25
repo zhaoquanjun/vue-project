@@ -17,17 +17,8 @@ router.beforeEach( async (to, from, next) => {
 // to.path 路由表配置  是否需要登录  && 登录 并且检验有权限 ，， 权限为空 只要登录就可以访问 
 //  route配置多个权限 任意一个就可访问  
     if (getLocal("token")) {
-       // to
-         store.dispatch('_getMenuListData').then((data)=>{
-           console.log(data,'0000data')
-          let resourceUrls = data.resourceUrls;
-          if(!resourceUrls.includes('404')){
-              
-          }else{
-            next()
-          }
-         });
-         
+      
+         next()
         
          
     } else {
@@ -51,3 +42,9 @@ router.beforeEach( async (to, from, next) => {
     }
   
   });
+
+
+
+
+
+  

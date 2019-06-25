@@ -1,5 +1,8 @@
 import * as types from "./mutation-types.js"
 import { setLocal } from '@/libs/local'
+let Base64 = require('js-base64').Base64;
+
+
 const mutations = {
    
     /**
@@ -37,9 +40,18 @@ const mutations = {
         setLocal('appid', payload);
     },
     [types.GETVALIDATEMENU](state, payload) {
-
+       // Base64.encode()
+        setLocal('validateMenu',payload);
         state.validateMenu = payload;
+       
         // setLocal('validateMenu', payload);
     },
+    set_menuList(state,m){
+        state.menuList = m;
+      },
+      set_authList(state, a){
+        state.authList = a;
+        state.hasRules = true;
+      },
 };
 export default mutations;
