@@ -37,6 +37,6 @@ if(localStorage.getItem("token")){
     store.commit("GETUSERDASHBOARD", appid)
     store.commit("SET_USER", obj)
   
-    getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
-    getLocal("authList")&& store.commit("set_authList",JSON.parse(getLocal("authList")))
+    // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
+     getLocal("authList")&& store.commit("set_authList",JSON.parse(getLocal("authList")))
 }

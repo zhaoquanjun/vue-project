@@ -43,6 +43,7 @@ export default {
     },
     methods: {
         handleClick() {
+            console.log(this.curItem,'-----')
             this.isHandleBtnShow = false;
             this.isSelectedShow = !this.isSelectedShow;
             this.$emit("handleSelected",this.curItem,this.isSelectedShow)

@@ -14,34 +14,29 @@ const router = new VueRouter({
 export default router;
 
 router.beforeEach(async (to, from, next) => {
-  console.log(to)
   if(!to.meta.requiresAuth){
+    store.dispatch('_getMenuListData')
      next()
     return
   }
-  // if(to.path==="/404" ){
-    // next()
-    // return
-  // }
   if (getLocal("token")) {
          next()
-       
     let r = await store.dispatch('getCurRouteAuth', to.path);
     if (r) {
+      if(store.getters.getMenuList.length<1){
+        await store.dispatch('_getMenuListData')
+      }
       next()
     } else {
-      router.replace('/404')
+     next('/404')
     }
   } else {
- 
     if (to.name !== "callback") {
       securityService.getUser().then(async (data) => {
-
         if (!data) {
           securityService.signIn();
           next()
         } else {
-          console.log(data)
           store.commit("SET_USER", data);
           await store.dispatch('_getUserDashboard')
           await store.dispatch('_getMenuListData')

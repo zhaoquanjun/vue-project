@@ -14,7 +14,7 @@
 export const defaultRoutes = [
   {
     path: "/",
-    redirect: { path: '/system' },
+    redirect: { path: '/board' },
     component: () => import('@/views/board/index.vue'),
   },
   {
@@ -70,7 +70,6 @@ export const defaultRoutes = [
   {
     path: "/system",
     name: 'system',
-   
     component: () => import("@/views/member-manage.vue"),
     meta: {
       title: "",

@@ -17,9 +17,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$router,'00000')
-    console.log(window.location.host)
-    console.log(this.menuList)
+   
   },
   methods: {
     // async skipPage(it) {
@@ -30,14 +28,11 @@ export default {
     //   }
     // }
     handlerRoute(item){
-      console.log(item,'二级菜单')
       let host = window.location.host; // 表示当前接口返回的url => item.menuUrl.split('/')[1]
       // dashboard.console.wezhan.cn
       //host === "localhost:8082"
        let [a,b]= item.menuUrl.split('/')
-       console.log(a,b)
       if(this.curWebsite == a){
-        console.log('dashboard',item.path)
         this.$router.push(item.path)
       }else{
            window.location.href ='//'+ item.menuUrl
