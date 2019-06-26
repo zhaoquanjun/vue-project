@@ -20,7 +20,9 @@
                         type="textarea"
                         :rows="5"
                         placeholder="请输入文章简介"
+                        maxlength="500"
                         v-model="articleDetail.summary"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -106,17 +108,17 @@
             <div class="content-item seo-key">
                 <el-collapse v-model="activeName1" accordion>
                     <el-collapse-item title="搜索引擎优化" name="1">
-                        <el-form-item label="seo标题" prop="metaTitle">
+                        <el-form-item label="SEO标题" prop="metaTitle">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">不填写则默认使用文章标题</div>
                                 <span>
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
                             </el-tooltip>
-                            <el-input placeholder="seo标题" v-model="articleDetail.metaTitle"></el-input>
+                            <el-input placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
                         </el-form-item>
-                        <el-form-item label="seo关键词" prop="metaKeywords">
-                            <el-input placeholder="seo关键词" v-model="articleDetail.metaKeywords"></el-input>
+                        <el-form-item label="SEO关键词" prop="metaKeywords">
+                            <el-input placeholder="SEO关键词" v-model="articleDetail.metaKeywords"></el-input>
                         </el-form-item>
 
                         <el-form-item label="文章描述" prop="metaDescription">
@@ -184,7 +186,7 @@ export default {
             articleDetail: {
                 NewId: "",
                 title: "",
-                categoryId:"",
+                categoryId:0,
                 summary: "",
                 contentDetail: "",
                 searchKeywords: "",
@@ -199,7 +201,7 @@ export default {
                 title: [
                     {
                         required: true,
-                        message: "请输入文章标题（必填）",
+                        message: "请输入文章标题",
                         trigger: "blur"
                     },
                     {
@@ -211,12 +213,12 @@ export default {
                 ],
                 summary:[
                     {
-                        min: 1,
+                        min: 0,
                         max: 500,
-                        message: "长度在 1 到 500 个字符",
+                        message: "长度不得超过 500 个字符",
                         trigger: "blur"
                     }
-                ]
+                ],
             }
         };
     },
@@ -250,7 +252,6 @@ export default {
         },
         // 新建保存
         submitForm(formName,imageUrl) {
-            alert(imageUrl)
             this.articleDetail.pictureUrl = imageUrl;
             console.log(this.title);
             this.$refs[formName].validate(valid => {
