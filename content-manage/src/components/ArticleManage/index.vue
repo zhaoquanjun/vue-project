@@ -22,6 +22,11 @@
                 :article-search-options="articleSearchOptions"
                 @getArticleList="getArticleList"
                 @addArticle="addArticle"
+                @batchMove="batchMoveNews"
+                @batchCopy="batchCopyNews"
+                @batchRemove="batchRemoveNews"
+                @batchTop="batchTopNews"
+                @batchPublish="batchPublishNews"
             ></content-header>
             <el-main>
                 <content-table
@@ -37,7 +42,7 @@
                     @batchPublish="batchPublishNews"
                     @handleEditArticle="handleEditArticle"
                     @moveClassify="moveClassify"
-                     @handleSelectionChange="handleSelectionChange"
+                    @handleSelectionChange="handleSelectionChange"
                 ></content-table>
                 <el-dialog
                     width="0"
@@ -51,7 +56,9 @@
                     @closeRightPanel="closeRightPanel"
                 >
                     <span slot="title-text">移动文章分类</span>
-                    <span slot="cur-name">{{curArticleInfo.categoryName}}</span>
+                    <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
                     <SelectTree
                         :categoryName="curArticleInfo.categoryName"
                         :tree-result="treeResult"
@@ -92,12 +99,13 @@ export default {
             count: 0,
             idsList: [],
             rightPanelType: 1, // 1 移动文章 2 复制文章
+            selectCategory:"",
 
             isInvitationPanelShow: false,
             articleSearchOptions: {
                 title: "",
                 categoryId: 0,
-                orderCondition: 0,
+                newsOrderColumns: "createtime",
                 topStatus: null,
                 publishStatus: null,
                 pageIndex: 1,
@@ -140,6 +148,7 @@ export default {
         },
         // 批量删除
         async batchRemoveNews(idlist) {
+            idlist = idlist == null ? this.idsList : idlist;
             this.$confirm(
                 "删除后，网站中引用的文章列表将不再显示该文章，是否确定删除？",
                 "提示",
@@ -177,6 +186,7 @@ export default {
         },
         // 批量置顶
         async batchTopNews(idlist, isTop) {
+            idlist = idlist == null ? this.idsList : idlist;
             var message = "置顶";
             if (isTop) message = "取消置顶";
             this.$confirm("您确定要" + message + "文章吗？", "提示", {
@@ -209,6 +219,7 @@ export default {
         },
         // 批量上下线
         async batchPublishNews(idlist, isPublish) {
+            idlist = idlist == null ? this.idsList : idlist;
             var message = "上线";
             if (isPublish) message = "下线";
             this.$confirm("您确认要" + message + "文章吗？", "提示", {
@@ -244,12 +255,14 @@ export default {
         },
         // 批量移动分类
         async batchMoveNews(idlist) {
+            idlist = idlist == null ? this.idsList : idlist;
             this.isInvitationPanelShow = true;
             this.rightPanelType = 1;
             this.newsIdList = idlist;
         },
         // 批量复制分类
         async batchCopyNews(idlist) {
+            idlist = idlist == null ? this.idsList : idlist;
             this.isInvitationPanelShow = true;
             this.rightPanelType = 2;
             this.newsIdList = idlist;
@@ -354,7 +367,8 @@ export default {
             await articleManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTreeAsync();
         },
-        async batchRemoveCategory(idList) {
+        async batchRemoveCategory(idlist) {
+            idlist = idlist == null ? this.idsList : idlist;
             this.$confirm(
                 "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
                 "提示",
@@ -395,15 +409,22 @@ export default {
             this.imageUrl = data.pictureUrl;
         },
         addArticle() {
-            this.$router.push({
-                path: "/create"
-            });
+            if(this.selectCategory == null){
+                this.$router.push({
+                    path: "/create"
+                });
+            } else{
+                this.$router.push({
+                    path: "/create",
+                    query: { categoryName: this.selectCategory.Label }
+                });
+            }
         },
         handleEditArticle(row) {
             console.log(row);
             this.$router.push({
                 path: "/create",
-                query: { id: row.id }
+                query: { id: row.id, categoryName: row.categoryName }
             });
         }
     }

@@ -71,7 +71,7 @@
 <script>
 let id = 1000;
 export default {
-    props: ["treeResult", "articleSearchOptions", "isrightPannel"],
+    props: ["treeResult", "articleSearchOptions", "isrightPannel", "selectCategory"],
     data() {
         return {
             flag: false,
@@ -252,6 +252,7 @@ export default {
             if (data.isNewAdd) return;
             this.curlabelName = data.label;
             this.articleSearchOptions.categoryId = data.id;
+            this.selectCategory = data;
             this.$emit("getList");
             // 点击其他区域 把当前新增但未确定的节点删除掉
             this.newAddData && this.newAddData.children.shift();

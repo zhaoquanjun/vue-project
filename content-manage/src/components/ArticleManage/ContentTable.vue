@@ -131,15 +131,6 @@ export default {
             this.multipleSelection = val;
             this.$emit("handleSelectionChange",val)
         },
-        getCheckArr() {
-            let checkArr = this.multipleSelection; // multipleSelection存储了勾选到的数据
-            let params = [];
-            let self = this;
-            checkArr.forEach(function(item) {
-                params.push(item.id); // 添加所有需要删除数据的id到一个数组，post提交过去
-            });
-            return params;
-        },
         /**
          * 编辑文章
          */
@@ -168,60 +159,31 @@ export default {
          * 删除操作
          */
         batchRemove(row) {
-            row = this.row;   
-            if (row == null || row == undefined) {
-                var idList = this.getCheckArr();
-                this.$emit("batchRemove", idList);
-            } else {
-                this.$emit("batchRemove", [row.id]);
-            }
+            this.$emit("batchRemove", [row.id]);
         },
         /**
          * 置顶操作
          */
         batchTop(row, isTop) {
-            if (row == null || row == undefined) {
-                var idList = this.getCheckArr();
-                this.$emit("batchTop", idList, isTop);
-            } else {
-                this.$emit("batchTop", [row.id], row.isTop);
-            }
+            this.$emit("batchTop", [row.id], row.isTop);
         },
         /**
          * 上下线操作
          */
         batchPublish(row, isPublish) {
-            if (row == null || row == undefined) {
-                var idList = this.getCheckArr();
-                this.$emit("batchPublish", idList, isPublish);
-            } else {
-                this.$emit("batchPublish", [row.id], row.isPublish);
-            }
+            this.$emit("batchPublish", [row.id], row.isPublish);
         },
         /**
          * 移动分类操作
          */
         batchMove(row) {
-
-            if (row == null || row == undefined) {
-                var idList = this.getCheckArr();
-                this.$emit("batchMove", idList);
-            } else {
-                
-                this.$emit("batchMove", [row.id]);
-            }
+            this.$emit("batchMove", [row.id]);
         },
         /**
          * 复制操作
          */
         batchCopy(row) {
-            if (row == null || row == undefined) {
-                var idList = this.getCheckArr();
-                this.$emit("batchCopy", idList);
-            } else {
-                
-                this.$emit("batchCopy", [row.id]);
-            }
+            this.$emit("batchCopy", [row.id]);
         },
 
         handleMoreOperate(flag){

@@ -22,7 +22,7 @@ export default {
   components: {
     MHeader,
     MAside
-  }
+  },
 };
 </script>
 <style scope>

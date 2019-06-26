@@ -7,7 +7,7 @@
                   @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection" :selectable="handleDisable" ></el-table-column>
-            <el-table-column prop="name" label="姓名" width="180" style="overflow:hidden"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="180"></el-table-column>
             <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
             <el-table-column prop="policies" label="权限数量(项)"></el-table-column>
             <el-table-column prop="remark" label="备注">
@@ -20,8 +20,8 @@
                         style="padding:0"
                         @show="showRemark(scope.row)"
                     >
-                        <span slot="reference" style="overflow:hidden">
-                            {{scope.row.remark}}
+                        <span slot="reference">
+                            <div class="remark-desc">{{scope.row.remark}}</div>
                             <svg-icon icon-class="remark"></svg-icon>
                         </span>
                         <div class="textareaWrap">
@@ -179,7 +179,19 @@ export default {
 }
 #member-table .el-table .cell {
     color: #333;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
 }
+#member-table .el-table .cell .remark-desc{
+        display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 81%;
+}   
 #member-table  .el-checkbox__input.is-checked  .el-checkbox__inner {
     background-color: #00c1de;
     border-color: #00c1de;

@@ -137,11 +137,11 @@ export default {
             statusValue: "",
             orderOptions: [
                 {
-                    orderValue: "1",
+                    orderValue: "CreateTime",
                     orderLabel: "创建时间"
                 },
                 {
-                    orderValue: "2",
+                    orderValue: "Name",
                     orderLabel: "标题"
                 }
             ],

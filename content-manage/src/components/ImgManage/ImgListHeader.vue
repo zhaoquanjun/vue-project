@@ -77,15 +77,15 @@ export default {
             modeSelecte:true,
             options: [
                 {
-                    value: "1",
+                    value: "CreateTime",
                     label: "创建时间"
                 },
                 {
-                    value: "2",
+                    value: "FileSize",
                     label: "文件大小"
                 },
                 {
-                    value: "3",
+                    value: "FileName",
                     label: "文件名"
                 }
             ],
@@ -126,7 +126,7 @@ export default {
     }
 };
 </script>
-<style <style lang="scss" scoped>
+<style  lang="scss" scoped>
 .content-header {
     display: flex;
     align-items: center;
@@ -193,16 +193,6 @@ export default {
 .head-middle {
     float: right;
 }
-// .upload-wrap {
-//     margin-right: 25px;
-//     cursor: pointer;
-//     display: inline-block;
-//     width: 45px;
-//     height: 32px;
-//     line-height: 32px;
-//     text-align: center;
-//     background: #00c1de;
-// }
 .upload-wrap{
     margin-right: 25px;
     cursor: pointer;
