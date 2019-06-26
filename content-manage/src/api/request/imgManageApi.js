@@ -11,7 +11,7 @@ import * as ajaxRequest from "../ajaxRequest";
  * @param {*} option 
  */
 export const getPicList = options => {
-    return ajaxRequest.get(`/api/Picture/${options.pageIndex}/${options.pageSize}`, options);
+    return ajaxRequest.get(`/api/Picture/GetList`, options);
 }
 export const batchRemove = (isDelete, idList) => {
     return ajaxRequest.put(`/api/Picture/ChangeDeleteStatus/${isDelete}`, idList);

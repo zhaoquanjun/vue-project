@@ -11,7 +11,7 @@ import * as ajaxRequest from "../ajaxRequest";
  * @param {*} option 
  */
 export const getProductList = options => {
-    return ajaxRequest.get(`/api/product/${options.pageIndex}/${options.pageSize}`, options);
+    return ajaxRequest.get(`/api/product/GetList`, options);
 }
 
 /**
