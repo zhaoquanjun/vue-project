@@ -28,14 +28,11 @@
                         <div style="float:left">
                             <span style="font-size:12px">分类:</span>
                             <span class="select-sort">
-                                <el-select size="small" v-model="value2" placeholder="请选择">
-                                    <el-option
-                                        v-for="item in options1"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select>
+                                <SelectTree size="small"  placeholder="请选择"
+                                    :categoryName="categoryName"
+                                    :tree-result="treeResult"
+                                    @chooseNode="chooseNode"
+                                />
                             </span>
                         </div>
                         <div style="float:right">
@@ -100,7 +97,7 @@
                                 v-model="articleDetail.searchKeywords"
                             ></el-input>
                         </el-form-item>
-                        <el-form-item label="置頂" prop="delivery">
+                        <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="articleDetail.isTop"></el-switch>
                         </el-form-item>
                     </el-collapse-item>
@@ -150,9 +147,15 @@
 </template>
 <script>
 import * as articleManageApi from "@/api/request/articleManageApi";
+import SelectTree from "@/components/common/SelectTree";
 export default {
+    components: {
+        SelectTree
+    },
     data() {
         return {
+            treeResult: null,
+            categoryName: "全部分类",
             options: [
                 {
                     value: "选项1",
@@ -181,6 +184,7 @@ export default {
             articleDetail: {
                 NewId: "",
                 title: "",
+                categoryId:"",
                 summary: "",
                 contentDetail: "",
                 searchKeywords: "",
@@ -195,13 +199,21 @@ export default {
                 title: [
                     {
                         required: true,
-                        message: "请输入文章标题",
+                        message: "请输入文章标题（必填）",
                         trigger: "blur"
                     },
                     {
                         min: 1,
                         max: 100,
                         message: "长度在 1 到 100 个字符",
+                        trigger: "blur"
+                    }
+                ],
+                summary:[
+                    {
+                        min: 1,
+                        max: 500,
+                        message: "长度在 1 到 500 个字符",
                         trigger: "blur"
                     }
                 ]
@@ -215,12 +227,26 @@ export default {
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
         }
+        this.getTreeAsync();
     },
     methods: {
+        async getTreeAsync() {
+            let { data } = await articleManageApi.getArticleCategory();
+            this.treeResult = data;
+
+            var categoryName = this.$route.query.categoryName;
+            if (categoryName != null || categoryName != undefined) {
+                this.categoryName = categoryName;
+            }
+        },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
             this.articleDetail = data;
             this.articleDetail.NewId = data.id;
+        },
+        //选择移动分类时的节点
+        chooseNode(node) {
+            this.articleDetail.categoryId = node.id;
         },
         // 新建保存
         submitForm(formName,imageUrl) {
@@ -295,7 +321,7 @@ export default {
         background: #fff;
         box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.03);
         margin-bottom: 16px;
-        overflow: hidden;
+        // overflow: hidden;
     }
     .content-title {
         padding-bottom: 20px;
