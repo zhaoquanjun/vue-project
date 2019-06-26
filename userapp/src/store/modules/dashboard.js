@@ -1,8 +1,9 @@
 import { getUserCurrentAppPolicy, getUserDashboard, getSliderMenuList} from "@/api/index"
 import { authRoutes } from "@/router/routes.js";
+import {setLocal} from "@/libs/local"
+
 // 更具后台菜单路由 匹配出 所需要显示的路由
 let getNeedRoutes = auth => {
-
     function r(authRoutes) {
         return authRoutes.filter(route => {
             if (auth.includes(route.name)) {
@@ -19,8 +20,11 @@ let getNeedRoutes = auth => {
 
 // 序列化菜单
 let filterMenuListData = (source) => {
+   
     let cloneData = JSON.parse(JSON.stringify(source));
-    let result = cloneData.filter(father => {
+    let pathArr=[];
+    let result =  cloneData.filter(father => {
+        pathArr.push(father.path)
         let branchArr = cloneData.filter(
             child => father.id == child.parentId
         );
@@ -30,10 +34,13 @@ let filterMenuListData = (source) => {
     let result1 = Object.values(result).sort((c, d) => {
         return c.orderId - d.orderId;
     });
-    return result1;
+    console.log(result1,pathArr)
+    return {result1,pathArr};
+    
 };
 const dashboard = {
     state: {
+        appid:"",
         validateMenu:"",
         menuList:[],
         authList:[], 
@@ -41,7 +48,11 @@ const dashboard = {
         hasRules:false 
     },
     mutations: {
-        [types.GETVALIDATEMENU](state, payload) {
+        GETUSERDASHBOARD(state, payload) {
+            state.appid = payload;
+            setLocal('appid', payload);
+        },
+        GETVALIDATEMENU(state, payload) {
             // Base64.encode()
              setLocal('validateMenu',payload);
              state.validateMenu = payload;
@@ -49,14 +60,14 @@ const dashboard = {
              // setLocal('validateMenu', payload);
          },
          set_menuList(state,m){
-             let v = JSON.parse(state.validateMenu)
-             console.log(v.menuList)
-            state.menuList = filterMenuListData(v);
-           
+            state.menuList = JSON.stringify(m);
+            setLocal("menulist", m)
+
            },
            set_authList(state, a){
-             state.authList = a;
+             state.authList = JSON.stringify(a);
              state.hasRules = true;
+             setLocal("authList", a)
            },
     },
     actions: {
@@ -68,11 +79,10 @@ const dashboard = {
             data && commit("GETUSERDASHBOARD", data.currentAppId)
         },
         async _getMenuListData({ commit }) {
-            let { data } = await getSliderMenuList();
-            let { result, pathArr } = filterMenuListData(data);
+           let { data } = await getSliderMenuList();
+             let { result1, pathArr } = filterMenuListData(data);
             commit('set_menuList', result1);
-          //  commit('set_authList', pathArr);
-            data && commit("GETVALIDATEMENU", data)
+            commit('set_authList', pathArr);
             return data
         },
         async getAuthRoute({ commit, state }) {
@@ -81,15 +91,20 @@ const dashboard = {
             // 当前需要动态添加的路由
             return r;
         },
-        async getCurRouteAuth({ state }, path) {
-            let validateMenu = JSON.parse(state.validateMenu);
-            return validateMenu.menuList.some((item, index, array) => {
-                return `/${item.code}` === path;
+        async getCurRouteAuth({state,getters}, path) {
+              
+            if(!state.authList) return
+            let authList = JSON.parse(state.authList)
+            return authList.some((item, index, array) => {
+                return item === path;
             });
         }
     },
     getters: {
-
+        getMenuList(state){
+            if(!state.menuList) return 
+            return JSON.parse(state.menuList)
+        }
     }
 };
-export default login;
+export default dashboard;

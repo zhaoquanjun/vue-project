@@ -9,7 +9,7 @@ import environment from "@/environment/index.js";
 import store from "@/store/index";
 import router from '@/router/index'
 import securityService from "@/services/authentication/securityService";
-console.log(store)
+console.log(store.state)
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = environment.memberManageApi;
@@ -31,7 +31,7 @@ axios.interceptors.request.use(
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');       
         token && (config.headers.Authorization = "Bearer " + token);
-        config.headers.appid = store.state.appid;
+        config.headers.appid = store.state.dashboard.appid;
         return config;
     },
     error => {

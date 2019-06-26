@@ -10,7 +10,7 @@
             <ul class="left-menu">
                 <li
                     class="left-menu-item"
-                    v-for="(it, i) in menuList"
+                    v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(i)"
                     @click="skipPages(it)"
@@ -22,18 +22,19 @@
                 </li>
             </ul>
         </el-aside>
-     
+     <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
             v-if="isLeftNavComponentsShow"
             :style="{width:width1+'px !important',transition: 'width '+time+' linear',backgroundColor:'#fff',height: '100%'}"
             class="m-asideright"
-            :menuList="menuList[curIndex]"
+           :menuList="menuListChild"
         ></LeftNavComponents>
     </div>
 </template>
 <script>
 import { getSliderMenuList, checkHasRootSkip } from "@/api/index";
 import LeftNavComponents from "../Aside/LeftNavComponents";
+import { mapGetters } from 'vuex';
 
 export default {
     data() {
@@ -50,10 +51,8 @@ export default {
     components: {
         LeftNavComponents
     },
-    created() {
-    },
-    mounted() {
-      // this.getMenuListData();
+    mounted(){
+      
     },
     methods: {
         getMenuListData() {
@@ -68,7 +67,6 @@ export default {
                 // this.menuList = this.treeData(data, "id", "parentId", "children");
             }
         },
-       
         filterMenuListData(source) {
             let cloneData = JSON.parse(JSON.stringify(source));
             let result =  cloneData.filter(father => {
@@ -93,7 +91,8 @@ export default {
             let path = item.menuUrl.split('/')[1]
             console.log(path,`/${item.code}`)
             console.log(this.$router)
-            this.$router.push(`/${item.code}`)
+            if(!item.path){return}
+            this.$router.push(item.path)
         },
         collapseOpen(width, time) {
             this.width = width;
@@ -107,29 +106,30 @@ export default {
         }
     },
     computed: {
+        getMenuList(){
+            console.log(this.$store.getters.getMenuList)
+              if(!this.$store.getters.getMenuList) return
+            return this.$store.getters.getMenuList
+        },
+        menuListChild(){
+            if(!this.getMenuList) return
+            return this.getMenuList[this.curIndex]
+        },
         isLeftNavComponentsShow(){
-            let item = this.menuList[this.curIndex] ;
+             if(!this.$store.getters.getMenuList) return
+            let item = this.$store.getters.getMenuList[this.curIndex] ;
             if(item && item.children){
                 return true
             }else{
                 return false
             }
-           
-            // if(this.menuList[this.curIndex]&& this.menuList[this.curIndex].children.length>0 ){
-
-            // }
-            
-        }
-        // validateMenu() {
-        //     this.getMenuListData();
-        //     return this.$store.state.validateMenu;
-        // }
+        },
+       
     },
-    watch: {
-        // validateMenu() {
-        //    this.getMenuListData();
-        // }
+    watch:{
+       
     }
+   
 };
 </script>
 

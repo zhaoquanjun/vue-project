@@ -6,6 +6,7 @@ import actions from "./actions";
 import * as getters from "./getters";
 import login from "./modules/login";
 import user from "./modules/user";
+import dashboard from "./modules/dashboard"
 import memberManager from "./modules/member-manager";
 import {setLocal,getLocal} from "@/libs/local"
 let Base64 = require('js-base64').Base64;
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
   modules: {
     login,
     user,
-    memberManager
+    memberManager,
+    dashboard,
   },
   state,
   mutations,
@@ -33,5 +35,6 @@ if(localStorage.getItem("token")){
     let appid = getLocal("appid")
     store.commit("GETUSERDASHBOARD", appid)
     store.commit("SET_USER", obj)
-    store.commit("GETVALIDATEMENU",getLocal("validateMenu"))
+    store.commit("set_menuList",JSON.parse(getLocal("menulist")))
+    store.commit("set_authList",JSON.parse(getLocal("authList")))
 }

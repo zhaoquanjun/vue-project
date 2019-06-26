@@ -180,11 +180,7 @@ export default {
             this.$emit("getArticleList");
         },
         changeStatus(value) {
-            this.articleSearchOptions.isOnSell = value;
-            this.getArticleList();
-        },
-        changeTopStatus(value){
-            this.articleSearchOptions.topStatus = value;
+            this.articleSearchOptions.publishStatus = value;
             this.getArticleList();
         },
         changeOrderCondition(value) {
@@ -192,13 +188,12 @@ export default {
             this.getArticleList();
         },
         changeStickStatus(value) {
-            console.log(value, "nullnullnull");
             if (!isNaN(value)) {
                 value = !!value;
             } else {
                 value = null;
             }
-            this.articleSearchOptions.isOnSell = value;
+            this.articleSearchOptions.topStatus = value;
             this.getArticleList();
         },
         switchIsDesc() {
