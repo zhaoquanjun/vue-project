@@ -91,7 +91,7 @@ export default {
             articleSearchOptions: {
                 title: "",
                 categoryId: 0,
-                orderCondition: 0,
+                newsOrderColumns: "createtime",
                 topStatus: null,
                 publishStatus: null,
                 pageIndex: 1,

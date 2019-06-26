@@ -145,15 +145,11 @@ export default {
             topValue: "",
             orderOptions: [
                 {
-                    orderValue: "0",
+                    orderValue: "createtime",
                     orderLabel: "创建时间"
-                },
-                {
-                    orderValue: "1",
-                    orderLabel: "标题"
                 }
             ],
-            orderValue: "0"
+            orderValue: "createtime"
         };
     },
     methods: {
@@ -169,7 +165,7 @@ export default {
             this.getArticleList();
         },
         changeOrderCondition(value) {
-            this.articleSearchOptions.orderCondition = value;
+            this.articleSearchOptions.newsOrderColumns = value;
             this.getArticleList();
         },
         switchIsDesc() {
