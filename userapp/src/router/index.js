@@ -16,7 +16,6 @@ export default router;
 router.beforeEach(async (to, from, next) => {
   console.log(to)
   if(!to.meta.requiresAuth){
-    alert(123)
      next()
     return
   }
@@ -26,8 +25,7 @@ router.beforeEach(async (to, from, next) => {
   // }
   if (getLocal("token")) {
          next()
-         await store.dispatch('_getUserDashboard')
-         await store.dispatch('_getMenuListData')
+       
     let r = await store.dispatch('getCurRouteAuth', to.path);
     if (r) {
       next()
