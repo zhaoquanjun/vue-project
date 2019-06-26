@@ -12,7 +12,7 @@ const actions = {
             data = await getUserDashboard();
         }
         console.log(data);
-        data && commit("GETUSERDASHBOARD", data.lastLoginOutAppId)
+        data && commit("GETUSERDASHBOARD", data.currentAppId)
     }
 };
 export default actions;

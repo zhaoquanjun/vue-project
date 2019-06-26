@@ -81,18 +81,48 @@ export default {
         /**
          * 点击权限配置 "确认" 按钮
          */
-        primary() {
+        async primary() {
             if (this.isBatch) {
-                this._batchUpdateUserPolicy(this.userIds);
+                let { status } = await this._batchUpdateUserPolicy(this.userIds);
+                if (status === 200) {
+                    this.$message({
+                        type: "successed",
+                        message: "保存成功"
+                    });
+                    this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+                } else {
+                    this.$message({
+                        type: "failed",
+                        message: "保存失败"
+                    });
+                }
             } else {
-                console.log(this.memberInfo, '提交');
+                if (this.value != null && this.value.length > 20) {
+                    this.$message({
+                        type: "failed",
+                        message: "备注长度不能超过20个字符!"
+                    });
+                    return false;
+                }
                 let para = {
                     remark: this.value,
                     userId: this.memberInfo.id
                 };
-                this._updateUserPolicy(para);
+                let { status } =await this._updateUserPolicy(para);
+                if (status === 200) {
+                    this.$message({
+                        type: "successed",
+                        message: "保存成功"
+                    });
+                    this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+                } else {
+                    this.$message({
+                        type: "failed",
+                        message: "保存失败"
+                    });
+                }
             }
-             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+            
         },
         cancel(){
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);

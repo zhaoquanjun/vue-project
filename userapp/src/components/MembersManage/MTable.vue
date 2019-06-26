@@ -7,7 +7,7 @@
                   @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection" :selectable="handleDisable" ></el-table-column>
-            <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="180" style="overflow:hidden"></el-table-column>
             <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
             <el-table-column prop="policies" label="权限数量(项)"></el-table-column>
             <el-table-column prop="remark" label="备注">
@@ -20,7 +20,7 @@
                         style="padding:0"
                         @show="showRemark(scope.row)"
                     >
-                        <span slot="reference">
+                        <span slot="reference" style="overflow:hidden">
                             {{scope.row.remark}}
                             <svg-icon icon-class="remark"></svg-icon>
                         </span>

@@ -49,7 +49,7 @@
                 :before-close="handleClose"
             ></el-dialog>
             <right-pannel :style="{width:pannelWidth+'px'}">
-                <span slot="title-text">权限配置</span>
+                <span slot="title-text">{{rightPanelTitle}}</span>
                 <i slot="icon-tip">
                     <svg-icon icon-class="tip-icon"></svg-icon>
                 </i>
@@ -85,6 +85,7 @@ export default {
                 { name: "显示设置", url: "/xx" },
                 { name: "成员列表", url: "/memberManage" }
             ],
+            rightPanelTitle: "权限配置",
             memberPhone: "",
             dialogVisible: true,
             memberInfo: {},
@@ -250,6 +251,7 @@ export default {
          */
         authEdit(data) {
             console.log(data);
+            this.rightPanelTitle = "编辑成员";
             this.ISRIGHTPANNELSHOW(true);
             this._getAppPolicies();
             this._getUserPolicy(data.userId);
