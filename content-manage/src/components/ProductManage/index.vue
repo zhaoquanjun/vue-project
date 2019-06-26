@@ -129,7 +129,7 @@ export default {
     mounted() {
         this.contentTableList();
 
-        this.getTreeAsync();
+        this.getTree();
     },
     computed: {
         isInvitationlWidth() {
@@ -304,7 +304,7 @@ export default {
         /**
          * 获取 tree 结构
          */
-        async getTreeAsync() {
+        async getTree() {
             let { data } = await productCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;

@@ -21,7 +21,7 @@
                         @show="showRemark(scope.row)"
                     >
                         <span slot="reference">
-                            {{scope.row.remark}}
+                            <div class="remark-desc">{{scope.row.remark}}</div>
                             <svg-icon icon-class="remark"></svg-icon>
                         </span>
                         <div class="textareaWrap">
@@ -179,7 +179,19 @@ export default {
 }
 #member-table .el-table .cell {
     color: #333;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
 }
+#member-table .el-table .cell .remark-desc{
+        display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 81%;
+}   
 #member-table  .el-checkbox__input.is-checked  .el-checkbox__inner {
     background-color: #00c1de;
     border-color: #00c1de;

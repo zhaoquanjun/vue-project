@@ -97,7 +97,7 @@
                         <button v-else>未绑定</button>
                          |
                         <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button> 
-                        <button v-else @click="_bindingWeixin">绑定</button>
+                        <button v-else @click="_bindingWeixin(WeChatUser.provider)">绑定</button>
                     </span>
                 </div>
             </li>
@@ -113,8 +113,8 @@
                     <button v-if="DingDingUser">已绑定</button>
                     <button v-else>未绑定</button>
                         |
-                    <button v-if="DingDingUser" @click="modifiDing(DingDingUser.provider)">解绑</button> 
-                    <button v-else @click="modifiDing">绑定</button>
+                    <button v-if="DingDingUser" @click="_untyingDing(DingDingUser.provider)">解绑</button> 
+                    <button v-else @click="_bindingDing(WeChatUser.provider)">绑定</button>
                 </div>
             </li>
             <li>
@@ -133,8 +133,8 @@
                         <button v-if="AlipayUser">已绑定</button>
                         <button v-else>未绑定</button>
                          |
-                        <button v-if="AlipayUser" @click="modifAlipay(AlipayUser.provider)">解绑</button> 
-                        <button v-else @click="modifAlipay(AlipayUser.provider)">绑定</button>
+                        <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button> 
+                        <button v-else @click="_bindingAlipay(AlipayUser.provider)">绑定</button>
                     </span>
                 </div>
             </li>
@@ -144,7 +144,7 @@
             <component :is="curComponent" :sourcePhone="userInfo.phoneNumber" :provider="CurrentProvider" 
             @removeExternalUserAsync="_removeExternalUserAsync" 
             @updateWeiXinHtml="updateWeiXinHtml" 
-            :weixinHtml="weixinHtml"></component>
+            :weixinHtml="weixinHtml" :weChatJsLogin="weChatJsLogin"></component>
         </right-pannel>
          <el-dialog
                 width="0"
@@ -167,7 +167,7 @@ import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
 import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import { getUserProfile,getExternalUserInfo,removeExternalUser } from "@/api/index.js"; 
+import { getUserProfile,getExternalUserInfo,removeExternalUser,getWeChatJsLoginParams } from "@/api/index.js"; 
 import { updateUserName } from "@/api/index.js";
     export default {
         data() {
@@ -181,6 +181,7 @@ import { updateUserName } from "@/api/index.js";
                 WeChatUser: null,
                 AlipayUser: null,
                 DingDingUser: null,
+                WeChatJsLogin:null,
                 CurrentProvider:"",
                 weixinHtml:"",
             };
@@ -196,6 +197,7 @@ import { updateUserName } from "@/api/index.js";
         created() {
             this._getUserProfileAsync();
             this._getExternalUserAsync();
+            this._getWeChatJsLoginParams();
         },
         methods: {
             ...mapMutations(["ISRIGHTPANNELSHOW"]),
@@ -223,7 +225,10 @@ import { updateUserName } from "@/api/index.js";
                     });
                 }
             },
-
+            async _getWeChatJsLoginParams(){
+                let { data } = await getWeChatJsLoginParams();
+                this.WeChatJsLogin = data;
+            },
             async _removeExternalUserAsync(provider){
                 let { data } = await removeExternalUser(provider);
                 if(data == "true"){
@@ -271,15 +276,29 @@ import { updateUserName } from "@/api/index.js";
                 this.curComponent = BindingWeChat;
                 this.ISRIGHTPANNELSHOW(true)
             }, 
-            //钉钉操作
-            modifiDing() { 
-                 console.log(provider);
-                this._removeExternalUserAsync(provider);
+            //钉钉 解绑
+            _untyingDing(provider) { 
+                this.titText="解绑钉钉";
+                this.CurrentProvider=provider;
+                //this.curComponent = UntyingWeChat;
+                this.ISRIGHTPANNELSHOW(true)
             },
-            //支付宝操作
-            modifAlipay(provider) {
-                console.log(provider);
-                this._removeExternalUserAsync(provider);  
+            //钉钉 绑定
+            _bindingDing(provider) { 
+                this.titText="绑定钉钉";
+                this.CurrentProvider=provider;
+            },
+            //支付宝 解绑
+            _untyingAlipay(provider) {
+                this.titText="解绑支付宝";
+                this.CurrentProvider=provider;
+                //this.curComponent = UntyingWeChat;
+                this.ISRIGHTPANNELSHOW(true)
+            },
+            //支付宝 绑定
+            _bindingAlipay(provider) {
+                this.titText="绑定支付宝";
+                this.CurrentProvider=provider;
              },
             setName() {
                 this.flag = false;

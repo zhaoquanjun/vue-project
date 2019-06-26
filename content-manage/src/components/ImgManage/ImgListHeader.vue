@@ -126,7 +126,7 @@ export default {
     }
 };
 </script>
-<style <style lang="scss" scoped>
+<style  lang="scss" scoped>
 .content-header {
     display: flex;
     align-items: center;
