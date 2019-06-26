@@ -77,15 +77,15 @@ export default {
             modeSelecte:true,
             options: [
                 {
-                    value: "1",
+                    value: "CreateTime",
                     label: "创建时间"
                 },
                 {
-                    value: "2",
+                    value: "FileSize",
                     label: "文件大小"
                 },
                 {
-                    value: "3",
+                    value: "FileName",
                     label: "文件名"
                 }
             ],
