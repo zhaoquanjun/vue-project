@@ -225,10 +225,12 @@ import { updateUserName } from "@/api/index.js";
                     });
                 }
             },
+            //获取微信Js相关参数
             async _getWeChatJsLoginParams(){
                 let { data } = await getWeChatJsLoginParams();
                 this.WeChatJsLogin = data;
             },
+            //解绑第三方账号
             async _removeExternalUserAsync(provider){
                 let { data } = await removeExternalUser(provider);
                 if(data == "true"){
@@ -269,6 +271,7 @@ import { updateUserName } from "@/api/index.js";
                 this.curComponent = UntyingWeChat;
                 this.ISRIGHTPANNELSHOW(true)
             },
+            //绑定微信
             _bindingWeixin(provider){
                 this.titText="绑定微信";
                 this.weixinHtml="绑定微信" +new Date;
