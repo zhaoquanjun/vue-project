@@ -13,6 +13,7 @@
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @update="updateCategory"
+                @getProList="contentTableList"
                 @modifyNode="modifyNodeCategory"
             ></category-tree>
         </el-aside>
