@@ -28,6 +28,16 @@ export const defaultRoutes = [
     }
   },
   {
+    path: "/aaa",
+    name: 'aaa',
+    component: () => import('@/views/board/index.vue'),
+    meta: {
+      title: "控制台首页",
+      requiresAuth: false,
+      requiresRole: {},
+    }
+  },
+  {
     path: "/website",
     name: "website",
     component: website,

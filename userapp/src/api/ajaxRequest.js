@@ -9,6 +9,7 @@ import environment from "@/environment/index.js";
 import store from "@/store/index";
 import router from '@/router/index'
 import securityService from "@/services/authentication/securityService";
+console.log(store)
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = environment.memberManageApi;

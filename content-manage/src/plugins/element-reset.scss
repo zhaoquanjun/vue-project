@@ -9,12 +9,11 @@
     align-items: center;
 }
 .el-table .el-table__body-wrapper .el-table__row .cell span{
-    display: inline-block;
+    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 81%;
-   
+    display: block;
    
 }
 /* table 头部颜色 和 高度 */

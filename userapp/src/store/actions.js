@@ -1,6 +1,7 @@
 
 import { getUserCurrentAppPolicy, getUserDashboard, getSliderMenuList} from "@/api/index"
 import { authRoutes } from "@/router/routes.js";
+
 let getNeedRoutes = auth => {
 
   function r(authRoutes) {
@@ -65,13 +66,15 @@ const actions = {
         }
         console.log(data);
         //currentAppId
-        data && commit("GETUSERDASHBOARD", data.lastLoginOutAppId)
+        data && commit("GETUSERDASHBOARD", data.currentAppId)
     },
 
 
     async _getMenuListData({ commit }) {
       let { data } = await getSliderMenuList();
       let {result, pathArr } = filterMenuListData(data);
+
+      
       commit('set_menuList',result);
       commit('set_authList',pathArr);
       data && commit("GETVALIDATEMENU", data)
@@ -82,6 +85,17 @@ const actions = {
       let r = getNeedRoutes(state.authList);
       // 当前需要动态添加的路由
       return r;
+    },
+    async getCurRouteAuth({state},path){
+        console.log(path,'pathpathpath')
+        let validateMenu =JSON.parse(state.validateMenu);
+        console.log(validateMenu)
+
+       
+       return validateMenu.menuList.some( ( item, index, array ) =>{ 
+           
+            return `/${item.code}`=== path; 
+        });
     }
 };
 export default actions;
