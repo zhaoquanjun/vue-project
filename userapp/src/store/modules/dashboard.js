@@ -21,7 +21,7 @@ let getNeedRoutes = auth => {
 // 序列化菜单
 let filterMenuListData = (source) => {
    
-    let cloneData = JSON.parse(JSON.stringify(source));
+    let cloneData = source;
     let pathArr=[];
     let result =  cloneData.filter(father => {
         pathArr.push(father.path)
