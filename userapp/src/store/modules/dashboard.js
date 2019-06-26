@@ -70,8 +70,8 @@ const dashboard = {
         async _getMenuListData({ commit }) {
             let { data } = await getSliderMenuList();
             let { result, pathArr } = filterMenuListData(data);
-            commit('set_menuList', result);
-            commit('set_authList', pathArr);
+            commit('set_menuList', result1);
+          //  commit('set_authList', pathArr);
             data && commit("GETVALIDATEMENU", data)
             return data
         },

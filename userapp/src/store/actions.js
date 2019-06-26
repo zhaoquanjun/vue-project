@@ -24,37 +24,38 @@ let filterMenuListData = (data) =>{
   //     filterList.push(it);
   //   }
   // });
-  let pathArr = [];
-  data.menuList
-      .sort((a, b) => {
-          return a.parentId - b.parentId;
-      })
-      .map((it, i) => {
-          pathArr.push(it.code);
-          //   debugger;
-          if (obj[it.parentId]) {
-              obj[it.parentId].children =
-                  obj[it.parentId].children &&
-                  obj[it.parentId].children.length
-                      ? obj[it.parentId].children
-                      : [];
-              obj[it.parentId].children.push(it);
-              obj[it.parentId].children.sort((v, k) => {
-                  return v.orderId - k.orderId;
-              });
-          } else {
-              if (it.parentId == 0) {
-                  obj[it.id] = it;
-              } else {
-                  filterList.push(it);
-              }
-          }
-      });
-  let result = Object.values(obj).sort((c, d) => {
-      return c.orderId - d.orderId;
-  });
-
-  return { result, pathArr };
+    let pathArr = [];
+    
+  //      data.menuList.sort((a, b) => {
+  //          return a.parentId - b.parentId;
+  //      })
+  //          .map((it, i) => {
+  //              pathArr.push(it.code);
+  //              //   debugger;
+  //              if (obj[it.parentId]) {
+  //                  obj[it.parentId].children =
+  //                      obj[it.parentId].children &&
+  //                          obj[it.parentId].children.length
+  //                          ? obj[it.parentId].children
+  //                          : [];
+  //                  obj[it.parentId].children.push(it);
+  //                  obj[it.parentId].children.sort((v, k) => {
+  //                      return v.orderId - k.orderId;
+  //                  });
+  //              } else {
+  //                  if (it.parentId == 0) {
+  //                      obj[it.id] = it;
+  //                  } else {
+  //                      filterList.push(it);
+  //                  }
+  //              }
+  //          });
+   
+  //let result = Object.values(obj).sort((c, d) => {
+  //    return c.orderId - d.orderId;
+  //});
+    let result = {};
+    return{ result, pathArr };
 };
 
 const actions = {
@@ -88,14 +89,14 @@ const actions = {
     },
     async getCurRouteAuth({state},path){
         console.log(path,'pathpathpath')
-        let validateMenu =JSON.parse(state.validateMenu);
-        console.log(validateMenu)
+        //let validateMenu =JSON.parse(state.validateMenu);
+        //console.log(validateMenu)
 
        
-       return validateMenu.menuList.some( ( item, index, array ) =>{ 
+      // return validateMenu.menuList.some( ( item, index, array ) =>{ 
            
-            return `/${item.code}`=== path; 
-        });
+        return true;//`/${item.code}`=== path; 
+       // });
     }
 };
 export default actions;

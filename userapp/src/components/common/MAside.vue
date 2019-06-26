@@ -53,7 +53,7 @@ export default {
     created() {
     },
     mounted() {
-       this.getMenuListData();
+      // this.getMenuListData();
     },
     methods: {
         getMenuListData() {

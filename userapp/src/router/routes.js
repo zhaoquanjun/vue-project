@@ -74,7 +74,7 @@ export const defaultRoutes = [
     component: () => import("@/views/member-manage.vue"),
     children: [
       {
-        path: "/role",
+      path: "/system/role",
         name: "role",
         component: () => import("@/views/member-manage.vue"),
         meta: {
