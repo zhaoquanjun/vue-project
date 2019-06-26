@@ -37,8 +37,8 @@ export default {
        let [a,b]= item.menuUrl.split('/')
        console.log(a,b)
       if(this.curWebsite == a){
-        
-        this.$router.push(item.code)
+        console.log('dashboard',item.path)
+        this.$router.push(item.path)
       }else{
            window.location.href ='//'+ item.menuUrl
       }
