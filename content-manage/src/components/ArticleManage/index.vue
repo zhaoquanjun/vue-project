@@ -53,7 +53,7 @@
                 ></el-dialog>
                 <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
-                    @closeRightPanel="closeRightPanel"
+                    @closeRightPanel="cancelUpdateCategory"
                 >
                     <span slot="title-text">移动文章分类</span>
                     <div class="category-content">
