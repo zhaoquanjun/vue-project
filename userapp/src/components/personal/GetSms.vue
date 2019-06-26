@@ -87,7 +87,7 @@ export default {
                     // }
                     callback();
                 } else {
-                    return callback(new Error("请输入正确的手机号"));
+                    return callback(new Error("您输入的手机号格式有误,请重新输入"));
                 }
             }
         };
