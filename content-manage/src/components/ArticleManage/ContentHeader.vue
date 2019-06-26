@@ -5,7 +5,7 @@
                 <el-input
                     size="small"
                     v-model="articleSearchOptions.title"
-                    placeholder="请输入名称或ID进行精准查询"
+                    placeholder="请输入文章标题搜索"
                     class="input-with-select"
                 >
                
@@ -71,8 +71,8 @@
                     </span>
                 </div>
                 <div class="head-item head-handle-btn">
-                    <button @click="importArticle">导入产品</button>
-                    <button class="add-article" @click="addArticle">新增产品</button>
+                    <!-- <button @click="importArticle">导入文章</button> -->
+                    <button class="add-article" @click="addArticle">新增文章</button>
                 </div>
             </div>
         </template>
@@ -81,13 +81,13 @@
             <div class="bach-header">
                 <span>
                     已选
-                    <i>{{count}}</i> 个产品
+                    <i>{{count}}</i> 个文章
                 </span>
                <div style="float:right">
-                    <el-button size="small" @click="batchPublish(3, false)">上线</el-button>
-                <el-button size="small" @click="batchPublish(3, true)">下线</el-button>
+                    <el-button size="small" @click="batchPublish(false)">上线</el-button>
+                <el-button size="small" @click="batchPublish(true)">下线</el-button>
                 <el-button size="small" @click="batchCopy">复制</el-button>
-                <el-button style="margin-right: 10px;" size="small" @click="batchRemove(1,true)">删除</el-button>
+                <el-button style="margin-right: 10px;" size="small" @click="batchRemove">删除</el-button>
                 <el-dropdown trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
                         <el-button size="small"> <svg-icon icon-class="across-dot"></svg-icon></el-button>
@@ -101,7 +101,7 @@
                         <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
                         <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
                         <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
-                        <el-dropdown-item command="permission">访问权限</el-dropdown-item>
+                        <!-- <el-dropdown-item command="permission">访问权限</el-dropdown-item> -->
                     </el-dropdown-menu>
                 </el-dropdown>
                </div>
@@ -118,7 +118,7 @@
 </template>
 <script>
 export default {
-    props: ["articleSearchOptions", "isBatchHeaderShow", "count", "idsList"],
+    props: ["articleSearchOptions", "isBatchHeaderShow", "count"],
     data() {
         return {
             statusOptions: [
@@ -153,15 +153,11 @@ export default {
             topValue: "",
             orderOptions: [
                 {
-                    orderValue: "1",
+                    orderValue: "createtime",
                     orderLabel: "创建时间"
-                },
-                {
-                    orderValue: "2",
-                    orderLabel: "标题"
                 }
             ],
-            orderValue: "1",
+            orderValue: "createtime",
             topOptions: [
                 {
                     orderValue: "",
@@ -184,25 +180,20 @@ export default {
             this.$emit("getArticleList");
         },
         changeStatus(value) {
-            this.articleSearchOptions.isOnSell = value;
-            this.getArticleList();
-        },
-        changeTopStatus(value){
-            this.articleSearchOptions.topStatus = value;
+            this.articleSearchOptions.publishStatus = value;
             this.getArticleList();
         },
         changeOrderCondition(value) {
-            this.articleSearchOptions.orderByType = value;
+            this.articleSearchOptions.newsOrderColumns = value;
             this.getArticleList();
         },
         changeStickStatus(value) {
-            console.log(value, "nullnullnull");
             if (!isNaN(value)) {
                 value = !!value;
             } else {
                 value = null;
             }
-            this.articleSearchOptions.isOnSell = value;
+            this.articleSearchOptions.topStatus = value;
             this.getArticleList();
         },
         switchIsDesc() {
@@ -223,37 +214,22 @@ export default {
 
         //////批量操作
         // 批量 上下架
-        batchPublish(type, flag) {
-            let options = {
-                switchType: type,
-                flag: flag,
-                idList: this.idsList
-            };
-            this.$emit("batchSwitchStatus", options);
+        batchPublish(flag) {
+            this.$emit("batchPublish", null, flag);
         },
         //批量删除
-        batchRemove(type, flag) {
-            let options = {
-                switchType: type,
-                flag: flag,
-                idList: this.idsList
-            };
-            this.$emit("batchSwitchStatus", options);
+        batchRemove() {
+            this.$emit("batchRemove");
         },
 
         // 批量置顶 or 取消置顶
-        batchTop(type, flag) {
-            let options = {
-                switchType: type,
-                flag: flag,
-                idList: this.idsList
-            };
-            this.$emit("batchSwitchStatus", options);
+        batchTop(flag) {
+            this.$emit("batchTop", null, flag);
         },
 
         // 批量分类设置 移动  ok
         batchclassifySet() {
-            this.$emit("batchMove", "batchmove");
+            this.$emit("batchMove");
         },
         // 批量设置访问权限
         batchViewAuth() {
@@ -261,7 +237,7 @@ export default {
         },
         // 批量复制
         batchCopy() {
-            this.$emit("batchMove", "batchCopy");
+            this.$emit("batchCopy");
         },
         handleCommand(command) {
            switch (command){
@@ -269,10 +245,10 @@ export default {
                    this.batchclassifySet();
                    break;
                 case "top" :
-                   this.batchTop(2, false);
+                   this.batchTop(false);
                     break;
                 case "cancelTop" :
-                    this.batchTop(2, true);
+                    this.batchTop(true);
                      break;
                 case "permission":
                     this.batchViewAuth()

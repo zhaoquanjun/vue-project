@@ -113,8 +113,8 @@
                     <button v-if="DingDingUser">已绑定</button>
                     <button v-else>未绑定</button>
                         |
-                    <button v-if="DingDingUser" @click="modifiDing(DingDingUser.provider)">解绑</button> 
-                    <button v-else @click="modifiDing(WeChatUser.provider)">绑定</button>
+                    <button v-if="DingDingUser" @click="_untyingDing(DingDingUser.provider)">解绑</button> 
+                    <button v-else @click="_bindingDing(WeChatUser.provider)">绑定</button>
                 </div>
             </li>
             <li>
@@ -133,8 +133,8 @@
                         <button v-if="AlipayUser">已绑定</button>
                         <button v-else>未绑定</button>
                          |
-                        <button v-if="AlipayUser" @click="modifAlipay(AlipayUser.provider)">解绑</button> 
-                        <button v-else @click="modifAlipay(AlipayUser.provider)">绑定</button>
+                        <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button> 
+                        <button v-else @click="_bindingAlipay(AlipayUser.provider)">绑定</button>
                     </span>
                 </div>
             </li>
@@ -225,10 +225,12 @@ import { updateUserName } from "@/api/index.js";
                     });
                 }
             },
+            //获取微信Js相关参数
             async _getWeChatJsLoginParams(){
                 let { data } = await getWeChatJsLoginParams();
                 this.WeChatJsLogin = data;
             },
+            //解绑第三方账号
             async _removeExternalUserAsync(provider){
                 let { data } = await removeExternalUser(provider);
                 if(data == "true"){
@@ -269,6 +271,7 @@ import { updateUserName } from "@/api/index.js";
                 this.curComponent = UntyingWeChat;
                 this.ISRIGHTPANNELSHOW(true)
             },
+            //绑定微信
             _bindingWeixin(provider){
                 this.titText="绑定微信";
                 this.weixinHtml="绑定微信" +new Date;
@@ -276,15 +279,29 @@ import { updateUserName } from "@/api/index.js";
                 this.curComponent = BindingWeChat;
                 this.ISRIGHTPANNELSHOW(true)
             }, 
-            //钉钉操作
-            modifiDing() { 
-                 console.log(provider);
-                this._removeExternalUserAsync(provider);
+            //钉钉 解绑
+            _untyingDing(provider) { 
+                this.titText="解绑钉钉";
+                this.CurrentProvider=provider;
+                //this.curComponent = UntyingWeChat;
+                this.ISRIGHTPANNELSHOW(true)
             },
-            //支付宝操作
-            modifAlipay(provider) {
-                console.log(provider);
-                this._removeExternalUserAsync(provider);  
+            //钉钉 绑定
+            _bindingDing(provider) { 
+                this.titText="绑定钉钉";
+                this.CurrentProvider=provider;
+            },
+            //支付宝 解绑
+            _untyingAlipay(provider) {
+                this.titText="解绑支付宝";
+                this.CurrentProvider=provider;
+                //this.curComponent = UntyingWeChat;
+                this.ISRIGHTPANNELSHOW(true)
+            },
+            //支付宝 绑定
+            _bindingAlipay(provider) {
+                this.titText="绑定支付宝";
+                this.CurrentProvider=provider;
              },
             setName() {
                 this.flag = false;

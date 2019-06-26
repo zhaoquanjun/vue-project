@@ -9,7 +9,7 @@
                 </el-row>
                 <el-form-item label prop="name">
                     <el-input
-                        placeholder="请输入文章标题（必填）"
+                        placeholder="请输入产品标题（必填）"
                         v-model="detailData.name"
                         maxlength="100"
                         show-word-limit
@@ -19,7 +19,7 @@
                     <el-input
                         type="textarea"
                         :rows="5"
-                        placeholder="请输入文章简介"
+                        placeholder="请输入产品简介"
                         v-model="detailData.description"
                     ></el-input>
                 </el-form-item>
@@ -57,21 +57,21 @@
             <div class="content-item">
                 <el-row>
                     <el-col :span="24">
-                        <div class="content-title">文章详情</div>
+                        <div class="content-title">产品详情</div>
                     </el-col>
                 </el-row>
                 <el-form-item label prop="contentDetail">
                     <el-input
                         type="textarea"
                         :rows="10"
-                        placeholder="请输入文章详情"
+                        placeholder="请输入产品详情"
                         v-model="detailData.detailContent"
                     ></el-input>
                 </el-form-item>
             </div>
             <div class="content-item set-article">
                 <el-collapse v-model="activeName" accordion>
-                    <el-collapse-item title="文章设置" name="1">
+                    <el-collapse-item title="产品设置" name="1">
                         <el-form-item label="时间">
                             <el-col :span="11">
                                 <el-form-item prop="createTime">
@@ -88,7 +88,7 @@
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
-                                    <br>结果更加准确，一篇文章最多可以设置5个关键词
+                                    <br>结果更加准确，一篇产品最多可以设置5个关键词
                                 </div>
                                 <span>
                                     <svg-icon icon-class="tip-icon"></svg-icon>
@@ -123,7 +123,7 @@
                     <el-collapse-item title="搜索引擎优化" name="1">
                         <el-form-item label="seo标题" prop="searchKeyword">
                             <el-tooltip class="item" effect="dark" placement="right">
-                                <div slot="content">不填写则默认使用文章标题</div>
+                                <div slot="content">不填写则默认使用产品标题</div>
                                 <span>
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
@@ -134,7 +134,7 @@
                             <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input>
                         </el-form-item>
 
-                        <el-form-item label="文章描述" prop="seoDescription">
+                        <el-form-item label="产品描述" prop="seoDescription">
                             <el-input
                                 type="textarea"
                                 :rows="5"
@@ -255,7 +255,7 @@ export default {
                 name: [
                     {
                         required: true,
-                        message: "请输入文章标题",
+                        message: "请输入产品标题",
                         trigger: "blur"
                     },
                     {
@@ -327,7 +327,7 @@ export default {
                 }
             });
         },
-        //编辑保存文章
+        //编辑保存产品
         async saveArticle() {
             let { status, data } = await articleManageApi.editArticle(
                 this.articleDetail
