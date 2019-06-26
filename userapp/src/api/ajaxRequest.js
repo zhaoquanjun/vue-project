@@ -6,9 +6,10 @@ import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import { getLocal } from "@/libs/local.js";
 import environment from "@/environment/index.js";
-import store  from "@/store/state";
-
-
+import store from "@/store/index";
+import router from '@/router/index'
+import securityService from "@/services/authentication/securityService";
+console.log(store)
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = environment.memberManageApi;
@@ -25,14 +26,12 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 // 请求拦截器
 axios.interceptors.request.use(
-    config => {
+    config =>{
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-        const token = getLocal('token');
-    
+        const token = getLocal('token');       
         token && (config.headers.Authorization = "Bearer " + token);
-        console.log(store.appid,'appid');
-        config.headers.appid = store.appid;
+        config.headers.appid = store.state.appid;
         return config;
     },
     error => {
@@ -42,7 +41,6 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
-        console.log(response)
         if (response.status === 200) {
             return Promise.resolve(response);
         } else {
@@ -51,7 +49,6 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
-        console.log(error,'999999')
         let status = error.response.status;
         if (error.response.status) {
             switch (error.response.status) {
@@ -60,17 +57,21 @@ axios.interceptors.response.use(
                 // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                 case 401:
                     // alert('404')
+                    // store.commit("SET_USER")
+                    // window.localStorage.clear()
+                    // securityService.signIn();
                     break;
                 // 403 token过期                
                 // 登录过期对用户进行提示                
                 // 清除本地token和清空vuex中token对象                
                 // 跳转登录页面                
                 case 403:
-                    // alert('403')
+                    alert('403')
                     break;
                 // 404请求不存在                
                 case 404:
                     // alert('404')
+                    router.push({ path: '/404' })
                     break;
                 // 其他错误，直接抛出错误提示                
                 default:

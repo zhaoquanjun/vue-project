@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 Vue.use(Vuex);
 
-import {setLocal} from '@/libs/local'
+import {setLocal,removeLocal} from '@/libs/local'
 const store =  new Vuex.Store({
   state: {
     accessToken: { Authorization: '' },

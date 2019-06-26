@@ -196,7 +196,7 @@ export const getUserDashboard = () => {
  * @method GET
  */
 export const getSliderMenuList = () => {
-    return ajaxRequest.get('/api/appinfo/GetAppsMenuResource')
+    return ajaxRequest.get('/api/appinfo/GetAppMenusByUserId')
 }
 
 /**
@@ -224,4 +224,12 @@ export const removeExternalUser = (provider) => {
         provider: provider
     }
     return ajaxRequest._delete(`/api/userInfo/RemoveExternalUser/${provider}`, params);
+}
+
+/**
+ * InterfaceAuthor : litao
+ * 获取微信JsLogin参数
+ */
+export const getWeChatJsLoginParams = (provider) => {
+    return ajaxRequest.get('/api/userInfo/GetWeChatJsLoginParams');
 }

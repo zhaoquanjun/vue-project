@@ -27,8 +27,6 @@ class SecurityService {
       : oidcMgr.signinRedirect()
   }
   signOut() {
-    globalAuthData.isAuthenticated = false
-    globalAuthData.token = ''
     oidcMgr.signoutRedirect().then(function(resp) {
       console.log('signed out', resp)
     }).catch(function(err) {

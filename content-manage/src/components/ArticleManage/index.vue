@@ -17,6 +17,8 @@
         </el-aside>
         <el-main>
             <content-header
+                :count="count"
+                :is-batch-header-show="isBatchHeaderShow"
                 :article-search-options="articleSearchOptions"
                 @getArticleList="getArticleList"
                 @addArticle="addArticle"
@@ -35,6 +37,7 @@
                     @batchPublish="batchPublishNews"
                     @handleEditArticle="handleEditArticle"
                     @moveClassify="moveClassify"
+                     @handleSelectionChange="handleSelectionChange"
                 ></content-table>
                 <el-dialog
                     width="0"
@@ -48,7 +51,9 @@
                     @closeRightPanel="closeRightPanel"
                 >
                     <span slot="title-text">移动文章分类</span>
-                    <span slot="cur-name">{{curArticleInfo.categoryName}}</span>
+                    <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
                     <SelectTree
                         :categoryName="curArticleInfo.categoryName"
                         :tree-result="treeResult"
@@ -86,7 +91,10 @@ export default {
             curArticleInfo: "",
             moveToClassiFy: "",
             newsIdList: "",
+            count: 0,
+            idsList: [],
             rightPanelType: 1, // 1 移动文章 2 复制文章
+
             isInvitationPanelShow: false,
             articleSearchOptions: {
                 title: "",
@@ -107,9 +115,25 @@ export default {
     computed: {
         isInvitationlWidth() {
             return this.isInvitationPanelShow === true ? 331 : 0;
+        },
+        isBatchHeaderShow() {
+            console.log(this.idsList)
+            return this.idsList.length > 1 ? true : false;
         }
     },
     methods: {
+        /**
+         * 获取多选的列表
+         */
+        handleSelectionChange(list) {
+            console.log(list)
+            this.idsList = [];
+            this.count = list.length;
+            if (list.length < 1) return;
+            list.forEach(item => {
+                this.idsList.push(item.id);
+            });
+        },
         async getArticleList(options) {
             let { data } = await articleManageApi.getArticleList(
                 (options = this.articleSearchOptions)

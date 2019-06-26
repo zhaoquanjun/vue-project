@@ -1,6 +1,6 @@
 <template>
     <el-header class="content-header">
-        <template v-if="true">
+        <template v-if="!isBatchHeaderShow">
             <div class="seachInput head-item">
                 <el-input
                     size="small"
@@ -8,15 +8,17 @@
                     placeholder="请输入名称或ID进行精准查询"
                     class="input-with-select"
                 >
+               
                     <el-button slot="append" @click="getArticleList">
                         <svg-icon icon-class="search-icon"></svg-icon>
                     </el-button>
                 </el-input>
             </div>
+
             <div class="head-item head-right">
                 <div class="head-item">
                     <span>状态</span>
-                    <span class="select-sort">
+                    <span class="select-item">
                         <el-select
                             size="small"
                             v-model="statusValue"
@@ -48,7 +50,7 @@
                         </el-select>
                     </span>
                     <span>排序</span>
-                    <span class="select-sort">
+                    <span class="select-sort select-item">
                         <el-select
                             size="small"
                             v-model="orderValue"
@@ -63,54 +65,76 @@
                             ></el-option>
                         </el-select>
                     </span>
+                    <span>置顶</span>
+                    <span class="select-item">
+                        <el-select
+                            size="small"
+                            v-model="topValue"
+                            placeholder="请选择"
+                            @change="changeStickStatus"
+                        >
+                            <el-option
+                                v-for="item in topOptions"
+                                :key="item.orderValue"
+                                :label="item.orderLabel"
+                                :value="item.orderValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
                     <span @click="switchIsDesc">
                         <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                         <svg-icon v-else icon-class="top-arrow"></svg-icon>
                     </span>
-                    <!-- <span class="list-mode mode-item">
-                    <svg-icon icon-class="list-mode "></svg-icon>
-                </span>
-                <span class="grid-mode mode-item">
-                    <svg-icon icon-class="grid-mode"></svg-icon>
-                    </span>-->
                 </div>
-                <div class="head-item head-right">
-                    <button @click="importArticle">导入文章</button>
-                    <button class="add-article" @click="addArticle">新增文章</button>
-                    <!-- <span class="upload-wrap">
-                <svg-icon icon-class="upload-img"></svg-icon>
-                    </span>-->
+                <div class="head-item head-handle-btn">
+                    <button @click="importArticle">导入产品</button>
+                    <button class="add-article" @click="addArticle">新增产品</button>
                 </div>
             </div>
         </template>
+
         <template v-else>
-            <div style="padding:0 21px">
+            <div class="bach-header">
                 <span>
                     已选
                     <i>{{count}}</i> 个产品
                 </span>
-                <el-button size="small" @click="batchPublish(null, false)">上架</el-button>
-                <el-button size="small" @click="batchPublish(null, false)">下架</el-button>
-                <el-button size="small" >复制</el-button>
-                <el-button size="small"  @click="batchRemove(null)">删除</el-button>
-                <el-button size="small" @click="batchDelete">分类设置</el-button>
-                <el-button size="small" @click="batchTop(null, false)">置顶</el-button>
-                <el-button size="small" @click="batchTop(null, true)">取消置顶</el-button>
-                <el-button size="small" @click="batchDelete">访问权限</el-button>
+               <div style="float:right">
+                    <el-button size="small" @click="batchPublish(3, false)">上线</el-button>
+                <el-button size="small" @click="batchPublish(3, true)">下线</el-button>
+                <el-button size="small" @click="batchCopy">复制</el-button>
+                <el-button style="margin-right: 10px;" size="small" @click="batchRemove(1,true)">删除</el-button>
+                <el-dropdown trigger="click" @command="handleCommand">
+                    <span class="el-dropdown-link">
+                        <el-button size="small"> <svg-icon icon-class="across-dot"></svg-icon></el-button>
+                      
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <!-- <span size="small" @click="batchclassifySet">移动</span> -->
+                        <el-dropdown-item command="move">移动</el-dropdown-item>
+                        <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
+                        <el-dropdown-item command="top">置顶</el-dropdown-item>
+                        <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
+                        <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
+                        <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
+                        <el-dropdown-item command="permission">访问权限</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+               </div>
 
-                 <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
+                <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
         <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
         <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
         <el-button type="danger" @click="batchPublish(null,false)">批量上线</el-button>
         <el-button type="danger" @click="batchPublish(null,true)">批量下线</el-button>
-        <el-button type="danger" @click="batchMove(null)">批量移动</el-button> -->
+                <el-button type="danger" @click="batchMove(null)">批量移动</el-button>-->
             </div>
         </template>
     </el-header>
 </template>
 <script>
 export default {
-    props: ["articleSearchOptions", "isBatchHeaderShow", "count"],
+    props: ["articleSearchOptions", "isBatchHeaderShow", "count", "idsList"],
     data() {
         return {
             statusOptions: [
@@ -149,7 +173,22 @@ export default {
                     orderLabel: "创建时间"
                 }
             ],
-            orderValue: "createtime"
+            orderValue: "createtime",
+            topOptions: [
+                {
+                    orderValue: "",
+                    orderLabel: "全部"
+                },
+                {
+                    orderValue: 1,
+                    orderLabel: "是"
+                },
+                {
+                    orderValue: 0,
+                    orderLabel: "否"
+                }
+            ],
+            topValue: "全部"
         };
     },
     methods: {
@@ -157,7 +196,7 @@ export default {
             this.$emit("getArticleList");
         },
         changeStatus(value) {
-            this.articleSearchOptions.publishStatus = value;
+            this.articleSearchOptions.isOnSell = value;
             this.getArticleList();
         },
         changeTopStatus(value){
@@ -166,6 +205,16 @@ export default {
         },
         changeOrderCondition(value) {
             this.articleSearchOptions.newsOrderColumns = value;
+            this.getArticleList();
+        },
+        changeStickStatus(value) {
+            console.log(value, "nullnullnull");
+            if (!isNaN(value)) {
+                value = !!value;
+            } else {
+                value = null;
+            }
+            this.articleSearchOptions.isOnSell = value;
             this.getArticleList();
         },
         switchIsDesc() {
@@ -180,7 +229,69 @@ export default {
         },
         addArticle() {
             this.$emit("addArticle");
-        }
+        },
+
+
+
+        //////批量操作
+        // 批量 上下架
+        batchPublish(type, flag) {
+            let options = {
+                switchType: type,
+                flag: flag,
+                idList: this.idsList
+            };
+            this.$emit("batchSwitchStatus", options);
+        },
+        //批量删除
+        batchRemove(type, flag) {
+            let options = {
+                switchType: type,
+                flag: flag,
+                idList: this.idsList
+            };
+            this.$emit("batchSwitchStatus", options);
+        },
+
+        // 批量置顶 or 取消置顶
+        batchTop(type, flag) {
+            let options = {
+                switchType: type,
+                flag: flag,
+                idList: this.idsList
+            };
+            this.$emit("batchSwitchStatus", options);
+        },
+
+        // 批量分类设置 移动  ok
+        batchclassifySet() {
+            this.$emit("batchMove", "batchmove");
+        },
+        // 批量设置访问权限
+        batchViewAuth() {
+            this.$emit("batchMove", "permission");
+        },
+        // 批量复制
+        batchCopy() {
+            this.$emit("batchMove", "batchCopy");
+        },
+        handleCommand(command) {
+           switch (command){
+               case "move" :
+                   this.batchclassifySet();
+                   break;
+                case "top" :
+                   this.batchTop(2, false);
+                    break;
+                case "cancelTop" :
+                    this.batchTop(2, true);
+                     break;
+                case "permission":
+                    this.batchViewAuth()
+                     break;     
+
+           }
+      }
     }
 };
 </script>
@@ -206,28 +317,24 @@ export default {
     /* height: 36px; */
     box-sizing: border-box;
 }
-.select-sort {
+.select-item{
     display: inline-block;
-    width: 117px;
+    width: 80px;
     box-sizing: border-box;
     height: 32px;
     margin: 0 16px 0 7px;
+}
+.select-sort {
+  width: 117px;
 }
 .head-item {
     display: inline-block;
     flex: none;
 }
-.mode-item {
-    display: inline-block;
-    width: 45px;
-    padding: 8px 0;
-    text-align: center;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
+.head-handle-btn{
+    padding-left: 40px;
 }
-.list-mode {
-    border-right: none;
-}
+
 .head-right {
     display: flex;
     justify-content: flex-end;
@@ -245,5 +352,13 @@ export default {
         background: rgba(1, 192, 222, 1);
         color: #fff;
     }
+}
+
+.bach-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // padding:0 21px;
+    width: 100%;
 }
 </style>

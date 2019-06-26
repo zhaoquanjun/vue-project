@@ -129,6 +129,7 @@ export default {
          */
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            this.$emit("handleSelectionChange",val)
         },
         getCheckArr() {
             let checkArr = this.multipleSelection; // multipleSelection存储了勾选到的数据

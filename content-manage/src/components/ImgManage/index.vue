@@ -6,7 +6,7 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
-            <h5 class="title-item" @click="resetCategoryId">全部分类</h5>
+            <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
             <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree
                 :tree-result="treeResult"
@@ -62,8 +62,9 @@
                      :tree-result="treeResult"
                 >
                     <span slot="title-text">移动图片分类</span>
-                    <span slot="cur-name">{{curImgInfo.categoryName}}</span>
-                    <span slot="move-to-name">{{moveToClassiFy.label}}</span>
+                   <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
                     <!-- <m-tree
                         :isright-pannel="true"
                         :tree-result="treeResult"
@@ -168,7 +169,7 @@ export default {
         // 批量删除列表
         async batchRemovePic(idlist) {
             this.$confirm(
-                "删除后，图片将被移动到回收站，可在回收站？",
+                "删除后，图片将被移动到回收站，可在回收站中恢复，是否确定删除？",
                 "提示",
                 {
                     confirmButtonText: "确定",
@@ -203,6 +204,7 @@ export default {
             this.picSearchOptions.picCategoryId = null;
             this.getPicList();
         },
+        
         async changeCategoryPic(categoryId, idList) {
             let { data, status } = await imgManageApi.changeCategory(
                 categoryId,

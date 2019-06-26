@@ -33,7 +33,8 @@ npm run test:unit
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
  
- 
+### IMG 路径 
+background: url("~img/list-mode.png") no-repeat center;
  
  ### SVN
  <svg-icon icon-class="l-recyclebin"></svg-icon>

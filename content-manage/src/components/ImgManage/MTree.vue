@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div style="height: calc(100% - 60px);">
         <el-tree
+        style=""
             :data="treeResult"
             node-key="id"
             :default-expand-all="isexpand"
