@@ -14,7 +14,7 @@
 export const defaultRoutes = [
   {
     path: "/",
-    redirect: { path: '/board' },
+    redirect: { path: '/system' },
     component: () => import('@/views/board/index.vue'),
   },
   {
@@ -28,12 +28,12 @@ export const defaultRoutes = [
     }
   },
   {
-    path: "/aaa",
-    name: 'aaa',
+    path: "/news",
+    name: 'board',
     component: () => import('@/views/board/index.vue'),
     meta: {
       title: "控制台首页",
-      requiresAuth: false,
+      requiresAuth: true,
       requiresRole: {},
     }
   },
@@ -70,11 +70,34 @@ export const defaultRoutes = [
   {
     path: "/system",
     name: 'system',
+   
+    component: () => import("@/views/member-manage.vue"),
+    meta: {
+      title: "",
+      requiresAuth: true,
+      requiresRole: {},
+    },
+    children: [
+      {
+        path: "role",
+        name: "role",
+        component: () => import("@/views/member-manage.vue"),
+        meta: {
+          title: "",
+          requiresAuth: true,
+          requiresRole: {},
+        }
+      },
+    ]
+  },
+   {
+    path: "/system",
+    name: 'system',
     redirect: { path: '/system/role' },
     component: () => import("@/views/member-manage.vue"),
     children: [
       {
-        path: "/role",
+        path: "role",
         name: "role",
         component: () => import("@/views/member-manage.vue"),
         meta: {
@@ -111,7 +134,7 @@ export const defaultRoutes = [
     name: "callback",
     component: () => import("@/views/login/signcallback.vue"),
     meta: {
-
+      requiresAuth: true,
     }
   },
   {

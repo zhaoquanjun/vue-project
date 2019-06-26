@@ -33,22 +33,6 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span>置顶</span>
-                    <span class="select-sort">
-                        <el-select
-                            size="small"
-                            v-model="topValue"
-                            placeholder="请选择"
-                            @change="changeTopStatus"
-                        >
-                            <el-option
-                                v-for="item in topOptions"
-                                :key="item.topValue"
-                                :label="item.topLabel"
-                                :value="item.topValue"
-                            ></el-option>
-                        </el-select>
-                    </span>
                     <span>排序</span>
                     <span class="select-sort select-item">
                         <el-select
