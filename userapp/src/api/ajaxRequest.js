@@ -17,9 +17,9 @@ import securityService from "@/services/authentication/securityService";
 //     axios.defaults.baseURL = '/';
 // }
 axios.defaults.baseURL = environment.memberManageApi;
-if (process.env.NODE_ENV === "production") {
-    axios.defaults.withCredentials = true; //允许携带cookie
-}
+// if (process.env.NODE_ENV === "production") {
+//     axios.defaults.withCredentials = true; //允许携带cookie
+// }
 
 // 请求超时时间
 axios.defaults.timeout = 5000;

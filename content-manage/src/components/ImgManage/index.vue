@@ -60,11 +60,13 @@
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
                     ></m-tree> -->
-
-                        :categoryName="curImgInfo.categoryName"
+                    <SelectTree
+                         :categoryName="curImgInfo.categoryName"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
-                     />
+                    >
+                       
+                     </SelectTree>
 
 
                     <div slot="footer" class="pannle-footer">

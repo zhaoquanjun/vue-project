@@ -129,7 +129,6 @@ export default {
          * 查看大图
          */
         viewPic(row,index) {
-            alert(index)
             this.picUrl = row.fullOssUrl;
             this.picTitle = row.title;
             this.imgVisible = true;
