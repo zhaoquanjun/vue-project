@@ -1,6 +1,6 @@
 import { getUserDashboard,updateAppIdToCookie, getSliderMenuList} from "@/api/request/user"
 import { authRoutes } from "@/router/routes.js";
-import {setLocal} from "@/libs/local"
+import {setLocal,getLocal,removeLocal} from '@/libs/local'
 // 更具后台菜单路由 匹配出 所需要显示的路由
 let getNeedRoutes = auth => {
     function r(authRoutes) {
@@ -38,6 +38,7 @@ let filterMenuListData = (source) => {
 const dashboard = {
   
     state: {
+      
         appid:"",
         validateMenu:"",
         menuList:[],
@@ -46,6 +47,7 @@ const dashboard = {
         hasRules:false 
     },
     mutations: {
+      
         GETUSERDASHBOARD(state, payload) {
             state.appid = payload;
             setLocal('appid', payload);

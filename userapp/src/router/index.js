@@ -39,13 +39,12 @@ router.beforeEach(async (to, from, next) => {
   } else {
     if (to.name !== "callback") {
       securityService.getUser(location.href).then(async (data) => {
-        console.log(data, 'dadddd')
         if (!data) {
           securityService.signIn();
           next()
         } else {
           store.commit("SET_USER", data);
-          await store.dispatch('_getUserDashboard')
+          
           await store.dispatch('_getMenuListData')
           next()
         }

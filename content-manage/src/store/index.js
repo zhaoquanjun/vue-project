@@ -3,9 +3,9 @@ import Vuex from "vuex";
 import dashboard from "./modules/dashboard"
 Vue.use(Vuex);
 
-import {setLocal,removeLocal} from '@/libs/local'
+import { setLocal, getLocal, removeLocal } from '@/libs/local'
 
-const store =  new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     dashboard,
   },
@@ -14,9 +14,10 @@ const store =  new Vuex.Store({
   },
   mutations: {
     SET_USER: (state, user) => {
+      console.log(user.access_token)
       if (user) {
         state.accessToken.Authorization = user.access_token;
-        setLocal('token',user.access_token);
+        setLocal('token', user.access_token);
       } else {
         state.accessToken.Authorization = '';
         removeLocal('token');
@@ -43,9 +44,13 @@ export default store;
 /**
  * 页面刷新再将local中的token 写入store中
  */
-if(localStorage.getItem("token")){
+if (getLocal("token")) {
+
   let obj = {
-    access_token:localStorage.getItem("token")
+    access_token: getLocal("token"),
   }
   store.commit("SET_USER", obj)
+
+  // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
+  getLocal("authList") && store.commit("set_authList", JSON.parse(getLocal("authList")))
 }
