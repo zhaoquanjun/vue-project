@@ -69,7 +69,7 @@ export const defaultRoutes = [
   {
     path: "/system",
     name: 'system',
-    component: () => import("@/views/member-manage.vue"),
+    component: () => import("@/views/system/system.vue"),
     meta: {
       title: "",
       requiresAuth: true,
@@ -88,24 +88,7 @@ export const defaultRoutes = [
       },
     ]
   },
-   {
-    path: "/system",
-    name: 'system',
-    redirect: { path: '/system/role' },
-    component: () => import("@/views/member-manage.vue"),
-    children: [
-      {
-        path: "role",
-        name: "role",
-        component: () => import("@/views/member-manage.vue"),
-        meta: {
-          title: "",
-          requiresAuth: true,
-          requiresRole: {},
-        }
-      },
-    ]
-  },
+
   {
     path: "/recycle",
     name: "recycle",
