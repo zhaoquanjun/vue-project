@@ -50,11 +50,11 @@
                  :modal-append-to-body="false"
             >
                 <right-pannel :style="{width:pannelWidth+'px'}">
-                <span slot="title-text">权限配置</span>
+                <span slot="title-text">{{rightPanelTitle}}</span>
                 <i slot="icon-tip">
                     <svg-icon icon-class="tip-icon"></svg-icon>
                 </i>
-                <auth-config :userIds="userIds" :is-batch="isBatch"/>
+                <auth-config ref="authConfig" :userIds="userIds" :is-batch="isBatch"/>
             </right-pannel>
             <right-pannel :style="{width:isInvitationlWidth+'px'}">
                 <span slot="title-text" id="title-text">邀请成员</span>
@@ -89,6 +89,7 @@ export default {
                 { name: "显示设置", url: "/xx" },
                 { name: "成员列表", url: "/memberManage" }
             ],
+            rightPanelTitle: "权限配置",
             memberPhone: "",
             dialogVisible: true,
             memberInfo: {},
@@ -156,12 +157,7 @@ export default {
                                     message: "删除成功!"
                                 });
                             }
-                        } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
-                        }
+                        } 
                     }
                 }
             );
@@ -246,14 +242,17 @@ export default {
          * dialog 关闭
          */
         handleClose() {
+
             this.ISRIGHTPANNELSHOW(false);
             this.ISINVITATIONPANELSHOW(false);
+       
         },
         /**
          * table组件 点击编辑后触发此方法
          */
         authEdit(data) {
             console.log(data);
+            this.rightPanelTitle = "编辑成员";
             this.ISRIGHTPANNELSHOW(true);
             this._getAppPolicies();
             this._getUserPolicy(data.userId);

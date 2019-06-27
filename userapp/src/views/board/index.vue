@@ -37,10 +37,10 @@ export default {
       let {data, status} = await getUserDashboard();
       this.dashboardData = data
         this.contentNumber = {
-        newsCount: data.newsCount,
-        filesCount: data.filesCount,
-        picturesCount: data.picturesCount,
-        productsCount: data.productsCount
+            newsCount: data.contentsNumber.newsCount,
+            filesCount: data.contentsNumber.filesCount,
+            picturesCount: data.contentsNumber.picturesCount,
+            productsCount: data.contentsNumber.productsCount
         }
     }
   }

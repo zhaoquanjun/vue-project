@@ -15,7 +15,6 @@ export const defaultRoutes = [
   {
     path: "/",
     redirect: { path: '/board' },
-    component: () => import('@/views/board/index.vue'),
   },
   {
     path: "/board",
