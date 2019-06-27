@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="selected-auth">
         <div class="auth-name-title">
             <span class="item-left">权限名称</span>
             <span class="item-right empty" @click="empty">清空</span>
@@ -83,6 +83,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.selected-auth{
+    font-size: 12px;
+}
 .choose-bg {
     background: #e8f8fb;
 }
@@ -99,6 +102,7 @@ export default {
     min-height: 274px;
 }
 .auth-list .list-item {
+    cursor: pointer;
     height: 40px;
     line-height: 40px;
     width: 100%;

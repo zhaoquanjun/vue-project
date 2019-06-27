@@ -1,11 +1,11 @@
-import { getUserCurrentAppPolicy, getUserDashboard, getSliderMenuList} from "@/api/index"
+import { getUserDashboard, getSliderMenuList} from "@/api/request/user"
 import { authRoutes } from "@/router/routes.js";
 import {setLocal} from "@/libs/local"
-
 // 更具后台菜单路由 匹配出 所需要显示的路由
 let getNeedRoutes = auth => {
     function r(authRoutes) {
         return authRoutes.filter(route => {
+            console.log(auth)
             if (auth.includes(route.name)) {
                 if (route.children) {
                     route.children = r(route.children);
@@ -22,7 +22,7 @@ let filterMenuListData = (source) => {
     let cloneData = source;
     let pathArr=[];
     let result =  cloneData.filter(father => {
-        pathArr.push(father.path)
+        pathArr.push(father.code)
         let branchArr = cloneData.filter(
             child => father.id == child.parentId
         );
@@ -36,6 +36,7 @@ let filterMenuListData = (source) => {
     
 };
 const dashboard = {
+  
     state: {
         appid:"",
         validateMenu:"",
@@ -49,13 +50,6 @@ const dashboard = {
             state.appid = payload;
             setLocal('appid', payload);
         },
-        GETVALIDATEMENU(state, payload) {
-            // Base64.encode()
-             setLocal('validateMenu',payload);
-             state.validateMenu = payload;
-            
-             // setLocal('validateMenu', payload);
-         },
          set_menuList(state,m){
             // state.menuList = JSON.stringify(m);
             state.menuList = m;
@@ -63,7 +57,6 @@ const dashboard = {
 
            },
            set_authList(state, a){
-             state.authList = JSON.stringify(a);
              state.authList = a;
              state.hasRules = true;
              setLocal("authList", a)
@@ -75,7 +68,7 @@ const dashboard = {
             if (data == null) {
                 data = await getUserDashboard();
             }
-            data && commit("GETUSERDASHBOARD", data.currentAppId)
+           commit("GETUSERDASHBOARD", data.currentAppId)
         },
         async _getMenuListData({ commit }) {
            let { data } = await getSliderMenuList();

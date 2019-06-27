@@ -47,8 +47,9 @@
                 :show-close="false"
                 :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
                 :before-close="handleClose"
-            ></el-dialog>
-            <right-pannel :style="{width:pannelWidth+'px'}">
+                 :modal-append-to-body="false"
+            >
+                <right-pannel :style="{width:pannelWidth+'px'}">
                 <span slot="title-text">{{rightPanelTitle}}</span>
                 <i slot="icon-tip">
                     <svg-icon icon-class="tip-icon"></svg-icon>
@@ -59,6 +60,8 @@
                 <span slot="title-text" id="title-text">邀请成员</span>
                 <invitation-link></invitation-link>
             </right-pannel>
+            </el-dialog>
+            
         </el-main>
         
     </el-container>
@@ -304,9 +307,12 @@ export default {
 };
 </script>
 <style scoped>
-.seachInput /deep/ .el-input__inner,.seachInput /deep/ .el-input-group__append .el-button{
+.seachInput /deep/ .el-input__inner,.seachInput /deep/ .el-input-group__append .el-button,.seachInput /deep/ .el-input-group__append{
    border-radius: 0 !important;
     font-size: 12px;
+}.seachInput /deep/ .el-input-group__append{
+    /* border: none; */
+    background: #EEEEEE;
 }
 </style>
 

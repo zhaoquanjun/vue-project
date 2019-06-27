@@ -59,9 +59,9 @@
                         >
                             <el-option
                                 v-for="item in topOptions"
-                                :key="item.orderValue"
-                                :label="item.orderLabel"
-                                :value="item.orderValue"
+                                :key="item.topValue"
+                                :label="item.topLabel"
+                                :value="item.topValue"
                             ></el-option>
                         </el-select>
                     </span>
@@ -157,22 +157,7 @@ export default {
                     orderLabel: "创建时间"
                 }
             ],
-            orderValue: "createtime",
-            topOptions: [
-                {
-                    orderValue: "",
-                    orderLabel: "全部"
-                },
-                {
-                    orderValue: 1,
-                    orderLabel: "是"
-                },
-                {
-                    orderValue: 0,
-                    orderLabel: "否"
-                }
-            ],
-            topValue: "全部"
+            orderValue: "createtime"
         };
     },
     methods: {

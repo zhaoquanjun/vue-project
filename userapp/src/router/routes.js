@@ -123,7 +123,7 @@ export const defaultRoutes = [
     component: () => import("@/views/personal.vue"),
     meta: {
       title: "个人中心",
-      requiresAuth: true,
+     
       requiresRole: {},
     }
   },

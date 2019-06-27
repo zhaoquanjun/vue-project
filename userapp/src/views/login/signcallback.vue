@@ -7,7 +7,6 @@
 import mgr from '@/services/authentication/oidcService'
 export default {
   async created() { 
-    alert("callback")
     try {
       var result = await mgr.signinRedirectCallback();
       var returnToUrl = '/'
