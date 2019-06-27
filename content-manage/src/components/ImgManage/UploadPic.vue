@@ -3,9 +3,9 @@
         <!-- 一次可上传60张图片，单张图片大小不超过10MB -->
         <el-row class="upload-head" type="flex" justify="space-between">
             <!-- [{{upload2Category.label}}] -->
-            <el-col :span="12">
-                <span style="vertical-align: -5px;">上传至:</span>
-                <span style="vertical-align: -5px;padding:0 10px">{{upload2Category.label}}</span>
+            <el-col :span="12" >
+                <span style="padding-right:8px">上传至:</span>
+                <!-- <span style="vertical-align: -5px;padding:0 10px">{{upload2Category.label}}</span>
                 <el-tree
                     class="upload-tree"
                     ref="treeX"
@@ -14,12 +14,21 @@
                     accordion
                     :expand-on-click-node="true"
                     @node-click="chooseNode"
-                ></el-tree>
+                ></el-tree> -->
+                 <SelectTree
+                    style="width:140px"
+                    ref="treeX"
+                    :tree-result="treeResult"
+                    node-key="id"
+                    accordion
+                    :expand-on-click-node="true"
+                    @chooseNode="chooseNode"
+                     />
             </el-col>
-            <div>
+            <!-- <div>
                 <el-button class="choose-img upload-btn" size="small" type="default">选择图片</el-button>
                 <el-button class="upload-btn" size="small" type="default">选择文件夹</el-button>
-            </div>
+            </div> -->
         </el-row>
 
         <el-upload
@@ -54,9 +63,12 @@
 </template>
 
 <script>
+import SelectTree from "@/components/common/SelectTree"
 export default {
     props: ["treeResult", "uploadPicUrl"],
-
+    components:{
+        SelectTree
+    },
     data() {
         return {
             uoloadDisabled: true,
@@ -107,16 +119,6 @@ export default {
             this.uploadPicAction = `${this.uploadPicUrl}/${
                 this.upload2Category.id
             }`;
-
-            for (
-                var i = 0;
-                i < this.$refs.treeX.store._getAllNodes().length;
-                i++
-            ) {
-                this.$refs.treeX.store._getAllNodes()[
-                    i
-                ].expanded = this.isexpand;
-            }
         },
         submitUpload() {
             this.headers.Authorization =

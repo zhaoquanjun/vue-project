@@ -4,6 +4,7 @@ import { defaultRoutes } from "./routes"
 import securityService from "@/services/authentication/securityService";
 import { getLocal } from "@/libs/local";
 import store from "@/store/index";
+import Cookies from "js-cookie"
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -14,28 +15,31 @@ const router = new VueRouter({
 export default router;
 
 router.beforeEach(async (to, from, next) => {
-  
-  if(!to.meta.requiresAuth){
-   
+
+  if (!to.meta.requiresAuth) {
+
     store.dispatch('_getMenuListData')
-     next()
+    next()
     return
   }
   if (getLocal("token")) {
-         next()
+    if (!Cookies.get('AppId')) {
+      await store.dispatch('_updateAppIdToCookie')
+    }
+    next()
     let r = await store.dispatch('getCurRouteAuth', to.path);
     if (r) {
-      if(store.getters.getMenuList.length<1){
+      if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
       next()
     } else {
-     next('/404')
+      next('/404')
     }
   } else {
     if (to.name !== "callback") {
       securityService.getUser(location.href).then(async (data) => {
-        console.log(data,'dadddd')
+        console.log(data, 'dadddd')
         if (!data) {
           securityService.signIn();
           next()

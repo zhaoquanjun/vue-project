@@ -233,3 +233,9 @@ export const removeExternalUser = (provider) => {
 export const getWeChatJsLoginParams = (provider) => {
     return ajaxRequest.get('/api/userInfo/GetWeChatJsLoginParams');
 }
+
+export const updateAppIdToCookie = (provider) => {
+    return ajaxRequest.put('/api/userInfo/UpdateAppIdToCookie');
+}
+
+//put: UpdateUserLastAppIdAndCookie(string appId)

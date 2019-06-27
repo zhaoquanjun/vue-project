@@ -71,9 +71,9 @@
                         @chooseNode="chooseNode"
                     ></m-tree> -->
                     <SelectTree
-                   :categoryName="curImgInfo.categoryName"
-                    :tree-result="treeResult"
-                     @chooseNode="chooseNode"
+                        :categoryName="curImgInfo.categoryName"
+                        :tree-result="treeResult"
+                        @chooseNode="chooseNode"
                      />
                     <div slot="footer" class="pannle-footer">
                         <button @click="updateCategoryPic" class="sure">确定</button>
@@ -87,6 +87,18 @@
         <el-dialog title="上传图片" 
         :visible.sync="dialogTableVisible" 
         :modal-append-to-body="false" >
+        <span slot="title">
+            <span class="fs14">上传图片 
+                <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="一次可上传60张图片，单张图片大小不超过10MB"
+                    placement="right"
+                >
+                   <svg-icon icon-class="tip-icon"></svg-icon>
+                </el-tooltip></span>
+              
+        </span>
             <upload-pic
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 :tree-result="treeResult"

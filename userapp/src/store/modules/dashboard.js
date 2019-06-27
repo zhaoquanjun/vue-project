@@ -1,4 +1,4 @@
-import { getUserCurrentAppPolicy, getUserDashboard, getSliderMenuList} from "@/api/index"
+import { getUserCurrentAppPolicy, updateAppIdToCookie, getSliderMenuList} from "@/api/index"
 import { authRoutes } from "@/router/routes.js";
 import {setLocal} from "@/libs/local"
 
@@ -70,12 +70,9 @@ const dashboard = {
            },
     },
     actions: {
-        async _getUserDashboard({ commit }) {
-            let { data } = await getUserDashboard();
-            if (data == null) {
-                data = await getUserDashboard();
-            }
-            data && commit("GETUSERDASHBOARD", data.currentAppId)
+        async _updateAppIdToCookie({ commit }){
+            let { data } = await updateAppIdToCookie();
+            commit("GETUSERDASHBOARD", data)
         },
         async _getMenuListData({ commit }) {
            let { data } = await getSliderMenuList();
