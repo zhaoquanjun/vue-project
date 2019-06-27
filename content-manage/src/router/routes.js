@@ -7,6 +7,18 @@ export const defaultRoutes = [
     redirect: { path: '/content/news' },
   },
   {
+    path: "/news",
+    redirect: { path: '/content/news' },
+  },
+  {
+    path: "/picture",
+    redirect: { path: '/content/picture' },
+  },
+  {
+    path: "/product",
+    redirect: { path: '/content/product' },
+  },
+  {
     path: "/content",
     component:  () => import('@/views/content-manage/content.vue'),
     children:[
