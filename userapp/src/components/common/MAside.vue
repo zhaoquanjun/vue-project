@@ -55,42 +55,12 @@ export default {
       
     },
     methods: {
-        getMenuListData() {
-            let data = JSON.parse(this.$store.state.validateMenu);
-            if (data && data.isAdmin) {
-                this.menuList = this.filterMenuListData(data.menuList);
-            } else {
-                // let { result, pathArr } = this.filterMenuListData(data);
-                // this.menuList = result;
-              this.menuList=this.filterMenuListData(data.menuList)
-                //this.menuList = this.filterUserMenuListData(data);
-                // this.menuList = this.treeData(data, "id", "parentId", "children");
-            }
-        },
-        filterMenuListData(source) {
-            let cloneData = JSON.parse(JSON.stringify(source));
-            let result =  cloneData.filter(father => {
-                let branchArr = cloneData.filter(
-                    child => father.id == child.parentId
-                );
-                branchArr.length > 0 ? (father.children = branchArr) : "";
-                return father.parentId == 0; 
-            });
-             let result1 = Object.values(result).sort((c, d) => {
-                return c.orderId - d.orderId;
-            });
-            return result1;
-           
-        },
-
         changeCurHoverItem(i) {
             this.curIndex = i;
         },
         skipPages(item) {
-            console.log(item)
             let path = item.menuUrl.split('/')[1]
-            console.log(path,`/${item.code}`)
-            console.log(this.$router)
+           
             if(!item.path){return}
             this.$router.push(item.path)
         },
@@ -107,8 +77,7 @@ export default {
     },
     computed: {
         getMenuList(){
-            console.log(this.$store.getters.getMenuList)
-              if(!this.$store.getters.getMenuList) return
+            if(!this.$store.getters.getMenuList) return
             return this.$store.getters.getMenuList
         },
         menuListChild(){

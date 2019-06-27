@@ -236,7 +236,7 @@
                 }
                 if (data.isNewAdd) return;
                 this.curlabelName = data.label;
-                this.productSearchOptions.proCategoryId = data.id;
+                this.productSearchOptions.CategoryId = data.id;
                 this.$emit("getProList");
                 // 点击其他区域 把当前新增但未确定的节点删除掉
                 this.newAddData && this.newAddData.children.shift()
