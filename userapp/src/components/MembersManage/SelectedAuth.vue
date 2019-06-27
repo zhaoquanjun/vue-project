@@ -12,7 +12,7 @@
                     :key="item"
                 >
                    
-                    <span class="item-left">{{item}}</span>
+                    <span class="item-left auth-name ellipsis">{{item}}</span>
                     <span class="item-right auth-icon" @click.stop="removeAuth(item,index)">
                         <i class="iconfont icon-weibiaoti-"></i>
                     </span>
@@ -116,8 +116,11 @@ export default {
     float: left;
     color: #262626;
 }
-.item-right {
+.auth-name{
     width: 60%;
+}
+.item-right {
+    width: 40%;
     padding-left: 10px;
     height: 40px;
     overflow: hidden;

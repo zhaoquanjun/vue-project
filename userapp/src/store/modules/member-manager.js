@@ -27,20 +27,17 @@ const memberManager = {
          */
         USERPERMISSION: (state, info) => {
             state.userPermission = info;
-            
             // 当前成员已有的权限
             let memberPolicy = state.memberPolicy;
             let userPermission =  state.userPermission;
+            
             userPermission.forEach((item)=>{
                 if(memberPolicy.includes(item.name)){
-                 
                     item.show = true;
                 }
             })
-//             let A=[1,2,3,4,5,6],
-//     B=[8,10,6,7,8];
-//    A.find(item=>B.includes(item)) //如果没有相同项，结果是undefined
 
+            
 
 
 
@@ -64,6 +61,8 @@ const memberManager = {
          * @param {*} payload 
          */
         REMOVESELECTEDAUTH(state, payload) {
+            console.log(state.memberPolicy)
+            console.log(payload)
             payload = payload.name||payload;// 选择权限 或 者已选权限  数据结构不通
             state.memberPolicy = state.memberPolicy.filter((item) => {
                 // return item.name != payload.name

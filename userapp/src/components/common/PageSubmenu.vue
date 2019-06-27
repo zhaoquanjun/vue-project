@@ -17,7 +17,7 @@ export default {
         submenuList:{
             type:Array,
             default:() =>([
-                 {name:"企业信息",url:'memberManage'},
+                 {name:"企业信息",url:'/amemberManage'},
                 {name:"显示设置",url:'/memberManage'},
                 {name:'成员列表',url:'/memberManage'}
             ])
@@ -28,6 +28,10 @@ export default {
 <style lang="scss" scoped>
 .router-link-active {
     color: #00c1de;
+    background: #e5f8fa;
+}
+.submenu-list :last-child{
+      color: #00c1de;
     background: #e5f8fa;
 }
 .submenu {

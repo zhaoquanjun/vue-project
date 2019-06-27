@@ -14,8 +14,8 @@
                     @click="curAuth(item,index)"
                     :class="{'choose-bg':item.show == true && isSelect}"
                 >
-                    <span class="item-left">{{item.name}}</span>
-                    <span class="item-right" v-if="isSelect">{{item.mark}}</span>
+                    <span class="item-left ellipsis">{{item.name}}</span>
+                    <span class="item-right ellipsis" v-if="isSelect">{{item.mark}}</span>
                     <span class="item-right auth-icon" v-else @click.stop="removeAuth(item,index)">
                         <i class="iconfont icon-weibiaoti-"></i>
                     </span>
@@ -26,7 +26,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { stat } from 'fs';
+import { stat } from "fs";
 export default {
     name: "AuthList",
     props: {
@@ -41,6 +41,7 @@ export default {
     methods: {
         curAuth(item, index) {
             let cur = this.authList[index];
+            console.log(cur, "-----cur----");
             if (cur.show) {
                 this.$set(this.authList[index], "show", false);
                 this.$emit("removeSelected", item);
@@ -54,15 +55,11 @@ export default {
             this.$emit("removeSelected", curitem);
         },
         empty() {
-          
             this.$emit("emptySelected");
         }
     },
-    mounted() {
-   
-    },
-    watch:{
-         
+    mounted() {},
+    watch: {
         // if (this.memberPolicy.length > 0) {
         //      console.log(this.memberPolicy);
         //     for (let i = 0; i < this.userPermission.length; i++) {
@@ -75,11 +72,10 @@ export default {
         // }
     },
     computed: {
-         ...mapState({
+        ...mapState({
             userPermission: state => state.memberManager.userPermission,
             memberPolicy: state => state.memberManager.memberPolicy
-        }),
-        
+        })
     }
 };
 </script>
@@ -129,7 +125,7 @@ export default {
     color: #8c8c8c;
 }
 .empty {
-      cursor: pointer;
+    cursor: pointer;
     width: 30%;
     color: #00c1de;
     text-align: right;
