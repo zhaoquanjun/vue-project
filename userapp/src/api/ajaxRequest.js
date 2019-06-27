@@ -8,6 +8,7 @@ import { getLocal } from "@/libs/local.js";
 import environment from "@/environment/index.js";
 import store from "@/store/index";
 import router from '@/router/index'
+import Cookies from "js-cookie"
 import securityService from "@/services/authentication/securityService";
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
@@ -34,7 +35,12 @@ axios.interceptors.request.use(
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');       
         token && (config.headers.Authorization = "Bearer " + token);
-        config.headers.AppId = "823EB3BD-93F4-4655-B833-D604A6EF2032";//store.state.dashboard.appid;
+         //todo 测试阶段写死
+         if(!Cookies.get('AppId')){
+             console.log(store.state.dashboard.appid,'store.state.dashboard.appid')
+            config.headers.AppId = store.state.dashboard.appid;
+        }
+       // config.headers.AppId = "823EB3BD-93F4-4655-B833-D604A6EF2032";//store.state.dashboard.appid;
         return config;
     },
     error => {

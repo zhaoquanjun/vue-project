@@ -57,9 +57,9 @@
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="cancelUpdateCategory"
                 >
-                    <span slot="title-text">{{this.operateName}}文章分类</span>
+                    <span slot="title-text">{{operateName}}文章分类</span>
                     <div class="category-content">
-                            <span name="cur-tip">{{this.operateName}}至</span>
+                            <span name="cur-tip">{{operateName}}至</span>
                         </div>
                     <SelectTree
                         :categoryName="curArticleInfo.categoryName"

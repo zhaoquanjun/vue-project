@@ -1,4 +1,4 @@
-import { getUserDashboard, getSliderMenuList} from "@/api/request/user"
+import { getUserDashboard,updateAppIdToCookie, getSliderMenuList} from "@/api/request/user"
 import { authRoutes } from "@/router/routes.js";
 import {setLocal} from "@/libs/local"
 // 更具后台菜单路由 匹配出 所需要显示的路由
@@ -63,12 +63,9 @@ const dashboard = {
            },
     },
     actions: {
-        async _getUserDashboard({ commit }) {
-            let { data } = await getUserDashboard();
-            if (data == null) {
-                data = await getUserDashboard();
-            }
-           commit("GETUSERDASHBOARD", data.currentAppId)
+        async _updateAppIdToCookie({ commit }){
+            let { data } = await updateAppIdToCookie();
+            commit("GETUSERDASHBOARD", data)
         },
         async _getMenuListData({ commit }) {
            let { data } = await getSliderMenuList();

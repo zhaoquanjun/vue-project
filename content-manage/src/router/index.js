@@ -18,7 +18,7 @@ router.beforeEach(async (to, from, next) => {
    
   if (accessToken) {
         if(!Cookies.get('AppId')){
-            await store.dispatch('_getUserDashboard')
+            await store.dispatch('_updateAppIdToCookie')
             next()
         }else{
           next()

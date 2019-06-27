@@ -234,7 +234,7 @@ export const getWeChatJsLoginParams = (provider) => {
     return ajaxRequest.get('/api/userInfo/GetWeChatJsLoginParams');
 }
 
-export const updateAppIdToCookie = (provider) => {
+export const updateAppIdToCookie = () => {
     return ajaxRequest.put('/api/userInfo/UpdateAppIdToCookie');
 }
 

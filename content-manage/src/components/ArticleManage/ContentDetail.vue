@@ -6,14 +6,14 @@
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item>内容管理</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: '/article' }">文章管理</el-breadcrumb-item>
-                <el-breadcrumb-item>{{this.operateName}}文章</el-breadcrumb-item>
+                <el-breadcrumb-item>{{operateName}}文章</el-breadcrumb-item>
             </el-breadcrumb>
            </div>
         </header>
         <el-container class="article-container" style>
             <el-header>
                 <el-row class="article-head">
-                    <el-col :span="13" :offset="3" style=" font-size: 22px;">{{this.operateName}}文章</el-col>
+                    <el-col :span="13" :offset="3" style=" font-size: 22px;">{{operateName}}文章</el-col>
                     <el-col :span="6">
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>

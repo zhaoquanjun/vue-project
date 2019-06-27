@@ -3,7 +3,7 @@
         <el-row class="demo-autocomplete"></el-row>
         <el-alert title="绑定微信，可使用微信登陆管理平台" type="success"></el-alert>
         <div class="from-row">
-            <div id="weixin" style="text-align: center">{{this.weixinHtml}}</div>
+            <div id="weixin" style="text-align: center">{{weixinHtml}}</div>
         </div>  
         <div class="footer">
             <button class="cancel footer-btn" @click="refqroce">刷新</button>
