@@ -15,7 +15,7 @@
             <span>
                 备注 :
                 <template v-if="isRemarkShow">
-                    <span @click="handleRemark" style="display: inline-block;">
+                    <span @click="handleRemark" style="display: inline-block;  cursor: pointer;">
                         <i>{{ remarkValue}}</i>
                         <svg-icon icon-class="remark"></svg-icon>
                     </span>
@@ -91,7 +91,7 @@ export default {
         border-radius: 50%;
         vertical-align: middle;
         margin-right: 15px;
-        float: left;
+        flex: none;
         img {
             width: 100%;
             height: 100%;
@@ -105,6 +105,7 @@ export default {
             line-height: 20px;
         }
         .remark-input {
+           
             width: 322px;
             height: 28px;
             border: none;

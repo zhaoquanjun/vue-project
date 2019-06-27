@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="auth-config">
         <member-info 
        v-model="value"
         v-if="memberInfo && Object.keys(memberInfo).length>0" 
@@ -139,6 +139,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.auth-config{
+    font-size: 12px;
+}
 .auth-title {
     height: 40px;
     line-height: 40px;
@@ -186,6 +189,7 @@ export default {
             background: #fff;
         }
         .auth-input {
+            font-size: 12px;
             text-indent: 10px;
             box-sizing: border-box;
             width: 100%;
