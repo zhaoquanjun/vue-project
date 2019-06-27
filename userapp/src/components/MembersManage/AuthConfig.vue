@@ -63,7 +63,9 @@ export default {
         }
     },
     components: { AuthList,SelectedAuth, MemberInfo },
-    created() {},
+        created() {
+            
+        },
     data() {
         return {
             input: "",
@@ -122,13 +124,14 @@ export default {
                     });
                 }
             }
-            
+            this.input = '';
         },
         cancel(){
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+            this.input = '';
         },
         chooseAuth(obj) {
-            this.CHOOSEAUTH(obj);
+            this.CHOOSEAUTH(obj);           
         },
         removeSelected(item) {
             this.REMOVESELECTEDAUTH(item);
@@ -138,6 +141,7 @@ export default {
         },
         closePanel() {
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+            
         },
         searchAuth() {
             this.oldUserPermission = JSON.stringify(this.userPermission);

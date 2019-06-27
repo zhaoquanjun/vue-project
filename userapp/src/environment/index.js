@@ -10,7 +10,7 @@ let silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
 let clientId = 'dashboard.api';
 
 if (process.env.NODE_ENV === 'development') {
-    memberManageApi = "http://localhost:8100";// 'http://api.dashboard.newwezhan.cn';
+    memberManageApi = 'http://api.dashboard.newwezhan.cn';
     authorityUrl = "http://api.identity.newwezhan.cn";
     redirectUrl = "http://localhost:8082/callback";
     logoutRedirectUri = "http://dashboard.newwezhan.cn/index.html";

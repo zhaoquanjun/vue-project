@@ -53,7 +53,7 @@
                 <i slot="icon-tip">
                     <svg-icon icon-class="tip-icon"></svg-icon>
                 </i>
-                <auth-config :userIds="userIds" :is-batch="isBatch"/>
+                <auth-config ref="authConfig" :userIds="userIds" :is-batch="isBatch"/>
             </right-pannel>
             <right-pannel :style="{width:isInvitationlWidth+'px'}">
                 <span slot="title-text" id="title-text">邀请成员</span>
@@ -154,12 +154,7 @@ export default {
                                     message: "删除成功!"
                                 });
                             }
-                        } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
-                        }
+                        } 
                     }
                 }
             );
@@ -244,8 +239,10 @@ export default {
          * dialog 关闭
          */
         handleClose() {
+
             this.ISRIGHTPANNELSHOW(false);
             this.ISINVITATIONPANELSHOW(false);
+       
         },
         /**
          * table组件 点击编辑后触发此方法
