@@ -16,6 +16,10 @@ import securityService from "@/services/authentication/securityService";
 //     axios.defaults.baseURL = '/';
 // }
 axios.defaults.baseURL = environment.memberManageApi;
+if(process.env.NODE_ENV === "production"){
+    axios.defaults.withCredentials=true; //允许携带cookie
+}
+
 // 请求超时时间
 axios.defaults.timeout = 5000;
 //设置put请求传输内容的格式
@@ -30,7 +34,7 @@ axios.interceptors.request.use(
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');       
         token && (config.headers.Authorization = "Bearer " + token);
-        config.headers.appid = store.state.dashboard.appid;
+        config.headers.AppId = "823EB3BD-93F4-4655-B833-D604A6EF2032";//store.state.dashboard.appid;
         return config;
     },
     error => {

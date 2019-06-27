@@ -59,9 +59,9 @@
                         >
                             <el-option
                                 v-for="item in topOptions"
-                                :key="item.orderValue"
-                                :label="item.orderLabel"
-                                :value="item.orderValue"
+                                :key="item.topValue"
+                                :label="item.topLabel"
+                                :value="item.topValue"
                             ></el-option>
                         </el-select>
                     </span>
@@ -157,22 +157,7 @@ export default {
                     orderLabel: "创建时间"
                 }
             ],
-            orderValue: "createtime",
-            topOptions: [
-                {
-                    orderValue: "",
-                    orderLabel: "全部"
-                },
-                {
-                    orderValue: 1,
-                    orderLabel: "是"
-                },
-                {
-                    orderValue: 0,
-                    orderLabel: "否"
-                }
-            ],
-            topValue: "全部"
+            orderValue: "createtime"
         };
     },
     methods: {
@@ -188,11 +173,6 @@ export default {
             this.getArticleList();
         },
         changeStickStatus(value) {
-            if (!isNaN(value)) {
-                value = !!value;
-            } else {
-                value = null;
-            }
             this.articleSearchOptions.topStatus = value;
             this.getArticleList();
         },
@@ -229,6 +209,7 @@ export default {
 
         // 批量分类设置 移动  ok
         batchclassifySet() {
+            this.$emit("changeOperateName","移动");
             this.$emit("batchMove");
         },
         // 批量设置访问权限
@@ -237,6 +218,7 @@ export default {
         },
         // 批量复制
         batchCopy() {
+            this.$emit("changeOperateName","复制");
             this.$emit("batchCopy");
         },
         handleCommand(command) {

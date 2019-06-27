@@ -7,14 +7,16 @@ import store from "@/store/index";
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  mode: "history",
+    mode: "history",
   //base: process.env.BASE_URL,
   routes: defaultRoutes
 });
 export default router;
 
 router.beforeEach(async (to, from, next) => {
+  
   if(!to.meta.requiresAuth){
+   
     store.dispatch('_getMenuListData')
      next()
     return
@@ -32,7 +34,8 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     if (to.name !== "callback") {
-      securityService.getUser().then(async (data) => {
+      securityService.getUser(location.href).then(async (data) => {
+        console.log(data,'dadddd')
         if (!data) {
           securityService.signIn();
           next()

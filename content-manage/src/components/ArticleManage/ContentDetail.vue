@@ -6,18 +6,17 @@
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item>内容管理</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: '/article' }">文章管理</el-breadcrumb-item>
-                <el-breadcrumb-item>新增文章</el-breadcrumb-item>
+                <el-breadcrumb-item>{{this.operateName}}文章</el-breadcrumb-item>
             </el-breadcrumb>
            </div>
         </header>
         <el-container class="article-container" style>
             <el-header>
                 <el-row class="article-head">
-                    <el-col :span="13" :offset="3" style=" font-size: 22px;">新增文章</el-col>
+                    <el-col :span="13" :offset="3" style=" font-size: 22px;">{{this.operateName}}文章</el-col>
                     <el-col :span="6">
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
-                            <button>预览</button>
                             <button @click="submitForm">保存</button>
                         </div>
                     </el-col>
@@ -27,7 +26,9 @@
                 <div>
                     <el-row>
                         <el-col :span="13" :offset="3">
-                            <ArticleContent ref="articleContent" />
+                            <ArticleContent
+                                @changeOperateName="changeOperateName"
+                                ref="articleContent" />
                         </el-col>
                         <el-col :span="6" style="margin-left: 16px;">
                             <RightContent :imageUrl="imageUrl" ref="articleRight" />
@@ -55,6 +56,7 @@ export default {
         return {
             imageUrl:"",
             detailData:{},
+            operateName:"新增"
         }
     },
     components: {
@@ -62,6 +64,9 @@ export default {
         ArticleContent
     },
     methods:{
+      changeOperateName(operate){
+          this.operateName = operate;
+      },
       submitForm(){
 
         let imageUrl = this.$refs.articleRight.imageUrl1;

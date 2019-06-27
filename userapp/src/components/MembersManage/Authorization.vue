@@ -7,7 +7,7 @@
                 <button class="auth-btn" @click="searchAuth">搜索</button>
             </div>
             <div class="auth-name">
-                <auth-list @chooseAuth="chooseAuth" :authList="userPermission" :isSelect="true"></auth-list>
+                <auth-list @chooseAuth="chooseAuth"  @removeSelected="removeSelected" :authList="userPermission" :isSelect="true"></auth-list>
             </div>
         </div>
         <div class="pannel-left-item">
@@ -44,9 +44,11 @@ export default {
         ]),
 
         chooseAuth(obj) {
+            console.log(obj)
             this.CHOOSEAUTH(obj);
         },
         removeSelected(item) {
+            console.log(item,'ooooooooo')
             this.REMOVESELECTEDAUTH(item);
         },
         emptySelected() {
@@ -54,9 +56,9 @@ export default {
         },
         searchAuth() {
             this.oldUserPermission = JSON.stringify(this.userPermission);
+            console.log(this.oldUserPermission,'----0000000')
             let ary = [];
             this.userPermission.forEach(item => {
-             
                  if (item.description.includes(this.input)){
                    ary.push(item);
                  }
@@ -129,6 +131,7 @@ export default {
             background: #fff;
         }
         .auth-input {
+            font-size: 12px;
             width: 100%;
             text-indent: 10px;
         }

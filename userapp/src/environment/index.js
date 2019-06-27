@@ -4,7 +4,7 @@
  */
 let memberManageApi = 'http://api.dashboard.newwezhan.cn';
 let authorityUrl = "http://api.identity.newwezhan.cn";
-let redirectUrl = "http://localhost:8082/callback"; //"http://dashboard.newwezhan.cn/callback"
+let redirectUrl = "http://dashboard.newwezhan.cn/callback"
 let logoutRedirectUri = "http://dashboard.newwezhan.cn/index.html";
 let silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
 let clientId = 'dashboard.api';

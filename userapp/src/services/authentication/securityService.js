@@ -26,9 +26,11 @@ class SecurityService {
     returnPath ? oidcMgr.signinRedirect({ state: returnPath })
       : oidcMgr.signinRedirect()
   }
-  signOut() {
-    oidcMgr.signoutRedirect().then(function(resp) {
+  signOut(returnPath) {
+   
+    oidcMgr.signoutRedirect({ state: returnPath }).then(function(resp) {
       console.log('signed out', resp)
+      localStorage.clear();
     }).catch(function(err) {
       console.log(err)
     })

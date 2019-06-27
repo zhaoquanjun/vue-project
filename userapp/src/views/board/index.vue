@@ -1,6 +1,7 @@
 <template>
   <div class="home-page">
     <p class="welcome-words">今日，2019年6月22日星期六，欢迎您回到云速成美站控制台。</p>
+   
     <el-row>
       <el-col :span="16">
         <plugins :plugins="dashboardData.pluginList" v-if="dashboardData.pluginList && dashboardData.pluginList.length > 0" />
@@ -36,10 +37,10 @@ export default {
       let {data, status} = await getUserDashboard();
       this.dashboardData = data
         this.contentNumber = {
-        newsCount: data.newsCount,
-        filesCount: data.filesCount,
-        picturesCount: data.picturesCount,
-        productsCount: data.productsCount
+            newsCount: data.contentsNumber.newsCount,
+            filesCount: data.contentsNumber.filesCount,
+            picturesCount: data.contentsNumber.picturesCount,
+            productsCount: data.contentsNumber.productsCount
         }
     }
   }

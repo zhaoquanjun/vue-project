@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="memenber-auth">
         <div class="auth-name-title">
             <span class="item-left">权限名称</span>
             <span v-if="isSelect" class="item-right color-black">说明</span>
@@ -14,11 +14,25 @@
                     @click="curAuth(item,index)"
                     :class="{'choose-bg':item.show == true && isSelect}"
                 >
-                    <span class="item-left">{{item.name}}</span>
-                    <span class="item-right" v-if="isSelect">{{item.mark}}</span>
+                    <el-tooltip
+                        :content="item.name"
+                        placement="top-start"
+                    >
+                        <span class="item-left ellipsis">{{item.name}}</span>
+                    </el-tooltip>
+                     <el-tooltip
+                     v-if="isSelect"
+                        :content="item.mark"
+                        placement="top-start"
+                    >
+                        <span class="item-right ellipsis" >{{item.mark}}</span>
+                          
+                    </el-tooltip>
                     <span class="item-right auth-icon" v-else @click.stop="removeAuth(item,index)">
-                        <i class="iconfont icon-weibiaoti-"></i>
+                                <i class="iconfont icon-weibiaoti-"></i>
                     </span>
+                 
+                       
                 </li>
             </template>
         </ul>
@@ -26,7 +40,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { stat } from 'fs';
+import { stat } from "fs";
 export default {
     name: "AuthList",
     props: {
@@ -41,6 +55,7 @@ export default {
     methods: {
         curAuth(item, index) {
             let cur = this.authList[index];
+            console.log(cur, "-----cur----");
             if (cur.show) {
                 this.$set(this.authList[index], "show", false);
                 this.$emit("removeSelected", item);
@@ -54,15 +69,11 @@ export default {
             this.$emit("removeSelected", curitem);
         },
         empty() {
-          
             this.$emit("emptySelected");
         }
     },
-    mounted() {
-   
-    },
-    watch:{
-         
+    mounted() {},
+    watch: {
         // if (this.memberPolicy.length > 0) {
         //      console.log(this.memberPolicy);
         //     for (let i = 0; i < this.userPermission.length; i++) {
@@ -75,17 +86,18 @@ export default {
         // }
     },
     computed: {
-         ...mapState({
+        ...mapState({
             userPermission: state => state.memberManager.userPermission,
             memberPolicy: state => state.memberManager.memberPolicy
-        }),
-        
+        })
     }
 };
 </script>
 
 <style lang="scss" scoped>
-.choose-bg {
+.memenber-auth{
+    font-size: 12px;
+    .choose-bg {
     background: #e8f8fb;
 }
 
@@ -101,6 +113,7 @@ export default {
     min-height: 274px;
 }
 .auth-list .list-item {
+    cursor: pointer;
     height: 40px;
     line-height: 40px;
     width: 100%;
@@ -129,7 +142,7 @@ export default {
     color: #8c8c8c;
 }
 .empty {
-      cursor: pointer;
+    cursor: pointer;
     width: 30%;
     color: #00c1de;
     text-align: right;
@@ -141,4 +154,6 @@ export default {
 .icon-weibiaoti- {
     color: #f4542b;
 }
+}
+
 </style>

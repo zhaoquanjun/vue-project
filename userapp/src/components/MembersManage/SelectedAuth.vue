@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="selected-auth">
         <div class="auth-name-title">
             <span class="item-left">权限名称</span>
             <span class="item-right empty" @click="empty">清空</span>
@@ -12,7 +12,7 @@
                     :key="item"
                 >
                    
-                    <span class="item-left">{{item}}</span>
+                    <span class="item-left auth-name ellipsis">{{item}}</span>
                     <span class="item-right auth-icon" @click.stop="removeAuth(item,index)">
                         <i class="iconfont icon-weibiaoti-"></i>
                     </span>
@@ -83,6 +83,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.selected-auth{
+    font-size: 12px;
+}
 .choose-bg {
     background: #e8f8fb;
 }
@@ -99,6 +102,7 @@ export default {
     min-height: 274px;
 }
 .auth-list .list-item {
+    cursor: pointer;
     height: 40px;
     line-height: 40px;
     width: 100%;
@@ -116,8 +120,11 @@ export default {
     float: left;
     color: #262626;
 }
-.item-right {
+.auth-name{
     width: 60%;
+}
+.item-right {
+    width: 40%;
     padding-left: 10px;
     height: 40px;
     overflow: hidden;

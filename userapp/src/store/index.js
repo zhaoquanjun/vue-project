@@ -9,8 +9,6 @@ import user from "./modules/user";
 import dashboard from "./modules/dashboard"
 import memberManager from "./modules/member-manager";
 import {setLocal,getLocal} from "@/libs/local"
-import { Alert } from "element-ui";
-let Base64 = require('js-base64').Base64;
 Vue.use(Vuex);
 const store = new Vuex.Store({
   modules: {
