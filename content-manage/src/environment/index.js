@@ -5,25 +5,25 @@
 
 
 /**生产环境 */
-let memberManageApi = 'http://api.content.newwezhan.cn';
-let dashboardApi = 'http://api.dashboard.newwezhan.cn';
-let uploadPicUrl = 'http://api.content.newwezhan.cn/api/picture';
-let authorityUrl = "http://api.identity.newwezhan.cn";
-let redirectUrl = "http://content.newwezhan.cn/callback";
-let logoutRedirectUri = "http://content.newwezhan.cn/index.html";
-let silentRedirectUri = 'http://content.newwezhan.cn/static/silent-renew.html';
+let memberManageApi = 'http://api.content.console.wezhan.cn';
+let dashboardApi = 'http://api.dashboard.console.wezhan.cn';
+let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
+let authorityUrl = "http://api.identity.console.wezhan.cn";
+let redirectUrl = "http://content.console.wezhan.cn/callback";
+let logoutRedirectUri = "http://content.console.wezhan.cn/index.html";
+let silentRedirectUri = 'http://content.console.wezhan.cn/static/silent-renew.html';
 let clientId = 'content.api';
 /**
  * 开发环境的URL
  */
 
 if (process.env.NODE_ENV === 'development') {
-    memberManageApi = 'http://api.content.newwezhan.cn';
-    dashboardApi = 'http://api.dashboard.newwezhan.cn';
-    uploadPicUrl = 'http://api.content.newwezhan.cn/api/picture';
-    authorityUrl = "http://api.identity.newwezhan.cn";
+    memberManageApi = 'http://api.content.console.wezhan.cn';
+    dashboardApi = 'http://api.dashboard.console.wezhan.cn';
+    uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
+    authorityUrl = "http://api.identity.console.wezhan.cn";
     redirectUrl = "http://localhost:8081/callback";
-    logoutRedirectUri = "http://content.newwezhan.cn/index.html";
+    logoutRedirectUri = "http://content.console.wezhan.cn/index.html";
     silentRedirectUri = 'http://localhost:8081/static/silent-renew.html';
     clientId = 'dev.content.api';
 };
