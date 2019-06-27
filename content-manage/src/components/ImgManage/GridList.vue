@@ -58,6 +58,7 @@ export default {
                 this.seletedList = this.seletedList.filter(cur => cur !== item);
             }
             this.$emit("handleSelectionChange", this.seletedList);
+        
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;

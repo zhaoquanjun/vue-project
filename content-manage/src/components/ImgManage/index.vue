@@ -341,7 +341,7 @@ export default {
                  this.getPicList();
             } else {
                 this.componentId = "GridList";
-                this.picSearchOptions.pageSize = 18;
+                this.picSearchOptions.pageSize = 20;
                  this.getPicList();
             }
         }

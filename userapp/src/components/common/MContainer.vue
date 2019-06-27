@@ -6,6 +6,7 @@
         <el-main>
             <slot name="container">xxx</slot>
         </el-main>
+       
     </el-container>
 </template>
 <style scoped>

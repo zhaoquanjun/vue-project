@@ -9,7 +9,6 @@ import environment from "@/environment/index.js";
 import store from "@/store/index";
 import router from '@/router/index'
 import securityService from "@/services/authentication/securityService";
-console.log(store.state)
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = environment.memberManageApi;
@@ -17,6 +16,7 @@ console.log(store.state)
 //     axios.defaults.baseURL = '/';
 // }
 axios.defaults.baseURL = environment.memberManageApi;
+//axios.defaults.withCredentials=true 允许携带cookie
 // 请求超时时间
 axios.defaults.timeout = 5000;
 //设置put请求传输内容的格式

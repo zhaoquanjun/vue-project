@@ -188,11 +188,6 @@ export default {
             this.getArticleList();
         },
         changeStickStatus(value) {
-            if (!isNaN(value)) {
-                value = !!value;
-            } else {
-                value = null;
-            }
             this.articleSearchOptions.topStatus = value;
             this.getArticleList();
         },

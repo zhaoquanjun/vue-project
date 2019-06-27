@@ -1,6 +1,7 @@
 import { getUserCurrentAppPolicy, getUserDashboard, getSliderMenuList} from "@/api/index"
 import { authRoutes } from "@/router/routes.js";
 import {setLocal} from "@/libs/local"
+import { Alert } from "element-ui";
 
 // 更具后台菜单路由 匹配出 所需要显示的路由
 let getNeedRoutes = auth => {
@@ -16,8 +17,6 @@ let getNeedRoutes = auth => {
     }
     return r(authRoutes);
 };
-
-
 // 序列化菜单
 let filterMenuListData = (source) => {
    
@@ -34,7 +33,6 @@ let filterMenuListData = (source) => {
     let result1 = Object.values(result).sort((c, d) => {
         return c.orderId - d.orderId;
     });
-    console.log(result1,pathArr)
     return {result1,pathArr};
     
 };
@@ -60,12 +58,14 @@ const dashboard = {
              // setLocal('validateMenu', payload);
          },
          set_menuList(state,m){
-            state.menuList = JSON.stringify(m);
+            // state.menuList = JSON.stringify(m);
+            state.menuList = m;
             setLocal("menulist", m)
 
            },
            set_authList(state, a){
              state.authList = JSON.stringify(a);
+             state.authList = a;
              state.hasRules = true;
              setLocal("authList", a)
            },
@@ -92,10 +92,9 @@ const dashboard = {
             return r;
         },
         async getCurRouteAuth({state,getters}, path) {
-              
-            if(!state.authList) return
-            let authList = JSON.parse(state.authList)
-            return authList.some((item, index, array) => {
+            if(!state.authList) return;
+            // let authList = JSON.parse(state.authList)
+            return state.authList.some((item, index, array) => {
                 return item === path;
             });
         }
@@ -103,7 +102,8 @@ const dashboard = {
     getters: {
         getMenuList(state){
             if(!state.menuList) return 
-            return JSON.parse(state.menuList)
+            // return JSON.parse(state.menuList)
+            return state.menuList
         }
     }
 };

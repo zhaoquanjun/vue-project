@@ -9,15 +9,16 @@
         <el-aside class="m-asideleft" :style="{width:width+'px'}">
             <ul class="left-menu">
                 <li
+                    ref="menuItem"
                     class="left-menu-item"
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(i)"
-                    @click="skipPages(it)"
+                    @click="skipPages(it,i)"
                 >
                     <!-- <svg-icon :icon-class="'l-' + it.code"></svg-icon> -->
                     <!-- :class="curIndex==i ? it.code+"-on" : it.code" -->
-                    <i class="menu-icon" :class="curIndex==i ? it.code+'-on' : it.code"></i>
+                    <i class="menu-icon" :class="[curIndex==i ? it.code+'-on' : it.code]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                 </li>
             </ul>
@@ -55,42 +56,12 @@ export default {
       
     },
     methods: {
-        getMenuListData() {
-            let data = JSON.parse(this.$store.state.validateMenu);
-            if (data && data.isAdmin) {
-                this.menuList = this.filterMenuListData(data.menuList);
-            } else {
-                // let { result, pathArr } = this.filterMenuListData(data);
-                // this.menuList = result;
-              this.menuList=this.filterMenuListData(data.menuList)
-                //this.menuList = this.filterUserMenuListData(data);
-                // this.menuList = this.treeData(data, "id", "parentId", "children");
-            }
-        },
-        filterMenuListData(source) {
-            let cloneData = JSON.parse(JSON.stringify(source));
-            let result =  cloneData.filter(father => {
-                let branchArr = cloneData.filter(
-                    child => father.id == child.parentId
-                );
-                branchArr.length > 0 ? (father.children = branchArr) : "";
-                return father.parentId == 0; 
-            });
-             let result1 = Object.values(result).sort((c, d) => {
-                return c.orderId - d.orderId;
-            });
-            return result1;
-           
-        },
-
         changeCurHoverItem(i) {
             this.curIndex = i;
         },
-        skipPages(item) {
-            console.log(item)
+        skipPages(item,i) {
+            console.log(this.$refs.menuItem)    
             let path = item.menuUrl.split('/')[1]
-            console.log(path,`/${item.code}`)
-            console.log(this.$router)
             if(!item.path){return}
             this.$router.push(item.path)
         },
@@ -107,8 +78,7 @@ export default {
     },
     computed: {
         getMenuList(){
-            console.log(this.$store.getters.getMenuList)
-              if(!this.$store.getters.getMenuList) return
+            if(!this.$store.getters.getMenuList) return
             return this.$store.getters.getMenuList
         },
         menuListChild(){
@@ -134,10 +104,7 @@ export default {
 </script>
 
 <style scoped>
-.left-menu-item:hover {
-    background: #e5f8fa;
-    color: #00c1de;
-}
+
 
 .m-aside {
     position: absolute;
@@ -165,6 +132,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 手写菜单
+
 .left-menu {
     height: 100%;
     border-right: solid 1px #e6e6e6;
@@ -174,6 +142,10 @@ export default {
         padding: 0 20px;
         line-height: 40px;
         white-space: nowrap;
+        &:hover{
+             background: #e5f8fa;
+            color: #00c1de;
+        }
         .menu-item-content {
             margin-left: 20px;
         }

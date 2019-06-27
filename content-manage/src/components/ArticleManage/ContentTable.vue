@@ -15,7 +15,7 @@
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column prop="title" label="文章标题">
+            <el-table-column :show-overflow-tooltip="true" prop="title" label="文章标题">
                 <template slot-scope="scope">
                     <img :src="scope.row.pictureUrl" class="cover" alt>
                     <span>{{ scope.row.title }}</span>
