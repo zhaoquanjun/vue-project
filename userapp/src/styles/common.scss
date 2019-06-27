@@ -42,3 +42,9 @@ button{
     bottom: -10px; left: -10px;
    }
 
+   .ellipsis{
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

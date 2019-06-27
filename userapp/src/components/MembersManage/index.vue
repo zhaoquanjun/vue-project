@@ -13,7 +13,7 @@
                 <el-col :span="15">
                     <span class="user-count">成员 ({{memberCount}}人)</span>
                     <button class="btn-item" :disabled="disabled" @click="authorization">权限配置</button>
-                    <button class="btn-item" :disabled="disabled" @click="batchDeletMember">删除</button>
+                    <button class="btn-item" style="width:66px" :disabled="disabled" @click="batchDeletMember">删除</button>
                     <div class="seachInput">
                         <el-input
                             size="medium"
@@ -60,6 +60,7 @@
                 <invitation-link></invitation-link>
             </right-pannel>
         </el-main>
+        
     </el-container>
 </template>
 <script>
@@ -303,6 +304,13 @@ export default {
     }
 };
 </script>
+<style scoped>
+.seachInput /deep/ .el-input__inner,.seachInput /deep/ .el-input-group__append .el-button{
+   border-radius: 0 !important;
+    font-size: 12px;
+}
+</style>
+
 <style lang="scss" scoped>
 .member-container {
     .member-content {
@@ -329,7 +337,7 @@ export default {
         line-height: 34px;
         width: 90px;
         background: #eeeeee;
-        border-radius: 3px;
+        
         margin-right: 10px;
     }
     .invite-member {

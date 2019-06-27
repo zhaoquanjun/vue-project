@@ -14,7 +14,9 @@ const router = new VueRouter({
 export default router;
 
 router.beforeEach(async (to, from, next) => {
+  
   if(!to.meta.requiresAuth){
+   
     store.dispatch('_getMenuListData')
      next()
     return
@@ -32,7 +34,8 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     if (to.name !== "callback") {
-      securityService.getUser().then(async (data) => {
+      securityService.getUser(location.href).then(async (data) => {
+        console.log(data,'dadddd')
         if (!data) {
           securityService.signIn();
           next()

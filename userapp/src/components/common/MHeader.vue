@@ -42,7 +42,7 @@
                         </p>
                         <dl class="login-set dropdown-avatar-menu" v-show="isdropdownAvatarShow">
                             <dd @click="pannelShow">个人设置</dd>
-                            <dd>退出控制台</dd>
+                            <dd @click="signOut">退出控制台</dd>
                         </dl>
                     </span>
                 </div>
@@ -51,6 +51,7 @@
     </div>
 </template>
 <script>
+import securityService from "@/services/authentication/securityService";
 export default {
     data() {
         return {
@@ -59,6 +60,9 @@ export default {
         };
     },
     methods: {
+        signOut(){
+            securityService.signOut(location.href)
+        },
         pannelShow() {
             this.$router.push({
                 name: "personal"
