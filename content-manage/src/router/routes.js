@@ -2,11 +2,13 @@
 
 // 默认访问的路由
 export const defaultRoutes = [
-
   {
     path: "/",
-    redirect:{path:'/picture'},
-    component: ()=>import('@/components/index.vue'),
+    redirect: { path: '/content/news' },
+  },
+  {
+    path: "/content",
+    component:  () => import('@/views/content-manage/content.vue'),
     children:[
       {
         path: "news",

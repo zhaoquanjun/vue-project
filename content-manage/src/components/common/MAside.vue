@@ -5,7 +5,7 @@
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-      <!-- @mouseleave="collapseClose" -->
+        <!-- @mouseleave="collapseClose" -->
         <el-aside class="m-asideleft" :style="{width:width+'px'}">
             <ul class="left-menu">
                 <li
@@ -23,12 +23,12 @@
                 </li>
             </ul>
         </el-aside>
-     <!--  :menuList="menuList[curIndex]" -->
+        <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
             v-if="isLeftNavComponentsShow"
             :style="{width:width1+'px !important',transition: 'width '+time+' linear',backgroundColor:'#fff',height: '100%'}"
             class="m-asideright"
-           :menuList="menuListChild"
+            :menuList="menuListChild"
         ></LeftNavComponents>
     </div>
 </template>
@@ -45,24 +45,29 @@ export default {
             time: "0.8s",
             curIndex: 0,
             menuList: [],
-            serversData: []
+            serversData: [],
+            curWebsite: "content.console.wezhan.cn"
         };
     },
     components: {
         LeftNavComponents
     },
-    mounted(){
-      
-    },
+    mounted() {},
     methods: {
         changeCurHoverItem(i) {
             this.curIndex = i;
         },
-        skipPages(item,i) {
-            console.log(this.$refs.menuItem)    
-            let path = item.menuUrl.split('/')[1]
-            if(!item.path){return}
-            this.$router.push(item.path)
+        skipPages(item, i) {
+            console.log(this.$refs.menuItem);
+            let [a, b] = item.menuUrl.split("/");
+            if (!item.path) {
+                return;
+            }
+            if (this.curWebsite == a) {
+                this.$router.push(item.path);
+            } else {
+                window.location.href = "//" + item.menuUrl;
+            }
         },
         collapseOpen(width, time) {
             this.width = width;
@@ -76,35 +81,29 @@ export default {
         }
     },
     computed: {
-        getMenuList(){
-            if(!this.$store.getters.getMenuList) return
-            return this.$store.getters.getMenuList
+        getMenuList() {
+            if (!this.$store.getters.getMenuList) return;
+            return this.$store.getters.getMenuList;
         },
-        menuListChild(){
-            if(!this.getMenuList) return
-            return this.getMenuList[this.curIndex]
+        menuListChild() {
+            if (!this.getMenuList) return;
+            return this.getMenuList[this.curIndex];
         },
-        isLeftNavComponentsShow(){
-             if(!this.$store.getters.getMenuList) return
-            let item = this.$store.getters.getMenuList[this.curIndex] ;
-            if(item && item.children){
-                return true
-            }else{
-                return false
+        isLeftNavComponentsShow() {
+            if (!this.$store.getters.getMenuList) return;
+            let item = this.$store.getters.getMenuList[this.curIndex];
+            if (item && item.children) {
+                return true;
+            } else {
+                return false;
             }
-        },
-       
+        }
     },
-    watch:{
-       
-    }
-   
+    watch: {}
 };
 </script>
 
 <style scoped>
-
-
 .m-aside {
     position: absolute;
     left: 0;
@@ -141,8 +140,8 @@ export default {
         padding: 0 20px;
         line-height: 40px;
         white-space: nowrap;
-        &:hover{
-             background: #e5f8fa;
+        &:hover {
+            background: #e5f8fa;
             color: #00c1de;
         }
         .menu-item-content {

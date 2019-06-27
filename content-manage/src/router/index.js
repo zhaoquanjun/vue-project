@@ -5,7 +5,6 @@ import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
 import Cookies from "js-cookie"
 Vue.use(VueRouter);
-
 let router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
@@ -16,8 +15,8 @@ let accessToken = store.state.accessToken.Authorization;
 let flag = false;
 router.beforeEach(async (to, from, next) => {
   if (!to.meta.requiresAuth) {
-    debugger
     store.dispatch('_getMenuListData')
+    await store.dispatch('_updateAppIdToCookie')
     next()
     return
   }
@@ -37,21 +36,13 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     if (to.name !== "callback") {
-      alert(1)
-      debugger
       securityService.getUser().then(async (data) => {
         if (!data) {
-          alert(2)
-          debugger
-         console.log(data)
           securityService.signIn();
           next()
         } else {
-          alert(JSON.stringify(data))
-          console.log(data)
-          console.log(data)
-          debugger
           store.commit("SET_USER", data);
+          await store.dispatch('_updateAppIdToCookie')
           await store.dispatch('_getMenuListData')
           next()
         }

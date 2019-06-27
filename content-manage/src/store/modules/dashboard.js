@@ -22,7 +22,7 @@ let filterMenuListData = (source) => {
     let cloneData = source;
     let pathArr=[];
     let result =  cloneData.filter(father => {
-        pathArr.push(father.code)
+        pathArr.push(father.path)
         let branchArr = cloneData.filter(
             child => father.id == child.parentId
         );

@@ -12,7 +12,7 @@ export default {
   props: ["menuList"],
   data(){
     return {
-      curWebsite:"dashboard.console.wezhan.cn"
+      curWebsite:"content.console.wezhan.cn"
     }
   },
   mounted() {
@@ -27,10 +27,12 @@ export default {
     //   }
     // }
     handlerRoute(item){
+     
       let host = window.location.host; // 表示当前接口返回的url => item.menuUrl.split('/')[1]
       // dashboard.console.wezhan.cn
       //host === "localhost:8082"
-       let [a,b]= item.menuUrl.split('/')
+       let [a,b]= item.menuUrl.split('/');
+       
       if(this.curWebsite == a){
         this.$router.push(item.path)
       }else{

@@ -17,17 +17,19 @@ export default router;
 router.beforeEach(async (to, from, next) => {
 
   if (!to.meta.requiresAuth) {
-
+    alert(123)
     store.dispatch('_getMenuListData')
     next()
     return
   }
   if (getLocal("token")) {
     if (!Cookies.get('AppId')) {
+      alert("coolie")
       await store.dispatch('_updateAppIdToCookie')
     }
-    next()
+    
     let r = await store.dispatch('getCurRouteAuth', to.path);
+    alert(r)
     if (r) {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
@@ -44,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
           next()
         } else {
           store.commit("SET_USER", data);
-          
+          await store.dispatch('_updateAppIdToCookie')
           await store.dispatch('_getMenuListData')
           next()
         }
