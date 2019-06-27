@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="auth-config">
         <member-info 
        v-model="value"
         v-if="memberInfo && Object.keys(memberInfo).length>0" 
@@ -63,7 +63,9 @@ export default {
         }
     },
     components: { AuthList,SelectedAuth, MemberInfo },
-    created() {},
+        created() {
+            
+        },
     data() {
         return {
             input: "",
@@ -81,24 +83,55 @@ export default {
         /**
          * 点击权限配置 "确认" 按钮
          */
-        primary() {
+        async primary() {
             if (this.isBatch) {
-                this._batchUpdateUserPolicy(this.userIds);
+                let { status } = await this._batchUpdateUserPolicy(this.userIds);
+                if (status === 200) {
+                    this.$message({
+                        type: "successed",
+                        message: "保存成功"
+                    });
+                    this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+                } else {
+                    this.$message({
+                        type: "failed",
+                        message: "保存失败"
+                    });
+                }
             } else {
-                console.log(this.memberInfo, '提交');
+                if (this.value != null && this.value.length > 20) {
+                    this.$message({
+                        type: "failed",
+                        message: "备注长度不能超过20个字符!"
+                    });
+                    return false;
+                }
                 let para = {
                     remark: this.value,
                     userId: this.memberInfo.id
                 };
-                this._updateUserPolicy(para);
+                let { status } =await this._updateUserPolicy(para);
+                if (status === 200) {
+                    this.$message({
+                        type: "successed",
+                        message: "保存成功"
+                    });
+                    this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+                } else {
+                    this.$message({
+                        type: "failed",
+                        message: "保存失败"
+                    });
+                }
             }
-             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+            this.input = '';
         },
         cancel(){
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+            this.input = '';
         },
         chooseAuth(obj) {
-            this.CHOOSEAUTH(obj);
+            this.CHOOSEAUTH(obj);           
         },
         removeSelected(item) {
             this.REMOVESELECTEDAUTH(item);
@@ -108,6 +141,7 @@ export default {
         },
         closePanel() {
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
+            
         },
         searchAuth() {
             this.oldUserPermission = JSON.stringify(this.userPermission);
@@ -139,6 +173,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.auth-config{
+    font-size: 12px;
+}
 .auth-title {
     height: 40px;
     line-height: 40px;
@@ -186,6 +223,7 @@ export default {
             background: #fff;
         }
         .auth-input {
+            font-size: 12px;
             text-indent: 10px;
             box-sizing: border-box;
             width: 100%;

@@ -15,7 +15,6 @@ export const defaultRoutes = [
   {
     path: "/",
     redirect: { path: '/board' },
-    component: () => import('@/views/board/index.vue'),
   },
   {
     path: "/board",
@@ -124,7 +123,7 @@ export const defaultRoutes = [
     component: () => import("@/views/personal.vue"),
     meta: {
       title: "个人中心",
-      requiresAuth: true,
+     
       requiresRole: {},
     }
   },

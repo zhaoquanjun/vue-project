@@ -131,6 +131,7 @@ export default {
             background: #fff;
         }
         .auth-input {
+            font-size: 12px;
             width: 100%;
             text-indent: 10px;
         }
