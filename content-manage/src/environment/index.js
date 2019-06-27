@@ -4,7 +4,7 @@
  */
 
 
-/**生产环境 */
+/**生产环境-- */
 let memberManageApi = 'http://api.content.console.wezhan.cn';
 let dashboardApi = 'http://api.dashboard.console.wezhan.cn';
 let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
