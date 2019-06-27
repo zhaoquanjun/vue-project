@@ -1,9 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import dashboard from "./modules/dashboard"
 Vue.use(Vuex);
 
 import {setLocal,removeLocal} from '@/libs/local'
+
 const store =  new Vuex.Store({
+  modules: {
+    dashboard,
+  },
   state: {
     accessToken: { Authorization: '' },
   },

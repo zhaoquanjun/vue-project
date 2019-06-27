@@ -6,13 +6,12 @@
                 <slot name="title-text"></slot>
                 <el-tooltip
                     class="item"
-                    effect="dark"
-                    content="可批量为多个成员增加权限，该操作不会删除"
-                    placement="left-start"
+                    effect="light"
+                     content="可批量为多个成员增加权限，该操作不会删除"
+                    placement="bottom-end"
                 >
-                    <slot name="icon-tip"></slot>
+                   <slot name="icon-tip"></slot>
                 </el-tooltip>
-               
             </span>
             <span class="close-pannel" @click="closePanel">X</span>
         </div>

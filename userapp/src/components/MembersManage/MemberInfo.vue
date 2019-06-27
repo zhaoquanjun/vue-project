@@ -1,5 +1,5 @@
 <template>
-    <dl class="members—info">
+    <dl class="members—info" id="members—info">
         <dt class="avatar">
             <img src="../../assets/avatar.jpeg" onerror>
         </dt>
@@ -12,8 +12,8 @@
                 手机 :
                 <i>{{memberInfo.phoneNumber}}</i>
             </span>
-            <span>
-                备注 :
+            <span style="display: flex;align-items: center;">
+               <i style="flex: none;padding-right: 10px;"> 备注 :</i>
                 <template v-if="isRemarkShow">
                     <span @click="handleRemark" style="display: inline-block;  cursor: pointer;">
                         <i>{{ remarkValue}}</i>
@@ -21,11 +21,37 @@
                     </span>
                 </template>
                 <template v-else>
-                    <input type="text" 
-                    :value="memberInfo.remark"
-                     @input="change" 
-                      @blur="handlerblur"
-                     class="remark-input input-hover">
+                    <el-input
+                        v-if="inputType"
+                       clear="remark" 
+                        type="text"
+                        placeholder="请输入内容"
+                        v-model="memberInfo.remark"
+                        maxlength="100"
+                        show-word-limit
+                         @change="change"
+                        @blur="handlerblur"
+                        @focus="focus"
+                    ></el-input>
+                       <el-input
+                        v-else
+                       clear="remark" 
+                        type="text"
+                        placeholder="请输入内容"
+                        v-model="memberInfo.remark"
+                        maxlength="100"
+                        show-word-limit
+                         @change="change"
+                        @blur="handlerblur"
+                        @focus="focus"
+                    ></el-input>
+                    <!-- <input
+                        type="text"
+                        :value="memberInfo.remark"
+                        @input="change"
+                        @blur="handlerblur"
+                        class="remark-input input-hover"
+                    > -->
                     <!-- <el-input
                         :value="value"
                         @input="change"
@@ -49,35 +75,48 @@ export default {
     },
     data() {
         return {
+            inputType:true,
             isRemarkShow: true
         };
-        },
-        created() {
-            
-        },
+    },
+    created() {},
     methods: {
         handleRemark() {
+            
             this.isRemarkShow = false;
         },
-        handlerblur(){
-             this.isRemarkShow = true;
+        handlerblur() {
+         
+            this.isRemarkShow = true;
+            // this.inputType = "text"
         },
-        change(e) {
-            this.memberInfo.remark=e.target.value;
+        focus(){
+            
+            this.inputType = "textarea"
+        },
+        change(value) {
+            console.log(value,'00000')
+            //this.memberInfo.remark = e.target.value;
             //this.$emit("update:value", e.target.value);
-            this.$emit("input", e.target.value);
+            this.$emit("input", value);
         }
     },
-        computed : {
-            remarkValue() {
-                return this.memberInfo.remark ? this.memberInfo.remark:""
-            }
+    computed: {
+        remarkValue() {
+            return this.memberInfo.remark ? this.memberInfo.remark : "";
         }
-
+    }
 };
 </script>
+<style >
+#members—info .el-input .el-input__inner{
+    height: 32px;
+    line-height: 32px;
+}
+</style>
 
 <style lang="scss" scoped>
+
 // 成员信息
 .members—info {
     padding: 0 15px;
@@ -105,17 +144,15 @@ export default {
             line-height: 20px;
         }
         .remark-input {
-           
             width: 322px;
             height: 28px;
             border: none;
-            border: 1px solid #E8E8E8;
+            border: 1px solid #e8e8e8;
             border-radius: 1px;
             text-indent: 10px;
-            &:hover{
-              border: 1px solid #00C1DE
+            &:hover {
+                border: 1px solid #00c1de;
             }
-           
         }
     }
 }

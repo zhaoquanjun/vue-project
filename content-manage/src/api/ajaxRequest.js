@@ -8,9 +8,10 @@ import store from "@/store/index"
 import router from '@/router/index'
 import { MessageBox, Message } from 'element-ui';
 import securityService from "@/services/authentication/securityService";
+import Cookies from "js-cookie"
 axios.defaults.baseURL = environment.memberManageApi;
 // 请求超时时间
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 100000;
 
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
@@ -25,7 +26,10 @@ axios.interceptors.request.use(
         const token = store.getters.token;
         token && (config.headers.Authorization = 'Bearer ' +token);
         //todo 测试阶段写死
-        config.headers.AppId = '823EB3BD-93F4-4655-B833-D604A6EF2032';
+        if(!Cookies.get('AppId')){
+            config.headers.AppId = store.state.dashboard.appid;
+        }
+       
         return config;
     },
     error => {
