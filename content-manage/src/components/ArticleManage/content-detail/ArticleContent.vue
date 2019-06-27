@@ -29,7 +29,7 @@
                     <div>
                         <div style="float:left">
                             <span style="font-size:12px">分类:</span>
-                            <span class="select-sort">
+                            <span class="select-sort" style="width:200px;">
                                 <SelectTree size="small"  placeholder="请选择"
                                     :categoryName="categoryName"
                                     :tree-result="treeResult"
@@ -38,9 +38,9 @@
                             </span>
                         </div>
                         <div style="float:right">
-                            <span style="font-size:12px">排序</span>
+                            <span style="font-size:12px">状态</span>
                             <span class="select-sort">
-                                <el-select size="small" v-model="value" placeholder="请选择">
+                                <el-select size="small" v-model="articleDetail.isPublish" placeholder="请选择">
                                     <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -160,26 +160,15 @@ export default {
             categoryName: "全部分类",
             options: [
                 {
-                    value: "选项1",
+                    value: true,
                     label: "上线"
                 },
                 {
-                    value: "选项2",
+                    value: false,
                     label: "下线"
                 }
             ],
-            value: "上线",
-            options1: [
-                {
-                    value: "选项1",
-                    label: "全部分类1"
-                },
-                {
-                    value: "选项2",
-                    label: "全部分类2"
-                }
-            ],
-            value2: "全部分类",
+            value: false,
 
             activeName: "",
             activeName1:"",
@@ -190,6 +179,7 @@ export default {
                 summary: "",
                 contentDetail: "",
                 searchKeywords: "",
+                isPublish: false,
                 createTime: new Date(),
                 isTop: false,
                 metaTitle: "",
@@ -228,6 +218,7 @@ export default {
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
+            this.$emit("changeOperateName","编辑");
         }
         this.getTreeAsync();
     },
@@ -249,6 +240,7 @@ export default {
         //选择移动分类时的节点
         chooseNode(node) {
             this.articleDetail.categoryId = node.id;
+            this.categoryName = node.label;
         },
         // 新建保存
         submitForm(formName,imageUrl) {
@@ -277,7 +269,7 @@ export default {
                     type: "success",
                     message: "添加成功!"
                 });
-                this.$router.push(`/create?id=${data}`);
+                this.$router.push(`/create?id=${data}&categoryName=${this.categoryName}`);
             }
         },
         // 编辑提交

@@ -177,12 +177,14 @@ export default {
          * 移动分类操作
          */
         batchMove(row) {
+            this.$emit("changeOperateName","移动");
             this.$emit("batchMove", [row.id]);
         },
         /**
          * 复制操作
          */
         batchCopy(row) {
+            this.$emit("changeOperateName","复制");
             this.$emit("batchCopy", [row.id]);
         },
 

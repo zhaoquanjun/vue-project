@@ -27,6 +27,7 @@
                 @batchRemove="batchRemoveNews"
                 @batchTop="batchTopNews"
                 @batchPublish="batchPublishNews"
+                @changeOperateName="changeOperateName"
             ></content-header>
             <el-main>
                 <content-table
@@ -43,6 +44,7 @@
                     @handleEditArticle="handleEditArticle"
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
+                    @changeOperateName="changeOperateName"
                 ></content-table>
                 <el-dialog
                     width="0"
@@ -55,9 +57,9 @@
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="cancelUpdateCategory"
                 >
-                    <span slot="title-text">移动文章分类</span>
+                    <span slot="title-text">{{this.operateName}}文章分类</span>
                     <div class="category-content">
-                            <span name="cur-tip">移动至</span>
+                            <span name="cur-tip">{{this.operateName}}至</span>
                         </div>
                     <SelectTree
                         :categoryName="curArticleInfo.categoryName"
@@ -100,6 +102,7 @@ export default {
             idsList: [],
             rightPanelType: 1, // 1 移动文章 2 复制文章
             selectCategory:"",
+            operateName:"移动",
 
             isInvitationPanelShow: false,
             articleSearchOptions: {
@@ -128,6 +131,10 @@ export default {
         }
     },
     methods: {
+        // 移动分类 或是 复制到分类
+        changeOperateName(operate){
+            this.operateName = operate;
+        },
         /**
          * 获取多选的列表
          */
