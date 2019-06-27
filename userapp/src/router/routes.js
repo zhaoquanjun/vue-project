@@ -15,7 +15,12 @@ export const defaultRoutes = [
   {
     path: "/",
     redirect: { path: '/system' },
-    component: () => import('@/views/board/index.vue'),
+        component: () => import('@/views/board/index.vue'),
+        meta: {
+            title: "控制台首页",
+            requiresAuth: true,
+            requiresRole: {},
+        }
   },
   {
     path: "/board",
