@@ -28,7 +28,7 @@
                     </span>
                 </div>
                 <template v-else>
-                    <img v-if="data.thumbnailPicUrl" :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"/>
+                    <img v-if="data.thumbnailPicUrl" :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'" />
                     <span>{{data.label}}</span>
                     <span v-if="data.level<=1">({{data.leafSum }})</span>
                 </template>
@@ -145,7 +145,7 @@
                     }
                     case "before":
                     case "after": {
-                        draggingNode.parentId = targetNode.parentId;
+                        targetNode.parentId ? targetNode.parentId : 0;
                         break;
                     }
                     case "none":
@@ -154,11 +154,7 @@
                     }
                 }
                 var idOrderByArr = [];
-                for (
-                    var i = targetNodeDom.parent.childNodes.length - 1;
-                    i >= 0;
-                    i--
-                ) {
+                for (var i = 0; i < targetNodeDom.parent.childNodes.length; i++) {
                     var childNode = targetNodeDom.parent.childNodes[i];
                     idOrderByArr.push(childNode.data.id);
                 }
@@ -236,7 +232,7 @@
                 }
                 if (data.isNewAdd) return;
                 this.curlabelName = data.label;
-                this.productSearchOptions.CategoryId = data.id;
+                this.productSearchOptions.categoryIdList = this.getAllNodeIds(data);
                 this.$emit("getProList");
                 // 点击其他区域 把当前新增但未确定的节点删除掉
                 this.newAddData && this.newAddData.children.shift()

@@ -46,9 +46,7 @@
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
             </el-table-column>
-
-            <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
-
+                       
             <el-table-column prop="createTimeStr" label="创建时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作">

@@ -2,6 +2,7 @@
  * 请求拦截、相应拦截、错误统一处理
  */
 import axios from 'axios';
+import qs from 'qs';
 import { getLocal } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 import store from "@/store/index"
@@ -93,7 +94,10 @@ axios.interceptors.response.use(
 export function get(url, params) {
     return new Promise((resolve, reject) => {
         axios.get(url, {
-            params: params
+            params: params,
+            paramsSerializer: params => {
+                return qs.stringify(params, { indices: false })
+            }
         })
             .then(res => {
                 resolve(res);
