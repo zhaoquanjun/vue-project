@@ -123,7 +123,7 @@ export default {
                 keyword: "", //1
                 isDelete: false, //1
                 isOnSell: null, //is 上架
-                categoryId: null, //1,
+                categoryIdList: [], //1,
             }
         };
     },
@@ -299,7 +299,7 @@ export default {
          * z 点击 全部分类 刷新树结构
          */
         resetCategoryId() {
-            this.productSearchOptions.categoryId = null;
+            this.productSearchOptions.categoryIdList = [];
             this.getArticleListAsync();
         },
         /**
