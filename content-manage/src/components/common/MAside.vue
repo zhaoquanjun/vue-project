@@ -5,103 +5,35 @@
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <!--   @mouseenter="collapseOpen(150,0.8)"
-        @mouseleave="collapseClose"-->
+        <!-- @mouseleave="collapseClose" -->
         <el-aside class="m-asideleft" :style="{width:width+'px'}">
             <ul class="left-menu">
-                <li class="left-menu-item">
-                    <svg-icon icon-class="l-home"></svg-icon>
-                    <span class="menu-item-content">控制台首页</span>
-                </li>
-                
-                <li class="left-menu-item">
-                    <svg-icon icon-class="l-content"></svg-icon>
-                    <span class="menu-item-content">内容管理</span>
-                </li>
-                <li class="left-menu-item">
-                    <svg-icon icon-class="l-website"></svg-icon>
-                    <span class="menu-item-content">网站管理</span>
-                </li>
-                 <li class="left-menu-item">
-                    <svg-icon icon-class="l-smallprogram"></svg-icon>
-                    <span class="menu-item-content">小程序</span>
-                </li>
-                 <li class="left-menu-item">
-                    <svg-icon icon-class="l-weixin"></svg-icon>
-                    <span class="menu-item-content">微信公众号</span>
-                </li>
-                <li class="left-menu-item">
-                    <svg-icon icon-class="l-form"></svg-icon>
-                    <span class="menu-item-content">表单管理</span>
-                </li>
-                <li class="left-menu-item">
-                    <svg-icon icon-class="l-member"></svg-icon>
-                    <span class="menu-item-content">电商会员</span>
-                </li>
-                <li class="left-menu-item">
-                    <svg-icon icon-class="l-system"></svg-icon>
-                    <span class="menu-item-content">系统设置</span>
-                </li>
-                <li class="left-menu-item">
-                    <svg-icon icon-class="l-recyclebin"></svg-icon>
-                    <span class="menu-item-content">回收站</span>
+                <li
+                    ref="menuItem"
+                    class="left-menu-item"
+                    v-for="(it, i) in getMenuList"
+                    :key="i"
+                    @mouseenter="changeCurHoverItem(i)"
+                    @click="skipPages(it,i)"
+                >
+                    <!-- <svg-icon :icon-class="'l-' + it.code"></svg-icon> -->
+                    <!-- :class="curIndex==i ? it.code+"-on" : it.code" -->
+                    <i class="menu-icon" :class="[curIndex==i ? it.code+'-on' : it.code]"></i>
+                    <span class="menu-item-content">{{it.name}}</span>
                 </li>
             </ul>
-
-            <!-- <el-menu default-active="1-4-1" class="el-menu-vertical-demo">
-        <el-menu-item
-          v-for="(item) in navList"
-          @mouseenter="collapseOpen(150,0)"
-          :index="item.id"
-          :key="item.id"
-        >
-          <i class="el-icon-menu"></i>
-          <span>{{item.name}}</span>
-        </el-menu-item>
-            </el-menu>-->
-
-            <!-- <el-menu default-active="1-4-1" class="el-menu-vertical" active-text-color="#00c1de">
-                <el-menu-item index="1">
-                    <i>
-                        <svg-icon icon-class="l-home"></svg-icon>
-                    </i>
-                    <span class="menu-item-conten">控制台首页</span>
-                </el-menu-item>
-                <el-menu-item index="2"></el-menu-item>
-                <el-menu-item index="3">
-                    <i>
-                        <svg-icon icon-class="l-website"></svg-icon>
-                    </i>
-                    <span class="menu-item-conten">网站管理</span>
-                </el-menu-item>
-                <el-menu-item index="4">
-                    <i>
-                        <svg-icon icon-class="l-form"></svg-icon>
-                    </i>
-                    <span class="menu-item-conten">表单管理</span>
-                </el-menu-item>
-                <el-menu-item index="5">
-                    <i>
-                        <svg-icon icon-class="l-system"></svg-icon>
-                    </i>
-                    <span class="menu-item-conten">系统设置</span>
-                </el-menu-item>
-                <el-menu-item index="6">
-                    <i>
-                        <svg-icon icon-class="l-recyclebin"></svg-icon>
-                    </i>
-                    <span class="menu-item-conten">回收站</span>
-                </el-menu-item>
-            </el-menu>-->
         </el-aside>
+        <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
-            :style="{width:width1+'px !important',transition: 'width '+time+' linear',backgroundColor:'#fff'}"
+            v-if="isLeftNavComponentsShow"
+            :style="{width:width1+'px !important',transition: 'width '+time+' linear',backgroundColor:'#fff',height: '100%'}"
             class="m-asideright"
-            :navList="navList"
+            :menuList="menuListChild"
         ></LeftNavComponents>
     </div>
 </template>
 <script>
+import { getSliderMenuList } from "@/api/request/user.js";
 import LeftNavComponents from "../Aside/LeftNavComponents";
 
 export default {
@@ -111,60 +43,67 @@ export default {
             width: 50,
             width1: 0,
             time: "0.8s",
-            navList: [
-                { name: "控制台", id: "1" },
-                { name: "内容管理", id: "2" },
-                { name: "网站管理", id: "3" },
-                { name: "小程序管理", id: "4" },
-                { name: "微信公众号", id: "5" },
-                { name: "表单管理", id: "6" },
-                { name: "电商会员", id: "7" },
-                { name: "系统设置", id: "8" },
-                { name: "回收站", id: "9" }
-            ]
+            curIndex: 0,
+            menuList: [],
+            serversData: [],
+            curWebsite: "content.console.wezhan.cn"
         };
     },
     components: {
         LeftNavComponents
     },
+    mounted() {},
     methods: {
+        changeCurHoverItem(i) {
+            this.curIndex = i;
+        },
+        skipPages(item, i) {
+            console.log(this.$refs.menuItem);
+            let [a, b] = item.menuUrl.split("/");
+            if (!item.path) {
+                return;
+            }
+            if (this.curWebsite == a) {
+                this.$router.push(item.path);
+            } else {
+                window.location.href = "//" + item.menuUrl;
+            }
+        },
         collapseOpen(width, time) {
             this.width = width;
             this.width1 = 120;
             this.time = time + "s";
-            this.navList = [
-                { name: "控制台", id: "1" },
-                { name: "内容管理", id: "2" },
-                { name: "网站管理", id: "3" },
-                { name: "小程序管理", id: "4" },
-                { name: "微信公众号", id: "5" },
-                { name: "表单管理", id: "6" },
-                { name: "电商会员", id: "7" },
-                { name: "系统设置", id: "8" },
-                { name: "回收站", id: "9" }
-            ];
         },
         collapseClose() {
             this.width = 50;
             this.width1 = 0;
             this.time = "0s";
         }
-    }
+    },
+    computed: {
+        getMenuList() {
+            if (!this.$store.getters.getMenuList) return;
+            return this.$store.getters.getMenuList;
+        },
+        menuListChild() {
+            if (!this.getMenuList) return;
+            return this.getMenuList[this.curIndex];
+        },
+        isLeftNavComponentsShow() {
+            if (!this.$store.getters.getMenuList) return;
+            let item = this.$store.getters.getMenuList[this.curIndex];
+            if (item && item.children) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    },
+    watch: {}
 };
 </script>
 
 <style scoped>
-.left-menu-item:hover{
-    background: #E5F8FA
-}
-.left-menu-item .svg-icon {
-      stroke: #5F9EE9 !important;
-    fill: #5F9EE9 !important;
-}
-.svg-icon:hover path{
-	fill:red;
-}
-
 .m-aside {
     position: absolute;
     left: 0;
@@ -190,19 +129,93 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-
-
 // 手写菜单
+
 .left-menu {
     height: 100%;
     border-right: solid 1px #e6e6e6;
     background: #fff;
     .left-menu-item {
+        cursor: pointer;
         padding: 0 20px;
         line-height: 40px;
         white-space: nowrap;
+        &:hover {
+            background: #e5f8fa;
+            color: #00c1de;
+        }
         .menu-item-content {
             margin-left: 20px;
+        }
+        .menu-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+        }
+        .board {
+            background: url("~img/menu-icon/board.png") no-repeat center;
+            background-size: 100%;
+        }
+        .board-on {
+            background: url("~img/menu-icon/board-on.png") no-repeat center;
+            background-size: 100%;
+        }
+        .content {
+            background: url("~img/menu-icon/content.png") no-repeat center;
+            background-size: 100%;
+        }
+        .content-on {
+            background: url("~img/menu-icon/content-on.png") no-repeat center;
+            background-size: 100%;
+        }
+        .micro {
+            background: url("~img/menu-icon/micro.png") no-repeat center;
+            background-size: 100%;
+        }
+        .micro-on {
+            background: url("~img/menu-icon/micro-on.png") no-repeat center;
+            background-size: 100%;
+        }
+        .website {
+            background: url("~img/menu-icon/website.png") no-repeat center;
+            background-size: 100%;
+        }
+        .website-on {
+            background: url("~img/menu-icon/website-on.png") no-repeat center;
+            background-size: 100%;
+        }
+        .wechat {
+            background: url("~img/menu-icon/wechat.png") no-repeat center;
+            background-size: 100%;
+        }
+        .wechat-on {
+            background: url("~img/menu-icon/wechat-on.png") no-repeat center;
+            background-size: 100%;
+        }
+        .form {
+            background: url("~img/menu-icon/form.png") no-repeat center;
+            background-size: 100%;
+        }
+        .form-on {
+            background: url("~img/menu-icon/form-on.png") no-repeat center;
+            background-size: 100%;
+        }
+        .system {
+            background: url("~img/menu-icon/system.png") no-repeat center;
+            background-size: 100%;
+        }
+        .system-on {
+            background: url("~img/menu-icon/system-on.png") no-repeat center;
+            background-size: 100%;
+        }
+        .recycle {
+            background: url("~img/menu-icon/recycle.png") no-repeat center;
+            background-size: 100%;
+        }
+        .recycle-on {
+            background: url("~img/menu-icon/recycle-on.png") no-repeat center;
+            background-size: 100%;
         }
     }
 }

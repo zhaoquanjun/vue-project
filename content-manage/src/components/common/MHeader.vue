@@ -7,18 +7,19 @@
                     <span>云～速成美站</span>
                     <span
                         class="designTitle"
+                        @click="designer"
                         @mouseenter="dropdownDesignShow"
                         @mouseleave="dropdownDesignhide"
                     >
                         进入设计
-                        <ul class="intoDesign" v-show="isdropdownDesignShow">
+                        <!-- <ul class="intoDesign" v-show="isdropdownDesignShow">
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
-                        </ul>
+                        </ul> -->
                     </span>
                 </div>
             </el-col>
@@ -42,7 +43,7 @@
                         </p>
                         <dl class="login-set dropdown-avatar-menu" v-show="isdropdownAvatarShow">
                             <dd @click="pannelShow">个人设置</dd>
-                            <dd>退出控制台</dd>
+                            <dd @click="signOut">退出控制台</dd>
                         </dl>
                     </span>
                 </div>
@@ -51,6 +52,7 @@
     </div>
 </template>
 <script>
+import securityService from "@/services/authentication/securityService";
 export default {
     data() {
         return {
@@ -59,10 +61,14 @@ export default {
         };
     },
     methods: {
+         designer(){
+            location.href="//designer.console.wezhan.cn"
+        },
+         signOut(){
+            securityService.signOut(location.href)
+        },
         pannelShow() {
-            this.$router.push({
-                name: "personal"
-            });
+             location.href="//dashboard.console.wezhan.cn/personal"
             //this.$store.commit("CLOSERIGHTPANNEL",true)
         },
         dropdownAvatarShow() {

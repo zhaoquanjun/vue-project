@@ -31,7 +31,7 @@
                         <button class="handle-btn move-btn" @click="handleMove(scope.row)">
                             <!-- <svg-icon style="width:27px;height:27px" icon-class="tab-move"></svg-icon> -->
                         </button>
-                        <button class="handle-btn look-btn" @click="viewPic( scope.row)">
+                        <button class="handle-btn look-btn" @click="viewPic( scope.row,scope.$index)">
                             <svg-icon icon-class="tab-look"></svg-icon>
                         </button>
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
@@ -128,7 +128,7 @@ export default {
         /**
          * 查看大图
          */
-        viewPic(row) {
+        viewPic(row,index) {
             this.picUrl = row.fullOssUrl;
             this.picTitle = row.title;
             this.imgVisible = true;

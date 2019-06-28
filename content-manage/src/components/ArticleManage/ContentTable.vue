@@ -17,7 +17,7 @@
 
             <el-table-column :show-overflow-tooltip="true" prop="title" label="文章标题">
                 <template slot-scope="scope">
-                    <img :src="scope.row.pictureUrl" class="cover" alt>
+                    <img :src="scope.row.pictureUrl" :onerror="defaultImg" class="cover" alt>
                     <span>{{ scope.row.title }}</span>
                 </template>
             </el-table-column>
@@ -86,6 +86,7 @@ export default {
     props: ["articlePageResult", "articleSearchOptions", "treeResult"],
     data() {
         return {
+             defaultImg:require("../../../static/images/content-default-pic.png"),
             multipleSelection: [],
             operateList: [
                 { name: "移动", flag: "move" },
@@ -177,12 +178,14 @@ export default {
          * 移动分类操作
          */
         batchMove(row) {
+            this.$emit("changeOperateName","移动");
             this.$emit("batchMove", [row.id]);
         },
         /**
          * 复制操作
          */
         batchCopy(row) {
+            this.$emit("changeOperateName","复制");
             this.$emit("batchCopy", [row.id]);
         },
 

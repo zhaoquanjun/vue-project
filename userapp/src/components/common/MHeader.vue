@@ -7,18 +7,19 @@
                     <span>云～速成美站</span>
                     <span
                         class="designTitle"
+                        @click="designer"
                         @mouseenter="dropdownDesignShow"
                         @mouseleave="dropdownDesignhide"
                     >
                         进入设计
-                        <ul class="intoDesign" v-show="isdropdownDesignShow">
+                        <!-- <ul class="intoDesign" v-show="isdropdownDesignShow">
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
-                        </ul>
+                        </ul> -->
                     </span>
                 </div>
             </el-col>
@@ -60,6 +61,9 @@ export default {
         };
     },
     methods: {
+        designer(){
+            location.href="//designer.console.wezhan.cn"
+        },
         signOut(){
             securityService.signOut(location.href)
         },

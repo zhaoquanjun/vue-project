@@ -1,7 +1,10 @@
 <template>
-    <el-select  id="el-select" ref="elSelect" :popper-append-to-body="false" :value="valueTitle" 
-    :clearable="clearable" 
+<!-- 
+   :clearable="clearable" 
     @clear="clearHandle"
+ -->
+    <el-select  id="el-select" ref="elSelect" :popper-append-to-body="false" :value="valueTitle" 
+   
     size="small"
     >
             <el-option :value="valueTitle" :label="valueTitle">
@@ -42,7 +45,8 @@ export default {
       default: ()=>{ return [] }
     },
     categoryName:{
-        type:String
+        type:String,
+        default:"全部分类"
     },
     /* 初始值 */
     value:{

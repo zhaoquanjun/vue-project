@@ -2,18 +2,18 @@
 /**
  * 开发环境的URL
  */
-let memberManageApi = 'http://api.dashboard.newwezhan.cn';
-let authorityUrl = "http://api.identity.newwezhan.cn";
-let redirectUrl = "http://dashboard.newwezhan.cn/callback"
-let logoutRedirectUri = "http://dashboard.newwezhan.cn/index.html";
+let memberManageApi = 'http://api.dashboard.console.wezhan.cn';
+let authorityUrl = "http://api.identity.console.wezhan.cn";
+let redirectUrl = "http://dashboard.console.wezhan.cn/callback"
+let logoutRedirectUri = "http://dashboard.console.wezhan.cn/index.html";
 let silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
 let clientId = 'dashboard.api';
 
 if (process.env.NODE_ENV === 'development') {
-    memberManageApi = "http://localhost:8100";//'http://api.dashboard.newwezhan.cn';
-    authorityUrl = "http://api.identity.newwezhan.cn";
+    memberManageApi = 'http://api.dashboard.console.wezhan.cn';
+    authorityUrl = "http://api.identity.console.wezhan.cn";
     redirectUrl = "http://localhost:8082/callback";
-    logoutRedirectUri = "http://dashboard.newwezhan.cn/index.html";
+    logoutRedirectUri = "http://dashboard.console.wezhan.cn/index.html";
     silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
     clientId = 'dev.dashboard.api';
 }

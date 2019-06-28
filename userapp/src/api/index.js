@@ -234,6 +234,13 @@ export const getWeChatJsLoginParams = (provider) => {
     return ajaxRequest.get('/api/userInfo/GetWeChatJsLoginParams');
 }
 
+export const updateAppIdToCookie = () => {
+    return ajaxRequest.put('/api/userInfo/UpdateAppIdToCookie');
+}
+
+//put: UpdateUserLastAppIdAndCookie(string appId)
+}
+
 /**
  * InterfaceAuthor : xuzhuan
  * 更新用户当前使用的app
