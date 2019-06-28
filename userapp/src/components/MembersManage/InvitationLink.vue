@@ -17,7 +17,7 @@
             <p class="invita-item invita-tip">一个邀请链接只能邀请一个成员, 有效期3天</p>
         </div>
         <template v-else>
-            <div class="auth-tip" v-if="authtipShow">请至少选择人一项权限</div>
+            <div class="auth-tip" v-if="authtipShow">请至少选择一项权限</div>
             <Authorization/>
             <footer class="footer">
                 <button class="create-link" @click="generate">生成链接</button>

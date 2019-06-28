@@ -8,9 +8,7 @@
         <content-num :contentNumber="contentNumber" v-if="Object.keys(contentNumber).length > 0" />
       </el-col>
       <el-col :span="4" :offset="1">
-        <div style="    background: lavender;
-    height: 100%;
-    width: 100%;"></div>
+        <div class="board-right" style=""></div>
       </el-col>
     </el-row>
   </div>
@@ -57,5 +55,12 @@ export default {
       color: #262626;
       line-height:17px;
     }
+  }
+  .board-right{
+    width: 260px;
+    height: 640px;
+    background: url("~img/board-right.png") no-repeat center;
+    background-size: cover;
+    
   }
 </style>
