@@ -299,6 +299,7 @@ export default {
                     type: "success",
                     message: "保存成功!"
                 });
+                 this.$router.push("/content/news")
             }
         }
     }
