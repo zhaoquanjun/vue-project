@@ -21,7 +21,7 @@ class SecurityService {
   signOut() {
     oidcMgr.signoutRedirect().then(function(resp) {
       console.log('signed out', resp)
-      localStorage.clear();
+      sessionStorage.clear();
     }).catch(function(err) {
       console.log(err)
     })
