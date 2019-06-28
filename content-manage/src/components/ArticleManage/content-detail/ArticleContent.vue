@@ -202,14 +202,14 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                summary:[
-                    {
-                        min: 0,
-                        max: 500,
-                        message: "长度不得超过 500 个字符",
-                        trigger: "blur"
-                    }
-                ],
+                // summary:[
+                //     {
+                //         min: 0,
+                //         max: 500,
+                //         message: "长度不得超过 500 个字符",
+                //         trigger: "blur"
+                //     }
+                // ],
             }
         };
     },
