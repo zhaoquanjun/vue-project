@@ -14,7 +14,6 @@ const store = new Vuex.Store({
   },
   mutations: {
     SET_USER: (state, user) => {
-      console.log(user.access_token)
       if (user) {
         state.accessToken.Authorization = user.access_token;
         setLocal('token', user.access_token);

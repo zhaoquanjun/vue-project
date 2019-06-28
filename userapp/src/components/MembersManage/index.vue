@@ -61,9 +61,7 @@
                 <invitation-link></invitation-link>
             </right-pannel>
             </el-dialog>
-            
         </el-main>
-        
     </el-container>
 </template>
 <script>
