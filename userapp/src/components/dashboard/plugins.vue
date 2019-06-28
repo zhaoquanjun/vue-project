@@ -22,13 +22,12 @@ export default {
             clonePlugins: "",
             p: [
                  {
-                       pluginCode: "DashBoard",
-                  
+                    pluginCode: "DashBoard",
                     name: "网站",
                     description: "Pc，手机两站板式单独设计，更适合用户访问",
                     isActive: true,
                     imageUrl: null,
-                    menuUrl: "design.console.wezhan.cn",
+                    menuUrl: "designer.console.wezhan.cn",
                     id: 1002
                 },
                   {

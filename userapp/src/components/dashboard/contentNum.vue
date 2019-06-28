@@ -55,7 +55,7 @@ export default {
     background: #fff;
     .section-title {
         padding-left: 16px;
-        padding-bottom: 8px;
+        padding-bottom: 16px;
         padding-top: 14px;
         font-size: 14px;
         line-height: 18px;
@@ -70,7 +70,7 @@ export default {
             margin-bottom: 16px;
             .item-box {
                 width: 100%;
-                height: 40px;
+                height: 56px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
