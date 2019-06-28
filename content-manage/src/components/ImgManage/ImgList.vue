@@ -45,7 +45,7 @@
             <slot name="paging"></slot>
             <el-pagination
                 background
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="total, sizes, prev, pager, next"
                 :total="imgPageResult.totalRecord"
                 :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"
@@ -129,7 +129,6 @@ export default {
          * 查看大图
          */
         viewPic(row,index) {
-            alert(index)
             this.picUrl = row.fullOssUrl;
             this.picTitle = row.title;
             this.imgVisible = true;

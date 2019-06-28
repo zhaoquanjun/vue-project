@@ -13,7 +13,7 @@ import Cookies from "js-cookie"
 axios.defaults.baseURL = environment.memberManageApi;
 // 请求超时时间
 axios.defaults.timeout = 100000;
-
+//axios.defaults.withCredentials = true; //允许携带cookie
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
@@ -27,8 +27,11 @@ axios.interceptors.request.use(
         const token = store.getters.token;
         token && (config.headers.Authorization = 'Bearer ' +token);
         //todo 测试阶段写死
+        
         if(!Cookies.get('AppId')){
             config.headers.AppId = store.state.dashboard.appid;
+        }else{
+            config.headers.AppId = Cookies.get('AppId');
         }
        
         return config;

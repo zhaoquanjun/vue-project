@@ -5,7 +5,7 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>文章分类</span>
             </h4>
-            <h5 class="title-item" @click="resetCategoryId">全部分类</h5>
+            <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
             <m-tree
                 :treeResult="treeResult"
                 :articleSearchOptions="articleSearchOptions"
@@ -318,6 +318,7 @@ export default {
                     message: "移动成功!"
                 });
                 this.isInvitationPanelShow = false;
+                this.getTreeAsync();
                 this.getArticleList();
             }
         },
@@ -342,6 +343,7 @@ export default {
                     message: "复制成功!"
                 });
                 this.isInvitationPanelShow = false;
+                this.getTreeAsync();
                 this.getArticleList();
             }
         },
@@ -418,11 +420,11 @@ export default {
         addArticle() {
             if(this.selectCategory == null){
                 this.$router.push({
-                    path: "/create"
+                    path: "/news/create"
                 });
             } else{
                 this.$router.push({
-                    path: "/create",
+                    path: "/news/create",
                     query: { categoryName: this.selectCategory.Label }
                 });
             }
@@ -430,7 +432,7 @@ export default {
         handleEditArticle(row) {
             console.log(row);
             this.$router.push({
-                path: "/create",
+                path: "/news/create",
                 query: { id: row.id, categoryName: row.categoryName }
             });
         }

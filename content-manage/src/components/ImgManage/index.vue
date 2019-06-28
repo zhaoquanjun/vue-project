@@ -51,7 +51,7 @@
                 <right-pannel :style="{width:isInvitationlWidth+'px'}"
                               @closeRightPanel="closeRightPanel"
                               :tree-result="treeResult">
-                    <span slot="title-text">移动图片分类</span>
+                    <span slot="title-text">移动图片</span>
                     <div class="category-content">
                         <span name="cur-tip">移动至</span>
                     </div>
@@ -60,11 +60,13 @@
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
                     ></m-tree> -->
-
-                        :categoryName="curImgInfo.categoryName"
+                    <SelectTree
+                         :categoryName="curImgInfo.categoryName"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
-                     />
+                    >
+                       
+                     </SelectTree>
 
 
                     <div slot="footer" class="pannle-footer">
@@ -357,7 +359,7 @@
             },
             isBatchHeaderShow() {
                 console.log(this.idsList.length);
-                return this.idsList.length > 1 ? true : false;
+                return this.idsList.length > 0 ? true : false;
             }
         },
         watch: {}

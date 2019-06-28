@@ -14,20 +14,22 @@
                     @click="curAuth(item,index)"
                     :class="{'choose-bg':item.show == true && isSelect}"
                 >
-                    <el-tooltip
+                    <!-- <el-tooltip
                         :content="item.name"
                         placement="top-start"
                     >
+                      </el-tooltip> -->
                         <span class="item-left ellipsis">{{item.name}}</span>
-                    </el-tooltip>
-                     <el-tooltip
+                  
+                     <!-- <el-tooltip
                      v-if="isSelect"
                         :content="item.mark"
                         placement="top-start"
                     >
-                        <span class="item-right ellipsis" >{{item.mark}}</span>
+                       
                           
-                    </el-tooltip>
+                    </el-tooltip> -->
+                     <span class="item-right ellipsis"  v-if="isSelect">{{item.mark}}</span>
                     <span class="item-right auth-icon" v-else @click.stop="removeAuth(item,index)">
                                 <i class="iconfont icon-weibiaoti-"></i>
                     </span>
