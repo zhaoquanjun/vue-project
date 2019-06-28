@@ -72,7 +72,8 @@ import RightPannel from "../RightPannel";
 import AuthConfig from "./AuthConfig";
 import InvitationLink from "./InvitationLink";
 import PageSubmenu from "@/components/common/PageSubmenu";
-import { mapMutations, mapState, mapActions } from "vuex";
+    import { mapMutations, mapState, mapActions } from "vuex";
+    import { updateUserLastAppIdAndCookie } from "@/api/index.js";
 export default {
     name: "homeMain",
     components: {
@@ -213,7 +214,8 @@ export default {
         /**
          * 搜索成员
          */
-        memberSearch() {
+       async memberSearch() {
+           await updateUserLastAppIdAndCookie("1234");
             let options = { phone: this.memberPhone };
             this._getBeInvitedUsers(options).then(jsonData => {
                 console.log(jsonData, "jsondata");

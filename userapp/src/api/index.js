@@ -233,3 +233,11 @@ export const removeExternalUser = (provider) => {
 export const getWeChatJsLoginParams = (provider) => {
     return ajaxRequest.get('/api/userInfo/GetWeChatJsLoginParams');
 }
+
+/**
+ * InterfaceAuthor : xuzhuan
+ * 更新用户当前使用的app
+ */
+export const updateUserLastAppIdAndCookie = (appId) => {
+    return ajaxRequest.put('/api/userInfo/UpdateUserLastAppIdAndCookie', JSON.stringify(appId));
+}
