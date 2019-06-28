@@ -59,8 +59,8 @@ export default {
     }
   }
   .board-right{
-       min-width: 269px;
-    height: 640px;
+    min-width: 269px;
+    min-height: 680px;
     background: url("~img/board-right.png") no-repeat center;
     background-size: cover;
     
