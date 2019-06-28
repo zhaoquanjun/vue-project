@@ -169,7 +169,7 @@ export default {
                     label: "下线"
                 }
             ],
-            value: false,
+            value: 1,
 
             activeName: "",
             activeName1:"",
@@ -195,12 +195,12 @@ export default {
                         message: "请输入文章标题",
                         trigger: "blur"
                     },
-                    {
-                        min: 1,
-                        max: 100,
-                        message: "长度在 1 到 100 个字符",
-                        trigger: "blur"
-                    }
+                    // {
+                    //     min: 1,
+                    //     max: 100,
+                    //     message: "长度在 1 到 100 个字符",
+                    //     trigger: "blur"
+                    // }
                 ],
                 // summary:[
                 //     {

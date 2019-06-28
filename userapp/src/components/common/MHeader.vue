@@ -98,6 +98,11 @@ export default {
     background: #000;
     color: #fff;
     position: relative;
+    //     position: fixed;
+    // width: 100%;
+    // top: 0;
+    // left: 0;
+    // z-index: 1000;
     .head-item {
         span {
             display: inline-block;
