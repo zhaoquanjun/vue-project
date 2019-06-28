@@ -33,7 +33,7 @@
                 </div>
                 <template v-else>
                     <span>{{data.label}}</span>
-                    <span v-if="data.level<=1">({{data.childrenSum }})</span>
+                    <span>({{data.newsCount }})</span>
                 </template>
                 <!-- 三个点 分类操作 -->
                 <span
