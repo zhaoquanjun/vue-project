@@ -72,6 +72,7 @@ export default {
     },
     watch: {
         fileList() {
+            console.log(this.fileList,'0000')
             this.fileList1 = this.fileList;
         }
     },
@@ -112,7 +113,7 @@ export default {
             const isSizeOk = file.size / 1024 / 1024 < maxMb;
 
             if (!isPic) {
-                this.$message.error("上传头像图片只能是 图片 格式!");
+                this.$message.error("上传图片只能是 图片 格式!");
             }
             if (!isSizeOk) {
                 this.$message.error(`上传图片大小不能超过 ${maxMb}MB!`);
@@ -126,6 +127,7 @@ export default {
 .el-card /deep/ .el-card__body {
     text-align: center;
 }
+/* 
 .el-collapse /deep/ .el-collapse-item__header {
     padding: 0 10px;
 }
@@ -154,7 +156,7 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
-}
+} */
 </style>
 <style lang="scss" scoped>
 </style>

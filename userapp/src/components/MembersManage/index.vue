@@ -61,9 +61,7 @@
                 <invitation-link></invitation-link>
             </right-pannel>
             </el-dialog>
-            
         </el-main>
-        
     </el-container>
 </template>
 <script>
@@ -85,9 +83,9 @@ export default {
     data() {
         return {
             submenuList: [
-                { name: "企业信息", url: "/xx" },
-                { name: "显示设置", url: "/xx" },
-                { name: "成员列表", url: "/memberManage" }
+                // { name: "企业信息", url: "/system/role" },
+                // { name: "显示设置", url: "/system/role" },
+                { name: "成员列表", url: "/system/role" }
             ],
             rightPanelTitle: "权限配置",
             memberPhone: "",

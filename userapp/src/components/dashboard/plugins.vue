@@ -1,7 +1,7 @@
 <template>
     <el-row class="plugin-section" :gutter="16">
         <el-col class="plugins-box" :span="12" v-for="(it, idx) in plugins" :key="idx">
-            <div class="box-inner" @click="checkSkipRoot(it)">
+            <div class="box-inner"  @click="checkSkipRoot(it)">
                 <span class="plugin-l plugin-item" :class="pluginsPic(it)"></span>
                 <span class="plugin-r plugin-item">
                     <h2>{{it.name}}</h2>
@@ -73,6 +73,11 @@ body {
             background: #fff;
                 padding: 30px 50px;
                 padding-right: 10px;
+                border: 1px solid transparent;
+            &:hover{
+                border: 1px solid #00C1DE;
+
+            }    
             .plugin-item {
                 display: block;
             }
@@ -85,17 +90,18 @@ body {
                     center;
                    background-size: contain;
             }
-            .DashBoard-on {
+            &:hover .DashBoard{
                 background: url("~img/dashboard/board-websiteOn.png") no-repeat
                     center;
                     background-size: contain;
+               
             }
             .Content {
                 background: url("~img/dashboard/board-micro.png") no-repeat
                     center;
                     background-size: contain;
             }
-            .Content-on {
+            &:hover .Content {
                 background: url("~img/dashboard/board-microOn.png") no-repeat
                     center;
                  background-size: contain;
@@ -105,7 +111,7 @@ body {
                     center;
                background-size: contain;
             }
-            .pc-mobile-on {
+            &:hover .pc-mobile {
                  background: url("~img/dashboard/board-alipay.png") no-repeat center;
                background-size: contain;
             }
@@ -114,7 +120,7 @@ body {
                     center;
                background-size: contain;
             }
-            .MicroProgram-on {
+            &:hover .MicroProgram{
                 background: url("~img/dashboard/board-wechatOn.png") no-repeat
                     center;
                background-size: contain;
@@ -124,7 +130,7 @@ body {
                     center;
                background-size: contain;
             }
-            .Form-on {
+            &:hover .Form {
                 background: url("~img/dashboard/board-formOn.png") no-repeat
                     center;
                background-size: contain;
@@ -134,7 +140,7 @@ body {
                     center;
                background-size: contain;
             }
-            .Identity-on {
+            &:hover .Identity {
                 background: url("~img/dashboard/board-developOn.png") no-repeat
                     center;
                background-size: contain;
@@ -154,7 +160,7 @@ body {
                 }
                 p:last-of-type {
                     font-size: 12px;
-                   // padding-top: 18px;
+                    padding-top: 18px;
                     line-height: 17px;
                     color: #00c1de;
                 }

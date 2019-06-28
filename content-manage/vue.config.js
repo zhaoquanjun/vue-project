@@ -5,7 +5,7 @@ function resolve(dir) {
 module.exports = {
    
 
-    publicPath: './',
+    publicPath: '/',
     // 打包 不再使用sourcemap
     productionSourceMap: false,
     chainWebpack: config => {

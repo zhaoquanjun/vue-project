@@ -15,9 +15,7 @@ const router = new VueRouter({
 export default router;
 
 router.beforeEach(async (to, from, next) => {
-
   if (!to.meta.requiresAuth) {
-
     store.dispatch('_getMenuListData')
     next()
     return
@@ -26,7 +24,7 @@ router.beforeEach(async (to, from, next) => {
     if (!Cookies.get('AppId')) {
       await store.dispatch('_updateAppIdToCookie')
     }
-    next()
+    
     let r = await store.dispatch('getCurRouteAuth', to.path);
     if (r) {
       if (store.getters.getMenuList.length < 1) {
@@ -39,13 +37,12 @@ router.beforeEach(async (to, from, next) => {
   } else {
     if (to.name !== "callback") {
       securityService.getUser(location.href).then(async (data) => {
-        console.log(data, 'dadddd')
         if (!data) {
           securityService.signIn();
           next()
         } else {
           store.commit("SET_USER", data);
-          await store.dispatch('_getUserDashboard')
+          await store.dispatch('_updateAppIdToCookie')
           await store.dispatch('_getMenuListData')
           next()
         }

@@ -19,10 +19,10 @@ export default {
         submenuList: {
             type: Array,
             default: () => [
-                { name: "文章管理", url: "/article" },
-                { name: "产品管理", url: "/product" },
-                { name: "图片管理", url: "/image" },
-                { name: "文件管理", url: "/file" }
+                { name: "文章管理", url: "/content/news" },
+                { name: "产品管理", url: "/content/product" },
+                { name: "图片管理", url: "/content/picture" },
+               
             ]
         }
     },

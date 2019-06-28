@@ -2,13 +2,15 @@
   <div class="home-page">
     <p class="welcome-words">今日，2019年6月22日星期六，欢迎您回到云速成美站控制台。</p>
    
-    <el-row>
-      <el-col :span="16">
+    <el-row style="display: flex;">
+      <el-col :span="19">
         <plugins :plugins="dashboardData.pluginList" v-if="dashboardData.pluginList && dashboardData.pluginList.length > 0" />
         <content-num :contentNumber="contentNumber" v-if="Object.keys(contentNumber).length > 0" />
       </el-col>
-      <el-col :span="8">
-
+      <el-col :span="4" :offset="1">
+        <div style="    background: lavender;
+    height: 100%;
+    width: 100%;"></div>
       </el-col>
     </el-row>
   </div>

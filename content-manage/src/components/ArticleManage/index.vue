@@ -420,11 +420,11 @@ export default {
         addArticle() {
             if(this.selectCategory == null){
                 this.$router.push({
-                    path: "/create"
+                    path: "/news/create"
                 });
             } else{
                 this.$router.push({
-                    path: "/create",
+                    path: "/news/create",
                     query: { categoryName: this.selectCategory.Label }
                 });
             }
@@ -432,7 +432,7 @@ export default {
         handleEditArticle(row) {
             console.log(row);
             this.$router.push({
-                path: "/create",
+                path: "/news/create",
                 query: { id: row.id, categoryName: row.categoryName }
             });
         }
