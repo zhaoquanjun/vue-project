@@ -393,13 +393,13 @@ export default {
         },
         addArticle() {
             this.$router.push({
-                path: "/createProduct"
+                path: "/product/create"
             });
         },
         handleEditArticle(row) {
             console.log(row);
             this.$router.push({
-                path: "/createProduct",
+                path: "/product/create",
                 query: { id: row.id }
             });
         },

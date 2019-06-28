@@ -10,7 +10,7 @@ module.exports = {
     runtimeCompiler: false,
 
     // 打包 不再使用sourcemap
-    productionSourceMap: false,
+    //productionSourceMap: false,
     chainWebpack: config => {
         config.resolve.alias.set('_c', path.resolve(__dirname, 'src/components'));
         config.resolve.alias.set('_v', path.resolve(__dirname, 'src/views'));

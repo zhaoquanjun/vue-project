@@ -123,9 +123,12 @@ export default {
     top: 0;
     text-align: center;
     overflow: hidden;
+    
+    /* border-right: 1px solid #E5E5E5; */
 }
-.el-menu {
+.el-aside /deep/ .el-menu {
     height: 100%;
+    border: none;
 }
 </style>
 <style lang="scss" scoped>

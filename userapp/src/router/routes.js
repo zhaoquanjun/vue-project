@@ -74,21 +74,33 @@ export const defaultRoutes = [
       title: "",
       requiresAuth: true,
       requiresRole: {},
+
     },
     children: [
-      {
-        path: "role",
-        name: "role",
-        component: () => import("@/views/member-manage.vue"),
-        meta: {
-          title: "",
-          requiresAuth: true,
-          requiresRole: {},
-        }
-      },
+      // {
+      //   path: "role",
+      //   name: "role",
+      //   component: () => import("@/views/member-manage.vue"),
+      //   meta: {
+      //     title: "",
+      //     requiresAuth: true,
+      //     requiresRole: {},
+      //     isSub:true
+      //   }
+      // },
     ]
   },
-
+  {
+    path: "/system/role",
+    name: "role",
+    component: () => import("@/views/member-manage.vue"),
+    meta: {
+      title: "",
+      requiresAuth: true,
+      requiresRole: {},
+      isSub:true
+    }
+  },
   {
     path: "/recycle",
     name: "recycle",

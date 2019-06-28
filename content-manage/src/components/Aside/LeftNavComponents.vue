@@ -43,4 +43,18 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .el-menu /deep/ .el-menu-item{
+    height: 40px;
+    line-height: 40px;
+    font-size: 12px;
+    border-right: 1px solid #e5e5e5
+   
+  }
+  .el-menu /deep/ :hover.el-menu-item{
+    color: #15C6E0;
+    background: #E5F8FA;
+  }
+</style>
+
 

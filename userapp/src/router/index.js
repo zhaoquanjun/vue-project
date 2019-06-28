@@ -15,7 +15,6 @@ const router = new VueRouter({
 export default router;
 
 router.beforeEach(async (to, from, next) => {
-
   if (!to.meta.requiresAuth) {
     store.dispatch('_getMenuListData')
     next()

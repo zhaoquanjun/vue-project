@@ -11,12 +11,20 @@ export const defaultRoutes = [
     redirect: { path: '/content/news' },
   },
   {
+    path: "/news/create",
+    redirect: { path: '/content/createarticle' },
+  },
+  {
     path: "/picture",
     redirect: { path: '/content/picture' },
   },
   {
     path: "/product",
     redirect: { path: '/content/product' },
+  },
+  {
+    path: "/product/create",
+    redirect: { path: '/content/createProduct' },
   },
   {
     path: "/content",
@@ -34,11 +42,11 @@ export const defaultRoutes = [
       
       },
       {
-        path: 'create',
-        name: "articlecreate",
+        path: 'createarticle',
+        name: "createarticle",
         component: () => import('@/components/ArticleManage/ContentDetail.vue'),
         meta:{
-          requiresAuth: true,
+         
           title:"新增文章"}
 
       },
@@ -58,13 +66,16 @@ export const defaultRoutes = [
         path: "product",
         name: "product",
         component:  () => import('@/views/content-manage/product-manage.vue'),
-        meta:{requiresAuth: true,title:"产品管理",isSub:true}
+        meta:{requiresAuth: true,title:"产品管理",isSub:true},
+        children:[
+         
+        ]
       },
       {
         path: 'createProduct',
         name: "createProduct",
         component: () => import('@/components/ProductManage/ContentDetail.vue'),
-        meta:{requiresAuth: true,title:"新增产品"}
+        meta:{title:"新增产品"}
       },
       {
         path: "content",
@@ -74,6 +85,8 @@ export const defaultRoutes = [
       },
     ]
   },
+
+  
   {
     path: "/callback",
     name: "callback",

@@ -14,9 +14,12 @@ export default router;
 let accessToken = store.state.accessToken.Authorization;
 let flag = false;
 router.beforeEach(async (to, from, next) => {
+  console.log(to)
+
   if (!to.meta.requiresAuth) {
-    store.dispatch('_getMenuListData')
     await store.dispatch('_updateAppIdToCookie')
+    store.dispatch('_getMenuListData')
+    
     next()
     return
   }
