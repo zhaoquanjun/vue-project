@@ -4,7 +4,7 @@
             <el-col :span="8">
                 <div class="head-left head-item">
                     <span><svg-icon  icon-class="logo"></svg-icon></span>
-                    <span>云～速成美站</span>
+                    <span>云 · 速成美站</span>
                     <span
                         class="designTitle"
                         @click="designer"

@@ -24,7 +24,7 @@
             </el-header>
             <el-main>
                 <div>
-                    <el-row>
+                    <el-row style="overflow:hidden">
                         <el-col :span="13" :offset="3">
                             <ArticleContent
                                 @changeOperateName="changeOperateName"
