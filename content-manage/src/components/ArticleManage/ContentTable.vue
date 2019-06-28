@@ -30,7 +30,7 @@
 
             <el-table-column prop="createUser" label="作者" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimePrt" label="创建时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作">
                 <template slot-scope="scope">
