@@ -60,13 +60,11 @@
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
                     ></m-tree> -->
-                    <SelectTree
-                         :categoryName="curImgInfo.categoryName"
-                        :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    >
-                       
-                     </SelectTree>
+                    <SelectTree :categoryName="curImgInfo.categoryName"
+                                :tree-result="treeResult"
+                                @chooseNode="chooseNode">
+
+                    </SelectTree>
 
 
                     <div slot="footer" class="pannle-footer">
@@ -78,26 +76,25 @@
             </el-main>
             <el-footer><slot name="modal-footer"></slot></el-footer>
         </el-main>
-        <el-dialog title="上传图片" 
-        :visible.sync="dialogTableVisible" 
-        :modal-append-to-body="false" >
-        <span slot="title">
-            <span class="fs14">上传图片 
-                <el-tooltip
-                    class="item"
-                    effect="dark"
-                    content="一次可上传60张图片，单张图片大小不超过10MB"
-                    placement="right"
-                >
-                   <svg-icon icon-class="tip-icon"></svg-icon>
-                </el-tooltip></span>
-              
-        </span>
-            <upload-pic
-                @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
-                :tree-result="treeResult"
-                :upload-pic-url="uploadPicUrl"
-            />
+        <el-dialog title="上传图片"
+                   :visible.sync="dialogTableVisible"
+                   :modal-append-to-body="false">
+            <span slot="title">
+                <span class="fs14">
+                    上传图片
+                    <el-tooltip class="item"
+                                effect="dark"
+                                content="一次可上传60张图片，单张图片大小不超过10MB"
+                                placement="right">
+                        <svg-icon icon-class="tip-icon"></svg-icon>
+                    </el-tooltip>
+                </span>
+
+            </span>
+            <upload-pic @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
+                        @getTree="getTree"
+                        :tree-result="treeResult"
+                        :upload-pic-url="uploadPicUrl" />
 
         </el-dialog>
 

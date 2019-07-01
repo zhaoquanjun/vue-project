@@ -100,6 +100,7 @@ export default {
                     message: "上传成功!"
                 });
                 this.$emit("switchUploadBoxShowStatus", "uploadImg");
+                this.$emit("getTree");
 
                 setTimeout(() => {}, 500);
                 this.uploadSucess = true;

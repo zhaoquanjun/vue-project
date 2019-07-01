@@ -1,6 +1,6 @@
 <template>
     <div style="height: calc(100% - 60px);">
-        <el-tree style=""
+        <el-tree 
                  :data="treeResult"
                  node-key="id"
                  :default-expand-all="isexpand"
@@ -18,7 +18,7 @@
                  slot-scope="{ node, data }">
                 <div style="display: inline-block;"
                      v-if="renameShowId === data.id || data.isNewAdd">
-                    <input class="category-name"
+                    <input class="category-name" maxlength="20"
                            v-model="data.label"
                            v-filter-special-char
                            @input="changeCategoryInput(data.label)">
@@ -30,8 +30,10 @@
                     </span>
                 </div>
                 <template v-else>
-                    <span>{{data.label}}</span>
-                    <span>({{data.leafSum }})</span>
+                    <div style="cursor:move">
+                        <span>{{data.label}}</span>
+                        <span>({{data.leafSum }})</span>
+                    </div>
                 </template>
                 <!-- 三个点 分类操作 -->
                 <span class="set-tree-type"
@@ -146,7 +148,7 @@
                     }
                     case "before":
                     case "after": {
-                        draggingNode.parentId = targetNode.parentId ? targetNode.parentId:0;
+                        draggingNode.parentId = targetNode.parentId ? targetNode.parentId : 0;
                         break;
                     }
                     case "none":
