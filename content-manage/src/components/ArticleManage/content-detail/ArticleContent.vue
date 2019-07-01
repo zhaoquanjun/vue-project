@@ -28,7 +28,7 @@
                 <el-form-item>
                     <div>
                         <div style="float:left">
-                            <span style="font-size:12px">分类:</span>
+                            <span style="font-size:12px">分类</span>
                             <span class="select-sort" style="width:200px;">
                                 <SelectTree size="small"  placeholder="请选择"
                                     :categoryName="categoryName"
@@ -95,7 +95,7 @@
                             </el-tooltip>
 
                             <el-input
-                                placeholder="每个关键词之间用会车键分离"
+                                placeholder="每个关键词之间用回车键分离"
                                 v-model="articleDetail.searchKeywords"
                             ></el-input>
                         </el-form-item>
