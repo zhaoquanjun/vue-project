@@ -11,14 +11,19 @@
                         {{input!=''? input : '设置您的名字'}}
                         <i @click="setName" class="el-icon-edit"></i>
                     </span>
-                    <el-input
-                        @blur="blur"
-                        v-else
-                        maxlength="20"
-                        size="small"
-                        v-model="input"
-                        placeholder="请输入内容"
-                    ></el-input>
+                    <el-input @blur="blur"
+                              v-else
+                              maxlength="20"
+                              show-word-limit
+                              v-model="input"
+                              placeholder="请输入内容"></el-input>
+                    <!--<el-input @blur="blur"
+                              v-else
+                              maxlength="20"
+                              show-word-limit
+                              size="small"
+                              v-model="input"
+                              placeholder="请输入内容"></el-input>-->
                 </p>
                 <p>
                     创建时间
@@ -53,7 +58,7 @@
                     <span class="pd-left social-desc">设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码</span>
                 </div>
                 <div class="fright">
-                    <span>********</span>
+                    <span></span>
 
                     <span class="pd-left">
                         <button>已绑定</button> |

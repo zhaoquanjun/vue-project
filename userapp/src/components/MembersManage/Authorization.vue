@@ -3,7 +3,7 @@
         <div class="pannel-right-item">
             <h5 class="auth-title">选择权限</h5>
             <div class="search-auth">
-                <input class="auth-input" v-model="input" placeholder="请输入权限名称" @input="changeInput">
+                <input class="auth-input" v-model="input" placeholder="请输入权限名称" @input="changeInput" :clearable="true">
                 <button class="auth-btn" @click="searchAuth">搜索</button>
             </div>
             <div class="auth-name">
@@ -80,6 +80,8 @@ export default {
             userPermission: state => state.memberManager.userPermission,
             memberPolicy: state => state.memberManager.memberPolicy
         })
+        }, mounted() {
+        this.input = "";
     }
 };
 </script>

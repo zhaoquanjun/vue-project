@@ -213,7 +213,6 @@ export default {
          * 搜索成员
          */
        async memberSearch() {
-           await updateUserLastAppIdAndCookie("1234");
             let options = { phone: this.memberPhone };
             this._getBeInvitedUsers(options).then(jsonData => {
                 console.log(jsonData, "jsondata");
@@ -226,6 +225,7 @@ export default {
          * 多人权限配置
          */
         authorization() {
+            this.rightPanelTitle= "权限配置",
             this.ISRIGHTPANNELSHOW(true);
             this.isBatch = true;
             this._getAppPolicies(this.isBatch);

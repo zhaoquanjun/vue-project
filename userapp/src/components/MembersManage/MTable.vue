@@ -100,17 +100,17 @@ export default {
         handleDisable(row, index) {
             return true;
             // 函数需要一个返回值,true为可选,false为不可选择
-            // if (index == 0) {
-            //   return false;
-            // } else {
-            //   return true;
-            // }
+             //if (index == 0) {
+             //  return false;
+             //} else {
+             //  return true;
+             //}
         },
         /**
          * 编辑操作
          */
         handleEdit(index, row) {
-            console.log(index, row);
+            console.log(index);
             this.$emit("authEdit", row);
         },
         /**

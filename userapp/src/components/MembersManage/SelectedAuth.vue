@@ -1,7 +1,8 @@
 <template>
     <div class="selected-auth">
         <div class="auth-name-title">
-            <span class="item-left">权限名称</span>
+            <span class="item-left" v-if="authList">已选{{authList.length}}项</span>
+            <span class="item-left" v-else>已选0项</span>
             <span class="item-right empty" @click="empty">清空</span>
         </div>
         <ul class="auth-list">
@@ -24,7 +25,13 @@
 <script>
 import { mapState } from "vuex";
 export default {
-    name: "AuthList",
+        name: "AuthList",
+        data() {
+            return {
+                permissionCount: 0
+            }
+        },
+       
     props: {
         isSelect: {
             type: Boolean
@@ -37,9 +44,10 @@ export default {
     methods: {
         curAuth(item, index) {
             let cur = this.authList[index];
+            this.permissionCount = authList.length;
             if (cur.show) {
                 this.$set(this.authList[index], "show", false);
-                this.$emit("removeSelected", item);
+                this.$emit("removeSelected", item);               
             } else {
                 this.$set(this.authList[index], "show", true);
                 this.$emit("chooseAuth", item);
