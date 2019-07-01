@@ -313,7 +313,8 @@ export default {
                     type: "success",
                     message: "添加成功!"
                 });
-               this.$router.push(`/product/create?id=${data}`);
+              // this.$router.push(`/product/create?id=${data}`);
+              this.$router.push(`/content/product`);
             }
         },
         // 编辑提交

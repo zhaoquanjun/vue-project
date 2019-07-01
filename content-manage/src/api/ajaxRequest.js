@@ -62,7 +62,7 @@ axios.interceptors.response.use(
                 case 401:
                    // router.push({ path: '/401' })
                    store.commit("SET_USER")
-                   window.localStorage.clear()
+                    window.sessionStorage.clear()
                    securityService.signIn();
                   
                     break;

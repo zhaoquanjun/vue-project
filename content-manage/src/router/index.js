@@ -15,7 +15,9 @@ let accessToken = store.state.accessToken.Authorization;
 let flag = false;
 router.beforeEach(async (to, from, next) => {
   if (!to.meta.requiresAuth) {
+    if (!Cookies.get('AppId')) {
     await store.dispatch('_updateAppIdToCookie')
+  }
     store.dispatch('_getMenuListData')
     next()
     return

@@ -151,6 +151,7 @@
 import * as articleManageApi from "@/api/request/articleManageApi";
 import SelectTree from "@/components/common/SelectTree";
 import { formatDate } from "@/utlis/date.js"
+console.log(formatDate)
 export default { 
     components: {
         SelectTree
@@ -181,7 +182,7 @@ export default {
                 contentDetail: "",
                 searchKeywords: "",
                 isPublish: false,
-                createTime: new Date(),
+                createTime:formatDate(new Date(),"yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
                 metaTitle: "",
                 metaKeywords: "",
@@ -215,7 +216,7 @@ export default {
     },
 
     created() {
-       
+       let start = new Date();
         // console.log(this.$route.query)
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
@@ -237,6 +238,7 @@ export default {
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
             this.articleDetail = data;
+            console.log(data,'000-----')
             this.articleDetail.NewId = data.id;
         },
         //选择移动分类时的节点
@@ -271,7 +273,8 @@ export default {
                     type: "success",
                     message: "添加成功!"
                 });
-                this.$router.push(`/news/create?id=${data}&categoryName=${this.categoryName}`);
+                // this.$router.push(`/news/create?id=${data}&categoryName=${this.categoryName}`);
+                this.$router.push("/content/news")
             }
         },
         // 编辑提交
@@ -296,6 +299,7 @@ export default {
                     type: "success",
                     message: "保存成功!"
                 });
+                 this.$router.push("/content/news")
             }
         }
     }

@@ -68,7 +68,7 @@ axios.interceptors.response.use(
                 case 401:
                     // alert('404')
                     // store.commit("SET_USER")
-                    // window.localStorage.clear()
+                    // window.sessionStorage.clear()
                     // securityService.signIn();
                     break;
                 // 403 token过期                
