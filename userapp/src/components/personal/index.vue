@@ -22,7 +22,7 @@
                 </p>
                 <p>
                     创建时间
-                    <i>{{userInfo.createTime}}</i>
+                    <i v-model="createTime">{{createTime}}</i>
                 </p>
             </dd>
         </dl>
@@ -43,26 +43,7 @@
                         <button @click="modifiPhoneNum">修改</button>
                     </span>
                 </div>
-            </li>
-            <li>
-                <div class="fleft">
-                    <span>
-                        <i>x</i>
-                        <b>绑定邮箱</b>
-                    </span>
-                    <span
-                        class="pd-left social-desc"
-                    >绑定邮箱可用于接收系统发送给您的各种通知</span>
-                </div>
-                <div class="fright">
-                    <span>13011011746</span>
-
-                    <span class="pd-left">
-                        <button>已绑定</button> |
-                        <button @click="modifiEmail">修改</button>
-                    </span>
-                </div>
-            </li>
+            </li>           
             <li>
                 <div class="fleft">
                     <span>
@@ -167,7 +148,7 @@ import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
 import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import { getUserProfile,getExternalUserInfo,removeExternalUser,getWeChatJsLoginParams } from "@/api/index.js"; 
+    import { getUserProfile, getExternalUserInfo, removeExternalUser, getWeChatJsLoginParams,formatDateTime } from "@/api/index.js"; 
 import { updateUserName } from "@/api/index.js";
     export default {
         data() {
@@ -183,7 +164,8 @@ import { updateUserName } from "@/api/index.js";
                 DingDingUser: null,
                 WeChatJsLogin:null,
                 CurrentProvider:"",
-                weixinHtml:"",
+                weixinHtml: "",
+                createTime: "2019-06-28"
             };
         },
         components: {
@@ -197,14 +179,15 @@ import { updateUserName } from "@/api/index.js";
         created() {
             this._getUserProfileAsync();
             this._getExternalUserAsync();
-            this._getWeChatJsLoginParams();
+            this._getWeChatJsLoginParams();           
         },
         methods: {
-            ...mapMutations(["ISRIGHTPANNELSHOW"]),
+            ...mapMutations(["ISRIGHTPANNELSHOW"]),          
             async _getUserProfileAsync() {
                 let { data } = await getUserProfile();
                 this.userInfo = data;
-                this.input = data.displayName;
+                this.input = data.displayName;                
+                this.createTime = formatDateTime(data.createTime, "yyyy-MM-dd hh:mm:ss");
                 console.log(this.userInfo)
             },
             async _getExternalUserAsync() {
@@ -225,6 +208,7 @@ import { updateUserName } from "@/api/index.js";
                     });
                 }
             },
+            
             //获取微信Js相关参数
             async _getWeChatJsLoginParams(){
                 let { data } = await getWeChatJsLoginParams();
@@ -255,9 +239,7 @@ import { updateUserName } from "@/api/index.js";
             modifiPhoneNum() {
                 this.curComponent = SetPhoneNumber;
                 this.ISRIGHTPANNELSHOW(true)
-            },
-            //修改邮箱
-            modifiEmail() { },
+            },            
             //修改密码
             modifiPwd() {
                 this.curComponent = SetPwd;
