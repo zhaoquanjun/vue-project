@@ -74,6 +74,7 @@ export const defaultRoutes = [
       title: "",
       requiresAuth: true,
       requiresRole: {},
+
     },
     children: [
       {
@@ -84,6 +85,7 @@ export const defaultRoutes = [
           title: "",
           requiresAuth: true,
           requiresRole: {},
+          isSub:true
         }
       },
     ]

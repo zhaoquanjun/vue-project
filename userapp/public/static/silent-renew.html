@@ -7,7 +7,7 @@
     <script src='./oidc-client.min.js'></script>
     <script>      
         console.log('renewing tokens');
-        new Oidc.UserManager({userStore: new Oidc.WebStorageStateStore({ store: window.localStorage })})
+        new Oidc.UserManager({ userStore: new Oidc.WebStorageStateStore({ store: window.sessionStorage })})
             .signinSilentCallback();
     </script>
 </body>

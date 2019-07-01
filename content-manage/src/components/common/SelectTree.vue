@@ -3,7 +3,11 @@
    :clearable="clearable" 
     @clear="clearHandle"
  -->
-    <el-select  id="el-select" ref="elSelect" :popper-append-to-body="false" :value="valueTitle" 
+    <el-select  
+    id="el-select" 
+    ref="elSelect" 
+    :popper-append-to-body="false" 
+    :value="valueTitle" 
    
     size="small"
     >

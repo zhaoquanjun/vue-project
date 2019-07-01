@@ -15,7 +15,6 @@ const router = new VueRouter({
 export default router;
 
 router.beforeEach(async (to, from, next) => {
-
   if (!to.meta.requiresAuth) {
     store.dispatch('_getMenuListData')
     next()
@@ -25,7 +24,6 @@ router.beforeEach(async (to, from, next) => {
     if (!Cookies.get('AppId')) {
       await store.dispatch('_updateAppIdToCookie')
     }
-    
     let r = await store.dispatch('getCurRouteAuth', to.path);
     if (r) {
       if (store.getters.getMenuList.length < 1) {
@@ -40,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
       securityService.getUser(location.href).then(async (data) => {
         if (!data) {
           securityService.signIn();
-          next()
+         return
         } else {
           store.commit("SET_USER", data);
           await store.dispatch('_updateAppIdToCookie')

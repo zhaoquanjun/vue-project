@@ -41,7 +41,7 @@
                 </span>
                 <span class="grid-mode mode-item" @click="showType('grid')">
                     <!-- <svg-icon icon-class="grid-mode"></svg-icon> -->
-                     <i class="list-icon mode-icon" :class="{'mode-iconOn':!modeSelecte}"></i>
+                    <i class="list-icon mode-icon" :class="{'mode-iconOn':!modeSelecte}"></i>
                 </span>
             </div>
             <div class="head-item head-right">
@@ -52,19 +52,21 @@
             </div>
         </template>
         <template v-else>
-            <div style="padding:0 21px">
+            <div style="padding:0 21px;width:100%">
                 <span>
                     已选
                     <i>{{countPic}}</i> 张图片
                 </span>
-                <el-button style="margin:0 16px" size="small" @click="batchMove">
-                    <!-- <svg-icon icon-class="tab-moved"></svg-icon> -->
-                    移动
-                </el-button>
-                <el-button size="small" @click="batchDelete">
-                    <!-- <svg-icon icon-class="l-recyclebin"></svg-icon> -->
-                    删除
-                </el-button>
+                <div style="float:right">
+                    <el-button style="margin:0 16px" size="small" @click="batchMove">
+                        <!-- <svg-icon icon-class="tab-moved"></svg-icon> -->
+                        移动
+                    </el-button>
+                    <el-button size="small" @click="batchDelete">
+                        <!-- <svg-icon icon-class="l-recyclebin"></svg-icon> -->
+                        删除
+                    </el-button>
+                </div>
             </div>
         </template>
     </el-header>
@@ -74,7 +76,7 @@ export default {
     props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
     data() {
         return {
-            modeSelecte:true,
+            modeSelecte: true,
             options: [
                 {
                     value: "CreateTime",
@@ -115,11 +117,11 @@ export default {
             this.$emit("batchDelete");
         },
         showType(value) {
-            if(value==="list"){
-                this.modeSelecte=true
+            if (value === "list") {
+                this.modeSelecte = true;
             }
-            if(value === "grid"){
-                 this.modeSelecte=false
+            if (value === "grid") {
+                this.modeSelecte = false;
             }
             this.$emit("showType", value);
         }
@@ -160,7 +162,7 @@ export default {
     text-align: center;
     box-sizing: border-box;
     border: 1px solid #e5e5e5;
-     .mode-icon {
+    .mode-icon {
         display: inline-block;
         width: 16px;
         height: 14px;
@@ -168,7 +170,7 @@ export default {
 }
 .list-mode {
     border-right: none;
-   
+
     .list-icon {
         background: url("~img/list-mode.png") no-repeat center;
         background-size: 100%;
@@ -193,7 +195,10 @@ export default {
 .head-middle {
     float: right;
 }
-.upload-wrap{
+.upload-wrap {
+    border: none;
+    font-size: 12px;
+    border-radius: 3px;
     margin-right: 25px;
     cursor: pointer;
     display: inline-block;
@@ -202,5 +207,4 @@ export default {
     color: #fff;
     font-weight: 400;
 }
-  
 </style>

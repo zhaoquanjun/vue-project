@@ -150,7 +150,9 @@
 <script>
 import * as articleManageApi from "@/api/request/articleManageApi";
 import SelectTree from "@/components/common/SelectTree";
-export default {
+import { formatDate } from "@/utlis/date.js"
+console.log(formatDate)
+export default { 
     components: {
         SelectTree
     },
@@ -168,7 +170,7 @@ export default {
                     label: "下线"
                 }
             ],
-            value: false,
+            value: 1,
 
             activeName: "",
             activeName1:"",
@@ -180,7 +182,7 @@ export default {
                 contentDetail: "",
                 searchKeywords: "",
                 isPublish: false,
-                createTime: new Date(),
+                createTime:formatDate(new Date(),"yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
                 metaTitle: "",
                 metaKeywords: "",
@@ -194,26 +196,27 @@ export default {
                         message: "请输入文章标题",
                         trigger: "blur"
                     },
-                    {
-                        min: 1,
-                        max: 100,
-                        message: "长度在 1 到 100 个字符",
-                        trigger: "blur"
-                    }
+                    // {
+                    //     min: 1,
+                    //     max: 100,
+                    //     message: "长度在 1 到 100 个字符",
+                    //     trigger: "blur"
+                    // }
                 ],
-                summary:[
-                    {
-                        min: 0,
-                        max: 500,
-                        message: "长度不得超过 500 个字符",
-                        trigger: "blur"
-                    }
-                ],
+                // summary:[
+                //     {
+                //         min: 0,
+                //         max: 500,
+                //         message: "长度不得超过 500 个字符",
+                //         trigger: "blur"
+                //     }
+                // ],
             }
         };
     },
 
     created() {
+       let start = new Date();
         // console.log(this.$route.query)
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
@@ -235,6 +238,7 @@ export default {
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
             this.articleDetail = data;
+            console.log(data,'000-----')
             this.articleDetail.NewId = data.id;
         },
         //选择移动分类时的节点
@@ -269,7 +273,8 @@ export default {
                     type: "success",
                     message: "添加成功!"
                 });
-                this.$router.push(`/create?id=${data}&categoryName=${this.categoryName}`);
+                // this.$router.push(`/news/create?id=${data}&categoryName=${this.categoryName}`);
+                this.$router.push("/content/news")
             }
         },
         // 编辑提交
@@ -294,6 +299,7 @@ export default {
                     type: "success",
                     message: "保存成功!"
                 });
+                 this.$router.push("/content/news")
             }
         }
     }
@@ -310,7 +316,7 @@ export default {
 <style scoped lang="scss">
 .article-content {
     .content-item {
-        padding: 21px 16px 0;
+        padding: 21px 16px 20px;
         background: #fff;
         box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.03);
         margin-bottom: 16px;

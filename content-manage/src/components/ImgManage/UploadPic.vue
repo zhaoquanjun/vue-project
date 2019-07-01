@@ -3,7 +3,7 @@
         <!-- 一次可上传60张图片，单张图片大小不超过10MB -->
         <el-row class="upload-head" type="flex" justify="space-between">
             <!-- [{{upload2Category.label}}] -->
-            <el-col :span="12" >
+            <el-col :span="12">
                 <span style="padding-right:8px">上传至:</span>
                 <!-- <span style="vertical-align: -5px;padding:0 10px">{{upload2Category.label}}</span>
                 <el-tree
@@ -14,8 +14,8 @@
                     accordion
                     :expand-on-click-node="true"
                     @node-click="chooseNode"
-                ></el-tree> -->
-                 <SelectTree
+                ></el-tree>-->
+                <SelectTree
                     style="width:140px"
                     ref="treeX"
                     :tree-result="treeResult"
@@ -23,12 +23,12 @@
                     accordion
                     :expand-on-click-node="true"
                     @chooseNode="chooseNode"
-                     />
+                />
             </el-col>
             <!-- <div>
                 <el-button class="choose-img upload-btn" size="small" type="default">选择图片</el-button>
                 <el-button class="upload-btn" size="small" type="default">选择文件夹</el-button>
-            </div> -->
+            </div>-->
         </el-row>
 
         <el-upload
@@ -63,10 +63,10 @@
 </template>
 
 <script>
-import SelectTree from "@/components/common/SelectTree"
+import SelectTree from "@/components/common/SelectTree";
 export default {
     props: ["treeResult", "uploadPicUrl"],
-    components:{
+    components: {
         SelectTree
     },
     data() {
@@ -79,7 +79,7 @@ export default {
                 appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
                 Authorization: ""
             },
-            uploadSucess:false,
+            uploadSucess: false
         };
     },
     methods: {
@@ -94,17 +94,17 @@ export default {
             // }
         },
         handleSucess(response, file, fileList) {
-           
-           if(!this.uploadSucess){
+            if (!this.uploadSucess) {
                 this.$message({
-                type: "success",
-                message: "上传成功!"
-            });
-            setTimeout(() => {
+                    type: "success",
+                    message: "上传成功!"
+                });
                 this.$emit("switchUploadBoxShowStatus", "uploadImg");
-            }, 500);
-             this.uploadSucess=true;
-           }
+
+                setTimeout(() => {}, 500);
+                this.uploadSucess = true;
+                this.$refs.upload.clearFiles();
+            }
         },
         handleRemove(file, fileList) {
             console.log(file, fileList);
@@ -133,10 +133,18 @@ export default {
             const isSizeOk = file.size / 1024 / 1024 < maxMb;
 
             if (!isPic) {
-                alert("上传头像图片只能是 图片 格式!");
+                this.$message({
+                    type: "warning",
+                    message: "上传图片只能是 图片 格式!"
+                });
+                 return false
             }
             if (!isSizeOk) {
-                alert(`上传图片大小不能超过 ${maxMb}MB!`);
+                  this.$message({
+                    type: "warning",
+                    message: `上传图片大小不能超过 ${maxMb}MB!`
+                });
+                return false
             }
             return isPic && isSizeOk;
         }

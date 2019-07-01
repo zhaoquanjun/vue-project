@@ -33,7 +33,7 @@
                 </div>
                 <template v-else>
                     <span>{{data.label}}</span>
-                    <span v-if="data.level<=1">({{data.childrenSum }})</span>
+                    <span>({{data.newsCount }})</span>
                 </template>
                 <!-- 三个点 分类操作 -->
                 <span
@@ -252,7 +252,7 @@ export default {
             if (data.isNewAdd) return;
             this.curlabelName = data.label;
             this.articleSearchOptions.categoryId = data.id;
-            this.selectCategory = data;
+            //this.selectCategory = data; 因提示报错暂时注释
             this.$emit("getList");
             // 点击其他区域 把当前新增但未确定的节点删除掉
             this.newAddData && this.newAddData.children.shift();

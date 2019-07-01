@@ -14,7 +14,7 @@
         <div class="pageing">
             <el-pagination
                 background
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="total, sizes, prev, pager, next"
                 :total="imgPageResult.totalRecord"
                 :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"

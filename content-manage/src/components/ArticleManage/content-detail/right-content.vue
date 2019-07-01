@@ -30,12 +30,15 @@
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload"
-                     :on-preview="handlePreview"
-  :on-remove="handleRemove"
-                    >
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                >
                     <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt>
+                </el-dialog>
             </div>
         </el-card>
         <el-col style="margin-top:20px">
@@ -55,6 +58,8 @@ export default {
     props: ["imageUrl"],
     data() {
         return {
+             dialogImageUrl: '',
+        dialogVisible: false,
             activeName: "",
             uoloadDisabled: true,
             fileList: [],
@@ -87,12 +92,14 @@ export default {
                 this.uploadSucess = true;
             }
         },
-       handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+              this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+        },
 
         ///////
         handleAvatarSuccess(res, file) {

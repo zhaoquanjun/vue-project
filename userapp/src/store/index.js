@@ -27,7 +27,7 @@ export default store;
 /**
  * 页面刷新再将local中的token 写入store中
  */
-if(localStorage.getItem("token")){
+if (sessionStorage.getItem("token")){
   let obj = {
       access_token: getLocal("token"),
     }

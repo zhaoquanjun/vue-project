@@ -5,7 +5,7 @@
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-      <!-- @mouseleave="collapseClose" -->
+        <!-- @mouseleave="collapseClose" -->
         <el-aside class="m-asideleft" :style="{width:width+'px'}">
             <ul class="left-menu">
                 <li
@@ -14,6 +14,7 @@
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(i)"
+                    @mouseleave="itemhandlerLeave"
                     @click="skipPages(it,i)"
                 >
                     <!-- <svg-icon :icon-class="'l-' + it.code"></svg-icon> -->
@@ -23,19 +24,19 @@
                 </li>
             </ul>
         </el-aside>
-     <!--  :menuList="menuList[curIndex]" -->
+        <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
             v-if="isLeftNavComponentsShow"
             :style="{width:width1+'px !important',transition: 'width '+time+' linear',backgroundColor:'#fff',height: '100%'}"
             class="m-asideright"
-           :menuList="menuListChild"
+            :menuList="menuListChild"
         ></LeftNavComponents>
     </div>
 </template>
 <script>
 import { getSliderMenuList, checkHasRootSkip } from "@/api/index";
 import LeftNavComponents from "../Aside/LeftNavComponents";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
     data() {
@@ -52,18 +53,21 @@ export default {
     components: {
         LeftNavComponents
     },
-    mounted(){
-      
-    },
+    mounted() {},
     methods: {
         changeCurHoverItem(i) {
             this.curIndex = i;
         },
-        skipPages(item,i) {
-            console.log(this.$refs.menuItem)    
-            let path = item.menuUrl.split('/')[1]
-            if(!item.path){return}
-            this.$router.push(item.path)
+        itemhandlerLeave() {
+            //this.curIndex = 0;
+        },
+        skipPages(item, i) {
+            console.log(this.$refs.menuItem);
+            let path = item.menuUrl.split("/")[1];
+            if (!item.path) {
+                return;
+            }
+            this.$router.push(item.path);
         },
         collapseOpen(width, time) {
             this.width = width;
@@ -77,35 +81,29 @@ export default {
         }
     },
     computed: {
-        getMenuList(){
-            if(!this.$store.getters.getMenuList) return
-            return this.$store.getters.getMenuList
+        getMenuList() {
+            if (!this.$store.getters.getMenuList) return;
+            return this.$store.getters.getMenuList;
         },
-        menuListChild(){
-            if(!this.getMenuList) return
-            return this.getMenuList[this.curIndex]
+        menuListChild() {
+            if (!this.getMenuList) return;
+            return this.getMenuList[this.curIndex];
         },
-        isLeftNavComponentsShow(){
-             if(!this.$store.getters.getMenuList) return
-            let item = this.$store.getters.getMenuList[this.curIndex] ;
-            if(item && item.children){
-                return true
-            }else{
-                return false
+        isLeftNavComponentsShow() {
+            if (!this.$store.getters.getMenuList) return;
+            let item = this.$store.getters.getMenuList[this.curIndex];
+            if (item && item.children) {
+                return true;
+            } else {
+                return false;
             }
-        },
-       
+        }
     },
-    watch:{
-       
-    }
-   
+    watch: {}
 };
 </script>
 
 <style scoped>
-
-
 .m-aside {
     position: absolute;
     left: 0;
@@ -124,10 +122,11 @@ export default {
     z-index: 10;
     top: 0;
     text-align: center;
-    overflow: hidden;
+    /* border-right: 1px solid #E5E5E5; */
 }
-.el-menu {
+.el-aside /deep/ .el-menu {
     height: 100%;
+    border: none;
 }
 </style>
 <style lang="scss" scoped>
@@ -142,8 +141,8 @@ export default {
         padding: 0 20px;
         line-height: 40px;
         white-space: nowrap;
-        &:hover{
-             background: #e5f8fa;
+        &:hover {
+            background: #e5f8fa;
             color: #00c1de;
         }
         .menu-item-content {

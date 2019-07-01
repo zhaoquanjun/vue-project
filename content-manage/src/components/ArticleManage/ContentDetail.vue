@@ -5,7 +5,7 @@
               <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item>内容管理</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/article' }">文章管理</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/content/news' }">文章管理</el-breadcrumb-item>
                 <el-breadcrumb-item>{{operateName}}文章</el-breadcrumb-item>
             </el-breadcrumb>
            </div>
@@ -24,7 +24,7 @@
             </el-header>
             <el-main>
                 <div>
-                    <el-row>
+                    <el-row style="overflow:hidden">
                         <el-col :span="13" :offset="3">
                             <ArticleContent
                                 @changeOperateName="changeOperateName"
