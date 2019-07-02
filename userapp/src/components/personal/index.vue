@@ -1,10 +1,12 @@
 <template>
     <div class="personal">
-        <h3>个人账号管理</h3>
+        <h3>个人账号管理</h3>        
         <dl class="user-account clear">
             <dt class="avatar">
-                <img src="../../assets/avatar.jpeg" alt>
+                <img src="../../assets/avatar.jpeg" alt="个人头像" @mouseover="changeFlag">
+                <button @click="uploadImg" v-show="showUploadBtn">修改头像</button>
             </dt>
+
             <dd class="account-info">
                 <p>
                     <span v-if="flag">
@@ -18,12 +20,12 @@
                               v-model="input"
                               placeholder="请输入内容"></el-input>
                     <!--<el-input @blur="blur"
-                              v-else
-                              maxlength="20"
-                              show-word-limit
-                              size="small"
-                              v-model="input"
-                              placeholder="请输入内容"></el-input>-->
+                  v-else
+                  maxlength="20"
+                  show-word-limit
+                  size="small"
+                  v-model="input"
+                  placeholder="请输入内容"></el-input>-->
                 </p>
                 <p>
                     创建时间
@@ -48,7 +50,7 @@
                         <button @click="modifiPhoneNum">修改</button>
                     </span>
                 </div>
-            </li>           
+            </li>
             <li>
                 <div class="fleft">
                     <span>
@@ -81,8 +83,8 @@
                     <span class="pd-left">
                         <button v-if="WeChatUser">已绑定</button>
                         <button v-else>未绑定</button>
-                         |
-                        <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button> 
+                        |
+                        <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button>
                         <button v-else @click="_bindingWeixin(WeChatUser.provider)">绑定</button>
                     </span>
                 </div>
@@ -98,8 +100,8 @@
                 <div class="fright">
                     <button v-if="DingDingUser">已绑定</button>
                     <button v-else>未绑定</button>
-                        |
-                    <button v-if="DingDingUser" @click="_untyingDing(DingDingUser.provider)">解绑</button> 
+                    |
+                    <button v-if="DingDingUser" @click="_untyingDing(DingDingUser.provider)">解绑</button>
                     <button v-else @click="_bindingDing(WeChatUser.provider)">绑定</button>
                 </div>
             </li>
@@ -118,8 +120,8 @@
                     <span class="pd-left">
                         <button v-if="AlipayUser">已绑定</button>
                         <button v-else>未绑定</button>
-                         |
-                        <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button> 
+                        |
+                        <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button>
                         <button v-else @click="_bindingAlipay(AlipayUser.provider)">绑定</button>
                     </span>
                 </div>
@@ -127,20 +129,16 @@
         </ul>
         <right-pannel :style="{width:pannelWidth+'px'}">
             <span slot="title-text">{{titText}}</span>
-            <component :is="curComponent" :sourcePhone="userInfo.phoneNumber" :provider="CurrentProvider" 
-            @removeExternalUserAsync="_removeExternalUserAsync" 
-            @updateWeiXinHtml="updateWeiXinHtml" 
-            :weixinHtml="weixinHtml" :weChatJsLogin="weChatJsLogin"></component>
+            <component :is="curComponent" :sourcePhone="userInfo.phoneNumber" :provider="CurrentProvider"
+                       @removeExternalUserAsync="_removeExternalUserAsync"
+                       @updateWeiXinHtml="updateWeiXinHtml"
+                       :weixinHtml="weixinHtml" :weChatJsLogin="weChatJsLogin"></component>
         </right-pannel>
-         <el-dialog
-                width="0"
-                style="z-index:10"
-                :close-on-click-modal="false"
-                :show-close="false"
-                :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
-                
-
-            ></el-dialog>
+        <el-dialog width="0"
+                   style="z-index:10"
+                   :close-on-click-modal="false"
+                   :show-close="false"
+                   :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"></el-dialog>
     </div>
 </template>
 <script>
@@ -170,7 +168,8 @@ import { updateUserName } from "@/api/index.js";
                 WeChatJsLogin:null,
                 CurrentProvider:"",
                 weixinHtml: "",
-                createTime: "2019-06-28"
+                createTime: "2019-06-28",
+                showUploadBtn: false
             };
         },
         components: {
@@ -213,7 +212,13 @@ import { updateUserName } from "@/api/index.js";
                     });
                 }
             },
-            
+            changeFlag() {
+                this.showUploadBtn = true;
+            },
+            //上传头像
+            uploadImg() {
+                this.showUploadBtn = false;
+            },
             //获取微信Js相关参数
             async _getWeChatJsLoginParams(){
                 let { data } = await getWeChatJsLoginParams();
