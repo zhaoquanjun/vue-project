@@ -14,15 +14,15 @@
 </template>
 <script>
 export default {
-    props: ["weixinHtml","weChatJsLogin"],
+    props: ["weixinHtml","WeChatJsLoginParams"],
     mounted(){    
        var obj = new WxLogin({
             self_redirect: true,
             id: "weixin",
-            appid: this.weChatJsLogin.appId,
+            appid: this.WeChatJsLoginParams.appId,
             scope: "snsapi_login,snsapi_userinfo",
-            redirect_uri: this.weChatJsLogin.redirectUri,
-            state: this.weChatJsLogin.state,
+            redirect_uri: this.WeChatJsLoginParams.redirectUri,
+            state: this.WeChatJsLoginParams.state,
             style: "",
             href: "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9DQouaW1wb3dlckJveCAucXJjb2RlIHt3aWR0aDogMjIwcHg7fQ0KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyMjBweDt9DQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9DQouaW1wb3dlckJveCAuc3RhdHVzIHt0ZXh0LWFsaWduOiBjZW50ZXI7fQ=="
         });
@@ -41,10 +41,10 @@ export default {
         var obj = new WxLogin({
             self_redirect: true,
             id: "weixin",
-            appid: this.weChatJsLogin.appId,
+            appid: this.WeChatJsLoginParams.appId,
             scope: "snsapi_login,snsapi_userinfo",
-            redirect_uri: this.weChatJsLogin.redirectUri,
-            state: this.weChatJsLogin.state,
+            redirect_uri: this.WeChatJsLoginParams.redirectUri,
+            state: this.WeChatJsLoginParams.state,
             style: "",
             href: "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9DQouaW1wb3dlckJveCAucXJjb2RlIHt3aWR0aDogMjIwcHg7fQ0KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyMjBweDt9DQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9DQouaW1wb3dlckJveCAuc3RhdHVzIHt0ZXh0LWFsaWduOiBjZW50ZXI7fQ=="
         });
