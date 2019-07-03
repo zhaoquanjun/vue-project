@@ -58,6 +58,8 @@ export default {
     background-color: "#fff";
     // width: 200px;
     color: #262626;
+    overflow:hidden;
+    .right-pannel
     .pannel-head {
         height: 40px;
         line-height: 40px;

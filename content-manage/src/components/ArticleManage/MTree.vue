@@ -5,6 +5,7 @@
             node-key="id"
             default-expand-all
             :expand-on-click-node="false"
+            highlight-current
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
             accordion

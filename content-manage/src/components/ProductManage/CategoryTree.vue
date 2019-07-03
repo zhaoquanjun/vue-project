@@ -16,7 +16,7 @@
                  slot-scope="{ node, data }">
                 <div style="display: inline-block;"
                      v-if="renameShowId === data.id || data.isNewAdd">
-                    <input class="category-name"
+                    <input class="category-name" maxlength="20"
                            v-model="data.label"
                            v-filter-special-char
                            @input="changeCategoryInput(data.label)">
@@ -29,8 +29,10 @@
                 </div>
                 <template v-else>
                     <img v-if="data.thumbnailPicUrl" :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'" />
-                    <span>{{data.label}}</span>
-                    <span v-if="data.level<=1">({{data.leafSum }})</span>
+                    <div style="cursor:move">
+                        <span>{{data.label}}</span>
+                        <span v-if="data.level<=1">({{data.leafSum }})</span>
+                    </div>
                 </template>
                 <!-- 三个点 分类操作 -->
                 <span class="set-tree-type"

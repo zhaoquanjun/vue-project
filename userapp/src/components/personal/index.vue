@@ -11,18 +11,23 @@
                         {{input!=''? input : '设置您的名字'}}
                         <i @click="setName" class="el-icon-edit"></i>
                     </span>
-                    <el-input
-                        @blur="blur"
-                        v-else
-                        maxlength="20"
-                        size="small"
-                        v-model="input"
-                        placeholder="请输入内容"
-                    ></el-input>
+                    <el-input @blur="blur"
+                              v-else
+                              maxlength="20"
+                              show-word-limit
+                              v-model="input"
+                              placeholder="请输入内容"></el-input>
+                    <!--<el-input @blur="blur"
+                              v-else
+                              maxlength="20"
+                              show-word-limit
+                              size="small"
+                              v-model="input"
+                              placeholder="请输入内容"></el-input>-->
                 </p>
                 <p>
                     创建时间
-                    <i>{{userInfo.createTime}}</i>
+                    <i v-model="createTime">{{createTime}}</i>
                 </p>
             </dd>
         </dl>
@@ -43,26 +48,7 @@
                         <button @click="modifiPhoneNum">修改</button>
                     </span>
                 </div>
-            </li>
-            <li>
-                <div class="fleft">
-                    <span>
-                        <i>x</i>
-                        <b>绑定邮箱</b>
-                    </span>
-                    <span
-                        class="pd-left social-desc"
-                    >绑定邮箱可用于接收系统发送给您的各种通知</span>
-                </div>
-                <div class="fright">
-                    <span>13011011746</span>
-
-                    <span class="pd-left">
-                        <button>已绑定</button> |
-                        <button @click="modifiEmail">修改</button>
-                    </span>
-                </div>
-            </li>
+            </li>           
             <li>
                 <div class="fleft">
                     <span>
@@ -72,7 +58,7 @@
                     <span class="pd-left social-desc">设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码</span>
                 </div>
                 <div class="fright">
-                    <span>********</span>
+                    <span></span>
 
                     <span class="pd-left">
                         <button>已绑定</button> |
@@ -97,7 +83,7 @@
                         <button v-else>未绑定</button>
                          |
                         <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button> 
-                        <button v-else @click="_bindingWeixin(WeChatUser.provider)">绑定</button>
+                        <button v-else @click="_bindingWeixin()">绑定</button>
                     </span>
                 </div>
             </li>
@@ -114,7 +100,7 @@
                     <button v-else>未绑定</button>
                         |
                     <button v-if="DingDingUser" @click="_untyingDing(DingDingUser.provider)">解绑</button> 
-                    <button v-else @click="_bindingDing(WeChatUser.provider)">绑定</button>
+                    <button v-else @click="_bindingDing()">绑定</button>
                 </div>
             </li>
             <li>
@@ -134,7 +120,7 @@
                         <button v-else>未绑定</button>
                          |
                         <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button> 
-                        <button v-else @click="_bindingAlipay(AlipayUser.provider)">绑定</button>
+                        <button v-else @click="_bindingAlipay()">绑定</button>
                     </span>
                 </div>
             </li>
@@ -144,7 +130,7 @@
             <component :is="curComponent" :sourcePhone="userInfo.phoneNumber" :provider="CurrentProvider" 
             @removeExternalUserAsync="_removeExternalUserAsync" 
             @updateWeiXinHtml="updateWeiXinHtml" 
-            :weixinHtml="weixinHtml" :weChatJsLogin="weChatJsLogin"></component>
+            :weixinHtml="weixinHtml" :WeChatJsLoginParams="WeChatJsLoginParams"></component>
         </right-pannel>
          <el-dialog
                 width="0"
@@ -167,7 +153,7 @@ import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
 import { mapState,mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import { getUserProfile,getExternalUserInfo,removeExternalUser,getWeChatJsLoginParams } from "@/api/index.js"; 
+import { getUserProfile, getExternalUserInfo, removeExternalUser, getWeChatJsLoginParams,formatDateTime } from "@/api/index.js"; 
 import { updateUserName } from "@/api/index.js";
     export default {
         data() {
@@ -181,9 +167,10 @@ import { updateUserName } from "@/api/index.js";
                 WeChatUser: null,
                 AlipayUser: null,
                 DingDingUser: null,
-                WeChatJsLogin:null,
+                WeChatJsLoginParams:null,
                 CurrentProvider:"",
-                weixinHtml:"",
+                weixinHtml: "",
+                createTime: "2019-06-28"
             };
         },
         components: {
@@ -197,21 +184,23 @@ import { updateUserName } from "@/api/index.js";
         created() {
             this._getUserProfileAsync();
             this._getExternalUserAsync();
-            this._getWeChatJsLoginParams();
+            this._getWeChatJsLoginParams();           
         },
         methods: {
-            ...mapMutations(["ISRIGHTPANNELSHOW"]),
+            ...mapMutations(["ISRIGHTPANNELSHOW"]),          
             async _getUserProfileAsync() {
                 let { data } = await getUserProfile();
                 this.userInfo = data;
-                this.input = data.displayName;
-                console.log(this.userInfo)
+                this.input = data.displayName;                
+                this.createTime = formatDateTime(data.createTime, "yyyy-MM-dd hh:mm:ss");
+               // console.log(this.userInfo)
             },
             async _getExternalUserAsync() {
                 this.WeChatUser=null;
                 this.AlipayUser=null;
                 this.DingDingUser=null;
                 let { data } = await getExternalUserInfo();
+               // console.log(data);
                 this.ExternalUsers = data; 
                 if(this.ExternalUsers && this.ExternalUsers.length>0  ){
                     this.ExternalUsers.forEach(element => {
@@ -225,10 +214,11 @@ import { updateUserName } from "@/api/index.js";
                     });
                 }
             },
+            
             //获取微信Js相关参数
             async _getWeChatJsLoginParams(){
                 let { data } = await getWeChatJsLoginParams();
-                this.WeChatJsLogin = data;
+                this.WeChatJsLoginParams = data;
             },
             //解绑第三方账号
             async _removeExternalUserAsync(provider){
@@ -255,9 +245,7 @@ import { updateUserName } from "@/api/index.js";
             modifiPhoneNum() {
                 this.curComponent = SetPhoneNumber;
                 this.ISRIGHTPANNELSHOW(true)
-            },
-            //修改邮箱
-            modifiEmail() { },
+            },            
             //修改密码
             modifiPwd() {
                 this.curComponent = SetPwd;
@@ -272,10 +260,10 @@ import { updateUserName } from "@/api/index.js";
                 this.ISRIGHTPANNELSHOW(true)
             },
             //绑定微信
-            _bindingWeixin(provider){
+            _bindingWeixin(){
                 this.titText="绑定微信";
                 this.weixinHtml="绑定微信" +new Date;
-                this.CurrentProvider=provider;
+                this.CurrentProvider="Weixin";
                 this.curComponent = BindingWeChat;
                 this.ISRIGHTPANNELSHOW(true)
             }, 
@@ -287,9 +275,9 @@ import { updateUserName } from "@/api/index.js";
                 this.ISRIGHTPANNELSHOW(true)
             },
             //钉钉 绑定
-            _bindingDing(provider) { 
+            _bindingDing() { 
                 this.titText="绑定钉钉";
-                this.CurrentProvider=provider;
+                this.CurrentProvider="Dingding";
             },
             //支付宝 解绑
             _untyingAlipay(provider) {
@@ -299,9 +287,9 @@ import { updateUserName } from "@/api/index.js";
                 this.ISRIGHTPANNELSHOW(true)
             },
             //支付宝 绑定
-            _bindingAlipay(provider) {
+            _bindingAlipay() {
                 this.titText="绑定支付宝";
-                this.CurrentProvider=provider;
+                this.CurrentProvider="Alipay";
              },
             setName() {
                 this.flag = false;

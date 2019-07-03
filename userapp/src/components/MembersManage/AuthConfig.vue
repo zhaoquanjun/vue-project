@@ -9,13 +9,12 @@
             <div class="pannel-right-item">
                 <h5 class="auth-title">选择权限</h5>
                 <div class="search-auth">
-                    <input
-                        class="auth-input input-hover"
-                        v-model="input"
-                        placeholder="请输入权限名称"
-                        @input="changeInput"
-                        
-                    >
+                    <input class="auth-input input-hover"
+                           v-model="input"
+                           placeholder="请输入权限名称"
+                           @input="changeInput"
+                           >
+                    
                     <button class="auth-btn" @click="searchAuth">搜索</button>
                 </div>
                 <div class="auth-name">
@@ -99,10 +98,10 @@ export default {
                     });
                 }
             } else {
-                if (this.value != null && this.value.length > 20) {
+                if (this.value != null && this.value.length > 100) {
                     this.$message({
                         type: "failed",
-                        message: "备注长度不能超过20个字符!"
+                        message: "备注长度不能超过100个字符!"
                     });
                     return false;
                 }
@@ -209,9 +208,9 @@ export default {
     }
 }
 .panel-main {
-    padding: 20px 16px;
-    overflow: hidden;
-    .search-auth {
+        padding: 20px 16px;
+        overflow: hidden;
+        .search-auth {
         display: flex;
         height: 32px;
         box-sizing: border-box;
@@ -244,7 +243,7 @@ export default {
     .auth-name {
         border: 1px solid #efefef;
         border-top: none;
-        padding: 0 10px;
+        padding: 0 0px;
     }
 }
 .pannel-right-item {
