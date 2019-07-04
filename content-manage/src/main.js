@@ -11,6 +11,8 @@ import "@/directive/index.js"
 import { getLocal } from "./libs/local";
 import './icons';
 import securityService from "@/services/authentication/securityService";
+import VueQuillEditor from 'vue-quill-editor'
+Vue.use(VueQuillEditor)
 Vue.config.productionTip = false;
 
 

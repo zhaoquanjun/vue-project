@@ -44,7 +44,7 @@ export default {
 };
 </script>
 <style >
-
+    @import url('./assets/quill.css');
 </style>
 
 <style lang="scss">
