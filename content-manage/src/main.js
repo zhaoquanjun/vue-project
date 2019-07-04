@@ -8,15 +8,13 @@ import "./styles/common.scss";
 import "./plugins/element-reset.scss"
 import "./styles/weizhan.scss";
 import "@/directive/index.js"
-import { getLocal } from "./libs/local";
 import './icons';
 import securityService from "@/services/authentication/securityService";
 import VueQuillEditor from 'vue-quill-editor'
 Vue.use(VueQuillEditor)
 Vue.config.productionTip = false;
-
-
 new Vue({
+
   router,
   store,
   render: h => h(App)

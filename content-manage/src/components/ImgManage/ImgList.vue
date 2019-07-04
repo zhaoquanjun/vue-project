@@ -58,13 +58,15 @@
         <div id="img-list-dialog">
              <el-dialog  :visible.sync="imgVisible"  :modal-append-to-body="false">
             <!-- //<img :src="picUrl"> -->
-            <el-carousel :autoplay="false" arrow="always" indicator-position="none" :loop="false">
+            <el-carousel :autoplay="false" :initial-index="initial" arrow="always" indicator-position="none" :loop="false">
                 <el-carousel-item v-for="item in imgPageResult.list" :key="item.id">
                     <h3>
                         <img :src="item.fullOssUrl">
                     </h3>
+                   
                 </el-carousel-item>
             </el-carousel>
+           <div slot="footer">12345</div>
         </el-dialog>
         </div>
        
@@ -91,6 +93,7 @@ export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
         return {
+            initial:0,
             imgVisible: false,
             multipleSelection: [],
             picUrl: null,
@@ -129,6 +132,7 @@ export default {
          * 查看大图
          */
         viewPic(row,index) {
+            this.initial = index;
             this.picUrl = row.fullOssUrl;
             this.picTitle = row.title;
             this.imgVisible = true;
