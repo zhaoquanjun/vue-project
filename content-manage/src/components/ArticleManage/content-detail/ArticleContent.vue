@@ -426,9 +426,7 @@ export default {
     },
     mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
-        this.$refs.myQuillEditor.quill
-            .getModule("toolbar")
-            .addHandler("image", this.imageHandler);
+        this.$refs.myQuillEditor.quill.getModule("toolbar").addHandler("image", this.imageHandler);
         // 为视频ICON绑定事件
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         addQuillTitle();
@@ -476,7 +474,11 @@ export default {
     height: 500px;
 }
 .ql-container {
-    height: 480px;
+    height: 400px;
 }
 </style>
-
+<style scoped>
+.quill-editor /deep/ .ql-container{
+    height: 420px;
+}
+</style>
