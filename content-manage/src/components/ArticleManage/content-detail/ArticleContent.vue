@@ -60,12 +60,26 @@
                     </el-col>
                 </el-row>
                 <el-form-item label prop="contentDetail">
-                    <el-input
-                        type="textarea"
-                        :rows="10"
-                        placeholder="请输入文章详情"
-                        v-model="articleDetail.contentDetail"
-                    ></el-input>
+                    <!-- quill-editor 编辑一-->
+                    <quill-editor v-model="articleDetail.contentDetail"
+                    ref="myQuillEditor" 
+                    themes="bubble" 
+                    :options="editorOption" 
+                    @change="onEditorChange($event)">
+                    </quill-editor>
+                    <div class="mask" v-show="isModalShow"></div>
+                    <div id="content" v-show="isModalShow">
+                        <el-header class="modal-header">
+                            <span style="font-size: 16px;">我的图片</span>
+                            <span @click="cancelEditorImg">X</span>
+                        </el-header>
+                        <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo">
+                            <div slot="modal-footer" class="modal-footer">
+                                <button type="button" @click="getEditorImg" class="sure">确定</button>
+                                <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                            </div>
+                        </modal-content>
+                    </div>                  
                 </el-form-item>
             </div>
             <div class="content-item set-article">
@@ -151,10 +165,34 @@
 import * as articleManageApi from "@/api/request/articleManageApi";
 import SelectTree from "@/components/common/SelectTree";
 import { formatDate } from "@/utlis/date.js"
-console.log(formatDate)
+// 引入编辑器
+import * as Quill from 'quill'  
+import { addQuillTitle } from '@/assets/quill-title.js'
+// require styles这里是富文本编辑器的样式引用
+import 'quill/dist/quill.snow.css'
+// 自定义quill编辑器的字体
+var fonts = [false, 'SimSun', 'SimHei','Microsoft-YaHei','KaiTi','FangSong','Arial','Times-New-Roman'];  
+var Font = Quill.import('formats/font');  
+Font.whitelist = fonts; 
+Quill.register(Font, true);
+
+// 自定义quill编辑器的字体大小
+let Size = Quill.import('attributors/style/size')
+let sizes = [false, '10px', '12px', '14px', '16px', '18px', '20px']
+Size.whitelist = sizes
+Quill.register(Size, true);
+
+// 调整大小组件。
+// import { ImageResize } from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
+
+import ModalContent from "@/components/ImgManage/index.vue";
+ 
+
 export default { 
     components: {
-        SelectTree
+        SelectTree,
+        ModalContent
     },
     data() {
         return {
@@ -171,7 +209,6 @@ export default {
                 }
             ],
             value: 1,
-
             activeName: "",
             activeName1:"",
             articleDetail: {
@@ -211,10 +248,11 @@ export default {
                 //         trigger: "blur"
                 //     }
                 // ],
-            }
+            },
+            isModalShow: false,
+            editorOption: {}
         };
     },
-
     created() {
        let start = new Date();
         // console.log(this.$route.query)
@@ -224,6 +262,27 @@ export default {
             this.$emit("changeOperateName","编辑");
         }
         this.getTreeAsync();
+        this.editorOption = {
+        placeholder: '请输入文本',
+        modules: {
+            toolbar: [
+            ['bold', 'italic', 'underline', 'strike'], 
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],     
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],  
+            [{ 'indent': '-1'}, { 'indent': '+1' }],   
+            [{ 'direction': 'rtl' }],               
+            [{ 'size': sizes }], 
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'color': [] }, { 'background': [] }], 
+            [{ 'font': fonts }], 
+            [{ 'align': [] }],
+            ['clean'],
+            ['image','video']
+            ]
+            }
+        }
     },
     methods: {
         async getTreeAsync() {
@@ -301,8 +360,46 @@ export default {
                 });
                  this.$router.push("/content/news")
             }
+        },
+        onEditorChange({editor, html, text}) {
+            this.articleDetail.contentDetail = html
+        },
+        imageHandler(){
+            this.isModalShow = !this.isModalShow;
+        },
+        getImgInfo(info) {
+            //console.log(info, "0000000");
+            this.imgData = info;
+        },
+        getEditorImg() {
+            // 获取选中的图片信息 有两种方式
+            //console.log(this.imgData, "imgData"); 
+            //console.log(this.$refs.imgList.selectedImg, "selectedImg"); 
+            this.isModalShow = false;      
+            this.insertEditorImg(this.imgData);     
+        },
+        insertEditorImg(imgFiles){
+            if(imgFiles && imgFiles.length>0){     
+                for(var i=0;i<imgFiles.length;i++){
+                    this.addRange = this.$refs.myQuillEditor.quill.getSelection();
+                    var value = imgFiles[i].fullOssUrl;
+                    // 调用编辑器的 insertEmbed 方法，插入URL
+                    this.$refs.myQuillEditor.quill.insertEmbed(this.addRange !== null ? this.addRange.index : 0, 'image', value, Quill.sources.USER)        
+               }    
+            }
+        },
+        // 关闭图片选择弹窗
+        cancelEditorImg() {
+            this.isModalShow = false;
         }
-    }
+    },
+    mounted() {
+        // 为图片ICON绑定事件  getModule 为编辑器的内部属性
+        this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('image', this.imageHandler)
+        // 为视频ICON绑定事件
+        // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler) 
+        addQuillTitle();
+  }
 };
 </script>
 <style>
@@ -341,6 +438,12 @@ export default {
     box-sizing: border-box;
     height: 32px;
     margin: 0 16px 0 7px;
+}
+.quill-editor {
+  height: 500px;
+}
+.ql-container {
+  height: 480px;
 }
 </style>
 
