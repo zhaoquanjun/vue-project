@@ -31,8 +31,14 @@
                     </el-select>
                 </span>
                 <span @click="switchIsDesc">
-                    <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                    <svg-icon v-else icon-class="top-arrow"></svg-icon>
+                    <i class="sort-icon asc" ></i>
+                    <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
+                    <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
+                </span>
+                <span @click="switchIsDesc">
+                    <i class="sort-icon dec"></i>
+                    <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
+                    <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                 </span>
 
                 <span class="list-mode mode-item" @click="showType('list')">
@@ -76,6 +82,7 @@ export default {
     props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
     data() {
         return {
+            isAsc: false,
             modeSelecte: true,
             options: [
                 {
@@ -194,6 +201,29 @@ export default {
 .head-right,
 .head-middle {
     float: right;
+}
+.head-middle {
+    .sort-icon {
+        display: inline-block;
+        width: 16px;
+        height: 22px;
+    }
+    .asc{
+        background: url("~img/content-icon/asc.png") no-repeat center;
+        background-size: contain;
+    }
+    .asc-icon-on {
+        background: url("~img/content-icon/asc-on.png") no-repeat center;
+        background-size: contain;
+    }
+    .dec{
+         background: url("~img/content-icon/desc.png") no-repeat center;
+        background-size: contain;
+    }
+     .desc-on{
+         background: url("~img/content-icon/desc-on.png") no-repeat center;
+        background-size: contain;
+    }
 }
 .upload-wrap {
     border: none;

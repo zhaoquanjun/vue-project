@@ -1,10 +1,11 @@
 let path = require('path');
+const webpack = require("webpack")
 function resolve(dir) {
     return path.join(__dirname, '.', dir)
 }
 
 module.exports = {
-   
+
 
     publicPath: '/',
     // 打包 不再使用sourcemap
@@ -38,7 +39,18 @@ module.exports = {
     devServer: {
         disableHostCheck: true,
         port: 8081,
+    },
+    configureWebpack:{
+        plugins: [
+            new webpack.ProvidePlugin({
+              'window.Quill': 'quill/dist/quill.js',
+              'Quill': 'quill/dist/quill.js'
+            }),
+          ]
+     
     }
+  
+    
 }
 
 
