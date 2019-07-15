@@ -19,6 +19,7 @@
                 @mouseover="handlerOver(data)"
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
+                style="cursor:move;"
             >
                 <div
                     style="display: inline-block;"
