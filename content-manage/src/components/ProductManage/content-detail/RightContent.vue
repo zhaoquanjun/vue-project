@@ -58,7 +58,7 @@ export default {
     data() {
         return {
             activeName: "",
-            uoloadDisabled: true,
+            uploadDisabled: true,
             fileList1: [],
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
