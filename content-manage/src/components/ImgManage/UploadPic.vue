@@ -15,49 +15,48 @@
                     :expand-on-click-node="true"
                     @node-click="chooseNode"
                 ></el-tree>-->
-                <SelectTree
-                    style="width:140px"
-                    ref="treeX"
-                    :tree-result="treeResult"
-                    node-key="id"
-                    accordion
-                    :expand-on-click-node="true"
-                    @chooseNode="chooseNode"
-                />
+                <SelectTree style="width:140px"
+                            ref="treeX"
+                            :tree-result="treeResult"
+                            node-key="id"
+                            accordion
+                            :expand-on-click-node="true"
+                            @chooseNode="chooseNode" />
             </el-col>
-            <!-- <div>
-                <el-button class="choose-img upload-btn" size="small" type="default">选择图片</el-button>
-                <el-button class="upload-btn" size="small" type="default">选择文件夹</el-button>
-            </div>-->
+            <div>
+            </div>
         </el-row>
 
-        <el-upload
-            class="upload-pic"
-            :action="uploadPicAction"
-            :headers="headers"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :on-success="handleSucess"
-            :on-change="handleChange"
-            :file-list="fileList"
-            list-type="picture-card"
-            :auto-upload="false"
-            :limit="60"
-            :multiple="true"
-            ref="upload"
-            :before-upload="beforeUpload"
-        >
-            <i class="el-icon-plus avatar-uploader-icon"></i>
+        <el-upload class="upload-pic"
+                   :action="uploadPicAction"
+                   :headers="headers"
+                   :on-preview="handlePreview"
+                   :on-remove="handleRemove"
+                   :on-success="handleSucess"
+                   :on-change="handleChange"
+                   :file-list="fileList"
+                   list-type="picture-card"
+                   :auto-upload="false"
+                   :multiple="true"
+                   ref="upload"
+                   :limit="60"
+                   drag
+                   :isFolder="isFolder"
+                   :onExceed="onExceed"
+                   :before-upload="beforeUpload">
+            <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
+            <div @click="setFolder(false)" class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <el-button class="upload-btn" @click="setFolder(false)" size="small" type="default" style=" position: absolute;top: 57px; right: 136px;">选择图片</el-button>
+            <el-button class="choose-img  upload-btn" size="small" @click="setFolder(true)" type="default" style="position: absolute;top: 57px; right: 6px;">选择文件夹</el-button>
+
         </el-upload>
         <el-row class="footer-upload-btn">
-            <el-button
-                :disabled="uoloadDisabled"
-                class="handle-upload"
-                :class="[{'handle-upload-disabled':uoloadDisabled}]"
-                style="float:right"
-                size="small"
-                @click="submitUpload"
-            >开始上传</el-button>
+            <el-button :disabled="uploadDisabled"
+                       class="handle-upload"
+                       :class="[{'handle-upload-disabled':uploadDisabled}]"
+                       style="float:right"
+                       size="small"
+                       @click="submitUpload">开始上传</el-button>
         </el-row>
     </div>
 </template>
@@ -71,7 +70,8 @@ export default {
     },
     data() {
         return {
-            uoloadDisabled: true,
+            isFolder:false,
+            uploadDisabled: true,
             fileList: [],
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${this.uploadPicUrl}/0`,
@@ -83,8 +83,9 @@ export default {
         };
     },
     methods: {
-        handleChange(file) {
-            this.uoloadDisabled = false;
+        handleChange(file,fileList) {
+
+            this.uploadDisabled = false;
             //  const isPic =
             //     ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
             //     -1;
@@ -93,6 +94,12 @@ export default {
             //     return
             // }
         },
+    onExceed(fileList){
+  this.$message({
+                    type: "warning",
+                    message: `上传图片文件超过数量限制`
+                });
+    },
         handleSucess(response, file, fileList) {
             if (!this.uploadSucess) {
                 this.$message({
@@ -108,15 +115,16 @@ export default {
             }
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
-            if (fileList < 1) this.uoloadDisabled = true;
+                        if (fileList < 1) this.uploadDisabled = true;
         },
+    setFolder(isFolder){
+    this.isFolder=isFolder;
+    },
         handlePreview(file) {
             console.log(file);
         },
         chooseNode(data) {
             this.upload2Category = data;
-            console.log(this.upload2Category);
             this.uploadPicAction = `${this.uploadPicUrl}/${
                 this.upload2Category.id
             }`;
@@ -127,12 +135,13 @@ export default {
             this.$refs.upload.submit();
         },
         beforeUpload(file) {
-            const isPic =
+
+
+         const isPic =
                 ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
                 -1;
             const maxMb = 10;
             const isSizeOk = file.size / 1024 / 1024 < maxMb;
-
             if (!isPic) {
                 this.$message({
                     type: "warning",
@@ -153,14 +162,27 @@ export default {
     watch: {}
 };
 </script>
+<style>
+    #upload-img .upload-pic /deep/ .el-upload-dragger {
+        position: static;
+    } 
 
+</style>
 <style scoped lang="scss">
-#upload-img .upload-head {
-    padding-top: 12px;
-    border-top: 1px solid #eee;
-}
-#upload-img {
-    .upload-tree {
+    #upload-img .upload-head {
+        padding-top: 12px;
+        border-top: 1px solid #eee;
+    }
+
+    #upload-img {
+        .el-upload-dragger
+    {
+        position:none;
+    } 
+    .upload-tree
+
+
+    {
         width: 240px;
         display: inline-block;
         vertical-align: top;
@@ -168,6 +190,7 @@ export default {
         z-index: 10;
         box-shadow: 0 0 3px #ccc;
     }
+
     .upload-btn {
         width: 98px;
         height: 32px;
@@ -177,31 +200,38 @@ export default {
         border: 1px solid #00c1de;
         color: #00c1de;
     }
+
     .choose-img {
         margin-right: 13px;
         color: #fff;
         background: #00c1de;
     }
+
     .upload-pic {
         min-height: 320px;
         border: 1px solid #eee;
         margin: 13px 0 16px 0;
         padding: 18px 20px;
     }
+
     .footer-upload-btn {
-        .handle-upload {
-            width: 76px;
-            height: 32px;
-            background: #00c1de;
-            border: none;
-            color: #fff;
-        }
-        .handle-upload-disabled {
-            background: rgba(245, 245, 245, 1);
-            font-weight: 400;
-            color: #8c8c8c;
-        }
+        .handle-upload
+
+    {
+        width: 76px;
+        height: 32px;
+        background: #00c1de;
+        border: none;
+        color: #fff;
     }
-}
+
+    .handle-upload-disabled {
+        background: rgba(245, 245, 245, 1);
+        font-weight: 400;
+        color: #8c8c8c;
+    }
+
+    }
+    }
 </style>
 
