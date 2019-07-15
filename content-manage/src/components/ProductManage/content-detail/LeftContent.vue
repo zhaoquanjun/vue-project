@@ -61,12 +61,27 @@
                     </el-col>
                 </el-row>
                 <el-form-item label prop="contentDetail">
-                    <el-input
-                        type="textarea"
-                        :rows="10"
-                        placeholder="请输入产品详情"
+                    <!-- quill-editor 编辑一-->
+                    <quill-editor
                         v-model="detailData.detailContent"
-                    ></el-input>
+                        ref="myQuillEditor"
+                        themes="bubble"
+                        :options="editorOption"
+                        @change="onEditorChange($event)"
+                    ></quill-editor>
+                    <div class="mask" v-show="isModalShow"></div>
+                    <div id="content" v-show="isModalShow">
+                        <el-header class="modal-header">
+                            <span style="font-size: 16px;">我的图片</span>
+                            <span @click="cancelEditorImg">X</span>
+                        </el-header>
+                        <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo">
+                            <div slot="modal-footer" class="modal-footer">
+                                <button type="button" @click="getEditorImg" class="sure">确定</button>
+                                <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                            </div>
+                        </modal-content>
+                    </div>
                 </el-form-item>
             </div>
             <div class="content-item set-article">
@@ -88,7 +103,7 @@
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
-                                    <br>结果更加准确，一篇产品最多可以设置5个关键词
+                                    <br />结果更加准确，一篇产品最多可以设置5个关键词
                                 </div>
                                 <span>
                                     <svg-icon icon-class="tip-icon"></svg-icon>
@@ -143,16 +158,13 @@
                             ></el-input>
                         </el-form-item>
                         <el-form-item label="自定义地址" prop="customUrl">
-                            <el-input
-                                placeholder="请输入自定义地址"
-                                v-model="detailData.customUrl"
-                            ></el-input>
+                            <el-input placeholder="请输入自定义地址" v-model="detailData.customUrl"></el-input>
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
             </div>
             <div class="content-item seo-key">
-                 <!-- <el-form-item label prop="contentDetail">
+                <!-- <el-form-item label prop="contentDetail">
                 <el-collapse v-model="activeName1" accordion>
                     <el-collapse-item title="相关产品" name="2">
                           <el-table >
@@ -162,7 +174,7 @@
                         </el-table >
                     </el-collapse-item>
                 </el-collapse>
-                 </el-form-item > -->
+                </el-form-item >-->
             </div>
         </el-form>
 
@@ -183,7 +195,43 @@ const viewAuth = [
     { name: "登录用户", id: 1 },
     { name: "未登录用户", id: 2 }
 ];
+// 引入编辑器
+import * as Quill from "quill";
+import { addQuillTitle } from "@/assets/quill-title.js";
+// require styles这里是富文本编辑器的样式引用
+import "quill/dist/quill.snow.css";
+// 自定义quill编辑器的字体
+var fonts = [
+    false,
+    "SimSun",
+    "SimHei",
+    "Microsoft-YaHei",
+    "KaiTi",
+    "FangSong",
+    "Arial",
+    "Times-New-Roman"
+];
+var Font = Quill.import("formats/font");
+Font.whitelist = fonts;
+Quill.register(Font, true);
+
+// 自定义quill编辑器的字体大小
+let Size = Quill.import("attributors/style/size");
+let sizes = [false, "10px", "12px", "14px", "16px", "18px", "20px"];
+Size.whitelist = sizes;
+Quill.register(Size, true);
+
+// 调整大小组件。
+import ImageResize from "quill-image-resize-module";
+Quill.register("modules/imageResize", ImageResize);
+import { ImageDrop } from "quill-image-drop-module";
+Quill.register("modules/imageDrop", ImageDrop);
+import ModalContent from "@/components/ImgManage/index.vue";
+
 export default {
+    components: {
+        ModalContent
+    },
     data() {
         return {
             checkAll: false,
@@ -214,7 +262,7 @@ export default {
             value2: "全部分类",
 
             activeName: "",
-            activeName1: "",       
+            activeName1: "",
             detailData: {
                 name: "",
                 description: "",
@@ -226,7 +274,7 @@ export default {
                 seoDescription: "",
                 searchKeyword: "",
                 skuId: "", //
-                publishTime:  new Date(),
+                publishTime: new Date(),
                 customUrl: "",
                 accessRoleList: [1],
                 thumbnailPicUrlList: [],
@@ -243,7 +291,7 @@ export default {
                         thumbnailPicUrl: "2" //
                     }
                 ],
-                params: {name:1}, //
+                params: { name: 1 }, //
                 isTop: true,
                 isOnSell: true,
                 isTemplate: false, //
@@ -265,30 +313,59 @@ export default {
                         trigger: "blur"
                     }
                 ]
-            }
+            },
+            isModalShow: false,
+            editorOption: {}
         };
     },
-
     created() {
-       
-        console.log(this.$route.query)
+        console.log(this.$route.query);
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
         }
+        this.editorOption = {
+            placeholder: "请输入文本",
+            modules: {
+                toolbar: [
+                    ["bold", "italic", "underline", "strike"],
+                    ["blockquote", "code-block"],
+                    [{ header: 1 }, { header: 2 }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    [{ script: "sub" }, { script: "super" }],
+                    [{ indent: "-1" }, { indent: "+1" }],
+                    [{ direction: "rtl" }],
+                    [{ size: sizes }],
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    [{ color: [] }, { background: [] }],
+                    [{ font: fonts }],
+                    [{ align: [] }],
+                    ["clean"],
+                    ["image", "video"]
+                ],
+                imageDrop: true,
+                imageResize: {
+                    displayStyles: {
+                        backgroundColor: "black",
+                        border: "none",
+                        color: "white"
+                    },
+                    modules: ["Resize", "DisplaySize", "Toolbar"]
+                }
+            }
+        };
     },
     methods: {
         async getArticleDetail(id) {
-           
             let { data } = await productManageApi.getProductDetail(id);
-             this.detailData = data;
+            this.detailData = data;
             //this.detailData.NewId = data.id;
         },
         // 新建保存
         submitForm(formName, fileList) {
-         //   this.detailData.pictureUrl = imageUrl;
-         console.log(fileList)
-            this.detailData.thumbnailPicUrlList = fileList
+            //   this.detailData.pictureUrl = imageUrl;
+            console.log(fileList);
+            this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 console.log(valid, "[[[[[[[[[");
                 if (valid) {
@@ -313,8 +390,8 @@ export default {
                     type: "success",
                     message: "添加成功!"
                 });
-              // this.$router.push(`/product/create?id=${data}`);
-              this.$router.push(`/content/product`);
+                // this.$router.push(`/product/create?id=${data}`);
+                this.$router.push(`/content/product`);
             }
         },
         // 编辑提交
@@ -350,7 +427,52 @@ export default {
             // this.checkAll = checkedCount === this.cities.length;
             // this.isIndeterminate =
             //     checkedCount > 0 && checkedCount < this.cities.length;
+        },
+        onEditorChange({ editor, html, text }) {
+            this.detailData.detailContent = html;
+        },
+        imageHandler() {
+            this.isModalShow = !this.isModalShow;
+        },
+        getImgInfo(info) {
+            //console.log(info, "0000000");
+            this.imgData = info;
+        },
+        getEditorImg() {
+            // 获取选中的图片信息 有两种方式
+            //console.log(this.imgData, "imgData");
+            //console.log(this.$refs.imgList.selectedImg, "selectedImg");
+            this.isModalShow = false;
+            this.insertEditorImg(this.imgData);
+        },
+        insertEditorImg(imgFiles) {
+            if (imgFiles && imgFiles.length > 0) {
+                for (var i = 0; i < imgFiles.length; i++) {
+                    this.addRange = this.$refs.myQuillEditor.quill.getSelection();
+                    var value = imgFiles[i].fullOssUrl;
+                    // 调用编辑器的 insertEmbed 方法，插入URL
+                    this.$refs.myQuillEditor.quill.insertEmbed(
+                        this.addRange !== null ? this.addRange.index : 0,
+                        "image",
+                        value,
+                        Quill.sources.USER
+                    );
+                }
+            }
+        },
+        // 关闭图片选择弹窗
+        cancelEditorImg() {
+            this.isModalShow = false;
         }
+    },
+    mounted() {
+        // 为图片ICON绑定事件  getModule 为编辑器的内部属性
+        this.$refs.myQuillEditor.quill
+            .getModule("toolbar")
+            .addHandler("image", this.imageHandler);
+        // 为视频ICON绑定事件
+        // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
+        addQuillTitle();
     }
 };
 </script>
@@ -391,5 +513,20 @@ export default {
     height: 32px;
     margin: 0 16px 0 7px;
 }
+.quill-editor {
+    height: 500px;
+}
+.ql-editor {
+    height: 500px;
+}
+.ql-container {
+    height: 430px;
+}
 </style>
+<style scoped>
+.quill-editor /deep/ .ql-container{
+    height: 400px;
+}
+</style>
+
 
