@@ -23,6 +23,7 @@
                     accordion
                     :expand-on-click-node="true"
                     @chooseNode="chooseNode"
+                    :categoryName="nodeData.label"
                 />
             </el-col>
             <!-- <div>
@@ -35,7 +36,7 @@
             class="upload-pic"
             :action="uploadPicAction"
             :headers="headers"
-            :on-preview="handlePreview"
+           
             :on-remove="handleRemove"
             :on-success="handleSucess"
             :on-change="handleChange"
@@ -64,8 +65,9 @@
 
 <script>
 import SelectTree from "@/components/common/SelectTree";
+import { setTimeout } from 'timers';
 export default {
-    props: ["treeResult", "uploadPicUrl"],
+    props: ["treeResult", "uploadPicUrl",'nodeData'],
     components: {
         SelectTree
     },
@@ -79,12 +81,28 @@ export default {
                 appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
                 Authorization: ""
             },
-            uploadSucess: false
+            uploadSucess: false,
+            count:0
         };
     },
+    mounted(){
+         if(this.nodeData){
+                  this.uploadPicAction = `${this.uploadPicUrl}/${
+                this.nodeData.id
+            }`;
+            };
+    },
     methods: {
-        handleChange(file) {
+        handleChange(file, fileList) {
             this.uoloadDisabled = false;
+           fileList.forEach((item,index) =>{
+                if(["image/png", "image/jpeg", "image/gif"].indexOf(item.raw.type) ==
+                -1){
+                    fileList.splice(index,1)
+                }
+            })
+         
+          
             //  const isPic =
             //     ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
             //     -1;
@@ -94,37 +112,47 @@ export default {
             // }
         },
         handleSucess(response, file, fileList) {
-            if (!this.uploadSucess) {
+              if ( ++this.count == fileList.length) {
                 this.$message({
                     type: "success",
-                    message: "上传成功!"
+                    message: `成功上传${fileList.length}图片`
                 });
-                this.$emit("switchUploadBoxShowStatus", "uploadImg");
-                this.$emit("getTree");
-
-                setTimeout(() => {}, 500);
-                this.uploadSucess = true;
+                setTimeout(()=>{
+                     this.$emit("switchUploadBoxShowStatus", "uploadImg");
+               // this.$emit("getTree");
                 this.$refs.upload.clearFiles();
+                },500)
             }
         },
+        
         handleRemove(file, fileList) {
             console.log(file, fileList);
             if (fileList < 1) this.uoloadDisabled = true;
         },
-        handlePreview(file) {
-            console.log(file);
-        },
+        // handlePreview(file) {
+        //     console.log(file);
+        // },
         chooseNode(data) {
-            this.upload2Category = data;
+            this.upload2Category = data ;
             console.log(this.upload2Category);
             this.uploadPicAction = `${this.uploadPicUrl}/${
                 this.upload2Category.id
             }`;
         },
         submitUpload() {
+            this.count = 0;
+            if(this.nodeData){
+                  this.uploadPicAction = `${this.uploadPicUrl}/${
+                this.nodeData.id
+            }`;
+            };
+               console.log(this.nodeData,'----')
+
             this.headers.Authorization =
                 "Bearer " + this.$store.state.accessToken.Authorization;
             this.$refs.upload.submit();
+             
+               
         },
         beforeUpload(file) {
             const isPic =

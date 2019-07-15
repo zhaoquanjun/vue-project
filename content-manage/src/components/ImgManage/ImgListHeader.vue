@@ -30,13 +30,13 @@
                         ></el-option>
                     </el-select>
                 </span>
-                <span @click="switchIsDesc">
-                    <i class="sort-icon asc" ></i>
+                <span @click="switchIsDesc('asc')">
+                    <i class="sort-icon asc"  :class="{'asc-icon-on ':ascSort}"></i>
                     <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                 </span>
-                <span @click="switchIsDesc">
-                    <i class="sort-icon dec"></i>
+                <span @click="switchIsDesc('dec')">
+                    <i class="sort-icon dec"  :class="{'dec-icon-on ':descSort}"></i>
                     <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                 </span>
@@ -82,7 +82,9 @@ export default {
     props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
     data() {
         return {
-            isAsc: false,
+            ascSort:false,
+            descSort:false,
+          
             modeSelecte: true,
             options: [
                 {
@@ -112,7 +114,14 @@ export default {
         switchUploadBoxShowStatus() {
             this.$emit("switchUploadBoxShowStatus");
         },
-        switchIsDesc() {
+        switchIsDesc(flag) {
+            if(flag==="asc"){
+                this.ascSort = true;
+                 this.descSort = !this.ascSort
+            }else{
+                this.descSort = true;
+                this.ascSort = !this.descSort
+            }
             this.picSearchOptions.isDescending = !this.picSearchOptions
                 .isDescending;
             this.getPicList();
@@ -177,6 +186,7 @@ export default {
 }
 .list-mode {
     border-right: none;
+    margin-left: 16px;
 
     .list-icon {
         background: url("~img/list-mode.png") no-repeat center;
@@ -201,12 +211,14 @@ export default {
 .head-right,
 .head-middle {
     float: right;
+    display: flex;
+    align-items: center;
 }
 .head-middle {
     .sort-icon {
         display: inline-block;
         width: 16px;
-        height: 22px;
+        height: 14px;
     }
     .asc{
         background: url("~img/content-icon/asc.png") no-repeat center;
@@ -220,7 +232,7 @@ export default {
          background: url("~img/content-icon/desc.png") no-repeat center;
         background-size: contain;
     }
-     .desc-on{
+     .dec-icon-on{
          background: url("~img/content-icon/desc-on.png") no-repeat center;
         background-size: contain;
     }
