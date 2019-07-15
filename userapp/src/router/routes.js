@@ -39,12 +39,55 @@ export const defaultRoutes = [
   {
     path: "/website",
     name: "website",
-    component: website,
+    component: () => import('@/views/website-manage/index.vue'),
     meta: {
       title: "网站管理",
       requiresAuth: true,
       requiresRole: {},
-    }
+      isSub:true
+    },
+    children: [
+      {
+        path: "backup",
+        name: "backup",
+        component: () => import("@/views/website-manage/websiteBackup.vue"),
+        meta: {
+          title: "网站备份",
+          requiresAuth: true,
+          isSub:true
+        }
+      },
+      {
+        path: "mySite",
+        name: "mySite",
+        component: () => import("@/views/website-manage/mySite.vue"),
+        meta: {
+          title: "我的网站",
+          requiresAuth: true,
+          isSub:true
+        }
+      },
+      {
+        path: "companyInfo",
+        name: "companyInfo",
+        component: () => import("@/views/website-manage/companyInfo.vue"),
+        meta: {
+          title: "公司信息",
+          requiresAuth: true,
+          isSub:true
+        }
+      },
+      {
+        path: "siteDomain",
+        name: "siteDomain",
+        component: () => import("@/views/website-manage/siteDomain.vue"),
+        meta: {
+          title: "域名管理",
+          requiresAuth: true,
+          isSub:true
+        }
+      },
+    ]
   },
   {
     path: "/wechat",
@@ -155,7 +198,7 @@ export const defaultRoutes = [
 
 ];
 
-import website from '@/views/website-manage/website.vue';
+
 // 有权限才可访问的路由
 export const authRoutes = [
 

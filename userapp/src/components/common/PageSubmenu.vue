@@ -30,10 +30,7 @@ export default {
     color: #00c1de;
     background: #e5f8fa;
 }
-.submenu-list :last-child{
-      color: #00c1de;
-    background: #e5f8fa;
-}
+
 .submenu {
     max-width: 120px;
     height: 100vh;

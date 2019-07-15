@@ -61,7 +61,7 @@ export default {
              dialogImageUrl: '',
         dialogVisible: false,
             activeName: "",
-            uoloadDisabled: true,
+            uploadDisabled: true,
             fileList: [],
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
