@@ -520,7 +520,13 @@ export default {
     height: 500px;
 }
 .ql-container {
-    height: 480px;
+    height: 430px;
 }
 </style>
+<style scoped>
+.quill-editor /deep/ .ql-container{
+    height: 400px;
+}
+</style>
+
 
