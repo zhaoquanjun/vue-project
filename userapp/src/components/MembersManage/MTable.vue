@@ -21,7 +21,7 @@
                         @show="showRemark(scope.row)"
                     >
                         <span slot="reference">
-                            <div class="remark-desc">{{scope.row.remark}}</div>
+                            <div class="remark-desc">{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
                             <svg-icon icon-class="remark"></svg-icon>
                         </span>
                         <div class="textareaWrap">
@@ -147,6 +147,7 @@ export default {
                 targetUserId:row.userId,
                 remark:this.remarkValue
             };
+            this.memberList[id].remark = this.remarkValue;
             this.$emit("updateUserRemark", data)
             this.$refs[`popover-${id}`].doClose();
         },

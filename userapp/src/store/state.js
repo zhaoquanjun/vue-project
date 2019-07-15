@@ -2,6 +2,7 @@ const state = {
 
   isRightPanelShow:false,
   isInvitationPanelShow:false,
+  invitationValue: '',
   userCurAppPolicy:"",
   selectedAuth:[
     {
