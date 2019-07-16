@@ -6,8 +6,8 @@
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item>内容管理</el-breadcrumb-item>
                 <!-- :to="{ path: '/content/createarticle' }" -->
-                <el-breadcrumb-item :to="{ path: '/content/news' }">文章管理</el-breadcrumb-item>
-                <el-breadcrumb-item>{{operateName}}文章</el-breadcrumb-item>
+                <el-breadcrumb-item >文章管理</el-breadcrumb-item>
+                <el-breadcrumb-item style="font-weight:700">{{operateName}}文章</el-breadcrumb-item>
             </el-breadcrumb>
            </div>
         </header>
@@ -102,8 +102,11 @@ export default {
     background: #f9fafc;
 }
 .article-bg {
+    width: 100%;
     height: 170px;
-    background: #e5f8fa;
+    background: url("~img/content-icon/content-detaiBg.png") no-repeat center;
+    overflow: hidden;
+    background-size: cover;
     .article-crumbs{
         width:80%;margin:0 auto;padding-top:15px
     }

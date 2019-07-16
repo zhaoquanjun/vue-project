@@ -38,6 +38,7 @@ import {
     Dropdown,
     DropdownItem,
     DropdownMenu,
+    Image
   
 } from 'element-ui';
 Vue.use(Container)
@@ -76,6 +77,7 @@ Vue.use(Container)
     .use(Dropdown)
     .use(DropdownItem)
     .use(DropdownMenu)
+    .use(Image)
     
 ;
 Vue.prototype.$message = Message;
