@@ -201,8 +201,8 @@ Quill.register(Size, true);
 // 调整大小组件。
 import ImageResize from "quill-image-resize-module";
 Quill.register("modules/imageResize", ImageResize);
-import {ImageDrop} from'quill-image-drop-module';
-Quill.register('modules/imageDrop',ImageDrop);
+import { ImageDrop } from "quill-image-drop-module";
+Quill.register("modules/imageDrop", ImageDrop);
 import ModalContent from "@/components/ImgManage/index.vue";
 
 export default {
@@ -299,15 +299,14 @@ export default {
                 ],
                 imageDrop: true,
                 imageResize: {
-                displayStyles: {
-                    backgroundColor: "black",
-                    border: "none",
-                    color: "white"
-                },
-                modules: ["Resize", "DisplaySize", "Toolbar"]
+                    displayStyles: {
+                        backgroundColor: "black",
+                        border: "none",
+                        color: "white"
+                    },
+                    modules: ["Resize", "DisplaySize", "Toolbar"]
+                }
             }
-            },
-            
         };
     },
     methods: {
@@ -354,12 +353,24 @@ export default {
                 this.articleDetail
             );
             if (status === 200) {
-                this.$message({
+                // this.$message({
+                //     type: "success",
+                //     message: "保存成功!"
+                // });
+
+                this.$confirm("保存成功!", "提示", {
+                    confirmButtonText: "新增下一篇",
+
                     type: "success",
-                    message: "添加成功!"
+                    callback: async action => {
+                        if (action === "confirm") {
+                            this.resetForm("articleDetail")
+                        }
+                    }
                 });
+
                 // this.$router.push(`/news/create?id=${data}&categoryName=${this.categoryName}`);
-                this.$router.push("/content/news");
+                //this.$router.push("/content/news");
             }
         },
         // 编辑提交
@@ -386,6 +397,10 @@ export default {
                 });
                 this.$router.push("/content/news");
             }
+        },
+        //重置表单
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         },
         onEditorChange({ editor, html, text }) {
             this.articleDetail.contentDetail = html;
@@ -426,7 +441,9 @@ export default {
     },
     mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
-        this.$refs.myQuillEditor.quill.getModule("toolbar").addHandler("image", this.imageHandler);
+        this.$refs.myQuillEditor.quill
+            .getModule("toolbar")
+            .addHandler("image", this.imageHandler);
         // 为视频ICON绑定事件
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         addQuillTitle();
@@ -478,7 +495,7 @@ export default {
 }
 </style>
 <style scoped>
-.quill-editor /deep/ .ql-container{
+.quill-editor /deep/ .ql-container {
     height: 420px;
 }
 </style>

@@ -5,6 +5,7 @@
               <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item>内容管理</el-breadcrumb-item>
+                <!-- :to="{ path: '/content/createarticle' }" -->
                 <el-breadcrumb-item :to="{ path: '/content/news' }">文章管理</el-breadcrumb-item>
                 <el-breadcrumb-item>{{operateName}}文章</el-breadcrumb-item>
             </el-breadcrumb>
@@ -13,10 +14,11 @@
         <el-container class="article-container" style>
             <el-header>
                 <el-row class="article-head">
-                    <el-col :span="13" :offset="3" style=" font-size: 22px;">{{operateName}}文章</el-col>
-                    <el-col :span="6">
+                    <el-col :span="11" :offset="3" style=" font-size: 22px;">{{operateName}}文章</el-col>
+                    <el-col :span="10">
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
+                            <button >预览</button>
                             <button @click="submitForm">保存</button>
                         </div>
                     </el-col>
@@ -24,13 +26,13 @@
             </el-header>
             <el-main>
                 <div>
-                    <el-row style="overflow:hidden">
-                        <el-col :span="13" :offset="3">
+                    <el-row style="overflow:hidden" :gutter="16">
+                        <el-col :span="14" :offset="3">
                             <ArticleContent
                                 @changeOperateName="changeOperateName"
                                 ref="articleContent" />
                         </el-col>
-                        <el-col :span="6" style="margin-left: 16px;">
+                        <el-col :span="7" >
                             <RightContent :imageUrl="imageUrl" ref="articleRight" />
                         </el-col>
                     </el-row>
@@ -112,6 +114,7 @@ export default {
 }
 .article-head {
     .article-btn {
+        float: right;
         button {
             width: 70px;
             height: 32px;

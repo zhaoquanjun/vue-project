@@ -5,20 +5,20 @@
             node-key="id"
             default-expand-all
             :expand-on-click-node="false"
-            highlight-current
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
             accordion
             ref="tree"
             draggable
             :allow-drop="allowDrop"
-            
+            :highlight-current="true"
         >
             <div
                 class="custom-tree-node"
                 @mouseover="handlerOver(data)"
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
+                 style="cursor:move;"
             >
                 <div
                     style="display: inline-block;"
