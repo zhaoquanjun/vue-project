@@ -5,7 +5,7 @@
               <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item>内容管理</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/content/product' }">产品管理</el-breadcrumb-item>
+                <el-breadcrumb-item >产品管理</el-breadcrumb-item>
                 <el-breadcrumb-item>新增产品</el-breadcrumb-item>
             </el-breadcrumb>
            </div>
@@ -103,8 +103,11 @@ export default {
     background: #f9fafc;
 }
 .article-bg {
+    width: 100%;
     height: 170px;
-    background: #e5f8fa;
+    background: url("~img/content-icon/content-detaiBg.png") no-repeat center;
+    overflow: hidden;
+    background-size: cover;
     .article-crumbs{
         width:80%;margin:0 auto;padding-top:15px
     }
