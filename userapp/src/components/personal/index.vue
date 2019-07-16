@@ -254,7 +254,7 @@ import { updateUserName } from "@/api/index.js";
             },
             // 解绑微信
             _untyingWeixin(provider) { 
-                this.titText="解绑微信";
+                this.titText="微信解绑";
                 this.CurrentProvider=provider;
                 this.curComponent = UntyingWeChat;
                 this.ISRIGHTPANNELSHOW(true)
@@ -269,7 +269,7 @@ import { updateUserName } from "@/api/index.js";
             }, 
             //钉钉 解绑
             _untyingDing(provider) { 
-                this.titText="解绑钉钉";
+                this.titText="钉钉解绑";
                 this.CurrentProvider=provider;
                 //this.curComponent = UntyingWeChat;
                 this.ISRIGHTPANNELSHOW(true)
@@ -281,7 +281,7 @@ import { updateUserName } from "@/api/index.js";
             },
             //支付宝 解绑
             _untyingAlipay(provider) {
-                this.titText="解绑支付宝";
+                this.titText="支付宝解绑";
                 this.CurrentProvider=provider;
                 //this.curComponent = UntyingWeChat;
                 this.ISRIGHTPANNELSHOW(true)
