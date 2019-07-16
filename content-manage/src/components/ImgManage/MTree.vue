@@ -319,6 +319,7 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
+    height: 100%;
     .enter {
         margin: 0 5px;
     }
