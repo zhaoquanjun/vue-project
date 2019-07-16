@@ -109,10 +109,10 @@ export default {
                     remark: this.value,
                     userId: this.memberInfo.id
                 };
-                let { status } =await this._updateUserPolicy(para);
+                let { status } = await this._updateUserPolicy(para);
                 if (status === 200) {
                     this.$message({
-                        type: "successed",
+                        type: "success",
                         message: "保存成功"
                     });
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);

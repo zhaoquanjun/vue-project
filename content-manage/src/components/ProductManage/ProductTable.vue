@@ -76,7 +76,7 @@
         <div class="pageing">
             <el-pagination
                 background
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="total, sizes, prev, pager, next"
                 :total="articlePageResult.totalRecord"
                 :page-count="articlePageResult.totalPage"
                 :page-size="articlePageResult.pageSize"

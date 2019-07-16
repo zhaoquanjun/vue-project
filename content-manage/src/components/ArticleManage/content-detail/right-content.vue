@@ -33,11 +33,23 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                 >
-                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar" />
+                    <template v-else>
+                        <i style class="el-icon-plus avatar-uploader-icon"></i>
+                        <i style=" display: block;">添加图片</i>
+                    </template>
+                    <span class="el-upload-list__item-actions">
+                        
+                            <i class="el-icon-delete"></i>
+                      
+                        <span class="el-upload-list__item-preview">
+                            <i class="el-icon-zoom-in"></i>
+                        </span>
+                       
+                    </span>
                 </el-upload>
                 <el-dialog :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt>
+                    <img width="100%" :src="dialogImageUrl" alt />
                 </el-dialog>
             </div>
         </el-card>
@@ -58,10 +70,10 @@ export default {
     props: ["imageUrl"],
     data() {
         return {
-             dialogImageUrl: '',
-        dialogVisible: false,
+            dialogImageUrl: "",
+            dialogVisible: false,
             activeName: "",
-            uoloadDisabled: true,
+            uploadDisabled: true,
             fileList: [],
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
@@ -97,8 +109,8 @@ export default {
         },
         handlePreview(file) {
             console.log(file);
-              this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
         },
 
         ///////
@@ -137,12 +149,23 @@ export default {
 .el-collapse /deep/ .el-collapse-item__content {
     padding: 0 10px;
 }
+
+.avatar-uploader {
+    margin: 0 auto;
+    display: table;
+}
 .avatar-uploader /deep/ .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    height: 170px;
+    vertical-align: middle;
+    display: table-cell;
+}
+.avatar-uploader /deep/ .el-upload i {
+    color: #00c1de;
 }
 .avatar-uploader .el-upload:hover {
     border-color: #409eff;
@@ -151,14 +174,30 @@ export default {
     font-size: 28px;
     color: #8c939d;
     width: 178px;
-    height: 178px;
-    line-height: 178px;
     text-align: center;
+    margin-bottom: 10px;
 }
 .avatar {
     width: 178px;
     height: 178px;
     display: block;
+}
+.el-upload-list__item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    text-align: center;
+    color: #fff;
+    opacity: 0;
+    font-size: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s;
 }
 </style>
 <style lang="scss" scoped>
