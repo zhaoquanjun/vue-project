@@ -72,6 +72,7 @@
                     </el-col>
                 </el-row>
                 <el-form-item label prop="contentDetail">
+                    {{this.articleDetail.contentDetail}}
                     <!-- quill-editor 编辑一-->
                     <quill-editor
                         v-model="articleDetail.contentDetail"
@@ -195,6 +196,7 @@ import { formatDate } from "@/utlis/date.js";
 // 引入编辑器
 import Quill from "quill";
 import { addQuillTitle } from "@/assets/quill-title.js";
+import  LineHeight from "@/assets/lineheight.js";
 // require styles这里是富文本编辑器的样式引用
 import "quill/dist/quill.snow.css";
 // 自定义quill编辑器的字体
@@ -217,6 +219,10 @@ let Size = Quill.import("attributors/style/size");
 let sizes = [false, "10px", "12px", "14px", "16px", "18px", "20px"];
 Size.whitelist = sizes;
 Quill.register(Size, true);
+
+//自定义quill编辑器行间距
+let lineheights = [false, "10px", "18px", "20px", "32px"];
+Quill.register('formats/lineheight',LineHeight);
 
 // 调整大小组件。
 import ImageResize from "quill-image-resize-module";
@@ -316,7 +322,8 @@ export default {
                     [{ font: fonts }],
                     [{ align: [] }],
                     ["clean"],
-                    ["image", "video"]
+                    ["image", "video"],
+                    [{lineheight: lineheights }]
                 ],
                 imageDrop: true,
                 imageResize: {
@@ -434,12 +441,25 @@ export default {
                 this.$router.push("/content/news");
             }
         },
+
+        imgChangeSizeHandler(img){
+            console.log("imgChangeSizeHandler");
+            img.width="100";
+            img.height="100";
+        },
         //重置表单
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
         onEditorChange({ editor, html, text }) {
             this.articleDetail.contentDetail = html;
+            var imgNodes = document.querySelectorAll('.ql-editor img');
+            imgNodes.forEach((img)=>{
+                //if(img.isBind==undefined || img.isBind==null||!img.isBind){
+                //   img.isBind = true;
+                //   img.addEventListener("dblclick",this.imgChangeSizeHandler,img);
+                //}
+            });
         },
         imageHandler() {
             this.isModalShow = !this.isModalShow;
@@ -473,6 +493,16 @@ export default {
         // 关闭图片选择弹窗
         cancelEditorImg() {
             this.isModalShow = false;
+        },
+        addEvent(el, type, fn) { 
+            if(el.addEventListener) {　　
+                el.addEventListener(type,fn,false)　　
+            }
+            else if(el.attachEvent()){          
+                el.attachEvent('on' + type,fn,false)　　
+            }else{
+                return false
+            }
         }
     },
     mounted() {
@@ -482,6 +512,7 @@ export default {
             .addHandler("image", this.imageHandler);
         // 为视频ICON绑定事件
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
+        //this.$refs.myQuillEditor.quill.root.addEventListener("dblclick",this.imgChangeSizeHandler,!1);
         addQuillTitle();
     }
 };

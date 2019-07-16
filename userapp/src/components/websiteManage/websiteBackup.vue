@@ -12,6 +12,10 @@
             <el-row>
                 <div class="siteBox">
                     <div class="siteInfo">
+                        <div class="siteImg"></div>
+                        <!-- <img :src="siteInfoImg" alt="" class="siteImg"> -->
+                        <span class="siteName">{{siteName}}</span>
+                        <span class="secondDomain">{{secondDomain}}</span>
                         <button class="changeSite">切换站点</button>
                     </div>
                 </div>
@@ -29,26 +33,62 @@
                         tooltip-effect="dark"
                         class="content-table"
                     >
-                        <el-table-column prop="appId" label="站点名称"></el-table-column>
+                        <el-table-column prop="siteName" label="站点名称"></el-table-column>
                         <el-table-column prop="backupTime" label="备份时间"></el-table-column>
                         <el-table-column prop="dataSize" label="备份包大小"></el-table-column>
-                        <el-table-column prop="userId" label="备份人"></el-table-column>
-                        <el-table-column prop="description" label="备注" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="userName" label="备份人"></el-table-column>
+                        <el-table-column prop="description" label="备注" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <el-popover
+                                    :ref="`popover-${scope.$index}`"
+                                    placement="bottom"
+                                    width="317"
+                                    trigger="click"
+                                    style="padding:0"
+                                    @show="showRemark(scope.row)"
+                                >
+                                    <span slot="reference">
+                                        <div class="remark-desc">{{scope.row.description}}</div>
+                                        <svg-icon icon-class="remark"></svg-icon>
+                                    </span>
+                                    <div class="textareaWrap">
+                                        <el-input
+                                            type="textarea"
+                                            :autosize="{ minRows: 3, maxRows: 3}"
+                                            placeholder="请输入内容"
+                                            v-model="remarkValue"
+                                            maxlength="100"
+                                            show-word-limit
+                                            resize="none"
+                                        ></el-input>
+                                        <div class="btn-wrap">
+                                            <button
+                                                class="popover-btn cancel"
+                                                slot="refenrence"
+                                                type="primary"
+                                                @click="cancelInput(scope.$index)"
+                                            >取消</button>
+                                            <button class="popover-btn save" @click="saveInputValue(scope.$index,scope.row)">保存</button>
+                                        </div>
+                                    </div>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
 
                         <el-table-column label="操作">
-                            <!-- <template slot-scope="scope"> -->
+                            <template slot-scope="scope">
                                 <div class="handle-btn-wrap">
-                                    <button class="handle-btn backup-btn" >
-                                        <!-- @click="handleMove(scope.row)" -->
+                                    <button class="handle-btn backup-btn" @click="recovery( scope )">
+                                        <!-- -->
                                     </button>
-                                    <button class="handle-btn download-btn" >
+                                    <button class="handle-btn download-btn" @click="downloadBackup( scope )">
                                         <!-- @click="viewPic( scope.row,scope.$index)" -->
                                     </button>
-                                    <button class="handle-btn delete-btn" >
+                                    <button class="handle-btn delete-btn" @click="deleteBackup( scope )">
                                         <!-- @click="batchRemove( scope.row)" -->
                                     </button>
                                 </div>
-                            <!-- </template> -->
+                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -57,13 +97,10 @@
                     :visible.sync = "backupShow"
                     :show-close="false"
                 >
-                    <!-- <right-pannel :style="{width: '470px'}">
-                        <span slot="title-text">设置相关产品</span>
-                    </right-pannel> -->
                     <div class="right-pannel" :style="{width:'470px'}">
                         <div class="pannel-head">
                             <span>
-                                <span>设置相关产品</span>
+                                <span>备份当前产品</span>
                                 <el-tooltip
                                     class="item"
                                     effect="light"
@@ -120,30 +157,77 @@ export default {
                 { name: "公司信息", url: "/website/companyinfo" },
                 { name: "域名管理", url: "/website/sitedomain" }
             ],
+            siteInfoImg: "",
+            siteName: "",
+            siteId: 0,
+            secondDomain: "",
+            remarkValue: "",
             siteInfo: [],
             backupType: "first",
             backupShow: false,
+            // recovery: false,
             remarkInfo: ""
         }
   },
   mounted() {
+      this.getSiteInfo()
       this.getBackupSite()
   },
   methods: {
         /**
-         * 获取备份站点信息
+         * 获取站点信息
+         */
+        async getSiteInfo() {
+            let { data } = await siteBackupApi.getSiteInfo(2);
+            console.log(data)
+            this.siteInfoImg = data.siteImage;
+            this.siteName = data.siteName;
+            this.secondDomain = data.secondDomain;
+            this.siteId = data.id
+        },
+        /**
+         * 获取备份信息
          */
         async getBackupSite() {
             let { data } = await siteBackupApi.getBackupSite(2, false)
             console.log(data)
-            this.siteInfo = data;
-            
+            this.siteInfo = data.items;
+            console.log(this.siteInfo)
         },
         /**
-         * 备份当前版本
+         * 还原站点
          */
-        async backupSite() {
-            await siteBackupApi.backupSite("111")
+        async recovery(scope) {
+            console.log(scope)
+            // await siteBackupApi.recoverySite()
+            this.$confirm(
+                "确定要将网站还原至该备份版本吗？\\n还原后系统会自动备份当前站点设计，可在自动备份列表中查看。",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let { status } = await siteBackupApi.recoverySite()
+                            console.log(status);
+                            console.log(status === 200);
+                            if (status === 200) {
+                                this.$message({
+                                    type: "success",
+                                    message: "网站还原成功"
+                                });
+                            } else {
+                                this.$message({
+                                    type: "error",
+                                    message: "系统正忙，请稍后再试！"
+                                })
+                            }
+                        } 
+                    }
+                }
+            );
         },
         /**
          * 切换手动备份和自动备份
@@ -154,15 +238,103 @@ export default {
         /**
          * 备份当前版本
          */
-        backup(){
-            this.backupShow = true
+        async backup(){
+            let { status } = await siteBackupApi.getBackupCount(2)
+            if (status == 200) {
+                this.backupShow = true
+            }else{
+                this.$message({
+                    type: "error",
+                    message: "系统正忙，请稍后再试！"
+                })
+            }
+        },
+        async backupSite() {
+            await siteBackupApi.backupSite(this.siteName, this.siteId, "备注")
+        },
+        /**
+         * 下载备份
+         */
+        async downloadBackup(){
+            this.$confirm(
+                `确定下载该备份包`,
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let { status } = await siteBackupApi.exportBackup()
+                            console.log(status);
+                            console.log(status === 200);
+                            if (status === 200) {
+                                
+                            } else {
+                                this.$message({
+                                    type: "error",
+                                    message: "系统正忙，请稍后再试！"
+                                })
+                            }
+                        } 
+                    }
+                }
+            );
+        },
+        /**
+         * 删除备份
+         */
+        async deleteBackup(scope){
+            this.$confirm(
+                `备份包删除后不可恢复，确定要删除吗？`,
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            let { status } = await siteBackupApi.deleteBackup(scope.row.id, scope.row.fileName, scope.row.siteId)
+                            console.log(status);
+                            if (status === 200) {
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功"
+                                });
+                            } else {
+                                this.$message({
+                                    type: "error",
+                                    message: "系统正忙，请稍后再试！"
+                                })
+                            }
+                        } 
+                    }
+                }
+            );
         },
         /**
          * 关闭弹框
          */
         closeDialog() {
             this.backupShow = false
-        }
+        },
+        /**
+         * 修改备注
+         */
+        showRemark(row) {
+            this.remarkValue = row.description ? row.description : "";
+        },
+        cancelInput(id) {
+            this.$refs[`popover-${id}`].doClose();
+            this.remarkValue = "";
+        },
+        async saveInputValue(index) {            
+            this.$refs[`popover-${index}`].doClose();
+            await siteBackupApi.updateDescription(this.siteId, this.remarkValue)
+            this.siteInfo[index].description = this.remarkValue
+        },
   },
 }
 </script>
@@ -182,9 +354,36 @@ export default {
 .siteBox .siteInfo{
     width: 473px;
     height: 116px;
-    background: #fff
+    background: #fff;
+    position: relative;
+}
+.siteImg{
+    display: inline-block;
+    width: 200px;
+    height: 115px;
+    margin-right: 24px;
+    vertical-align: top;
+}
+.siteName{
+    position: absolute;
+    top: 12px;
+    display: inline-block;
+    font-size:16px;
+    font-weight:400;
+    color:rgba(38,38,38,1);
+}
+.secondDomain{
+    position: absolute;
+    top: 40px;
+    display: inline-block;
+    font-size:14px;
+    font-weight:400;
+    color:rgba(38,38,38,1);
+    line-height:20px;
 }
 .changeSite{
+    position: absolute;
+    top: 71px;
     width:80px;
     height:32px;
     background:rgba(0,193,222,1);
@@ -237,6 +436,13 @@ export default {
     width: 100%;
     box-sizing: border-box;
 }
+.remark-desc{
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 81%;
+}   
 </style>
 
 <style lang="scss" scoped>
@@ -288,6 +494,7 @@ export default {
         }
     }
 }
+// 右侧弹框
 .right-pannel {
     background: #ffffff;
     position: fixed;
@@ -355,6 +562,30 @@ export default {
             font-weight:400;
             color:rgba(255,255,255,1);
             line-height: 32px;
+        }
+    }
+}
+// 修改备注
+.textareaWrap {
+    background: #fff;
+    position: relative;
+    .btn-wrap {
+        text-align: right;
+        padding-top: 10px;
+        button {
+            width: 63px;
+            height: 25px;
+            line-height: 25px;
+            font-size: 12px;
+            border: none;
+        }
+        .cancel {
+            border: 1px solid #eeeeee;
+            margin-right: 10px;
+        }
+        .save {
+            background: #00c1de;
+            color: #fff;
         }
     }
 }
