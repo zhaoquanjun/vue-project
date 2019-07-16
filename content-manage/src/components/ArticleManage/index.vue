@@ -166,19 +166,14 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            let {
-                                status,
-                                data
-                            } = await articleManageApi.batchRemove(
-                                true,
-                                idlist
-                            );
+                            let {status, data } = await articleManageApi.batchRemove(true,idlist);
                             if (status === 200) {
                                 // this.getTree();
                                 this.$message({
                                     type: "success",
                                     message: "删除成功!"
                                 });
+                                this.getTreeAsync();
                                 this.getArticleList();
                             }
                         } else {

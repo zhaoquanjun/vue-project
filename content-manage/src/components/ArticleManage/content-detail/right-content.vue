@@ -34,7 +34,11 @@
                     :on-remove="handleRemove"
                 >
                     <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <template  v-else >
+                         <i class="el-icon-plus avatar-uploader-icon">
+                         
+                         </i>
+                    </template>
                 </el-upload>
                 <el-dialog :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt>

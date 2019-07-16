@@ -59,7 +59,7 @@
         <div class="pageing">
             <el-pagination
                 background
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="total, sizes, prev, pager, next"
                 :total="articlePageResult.totalRecord"
                 :page-count="articlePageResult.totalPage"
                 :page-size="articlePageResult.pageSize"
@@ -153,7 +153,12 @@ export default {
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 11 + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
-            this.$refs.operateSection.style.display = "block";
+           
+            if(this.$refs.operateSection.style.display == "block" ){
+                this.$refs.operateSection.style.display = "none";
+            }else{
+                 this.$refs.operateSection.style.display = "block";
+            }
         },
   
         /**
@@ -234,11 +239,11 @@ export default {
         .more-operate {
             position: relative;
             cursor: pointer;
-            width: 3px;
+            width: 20px;
             height: 15px;
             background: url("../../../static/images/more_operate.png") no-repeat
                 center center;
-            background-size: 100% 100%;
+            background-size: contain;
             &::before {
                 content: "";
                 position: absolute;
