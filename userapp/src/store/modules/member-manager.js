@@ -132,7 +132,7 @@ const memberManager = {
                 appId:'',
             }
            let jsonData = await updateUserPolicy(options);
-           console.log(jsonData,'2222')
+           return jsonData;
         },
         /**
          * 批量更新成员的权限
@@ -144,6 +144,7 @@ const memberManager = {
                 userids: userids
             }
             let jsonData = await batchUpdateUserPolicy(options);
+            return jsonData;
            
         },
 
