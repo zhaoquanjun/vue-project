@@ -1,7 +1,7 @@
 <template>
     <div class="set-phone-number">
         <el-row class="demo-autocomplete"></el-row>
-        <el-alert title="解绑后，将不能使用微信登陆管理平台" type="success"></el-alert>
+        <el-alert title="解绑后，将不能使用微信登录管理平台" type="success"></el-alert>
         <div class="from-row">
             <get-sms ref="getSms" :sourcePhone="sourcePhone"  :is-modifi="isModifi"></get-sms>
         </div>

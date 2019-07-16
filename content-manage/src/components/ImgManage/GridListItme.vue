@@ -8,6 +8,7 @@
         >
             <span class="img-wrap">
                 <div class="mask" :class="isMaskShow"></div>
+                 <!-- <el-image :src="curItem.zoomOssUrl"></el-image> -->
                 <img :src="curItem.zoomOssUrl" alt>
             </span>
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">

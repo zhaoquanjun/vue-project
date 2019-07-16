@@ -33,7 +33,6 @@
             class="upload-pic"
             :action="uploadPicAction"
             :headers="headers"
-            :on-preview="handlePreview"
             :on-remove="handleRemove"
             :on-success="handleSucess"
             :on-change="handleChange"
@@ -48,6 +47,7 @@
             :onExceed="onExceed"
             :before-upload="beforeUpload"
         >
+          
             <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
             <div @click="setFolder(false)" class="el-upload__text">
                 将文件拖到此处，或
@@ -200,9 +200,20 @@ export default {
     watch: {}
 };
 </script>
-<style>
+<style scoped>
 #upload-img .upload-pic /deep/ .el-upload-dragger {
     position: static;
+    height: auto;
+}
+.upload-pic /deep/ .el-upload--picture-card {
+    border: none;
+}
+#upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item{
+       overflow: visible;
+}
+#upload-img .upload-pic  /deep/ .el-upload-list--picture-card .el-upload-list__item-name{
+    display: block;
+    text-align: center
 }
 </style>
 <style scoped lang="scss">
@@ -262,6 +273,7 @@ export default {
             color: #8c8c8c;
         }
     }
+   
 }
 </style>
 
