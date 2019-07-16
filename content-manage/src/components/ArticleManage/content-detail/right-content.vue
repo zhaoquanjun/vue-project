@@ -33,20 +33,19 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                 >
-                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar" />
+                    <div v-if="imageUrl1"  class="imgWrap">
+                         <img :src="imageUrl1" class="avatar" />
+                         <span class="el-upload-list__item-actions">
+                              <i class="icon-change"></i>
+                            <i @click.stop="handleRemove" class="el-icon-delete"></i>
+                        </span>
+                    </div>
+                   
                     <template v-else>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;">添加图片</i>
                     </template>
-                    <span class="el-upload-list__item-actions">
-                        
-                            <i class="el-icon-delete"></i>
-                      
-                        <span class="el-upload-list__item-preview">
-                            <i class="el-icon-zoom-in"></i>
-                        </span>
-                       
-                    </span>
+                   
                 </el-upload>
                 <el-dialog :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt />
@@ -105,6 +104,7 @@ export default {
             }
         },
         handleRemove(file, fileList) {
+            this.imageUrl1= ""
             console.log(file, fileList);
         },
         handlePreview(file) {
@@ -160,12 +160,14 @@ export default {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    height: 170px;
+       height: 200px;
+    width: 200px;
     vertical-align: middle;
     display: table-cell;
 }
 .avatar-uploader /deep/ .el-upload i {
     color: #00c1de;
+    cursor: pointer;
 }
 .avatar-uploader .el-upload:hover {
     border-color: #409eff;
@@ -178,14 +180,15 @@ export default {
     margin-bottom: 10px;
 }
 .avatar {
-    width: 178px;
-    height: 178px;
+    width: 200px;
+    height: 200px;
     display: block;
 }
 .el-upload-list__item-actions {
+    
     display: flex;
-    align-items: center;
-    justify-content: center;
+       align-items: flex-end;
+    justify-content: space-around;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -198,6 +201,21 @@ export default {
     font-size: 20px;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s;
+  
+}
+.avatar-uploader .el-upload-list__item-actions  i{
+    color: #fff;
+    font-size: 21px;
+    margin-bottom: 15px;
+}
+.imgWrap:hover .el-upload-list__item-actions {
+   opacity: 1;
+}
+.icon-change{
+    display: inline-block;
+    width: 20px;height: 20px;;
+    background: url("~img/content-icon/change.png") no-repeat center;
+    background-size: contain;
 }
 </style>
 <style lang="scss" scoped>
