@@ -21,8 +21,8 @@
                 </div>
             </el-row>
             <el-tabs v-model="backupType" type="card" @tab-click="handleClick">
-                <el-tab-pane label="手动备份" name="first"></el-tab-pane>
-                <el-tab-pane label="自动备份" name="second"></el-tab-pane>
+                <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
+                <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
             </el-tabs>
             <button class="backupBtn" @click="backup">备份当前版本</button>
             <el-main>
@@ -78,15 +78,9 @@
                         <el-table-column label="操作">
                             <template slot-scope="scope">
                                 <div class="handle-btn-wrap">
-                                    <button class="handle-btn backup-btn" @click="recovery( scope )">
-                                        <!-- -->
-                                    </button>
-                                    <button class="handle-btn download-btn" @click="downloadBackup( scope )">
-                                        <!-- @click="viewPic( scope.row,scope.$index)" -->
-                                    </button>
-                                    <button class="handle-btn delete-btn" @click="deleteBackup( scope )">
-                                        <!-- @click="batchRemove( scope.row)" -->
-                                    </button>
+                                    <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
+                                    <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button>
+                                    <button class="handle-btn delete-btn" @click="deleteBackup( scope )"></button>
                                 </div>
                             </template>
                         </el-table-column>
@@ -100,7 +94,7 @@
                     <div class="right-pannel" :style="{width:'470px'}">
                         <div class="pannel-head">
                             <span>
-                                <span>备份当前产品</span>
+                                <span>备份当前版本</span>
                                 <el-tooltip
                                     class="item"
                                     effect="light"
@@ -163,7 +157,9 @@ export default {
             secondDomain: "",
             remarkValue: "",
             siteInfo: [],
-            backupType: "first",
+            manualSite: [],
+            autoSite: [],
+            backupType: "manual",
             backupShow: false,
             // recovery: false,
             remarkInfo: ""
@@ -186,12 +182,28 @@ export default {
             this.siteId = data.id
         },
         /**
+         * 切换手动备份和自动备份
+         */
+        handleClick() {
+            if (this.backupType === "manual") {
+                this.siteInfo = this.manualSite;
+            } else if (this.backupType === "auto") {
+                this.siteInfo = this.autoSite;
+            }
+        },
+        /**
          * 获取备份信息
          */
         async getBackupSite() {
-            let { data } = await siteBackupApi.getBackupSite(2, false)
-            console.log(data)
-            this.siteInfo = data.items;
+            let manualData = await siteBackupApi.getBackupSite(2, false);
+            this.manualSite = manualData.data.items;
+            let autoData = await siteBackupApi.getBackupSite(2, true);
+            this.autoSite = autoData.data.items;
+            if (this.backupType === "manual") {
+                this.siteInfo = this.manualSite;
+            } else if (this.backupType === "auto") {
+                this.siteInfo = this.autoSite;
+            }
             console.log(this.siteInfo)
         },
         /**
@@ -201,7 +213,7 @@ export default {
             console.log(scope)
             // await siteBackupApi.recoverySite()
             this.$confirm(
-                "确定要将网站还原至该备份版本吗？\\n还原后系统会自动备份当前站点设计，可在自动备份列表中查看。",
+                "确定要将网站还原至该备份版本吗？\n还原后系统会自动备份当前站点设计，可在自动备份列表中查看。",
                 "提示",
                 {
                     confirmButtonText: "确定",
@@ -210,7 +222,7 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            let { status } = await siteBackupApi.recoverySite()
+                            let { status } = await siteBackupApi.recoverySite(scope.row.siteId, scope.row.siteName, scope.row.fileName)
                             console.log(status);
                             console.log(status === 200);
                             if (status === 200) {
@@ -218,6 +230,7 @@ export default {
                                     type: "success",
                                     message: "网站还原成功"
                                 });
+                                this.getBackupSite()
                             } else {
                                 this.$message({
                                     type: "error",
@@ -228,12 +241,6 @@ export default {
                     }
                 }
             );
-        },
-        /**
-         * 切换手动备份和自动备份
-         */
-        handleClick() {
-            console.log(123)
         },
         /**
          * 备份当前版本
@@ -250,12 +257,14 @@ export default {
             }
         },
         async backupSite() {
-            await siteBackupApi.backupSite(this.siteName, this.siteId, "备注")
+            await siteBackupApi.backupSite(this.siteName, this.siteId, "备注").then(() => {
+                this.backupShow = false;
+            })
         },
         /**
          * 下载备份
          */
-        async downloadBackup(){
+        async downloadBackup(scope) {
             this.$confirm(
                 `确定下载该备份包`,
                 "提示",
@@ -266,8 +275,8 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            let { status } = await siteBackupApi.exportBackup()
-                            console.log(status);
+                            await siteBackupApi.exportBackup(scope.row.siteName, scope.row.siteId, scope.row.fileName)
+                            // console.log(data);
                             console.log(status === 200);
                             if (status === 200) {
                                 
@@ -303,6 +312,7 @@ export default {
                                     type: "success",
                                     message: "删除成功"
                                 });
+                                this.getBackupSite()
                             } else {
                                 this.$message({
                                     type: "error",
@@ -330,9 +340,9 @@ export default {
             this.$refs[`popover-${id}`].doClose();
             this.remarkValue = "";
         },
-        async saveInputValue(index) {            
+        async saveInputValue(index, row) {
             this.$refs[`popover-${index}`].doClose();
-            await siteBackupApi.updateDescription(this.siteId, this.remarkValue)
+            await siteBackupApi.updateDescription(row.id, this.remarkValue)
             this.siteInfo[index].description = this.remarkValue
         },
   },
