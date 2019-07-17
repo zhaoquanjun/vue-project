@@ -1,39 +1,45 @@
 <template>
     <div class="auth-config">
-        <member-info 
-       v-model="value"
-        v-if="memberInfo && Object.keys(memberInfo).length>0" 
-        :memberInfo="memberInfo"
+        <member-info
+            v-model="value"
+            v-if="memberInfo && Object.keys(memberInfo).length>0"
+            :memberInfo="memberInfo"
         ></member-info>
         <div class="panel-main">
             <div class="pannel-right-item">
                 <h5 class="auth-title">选择权限</h5>
                 <div class="search-auth">
-                    <input class="auth-input input-hover"
-                           v-model="input"
-                           placeholder="请输入权限名称"
-                           @input="changeInput"
-                           >
-                    
+                    <input
+                        class="auth-input input-hover"
+                        v-model="input"
+                        placeholder="请输入权限名称"
+                        @input="changeInput"
+                    />
+
                     <button class="auth-btn" @click="searchAuth">搜索</button>
                 </div>
                 <div class="auth-name">
-                    <auth-list @chooseAuth="chooseAuth" :authList="userPermission" @removeSelected="removeSelected" :isSelect="true"></auth-list>
+                    <auth-list
+                        @chooseAuth="chooseAuth"
+                        :authList="userPermission"
+                        @removeSelected="removeSelected"
+                        :isSelect="true"
+                    ></auth-list>
                 </div>
             </div>
             <div class="pannel-left-item">
                 <h5 class="auth-title">已选权限</h5>
                 <div class="selected-auth">
                     <selected-auth
-                         :authList="memberPolicy"
-                         @removeSelected="removeSelected"
-                          @emptySelected="emptySelected"
+                        :authList="memberPolicy"
+                        @removeSelected="removeSelected"
+                        @emptySelected="emptySelected"
                     ></selected-auth>
                     <!-- <auth-list
                         @emptySelected="emptySelected"
                         @removeSelected="removeSelected"
                         :authList="memberPolicy"
-                    ></auth-list> -->
+                    ></auth-list>-->
                 </div>
             </div>
         </div>
@@ -45,12 +51,12 @@
 </template>
 <script>
 import AuthList from "./AuthList";
-import SelectedAuth from "./SelectedAuth"
+import SelectedAuth from "./SelectedAuth";
 import MemberInfo from "./MemberInfo";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
-    name: "right-pannel",
+    name: "",
     props: {
         isBatch: {
             type: Boolean,
@@ -61,14 +67,12 @@ export default {
             default: () => []
         }
     },
-    components: { AuthList,SelectedAuth, MemberInfo },
-        created() {
-            
-        },
+    components: { AuthList, SelectedAuth, MemberInfo },
+    created() {},
     data() {
         return {
-            input: "",
-            value:""
+           
+            value: ""
         };
     },
     methods: {
@@ -84,7 +88,9 @@ export default {
          */
         async primary() {
             if (this.isBatch) {
-                let { status } = await this._batchUpdateUserPolicy(this.userIds);
+                let { status } = await this._batchUpdateUserPolicy(
+                    this.userIds
+                );
                 if (status === 200) {
                     this.$message({
                         type: "successed",
@@ -123,14 +129,14 @@ export default {
                     });
                 }
             }
-            this.input = '';
+            this.input = "";
         },
-        cancel(){
+        cancel() {
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
-            this.input = '';
+            this.input = "";
         },
         chooseAuth(obj) {
-            this.CHOOSEAUTH(obj);           
+            this.CHOOSEAUTH(obj);
         },
         removeSelected(item) {
             this.REMOVESELECTEDAUTH(item);
@@ -140,7 +146,6 @@ export default {
         },
         closePanel() {
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
-            
         },
         searchAuth() {
             this.oldUserPermission = JSON.stringify(this.userPermission);
@@ -162,17 +167,27 @@ export default {
     mounted() {},
     computed: {
         ...mapState({
+            invitationValue: state => state.invitationValue,
             userPermission: state => state.memberManager.userPermission,
             memberInfo: state => state.memberManager.memberInfo,
             memberPolicy: state => state.memberManager.memberPolicy
         }),
         ...mapState(["authList", "selectedAuth", "isRightPanelShow"]),
-        ...mapGetters(["getSelectedAuthNames"])
+        ...mapGetters(["getSelectedAuthNames"]),
+        input: {
+            get: function() {
+                return this.invitationValue;
+            },
+            set: function(newVal) {
+                console.log(newVal)
+                this.$store.commit("SETINVITATIONVALUE", newVal);
+            }
+        }
     }
 };
 </script>
 <style lang="scss" scoped>
-.auth-config{
+.auth-config {
     font-size: 12px;
 }
 .auth-title {
@@ -208,9 +223,9 @@ export default {
     }
 }
 .panel-main {
-        padding: 20px 16px;
-        overflow: hidden;
-        .search-auth {
+    padding: 20px 16px;
+    overflow: hidden;
+    .search-auth {
         display: flex;
         height: 32px;
         box-sizing: border-box;
@@ -226,9 +241,9 @@ export default {
             text-indent: 10px;
             box-sizing: border-box;
             width: 100%;
-            border: 1px solid #E5E5E5;
-            &:hover{
-                border: 1px solid #00C1DE;
+            border: 1px solid #e5e5e5;
+            &:hover {
+                border: 1px solid #00c1de;
             }
         }
         .auth-btn {
@@ -279,6 +294,5 @@ export default {
         color: rgba(0, 193, 222, 1);
     }
 }
-
 </style>
 

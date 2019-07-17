@@ -26,23 +26,19 @@ const memberManager = {
          * 用户权限信息
          */
         USERPERMISSION: (state, info) => {
+            
             state.userPermission = info;
-            // 当前成员已有的权限
-            let memberPolicy = state.memberPolicy;
-            let userPermission =  state.userPermission;
-            
-            userPermission.forEach((item)=>{
-                if(memberPolicy.includes(item.name)){
-                    item.show = true;
-                }
+            // 当前成员已有的权限          
+            setTimeout(()=>{
+                let memberPolicy = state.memberPolicy;
+                let userPermission =  state.userPermission;
+                userPermission.forEach((item)=>{
+                    if(memberPolicy.includes(item.name)){
+                        item.show = true;
+                    }
+                })
             })
-
-            
-
-
-
-
-
+           
         },
         /**
          * 点击选择权限
@@ -105,7 +101,6 @@ const memberManager = {
         */
         async _getUserPolicy({ commit },userId) {
             let { data: userInfo, status } = await getUserPolicy(userId);
-            console.log(userInfo,'000---------')
             commit("CURMEMBVERINFO", userInfo)
         },
 

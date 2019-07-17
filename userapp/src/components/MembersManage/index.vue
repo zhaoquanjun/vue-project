@@ -54,7 +54,9 @@
         :before-close="handleClose"
         :modal-append-to-body="false"
       >
-        <right-pannel :style="{width:pannelWidth+'px'}">
+       
+      </el-dialog>
+       <right-pannel :style="{width:pannelWidth+'px'}">
           <span slot="title-text">{{rightPanelTitle}}</span>
           <i slot="icon-tip">
             <svg-icon icon-class="tip-icon"></svg-icon>
@@ -65,7 +67,6 @@
           <span slot="title-text" id="title-text">邀请成员</span>
           <invitation-link></invitation-link>
         </right-pannel>
-      </el-dialog>
     </el-main>
   </el-container>
 </template>
@@ -105,7 +106,7 @@ export default {
       memberListParams: {
         phone: "",
         pageNum: "",
-        pageSize: 3
+        pageSize: 6
       }
     };
   },

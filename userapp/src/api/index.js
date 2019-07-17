@@ -75,7 +75,7 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
     let params = {
         pageIndex: options.page,
         phone:options.phone,
-        pageSize: 3,
+        pageSize: 9,
     };
     return ajaxRequest.get('/api/userInfo/GetBeInvitedUsers', params);
 }

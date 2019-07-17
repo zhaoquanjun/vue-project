@@ -1,9 +1,7 @@
 <template>
     <div class="invita-link">
         <div class="invita-wrap" v-if="isLinkShow">
-            <i class="back-icon" @click="backInvite">
-                <svg-icon icon-class="l-home"></svg-icon>
-            </i>
+            <i class="back-icon" @click="backInvite"></i>
             <p class="invita-title invita-item">将链接发送给成员, 成员加入后即可协助您管理站点</p>
             <p class="link-wrap">
                 <span class="link">{{link}}</span>
@@ -117,9 +115,14 @@ export default {
         border: 1px solid rgba(253, 171, 153, 1);
     }
     .back-icon {
+        display: inline-block;
         position: absolute;
         top: 10px;
         left: 10px;
+        width: 16px;
+        height: 16px;
+        background: url("~img/memberManage/back.png") no-repeat center;
+        background-size: contain;
     }
     .invita-wrap {
         padding: 42px 29px;

@@ -1,9 +1,10 @@
 <template>
     <div class="set-phone-number">
         <el-row class="demo-autocomplete"></el-row>
-        <el-alert title="绑定微信，可使用微信登陆管理平台" type="success"></el-alert>
+        <el-alert title="绑定微信，可使用微信登录管理平台" type="success"></el-alert>
         <div class="from-row">
             <div id="weixin" style="text-align: center">{{weixinHtml}}</div>
+            <div id="weixinTip" style="text-align: center">{{bindResultMessage}}</div>
         </div>  
         <div class="footer">
             <button class="cancel footer-btn" @click="refqroce">刷新</button>
@@ -15,6 +16,11 @@
 <script>
 export default {
     props: ["weixinHtml","WeChatJsLoginParams"],
+    data(){
+        return {
+            bindResultMessage: null,
+        }
+    },
     mounted(){    
        var obj = new WxLogin({
             self_redirect: true,
@@ -27,12 +33,31 @@ export default {
             href: "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9DQouaW1wb3dlckJveCAucXJjb2RlIHt3aWR0aDogMjIwcHg7fQ0KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyMjBweDt9DQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9DQouaW1wb3dlckJveCAuc3RhdHVzIHt0ZXh0LWFsaWduOiBjZW50ZXI7fQ=="
         });
     },
+    created() {
+        window.addEventListener('message',(e)=>{
+            let data = e.data;
+            this._bindResult(data);
+        })
+    },
      methods: {       
         close() { 
             this.$store.commit("CLOSERIGHTPANNEL", false);
         },
         refqroce(){
             this.$emit('updateWeiXinHtml');
+        },
+        _bindResult(data){
+            if(data.result == "True"){
+                this.bindResultMessage=null;
+                this.$store.commit("CLOSERIGHTPANNEL", false);
+                this.$message({
+                    type: "success", 
+                    message: "绑定成功!"
+                });
+            }else{
+                this.bindResultMessage=data.message;
+                this.refqroce();
+            }
         }
      },
     updated(){
