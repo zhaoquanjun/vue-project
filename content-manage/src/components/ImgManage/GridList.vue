@@ -18,7 +18,7 @@
                 :total="imgPageResult.totalRecord"
                 :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"
-                :page-sizes="[5,10,15,20,50,100]"
+                :page-sizes="[10,20,50]"
                 @current-change="changePage"
                 @size-change="changeSize"
             ></el-pagination>

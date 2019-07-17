@@ -89,10 +89,10 @@
                     <i>{{count}}</i> 个文章
                 </span>
                 <div style="float:right">
-                    <el-button size="small" @click="batchPublish(false)">上线</el-button>
-                    <el-button size="small" @click="batchPublish(true)">下线</el-button>
+                    <el-button class="deleteActive" size="small" @click="batchPublish(false)">上线</el-button>
+                    <el-button class="deleteActive" size="small" @click="batchPublish(true)">下线</el-button>
                     <el-button size="small" @click="batchCopy">复制</el-button>
-                    <el-button style="margin-right: 10px;" size="small" @click="batchRemove">删除</el-button>
+                    <el-button class="deleteActive" style="margin-right: 10px;" size="small" @click="batchRemove">删除</el-button>
                     <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                             <el-button size="small">
@@ -256,6 +256,7 @@ export default {
 };
 </script>
 <style>
+
 .seachInput .el-input__inner {
     font-size: 12px;
 }

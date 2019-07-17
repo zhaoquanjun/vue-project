@@ -83,7 +83,7 @@
                     indicator-position="none"
                     :loop="false"
                 >
-                    <el-carousel-item v-for="item in imgPageResult.list" :key="item.id">
+                    <el-carousel-item v-for="item in imgList" :key="item.id">
                         <h3>
                             <img :src="item.fullOssUrl" />
                         </h3>
@@ -130,7 +130,8 @@ export default {
             picUrl: null,
             picTitle: null,
             categoryVisable: false,
-            changeCategoryPicId: null
+            changeCategoryPicId: null,
+            imgList:""
         };
     },
 
@@ -170,10 +171,13 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
+            
             this.picInfo = row;
             console.log(index)
-            this.initial = Number(index);
+           
+            this.imgList = this.imgPageResult.list
             this.imgVisible = true;
+             this.initial = Number(index);
         },
 
         changePage(page) {
