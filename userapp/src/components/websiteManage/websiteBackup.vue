@@ -275,17 +275,28 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            await siteBackupApi.exportBackup(scope.row.siteName, scope.row.siteId, scope.row.fileName)
-                            // console.log(data);
-                            console.log(status === 200);
-                            if (status === 200) {
+                            // await siteBackupApi.exportBackup(scope.row.siteName, scope.row.siteId, scope.row.fileName)
+                            // window.open(`http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=${scope.row.siteName}&siteId=${scope.row.siteId}&backupName=${scope.row.fileName}`)
+                            var eleLink = document.createElement('a');
+                            eleLink.download = "filename";
+                            eleLink.style.display = 'none';
+                            // 字符内容转变成blob地址
+                            var blob = new Blob(`http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=${scope.row.siteName}&siteId=${scope.row.siteId}&backupName=${scope.row.fileName}`);
+                            eleLink.href = URL.createObjectURL(blob);
+                            // 触发点击
+                            document.body.appendChild(eleLink);
+                            eleLink.click();
+                            // 然后移除
+                            document.body.removeChild(eleLink);
+                            // console.log(status === 200);
+                            // if (status === 200) {
                                 
-                            } else {
-                                this.$message({
-                                    type: "error",
-                                    message: "系统正忙，请稍后再试！"
-                                })
-                            }
+                            // } else {
+                            //     this.$message({
+                            //         type: "error",
+                            //         message: "系统正忙，请稍后再试！"
+                            //     })
+                            // }
                         } 
                     }
                 }
