@@ -159,8 +159,24 @@
                             </el-tooltip>
                             <el-input placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
                         </el-form-item>
-                        <el-form-item label="SEO关键词" prop="metaKeywords">
-                            <el-input placeholder="SEO关键词" v-model="articleDetail.metaKeywords"></el-input>
+                        <el-form-item style="position:relative" label="SEO关键词" prop="metaKeywords">
+                            <ul class="keyword-list" ref="metaKeywordList">
+                                <li v-for="(item,index) in articleDetail.metaKeywords" :key="index">
+                                    {{item}}
+                                    <i
+                                        class="el-icon-close"
+                                        @click="removeCurKeyWord(index)"
+                                    ></i>
+                                </li>
+                            </ul>
+                            <el-input
+                                ref="metaKeywordsInput"
+                                placeholder="每个关键词之间用回车键分离"
+                                v-model="metaKeyword"
+                                @keyup.enter.native="keywords(metaKeyword,'metaKeywords')"
+                                @blur="keywords(metaKeyword,'metaKeywords')"
+                            ></el-input>
+                            <!-- <el-input placeholder="SEO关键词" v-model="articleDetail.metaKeywords"></el-input> -->
                         </el-form-item>
 
                         <el-form-item label="文章描述" prop="metaDescription">
@@ -196,7 +212,7 @@ import { formatDate } from "@/utlis/date.js";
 // 引入编辑器
 import Quill from "quill";
 import { addQuillTitle } from "@/assets/quill-title.js";
-import  LineHeight from "@/assets/lineheight.js";
+import LineHeight from "@/assets/lineheight.js";
 // require styles这里是富文本编辑器的样式引用
 import "quill/dist/quill.snow.css";
 // 自定义quill编辑器的字体
@@ -222,7 +238,7 @@ Quill.register(Size, true);
 
 //自定义quill编辑器行间距
 let lineheights = [false, "10px", "18px", "20px", "32px"];
-Quill.register('formats/lineheight',LineHeight);
+Quill.register("formats/lineheight", LineHeight);
 
 // 调整大小组件。
 import ImageResize from "quill-image-resize-module";
@@ -238,11 +254,10 @@ export default {
     },
     data() {
         var checkAge = (rule, value, callback) => {
-           
             setTimeout(() => {
-                if (value.length>5) {
+                if (value.length > 5) {
                     callback(new Error("每篇文章最多填写5个关键词！"));
-                } 
+                }
             }, 1000);
         };
         return {
@@ -273,7 +288,7 @@ export default {
                 createTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
                 metaTitle: "",
-                metaKeywords: "",
+                metaKeywords: [],
                 metaDescription: "",
                 pictureUrl: ""
             },
@@ -284,16 +299,15 @@ export default {
                         message: "请输入文章标题",
                         trigger: "blur"
                     }
-                ],
+                ]
                 // searchKeywords:[
                 //     { validator: checkAge }
                 // ]
-             
             },
             isModalShow: false,
             editorOption: {},
-            keywordsAry: [],
-            keywordValue: ""
+            keywordValue: "",
+            metaKeyword: ""
         };
     },
     created() {
@@ -323,7 +337,7 @@ export default {
                     [{ align: [] }],
                     ["clean"],
                     ["image", "video"],
-                    [{lineheight: lineheights }]
+                    [{ lineheight: lineheights }]
                 ],
                 imageDrop: true,
                 imageResize: {
@@ -338,17 +352,30 @@ export default {
         };
     },
     methods: {
-        keywords(value) {
-            if (this.articleDetail.searchKeywords.length >= 5 || !value) {
-                return;
+        keywords(value, name) {
+            if (name === "metaKeywords") {
+                if (this.articleDetail.metaKeywords.length >= 5 || !value) {
+                    return;
+                }
+                this.metaKeyword = "";
+                this.articleDetail.metaKeywords.push(value);
+                this.$nextTick(() => {
+                    this.$refs.metaKeywordsInput.$el.children[0].style.textIndent =
+                        this.$refs.metaKeywordList.clientWidth + "px";
+                    //  this.$refs.keywordInput.children[0].style.textIndent = this.$refs.keywordList.clientWidth + 'px'
+                });
+            } else {
+                if (this.articleDetail.searchKeywords.length >= 5 || !value) {
+                    return;
+                }
+                this.keywordValue = "";
+                this.articleDetail.searchKeywords.push(value);
+                this.$nextTick(() => {
+                    this.$refs.keywordInput.$el.children[0].style.textIndent =
+                        this.$refs.keywordList.clientWidth + "px";
+                    //  this.$refs.keywordInput.children[0].style.textIndent = this.$refs.keywordList.clientWidth + 'px'
+                });
             }
-            this.keywordValue = "";
-            this.articleDetail.searchKeywords.push(value);
-            this.$nextTick(() => {
-                this.$refs.keywordInput.$el.children[0].style.textIndent =
-                    this.$refs.keywordList.clientWidth + "px";
-                //  this.$refs.keywordInput.children[0].style.textIndent = this.$refs.keywordList.clientWidth + 'px'
-            });
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
@@ -376,7 +403,7 @@ export default {
         // 新建保存
         submitForm(formName, imageUrl) {
             this.articleDetail.pictureUrl = imageUrl;
-          
+
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.insertArticle();
@@ -442,10 +469,10 @@ export default {
             }
         },
 
-        imgChangeSizeHandler(img){
+        imgChangeSizeHandler(img) {
             console.log("imgChangeSizeHandler");
-            img.width="100";
-            img.height="100";
+            img.width = "100";
+            img.height = "100";
         },
         //重置表单
         resetForm(formName) {
@@ -453,8 +480,8 @@ export default {
         },
         onEditorChange({ editor, html, text }) {
             this.articleDetail.contentDetail = html;
-            var imgNodes = document.querySelectorAll('.ql-editor img');
-            imgNodes.forEach((img)=>{
+            var imgNodes = document.querySelectorAll(".ql-editor img");
+            imgNodes.forEach(img => {
                 //if(img.isBind==undefined || img.isBind==null||!img.isBind){
                 //   img.isBind = true;
                 //   img.addEventListener("dblclick",this.imgChangeSizeHandler,img);
@@ -494,14 +521,13 @@ export default {
         cancelEditorImg() {
             this.isModalShow = false;
         },
-        addEvent(el, type, fn) { 
-            if(el.addEventListener) {　　
-                el.addEventListener(type,fn,false)　　
-            }
-            else if(el.attachEvent()){          
-                el.attachEvent('on' + type,fn,false)　　
-            }else{
-                return false
+        addEvent(el, type, fn) {
+            if (el.addEventListener) {
+                el.addEventListener(type, fn, false);
+            } else if (el.attachEvent()) {
+                el.attachEvent("on" + type, fn, false);
+            } else {
+                return false;
             }
         }
     },

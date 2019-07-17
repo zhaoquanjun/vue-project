@@ -12,9 +12,8 @@
                 >
                     <slot name="icon-tip"></slot>
                 </el-tooltip>
-               
             </span>
-            <span class="close-pannel" @click="closePanel">X</span>
+            <span class="icon-size close-pannel" @click="closePanel"></span>
         </div>
         <slot></slot>
     </div>
@@ -29,10 +28,10 @@ export default {
             default: "534"
         }
     },
-    data(){
+    data() {
         return {
-            aa:123
-        }
+            aa: 123
+        };
     },
     methods: {
         closePanel() {
@@ -57,9 +56,12 @@ export default {
     box-shadow: 0 0 3px #ccc;
     transition: width 0.2s linear;
     background-color: "#fff";
-    overflow:hidden;
+    overflow: hidden;
     color: #262626;
     .pannel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         height: 40px;
         line-height: 40px;
         font-size: 14px;
@@ -74,6 +76,8 @@ export default {
         .close-pannel {
             float: right;
             cursor: pointer;
+            background: url("~img/close.png") no-repeat center;
+            background-size: contain;
         }
     }
 }
