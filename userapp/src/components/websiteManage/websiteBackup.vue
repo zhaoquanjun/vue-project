@@ -79,7 +79,8 @@
                             <template slot-scope="scope">
                                 <div class="handle-btn-wrap">
                                     <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
-                                    <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button>
+                                    <a href="http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=a&siteId=2&backupName=2_backup_20190716131646.dat">123</a>
+                                    <!-- <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button> -->
                                     <button class="handle-btn delete-btn" @click="deleteBackup( scope )"></button>
                                 </div>
                             </template>
@@ -246,20 +247,43 @@ export default {
          * 备份当前版本
          */
         async backup(){
-            let { status } = await siteBackupApi.getBackupCount(2)
-            if (status == 200) {
-                this.backupShow = true
-            }else{
-                this.$message({
-                    type: "error",
-                    message: "系统正忙，请稍后再试！"
-                })
+            if (this.manualSite.length <= 20) {
+                let { status } = await siteBackupApi.getBackupCount(2)
+                if (status == 200) {
+                    this.backupShow = true
+                }else{
+                    this.$message({
+                        type: "error",
+                        message: "系统正忙，请稍后再试！"
+                    })
+                }
+            } else {
+                this.$confirm(
+                    `最多保留20个手动备份包，请删除后再备份!`,
+                    "提示",
+                    {
+                        confirmButtonText: "确定",
+                        type: "warning",
+                    }
+                );
             }
+            
         },
         async backupSite() {
-            await siteBackupApi.backupSite(this.siteName, this.siteId, "备注").then(() => {
+            let { status } = await siteBackupApi.backupSite(this.siteName, this.siteId, this.remarkInfo).then(() => {
                 this.backupShow = false;
             })
+            if (status == 200) {
+                this.$message({
+                    type: "success",
+                    message: "备份成功"
+                })
+            } else {
+                this.$message({
+                    type: "error",
+                    message: "备份失败，请稍后再试！"
+                })
+            }
         },
         /**
          * 下载备份
@@ -278,11 +302,11 @@ export default {
                             // await siteBackupApi.exportBackup(scope.row.siteName, scope.row.siteId, scope.row.fileName)
                             // window.open(`http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=${scope.row.siteName}&siteId=${scope.row.siteId}&backupName=${scope.row.fileName}`)
                             var eleLink = document.createElement('a');
-                            eleLink.download = "filename";
+                            eleLink.download = scope.row.siteName;
                             eleLink.style.display = 'none';
                             // 字符内容转变成blob地址
-                            var blob = new Blob(`http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=${scope.row.siteName}&siteId=${scope.row.siteId}&backupName=${scope.row.fileName}`);
-                            eleLink.href = URL.createObjectURL(blob);
+                            // var blob = new Blob([]);
+                            eleLink.href = window.URL.createObjectURL(`http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=${scope.row.siteName}&siteId=${scope.row.siteId}&backupName=${scope.row.fileName}`);
                             // 触发点击
                             document.body.appendChild(eleLink);
                             eleLink.click();
