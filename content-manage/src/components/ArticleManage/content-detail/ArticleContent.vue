@@ -1,6 +1,12 @@
 <template>
     <div class="article-content" id="article-content">
-        <el-form class="base-ariticle" :model="articleDetail" :rules="rules" ref="articleDetail">
+        <el-form
+            class="base-ariticle"
+            @submit.native.prevent
+            :model="articleDetail"
+            :rules="rules"
+            ref="articleDetail"
+        >
             <div class="content-item">
                 <el-row>
                     <el-col :span="24">
@@ -104,7 +110,7 @@
                                 </el-form-item>
                             </el-col>
                         </el-form-item>
-                        <el-form-item label="搜索关键词" prop="searchKeywords">
+                        <el-form-item style="position:relative" label="搜索关键词" prop="searchKeywords">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
@@ -114,10 +120,24 @@
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
                             </el-tooltip>
-
+                            <ul class="keyword-list" ref="keywordList">
+                                <li
+                                    v-for="(item,index) in articleDetail.searchKeywords"
+                                    :key="index"
+                                >
+                                    {{item}}
+                                    <i
+                                        class="el-icon-close"
+                                        @click="removeCurKeyWord(index)"
+                                    ></i>
+                                </li>
+                            </ul>
                             <el-input
+                                ref="keywordInput"
                                 placeholder="每个关键词之间用回车键分离"
-                                v-model="articleDetail.searchKeywords"
+                                v-model="keywordValue"
+                                @keyup.enter.native="keywords(keywordValue)"
+                                @blur="keywords(keywordValue)"
                             ></el-input>
                         </el-form-item>
                         <el-form-item label="置顶" prop="delivery">
@@ -216,6 +236,14 @@ export default {
         ModalContent
     },
     data() {
+        var checkAge = (rule, value, callback) => {
+           
+            setTimeout(() => {
+                if (value.length>5) {
+                    callback(new Error("每篇文章最多填写5个关键词！"));
+                } 
+            }, 1000);
+        };
         return {
             treeResult: null,
             categoryName: "全部分类",
@@ -232,13 +260,14 @@ export default {
             value: 1,
             activeName: "",
             activeName1: "",
+
             articleDetail: {
                 NewId: "",
                 title: "",
                 categoryId: 0,
                 summary: "",
                 contentDetail: "",
-                searchKeywords: "",
+                searchKeywords: [],
                 isPublish: false,
                 createTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
@@ -254,24 +283,16 @@ export default {
                         message: "请输入文章标题",
                         trigger: "blur"
                     }
-                    // {
-                    //     min: 1,
-                    //     max: 100,
-                    //     message: "长度在 1 到 100 个字符",
-                    //     trigger: "blur"
-                    // }
-                ]
-                // summary:[
-                //     {
-                //         min: 0,
-                //         max: 500,
-                //         message: "长度不得超过 500 个字符",
-                //         trigger: "blur"
-                //     }
-                // ],
+                ],
+                // searchKeywords:[
+                //     { validator: checkAge }
+                // ]
+             
             },
             isModalShow: false,
-            editorOption: {}
+            editorOption: {},
+            keywordsAry: [],
+            keywordValue: ""
         };
     },
     created() {
@@ -316,6 +337,21 @@ export default {
         };
     },
     methods: {
+        keywords(value) {
+            if (this.articleDetail.searchKeywords.length >= 5 || !value) {
+                return;
+            }
+            this.keywordValue = "";
+            this.articleDetail.searchKeywords.push(value);
+            this.$nextTick(() => {
+                this.$refs.keywordInput.$el.children[0].style.textIndent =
+                    this.$refs.keywordList.clientWidth + "px";
+                //  this.$refs.keywordInput.children[0].style.textIndent = this.$refs.keywordList.clientWidth + 'px'
+            });
+        },
+        removeCurKeyWord(index) {
+            this.articleDetail.searchKeywords.splice(index, 1);
+        },
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
@@ -339,7 +375,7 @@ export default {
         // 新建保存
         submitForm(formName, imageUrl) {
             this.articleDetail.pictureUrl = imageUrl;
-            console.log(this.title);
+          
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.insertArticle();
@@ -370,7 +406,7 @@ export default {
                     type: "success",
                     callback: async action => {
                         if (action === "confirm") {
-                            this.resetForm("articleDetail")
+                            this.resetForm("articleDetail");
                         }
                     }
                 });
@@ -489,6 +525,25 @@ export default {
 </style>
 
 <style scoped lang="scss">
+.keyword-list {
+    position: absolute;
+    display: inline-block;
+    z-index: 1;
+    top: 50px;
+    left: 0;
+    li {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 0 5px;
+        background: #609ee9;
+        border-radius: 30px;
+        font-size: 12px;
+        color: #fff;
+        i {
+            color: #fff;
+        }
+    }
+}
 .article-content {
     .content-item {
         padding: 21px 16px 20px;

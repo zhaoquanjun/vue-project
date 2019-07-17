@@ -76,6 +76,7 @@ export default {
         if(this.$route.query.id){
             this.$refs.articleContent.editArticle('articleDetail',imageUrl)
         }else{
+           
             this.$refs.articleContent.submitForm('articleDetail',imageUrl)
         }
         
