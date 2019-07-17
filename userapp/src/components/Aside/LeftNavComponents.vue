@@ -35,7 +35,7 @@ export default {
       if(this.curWebsite == a){
         this.$router.push(item.path)
       }else{
-           window.location.href ='//'+ item.menuUrl
+        window.location.href ='//'+ item.menuUrl
       }
      
     }

@@ -94,7 +94,9 @@
             <upload-pic @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                         @getTree="getTree"
                         :tree-result="treeResult"
-                        :upload-pic-url="uploadPicUrl" />
+                        :upload-pic-url="uploadPicUrl"
+                        :node-data="nodeData"
+                         />
 
         </el-dialog>
 
@@ -130,6 +132,7 @@
         },
         data() {
             return {
+                nodeData:"",// 分类节点的名称
                 componentId: "ImgList",
                 isImgList: false,
                 countPic: 0,
@@ -160,12 +163,16 @@
             if (this.isGrid) {
                 this.componentId = "GridList";
             }
-            this.getPicList({});
+            this.getPicList();
             this.getTree();
         },
         methods: {
             // 获取列表
-            async getPicList() {
+            async getPicList(node) {
+                if(node){
+                     this.nodeData = node; // 上传图片所需
+                }
+               
                 let { data } = await imgManageApi.getPicList(this.picSearchOptions);
                 this.imgPageResult = data;
 
@@ -195,10 +202,10 @@
                                     this.getPicList();
                                 }
                             } else {
-                                this.$message({
-                                    type: "info",
-                                    message: "已取消删除"
-                                });
+                                // this.$message({
+                                //     type: "info",
+                                //     message: "已取消删除"
+                                // });
                             }
                         }
                     }
@@ -277,10 +284,10 @@
                 await imgCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
                 this.getTree();
             },
-
+            // 点击上传图片
             switchUploadBoxShowStatus(uploadImg) {
                 this.dialogTableVisible = !this.dialogTableVisible;
-                if (uploadImg === "uploadImg") this.getPicList({});
+                if (uploadImg === "uploadImg") this.getPicList();
             },
             moveClassify(b, data) {
                 this.isInvitationPanelShow = b;

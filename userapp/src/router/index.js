@@ -24,6 +24,7 @@ router.beforeEach(async (to, from, next) => {
     if (!Cookies.get('AppId')) {
       await store.dispatch('_updateAppIdToCookie')
     }
+   
     let r = await store.dispatch('getCurRouteAuth', to.path);
     if (r) {
       if (store.getters.getMenuList.length < 1) {

@@ -1,6 +1,12 @@
 <template>
     <div class="article-content" id="article-content">
-        <el-form class="base-ariticle" :model="articleDetail" :rules="rules" ref="articleDetail">
+        <el-form
+            class="base-ariticle"
+            @submit.native.prevent
+            :model="articleDetail"
+            :rules="rules"
+            ref="articleDetail"
+        >
             <div class="content-item">
                 <el-row>
                     <el-col :span="24">
@@ -66,6 +72,7 @@
                     </el-col>
                 </el-row>
                 <el-form-item label prop="contentDetail">
+                    {{this.articleDetail.contentDetail}}
                     <!-- quill-editor 编辑一-->
                     <quill-editor
                         v-model="articleDetail.contentDetail"
@@ -104,7 +111,7 @@
                                 </el-form-item>
                             </el-col>
                         </el-form-item>
-                        <el-form-item label="搜索关键词" prop="searchKeywords">
+                        <el-form-item style="position:relative" label="搜索关键词" prop="searchKeywords">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
@@ -114,10 +121,24 @@
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
                             </el-tooltip>
-
+                            <ul class="keyword-list" ref="keywordList">
+                                <li
+                                    v-for="(item,index) in articleDetail.searchKeywords"
+                                    :key="index"
+                                >
+                                    {{item}}
+                                    <i
+                                        class="el-icon-close"
+                                        @click="removeCurKeyWord(index)"
+                                    ></i>
+                                </li>
+                            </ul>
                             <el-input
+                                ref="keywordInput"
                                 placeholder="每个关键词之间用回车键分离"
-                                v-model="articleDetail.searchKeywords"
+                                v-model="keywordValue"
+                                @keyup.enter.native="keywords(keywordValue)"
+                                @blur="keywords(keywordValue)"
                             ></el-input>
                         </el-form-item>
                         <el-form-item label="置顶" prop="delivery">
@@ -175,6 +196,7 @@ import { formatDate } from "@/utlis/date.js";
 // 引入编辑器
 import Quill from "quill";
 import { addQuillTitle } from "@/assets/quill-title.js";
+import  LineHeight from "@/assets/lineheight.js";
 // require styles这里是富文本编辑器的样式引用
 import "quill/dist/quill.snow.css";
 // 自定义quill编辑器的字体
@@ -198,11 +220,15 @@ let sizes = [false, "10px", "12px", "14px", "16px", "18px", "20px"];
 Size.whitelist = sizes;
 Quill.register(Size, true);
 
+//自定义quill编辑器行间距
+let lineheights = [false, "10px", "18px", "20px", "32px"];
+Quill.register('formats/lineheight',LineHeight);
+
 // 调整大小组件。
 import ImageResize from "quill-image-resize-module";
 Quill.register("modules/imageResize", ImageResize);
-import {ImageDrop} from'quill-image-drop-module';
-Quill.register('modules/imageDrop',ImageDrop);
+import { ImageDrop } from "quill-image-drop-module";
+Quill.register("modules/imageDrop", ImageDrop);
 import ModalContent from "@/components/ImgManage/index.vue";
 
 export default {
@@ -211,6 +237,14 @@ export default {
         ModalContent
     },
     data() {
+        var checkAge = (rule, value, callback) => {
+           
+            setTimeout(() => {
+                if (value.length>5) {
+                    callback(new Error("每篇文章最多填写5个关键词！"));
+                } 
+            }, 1000);
+        };
         return {
             treeResult: null,
             categoryName: "全部分类",
@@ -227,13 +261,14 @@ export default {
             value: 1,
             activeName: "",
             activeName1: "",
+
             articleDetail: {
                 NewId: "",
                 title: "",
                 categoryId: 0,
                 summary: "",
                 contentDetail: "",
-                searchKeywords: "",
+                searchKeywords: [],
                 isPublish: false,
                 createTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
@@ -249,24 +284,16 @@ export default {
                         message: "请输入文章标题",
                         trigger: "blur"
                     }
-                    // {
-                    //     min: 1,
-                    //     max: 100,
-                    //     message: "长度在 1 到 100 个字符",
-                    //     trigger: "blur"
-                    // }
-                ]
-                // summary:[
-                //     {
-                //         min: 0,
-                //         max: 500,
-                //         message: "长度不得超过 500 个字符",
-                //         trigger: "blur"
-                //     }
-                // ],
+                ],
+                // searchKeywords:[
+                //     { validator: checkAge }
+                // ]
+             
             },
             isModalShow: false,
-            editorOption: {}
+            editorOption: {},
+            keywordsAry: [],
+            keywordValue: ""
         };
     },
     created() {
@@ -295,22 +322,37 @@ export default {
                     [{ font: fonts }],
                     [{ align: [] }],
                     ["clean"],
-                    ["image", "video"]
+                    ["image", "video"],
+                    [{lineheight: lineheights }]
                 ],
                 imageDrop: true,
                 imageResize: {
-                displayStyles: {
-                    backgroundColor: "black",
-                    border: "none",
-                    color: "white"
-                },
-                modules: ["Resize", "DisplaySize", "Toolbar"]
+                    displayStyles: {
+                        backgroundColor: "black",
+                        border: "none",
+                        color: "white"
+                    },
+                    modules: ["Resize", "DisplaySize", "Toolbar"]
+                }
             }
-            },
-            
         };
     },
     methods: {
+        keywords(value) {
+            if (this.articleDetail.searchKeywords.length >= 5 || !value) {
+                return;
+            }
+            this.keywordValue = "";
+            this.articleDetail.searchKeywords.push(value);
+            this.$nextTick(() => {
+                this.$refs.keywordInput.$el.children[0].style.textIndent =
+                    this.$refs.keywordList.clientWidth + "px";
+                //  this.$refs.keywordInput.children[0].style.textIndent = this.$refs.keywordList.clientWidth + 'px'
+            });
+        },
+        removeCurKeyWord(index) {
+            this.articleDetail.searchKeywords.splice(index, 1);
+        },
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
@@ -334,7 +376,7 @@ export default {
         // 新建保存
         submitForm(formName, imageUrl) {
             this.articleDetail.pictureUrl = imageUrl;
-            console.log(this.title);
+          
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.insertArticle();
@@ -354,12 +396,24 @@ export default {
                 this.articleDetail
             );
             if (status === 200) {
-                this.$message({
+                // this.$message({
+                //     type: "success",
+                //     message: "保存成功!"
+                // });
+
+                this.$confirm("保存成功!", "提示", {
+                    confirmButtonText: "新增下一篇",
+
                     type: "success",
-                    message: "添加成功!"
+                    callback: async action => {
+                        if (action === "confirm") {
+                            this.resetForm("articleDetail");
+                        }
+                    }
                 });
+
                 // this.$router.push(`/news/create?id=${data}&categoryName=${this.categoryName}`);
-                this.$router.push("/content/news");
+                //this.$router.push("/content/news");
             }
         },
         // 编辑提交
@@ -387,8 +441,25 @@ export default {
                 this.$router.push("/content/news");
             }
         },
+
+        imgChangeSizeHandler(img){
+            console.log("imgChangeSizeHandler");
+            img.width="100";
+            img.height="100";
+        },
+        //重置表单
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
         onEditorChange({ editor, html, text }) {
             this.articleDetail.contentDetail = html;
+            var imgNodes = document.querySelectorAll('.ql-editor img');
+            imgNodes.forEach((img)=>{
+                //if(img.isBind==undefined || img.isBind==null||!img.isBind){
+                //   img.isBind = true;
+                //   img.addEventListener("dblclick",this.imgChangeSizeHandler,img);
+                //}
+            });
         },
         imageHandler() {
             this.isModalShow = !this.isModalShow;
@@ -422,13 +493,26 @@ export default {
         // 关闭图片选择弹窗
         cancelEditorImg() {
             this.isModalShow = false;
+        },
+        addEvent(el, type, fn) { 
+            if(el.addEventListener) {　　
+                el.addEventListener(type,fn,false)　　
+            }
+            else if(el.attachEvent()){          
+                el.attachEvent('on' + type,fn,false)　　
+            }else{
+                return false
+            }
         }
     },
     mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
-        this.$refs.myQuillEditor.quill.getModule("toolbar").addHandler("image", this.imageHandler);
+        this.$refs.myQuillEditor.quill
+            .getModule("toolbar")
+            .addHandler("image", this.imageHandler);
         // 为视频ICON绑定事件
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
+        //this.$refs.myQuillEditor.quill.root.addEventListener("dblclick",this.imgChangeSizeHandler,!1);
         addQuillTitle();
     }
 };
@@ -442,6 +526,25 @@ export default {
 </style>
 
 <style scoped lang="scss">
+.keyword-list {
+    position: absolute;
+    display: inline-block;
+    z-index: 1;
+    top: 50px;
+    left: 0;
+    li {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 0 5px;
+        background: #609ee9;
+        border-radius: 30px;
+        font-size: 12px;
+        color: #fff;
+        i {
+            color: #fff;
+        }
+    }
+}
 .article-content {
     .content-item {
         padding: 21px 16px 20px;
@@ -478,7 +581,7 @@ export default {
 }
 </style>
 <style scoped>
-.quill-editor /deep/ .ql-container{
+.quill-editor /deep/ .ql-container {
     height: 420px;
 }
 </style>

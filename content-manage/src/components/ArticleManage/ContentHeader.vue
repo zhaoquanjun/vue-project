@@ -8,7 +8,6 @@
                     placeholder="请输入文章标题搜索"
                     class="input-with-select"
                 >
-               
                     <el-button slot="append" @click="getArticleList">
                         <svg-icon icon-class="search-icon"></svg-icon>
                     </el-button>
@@ -65,9 +64,15 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span @click="switchIsDesc">
-                        <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                        <svg-icon v-else icon-class="top-arrow"></svg-icon>
+                    <span @click="switchIsDesc('asc')">
+                        <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
+                        <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
+                        <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
+                    </span>
+                    <span @click="switchIsDesc('dec')">
+                        <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
+                        <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
+                        <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                     </span>
                 </div>
                 <div class="head-item head-handle-btn">
@@ -83,28 +88,29 @@
                     已选
                     <i>{{count}}</i> 个文章
                 </span>
-               <div style="float:right">
-                    <el-button size="small" @click="batchPublish(false)">上线</el-button>
-                <el-button size="small" @click="batchPublish(true)">下线</el-button>
-                <el-button size="small" @click="batchCopy">复制</el-button>
-                <el-button style="margin-right: 10px;" size="small" @click="batchRemove">删除</el-button>
-                <el-dropdown trigger="click" @command="handleCommand">
-                    <span class="el-dropdown-link">
-                        <el-button size="small"> <svg-icon icon-class="across-dot"></svg-icon></el-button>
-                      
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <!-- <span size="small" @click="batchclassifySet">移动</span> -->
-                        <el-dropdown-item command="move">移动</el-dropdown-item>
-                        <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
-                        <el-dropdown-item command="top">置顶</el-dropdown-item>
-                        <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
-                        <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                        <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
-                        <!-- <el-dropdown-item command="permission">访问权限</el-dropdown-item> -->
-                    </el-dropdown-menu>
-                </el-dropdown>
-               </div>
+                <div style="float:right">
+                    <el-button class="deleteActive" size="small" @click="batchPublish(false)">上线</el-button>
+                    <el-button class="deleteActive" size="small" @click="batchPublish(true)">下线</el-button>
+                    <el-button size="small" @click="batchCopy">复制</el-button>
+                    <el-button class="deleteActive" style="margin-right: 10px;" size="small" @click="batchRemove">删除</el-button>
+                    <el-dropdown trigger="click" @command="handleCommand">
+                        <span class="el-dropdown-link">
+                            <el-button size="small">
+                                <svg-icon icon-class="across-dot"></svg-icon>
+                            </el-button>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <!-- <span size="small" @click="batchclassifySet">移动</span> -->
+                            <el-dropdown-item command="move">移动</el-dropdown-item>
+                            <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
+                            <el-dropdown-item command="top">置顶</el-dropdown-item>
+                            <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
+                            <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
+                            <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
+                            <!-- <el-dropdown-item command="permission">访问权限</el-dropdown-item> -->
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
 
                 <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
         <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
@@ -121,6 +127,9 @@ export default {
     props: ["articleSearchOptions", "isBatchHeaderShow", "count"],
     data() {
         return {
+            ascSort: false,
+            descSort: false,
+
             statusOptions: [
                 {
                     statusValue: "",
@@ -176,7 +185,15 @@ export default {
             this.articleSearchOptions.topStatus = value;
             this.getArticleList();
         },
-        switchIsDesc() {
+
+        switchIsDesc(flag) {
+            if (flag === "asc") {
+                this.ascSort = true;
+                this.descSort = !this.ascSort;
+            } else {
+                this.descSort = true;
+                this.ascSort = !this.descSort;
+            }
             this.articleSearchOptions.isDescending = !this.articleSearchOptions
                 .isDescending;
             this.getArticleList();
@@ -189,8 +206,6 @@ export default {
         addArticle() {
             this.$emit("addArticle");
         },
-
-
 
         //////批量操作
         // 批量 上下架
@@ -209,7 +224,7 @@ export default {
 
         // 批量分类设置 移动  ok
         batchclassifySet() {
-            this.$emit("changeOperateName","移动");
+            this.$emit("changeOperateName", "移动");
             this.$emit("batchMove");
         },
         // 批量设置访问权限
@@ -218,30 +233,30 @@ export default {
         },
         // 批量复制
         batchCopy() {
-            this.$emit("changeOperateName","复制");
+            this.$emit("changeOperateName", "复制");
             this.$emit("batchCopy");
         },
         handleCommand(command) {
-           switch (command){
-               case "move" :
-                   this.batchclassifySet();
-                   break;
-                case "top" :
-                   this.batchTop(false);
+            switch (command) {
+                case "move":
+                    this.batchclassifySet();
                     break;
-                case "cancelTop" :
+                case "top":
+                    this.batchTop(false);
+                    break;
+                case "cancelTop":
                     this.batchTop(true);
-                     break;
+                    break;
                 case "permission":
-                    this.batchViewAuth()
-                     break;     
-
-           }
-      }
+                    this.batchViewAuth();
+                    break;
+            }
+        }
     }
 };
 </script>
 <style>
+
 .seachInput .el-input__inner {
     font-size: 12px;
 }
@@ -263,7 +278,7 @@ export default {
     /* height: 36px; */
     box-sizing: border-box;
 }
-.select-item{
+.select-item {
     display: inline-block;
     width: 80px;
     box-sizing: border-box;
@@ -271,13 +286,13 @@ export default {
     margin: 0 16px 0 7px;
 }
 .select-sort {
-  width: 117px;
+    width: 117px;
 }
 .head-item {
     display: inline-block;
     flex: none;
 }
-.head-handle-btn{
+.head-handle-btn {
     padding-left: 40px;
 }
 
@@ -300,11 +315,35 @@ export default {
     }
 }
 
-.bach-header{
+.bach-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     // padding:0 21px;
     width: 100%;
+}
+
+.head-right {
+    .sort-icon {
+        display: inline-block;
+        width: 16px;
+        height: 14px;
+    }
+    .asc {
+        background: url("~img/content-icon/asc.png") no-repeat center;
+        background-size: contain;
+    }
+    .asc-icon-on {
+        background: url("~img/content-icon/asc-on.png") no-repeat center;
+        background-size: contain;
+    }
+    .dec {
+        background: url("~img/content-icon/desc.png") no-repeat center;
+        background-size: contain;
+    }
+    .dec-icon-on {
+        background: url("~img/content-icon/desc-on.png") no-repeat center;
+        background-size: contain;
+    }
 }
 </style>

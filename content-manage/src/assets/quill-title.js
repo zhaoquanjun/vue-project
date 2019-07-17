@@ -20,7 +20,8 @@ const titleConfig = {
     'ql-formula': '公式',  
     'ql-image': '图片',  
     'ql-video': '视频',  
-    'ql-clean': '清除字体样式'
+    'ql-clean': '清除字体样式',
+    'ql-lineheight':'行间距'
  }; 
  export function addQuillTitle(){ 
      const oToolBar = document.querySelector('.ql-toolbar'),        

@@ -33,11 +33,22 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                 >
-                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <div v-if="imageUrl1"  class="imgWrap">
+                         <img :src="imageUrl1" class="avatar" />
+                         <span class="el-upload-list__item-actions">
+                              <i class="icon-change"></i>
+                            <i @click.stop="handleRemove" class="el-icon-delete"></i>
+                        </span>
+                    </div>
+                   
+                    <template v-else>
+                        <i style class="el-icon-plus avatar-uploader-icon"></i>
+                        <i style=" display: block;">添加图片</i>
+                    </template>
+                   
                 </el-upload>
                 <el-dialog :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt>
+                    <img width="100%" :src="dialogImageUrl" alt />
                 </el-dialog>
             </div>
         </el-card>
@@ -58,10 +69,10 @@ export default {
     props: ["imageUrl"],
     data() {
         return {
-             dialogImageUrl: '',
-        dialogVisible: false,
+            dialogImageUrl: "",
+            dialogVisible: false,
             activeName: "",
-            uoloadDisabled: true,
+            uploadDisabled: true,
             fileList: [],
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
@@ -93,12 +104,13 @@ export default {
             }
         },
         handleRemove(file, fileList) {
+            this.imageUrl1= ""
             console.log(file, fileList);
         },
         handlePreview(file) {
             console.log(file);
-              this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
         },
 
         ///////
@@ -137,12 +149,25 @@ export default {
 .el-collapse /deep/ .el-collapse-item__content {
     padding: 0 10px;
 }
+
+.avatar-uploader {
+    margin: 0 auto;
+    display: table;
+}
 .avatar-uploader /deep/ .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
+       height: 200px;
+    width: 200px;
+    vertical-align: middle;
+    display: table-cell;
+}
+.avatar-uploader /deep/ .el-upload i {
+    color: #00c1de;
+    cursor: pointer;
 }
 .avatar-uploader .el-upload:hover {
     border-color: #409eff;
@@ -151,14 +176,46 @@ export default {
     font-size: 28px;
     color: #8c939d;
     width: 178px;
-    height: 178px;
-    line-height: 178px;
     text-align: center;
+    margin-bottom: 10px;
 }
 .avatar {
-    width: 178px;
-    height: 178px;
+    width: 200px;
+    height: 200px;
     display: block;
+}
+.el-upload-list__item-actions {
+    
+    display: flex;
+       align-items: flex-end;
+    justify-content: space-around;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    text-align: center;
+    color: #fff;
+    opacity: 0;
+    font-size: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s;
+  
+}
+.avatar-uploader .el-upload-list__item-actions  i{
+    color: #fff;
+    font-size: 21px;
+    margin-bottom: 15px;
+}
+.imgWrap:hover .el-upload-list__item-actions {
+   opacity: 1;
+}
+.icon-change{
+    display: inline-block;
+    width: 20px;height: 20px;;
+    background: url("~img/content-icon/change.png") no-repeat center;
+    background-size: contain;
 }
 </style>
 <style lang="scss" scoped>

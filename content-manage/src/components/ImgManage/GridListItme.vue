@@ -8,17 +8,40 @@
         >
             <span class="img-wrap">
                 <div class="mask" :class="isMaskShow"></div>
+                 <!-- <el-image :src="curItem.zoomOssUrl"></el-image> -->
                 <img :src="curItem.zoomOssUrl" alt>
             </span>
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
                 <span @click.stop="handleMove">
-                    <svg-icon icon-class="img-move"></svg-icon>
+                     <el-tooltip
+                            class="item"
+                            effect="dark"
+                            content="移动"
+                            placement="bottom"
+                        >
+                            <svg-icon icon-class="img-move"></svg-icon>
+                        </el-tooltip>
+                   
                 </span>
                 <span @click.stop="handleLook">
+                     <el-tooltip
+                            class="item"
+                            effect="dark"
+                            content="预览"
+                            placement="bottom"
+                        >
                     <svg-icon icon-class="img-look"></svg-icon>
+                    </el-tooltip>
                 </span>
                 <span @click.stop="handleDelete">
+                    <el-tooltip
+                            class="item"
+                            effect="dark"
+                            content="删除"
+                            placement="bottom"
+                        >
                     <svg-icon icon-class="img-delete"></svg-icon>
+                     </el-tooltip>
                 </span>
             </div>
             <div class="img-handle-btn" :class="[isSelectedShow?'show':'hide']">
