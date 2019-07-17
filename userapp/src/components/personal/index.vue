@@ -3,7 +3,9 @@
         <h3>个人账号管理</h3>
         <dl class="user-account clear">
             <dt class="avatar">
-                <img src="../../assets/avatar.jpeg" alt>
+                <img v-if="userInfo.userHeadUrl" :src="userInfo.userHeadUrl" />
+                 <img v-else :src="defaultAvatar" />
+                <span @click="modifyAvatar">修改头像</span>
             </dt>
             <dd class="account-info">
                 <p>
@@ -11,23 +13,25 @@
                         {{input!=''? input : '设置您的名字'}}
                         <i @click="setName" class="el-icon-edit"></i>
                     </span>
-                    <el-input @blur="blur"
-                              v-else
-                              maxlength="20"
-                              show-word-limit
-                              v-model="input"
-                              placeholder="请输入内容"></el-input>
+                    <el-input
+                        @blur="blur"
+                        v-else
+                        maxlength="20"
+                        show-word-limit
+                        v-model="input"
+                        placeholder="请输入内容"
+                    ></el-input>
                     <!--<el-input @blur="blur"
                               v-else
                               maxlength="20"
                               show-word-limit
                               size="small"
                               v-model="input"
-                              placeholder="请输入内容"></el-input>-->
+                    placeholder="请输入内容"></el-input>-->
                 </p>
                 <p>
                     创建时间
-                    <i v-model="createTime">{{createTime}}</i>
+                    <i>{{createTime}}</i>
                 </p>
             </dd>
         </dl>
@@ -38,7 +42,9 @@
                         <i>x</i>
                         <b>手机号码</b>
                     </span>
-                    <span class="pd-left social-desc">手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net.cn</span>
+                    <span
+                        class="pd-left social-desc"
+                    >手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net.cn</span>
                 </div>
                 <div class="fright">
                     <span>{{userInfo.phoneNumber}}</span>
@@ -48,7 +54,7 @@
                         <button @click="modifiPhoneNum">修改</button>
                     </span>
                 </div>
-            </li>           
+            </li>
             <li>
                 <div class="fleft">
                     <span>
@@ -81,8 +87,11 @@
                     <span class="pd-left">
                         <button v-if="WeChatUser">已绑定</button>
                         <button v-else>未绑定</button>
-                         |
-                        <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button> 
+                        |
+                        <button
+                            v-if="WeChatUser"
+                            @click="_untyingWeixin(WeChatUser.provider)"
+                        >解绑</button>
                         <button v-else @click="_bindingWeixin()">绑定</button>
                     </span>
                 </div>
@@ -98,8 +107,11 @@
                 <div class="fright">
                     <button v-if="DingDingUser">已绑定</button>
                     <button v-else>未绑定</button>
-                        |
-                    <button v-if="DingDingUser" @click="_untyingDing(DingDingUser.provider)">解绑</button> 
+                    |
+                    <button
+                        v-if="DingDingUser"
+                        @click="_untyingDing(DingDingUser.provider)"
+                    >解绑</button>
                     <button v-else @click="_bindingDing()">绑定</button>
                 </div>
             </li>
@@ -118,8 +130,11 @@
                     <span class="pd-left">
                         <button v-if="AlipayUser">已绑定</button>
                         <button v-else>未绑定</button>
-                         |
-                        <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button> 
+                        |
+                        <button
+                            v-if="AlipayUser"
+                            @click="_untyingAlipay(AlipayUser.provider)"
+                        >解绑</button>
                         <button v-else @click="_bindingAlipay()">绑定</button>
                     </span>
                 </div>
@@ -127,66 +142,77 @@
         </ul>
         <right-pannel :style="{width:pannelWidth+'px'}">
             <span slot="title-text">{{titText}}</span>
-            <component :is="curComponent" :sourcePhone="userInfo.phoneNumber" :provider="CurrentProvider" 
-            @removeExternalUserAsync="_removeExternalUserAsync" 
-            @updateWeiXinHtml="updateWeiXinHtml" 
-            :weixinHtml="weixinHtml" :WeChatJsLoginParams="WeChatJsLoginParams"></component>
+            <component
+                :is="curComponent"
+                :sourcePhone="userInfo.phoneNumber"
+                :provider="CurrentProvider"
+                @removeExternalUserAsync="_removeExternalUserAsync"
+                @updateWeiXinHtml="updateWeiXinHtml"
+                :weixinHtml="weixinHtml"
+                :WeChatJsLoginParams="WeChatJsLoginParams"
+            ></component>
         </right-pannel>
-         <el-dialog
-                width="0"
-                style="z-index:10"
-                :close-on-click-modal="false"
-                :show-close="false"
-                :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
-                
-
-            ></el-dialog>
+        <el-dialog
+            width="0"
+            style="z-index:10"
+            :close-on-click-modal="false"
+            :show-close="false"
+            :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
+        ></el-dialog>
     </div>
 </template>
 <script>
-
 import RightPannel from "../RightPannel";
+import SetAvatar from "./SetAvatar"
 import SetPhoneNumber from "./SetPhoneNumber";
 import SetPwd from "./SetPwd";
 import BindingWeChat from "./BindingWeChat";
 import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
-import { mapState,mapMutations, mapGetters } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import { getUserProfile, getExternalUserInfo, removeExternalUser, getWeChatJsLoginParams,formatDateTime } from "@/api/index.js"; 
+import {
+    getUserProfile,
+    getExternalUserInfo,
+    removeExternalUser,
+    getWeChatJsLoginParams,
+    formatDateTime
+} from "@/api/index.js";
 import { updateUserName } from "@/api/index.js";
-    export default {
-        data() {
-            return {
-                input: "",
-                flag: true,
-                userInfo: {phoneNumber:"15801566482"},
-                curComponent: "",
-                titText: "手机号修改",
-                ExternalUsers:null,
-                WeChatUser: null,
-                AlipayUser: null,
-                DingDingUser: null,
-                WeChatJsLoginParams:null,
-                CurrentProvider:"",
-                weixinHtml: "",
-                createTime: "2019-06-28"
-            };
-        },
-        components: {
-            RightPannel,
-            SetPhoneNumber,
-            UntyingWeChat,
-            BindingWeChat,
-            SetPhoneNumber,
-            SetPwd
-        },
-        created() {
-            this._getUserProfileAsync();
-            this._getExternalUserAsync();
-            this._getWeChatJsLoginParams();           
-        },
-        methods: {
+export default {
+    data() {
+        return {
+            defaultAvatar:require('../../assets/defualtAvater.png'),
+            input: "",
+            flag: true,
+            userInfo: { phoneNumber: "15801566482" },
+            curComponent: "",
+            titText: "修改手机号",
+            ExternalUsers: null,
+            WeChatUser: null,
+            AlipayUser: null,
+            DingDingUser: null,
+            WeChatJsLoginParams: null,
+            CurrentProvider: "",
+            weixinHtml: "",
+            createTime: "2019-06-28"
+        };
+    },
+    components: {
+        RightPannel,
+        SetPhoneNumber,
+        UntyingWeChat,
+        BindingWeChat,
+        SetPhoneNumber,
+        SetPwd,
+        SetAvatar
+    },
+    created() {
+        this._getUserProfileAsync();
+        this._getExternalUserAsync();
+        this._getWeChatJsLoginParams();
+    },
+      methods: {
             ...mapMutations(["ISRIGHTPANNELSHOW"]),          
             async _getUserProfileAsync() {
                 let { data } = await getUserProfile();
@@ -310,13 +336,112 @@ import { updateUserName } from "@/api/index.js";
                 }
             },
 
+        //获取微信Js相关参数
+        async _getWeChatJsLoginParams() {
+            let { data } = await getWeChatJsLoginParams();
+            this.WeChatJsLoginParams = data;
         },
-        computed: {
-            pannelWidth() {
-                return this.$store.state.isRightPanelShow === true ? 390 : 0;
+        //解绑第三方账号
+        async _removeExternalUserAsync(provider) {
+            let { data } = await removeExternalUser(provider);
+            if (data == "true") {
+                this.$message({
+                    type: "success",
+                    message: "解绑成功!"
+                });
+                this.ISRIGHTPANNELSHOW(false);
+                this._getExternalUserAsync();
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "解绑失败!"
+                });
+            }
+        },
+        updateWeiXinHtml() {
+            this.weixinHtml = "绑定微信" + new Date();
+        },
+        modifyAvatar(){
+              this.curComponent = SetAvatar;
+            this.titText = "修改头像";
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        // 修改手机号
+        modifiPhoneNum() {
+            this.curComponent = SetPhoneNumber;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //修改密码
+        modifiPwd() {
+            this.curComponent = SetPwd;
+            this.titText = "设置密码";
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        // 解绑微信
+        _untyingWeixin(provider) {
+            this.titText = "微信解绑";
+            this.CurrentProvider = provider;
+            this.curComponent = UntyingWeChat;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //绑定微信
+        _bindingWeixin() {
+            this.titText = "绑定微信";
+            this.weixinHtml = "绑定微信" + new Date();
+            this.CurrentProvider = "Weixin";
+            this.curComponent = BindingWeChat;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //钉钉 解绑
+        _untyingDing(provider) {
+            this.titText = "钉钉解绑";
+            this.CurrentProvider = provider;
+            //this.curComponent = UntyingWeChat;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //钉钉 绑定
+        _bindingDing() {
+            this.titText = "绑定钉钉";
+            this.CurrentProvider = "Dingding";
+        },
+        //支付宝 解绑
+        _untyingAlipay(provider) {
+            this.titText = "支付宝解绑";
+            this.CurrentProvider = provider;
+            //this.curComponent = UntyingWeChat;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //支付宝 绑定
+        _bindingAlipay() {
+            this.titText = "绑定支付宝";
+            this.CurrentProvider = "Alipay";
+        },
+        setName() {
+            this.flag = false;
+        },
+        async blur() {
+            this.flag = true;
+            let { status } = await updateUserName(this.input);
+            if (status === 200) {
+                this.$message({
+                    type: "success",
+                    message: "设置成功!"
+                });
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "设置失败!"
+                });
             }
         }
-    };
+    },
+    computed: {
+        pannelWidth() {
+            return this.$store.state.isRightPanelShow === true ? 390 : 0;
+        }
+    }
+    
+};
 </script>
 <style scoped>
 </style>
@@ -335,10 +460,23 @@ import { updateUserName } from "@/api/index.js";
         float: left;
         width: 80px;
         height: 80px;
+        position: relative;
+        overflow: hidden;
         img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
+        }
+        span {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background: #000;
+            opacity: 0.5;
+            color: #fff;
+            padding: 5px;
+            width: 100%;
+            text-align: center;
         }
     }
     .account-info {

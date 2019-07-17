@@ -65,11 +65,10 @@
         <div class="pageing">
             <el-pagination
                 background
-                layout="total, sizes, prev, pager, next"
+                layout="total, prev, pager, next"
                 :total="memberInfo.totalCount"
                 :page-count="memberInfo.totalPages"
-                :page-size="3"
-                :page-sizes="[3, 4, 5, 6]"
+                
                 @current-change="changePage"
             ></el-pagination>
         </div>
@@ -193,7 +192,7 @@ export default {
     white-space: nowrap;
     width: 81%;
 }   
-#member-table  .el-checkbox__input.is-checked  .el-checkbox__inner {
+#member-table  .el-checkbox__input.is-checked  .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
     background-color: #00c1de;
     border-color: #00c1de;
 }

@@ -1,7 +1,7 @@
 <template>
     <dl class="members—info" id="members—info">
         <dt class="avatar">
-            <img src="../../assets/avatar.jpeg" onerror>
+            <img src="../../assets/avatar.jpeg" onerror="../../assets/defualtvatar.jpeg">
         </dt>
         <dd class="basic">
             <span>
@@ -112,6 +112,7 @@ export default {
 #members—info .el-input .el-input__inner{
     height: 32px;
     line-height: 32px;
+    padding-right: 60px;
 }
 </style>
 
