@@ -72,7 +72,6 @@
                     </el-col>
                 </el-row>
                 <el-form-item label prop="contentDetail">
-                    {{this.articleDetail.contentDetail}}
                     <!-- quill-editor 编辑一-->
                     <quill-editor
                         v-model="articleDetail.contentDetail"
