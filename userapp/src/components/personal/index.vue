@@ -212,38 +212,7 @@ export default {
         this._getExternalUserAsync();
         this._getWeChatJsLoginParams();
     },
-    methods: {
-        ...mapMutations(["ISRIGHTPANNELSHOW"]),
-        async _getUserProfileAsync() {
-            let { data } = await getUserProfile();
-            this.userInfo = data;
-            this.input = data.displayName;
-            this.createTime = formatDateTime(
-                data.createTime,
-                "yyyy-MM-dd hh:mm:ss"
-            );
-            // console.log(this.userInfo)
-        },
-        async _getExternalUserAsync() {
-            this.WeChatUser = null;
-            this.AlipayUser = null;
-            this.DingDingUser = null;
-            let { data } = await getExternalUserInfo();
-            // console.log(data);
-            this.ExternalUsers = data;
-            if (this.ExternalUsers && this.ExternalUsers.length > 0) {
-                this.ExternalUsers.forEach(element => {
-                    if (element.provider == "Weixin") {
-                        this.WeChatUser = element;
-                    } else if (element.provider == "Alipay") {
-                        this.AlipayUser = element;
-                    } else if (element.provider == "DingDing") {
-                        this.DingDingUser = element;
-                    }
-                });
-            }
-        },
-        methods: {
+      methods: {
             ...mapMutations(["ISRIGHTPANNELSHOW"]),          
             async _getUserProfileAsync() {
                 let { data } = await getUserProfile();
@@ -471,7 +440,7 @@ export default {
             return this.$store.state.isRightPanelShow === true ? 390 : 0;
         }
     }
-    }
+    
 };
 </script>
 <style scoped>

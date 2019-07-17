@@ -8,8 +8,9 @@ let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
 let authorityUrl = "http://api.identity.console.wezhan.cn";
 let redirectUrl = "http://dashboard.console.wezhan.cn/callback"
 let logoutRedirectUri = "http://dashboard.console.wezhan.cn/index.html";
-let silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
+let silentRedirectUri = 'http://dashboard.console.wezhan.cn/static/silent-renew.html';
 let clientId = 'dashboard.api';
+let scope = "openid profile dashboard.api designer.api content.api";
 
 if (process.env.NODE_ENV === 'development') {
     siteManageApi  = 'http://api.designer.console.wezhan.cn';
@@ -20,6 +21,7 @@ if (process.env.NODE_ENV === 'development') {
     logoutRedirectUri = "http://dashboard.console.wezhan.cn/index.html";
     silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
     clientId = 'dev.dashboard.api';
+    scope = "openid profile dashboard.api designer.api content.api";
 }
 
 
@@ -36,7 +38,8 @@ const enbironmemy = {
     memberManageApi,
     siteManageApi,
     silentRedirectUri,
-    clientId
+    clientId,
+    scope
 
 };
 export default enbironmemy;
