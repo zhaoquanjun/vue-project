@@ -20,6 +20,7 @@
     "quill-image-drop-module": "^1.0.3",
     "quill-image-resize-module": "^3.0.0",
     "vue": "^2.6.10",
+    "vue-cli": "^2.9.6",
     "vue-nprogress": "^0.1.5",
     "vue-quill-editor": "^3.0.6",
     "vue-quill-editor-upload": "^1.1.0",

@@ -223,7 +223,7 @@ import { updateUserName } from "@/api/index.js";
             //解绑第三方账号
             async _removeExternalUserAsync(provider){
                 let { data } = await removeExternalUser(provider);
-                if(data == "true"){
+                if(data!=undefined && data == true){
                     this.$message({
                         type: "success",
                         message: "解绑成功!"
