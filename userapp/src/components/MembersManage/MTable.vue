@@ -17,7 +17,7 @@
                           <span style="padding-left:5px" v-if="scope.row.isSystem">(全部权限)</span>
                       </template>  
             </el-table-column>
-            <el-table-column prop="remark" label="备注">
+            <el-table-column prop="remark" label="备注" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <el-popover
                         :ref="`popover-${scope.$index}`"
