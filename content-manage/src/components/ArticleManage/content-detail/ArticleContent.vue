@@ -128,7 +128,7 @@
                                     {{item}}
                                     <i
                                         class="el-icon-close"
-                                        @click="removeCurKeyWord(index)"
+                                        @click.stop="removeCurKeyWord(index)"
                                     ></i>
                                 </li>
                             </ul>
@@ -164,7 +164,7 @@
                                     {{item}}
                                     <i
                                         class="el-icon-close"
-                                        @click="removeCurKeyWord(index)"
+                                        @click.stop="removeCurmetaKeyWord(index)"
                                     ></i>
                                 </li>
                             </ul>
@@ -378,6 +378,17 @@ export default {
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
+            this.$nextTick(() => {
+                    this.$refs.keywordInput.$el.children[0].style.textIndent =
+                        this.$refs.keywordList.clientWidth + "px";
+                });
+        },
+        removeCurmetaKeyWord(index) {
+            this.articleDetail.metaKeywords.splice(index, 1);
+             this.$nextTick(() => {
+                    this.$refs.metaKeywordsInput.$el.children[0].style.textIndent =
+                        this.$refs.metaKeywordList.clientWidth + "px";
+                });
         },
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
@@ -539,7 +550,8 @@ export default {
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         //this.$refs.myQuillEditor.quill.root.addEventListener("dblclick",this.imgChangeSizeHandler,!1);
         addQuillTitle();
-    }
+    },
+
 };
 </script>
 <style>
@@ -580,11 +592,11 @@ export default {
     }
     .content-title {
         padding-bottom: 20px;
-        height: 20px;
+        // height: 20px;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
         color: rgba(38, 38, 38, 1);
-        line-height: 20px;
+        // line-height: 20px;
     }
     .set-article,
     .seo-key {
@@ -599,7 +611,7 @@ export default {
     margin: 0 16px 0 7px;
 }
 .quill-editor {
-    height: 500px;
+    //height: 500px;
 }
 .ql-container {
     height: 400px;

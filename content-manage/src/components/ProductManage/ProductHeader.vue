@@ -145,7 +145,7 @@ export default {
                     orderLabel: "标题"
                 }
             ],
-            orderValue: "1",
+            orderValue: "创建时间",
             topOptions: [
                 {
                     orderValue: "",

@@ -1,7 +1,8 @@
 <template>
     <dl class="members—info" id="members—info">
         <dt class="avatar">
-            <img src="../../assets/avatar.jpeg" onerror="../../assets/defualtvatar.jpeg">
+            <img v-if="memberInfo.userHeadUrl" :src="memberInfo.userHeadUrl" >
+            <img v-else src="../../assets/defualtAvater.png" alt="">
         </dt>
         <dd class="basic">
             <span>
@@ -16,7 +17,7 @@
                <i style="flex: none;padding-right: 10px;"> 备注 :</i>
                 <template v-if="isRemarkShow">
                     <span @click="handleRemark" style="display: inline-block;  cursor: pointer;">
-                        <i>{{ remarkValue}}</i>
+                        <i>{{ !!remarkValue?remarkValue:"暂无备注"}}</i>&nbsp;
                         <svg-icon icon-class="remark"></svg-icon>
                     </span>
                 </template>
@@ -25,7 +26,7 @@
                         v-if="inputType"
                        clear="remark" 
                         type="text"
-                        placeholder="请输入内容"
+                        placeholder="暂无备注"
                         v-model="memberInfo.remark"
                         maxlength="100"
                         show-word-limit

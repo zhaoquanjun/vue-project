@@ -291,6 +291,7 @@ export default {
 .el-tree /deep/ .el-tree-node__content {
     height: 44px;
     position: relative !important;
+    background: #fff;
 }
 
 .el-tree /deep/ .el-tree-node__label {
@@ -318,7 +319,7 @@ export default {
     }
     .node-label {
         display: block;
-        width: 100px;
+        max-width: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

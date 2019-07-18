@@ -71,11 +71,11 @@ export const batchDeletMember = (options) => {
  * InterfaceAuthor : 徐专
  * 获取当前用户下的成员列表
  */
-export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
+export const getBeInvitedUsers = (options = { page: 1, phone: "",size:10 }) => {
     let params = {
         pageIndex: options.page,
         phone:options.phone,
-        pageSize: 9,
+        pageSize: options.size,
     };
     return ajaxRequest.get('/api/userInfo/GetBeInvitedUsers', params);
 }

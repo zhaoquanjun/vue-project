@@ -21,7 +21,7 @@ const mutations = {
         console.log(value)
         state.invitationValue = value;
     },
-
+    
     /**
      * 右侧邀请面板
      * @param {*} state 

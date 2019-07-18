@@ -368,6 +368,10 @@ export default {
 };
 </script>
 <style scoped>
+.el-input /deep/ .el-input__inner{
+    
+    padding-right: 60px;
+}
 </style>
 
 <style lang="scss" scoped>

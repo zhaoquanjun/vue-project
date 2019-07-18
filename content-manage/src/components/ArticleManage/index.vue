@@ -177,10 +177,10 @@ export default {
                                 this.getArticleList();
                             }
                         } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
+                            // this.$message({
+                            //     type: "info",
+                            //     message: "已取消删除"
+                            // });
                         }
                     }
                 }
@@ -211,10 +211,10 @@ export default {
                             this.getArticleList();
                         }
                     } else {
-                        this.$message({
-                            type: "info",
-                            message: "已取消" + message
-                        });
+                        // this.$message({
+                        //     type: "info",
+                        //     message: "已取消" + message
+                        // });
                     }
                 }
             });
@@ -247,10 +247,10 @@ export default {
                             this.getArticleList();
                         }
                     } else {
-                        this.$message({
-                            type: "info",
-                            message: "已取消" + message
-                        });
+                        // this.$message({
+                        //     type: "info",
+                        //     message: "已取消" + message
+                        // });
                     }
                 }
             });

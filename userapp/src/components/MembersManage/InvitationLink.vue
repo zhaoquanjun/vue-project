@@ -1,6 +1,6 @@
 <template>
     <div class="invita-link">
-        <div class="invita-wrap" v-if="isLinkShow">
+        <div class="invita-wrap" v-if="isLinkShow && $store.state.isRightPanelShow">
             <i class="back-icon" @click="backInvite"></i>
             <p class="invita-title invita-item">将链接发送给成员, 成员加入后即可协助您管理站点</p>
             <p class="link-wrap">
@@ -10,13 +10,14 @@
                     v-clipboard:success="onCopy"
                     v-clipboard:error="onError"
                     class="link-btn"
+                    :class="[isCopy?'link-btn-green':'']"
                 >{{copyTip}}</button>
             </p>
             <p class="invita-item invita-tip">一个邀请链接只能邀请一个成员, 有效期3天</p>
         </div>
         <template v-else>
             <div class="auth-tip" v-if="authtipShow">请至少选择一项权限</div>
-            <Authorization/>
+            <Authorization />
             <footer class="footer">
                 <button class="create-link" @click="generate">生成链接</button>
             </footer>
@@ -41,7 +42,8 @@ export default {
             input: "212",
             link: "",
             copyTip: "复制链接",
-            authtipShow: false
+            authtipShow: false,
+            isCopy: false
         };
     },
     methods: {
@@ -58,9 +60,9 @@ export default {
                 return false;
             }
             this.authtipShow = false;
+            this.isCopy = false;
             this._getShortUrlByInviation(names);
             this.$store.commit("CLOSERIGHTPANNEL", false);
-            this.$store.commit("CURMEMBVERINFO", 1);
             this.timer = setTimeout(() => {
                 this.$store.commit("CLOSERIGHTPANNEL", true);
                 this.isLinkShow = true;
@@ -73,6 +75,7 @@ export default {
             });
             // this.$store.commit("CLOSERIGHTPANNEL", false);
             this.copyTip = "复制成功";
+            this.isCopy = true;
             // this.isLinkShow = false;
         },
         onError() {
@@ -82,17 +85,21 @@ export default {
             this.isLinkShow = false;
         }
     },
+    computed: {},
     watch: {
         isLinkShow() {
             let titleText = document.getElementById("title-text");
+            
+            
             if (this.isLinkShow) {
                 titleText.style.paddingLeft = "30px";
             } else {
                 titleText.style.paddingLeft = "10px";
             }
-        }
-    },
-    mounted() {}
+        },
+        immediate: true,
+       
+    }
 };
 </script>
 
@@ -148,6 +155,9 @@ export default {
                 color: #fff;
                 margin-left: 10px;
             }
+            .link-btn-green {
+                background: #00b539;
+            }
         }
     }
     .footer {
@@ -157,6 +167,7 @@ export default {
         left: 16px;
         .create-link {
             border: none;
+            font-size: 12px;
             width: 90px;
             height: 32px;
             color: #fff;

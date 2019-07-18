@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="asideTree">
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -283,22 +283,7 @@ export default {
     }
 };
 </script>
-<style>
-.el-tree-node > .el-tree-node__children {
-    overflow: visible !important;
-}
-</style>
 
-<style scoped>
-.el-tree /deep/ .el-tree-node__content {
-    height: 44px;
-    position: relative !important;
-}
-
-.el-tree /deep/ .el-tree-node__label {
-    font-size: 12px;
-}
-</style>
 <style lang="scss" scoped>
 .custom-tree-node {
     overflow: hidden;
@@ -317,7 +302,7 @@ export default {
     }
       .node-label {
         display: block;
-        width: 100px;
+        max-width: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
