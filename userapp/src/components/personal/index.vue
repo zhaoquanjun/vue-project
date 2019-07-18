@@ -282,7 +282,7 @@ export default {
             this.ISRIGHTPANNELSHOW(true);
         },
         updateWeiXinHtml(){
-            this.weixinHtml="绑定微信" +new Date;
+            this.weixinHtml="绑定微信" +new Date();
 
         },
         // 修改手机号
