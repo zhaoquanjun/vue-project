@@ -23,13 +23,13 @@
     </div>
     <div class="pannel-left-item">
       <h5 class="auth-title">已选权限</h5>
-      <div class="selected-auth">
+     
         <selected-auth
           @emptySelected="emptySelected"
           @removeSelected="removeSelected"
           :authList="memberPolicy"
         ></selected-auth>
-      </div>
+      
     </div>
   </div>
 </template>
@@ -109,33 +109,7 @@ export default {
   line-height: 40px;
   margin-right: 10px;
 }
-.right-pannel {
-  background: #ffffff;
-  position: absolute;
-  z-index: 1;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 534px;
-  color: #262626;
-  .pannel-head {
-    height: 40px;
-    line-height: 40px;
-    font-size: 14px;
-    overflow: hidden;
-    border-bottom: 1px solid #efefef;
-    span {
-      padding: 0 10px;
-    }
-    .auth-title {
-      margin-right: 10px;
-    }
-    .close-pannel {
-      float: right;
-      cursor: pointer;
-    }
-  }
-}
+
 .panel-main {
   padding: 20px 10px;
   overflow: hidden;

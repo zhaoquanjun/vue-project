@@ -14,7 +14,6 @@ let router = new VueRouter({
 });
 export default router;
 let accessToken = store.state.accessToken.Authorization;
-let flag = false;
 router.beforeEach(async (to, from, next) => {
   NProgress.start()
   if (!to.meta.requiresAuth) {

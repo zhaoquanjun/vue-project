@@ -29,7 +29,7 @@
             </div>
             <div class="pannel-left-item">
                 <h5 class="auth-title">已选权限</h5>
-                <div class="selected-auth">
+               
                     <selected-auth
                         :authList="memberPolicy"
                         @removeSelected="removeSelected"
@@ -40,7 +40,7 @@
                         @removeSelected="removeSelected"
                         :authList="memberPolicy"
                     ></auth-list>-->
-                </div>
+                
             </div>
         </div>
         <div class="footer">
@@ -96,6 +96,7 @@ export default {
                         type: "successed",
                         message: "保存成功"
                     });
+                    this.$emit("getMemberList")
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
                 } else {
                     this.$message({
@@ -121,6 +122,7 @@ export default {
                         type: "success",
                         message: "保存成功"
                     });
+                     this.$emit("getMemberList")
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
                 } else {
                     this.$message({
@@ -195,33 +197,7 @@ export default {
     line-height: 40px;
     margin-right: 10px;
 }
-.right-pannel {
-    background: #ffffff;
-    position: absolute;
-    z-index: 1;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 534px;
-    color: #262626;
-    .pannel-head {
-        height: 40px;
-        line-height: 40px;
-        font-size: 14px;
-        overflow: hidden;
-        border-bottom: 1px solid #efefef;
-        span {
-            padding: 0 10px;
-        }
-        .auth-title {
-            margin-right: 10px;
-        }
-        .close-pannel {
-            float: right;
-            cursor: pointer;
-        }
-    }
-}
+
 .panel-main {
     padding: 20px 16px;
     overflow: hidden;
@@ -258,7 +234,7 @@ export default {
     .auth-name {
         border: 1px solid #efefef;
         border-top: none;
-        padding: 0 0px;
+        padding: 0 10px;
     }
 }
 .pannel-right-item {

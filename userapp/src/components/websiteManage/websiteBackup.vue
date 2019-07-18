@@ -79,8 +79,7 @@
                             <template slot-scope="scope">
                                 <div class="handle-btn-wrap">
                                     <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
-                                    <a href="http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=a&siteId=2&backupName=2_backup_20190716131646.dat">123</a>
-                                    <!-- <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button> -->
+                                    <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button>
                                     <button class="handle-btn delete-btn" @click="deleteBackup( scope )"></button>
                                 </div>
                             </template>
@@ -128,6 +127,21 @@
                         </div>
                     </div>
                 </el-dialog>
+                <el-dialog
+                    width="0"
+                    :visible.sync = "backuping"
+                    :show-close="false"
+                >
+                    <div class="circleprogress" :style="{width:'270px'}">
+                        <div class="circleWrap">
+                            <div class="circle">
+                                <div class="circleBox"></div>
+                            </div>
+                            <div class="hideCircle"></div>
+                        </div>
+                        <span class="backuping">正在还原网站</span>
+                    </div>
+                </el-dialog>
             </el-main>
         </el-main>
 
@@ -150,7 +164,8 @@ export default {
                 { name: "网站备份", url: "/website/backup" },
                 { name: "我的网站", url: "/website/mysite" },
                 { name: "公司信息", url: "/website/companyinfo" },
-                { name: "域名管理", url: "/website/sitedomain" }
+                { name: "域名管理", url: "/website/sitedomain" },
+                { name: "邮件服务器", url: "/website/email" },
             ],
             siteInfoImg: "",
             siteName: "",
@@ -162,6 +177,7 @@ export default {
             autoSite: [],
             backupType: "manual",
             backupShow: false,
+            backuping: false,
             // recovery: false,
             remarkInfo: ""
         }
@@ -205,6 +221,9 @@ export default {
             } else if (this.backupType === "auto") {
                 this.siteInfo = this.autoSite;
             }
+            for (var i = 0; i < this.siteInfo.length; i++) {
+                this.siteInfo[i].backupTime = this.formatDateTime(this.siteInfo[i].backupTime, 'yyyy-mm-dd hh:MM:ss')
+            }
             console.log(this.siteInfo)
         },
         /**
@@ -212,9 +231,8 @@ export default {
          */
         async recovery(scope) {
             console.log(scope)
-            // await siteBackupApi.recoverySite()
             this.$confirm(
-                "确定要将网站还原至该备份版本吗？\n还原后系统会自动备份当前站点设计，可在自动备份列表中查看。",
+                `确定要将网站还原至该备份版本吗？ 还原后系统会自动备份当前站点设计，可在自动备份列表中查看。`,
                 "提示",
                 {
                     confirmButtonText: "确定",
@@ -223,21 +241,25 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            let { status } = await siteBackupApi.recoverySite(scope.row.siteId, scope.row.siteName, scope.row.fileName)
-                            console.log(status);
-                            console.log(status === 200);
-                            if (status === 200) {
-                                this.$message({
-                                    type: "success",
-                                    message: "网站还原成功"
-                                });
-                                this.getBackupSite()
-                            } else {
-                                this.$message({
-                                    type: "error",
-                                    message: "系统正忙，请稍后再试！"
-                                })
-                            }
+                            this.backuping = true;
+                            await siteBackupApi.recoverySite(scope.row.siteId, scope.row.siteName, scope.row.fileName).then( (res) => {
+                                console.log(res.status)
+                                if (res.status === 200) {
+                                    this.$message({
+                                        type: "success",
+                                        message: "网站还原成功"
+                                    });
+                                    this.getBackupSite()
+                                    this.backuping = false
+                                } else {
+                                    this.$message({
+                                        type: "error",
+                                        message: "系统正忙，请稍后再试！"
+                                    })
+                                    this.backuping = false
+                                }
+                            })
+                            
                         } 
                     }
                 }
@@ -247,9 +269,11 @@ export default {
          * 备份当前版本
          */
         async backup(){
-            if (this.manualSite.length <= 20) {
+            console.log(this.manualSite.length)
+            if (this.manualSite.length < 20) {
                 let { status } = await siteBackupApi.getBackupCount(2)
                 if (status == 200) {
+                    this.remarkInfo = "";
                     this.backupShow = true
                 }else{
                     this.$message({
@@ -263,6 +287,7 @@ export default {
                     "提示",
                     {
                         confirmButtonText: "确定",
+                        showCancelButton:false,
                         type: "warning",
                     }
                 );
@@ -270,20 +295,20 @@ export default {
             
         },
         async backupSite() {
-            let { status } = await siteBackupApi.backupSite(this.siteName, this.siteId, this.remarkInfo).then(() => {
-                this.backupShow = false;
-            })
+            let { status } = await siteBackupApi.backupSite(this.siteName, this.siteId, this.remarkInfo)
             if (status == 200) {
                 this.$message({
                     type: "success",
                     message: "备份成功"
                 })
+                this.getBackupSite();
             } else {
                 this.$message({
                     type: "error",
                     message: "备份失败，请稍后再试！"
                 })
             }
+            this.backupShow = false;
         },
         /**
          * 下载备份
@@ -299,28 +324,19 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            // await siteBackupApi.exportBackup(scope.row.siteName, scope.row.siteId, scope.row.fileName)
-                            // window.open(`http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=${scope.row.siteName}&siteId=${scope.row.siteId}&backupName=${scope.row.fileName}`)
-                            var eleLink = document.createElement('a');
-                            eleLink.download = scope.row.siteName;
-                            eleLink.style.display = 'none';
-                            // 字符内容转变成blob地址
-                            // var blob = new Blob([]);
-                            eleLink.href = window.URL.createObjectURL(`http://api.designer.console.wezhan.cn/api/v1/backup/exportbackup?siteName=${scope.row.siteName}&siteId=${scope.row.siteId}&backupName=${scope.row.fileName}`);
-                            // 触发点击
-                            document.body.appendChild(eleLink);
-                            eleLink.click();
-                            // 然后移除
-                            document.body.removeChild(eleLink);
-                            // console.log(status === 200);
-                            // if (status === 200) {
-                                
-                            // } else {
-                            //     this.$message({
-                            //         type: "error",
-                            //         message: "系统正忙，请稍后再试！"
-                            //     })
-                            // }
+                            var res = await siteBackupApi.exportBackup(scope.row.siteName, scope.row.siteId, scope.row.fileName)   
+                            console.log(res);
+                            var a = document.createElement('a');
+                            var binaryData = [];
+                            binaryData.push(res.data);
+                            a.href = window.URL.createObjectURL(new Blob(binaryData, { type: "application/dat" }));
+                            var names = scope.row.fileName.split('_');
+                            var filename = scope.row.siteName + '_' + names[1] + '_' + names[2];
+                            a.download = filename; // Set the file name.
+                            a.style.display = 'none';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
                         } 
                     }
                 }
@@ -379,6 +395,38 @@ export default {
             this.$refs[`popover-${index}`].doClose();
             await siteBackupApi.updateDescription(row.id, this.remarkValue)
             this.siteInfo[index].description = this.remarkValue
+        },
+         /**
+         * InterfaceAuthor : xuzhuan
+         * 时间格式化
+         */
+        formatDateTime  (date, fmt) {
+            if (!date) {
+                return "";
+            }
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
+            if (/(y+)/.test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+            }
+            let o = {
+                'M+': date.getMonth() + 1,
+                'd+': date.getDate(),
+                'h+': date.getHours(),
+                'm+': date.getMinutes(),
+                's+': date.getSeconds()
+            }
+            for (let k in o) {
+                let str = o[k] + '';
+                if (new RegExp(`(${k})`).test(fmt)) {
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : this.padLeftZero(str));
+                }
+            }
+            return fmt;
+        },
+        padLeftZero(str) {
+            return ('00' + str).substr(str.length);   
         },
   },
 }
@@ -487,7 +535,8 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 81%;
-}   
+}
+
 </style>
 
 <style lang="scss" scoped>
@@ -632,6 +681,70 @@ export default {
             background: #00c1de;
             color: #fff;
         }
+    }
+}
+//网站还原中
+.circleprogress{
+    background: #ffffff;
+    position: fixed;
+    z-index: 2200;
+    width: 270px;
+    height: 199px;
+    margin-left: -135px;
+    margin-top: -100px;
+    left: 50%;
+    top: 50%;
+    box-shadow: 0 0 3px #ccc;
+    transition: width 0.2s linear;
+    background-color: "#fff";
+    color: #262626;
+    overflow:hidden;
+    .circle{
+        width: 56px; 
+        height: 56px; 
+        box-sizing: border-box; 
+        padding: 5px; 
+        border-radius: 50%; 
+        background-image: -webkit-linear-gradient(top, #45A9FE 0%, #00C1DE 90%);  
+        background-image: -moz-linear-gradient(top, #45A9FE 0%, #00C1DE 90%); 
+        background-image: linear-gradient(top left, #45A9FE 0%, #00C1DE 90%);  
+        .circleBox{
+            width:100%; 
+            height:100%; 
+            border-radius:50%; 
+            background:#fff; 
+        }
+    }
+    .circleWrap{
+        position: absolute;
+        left: 50%;
+        top: 54px;
+        margin-left: -28px;
+        width: 56px; 
+        height: 56px; 
+        -webkit-animation:rotate 2s linear infinite;
+    }
+    @-webkit-keyframes rotate{
+		0%{-webkit-transform:rotate(0deg);}
+		100%{-webkit-transform:rotate(360deg);}
+	}
+    .hideCircle{
+        width: 28px;
+        height: 28px;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        background: #fff;
+        z-index: 2500
+    }
+    .backuping{
+        position: absolute;
+        top: 123px;
+        left: 92px;
+        font-size:14px;
+        font-weight:400;
+        color:rgba(38,38,38,1);
+        line-height:20px;
     }
 }
 </style>

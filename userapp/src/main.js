@@ -7,9 +7,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/reset.css";
 import "./styles/common.scss";
 import './icons'
-import { getLocal } from "@/libs/local";
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
+// 验证码滑块
+import SliderVerificationCode from 'slider-verification-code';
+import 'slider-verification-code/lib/slider-verification-code.css';
+Vue.use(SliderVerificationCode);
 //import '@/icons'
 Vue.use(ElementUI)
 Vue.config.productionTip = false;

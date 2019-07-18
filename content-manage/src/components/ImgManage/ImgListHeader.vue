@@ -64,11 +64,11 @@
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <div style="float:right">
-                    <el-button style="margin:0 16px" size="small" @click="batchMove">
+                    <el-button class="deleteActive" style="margin:0 16px" size="small" @click="batchMove">
                         <!-- <svg-icon icon-class="tab-moved"></svg-icon> -->
                         移动
                     </el-button>
-                    <el-button size="small" @click="batchDelete">
+                    <el-button class="deleteActive" size="small" @click="batchDelete">
                         <!-- <svg-icon icon-class="l-recyclebin"></svg-icon> -->
                         删除
                     </el-button>

@@ -62,8 +62,10 @@
                     ></m-tree> -->
                     <SelectTree :categoryName="curImgInfo.categoryName"
                                 :tree-result="treeResult"
-                                @chooseNode="chooseNode">
-
+                                @chooseNode="chooseNode"
+                                :isexpand="true"
+                    >
+                              
                     </SelectTree>
 
 
@@ -77,6 +79,7 @@
             <el-footer><slot name="modal-footer"></slot></el-footer>
         </el-main>
         <el-dialog title="上传图片"
+                    width="50%"
                    :visible.sync="dialogTableVisible"
                    :modal-append-to-body="false">
             <span slot="title">

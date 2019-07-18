@@ -1,130 +1,215 @@
 
 <template>
     <div class="setPwd">
-        <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">          
-            <el-form-item prop="verification" class="verification-code">
-                <el-input 
-                            v-model="ruleForm.password"
-                            autocomplete="on"
-                            placeholder="������������">
-
-                </el-input>
-                <el-input 
-                            v-model="ruleForm.confirmPassword"
-                            autocomplete="on"
-                            placeholder="����ȷ������">
-
-                </el-input>
-            </el-form-item>
-        </el-form>
+        <el-alert :closable="false" :title="tipTitle" type="success"></el-alert>
+        <template v-if="!isSetPassWord">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
+                <el-form-item prop="password" class="verification-code">
+                    <el-input
+                        type="password"
+                        v-model="ruleForm.password"
+                        autocomplete="on"
+                        placeholder="输入设置密码"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item prop="confirmPassword" class="verification-code">
+                    <el-input
+                        type="password"
+                        v-model="ruleForm.beSurePwd"
+                        autocomplete="on"
+                        placeholder="输入确认密码"
+                    ></el-input>
+                </el-form-item>
+            </el-form>
+        </template>
+        <template v-else>
+            <el-form :model="ruleFormCode" :rules="rules" ref="ruleForm" class="pwd-form">
+                <el-form-item prop="verification" class="verification-code">
+                    <el-input
+                        type="verification"
+                        v-model="ruleFormCode.code"
+                        autocomplete="on"
+                        placeholder="验证码"
+                        @input="changeInput"
+                    ></el-input>
+                    <el-button class="verification-text" @click="send" :disabled="disabled=!show">
+                        <span v-show="show">获取验证码</span>
+                        <span v-show="!show" class="count">{{count}} s</span>
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </template>
         <div class="footer">
-            <!--<button class="confirm footer-btn" @click="modify">����</button>
-    <button class="cancel footer-btn" @click="close">ȡ��</button>-->
+            <button class="confirm footer-btn" v-if="!isModifi" @click="nextStep">下一步</button>
+            <button class="confirm footer-btn" v-else @click="submitForm('ruleForm')">确定</button>
+            <button class="cancel footer-btn" @click="close">取消</button>
         </div>
     </div>
 </template>
 <script>
-    export default {
-        data() {
-            return {
-                ruleForm: {
-                    password: "",
-                    confirmPassword: ''
-                },
+import {
+    updateUserPwd,
+    sendSourcePhoneCode,
+    changeUserPwd,
+    isInvalidCode
+} from "@/api/index.js";
+export default {
+    props: ["isSetPassWord", "sourcePhone"],
+    data() {
+        var checPwd = (rule, value, callback) => {
+            console.log(rule, value, callback);
+            setTimeout(() => {
+                if (value.length > 16) {
+                    callback(new Error("密码长度不能超过16位！"));
+                } else if (value.length < 6) {
+                    callback(new Error("密码长度最低为6位！"));
+                }
+                let reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
+            }, 1000);
+        };
+        return {
+            show: true, // 初始启用按钮
+            count: "", // 初始化次数
+            timer: null,
+            isModifi: false,
+            tipTitle:
+                "设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码",
+            ruleForm: {
+                password: "",
+                beSurePwd: ""
+            },
+            ruleFormCode: {
+                phone: "",
+                code: ""
+            },
+
+            rules: {
+                password: [
+                    { validator: checPwd, trigger: "blur", required: true }
+                ],
+                beSurePwd: [
+                    {
+                        required: true,
+                        message: "请输入文章标题",
+                        trigger: "blur"
+                    }
+                ]
+            },
+            phone: "",
+            code: ""
+        };
+    },
+    mounted() {
+        this.tipTitle = this.isSetPassWord
+            ? "为保证帐号更加安全，建议您定期修改密码"
+            : this.tipTitle;
+    },
+    methods: {
+        async send() {
+            let { status } = await sendSourcePhoneCode(this.sourcePhone);
+            if (status === 200) {
+                this.$message({
+                    type: "success",
+                    message: "发送成功!"
+                });
+                if (!this.timer) {
+                    this.count = TIME_COUNT;
+                    this.show = false;
+                    this.timer = setInterval(() => {
+                        if (this.count > 0 && this.count <= TIME_COUNT) {
+                            this.count--;
+                        } else {
+                            this.show = true;
+                            clearInterval(this.timer); // 清除定时器
+                            this.timer = null;
+                        }
+                    }, 1000);
+                }
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "发送失败!"
+                });
             }
         },
-        method: {
-            modify() {
-                if (this.ruleForm.password == this.ruleForm.confirmPassword) {
+        changeInput() {},
+        close() {
+            this.$store.commit("CLOSERIGHTPANNEL", false);
+        },
+        submitForm(formName) {
+            //  如果已经设置过密码 调修改接口
+            this.isSetPassWord ? this.modifyPaw() : this.setPaw();
 
+            this.$refs[formName].validate(valid => {
+                console.log(valid);
+                if (valid) {
+                } else {
+                    console.log("error submit!!");
+                    return false;
                 }
-            },
-            close() {
-                 
+            });
+        },
+        async setPaw() {
+            let { status } = await updateUserPwd(this.ruleForm);
+            if (status === 200) {
+            }
+        },
+        async modifyPaw() {
+            let option = {
+                phone: this.phone,
+                code: this.code,
+                ...this.ruleForm
+            };
+            let { status } = await changeUserPwd(option);
+            if (status === 200) {
+            }
+        },
+        // 点击下一步
+        async nextStep() {
+            let code = this.ruleFormCode.code;
+            if (!code) {
+                this.$message({
+                    type: "warning",
+                    message: "请输入验证码!"
+                });
+            } else {
+                let { status } = await isInvalidCode(this.sourcePhone, code);
+                if (status === 200) {
+                    this.isModifi = true;
+                    if (!this.isModifi) {
+                        this.$store.commit("CLOSERIGHTPANNEL", false);
+                        this.timer = setTimeout(() => {
+                            this.$store.commit("CLOSERIGHTPANNEL", true);
+                        }, 500);
+                    }
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: "验证失败!"
+                    });
+                }
             }
         }
     }
+};
 </script>
-<style>
-        .el-select-dropdown {
-            z-index: 10000 !important;
-        }
-
-        .el-autocomplete-suggestion {
-            width: 150px;
-        }
-
-        .el-select .el-input__inner {
-            border: none;
-            padding: 0;
-            padding-left: 5px;
-            height: 30px;
-        }
-
-        .el-select {
-            width: 70px;
-        }
-
-        .dropdown__item {
-            width: 150px;
-        }
-
-        .el-input--small .el-input__icon {
-            line-height: 30px;
-        }
-
-        .el-input--prefix .el-input__inner {
-            padding-left: 100px;
-        }
-        /* .el-select-dropdown{
-      left: 262px !important;
-    } */
-        .el-scrollbar__wrap {
-            width: 150px;
-        }
-</style>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-    .verification-code {
-        position: relative;
+<style lang="scss" scoped>
+@import "./style/personal";
+.setPwd {
+    padding: 10px;
+    .pwd-form {
+        padding-top: 20px;
     }
-
-    .verification-text {
-        position: absolute;
-        top: 1px;
-        bottom: 1px;
-        right: 1px;
-        border: none;
-        color: red;
-    }
-    /*@at-root*/
-    .from-row {
-        margin-top: 30px;
-    }
-
-    .footer {
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        padding: 15px 17px;
-        border-top: 1px solid #efefef;
-        .footer-btn
-
-    {
-        width: 63px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        color: #fff;
-    }
-
-    .cancel {
-        margin-left: 20px;
-        background: #fff;
-        border: 1px solid rgba(0, 193, 222, 1);
-        color: rgba(0, 193, 222, 1);
-    }
-
-    }
+}
+.verification-code {
+    position: relative;
+}
+.verification-text {
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    right: 1px;
+    border: none;
+    color: red;
+}
 </style>

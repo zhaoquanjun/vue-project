@@ -117,7 +117,7 @@ export default {
     .back-icon {
         display: inline-block;
         position: absolute;
-        top: 10px;
+        top: 12px;
         left: 10px;
         width: 16px;
         height: 16px;

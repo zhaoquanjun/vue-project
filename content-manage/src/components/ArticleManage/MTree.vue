@@ -18,7 +18,6 @@
                 @mouseover="handlerOver(data)"
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
-                 style="cursor:move;"
             >
                 <div
                     style="display: inline-block;"
@@ -33,8 +32,17 @@
                     </span>
                 </div>
                 <template v-else>
-                    <span>{{data.label}}</span>
-                    <span>({{data.newsCount }})</span>
+                      <div class="node-label-wrap">
+                        <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="data.label"
+                            placement="bottom"
+                        >
+                            <span class="node-label">{{data.label}}</span>
+                        </el-tooltip>
+                        <span>({{data.newsCount }})</span>
+                    </div>
                 </template>
                 <!-- 三个点 分类操作 -->
                 <span
@@ -303,6 +311,16 @@ export default {
     align-items: center;
     .enter {
         margin: 0 5px;
+    }
+     .node-label-wrap{
+        cursor:move;display: flex;align-items: center;height: 100%;
+    }
+      .node-label {
+        display: block;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     .category-name {
         width: 86px;

@@ -103,12 +103,12 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "" }) => {
  */
 
 export const updateUserRemark = (targetUserId, remark) => {
-    console.log(targetUserId, remark);
+ 
     let params = {
         targetUserId: targetUserId,
         remark: remark
     };
-    return ajaxRequest.put(`/api/userInfo/UpdateUserRemark/${targetUserId}/${remark}`, params);
+    return ajaxRequest.put(`/api/userInfo/UpdateUserRemark/${targetUserId}/${remark}`, );
 
 }
 
@@ -248,6 +248,18 @@ export const updateAppIdToCookie = () => {
 export const updateUserLastAppIdAndCookie = (appId) => {
     return ajaxRequest.put('/api/userInfo/UpdateUserLastAppIdAndCookie', JSON.stringify(appId));
 }
+//更新头像
+export const updateUserPicture = (pictureUrl) => {
+    let params ={
+        pictureUrl:pictureUrl
+    }
+    return ajaxRequest.put(`/api/userInfo/UpdateUserPicture`,JSON.stringify(pictureUrl));
+}
+//设置密码
+export const changeUserPwd = (options) => {
+    return ajaxRequest.put(`/api/userInfo/ChangeUserPwd`,options);
+}
+
 /**
  * InterfaceAuthor : xuzhuan
  * 时间格式化
