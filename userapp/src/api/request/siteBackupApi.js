@@ -9,7 +9,7 @@ export const recoverySite = (siteId, siteName, fileName) => {
     return ajaxRequest.post(`${enbironmemy.siteManageApi}/api/v1/Backup/RecoverySite`, {siteId: siteId, siteName: siteName, fileName: fileName});
 }
 export const getBackupSite = (id, isSystemBackup) => {
-    return ajaxRequest.get(`${enbironmemy.siteManageApi}/api/v1/Backup/GetBackupSites`, {siteId: id, isSystemBackup: isSystemBackup, pageIndex: 1, pageSize: 10});
+    return ajaxRequest.get(`${enbironmemy.siteManageApi}/api/v1/Backup/GetBackupSites`, {siteId: id, isSystemBackup: isSystemBackup, pageIndex: 1, pageSize: 20});
 }
 export const updateDescription = (id, remark) => {
     return ajaxRequest.put(`${enbironmemy.siteManageApi}/api/v1/Backup/UpdateDescription`, {id: id, description: remark});
