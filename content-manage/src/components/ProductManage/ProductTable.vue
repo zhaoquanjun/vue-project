@@ -16,7 +16,7 @@
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column prop="name" label="产品标题">
+            <el-table-column prop="name" label="产品标题" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <img
                         v-if="scope.row.thumbnailPicUrlList.length"
@@ -29,7 +29,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="productCategoryList" label="分类">
+            <el-table-column prop="productCategoryList" label="分类" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <span>{{ scope.row.productCategoryList.length && scope.row.productCategoryList[0].displayName }}</span>
                 </template>
@@ -41,10 +41,10 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="isTop" sortable="custom" label="置顶" show-overflow-tooltip>
-                <template slot-scope="scope">
+            <el-table-column prop="isTop"  label="置顶" show-overflow-tooltip>
+                <!-- <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
-                </template>
+                </template> -->
             </el-table-column>
                        
             <el-table-column prop="createTimeStr" label="创建时间" show-overflow-tooltip></el-table-column>
