@@ -1,7 +1,7 @@
 <template>
     <div class="set-phone-number">
         <el-row class="demo-autocomplete"></el-row>
-        <el-alert title="修改手机号后，可以使用新手机登录管理平台，您关联的账户下的成员列表中的手机号会一同修改" type="success"></el-alert>
+        <el-alert :closable="false" title="修改手机号后，可以使用新手机登录管理平台，您关联的账户下的成员列表中的手机号会一同修改" type="success"></el-alert>
         <!-- <no-captcha></no-captcha> -->
         <!-- <div class="modifi-phone">
 

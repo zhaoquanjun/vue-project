@@ -76,18 +76,6 @@ export default {
         }
     },
     mounted() {},
-    watch: {
-        // if (this.memberPolicy.length > 0) {
-        //      console.log(this.memberPolicy);
-        //     for (let i = 0; i < this.userPermission.length; i++) {
-        //         for (let j = 0; j < this.memberPolicy.length; j++) {
-        //             if (this.userPermission[i] == this.memberPolicy[i]) {
-        //                 console.log("真的吗");
-        //             }
-        //         }
-        //     }
-        // }
-    },
     computed: {
         ...mapState({
             userPermission: state => state.memberManager.userPermission,

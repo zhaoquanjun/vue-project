@@ -7,13 +7,13 @@
                 <el-tooltip
                     class="item"
                     effect="light"
-                     content="可批量为多个成员增加权限，该操作不会删除"
+                    content="可批量为多个成员增加权限，该操作不会删除"
                     placement="bottom-end"
                 >
-                   <slot name="icon-tip"></slot>
+                    <slot name="icon-tip"></slot>
                 </el-tooltip>
             </span>
-            <span class="close-pannel" @click="closePanel">X</span>
+            <span class="icon-size close-pannel" @click="closePanel"></span>
         </div>
         <slot></slot>
     </div>
@@ -28,10 +28,10 @@ export default {
             default: "534"
         }
     },
-    data(){
+    data() {
         return {
-            aa:123
-        }
+            aa: 123
+        };
     },
     methods: {
         closePanel() {
@@ -56,8 +56,11 @@ export default {
     box-shadow: 0 0 3px #ccc;
     transition: width 0.2s linear;
     color: #262626;
-    overflow:hidden;
+    overflow: hidden;
     .pannel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         height: 40px;
         line-height: 40px;
         font-size: 14px;
@@ -72,6 +75,8 @@ export default {
         .close-pannel {
             float: right;
             cursor: pointer;
+            background: url("~img/close.png") no-repeat center;
+            background-size: contain;
         }
     }
 }
