@@ -27,7 +27,8 @@ export default {
                 { name: "网站备份", url: "/website/backup" },
                 { name: "我的网站", url: "/website/mysite" },
                 { name: "公司信息", url: "/website/companyinfo" },
-                { name: "域名管理", url: "/website/sitedomain" }
+                { name: "域名管理", url: "/website/sitedomain" },
+                { name: "邮件服务器", url: "/website/email" },
           ]
       }
   },

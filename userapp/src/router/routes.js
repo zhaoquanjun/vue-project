@@ -87,6 +87,16 @@ export const defaultRoutes = [
           isSub:true
         }
       },
+      {
+        path: "email",
+        name: "email",
+        component: () => import("@/views/website-manage/mailServer.vue"),
+        meta: {
+          title: "邮件服务器",
+          requiresAuth: true,
+          isSub:true
+        }
+      },
     ]
   },
   {
