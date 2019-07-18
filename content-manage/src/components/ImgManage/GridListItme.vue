@@ -50,8 +50,18 @@
                 </span>
             </div>
         </div>
-        <p class="img-desc">{{curItem.title}}</p>
-       
+        <p v-if="isRename" @click="rename()" class="img-desc">{{curItem.title}}</p>
+         <el-input
+                        style="padding-top:5px"
+                        v-else
+                        type="text"
+                        size="small"
+                        placeholder="请输入内容"
+                        v-model="curItem.title"
+                        maxlength="30"
+                        show-word-limit
+                        @blur="rename(curItem.id,curItem.title)"
+                    ></el-input>
     </div>
 </template>
 <script>
@@ -59,6 +69,7 @@ export default {
     props: ["curItem"],
     data() {
         return {
+            isRename:true,
             isHandleBtnShow: false,
             isSelectedShow: false,
           
@@ -83,6 +94,7 @@ export default {
             this.isHandleBtnShow = true;
             this.$emit("handleMove",this.curItem)
         },
+        // 查看大图
         handleLook() {
             
             this.isHandleBtnShow = true;
@@ -92,7 +104,27 @@ export default {
            
             this.isHandleBtnShow = true;
             this.$emit("batchRemovePic",this.curItem)
-        }
+        },
+        // 重命名图片名称
+        rename(id, newName) {
+           
+            if(id){
+                this.isRename = true;
+                this.$emit("rename", id, newName);
+            }else{
+                this.isRename = false;
+               
+                //
+            }
+            
+            // if (isNaN(index)) {
+            //     this.index = -1;
+            //     this.$emit("rename", id, newName);
+            //     return;
+            // }
+            // this.index = index;
+            //this.$emit("rename", id, newName);
+        },
     },
     computed: {
         isMaskShow() {
@@ -110,6 +142,11 @@ export default {
     }
 };
 </script>
+<style scoped>
+    .el-input /deep/ .el-input__inner{
+        padding-right: 50px;
+    }
+</style>
 
 <style lang="scss" scoped>
 .show {
@@ -176,5 +213,6 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+   
 }
 </style>

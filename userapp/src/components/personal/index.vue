@@ -1,11 +1,12 @@
 <template>
     <div class="personal">
         <h3>个人账号管理</h3>
+
         <dl class="user-account clear">
             <dt class="avatar">
                 <img v-if="userInfo.userHeadUrl" :src="userInfo.userHeadUrl" />
-                 <img v-else :src="defaultAvatar" />
-                <span @click="modifyAvatar">修改头像</span>
+                <img v-else :src="defaultAvatar" />
+                <span class="modify-avatar" @click="modifyAvatar">修改头像</span>
             </dt>
             <dd class="account-info">
                 <p>
@@ -47,7 +48,7 @@
                     >手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net.cn</span>
                 </div>
                 <div class="fright">
-                    <span>{{userInfo.phoneNumber}}</span>
+                    <span>{{userInfo.phoneNumber | geTel }}</span>
 
                     <span class="pd-left">
                         <button>已绑定</button> |
@@ -146,8 +147,11 @@
                 :is="curComponent"
                 :sourcePhone="userInfo.phoneNumber"
                 :provider="CurrentProvider"
+                :imageUrl="userInfo.userHeadUrl"
+                isSetPassWord="true"
                 @removeExternalUserAsync="_removeExternalUserAsync"
                 @updateWeiXinHtml="updateWeiXinHtml"
+                @getUserProfileAsync="_getUserProfileAsync"
                 :weixinHtml="weixinHtml"
                 :WeChatJsLoginParams="WeChatJsLoginParams"
             ></component>
@@ -163,7 +167,7 @@
 </template>
 <script>
 import RightPannel from "../RightPannel";
-import SetAvatar from "./SetAvatar"
+import SetAvatar from "./SetAvatar";
 import SetPhoneNumber from "./SetPhoneNumber";
 import SetPwd from "./SetPwd";
 import BindingWeChat from "./BindingWeChat";
@@ -182,7 +186,7 @@ import { updateUserName } from "@/api/index.js";
 export default {
     data() {
         return {
-            defaultAvatar:require('../../assets/defualtAvater.png'),
+            defaultAvatar: require("../../assets/defualtAvater.png"),
             input: "",
             flag: true,
             userInfo: { phoneNumber: "15801566482" },
@@ -212,129 +216,138 @@ export default {
         this._getExternalUserAsync();
         this._getWeChatJsLoginParams();
     },
-      methods: {
-            ...mapMutations(["ISRIGHTPANNELSHOW"]),          
-            async _getUserProfileAsync() {
-                let { data } = await getUserProfile();
-                this.userInfo = data;
-                this.input = data.displayName;                
-                this.createTime = formatDateTime(data.createTime, "yyyy-MM-dd hh:mm:ss");
-               // console.log(this.userInfo)
-            },
-            async _getExternalUserAsync() {
-                this.WeChatUser=null;
-                this.AlipayUser=null;
-                this.DingDingUser=null;
-                let { data } = await getExternalUserInfo();
-               // console.log(data);
-                this.ExternalUsers = data; 
-                if(this.ExternalUsers && this.ExternalUsers.length>0  ){
-                    this.ExternalUsers.forEach(element => {
-                        if(element.provider=="Weixin"){
-                            this.WeChatUser=element;
-                        }else if(element.provider=="Alipay"){
-                            this.AlipayUser=element;
-                        }else if(element.provider=="DingDing"){
-                            this.DingDingUser=element;
-                        }
-                    });
-                }
-            },
-            
-            //获取微信Js相关参数
-            async _getWeChatJsLoginParams(){
-                let { data } = await getWeChatJsLoginParams();
-                this.WeChatJsLoginParams = data;
-            },
-            //解绑第三方账号
-            async _removeExternalUserAsync(provider){
-                let { data } = await removeExternalUser(provider);
-                if(data!=undefined && data == true){
-                    this.$message({
-                        type: "success",
-                        message: "解绑成功!"
-                    });
-                    this.ISRIGHTPANNELSHOW(false)
-                    this._getExternalUserAsync();
-                }else
-                {
-                    this.$message({
-                        type: "failed",
-                        message: "解绑失败!"
-                    });
-                }
-            },
-            updateWeiXinHtml(){
-               this.weixinHtml="绑定微信" +new Date;
-            },
-            // 修改手机号
-            modifiPhoneNum() {
-                this.curComponent = SetPhoneNumber;
-                this.ISRIGHTPANNELSHOW(true)
-            },            
-            //修改密码
-            modifiPwd() {
-                this.curComponent = SetPwd;
-                this.titText = "设置密码";
-                this.ISRIGHTPANNELSHOW(true)
-            },
-            // 解绑微信
-            _untyingWeixin(provider) { 
-                this.titText="微信解绑";
-                this.CurrentProvider=provider;
-                this.curComponent = UntyingWeChat;
-                this.ISRIGHTPANNELSHOW(true)
-            },
-            //绑定微信
-            _bindingWeixin(){
-                this.titText="绑定微信";
-                this.weixinHtml="绑定微信" +new Date;
-                this.CurrentProvider="Weixin";
-                this.curComponent = BindingWeChat;
-                this.ISRIGHTPANNELSHOW(true)
-            }, 
-            //钉钉 解绑
-            _untyingDing(provider) { 
-                this.titText="钉钉解绑";
-                this.CurrentProvider=provider;
-                //this.curComponent = UntyingWeChat;
-                this.ISRIGHTPANNELSHOW(true)
-            },
-            //钉钉 绑定
-            _bindingDing() { 
-                this.titText="绑定钉钉";
-                this.CurrentProvider="Dingding";
-            },
-            //支付宝 解绑
-            _untyingAlipay(provider) {
-                this.titText="支付宝解绑";
-                this.CurrentProvider=provider;
-                //this.curComponent = UntyingWeChat;
-                this.ISRIGHTPANNELSHOW(true)
-            },
-            //支付宝 绑定
-            _bindingAlipay() {
-                this.titText="绑定支付宝";
-                this.CurrentProvider="Alipay";
-             },
-            setName() {
-                this.flag = false;
-            },
-            async blur() {
-                this.flag = true;
-                let { status } = await updateUserName(this.input);
-                if (status === 200) {
-                    this.$message({
-                        type: "success",
-                        message: "设置成功!"
-                    });
-                } else {
-                    this.$message({
-                        type: "failed",
-                        message: "设置失败!"
-                    });
-                }
-            },
+    /* 局部过滤器 */
+    filters: {
+        geTel(tel) {
+            var reg = /^(\d{3})\d{4}(\d{4})$/;
+            return tel.replace(reg, "$1****$2");
+        }
+    },
+    methods: {
+        ...mapMutations(["ISRIGHTPANNELSHOW"]),
+        async _getUserProfileAsync() {
+            let { data } = await getUserProfile();
+            this.userInfo = data;
+            this.input = data.displayName;
+            this.createTime = formatDateTime(
+                data.createTime,
+                "yyyy-MM-dd hh:mm:ss"
+            );
+            // console.log(this.userInfo)
+        },
+        async _getExternalUserAsync() {
+            this.WeChatUser = null;
+            this.AlipayUser = null;
+            this.DingDingUser = null;
+            let { data } = await getExternalUserInfo();
+            // console.log(data);
+            this.ExternalUsers = data;
+            if (this.ExternalUsers && this.ExternalUsers.length > 0) {
+                this.ExternalUsers.forEach(element => {
+                    if (element.provider == "Weixin") {
+                        this.WeChatUser = element;
+                    } else if (element.provider == "Alipay") {
+                        this.AlipayUser = element;
+                    } else if (element.provider == "DingDing") {
+                        this.DingDingUser = element;
+                    }
+                });
+            }
+        },
+
+        //获取微信Js相关参数
+        async _getWeChatJsLoginParams() {
+            let { data } = await getWeChatJsLoginParams();
+            this.WeChatJsLoginParams = data;
+        },
+        //解绑第三方账号
+        async _removeExternalUserAsync(provider) {
+            let { data } = await removeExternalUser(provider);
+            if (data != undefined && data == true) {
+                this.$message({
+                    type: "success",
+                    message: "解绑成功!"
+                });
+                this.ISRIGHTPANNELSHOW(false);
+                this._getExternalUserAsync();
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "解绑失败!"
+                });
+            }
+        },
+        updateWeiXinHtml() {
+            this.weixinHtml = "绑定微信" + new Date();
+        },
+        // 修改手机号
+        modifiPhoneNum() {
+            this.curComponent = SetPhoneNumber;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //修改密码
+        modifiPwd() {
+            this.curComponent = SetPwd;
+            this.titText = "设置密码";
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        // 解绑微信
+        _untyingWeixin(provider) {
+            this.titText = "微信解绑";
+            this.CurrentProvider = provider;
+            this.curComponent = UntyingWeChat;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //绑定微信
+        _bindingWeixin() {
+            this.titText = "绑定微信";
+            this.weixinHtml = "绑定微信" + new Date();
+            this.CurrentProvider = "Weixin";
+            this.curComponent = BindingWeChat;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //钉钉 解绑
+        _untyingDing(provider) {
+            this.titText = "钉钉解绑";
+            this.CurrentProvider = provider;
+            //this.curComponent = UntyingWeChat;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //钉钉 绑定
+        _bindingDing() {
+            this.titText = "绑定钉钉";
+            this.CurrentProvider = "Dingding";
+        },
+        //支付宝 解绑
+        _untyingAlipay(provider) {
+            this.titText = "支付宝解绑";
+            this.CurrentProvider = provider;
+            //this.curComponent = UntyingWeChat;
+            this.ISRIGHTPANNELSHOW(true);
+        },
+        //支付宝 绑定
+        _bindingAlipay() {
+            this.titText = "绑定支付宝";
+            this.CurrentProvider = "Alipay";
+        },
+        setName() {
+            this.flag = false;
+        },
+        async blur() {
+            this.flag = true;
+            let { status } = await updateUserName(this.input);
+            if (status === 200) {
+                this.$message({
+                    type: "success",
+                    message: "设置成功!"
+                });
+            } else {
+                this.$message({
+                    type: "failed",
+                    message: "设置失败!"
+                });
+            }
+        },
 
         //获取微信Js相关参数
         async _getWeChatJsLoginParams() {
@@ -361,8 +374,8 @@ export default {
         updateWeiXinHtml() {
             this.weixinHtml = "绑定微信" + new Date();
         },
-        modifyAvatar(){
-              this.curComponent = SetAvatar;
+        modifyAvatar() {
+            this.curComponent = SetAvatar;
             this.titText = "修改头像";
             this.ISRIGHTPANNELSHOW(true);
         },
@@ -440,7 +453,6 @@ export default {
             return this.$store.state.isRightPanelShow === true ? 390 : 0;
         }
     }
-    
 };
 </script>
 <style scoped>
@@ -467,7 +479,8 @@ export default {
             height: 100%;
             border-radius: 50%;
         }
-        span {
+        .modify-avatar {
+            display: none;
             position: absolute;
             left: 0;
             bottom: 0;
@@ -477,6 +490,9 @@ export default {
             padding: 5px;
             width: 100%;
             text-align: center;
+        }
+        &:hover .modify-avatar {
+            display: block;
         }
     }
     .account-info {

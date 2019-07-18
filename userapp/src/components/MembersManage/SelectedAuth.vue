@@ -15,7 +15,7 @@
                    
                     <span class="item-left auth-name ellipsis">{{item}}</span>
                     <span class="item-right auth-icon" @click.stop="removeAuth(item,index)">
-                        <i class="iconfont icon-weibiaoti-"></i>
+                        <i class="icon-size clear-icon"></i>
                     </span>
                 </li>
             </template>
@@ -101,6 +101,7 @@ export default {
 .auth-name-title {
     height: 40px;
     line-height: 40px;
+    padding: 0 5px;
     border-bottom: 1px solid #efefef;
 }
 .auth-list {
@@ -115,6 +116,7 @@ export default {
     line-height: 40px;
     width: 100%;
     padding: 0 5px;
+    box-sizing: border-box;
     span {
         display: inline-block;
     }
@@ -151,7 +153,8 @@ export default {
 .auth-icon {
     text-align: right;
 }
-.icon-weibiaoti- {
-    color: #f4542b;
+.clear-icon{
+   background: url("~img/memberManage/clear-icon.png") no-repeat center;
+   background-size:contain; 
 }
 </style>

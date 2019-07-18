@@ -2,42 +2,7 @@
     <div class="set-phone-number">
         <el-row class="demo-autocomplete"></el-row>
         <el-alert :closable="false" title="修改手机号后，可以使用新手机登录管理平台，您关联的账户下的成员列表中的手机号会一同修改" type="success"></el-alert>
-        <!-- <no-captcha></no-captcha> -->
-        <!-- <div class="modifi-phone">
-
-        <div class="smsCodeWrap">
-            <el-input
-                class="smsInput"
-                prefix-icon="el-icon-date"
-                size="small"
-                v-model="input"
-                placeholder="请输入内容"
-            >
-              <el-select
-              slot="prefix"
-                style="z-index:10000"
-                size="small"
-                @change="change"
-                v-model="value"
-                placeholder="请选择"
-            >
-                <el-option
-                    popper-class="dropdown__item"
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                >
-                    <span style="float: left">{{ item.label }}</span>
-                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-                </el-option>
-            </el-select>
-            </el-input>
-
-
-    <!-- <button class="sendSms">发送验证码</button>-->
-        <!-- </div>
-    </div>-->
+        
         <div class="from-row">
             <get-sms ref="getSms" :sourcePhone="sourcePhone"  :is-modifi="isModifi"></get-sms>
         </div>
@@ -47,7 +12,7 @@
             <button class="cancel footer-btn" @click="close">取消</button>
         </div>
     </div>
-</template>
+</template> 
 <script>
 import NoCaptcha from "../common/no-captcha";
     import GetSms from "./GetSms";    
@@ -57,6 +22,7 @@ import NoCaptcha from "../common/no-captcha";
     components: { NoCaptcha, GetSms },
     data() {
         return {
+           
             value: "",
             isModifi: false,
             input: "123",

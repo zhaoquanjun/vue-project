@@ -211,9 +211,17 @@ export default {
 #upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item{
        overflow: visible;
 }
+
+#upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item-status-label{
+    display: none;
+}
 #upload-img .upload-pic  /deep/ .el-upload-list--picture-card .el-upload-list__item-name{
     display: block;
-    text-align: center
+    text-align: center;
+    margin-right: 0;
+}
+#upload-img .upload-pic  /deep/ .el-upload-list--picture-card .el-upload-list__item-name .el-icon-document{
+    display: none;
 }
 </style>
 <style scoped lang="scss">

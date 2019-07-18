@@ -19,7 +19,6 @@
                 @mouseover="handlerOver(data)"
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
-                style="cursor:move;"
             >
                 <div
                     style="display: inline-block;"
@@ -40,7 +39,7 @@
                     </span>
                 </div>
                 <template v-else>
-                    <div style="cursor:move;display: flex;">
+                    <div class="node-label-wrap">
                         <el-tooltip
                             class="item"
                             effect="dark"
@@ -322,6 +321,9 @@ export default {
     height: 100%;
     .enter {
         margin: 0 5px;
+    }
+    .node-label-wrap{
+        cursor:move;display: flex;align-items: center;height: 100%;
     }
     .node-label {
         display: block;

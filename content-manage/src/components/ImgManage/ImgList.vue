@@ -81,11 +81,12 @@
                     :initial-index="initial"
                     arrow="always"
                     indicator-position="none"
-                    :loop="false"
+                    :loop="true"
+                    @change="change"
                 >
                     <el-carousel-item v-for="item in imgList" :key="item.id">
                         <h3>
-                            <img :src="item.fullOssUrl" />
+                            <img :src="fullOssUrl" />
                         </h3>
                     </el-carousel-item>
                 </el-carousel>
@@ -131,7 +132,8 @@ export default {
             picTitle: null,
             categoryVisable: false,
             changeCategoryPicId: null,
-            imgList:""
+            imgList:"",
+            fullOssUrl:""
         };
     },
 
@@ -171,13 +173,15 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
-            
-            this.picInfo = row;
-            console.log(index)
-           
+            this.fullOssUrl = row.fullOssUrl
             this.imgList = this.imgPageResult.list
             this.imgVisible = true;
-             this.initial = Number(index);
+            this.initial = Number(index);
+            
+        },
+        change(index){
+            this.fullOssUrl=  this.imgList[index].fullOssUrl;
+              this.picInfo = this.imgList[index];
         },
 
         changePage(page) {
@@ -194,6 +198,9 @@ export default {
     }
 };
 </script>
+<style>
+
+</style>
 
 <style scoped>
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
@@ -219,6 +226,7 @@ export default {
 #img-list-dialog .el-dialog{
     background: #262626;
     opacity: 0.7;
+    height: auto;
 }
 /* 
 

@@ -31,7 +31,7 @@
                     </el-tooltip> -->
                      <span class="item-right ellipsis"  v-if="isSelect">{{item.mark}}</span>
                     <span class="item-right auth-icon" v-else @click.stop="removeAuth(item,index)">
-                                <i class="iconfont icon-weibiaoti-"></i>
+                                <i class="iconfont clear-icon"></i>
                     </span>
                  
                        
@@ -96,6 +96,7 @@ export default {
     height: 40px;
     line-height: 40px;
     border-bottom: 1px solid #efefef;
+    padding: 0 5px;
 }
 .auth-list {
     min-height: 242px;
@@ -109,6 +110,7 @@ export default {
     line-height: 40px;
     width: 100%;
     padding: 0 5px;
+    box-sizing: border-box;
     span {
         display: inline-block;
     }
@@ -142,8 +144,9 @@ export default {
 .auth-icon {
     text-align: right;
 }
-.icon-weibiaoti- {
-    color: #f4542b;
+.clear-icon{
+   background: url("~img/memberManage/clear-icon.png") no-repeat center;
+   background-size:contain; 
 }
 }
 

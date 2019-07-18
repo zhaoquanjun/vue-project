@@ -4,12 +4,19 @@
             :data="memberList"
             style="width: 100%"
             :header-cell-style="{background:'#F5F5F5'}"
-                  @selection-change="handleSelectionChange"
+            @selection-change="handleSelectionChange"
+            :cell-class-name="checkbox"
+           
         >
-            <el-table-column type="selection" :selectable="handleDisable" ></el-table-column>
+            <el-table-column type="selection" :selectable="handleDisable"></el-table-column>
             <el-table-column prop="name" label="姓名" width="180"></el-table-column>
             <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
-            <el-table-column prop="policies" label="权限数量(项)"></el-table-column>
+            <el-table-column prop="policies" label="权限数量(项)">
+                      <template slot-scope="scope">
+                          <span>{{scope.row.policies}} </span> 
+                          <span style="padding-left:5px" v-if="scope.row.isSystem">(全部权限)</span>
+                      </template>  
+            </el-table-column>
             <el-table-column prop="remark" label="备注">
                 <template slot-scope="scope">
                     <el-popover
@@ -21,7 +28,9 @@
                         @show="showRemark(scope.row)"
                     >
                         <span slot="reference">
-                            <div class="remark-desc">{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
+                            <div
+                                class="remark-desc"
+                            >{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
                             <svg-icon icon-class="remark"></svg-icon>
                         </span>
                         <div class="textareaWrap">
@@ -42,14 +51,17 @@
                                     type="primary"
                                     @click="cancelInput(scope.$index)"
                                 >取消</button>
-                                <button class="popover-btn save" @click="saveInputValue(scope.$index,scope.row)">保存</button>
+                                <button
+                                    class="popover-btn save"
+                                    @click="saveInputValue(scope.$index,scope.row)"
+                                >保存</button>
                             </div>
                         </div>
                     </el-popover>
                 </template>
             </el-table-column>
             <el-table-column label="操作">
-                <template slot-scope="scope">
+                <template slot-scope="scope" v-if="!scope.row.isSystem">
                     <button
                         class="handle-btn handle-btn-item"
                         @click="handleEdit(scope.$index, scope.row)"
@@ -65,12 +77,16 @@
         <div class="pageing">
             <el-pagination
                 background
-                layout="total, prev, pager, next"
+                layout="total,slot,sizes, prev, pager, next"
                 :total="memberInfo.totalCount"
                 :page-count="memberInfo.totalPages"
-                
+                :page-sizes="[10, 20, 50]"
+                prev-text="上一页"
+                next-text="下一页"
                 @current-change="changePage"
-            ></el-pagination>
+            >
+                <div class="sizes-title">每页显示</div>
+            </el-pagination>
         </div>
     </div>
 </template>
@@ -96,14 +112,22 @@ export default {
         };
     },
     methods: {
+        checkbox(row) {
+           
+            if (row.row.isSystem === true && row.columnIndex === 0) {
+                 console.log(row)
+                return "mycell";
+
+            }
+        },
         handleDisable(row, index) {
             return true;
             // 函数需要一个返回值,true为可选,false为不可选择
-             //if (index == 0) {
-             //  return false;
-             //} else {
-             //  return true;
-             //}
+            //if (index == 0) {
+            //  return false;
+            //} else {
+            //  return true;
+            //}
         },
         /**
          * 编辑操作
@@ -141,13 +165,13 @@ export default {
             this.remarkValue = "";
         },
 
-        saveInputValue(id,row) {            
+        saveInputValue(id, row) {
             let data = {
-                targetUserId:row.userId,
-                remark:this.remarkValue
+                targetUserId: row.userId,
+                remark: this.remarkValue
             };
             this.memberList[id].remark = this.remarkValue;
-            this.$emit("updateUserRemark", data)
+            this.$emit("updateUserRemark", data);
             this.$refs[`popover-${id}`].doClose();
         },
 
@@ -166,6 +190,9 @@ export default {
 };
 </script>
 <style>
+.mycell .el-checkbox__input {
+    display: none;
+}
 #member-table .el-table th {
     padding: 10px 0;
     background: #f5f5f5;
@@ -185,18 +212,24 @@ export default {
     white-space: nowrap;
     width: 100%;
 }
-#member-table .el-table .cell .remark-desc{
-        display: inline-block;
+#member-table .el-table .cell .remark-desc {
+    display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 81%;
-}   
-#member-table  .el-checkbox__input.is-checked  .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    /* width: 81%; */
+    vertical-align: middle;
+}
+#member-table .el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
     background-color: #00c1de;
     border-color: #00c1de;
 }
-#member-table  .el-pagination.is-background .el-pager li:not(.disabled)#member-table .active {
+#member-table
+    .el-pagination.is-background
+    .el-pager
+    li:not(.disabled)#member-table
+    .active {
     background-color: #01c0de;
 }
 #member-table .el-pagination .el-pager li {
@@ -210,10 +243,15 @@ export default {
 #member-table .el-pagination .el-pagination__total {
     color: #8c8c8c;
 }
+#member-table .el-pagination /deep/ .btn-prev,
+#member-table .el-pagination /deep/ .btn-next {
+    padding: 0 10px;
+}
 
 </style>
 
 <style lang="scss" scoped>
+
 .textareaWrap {
     background: #fff;
     position: relative;
@@ -251,6 +289,12 @@ export default {
     display: flex;
     float: right;
     margin-top: 30px;
+    .sizes-title {
+        line-height: 28px;
+        color: #8c8c8c;
+        font-weight: 400;
+        display: inline-block;
+    }
 }
 .myCell .el-checkbox__input {
     display: none;

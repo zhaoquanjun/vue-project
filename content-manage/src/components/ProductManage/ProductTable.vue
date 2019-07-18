@@ -16,7 +16,7 @@
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column prop="name" label="文章标题">
+            <el-table-column prop="name" label="产品标题">
                 <template slot-scope="scope">
                     <img
                         v-if="scope.row.thumbnailPicUrlList.length"

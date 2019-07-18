@@ -3,6 +3,7 @@
     <div class="login">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <div v-if="!isModifi">
+               
                 <el-form-item prop="verification" class="verification-code">
                     <el-input
                         type="verification"
@@ -65,7 +66,6 @@
 </template>
  
 <script>
-    import { watch } from "fs"; 
     import { updateUserPhone } from "@/api/index.js";
     import { sendSourcePhoneCode } from "@/api/index.js";
     import { sendTargetPhoneCode } from "@/api/index.js"; 

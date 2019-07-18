@@ -83,10 +83,10 @@
                     <i>{{count}}</i> 个产品
                 </span>
                <div style="float:right">
-                    <el-button size="small" @click="batchPublish(3, false)">上架</el-button>
-                <el-button size="small" @click="batchPublish(3, true)">下架</el-button>
-                <el-button size="small" @click="batchCopy">复制</el-button>
-                <el-button style="margin-right: 10px;" size="small" @click="batchRemove(1,true)">删除</el-button>
+                    <el-button class="deleteActive" size="small" @click="batchPublish(3, false)">上架</el-button>
+                <el-button class="deleteActive" size="small" @click="batchPublish(3, true)">下架</el-button>
+                <el-button class="deleteActive" size="small" @click="batchCopy">复制</el-button>
+                <el-button class="deleteActive" style="margin-right: 10px;" size="small" @click="batchRemove(1,true)">删除</el-button>
                 <el-dropdown trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
                         <el-button size="small"> <svg-icon icon-class="across-dot"></svg-icon></el-button>

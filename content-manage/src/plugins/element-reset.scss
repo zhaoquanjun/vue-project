@@ -31,12 +31,14 @@
     .el-dialog {
          background: transparent;
          box-shadow: none;
+         height: auto;
      }
     .el-dialog__body {
          text-align: center;
      }
      .el-dialog__headerbtn{
-         right: 0;
+         position: fixed;
+         right: 57px;
      }
     .el-dialog__headerbtn .el-dialog__close {
          color: #fff;
@@ -54,10 +56,32 @@
      }
   .el-carousel__item.is-animating{
         display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        align-items: center;
+        justify-content: center;
+    } 
+    .dislog-footer{
+        text-align: center;
+        position: fixed;
+            width: 100%;
+        left: 0;
+        bottom: 15px;
+       
+    }
+  .el-dialog__wrapper{
+        display: flex;
+        align-items: center;
+       
+        
+    }
+   .dislog-footer span{
+        padding: 0 20px;
+        color: #fff;
+    }
+    .v-modal{
+        opacity: 0.8;
+    }
  }
+
 /* 列表分页样式  */
 #table-list .el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: #01c0de;
@@ -74,4 +98,10 @@
 #table-list .el-pager .active {
     background-color: #01c0de;
     color: #fff;
+}
+// button focus样式
+button.deleteActive:focus{
+    color: #606266;
+    background: #fff;
+    border: 1px solid #DCDFE6;
 }

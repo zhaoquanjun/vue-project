@@ -58,10 +58,9 @@
       </el-dialog>
        <right-pannel :style="{width:pannelWidth+'px'}">
           <span slot="title-text">{{rightPanelTitle}}</span>
-          <i slot="icon-tip">
-            <svg-icon icon-class="tip-icon"></svg-icon>
+          <i slot="icon-tip" class="icon-size icon-explain">
           </i>
-          <auth-config ref="authConfig" :userIds="userIds" :is-batch="isBatch" />
+          <auth-config ref="authConfig" :userIds="userIds" :is-batch="isBatch" @getMemberList="getMemberList" />
         </right-pannel>
         <right-pannel :style="{width:isInvitationlWidth+'px'}">
           <span slot="title-text" id="title-text">邀请成员</span>
@@ -152,6 +151,7 @@ export default {
               this.memberList = this.memberList.filter(
                 item => item !== curItem
               );
+              this.getMemberList()
               this.$message({
                 type: "success",
                 message: "删除成功!"
@@ -200,6 +200,7 @@ export default {
       this._getBeInvitedUsers(options).then(jsonData => {
         this.memberInfo = jsonData;
         this.memberList = jsonData.items;
+     
       });
     },
     /**
@@ -283,7 +284,7 @@ export default {
       return this.multipleSelection.length > 0 ? false : true;
     },
     memberCount() {
-      return this.memberList.length;
+      return this.memberInfo.totalCount;
     },
     /**
      * 批量配置权限的成员userid集合
@@ -334,8 +335,8 @@ export default {
     height: 34px;
     line-height: 34px;
     width: 90px;
-    background: #eeeeee;
-
+    background: #F2F2F2;
+    color: #C3C3C3;
     margin-right: 10px;
   }
   .invite-member {
@@ -350,6 +351,11 @@ export default {
   width: 248px;
   height: 36px;
   box-sizing: border-box;
+}
+.icon-explain{
+  margin: 0 5px;
+  background: url("~img/memberManage/explain.png") no-repeat center;
+   background-size:contain; 
 }
 </style>
 

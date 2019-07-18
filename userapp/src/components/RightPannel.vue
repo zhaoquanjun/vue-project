@@ -8,7 +8,7 @@
                     class="item"
                     effect="light"
                     content="可批量为多个成员增加权限，该操作不会删除"
-                    placement="bottom-end"
+                    placement="right"
                 >
                     <slot name="icon-tip"></slot>
                 </el-tooltip>
@@ -66,7 +66,8 @@ export default {
         font-size: 14px;
         overflow: hidden;
         border-bottom: 1px solid #efefef;
-        span {
+        vertical-align: middle;
+        >span {
             padding: 0 10px;
         }
         .auth-title {

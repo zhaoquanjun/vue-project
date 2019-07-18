@@ -15,6 +15,7 @@
                 <el-tree
                     id="tree-option"
                     ref="selectTree"
+                    :default-expand-all="true" 
                     :expand-on-click-node="false"
                     :accordion="accordion"
                     :data="treeResult"
@@ -67,6 +68,10 @@ export default {
       type:Boolean,
       default:()=>{ return false }
     },
+    isexpand:{
+      type:Boolean,
+      default:()=>{ return false }
+    }
   },
   data() {
     return {
@@ -150,13 +155,20 @@ export default {
   ul li >>>.el-tree .el-tree-node__content{
     height:auto;
     padding: 0 20px;
+     display: block;
+        width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
   }
   .el-tree-node__label{
     font-weight: normal;
+    
   }
   .el-tree >>>.is-current .el-tree-node__label{
     color: #409EFF;
     font-weight: 700;
+    
   }
   .el-tree >>>.is-current .el-tree-node__children .el-tree-node__label{
     color:#606266;

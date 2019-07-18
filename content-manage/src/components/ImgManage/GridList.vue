@@ -8,6 +8,7 @@
                 @viewPic="viewPic"
                 @handleMove="handleMove"
                 @batchRemovePic="batchRemovePic"
+                @rename="rename"
                 ></grid-list-item>
             </li>
         </ul>
@@ -80,6 +81,9 @@ export default {
         },
         batchRemovePic(item){
              this.$emit("batchRemove",[item.id])
+        },
+        rename(id, newName){
+             this.$emit("rename", id, newName);
         },
     }
 };

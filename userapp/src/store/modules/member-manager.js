@@ -35,9 +35,11 @@ const memberManager = {
                 userPermission.forEach((item)=>{
                     if(memberPolicy.includes(item.name)){
                         item.show = true;
+                    }else{
+                        item.show = false;
                     }
                 })
-            })
+            },500)
            
         },
         /**

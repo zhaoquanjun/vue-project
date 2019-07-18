@@ -8,38 +8,52 @@
             :before-upload="beforeAvatarUpload"
             :headers="headers"
         >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <img v-if="picUrl" :src="picUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <el-button class="upload-btn" size="small" type="primary">点击上传</el-button>
+            <el-button
+                class="upload-btn"
+                size="small"
+                plain
+                type="primary"
+            >{{!!picUrl?'上传头像':'重新上传'}}</el-button>
         </el-upload>
+        <div class="picture-format">支持jpg、png、jpeg、bmp格式，小于10M</div>
         <div class="footer">
-            <button class="confirm footer-btn">确定</button>
-            <button class="cancel footer-btn">取消</button>
+            <button class="confirm footer-btn" @click="comfirm">确定</button>
+            <button class="cancel footer-btn" @click="close">取消</button>
         </div>
     </div>
 </template>
 <script>
 import environment from "@/environment/index.js";
+import { updateUserPicture } from "@/api/index.js";
 export default {
+    props: ["imageUrl"],
     data() {
         return {
-            imageUrl: "//newwezhanoss.oss-cn-hangzhou.aliyuncs.com/DetailImages/news/thumbnail/meeting-1.png",
-            uploadPicAction:`${environment.uploadPicUrl}/0`,
+            picUrl: "",
+            uploadPicAction: `${environment.uploadPicUrl}/0`,
             headers: {
                 appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
                 Authorization: ""
             },
+            picUrl: "",
+            textName: "上传头像"
         };
     },
+    created() {
+        this.picUrl = this.imageUrl;
+    },
+    mounted() {},
     methods: {
         handleAvatarSuccess(res, file) {
-            this.imageUrl = URL.createObjectURL(file.raw);
+            this.picUrl = file.response;
         },
         beforeAvatarUpload(file) {
-             this.headers.Authorization =
+            this.headers.Authorization =
                 "Bearer " + this.$store.state.user.accessToken.Authorization;
-              this.headers.appId =this.$store.state.dashboard.appid;
-              
+            this.headers.appId = this.$store.state.dashboard.appid;
+
             const isPic =
                 ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
                 -1;
@@ -53,6 +67,16 @@ export default {
                 this.$message.error(`上传图片大小不能超过 ${maxMb}MB!`);
             }
             return isPic && isSizeOk;
+        },
+        async comfirm() {
+            let { status } = await updateUserPicture(this.picUrl);
+            if (status === 200) {
+                this.$emit("getUserProfileAsync");
+                this.$store.commit("CLOSERIGHTPANNEL", false);
+            }
+        },
+        close() {
+            this.$store.commit("CLOSERIGHTPANNEL", false);
         }
     }
 };
@@ -93,6 +117,10 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+}
+.picture-format {
+    text-align: center;
+    margin-top: 100px;
 }
 </style>
 
