@@ -152,6 +152,7 @@
                 @removeExternalUserAsync="_removeExternalUserAsync"
                 @updateWeiXinHtml="updateWeiXinHtml"
                 @getUserProfileAsync="_getUserProfileAsync"
+                @getExternalUserAsync="_getExternalUserAsync"
                 :weixinHtml="weixinHtml"
                 :WeChatJsLoginParams="WeChatJsLoginParams"
             ></component>
@@ -216,186 +217,92 @@ export default {
         this._getExternalUserAsync();
         this._getWeChatJsLoginParams();
     },
-    /* 局部过滤器 */
+       /* 局部过滤器 */
     filters: {
         geTel(tel) {
             var reg = /^(\d{3})\d{4}(\d{4})$/;
             return tel.replace(reg, "$1****$2");
         }
     },
-    methods: {
-        ...mapMutations(["ISRIGHTPANNELSHOW"]),
+      methods: {
+        ...mapMutations(["ISRIGHTPANNELSHOW"]),          
         async _getUserProfileAsync() {
             let { data } = await getUserProfile();
             this.userInfo = data;
-            this.input = data.displayName;
-            this.createTime = formatDateTime(
-                data.createTime,
-                "yyyy-MM-dd hh:mm:ss"
-            );
+            this.input = data.displayName;                
+            this.createTime = formatDateTime(data.createTime, "yyyy-MM-dd hh:mm:ss");
             // console.log(this.userInfo)
         },
         async _getExternalUserAsync() {
-            this.WeChatUser = null;
-            this.AlipayUser = null;
-            this.DingDingUser = null;
+            this.WeChatUser=null;
+            this.AlipayUser=null;
+            this.DingDingUser=null;
             let { data } = await getExternalUserInfo();
             // console.log(data);
-            this.ExternalUsers = data;
-            if (this.ExternalUsers && this.ExternalUsers.length > 0) {
+            this.ExternalUsers = data; 
+            if(this.ExternalUsers && this.ExternalUsers.length>0  ){
                 this.ExternalUsers.forEach(element => {
-                    if (element.provider == "Weixin") {
-                        this.WeChatUser = element;
-                    } else if (element.provider == "Alipay") {
-                        this.AlipayUser = element;
-                    } else if (element.provider == "DingDing") {
-                        this.DingDingUser = element;
+                    if(element.provider=="Weixin"){
+                        this.WeChatUser=element;
+                    }else if(element.provider=="Alipay"){
+                        this.AlipayUser=element;
+                    }else if(element.provider=="DingDing"){
+                        this.DingDingUser=element;
                     }
                 });
             }
         },
-
         //获取微信Js相关参数
-        async _getWeChatJsLoginParams() {
+        async _getWeChatJsLoginParams(){
             let { data } = await getWeChatJsLoginParams();
             this.WeChatJsLoginParams = data;
         },
         //解绑第三方账号
-        async _removeExternalUserAsync(provider) {
+        async _removeExternalUserAsync(provider){
             let { data } = await removeExternalUser(provider);
-            if (data != undefined && data == true) {
+            if(data!=undefined && (data == "true" || data == true)){
                 this.$message({
                     type: "success",
                     message: "解绑成功!"
                 });
-                this.ISRIGHTPANNELSHOW(false);
+                this.ISRIGHTPANNELSHOW(false)
                 this._getExternalUserAsync();
-            } else {
+            }else
+            {
                 this.$message({
                     type: "failed",
                     message: "解绑失败!"
                 });
             }
         },
-        updateWeiXinHtml() {
-            this.weixinHtml = "绑定微信" + new Date();
-        },
-        // 修改手机号
-        modifiPhoneNum() {
-            this.curComponent = SetPhoneNumber;
-            this.ISRIGHTPANNELSHOW(true);
-        },
-        //修改密码
-        modifiPwd() {
-            this.curComponent = SetPwd;
-            this.titText = "设置密码";
-            this.ISRIGHTPANNELSHOW(true);
-        },
-        // 解绑微信
-        _untyingWeixin(provider) {
-            this.titText = "微信解绑";
-            this.CurrentProvider = provider;
-            this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true);
-        },
-        //绑定微信
-        _bindingWeixin() {
-            this.titText = "绑定微信";
-            this.weixinHtml = "绑定微信" + new Date();
-            this.CurrentProvider = "Weixin";
-            this.curComponent = BindingWeChat;
-            this.ISRIGHTPANNELSHOW(true);
-        },
-        //钉钉 解绑
-        _untyingDing(provider) {
-            this.titText = "钉钉解绑";
-            this.CurrentProvider = provider;
-            //this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true);
-        },
-        //钉钉 绑定
-        _bindingDing() {
-            this.titText = "绑定钉钉";
-            this.CurrentProvider = "Dingding";
-        },
-        //支付宝 解绑
-        _untyingAlipay(provider) {
-            this.titText = "支付宝解绑";
-            this.CurrentProvider = provider;
-            //this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true);
-        },
-        //支付宝 绑定
-        _bindingAlipay() {
-            this.titText = "绑定支付宝";
-            this.CurrentProvider = "Alipay";
-        },
-        setName() {
-            this.flag = false;
-        },
-        async blur() {
-            this.flag = true;
-            let { status } = await updateUserName(this.input);
-            if (status === 200) {
-                this.$message({
-                    type: "success",
-                    message: "设置成功!"
-                });
-            } else {
-                this.$message({
-                    type: "failed",
-                    message: "设置失败!"
-                });
-            }
-        },
 
-        //获取微信Js相关参数
-        async _getWeChatJsLoginParams() {
-            let { data } = await getWeChatJsLoginParams();
-            this.WeChatJsLoginParams = data;
-        },
-        //解绑第三方账号
-        async _removeExternalUserAsync(provider) {
-            let { data } = await removeExternalUser(provider);
-            if (data == "true") {
-                this.$message({
-                    type: "success",
-                    message: "解绑成功!"
-                });
-                this.ISRIGHTPANNELSHOW(false);
-                this._getExternalUserAsync();
-            } else {
-                this.$message({
-                    type: "failed",
-                    message: "解绑失败!"
-                });
-            }
-        },
-        updateWeiXinHtml() {
-            this.weixinHtml = "绑定微信" + new Date();
-        },
         modifyAvatar() {
             this.curComponent = SetAvatar;
             this.titText = "修改头像";
             this.ISRIGHTPANNELSHOW(true);
         },
+        updateWeiXinHtml(){
+            this.weixinHtml="绑定微信" +new Date;
+
+        },
         // 修改手机号
         modifiPhoneNum() {
+            this.titText = "修改手机号";
             this.curComponent = SetPhoneNumber;
-            this.ISRIGHTPANNELSHOW(true);
-        },
+            this.ISRIGHTPANNELSHOW(true)
+        },            
         //修改密码
         modifiPwd() {
             this.curComponent = SetPwd;
             this.titText = "设置密码";
-            this.ISRIGHTPANNELSHOW(true);
+            this.ISRIGHTPANNELSHOW(true)
         },
         // 解绑微信
-        _untyingWeixin(provider) {
-            this.titText = "微信解绑";
-            this.CurrentProvider = provider;
+        _untyingWeixin(provider) { 
+            this.titText="微信解绑";
+            this.CurrentProvider=provider;
             this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true);
+            this.ISRIGHTPANNELSHOW(true)
         },
         //绑定微信
         _bindingWeixin() {
@@ -406,28 +313,28 @@ export default {
             this.ISRIGHTPANNELSHOW(true);
         },
         //钉钉 解绑
-        _untyingDing(provider) {
-            this.titText = "钉钉解绑";
-            this.CurrentProvider = provider;
+        _untyingDing(provider) { 
+            this.titText="钉钉解绑";
+            this.CurrentProvider=provider;
             //this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true);
+            this.ISRIGHTPANNELSHOW(true)
         },
         //钉钉 绑定
-        _bindingDing() {
-            this.titText = "绑定钉钉";
-            this.CurrentProvider = "Dingding";
+        _bindingDing() { 
+            this.titText="绑定钉钉";
+            this.CurrentProvider="Dingding";
         },
         //支付宝 解绑
         _untyingAlipay(provider) {
-            this.titText = "支付宝解绑";
-            this.CurrentProvider = provider;
-            //this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true);
+            this.titText="支付宝解绑";
+            this.CurrentProvider=provider;
+            this.curComponent = UntyingWeChat;
+            this.ISRIGHTPANNELSHOW(true)
         },
         //支付宝 绑定
         _bindingAlipay() {
-            this.titText = "绑定支付宝";
-            this.CurrentProvider = "Alipay";
+            this.titText="绑定支付宝";
+            this.CurrentProvider="Alipay";
         },
         setName() {
             this.flag = false;
@@ -446,7 +353,12 @@ export default {
                     message: "设置失败!"
                 });
             }
-        }
+        },
+        modifyAvatar(){
+            this.curComponent = SetAvatar;
+            this.titText = "修改头像";
+            this.ISRIGHTPANNELSHOW(true);
+        },
     },
     computed: {
         pannelWidth() {
