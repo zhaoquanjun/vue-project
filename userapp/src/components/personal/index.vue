@@ -148,6 +148,7 @@
                 :provider="CurrentProvider"
                 @removeExternalUserAsync="_removeExternalUserAsync"
                 @updateWeiXinHtml="updateWeiXinHtml"
+                @getExternalUserAsync="_getExternalUserAsync"
                 :weixinHtml="weixinHtml"
                 :WeChatJsLoginParams="WeChatJsLoginParams"
             ></component>
@@ -344,7 +345,7 @@ export default {
         //解绑第三方账号
         async _removeExternalUserAsync(provider) {
             let { data } = await removeExternalUser(provider);
-            if (data == "true") {
+            if (data == "true" || data == true) {
                 this.$message({
                     type: "success",
                     message: "解绑成功!"

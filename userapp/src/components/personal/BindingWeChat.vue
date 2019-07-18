@@ -54,6 +54,7 @@ export default {
                     type: "success", 
                     message: "绑定成功!"
                 });
+                this.$emit('getExternalUserAsync');
             }else if(data.result == "False"){
                 this.bindResultMessage=data.message;
                 this.refqroce();
