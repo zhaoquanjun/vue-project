@@ -7,7 +7,6 @@
             :expand-on-click-node="false"
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
-            accordion
             ref="tree"
             draggable
             :allow-drop="allowDrop"
@@ -251,13 +250,11 @@ export default {
                     i < this.$refs.tree.store._getAllNodes().length;
                     i++
                 ) {
-                    this.$refs.tree.store._getAllNodes()[
-                        i
-                    ].expanded = this.isexpand;
+                    this.$refs.tree.store._getAllNodes()[i].expanded = this.isexpand;
                 }
                 return false;
             }
-
+            
             if (data.isNewAdd) return;
             this.curlabelName = data.label;
             this.articleSearchOptions.categoryId = data.id;

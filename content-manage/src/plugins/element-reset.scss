@@ -128,3 +128,10 @@ button.deleteActive:focus{
         border-left: 2px solid #00C1DE;
     }
 }
+
+// 修改element input设置字数显示 最后遮挡问题
+.el-input .el-input__inner{
+    height: 32px;
+    line-height: 32px;
+    padding-right: 60px;
+}

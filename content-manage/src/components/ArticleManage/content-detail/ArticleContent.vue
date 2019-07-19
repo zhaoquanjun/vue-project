@@ -351,6 +351,11 @@ export default {
         };
     },
     methods: {
+        textIndent(ele, width) {
+            this.$nextTick(() => {
+                ele.style.textIndent = width + "px";
+            });
+        },
         keywords(value, name) {
             if (name === "metaKeywords") {
                 if (this.articleDetail.metaKeywords.length >= 5 || !value) {
@@ -358,37 +363,33 @@ export default {
                 }
                 this.metaKeyword = "";
                 this.articleDetail.metaKeywords.push(value);
-                this.$nextTick(() => {
-                    this.$refs.metaKeywordsInput.$el.children[0].style.textIndent =
-                        this.$refs.metaKeywordList.clientWidth + "px";
-                    //  this.$refs.keywordInput.children[0].style.textIndent = this.$refs.keywordList.clientWidth + 'px'
-                });
+                let ele = this.$refs.metaKeywordsInput.$el.children[0];
+                let width = this.$refs.metaKeywordList.clientWidth;
+                this.textIndent(ele, width);
             } else {
                 if (this.articleDetail.searchKeywords.length >= 5 || !value) {
                     return;
                 }
                 this.keywordValue = "";
                 this.articleDetail.searchKeywords.push(value);
-                this.$nextTick(() => {
-                    this.$refs.keywordInput.$el.children[0].style.textIndent =
-                        this.$refs.keywordList.clientWidth + "px";
-                    //  this.$refs.keywordInput.children[0].style.textIndent = this.$refs.keywordList.clientWidth + 'px'
-                });
+                let ele = this.$refs.keywordInput.$el.children[0];
+                let width = this.$refs.keywordList.clientWidth;
+                this.textIndent(ele, width);
             }
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
             this.$nextTick(() => {
-                    this.$refs.keywordInput.$el.children[0].style.textIndent =
-                        this.$refs.keywordList.clientWidth + "px";
-                });
+                this.$refs.keywordInput.$el.children[0].style.textIndent =
+                    this.$refs.keywordList.clientWidth + "px";
+            });
         },
         removeCurmetaKeyWord(index) {
             this.articleDetail.metaKeywords.splice(index, 1);
-             this.$nextTick(() => {
-                    this.$refs.metaKeywordsInput.$el.children[0].style.textIndent =
-                        this.$refs.metaKeywordList.clientWidth + "px";
-                });
+            this.$nextTick(() => {
+                metaKeywordsInput.$el.children[0].style.textIndent =
+                    this.$refs.metaKeywordList.clientWidth + "px";
+            });
         },
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
@@ -401,8 +402,10 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
-            this.articleDetail = data;
+            data.metaKeywords = data.metaKeywords.split(",");
+            data.searchKeywords = data.searchKeywords.split(",");
             console.log(data, "000-----");
+            this.articleDetail = data;
             this.articleDetail.NewId = data.id;
         },
         //选择移动分类时的节点
@@ -551,7 +554,20 @@ export default {
         //this.$refs.myQuillEditor.quill.root.addEventListener("dblclick",this.imgChangeSizeHandler,!1);
         addQuillTitle();
     },
-
+    computed: {},
+    watch: {
+        "articleDetail.searchKeywords"() {
+            let width = this.articleDetail.searchKeywords.length * 42 + 30;
+            let ele = this.$refs.keywordInput.$el.children[0];
+            this.textIndent(ele, width);
+        },
+        "articleDetail.metaKeywords"() {
+            let width = this.articleDetail.metaKeywords.length * 42 + 30;
+            let ele = this.$refs.metaKeywordsInput.$el.children[0];
+            this.textIndent(ele, width);
+        },
+        deep: true
+    }
 };
 </script>
 <style>

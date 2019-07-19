@@ -66,13 +66,9 @@
                     </span>
                     <span @click="switchIsDesc('asc')">
                         <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
-                        <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                        <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                     </span>
                     <span @click="switchIsDesc('dec')">
                         <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
-                        <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                        <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                     </span>
                 </div>
                 <div class="head-item head-handle-btn">

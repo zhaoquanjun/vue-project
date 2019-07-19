@@ -8,7 +8,7 @@
             :indent="10"
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
-            accordion
+          
             ref="tree"
             draggable
             :allow-drop="allowDrop"

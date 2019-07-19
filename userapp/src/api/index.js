@@ -256,6 +256,10 @@ export const updateUserPicture = (pictureUrl) => {
     return ajaxRequest.put(`/api/userInfo/UpdateUserPicture`,JSON.stringify(pictureUrl));
 }
 //设置密码
+export const updateUserPwd = (options) => {
+    return ajaxRequest.put(`/api/userInfo/UpdateUserPwd`,options);
+}
+//修改密码
 export const changeUserPwd = (options) => {
     return ajaxRequest.put(`/api/userInfo/ChangeUserPwd`,options);
 }
