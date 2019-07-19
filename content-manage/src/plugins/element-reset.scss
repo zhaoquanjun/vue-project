@@ -105,3 +105,33 @@ button.deleteActive:focus{
     background: #fff;
     border: 1px solid #DCDFE6;
 }
+
+// 侧边分类树节点
+#asideTree{
+    .el-tree .el-tree-node__content {
+        height: 44px;
+        position: relative !important;
+        background: #fff;
+    }
+    .el-tree .el-tree-node__label {
+        font-size: 12px;
+    }
+    .el-tree .el-tree-node__expand-icon{
+            // color: #8C8C8C;
+    }
+    .el-tree-node > .el-tree-node__children {
+        overflow: visible !important;
+    }
+    .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
+        color: #00C1DE;
+        background: rgb(247, 247, 247);
+        border-left: 2px solid #00C1DE;
+    }
+}
+
+// 修改element input设置字数显示 最后遮挡问题
+.el-input .el-input__inner{
+    height: 32px;
+    line-height: 32px;
+    padding-right: 60px;
+}

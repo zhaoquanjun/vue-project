@@ -5,7 +5,7 @@
         <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
         <el-button type="danger" @click="batchPublish(null,false)">批量上线</el-button>
         <el-button type="danger" @click="batchPublish(null,true)">批量下线</el-button>
-        <el-button type="danger" @click="batchMove(null)">批量移动</el-button> -->
+        <el-button type="danger" @click="batchMove(null)">批量移动</el-button>-->
         <el-table
             ref="multipleTable"
             :data="articlePageResult.list"
@@ -15,22 +15,41 @@
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column :show-overflow-tooltip="true" prop="title" label="文章标题" min-width="150">
+            <el-table-column
+                :show-overflow-tooltip="true"
+                prop="title"
+                label="文章标题"
+                min-width="150"
+                 
+            >
                 <template slot-scope="scope">
-                    <img :src="scope.row.pictureUrl" :onerror="defaultImg" class="cover" alt>
+                    <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" class="cover" alt />
+                    <img v-else :src="defaultImg" class="cover" alt />
                     <span>{{ scope.row.title }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
+            <el-table-column prop="categoryName" label="分类" show-overflow-tooltip>
+                 <template slot-scope="scope">
+                    <span>{{ scope.row.categoryName }}</span>
+                </template>
+            </el-table-column>
 
             <el-table-column prop="isPublishPrt" label="状态" show-overflow-tooltip></el-table-column>
 
             <el-table-column prop="isTopPrt" label="置顶" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="createUser" label="作者" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createUser" label="作者" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.createUser }}</span>
+                </template>
+            </el-table-column>
 
-            <el-table-column prop="createTimePrt" label="创建时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimePrt" label="创建时间" show-overflow-tooltip>
+                 <template slot-scope="scope">
+                    <span>{{ scope.row.createTimePrt }}</span>
+                </template>
+            </el-table-column>
 
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -69,8 +88,11 @@
             ></el-pagination>
         </div>
         <ul class="operate-section" ref="operateSection">
-            <li class="operate-item" v-for="(it, index) in operateList" :key="index"
-            @click="handleMoreOperate(it.flag)"
+            <li
+                class="operate-item"
+                v-for="(it, index) in operateList"
+                :key="index"
+                @click="handleMoreOperate(it.flag)"
             >{{it.name}}</li>
         </ul>
         <!-- <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
@@ -86,7 +108,7 @@ export default {
     props: ["articlePageResult", "articleSearchOptions", "treeResult"],
     data() {
         return {
-             defaultImg:require("../../../static/images/content-default-pic.png"),
+            defaultImg: require("../../../static/images/content-default-pic.png"),
             multipleSelection: [],
             operateList: [
                 { name: "移动", flag: "move" },
@@ -95,14 +117,14 @@ export default {
                 { name: "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ],
-            row:"",
+            row: ""
         };
     },
     mounted() {
         document.addEventListener("click", () => {
             this.$nextTick(() => {
-                if(this.$refs.operateSection) this.$refs.operateSection.style.display = "none";
-                
+                if (this.$refs.operateSection)
+                    this.$refs.operateSection.style.display = "none";
             });
         });
     },
@@ -130,37 +152,36 @@ export default {
          */
         handleSelectionChange(val) {
             this.multipleSelection = val;
-            this.$emit("handleSelectionChange",val)
+            this.$emit("handleSelectionChange", val);
         },
         /**
          * 编辑文章
          */
         handleEdit(row) {
             console.log(row);
-            this.$emit("handleEditArticle",row)
-
+            this.$emit("handleEditArticle", row);
         },
         _handleShowMoreOperate(ev, row) {
-            console.log(row,'00000')
-            this. operateList =  [
+            console.log(row, "00000");
+            (this.operateList = [
                 { name: "移动", flag: "move" },
                 { name: "复制", flag: "copy" },
-                { name: row.isPublish ?"下线": "上线", flag: "isOnSell" },
-                { name: row.isTop ?"取消置顶": "置顶",  flag: "stick" },
+                { name: row.isPublish ? "下线" : "上线", flag: "isOnSell" },
+                { name: row.isTop ? "取消置顶" : "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
-            ],
-            this.row = row;
+            ]),
+                (this.row = row);
             this.$refs.operateSection.style.left =
-                ev.pageX - ev.offsetX + 11 + "px";
+                ev.pageX - ev.offsetX + 16 + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
-           
-            if(this.$refs.operateSection.style.display == "block" ){
+
+            if (this.$refs.operateSection.style.display == "block") {
                 this.$refs.operateSection.style.display = "none";
-            }else{
-                 this.$refs.operateSection.style.display = "block";
+            } else {
+                this.$refs.operateSection.style.display = "block";
             }
         },
-  
+
         /**
          * 删除操作
          */
@@ -183,39 +204,37 @@ export default {
          * 移动分类操作
          */
         batchMove(row) {
-            this.$emit("changeOperateName","移动");
+            this.$emit("changeOperateName", "移动");
             this.$emit("batchMove", [row.id]);
         },
         /**
          * 复制操作
          */
         batchCopy(row) {
-            this.$emit("changeOperateName","复制");
+            this.$emit("changeOperateName", "复制");
             this.$emit("batchCopy", [row.id]);
         },
 
-        handleMoreOperate(flag){
-           
+        handleMoreOperate(flag) {
             let row = this.row;
-            switch(flag){
+            switch (flag) {
                 case "move":
-                     this.$emit("moveClassify",true,row)
-                    this.batchMove(row) 
+                    this.$emit("moveClassify", true, row);
+                    this.batchMove(row);
                     break;
                 case "copy":
-                     this.$emit("moveClassify",true,row)
-                    this.batchCopy(row) 
+                    this.$emit("moveClassify", true, row);
+                    this.batchCopy(row);
                     break;
-                 case "isOnSell":
-                    
-                    this.batchPublish(row, row.isPublish) 
+                case "isOnSell":
+                    this.batchPublish(row, row.isPublish);
                     break;
                 case "stick":
-                    this.batchTop(row)    
+                    this.batchTop(row);
                     break;
                 case "delete":
-                    this.batchRemove(row)
-                    break;    
+                    this.batchRemove(row);
+                    break;
             }
         }
     }
@@ -305,8 +324,6 @@ export default {
   text-align: left;
 } */
 
-
-
 #table-list .el-table th > .cell {
     color: #fff;
     font-weight: 400;
@@ -315,10 +332,7 @@ export default {
 #table-list .el-table .el-table__row {
     height: 60px;
 }
-#table-list
-    .el-pagination.is-background
-    .el-pager
-    li:not(.disabled).active {
+#table-list .el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: #01c0de;
 }
 #table-list .el-pagination .el-pagination__total {

@@ -15,7 +15,7 @@
                 size="small"
                 plain
                 type="primary"
-            >{{!!picUrl?'上传头像':'重新上传'}}</el-button>
+            > {{ !!picUrl ?'重新上传':'上传头像'}}</el-button>
         </el-upload>
         <div class="picture-format">支持jpg、png、jpeg、bmp格式，小于10M</div>
         <div class="footer">
@@ -64,7 +64,7 @@ export default {
                 this.$message.error("上传头像图片只能是 图片 格式!");
             }
             if (!isSizeOk) {
-                this.$message.error(`上传图片大小不能超过 ${maxMb}MB!`);
+                this.$message.error(`请上传小于${maxMb}M的图片!`);
             }
             return isPic && isSizeOk;
         },

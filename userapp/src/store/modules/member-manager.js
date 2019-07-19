@@ -14,7 +14,7 @@ const memberManager = {
         CURMEMBVERINFO: (state, info) => {
             if (info === 1) {// info =1  清空已选成员 =》 邀请成员
                 state.memberInfo = null;
-                state.memberPolicy = [];
+                 state.memberPolicy = [];
                 return
             };
             state.memberInfo = info;

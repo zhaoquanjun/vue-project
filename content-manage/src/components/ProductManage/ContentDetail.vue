@@ -4,9 +4,9 @@
            <div class="article-crumbs" style="width:80%;margin:0 auto;padding-top:15px">
               <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
-                <el-breadcrumb-item>内容管理</el-breadcrumb-item>
-                <el-breadcrumb-item >产品管理</el-breadcrumb-item>
-                <el-breadcrumb-item>新增产品</el-breadcrumb-item>
+                <el-breadcrumb-item  :to="{ path:'/content/product' }">内容管理</el-breadcrumb-item>
+                <el-breadcrumb-item  :to="{ path:'/content/product' }">产品管理</el-breadcrumb-item>
+                <el-breadcrumb-item >新增产品</el-breadcrumb-item>
             </el-breadcrumb>
            </div>
         </header>
@@ -97,7 +97,13 @@ export default {
 };
 </script>
 
-
+<style scoped>
+    .article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner{
+        font-weight: 400;
+        color: #262626;
+        font-size: 12px;
+    }
+</style>
 <style lang="scss" scoped>
 .article-box {
     background: #f9fafc;

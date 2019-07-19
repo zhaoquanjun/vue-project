@@ -13,6 +13,7 @@
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
+                
             ></m-tree>
         </el-aside>
         <el-main>
@@ -177,10 +178,10 @@ export default {
                                 this.getArticleList();
                             }
                         } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
+                            // this.$message({
+                            //     type: "info",
+                            //     message: "已取消删除"
+                            // });
                         }
                     }
                 }
@@ -211,10 +212,10 @@ export default {
                             this.getArticleList();
                         }
                     } else {
-                        this.$message({
-                            type: "info",
-                            message: "已取消" + message
-                        });
+                        // this.$message({
+                        //     type: "info",
+                        //     message: "已取消" + message
+                        // });
                     }
                 }
             });
@@ -247,10 +248,10 @@ export default {
                             this.getArticleList();
                         }
                     } else {
-                        this.$message({
-                            type: "info",
-                            message: "已取消" + message
-                        });
+                        // this.$message({
+                        //     type: "info",
+                        //     message: "已取消" + message
+                        // });
                     }
                 }
             });
@@ -368,7 +369,7 @@ export default {
             this.getTreeAsync();
         },
         async modifyNodeCategory(id, parentId, idOrderByArr) {
-            await articleManageApi.modifyNode(id, parentId, idOrderByArr);
+            //await articleManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTreeAsync();
         },
         async batchRemoveCategory(idlist) {

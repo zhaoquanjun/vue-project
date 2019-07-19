@@ -1,6 +1,7 @@
 <template>
     <div>
         <el-tree
+            id="asideTree"
             :data="treeResult"
             node-key="id"
             default-expand-all
@@ -41,24 +42,23 @@
                         v-if="data.thumbnailPicUrl"
                         :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
                     />
-                    <div>
-                        <div class="node-label-wrap">
-                            <el-tooltip
-                                class="item"
-                                effect="dark"
-                                :content="data.label"
-                                placement="bottom"
-                            >
-                                <span class="node-label">{{data.label}}</span>
-                            </el-tooltip>
-                            <span v-if="data.level<=1">({{data.leafSum }})</span>
-                        </div>
+                    <div class="node-label-wrap">
+                        <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="data.label"
+                            placement="bottom"
+                        >
+                            <span class="node-label">{{data.label}}</span>
+                        </el-tooltip>
+                        <span v-if="data.level<=1">({{data.leafSum }})</span>
                     </div>
                 </template>
                 <!-- 三个点 分类操作 -->
+                 <!-- @click.stop="handleShow($event,node,data)" -->
                 <span
                     class="set-tree-type"
-                    @click.stop="handleShow(node,data)"
+                   @click.stop="handleShow(node,data)"
                     v-show="data.id === treeNodeId"
                 >
                     <svg-icon icon-class="tree-handler"></svg-icon>
@@ -86,6 +86,10 @@
                 </div>
             </div>
         </el-tree>
+
+        <!-- <div class="category-name-pic">
+
+        </div> -->
     </div>
 </template>
 <script>
@@ -291,6 +295,7 @@ export default {
 .el-tree /deep/ .el-tree-node__content {
     height: 44px;
     position: relative !important;
+    background: #fff;
 }
 
 .el-tree /deep/ .el-tree-node__label {
@@ -298,6 +303,11 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.category-name-pic{
+    width: 100px;
+    height: 100px;
+    background: red;
+}
 .custom-tree-node {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -307,6 +317,7 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
+    height: 100%;
     .enter {
         margin: 0 5px;
     }
@@ -318,7 +329,7 @@ export default {
     }
     .node-label {
         display: block;
-        width: 100px;
+        max-width: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
