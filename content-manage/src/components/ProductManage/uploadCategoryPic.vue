@@ -1,10 +1,26 @@
 <template>
-    <div>
-        <el-card class="box-card">
-            <div slot="header">
-                <span class="article-cover">文章封面</span>
-            </div>
-            <div>
+    <div class="uploadCategoryPic">
+        <el-form
+            :model="ruleForm"
+            
+            :rules="rules"
+            ref="ruleForm"
+            label-width="76px"
+            class="demo-ruleForm"
+        >
+            <el-form-item label="分类名称" prop="name">
+                <el-input size="small"  v-model="ruleForm.name" autocomplete="off" placeholder="请输入分类名称"></el-input>
+            </el-form-item>
+            <el-form-item label="分类名称" prop="name">
+                 <el-tooltip class="item" effect="dark" placement="right">
+                                <div slot="content">
+                                    网站使用了搜索控件时，将使该网站的搜索
+                                    <br />结果更加准确，一篇产品最多可以设置5个关键词
+                                </div>
+                                <span style="position: absolute;left: -21px;">
+                                    <svg-icon icon-class="tip-icon"></svg-icon>
+                                </span>
+                            </el-tooltip>
                 <el-upload
                     class="avatar-uploader"
                     :action="uploadPicAction"
@@ -15,33 +31,37 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                 >
-                    <div v-if="imageUrl1"  class="imgWrap">
-                         <img :src="imageUrl1" class="avatar" />
-                         <span class="el-upload-list__item-actions">
-                              <i class="icon-change"></i>
+                    <div v-if="imageUrl1" class="imgWrap">
+                        <img :src="imageUrl1" class="avatar" />
+                        <span class="el-upload-list__item-actions">
+                            <i class="icon-change"></i>
                             <i @click.stop="handleRemove" class="el-icon-delete"></i>
                         </span>
                     </div>
-                   
+
                     <template v-else>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
-                        <i style=" display: block;">添加图片</i>
+                        <!-- <i style=" display: block;">添加图片</i> -->
                     </template>
-                   
                 </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt />
-                </el-dialog>
-            </div>
-        </el-card>
-        <el-col style="margin-top:20px">
-            <el-collapse v-model="activeName" accordion>
-                <el-collapse-item title="模版样式" name="1">
-                    <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-                    <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
-                </el-collapse-item>
-            </el-collapse>
-        </el-col>
+            </el-form-item>
+            <!-- <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                <el-button @click="resetForm('ruleForm')">重置</el-button>
+            </el-form-item> -->
+        </el-form>
+
+        <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+
+          
+          
+        </el-form>
+
+       -->
+        <div class="pannle-footer">
+            <button class="sure">确定</button>
+            <button class="cancel">取消</button>
+        </div>
     </div>
 </template>
 <script>
@@ -63,7 +83,24 @@ export default {
                 Authorization: ""
             },
             uploadSucess: false,
-            imageUrl1: ""
+            imageUrl1: "",
+            ruleForm: {
+                name: ""
+            },
+            rules: {
+                name: [
+                    {
+                        message: "请输入分类名称",
+                        trigger: "blur"
+                    },
+                    {
+                        min: 1,
+                        max: 20,
+                        message: "长度不能超过20个字符",
+                        trigger: "blur"
+                    }
+                ]
+            }
         };
     },
     watch: {
@@ -86,7 +123,7 @@ export default {
             }
         },
         handleRemove(file, fileList) {
-            this.imageUrl1= ""
+            this.imageUrl1 = "";
             console.log(file, fileList);
         },
         handlePreview(file) {
@@ -122,30 +159,31 @@ export default {
 };
 </script>
 <style scoped>
-.el-card /deep/ .el-card__body {
-    text-align: center;
+.uploadCategoryPic /deep/ .el-form{
+    padding: 10px;
 }
-.el-collapse /deep/ .el-collapse-item__header {
-    padding: 0 10px;
+.uploadCategoryPic /deep/ .el-form .el-form-item__label{
+    font-size: 12px;
+    text-align: left;
 }
-.el-collapse /deep/ .el-collapse-item__content {
-    padding: 0 10px;
+.uploadCategoryPic /deep/ .el-form .el-form-item{
+    margin-bottom: 8px;
 }
-
 .avatar-uploader {
     margin: 0 auto;
-    display: table;
+   
 }
 .avatar-uploader /deep/ .el-upload {
-    border: 1px dashed rgba(144,220,232,1);
-    border-radius: 6px;
+    border: 1px dashed rgba(144, 220, 232, 1);
     cursor: pointer;
     position: relative;
     overflow: hidden;
-       height: 200px;
-    width: 200px;
+    height: 70px;
+    width: 70px;
+    line-height: 70px;
     vertical-align: middle;
-    display: table-cell;
+    box-sizing: border-box;
+    border-radius: 0;
 }
 .avatar-uploader /deep/ .el-upload i {
     color: #00c1de;
@@ -155,21 +193,20 @@ export default {
     border-color: #409eff;
 }
 .avatar-uploader-icon {
-    font-size: 28px;
+    font-size: 22px;
     color: #8c939d;
-    width: 178px;
+    /* width: 178px; */
     text-align: center;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
 }
 .avatar {
-    width: 200px;
-    height: 200px;
+    width: 70px;
+    height: 70px;
     display: block;
 }
 .el-upload-list__item-actions {
-    
     display: flex;
-       align-items: flex-end;
+    align-items: flex-end;
     justify-content: space-around;
     position: absolute;
     width: 100%;
@@ -185,25 +222,41 @@ export default {
     transition: opacity 0.3s;
   
 }
-.avatar-uploader .el-upload-list__item-actions  i{
+.avatar-uploader .el-upload-list__item-actions i {
     color: #fff;
     font-size: 21px;
     margin-bottom: 15px;
 }
 .imgWrap:hover .el-upload-list__item-actions {
-   opacity: 1;
+    opacity: 1;
 }
-.icon-change{
+.icon-change {
     display: inline-block;
-    width: 20px;height: 20px;;
+    width: 20px;
+    height: 20px;
     background: url("~img/content-icon/change.png") no-repeat center;
     background-size: contain;
 }
 </style>
 <style lang="scss" scoped>
-.article-cover{
-     color: #262626;
+.article-cover {
+    color: #262626;
     font-weight: 500;
     font-size: 14px;
 }
+.uploadCategoryPic {
+    .pannle-footer {
+        text-align: right;
+        padding: 5px 8px 0 0;
+        button {
+            width: 58px;
+        }
+        .cancel {
+            border: 1px solid #00c1de;
+            color: #00c1de;
+            background: #fff;
+        }
+    }
+}
 </style>
+
