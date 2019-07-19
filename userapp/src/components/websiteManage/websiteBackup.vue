@@ -152,6 +152,7 @@
 import RightPannel from "../RightPannel";
 import PageSubmenu from "@/components/common/PageSubmenu";
 import { sendTargetPhoneCode } from '@/api/index.js';
+import { formatDateTime } from "@/api/index";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 export default {
   components:{
@@ -222,7 +223,7 @@ export default {
                 this.siteInfo = this.autoSite;
             }
             for (var i = 0; i < this.siteInfo.length; i++) {
-                this.siteInfo[i].backupTime = this.formatDateTime(this.siteInfo[i].backupTime, 'yyyy-mm-dd hh:MM:ss')
+                this.siteInfo[i].backupTime = formatDateTime(this.siteInfo[i].backupTime, 'yyyy-mm-dd hh:MM:ss')
             }
             console.log(this.siteInfo)
         },
@@ -395,38 +396,6 @@ export default {
             this.$refs[`popover-${index}`].doClose();
             await siteBackupApi.updateDescription(row.id, this.remarkValue)
             this.siteInfo[index].description = this.remarkValue
-        },
-         /**
-         * InterfaceAuthor : xuzhuan
-         * 时间格式化
-         */
-        formatDateTime  (date, fmt) {
-            if (!date) {
-                return "";
-            }
-            if (typeof date === 'string') {
-                date = new Date(date);
-            }
-            if (/(y+)/.test(fmt)) {
-                fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
-            }
-            let o = {
-                'M+': date.getMonth() + 1,
-                'd+': date.getDate(),
-                'h+': date.getHours(),
-                'm+': date.getMinutes(),
-                's+': date.getSeconds()
-            }
-            for (let k in o) {
-                let str = o[k] + '';
-                if (new RegExp(`(${k})`).test(fmt)) {
-                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : this.padLeftZero(str));
-                }
-            }
-            return fmt;
-        },
-        padLeftZero(str) {
-            return ('00' + str).substr(str.length);   
         },
   },
 }
@@ -705,9 +674,9 @@ export default {
         box-sizing: border-box; 
         padding: 5px; 
         border-radius: 50%; 
-        background-image: -webkit-linear-gradient(top, #45A9FE 0%, #00C1DE 90%);  
-        background-image: -moz-linear-gradient(top, #45A9FE 0%, #00C1DE 90%); 
-        background-image: linear-gradient(top left, #45A9FE 0%, #00C1DE 90%);  
+        background-image: -webkit-linear-gradient(to top left, #45A9FE 0%, #00C1DE 90%);  
+        background-image: -moz-linear-gradient(to top left, #45A9FE 0%, #00C1DE 90%); 
+        background-image: linear-gradient(to top left, #45A9FE 0%, #00C1DE 90%);  
         .circleBox{
             width:100%; 
             height:100%; 

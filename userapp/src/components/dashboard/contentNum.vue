@@ -1,6 +1,6 @@
 <template>
     <div class="content-num-section">
-        <p class="section-title">内容</p>
+        <p class="section-title">内容管理</p>
         <el-row class="content" :gutter="16">
             <el-col class="item" :span="12" v-for="(it, idx) in content" :key="idx">
                 <div class="item-box">
