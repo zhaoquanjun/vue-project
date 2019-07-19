@@ -1,14 +1,13 @@
 <template>
     <div>
-       <FileManage/>
+        <AudioManage/>
     </div>
 </template>
 <script>
-import FileManage from "@/components/FileManage/index.vue"
+import AudioManage from "@/components/AudioManage/index.vue"
 export default {
     components:{
-        FileManage
+        AudioManage
     }
 }
 </script>
-

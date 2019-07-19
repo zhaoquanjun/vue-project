@@ -1,14 +1,13 @@
 <template>
     <div>
-       <FileManage/>
+        <VideoManage/>
     </div>
 </template>
 <script>
-import FileManage from "@/components/FileManage/index.vue"
+import VideoManage from "@/components/VideoManage/index.vue"
 export default {
     components:{
-        FileManage
+        VideoManage
     }
 }
 </script>
-
