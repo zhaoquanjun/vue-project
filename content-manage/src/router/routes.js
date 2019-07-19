@@ -46,9 +46,7 @@ export const defaultRoutes = [
         name: "createarticle",
         component: () => import('@/components/ArticleManage/ContentDetail.vue'),
         meta:{
-         
           title:"新增文章"}
-
       },
      
       {
@@ -60,7 +58,19 @@ export const defaultRoutes = [
       {
         path: "file",
         name: "file",
-        component:  () => import('@/views/content-manage/file-manage.vue')
+        component:  () => import('@/views/content-manage/file-manage.vue'),
+       // meta:{requiresAuth: true,title:"文件管理",isSub:true},
+      },
+      {
+        path: "video",
+        name: "file",
+        component:  () => import('@/views/content-manage/video-manage.vue'),
+       
+      },
+      {
+        path: "audio",
+        name: "file",
+        component:  () => import('@/views/content-manage/audio-manage.vue')
       },
       {
         path: "product",
@@ -85,7 +95,7 @@ export const defaultRoutes = [
       },
     ]
   },
-
+  
   
   {
     path: "/callback",
@@ -224,3 +234,4 @@ export const authRoutes=[
   },
  
 ]
+

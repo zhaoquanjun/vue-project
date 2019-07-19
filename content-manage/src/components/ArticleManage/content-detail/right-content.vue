@@ -2,25 +2,7 @@
     <div>
         <el-card class="box-card">
             <div slot="header">
-                <span>文章封面</span>
-            </div>
-            <div>
-                <!-- <el-upload
-                    class="upload-pic"
-                    :action="uploadPicAction"
-                    :headers="headers"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :on-success="handleSucess"
-                    :on-change="handleChange"
-                    list-type="picture-card"
-                    :auto-upload="true"
-                    :limit="60"
-                    ref="upload"
-                    :before-upload="beforeUpload"
-                >
-                    <i class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>-->
+                <span class="article-cover">文章封面</span>
             </div>
             <div>
                 <el-upload
@@ -155,7 +137,7 @@ export default {
     display: table;
 }
 .avatar-uploader /deep/ .el-upload {
-    border: 1px dashed #d9d9d9;
+    border: 1px dashed rgba(144,220,232,1);
     border-radius: 6px;
     cursor: pointer;
     position: relative;
@@ -219,4 +201,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.article-cover{
+     color: #262626;
+    font-weight: 500;
+    font-size: 14px;
+}
 </style>

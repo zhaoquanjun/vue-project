@@ -95,8 +95,10 @@ export default {
     box-sizing: border-box;
     li.item {
         display: inline-block;
-        width: 141px;
-        margin: 10px 20px;
+        // width: 141px;
+        width: 20%;
+       padding: 10px;
+       box-sizing: border-box;
     }
 }
 </style>

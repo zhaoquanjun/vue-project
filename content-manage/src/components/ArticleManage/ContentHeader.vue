@@ -66,13 +66,9 @@
                     </span>
                     <span @click="switchIsDesc('asc')">
                         <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
-                        <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                        <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                     </span>
                     <span @click="switchIsDesc('dec')">
                         <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
-                        <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                        <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                     </span>
                 </div>
                 <div class="head-item head-handle-btn">
@@ -111,13 +107,6 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
-
-                <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
-        <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
-        <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
-        <el-button type="danger" @click="batchPublish(null,false)">批量上线</el-button>
-        <el-button type="danger" @click="batchPublish(null,true)">批量下线</el-button>
-                <el-button type="danger" @click="batchMove(null)">批量移动</el-button>-->
             </div>
         </template>
     </el-header>
@@ -190,12 +179,13 @@ export default {
             if (flag === "asc") {
                 this.ascSort = true;
                 this.descSort = !this.ascSort;
+                this.articleSearchOptions.isDescending  = true;
             } else {
                 this.descSort = true;
                 this.ascSort = !this.descSort;
+                this.articleSearchOptions.isDescending = false;
             }
-            this.articleSearchOptions.isDescending = !this.articleSearchOptions
-                .isDescending;
+           
             this.getArticleList();
         },
         importArticle() {

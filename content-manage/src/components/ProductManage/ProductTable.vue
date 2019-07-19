@@ -42,9 +42,9 @@
             </el-table-column>
 
             <el-table-column prop="isTop"  label="置顶" show-overflow-tooltip>
-                <!-- <template slot-scope="scope">
+                <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
-                </template> -->
+                </template>
             </el-table-column>
                        
             <el-table-column prop="createTimeStr" label="创建时间" show-overflow-tooltip></el-table-column>

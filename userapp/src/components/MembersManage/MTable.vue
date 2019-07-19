@@ -6,16 +6,25 @@
             :header-cell-style="{background:'#F5F5F5'}"
             @selection-change="handleSelectionChange"
             :cell-class-name="checkbox"
-           
         >
+            <template slot="empty">
+                <div class="empty-table">
+                    <img src="~img/memberManage/table-empty.png" />
+                    <span>无搜索结果</span>
+                </div>
+            </template>
             <el-table-column type="selection" :selectable="handleDisable"></el-table-column>
-            <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="180" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <span>{{scope.row.name}}</span>
+                </template>
+            </el-table-column>
             <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
             <el-table-column prop="policies" label="权限数量(项)">
-                      <template slot-scope="scope">
-                          <span>{{scope.row.policies}} </span> 
-                          <span style="padding-left:5px" v-if="scope.row.isSystem">(全部权限)</span>
-                      </template>  
+                <template slot-scope="scope">
+                    <span>{{scope.row.policies}}</span>
+                    <span style="padding-left:5px" v-if="scope.row.isSystem">(全部权限)</span>
+                </template>
             </el-table-column>
             <el-table-column prop="remark" label="备注" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -28,9 +37,12 @@
                         @show="showRemark(scope.row)"
                     >
                         <span slot="reference">
-                            <div
-                                class="remark-desc"
-                            >{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
+                            <el-tooltip class="item" effect="dark" placement="bottom">
+                                <div style="width:150px;" slot="content">{{scope.row.remark}}</div>
+                                <div
+                                    class="remark-desc"
+                                >{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
+                            </el-tooltip>
                             <svg-icon icon-class="remark"></svg-icon>
                         </span>
                         <div class="textareaWrap">
@@ -74,7 +86,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing">
+        <div class="pageing" v-if="memberList && memberList.length > 0">
             <el-pagination
                 background
                 layout="total,slot,sizes, prev, pager, next"
@@ -84,6 +96,7 @@
                 prev-text="上一页"
                 next-text="下一页"
                 @current-change="changePage"
+                 @size-change="changePageSize"
             >
                 <div class="sizes-title">每页显示</div>
             </el-pagination>
@@ -102,9 +115,7 @@ export default {
             default: () => []
         }
     },
-    created() {
-        console.log(this.memberList, "0097666666");
-    },
+    created() {},
     data() {
         return {
             remarkValue: "123"
@@ -113,11 +124,9 @@ export default {
     },
     methods: {
         checkbox(row) {
-           
             if (row.row.isSystem === true && row.columnIndex === 0) {
-                 console.log(row)
+                console.log(row);
                 return "mycell";
-
             }
         },
         handleDisable(row, index) {
@@ -159,6 +168,9 @@ export default {
         changePage(page) {
             console.log(page, "当前页码");
             this.$emit("changePageNum", page);
+        },
+        changePageSize(size){
+           this.$emit("changePageSize", size);
         },
         cancelInput(id) {
             this.$refs[`popover-${id}`].doClose();
@@ -247,11 +259,19 @@ export default {
 #member-table .el-pagination /deep/ .btn-next {
     padding: 0 10px;
 }
-
 </style>
 
 <style lang="scss" scoped>
-
+.empty-table {
+    img {
+        width: 54px;
+        vertical-align: middle;
+        padding: 18px 28px;
+    }
+    span {
+        color: #8c8c8c;
+    }
+}
 .textareaWrap {
     background: #fff;
     position: relative;

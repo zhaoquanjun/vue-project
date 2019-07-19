@@ -148,7 +148,7 @@
                 :sourcePhone="userInfo.phoneNumber"
                 :provider="CurrentProvider"
                 :imageUrl="userInfo.userHeadUrl"
-                isSetPassWord="true"
+                :isSetPassWord="userInfo.isSetPassWord"
                 @removeExternalUserAsync="_removeExternalUserAsync"
                 @updateWeiXinHtml="updateWeiXinHtml"
                 @getUserProfileAsync="_getUserProfileAsync"
@@ -368,6 +368,10 @@ export default {
 };
 </script>
 <style scoped>
+.el-input /deep/ .el-input__inner{
+    
+    padding-right: 60px;
+}
 </style>
 
 <style lang="scss" scoped>

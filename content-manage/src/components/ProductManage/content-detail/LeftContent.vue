@@ -9,6 +9,7 @@
                 </el-row>
                 <el-form-item label prop="name">
                     <el-input
+                        class="contentDetail-title"
                         placeholder="请输入产品标题（必填）"
                         v-model="detailData.name"
                         maxlength="100"
@@ -476,11 +477,17 @@ export default {
     }
 };
 </script>
-<style>
+<style scoped>
 #article-content .el-collapse,
 #article-content .el-collapse-item__header {
     border: none;
     font-size: 14px;
+}
+ /* 修改element input设置字数显示 最后遮挡问题 */
+.contentDetail-title.el-input /deep/ .el-input__inner{
+    height: 32px;
+    line-height: 32px;
+    padding-right: 60px;
 }
 </style>
 

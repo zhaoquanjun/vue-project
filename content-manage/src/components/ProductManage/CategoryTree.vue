@@ -1,6 +1,7 @@
 <template>
     <div>
         <el-tree
+            id="asideTree"
             :data="treeResult"
             node-key="id"
             default-expand-all
@@ -41,24 +42,23 @@
                         v-if="data.thumbnailPicUrl"
                         :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
                     />
-                    <div>
-                        <div class="node-label-wrap">
-                            <el-tooltip
-                                class="item"
-                                effect="dark"
-                                :content="data.label"
-                                placement="bottom"
-                            >
-                                <span class="node-label">{{data.label}}</span>
-                            </el-tooltip>
-                            <span v-if="data.level<=1">({{data.leafSum }})</span>
-                        </div>
+                    <div class="node-label-wrap">
+                        <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="data.label"
+                            placement="bottom"
+                        >
+                            <span class="node-label">{{data.label}}</span>
+                        </el-tooltip>
+                        <span v-if="data.level<=1">({{data.leafSum }})</span>
                     </div>
                 </template>
                 <!-- 三个点 分类操作 -->
+                <!-- @click.stop="handleShow($event,node,data)" -->
                 <span
                     class="set-tree-type"
-                    @click.stop="handleShow(node,data)"
+                    @click="_handleShowMoreOperate($event)"
                     v-show="data.id === treeNodeId"
                 >
                     <svg-icon icon-class="tree-handler"></svg-icon>
@@ -86,11 +86,21 @@
                 </div>
             </div>
         </el-tree>
+
+        <div class="category-name-pic" ref="operateSection">
+            
+            <UploadCategoryPic />
+        </div>
+      
     </div>
 </template>
 <script>
+import UploadCategoryPic from "./uploadCategoryPic";
 export default {
     props: ["treeResult", "productSearchOptions", "isrightPannel"],
+    components: {
+        UploadCategoryPic
+    },
     data() {
         return {
             flag: false,
@@ -105,6 +115,17 @@ export default {
         };
     },
     methods: {
+        _handleShowMoreOperate(ev, row) {
+            this.$refs.operateSection.style.left =
+                ev.pageX - ev.offsetX + 36 + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+
+            if (this.$refs.operateSection.style.display == "block") {
+                this.$refs.operateSection.style.display = "none";
+            } else {
+                this.$refs.operateSection.style.display = "block";
+            }
+        },
         handlerOver(data) {
             if (!isNaN(data.id)) this.treeNodeId = data.id;
             if (this.isNewAdd) this.treeNodeId = null;
@@ -291,6 +312,7 @@ export default {
 .el-tree /deep/ .el-tree-node__content {
     height: 44px;
     position: relative !important;
+    background: #fff;
 }
 
 .el-tree /deep/ .el-tree-node__label {
@@ -298,6 +320,27 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.category-name-pic {
+    width: 282px;
+    height: 190px;
+    background: #fff;
+    display: none;
+    position: absolute;
+    z-index: 19;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
+   // border: 1px solid rgba(216, 216, 216, 1);
+    // &:after {
+    //     position: absolute;
+    //     content: "";
+    //     left: -21px;
+    //     top: 10px;
+    //     border-top: 10px transparent dashed;
+    //     border-left: 10px transparent dashed;
+    //     border-bottom: 10px transparent dashed;
+    //     border-right: 10px #fff solid;
+    //      border: 1px solid rgba(216, 216, 216, 1);
+    // }
+}
 .custom-tree-node {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -307,6 +350,7 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
+    height: 100%;
     .enter {
         margin: 0 5px;
     }
@@ -318,7 +362,7 @@ export default {
     }
     .node-label {
         display: block;
-        width: 100px;
+        max-width: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

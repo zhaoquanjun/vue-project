@@ -43,7 +43,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { stat } from "fs";
 export default {
     name: "AuthList",
     props: {
@@ -58,7 +57,6 @@ export default {
     methods: {
         curAuth(item, index) {
             let cur = this.authList[index];
-            console.log(cur, "-----cur----");
             if (cur.show) {
                 this.$set(this.authList[index], "show", false);
                 this.$emit("removeSelected", item);
@@ -75,7 +73,6 @@ export default {
             this.$emit("emptySelected");
         }
     },
-    mounted() {},
     computed: {
         ...mapState({
             userPermission: state => state.memberManager.userPermission,

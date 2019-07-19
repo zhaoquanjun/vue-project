@@ -1,5 +1,14 @@
 <template>
     <div>
-        文件管理
+       <FileManage/>
     </div>
 </template>
+<script>
+import FileManage from "@/components/FileManage/index.vue"
+export default {
+    components:{
+        FileManage
+    }
+}
+</script>
+

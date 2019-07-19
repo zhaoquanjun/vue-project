@@ -8,40 +8,24 @@
         >
             <span class="img-wrap">
                 <div class="mask" :class="isMaskShow"></div>
-                 <!-- <el-image :src="curItem.zoomOssUrl"></el-image> -->
-                <img :src="curItem.zoomOssUrl" alt>
+                <!-- <el-image :src="curItem.zoomOssUrl"></el-image> -->
+                <img :src="curItem.zoomOssUrl" alt />
             </span>
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
                 <span @click.stop="handleMove">
-                     <el-tooltip
-                            class="item"
-                            effect="dark"
-                            content="移动"
-                            placement="bottom"
-                        >
-                            <svg-icon icon-class="img-move"></svg-icon>
-                        </el-tooltip>
-                   
+                    <el-tooltip class="item" effect="dark" content="移动" placement="bottom">
+                        <svg-icon icon-class="img-move"></svg-icon>
+                    </el-tooltip>
                 </span>
                 <span @click.stop="handleLook">
-                     <el-tooltip
-                            class="item"
-                            effect="dark"
-                            content="预览"
-                            placement="bottom"
-                        >
-                    <svg-icon icon-class="img-look"></svg-icon>
+                    <el-tooltip class="item" effect="dark" content="预览" placement="bottom">
+                        <svg-icon icon-class="img-look"></svg-icon>
                     </el-tooltip>
                 </span>
                 <span @click.stop="handleDelete">
-                    <el-tooltip
-                            class="item"
-                            effect="dark"
-                            content="删除"
-                            placement="bottom"
-                        >
-                    <svg-icon icon-class="img-delete"></svg-icon>
-                     </el-tooltip>
+                    <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+                        <svg-icon icon-class="img-delete"></svg-icon>
+                    </el-tooltip>
                 </span>
             </div>
             <div class="img-handle-btn" :class="[isSelectedShow?'show':'hide']">
@@ -51,17 +35,17 @@
             </div>
         </div>
         <p v-if="isRename" @click="rename()" class="img-desc">{{curItem.title}}</p>
-         <el-input
-                        style="padding-top:5px"
-                        v-else
-                        type="text"
-                        size="small"
-                        placeholder="请输入内容"
-                        v-model="curItem.title"
-                        maxlength="30"
-                        show-word-limit
-                        @blur="rename(curItem.id,curItem.title)"
-                    ></el-input>
+        <el-input
+            style="padding-top:5px"
+            v-else
+            type="text"
+            size="small"
+            placeholder="请输入内容"
+            v-model="curItem.title"
+            maxlength="30"
+            show-word-limit
+            @blur="rename(curItem.id,curItem.title)"
+        ></el-input>
     </div>
 </template>
 <script>
@@ -69,18 +53,17 @@ export default {
     props: ["curItem"],
     data() {
         return {
-            isRename:true,
+            isRename: true,
             isHandleBtnShow: false,
-            isSelectedShow: false,
-          
+            isSelectedShow: false
         };
     },
     methods: {
         handleClick() {
-            console.log(this.curItem,'-----')
+            console.log(this.curItem, "-----");
             this.isHandleBtnShow = false;
             this.isSelectedShow = !this.isSelectedShow;
-            this.$emit("handleSelected",this.curItem,this.isSelectedShow)
+            this.$emit("handleSelected", this.curItem, this.isSelectedShow);
         },
         handleMouseMove() {
             if (this.isSelectedShow || this.isHandleBtnShow) return;
@@ -90,33 +73,29 @@ export default {
             this.isHandleBtnShow = false;
         },
         handleMove() {
-        
             this.isHandleBtnShow = true;
-            this.$emit("handleMove",this.curItem)
+            this.$emit("handleMove", this.curItem);
         },
         // 查看大图
         handleLook() {
-            
             this.isHandleBtnShow = true;
-            this.$emit("viewPic",this.curItem)
+            this.$emit("viewPic", this.curItem);
         },
         handleDelete() {
-           
             this.isHandleBtnShow = true;
-            this.$emit("batchRemovePic",this.curItem)
+            this.$emit("batchRemovePic", this.curItem);
         },
         // 重命名图片名称
         rename(id, newName) {
-           
-            if(id){
+            if (id) {
                 this.isRename = true;
                 this.$emit("rename", id, newName);
-            }else{
+            } else {
                 this.isRename = false;
-               
+
                 //
             }
-            
+
             // if (isNaN(index)) {
             //     this.index = -1;
             //     this.$emit("rename", id, newName);
@@ -124,7 +103,7 @@ export default {
             // }
             // this.index = index;
             //this.$emit("rename", id, newName);
-        },
+        }
     },
     computed: {
         isMaskShow() {
@@ -135,17 +114,17 @@ export default {
             }
         }
     },
-    watch:{
-    //    curItem(){
-    //        alert(1)
-    //    } 
+    watch: {
+        //    curItem(){
+        //        alert(1)
+        //    }
     }
 };
 </script>
 <style scoped>
-    .el-input /deep/ .el-input__inner{
-        padding-right: 50px;
-    }
+.el-input /deep/ .el-input__inner {
+    padding-right: 50px;
+}
 </style>
 
 <style lang="scss" scoped>
@@ -156,12 +135,21 @@ export default {
     display: none;
 }
 .img-item {
+    display: inline-block;
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+    overflow: hidden;
     position: relative;
     .img-wrap {
         position: relative;
         display: inline-block;
-        width: 141px;
-        height: 141px;
+        width: 100%;
+        padding-bottom: 100%;
+        overflow: hidden;
+   
+        // width: 141px;
+        // height: 141px;
         .mask {
             position: absolute;
             background: rgba(38, 38, 38, 1);
@@ -175,6 +163,8 @@ export default {
         img {
             width: 100%;
             height: 100%;
+            max-height: 300px;
+            max-width: 300px;
         }
     }
     .img-handle-btn {
