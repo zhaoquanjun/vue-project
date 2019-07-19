@@ -7,7 +7,7 @@
                 <el-form-item prop="password" class="verification-code">
                     <el-input
                         type="password"
-                        v-model="ruleForm.password"
+                        v-model="ruleForm.passWrod"
                         autocomplete="on"
                         placeholder="输入设置密码"
                     ></el-input>
@@ -73,7 +73,7 @@ export default {
                 callback(new Error("密码长度不能超过16位！"));
             } else if (value.length < 6) {
                 callback(new Error("密码长度最低为6位！"));
-            } else if (value !== this.ruleForm.password) {
+            } else if (value !== this.ruleForm.passWrod) {
                 callback(new Error("两次输入密码不一致!"));
             } else {
                 callback();
@@ -87,7 +87,7 @@ export default {
             tipTitle:
                 "设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码",
             ruleForm: {
-                password: "",
+                passWrod: "",
                 beSurePwd: ""
             },
             ruleFormCode: {
@@ -96,7 +96,7 @@ export default {
             },
 
             rules: {
-                password: [
+                passWrod: [
                     {
                         validator: checPwd,
                         trigger: "blur",
