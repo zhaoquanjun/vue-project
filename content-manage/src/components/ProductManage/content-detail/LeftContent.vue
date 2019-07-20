@@ -1,6 +1,12 @@
 <template>
     <div class="article-content" id="article-content">
-        <el-form class="base-ariticle" :model="detailData" :rules="rules" ref="articleDetail">
+        <el-form
+            class="base-ariticle"
+            @submit.native.prevent
+            :model="detailData"
+            :rules="rules"
+            ref="articleDetail"
+        >
             <div class="content-item">
                 <el-row>
                     <el-col :span="24">
@@ -110,11 +116,29 @@
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
                             </el-tooltip>
-
+                            <ul class="keyword-list" ref="keywordList">
+                                <li
+                                    v-for="(item,index) in detailData.searchKeywords"
+                                    :key="index"
+                                >
+                                    {{item}}
+                                    <i
+                                        class="el-icon-close"
+                                        @click.stop="removeCurKeyWord(index)"
+                                    ></i>
+                                </li>
+                            </ul>
                             <el-input
+                                ref="keywordInput"
+                                placeholder="每个关键词之间用回车键分离"
+                                v-model="keywordValue"
+                                @keyup.enter.native="keywords(keywordValue)"
+                                @blur="keywords(keywordValue)"
+                            ></el-input>
+                            <!-- <el-input
                                 placeholder="每个关键词之间用会车键分离"
                                 v-model="detailData.searchKeywords"
-                            ></el-input>
+                            ></el-input>-->
                         </el-form-item>
                         <el-form-item>
                             <el-checkbox-group
@@ -146,8 +170,24 @@
                             </el-tooltip>
                             <el-input placeholder="seo标题" v-model="detailData.searchKeyword"></el-input>
                         </el-form-item>
-                        <el-form-item label="seo关键词" prop="seoKeyword">
-                            <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input>
+                        <el-form-item style="position:relative" label="seo关键词" prop="seoKeyword">
+                            <ul class="keyword-list" ref="metaKeywordList">
+                                <li v-for="(item,index) in detailData.seoKeyword" :key="index">
+                                    {{item}}
+                                    <i
+                                        class="el-icon-close"
+                                        @click.stop="removeCurmetaKeyWord(index)"
+                                    ></i>
+                                </li>
+                            </ul>
+                            <el-input
+                                ref="metaKeywordsInput"
+                                placeholder="每个关键词之间用回车键分离"
+                                v-model="metaKeyword"
+                                @keyup.enter.native="keywords(metaKeyword,'seoKeyword')"
+                                @blur="keywords(metaKeyword,'seoKeyword')"
+                            ></el-input>
+                            <!-- <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input> -->
                         </el-form-item>
 
                         <el-form-item label="产品描述" prop="seoDescription">
@@ -182,9 +222,9 @@
         <!-- 
 
                  <el-form-item>
-        <el-button type="primary" @click="submitForm('articleDetail')">立即创建</el-button>
-        <el-button @click="resetForm('articleDetail')">重置</el-button>
-        <el-button type="primary" @click="editArticle('articleDetail')">编辑保存</el-button>
+        <el-button type="primary" @click="submitForm('detailData')">立即创建</el-button>
+        <el-button @click="resetForm('detailData')">重置</el-button>
+        <el-button type="primary" @click="editArticle('detailData')">编辑保存</el-button>
       </el-form-item>
         -->
     </div>
@@ -271,7 +311,8 @@ export default {
                 price: 1, //
                 costPrice: 1, //
                 originalPrice: 1, //
-                seoKeyword: "",
+                seoKeyword: [],
+                searchKeywords: [],
                 seoDescription: "",
                 searchKeyword: "",
                 skuId: "", //
@@ -316,7 +357,9 @@ export default {
                 ]
             },
             isModalShow: false,
-            editorOption: {}
+            editorOption: {},
+            keywordValue: "",
+            metaKeyword: ""
         };
     },
     created() {
@@ -357,18 +400,70 @@ export default {
         };
     },
     methods: {
+        textIndent(ele, width) {
+            this.$nextTick(() => {
+                ele.style.textIndent = width + "px";
+            });
+        },
+        keywords(value, name) {
+            if (name === "seoKeyword") {
+                if (this.detailData.seoKeyword.length >= 5 || !value) {
+                    return;
+                }
+                this.metaKeyword = "";
+                this.detailData.seoKeyword.push(value);
+                // let ele = this.$refs.metaKeywordsInput.$el.children[0];
+                // let width = this.$refs.metaKeywordList.clientWidth;
+                //this.textIndent(ele, width);
+            } else {
+                if (this.detailData.searchKeywords.length >= 5 || !value) {
+                    return;
+                }
+                this.keywordValue = "";
+                this.detailData.searchKeywords.push(value);
+                // let ele = this.$refs.keywordInput.$el.children[0];
+                // let width = this.$refs.keywordList.clientWidth;
+               // this.textIndent(ele, width);
+            }
+        },
+        removeCurKeyWord(index) {
+            this.detailData.searchKeywords.splice(index, 1);
+            // this.$nextTick(() => {
+            //     this.$refs.keywordInput.$el.children[0].style.textIndent =
+            //         this.$refs.keywordList.clientWidth + "px";
+            // });
+        },
+        removeCurmetaKeyWord(index) {
+            this.detailData.seoKeyword.splice(index, 1);
+            // this.$nextTick(() => {
+            //     metaKeywordsInput.$el.children[0].style.textIndent =
+            //         this.$refs.metaKeywordList.clientWidth + "px";
+            // });
+        },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
+            if(data.seoKeyword && Object.keys(data.seoKeyword).length<1){
+                 data.seoKeyword =[];
+            }else{
+                  data.seoKeyword = data.metaKeywords.split(",");
+            }
+             if(data.searchKeywords && Object.keys(data.searchKeywords).length<1){
+                 data.searchKeywords =[];
+            }else{
+                data.searchKeywords = data.searchKeywords.split(",");
+            }
+            
             this.detailData = data;
             //this.detailData.NewId = data.id;
         },
         // 新建保存
         submitForm(formName, fileList) {
+            console.log(formName)
             //   this.detailData.pictureUrl = imageUrl;
             console.log(fileList);
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
-                console.log(valid, "[[[[[[[[[");
+               
                 if (valid) {
                     this.insertArticle();
                 } else {
@@ -409,7 +504,7 @@ export default {
         //编辑保存产品
         async saveArticle() {
             let { status, data } = await articleManageApi.editArticle(
-                this.articleDetail
+                this.detailData
             );
             if (status === 200) {
                 this.$message({
@@ -474,6 +569,19 @@ export default {
         // 为视频ICON绑定事件
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         addQuillTitle();
+    },
+    watch: {
+        "detailData.searchKeywords"() {
+            let width = this.detailData.searchKeywords.length * 52 ;
+            let ele = this.$refs.keywordInput.$el.children[0];
+            this.textIndent(ele, width);
+        },
+        "detailData.seoKeyword"() {
+            let width = this.detailData.seoKeyword.length * 52;
+            let ele = this.$refs.metaKeywordsInput.$el.children[0];
+            this.textIndent(ele, width);
+        },
+        deep: true
     }
 };
 </script>
@@ -483,8 +591,8 @@ export default {
     border: none;
     font-size: 14px;
 }
- /* 修改element input设置字数显示 最后遮挡问题 */
-.contentDetail-title.el-input /deep/ .el-input__inner{
+/* 修改element input设置字数显示 最后遮挡问题 */
+.contentDetail-title.el-input /deep/ .el-input__inner {
     height: 32px;
     line-height: 32px;
     padding-right: 60px;
@@ -492,6 +600,7 @@ export default {
 </style>
 
 <style scoped lang="scss">
+@import "../../style/contentDetail";
 .article-content {
     .content-item {
         padding: 21px 16px 0;
@@ -531,7 +640,7 @@ export default {
 }
 </style>
 <style scoped>
-.quill-editor /deep/ .ql-container{
+.quill-editor /deep/ .ql-container {
     height: 400px;
 }
 </style>

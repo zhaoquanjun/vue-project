@@ -1,22 +1,15 @@
 <template>
     <div class="table-content" id="table-list">
-        <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
-        <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
-        <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
-        <el-button type="danger" @click="batchPublish(null,false)">批量上线</el-button>
-        <el-button type="danger" @click="batchPublish(null,true)">批量下线</el-button>
-        <el-button type="danger" @click="batchMove(null)">批量移动</el-button>-->
         <el-table
             ref="multipleTable"
             :data="articlePageResult.list"
             tooltip-effect="dark"
             class="content-table"
             @selection-change="handleSelectionChange"
-            @sort-change="sortByTopStatus"
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column prop="name" label="产品标题" show-overflow-tooltip>
+            <el-table-column min-width="150" prop="name" label="产品标题" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <img
                         v-if="scope.row.thumbnailPicUrlList.length"
@@ -24,6 +17,7 @@
                         class="cover"
                         alt
                     >
+                     <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
                     <span>{{ scope.row.name }}</span>
                 </template>
@@ -35,21 +29,21 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="isOnSell" label="状态" show-overflow-tooltip>
+            <el-table-column width="100"  prop="isOnSell" label="状态" >
                 <template slot-scope="scope">
                     <span>{{ scope.row.isOnSell?"上架":"下架" }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="isTop"  label="置顶" show-overflow-tooltip>
+            <el-table-column width="100" prop="isTop"  label="置顶">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
             </el-table-column>
                        
-            <el-table-column prop="createTimeStr" label="创建时间" show-overflow-tooltip></el-table-column>
+            <el-table-column min-width="100" prop="createTimeStr" label="创建时间" ></el-table-column>
 
-            <el-table-column label="操作">
+            <el-table-column width="150" min-width="100" label="操作">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)"></span>
@@ -57,18 +51,7 @@
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
                         ></span>
-                        <!-- <button class="handle-btn" @click="handleLook(scope.$index, scope.row)">
-              <svg-icon icon-class="tab-look"></svg-icon>
-            </button>
-            <button class="handle-btn" @click="batchRemove( scope.row)">
-              <svg-icon icon-class="l-recyclebin"></svg-icon>
-            </button>
-            <button class="handle-btn" @click="batchTop( scope.row)">
-              <svg-icon icon-class="l-recyclebin"></svg-icon>
-            </button>
-            <button class="handle-btn" @click="batchPublish( scope.row)">
-              <svg-icon icon-class="l-recyclebin"></svg-icon>
-                        </button>-->
+
                     </div>
                 </template>
             </el-table-column>
@@ -106,6 +89,7 @@ export default {
     props: ["articlePageResult", "articleSearchOptions"],
     data() {
         return {
+            defaultImg: require("../../../static/images/content-default-pic.png"),
             multipleSelection: [],
             operateList: [
                 { name: "移动", flag: "move" },
@@ -128,11 +112,11 @@ export default {
     methods: {
         changePageNum(page) {
             this.articleSearchOptions.pageIndex = page;
-            this.$emit("getArticleList");
+            this.$emit("contentTableList");
         },
         changePageSize(size) {
             this.articleSearchOptions.pageSize = size;
-            this.$emit("getArticleList");
+            this.$emit("contentTableList");
         },
         sortByTopStatus: function(column, prop, order) {
             // descending ascending
@@ -142,7 +126,7 @@ export default {
                     : column.order == "descending"
                     ? false
                     : null;
-            this.$emit("getArticleList");
+            this.$emit("contentTableList");
         },
         /**
          * 单选或全选操作
@@ -168,7 +152,6 @@ export default {
             this.$emit("handleEditArticle", row);
         },
         _handleShowMoreOperate(ev, row) {
-            console.log(ev)
             this.row = row;
             this.operateList = [
                 { name: "移动", flag: "move" },
@@ -177,10 +160,17 @@ export default {
                 { name:row.isTop ?"取消置顶": "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ];
+            let clientH = document.getElementsByClassName("more-operate")[0].clientHeight +10;
+            let clientW = this.$refs.operateSection.clientWidth;
+            
             this.$refs.operateSection.style.left =
-                ev.pageX - ev.offsetX + 11 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
-            this.$refs.operateSection.style.display = "block";
+                ev.pageX - ev.offsetX - 40 + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + clientH + "px";
+              if (this.$refs.operateSection.style.display == "block") {
+                this.$refs.operateSection.style.display = "none";
+            } else {
+                this.$refs.operateSection.style.display = "block";
+            }
         },
 
         /**

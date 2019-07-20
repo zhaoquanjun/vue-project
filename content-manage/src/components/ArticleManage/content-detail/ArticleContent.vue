@@ -364,33 +364,33 @@ export default {
                 }
                 this.metaKeyword = "";
                 this.articleDetail.metaKeywords.push(value);
-                let ele = this.$refs.metaKeywordsInput.$el.children[0];
-                let width = this.$refs.metaKeywordList.clientWidth;
-                this.textIndent(ele, width);
+                // let ele = this.$refs.metaKeywordsInput.$el.children[0];
+                // let width = this.$refs.metaKeywordList.clientWidth;
+                // this.textIndent(ele, width);
             } else {
                 if (this.articleDetail.searchKeywords.length >= 5 || !value) {
                     return;
                 }
                 this.keywordValue = "";
                 this.articleDetail.searchKeywords.push(value);
-                let ele = this.$refs.keywordInput.$el.children[0];
-                let width = this.$refs.keywordList.clientWidth;
-                this.textIndent(ele, width);
+                // let ele = this.$refs.keywordInput.$el.children[0];
+                // let width = this.$refs.keywordList.clientWidth;
+                // this.textIndent(ele, width);
             }
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
-            this.$nextTick(() => {
-                this.$refs.keywordInput.$el.children[0].style.textIndent =
-                    this.$refs.keywordList.clientWidth + "px";
-            });
+            // this.$nextTick(() => {
+            //     this.$refs.keywordInput.$el.children[0].style.textIndent =
+            //         this.$refs.keywordList.clientWidth + "px";
+            // });
         },
         removeCurmetaKeyWord(index) {
             this.articleDetail.metaKeywords.splice(index, 1);
-            this.$nextTick(() => {
-                metaKeywordsInput.$el.children[0].style.textIndent =
-                    this.$refs.metaKeywordList.clientWidth + "px";
-            });
+            // this.$nextTick(() => {
+            //     metaKeywordsInput.$el.children[0].style.textIndent =
+            //         this.$refs.metaKeywordList.clientWidth + "px";
+            // });
         },
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
@@ -558,12 +558,12 @@ export default {
     computed: {},
     watch: {
         "articleDetail.searchKeywords"() {
-            let width = this.articleDetail.searchKeywords.length * 42 + 30;
+            let width = this.articleDetail.searchKeywords.length * 52;
             let ele = this.$refs.keywordInput.$el.children[0];
             this.textIndent(ele, width);
         },
         "articleDetail.metaKeywords"() {
-            let width = this.articleDetail.metaKeywords.length * 42 + 30;
+            let width = this.articleDetail.metaKeywords.length * 52;
             let ele = this.$refs.metaKeywordsInput.$el.children[0];
             this.textIndent(ele, width);
         },

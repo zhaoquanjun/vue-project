@@ -143,9 +143,9 @@ export default {
                     message: `成功上传${fileList.length}图片`
                 });
                 setTimeout(() => {
-                    this.$emit("switchUploadBoxShowStatus", "uploadImg");
+                   this.$emit("switchUploadBoxShowStatus", "uploadImg");
                     // this.$emit("getTree");
-                    this.$refs.upload.clearFiles();
+                   this.$refs.upload.clearFiles();
                 }, 500);
             }
         },
@@ -164,6 +164,7 @@ export default {
             this.uploadPicAction = `${this.uploadPicUrl}/${this.upload2Category.id}`;
         },
         submitUpload() {
+            this.uploadDisabled = true
             this.count = 0;
             if (this.nodeData) {
                 this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
@@ -209,9 +210,18 @@ export default {
     border: none;
 }
 #upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item{
-       overflow: visible;
+       /* overflow: visible; */
+       height: auto;
+       border: none;
+       border-radius: 0;
 }
-
+#upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item .el-upload-list__item-actions{
+    height: 148px;;
+}
+#upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item .el-upload-list__item-thumbnail{
+    height: 148px;
+    object-fit: contain;
+}
 #upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item-status-label{
     display: none;
 }
@@ -223,6 +233,7 @@ export default {
 #upload-img .upload-pic  /deep/ .el-upload-list--picture-card .el-upload-list__item-name .el-icon-document{
     display: none;
 }
+
 </style>
 <style scoped lang="scss">
 #upload-img .upload-head {
@@ -260,10 +271,12 @@ export default {
     }
 
     .upload-pic {
+        max-height: 320px;
         min-height: 320px;
         border: 1px solid #eee;
         margin: 13px 0 16px 0;
         padding: 18px 20px;
+        overflow-y: auto;
     }
 
     .footer-upload-btn {

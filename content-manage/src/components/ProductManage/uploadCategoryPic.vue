@@ -2,20 +2,20 @@
     <div class="uploadCategoryPic">
         <el-form
             :model="ruleForm"
-            
             :rules="rules"
             ref="ruleForm"
             label-width="76px"
             class="demo-ruleForm"
         >
             <el-form-item label="分类名称" prop="name">
-                <el-input size="small"  v-model="ruleForm.name" autocomplete="off" placeholder="请输入分类名称"></el-input>
+                <el-input size="small"  v-model="ruleForm.name" autocomplete="off" placeholder="请输入分类名称"  maxlength="20"
+  show-word-limit ></el-input>
             </el-form-item>
-            <el-form-item label="分类名称" prop="name">
+            <el-form-item label="分类图片" >
                  <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
-                                    网站使用了搜索控件时，将使该网站的搜索
-                                    <br />结果更加准确，一篇产品最多可以设置5个关键词
+                                     分类图片用于分类控件带图片样式的展示，
+                                    <br />建议上传尺寸为400✕400像素的图片
                                 </div>
                                 <span style="position: absolute;left: -21px;">
                                     <svg-icon icon-class="tip-icon"></svg-icon>
@@ -59,8 +59,8 @@
 
        -->
         <div class="pannle-footer">
-            <button class="sure">确定</button>
-            <button class="cancel">取消</button>
+            <button class="confrim" @click="submitForm('ruleForm')">确定</button>
+            <button class="cancel" @click="cancel">取消</button>
         </div>
     </div>
 </template>
@@ -68,7 +68,7 @@
 import environment from "@/environment/index.js";
 
 export default {
-    props: ["imageUrl"],
+    props: ["modifyCategoryData"],
     data() {
         return {
             dialogImageUrl: "",
@@ -90,37 +90,34 @@ export default {
             rules: {
                 name: [
                     {
+                        required: true,
                         message: "请输入分类名称",
                         trigger: "blur"
                     },
                     {
                         min: 1,
-                        max: 20,
-                        message: "长度不能超过20个字符",
+                        max: 100,
+                        message: "长度在 1 到 20 个字符",
                         trigger: "blur"
                     }
+                  
                 ]
             }
         };
     },
     watch: {
-        imageUrl() {
-            this.imageUrl1 = this.imageUrl;
-        }
+        modifyCategoryData() {
+            this.ruleForm.name =  this.modifyCategoryData.label
+           this.imageUrl1 = this.modifyCategoryData.thumbnailPicUrl;
+           console.log(this.modifyCategoryData )
+        },
+        deep:true,
+
     },
     methods: {
         handleSucess(response, file, fileList) {
             this.imageUrl1 = file.response;
-            if (!this.uploadSucess) {
-                this.$message({
-                    type: "success",
-                    message: "上传成功!"
-                });
-                setTimeout(() => {
-                    this.$emit("switchUploadBoxShowStatus", "uploadImg");
-                }, 500);
-                this.uploadSucess = true;
-            }
+           
         },
         handleRemove(file, fileList) {
             this.imageUrl1 = "";
@@ -154,7 +151,27 @@ export default {
                 this.$message.error(`上传图片大小不能超过 ${maxMb}MB!`);
             }
             return isPic && isSizeOk;
+        },
+         // 新建保存
+        submitForm(formName) {
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    this.confrim();
+                } else {
+                    return false;
+                }
+            });
+        },
+        // 确定按钮
+        confrim(){
+            let displayName = this.ruleForm.name;
+            this.$emit("createCategory",displayName, this.imageUrl1)
+        },
+        //取消按钮
+        cancel(){
+            this.$emit("closeUploadCategoryPic")
         }
+       
     }
 };
 </script>
@@ -168,6 +185,11 @@ export default {
 }
 .uploadCategoryPic /deep/ .el-form .el-form-item{
     margin-bottom: 8px;
+}
+
+.uploadCategoryPic /deep/ .el-form .el-form-item__error{
+    background: #fff;
+    z-index: 1;
 }
 .avatar-uploader {
     margin: 0 auto;

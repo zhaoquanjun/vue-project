@@ -117,7 +117,7 @@ export default {
     data() {
         return {
             ascSort: false,
-            descSort: false,
+            descSort: true,
 
             statusOptions: [
                 {
@@ -179,11 +179,11 @@ export default {
             if (flag === "asc") {
                 this.ascSort = true;
                 this.descSort = !this.ascSort;
-                this.articleSearchOptions.isDescending  = true;
+                this.articleSearchOptions.isDescending  = false;
             } else {
                 this.descSort = true;
                 this.ascSort = !this.descSort;
-                this.articleSearchOptions.isDescending = false;
+                this.articleSearchOptions.isDescending = true;
             }
            
             this.getArticleList();

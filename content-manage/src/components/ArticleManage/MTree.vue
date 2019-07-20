@@ -1,5 +1,5 @@
 <template>
-    <div id="asideTree">
+    <div id="asideTree" class="aside-tree">
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -8,10 +8,11 @@
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
             ref="tree"
-            draggable
+           
             :allow-drop="allowDrop"
             :highlight-current="true"
         >
+        <!--  draggable -->
             <div
                 class="custom-tree-node"
                 @mouseover="handlerOver(data)"
@@ -269,6 +270,20 @@ export default {
                 this.renameData.label = this.curlabelName;
                 this.renameShowId = null;
             }
+             let allCategoryEle = document.querySelector(".el-tree")
+                .childNodes[0].childNodes[0];
+
+            this.setCss(allCategoryEle, {
+                background: "#fff",
+                color: "#606266",
+                border: "none"
+            });
+        },
+         // 取消第一个全部分类默认选中的样式
+        setCss(obj, css) {
+            for (var attr in css) {
+                obj.style[attr] = css[attr];
+            }
         },
         handleShow(node, val) {
             node.checked = true;
@@ -282,59 +297,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.custom-tree-node {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: block;
-    // width: 84px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    .enter {
-        margin: 0 5px;
-    }
-     .node-label-wrap{
-        cursor:move;display: flex;align-items: center;height: 100%;
-    }
-      .node-label {
-        display: block;
-        max-width: 100px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .category-name {
-        width: 86px;
-        height: 30px;
-        border: none;
-        border: 1px solid rgba(229, 229, 229, 1);
-    }
-}
-.tree-handle {
-    position: absolute;
-    right: -88px;
-    top: 0;
-    z-index: 1000;
-    background: #ffffff;
-    width: 92px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.07);
-    padding: 5px 0;
-    button {
-        width: 100%;
-        display: block;
-        padding: 8px 14px;
-        text-align: left;
-        &:hover {
-            background: #eee;
-        }
-    }
-}
-.set-tree-type {
-    position: absolute;
-    right: 5px;
-    padding: 0 5px;
-    z-index: 10;
-}
+   @import "../style/manageAsideTree";
 </style>

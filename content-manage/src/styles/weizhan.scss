@@ -11,8 +11,11 @@
     }
     .el-dialog__body {
         padding-top: 0;
+        padding-bottom: 38px;
     }
-
+    .tree-aside {
+        height: auto;
+    }
     .pannle-footer {
         position: absolute;
         bottom: 17px;
@@ -120,17 +123,16 @@
     // border-radius: 5px;
     height: 90%;
 }
-#content-manage .tree-aside {
-    height: auto;
-}
-.el-dialog {
-    margin-top: 5vh !important;
-    width: 90%;
-    height: 80%;
-    overflow: auto;
-}
+
+// .el-dialog {
+//     margin-top: 5vh !important;
+//     width: 90%;
+//     height: 80%;
+//     overflow: auto;
+// }
 #content .el-dialog__body {
     padding-top: 0;
+   
     /* border-top: 1px solid #e8eaf3; */
 }
 #content .modal-header {
@@ -157,3 +159,5 @@
         background: rgba(238, 238, 238, 1);
     }
 }
+
+// 图片选择弹窗 

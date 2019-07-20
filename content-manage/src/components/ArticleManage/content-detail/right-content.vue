@@ -138,7 +138,7 @@ export default {
 }
 .avatar-uploader /deep/ .el-upload {
     border: 1px dashed rgba(144,220,232,1);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -169,7 +169,7 @@ export default {
 .el-upload-list__item-actions {
     
     display: flex;
-       align-items: flex-end;
+    align-items: flex-end;
     justify-content: space-around;
     position: absolute;
     width: 100%;

@@ -63,9 +63,9 @@ export default {
     },
     methods:{
       submitForm(){
-          console.log(this.$refs.articleRight.fileList1)
-        
-        let fileList = this.$refs.articleRight.fileList1.map(item=>{
+          console.log(this.$refs.articleRight.fileList2)
+        let flieUrls = [...this.$refs.articleRight.fileList1,...this.$refs.articleRight.fileList2]    
+        let fileList =flieUrls.map(item=>{
             return item.response
         });
         this.$refs.articleContent.submitForm('articleDetail',fileList)
