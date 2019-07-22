@@ -179,14 +179,14 @@
                             <!-- <el-input placeholder="SEO关键词" v-model="articleDetail.metaKeywords"></el-input> -->
                         </el-form-item>
 
-                        <el-form-item label="文章描述" prop="metaDescription">
+                        <!-- <el-form-item label="文章描述" prop="metaDescription">
                             <el-input
                                 type="textarea"
                                 :rows="5"
                                 placeholder
                                 v-model="articleDetail.metaDescription"
                             ></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                         <!-- <el-form-item label="自定义地址" prop="metaDescription">
                         <el-input placeholder="请输入自定义地址" v-model="articleDetail.metaDescription"></el-input>
                         </el-form-item>-->
@@ -403,9 +403,18 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
-            data.metaKeywords = data.metaKeywords.split(",");
-            data.searchKeywords = data.searchKeywords.split(",");
-            console.log(data, "000-----");
+          
+             if( Object.keys(data.metaKeywords).length<1){
+                 data.metaKeywords =[];
+            }else{
+                  data.metaKeywords = data.metaKeywords.split(",");
+            }
+            if( Object.keys(data.searchKeywords).length<1){
+                 data.searchKeywords =[];
+            }else{
+               
+                data.searchKeywords = data.searchKeywords.split(",");
+            }
             this.articleDetail = data;
             this.articleDetail.NewId = data.id;
         },
@@ -479,7 +488,7 @@ export default {
                     type: "success",
                     message: "保存成功!"
                 });
-                this.$router.push("/content/news");
+                // this.$router.push("/content/news");
             }
         },
 
@@ -617,7 +626,7 @@ export default {
         padding-bottom: 20px;
         // height: 20px;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 500;
         color: rgba(38, 38, 38, 1);
         // line-height: 20px;
     }

@@ -291,7 +291,7 @@ export default {
             this.curComponent = SetPhoneNumber;
             this.ISRIGHTPANNELSHOW(true)
         },            
-        //修改密码
+        //修改 || 设置 密码
         modifiPwd() {
             this.curComponent = SetPwd;
             this.titText = "设置密码";

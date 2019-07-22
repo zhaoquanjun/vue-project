@@ -4,7 +4,7 @@
         <el-alert :closable="false" :title="tipTitle" type="success"></el-alert>
         <template v-if="!isSetPassWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
-                <el-form-item prop="password" class="verification-code">
+                <el-form-item prop="passWrod" class="verification-code">
                     <el-input
                         type="password"
                         v-model="ruleForm.passWrod"
@@ -58,7 +58,7 @@ export default {
     props: ["isSetPassWord", "sourcePhone"],
     data() {
         var checPwd = (rule, value, callback) => {
-            
+              
             if (value.length > 16) {
                 callback(new Error("密码长度不能超过16位！"));
             } else if (value.length < 6) {
@@ -170,6 +170,11 @@ export default {
             console.log(option);
             let { status } = await updateUserPwd(option);
             if (status === 200) {
+                 this.$message({
+                    type: "success",
+                    message: "设置成功!"
+                });
+                 this.$store.commit("CLOSERIGHTPANNEL", false);
             }
         },
         async modifyPaw() {
@@ -180,6 +185,11 @@ export default {
             };
             let { status } = await changeUserPwd(option);
             if (status === 200) {
+                 this.$message({
+                    type: "success",
+                    message: "修改成功!"
+                });
+                 this.$store.commit("CLOSERIGHTPANNEL", false);
             }
         },
         // 点击下一步
