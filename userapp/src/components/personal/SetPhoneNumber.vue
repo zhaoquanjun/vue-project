@@ -66,7 +66,7 @@ import NoCaptcha from "../common/no-captcha";
     methods: {       
         async nextStep() {
             let code = this.$refs.getSms.ruleForm.verification
-            if (code==null) {
+            if (code ==null || code =="") {
                 this.$message({
                     type: "failed",
                     message: "请输入验证码!"
@@ -93,7 +93,8 @@ import NoCaptcha from "../common/no-captcha";
             this.$refs.getSms.submitForm("ruleForm");            
           // alert('确认修改')
         },
-        close() {            
+        close() {   
+            this.isModifi = false;         
             this.$store.commit("CLOSERIGHTPANNEL", false);
         }
      },

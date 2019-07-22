@@ -165,17 +165,25 @@ export default {
         // 确定按钮
         confrim(){
             let displayName = this.ruleForm.name;
+            
             this.$emit("createCategory",displayName, this.imageUrl1)
+             this.ruleForm.name ="";
+             this.imageUrl1=""
         },
         //取消按钮
         cancel(){
             this.$emit("closeUploadCategoryPic")
+            this.ruleForm.name ="";
+             this.imageUrl1=""
         }
        
     }
 };
 </script>
 <style scoped>
+.el-input /deep/ .el-input__inner {
+    padding-right: 50px;
+}
 .uploadCategoryPic /deep/ .el-form{
     padding: 10px;
 }

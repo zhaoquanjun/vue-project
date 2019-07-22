@@ -198,6 +198,7 @@ export default {
         },
         // 添加分类  0720
         create(ev, node, data) {
+           
             this.modifyCategoryData = ""; //创建新分类 不需传
             this._handleShowMoreOperate(ev, node, data);
             this.isAdd = true;
@@ -239,12 +240,22 @@ export default {
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
 
-            this.setCss(allCategoryEle, {
-                background: "#fff",
-                color: "#606266",
-                border: "none"
-            });
+           if (data.level === 0) {
+                this.setCss(allCategoryEle, {
+                    background: "#f7f7f7",
+                    color: "#00C1DE",
+                    border: "2px solid #00C1DE;"
+                });
+            } else {
+                this.setCss(allCategoryEle, {
+                    background: "#fff",
+                    color: "#606266",
+                    border: "none"
+                });
+            }
             this.closeUploadCategoryPic();
+              this.productSearchOptions.categoryIdList = this.getAllNodeIds(data);
+            this.$emit("getProList")
         },
         // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {
@@ -268,6 +279,11 @@ export default {
     }
 };
 </script>
+<style>
+#content-manage .el-aside {
+      overflow: visible !important;
+    }
+</style>
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";

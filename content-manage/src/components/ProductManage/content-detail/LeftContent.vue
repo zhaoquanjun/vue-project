@@ -442,14 +442,16 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
-            if(data.seoKeyword && Object.keys(data.seoKeyword).length<1){
+         
+            if( Object.keys(data.seoKeyword).length<1){
                  data.seoKeyword =[];
             }else{
-                  data.seoKeyword = data.metaKeywords.split(",");
+                  data.seoKeyword = data.seoKeyword.split(",");
             }
-             if(data.searchKeyword && Object.keys(data.searchKeyword).length<1){
+            if( Object.keys(data.searchKeyword).length<1){
                  data.searchKeyword =[];
             }else{
+               
                 data.searchKeyword = data.searchKeyword.split(",");
             }
             
