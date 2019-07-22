@@ -43,7 +43,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { stat } from "fs";
 export default {
     name: "AuthList",
     props: {

@@ -2,25 +2,7 @@
     <div>
         <el-card class="box-card">
             <div slot="header">
-                <span>产品封面</span>
-            </div>
-            <div>
-                <!-- <el-upload
-                    class="upload-pic"
-                    :action="uploadPicAction"
-                    :headers="headers"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :on-success="handleSucess"
-                    :on-change="handleChange"
-                    list-type="picture-card"
-                    :auto-upload="true"
-                    :limit="60"
-                    ref="upload"
-                    :before-upload="beforeUpload"
-                >
-                    <i class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>-->
+                <span class="article-cover">产品封面</span>
             </div>
             <div>
                 <el-upload
@@ -33,10 +15,14 @@
                     :before-upload="beforeAvatarUpload"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
-                     :multiple="true"
-                    >
+                    :multiple="true"
+                >
                     <!-- <img v-if="imageUrl1" :src="imageUrl1" class="avatar"> -->
-                    <i class="el-icon-plus avatar-uploader-icon"></i>
+                    <template >
+                        <i style class="el-icon-plus avatar-uploader-icon"></i>
+                        <i style=" display: block;font-size:12px">添加图片</i>
+                    </template>
+                    <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
                 </el-upload>
             </div>
         </el-card>
@@ -60,6 +46,7 @@ export default {
             activeName: "",
             uploadDisabled: true,
             fileList1: [],
+            fileList2:[],
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
             headers: {
@@ -72,38 +59,30 @@ export default {
     },
     watch: {
         fileList() {
-            console.log(this.fileList,'0000')
+            console.log(this.fileList, "0000");
             this.fileList1 = this.fileList;
         }
     },
     methods: {
-        handleSucess(response, file, fileList) {
-            console.log(fileList)
-            this.imageUrl1 = file.response;
-            if (!this.uploadSucess) {
-                this.$message({
-                    type: "success",
-                    message: "上传成功!"
-                });
-                setTimeout(() => {
-                    this.$emit("switchUploadBoxShowStatus", "uploadImg");
-                }, 500);
-                this.uploadSucess = true;
-            }
+        handleSucess(response, file, fileList) {},
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
         },
-       handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
+        handlePreview(file) {
+            console.log(file);
+        },
 
         ///////
         handleAvatarSuccess(res, file) {
-            console.log(file,'--00000')
-            this.fileList1.push(file);
+             let fileList ={
+                    name:file.name,
+                    response:file.response,
+                    url:file.response
+                }
+             this.fileList2.push(fileList);
+            
         },
-        beforeAvatarUpload(file,fileList) {
+        beforeAvatarUpload(file, fileList) {
             this.headers.Authorization =
                 "Bearer " + this.$store.state.accessToken.Authorization;
             const isPic =
@@ -127,36 +106,30 @@ export default {
 .el-card /deep/ .el-card__body {
     text-align: center;
 }
-/* 
 .el-collapse /deep/ .el-collapse-item__header {
     padding: 0 10px;
 }
 .el-collapse /deep/ .el-collapse-item__content {
     padding: 0 10px;
 }
+/* 产品封面 */
+.avatar-uploader {
+}
 .avatar-uploader /deep/ .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
+    border: 1px dashed rgba(144, 220, 232, 1);
+    border-radius: 0;
+
+    vertical-align: middle;
+}
+.avatar-uploader .el-upload i {
+    color: #00c1de;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
 }
-.avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-}
-.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-}
-.avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-} */
 </style>
 <style lang="scss" scoped>
+.article-cover {
+    color: #262626;
+    font-weight: 500;
+    font-size: 14px;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="asideTree" class="aside-tree">
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -11,6 +11,7 @@
             ref="tree"
             draggable
             :allow-drop="allowDrop"
+            :highlight-current="true"
         >
             <div
                 class="custom-tree-node"
@@ -18,47 +19,23 @@
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
             >
-                <div
-                    style="display: inline-block;"
-                    v-if="renameShowId === data.id || data.isNewAdd"
-                >
-                    <input
-                        class="category-name"
-                        maxlength="20"
-                        v-model="data.label"
-                        v-filter-special-char
-                        @input="changeCategoryInput(data.label)"
-                    />
-                    <span class="enter" @click.stop="hadnleTreeInput(data,data.isNewAdd)">
-                        <svg-icon icon-class="tree-yes"></svg-icon>
-                    </span>
-                    <span class="cancel" @click.stop="cancelhadnleTreeInput(data,node)">
-                        <svg-icon icon-class="tree-no"></svg-icon>
-                    </span>
+                <img
+                    class="categoryPic"
+                    v-if="data.thumbnailPicUrl"
+                    :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
+                />
+                <div class="node-label-wrap">
+                    <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
+                        <span class="node-label">{{data.label}}</span>
+                    </el-tooltip>
+                    <span>({{data.leafSum }})</span>
                 </div>
-                <template v-else>
-                    <img
-                        v-if="data.thumbnailPicUrl"
-                        :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
-                    />
-                    <div>
-                        <div class="node-label-wrap">
-                            <el-tooltip
-                                class="item"
-                                effect="dark"
-                                :content="data.label"
-                                placement="bottom"
-                            >
-                                <span class="node-label">{{data.label}}</span>
-                            </el-tooltip>
-                            <span v-if="data.level<=1">({{data.leafSum }})</span>
-                        </div>
-                    </div>
-                </template>
                 <!-- 三个点 分类操作 -->
+                <!--  -->
+                <!-- _handleShowMoreOperate($event,node,data) -->
                 <span
                     class="set-tree-type"
-                    @click.stop="handleShow(node,data)"
+                    @click.stop="handleShow($event,node,data)"
                     v-show="data.id === treeNodeId"
                 >
                     <svg-icon icon-class="tree-handler"></svg-icon>
@@ -68,14 +45,14 @@
                         v-if="node.data.level <3"
                         type="text"
                         size="mini"
-                        @click.stop=" create(data,node)"
+                        @click.stop=" create($event,node,data)"
                     >添加子分类</button>
                     <button
                         v-if="node.data.level>0"
                         type="text"
                         size="mini"
-                        @click.stop="rename(data)"
-                    >修改名称</button>
+                        @click.stop="rename($event,node,data)"
+                    >编辑分类</button>
 
                     <button
                         v-if="node.data.level>0"
@@ -86,11 +63,22 @@
                 </div>
             </div>
         </el-tree>
+        <div class="category-name-pic" ref="operateSection">
+            <UploadCategoryPic
+                :modifyCategoryData="modifyCategoryData"
+                @createCategory="createCategory"
+                @closeUploadCategoryPic="closeUploadCategoryPic"
+            />
+        </div>
     </div>
 </template>
 <script>
+import UploadCategoryPic from "./uploadCategoryPic";
 export default {
     props: ["treeResult", "productSearchOptions", "isrightPannel"],
+    components: {
+        UploadCategoryPic
+    },
     data() {
         return {
             flag: false,
@@ -101,10 +89,42 @@ export default {
             curlabelName: "",
             isRename: false,
             newAddNode: "",
-            renameData: ""
+            renameData: "",
+            createCategoryData: "", // 当前点击的创建分类节点
+            isAdd: false, // true 添加 false编辑
+            modifyCategoryData: {} // 编辑分类需要传当前节点的名称和imgurl
         };
     },
+      mounted() {
+        // document.addEventListener("click", () => {
+        //     this.$nextTick(() => {
+        //         if (this.$refs.operateSection)
+        //             this.$refs.operateSection.style.display = "none";
+        //     });
+        // });
+    },
     methods: {
+        createCategory(displayName, thumbnailPicUrl) {
+            if (this.isAdd) {
+                this.$emit("create", {
+                    DisplayName: displayName,
+                    ParentId: this.createCategoryData.id,
+                    thumbnailPicUrl: thumbnailPicUrl
+                });
+            } else {
+                this.$emit(
+                    "update",
+                    this.createCategoryData.id,
+                    displayName,
+                    thumbnailPicUrl
+                );
+            }
+            this.closeUploadCategoryPic();
+        },
+        closeUploadCategoryPic() {
+            this.$refs.operateSection.style.display = "none";
+        },
+        //////////////
         handlerOver(data) {
             if (!isNaN(data.id)) this.treeNodeId = data.id;
             if (this.isNewAdd) this.treeNodeId = null;
@@ -112,29 +132,6 @@ export default {
         handlerMouseLeave() {
             this.treeNodeId = this.curId = null;
         },
-        //修改节点名称 OR 新增节点
-        hadnleTreeInput(data, isNewAdd) {
-            this.isNewAdd = false; //点击确定修改后 开启允许创建子节点
-            if (data.label == "") {
-                this.$message({
-                    message: "分类名称不能为空",
-                    type: "warning"
-                });
-            }
-            if (isNewAdd) {
-                this.$emit("create", {
-                    DisplayName: data.label,
-                    ParentId: data.parentId
-                });
-                return;
-            }
-            if (data.label != "") {
-                this.$emit("update", data.id, data.label, data.thumbnailPicUrl);
-                this.renameShowId = this.curId = null;
-            }
-            this.treeNodeId = null;
-        },
-        //
         cancelhadnleTreeInput(data, node) {
             if (this.isRename) {
                 if (data.label == "") {
@@ -199,19 +196,11 @@ export default {
             }
             return true;
         },
-
-        create(data, node) {
-            if (!this.isNewAdd) {
-                this.isNewAdd = true;
-                const newChild = {
-                    parentId: data.id,
-                    label: "",
-                    isNewAdd: true
-                };
-                data.children.unshift(newChild);
-            }
-            this.curId = null;
-            this.newAddData = data;
+        // 添加分类  0720
+        create(ev, node, data) {
+            this.modifyCategoryData = ""; //创建新分类 不需传
+            this._handleShowMoreOperate(ev, node, data);
+            this.isAdd = true;
         },
         getAllNodeIds(node, isChildNode) {
             var idList = isChildNode ? [] : [node.id];
@@ -231,132 +220,82 @@ export default {
             }
             return level;
         },
-        rename(data) {
-            this.renameShowId = data.id;
-            this.curId = null;
-            this.isRename = true;
-            this.renameData = data;
-            this.isNewAdd = true;
+        // 编辑分类 0720
+        rename(ev, node, data) {
+            this.isAdd = false;
+            this.modifyCategoryData = data;
+            this._handleShowMoreOperate(ev, node, data);
         },
         modifyNode(id, parentId, idOrderByArr) {
             this.$emit("modifyNode", id, parentId, idOrderByArr);
         },
-        // 描述：
+        // 描述： 删除分类
         batchRemove(node, data) {
             console.log(data, "remove-----");
             this.$emit("batchRemove", this.getAllNodeIds(data));
         },
+        // 点击节点的时候
         changeCategory(data) {
-            if (this.isrightPannel) {
-                console.log(data);
-                this.$emit("chooseNode", data);
-                return false;
-            }
-            if (data.isNewAdd) return;
-            this.curlabelName = data.label;
-            this.productSearchOptions.categoryIdList = this.getAllNodeIds(data);
-            this.$emit("getProList");
-            // 点击其他区域 把当前新增但未确定的节点删除掉
-            this.newAddData && this.newAddData.children.shift();
-            if (this.renameShowId !== data.id) this.isNewAdd = false;
+            let allCategoryEle = document.querySelector(".el-tree")
+                .childNodes[0].childNodes[0];
 
-            //  // 点击其他区域 把当前重命名但未确定的，恢复重命名之前label
-            if (this.renameData && this.renameShowId !== data.id) {
-                this.renameData.label = this.curlabelName;
-                this.renameShowId = null;
+            this.setCss(allCategoryEle, {
+                background: "#fff",
+                color: "#606266",
+                border: "none"
+            });
+            this.closeUploadCategoryPic();
+        },
+        // 取消第一个全部分类默认选中的样式
+        setCss(obj, css) {
+            for (var attr in css) {
+                obj.style[attr] = css[attr];
             }
         },
-        handleShow(node, val) {
+        // 操作按钮出现
+        handleShow(ev, node, val) {
             node.checked = true;
             this.curId = node.data.id;
         },
-        changeCategoryInput(label) {
-            console.log(label);
+
+        _handleShowMoreOperate(ev, node, data) {
+            this.createCategoryData = data;
+            this.$refs.operateSection.style.left =
+                ev.pageX - ev.offsetX + 16 + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection.style.display = "block";
         }
-    },
-    mounted() {
-        // document.addEventListener("click",()=>{
-        //    this.curId = null;
-        // })
     }
 };
 </script>
-<style>
-.el-tree-node > .el-tree-node__children {
-    overflow: visible !important;
-}
-</style>
 
-<style scoped>
-.el-tree /deep/ .el-tree-node__content {
-    height: 44px;
-    position: relative !important;
-    background: #fff;
-}
-
-.el-tree /deep/ .el-tree-node__label {
-    font-size: 12px;
-}
-</style>
 <style lang="scss" scoped>
-.custom-tree-node {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: block;
-    // width: 84px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    .enter {
-        margin: 0 5px;
-    }
-    .node-label-wrap {
-        cursor: move;
-        display: flex;
-        align-items: center;
-        height: 100%;
-    }
-    .node-label {
-        display: block;
-        max-width: 100px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .category-name {
-        width: 86px;
-        height: 30px;
-        border: none;
-        border: 1px solid rgba(229, 229, 229, 1);
-    }
+@import "../style/manageAsideTree";
+.category-name-pic {
+    width: 282px;
+    height: 190px;
+    background: #fff;
+    display: none;
+    position: absolute;
+    z-index: 19;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
+    // border: 1px solid rgba(216, 216, 216, 1);
+    // &:after {
+    //     position: absolute;
+    //     content: "";
+    //     left: -21px;
+    //     top: 10px;
+    //     border-top: 10px transparent dashed;
+    //     border-left: 10px transparent dashed;
+    //     border-bottom: 10px transparent dashed;
+    //     border-right: 10px #fff solid;
+    //      border: 1px solid rgba(216, 216, 216, 1);
+    // }
 }
 
-.tree-handle {
-    position: absolute;
-    right: -88px;
-    top: 0;
-    z-index: 1000;
-    background: #ffffff;
-    width: 92px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.07);
-    padding: 5px 0;
-    button {
-        width: 100%;
-        display: block;
-        padding: 8px 14px;
-        text-align: left;
-        &:hover {
-            background: #eee;
-        }
-    }
-}
-
-.set-tree-type {
-    position: absolute;
-    right: 5px;
-    padding: 0 5px;
-    z-index: 10;
+.categoryPic {
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
 }
 </style>

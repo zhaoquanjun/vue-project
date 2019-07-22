@@ -78,7 +78,6 @@
                 <!-- //<img :src="picUrl"> -->
                 <el-carousel
                     :autoplay="false"
-                    :initial-index="initial"
                     arrow="always"
                     indicator-position="none"
                     :loop="true"
@@ -93,7 +92,7 @@
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
-                    <span>尺寸: {{picInfo.sizeStr}}</span>
+                    <!-- <span>尺寸: {{picInfo.sizeStr}}</span> -->
                     <span>大小: {{picInfo.size}}</span>
                 </div>
             </el-dialog>
@@ -173,10 +172,10 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
+             this.fullOssUrl=""
             this.fullOssUrl = row.fullOssUrl
             this.imgList = this.imgPageResult.list
             this.imgVisible = true;
-            this.initial = Number(index);
             
         },
         change(index){

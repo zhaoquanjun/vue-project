@@ -5,24 +5,6 @@
                 <span class="article-cover">文章封面</span>
             </div>
             <div>
-                <!-- <el-upload
-                    class="upload-pic"
-                    :action="uploadPicAction"
-                    :headers="headers"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :on-success="handleSucess"
-                    :on-change="handleChange"
-                    list-type="picture-card"
-                    :auto-upload="true"
-                    :limit="60"
-                    ref="upload"
-                    :before-upload="beforeUpload"
-                >
-                    <i class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>-->
-            </div>
-            <div>
                 <el-upload
                     class="avatar-uploader"
                     :action="uploadPicAction"
@@ -156,7 +138,7 @@ export default {
 }
 .avatar-uploader /deep/ .el-upload {
     border: 1px dashed rgba(144,220,232,1);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -187,7 +169,7 @@ export default {
 .el-upload-list__item-actions {
     
     display: flex;
-       align-items: flex-end;
+    align-items: flex-end;
     justify-content: space-around;
     position: absolute;
     width: 100%;

@@ -83,7 +83,7 @@ export default {
     data() {
         return {
             ascSort:false,
-            descSort:false,
+            descSort:true,
           
             modeSelecte: true,
             options: [
@@ -100,7 +100,7 @@ export default {
                     label: "文件名"
                 }
             ],
-            orderByLabel: ""
+            orderByLabel: "创建时间"
         };
     },
     methods: {
@@ -117,13 +117,15 @@ export default {
         switchIsDesc(flag) {
             if(flag==="asc"){
                 this.ascSort = true;
-                 this.descSort = !this.ascSort
+                 this.descSort = !this.ascSort;
+                  this.picSearchOptions.isDescending = false
+                .isDescending;
             }else{
                 this.descSort = true;
-                this.ascSort = !this.descSort
+                this.ascSort = !this.descSort;
+                 this.picSearchOptions.isDescending = true
             }
-            this.picSearchOptions.isDescending = !this.picSearchOptions
-                .isDescending;
+           
             this.getPicList();
         },
         batchMove() {

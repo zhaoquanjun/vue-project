@@ -7,12 +7,12 @@
                 <el-form-item prop="password" class="verification-code">
                     <el-input
                         type="password"
-                        v-model="ruleForm.password"
+                        v-model="ruleForm.passWrod"
                         autocomplete="on"
                         placeholder="输入设置密码"
                     ></el-input>
                 </el-form-item>
-                <el-form-item prop="confirmPassword" class="verification-code">
+                <el-form-item prop="beSurePwd" class="verification-code">
                     <el-input
                         type="password"
                         v-model="ruleForm.beSurePwd"
@@ -47,6 +47,7 @@
     </div>
 </template>
 <script>
+const TIME_COUNT = 60; //更改倒计时时间
 import {
     updateUserPwd,
     sendSourcePhoneCode,
@@ -57,15 +58,26 @@ export default {
     props: ["isSetPassWord", "sourcePhone"],
     data() {
         var checPwd = (rule, value, callback) => {
-            console.log(rule, value, callback);
-            setTimeout(() => {
-                if (value.length > 16) {
-                    callback(new Error("密码长度不能超过16位！"));
-                } else if (value.length < 6) {
-                    callback(new Error("密码长度最低为6位！"));
-                }
-                let reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
-            }, 1000);
+            
+            if (value.length > 16) {
+                callback(new Error("密码长度不能超过16位！"));
+            } else if (value.length < 6) {
+                callback(new Error("密码长度最低为6位！"));
+            } else {
+                callback();
+            }
+            let reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
+        };
+        var checBeSurePwd = (rule, value, callback) => {
+            if (value.length > 16) {
+                callback(new Error("密码长度不能超过16位！"));
+            } else if (value.length < 6) {
+                callback(new Error("密码长度最低为6位！"));
+            } else if (value !== this.ruleForm.passWrod) {
+                callback(new Error("两次输入密码不一致!"));
+            } else {
+                callback();
+            }
         };
         return {
             show: true, // 初始启用按钮
@@ -75,7 +87,7 @@ export default {
             tipTitle:
                 "设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码",
             ruleForm: {
-                password: "",
+                passWrod: "",
                 beSurePwd: ""
             },
             ruleFormCode: {
@@ -84,14 +96,18 @@ export default {
             },
 
             rules: {
-                password: [
-                    { validator: checPwd, trigger: "blur", required: true }
+                passWrod: [
+                    {
+                        validator: checPwd,
+                        trigger: "blur",
+                        required: true
+                    }
                 ],
                 beSurePwd: [
                     {
-                        required: true,
-                        message: "请输入文章标题",
-                        trigger: "blur"
+                        validator: checBeSurePwd,
+                        trigger: "blur",
+                        required: true
                     }
                 ]
             },
@@ -138,11 +154,11 @@ export default {
         },
         submitForm(formName) {
             //  如果已经设置过密码 调修改接口
-            this.isSetPassWord ? this.modifyPaw() : this.setPaw();
 
             this.$refs[formName].validate(valid => {
                 console.log(valid);
                 if (valid) {
+                    this.isSetPassWord ? this.modifyPaw() : this.setPaw();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -150,7 +166,9 @@ export default {
             });
         },
         async setPaw() {
-            let { status } = await updateUserPwd(this.ruleForm);
+            let option = this.ruleForm;
+            console.log(option);
+            let { status } = await updateUserPwd(option);
             if (status === 200) {
             }
         },
@@ -166,6 +184,10 @@ export default {
         },
         // 点击下一步
         async nextStep() {
+            if (!this.isSetPassWord) {
+                this.submitForm("ruleForm");
+                return;
+            }
             let code = this.ruleFormCode.code;
             if (!code) {
                 this.$message({

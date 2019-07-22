@@ -64,9 +64,15 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span @click="switchIsDesc">
+                    <!-- <span @click="switchIsDesc">
                         <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                         <svg-icon v-else icon-class="top-arrow"></svg-icon>
+                    </span>-->
+                    <span @click="switchIsDesc('asc')">
+                        <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
+                    </span>
+                    <span @click="switchIsDesc('dec')">
+                        <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
                     </span>
                 </div>
                 <div class="head-item head-handle-btn">
@@ -82,28 +88,34 @@
                     已选
                     <i>{{count}}</i> 个产品
                 </span>
-               <div style="float:right">
+                <div style="float:right">
                     <el-button class="deleteActive" size="small" @click="batchPublish(3, false)">上架</el-button>
-                <el-button class="deleteActive" size="small" @click="batchPublish(3, true)">下架</el-button>
-                <el-button class="deleteActive" size="small" @click="batchCopy">复制</el-button>
-                <el-button class="deleteActive" style="margin-right: 10px;" size="small" @click="batchRemove(1,true)">删除</el-button>
-                <el-dropdown trigger="click" @command="handleCommand">
-                    <span class="el-dropdown-link">
-                        <el-button size="small"> <svg-icon icon-class="across-dot"></svg-icon></el-button>
-                      
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <!-- <span size="small" @click="batchclassifySet">移动</span> -->
-                        <el-dropdown-item command="move">移动</el-dropdown-item>
-                        <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
-                        <el-dropdown-item command="top">置顶</el-dropdown-item>
-                        <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
-                        <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                        <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
-                        <el-dropdown-item command="permission">访问权限</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-               </div>
+                    <el-button class="deleteActive" size="small" @click="batchPublish(3, true)">下架</el-button>
+                    <el-button class="deleteActive" size="small" @click="batchCopy">复制</el-button>
+                    <el-button
+                        class="deleteActive"
+                        style="margin-right: 10px;"
+                        size="small"
+                        @click="batchRemove(1,true)"
+                    >删除</el-button>
+                    <el-dropdown trigger="click" @command="handleCommand">
+                        <span class="el-dropdown-link">
+                            <el-button size="small">
+                                <svg-icon icon-class="across-dot"></svg-icon>
+                            </el-button>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <!-- <span size="small" @click="batchclassifySet">移动</span> -->
+                            <el-dropdown-item command="move">移动</el-dropdown-item>
+                            <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
+                            <el-dropdown-item command="top">置顶</el-dropdown-item>
+                            <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
+                            <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
+                            <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
+                            <el-dropdown-item command="permission">访问权限</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
 
                 <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
         <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
@@ -120,6 +132,8 @@ export default {
     props: ["articleSearchOptions", "isBatchHeaderShow", "count", "idsList"],
     data() {
         return {
+            ascSort: false,
+            descSort: true,
             statusOptions: [
                 {
                     statusValue: "",
@@ -185,10 +199,20 @@ export default {
             this.articleSearchOptions.isOnSell = value;
             this.getArticleList();
         },
-        switchIsDesc() {
-            this.articleSearchOptions.isDescending = !this.articleSearchOptions
-                .isDescending;
-            this.getArticleList();
+        switchIsDesc(flag) {
+          
+            if (flag === "asc") {
+                this.ascSort = true;
+                this.descSort = !this.ascSort;
+                console.log(this.ascSort);
+                this.articleSearchOptions.isDescending = false;
+            } else {
+                this.descSort = true;
+                this.ascSort = !this.descSort;
+                this.articleSearchOptions.isDescending = true;
+            }
+
+             this.getArticleList();
         },
         importArticle() {
             // this.push({
@@ -241,22 +265,21 @@ export default {
             this.$emit("batchMove", "batchCopy");
         },
         handleCommand(command) {
-           switch (command){
-               case "move" :
-                   this.batchclassifySet();
-                   break;
-                case "top" :
-                   this.batchTop(2, false);
+            switch (command) {
+                case "move":
+                    this.batchclassifySet();
                     break;
-                case "cancelTop" :
+                case "top":
+                    this.batchTop(2, false);
+                    break;
+                case "cancelTop":
                     this.batchTop(2, true);
-                     break;
+                    break;
                 case "permission":
-                    this.batchViewAuth()
-                     break;     
-
-           }
-      }
+                    this.batchViewAuth();
+                    break;
+            }
+        }
     }
 };
 </script>
@@ -282,7 +305,7 @@ export default {
     /* height: 36px; */
     box-sizing: border-box;
 }
-.select-item{
+.select-item {
     display: inline-block;
     width: 80px;
     box-sizing: border-box;
@@ -290,13 +313,13 @@ export default {
     margin: 0 16px 0 7px;
 }
 .select-sort {
-  width: 117px;
+    width: 117px;
 }
 .head-item {
     display: inline-block;
     flex: none;
 }
-.head-handle-btn{
+.head-handle-btn {
     padding-left: 40px;
 }
 
@@ -318,12 +341,34 @@ export default {
         color: #fff;
     }
 }
-
-.bach-header{
+.bach-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     // padding:0 21px;
     width: 100%;
+}
+.head-right {
+    .sort-icon {
+        display: inline-block;
+        width: 16px;
+        height: 14px;
+    }
+    .asc {
+        background: url("~img/content-icon/asc.png") no-repeat center;
+        background-size: contain;
+    }
+    .asc-icon-on {
+        background: url("~img/content-icon/asc-on.png") no-repeat center;
+        background-size: contain;
+    }
+    .dec {
+        background: url("~img/content-icon/desc.png") no-repeat center;
+        background-size: contain;
+    }
+    .dec-icon-on {
+        background: url("~img/content-icon/desc-on.png") no-repeat center;
+        background-size: contain;
+    }
 }
 </style>

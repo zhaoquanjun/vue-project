@@ -13,6 +13,7 @@
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
+                
             ></m-tree>
         </el-aside>
         <el-main>
@@ -368,7 +369,7 @@ export default {
             this.getTreeAsync();
         },
         async modifyNodeCategory(id, parentId, idOrderByArr) {
-            await articleManageApi.modifyNode(id, parentId, idOrderByArr);
+            //await articleManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTreeAsync();
         },
         async batchRemoveCategory(idlist) {

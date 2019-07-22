@@ -1,0 +1,23 @@
+// 文章 产品详情 
+.keyword-list {
+    position: absolute;
+    display: inline-block;
+    z-index: 1;
+    top: 50px;
+    left: 0;
+    li {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 0 5px;
+        background: #609ee9;
+        border-radius: 30px;
+        font-size: 12px;
+        color: #fff;
+        i {
+            color: #fff;
+        }
+    }
+}
+
+
+

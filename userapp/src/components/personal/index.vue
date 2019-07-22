@@ -148,7 +148,7 @@
                 :sourcePhone="userInfo.phoneNumber"
                 :provider="CurrentProvider"
                 :imageUrl="userInfo.userHeadUrl"
-                isSetPassWord="true"
+                :isSetPassWord="userInfo.isSetPassWord"
                 @removeExternalUserAsync="_removeExternalUserAsync"
                 @updateWeiXinHtml="updateWeiXinHtml"
                 @getUserProfileAsync="_getUserProfileAsync"

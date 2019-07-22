@@ -60,7 +60,7 @@ import NoCaptcha from "../common/no-captcha";
                     label: "+39"
                 }
             ],
-            value: "中国大陆"
+            value: "+86"
         };
     },
     methods: {       

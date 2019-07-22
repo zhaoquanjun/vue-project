@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 !node_modules/element-ui/lib/upload.js
+!node_modules/vue-simple-uploader
+!node_modules/simple-uploader.js
 /dist
 
 # local env files

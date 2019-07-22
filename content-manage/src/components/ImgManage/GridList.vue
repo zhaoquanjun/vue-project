@@ -1,11 +1,11 @@
 <template>
     <div class="table-wrap" id="img-list">
         <ul class="img-list">
-            <li class="item" v-for="(item) in imgPageResult.list" :key="item.id">
+            <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
                 <grid-list-item 
                 :curItem="item" 
                 @handleSelected="handleSelected"
-                @viewPic="viewPic"
+                @viewPic="viewPic(item,index)"
                 @handleMove="handleMove"
                 @batchRemovePic="batchRemovePic"
                 @rename="rename"
@@ -24,17 +24,30 @@
                 @size-change="changeSize"
             ></el-pagination>
         </div>
+       <!-- :title="picTitle" -->
         <div id="img-list-dialog">
-           <el-dialog  :visible.sync="imgVisible"  :modal-append-to-body="false">
-            <!-- //<img :src="picUrl"> -->
-            <el-carousel :autoplay="false" arrow="always" indicator-position="none" :loop="false">
-                <el-carousel-item v-for="item in imgPageResult.list" :key="item.id">
-                    <h3>
-                        <img :src="item.fullOssUrl">
-                    </h3>
-                </el-carousel-item>
-            </el-carousel>
-        </el-dialog>
+            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
+                <!-- //<img :src="picUrl"> -->
+                <el-carousel
+                    :autoplay="false"
+                    :initial-index="initial"
+                    arrow="always"
+                    indicator-position="none"
+                    :loop="true"
+                    @change="change"
+                >
+                    <el-carousel-item v-for="item in imgList" :key="item.id">
+                        <h3>
+                            <img :src="fullOssUrl" />
+                        </h3>
+                    </el-carousel-item>
+                </el-carousel>
+                <div class="dislog-footer" slot="footer">
+                    <span>{{picInfo.title}}</span>
+                    <span>分类: {{picInfo.categoryName}}</span>
+                    <span>大小: {{picInfo.size}}</span>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -44,8 +57,12 @@ export default {
     props: ["imgPageResult", "picSearchOptions"],
     data() {
         return {
-              imgVisible: false,
-            seletedList: []
+            imgVisible: false,
+            seletedList: [],
+            imgList:"",
+            fullOssUrl:"",
+             picInfo:{},
+             initial:-1,
         };
     },
     components: {
@@ -69,8 +86,21 @@ export default {
             this.picSearchOptions.pageSize = size;
             this.$emit("getPicList");
         },
-        viewPic() {
+        /**
+         * 查看大图
+         */
+        viewPic(row,index) {
+              this.fullOssUrl=""
+            this.fullOssUrl = row.fullOssUrl
+            this.imgList = this.imgPageResult.list
             this.imgVisible = true;
+            this.initial = Number(index);
+            
+        },
+        change(index){
+            console.log(index)
+            this.fullOssUrl=  this.imgList[index].fullOssUrl;
+            this.picInfo = this.imgList[index];
         },
          /**
          * 移动分类
