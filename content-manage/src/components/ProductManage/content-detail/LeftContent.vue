@@ -106,7 +106,7 @@
                                 </el-form-item>
                             </el-col>
                         </el-form-item>
-                        <el-form-item label="搜索关键词" prop="searchKeywords">
+                        <el-form-item label="搜索关键词" prop="searchKeyword">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
@@ -118,7 +118,7 @@
                             </el-tooltip>
                             <ul class="keyword-list" ref="keywordList">
                                 <li
-                                    v-for="(item,index) in detailData.searchKeywords"
+                                    v-for="(item,index) in detailData.searchKeyword"
                                     :key="index"
                                 >
                                     {{item}}
@@ -137,7 +137,7 @@
                             ></el-input>
                             <!-- <el-input
                                 placeholder="每个关键词之间用会车键分离"
-                                v-model="detailData.searchKeywords"
+                                v-model="detailData.searchKeyword"
                             ></el-input>-->
                         </el-form-item>
                         <el-form-item>
@@ -161,14 +161,14 @@
             <div class="content-item seo-key">
                 <el-collapse v-model="activeName1" accordion>
                     <el-collapse-item title="搜索引擎优化" name="1">
-                        <el-form-item label="seo标题" prop="searchKeyword">
+                        <el-form-item label="seo标题" prop="seoTitle">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">不填写则默认使用产品标题</div>
                                 <span>
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
                             </el-tooltip>
-                            <el-input placeholder="seo标题" v-model="detailData.searchKeyword"></el-input>
+                            <el-input placeholder="seo标题" v-model="detailData.seoTitle"></el-input>
                         </el-form-item>
                         <el-form-item style="position:relative" label="seo关键词" prop="seoKeyword">
                             <ul class="keyword-list" ref="metaKeywordList">
@@ -190,14 +190,14 @@
                             <!-- <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input> -->
                         </el-form-item>
 
-                        <el-form-item label="产品描述" prop="seoDescription">
+                        <!-- <el-form-item label="产品描述" prop="seoDescription">
                             <el-input
                                 type="textarea"
                                 :rows="5"
                                 placeholder
                                 v-model="detailData.seoDescription"
                             ></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="自定义地址" prop="customUrl">
                             <el-input placeholder="请输入自定义地址" v-model="detailData.customUrl"></el-input>
                         </el-form-item>
@@ -312,9 +312,9 @@ export default {
                 costPrice: 1, //
                 originalPrice: 1, //
                 seoKeyword: [],
-                searchKeywords: [],
+                searchKeyword: [],
                 seoDescription: "",
-                searchKeyword: "",
+              
                 skuId: "", //
                 publishTime: new Date(),
                 customUrl: "",
@@ -416,18 +416,18 @@ export default {
                 // let width = this.$refs.metaKeywordList.clientWidth;
                 //this.textIndent(ele, width);
             } else {
-                if (this.detailData.searchKeywords.length >= 5 || !value) {
+                if (this.detailData.searchKeyword.length >= 5 || !value) {
                     return;
                 }
                 this.keywordValue = "";
-                this.detailData.searchKeywords.push(value);
+                this.detailData.searchKeyword.push(value);
                 // let ele = this.$refs.keywordInput.$el.children[0];
                 // let width = this.$refs.keywordList.clientWidth;
                // this.textIndent(ele, width);
             }
         },
         removeCurKeyWord(index) {
-            this.detailData.searchKeywords.splice(index, 1);
+            this.detailData.searchKeyword.splice(index, 1);
             // this.$nextTick(() => {
             //     this.$refs.keywordInput.$el.children[0].style.textIndent =
             //         this.$refs.keywordList.clientWidth + "px";
@@ -447,10 +447,10 @@ export default {
             }else{
                   data.seoKeyword = data.metaKeywords.split(",");
             }
-             if(data.searchKeywords && Object.keys(data.searchKeywords).length<1){
-                 data.searchKeywords =[];
+             if(data.searchKeyword && Object.keys(data.searchKeyword).length<1){
+                 data.searchKeyword =[];
             }else{
-                data.searchKeywords = data.searchKeywords.split(",");
+                data.searchKeyword = data.searchKeyword.split(",");
             }
             
             this.detailData = data;
@@ -571,8 +571,8 @@ export default {
         addQuillTitle();
     },
     watch: {
-        "detailData.searchKeywords"() {
-            let width = this.detailData.searchKeywords.length * 52 ;
+        "detailData.searchKeyword"() {
+            let width = this.detailData.searchKeyword.length * 52 ;
             let ele = this.$refs.keywordInput.$el.children[0];
             this.textIndent(ele, width);
         },
