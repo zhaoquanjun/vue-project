@@ -11,28 +11,28 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                        <el-form-item label="邮件服务器" prop="mailServer">
-                            <el-input v-model="ruleForm.name"></el-input>
+                    <el-form :model="mailDetail" :rules="rules" ref="mailDetail" label-width="100px" class="demo-ruleForm">
+                        <el-form-item label="邮件服务器" prop="host">
+                            <el-input v-model="mailDetail.host"></el-input>
                         </el-form-item>
                         <el-form-item label="SSL" prop="SSL">
-                            <el-switch v-model="ruleForm.SSL"></el-switch>
+                            <el-switch v-model="mailDetail.enableSsl"></el-switch>
                         </el-form-item>
-                        <el-form-item label="邮件账号" prop="mailAccount">
-                            <el-input v-model="ruleForm.name"></el-input>
+                        <el-form-item label="邮件账号" prop="username">
+                            <el-input v-model="mailDetail.username"></el-input>
                         </el-form-item>
-                        <el-form-item label="邮件密码" prop="mailPassword">
-                            <el-input v-model="ruleForm.name"></el-input>
+                        <el-form-item label="邮件密码" prop="password">
+                            <el-input v-model="mailDetail.password"></el-input>
                         </el-form-item>
                         <el-form-item label="端口" prop="port">
-                            <el-input v-model="ruleForm.name"></el-input>
+                            <el-input v-model="mailDetail.port">25</el-input>
                         </el-form-item>
-                        <el-form-item label="发件人姓名" prop="senderName">
-                            <el-input v-model="ruleForm.name"></el-input>
+                        <el-form-item label="发件人姓名" prop="displayName">
+                            <el-input v-model="mailDetail.displayName"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                            <el-button @click="resetForm('ruleForm')">重置</el-button>
+                            <el-button type="primary" @click="submitForm('mailDetail')">立即创建</el-button>
+                            <el-button @click="resetForm('mailDetail')">重置</el-button>
                         </el-form-item>
                 </el-form>
                 </el-col>
@@ -46,12 +46,23 @@
 <script>
 import PageSubmenu from "@/components/common/PageSubmenu";
 import { getExternalUserInfo, removeExternalUser } from '@/api/index.js';
+import * as mailServerApi from "@/api/request/mailServerApi";
 export default {
   components:{
       PageSubmenu
   },
   data() {
         return {
+            mailDetail:{
+                id: 0,
+                host: null,
+                siteId:0,
+                enableSsl: false,
+                username: null,
+                password: null,
+                port: 25,
+                displayName: null
+            },
             submenuList: [
                     { name: "网站备份", url: "/website/backup" },
                     { name: "我的网站", url: "/website/mysite" },
@@ -59,44 +70,85 @@ export default {
                     { name: "域名管理", url: "/website/sitedomain" },
                     { name: "邮件服务器", url: "/website/email" },
             ],
-            ruleForm: {
-                mailServer: '',
-                SSL: false,
-                mailAccount: '',
-                mailPassword: '',
-                port: '',
-                senderName: ''
-            },
             rules: {
-                mailServer: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                host: [
+                    { required: true, message: '请输入邮件服务器', trigger: 'blur' },
                 ],
-                mailAccount: [
-                    { required: true, message: '请选择活动区域', trigger: 'blur' }
+                username: [
+                    { required: true, message: '请输入邮件账号', trigger: 'blur' }
                 ],
-                mailPassword: [
-                    { required: true, message: '请选择活动资源', trigger: 'blur' }
+                password: [
+                    { required: true, message: '请输入邮件密码', trigger: 'blur' }
                 ],
                 port: [
-                    { required: true, message: '请填写活动形式', trigger: 'blur' }
+                    { required: true, message: '请填写端口', trigger: 'blur' }
+                ],
+                displayName: [
+                    { required: true, message: '请填写发件人姓名', trigger: 'blur' }
                 ]
             }
         }
   },
+  created() {
+      this.getMailAccountDetail(3);
+  },
   methods: {
+        async getMailAccountDetail(siteId) {
+            let { data } = await mailServerApi.getMailAccountDetail(siteId);
+            this.mailDetail = data;
+            console.log(data, "000-----");
+        },
         /**
          * 提交表单
          */
         submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+            if(this.mailDetail.id > 0){
+                this.editMailAccount('mailDetail')
+            }else{
+                this.$refs[formName].validate(valid => {
+                    if (valid) {
+                        this.insertMailAccount();
+                    } else {
+                        console.log("error submit!!");
+                        return false;
+                    }
+                });
+            }
+        },
+        //插入邮件配置
+        async insertMailAccount() {
+            let { status, data } = await mailServerApi.createMailAccount(
+                this.mailDetail
+            );
+            if (status === 200) {
+                this.$message({
+                    type: "success",
+                    message: "添加成功!"
+                });
+            }
+        },
+        // 编辑提交
+        editMailAccount(formName) {
+            this.$refs[formName].validate(valid => {
                 if (valid) {
-                    alert('submit!');
+                    this.saveMailAccount();
                 } else {
-                    console.log('error submit!!');
+                    console.log("error submit!!");
                     return false;
                 }
             });
+        },
+        //编辑保存邮件配置
+        async saveMailAccount() {
+            let { status, data } = await mailServerApi.editMailAccount(
+                this.mailDetail
+            );
+            if (status === 200) {
+                this.$message({
+                    type: "success",
+                    message: "保存成功!"
+                });
+            }
         },
         /**
          * 重置表单
