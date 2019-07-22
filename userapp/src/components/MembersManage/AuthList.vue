@@ -14,12 +14,14 @@
                     @click="curAuth(item,index)"
                     :class="{'choose-bg':item.show == true && isSelect}"
                 >
-                    <!-- <el-tooltip
+                    <el-tooltip
                         :content="item.name"
                         placement="top-start"
+                        transition="0"
                     >
-                      </el-tooltip> -->
-                        <span class="item-left ellipsis">{{item.name}}</span>
+                           <span class="item-left ellipsis">{{item.name}}</span>
+                      </el-tooltip>
+                     
                   
                      <!-- <el-tooltip
                      v-if="isSelect"
