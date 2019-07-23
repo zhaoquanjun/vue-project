@@ -78,16 +78,15 @@
             </el-main>
             <el-footer><slot name="modal-footer"></slot></el-footer>
         </el-main>
-        <el-dialog title="上传图片"
+        <el-dialog title="上传视频"
                     width="50%"
                    :visible.sync="dialogTableVisible"
                    :modal-append-to-body="false">
             <span slot="title">
                 <span class="fs14">
-                    上传图片
+                    上传视频
                     <el-tooltip class="item"
                                 effect="dark"
-                                content="一次可上传60张图片，单张图片大小不超过10MB"
                                 placement="right">
                         <svg-icon icon-class="tip-icon"></svg-icon>
                     </el-tooltip>

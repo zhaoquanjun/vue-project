@@ -3,12 +3,13 @@
               :autoStart="false"
               class="uploader-example"
               @file-added="onFileAdded"
+              @file-success="onFileSuccess"
               @upload-start="uploadStart"
               @file-error="onFileError">
         <uploader-unsupport></uploader-unsupport>
         <uploader-drop>
-            <p>将文件拖到此处，或 </p><br />
-            <uploader-btn :attrs="attrs">选择视频文件</uploader-btn>
+            <p>将{{displayName}}拖到此处，或 </p><br />
+            <uploader-btn :attrs="attrs">选择{{displayName}}</uploader-btn>
             <uploader-btn :directory="true">选择文件夹</uploader-btn>
         </uploader-drop>
         <uploader-list></uploader-list>
@@ -18,22 +19,23 @@
 <script>
     import SparkMD5 from 'spark-md5'
     import * as chunkUploadManageApi from "@/api/request/chunkUploadManageApi";
+
     export default {
+        props: ["displayName", "uploadType", "accept", "apiHost"],
         components: {
 
         },
         data() {
             return {
                 categoryId: 0,
-                uploadType: "Video",
                 options: {
                     target: null,
                     testChunks: true,
                     chunkSize: 2048000,   //分块大小,
                     simultaneousUploads: 1,
                     headers: {
-                        //todo 在header中添加的验证，请根据实际业务来
-                        //    Authorization: "Bearer " + "xxxxxxxxxxxxxxx"
+                        AppId: this.$store.state.dashboard.appid,
+                        Authorization: "Bearer " + this.$store.state.accessToken.Authorization
                     },
                     checkChunkUploadedByResponse: (chunk, message) => {
                         let data = JSON.parse(message);
@@ -43,7 +45,8 @@
                             }
                             case 1: {
                                 if (chunk.offset === 0) {
-                                    alert(`文件[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`);
+                                    //todo 更换alert
+                                    alert(`${this.displayName}[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`);
                                 }
                                 return true;
                             }
@@ -59,6 +62,7 @@
                                         ContentType: chunk.file.fileType,
                                         CategoryId: this.categoryId
                                     });
+                                    //todo 更换alert
                                     alert(`文件秒传成功`);
                                 }
 
@@ -68,27 +72,26 @@
                     },
                 },
                 attrs: {
-                    accept: 'video/*'
+                    accept: this.accept//'video/*'
                 },
             }
         },
         created() {
-            //todo 更换路径
-            this.options.target = `//localhost:8200/API/chunkupload/upload/${this.uploadType}/${this.categoryId}`;
+            this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.categoryId}`;
         },
         methods: {
             onFileError(rootFile, file, response, chunk) {
+                //todo 更换alert
                 alert(JSON.parse(response).message)
+            }, onFileSuccess() {
+                this.$emit("getList");
             },
             onFileAdded(file) {
                 this.panelShow = true;
-                console.log(file, "onFileAdded")
                 //  file.resume();
                 this.computeMD5(file);
             },
             uploadStart() {
-                //  file.pause();
-                //console.log(file,33333333333)
             },
             computeMD5(file) {
                 let fileReader = new FileReader();
@@ -98,8 +101,8 @@
 
                 fileReader.readAsArrayBuffer(file.file);
                 fileReader.onload = (e => {
-
                     md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
+                    //todo md5监听事件在此触发
                     console.log(`MD5计算完毕：${file.id} ${file.name} MD5：${md5} 用时：${new Date().getTime() - time} ms,自动开始上传,\n 香槟boy 监听事件在此触发`);
                     file.uniqueIdentifier = md5;
                     file.resume();
