@@ -6,6 +6,7 @@
                     size="small"
                     v-model="articleSearchOptions.keyword"
                     placeholder="请输入名称或ID进行精准查询"
+                    @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
                 >
                     <el-button slot="append" @click="getArticleList">
@@ -180,6 +181,9 @@ export default {
     methods: {
         getArticleList() {
             this.$emit("contentTableList");
+        },
+        searchEnterFun() {
+            this.getArticleList();
         },
         changeStatus(value) {
             this.articleSearchOptions.isOnSell = value;
