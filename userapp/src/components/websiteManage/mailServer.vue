@@ -18,8 +18,8 @@
                         <el-form-item label="SSL" prop="SSL">
                             <el-switch v-model="mailDetail.enableSsl"></el-switch>
                         </el-form-item>
-                        <el-form-item label="邮件账号" prop="username">
-                            <el-input v-model="mailDetail.username"></el-input>
+                        <el-form-item label="邮件账号" prop="accountName">
+                            <el-input v-model="mailDetail.accountName"></el-input>
                         </el-form-item>
                         <el-form-item label="邮件密码" prop="password">
                             <el-input v-model="mailDetail.password"></el-input>
@@ -27,8 +27,8 @@
                         <el-form-item label="端口" prop="port">
                             <el-input v-model="mailDetail.port">25</el-input>
                         </el-form-item>
-                        <el-form-item label="发件人姓名" prop="displayName">
-                            <el-input v-model="mailDetail.displayName"></el-input>
+                        <el-form-item label="发件人姓名" prop="fromAlias">
+                            <el-input v-model="mailDetail.fromAlias"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="submitForm('mailDetail')">立即创建</el-button>
@@ -56,12 +56,11 @@ export default {
             mailDetail:{
                 id: 0,
                 host: null,
-                siteId:0,
                 enableSsl: false,
-                username: null,
+                accountName: null,
                 password: null,
                 port: 25,
-                displayName: null
+                fromAlias: null
             },
             submenuList: [
                     { name: "网站备份", url: "/website/backup" },
@@ -74,7 +73,7 @@ export default {
                 host: [
                     { required: true, message: '请输入邮件服务器', trigger: 'blur' },
                 ],
-                username: [
+                accountName: [
                     { required: true, message: '请输入邮件账号', trigger: 'blur' }
                 ],
                 password: [
@@ -83,18 +82,18 @@ export default {
                 port: [
                     { required: true, message: '请填写端口', trigger: 'blur' }
                 ],
-                displayName: [
+                fromAlias: [
                     { required: true, message: '请填写发件人姓名', trigger: 'blur' }
                 ]
             }
         }
   },
   created() {
-      this.getMailAccountDetail(3);
+      this.getMailAccountDetail();
   },
   methods: {
-        async getMailAccountDetail(siteId) {
-            let { data } = await mailServerApi.getMailAccountDetail(siteId);
+        async getMailAccountDetail() {
+            let { data } = await mailServerApi.getMailAccountDetail();
             this.mailDetail = data;
             console.log(data, "000-----");
         },
