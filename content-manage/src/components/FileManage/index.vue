@@ -4,7 +4,7 @@
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
                 <svg-icon icon-class="img-type-title"></svg-icon>
-                <span>图片分类</span>
+                <span>{{displayName}}分类</span>
             </h4>
             <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
             <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
@@ -19,17 +19,17 @@
         </el-aside>
 
         <el-main>
+            <list-header :count-pic="countPic"
+                         :display-name="displayName"
+                         :pic-search-options="picSearchOptions"
+                         :is-batch-header-show="isBatchHeaderShow"
+                         @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
+                         @getPicList="getPicList"
+                         @batchMove="batchMove"
+                         @batchDelete="batchDelete"
+                         @showType="showType">
 
-            <img-list-header :count-pic="countPic"
-                             :pic-search-options="picSearchOptions"
-                             :is-batch-header-show="isBatchHeaderShow"
-                             @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
-                             @getPicList="getPicList"
-                             @batchMove="batchMove"
-                             @batchDelete="batchDelete"
-                             @showType="showType">
-
-            </img-list-header>
+            </list-header>
 
             <el-main>
                 <component :is="componentId"
@@ -55,17 +55,11 @@
                     <div class="category-content">
                         <span name="cur-tip">移动至</span>
                     </div>
-                    <!-- <m-tree
-                        :isright-pannel="true"
-                        :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    ></m-tree> -->
                     <SelectTree :categoryName="curImgInfo.categoryName"
                                 :tree-result="treeResult"
                                 @chooseNode="chooseNode"
-                                :isexpand="true"
-                    >
-                              
+                                :isexpand="true">
+
                     </SelectTree>
 
 
@@ -78,13 +72,13 @@
             </el-main>
             <el-footer><slot name="modal-footer"></slot></el-footer>
         </el-main>
-        <el-dialog title="上传视频"
-                    width="50%"
+        <el-dialog title="上传"
+                   width="50%"
                    :visible.sync="dialogTableVisible"
                    :modal-append-to-body="false">
             <span slot="title">
                 <span class="fs14">
-                    上传视频
+                    上传{{displayName}}
                     <el-tooltip class="item"
                                 effect="dark"
                                 placement="right">
@@ -93,27 +87,29 @@
                 </span>
 
             </span>
-            <upload-pic @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
-                        @getTree="getTree"
-                        :tree-result="treeResult"
-                        :upload-pic-url="uploadPicUrl"
-                        :node-data="nodeData"
-                         />
+            <chunk-upload :displayName="displayName"
+                          :uploadType="'File'"
+                          :apiHost="apiHost"
+                          :accept="'*/*'"
+                          @getList="getPicList"
+                          />
 
         </el-dialog>
 
     </el-container>
 </template>
 <script>
+    import ChunkUpload from "@/components/common/ChunkUpload"
     import MTree from "./MTree";
-    import UploadPic from "./UploadPic";
-    import ImgListHeader from "./ImgListHeader";
-    import ImgList from "./ImgList";
-   
-    import RightPannel from "./RightPannel";
+
+    import ListHeader from "./ListHeader";
+    import List from "./List";
     import SelectTree from "@/components/common/SelectTree"
-    import * as imgManageApi from "@/api/request/imgManageApi";
-    import * as imgCategoryManageApi from "@/api/request/imgCategoryManageApi";
+
+
+    import RightPannel from "./RightPannel";
+    import * as videoManageApi from "@/api/request/fileManageApi";
+    import * as videoCategoryManageApi from "@/api/request/fileCategoryManageApi";
     import environment from "@/environment/index.js";
 
     export default {
@@ -125,17 +121,17 @@
         },
         components: {
             MTree,
-            ImgListHeader,
-            ImgList,
-          
-            UploadPic,
+            ListHeader,
+            List,
+            ChunkUpload,
             RightPannel,
             SelectTree
         },
         data() {
             return {
-                nodeData:"",// 分类节点的名称
-                componentId: "ImgList",
+                displayName: "文件",
+                nodeData: "",// 分类节点的名称
+                componentId: "List",
                 isImgList: false,
                 countPic: 0,
                 curImgInfo: {},
@@ -148,7 +144,7 @@
                 treeResult: null,
                 dialogTableVisible: false,
                 totalSum: 0,
-                uploadPicUrl: environment.uploadPicUrl,
+                apiHost: environment.memberManageApi,
                 picSearchOptions: {
                     pageSize: 10,
                     pageIndex: 1,
@@ -162,25 +158,25 @@
             };
         },
         mounted() {
-           
+
             this.getPicList();
             this.getTree();
         },
         methods: {
             // 获取列表
             async getPicList(node) {
-                if(node){
-                     this.nodeData = node; // 上传图片所需
+                if (node) {
+                    this.nodeData = node; // 上传图片所需
                 }
-               
-                let { data } = await imgManageApi.getPicList(this.picSearchOptions);
+
+                let { data } = await videoManageApi.getPicList(this.picSearchOptions);
                 this.imgPageResult = data;
 
             },
             // 批量删除列表
             async batchRemovePic(idlist) {
                 this.$confirm(
-                    "删除后，图片将被移动到回收站，可在回收站中恢复，是否确定删除？",
+                    `删除后，${this.displayName}将被移动到回收站，可在回收站中恢复，是否确定删除？`,
                     "提示",
                     {
                         confirmButtonText: "确定",
@@ -192,7 +188,7 @@
                                 let {
                                     status,
                                     data
-                                } = await imgManageApi.batchRemove(true, idlist);
+                                } = await videoManageApi.batchRemove(true, idlist);
                                 if (status === 200) {
                                     this.getTree();
                                     this.$message({
@@ -217,7 +213,7 @@
             },
 
             async changeCategoryPic(categoryId, idList) {
-                let { data, status } = await imgManageApi.changeCategory(
+                let { data, status } = await videoManageApi.changeCategory(
                     categoryId,
                     idList
                 );
@@ -231,17 +227,17 @@
                 }
             },
             async renamePic(id, newname) {
-                await imgManageApi.rename(id, newname);
+                await videoManageApi.rename(id, newname);
                 this.getPicList();
             },
             async getTree() {
-                let { data } = await imgCategoryManageApi.get();
+                let { data } = await videoCategoryManageApi.get();
                 this.treeResult = data.treeArray;
                 this.totalSum = data.totalSum;
             },
             async newCategory(entity) {
                 console.log(entity);
-                await imgCategoryManageApi.create(entity);
+                await videoCategoryManageApi.create(entity);
                 this.getTree();
             },
             async batchRemoveCategory(idList) {
@@ -258,7 +254,7 @@
                             if (action === "confirm") {
                                 let {
                                     status
-                                } = await imgCategoryManageApi.batchRemove(idList);
+                                } = await videoCategoryManageApi.batchRemove(idList);
                                 if (status === 200) {
                                     this.getTree();
                                     this.$message({
@@ -277,11 +273,11 @@
                 );
             },
             async renameCategory(id, newName) {
-                await imgCategoryManageApi.rename(id, newName);
+                await videoCategoryManageApi.rename(id, newName);
                 this.getTree();
             },
             async modifyNodeCategory(id, parentId, idOrderByArr) {
-                await imgCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
+                await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
                 this.getTree();
             },
             // 点击上传图片
@@ -315,7 +311,6 @@
             },
             // 点击确定按钮 更新图片分类
             updateCategoryPic() {
-                  alert(12346)
                 if (!this.moveToClassiFy) {
                     this.$message({
                         type: "error",
@@ -348,7 +343,7 @@
             //展示方式
             showType(val) {
                 if (val === "list") {
-                    this.componentId = "ImgList";
+                    this.componentId = "List";
                     this.picSearchOptions.pageSize = 10;
                     this.getPicList();
                 } else {
@@ -372,7 +367,26 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../style/contentDetail"
+    .pic-type-title {
+        height: 60px;
+        line-height: 60px;
+        padding-left: 14px;
+        border-bottom: 1px solid #e8eaf3;
+        border-right: 1px solid #e8eaf3;
+        box-sizing: border-box;
+        span
+
+    {
+        vertical-align: middle;
+        padding-left: 10px;
+    }
+
+    }
+
+    .title-item {
+        padding: 28px 0 12px 12px;
+    }
 </style>
+
 
 

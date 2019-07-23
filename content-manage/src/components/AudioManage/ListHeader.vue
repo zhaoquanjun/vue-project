@@ -5,7 +5,7 @@
                 <el-input
                     size="small"
                     v-model="picSearchOptions.keyword"
-                    placeholder="输入图片名称搜索"
+                    placeholder="输入视频名称搜索"
                     class="input-with-select"
                 >
                     <el-button slot="append" @click="getPicList">
@@ -53,7 +53,7 @@
             <div class="head-item head-right">
                 <el-button class="upload-wrap" @click="switchUploadBoxShowStatus">
                     <!-- <svg-icon icon-class="upload-img"></svg-icon> -->
-                    上传文件
+                    上传{{displayName}}
                 </el-button>
             </div>
         </template>
@@ -79,7 +79,7 @@
 </template>
 <script>
 export default {
-    props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
+        props: ["picSearchOptions", "isBatchHeaderShow", "countPic","displayName"],
     data() {
         return {
             ascSort:false,

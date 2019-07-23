@@ -9,10 +9,8 @@
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="图片名称">
+            <el-table-column label="视频名称">
                 <template slot-scope="scope">
-                    <img :src="scope.row.zoomOssUrl" class="cover" />
-
                     <el-input
                         v-if="(index == scope.$index)"
                         type="text"
@@ -86,7 +84,7 @@
                 >
                     <el-carousel-item v-for="item in imgList" :key="item.id">
                         <h3>
-                            <img :src="fullOssUrl" />
+                            <video :src="fullOssUrl"  controls="controls"/>
                         </h3>
                     </el-carousel-item>
                 </el-carousel>
