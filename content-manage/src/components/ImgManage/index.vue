@@ -79,7 +79,7 @@
             <el-footer><slot name="modal-footer"></slot></el-footer>
         </el-main>
         <el-dialog title="上传图片"
-                    width="876px"
+                    width="886px"
                    :visible.sync="dialogTableVisible"
                    :modal-append-to-body="false">
             <span slot="title">
@@ -374,29 +374,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-dialog{
-        
-    }
-
-.pic-type-title {
-    height: 60px;
-    line-height: 60px;
-    padding-left: 14px;
-    border-bottom: 1px solid #e8eaf3;
-    border-right: 1px solid #e8eaf3;
-    box-sizing: border-box;
-    span
-
-{
-    vertical-align: middle;
-    padding-left: 10px;
-}
-
-}
-
-.title-item {
-    padding: 28px 0 12px 12px;
-}
+@import "../style/contentDetail"
 </style>
 
 

@@ -43,7 +43,7 @@
                        
             <el-table-column min-width="100" prop="createTimeStr" label="创建时间" ></el-table-column>
 
-            <el-table-column width="150" min-width="100" label="操作">
+            <el-table-column width="200" min-width="100" label="操作">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)"></span>
@@ -163,10 +163,12 @@ export default {
             let clientH = document.getElementsByClassName("more-operate")[0].clientHeight +10;
             let clientW = this.$refs.operateSection.clientWidth;
             
-            this.$refs.operateSection.style.left =
-                ev.pageX - ev.offsetX - 40 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + clientH + "px";
-              if (this.$refs.operateSection.style.display == "block") {
+        
+              this.$refs.operateSection.style.left =
+                ev.pageX - ev.offsetX + 16 + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+
+            if (this.$refs.operateSection.style.display == "block") {
                 this.$refs.operateSection.style.display = "none";
             } else {
                 this.$refs.operateSection.style.display = "block";

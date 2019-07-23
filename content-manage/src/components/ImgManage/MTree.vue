@@ -53,12 +53,12 @@
                 <!-- 三个点 分类操作 -->
                 <span
                     class="set-tree-type"
-                    @click.stop="handleShow(node,data)"
+                    @click.stop="handleShow($event,node,data)"
                     v-show="data.id === treeNodeId"
                 >
                     <svg-icon icon-class="tree-handler"></svg-icon>
                 </span>
-                <div class="tree-handle" v-show="node.data.id === curId">
+                <!-- <div class="tree-handle" v-show="node.data.id === curId">
                     <button
                         v-if="node.data.level <3"
                         type="text"
@@ -78,9 +78,19 @@
                         size="mini"
                         @click.stop="batchRemove( node,data)"
                     >删除分类</button>
-                </div>
+                </div>-->
             </div>
         </el-tree>
+        <div @click="handleCategory" class="tree-handle" ref="operateSection">
+            <button v-if="curClickNode.data.level <3" type="text" size="mini" @click="create">添加子分类</button>
+            <button v-if="curClickNode.data.level>0" type="text" size="mini" @click="rename">修改名称</button>
+            <button
+                v-if="curClickNode.data.level>0"
+                type="text"
+                size="mini"
+                @click="batchRemove"
+            >删除分类</button>
+        </div>
     </div>
 </template>
 <script>
@@ -97,8 +107,17 @@ export default {
             curlabelName: "",
             isRename: false,
             newAddNode: "",
-            renameData: ""
+            renameData: "",
+            curClickNode: { data: { level: "" } }
         };
+    },
+    mounted() {
+        document.addEventListener("click", () => {
+            this.$nextTick(() => {
+                if (this.$refs.operateSection)
+                    this.$refs.operateSection.style.display = "none";
+            });
+        });
     },
     methods: {
         handlerOver(data) {
@@ -197,19 +216,19 @@ export default {
             }
             return true;
         },
-
-        create(data, node) {
+        //  新增分类
+        create() {
             if (!this.isNewAdd) {
                 this.isNewAdd = true;
                 const newChild = {
-                    parentId: data.id,
+                    parentId: this.curClickData.id,
                     label: "",
                     isNewAdd: true
                 };
-                data.children.unshift(newChild);
+                this.curClickData.children.unshift(newChild);
             }
             this.curId = null;
-            this.newAddData = data;
+            this.newAddData = this.curClickData;
         },
         getAllNodeIds(node, isChildNode) {
             var idList = isChildNode ? [] : [node.id];
@@ -229,20 +248,20 @@ export default {
             }
             return level;
         },
-        rename(data) {
-            this.renameShowId = data.id;
+        // 重命名分类名称
+        rename() {
+            this.renameShowId = this.curClickData.id;
             this.curId = null;
             this.isRename = true;
-            this.renameData = data;
+            this.renameData = this.curClickData;
             this.isNewAdd = true;
         },
         modifyNode(id, parentId, idOrderByArr) {
             this.$emit("modifyNode", id, parentId, idOrderByArr);
         },
         // 描述：
-        batchRemove(node, data) {
-            console.log(data, "remove-----");
-            this.$emit("batchRemove", this.getAllNodeIds(data));
+        batchRemove() {
+            this.$emit("batchRemove", this.getAllNodeIds(this.curClickData));
         },
         // 点击分类节点
         changeCategory(data) {
@@ -279,31 +298,58 @@ export default {
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
 
-            this.setCss(allCategoryEle, {
-                background: "#fff",
-                color: "#606266",
-                border: "none"
-            });
+            if (data.level === 0) {
+                this.setCss(allCategoryEle, {
+                    background: "#f7f7f7",
+                    color: "#00C1DE",
+                    border: "2px solid #00C1DE;"
+                });
+            } else {
+                this.setCss(allCategoryEle, {
+                    background: "#fff",
+                    color: "#606266",
+                    border: "none"
+                });
+            }
+
+            this.closeUploadCategoryPic();
         },
-         // 取消第一个全部分类默认选中的样式
+        // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {
             for (var attr in css) {
                 obj.style[attr] = css[attr];
             }
         },
-        handleShow(node, val) {
+        handleShow(ev, node, data) {
+            console.log(
+                node,
+                data,
+                "console.log(node, data)console.log(node, data)console.log(node, data)"
+            );
             node.checked = true;
-
             this.curId = node.data.id;
+            // 07 22新增
+            this._handleShowMoreOperate(ev, node);
+            this.curClickData = data;
+            this.curClickNode = node;
+        },
+        // 新增0722   分类操作菜单显示
+        _handleShowMoreOperate(ev, row) {
+            this.$refs.operateSection.style.left =
+                ev.pageX - ev.offsetX + 16 + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection.style.display = "block";
+        },
+        // 新增 0722  关闭分类操作菜单
+        closeUploadCategoryPic() {
+            this.$refs.operateSection.style.display = "none";
+        },
+        handleCategory() {
+            this.closeUploadCategoryPic();
         },
         changeCategoryInput(label) {
             console.log(label);
         }
-    },
-    mounted() {
-        // document.addEventListener("click",()=>{
-        //    this.curId = null;
-        // })
     }
 };
 </script>

@@ -87,7 +87,7 @@ axios.interceptors.response.use(
                     // 其他错误，直接抛出错误提示                
                     default:
                         Message({
-                            message: status + "   " + error.response.data,
+                            message: error.response.data,
                             type: 'error',
                             duration: 5 * 1000
                         })
