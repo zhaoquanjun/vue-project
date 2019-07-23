@@ -1,5 +1,6 @@
 
 .aside-tree{
+    height: calc(100% - 60px);
     .custom-tree-node {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -29,6 +30,7 @@
         }
     }
     .tree-handle {
+        display: none;
         position: absolute;
         right: -88px;
         top: 0;

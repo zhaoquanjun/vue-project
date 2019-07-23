@@ -4,13 +4,14 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <div v-if="!isModifi">
                
-                <el-form-item prop="verification" class="verification-code">
+                    <el-form-item prop="verification" class="verification-code">
                     <el-input
+                        :key="0"
                         type="verification"
                         v-model="ruleForm.verification"
                         autocomplete="on"
                         placeholder="验证码"
-                        @input="changeInput"
+                      
                     ></el-input>
                     <el-button class="verification-text" @click="send" :disabled="disabled=!show">
                         <span v-show="show">获取验证码</span>
@@ -20,7 +21,7 @@
             </div>
             <div v-else>
                 <el-form-item prop="phone">
-                    <el-input v-model.number="ruleForm.phone" autocomplete="on" placeholder="手机号">
+                    <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号">
                         <span slot="prefix">
                             <svg-icon icon-class="search-icon"></svg-icon>
                         </span>
@@ -49,11 +50,12 @@
                 </el-form-item>
                 <el-form-item prop="verification" class="verification-code">
                     <el-input
+                        key="verification"
                         type="verification"
                         v-model="ruleForm.verification"
                         autocomplete="on"
                         placeholder="验证码"
-                        @input="changeInput"
+                       
                     ></el-input>
                     <el-button class="verification-text" @click="sendChangePhoneCode" :disabled="disabled=!show">
                         <span v-show="show">获取验证码</span>
@@ -66,9 +68,7 @@
 </template>
  
 <script>
-    import { updateUserPhone } from "@/api/index.js";
-    import { sendSourcePhoneCode } from "@/api/index.js";
-    import { sendTargetPhoneCode } from "@/api/index.js"; 
+    import { updateUserPhone ,sendSourcePhoneCode ,sendTargetPhoneCode} from "@/api/index.js";
 const TIME_COUNT = 60; //更改倒计时时间
 export default {        
     props: ["sourcePhone","isModifi"],
@@ -98,18 +98,13 @@ export default {
             activeName: "first",
             ruleForm: {
                 phone: "",
-                password: ""
+                verification: ""
             },
             rules: {
                 phone: [{ validator: checkPhone, trigger: "blur" }],
-                password: [
-                    { required: true, message: "请输入密码", trigger: "blur" },
-                    {
-                        min: 6,
-                        max: 16,
-                        message: "长度在 6 到 16 个字符",
-                        trigger: "blur"
-                    }
+                verification: [
+                    { required: true, message: "请输入验证码", trigger: "blur" },
+                   
                 ]
                 //verification: [
                 //    {
@@ -124,36 +119,36 @@ export default {
             isPwd: true,
             options: [
                 {
-                    value: "+86" ,
-                    label: "中国大陆"
+                    value: "中国大陆" ,
+                    label: " +86"
                 },
                 {
-                    value: "+852",
-                    label: "香港"
+                    value: "香港",
+                    label: "+852"
                 },
                 {
-                    value: "+886",
-                    label: "台湾"
+                    value: "台湾",
+                    label: "+886"
                 },
                 {
-                    value: "+1",
-                    label: "美国"
+                    value: "美国",
+                    label: "+1"
                 },
                 {
-                    value:"+44",
-                    label: "英国" 
+                    value:"英国",
+                    label: "+44" 
                 },
                 {
-                    value: "+81" ,
-                    label: "日本"
+                    value: "日本" ,
+                    label: "+81"
                 },
                 {
-                    value: "+7",
-                    label: "俄罗斯"
+                    value: "俄罗斯",
+                    label: "+7"
                 },
                 {
-                    value: "+39",
-                    label: "意大利"
+                    value: "意大利",
+                    label: "+39"
                 }
             ],
             value: "+86"
@@ -192,7 +187,7 @@ export default {
         async sendChangePhoneCode() {
             console.log(this.value+this.ruleForm.phone);
             let targetPhone = this.ruleForm.phone;//this.value + this.ruleForm.phone;
-            if (this.ruleForm.phone == null) {
+            if (this.ruleForm.phone =="" ||this.ruleForm.phone == null) {
                 this.$message({
                     type: "failed",
                     message: "请先填写要绑定的手机号码!"
@@ -245,7 +240,7 @@ export default {
                     } else {
                         this.$message({
                             type: "failed",
-                            message: "改失败!"
+                            message: "修改失败!"
                         });
                     }
                 } else {
@@ -261,6 +256,7 @@ export default {
             console.log("我变化了");
             console.log(this.ruleForm.verification);
             this.ruleForm.verification = "";
+            this.show = true;
         }
     }
 };

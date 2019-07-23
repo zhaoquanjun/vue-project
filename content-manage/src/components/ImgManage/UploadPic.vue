@@ -113,11 +113,15 @@ export default {
         handleChange(file, fileList) {
             this.uploadDisabled = false;
             fileList.forEach((item, index) => {
+               const maxMb = 10;
+                const isSizeOk = file.size / 1024 / 1024 < maxMb;
                 if (
                     ["image/png", "image/jpeg", "image/gif"].indexOf(
                         item.raw.type
                     ) == -1
                 ) {
+                    fileList.splice(index, 1);
+                }else if(!isSizeOk){
                     fileList.splice(index, 1);
                 }
             });
@@ -207,6 +211,7 @@ export default {
     height: auto;
 }
 .upload-pic /deep/ .el-upload--picture-card {
+    display: block;
     border: none;
 }
 #upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item{
@@ -220,7 +225,7 @@ export default {
 }
 #upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item .el-upload-list__item-thumbnail{
     height: 148px;
-    object-fit: contain;
+    object-fit: cover;
 }
 #upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item-status-label{
     display: none;

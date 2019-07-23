@@ -36,7 +36,7 @@ export default {
 }
 .submenu {
     max-width: 120px;
-    height: 100vh;
+   height: 100%;
     background: #fff;
     .submenu-title {
         height: 40px;

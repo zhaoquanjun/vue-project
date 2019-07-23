@@ -1,5 +1,5 @@
 <template>
-    <el-container>
+    <el-container id="content-manage">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
                 <svg-icon icon-class="img-type-title"></svg-icon>
@@ -390,7 +390,7 @@ export default {
                             let {
                                 status
                             } = await articleManageApi.deleteNewsCategory(
-                                idList
+                                idlist
                             );
                             if (status === 200) {
                                 this.getTreeAsync();
@@ -438,42 +438,8 @@ export default {
     }
 };
 </script>
-<style scoped>
-.el-main {
-    /* padding: 0; */
-}
-.el-container {
-    padding-bottom: 30px;
-}
-.el-container .el-aside {
-    overflow: visible !important;
-}
-.el-container .tree-aside {
-    width: 220px !important;
-    height: 100vh;
-    background: #fff;
-    margin: 0 0 0 13px;
-}
-.el-container .el-dialog__body {
-    padding-top: 0;
-}
-</style>
 <style lang="scss" scoped>
-.pic-type-title {
-    height: 60px;
-    line-height: 60px;
-    padding-left: 14px;
-    border-bottom: 1px solid #e8eaf3;
-    border-right: 1px solid #e8eaf3;
-    box-sizing: border-box;
-    span {
-        vertical-align: middle;
-        padding-left: 10px;
-    }
-}
-.title-item {
-    padding: 28px 0 12px 12px;
-}
+@import "../style/contentDetail.scss"
 </style>
 
 
