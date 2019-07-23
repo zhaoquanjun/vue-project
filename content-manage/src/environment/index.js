@@ -19,7 +19,7 @@ let scope = 'openid profile dashboard.api content.api';
  */
 
 if (process.env.NODE_ENV === 'development') {
-    memberManageApi = 'http://localhost:8200';
+    memberManageApi = 'http://api.content.console.wezhan.cn';
     dashboardApi = 'http://api.dashboard.console.wezhan.cn';
     uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
     authorityUrl = "http://api.identity.console.wezhan.cn";
