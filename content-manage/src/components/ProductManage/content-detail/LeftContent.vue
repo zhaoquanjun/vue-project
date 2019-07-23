@@ -34,15 +34,29 @@
                     <div>
                         <div style="float:left">
                             <span style="font-size:12px">分类:</span>
-                            <span class="select-sort">
-                                <el-select size="small" v-model="value2" placeholder="请选择">
+                            <span class="select-sort category">
+                                <!-- <el-select 
+                                size="small" 
+                                v-model="value2" 
+                                multiple
+                                placeholder="请选择"
+                                >
                                     <el-option
                                         v-for="item in options1"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value"
                                     ></el-option>
-                                </el-select>
+                                </el-select> -->
+                                     <SelectTree
+                                    size="small"
+                                    placeholder="请选择"
+                                    :categoryName="categoryName"
+                                    :tree-result="treeResult"
+                                    @chooseNode="chooseNode"
+                                    @removeSeletedCategory="removeSeletedCategory"
+                                    :multiple="true"
+                                />
                             </span>
                         </div>
                         <div style="float:right">
@@ -231,6 +245,8 @@
 </template>
 <script>
 import * as productManageApi from "@/api/request/productManageApi";
+import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
+import SelectTree from "@/components/common/SelectTree";
 const viewAuth = [
     { name: "全选", id: 0 },
     { name: "登录用户", id: 1 },
@@ -271,7 +287,8 @@ import ModalContent from "@/components/ImgManage/index.vue";
 
 export default {
     components: {
-        ModalContent
+        ModalContent,
+        SelectTree
     },
     data() {
         return {
@@ -300,10 +317,12 @@ export default {
                     label: "全部分类2"
                 }
             ],
-            value2: "全部分类",
-
+            value2: ['全部分类1','全部分类2'],
+            
             activeName: "",
             activeName1: "",
+            categoryName:[],
+            treeResult: null,
             detailData: {
                 name: "",
                 description: "",
@@ -365,9 +384,11 @@ export default {
     created() {
         console.log(this.$route.query);
         var id = this.$route.query.id;
+        this.curProduct = id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
         }
+         this.getTree();
         this.editorOption = {
             placeholder: "请输入文本",
             modules: {
@@ -412,37 +433,25 @@ export default {
                 }
                 this.metaKeyword = "";
                 this.detailData.seoKeyword.push(value);
-                // let ele = this.$refs.metaKeywordsInput.$el.children[0];
-                // let width = this.$refs.metaKeywordList.clientWidth;
-                //this.textIndent(ele, width);
             } else {
                 if (this.detailData.searchKeyword.length >= 5 || !value) {
                     return;
                 }
                 this.keywordValue = "";
                 this.detailData.searchKeyword.push(value);
-                // let ele = this.$refs.keywordInput.$el.children[0];
-                // let width = this.$refs.keywordList.clientWidth;
-               // this.textIndent(ele, width);
             }
         },
         removeCurKeyWord(index) {
             this.detailData.searchKeyword.splice(index, 1);
-            // this.$nextTick(() => {
-            //     this.$refs.keywordInput.$el.children[0].style.textIndent =
-            //         this.$refs.keywordList.clientWidth + "px";
-            // });
         },
         removeCurmetaKeyWord(index) {
             this.detailData.seoKeyword.splice(index, 1);
-            // this.$nextTick(() => {
-            //     metaKeywordsInput.$el.children[0].style.textIndent =
-            //         this.$refs.metaKeywordList.clientWidth + "px";
-            // });
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
-         
+            this.categoryName = data.productCategoryList.map((item)=>{
+                return item.displayName
+            })
             if( Object.keys(data.seoKeyword).length<1){
                  data.seoKeyword =[];
             }else{
@@ -460,12 +469,8 @@ export default {
         },
         // 新建保存
         submitForm(formName, fileList) {
-            console.log(formName)
-            //   this.detailData.pictureUrl = imageUrl;
-            console.log(fileList);
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
-               
                 if (valid) {
                     this.insertArticle();
                 } else {
@@ -505,8 +510,8 @@ export default {
         },
         //编辑保存产品
         async saveArticle() {
-            let { status, data } = await articleManageApi.editArticle(
-                this.detailData
+            let { status, data } = await productManageApi.update(
+                 this.curProduct,this.detailData
             );
             if (status === 200) {
                 this.$message({
@@ -515,16 +520,32 @@ export default {
                 });
             }
         },
-        handleCheckAllChange(val) {
-            // this.checkedCities = val ? cityOptions : [];
-            // this.isIndeterminate = false;
+          /**
+         * 获取 tree 结构
+         */
+        async getTree() {
+            let { data } = await productCategoryManageApi.get();
+            this.treeResult = data.treeArray;
+            console.log(data,'datadatadata')
+              var categoryName = this.$route.query.categoryName;
+            if (categoryName != null || categoryName != undefined) {
+                this.categoryName = categoryName;
+            }
         },
-        handleCheckedCitiesChange(value) {
-            console.log(value);
-            // let checkedCount = value.length;
-            // this.checkAll = checkedCount === this.cities.length;
-            // this.isIndeterminate =
-            //     checkedCount > 0 && checkedCount < this.cities.length;
+        chooseNode(data){
+            this.detailData.productCategoryList.push({
+                displayName:data.label,
+                id:data.id,
+                thumbnailPicUrl:data.thumbnailPicUrl
+            })
+            console.log(data)
+        },
+        //  移除已选择的分类
+        removeSeletedCategory(cur){
+             let productCategoryList =this.detailData.productCategoryList;
+             this.detailData.productCategoryList =productCategoryList.filter((item)=>{
+                 return item.displayName != cur
+             })
         },
         onEditorChange({ editor, html, text }) {
             this.detailData.detailContent = html;
@@ -561,7 +582,18 @@ export default {
         // 关闭图片选择弹窗
         cancelEditorImg() {
             this.isModalShow = false;
-        }
+        },
+         handleCheckAllChange(val) {
+            // this.checkedCities = val ? cityOptions : [];
+            // this.isIndeterminate = false;
+        },
+        handleCheckedCitiesChange(value) {
+            console.log(value);
+            // let checkedCount = value.length;
+            // this.checkAll = checkedCount === this.cities.length;
+            // this.isIndeterminate =
+            //     checkedCount > 0 && checkedCount < this.cities.length;
+        },
     },
     mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
@@ -587,61 +619,12 @@ export default {
     }
 };
 </script>
-<style scoped>
-#article-content .el-collapse,
-#article-content .el-collapse-item__header {
-    border: none;
-    font-size: 14px;
-}
-/* 修改element input设置字数显示 最后遮挡问题 */
-.contentDetail-title.el-input /deep/ .el-input__inner {
-    height: 32px;
-    line-height: 32px;
-    padding-right: 60px;
-}
-</style>
-
 <style scoped lang="scss">
 @import "../../style/contentDetail";
-.article-content {
-    .content-item {
-        padding: 21px 16px 0;
-        background: #fff;
-        box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.03);
-        margin-bottom: 16px;
-        overflow: hidden;
-    }
-    .content-title {
-        padding-bottom: 20px;
-        height: 20px;
-        font-size: 14px;
-        font-weight: 500;
-        color: rgba(38, 38, 38, 1);
-        line-height: 20px;
-    }
-    .set-article,
-    .seo-key {
-        padding: 0 16px;
-    }
-}
-.select-sort {
-    display: inline-block;
-    width: 117px;
-    box-sizing: border-box;
-    height: 32px;
-    margin: 0 16px 0 7px;
-}
-.quill-editor {
-    height: 500px;
-}
-.ql-editor {
-    height: 500px;
-}
-.ql-container {
-    height: 430px;
-}
+
 </style>
 <style scoped>
+@import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 400px;
 }

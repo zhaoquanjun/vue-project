@@ -12,7 +12,6 @@
                     v-for="(item,index) in authList"
                     :key="item"
                 >
-                   
                     <span class="item-left auth-name ellipsis">{{item}}</span>
                     <span class="item-right auth-icon" @click.stop="removeAuth(item,index)">
                         <i class="icon-size clear-icon"></i>
@@ -54,10 +53,6 @@ export default {
             }
         },
         removeAuth(curitem, index) {
-            
-            console.log(curitem)
-           // this.$set(this.authList[index], "show", false);
-           
             this.$emit("removeSelected", curitem,index);
         },
         empty() {
@@ -66,19 +61,6 @@ export default {
     },
     mounted() {
    
-    },
-    watch:{
-         
-        // if (this.memberPolicy.length > 0) {
-        //      console.log(this.memberPolicy);
-        //     for (let i = 0; i < this.userPermission.length; i++) {
-        //         for (let j = 0; j < this.memberPolicy.length; j++) {
-        //             if (this.userPermission[i] == this.memberPolicy[i]) {
-        //                 console.log("真的吗");
-        //             }
-        //         }
-        //     }
-        // }
     },
     computed: {
          ...mapState({

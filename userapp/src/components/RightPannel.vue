@@ -6,10 +6,10 @@
                 <slot name="title-text"></slot>
                 <el-tooltip
                     class="item"
-                    effect="light"
-                    content="可批量为多个成员增加权限，该操作不会删除"
+                   
                     placement="right"
                 >
+                     <div slot="content">可批量为多个成员增加权限，该操作不会删除成员已有权限，<br/>如成员已有权限中无选中的权限，则为成员增加该权限</div>    
                     <slot name="icon-tip"></slot>
                 </el-tooltip>
             </span>

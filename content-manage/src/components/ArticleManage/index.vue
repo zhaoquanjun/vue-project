@@ -6,14 +6,15 @@
                 <span>文章分类</span>
             </h4>
             <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
+            <!--  @getList="getArticleListAsync" -->
             <m-tree
                 :treeResult="treeResult"
                 :articleSearchOptions="articleSearchOptions"
-                @getList="getArticleListAsync"
+                @chooseCategoryNode="chooseCategoryNode"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
-                
+                @chooseNode="chooseNode"
             ></m-tree>
         </el-aside>
         <el-main>
@@ -60,8 +61,8 @@
                 >
                     <span slot="title-text">{{operateName}}文章分类</span>
                     <div class="category-content">
-                            <span name="cur-tip">{{operateName}}至</span>
-                        </div>
+                        <span name="cur-tip">{{operateName}}至</span>
+                    </div>
                     <SelectTree
                         :categoryName="curArticleInfo.categoryName"
                         :tree-result="treeResult"
@@ -102,8 +103,8 @@ export default {
             count: 0,
             idsList: [],
             rightPanelType: 1, // 1 移动文章 2 复制文章
-            selectCategory:"",
-            operateName:"移动",
+            selectCategory: "",
+            operateName: "移动",
 
             isInvitationPanelShow: false,
             articleSearchOptions: {
@@ -127,20 +128,20 @@ export default {
             return this.isInvitationPanelShow === true ? 331 : 0;
         },
         isBatchHeaderShow() {
-            console.log(this.idsList)
+            console.log(this.idsList);
             return this.idsList.length > 1 ? true : false;
         }
     },
     methods: {
         // 移动分类 或是 复制到分类
-        changeOperateName(operate){
+        changeOperateName(operate) {
             this.operateName = operate;
         },
         /**
          * 获取多选的列表
          */
         handleSelectionChange(list) {
-            console.log(list)
+            console.log(list);
             this.idsList = [];
             this.count = list.length;
             if (list.length < 1) return;
@@ -167,7 +168,13 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            let {status, data } = await articleManageApi.batchRemove(true,idlist);
+                            let {
+                                status,
+                                data
+                            } = await articleManageApi.batchRemove(
+                                true,
+                                idlist
+                            );
                             if (status === 200) {
                                 // this.getTree();
                                 this.$message({
@@ -275,6 +282,10 @@ export default {
             console.log(node);
             this.moveToClassiFy = node;
         },
+        // 点击左侧分类树菜单时的节点
+        chooseCategoryNode(data) {
+            this.selectCategory = data;
+        },
         cancelUpdateCategory() {
             this.isInvitationPanelShow = false;
         },
@@ -283,14 +294,14 @@ export default {
             this.curArticleInfo = data;
         },
         // 判断是 移动还是复制
-        handOperateArticle(){
-            switch(this.rightPanelType){
+        handOperateArticle() {
+            switch (this.rightPanelType) {
                 case 1:
                     this.updateCategoryArticle();
                     break;
                 case 2:
-                    this.copyArticle(); 
-                    break; 
+                    this.copyArticle();
+                    break;
             }
         },
         // 点击确定按钮 更新文章所属分类
@@ -302,8 +313,9 @@ export default {
                 });
                 return;
             }
-            let cateId = this.moveToClassiFy.id;
 
+            let cateId = this.moveToClassiFy.id;
+                
             let { data, status } = await articleManageApi.batchMove(
                 cateId,
                 this.newsIdList
@@ -343,35 +355,43 @@ export default {
                 this.getArticleList();
             }
         },
+        // 关闭panel
         closeRightPanel() {
             this.isInvitationPanelShow = true;
         },
-        async getArticleListAsync(options) {
-            let { data } = await articleManageApi.getArticleList(
-                (options = this.articleSearchOptions)
-            );
-            this.articlePageResult = data;
-        },
+        // 获取文章table列表
+        // async getArticleListAsync(options) {
+        //     let { data } = await articleManageApi.getArticleList(
+        //         (options = this.articleSearchOptions)
+        //     );
+        //     this.articlePageResult = data;
+        // },
+        // 获取文章分类的树菜单
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
         },
-        resetCategoryId() {
-            this.articleSearchOptions.categoryId = null;
-            this.getArticleListAsync();
-        },
+        // resetCategoryId() {
+        //     this.articleSearchOptions.categoryId = null;
+        //     this.getArticleListAsync();
+        // },
+        // 重命名分类名称
         async renameCategory(id, newName) {
             await articleManageApi.reName(id, newName);
             this.getTreeAsync();
         },
+        /** 新增分类 */
         async newCategory(entity) {
             await articleManageApi.create(entity);
             this.getTreeAsync();
         },
-        async modifyNodeCategory(id, parentId, idOrderByArr) {
-            //await articleManageApi.modifyNode(id, parentId, idOrderByArr);
-            this.getTreeAsync();
-        },
+        // async modifyNodeCategory(id, parentId, idOrderByArr) {
+        //     //await articleManageApi.modifyNode(id, parentId, idOrderByArr);
+        //     this.getTreeAsync();
+        // },
+        /**
+         * 删除分类
+         */
         async batchRemoveCategory(idlist) {
             idlist = idlist == null ? this.idsList : idlist;
             this.$confirm(
@@ -407,36 +427,44 @@ export default {
             );
         },
         /**获取编辑产品详情 */
-        async getArticleDetail(id) {
-            let { data } = await articleManageApi.getArticleDetail(id);
-            this.articleDetail = data;
-            this.articleDetail.NewId = data.id;
-            this.imageUrl = data.pictureUrl;
-        },
+        // async getArticleDetail(id) {
+        //     let { data } = await articleManageApi.getArticleDetail(id);
+        //     this.articleDetail = data;
+        //     this.articleDetail.NewId = data.id;
+        //     this.imageUrl = data.pictureUrl;
+        // },
+        // 点击新增跳转到详情页
         addArticle() {
-            if(this.selectCategory == null){
+            if (!this.selectCategory) {
                 this.$router.push({
                     path: "/news/create"
                 });
-            } else{
+            } else {
                 this.$router.push({
                     path: "/news/create",
-                    query: { categoryName: this.selectCategory.Label }
+                    query: {
+                        categoryName: this.selectCategory.label,
+                        categoryId: this.selectCategory.id
+                    }
                 });
             }
         },
+        // 编辑文章跳转到详情页
         handleEditArticle(row) {
-            console.log(row);
             this.$router.push({
                 path: "/news/create",
-                query: { id: row.id, categoryName: row.categoryName }
+                query: {
+                    id: row.id,
+                    categoryName: row.categoryName,
+                    categoryId: row.categoryId
+                }
             });
         }
     }
 };
 </script>
 <style lang="scss" scoped>
-@import "../style/contentDetail.scss"
+@import "../style/contentDetail.scss";
 </style>
 
 

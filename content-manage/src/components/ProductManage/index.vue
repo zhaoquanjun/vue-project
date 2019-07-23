@@ -15,6 +15,7 @@
                 @update="updateCategory"
                 @getProList="contentTableList"
                 @modifyNode="modifyNodeCategory"
+                @chooseCategoryNode="chooseCategoryNode"
             ></category-tree>
         </el-aside>
         <el-main>
@@ -41,7 +42,6 @@
                     @handleEditArticle="handleEditArticle"
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
-                   
                 ></content-table>
 
                 <el-dialog
@@ -53,7 +53,7 @@
                 ></el-dialog>
                 <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
-                    @closeRightPanel="closeRightPanel"
+                    @closeRightPanel="cancelUpdateCategory"
                 >
                     <!-- 分类设置 -->
                     <span slot="title-text">分类设置</span>
@@ -124,7 +124,7 @@ export default {
                 keyword: "", //1
                 isDelete: false, //1
                 isOnSell: null, //is 上架
-                categoryIdList: [], //1,
+                categoryIdList: [] //1,
             }
         };
     },
@@ -211,6 +211,11 @@ export default {
         chooseNode(node) {
             console.log(node);
             this.moveToClassiFy = node;
+        },
+        // 点击左侧分类树菜单时的节点
+        chooseCategoryNode(data) {
+            console.log(data, "0000000");
+            this.selectCategory = data;
         },
         cancelUpdateCategory() {
             // this.$refs.checkTree.resetChecked(); // 清空选中的 树结构
@@ -315,7 +320,7 @@ export default {
          * z新增分类
          */
         async newCategory(entity) {
-            console.log(entity,'000000');
+            console.log(entity, "000000");
             await productCategoryManageApi.create(entity);
             this.getTree();
         },
@@ -393,15 +398,26 @@ export default {
             });
         },
         addArticle() {
-            this.$router.push({
-                path: "/product/create"
+            if (!this.selectCategory) {
+                this.$router.push({
+                    path: "/product/create"
+                });
+            } else {
+                 this.$router.push({
+                path: "/product/create",
+                query: {
+                    categoryName: this.selectCategory.label || "全部分类",
+                    categoryId: this.selectCategory.id || 0
+                }
             });
+            }
+           
         },
         handleEditArticle(row) {
             console.log(row);
             this.$router.push({
                 path: "/product/create",
-                query: { id: row.id }
+                query: { id: row.id, isEditor: 1 }
             });
         },
         /**
@@ -417,10 +433,9 @@ export default {
 };
 </script>
 <style scoped>
-
 </style>
 <style lang="scss" scoped>
-@import "../style/contentDetail.scss"
+@import "../style/contentDetail.scss";
 </style>
 
 

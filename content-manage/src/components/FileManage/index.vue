@@ -316,6 +316,7 @@
             },
             // 点击确定按钮 更新图片分类
             updateCategoryPic() {
+                  alert(12346)
                 if (!this.moveToClassiFy) {
                     this.$message({
                         type: "error",
@@ -372,26 +373,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .pic-type-title {
-        height: 60px;
-        line-height: 60px;
-        padding-left: 14px;
-        border-bottom: 1px solid #e8eaf3;
-        border-right: 1px solid #e8eaf3;
-        box-sizing: border-box;
-        span
-
-    {
-        vertical-align: middle;
-        padding-left: 10px;
-    }
-
-    }
-
-    .title-item {
-        padding: 28px 0 12px 12px;
-    }
+@import "../style/contentDetail"
 </style>
-
 
 

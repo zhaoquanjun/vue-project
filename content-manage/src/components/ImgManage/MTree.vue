@@ -34,7 +34,7 @@
                         <svg-icon icon-class="tree-yes"></svg-icon>
                     </span>
                     <span class="cancel" @click.stop="cancelhadnleTreeInput(data,node)">
-                        <svg-icon icon-class="tree-no"></svg-icon>
+                        <svg-icon  icon-class="tree-no"></svg-icon>
                     </span>
                 </div>
                 <template v-else>
@@ -321,11 +321,7 @@ export default {
             }
         },
         handleShow(ev, node, data) {
-            console.log(
-                node,
-                data,
-                "console.log(node, data)console.log(node, data)console.log(node, data)"
-            );
+          
             node.checked = true;
             this.curId = node.data.id;
             // 07 22新增
@@ -356,4 +352,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";
+
 </style>

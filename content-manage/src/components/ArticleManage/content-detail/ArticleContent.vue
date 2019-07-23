@@ -132,14 +132,16 @@
                                         @click.stop="removeCurKeyWord(index)"
                                     ></i>
                                 </li>
-                            </ul>
-                            <el-input
+                                 <el-input
+                                 style="width: auto;"
                                 ref="keywordInput"
                                 placeholder="每个关键词之间用回车键分离"
                                 v-model="keywordValue"
                                 @keyup.enter.native="keywords(keywordValue)"
                                 @blur="keywords(keywordValue)"
                             ></el-input>
+                            </ul>
+                           
                         </el-form-item>
                         <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="articleDetail.isTop"></el-switch>
@@ -186,7 +188,7 @@
                                 placeholder
                                 v-model="articleDetail.metaDescription"
                             ></el-input>
-                        </el-form-item> -->
+                        </el-form-item>-->
                         <!-- <el-form-item label="自定义地址" prop="metaDescription">
                         <el-input placeholder="请输入自定义地址" v-model="articleDetail.metaDescription"></el-input>
                         </el-form-item>-->
@@ -253,12 +255,12 @@ export default {
         ModalContent
     },
     data() {
-        var checkAge = (rule, value, callback) => {
-            setTimeout(() => {
-                if (value.length > 5) {
-                    callback(new Error("每篇文章最多填写5个关键词！"));
-                }
-            }, 1000);
+        var checkWord = (rule, value, callback) => {
+            if (value.length > 4) {
+                callback("每篇文章最多填写5个关键词！");
+            } else {
+                callback();
+            }
         };
         return {
             treeResult: null,
@@ -299,10 +301,9 @@ export default {
                         message: "请输入文章标题",
                         trigger: "blur"
                     }
-                ]
-                // searchKeywords:[
-                //     { validator: checkAge }
-                // ]
+                ],
+
+                searchKeywords: [{ validator: checkWord }]
             },
             isModalShow: false,
             editorOption: {},
@@ -314,6 +315,7 @@ export default {
         let start = new Date();
         // console.log(this.$route.query)
         var id = this.$route.query.id;
+        this.articleDetail.categoryId = this.$route.query.categoryId;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
             this.$emit("changeOperateName", "编辑");
@@ -403,20 +405,26 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
-          
-             if( Object.keys(data.metaKeywords).length<1){
-                 data.metaKeywords =[];
-            }else{
-                  data.metaKeywords = data.metaKeywords.split(",");
+
+            if (Object.keys(data.metaKeywords).length < 1) {
+                data.metaKeywords = [];
+            } else {
+                data.metaKeywords = data.metaKeywords.split(",");
             }
-            if( Object.keys(data.searchKeywords).length<1){
-                 data.searchKeywords =[];
-            }else{
-               
+            if (Object.keys(data.searchKeywords).length < 1) {
+                data.searchKeywords = [];
+            } else {
                 data.searchKeywords = data.searchKeywords.split(",");
             }
             this.articleDetail = data;
             this.articleDetail.NewId = data.id;
+
+            this.$nextTick(() => {
+                let width = this.$refs.keywordList.clientWidth;
+                console.log(width);
+                let ele = this.$refs.keywordInput.$el.children[0];
+                this.textIndent(ele, width);
+            });
         },
         //选择移动分类时的节点
         chooseNode(node) {
@@ -567,90 +575,34 @@ export default {
     computed: {},
     watch: {
         "articleDetail.searchKeywords"() {
-            let width = this.articleDetail.searchKeywords.length * 52;
-            let ele = this.$refs.keywordInput.$el.children[0];
-            this.textIndent(ele, width);
+            this.$nextTick(() => {
+                let width = this.$refs.keywordList.clientWidth;
+                let ele = this.$refs.keywordInput.$el.children[0];
+                this.textIndent(ele, width);
+            });
         },
         "articleDetail.metaKeywords"() {
-            let width = this.articleDetail.metaKeywords.length * 52;
-            let ele = this.$refs.metaKeywordsInput.$el.children[0];
-            this.textIndent(ele, width);
+            this.$nextTick(() => {
+                let width = this.$refs.metaKeywordList.clientWidth;
+                console.log(this.$refs.metaKeywordList.clientWidth);
+                let ele = this.$refs.metaKeywordsInput.$el.children[0];
+                this.textIndent(ele, width);
+            });
         },
-        deep: true
+        deep: true,
+        immediate: true
     }
 };
 </script>
-<style scoped>
- /* 修改element input设置字数显示 最后遮挡问题 */
-.contentDetail-title.el-input /deep/ .el-input__inner{
-    height: 32px;
-    line-height: 32px;
-    padding-right: 60px;
-}
-#article-content .el-collapse,
-#article-content .el-collapse-item__header {
-    border: none;
-    font-size: 14px;
-}
-</style>
+
 
 <style scoped lang="scss">
-.keyword-list {
-    position: absolute;
-    display: inline-block;
-    z-index: 1;
-    top: 50px;
-    left: 0;
-    li {
-        display: inline-block;
-        padding: 5px 10px;
-        margin: 0 5px;
-        background: #609ee9;
-        border-radius: 30px;
-        font-size: 12px;
-        color: #fff;
-        i {
-            color: #fff;
-        }
-    }
-}
-.article-content {
-    .content-item {
-        padding: 21px 16px 20px;
-        background: #fff;
-        box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.03);
-        margin-bottom: 16px;
-        // overflow: hidden;
-    }
-    .content-title {
-        padding-bottom: 20px;
-        // height: 20px;
-        font-size: 14px;
-        font-weight: 500;
-        color: rgba(38, 38, 38, 1);
-        // line-height: 20px;
-    }
-    .set-article,
-    .seo-key {
-        padding: 0 16px;
-    }
-}
-.select-sort {
-    display: inline-block;
-    width: 117px;
-    box-sizing: border-box;
-    height: 32px;
-    margin: 0 16px 0 7px;
-}
-.quill-editor {
-    //height: 500px;
-}
-.ql-container {
-    height: 400px;
-}
+@import "../../style/contentDetail";
 </style>
 <style scoped>
+@import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 420px;
 }
 </style>
+

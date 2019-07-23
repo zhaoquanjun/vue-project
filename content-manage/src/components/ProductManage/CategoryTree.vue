@@ -256,6 +256,7 @@ export default {
             this.closeUploadCategoryPic();
               this.productSearchOptions.categoryIdList = this.getAllNodeIds(data);
             this.$emit("getProList")
+            this.$emit("chooseCategoryNode",data)
         },
         // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {

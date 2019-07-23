@@ -38,6 +38,15 @@ export const createProduct = options => {
 }
 
 /**
+ * 
+ * @param {String} id 当前产品的id 
+ */
+
+export const update = (id, options) => {
+    return ajaxRequest.put(`/api/Product/Update/${id}`, options);
+}
+
+/**
  * 获取产品详情
  * @param {*} options 
  */
@@ -52,5 +61,5 @@ export const getProductDetail = id => {
  * @param {*} options 
  */
 export const copyBatchProduct = options => {
-    return ajaxRequest.post(`/api/Product/BatchCopy`,options);
+    return ajaxRequest.post(`/api/Product/BatchCopy`, options);
 }
