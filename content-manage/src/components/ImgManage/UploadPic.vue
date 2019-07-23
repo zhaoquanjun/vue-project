@@ -1,5 +1,5 @@
 <template>
-    <div id="upload-img">
+    <div id="upload-img" class="upload-img">
         <!-- 一次可上传60张图片，单张图片大小不超过10MB -->
         <el-row class="upload-head" type="flex" justify="space-between">
             <!-- [{{upload2Category.label}}] -->
@@ -105,6 +105,7 @@ export default {
         };
     },
     mounted() {
+        this.headers.appId = this.$store.state.dashboard.appid;
         if (this.nodeData) {
             this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
         }
@@ -142,10 +143,13 @@ export default {
         },
         handleSucess(response, file, fileList) {
             if (++this.count == fileList.length) {
-                this.$message({
+                this.$notify({
                     type: "success",
-                    message: `成功上传${fileList.length}图片`
+                    message: `成功上传${fileList.length}图片`,
+                    duration:1000
+                    
                 });
+                
                 setTimeout(() => {
                    this.$emit("switchUploadBoxShowStatus", "uploadImg");
                     // this.$emit("getTree");
@@ -186,14 +190,14 @@ export default {
             const maxMb = 10;
             const isSizeOk = file.size / 1024 / 1024 < maxMb;
             if (!isPic) {
-                this.$message({
+                this.$notify({
                     type: "warning",
                     message: "上传图片只能是 图片 格式!"
                 });
                 return false;
             }
             if (!isSizeOk) {
-                this.$message({
+                this.$notify({
                     type: "warning",
                     message: `上传图片大小不能超过 ${maxMb}MB!`
                 });
@@ -241,12 +245,13 @@ export default {
 
 </style>
 <style scoped lang="scss">
-#upload-img .upload-head {
+
+
+.upload-img {
+    .upload-head {
     padding-top: 12px;
     border-top: 1px solid #eee;
 }
-
-#upload-img {
     .el-upload-dragger {
         position: none;
     }

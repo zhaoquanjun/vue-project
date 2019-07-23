@@ -15,7 +15,6 @@
                         placeholder="请输入权限名称"
                         @input="changeInput"
                     />
-
                     <button class="auth-btn" @click="searchAuth">搜索</button>
                 </div>
                 <div class="auth-name">
@@ -29,18 +28,16 @@
             </div>
             <div class="pannel-left-item">
                 <h5 class="auth-title">已选权限</h5>
-               
-                    <selected-auth
-                        :authList="memberPolicy"
-                        @removeSelected="removeSelected"
+                <selected-auth
+                    :authList="memberPolicy"
+                    @removeSelected="removeSelected"
+                    @emptySelected="emptySelected"
+                ></selected-auth>
+                <!-- <auth-list
                         @emptySelected="emptySelected"
-                    ></selected-auth>
-                    <!-- <auth-list
-                        @emptySelected="emptySelected"
                         @removeSelected="removeSelected"
                         :authList="memberPolicy"
-                    ></auth-list>-->
-                
+                ></auth-list>-->
             </div>
         </div>
         <div class="footer">
@@ -71,7 +68,6 @@ export default {
     created() {},
     data() {
         return {
-           
             value: ""
         };
     },
@@ -96,7 +92,7 @@ export default {
                         type: "successed",
                         message: "保存成功"
                     });
-                    this.$emit("getMemberList")
+                    this.$emit("getMemberList");
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
                 } else {
                     this.$message({
@@ -105,24 +101,33 @@ export default {
                     });
                 }
             } else {
+                if (this.getSelectedAuthNames.length < 1) {
+                    this.$notify({
+                        title: "提示",
+                        message: "请至少选择一项权限",
+                        type: "warning"
+                    });
+                    return false;
+                };
                 if (this.value != null && this.value.length > 100) {
                     this.$message({
                         type: "failed",
                         message: "备注长度不能超过100个字符!"
                     });
                     return false;
-                }
-                let para = {
+                };
+                let params = {
                     remark: this.value,
                     userId: this.memberInfo.id
                 };
-                let { status } = await this._updateUserPolicy(para);
+                console.log(this.getSelectedAuthNames, "getSelectedAuthNames");
+                let { status } = await this._updateUserPolicy(params);
                 if (status === 200) {
                     this.$message({
                         type: "success",
                         message: "保存成功"
                     });
-                     this.$emit("getMemberList")
+                    this.$emit("getMemberList");
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
                 } else {
                     this.$message({
@@ -181,7 +186,7 @@ export default {
                 return this.invitationValue;
             },
             set: function(newVal) {
-                console.log(newVal)
+                console.log(newVal);
                 this.$store.commit("SETINVITATIONVALUE", newVal);
             }
         }

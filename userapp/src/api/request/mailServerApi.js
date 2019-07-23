@@ -12,7 +12,7 @@ import enbironmemy from "@/environment/index.js";
  * @param {*} option 
  */
 export const getMailAccountDetail = (options) => {
-    return ajaxRequest.get(`${enbironmemy.siteManageApi}/api/MailServer/GetMailAccountDetail/${options}`);
+    return ajaxRequest.get(`${enbironmemy.siteManageApi}/api/MailServer/GetMailAccountDetail`);
 }
 // 创建邮件配置
 export const createMailAccount = (options) => {

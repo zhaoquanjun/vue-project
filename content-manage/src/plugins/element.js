@@ -38,7 +38,9 @@ import {
     Dropdown,
     DropdownItem,
     DropdownMenu,
-    Image,Popover
+    Image,
+    Popover,
+    Notification
   
 } from 'element-ui';
 Vue.use(Container)
@@ -83,7 +85,7 @@ Vue.use(Container)
 ;
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
-
+Vue.prototype.$notify =Notification
 
 
 

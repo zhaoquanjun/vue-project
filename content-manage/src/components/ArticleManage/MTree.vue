@@ -293,16 +293,15 @@ export default {
                 }
                 return false;
             }
-
             if (data.isNewAdd) return;
             this.curlabelName = data.label;
             this.articleSearchOptions.categoryId = data.id;
             //this.selectCategory = data; 因提示报错暂时注释
-            this.$emit("getList");
+           
             // 点击其他区域 把当前新增但未确定的节点删除掉
+            console.log(this.newAddData )
             this.newAddData && this.newAddData.children.shift();
             if (this.renameShowId !== data.id) this.isNewAdd = false;
-
             // 点击其他区域 把当前重命名但未确定的，恢复重命名之前label
             if (this.renameData && this.renameShowId !== data.id) {
                 this.renameData.label = this.curlabelName;
@@ -324,7 +323,8 @@ export default {
                     border: "none"
                 });
             }
-            // 新增
+             this.$emit("getList");
+            this.$emit("chooseCategoryNode",data)
             this.closeUploadCategoryPic()
         },
         // 取消第一个全部分类默认选中的样式
