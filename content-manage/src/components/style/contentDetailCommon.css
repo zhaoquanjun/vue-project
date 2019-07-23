@@ -10,3 +10,12 @@
     font-size: 14px;
     font-weight: 600;
 }
+/* 关键词样式修改 */
+.keyword-list /deep/ .el-input{
+    width: auto;
+}
+.keyword-list /deep/ .el-input .el-input__inner{
+       border: none;
+       padding: 0;
+       height: 23px;
+   }

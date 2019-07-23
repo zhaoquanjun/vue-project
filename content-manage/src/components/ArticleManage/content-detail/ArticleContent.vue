@@ -132,16 +132,15 @@
                                         @click.stop="removeCurKeyWord(index)"
                                     ></i>
                                 </li>
-                                 <el-input
-                                 style="width: auto;"
-                                ref="keywordInput"
-                                placeholder="每个关键词之间用回车键分离"
-                                v-model="keywordValue"
-                                @keyup.enter.native="keywords(keywordValue)"
-                                @blur="keywords(keywordValue)"
-                            ></el-input>
+                                <el-input
+                                    ref="keywordInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="keywordValue"
+                                    @keyup.enter.native="keywords(keywordValue)"
+                                    @blur="keywords(keywordValue)"
+                                ></el-input>
                             </ul>
-                           
+                            <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
                         </el-form-item>
                         <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="articleDetail.isTop"></el-switch>
@@ -170,14 +169,15 @@
                                         @click.stop="removeCurmetaKeyWord(index)"
                                     ></i>
                                 </li>
+                                <el-input
+                                    ref="metaKeywordsInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="metaKeyword"
+                                    @keyup.enter.native="keywords(metaKeyword,'metaKeywords')"
+                                    @blur="keywords(metaKeyword,'metaKeywords')"
+                                ></el-input>
                             </ul>
-                            <el-input
-                                ref="metaKeywordsInput"
-                                placeholder="每个关键词之间用回车键分离"
-                                v-model="metaKeyword"
-                                @keyup.enter.native="keywords(metaKeyword,'metaKeywords')"
-                                @blur="keywords(metaKeyword,'metaKeywords')"
-                            ></el-input>
+                             <div class="el-form-item__error" v-if="isOutSeo">每篇文章最多填写5个关键词！</div>
                             <!-- <el-input placeholder="SEO关键词" v-model="articleDetail.metaKeywords"></el-input> -->
                         </el-form-item>
 
@@ -263,6 +263,8 @@ export default {
             }
         };
         return {
+            isOutSeo:false,
+            isOutSearch:false,
             treeResult: null,
             categoryName: "全部分类",
             options: [
@@ -295,15 +297,15 @@ export default {
                 pictureUrl: ""
             },
             rules: {
-                title: [
-                    {
-                        required: true,
-                        message: "请输入文章标题",
-                        trigger: "blur"
-                    }
-                ],
+                // title: [
+                //     {
+                //         required: true,
+                //         message: "请输入文章标题",
+                //         trigger: "blur"
+                //     }
+                // ],
 
-                searchKeywords: [{ validator: checkWord }]
+                // searchKeywords: [{ validator: checkWord }]
             },
             isModalShow: false,
             editorOption: {},
@@ -418,13 +420,6 @@ export default {
             }
             this.articleDetail = data;
             this.articleDetail.NewId = data.id;
-
-            this.$nextTick(() => {
-                let width = this.$refs.keywordList.clientWidth;
-                console.log(width);
-                let ele = this.$refs.keywordInput.$el.children[0];
-                this.textIndent(ele, width);
-            });
         },
         //选择移动分类时的节点
         chooseNode(node) {
@@ -575,19 +570,29 @@ export default {
     computed: {},
     watch: {
         "articleDetail.searchKeywords"() {
-            this.$nextTick(() => {
-                let width = this.$refs.keywordList.clientWidth;
-                let ele = this.$refs.keywordInput.$el.children[0];
-                this.textIndent(ele, width);
-            });
+            if(this.articleDetail.searchKeywords.length>=5){
+                this.isOutSearch =true
+            }else{
+                this.isOutSearch =false
+            }
+            // this.$nextTick(() => {
+            //     let width = this.$refs.keywordList.clientWidth;
+            //     let ele = this.$refs.keywordInput.$el.children[0];
+            //     this.textIndent(ele, width);
+            // });
         },
         "articleDetail.metaKeywords"() {
-            this.$nextTick(() => {
-                let width = this.$refs.metaKeywordList.clientWidth;
-                console.log(this.$refs.metaKeywordList.clientWidth);
-                let ele = this.$refs.metaKeywordsInput.$el.children[0];
-                this.textIndent(ele, width);
-            });
+              if(this.articleDetail.metaKeywords.length>=5){
+                this.isOutSeo =true
+            }else{
+                this.isOutSeo =false
+            }
+            // this.$nextTick(() => {
+            //     let width = this.$refs.metaKeywordList.clientWidth;
+            //     console.log(this.$refs.metaKeywordList.clientWidth);
+            //     let ele = this.$refs.metaKeywordsInput.$el.children[0];
+            //     this.textIndent(ele, width);
+            // });
         },
         deep: true,
         immediate: true

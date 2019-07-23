@@ -47,8 +47,8 @@
                                         :label="item.label"
                                         :value="item.value"
                                     ></el-option>
-                                </el-select> -->
-                                     <SelectTree
+                                </el-select>-->
+                                <SelectTree
                                     size="small"
                                     placeholder="请选择"
                                     :categoryName="categoryName"
@@ -131,24 +131,22 @@
                                 </span>
                             </el-tooltip>
                             <ul class="keyword-list" ref="keywordList">
-                                <li
-                                    v-for="(item,index) in detailData.searchKeyword"
-                                    :key="index"
-                                >
+                                <li v-for="(item,index) in detailData.searchKeyword" :key="index">
                                     {{item}}
                                     <i
                                         class="el-icon-close"
                                         @click.stop="removeCurKeyWord(index)"
                                     ></i>
                                 </li>
+                                <el-input
+                                    ref="keywordInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="keywordValue"
+                                    @keyup.enter.native="keywords(keywordValue)"
+                                    @blur="keywords(keywordValue)"
+                                ></el-input>
                             </ul>
-                            <el-input
-                                ref="keywordInput"
-                                placeholder="每个关键词之间用回车键分离"
-                                v-model="keywordValue"
-                                @keyup.enter.native="keywords(keywordValue)"
-                                @blur="keywords(keywordValue)"
-                            ></el-input>
+                            <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
                             <!-- <el-input
                                 placeholder="每个关键词之间用会车键分离"
                                 v-model="detailData.searchKeyword"
@@ -193,14 +191,15 @@
                                         @click.stop="removeCurmetaKeyWord(index)"
                                     ></i>
                                 </li>
+                                <el-input
+                                    ref="metaKeywordsInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="metaKeyword"
+                                    @keyup.enter.native="keywords(metaKeyword,'seoKeyword')"
+                                    @blur="keywords(metaKeyword,'seoKeyword')"
+                                ></el-input>
                             </ul>
-                            <el-input
-                                ref="metaKeywordsInput"
-                                placeholder="每个关键词之间用回车键分离"
-                                v-model="metaKeyword"
-                                @keyup.enter.native="keywords(metaKeyword,'seoKeyword')"
-                                @blur="keywords(metaKeyword,'seoKeyword')"
-                            ></el-input>
+                            <div class="el-form-item__error" v-if="isOutSeo">每篇文章最多填写5个关键词！</div>
                             <!-- <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input> -->
                         </el-form-item>
 
@@ -211,7 +210,7 @@
                                 placeholder
                                 v-model="detailData.seoDescription"
                             ></el-input>
-                        </el-form-item> -->
+                        </el-form-item>-->
                         <el-form-item label="自定义地址" prop="customUrl">
                             <el-input placeholder="请输入自定义地址" v-model="detailData.customUrl"></el-input>
                         </el-form-item>
@@ -292,6 +291,8 @@ export default {
     },
     data() {
         return {
+            isOutSeo:false,
+            isOutSearch:false,
             checkAll: false,
             checkedviewAuth: [{ name: "登录用户", id: 1 }],
             viewAuth: viewAuth,
@@ -317,11 +318,11 @@ export default {
                     label: "全部分类2"
                 }
             ],
-            value2: ['全部分类1','全部分类2'],
-            
+            value2: ["全部分类1", "全部分类2"],
+
             activeName: "",
             activeName1: "",
-            categoryName:[],
+            categoryName: [],
             treeResult: null,
             detailData: {
                 name: "",
@@ -333,7 +334,7 @@ export default {
                 seoKeyword: [],
                 searchKeyword: [],
                 seoDescription: "",
-              
+
                 skuId: "", //
                 publishTime: new Date(),
                 customUrl: "",
@@ -388,7 +389,7 @@ export default {
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
         }
-         this.getTree();
+        this.getTree();
         this.editorOption = {
             placeholder: "请输入文本",
             modules: {
@@ -449,21 +450,20 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
-            this.categoryName = data.productCategoryList.map((item)=>{
-                return item.displayName
-            })
-            if( Object.keys(data.seoKeyword).length<1){
-                 data.seoKeyword =[];
-            }else{
-                  data.seoKeyword = data.seoKeyword.split(",");
+            this.categoryName = data.productCategoryList.map(item => {
+                return item.displayName;
+            });
+            if (Object.keys(data.seoKeyword).length < 1) {
+                data.seoKeyword = [];
+            } else {
+                data.seoKeyword = data.seoKeyword.split(",");
             }
-            if( Object.keys(data.searchKeyword).length<1){
-                 data.searchKeyword =[];
-            }else{
-               
+            if (Object.keys(data.searchKeyword).length < 1) {
+                data.searchKeyword = [];
+            } else {
                 data.searchKeyword = data.searchKeyword.split(",");
             }
-            
+
             this.detailData = data;
             //this.detailData.NewId = data.id;
         },
@@ -511,7 +511,8 @@ export default {
         //编辑保存产品
         async saveArticle() {
             let { status, data } = await productManageApi.update(
-                 this.curProduct,this.detailData
+                this.curProduct,
+                this.detailData
             );
             if (status === 200) {
                 this.$message({
@@ -520,32 +521,34 @@ export default {
                 });
             }
         },
-          /**
+        /**
          * 获取 tree 结构
          */
         async getTree() {
             let { data } = await productCategoryManageApi.get();
             this.treeResult = data.treeArray;
-            console.log(data,'datadatadata')
-              var categoryName = this.$route.query.categoryName;
+            console.log(data, "datadatadata");
+            var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
                 this.categoryName = categoryName;
             }
         },
-        chooseNode(data){
+        chooseNode(data) {
             this.detailData.productCategoryList.push({
-                displayName:data.label,
-                id:data.id,
-                thumbnailPicUrl:data.thumbnailPicUrl
-            })
-            console.log(data)
+                displayName: data.label,
+                id: data.id,
+                thumbnailPicUrl: data.thumbnailPicUrl
+            });
+            console.log(data);
         },
         //  移除已选择的分类
-        removeSeletedCategory(cur){
-             let productCategoryList =this.detailData.productCategoryList;
-             this.detailData.productCategoryList =productCategoryList.filter((item)=>{
-                 return item.displayName != cur
-             })
+        removeSeletedCategory(cur) {
+            let productCategoryList = this.detailData.productCategoryList;
+            this.detailData.productCategoryList = productCategoryList.filter(
+                item => {
+                    return item.displayName != cur;
+                }
+            );
         },
         onEditorChange({ editor, html, text }) {
             this.detailData.detailContent = html;
@@ -583,7 +586,7 @@ export default {
         cancelEditorImg() {
             this.isModalShow = false;
         },
-         handleCheckAllChange(val) {
+        handleCheckAllChange(val) {
             // this.checkedCities = val ? cityOptions : [];
             // this.isIndeterminate = false;
         },
@@ -593,7 +596,7 @@ export default {
             // this.checkAll = checkedCount === this.cities.length;
             // this.isIndeterminate =
             //     checkedCount > 0 && checkedCount < this.cities.length;
-        },
+        }
     },
     mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
@@ -606,14 +609,25 @@ export default {
     },
     watch: {
         "detailData.searchKeyword"() {
-            let width = this.detailData.searchKeyword.length * 52 ;
-            let ele = this.$refs.keywordInput.$el.children[0];
-            this.textIndent(ele, width);
+           
+             if(this.detailData.searchKeyword.length>=5){
+                this.isOutSearch =true
+            }else{
+                this.isOutSearch =false
+            }
+            // let width = this.detailData.searchKeyword.length * 52 ;
+            // let ele = this.$refs.keywordInput.$el.children[0];
+            // this.textIndent(ele, width);
         },
         "detailData.seoKeyword"() {
-            let width = this.detailData.seoKeyword.length * 52;
-            let ele = this.$refs.metaKeywordsInput.$el.children[0];
-            this.textIndent(ele, width);
+               if(this.detailData.seoKeyword.length>=5){
+                this.isOutSeo =true
+            }else{
+                this.isOutSeo =false
+            }
+            // let width = this.detailData.seoKeyword.length * 52;
+            // let ele = this.$refs.metaKeywordsInput.$el.children[0];
+            // this.textIndent(ele, width);
         },
         deep: true
     }
@@ -621,7 +635,6 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../../style/contentDetail";
-
 </style>
 <style scoped>
 @import "../../style/contentDetailCommon.css";
