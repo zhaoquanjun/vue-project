@@ -25,7 +25,7 @@
                 </el-row>
             </el-header>
             <el-main>
-                <div>
+                <div style="overflow:hidden">
                     <el-row style="overflow:hidden" :gutter="16">
                         <el-col :span="14" :offset="3">
                             <ArticleContent

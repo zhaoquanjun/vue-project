@@ -170,7 +170,9 @@
                
                 let { data } = await imgManageApi.getPicList(this.picSearchOptions);
                 this.imgPageResult = data;
-
+                this.imgPageResult.list.forEach( (item, index) => {
+                    item.createTimeStr = this.imgPageResult.list[index].createTimeStr.split(" ")[0]
+                } )
             },
             // 批量删除列表
             async batchRemovePic(idlist) {
