@@ -22,11 +22,12 @@ export default {
                 { name: "文章管理", url: "/content/news" },
                 { name: "产品管理", url: "/content/product" },
                 { name: "图片管理", url: "/content/picture" },
-               
+                { name: "文件管理", url: "/content/file" },
+                { name: "音频管理", url: "/content/audio" },
+                { name: "视频管理", url: "/content/video" }
             ]
         }
-    },
-   
+    }
 };
 </script>
 <style lang="scss" scoped>
@@ -36,7 +37,7 @@ export default {
 }
 .submenu {
     max-width: 120px;
-   height: 100%;
+    height: 100%;
     background: #fff;
     .submenu-title {
         height: 40px;

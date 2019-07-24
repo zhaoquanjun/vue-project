@@ -164,6 +164,16 @@
             :show-close="false"
             :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
         ></el-dialog>
+        <el-dialog
+            title="提示"
+            :visible.sync="alipayBindTip"
+            width="30%"
+            @close="alipayBindHandleClose">
+            <span>支付宝绑定完成</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="alipayBindTip = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -181,7 +191,8 @@ import {
     getExternalUserInfo,
     removeExternalUser,
     getWeChatJsLoginParams,
-    formatDateTime
+    formatDateTime,
+    getAlipayBindUrl
 } from "@/api/index.js";
 import { updateUserName } from "@/api/index.js";
 export default {
@@ -200,7 +211,8 @@ export default {
             WeChatJsLoginParams: null,
             CurrentProvider: "",
             weixinHtml: "",
-            createTime: "2019-06-28"
+            createTime: "2019-06-28",
+            alipayBindTip: false
         };
     },
     components: {
@@ -332,9 +344,13 @@ export default {
             this.ISRIGHTPANNELSHOW(true)
         },
         //支付宝 绑定
-        _bindingAlipay() {
+        async _bindingAlipay() {
             this.titText="绑定支付宝";
             this.CurrentProvider="Alipay";
+            this.alipayBindTip = true;
+            let result  = await getAlipayBindUrl();
+            if(result != undefined && result.data)
+                window.open(result.data, '_blank')
         },
         setName() {
             this.flag = false;
@@ -359,6 +375,10 @@ export default {
             this.titText = "修改头像";
             this.ISRIGHTPANNELSHOW(true);
         },
+        async alipayBindHandleClose(){
+            console.log("alipayBindHandleClose")
+            await this._getExternalUserAsync();
+        }
     },
     computed: {
         pannelWidth() {
