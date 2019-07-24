@@ -60,18 +60,31 @@ export const defaultRoutes = [
                 path: "file",
                 name: "file",
                 component: () => import('@/views/content-manage/file-manage.vue'),
-                // meta:{requiresAuth: true,title:"文件管理",isSub:true},
+                meta: {
+                    // requiresAuth: true,
+                    title: "文件管理",
+                    isSub: true
+                },
             },
             {
                 path: "video",
                 name: "video",
                 component: () => import('@/views/content-manage/video-manage.vue'),
-
+                meta: {
+                    // requiresAuth: true,
+                    title: "视频管理",
+                    isSub: true
+                },
             },
             {
                 path: "audio",
                 name: "audio",
-                component: () => import('@/views/content-manage/audio-manage.vue')
+                component: () => import('@/views/content-manage/audio-manage.vue'),
+                meta: {
+                    // requiresAuth: true,
+                    title: "音频管理",
+                    isSub: true
+                },
             },
             {
                 path: "product",
