@@ -47,7 +47,7 @@
             :onExceed="onExceed"
             :before-upload="beforeUpload"
         >
-          
+         
             <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
             <div @click="setFolder(false)" class="el-upload__text">
                 将文件拖到此处，或
@@ -114,7 +114,7 @@ export default {
         handleChange(file, fileList) {
             this.uploadDisabled = false;
             fileList.forEach((item, index) => {
-               const maxMb = 10;
+                const maxMb = 10;
                 const isSizeOk = file.size / 1024 / 1024 < maxMb;
                 if (
                     ["image/png", "image/jpeg", "image/gif"].indexOf(
@@ -122,7 +122,7 @@ export default {
                     ) == -1
                 ) {
                     fileList.splice(index, 1);
-                }else if(!isSizeOk){
+                } else if (!isSizeOk) {
                     fileList.splice(index, 1);
                 }
             });
@@ -146,14 +146,13 @@ export default {
                 this.$notify({
                     type: "success",
                     message: `成功上传${fileList.length}图片`,
-                    duration:1000
-                    
+                    duration: 1000
                 });
-                
+
                 setTimeout(() => {
-                   this.$emit("switchUploadBoxShowStatus", "uploadImg");
+                    this.$emit("switchUploadBoxShowStatus", "uploadImg");
                     // this.$emit("getTree");
-                   this.$refs.upload.clearFiles();
+                    this.$refs.upload.clearFiles();
                 }, 500);
             }
         },
@@ -172,7 +171,7 @@ export default {
             this.uploadPicAction = `${this.uploadPicUrl}/${this.upload2Category.id}`;
         },
         submitUpload() {
-            this.uploadDisabled = true
+            this.uploadDisabled = true;
             this.count = 0;
             if (this.nodeData) {
                 this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
@@ -218,40 +217,90 @@ export default {
     display: block;
     border: none;
 }
-#upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item{
-       /* overflow: visible; */
-       height: auto;
-       border: none;
-       border-radius: 0;
+#upload-img
+    .upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item {
+    /* overflow: visible; */
+    height: 181px;
+    border: none;
+    border-radius: 0;
 }
-#upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item .el-upload-list__item-actions{
-    height: 148px;;
+#upload-img
+    .upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item
+    .el-upload-list__item-actions {
+    height: 148px;
 }
-#upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item .el-upload-list__item-thumbnail{
+.upload-pic
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-delete {
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 19px;
+    top: auto;
+    width: 27px;
+    border: 1px solid #fff;
+    height: 27px;
+    border-radius: 50%;
+}
+.upload-pic
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-delete
+    .el-icon-delete {
+    font-size: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: auto;
+    transform: translate(-50%, -50%);
+}
+#upload-img
+    .upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item
+    .el-upload-list__item-thumbnail {
     height: 148px;
     object-fit: cover;
 }
-#upload-img .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item-status-label{
+#upload-img
+    .upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item-status-label {
     display: none;
 }
-#upload-img .upload-pic  /deep/ .el-upload-list--picture-card .el-upload-list__item-name{
+#upload-img
+    .upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item-name {
     display: block;
     text-align: center;
     margin-right: 0;
 }
-#upload-img .upload-pic  /deep/ .el-upload-list--picture-card .el-upload-list__item-name .el-icon-document{
+#upload-img
+    .upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item-name
+    .el-icon-document {
     display: none;
 }
-
 </style>
 <style scoped lang="scss">
-
-
 .upload-img {
     .upload-head {
-    padding-top: 12px;
-    border-top: 1px solid #eee;
-}
+        padding-top: 12px;
+        border-top: 1px solid #eee;
+    }
     .el-upload-dragger {
         position: none;
     }
@@ -297,14 +346,12 @@ export default {
             border: none;
             color: #fff;
         }
-
         .handle-upload-disabled {
             background: rgba(245, 245, 245, 1);
             font-weight: 400;
             color: #8c8c8c;
         }
     }
-   
 }
 </style>
 

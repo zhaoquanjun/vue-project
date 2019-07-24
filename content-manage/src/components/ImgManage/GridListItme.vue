@@ -5,11 +5,13 @@
             @mousemove="handleMouseMove"
             @mouseleave="handleMouseLeave"
             class="img-item"
+            :style="{backgroundImage: 'url(' + (curItem.zoomOssUrl) + ')', backgroundSize:'contain'}"
+
         >
             <span class="img-wrap">
                 <div class="mask" :class="isMaskShow"></div>
                 <!-- <el-image :src="curItem.zoomOssUrl"></el-image> -->
-                <img :src="curItem.zoomOssUrl" alt />
+                <!-- <img :src="curItem.zoomOssUrl" alt /> -->
             </span>
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
                 <span @click.stop="handleMove">
