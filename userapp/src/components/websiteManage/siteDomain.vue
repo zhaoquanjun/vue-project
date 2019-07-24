@@ -108,8 +108,7 @@ export default {
   },
   methods: {
       async handleConfirm(){
-          let domain ="xatest.clouddream.net"
-          let data = await domainApi.bindDomainAndEnableCdn(domain);
+          let data = await domainApi.bindDomainAndEnableCdn({ domain: "xatest.clouddream.net" });
       },
         /**
          * 获取站点信息
