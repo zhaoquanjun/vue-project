@@ -6,6 +6,7 @@
                     size="small"
                     v-model="picSearchOptions.keyword"
                     placeholder="输入图片名称搜索"
+                    @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
                 >
                     <el-button slot="append" @click="getPicList">
@@ -110,6 +111,9 @@ export default {
         },
         getPicList() {
             this.$emit("getPicList");
+        },
+        searchEnterFun() {
+            this.getPicList();
         },
         switchUploadBoxShowStatus() {
             this.$emit("switchUploadBoxShowStatus");

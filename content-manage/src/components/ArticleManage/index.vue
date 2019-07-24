@@ -154,6 +154,9 @@ export default {
                 (options = this.articleSearchOptions)
             );
             this.articlePageResult = data;
+            this.articlePageResult.list.forEach( (item, index) => {
+                item.createTimePrt = this.articlePageResult.list[index].createTimePrt.split(" ")[0]
+            } )
         },
         // 批量删除
         async batchRemoveNews(idlist) {
