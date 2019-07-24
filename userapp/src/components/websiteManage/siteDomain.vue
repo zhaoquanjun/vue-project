@@ -10,9 +10,9 @@
                 <span class="member-list-title fs14">网站管理</span>
             </el-row>
             <el-row>
-              <SiteInfo/>
+              <SiteInfo />
             </el-row>
-            <DomainMenu/>
+            <DomainMenu @handleBtn="righPanelShow"/>
             <el-main>
                 <!-- <DomainList></DomainList>     -->
             </el-main>
@@ -52,8 +52,9 @@
                             >
                             </el-input>
                         </div>
-                        <div class="confirm">
-                            <button class="confirmBtn" @click="handleConfirm">确定</button>
+                        <div class="pannel-footer">
+                            <button class="footer-btn confirmBtn" @click="handleConfirm">确定</button>
+                             <button class="footer-btn cancel" @click="handleCancel">取消</button>
                         </div>
                     </div>
                 </el-dialog>
@@ -96,7 +97,7 @@ export default {
             manualSite: [],
             autoSite: [],
          
-            backupShow: true,
+            backupShow: false,
             backuping: false,
             // recovery: false,
             remarkInfo: ""
@@ -129,10 +130,14 @@ export default {
            let data = await domainApi.getCdnDomainList();
            console.log(data)
        },
-        /**
+       
+       righPanelShow(){
+            this.backupShow=true;
+        },
+         /**
          * 关闭弹框
          */
-        closeDialog() {
+        handleCancel() {
             this.backupShow = false
         },
   },
