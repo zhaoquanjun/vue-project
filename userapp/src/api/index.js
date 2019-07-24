@@ -237,8 +237,8 @@ export const getWeChatJsLoginParams = (provider) => {
  * InterfaceAuthor : xuzhuan
  * 更新cookie中的appid
  */
-export const updateAppIdToCookie = () => {
-    return ajaxRequest.put('/api/userInfo/UpdateAppIdToCookie');
+export const updateAppIdAndSiteIdToCookie = () => {
+    return ajaxRequest.put('/api/userInfo/UpdateAppIdAndSiteIdToCookie');
 }
 
 /**

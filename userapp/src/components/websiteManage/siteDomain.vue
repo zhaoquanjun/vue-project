@@ -7,86 +7,17 @@
         </el-aside>
         <el-main class="member-content">
             <el-row class="user-list">
-                <span class="member-list-title fs14">网站备份</span>
+                <span class="member-list-title fs14">网站管理</span>
             </el-row>
             <el-row>
-                <div class="siteBox">
-                    <div class="siteInfo">
-                        <div class="siteImg"></div>
-                        <!-- <img :src="siteInfoImg" alt="" class="siteImg"> -->
-                        <span class="siteName">{{siteName}}</span>
-                        <span class="secondDomain">{{secondDomain}}</span>
-                        <button class="changeSite">切换站点</button>
-                    </div>
-                </div>
+              <SiteInfo/>
             </el-row>
-            <el-tabs v-model="backupType" type="card" @tab-click="handleClick">
-                <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
-                <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
-            </el-tabs>
-            <button class="backupBtn" @click="backup">备份当前版本</button>
+            <DomainMenu/>
             <el-main>
-                <div class="table-wrap" id="table-list">
-                    <el-table
-                        ref="multipleTable"
-                        :data="siteInfo"
-                        tooltip-effect="dark"
-                        class="content-table"
-                    >
-                        <el-table-column prop="siteName" label="站点名称"></el-table-column>
-                        <el-table-column prop="backupTime" label="备份时间"></el-table-column>
-                        <el-table-column prop="dataSize" label="备份包大小"></el-table-column>
-                        <el-table-column prop="userName" label="备份人"></el-table-column>
-                        <el-table-column prop="description" label="备注" show-overflow-tooltip>
-                            <template slot-scope="scope">
-                                <el-popover
-                                    :ref="`popover-${scope.$index}`"
-                                    placement="bottom"
-                                    width="317"
-                                    trigger="click"
-                                    style="padding:0"
-                                    @show="showRemark(scope.row)"
-                                >
-                                    <span slot="reference">
-                                        <div class="remark-desc">{{scope.row.description}}</div>
-                                        <svg-icon icon-class="remark"></svg-icon>
-                                    </span>
-                                    <div class="textareaWrap">
-                                        <el-input
-                                            type="textarea"
-                                            :autosize="{ minRows: 3, maxRows: 3}"
-                                            placeholder="请输入内容"
-                                            v-model="remarkValue"
-                                            maxlength="100"
-                                            show-word-limit
-                                            resize="none"
-                                        ></el-input>
-                                        <div class="btn-wrap">
-                                            <button
-                                                class="popover-btn cancel"
-                                                slot="refenrence"
-                                                type="primary"
-                                                @click="cancelInput(scope.$index)"
-                                            >取消</button>
-                                            <button class="popover-btn save" @click="saveInputValue(scope.$index,scope.row)">保存</button>
-                                        </div>
-                                    </div>
-                                </el-popover>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column label="操作">
-                            <template slot-scope="scope">
-                                <div class="handle-btn-wrap">
-                                    <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
-                                    <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button>
-                                    <button class="handle-btn delete-btn" @click="deleteBackup( scope )"></button>
-                                </div>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-                <el-dialog
+                <!-- <DomainList></DomainList>     -->
+            </el-main>
+        </el-main>
+                 <el-dialog
                     width="0"
                     :visible.sync = "backupShow"
                     :show-close="false"
@@ -111,8 +42,7 @@
                         <div class="remark">
                             <span class="remarkTitle">备注</span>
                             <el-input
-                                type="textarea"
-                                :rows="6"
+                               
                                 v-model="remarkInfo"
                                 placeholder="请输入备注信息（非必填）"
                                 maxlength="30"
@@ -123,41 +53,30 @@
                             </el-input>
                         </div>
                         <div class="confirm">
-                            <button class="confirmBtn" @click="backupSite">确定</button>
+                            <button class="confirmBtn" @click="handleConfirm">确定</button>
                         </div>
                     </div>
                 </el-dialog>
-                <el-dialog
-                    width="0"
-                    :visible.sync = "backuping"
-                    :show-close="false"
-                >
-                    <div class="circleprogress" :style="{width:'270px'}">
-                        <div class="circleWrap">
-                            <div class="circle">
-                                <div class="circleBox"></div>
-                            </div>
-                            <div class="hideCircle"></div>
-                        </div>
-                        <span class="backuping">正在还原网站</span>
-                    </div>
-                </el-dialog>
-            </el-main>
-        </el-main>
-
     </el-container>
 </template>
 
 <script>
 import RightPannel from "../RightPannel";
 import PageSubmenu from "@/components/common/PageSubmenu";
+import SiteInfo from "_c/websiteManage/domain/site-info.vue"
+import DomainMenu from "_c/websiteManage/domain/domain-menu.vue";
+import DomainList from "_c/websiteManage/domain/domain-list.vue";
 import { sendTargetPhoneCode } from '@/api/index.js';
 import { formatDateTime } from "@/api/index";
-import * as siteBackupApi from "@/api/request/siteBackupApi";
+import * as domainApi from "@/api/request/domainApi";
+import {getSiteInfo} from "@/api/request/siteBackupApi";
 export default {
   components:{
         RightPannel,
         PageSubmenu,
+        SiteInfo,
+        DomainMenu,
+        DomainList
   },
   data() {
         return {
@@ -176,226 +95,45 @@ export default {
             siteInfo: [],
             manualSite: [],
             autoSite: [],
-            backupType: "manual",
-            backupShow: false,
+         
+            backupShow: true,
             backuping: false,
             // recovery: false,
             remarkInfo: ""
         }
   },
   mounted() {
+      this._getCdnDomainList();
       this.getSiteInfo()
-      this.getBackupSite()
   },
   methods: {
+      async handleConfirm(){
+          let domain ="xatest.clouddream.net"
+          let data = await domainApi.bindDomainAndEnableCdn(domain);
+      },
         /**
          * 获取站点信息
          */
         async getSiteInfo() {
-            let { data } = await siteBackupApi.getSiteInfo(2);
+            let { data } = await getSiteInfo(2);
             console.log(data)
             this.siteInfoImg = data.siteImage;
             this.siteName = data.siteName;
             this.secondDomain = data.secondDomain;
             this.siteId = data.id
         },
-        /**
-         * 切换手动备份和自动备份
-         */
-        handleClick() {
-            if (this.backupType === "manual") {
-                this.siteInfo = this.manualSite;
-            } else if (this.backupType === "auto") {
-                this.siteInfo = this.autoSite;
-            }
-        },
-        /**
-         * 获取备份信息
-         */
-        async getBackupSite() {
-            let manualData = await siteBackupApi.getBackupSite(2, false);
-            this.manualSite = manualData.data.items;
-            let autoData = await siteBackupApi.getBackupSite(2, true);
-            this.autoSite = autoData.data.items;
-            if (this.backupType === "manual") {
-                this.siteInfo = this.manualSite;
-            } else if (this.backupType === "auto") {
-                this.siteInfo = this.autoSite;
-            }
-            for (var i = 0; i < this.siteInfo.length; i++) {
-                this.siteInfo[i].backupTime = formatDateTime(this.siteInfo[i].backupTime, 'yyyy-mm-dd hh:MM:ss')
-            }
-            console.log(this.siteInfo)
-        },
-        /**
-         * 还原站点
-         */
-        async recovery(scope) {
-            console.log(scope)
-            this.$confirm(
-                `确定要将网站还原至该备份版本吗？ 还原后系统会自动备份当前站点设计，可在自动备份列表中查看。`,
-                "提示",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            this.backuping = true;
-                            await siteBackupApi.recoverySite(scope.row.siteId, scope.row.siteName, scope.row.fileName).then( (res) => {
-                                console.log(res.status)
-                                if (res.status === 200) {
-                                    this.$message({
-                                        type: "success",
-                                        message: "网站还原成功"
-                                    });
-                                    this.getBackupSite()
-                                    this.backuping = false
-                                } else {
-                                    this.$message({
-                                        type: "error",
-                                        message: "系统正忙，请稍后再试！"
-                                    })
-                                    this.backuping = false
-                                }
-                            })
-                            
-                        } 
-                    }
-                }
-            );
-        },
-        /**
-         * 备份当前版本
-         */
-        async backup(){
-            console.log(this.manualSite.length)
-            if (this.manualSite.length < 20) {
-                let { status } = await siteBackupApi.getBackupCount(2)
-                if (status == 200) {
-                    this.remarkInfo = "";
-                    this.backupShow = true
-                }else{
-                    this.$message({
-                        type: "error",
-                        message: "系统正忙，请稍后再试！"
-                    })
-                }
-            } else {
-                this.$confirm(
-                    `最多保留20个手动备份包，请删除后再备份!`,
-                    "提示",
-                    {
-                        confirmButtonText: "确定",
-                        showCancelButton:false,
-                        type: "warning",
-                    }
-                );
-            }
-            
-        },
-        async backupSite() {
-            let { status } = await siteBackupApi.backupSite(this.siteName, this.siteId, this.remarkInfo)
-            if (status == 200) {
-                this.$message({
-                    type: "success",
-                    message: "备份成功"
-                })
-                this.getBackupSite();
-            } else {
-                this.$message({
-                    type: "error",
-                    message: "备份失败，请稍后再试！"
-                })
-            }
-            this.backupShow = false;
-        },
-        /**
-         * 下载备份
-         */
-        async downloadBackup(scope) {
-            this.$confirm(
-                `确定下载该备份包`,
-                "提示",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            var res = await siteBackupApi.exportBackup(scope.row.siteName, scope.row.siteId, scope.row.fileName)   
-                            console.log(res);
-                            var a = document.createElement('a');
-                            var binaryData = [];
-                            binaryData.push(res.data);
-                            a.href = window.URL.createObjectURL(new Blob(binaryData, { type: "application/dat" }));
-                            var names = scope.row.fileName.split('_');
-                            var filename = scope.row.siteName + '_' + names[1] + '_' + names[2];
-                            a.download = filename; // Set the file name.
-                            a.style.display = 'none';
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                        } 
-                    }
-                }
-            );
-        },
-        /**
-         * 删除备份
-         */
-        async deleteBackup(scope){
-            this.$confirm(
-                `备份包删除后不可恢复，确定要删除吗？`,
-                "提示",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            let { status } = await siteBackupApi.deleteBackup(scope.row.id, scope.row.fileName, scope.row.siteId)
-                            console.log(status);
-                            if (status === 200) {
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功"
-                                });
-                                this.getBackupSite()
-                            } else {
-                                this.$message({
-                                    type: "error",
-                                    message: "系统正忙，请稍后再试！"
-                                })
-                            }
-                        } 
-                    }
-                }
-            );
-        },
+       /**
+        * 获取域名列表
+        */
+       async _getCdnDomainList(){
+           let data = await domainApi.getCdnDomainList();
+           console.log(data)
+       },
         /**
          * 关闭弹框
          */
         closeDialog() {
             this.backupShow = false
-        },
-        /**
-         * 修改备注
-         */
-        showRemark(row) {
-            this.remarkValue = row.description ? row.description : "";
-        },
-        cancelInput(id) {
-            this.$refs[`popover-${id}`].doClose();
-            this.remarkValue = "";
-        },
-        async saveInputValue(index, row) {
-            this.$refs[`popover-${index}`].doClose();
-            await siteBackupApi.updateDescription(row.id, this.remarkValue)
-            this.siteInfo[index].description = this.remarkValue
         },
   },
 }
@@ -405,87 +143,8 @@ export default {
 .el-dialog{
     right: 0
 }
-.siteBox{
-    height: 116px;
-    margin-top: 12px;
-    background: rgba(245,246,250,1);
-    padding-top: 11px;
-    padding-bottom: 11px;
-    padding-left: 9px
-}
-.siteBox .siteInfo{
-    width: 473px;
-    height: 116px;
-    background: #fff;
-    position: relative;
-}
-.siteImg{
-    display: inline-block;
-    width: 200px;
-    height: 115px;
-    margin-right: 24px;
-    vertical-align: top;
-}
-.siteName{
-    position: absolute;
-    top: 12px;
-    display: inline-block;
-    font-size:16px;
-    font-weight:400;
-    color:rgba(38,38,38,1);
-}
-.secondDomain{
-    position: absolute;
-    top: 40px;
-    display: inline-block;
-    font-size:14px;
-    font-weight:400;
-    color:rgba(38,38,38,1);
-    line-height:20px;
-}
-.changeSite{
-    position: absolute;
-    top: 71px;
-    width:80px;
-    height:32px;
-    background:rgba(0,193,222,1);
-    font-size:12px;
-    font-weight:400;
-    color:rgba(255,255,255,1);
-    line-height:32px;
-}
-.el-tabs{
-    margin-top: 24px
-}
-.el-tabs /deep/ .el-tabs__item{
-    width: 88px;
-    height: 38px;
-    font-size: 12px;
-    font-weight: 400;
-    color:rgba(51,51,51,1);
-    line-height: 36px;
-    border-bottom: 1px solid #E4E7ED;
-    background:rgba(245,245,245,1);
-    vertical-align: top;
-    border-top: 2px solid transparent;
-}
-.el-tabs /deep/ .is-active{
-    color:rgba(1,192,222,1);
-    border-top: 2px solid rgb(72,201,226);
-    border-bottom: 1px solid transparent;
-    background: rgb(255, 255, 255)
-}
-.backupBtn{
-    width: 110px;
-    height: 32px;
-    background:rgba(0,193,222,1);
-    position: absolute;
-    right: 16px;
-    top: 217px;
-    font-size:12px;
-    font-weight:400;
-    color:rgba(255,255,255,1);
-}
+
+
 .el-table /deep/ thead  th {
     padding: 0;
     height: 35px;

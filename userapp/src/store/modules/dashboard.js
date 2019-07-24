@@ -1,4 +1,4 @@
-import { getUserCurrentAppPolicy, updateAppIdToCookie, getSliderMenuList} from "@/api/index"
+import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList} from "@/api/index"
 import { authRoutes } from "@/router/routes.js";
 import {setLocal} from "@/libs/local"
 
@@ -38,6 +38,7 @@ let filterMenuListData = (source) => {
 const dashboard = {
     state: {
         appid:"",
+        siteId:"",
         validateMenu:"",
         menuList:[],
         authList:[], 
@@ -46,9 +47,17 @@ const dashboard = {
     },
     mutations: {
         GETUSERDASHBOARD(state, payload) {
-            state.appid = payload;
-            setLocal('appid', payload);
+            state.appid = payload.lastAppId;
+            state.siteId = payload.lastSiteId
+            setLocal('appid', payload.lastAppId);
+            setLocal('siteId', payload.lastSiteId);
         },
+        SETSITEID(state, siteId){
+            state.siteId = siteId
+        },
+        SETAPPID(state, appId){
+            state.appid = appId
+        },  
         GETVALIDATEMENU(state, payload) {
             // Base64.encode()
              setLocal('validateMenu',payload);
@@ -70,8 +79,8 @@ const dashboard = {
            },
     },
     actions: {
-        async _updateAppIdToCookie({ commit }){
-            let { data } = await updateAppIdToCookie();
+        async _updateAppIdAndSiteIdToCookie({ commit }){
+            let { data } = await updateAppIdAndSiteIdToCookie();
             commit("GETUSERDASHBOARD", data)
         },
         async _getMenuListData({ commit }) {
