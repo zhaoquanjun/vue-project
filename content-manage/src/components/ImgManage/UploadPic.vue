@@ -1,20 +1,10 @@
 <template>
     <div id="upload-img" class="upload-img">
         <!-- 一次可上传60张图片，单张图片大小不超过10MB -->
+        <!-- 图片上传弹窗 header -->
         <el-row class="upload-head" type="flex" justify="space-between">
-            <!-- [{{upload2Category.label}}] -->
             <el-col :span="12">
                 <span style="padding-right:8px">上传至:</span>
-                <!-- <span style="vertical-align: -5px;padding:0 10px">{{upload2Category.label}}</span>
-                <el-tree
-                    class="upload-tree"
-                    ref="treeX"
-                    :data="treeResult"
-                    node-key="id"
-                    accordion
-                    :expand-on-click-node="true"
-                    @node-click="chooseNode"
-                ></el-tree>-->
                 <SelectTree
                     style="width:140px"
                     ref="treeX"
@@ -28,7 +18,7 @@
             </el-col>
             <div></div>
         </el-row>
-
+        <!-- 图片上传组件 begin-->
         <el-upload
             class="upload-pic"
             :action="uploadPicAction"
@@ -36,6 +26,7 @@
             :on-remove="handleRemove"
             :on-success="handleSucess"
             :on-change="handleChange"
+            :on-preview="handlePictureCardPreview"
             :file-list="fileList"
             list-type="picture-card"
             :auto-upload="false"
@@ -47,7 +38,6 @@
             :onExceed="onExceed"
             :before-upload="beforeUpload"
         >
-         
             <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
             <div @click="setFolder(false)" class="el-upload__text">
                 将文件拖到此处，或
@@ -78,12 +68,20 @@
                 @click="submitUpload"
             >开始上传</el-button>
         </el-row>
+        <!-- 图片上传组件 end-->
+
+        <!-- 图片预览 begin -->
+        <el-dialog :append-to-body="true" :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt />
+        </el-dialog>
+        <!-- 图片预览 end -->
     </div>
 </template>
 
 <script>
 import SelectTree from "@/components/common/SelectTree";
-import { setTimeout } from "timers";
+import { isImgFile, imgSize } from "@/utlis/index";
+
 export default {
     props: ["treeResult", "uploadPicUrl", "nodeData"],
     components: {
@@ -91,6 +89,8 @@ export default {
     },
     data() {
         return {
+            dialogImageUrl: "",
+            dialogVisible: false,
             isFolder: false,
             uploadDisabled: true,
             fileList: [],
@@ -111,36 +111,32 @@ export default {
         }
     },
     methods: {
+        // 预览大图
+        handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
+        // 选择图片时触发
         handleChange(file, fileList) {
             this.uploadDisabled = false;
             fileList.forEach((item, index) => {
-                const maxMb = 10;
-                const isSizeOk = file.size / 1024 / 1024 < maxMb;
-                if (
-                    ["image/png", "image/jpeg", "image/gif"].indexOf(
-                        item.raw.type
-                    ) == -1
-                ) {
+                const isSizeOk = imgSize(file.size);
+                const isPic = isImgFile(item.raw.type);
+                if (!isPic) {
                     fileList.splice(index, 1);
                 } else if (!isSizeOk) {
                     fileList.splice(index, 1);
                 }
             });
-
-            //  const isPic =
-            //     ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
-            //     -1;
-            //  if (!isPic) {
-            //     alert("上传头像图片只能是 图片 格式!");
-            //     return
-            // }
         },
+        // 上传图片超出数量限制时触发
         onExceed(fileList) {
             this.$message({
                 type: "warning",
                 message: `上传图片文件超过数量限制`
             });
         },
+        // 图片上传成功时触发
         handleSucess(response, file, fileList) {
             if (++this.count == fileList.length) {
                 this.$notify({
@@ -156,38 +152,33 @@ export default {
                 }, 500);
             }
         },
-
+        // 移除图片时触发
         handleRemove(file, fileList) {
             if (fileList < 1) this.uploadDisabled = true;
         },
         setFolder(isFolder) {
             this.isFolder = isFolder;
         },
-        handlePreview(file) {
-            console.log(file);
-        },
+        // 选择分类节点
         chooseNode(data) {
             this.upload2Category = data;
             this.uploadPicAction = `${this.uploadPicUrl}/${this.upload2Category.id}`;
         },
+        // 点击上传按钮
         submitUpload() {
             this.uploadDisabled = true;
             this.count = 0;
             if (this.nodeData) {
                 this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
             }
-            console.log(this.nodeData, "----");
-
             this.headers.Authorization =
                 "Bearer " + this.$store.state.accessToken.Authorization;
             this.$refs.upload.submit();
         },
+        // 上传图片时
         beforeUpload(file) {
-            const isPic =
-                ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
-                -1;
-            const maxMb = 10;
-            const isSizeOk = file.size / 1024 / 1024 < maxMb;
+            const isPic = isImgFile(file.type);
+            const isSizeOk = imgSize(file.size);
             if (!isPic) {
                 this.$notify({
                     type: "warning",
@@ -203,13 +194,12 @@ export default {
                 return false;
             }
             return isPic && isSizeOk;
-        }
+        },
     },
-    watch: {}
 };
 </script>
 <style scoped>
-#upload-img .upload-pic /deep/ .el-upload-dragger {
+.upload-pic /deep/ .el-upload-dragger {
     position: static;
     height: auto;
 }
@@ -217,31 +207,19 @@ export default {
     display: block;
     border: none;
 }
-#upload-img
-    .upload-pic
-    /deep/
-    .el-upload-list--picture-card
-    .el-upload-list__item {
+.upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item {
     /* overflow: visible; */
     height: 181px;
     border: none;
     border-radius: 0;
 }
-#upload-img
-    .upload-pic
-    /deep/
-    .el-upload-list--picture-card
-    .el-upload-list__item
-    .el-upload-list__item-actions {
+
+.upload-pic /deep/ .el-upload-list__item .el-upload-list__item-actions {
     height: 148px;
 }
-.upload-pic
-    /deep/
-    .el-upload-list__item-actions
-    .el-upload-list__item-delete {
+.upload-pic /deep/ .el-upload-list__item-actions > span {
     position: absolute;
-    right: 50%;
-    transform: translateX(50%);
+    right: 17px;
     bottom: 19px;
     top: auto;
     width: 27px;
@@ -249,11 +227,12 @@ export default {
     height: 27px;
     border-radius: 50%;
 }
-.upload-pic
-    /deep/
-    .el-upload-list__item-actions
-    .el-upload-list__item-delete
-    .el-icon-delete {
+.upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
+    left: 17px;
+    bottom: 20px;
+    border: none;
+}
+.upload-pic /deep/ .el-upload-list__item-actions .el-icon-delete {
     font-size: 15px;
     position: absolute;
     top: 50%;
@@ -261,8 +240,23 @@ export default {
     margin: auto;
     transform: translate(-50%, -50%);
 }
-#upload-img
-    .upload-pic
+.upload-pic /deep/ .el-upload-list__item-actions .el-icon-zoom-in {
+    font-size: 30px;
+}
+.upload-pic
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-delete:hover {
+    background: #00c1de;
+    border: 1px solid #00c1de;
+}
+.upload-pic
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-preview:hover {
+    color: #00c1de;
+}
+.upload-pic
     /deep/
     .el-upload-list--picture-card
     .el-upload-list__item
@@ -270,24 +264,21 @@ export default {
     height: 148px;
     object-fit: cover;
 }
-#upload-img
-    .upload-pic
+
+.upload-pic
     /deep/
     .el-upload-list--picture-card
     .el-upload-list__item-status-label {
     display: none;
 }
-#upload-img
-    .upload-pic
-    /deep/
-    .el-upload-list--picture-card
-    .el-upload-list__item-name {
+
+.upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item-name {
     display: block;
     text-align: center;
     margin-right: 0;
 }
-#upload-img
-    .upload-pic
+
+.upload-pic
     /deep/
     .el-upload-list--picture-card
     .el-upload-list__item-name
