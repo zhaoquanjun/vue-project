@@ -296,3 +296,12 @@ export const formatDateTime = (date, fmt) => {
 function padLeftZero(str) {
     return ('00' + str).substr(str.length);   
 }
+
+
+/**
+ * InterfaceAuthor : litao
+ * 生成绑定支付宝Url
+ */
+export const getAlipayBindUrl = () => {
+    return ajaxRequest.get('/api/userInfo/getAlipayBindUrl');
+}
