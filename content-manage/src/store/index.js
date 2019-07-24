@@ -44,12 +44,13 @@ export default store;
  * 页面刷新再将local中的token 写入store中
  */
 if (getLocal("token")) {
-
   let obj = {
     access_token: getLocal("token"),
   }
   store.commit("SET_USER", obj)
-
   // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
   getLocal("authList") && store.commit("set_authList", JSON.parse(getLocal("authList")))
+}
+if(getLocal("appid")){
+    store.commit("GETUSERDASHBOARD", getLocal("appid"))
 }

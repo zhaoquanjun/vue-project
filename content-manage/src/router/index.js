@@ -16,6 +16,7 @@ export default router;
 let accessToken = store.state.accessToken.Authorization;
 
 router.beforeEach(async (to, from, next) => {
+  console.log(to)
   NProgress.start()
   if (!to.meta.requiresAuth) {
     if (!Cookies.get('AppId')) {
@@ -31,6 +32,7 @@ router.beforeEach(async (to, from, next) => {
       next()
     }
     let r = await store.dispatch('getCurRouteAuth', to.path);
+  
     if (r) {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
