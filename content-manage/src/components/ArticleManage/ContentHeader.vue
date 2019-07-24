@@ -6,6 +6,7 @@
                     size="small"
                     v-model="articleSearchOptions.title"
                     placeholder="请输入文章标题搜索"
+                    @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
                 >
                     <el-button slot="append" @click="getArticleList">
@@ -161,6 +162,9 @@ export default {
     methods: {
         getArticleList() {
             this.$emit("getArticleList");
+        },
+        searchEnterFun() {
+            this.getArticleList();
         },
         changeStatus(value) {
             this.articleSearchOptions.publishStatus = value;

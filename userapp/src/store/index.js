@@ -32,9 +32,12 @@ if (sessionStorage.getItem("token")){
       access_token: getLocal("token"),
     }
     let appid = getLocal("appid")
-    store.commit("GETUSERDASHBOARD", appid)
+    store.commit("SETAPPID", appid)
     store.commit("SET_USER", obj)
   
     // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
      getLocal("authList")&& store.commit("set_authList",JSON.parse(getLocal("authList")))
+}
+if(sessionStorage.getItem("siteId")){
+ store.commit("SETSITEID",sessionStorage.getItem("siteId"))
 }
