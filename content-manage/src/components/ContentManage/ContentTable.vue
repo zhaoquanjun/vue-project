@@ -201,12 +201,7 @@ export default {
 .handle-btn {
     //padding-right: 54px;
 }
-.cover {
-    width: 32px;
-    height: 32px;
-    vertical-align: middle;
-    margin-right: 10px;
-}
+
 .pageing {
     float: right;
     margin-top: 24px;

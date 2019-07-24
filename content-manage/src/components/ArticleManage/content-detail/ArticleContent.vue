@@ -15,6 +15,7 @@
                 </el-row>
                 <el-form-item label prop="title">
                     <el-input
+                        class="contentDetail-title"
                         placeholder="请输入文章标题（必填）"
                         v-model="articleDetail.title"
                         maxlength="100"
@@ -131,14 +132,15 @@
                                         @click.stop="removeCurKeyWord(index)"
                                     ></i>
                                 </li>
+                                <el-input
+                                    ref="keywordInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="keywordValue"
+                                    @keyup.enter.native="keywords(keywordValue)"
+                                    @blur="keywords(keywordValue)"
+                                ></el-input>
                             </ul>
-                            <el-input
-                                ref="keywordInput"
-                                placeholder="每个关键词之间用回车键分离"
-                                v-model="keywordValue"
-                                @keyup.enter.native="keywords(keywordValue)"
-                                @blur="keywords(keywordValue)"
-                            ></el-input>
+                            <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
                         </el-form-item>
                         <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="articleDetail.isTop"></el-switch>
@@ -167,25 +169,26 @@
                                         @click.stop="removeCurmetaKeyWord(index)"
                                     ></i>
                                 </li>
+                                <el-input
+                                    ref="metaKeywordsInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="metaKeyword"
+                                    @keyup.enter.native="keywords(metaKeyword,'metaKeywords')"
+                                    @blur="keywords(metaKeyword,'metaKeywords')"
+                                ></el-input>
                             </ul>
-                            <el-input
-                                ref="metaKeywordsInput"
-                                placeholder="每个关键词之间用回车键分离"
-                                v-model="metaKeyword"
-                                @keyup.enter.native="keywords(metaKeyword,'metaKeywords')"
-                                @blur="keywords(metaKeyword,'metaKeywords')"
-                            ></el-input>
+                             <div class="el-form-item__error" v-if="isOutSeo">每篇文章最多填写5个关键词！</div>
                             <!-- <el-input placeholder="SEO关键词" v-model="articleDetail.metaKeywords"></el-input> -->
                         </el-form-item>
 
-                        <el-form-item label="文章描述" prop="metaDescription">
+                        <!-- <el-form-item label="文章描述" prop="metaDescription">
                             <el-input
                                 type="textarea"
                                 :rows="5"
                                 placeholder
                                 v-model="articleDetail.metaDescription"
                             ></el-input>
-                        </el-form-item>
+                        </el-form-item>-->
                         <!-- <el-form-item label="自定义地址" prop="metaDescription">
                         <el-input placeholder="请输入自定义地址" v-model="articleDetail.metaDescription"></el-input>
                         </el-form-item>-->
@@ -252,14 +255,16 @@ export default {
         ModalContent
     },
     data() {
-        var checkAge = (rule, value, callback) => {
-            setTimeout(() => {
-                if (value.length > 5) {
-                    callback(new Error("每篇文章最多填写5个关键词！"));
-                }
-            }, 1000);
+        var checkWord = (rule, value, callback) => {
+            if (value.length > 4) {
+                callback("每篇文章最多填写5个关键词！");
+            } else {
+                callback();
+            }
         };
         return {
+            isOutSeo:false,
+            isOutSearch:false,
             treeResult: null,
             categoryName: "全部分类",
             options: [
@@ -292,16 +297,15 @@ export default {
                 pictureUrl: ""
             },
             rules: {
-                title: [
-                    {
-                        required: true,
-                        message: "请输入文章标题",
-                        trigger: "blur"
-                    }
-                ]
-                // searchKeywords:[
-                //     { validator: checkAge }
-                // ]
+                // title: [
+                //     {
+                //         required: true,
+                //         message: "请输入文章标题",
+                //         trigger: "blur"
+                //     }
+                // ],
+
+                // searchKeywords: [{ validator: checkWord }]
             },
             isModalShow: false,
             editorOption: {},
@@ -313,6 +317,7 @@ export default {
         let start = new Date();
         // console.log(this.$route.query)
         var id = this.$route.query.id;
+        this.articleDetail.categoryId = this.$route.query.categoryId;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
             this.$emit("changeOperateName", "编辑");
@@ -363,33 +368,33 @@ export default {
                 }
                 this.metaKeyword = "";
                 this.articleDetail.metaKeywords.push(value);
-                let ele = this.$refs.metaKeywordsInput.$el.children[0];
-                let width = this.$refs.metaKeywordList.clientWidth;
-                this.textIndent(ele, width);
+                // let ele = this.$refs.metaKeywordsInput.$el.children[0];
+                // let width = this.$refs.metaKeywordList.clientWidth;
+                // this.textIndent(ele, width);
             } else {
                 if (this.articleDetail.searchKeywords.length >= 5 || !value) {
                     return;
                 }
                 this.keywordValue = "";
                 this.articleDetail.searchKeywords.push(value);
-                let ele = this.$refs.keywordInput.$el.children[0];
-                let width = this.$refs.keywordList.clientWidth;
-                this.textIndent(ele, width);
+                // let ele = this.$refs.keywordInput.$el.children[0];
+                // let width = this.$refs.keywordList.clientWidth;
+                // this.textIndent(ele, width);
             }
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
-            this.$nextTick(() => {
-                this.$refs.keywordInput.$el.children[0].style.textIndent =
-                    this.$refs.keywordList.clientWidth + "px";
-            });
+            // this.$nextTick(() => {
+            //     this.$refs.keywordInput.$el.children[0].style.textIndent =
+            //         this.$refs.keywordList.clientWidth + "px";
+            // });
         },
         removeCurmetaKeyWord(index) {
             this.articleDetail.metaKeywords.splice(index, 1);
-            this.$nextTick(() => {
-                metaKeywordsInput.$el.children[0].style.textIndent =
-                    this.$refs.metaKeywordList.clientWidth + "px";
-            });
+            // this.$nextTick(() => {
+            //     metaKeywordsInput.$el.children[0].style.textIndent =
+            //         this.$refs.metaKeywordList.clientWidth + "px";
+            // });
         },
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
@@ -402,9 +407,17 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
-            data.metaKeywords = data.metaKeywords.split(",");
-            data.searchKeywords = data.searchKeywords.split(",");
-            console.log(data, "000-----");
+
+            if (Object.keys(data.metaKeywords).length < 1) {
+                data.metaKeywords = [];
+            } else {
+                data.metaKeywords = data.metaKeywords.split(",");
+            }
+            if (Object.keys(data.searchKeywords).length < 1) {
+                data.searchKeywords = [];
+            } else {
+                data.searchKeywords = data.searchKeywords.split(",");
+            }
             this.articleDetail = data;
             this.articleDetail.NewId = data.id;
         },
@@ -478,7 +491,7 @@ export default {
                     type: "success",
                     message: "保存成功!"
                 });
-                this.$router.push("/content/news");
+                // this.$router.push("/content/news");
             }
         },
 
@@ -557,84 +570,44 @@ export default {
     computed: {},
     watch: {
         "articleDetail.searchKeywords"() {
-            let width = this.articleDetail.searchKeywords.length * 42 + 30;
-            let ele = this.$refs.keywordInput.$el.children[0];
-            this.textIndent(ele, width);
+            if(this.articleDetail.searchKeywords.length>=5){
+                this.isOutSearch =true
+            }else{
+                this.isOutSearch =false
+            }
+            // this.$nextTick(() => {
+            //     let width = this.$refs.keywordList.clientWidth;
+            //     let ele = this.$refs.keywordInput.$el.children[0];
+            //     this.textIndent(ele, width);
+            // });
         },
         "articleDetail.metaKeywords"() {
-            let width = this.articleDetail.metaKeywords.length * 42 + 30;
-            let ele = this.$refs.metaKeywordsInput.$el.children[0];
-            this.textIndent(ele, width);
+              if(this.articleDetail.metaKeywords.length>=5){
+                this.isOutSeo =true
+            }else{
+                this.isOutSeo =false
+            }
+            // this.$nextTick(() => {
+            //     let width = this.$refs.metaKeywordList.clientWidth;
+            //     console.log(this.$refs.metaKeywordList.clientWidth);
+            //     let ele = this.$refs.metaKeywordsInput.$el.children[0];
+            //     this.textIndent(ele, width);
+            // });
         },
-        deep: true
+        deep: true,
+        immediate: true
     }
 };
 </script>
-<style>
-#article-content .el-collapse,
-#article-content .el-collapse-item__header {
-    border: none;
-    font-size: 14px;
-}
-</style>
+
 
 <style scoped lang="scss">
-.keyword-list {
-    position: absolute;
-    display: inline-block;
-    z-index: 1;
-    top: 50px;
-    left: 0;
-    li {
-        display: inline-block;
-        padding: 5px 10px;
-        margin: 0 5px;
-        background: #609ee9;
-        border-radius: 30px;
-        font-size: 12px;
-        color: #fff;
-        i {
-            color: #fff;
-        }
-    }
-}
-.article-content {
-    .content-item {
-        padding: 21px 16px 20px;
-        background: #fff;
-        box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.03);
-        margin-bottom: 16px;
-        // overflow: hidden;
-    }
-    .content-title {
-        padding-bottom: 20px;
-        // height: 20px;
-        font-size: 14px;
-        font-weight: 600;
-        color: rgba(38, 38, 38, 1);
-        // line-height: 20px;
-    }
-    .set-article,
-    .seo-key {
-        padding: 0 16px;
-    }
-}
-.select-sort {
-    display: inline-block;
-    width: 117px;
-    box-sizing: border-box;
-    height: 32px;
-    margin: 0 16px 0 7px;
-}
-.quill-editor {
-    //height: 500px;
-}
-.ql-container {
-    height: 400px;
-}
+@import "../../style/contentDetail";
 </style>
 <style scoped>
+@import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 420px;
 }
 </style>
+

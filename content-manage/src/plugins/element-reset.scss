@@ -113,6 +113,7 @@ button.deleteActive:focus{
         position: relative !important;
         background: #fff;
     }
+   
     .el-tree .el-tree-node__label {
         font-size: 12px;
     }
@@ -122,16 +123,22 @@ button.deleteActive:focus{
     .el-tree-node > .el-tree-node__children {
         overflow: visible !important;
     }
+    .el-tree > :first-child > .el-tree-node__content{
+        color: #00C1DE;
+        background: rgb(247, 247, 247);
+        border-left: 2px solid #00C1DE;
+    }
     .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
         color: #00C1DE;
         background: rgb(247, 247, 247);
         border-left: 2px solid #00C1DE;
     }
+    .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .set-tree-type{
+        background: rgb(247, 247, 247);
+    }
 }
 
-// 修改element input设置字数显示 最后遮挡问题
-.el-input .el-input__inner{
-    height: 32px;
-    line-height: 32px;
-    padding-right: 60px;
+
+.el-input .el-input__inner,.el-button,.el-input-group__append, .el-input-group__prepend{
+    border-radius: 0;
 }

@@ -1,6 +1,12 @@
 <template>
     <div class="article-content" id="article-content">
-        <el-form class="base-ariticle" :model="detailData" :rules="rules" ref="articleDetail">
+        <el-form
+            class="base-ariticle"
+            @submit.native.prevent
+            :model="detailData"
+            :rules="rules"
+            ref="articleDetail"
+        >
             <div class="content-item">
                 <el-row>
                     <el-col :span="24">
@@ -9,6 +15,7 @@
                 </el-row>
                 <el-form-item label prop="name">
                     <el-input
+                        class="contentDetail-title"
                         placeholder="请输入产品标题（必填）"
                         v-model="detailData.name"
                         maxlength="100"
@@ -27,15 +34,29 @@
                     <div>
                         <div style="float:left">
                             <span style="font-size:12px">分类:</span>
-                            <span class="select-sort">
-                                <el-select size="small" v-model="value2" placeholder="请选择">
+                            <span class="select-sort category">
+                                <!-- <el-select 
+                                size="small" 
+                                v-model="value2" 
+                                multiple
+                                placeholder="请选择"
+                                >
                                     <el-option
                                         v-for="item in options1"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value"
                                     ></el-option>
-                                </el-select>
+                                </el-select>-->
+                                <SelectTree
+                                    size="small"
+                                    placeholder="请选择"
+                                    :categoryName="categoryName"
+                                    :tree-result="treeResult"
+                                    @chooseNode="chooseNode"
+                                    @removeSeletedCategory="removeSeletedCategory"
+                                    :multiple="true"
+                                />
                             </span>
                         </div>
                         <div style="float:right">
@@ -99,7 +120,7 @@
                                 </el-form-item>
                             </el-col>
                         </el-form-item>
-                        <el-form-item label="搜索关键词" prop="searchKeywords">
+                        <el-form-item label="搜索关键词" prop="searchKeyword">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
@@ -109,11 +130,27 @@
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
                             </el-tooltip>
-
-                            <el-input
+                            <ul class="keyword-list" ref="keywordList">
+                                <li v-for="(item,index) in detailData.searchKeyword" :key="index">
+                                    {{item}}
+                                    <i
+                                        class="el-icon-close"
+                                        @click.stop="removeCurKeyWord(index)"
+                                    ></i>
+                                </li>
+                                <el-input
+                                    ref="keywordInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="keywordValue"
+                                    @keyup.enter.native="keywords(keywordValue)"
+                                    @blur="keywords(keywordValue)"
+                                ></el-input>
+                            </ul>
+                            <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
+                            <!-- <el-input
                                 placeholder="每个关键词之间用会车键分离"
-                                v-model="detailData.searchKeywords"
-                            ></el-input>
+                                v-model="detailData.searchKeyword"
+                            ></el-input>-->
                         </el-form-item>
                         <el-form-item>
                             <el-checkbox-group
@@ -136,27 +173,44 @@
             <div class="content-item seo-key">
                 <el-collapse v-model="activeName1" accordion>
                     <el-collapse-item title="搜索引擎优化" name="1">
-                        <el-form-item label="seo标题" prop="searchKeyword">
+                        <el-form-item label="seo标题" prop="seoTitle">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">不填写则默认使用产品标题</div>
                                 <span>
                                     <svg-icon icon-class="tip-icon"></svg-icon>
                                 </span>
                             </el-tooltip>
-                            <el-input placeholder="seo标题" v-model="detailData.searchKeyword"></el-input>
+                            <el-input placeholder="seo标题" v-model="detailData.seoTitle"></el-input>
                         </el-form-item>
-                        <el-form-item label="seo关键词" prop="seoKeyword">
-                            <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input>
+                        <el-form-item style="position:relative" label="seo关键词" prop="seoKeyword">
+                            <ul class="keyword-list" ref="metaKeywordList">
+                                <li v-for="(item,index) in detailData.seoKeyword" :key="index">
+                                    {{item}}
+                                    <i
+                                        class="el-icon-close"
+                                        @click.stop="removeCurmetaKeyWord(index)"
+                                    ></i>
+                                </li>
+                                <el-input
+                                    ref="metaKeywordsInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="metaKeyword"
+                                    @keyup.enter.native="keywords(metaKeyword,'seoKeyword')"
+                                    @blur="keywords(metaKeyword,'seoKeyword')"
+                                ></el-input>
+                            </ul>
+                            <div class="el-form-item__error" v-if="isOutSeo">每篇文章最多填写5个关键词！</div>
+                            <!-- <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input> -->
                         </el-form-item>
 
-                        <el-form-item label="产品描述" prop="seoDescription">
+                        <!-- <el-form-item label="产品描述" prop="seoDescription">
                             <el-input
                                 type="textarea"
                                 :rows="5"
                                 placeholder
                                 v-model="detailData.seoDescription"
                             ></el-input>
-                        </el-form-item>
+                        </el-form-item>-->
                         <el-form-item label="自定义地址" prop="customUrl">
                             <el-input placeholder="请输入自定义地址" v-model="detailData.customUrl"></el-input>
                         </el-form-item>
@@ -181,15 +235,17 @@
         <!-- 
 
                  <el-form-item>
-        <el-button type="primary" @click="submitForm('articleDetail')">立即创建</el-button>
-        <el-button @click="resetForm('articleDetail')">重置</el-button>
-        <el-button type="primary" @click="editArticle('articleDetail')">编辑保存</el-button>
+        <el-button type="primary" @click="submitForm('detailData')">立即创建</el-button>
+        <el-button @click="resetForm('detailData')">重置</el-button>
+        <el-button type="primary" @click="editArticle('detailData')">编辑保存</el-button>
       </el-form-item>
         -->
     </div>
 </template>
 <script>
 import * as productManageApi from "@/api/request/productManageApi";
+import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
+import SelectTree from "@/components/common/SelectTree";
 const viewAuth = [
     { name: "全选", id: 0 },
     { name: "登录用户", id: 1 },
@@ -230,10 +286,13 @@ import ModalContent from "@/components/ImgManage/index.vue";
 
 export default {
     components: {
-        ModalContent
+        ModalContent,
+        SelectTree
     },
     data() {
         return {
+            isOutSeo:false,
+            isOutSearch:false,
             checkAll: false,
             checkedviewAuth: [{ name: "登录用户", id: 1 }],
             viewAuth: viewAuth,
@@ -259,10 +318,12 @@ export default {
                     label: "全部分类2"
                 }
             ],
-            value2: "全部分类",
+            value2: ["全部分类1", "全部分类2"],
 
             activeName: "",
             activeName1: "",
+            categoryName: [],
+            treeResult: null,
             detailData: {
                 name: "",
                 description: "",
@@ -270,9 +331,10 @@ export default {
                 price: 1, //
                 costPrice: 1, //
                 originalPrice: 1, //
-                seoKeyword: "",
+                seoKeyword: [],
+                searchKeyword: [],
                 seoDescription: "",
-                searchKeyword: "",
+
                 skuId: "", //
                 publishTime: new Date(),
                 customUrl: "",
@@ -315,15 +377,19 @@ export default {
                 ]
             },
             isModalShow: false,
-            editorOption: {}
+            editorOption: {},
+            keywordValue: "",
+            metaKeyword: ""
         };
     },
     created() {
         console.log(this.$route.query);
         var id = this.$route.query.id;
+        this.curProduct = id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
         }
+        this.getTree();
         this.editorOption = {
             placeholder: "请输入文本",
             modules: {
@@ -356,18 +422,55 @@ export default {
         };
     },
     methods: {
+        textIndent(ele, width) {
+            this.$nextTick(() => {
+                ele.style.textIndent = width + "px";
+            });
+        },
+        keywords(value, name) {
+            if (name === "seoKeyword") {
+                if (this.detailData.seoKeyword.length >= 5 || !value) {
+                    return;
+                }
+                this.metaKeyword = "";
+                this.detailData.seoKeyword.push(value);
+            } else {
+                if (this.detailData.searchKeyword.length >= 5 || !value) {
+                    return;
+                }
+                this.keywordValue = "";
+                this.detailData.searchKeyword.push(value);
+            }
+        },
+        removeCurKeyWord(index) {
+            this.detailData.searchKeyword.splice(index, 1);
+        },
+        removeCurmetaKeyWord(index) {
+            this.detailData.seoKeyword.splice(index, 1);
+        },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
+            this.categoryName = data.productCategoryList.map(item => {
+                return item.displayName;
+            });
+            if (Object.keys(data.seoKeyword).length < 1) {
+                data.seoKeyword = [];
+            } else {
+                data.seoKeyword = data.seoKeyword.split(",");
+            }
+            if (Object.keys(data.searchKeyword).length < 1) {
+                data.searchKeyword = [];
+            } else {
+                data.searchKeyword = data.searchKeyword.split(",");
+            }
+
             this.detailData = data;
             //this.detailData.NewId = data.id;
         },
         // 新建保存
         submitForm(formName, fileList) {
-            //   this.detailData.pictureUrl = imageUrl;
-            console.log(fileList);
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
-                console.log(valid, "[[[[[[[[[");
                 if (valid) {
                     this.insertArticle();
                 } else {
@@ -407,8 +510,9 @@ export default {
         },
         //编辑保存产品
         async saveArticle() {
-            let { status, data } = await articleManageApi.editArticle(
-                this.articleDetail
+            let { status, data } = await productManageApi.update(
+                this.curProduct,
+                this.detailData
             );
             if (status === 200) {
                 this.$message({
@@ -417,16 +521,34 @@ export default {
                 });
             }
         },
-        handleCheckAllChange(val) {
-            // this.checkedCities = val ? cityOptions : [];
-            // this.isIndeterminate = false;
+        /**
+         * 获取 tree 结构
+         */
+        async getTree() {
+            let { data } = await productCategoryManageApi.get();
+            this.treeResult = data.treeArray;
+            console.log(data, "datadatadata");
+            var categoryName = this.$route.query.categoryName;
+            if (categoryName != null || categoryName != undefined) {
+                this.categoryName = categoryName;
+            }
         },
-        handleCheckedCitiesChange(value) {
-            console.log(value);
-            // let checkedCount = value.length;
-            // this.checkAll = checkedCount === this.cities.length;
-            // this.isIndeterminate =
-            //     checkedCount > 0 && checkedCount < this.cities.length;
+        chooseNode(data) {
+            this.detailData.productCategoryList.push({
+                displayName: data.label,
+                id: data.id,
+                thumbnailPicUrl: data.thumbnailPicUrl
+            });
+            console.log(data);
+        },
+        //  移除已选择的分类
+        removeSeletedCategory(cur) {
+            let productCategoryList = this.detailData.productCategoryList;
+            this.detailData.productCategoryList = productCategoryList.filter(
+                item => {
+                    return item.displayName != cur;
+                }
+            );
         },
         onEditorChange({ editor, html, text }) {
             this.detailData.detailContent = html;
@@ -463,6 +585,17 @@ export default {
         // 关闭图片选择弹窗
         cancelEditorImg() {
             this.isModalShow = false;
+        },
+        handleCheckAllChange(val) {
+            // this.checkedCities = val ? cityOptions : [];
+            // this.isIndeterminate = false;
+        },
+        handleCheckedCitiesChange(value) {
+            console.log(value);
+            // let checkedCount = value.length;
+            // this.checkAll = checkedCount === this.cities.length;
+            // this.isIndeterminate =
+            //     checkedCount > 0 && checkedCount < this.cities.length;
         }
     },
     mounted() {
@@ -473,58 +606,39 @@ export default {
         // 为视频ICON绑定事件
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         addQuillTitle();
+    },
+    watch: {
+        "detailData.searchKeyword"() {
+           
+             if(this.detailData.searchKeyword.length>=5){
+                this.isOutSearch =true
+            }else{
+                this.isOutSearch =false
+            }
+            // let width = this.detailData.searchKeyword.length * 52 ;
+            // let ele = this.$refs.keywordInput.$el.children[0];
+            // this.textIndent(ele, width);
+        },
+        "detailData.seoKeyword"() {
+               if(this.detailData.seoKeyword.length>=5){
+                this.isOutSeo =true
+            }else{
+                this.isOutSeo =false
+            }
+            // let width = this.detailData.seoKeyword.length * 52;
+            // let ele = this.$refs.metaKeywordsInput.$el.children[0];
+            // this.textIndent(ele, width);
+        },
+        deep: true
     }
 };
 </script>
-<style>
-#article-content .el-collapse,
-#article-content .el-collapse-item__header {
-    border: none;
-    font-size: 14px;
-}
-</style>
-
 <style scoped lang="scss">
-.article-content {
-    .content-item {
-        padding: 21px 16px 0;
-        background: #fff;
-        box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.03);
-        margin-bottom: 16px;
-        overflow: hidden;
-    }
-    .content-title {
-        padding-bottom: 20px;
-        height: 20px;
-        font-size: 14px;
-        font-weight: 500;
-        color: rgba(38, 38, 38, 1);
-        line-height: 20px;
-    }
-    .set-article,
-    .seo-key {
-        padding: 0 16px;
-    }
-}
-.select-sort {
-    display: inline-block;
-    width: 117px;
-    box-sizing: border-box;
-    height: 32px;
-    margin: 0 16px 0 7px;
-}
-.quill-editor {
-    height: 500px;
-}
-.ql-editor {
-    height: 500px;
-}
-.ql-container {
-    height: 430px;
-}
+@import "../../style/contentDetail";
 </style>
 <style scoped>
-.quill-editor /deep/ .ql-container{
+@import "../../style/contentDetailCommon.css";
+.quill-editor /deep/ .ql-container {
     height: 400px;
 }
 </style>

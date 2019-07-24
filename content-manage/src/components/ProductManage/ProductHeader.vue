@@ -133,7 +133,7 @@ export default {
     data() {
         return {
             ascSort: false,
-            descSort: false,
+            descSort: true,
             statusOptions: [
                 {
                     statusValue: "",
@@ -154,10 +154,10 @@ export default {
                     orderValue: "CreateTime",
                     orderLabel: "创建时间"
                 },
-                {
-                    orderValue: "Name",
-                    orderLabel: "标题"
-                }
+                // {
+                //     orderValue: "Name",
+                //     orderLabel: "标题"
+                // }
             ],
             orderValue: "创建时间",
             topOptions: [
@@ -205,11 +205,11 @@ export default {
                 this.ascSort = true;
                 this.descSort = !this.ascSort;
                 console.log(this.ascSort);
-                this.articleSearchOptions.isDescending = true;
+                this.articleSearchOptions.isDescending = false;
             } else {
                 this.descSort = true;
                 this.ascSort = !this.descSort;
-                this.articleSearchOptions.isDescending = false;
+                this.articleSearchOptions.isDescending = true;
             }
 
              this.getArticleList();

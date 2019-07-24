@@ -35,9 +35,9 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="isPublishPrt" label="状态" show-overflow-tooltip></el-table-column>
+            <el-table-column width="100" prop="isPublishPrt" label="状态" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="isTopPrt" label="置顶" show-overflow-tooltip></el-table-column>
+            <el-table-column width="100" prop="isTopPrt" label="置顶" show-overflow-tooltip></el-table-column>
 
             <el-table-column prop="createUser" label="作者" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
@@ -51,7 +51,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作">
+            <el-table-column width="200" label="操作">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)"></span>
