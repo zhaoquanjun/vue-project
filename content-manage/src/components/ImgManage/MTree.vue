@@ -33,7 +33,7 @@
                     <span class="enter" @click.stop="hadnleTreeInput(data,data.isNewAdd)">
                         <svg-icon icon-class="tree-yes"></svg-icon>
                     </span>
-                    <span class="cancel" @click.stop="cancelhadnleTreeInput(data,node)">
+                    <span class="cancel" @click.stop="cancelhandleTreeInput(data,node)">
                         <svg-icon icon-class="tree-no"></svg-icon>
                     </span>
                 </div>
@@ -58,38 +58,12 @@
                 >
                     <svg-icon icon-class="tree-handler"></svg-icon>
                 </span>
-                <!-- <div class="tree-handle" v-show="node.data.id === curId">
-                    <button
-                        v-if="node.data.level <3"
-                        type="text"
-                        size="mini"
-                        @click.stop=" create(data,node)"
-                    >添加子分类</button>
-                    <button
-                        v-if="node.data.level>0"
-                        type="text"
-                        size="mini"
-                        @click.stop="rename(data)"
-                    >修改名称</button>
-
-                    <button
-                        v-if="node.data.level>0"
-                        type="text"
-                        size="mini"
-                        @click.stop="batchRemove( node,data)"
-                    >删除分类</button>
-                </div>-->
             </div>
         </el-tree>
         <div @click="handleCategory" class="tree-handle" ref="operateSection">
-            <button v-if="curClickNode.data.level <3" type="text" size="mini" @click="create">添加子分类</button>
-            <button v-if="curClickNode.data.level>0" type="text" size="mini" @click="rename">修改名称</button>
-            <button
-                v-if="curClickNode.data.level>0"
-                type="text"
-                size="mini"
-                @click="batchRemove"
-            >删除分类</button>
+            <button v-if="curClickNode.data.level <3" @click="create">添加子分类</button>
+            <button v-if="curClickNode.data.level>0" @click="rename">修改名称</button>
+            <button v-if="curClickNode.data.level>0" @click="batchRemove">删除分类</button>
         </div>
     </div>
 </template>
@@ -149,9 +123,10 @@ export default {
             }
             this.treeNodeId = null;
         },
-        //
-        cancelhadnleTreeInput(data, node) {
+        // 取消修改节点名称 OR 新增节点
+        cancelhandleTreeInput(data, node) {
             if (this.isRename) {
+                // 重命名节点名称不能为空
                 if (data.label == "") {
                     this.$message({
                         message: "分类名称不能为空",
@@ -170,6 +145,7 @@ export default {
             // 点击取消按钮 关闭input框
             this.renameShowId = this.curId = null;
         },
+        // 拖拽完成
         handleDragEnd(draggingNodeDom, targetNodeDom, dropType, ev) {
             var draggingNode = draggingNodeDom.data;
             var targetNode = targetNodeDom.data;
@@ -230,6 +206,7 @@ export default {
             this.curId = null;
             this.newAddData = this.curClickData;
         },
+        //  获取全部子节点的id
         getAllNodeIds(node, isChildNode) {
             var idList = isChildNode ? [] : [node.id];
             for (var i in node.children) {
@@ -239,6 +216,7 @@ export default {
             }
             return idList;
         },
+        // 获取层级
         getLevel(node, level) {
             var localLevel = level;
             for (var i in node.children) {
@@ -265,8 +243,6 @@ export default {
         },
         // 点击分类节点
         changeCategory(data) {
-            console.log(arguments);
-
             if (this.isrightPannel) {
                 console.log(data);
                 this.$emit("chooseNode", data);
@@ -285,7 +261,7 @@ export default {
             if (data.isNewAdd) return;
             this.curlabelName = data.label;
             this.picSearchOptions.categoryIdList = this.getAllNodeIds(data);
-            this.$emit("getPicList", data);
+
             // 点击其他区域 把当前新增但未确定的节点删除掉
             this.newAddData && this.newAddData.children.shift();
             if (this.renameShowId !== data.id) this.isNewAdd = false;
@@ -295,9 +271,10 @@ export default {
                 this.renameData.label = this.curlabelName;
                 this.renameShowId = null;
             }
+
+            //  设置level为0 的是否被选中的样式
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
-
             if (data.level === 0) {
                 this.setCss(allCategoryEle, {
                     background: "#f7f7f7",
@@ -311,8 +288,8 @@ export default {
                     border: "none"
                 });
             }
-
-            this.closeUploadCategoryPic();
+            this.$emit("getPicList", data);
+            this.closeCategoryHandleMenu();
         },
         // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {
@@ -321,11 +298,6 @@ export default {
             }
         },
         handleShow(ev, node, data) {
-            console.log(
-                node,
-                data,
-                "console.log(node, data)console.log(node, data)console.log(node, data)"
-            );
             node.checked = true;
             this.curId = node.data.id;
             // 07 22新增
@@ -341,11 +313,11 @@ export default {
             this.$refs.operateSection.style.display = "block";
         },
         // 新增 0722  关闭分类操作菜单
-        closeUploadCategoryPic() {
+        closeCategoryHandleMenu() {
             this.$refs.operateSection.style.display = "none";
         },
         handleCategory() {
-            this.closeUploadCategoryPic();
+            this.closeCategoryHandleMenu();
         },
         changeCategoryInput(label) {
             console.log(label);

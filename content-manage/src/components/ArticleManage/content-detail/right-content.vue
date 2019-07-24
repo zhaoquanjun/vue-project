@@ -59,7 +59,7 @@ export default {
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
             headers: {
-                appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+                appId: "",
                 Authorization: ""
             },
             uploadSucess: false,
@@ -70,6 +70,9 @@ export default {
         imageUrl() {
             this.imageUrl1 = this.imageUrl;
         }
+    },
+    mounted(){
+         this.headers.appId = this.$store.state.dashboard.appid;
     },
     methods: {
         handleSucess(response, file, fileList) {
@@ -193,17 +196,21 @@ export default {
 .imgWrap:hover .el-upload-list__item-actions {
    opacity: 1;
 }
-.icon-change{
-    display: inline-block;
-    width: 20px;height: 20px;;
-    background: url("~img/content-icon/change.png") no-repeat center;
-    background-size: contain;
+
+.el-collapse /deep/ .el-collapse-item__header{
+    font-weight: 600;
 }
 </style>
 <style lang="scss" scoped>
 .article-cover{
      color: #262626;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
+}
+.icon-change{
+    display: inline-block;
+    width: 20px;height: 20px;;
+    background: url("~img/content-icon/change.png") no-repeat center;
+    background-size: contain;
 }
 </style>

@@ -114,6 +114,9 @@ export default {
         deep:true,
 
     },
+    mounted(){
+         this.headers.appId = this.$store.state.dashboard.appid;
+    },
     methods: {
         handleSucess(response, file, fileList) {
             this.imageUrl1 = file.response;

@@ -17,9 +17,7 @@
                     @rename="renameCategory"
                     @modifyNode="modifyNodeCategory"></m-tree>
         </el-aside>
-
         <el-main>
-
             <img-list-header :count-pic="countPic"
                              :pic-search-options="picSearchOptions"
                              :is-batch-header-show="isBatchHeaderShow"
@@ -30,7 +28,6 @@
                              @showType="showType">
 
             </img-list-header>
-
             <el-main>
                 <component :is="componentId"
                            :img-page-result="imgPageResult"
@@ -65,12 +62,9 @@
                                 @chooseNode="chooseNode"
                                 :isexpand="true"
                     >
-                              
                     </SelectTree>
-
-
                     <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryPic" class="sure">确定</button>
+                        <span @click="updateCategoryPic" class="sure">确定</span>
                         <button @click="cancelUpdateCategor" class="cancel">取消</button>
                     </div>
                 </right-pannel>
@@ -92,7 +86,6 @@
                         <svg-icon icon-class="tip-icon"></svg-icon>
                     </el-tooltip>
                 </span>
-
             </span>
             <upload-pic @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                         @getTree="getTree"
@@ -100,7 +93,6 @@
                         :upload-pic-url="uploadPicUrl"
                         :node-data="nodeData"
                          />
-
         </el-dialog>
 
     </el-container>
@@ -250,7 +242,6 @@
                 this.getTree();
             },
             async batchRemoveCategory(idList) {
-
                 this.$confirm(
                     "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
                     "提示",
@@ -304,7 +295,6 @@
             },
             //选择移动分类时的节点
             chooseNode(node) {
-
                 this.moveToClassiFy = node;
             },
             // 批量更新的选中数量
@@ -335,6 +325,7 @@
                     idList.push(this.curImgInfo.id);
                 }
                 this.changeCategoryPic(categoryId, idList);
+                return false
             },
             // 取消移动分类 关闭panel
             cancelUpdateCategor() {

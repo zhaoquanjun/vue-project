@@ -23,7 +23,7 @@
                     </el-col>
                 </el-row>
             </el-header>
-            <el-main>
+            <el-main style="overflow:hidden">
                 <div>
                     <el-row>
                         <el-col :span="13" :offset="3">
@@ -63,17 +63,21 @@ export default {
     },
     methods:{
       submitForm(){
-          console.log(this.$refs.articleRight.fileList2)
         let flieUrls = [...this.$refs.articleRight.fileList1,...this.$refs.articleRight.fileList2]    
         let fileList =flieUrls.map(item=>{
             return item.response
         });
-        this.$refs.articleContent.submitForm('articleDetail',fileList)
+        // editArticle
+        let isEditor = this.$route.query.isEditor;
+        if(!!isEditor){
+             this.$refs.articleContent.editArticle('articleDetail',fileList)
+        }else{
+            this.$refs.articleContent.submitForm('articleDetail',fileList)
+        }
       },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
             let thumbnailPicUrlList = data.thumbnailPicUrlList;
-            
             thumbnailPicUrlList.forEach(item => {
                 this.fileList.push({
                     name:"123",
@@ -81,10 +85,6 @@ export default {
                     url:item
                 })
             })
-            console.log(this.fileList)
-
-
-           
         },
      
     },
