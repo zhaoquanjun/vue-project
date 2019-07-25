@@ -266,6 +266,7 @@ export default {
         },
         // 操作按钮出现
         handleShow(ev, node, val) {
+            console.log(node)
             node.checked = true;
             this.curId = node.data.id;
         },

@@ -31,6 +31,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 // 请求拦截器
 axios.interceptors.request.use(
     config => {
+        console.log(config)
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');
@@ -58,7 +59,7 @@ axios.interceptors.response.use(
         }
     },
     // 服务器状态码不是200的情况    
-    error => {
+    (error) => {
         try{
             let status = error.response.status;
             if (error.response.status) {
@@ -114,6 +115,7 @@ export function get(url, params) {
                 resolve(res);
             })
             .catch(err => {
+               
                 reject(err)
             })
     });
@@ -123,13 +125,14 @@ export function get(url, params) {
  * @param {String} url [请求的url地址] 
  * @param {Object} params [请求时携带的参数] 
  */
-export function post(url, params) {
+export function post(url, params,fn) {
     return new Promise((resolve, reject) => {
-        axios.post(url, params)
+        axios.post(url, params,fn)
             .then(res => {
                 resolve(res);
             })
             .catch(err => {
+                
                 reject(err)
             })
     });

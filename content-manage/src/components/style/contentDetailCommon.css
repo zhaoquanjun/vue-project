@@ -10,6 +10,9 @@
     font-size: 14px;
     font-weight: 600;
 }
+.el-form-item__error{
+    font-weight: 400; 
+}
 /* 关键词样式修改 */
 .keyword-list /deep/ .el-input{
     width: auto;

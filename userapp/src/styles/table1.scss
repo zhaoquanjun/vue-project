@@ -1,0 +1,33 @@
+.handle-btn-wrap {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    .handle-btn {
+        width: 17px;
+        height: 16px;
+    }
+    .backup-btn {
+        background: url("~img/siteManage/backup.png") no-repeat center;
+        background-size: 100%;
+        &:hover {
+            background: url("~img/siteManage/backup-on.png") no-repeat center;
+            background-size: 100%;
+        }
+    }
+    .download-btn {
+        background: url("~img/siteManage/download.png") no-repeat center;
+        background-size: 100%;
+        &:hover {
+            background: url("~img/siteManage/download-on.png") no-repeat center;
+            background-size: 100%;
+        }
+    }
+    .delete-btn {
+        background: url("~img/siteManage/delete.png") no-repeat center;
+        background-size: 100%;
+        &:hover {
+            background: url("~img/siteManage/delete-on.png") no-repeat center;
+            background-size: 100%;
+        }
+    }
+}
