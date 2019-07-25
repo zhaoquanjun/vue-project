@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/reset.css";
 import "./styles/common.scss";
+import "./plugins/element-reset.css"
 import './icons'
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)

@@ -4,3 +4,6 @@
 .el-container .el-header {
     padding: 0;
 }
+.el-input__inner{
+    border-radius:0;
+}

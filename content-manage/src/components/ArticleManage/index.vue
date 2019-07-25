@@ -15,6 +15,7 @@
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
                 @chooseNode="chooseNode"
+                @getList="getArticleListAsync"
             ></m-tree>
         </el-aside>
         <el-main>
@@ -362,13 +363,13 @@ export default {
         closeRightPanel() {
             this.isInvitationPanelShow = true;
         },
-        // 获取文章table列表
-        // async getArticleListAsync(options) {
-        //     let { data } = await articleManageApi.getArticleList(
-        //         (options = this.articleSearchOptions)
-        //     );
-        //     this.articlePageResult = data;
-        // },
+        //获取文章table列表
+        async getArticleListAsync(options) {
+            let { data } = await articleManageApi.getArticleList(
+                (options = this.articleSearchOptions)
+            );
+            this.articlePageResult = data;
+        },
         // 获取文章分类的树菜单
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();

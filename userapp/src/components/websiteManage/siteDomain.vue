@@ -29,7 +29,7 @@
                 ></DomainList>
             </el-main>
         </el-main>
-        <el-dialog width="0" :visible.sync="backupShow" :show-close="false">
+        <el-dialog width="0" :visible.sync="backupShow" :show-close="false" :close-on-click-modal="false">
             <div class="right-pannel" :style="{width:'470px'}">
                 <div class="pannel-head">
                     <span>
@@ -44,16 +44,13 @@
                     <span class="close-pannel" @click="closeDialog">X</span>
                 </div>
                 <div class="tips">温馨提示：备份当前站点设计页面，包括电脑版、手机版和Pad版</div>
-                <div class="remark">
-                    <span class="remarkTitle">备注</span>
-                    <el-input
-                        v-model="remarkInfo"
-                        placeholder="请输入备注信息（非必填）"
-                        maxlength="30"
-                        class="remarkInput"
-                        show-word-limit
-                        :style="{width: '440px'}"
-                    ></el-input>
+                <div class="domain-wrap">
+                    <el-form>
+                        <el-form-item label="域名">
+                            <el-input v-model="domainValue" placeholder="请输入备注信息（非必填" @change="changeInput"></el-input>
+                            <div class="el-form-item__error" v-if="onerrorTip">{{onerrorText}}</div>
+                        </el-form-item>
+                    </el-form>
                 </div>
                 <div class="pannel-footer">
                     <button class="footer-btn confirmBtn" @click="handleConfirm">确定</button>
@@ -83,6 +80,16 @@ export default {
         DomainList
     },
     data() {
+        // var checkDomain = (rule, value, callback) => {
+        //     var reg = /^((?!-)[A-Za-z0-9-\u4E00-\u9FA5]{1,63}(?<!-)\.)+[A-Za-z]{2,6}$/;
+        //     if (value === "") {
+        //         callback(new Error("请输入域名"));
+        //     } else if (!reg.test(value)) {
+        //         callback(new Error("请输入正确格式的域名"));
+        //     } else {
+        //         callback();
+        //     }
+        // };
         return {
             submenuList: [
                 { name: "网站备份", url: "/website/backup" },
@@ -104,8 +111,20 @@ export default {
             backuping: false,
             // recovery: false,
             remarkInfo: "",
-            /////////////
-            domainListData: []
+            // /////////////
+            // domainDetail: {
+            //     curDomain: ""
+            // },
+            // rules: {
+            //     curDomain: [
+            //         // { validator: checkDomain, trigger: "blur", require: true }
+            //     ]
+            // },
+
+            domainListData: [],
+            domainValue: "",
+            onerrorTip: false,
+            onerrorText: ""
         };
     },
     mounted() {
@@ -133,10 +152,47 @@ export default {
             console.log(data);
         },
         async handleConfirm() {
-            let data = await domainApi.bindDomainAndEnableCdn({
-                domain: "xxx.net"
+            if(!this.changeInput()) return 
+            let { data, status } = await domainApi.bindDomainAndEnableCdn({
+                domain: this.domainValue
             });
-            console.log(data,'000-------')
+            if (status === 200 && !data.isSuccess) {
+                this.onerrorTip = true;
+                this.onerrorText = data.msg;
+                return;
+            }
+            if(status === 200 && data.isSuccess){
+               // this.onerrorTip = false;
+                const h = this.$createElement;
+                 this.$confirm(
+                `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`,
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "success",
+                    callback: async action => {
+                        console.log(action);
+                        if (action === "confirm") {
+                            
+                        } 
+                    }
+                }
+            );
+            }
+            
+            //    this.onerrorTip=true;
+            //    this.onerrorText="不好是"
+        },
+        submitForm(formName, imageUrl) {
+            this.$refs.domain.validate(valid => {
+                if (valid) {
+                    this.handleConfirm();
+                } else {
+                    console.log("error submit!!");
+                    return false;
+                }
+            });
         },
         /**
          * 解析域名
@@ -212,6 +268,25 @@ export default {
         },
         closeDialog() {
             this.backupShow = false;
+        },
+        testDomain(domain) {
+            var reg = /^([a-z0-9\-\u4E00-\u9FA5]*[\.])+([a-z\u4E00-\u9FA5]{2,10})$/;
+            return reg.test(domain);
+        },
+        changeInput(){
+              if (this.domainValue === "") {
+                this.onerrorTip = true;
+                this.onerrorText = "请输入域名";
+                return false;
+            } else if (!this.testDomain(this.domainValue)) {
+                this.onerrorTip = true;
+                this.onerrorText = "请输入正确格式的域名";
+                return false;
+            }else{
+                this.onerrorTip = false;
+                this.onerrorText = "";
+                return true
+            }
         }
     }
 };
@@ -363,104 +438,25 @@ export default {
         }
     }
 }
-// 修改备注
-.textareaWrap {
-    background: #fff;
-    position: relative;
-    .btn-wrap {
-        text-align: right;
-        padding-top: 10px;
-        button {
-            width: 63px;
-            height: 25px;
-            line-height: 25px;
-            font-size: 12px;
-            border: none;
-        }
-        .cancel {
-            border: 1px solid #eeeeee;
-            margin-right: 10px;
-        }
-        .save {
-            background: #00c1de;
-            color: #fff;
-        }
+</style>
+<style scoped lang="scss">
+.el-form-item__error {
+    color: #262626;
+    &::before {
+        display: inline-block;
+        content: "";
+        width: 13px;
+        height: 13px;
+        vertical-align: bottom;
+        padding-right: 8px;
+        background: url("~img/jian-icon.png") no-repeat center;
+        background-size: contain;
     }
 }
-//网站还原中
-.circleprogress {
-    background: #ffffff;
-    position: fixed;
-    z-index: 2200;
-    width: 270px;
-    height: 199px;
-    margin-left: -135px;
-    margin-top: -100px;
-    left: 50%;
-    top: 50%;
-    box-shadow: 0 0 3px #ccc;
-    transition: width 0.2s linear;
-    background-color: "#fff";
-    color: #262626;
-    overflow: hidden;
-    .circle {
-        width: 56px;
-        height: 56px;
-        box-sizing: border-box;
-        padding: 5px;
-        border-radius: 50%;
-        background-image: -webkit-linear-gradient(
-            to top left,
-            #45a9fe 0%,
-            #00c1de 90%
-        );
-        background-image: -moz-linear-gradient(
-            to top left,
-            #45a9fe 0%,
-            #00c1de 90%
-        );
-        background-image: linear-gradient(to top left, #45a9fe 0%, #00c1de 90%);
-        .circleBox {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: #fff;
-        }
-    }
-    .circleWrap {
-        position: absolute;
-        left: 50%;
-        top: 54px;
-        margin-left: -28px;
-        width: 56px;
-        height: 56px;
-        -webkit-animation: rotate 2s linear infinite;
-    }
-    @-webkit-keyframes rotate {
-        0% {
-            -webkit-transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-    .hideCircle {
-        width: 28px;
-        height: 28px;
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        background: #fff;
-        z-index: 2500;
-    }
-    .backuping {
-        position: absolute;
-        top: 123px;
-        left: 92px;
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(38, 38, 38, 1);
-        line-height: 20px;
-    }
+.domain-wrap {
+    padding: 0 16px;
+}
+.el-form-item.is-error {
+    border-color: #f56c6c;
 }
 </style>

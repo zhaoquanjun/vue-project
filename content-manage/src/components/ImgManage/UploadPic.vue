@@ -110,17 +110,11 @@ export default {
         handleChange(file, fileList) {
             console.log(fileList);
             this.uploadDisabled = false;
-<<<<<<< HEAD
-            console.log(file)
-            fileList.filter((item,index)=>{
-                if(!imgSize(item.size,10)){
-=======
 
             fileList.forEach((item, index) => {
                 const isSizeOk = imgSize(file.size);
                 const isPic = isImgFile(item.raw.type);
                 if (!isPic) {
->>>>>>> 620369920b9fdf9d81acbe6c18549b9a32f4718f
                     fileList.splice(index, 1);
                 };
                 if(!isImgFile(item.raw.type)){
