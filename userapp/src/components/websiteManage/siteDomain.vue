@@ -175,7 +175,7 @@ export default {
                         callback: async action => {
                             console.log(action);
                             if (action === "confirm") {
-                                this.elemnetConfirm("success","就啊跑")
+                                this.elemnetConfirm("success","就啊跑",this._getCdnDomainList)
                             }
                         }
                     }
@@ -311,13 +311,13 @@ export default {
                 return true;
             }
         },
-        elemnetConfirm(type,content) {
+        elemnetConfirm(type,content,callback) {
             this.$confirm("提示", {
                 message:content,
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: type,
-                callback: async action => {}
+                callback: async action => {callback.bind(this)}
             });
         }
     }
