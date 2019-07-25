@@ -231,7 +231,6 @@ export default {
          * 还原站点
          */
         async recovery(scope) {
-            console.log(scope)
             this.$confirm(
                 `确定要将网站还原至该备份版本吗？ 还原后系统会自动备份当前站点设计，可在自动备份列表中查看。`,
                 "提示",
