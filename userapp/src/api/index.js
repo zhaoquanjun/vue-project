@@ -184,11 +184,7 @@ export const updateUserPhone = (phone,code) => {
  * 获取dashbord
  */
 export const getUserDashboard = () => {  
-  
-    let params = {
-        appId: ''
-    }
-    return ajaxRequest.get('api/userInfo/GetUserDashboard', params);
+    return ajaxRequest.get('api/userInfo/GetUserDashboard');
 }
 
 /**

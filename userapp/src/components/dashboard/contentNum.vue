@@ -2,13 +2,17 @@
     <div class="content-num-section">
         <p class="section-title">内容管理</p>
         <el-row class="content" :gutter="16">
-            <el-col class="item" :span="12" v-for="(it, idx) in content" :key="idx">
+            <el-col class="item" :span="6" v-for="(it, idx) in content" :key="idx">
                 <div class="item-box">
                     <div class="item-l">
                         <span :class="contentIcon(it)"></span>
-                        <span>{{it.name}}</span>
+                        <span>{{ it.name }}</span>
+                    
                     </div>
-                    <div class="item-r">{{it.num}}</div>
+                    <div>
+                        <span class="item-r">{{ it.num }}</span>
+                        <span class="item-type">{{ it.type }}</span>
+                    </div>
                 </div>
             </el-col>
         </el-row>
@@ -24,12 +28,11 @@ export default {
         };
     },
     created() {
-        console.log(this.contentNum);
         this.content = [
-            { name: "文章", num: this.contentNumber.newsCount },
-            { name: "产品", num: this.contentNumber.productsCount },
-            { name: "图片", num: this.contentNumber.picturesCount },
-            { name: "文件", num: this.contentNumber.filesCount }
+            { name: "文章", num: this.contentNumber.newsCount, type: "/篇" },
+            { name: "产品", num: this.contentNumber.productsCount, type: "/个" },
+            { name: "图片", num: this.contentNumber.picturesCount, type: "/个" },
+            { name: "文件", num: this.contentNumber.filesCount, type: "/件" }
         ];
     },
     methods:{
@@ -52,13 +55,17 @@ export default {
 
 <style lang="scss" scoped>
 .content-num-section {
-    background: #fff;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 2px 8px 0px rgba(0,0,0,0.14);
     .section-title {
-        padding-left: 16px;
+        padding-left: 25px;
         padding-bottom: 16px;
-        padding-top: 14px;
-        font-size: 14px;
-        line-height: 18px;
+        padding-top: 20px;
+        font-size:18px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(38,38,38,1);
+        line-height:25px;
     }
     .content {
         padding: 0 24px 16px;
@@ -70,12 +77,12 @@ export default {
             margin-bottom: 16px;
             .item-box {
                 width: 100%;
-                height: 56px;
+                height: 100px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 padding: 0 16px;
-                background: #f5f5f5;
+                background:rgba(251,251,251,1);
                 span {
                     display: block;
                 }
@@ -105,17 +112,33 @@ export default {
                     justify-content: flex-start;
                     align-items: center;
                     span:first-of-type {
-                        width: 24px;
-                        height: 24px;
-                        margin-right: 8px;
+                        width: 40px;
+                        height: 40px;
+                        margin-right: 24px;
                     }
                     span:last-of-type {
-                        line-height: 17px;
-                        color: #8c8c8c;
+                        font-size:20px;
+                        font-family:PingFangSC-Light;
+                        font-weight:300;
+                        color:rgba(38,38,38,1);
+                        line-height:28px;
                     }
                 }
                 .item-r {
-                    color: #00c1de;
+                    display: inline;
+                    margin-right: 5px;
+                    font-size:32px;
+                    font-family:PingFangSC-Medium;
+                    font-weight:500;
+                    color:rgba(38,38,38,1);
+                }
+                .item-type{
+                    display: inline;
+                    font-size:14px;
+                    font-family:PingFangSC-Regular;
+                    font-weight:400;
+                    color:rgba(181,181,181,1);
+                    line-height:20px;
                 }
             }
         }

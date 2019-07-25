@@ -4,10 +4,10 @@
         <el-row class="content" :gutter="16">
             <el-col class="item" :span="6" v-for="(item, index) in recommend" :key="index">
                 <div class="item-box">
-                        <div class="item-title">{{item.appName}}</div>
-                        <div class="item-icon"></div>
-                        <span class="item-content">{{item.appDescription}}</span>
-                        <div class="item-btn">查看详情</div>
+                    <div class="item-title">{{item.appName}}</div>
+                    <div class="item-icon"></div>
+                    <span class="item-content">{{item.appDescription}}</span>
+                    <div class="item-btn">查看详情</div>
                 </div>
             </el-col>
         </el-row>
@@ -34,13 +34,16 @@ export default {
 <style lang="scss" scoped>
 .content-num-section {
     margin-top: 10px;
-    background: #fff;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 2px 8px 0px rgba(0,0,0,0.14);
     .section-title {
-        padding-left: 16px;
+        padding-left: 19px;
         padding-bottom: 16px;
-        padding-top: 14px;
-        font-size: 14px;
-        line-height: 18px;
+        padding-top: 19px;
+        font-size:18px;
+        font-family:PingFangSC-Semibold;
+        font-weight:600;
+        color:rgba(38,38,38,1);
     }
     .content {
         padding: 0 24px 16px;
@@ -50,31 +53,52 @@ export default {
             align-items: center;
             padding: 0 16px;
             margin-bottom: 16px;
-            border: 1px solid black;
+
             .item-box {
                 width: 100%;
                 height: 260px;
-                // display: flex;
-                // justify-content: space-between;
-                // align-items: center;
+                position: relative;
                 padding: 0 16px;
-                background: #f5f5f5;
-                
+                background:rgba(251,251,251,1);
+                text-align: center;
                 .item-title{
-                    color: rgba(38, 38, 38, 1);
-                    font-size: 16px;
+                    margin-top: 29px;
+                    font-size:20px;
+                    font-family:PingFangSC-Light;
+                    font-weight:300;
+                    color:rgba(38,38,38,1);
                     text-align: center;
+                    margin-bottom: 18px;
                 }
                 .item-icon{
-                    height: 100px;
+                    display: block;
+                    width: 40px;
+                    height: 40px;
+                    background: url("~img/dashboard/board-aliyun.png") no-repeat center;
+                    background-size: contain;
+                    margin-bottom: 20px;
+                    margin: 0 auto 20px;
                 }
                 .item-content{
-                    font-size: 14px;
-                    color: #8c8c8c;
+                    font-size:14px;
+                    font-family:PingFangSC-Regular;
+                    font-weight:400;
+                    color:rgba(140,140,140,1);
+                    text-align: center;
                 }
                 .item-btn{
                     text-align: center;
-                    background: #00c1de;
+                    height:32px;
+                    border:1px solid rgba(0,193,222,1);
+                    font-size:12px;
+                    font-family:PingFangSC-Regular;
+                    font-weight:400;
+                    color:rgba(0,193,222,1);
+                    line-height:32px;
+                    width: 100%;
+                    position: absolute;
+                    bottom: 32px;
+                    left: 0px;
                 }
             }
         }
