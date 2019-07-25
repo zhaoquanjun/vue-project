@@ -24,7 +24,7 @@
                 <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
                 <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
             </el-tabs>
-            <button class="backupBtn" @click="backup">备份当前版本</button>
+            <button class="backupBtn" @click="backup" v-show="showBackup">备份当前版本</button>
             <el-main>
                 <div class="table-wrap" id="table-list">
                     <el-table
@@ -32,11 +32,12 @@
                         :data="siteInfo"
                         tooltip-effect="dark"
                         class="content-table"
+                        :default-sort="{prop: 'backupTime', order: 'descending'}"
                     >
                         <el-table-column prop="siteName" label="站点名称"></el-table-column>
                         <el-table-column prop="backupTime" label="备份时间"></el-table-column>
                         <el-table-column prop="dataSize" label="备份包大小"></el-table-column>
-                        <el-table-column prop="userName" label="备份人"></el-table-column>
+                        <el-table-column prop="userName" label="备份人" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="description" label="备注" show-overflow-tooltip>
                             <template slot-scope="scope">
                                 <el-popover
@@ -57,7 +58,7 @@
                                             :autosize="{ minRows: 3, maxRows: 3}"
                                             placeholder="请输入内容"
                                             v-model="remarkValue"
-                                            maxlength="100"
+                                            maxlength="30"
                                             show-word-limit
                                             resize="none"
                                         ></el-input>
@@ -65,7 +66,6 @@
                                             <button
                                                 class="popover-btn cancel"
                                                 slot="refenrence"
-                                                type="primary"
                                                 @click="cancelInput(scope.$index)"
                                             >取消</button>
                                             <button class="popover-btn save" @click="saveInputValue(scope.$index,scope.row)">保存</button>
@@ -90,6 +90,7 @@
                     width="0"
                     :visible.sync = "backupShow"
                     :show-close="false"
+                    :close-on-click-modal="false"
                 >
                     <div class="right-pannel" :style="{width:'470px'}">
                         <div class="pannel-head">
@@ -168,6 +169,7 @@ export default {
                 { name: "域名管理", url: "/website/sitedomain" },
                 { name: "邮件服务器", url: "/website/email" },
             ],
+            showBackup: true,
             siteInfoImg: "",
             siteName: "",
             siteId: 0,
@@ -184,6 +186,7 @@ export default {
         }
   },
   mounted() {
+      console.log(this.trigger,' trigger="click"')
       this.getSiteInfo()
       this.getBackupSite()
   },
@@ -205,8 +208,10 @@ export default {
         handleClick() {
             if (this.backupType === "manual") {
                 this.siteInfo = this.manualSite;
+                this.showBackup = true;
             } else if (this.backupType === "auto") {
                 this.siteInfo = this.autoSite;
+                this.showBackup = false;
             }
         },
         /**
@@ -222,8 +227,13 @@ export default {
             } else if (this.backupType === "auto") {
                 this.siteInfo = this.autoSite;
             }
-            for (var i = 0; i < this.siteInfo.length; i++) {
-                this.siteInfo[i].backupTime = formatDateTime(this.siteInfo[i].backupTime, 'yyyy-mm-dd hh:MM:ss')
+            for (var i = 0; i < this.manualSite.length; i++) {
+                this.manualSite[i].backupTime = formatDateTime(this.manualSite[i].backupTime, 'yyyy-MM-dd hh:mm:ss')
+                this.manualSite[i].dataSize = this.manualSite[i].dataSize.toFixed(5) + "M";
+            }
+            for (var i = 0; i < this.autoSite.length; i++) {
+                this.autoSite[i].backupTime = formatDateTime(this.autoSite[i].backupTime, 'yyyy-MM-dd hh:mm:ss')
+                this.autoSite[i].dataSize = this.autoSite[i].dataSize.toFixed(5) + "M";
             }
             console.log(this.siteInfo)
         },
@@ -231,10 +241,14 @@ export default {
          * 还原站点
          */
         async recovery(scope) {
+            console.log(scope)
+            let message = [];
+            message.push(this.$createElement('p', null, "确定要将网站还原至该备份版本吗？"))
+            message.push(this.$createElement('p', null, "还原后系统会自动备份当前站点，可在自动备份列表中查看。"))
             this.$confirm(
-                `确定要将网站还原至该备份版本吗？ 还原后系统会自动备份当前站点设计，可在自动备份列表中查看。`,
                 "提示",
                 {
+                    message: this.$createElement('div', null, message),
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
@@ -269,7 +283,6 @@ export default {
          * 备份当前版本
          */
         async backup(){
-            console.log(this.manualSite.length)
             if (this.manualSite.length < 20) {
                 let { status } = await siteBackupApi.getBackupCount(2)
                 if (status == 200) {
@@ -315,7 +328,7 @@ export default {
          */
         async downloadBackup(scope) {
             this.$confirm(
-                `确定下载该备份包`,
+                `确定下载该备份包？`,
                 "提示",
                 {
                     confirmButtonText: "确定",
