@@ -92,8 +92,7 @@
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
-                    <!-- <span>尺寸: {{picInfo.sizeStr}}</span> -->
-                    <span>大小: {{picInfo.size}}</span>
+                    <span>大小: {{picInfo.sizeStr}}</span>
                 </div>
             </el-dialog>
         </div>
