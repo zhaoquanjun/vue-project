@@ -136,11 +136,20 @@ export default {
             onerrorText: ""
         };
     },
+    created(){
+        window.callback = function(){
+            console.log("重新打开窗口")
+        }
+    },
     mounted() {
         this._getCdnDomainList();
         this.getSiteInfo();
+        this._removeAliYunToken();
     },
     methods: {
+        async _removeAliYunToken(){
+            await domainApi.removeAliYunToken()
+        },
         /**
          * 获取站点信息
          */
@@ -161,25 +170,11 @@ export default {
             console.log(data);
         },
         async handleConfirm() {
+             
             if (!this.changeInput()) return;
             let { data, status } = await domainApi.bindDomainAndEnableCdn({
                 domain: this.domainValue
             });
-              this.$confirm(
-                    `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`,
-                    "提示",
-                    {
-                        confirmButtonText: "确定",
-                        cancelButtonText: "取消",
-                        type: "success",
-                        callback: async action => {
-                            console.log(action);
-                            if (action === "confirm") {
-                                this.elemnetConfirm("success","就啊跑",this._getCdnDomainList)
-                            }
-                        }
-                    }
-                );
             if (status === 200 && !data.isSuccess) {
                 this.onerrorTip = true;
                 this.onerrorText = data.msg;
@@ -187,17 +182,22 @@ export default {
             }
             if (status === 200 && data.isSuccess) {
                 // this.onerrorTip = false;
-                const h = this.$createElement;
+                let message = [];
+                message.push(this.$createElement('p',{ style: 'color: #262626'}, `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`))
+                message.push(this.$createElement('p',  { style: 'color: #8C8C8C'}, "如已存在解析记录，将会修改原有记录"))
                 this.$confirm(
-                    `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`,
                     "提示",
                     {
-                        confirmButtonText: "确定",
-                        cancelButtonText: "取消",
+                         message: this.$createElement('div', null, message),
+                        confirmButtonText: "授权并一键解析",
+                        cancelButtonText: "暂不授权",
                         type: "success",
                         callback: async action => {
                             console.log(action);
                             if (action === "confirm") {
+                                  this._resolveCdnByAliYunToken()  
+                            }else{
+                                this.elemnetConfirm("warning","您可在域名列表中继续完成解析设置。",`域名未解析！`)
                             }
                         }
                     }
@@ -223,12 +223,16 @@ export default {
         async _resolveCdnByAliYunToken() {
             let params = {
                 siteId: 2,
-                resolveType: "CNAME",
-                domain: "xatest.clouddream.net",
-                resolveValue: "xatest.clouddream.net.m.alikunlun.com",
+                resolveType: "",
+                domain: this.domainValue,
+                resolveValue: "",
                 isForceUpdate: false
             };
-            let data = await domainApi.resolveCdnByAliYunToken(params);
+            let {data} = await domainApi.resolveCdnByAliYunToken(params);
+            if(!data.isSuccess && data.redirectUrl){
+                 window.open(data.redirectUrl)
+            }
+           
         },
         /**
          * 开启https
@@ -311,14 +315,27 @@ export default {
                 return true;
             }
         },
-        elemnetConfirm(type,content,callback) {
-            this.$confirm("提示", {
-                message:content,
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: type,
-                callback: async action => {callback.bind(this)}
-            });
+        elemnetConfirm(type,content1,content2,callback) {
+             let message = [];
+                if(content1){
+                     message.push(this.$createElement('p',{ style: 'color: #262626'}, content1))
+                }
+                if(content2){
+                     message.push(this.$createElement('p',  { style: 'color: #8C8C8C'},content2 ))
+                }
+                this.$confirm(
+                    "提示",
+                    {
+                         message: this.$createElement('div', null, message),
+                        confirmButtonText: "确定",
+                        type: type,
+                        callback: async action => {
+                            if (action === "confirm") {
+                                
+                            }
+                        }
+                    }
+                );
         }
     }
 };
