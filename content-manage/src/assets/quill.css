@@ -154,3 +154,44 @@
   line-height: '32px';
 }
 
+
+/*子间距样式*/
+
+.ql-snow .ql-picker.ql-letterspacing,
+.ql-snow .ql-picker.ql-header {
+  width: 75px !important;
+}
+
+.ql-snow .ql-picker.ql-letterspacing {
+  width: 80px !important;
+}
+
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-label::before,
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-item::before {
+  content: 'Normal';
+}
+
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-label[data-value="5px"]::before,
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-item[data-value="5px"]::before {
+  content: '5px';
+  line-height: '5px';
+}
+
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-label[data-value="8px"]::before,
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-item[data-value="8px"]::before {
+  content: '8px';
+  line-height: '8px';
+}
+
+
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-label[data-value="10px"]::before,
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-item[data-value="10px"]::before {
+  content: '10px';
+  line-height: '10px';
+}
+
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-label[data-value="15px"]::before,
+.ql-snow .ql-picker.ql-letterspacing .ql-picker-item[data-value="15px"]::before {
+  content: '15px';
+  line-height: '15px';
+}

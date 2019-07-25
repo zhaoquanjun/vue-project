@@ -215,6 +215,7 @@ import { formatDate } from "@/utlis/date.js";
 import Quill from "quill";
 import { addQuillTitle } from "@/assets/quill-title.js";
 import LineHeight from "@/assets/lineheight.js";
+import LetterSpacing from "@/assets/letterspacing.js";
 // require styles这里是富文本编辑器的样式引用
 import "quill/dist/quill.snow.css";
 // 自定义quill编辑器的字体
@@ -241,6 +242,10 @@ Quill.register(Size, true);
 //自定义quill编辑器行间距
 let lineheights = [false, "10px", "18px", "20px", "32px"];
 Quill.register("formats/lineheight", LineHeight);
+
+//自定义quill编辑器字间距
+let letterspacings = [false, "5px", "8px", "10px", "15px"];
+Quill.register("formats/letterspacing", LetterSpacing);
 
 // 调整大小组件。
 import ImageResize from "quill-image-resize-module";
@@ -341,7 +346,8 @@ export default {
                     [{ align: [] }],
                     ["clean"],
                     ["image", "video"],
-                    [{ lineheight: lineheights }]
+                    [{ lineheight: lineheights }],
+                    [{ letterspacing: letterspacings }]
                 ],
                 imageDrop: true,
                 imageResize: {
