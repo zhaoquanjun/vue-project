@@ -277,7 +277,7 @@ export default {
     font-weight: 500;
     font-size: 14px;
 }
-.uploadCategoryPic {
+#content-manage .uploadCategoryPic {
     .pannle-footer {
         text-align: right;
         padding: 5px 8px 0 0;

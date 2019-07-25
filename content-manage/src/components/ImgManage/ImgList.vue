@@ -11,7 +11,7 @@
 
             <el-table-column label="图片名称">
                 <template slot-scope="scope">
-                    <img :src="scope.row.zoomOssUrl" class="cover" />
+                    <img :src="scope.row.zoomOssUrl" v-real-img="scope.row.zoomOssUrl" class="cover" />
 
                     <el-input
                         v-if="(index == scope.$index)"
@@ -81,6 +81,7 @@
                     arrow="always"
                     indicator-position="none"
                     :loop="true"
+                     :initial-index="initial"
                     @change="change"
                 >
                     <el-carousel-item v-for="item in imgList" :key="item.id">
@@ -121,7 +122,7 @@ export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
         return {
-            picInfo:{},
+           
             index: -1, //
             isRename: true, // 重命名图片名称
             initial: 0,
@@ -131,8 +132,9 @@ export default {
             picTitle: null,
             categoryVisable: false,
             changeCategoryPicId: null,
-            imgList:"",
-            fullOssUrl:""
+            imgList: "",
+            fullOssUrl: "",
+             picInfo: {},
         };
     },
 
@@ -172,15 +174,16 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
-             this.fullOssUrl=""
-            this.fullOssUrl = row.fullOssUrl
-            this.imgList = this.imgPageResult.list
+            this.fullOssUrl = "";
+            this.initial = index
+            this.fullOssUrl = row.fullOssUrl;
+            this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
-            
         },
-        change(index){
-            this.fullOssUrl=  this.imgList[index].fullOssUrl;
-              this.picInfo = this.imgList[index];
+        change(index) {
+            console.log(index)
+            this.fullOssUrl = this.imgList[index].fullOssUrl;
+            this.picInfo = this.imgList[index];
         },
 
         changePage(page) {
@@ -198,7 +201,6 @@ export default {
 };
 </script>
 <style>
-
 </style>
 
 <style scoped>
@@ -210,19 +212,18 @@ export default {
     cursor: pointer;
 }
 
-#img-list-dialog .dislog-footer{
+#img-list-dialog .dislog-footer {
     text-align: center;
     position: fixed;
-        width: 100%;
+    width: 100%;
     left: 0;
     bottom: 15px;
-   
 }
-#img-list-dialog .dislog-footer span{
+#img-list-dialog .dislog-footer span {
     padding: 0 20px;
     color: #fff;
 }
-#img-list-dialog .el-dialog{
+#img-list-dialog .el-dialog {
     background: #262626;
     opacity: 0.7;
     height: auto;

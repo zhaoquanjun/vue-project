@@ -118,16 +118,41 @@ export default {
         },
         // 选择图片时触发
         handleChange(file, fileList) {
+            console.log(fileList);
             this.uploadDisabled = false;
-            fileList.forEach((item, index) => {
-                const isSizeOk = imgSize(file.size);
-                const isPic = isImgFile(item.raw.type);
-                if (!isPic) {
+            console.log(file)
+            fileList.filter((item,index)=>{
+                if(!imgSize(item.size,10)){
                     fileList.splice(index, 1);
-                } else if (!isSizeOk) {
+                };
+                if(!isImgFile(item.raw.type)){
                     fileList.splice(index, 1);
-                }
-            });
+                };
+            })
+            // fileList.forEach((item, index) => {
+            //     const isSizeOk = imgSize(file.size,10);
+            //     const isPic = isImgFile(item.raw.type);
+            //     console.log(isPic,'isPicisPic')
+            //     console.log(index,'iiiiiiii')
+            //     console.log(isSizeOk,'isSizeOkisSizeOk')
+            //     console.log(item.raw.type,'item.raw.typeitem.raw.type')
+            //     if (!isPic) {
+            //         fileList.splice(index, 1);
+            //     } else if (!isSizeOk) {
+            //         fileList.splice(index, 1);
+            //         index--;
+            //     }
+            // });
+            // console.log(file,'filefile')
+            // console.log(fileList.length)
+            // fileList = fileList.filter((item, index) => {
+            //      const isSizeOk = imgSize(file.size,10);
+            //        if(isSizeOk){
+            //            return true
+            //        }else{
+            //            return false
+            //        }
+            // });
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
@@ -179,6 +204,7 @@ export default {
         beforeUpload(file) {
             const isPic = isImgFile(file.type);
             const isSizeOk = imgSize(file.size);
+            let maxMb = 10;
             if (!isPic) {
                 this.$notify({
                     type: "warning",
@@ -194,8 +220,8 @@ export default {
                 return false;
             }
             return isPic && isSizeOk;
-        },
-    },
+        }
+    }
 };
 </script>
 <style scoped>

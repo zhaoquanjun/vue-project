@@ -5,7 +5,7 @@
             @mousemove="handleMouseMove"
             @mouseleave="handleMouseLeave"
             class="img-item"
-            :style="{backgroundImage: 'url(' + (curItem.zoomOssUrl) + ')', backgroundSize:'contain'}"
+            :style="{background: 'url(' + (curItem.zoomOssUrl) + ') no-repeat center', backgroundSize:'cover'}"
 
         >
             <span class="img-wrap">
