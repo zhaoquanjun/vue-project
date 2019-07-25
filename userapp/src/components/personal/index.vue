@@ -376,7 +376,6 @@ export default {
             this.ISRIGHTPANNELSHOW(true);
         },
         async alipayBindHandleClose(){
-            console.log("alipayBindHandleClose")
             await this._getExternalUserAsync();
         }
     },

@@ -22,7 +22,7 @@ router.beforeEach(async (to, from, next) => {
   }
   if (getLocal("token")) {
     if (!Cookies.get('AppId')) {
-      await store.dispatch('_updateAppIdToCookie')
+      await store.dispatch('_updateAppIdAndSiteIdToCookie')
     }
    
     let r = await store.dispatch('getCurRouteAuth', to.path);
@@ -42,7 +42,7 @@ router.beforeEach(async (to, from, next) => {
          return
         } else {
           store.commit("SET_USER", data);
-          await store.dispatch('_updateAppIdToCookie')
+          await store.dispatch('_updateAppIdAndSiteIdToCookie')
           await store.dispatch('_getMenuListData')
           next()
         }

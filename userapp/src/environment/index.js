@@ -4,6 +4,7 @@
  */
 let siteManageApi  = 'http://api.designer.console.wezhan.cn';
 let memberManageApi = 'http://api.dashboard.console.wezhan.cn';
+ export let designerManageApi = 'http://api.designer.console.wezhan.cn';
 let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
 let authorityUrl = "http://api.identity.console.wezhan.cn";
 let redirectUrl = "http://dashboard.console.wezhan.cn/callback"
@@ -15,6 +16,7 @@ let scope = "openid profile dashboard.api designer.api content.api";
 if (process.env.NODE_ENV === 'development') {
     siteManageApi  = 'http://api.designer.console.wezhan.cn';
     memberManageApi = 'http://api.dashboard.console.wezhan.cn';
+    designerManageApi = 'http://api.designer.console.wezhan.cn';
     uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
     authorityUrl = "http://api.identity.console.wezhan.cn";
     redirectUrl = "http://localhost:8082/callback";
@@ -37,6 +39,7 @@ const enbironmemy = {
     logoutRedirectUri,
     memberManageApi,
     siteManageApi,
+    designerManageApi,
     silentRedirectUri,
     clientId,
     scope
