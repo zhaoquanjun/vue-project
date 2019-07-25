@@ -208,7 +208,7 @@ export const checkHasRootSkip = url => {
  * 获取用户的第三方绑定信息
  */
 export const getExternalUserInfo = () => {
-    return ajaxRequest.get('/api/userInfo/GetExternalUserInfo');
+    return ajaxRequest.get('/api/userInfo/GetUserLoginProviders');
 }
 
 /**
@@ -219,7 +219,7 @@ export const removeExternalUser = (provider) => {
     let params = {
         provider: provider
     }
-    return ajaxRequest._delete(`/api/userInfo/RemoveExternalUser/${provider}`, params);
+    return ajaxRequest._delete(`/api/userInfo/RemoveLoginProvider/${provider}`, params);
 }
 
 /**
@@ -233,8 +233,8 @@ export const getWeChatJsLoginParams = (provider) => {
  * InterfaceAuthor : xuzhuan
  * 更新cookie中的appid
  */
-export const updateAppIdToCookie = () => {
-    return ajaxRequest.put('/api/userInfo/UpdateAppIdToCookie');
+export const updateAppIdAndSiteIdToCookie = () => {
+    return ajaxRequest.put('/api/userInfo/UpdateAppIdAndSiteIdToCookie');
 }
 
 /**

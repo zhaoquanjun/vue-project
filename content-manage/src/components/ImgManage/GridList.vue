@@ -2,13 +2,13 @@
     <div class="table-wrap" id="img-list">
         <ul class="img-list">
             <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
-                <grid-list-item 
-                :curItem="item" 
-                @handleSelected="handleSelected"
-                @viewPic="viewPic(item,index)"
-                @handleMove="handleMove"
-                @batchRemovePic="batchRemovePic"
-                @rename="rename"
+                <grid-list-item
+                    :curItem="item"
+                    @handleSelected="handleSelected"
+                    @viewPic="viewPic(item,index)"
+                    @handleMove="handleMove"
+                    @batchRemovePic="batchRemovePic"
+                    @rename="rename"
                 ></grid-list-item>
             </li>
         </ul>
@@ -24,7 +24,7 @@
                 @size-change="changeSize"
             ></el-pagination>
         </div>
-       <!-- :title="picTitle" -->
+        <!-- :title="picTitle" -->
         <div id="img-list-dialog">
             <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
                 <!-- //<img :src="picUrl"> -->
@@ -59,10 +59,10 @@ export default {
         return {
             imgVisible: false,
             seletedList: [],
-            imgList:"",
-            fullOssUrl:"",
-             picInfo:{},
-             initial:-1,
+            imgList: "",
+            fullOssUrl: "",
+            picInfo: {},
+            initial: -1
         };
     },
     components: {
@@ -76,7 +76,6 @@ export default {
                 this.seletedList = this.seletedList.filter(cur => cur !== item);
             }
             this.$emit("handleSelectionChange", this.seletedList);
-        
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
@@ -89,37 +88,37 @@ export default {
         /**
          * 查看大图
          */
-        viewPic(row,index) {
-              this.fullOssUrl=""
-            this.fullOssUrl = row.fullOssUrl
-            this.imgList = this.imgPageResult.list
+        viewPic(row, index) {
+            console.log(index,'111',row)
+            this.fullOssUrl = "";
+            this.fullOssUrl = row.fullOssUrl;
+            this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
             this.initial = Number(index);
-            
         },
-        change(index){
-            console.log(index)
-            this.fullOssUrl=  this.imgList[index].fullOssUrl;
+        change(index) {
+            console.log(index,'222');
+            this.fullOssUrl = "";
+            this.fullOssUrl = this.imgList[index].fullOssUrl;
             this.picInfo = this.imgList[index];
         },
-         /**
+        /**
          * 移动分类
          */
         handleMove(item) {
-            console.log(item)
-            this.$emit("moveClassify",true,item)
+            console.log(item);
+            this.$emit("moveClassify", true, item);
         },
-        batchRemovePic(item){
-             this.$emit("batchRemove",[item.id])
+        batchRemovePic(item) {
+            this.$emit("batchRemove", [item.id]);
         },
-        rename(id, newName){
-             this.$emit("rename", id, newName);
-        },
+        rename(id, newName) {
+            this.$emit("rename", id, newName);
+        }
     }
 };
 </script>
 <style lang="scss" scoped>
-
 .img-list {
     width: 100%;
     box-sizing: border-box;
@@ -127,8 +126,8 @@ export default {
         display: inline-block;
         // width: 141px;
         width: 20%;
-       padding: 10px;
-       box-sizing: border-box;
+        padding: 10px;
+        box-sizing: border-box;
     }
 }
 </style>
