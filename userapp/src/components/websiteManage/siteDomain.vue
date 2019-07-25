@@ -29,7 +29,12 @@
                 ></DomainList>
             </el-main>
         </el-main>
-        <el-dialog width="0" :visible.sync="backupShow" :show-close="false" :close-on-click-modal="false">
+        <el-dialog
+            width="0"
+            :visible.sync="backupShow"
+            :show-close="false"
+            :close-on-click-modal="false"
+        >
             <div class="right-pannel" :style="{width:'470px'}">
                 <div class="pannel-head">
                     <span>
@@ -47,7 +52,11 @@
                 <div class="domain-wrap">
                     <el-form>
                         <el-form-item label="域名">
-                            <el-input v-model="domainValue" placeholder="请输入备注信息（非必填" @change="changeInput"></el-input>
+                            <el-input
+                                v-model="domainValue"
+                                placeholder="请输入备注信息（非必填"
+                                @change="changeInput"
+                            ></el-input>
                             <div class="el-form-item__error" v-if="onerrorTip">{{onerrorText}}</div>
                         </el-form-item>
                     </el-form>
@@ -152,35 +161,49 @@ export default {
             console.log(data);
         },
         async handleConfirm() {
-            if(!this.changeInput()) return 
+            if (!this.changeInput()) return;
             let { data, status } = await domainApi.bindDomainAndEnableCdn({
                 domain: this.domainValue
             });
+              this.$confirm(
+                    `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`,
+                    "提示",
+                    {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "success",
+                        callback: async action => {
+                            console.log(action);
+                            if (action === "confirm") {
+                                this.elemnetConfirm("success","就啊跑")
+                            }
+                        }
+                    }
+                );
             if (status === 200 && !data.isSuccess) {
                 this.onerrorTip = true;
                 this.onerrorText = data.msg;
                 return;
             }
-            if(status === 200 && data.isSuccess){
-               // this.onerrorTip = false;
+            if (status === 200 && data.isSuccess) {
+                // this.onerrorTip = false;
                 const h = this.$createElement;
-                 this.$confirm(
-                `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`,
-                "提示",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "success",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            
-                        } 
+                this.$confirm(
+                    `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`,
+                    "提示",
+                    {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "success",
+                        callback: async action => {
+                            console.log(action);
+                            if (action === "confirm") {
+                            }
+                        }
                     }
-                }
-            );
+                );
             }
-            
+
             //    this.onerrorTip=true;
             //    this.onerrorText="不好是"
         },
@@ -273,8 +296,8 @@ export default {
             var reg = /^([a-z0-9\-\u4E00-\u9FA5]*[\.])+([a-z\u4E00-\u9FA5]{2,10})$/;
             return reg.test(domain);
         },
-        changeInput(){
-              if (this.domainValue === "") {
+        changeInput() {
+            if (this.domainValue === "") {
                 this.onerrorTip = true;
                 this.onerrorText = "请输入域名";
                 return false;
@@ -282,11 +305,20 @@ export default {
                 this.onerrorTip = true;
                 this.onerrorText = "请输入正确格式的域名";
                 return false;
-            }else{
+            } else {
                 this.onerrorTip = false;
                 this.onerrorText = "";
-                return true
+                return true;
             }
+        },
+        elemnetConfirm(type,content) {
+            this.$confirm("提示", {
+                message:content,
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: type,
+                callback: async action => {}
+            });
         }
     }
 };
