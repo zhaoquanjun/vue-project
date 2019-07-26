@@ -34,6 +34,7 @@ export default {
         });
     },
     created() {
+
         window.addEventListener('message',(e)=>{
             let data = e.data;
             this._bindResult(data);
@@ -64,6 +65,7 @@ export default {
     updated(){
         //清空数据，并重新绑定
         document.getElementById("weixin").innerHTML="";
+        this.bindResultMessage=null;
         var obj = new WxLogin({
             self_redirect: true,
             id: "weixin",
