@@ -51,7 +51,7 @@
                     <span>{{userInfo.phoneNumber | geTel }}</span>
 
                     <span class="pd-left">
-                        <button>已绑定</button> |
+                        <button >已绑定</button> |
                         <button @click="modifiPhoneNum">修改</button>
                     </span>
                 </div>
@@ -68,8 +68,11 @@
                     <span></span>
 
                     <span class="pd-left">
-                        <button>已绑定</button> |
-                        <button @click="modifiPwd">修改</button>
+                        <button v-if="userInfo.isSetPassWord">已设置</button>
+                        <button v-else>未设置</button>
+                        |
+                        <button v-if="userInfo.isSetPassWord" @click="modifiPwd">修改</button>
+                        <button v-else @click="setPwd">设置</button>
                     </span>
                 </div>
             </li>
@@ -201,7 +204,7 @@ export default {
             defaultAvatar: require("../../assets/defualtAvater.png"),
             input: "",
             flag: true,
-            userInfo: { phoneNumber: "15801566482" },
+            userInfo: { phoneNumber: "" },
             curComponent: "",
             titText: "修改手机号",
             ExternalUsers: null,
@@ -211,7 +214,7 @@ export default {
             WeChatJsLoginParams: null,
             CurrentProvider: "",
             weixinHtml: "",
-            createTime: "2019-06-28",
+            createTime: "",
             alipayBindTip: false
         };
     },
@@ -303,12 +306,18 @@ export default {
             this.curComponent = SetPhoneNumber;
             this.ISRIGHTPANNELSHOW(true)
         },            
-        //修改 || 设置 密码
+        //修改密码
         modifiPwd() {
             this.curComponent = SetPwd;
-            this.titText = "设置密码";
+            this.titText = "修改密码";
             this.ISRIGHTPANNELSHOW(true)
-        },
+          },
+        //设置密码
+          setPwd() {
+              this.curComponent = SetPwd;
+              this.titText = "设置密码";
+              this.ISRIGHTPANNELSHOW(true)
+          },
         // 解绑微信
         _untyingWeixin(provider) { 
             this.titText="微信解绑";

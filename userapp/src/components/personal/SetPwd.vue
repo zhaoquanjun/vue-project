@@ -10,6 +10,8 @@
                         v-model="ruleForm.passWrod"
                         autocomplete="on"
                         placeholder="输入设置密码"
+                        minlength="6"
+                        maxlength="16"
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="beSurePwd" class="verification-code">
@@ -18,6 +20,8 @@
                         v-model="ruleForm.beSurePwd"
                         autocomplete="on"
                         placeholder="输入确认密码"
+                        minlength="6"
+                        maxlength="16"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -31,6 +35,7 @@
                         autocomplete="on"
                         placeholder="验证码"
                         @input="changeInput"
+                        maxlength="6"
                     ></el-input>
                     <el-button class="verification-text" @click="send" :disabled="disabled=!show">
                         <span v-show="show">获取验证码</span>
@@ -56,9 +61,12 @@ import {
 } from "@/api/index.js";
 export default {
     props: ["isSetPassWord", "sourcePhone"],
-    data() {
-        var checPwd = (rule, value, callback) => {
-              
+        data() {
+        var regex = new RegExp('[a-zA-Z0-9\W_!@#$ %^&*`~()-+=]{6,16}');
+        var checPwd = (rule, value, callback) => {            
+            if (!regex.test(value)) {
+                callback(new Error("密码长度为6-16位,并且必须包函数字、大小写字母以及标点符号！"));
+            }
             if (value.length > 16) {
                 callback(new Error("密码长度不能超过16位！"));
             } else if (value.length < 6) {
@@ -69,6 +77,9 @@ export default {
             let reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
         };
         var checBeSurePwd = (rule, value, callback) => {
+            if (!regex.test(value)) {
+                callback(new Error("密码长度为6-16位,并且必须包函数字、大小写字母以及标点符号！"));
+            }
             if (value.length > 16) {
                 callback(new Error("密码长度不能超过16位！"));
             } else if (value.length < 6) {
@@ -158,7 +169,7 @@ export default {
             this.$refs[formName].validate(valid => {
                 console.log(valid);
                 if (valid) {
-                    this.isSetPassWord ? this.modifyPaw() : this.setPaw();
+                    this.setPaw();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -208,6 +219,7 @@ export default {
                 let { status } = await isInvalidCode(this.sourcePhone, code);
                 if (status === 200) {
                     this.isModifi = true;
+                    this.isSetPassWord = false;
                     if (!this.isModifi) {
                         this.$store.commit("CLOSERIGHTPANNEL", false);
                         this.timer = setTimeout(() => {
