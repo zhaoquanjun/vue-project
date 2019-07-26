@@ -9,7 +9,7 @@ const siteId = store.state.dashboard.siteId;
  * 获取域名列表
  */
 export const getCdnDomainList = () => {
- 
+  
     return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/GetCdnDomainList/${siteId}`);
 }
 
@@ -17,7 +17,10 @@ export const getCdnDomainList = () => {
  * 绑定域名并授权cdn
  */
 export const bindDomainAndEnableCdn = (domain) => {
-    return ajaxRequest.post(`${designerManageApi}/api/v1/DomainManage/BindDomainAndEnableCdn/${siteId}`, domain);
+    let fn =function(ex){
+        console.log(ex)
+    }
+    return ajaxRequest.post(`${designerManageApi}/api/v1/DomainManage/BindDomainAndEnableCdn/${siteId}`, domain,fn);
 }
 
 /**
@@ -30,7 +33,7 @@ export const oneKeyEnableHttps = (siteDomainId) => {
 /**
  *  解析阿里云的cdn token
  */
-export const ResolveCdnByAliYunToken = (params) => {
+export const resolveCdnByAliYunToken = (params) => {
     let option = {
         "siteId": 0,
         "resolveType": "string",
@@ -40,6 +43,7 @@ export const ResolveCdnByAliYunToken = (params) => {
     }
     return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/ResolveCdnByAliYunToken`, params);
 }
+
 
 /**
  * 暂停CDN加速
@@ -57,18 +61,19 @@ export const reopenCdn = (siteDomainId) => {
 /**
  * 删除阿里云token
  */
-export const removeAliYunToken = (siteId) => {
-    return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/RemoveAliYunToken/${siteId}`);
+export const removeAliYunToken = () => {
+    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/RemoveAliYunToken/${siteId}`);
 }
 /**
  * 禁用https
  */
-export const disableHttps = (siteId) => {
-    return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/DisableHttps/${siteId}`);
+export const disableHttps = (siteDomainId) => {
+    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DisableHttps/${siteDomainId}`);
 }
 /**
  *  删除绑定域名
  */
-export const deleteCdnDomain = (siteId) => {
-    return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteDomainId}`);
+export const deleteCdnDomain = (siteDomainId) => {
+    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteDomainId}`);
 }
+

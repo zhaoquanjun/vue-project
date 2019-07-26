@@ -25,7 +25,7 @@ export default {
          * 点击右侧btn
          */
         handleBtn(){
-
+            this.$emit("handleBtn")
         }
     }
 }

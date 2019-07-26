@@ -187,7 +187,6 @@ export default {
   },
   mounted() {
       console.log(this.trigger,' trigger="click"')
-      
       this.getSiteInfo()
       this.getBackupSite()
   },

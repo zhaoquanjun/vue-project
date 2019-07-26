@@ -184,11 +184,7 @@ export const updateUserPhone = (phone,code) => {
  * 获取dashbord
  */
 export const getUserDashboard = () => {  
-  
-    let params = {
-        appId: ''
-    }
-    return ajaxRequest.get('api/userInfo/GetUserDashboard', params);
+    return ajaxRequest.get('api/userInfo/GetUserDashboard');
 }
 
 /**
@@ -212,7 +208,7 @@ export const checkHasRootSkip = url => {
  * 获取用户的第三方绑定信息
  */
 export const getExternalUserInfo = () => {
-    return ajaxRequest.get('/api/userInfo/GetExternalUserInfo');
+    return ajaxRequest.get('/api/userInfo/GetUserLoginProviders');
 }
 
 /**
@@ -223,7 +219,7 @@ export const removeExternalUser = (provider) => {
     let params = {
         provider: provider
     }
-    return ajaxRequest._delete(`/api/userInfo/RemoveExternalUser/${provider}`, params);
+    return ajaxRequest._delete(`/api/userInfo/RemoveLoginProvider/${provider}`, params);
 }
 
 /**
