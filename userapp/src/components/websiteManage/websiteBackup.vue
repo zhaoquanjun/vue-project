@@ -49,8 +49,8 @@
                                     @show="showRemark(scope.row)"
                                 >
                                     <span slot="reference">
-                                        <div class="remark-desc">{{scope.row.description}}</div>
-                                        <svg-icon icon-class="remark"></svg-icon>
+                                        <div class="remark-desc" @mouseenter="descriptionEnter(scope.$index, scope.row)" @mouseleave="descriptionLeave(scope.$index)">{{scope.row.description}}</div>
+                                        <svg-icon icon-class="remark" v-show="scope.row.remarkShow"></svg-icon>
                                     </span>
                                     <div class="textareaWrap">
                                         <el-input
@@ -78,13 +78,23 @@
                         <el-table-column label="操作">
                             <template slot-scope="scope">
                                 <div class="handle-btn-wrap">
-                                    <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
-                                    <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button>
-                                    <button class="handle-btn delete-btn" @click="deleteBackup( scope )"></button>
+                                    <el-tooltip content="还原备份包" placement="top">
+                                        <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
+                                    </el-tooltip>
+                                    <el-tooltip content="下载备份包" placement="top">                                    
+                                        <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button>
+                                    </el-tooltip>
+                                    <el-tooltip content="删除备份包" placement="top" visible-arrow="false">                                    
+                                        <button class="handle-btn delete-btn" @click="deleteBackup( scope )"></button>
+                                    </el-tooltip>
                                 </div>
                             </template>
                         </el-table-column>
                     </el-table>
+                </div>
+                <div class="backupTip">
+                    <div style="margin-bottom:10px">1、系统将在您更换网站模版与还原备份包时自动备份当前站点设计</div>
+                    <div>2、手动与自动备份包最多可分别保留20个，自动备份包数量已满时，最早的自动备份包会被删除</div>
                 </div>
                 <el-dialog
                     width="0"
@@ -96,13 +106,6 @@
                         <div class="pannel-head">
                             <span>
                                 <span>备份当前版本</span>
-                                <el-tooltip
-                                    class="item"
-                                    effect="light"
-                                    content="可批量为多个成员增加权限，该操作不会删除"
-                                    placement="bottom-end"
-                                >
-                                </el-tooltip>
                             </span>
                             <span class="close-pannel" @click="closeDialog">X</span>
                         </div>
@@ -230,27 +233,31 @@ export default {
             for (var i = 0; i < this.manualSite.length; i++) {
                 this.manualSite[i].backupTime = formatDateTime(this.manualSite[i].backupTime, 'yyyy-MM-dd hh:mm:ss')
                 this.manualSite[i].dataSize = this.manualSite[i].dataSize.toFixed(5) + "M";
+                this.manualSite[i].remarkShow = false
             }
             for (var i = 0; i < this.autoSite.length; i++) {
                 this.autoSite[i].backupTime = formatDateTime(this.autoSite[i].backupTime, 'yyyy-MM-dd hh:mm:ss')
                 this.autoSite[i].dataSize = this.autoSite[i].dataSize.toFixed(5) + "M";
+                this.autoSite[i].remarkShow = false
             }
+            
             console.log(this.siteInfo)
         },
         /**
          * 还原站点
          */
         async recovery(scope) {
-            console.log(scope)
             let message = [];
             message.push(this.$createElement('p', null, "确定要将网站还原至该备份版本吗？"))
-            message.push(this.$createElement('p', null, "还原后系统会自动备份当前站点，可在自动备份列表中查看。"))
+            message.push(this.$createElement('p', null, "还原后系统会自动备份当前站点设计，可在自动备份列表中查看。"))
             this.$confirm(
                 "提示",
                 {
-                    message: this.$createElement('div', null, message),
+                    title: "提示",
+                    message: this.$createElement('div', { style: "font-size:14px;font-family:PingFangSC-Regular;font-weight:400;color:rgba(38,38,38,1);"}, message),
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
+                    customClass: "messageBoxClass",
                     type: "warning",
                     callback: async action => {
                         console.log(action);
@@ -406,12 +413,29 @@ export default {
         },
         async saveInputValue(index, row) {
             this.$refs[`popover-${index}`].doClose();
-            await siteBackupApi.updateDescription(row.id, this.remarkValue)
-            this.siteInfo[index].description = this.remarkValue
+            await siteBackupApi.updateDescription(row.id, this.remarkValue);
+            this.getBackupSite()
+            // this.siteInfo[index].description = this.remarkValue
+            // this.$set(this.siteInfo[index], "description", this.remarkValue)
         },
+        descriptionEnter(index, i) {
+            // console.log(index)
+            // //this.siteInfo[index].remarkShow = true;
+            // this.$set(this.siteInfo[index], "remarkShow", true)
+            // console.log(i.remarkShow)
+            // console.log(this.siteInfo[index].remarkShow)
+        },
+        descriptionLeave(index) {
+            // this.siteInfo[index].remarkShow = false;
+        }
   },
 }
 </script>
+<style>
+.messageBoxClass{
+    width: 500px;
+}
+</style>
 
 <style scoped>
 .el-dialog{
@@ -517,7 +541,13 @@ export default {
     white-space: nowrap;
     width: 81%;
 }
-
+.backupTip{
+    margin-top: 24px;
+    margin-bottom: 32px;
+    font-size: 12px;
+    font-weight:500;
+    color:#262626;
+}
 </style>
 
 <style lang="scss" scoped>
