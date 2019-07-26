@@ -16,11 +16,12 @@
                     @mouseenter="changeCurHoverItem(i)"
                     @mouseleave="itemhandlerLeave"
                     @click="skipPages(it,i)"
+                  
                 >
                     <!-- <svg-icon :icon-class="'l-' + it.code"></svg-icon> -->
                     <!-- :class="curIndex==i ? it.code+"-on" : it.code" -->
                     <i class="menu-icon" :class="[curIndex==i ? it.code+'-on' : it.code]"></i>
-                    <span class="menu-item-content">{{it.name}}</span>
+                    <span class="menu-item-content" >{{it.name}}</span>
                 </li>
             </ul>
         </el-aside>
@@ -141,7 +142,14 @@ export default {
         padding: 0 20px;
         line-height: 40px;
         white-space: nowrap;
+        .menu-bg{
+            background: #E5F8FA
+        }
         &:hover {
+            background: #e5f8fa;
+            color: #00c1de;
+        }
+         &:active {
             background: #e5f8fa;
             color: #00c1de;
         }

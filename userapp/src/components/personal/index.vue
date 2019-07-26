@@ -51,7 +51,7 @@
                     <span>{{userInfo.phoneNumber | geTel }}</span>
 
                     <span class="pd-left">
-                        <button>已绑定</button> |
+                        <button >已绑定</button> |
                         <button @click="modifiPhoneNum">修改</button>
                     </span>
                 </div>
@@ -67,9 +67,8 @@
                 <div class="fright">
                     <span></span>
 
-                    <span class="pd-left">
-                        <button>已绑定</button> |
-                        <button @click="modifiPwd">修改</button>
+                    <span class="pd-left">                        
+                        <button>{{pwdTitle}}</button> | <button @click="modifiPwd">{{pwdBtn}}</button>
                     </span>
                 </div>
             </li>
@@ -149,6 +148,7 @@
                 :provider="CurrentProvider"
                 :imageUrl="userInfo.userHeadUrl"
                 :isSetPassWord="userInfo.isSetPassWord"
+                @setPwdTitleAndBtn="_setPwdTitleAndBtn"
                 @removeExternalUserAsync="_removeExternalUserAsync"
                 @updateWeiXinHtml="updateWeiXinHtml"
                 @getUserProfileAsync="_getUserProfileAsync"
@@ -186,7 +186,7 @@ import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
 import { mapState, mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import {
+    import {
     getUserProfile,
     getExternalUserInfo,
     removeExternalUser,
@@ -201,7 +201,7 @@ export default {
             defaultAvatar: require("../../assets/defualtAvater.png"),
             input: "",
             flag: true,
-            userInfo: { phoneNumber: "15801566482" },
+            userInfo: { phoneNumber: "" },
             curComponent: "",
             titText: "修改手机号",
             ExternalUsers: null,
@@ -211,8 +211,10 @@ export default {
             WeChatJsLoginParams: null,
             CurrentProvider: "",
             weixinHtml: "",
-            createTime: "2019-06-28",
-            alipayBindTip: false
+            createTime: "",
+            alipayBindTip: false,
+            pwdTitle: '未设置',
+            pwdBtn:'设置'
         };
     },
     components: {
@@ -237,12 +239,19 @@ export default {
         }
     },
       methods: {
-        ...mapMutations(["ISRIGHTPANNELSHOW"]),          
+          ...mapMutations(["ISRIGHTPANNELSHOW"]),     
+          _setPwdTitleAndBtn() {
+              this.pwdTitle = "已设置";
+              this.pwdBtn = "修改";
+          },
         async _getUserProfileAsync() {
             let { data } = await getUserProfile();
             this.userInfo = data;
             this.input = data.displayName;                
             this.createTime = formatDateTime(data.createTime, "yyyy-MM-dd hh:mm:ss");
+            if (this.userInfo.isSetPassWord) {
+                this._setPwdTitleAndBtn();
+            }
             // console.log(this.userInfo)
         },
         async _getExternalUserAsync() {
@@ -303,12 +312,17 @@ export default {
             this.curComponent = SetPhoneNumber;
             this.ISRIGHTPANNELSHOW(true)
         },            
-        //修改 || 设置 密码
+        //修改密码||设置密码
         modifiPwd() {
             this.curComponent = SetPwd;
-            this.titText = "设置密码";
+            if (this.userInfo.isSetPassWord) {
+                this.titText = "修改密码";
+            } else{
+                this.titText = "设置密码";
+            }
             this.ISRIGHTPANNELSHOW(true)
-        },
+          },
+        
         // 解绑微信
         _untyingWeixin(provider) { 
             this.titText="微信解绑";

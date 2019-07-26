@@ -44,6 +44,7 @@ export const resolveCdnByAliYunToken = (params) => {
     return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/ResolveCdnByAliYunToken`, params);
 }
 
+
 /**
  * 暂停CDN加速
  */
@@ -60,7 +61,7 @@ export const reopenCdn = (siteDomainId) => {
 /**
  * 删除阿里云token
  */
-export const removeAliYunToken = (siteId) => {
+export const removeAliYunToken = () => {
     return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/RemoveAliYunToken/${siteId}`);
 }
 /**
@@ -75,3 +76,4 @@ export const disableHttps = (siteDomainId) => {
 export const deleteCdnDomain = (siteDomainId) => {
     return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteDomainId}`);
 }
+

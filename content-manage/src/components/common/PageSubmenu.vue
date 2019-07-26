@@ -53,7 +53,7 @@ export default {
             padding-left: 12px;
             &:hover {
                 color: #00c1de;
-                background: #e5f8fa;
+                // background: #e5f8fa;
             }
         }
     }
