@@ -67,12 +67,8 @@
                 <div class="fright">
                     <span></span>
 
-                    <span class="pd-left">
-                        <button v-if="userInfo.isSetPassWord">已设置</button>
-                        <button v-else>未设置</button>
-                        |
-                        <button v-if="userInfo.isSetPassWord" @click="modifiPwd">修改</button>
-                        <button v-else @click="setPwd">设置</button>
+                    <span class="pd-left">                        
+                        <button>{{pwdTitle}}</button> | <button @click="modifiPwd">{{pwdBtn}}</button>
                     </span>
                 </div>
             </li>
@@ -152,6 +148,7 @@
                 :provider="CurrentProvider"
                 :imageUrl="userInfo.userHeadUrl"
                 :isSetPassWord="userInfo.isSetPassWord"
+                @setPwdTitleAndBtn="_setPwdTitleAndBtn"
                 @removeExternalUserAsync="_removeExternalUserAsync"
                 @updateWeiXinHtml="updateWeiXinHtml"
                 @getUserProfileAsync="_getUserProfileAsync"
@@ -189,7 +186,7 @@ import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
 import { mapState, mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-import {
+    import {
     getUserProfile,
     getExternalUserInfo,
     removeExternalUser,
@@ -215,7 +212,9 @@ export default {
             CurrentProvider: "",
             weixinHtml: "",
             createTime: "",
-            alipayBindTip: false
+            alipayBindTip: false,
+            pwdTitle: '未设置',
+            pwdBtn:'设置'
         };
     },
     components: {
@@ -240,12 +239,19 @@ export default {
         }
     },
       methods: {
-        ...mapMutations(["ISRIGHTPANNELSHOW"]),          
+          ...mapMutations(["ISRIGHTPANNELSHOW"]),     
+          _setPwdTitleAndBtn() {
+              this.pwdTitle = "已设置";
+              this.pwdBtn = "修改";
+          },
         async _getUserProfileAsync() {
             let { data } = await getUserProfile();
             this.userInfo = data;
             this.input = data.displayName;                
             this.createTime = formatDateTime(data.createTime, "yyyy-MM-dd hh:mm:ss");
+            if (this.userInfo.isSetPassWord) {
+                this._setPwdTitleAndBtn();
+            }
             // console.log(this.userInfo)
         },
         async _getExternalUserAsync() {
@@ -306,18 +312,17 @@ export default {
             this.curComponent = SetPhoneNumber;
             this.ISRIGHTPANNELSHOW(true)
         },            
-        //修改密码
+        //修改密码||设置密码
         modifiPwd() {
             this.curComponent = SetPwd;
-            this.titText = "修改密码";
+            if (this.userInfo.isSetPassWord) {
+                this.titText = "修改密码";
+            } else{
+                this.titText = "设置密码";
+            }
             this.ISRIGHTPANNELSHOW(true)
           },
-        //设置密码
-          setPwd() {
-              this.curComponent = SetPwd;
-              this.titText = "设置密码";
-              this.ISRIGHTPANNELSHOW(true)
-          },
+        
         // 解绑微信
         _untyingWeixin(provider) { 
             this.titText="微信解绑";

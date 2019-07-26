@@ -45,7 +45,7 @@
             </el-form>
         </template>
         <div class="footer">
-            <button class="confirm footer-btn" v-if="!isModifi" @click="nextStep">下一步</button>
+            <button class="confirm footer-btn" v-if="isSetPassWord" @click="nextStep">下一步</button>
             <button class="confirm footer-btn" v-else @click="submitForm('ruleForm')">确定</button>
             <button class="cancel footer-btn" @click="close">取消</button>
         </div>
@@ -59,10 +59,10 @@ import {
     changeUserPwd,
     isInvalidCode
 } from "@/api/index.js";
-export default {
-    props: ["isSetPassWord", "sourcePhone"],
+    export default {
+        props: ["isSetPassWord", "sourcePhone"],
         data() {
-        var regex = new RegExp('[a-zA-Z0-9\W_!@#$ %^&*`~()-+=]{6,16}');
+            var regex = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[$.@$,.!%*#?&])[A-Za-z\\d$@$,.!%*#?&]{6,16}$");
         var checPwd = (rule, value, callback) => {            
             if (!regex.test(value)) {
                 callback(new Error("密码长度为6-16位,并且必须包函数字、大小写字母以及标点符号！"));
@@ -181,11 +181,13 @@ export default {
             console.log(option);
             let { status } = await updateUserPwd(option);
             if (status === 200) {
+                this.isSetPassWord = true;                
                  this.$message({
                     type: "success",
                     message: "设置成功!"
-                });
-                 this.$store.commit("CLOSERIGHTPANNEL", false);
+                });                
+                this.$store.commit("CLOSERIGHTPANNEL", false);
+                this.$emit('setPwdTitleAndBtn');
             }
         },
         async modifyPaw() {
@@ -219,7 +221,6 @@ export default {
                 let { status } = await isInvalidCode(this.sourcePhone, code);
                 if (status === 200) {
                     this.isModifi = true;
-                    this.isSetPassWord = false;
                     if (!this.isModifi) {
                         this.$store.commit("CLOSERIGHTPANNEL", false);
                         this.timer = setTimeout(() => {

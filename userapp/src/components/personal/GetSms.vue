@@ -12,7 +12,6 @@
                         autocomplete="on"
                         placeholder="验证码"
                         maxlength="6"
-                        show-word-limit
                     ></el-input>
                     <el-button class="verification-text" @click="send" :disabled="disabled=!show">
                         <span v-show="show">获取验证码</span>
@@ -57,7 +56,6 @@
                         autocomplete="on"
                         placeholder="验证码"
                         maxlength="6"
-                        show-word-limit
                     ></el-input>
                     <el-button class="verification-text" @click="sendChangePhoneCode" :disabled="disabled=!show">
                         <span v-show="show">获取验证码</span>
