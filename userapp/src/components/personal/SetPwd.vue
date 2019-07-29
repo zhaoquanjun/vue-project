@@ -221,6 +221,7 @@ import {
                 let { status } = await isInvalidCode(this.sourcePhone, code);
                 if (status === 200) {
                     this.isModifi = true;
+                    this.isSetPassWord = false;
                     if (!this.isModifi) {
                         this.$store.commit("CLOSERIGHTPANNEL", false);
                         this.timer = setTimeout(() => {
