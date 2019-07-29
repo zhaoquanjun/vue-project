@@ -132,7 +132,6 @@ export default {
          */
         async _resolveCdnByAliYunToken(
             params = {
-                siteId: this.$store.state.dashboard.siteId,
                 resolveType: "",
                 domain: this.domainValue,
                 resolveValue: "",

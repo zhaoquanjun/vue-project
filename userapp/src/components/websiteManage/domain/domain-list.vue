@@ -217,7 +217,6 @@ export default {
         //一键解析域名
         resolveCdnByAliYunToken(row) {
             let params = {
-                siteId: row.siteId,
                 resolveType: row.cdnDomainResolveType,
                 domain: row.domain,
                 resolveValue: row.cdnDomainResolveValue,
