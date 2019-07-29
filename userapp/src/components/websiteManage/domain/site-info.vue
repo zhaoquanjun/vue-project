@@ -1,15 +1,21 @@
 <template>
      <div class="siteBox">
                     <div class="siteInfo">
-                        <div class="siteImg"></div>
-                        <!-- <img :src="siteInfoImg" alt="" class="siteImg"> -->
+                        <div class="siteImg"> <img :src="siteInfo.siteInfoImg" alt="" class="siteImg"></div>
+                       
 
-                        <span class="siteName">123</span>
-                        <span class="secondDomain">34</span>
+                        <span class="siteName">{{siteInfo.siteName}}</span>
+                        <span class="secondDomain">{{siteInfo.secondDomain}}</span>
                         <button class="changeSite">切换站点</button>
                     </div>
                 </div>
 </template>
+<script>
+export default {
+    props:["siteInfo"]
+}
+</script>
+
 <style lang="scss" scoped>
     .siteBox{
     height: 116px;

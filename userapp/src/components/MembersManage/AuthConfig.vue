@@ -1,5 +1,6 @@
 <template>
     <div class="auth-config">
+        <div class="auth-tip" v-if="authtipShow">请至少选择一项权限</div>
         <member-info
             v-model="value"
             v-if="memberInfo && Object.keys(memberInfo).length>0"
@@ -53,7 +54,7 @@ import MemberInfo from "./MemberInfo";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
-    name: "",
+    name: "authority-config", // 权限配置
     props: {
         isBatch: {
             type: Boolean,
@@ -68,7 +69,8 @@ export default {
     created() {},
     data() {
         return {
-            value: ""
+            value: "",
+            authtipShow: false
         };
     },
     methods: {
@@ -102,20 +104,17 @@ export default {
                 }
             } else {
                 if (this.getSelectedAuthNames.length < 1) {
-                    this.$notify({
-                        title: "提示",
-                        message: "请至少选择一项权限",
-                        type: "warning"
-                    });
+                    this.authtipShow = true;
                     return false;
-                };
+                }
+                 this.authtipShow = false;
                 if (this.value != null && this.value.length > 100) {
                     this.$message({
                         type: "failed",
                         message: "备注长度不能超过100个字符!"
                     });
                     return false;
-                };
+                }
                 let params = {
                     remark: this.value,
                     userId: this.memberInfo.id
@@ -196,83 +195,93 @@ export default {
 <style lang="scss" scoped>
 .auth-config {
     font-size: 12px;
-}
-.auth-title {
-    height: 40px;
-    line-height: 40px;
-    margin-right: 10px;
-}
-
-.panel-main {
-    padding: 20px 16px;
-    overflow: hidden;
-    .search-auth {
-        display: flex;
-        height: 32px;
+    .auth-tip {
         box-sizing: border-box;
-        position: relative;
-        input,
-        button {
-            height: 100%;
-            border: none;
-            background: #fff;
-        }
-        .auth-input {
-            font-size: 12px;
-            text-indent: 10px;
+        margin: 10px 16px 0;
+        height: 32px;
+        line-height: 32px;
+        padding: 0 16px;
+        color: #ff451d;
+        background: rgba(253, 240, 237, 1);
+        border: 1px solid rgba(253, 171, 153, 1);
+    }
+    .auth-title {
+        height: 40px;
+        line-height: 40px;
+        margin-right: 10px;
+    }
+
+    .panel-main {
+        padding: 20px 16px;
+        overflow: hidden;
+        .search-auth {
+            display: flex;
+            height: 32px;
             box-sizing: border-box;
-            width: 100%;
-            border: 1px solid #e5e5e5;
-            &:hover {
-                border: 1px solid #00c1de;
+            position: relative;
+            input,
+            button {
+                height: 100%;
+                border: none;
+                background: #fff;
+            }
+            .auth-input {
+                font-size: 12px;
+                text-indent: 10px;
+                box-sizing: border-box;
+                width: 100%;
+                border: 1px solid #e5e5e5;
+                &:hover {
+                    border: 1px solid #00c1de;
+                }
+            }
+            .auth-btn {
+                // position: absolute;
+                // right: 0;
+                // top: 0;
+                width: 58px;
+                background: #00c1de;
+                color: #fff;
             }
         }
-        .auth-btn {
-            // position: absolute;
-            // right: 0;
-            // top: 0;
-            width: 58px;
-            background: #00c1de;
-            color: #fff;
+        .auth-name {
+            border: 1px solid #efefef;
+            border-top: none;
+            padding: 0 10px;
         }
     }
-    .auth-name {
-        border: 1px solid #efefef;
-        border-top: none;
-        padding: 0 10px;
+    .pannel-right-item {
+        float: left;
+        width: 275px;
     }
-}
-.pannel-right-item {
-    float: left;
-    width: 275px;
-}
-.pannel-left-item {
-    width: 199px;
-    float: right;
-    .selected-auth {
-        border: 1px solid #efefef;
-        padding: 0 10px;
+    .pannel-left-item {
+        width: 199px;
+        float: right;
+        .selected-auth {
+            border: 1px solid #efefef;
+            padding: 0 10px;
+        }
     }
-}
 
-.footer {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    padding: 15px 17px;
-    border-top: 1px solid #efefef;
-    .footer-btn {
-        width: 63px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        color: #fff;
-    }
-    .cancel {
-        margin-left: 20px;
-        background: #fff;
-        border: 1px solid rgba(0, 193, 222, 1);
-        color: rgba(0, 193, 222, 1);
+    .footer {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 15px 17px;
+        border-top: 1px solid #efefef;
+        .footer-btn {
+            width: 63px;
+            height: 32px;
+            background: rgba(0, 193, 222, 1);
+            color: #fff;
+        }
+        .cancel {
+            margin-left: 20px;
+            background: #fff;
+            border: 1px solid rgba(0, 193, 222, 1);
+            color: rgba(0, 193, 222, 1);
+        }
     }
 }
 </style>

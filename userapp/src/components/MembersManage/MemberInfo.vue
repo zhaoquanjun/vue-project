@@ -13,10 +13,10 @@
                 手机 :
                 <i>{{memberInfo.phoneNumber}}</i>
             </span>
-            <span style="display: flex;align-items: center;">
-               <i style="flex: none;padding-right: 10px;"> 备注 :</i>
+            <span class="remark-wrap">
+               <i class="remark-title"> 备注 :</i>
                 <template v-if="isRemarkShow">
-                    <span @click="handleRemark" style="display: inline-block;  cursor: pointer;">
+                    <span @click="handleRemark" class="remark-text">
                         <i>{{ !!remarkValue?remarkValue:"暂无备注"}}</i>&nbsp;
                         <svg-icon icon-class="remark"></svg-icon>
                     </span>
@@ -24,7 +24,7 @@
                 <template v-else>
                     <el-input
                         v-if="inputType"
-                       clear="remark" 
+                       class="remark" 
                         type="text"
                         placeholder="暂无备注"
                         v-model="memberInfo.remark"
@@ -36,7 +36,7 @@
                     ></el-input>
                        <el-input
                         v-else
-                       clear="remark" 
+                       class="remark" 
                         type="text"
                         placeholder="请输入内容"
                         v-model="memberInfo.remark"
@@ -46,21 +46,6 @@
                         @blur="handlerblur"
                         @focus="focus"
                     ></el-input>
-                    <!-- <input
-                        type="text"
-                        :value="memberInfo.remark"
-                        @input="change"
-                        @blur="handlerblur"
-                        class="remark-input input-hover"
-                    > -->
-                    <!-- <el-input
-                        :value="value"
-                        @input="change"
-                        @blur="handlerblur"
-                        size="small"
-                        style="width:324px;"
-                        placeholder="请输入内容"
-                    ></el-input>-->
                 </template>
             </span>
         </dd>
@@ -83,16 +68,13 @@ export default {
     created() {},
     methods: {
         handleRemark() {
-            
             this.isRemarkShow = false;
         },
         handlerblur() {
-         
             this.isRemarkShow = true;
             // this.inputType = "text"
         },
         focus(){
-            
             this.inputType = "textarea"
         },
         change(value) {
@@ -145,16 +127,15 @@ export default {
             display: block;
             line-height: 20px;
         }
-        .remark-input {
-            width: 322px;
-            height: 28px;
-            border: none;
-            border: 1px solid #e8e8e8;
-            border-radius: 1px;
-            text-indent: 10px;
-            &:hover {
-                border: 1px solid #00c1de;
+        .remark-wrap{
+            display: flex;align-items: center;
+            .remark-title{
+               flex: none;padding-right: 10px;
             }
+            .remark-text{
+               display: inline-block;cursor: pointer;
+            }
+
         }
     }
 }

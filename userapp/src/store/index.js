@@ -6,7 +6,8 @@ import actions from "./actions";
 import * as getters from "./getters";
 import login from "./modules/login";
 import user from "./modules/user";
-import dashboard from "./modules/dashboard"
+import dashboard from "./modules/dashboard";
+import website from "./modules/website"
 import memberManager from "./modules/member-manager";
 import {setLocal,getLocal} from "@/libs/local"
 Vue.use(Vuex);
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
     user,
     memberManager,
     dashboard,
+    website
   },
   state,
   mutations,
