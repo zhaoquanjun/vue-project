@@ -349,6 +349,9 @@ export default {
                 ev.pageX - ev.offsetX + 16 + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
             this.$refs.operateSection.style.display = "block";
+            if(this.$refs.operateSection.style.display==="block"){
+                this.$refs.operateSection.style.display = "none";
+            }
         },
         // 新增 0722  关闭分类操作菜单
         closeUploadCategoryPic() {

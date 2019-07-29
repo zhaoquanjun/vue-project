@@ -13,7 +13,8 @@ const router = new VueRouter({
   routes: defaultRoutes
 });
 export default router;
-
+let accessToken = store.state.user.accessToken.Authorization;
+console.log(accessToken,'accessTokenaccessToken')
 router.beforeEach(async (to, from, next) => {
   if (!to.meta.requiresAuth) {
     store.dispatch('_getMenuListData')
@@ -21,7 +22,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  if (getLocal("token")) {
+  if (accessToken) {
     if (!Cookies.get('AppId')) {
       await store.dispatch('_updateAppIdAndSiteIdToCookie')
     }

@@ -113,9 +113,8 @@ export default {
     span {
         display: inline-block;
     }
-    &:hover {
-        background: #e5f8fa;
-        color: #fff;
+    &:hover span {
+        color:#00c1de;
     }
 }
 .item-left {
