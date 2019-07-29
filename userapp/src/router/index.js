@@ -20,17 +20,18 @@ router.beforeEach(async (to, from, next) => {
     next()
     return
   }
+
   if (getLocal("token")) {
     if (!Cookies.get('AppId')) {
       await store.dispatch('_updateAppIdAndSiteIdToCookie')
     }
-   
     let r = await store.dispatch('getCurRouteAuth', to.path);
     if (r) {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
-      next()
+      next();
+      
     } else {
       next('/404')
     }

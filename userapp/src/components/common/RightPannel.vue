@@ -19,7 +19,6 @@
     </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
 export default {
     name: "right-pannel",
     props: {
@@ -27,11 +26,6 @@ export default {
             type: String,
             default: "534"
         }
-    },
-    data() {
-        return {
-            aa: 123
-        };
     },
     methods: {
         closePanel() {

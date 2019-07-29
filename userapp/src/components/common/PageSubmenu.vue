@@ -1,26 +1,28 @@
 <template>
     <div class="submenu">
-        <h4 class="submenu-title"><slot name="title"></slot></h4>
-       <ul class="submenu-list">
-            <router-link
-                :to="item.url"
-                tag="li"
-                v-for="(item,index) in submenuList"
-                :key="index"
-            >{{item.name}}</router-link>
+        <h4 class="submenu-title">
+            <slot name="title"></slot>
+        </h4>
+        <ul class="submenu-list">
+            <li @click="jump(item)" v-for="(item,index) in submenuList" :key="index">{{item.name}}</li>
         </ul>
     </div>
 </template>
 <script>
 export default {
-    props:{
-        submenuList:{
-            type:Array,
-            default:() =>([
-                 {name:"企业信息",url:'/amemberManage'},
-                {name:"显示设置",url:'/memberManage'},
-                {name:'成员列表',url:'/memberManage'}
-            ])
+    props: {
+        submenuList: {
+            type: Array,
+            default: () => [
+                { name: "企业信息", url: "/amemberManage" },
+                { name: "显示设置", url: "/memberManage" },
+                { name: "成员列表", url: "/memberManage" }
+            ]
+        }
+    },
+    methods: {
+        jump(item) {   
+                 this.$router.push(item.url);          
         }
     }
 };
@@ -35,11 +37,11 @@ export default {
     max-width: 120px;
     height: 100vh;
     background: #fff;
-    border-right: 1px solid #E5E5E5;
+    border-right: 1px solid #e5e5e5;
     .submenu-title {
         height: 40px;
         line-height: 40px;
-         padding-left: 12px;
+        padding-left: 12px;
     }
     .submenu-list {
         padding-top: 7px;

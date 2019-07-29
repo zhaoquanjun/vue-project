@@ -9,6 +9,12 @@
             :row-key="getRowKeys"
             :expand-row-keys="expands"
         >
+            <template slot="empty">
+                <div class="empty-table">
+                    <img src="~img/memberManage/table-empty.png" />
+                    <span>无搜索结果</span>
+                </div>
+            </template>
             <el-table-column prop="domain" label="域名"></el-table-column>
             <el-table-column prop="httpsStatusDesc" label="HTTPS状态">
                 <template slot-scope="scope">
@@ -175,7 +181,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column  width="150">
+            <el-table-column width="150">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <!-- <button class="resolve-set" @click="expandSelect(scope.row,scope.row)">解析设置</button> -->
@@ -186,17 +192,14 @@
                     </div>
                 </template>
             </el-table-column>
-            
         </el-table>
     </div>
 </template>
 <script>
-import { setTimeout } from "timers";
 export default {
     props: ["tableData"],
     data() {
         return {
-            value: true,
             domainStepName: [
                 "生成解析记录值",
                 "配置解析",
@@ -205,8 +208,6 @@ export default {
             ],
             active: 0,
             expands: [],
-            entdatas: [],
-            entexpands: [],
             getRowKeys(row) {
                 return row.id;
             }
@@ -353,34 +354,6 @@ export default {
                 that.expands = [];
             }
         },
-        rowExpand(row, event, column) {
-            Array.prototype.remove = function(val) {
-                let index = this.indexOf(val);
-                if (index > -1) {
-                    this.splice(index, 1);
-                }
-            };
-            if (this.entexpands.indexOf(row.id) < 0) {
-                this.entexpands = [];
-                row.id = this.generateUUID();
-                this.entexpands.push(row.id);
-                alert(1);
-            } else {
-                this.entexpands.remove(row.id);
-            }
-        },
-        generateUUID() {
-            var d = new Date().getTime();
-            var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-                /[xy]/g,
-                function(c) {
-                    var r = (d + Math.random() * 16) % 16 | 0;
-                    d = Math.floor(d / 16);
-                    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
-                }
-            );
-            return uuid;
-        }
     },
     watch: {
         tableData() {
@@ -390,10 +363,8 @@ export default {
                 );
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
-                   
-                    ele.innerHTML = "<span style='color: #00c1de;' >解析设置</span>";
-
-                  
+                    ele.innerHTML =
+                        "<span style='color: #00c1de;' >解析设置</span>";
                 }
             });
         }
@@ -401,10 +372,37 @@ export default {
 };
 </script>
 <style scoped>
-@import "../../../styles/table.css";
-</style>
+.el-tabs{
+    margin-top: 24px
+}
+.el-tabs /deep/ .el-tabs__item{
+    width: 88px;
+    height: 38px;
+    font-size: 12px;
+    font-weight: 400;
+    color:rgba(51,51,51,1);
+    line-height: 36px;
+    border-bottom: 1px solid #E4E7ED;
+    background:rgba(245,245,245,1);
+    vertical-align: top;
+    border-top: 2px solid transparent;
+}
+.el-tabs /deep/ .is-active{
+    color:rgba(1,192,222,1);
+    border-top: 2px solid rgb(72,201,226);
+    border-bottom: 1px solid transparent;
+    background: rgb(255, 255, 255)
+}
 
-<style scoped>
+.el-table /deep/ thead  th {
+    padding: 0;
+    height: 35px;
+    background: #00c1de !important;
+    color: #fff;
+    font-weight: 400;
+    font-size: 12px;
+}
+
 .el-table /deep/ .el-table__body .cell {
     color: #262626;
 }
@@ -416,18 +414,14 @@ export default {
         width: 160px;
 } */
 
-.el-table /deep/ .el-table__expand-icon{
-    transform:rotate(0deg)
+.el-table /deep/ .el-table__expand-icon {
+    transform: rotate(0deg);
 }
 .el-table /deep/ .el-table__expanded-cell:hover {
     background: #eee !important;
 }
-
 </style>
 <style lang="scss" scoped>
-
-
-
 .relove-step {
     margin-top: 12px;
     background: #eeeeee;
@@ -501,7 +495,7 @@ export default {
 .handle-btn-wrap {
     width: 70%;
     display: flex;
-    justify-content:flex-end;
+    justify-content: flex-end;
     .handle-btn {
         width: 17px;
         height: 16px;

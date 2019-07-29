@@ -23,7 +23,6 @@
     </div>
     <div class="pannel-left-item">
       <h5 class="auth-title">已选权限</h5>
-     
         <selected-auth
           @emptySelected="emptySelected"
           @removeSelected="removeSelected"
@@ -38,12 +37,10 @@ import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import AuthList from "./AuthList";
 import SelectedAuth from "./SelectedAuth";
 export default {
+  // 成员邀请的权限配置
   components: {
     AuthList,
     SelectedAuth
-  },
-  data() {
-    return {};
   },
   methods: {
     ...mapMutations([

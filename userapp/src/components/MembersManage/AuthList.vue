@@ -46,7 +46,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-    name: "AuthList",
+    name: "AuthList", // 权限配置左侧管理员拥有的权限。。
     props: {
         isSelect: {
             type: Boolean

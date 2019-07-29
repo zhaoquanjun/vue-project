@@ -10,7 +10,7 @@
                 <span class="member-list-title fs14">网站管理</span>
             </el-row>
             <el-row>
-                <SiteInfo />
+                <SiteInfo :site-info="siteInfo" />
             </el-row>
             <DomainMenu @handleBtn="righPanelShow" />
             <!-- <button @click="_oneKeyEnableHttps">开启https</button>
@@ -91,6 +91,7 @@ export default {
             // recovery: false,
             remarkInfo: "",
             domainAmount:0,
+            siteInfo:{},
         };
     },
     created() {
@@ -112,11 +113,12 @@ export default {
          */
         async getSiteInfo() {
             let { data } = await getSiteInfo(2);
-            console.log(data);
-            this.siteInfoImg = data.siteImage;
-            this.siteName = data.siteName;
-            this.secondDomain = data.secondDomain;
-            this.siteId = data.id;
+            console.log(data,'000000');
+            this.siteInfo = data;
+            // this.siteInfoImg = data.siteImage;
+            // this.siteName = data.siteName;
+            // this.secondDomain = data.secondDomain;
+            // this.siteId = data.id;
         },
         /**
          * 获取域名列表
