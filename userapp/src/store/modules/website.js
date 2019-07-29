@@ -5,11 +5,13 @@ const website = {
 
   mutations: {
     SETMODUL(state,payload){
-        state.isChooseModul=true
+        state.isChooseModul=payload
     }
   },
   actions: {
-   
+    xx({commit}){
+        commit("SETMODUL",1)
+    }
   }
 }
 
