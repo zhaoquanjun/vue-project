@@ -3,14 +3,13 @@ import * as ajaxRequest from "../ajaxRequest";
 import store from "@/store/index";
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
 console.log(designerManageApi)
-const siteId = store.state.dashboard.siteId;
 
 /**
  * 获取域名列表
  */
 export const getCdnDomainList = () => {
   
-    return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/GetCdnDomainList/${siteId}`);
+    return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/GetCdnDomainList`);
 }
 
 /**
@@ -20,7 +19,7 @@ export const bindDomainAndEnableCdn = (domain) => {
     let fn =function(ex){
         console.log(ex)
     }
-    return ajaxRequest.post(`${designerManageApi}/api/v1/DomainManage/BindDomainAndEnableCdn/${siteId}`, domain,fn);
+    return ajaxRequest.post(`${designerManageApi}/api/v1/DomainManage/BindDomainAndEnableCdn`, domain,fn);
 }
 
 /**
@@ -35,7 +34,6 @@ export const oneKeyEnableHttps = (siteDomainId) => {
  */
 export const resolveCdnByAliYunToken = (params) => {
     let option = {
-        "siteId": 0,
         "resolveType": "string",
         "domain": "string",
         "resolveValue": "string",
@@ -62,7 +60,7 @@ export const reopenCdn = (siteDomainId) => {
  * 删除阿里云token
  */
 export const removeAliYunToken = () => {
-    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/RemoveAliYunToken/${siteId}`);
+    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/RemoveAliYunToken`);
 }
 /**
  * 禁用https
