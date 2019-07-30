@@ -107,7 +107,7 @@ export default {
 .m-aside {
     position: absolute;
     left: 0;
-    top: 50px;
+    top: 0;
     bottom: 0;
     z-index: 10;
 }

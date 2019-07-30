@@ -34,8 +34,9 @@ export default {
         });
     },
     created() {
-
+       
         window.addEventListener('message',(e)=>{
+          
             let data = e.data;
             this._bindResult(data);
         })
@@ -65,7 +66,7 @@ export default {
     updated(){
         //清空数据，并重新绑定
         document.getElementById("weixin").innerHTML="";
-        this.bindResultMessage=null;
+      
         var obj = new WxLogin({
             self_redirect: true,
             id: "weixin",
@@ -77,6 +78,17 @@ export default {
             href: "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9DQouaW1wb3dlckJveCAucXJjb2RlIHt3aWR0aDogMjIwcHg7fQ0KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyMjBweDt9DQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9DQouaW1wb3dlckJveCAuc3RhdHVzIHt0ZXh0LWFsaWduOiBjZW50ZXI7fQ=="
         });
     },
+    computed:{
+        pannelShow(){
+            return this.$store.state.isRightPanelShow
+        }
+    },
+    watch:{
+        pannelShow(){
+             this.bindResultMessage=null;
+        }
+    }
+
 }
 </script>
 <style lang="scss" scoped>

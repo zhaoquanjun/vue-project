@@ -8,7 +8,8 @@
             <h5 class="title-item">全部分类(12)</h5>
             <m-tree></m-tree>
         </el-aside>
-        <el-main>
+        <el-main  style="height: calc(100vh - 50px);
+    overflow-y: auto;">
             <content-header></content-header>
             <el-main>
                  <content-table></content-table>

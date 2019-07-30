@@ -53,7 +53,7 @@ export default {
   }
   .el-menu /deep/ :hover.el-menu-item{
     color: #15C6E0;
-    background: #E5F8FA;
+    background: #fff;
   }
 </style>
 

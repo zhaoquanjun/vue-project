@@ -18,7 +18,8 @@
                 @getList="getArticleListAsync"
             ></m-tree>
         </el-aside>
-        <el-main>
+        <el-main style="height: calc(100vh - 50px);
+    overflow-y: auto;">
             <content-header
                 :count="count"
                 :is-batch-header-show="isBatchHeaderShow"

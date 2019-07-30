@@ -18,7 +18,8 @@
                 @chooseCategoryNode="chooseCategoryNode"
             ></category-tree>
         </el-aside>
-        <el-main>
+        <el-main style="height: calc(100vh - 50px);
+    overflow-y: auto;">
             <content-header
                 :count="count"
                 :article-search-options="productSearchOptions"
@@ -48,7 +49,9 @@
                     width="0"
                     style="z-index:10"
                     :close-on-click-modal="false"
+                    :modal-append-to-body="false"
                     :show-close="false"
+                    :append-to-body="true"
                     :visible.sync="isInvitationPanelShow"
                 ></el-dialog>
                 <right-pannel

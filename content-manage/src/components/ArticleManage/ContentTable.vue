@@ -13,6 +13,12 @@
             class="content-table"
             @selection-change="handleSelectionChange"
         >
+            <template slot="empty">
+                <div class="empty-table">
+                    <img src="~img/table-empty.png" />
+                    <span>无搜索结果</span>
+                </div>
+            </template>
             <el-table-column type="selection"></el-table-column>
 
             <el-table-column
@@ -20,7 +26,6 @@
                 prop="title"
                 label="文章标题"
                 min-width="150"
-                 
             >
                 <template slot-scope="scope">
                     <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" class="cover" alt />
@@ -30,7 +35,7 @@
             </el-table-column>
 
             <el-table-column prop="categoryName" label="分类" show-overflow-tooltip>
-                 <template slot-scope="scope">
+                <template slot-scope="scope">
                     <span>{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
@@ -46,7 +51,7 @@
             </el-table-column>
 
             <el-table-column prop="createTimePrt" label="创建时间" show-overflow-tooltip>
-                 <template slot-scope="scope">
+                <template slot-scope="scope">
                     <span>{{ scope.row.createTimePrt }}</span>
                 </template>
             </el-table-column>
@@ -173,7 +178,7 @@ export default {
                 (this.row = row);
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY -50 + "px";
 
             if (this.$refs.operateSection.style.display == "block") {
                 this.$refs.operateSection.style.display = "none";

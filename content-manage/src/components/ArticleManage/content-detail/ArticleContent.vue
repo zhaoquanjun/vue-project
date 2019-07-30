@@ -360,8 +360,10 @@ export default {
                 }
             }
         };
+       
     },
     methods: {
+      
         textIndent(ele, width) {
             this.$nextTick(() => {
                 ele.style.textIndent = width + "px";

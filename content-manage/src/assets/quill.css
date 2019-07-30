@@ -1,11 +1,21 @@
+
+.ql-snow .ql-picker{
+  height: auto !important; 
+}
+/* 编辑器样式 */
+
+.ql-snow .ql-picker.ql-size .ql-picker-label::before, .ql-snow .ql-picker.ql-size .ql-picker-item::before{
+  font-size: 12px;
+}
+
 /* 字体大小样式 */
 .ql-snow .ql-picker.ql-size,
 .ql-snow .ql-picker.ql-header {
-  width: 75px !important;
+  /* width: 100px !important; */
 }
 
 .ql-snow .ql-picker.ql-font {
-  width: 80px !important;
+  width: 108px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="10px"]::before,
@@ -117,11 +127,7 @@
 
 .ql-snow .ql-picker.ql-lineheight,
 .ql-snow .ql-picker.ql-header {
-  width: 75px !important;
-}
-
-.ql-snow .ql-picker.ql-lineheight {
-  width: 80px !important;
+  width: 100px !important;
 }
 
 .ql-snow .ql-picker.ql-lineheight .ql-picker-label::before,
@@ -157,9 +163,9 @@
 
 /*子间距样式*/
 
-.ql-snow .ql-picker.ql-letterspacing,
-.ql-snow .ql-picker.ql-header {
-  width: 75px !important;
+.ql-snow .ql-picker.ql-letterspacing
+ {
+  width: 80px !important;
 }
 
 .ql-snow .ql-picker.ql-letterspacing {

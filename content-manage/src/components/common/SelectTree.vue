@@ -10,6 +10,7 @@
         :value="valueTitle"
         :multiple="multiple"
         @remove-tag="remove"
+        @node-expand="nodeExpand"
         size="small"
     >
     <!-- :label="valueTitle" -->
@@ -102,6 +103,9 @@ export default {
         this.initHandle();
     },
     methods: {
+      nodeExpand(data, node ,slot){
+          console.log(data, node ,slot)
+      },  
       remove(cur){
           console.log(this.valueTitle)
         this.valueTitle = this.valueTitle.filter((item)=>{

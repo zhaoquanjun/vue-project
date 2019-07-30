@@ -37,7 +37,7 @@ axios.interceptors.request.use(
         const token = getLocal('token');
         token && (config.headers.Authorization = "Bearer " + token);
         config.headers.AppId = Cookies.get('AppId') ? Cookies.get('AppId') : store.state.dashboard.appid;
-        config.headers.SiteId = Cookies.get('SiteId') ? Cookies.get('SiteId') : store.state.dashboard.siteid;
+        config.headers.SiteId = Cookies.get('SiteId') ? Cookies.get('SiteId') : store.state.dashboard.siteId;
         // config.headers.AppId = "823EB3BD-93F4-4655-B833-D604A6EF2032";//store.state.dashboard.appid;
         return config;
     },

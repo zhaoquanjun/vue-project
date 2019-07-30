@@ -1,5 +1,5 @@
 <template>
-    <div id="asideTree" class="aside-tree">
+    <div id="asideTree" class="aside-tree" >
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -347,11 +347,13 @@ export default {
         _handleShowMoreOperate(ev, row) {
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
-            this.$refs.operateSection.style.display = "block";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY -50 + "px";
             if(this.$refs.operateSection.style.display==="block"){
                 this.$refs.operateSection.style.display = "none";
+            }else{
+            this.$refs.operateSection.style.display = "block";
             }
+           
         },
         // 新增 0722  关闭分类操作菜单
         closeUploadCategoryPic() {
@@ -369,4 +371,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";
+.tree-handle {
+        display: none;
+}
 </style>

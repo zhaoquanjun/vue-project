@@ -7,6 +7,12 @@
             class="content-table"
             @selection-change="handleSelectionChange"
         >
+            <template slot="empty">
+                <div class="empty-table">
+                    <img src="~img/table-empty.png" />
+                    <span>无搜索结果</span>
+                </div>
+            </template>
             <el-table-column type="selection"></el-table-column>
 
             <el-table-column min-width="150" prop="name" label="产品标题" show-overflow-tooltip>
@@ -16,8 +22,8 @@
                         :src="scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
                         class="cover"
                         alt
-                    >
-                     <img v-else :src="defaultImg" class="cover" alt />
+                    />
+                    <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
                     <span>{{ scope.row.name }}</span>
                 </template>
@@ -29,19 +35,19 @@
                 </template>
             </el-table-column>
 
-            <el-table-column width="100"  prop="isOnSell" label="状态" >
+            <el-table-column width="100" prop="isOnSell" label="状态">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isOnSell?"上架":"下架" }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column width="100" prop="isTop"  label="置顶">
+            <el-table-column width="100" prop="isTop" label="置顶">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
             </el-table-column>
-                       
-            <el-table-column min-width="100" prop="createTimeStr" label="创建时间" ></el-table-column>
+
+            <el-table-column min-width="100" prop="createTimeStr" label="创建时间"></el-table-column>
 
             <el-table-column width="200" min-width="100" label="操作">
                 <template slot-scope="scope">
@@ -51,7 +57,6 @@
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
                         ></span>
-
                     </div>
                 </template>
             </el-table-column>
@@ -133,7 +138,7 @@ export default {
          */
         handleSelectionChange(val) {
             this.multipleSelection = val;
-              this.$emit("handleSelectionChange",val)
+            this.$emit("handleSelectionChange", val);
         },
         getCheckArr() {
             let checkArr = this.multipleSelection; // multipleSelection存储了勾选到的数据
@@ -156,17 +161,18 @@ export default {
             this.operateList = [
                 { name: "移动", flag: "move" },
                 { name: "复制", flag: "copy" },
-                { name: row.isOnSell ?"下架": "上架", flag: "isOnSell" },
-                { name:row.isTop ?"取消置顶": "置顶", flag: "stick" },
+                { name: row.isOnSell ? "下架" : "上架", flag: "isOnSell" },
+                { name: row.isTop ? "取消置顶" : "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ];
-            let clientH = document.getElementsByClassName("more-operate")[0].clientHeight +10;
+            let clientH =
+                document.getElementsByClassName("more-operate")[0]
+                    .clientHeight + 10;
             let clientW = this.$refs.operateSection.clientWidth;
-            
-        
-              this.$refs.operateSection.style.left =
+
+            this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY -50 + "px";
 
             if (this.$refs.operateSection.style.display == "block") {
                 this.$refs.operateSection.style.display = "none";
@@ -195,22 +201,21 @@ export default {
             }
         },
 
-      
         /**
          * 复制 操作
          */
-        batchCopy(row,type){
-           this.$emit("batchMove",type);
+        batchCopy(row, type) {
+            this.$emit("batchMove", type);
         },
         handleMoreOperate(flag) {
             this.clearSelection();
             let row = this.row;
             switch (flag) {
                 case "move":
-                    this.$emit("moveClassify", row,flag);
+                    this.$emit("moveClassify", row, flag);
                     break;
                 case "copy":
-                     this.$emit("moveClassify", row,flag);
+                    this.$emit("moveClassify", row, flag);
                     break;
                 case "isOnSell":
                     this.batchSwitchStatus(row, 3, row.isOnSell);
@@ -223,7 +228,7 @@ export default {
                     break;
             }
         },
-        clearSelection(){
+        clearSelection() {
             this.$refs.multipleTable.clearSelection();
         }
     }
@@ -319,14 +324,10 @@ export default {
     background: #00c1de !important;
 }
 
-
 #table-list .el-table .el-table__row {
     height: 60px;
 }
-#table-list
-    .el-pagination.is-background
-    .el-pager
-    li:not(.disabled).active {
+#table-list .el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: #01c0de;
 }
 #table-list .el-pagination .el-pagination__total {
