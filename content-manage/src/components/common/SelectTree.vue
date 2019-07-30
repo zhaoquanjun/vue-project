@@ -13,11 +13,12 @@
         @node-expand="nodeExpand"
         size="small"
     >
-    <!-- :label="valueTitle" -->
+        <!-- :label="valueTitle" -->
         <el-option :value="valueTitle">
             <el-tree
                 id="tree-option"
                 ref="selectTree"
+                :check-strictly="true"
                 :default-expand-all="true"
                 :expand-on-click-node="false"
                 :accordion="accordion"
@@ -25,7 +26,6 @@
                 :props="props"
                 :node-key="props.value"
                 :default-expanded-keys="defaultExpandedKey"
-                
                 @node-click="handleNodeClick"
             ></el-tree>
         </el-option>
@@ -54,8 +54,13 @@ export default {
                 return [];
             }
         },
+        /**分类名称 */
         categoryName: {
             type: [String, Array]
+        },
+        /** 分类ID */
+        categoryId:{
+            type:Number
         },
         /* 初始值 */
         value: {
@@ -94,29 +99,35 @@ export default {
     data() {
         return {
             valueId: null, // 初始值
-            valueTitle: this.categoryName,
+            valueTitle: this.categoryName ,
             defaultExpandedKey: []
         };
     },
     mounted() {
-      console.log(this.categoryName)
+        console.log(this.categoryName);
         this.initHandle();
+        // this.setCheckedKeys();
     },
     methods: {
-      nodeExpand(data, node ,slot){
-          console.log(data, node ,slot)
-      },  
-      remove(cur){
-          console.log(this.valueTitle)
-        this.valueTitle = this.valueTitle.filter((item)=>{
-      
-          return item != cur
-        })
-        this.$emit("removeSeletedCategory",cur)
-      },
+        // setCheckedKeys() {
+        //     console.log(this.$refs.selectTree);
+        //     this.$nextTick(()=>{
+        //          this.$refs.selectTree.setCurrentKey(34); // 设置默认选中
+        //     })
+        // },
+        nodeExpand(data, node, slot) {
+            console.log(data, node, slot);
+        },
+        remove(cur) {
+            console.log(this.valueTitle);
+            this.valueTitle = this.valueTitle.filter(item => {
+                return item != cur;
+            });
+            this.$emit("removeSeletedCategory", cur);
+        },
         // 初始化值
         initHandle() {
-            console.log(this.valueId);
+            console.log(this.valueId, "0000000");
             if (this.valueId) {
                 this.valueTitle = this.$refs.selectTree.getNode(
                     this.valueId
@@ -139,19 +150,20 @@ export default {
         // 切换选项
         handleNodeClick(node) {
             this.$refs.elSelect.blur();
-            if(this.multiple){
-              if(this.valueTitle.indexOf(node[this.props.label])>-1){
-                return
-              }
-               this.valueTitle.push(node[this.props.label]);
+            if (this.multiple) {
+                if (this.valueTitle.indexOf(node[this.props.label]) > -1) {
+                    return;
+                }
+                this.valueTitle.push(node[this.props.label]);
                 this.$emit("chooseNode", node);
                 return;
-            }else{
-              this.valueTitle =node[this.props.label];
-               this.$emit("chooseNode", node);
+            } else {
+                console.log()
+                this.valueTitle = node[this.props.label];
+                this.$emit("chooseNode", node);
             }
-            this.valueId = node[this.props.value];
-            this.defaultExpandedKey = [];
+            // this.valueId = node[this.props.value];
+            // this.defaultExpandedKey = [];
             this.clearSelected();
         },
         // 清除选中
@@ -185,6 +197,9 @@ export default {
 </script>
 
 <style scoped>
+/* .el-tree /deep/ .is-checked {
+    background: red;
+} */
 .el-select {
     width: 80%;
 }

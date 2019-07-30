@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <el-container>
-            <el-header style="height:50px;position: fixed;width: 100%;">
+            <el-header style="height:50px;position: fixed;width: 100%;z-index:1">
                 <m-header></m-header>
             </el-header>
             <el-container style="position: absolute;top: 50px;width: 100%;    height: calc(100vh - 50px);overflow: hidden;">

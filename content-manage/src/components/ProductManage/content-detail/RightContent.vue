@@ -6,6 +6,7 @@
             </div>
             <div>
                 <el-upload
+                
                     class="avatar-uploader"
                     :action="uploadPicAction"
                     :headers="headers"
@@ -18,7 +19,7 @@
                     :multiple="true"
                 >
                     <!-- <img v-if="imageUrl1" :src="imageUrl1" class="avatar"> -->
-                    <template >
+                    <template>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;font-size:12px">添加图片</i>
                     </template>
@@ -59,15 +60,28 @@ export default {
     },
     watch: {
         fileList() {
-            console.log(this.fileList, "0000");
             this.fileList1 = this.fileList;
+              this.$nextTick(()=>{
+                if(this.fileList1.length>=9){
+                   document.querySelector(".el-upload").style.display="none";
+                }
+            })
+        },
+        fileList2(){
+            this.$nextTick(()=>{
+                if(this.fileList2.length>=9){
+                   document.querySelector(".el-upload").style.display="none";
+                }
+            })
         }
     },
      mounted(){
          this.headers.appId = this.$store.state.dashboard.appid;
     },
     methods: {
-        handleSucess(response, file, fileList) {},
+        handleSucess(response, file, fileList) {
+
+        },
         handleRemove(file, fileList) {
             console.log(file, fileList);
         },

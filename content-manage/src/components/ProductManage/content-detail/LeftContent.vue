@@ -433,8 +433,10 @@ export default {
                 }
             }
         };
+       
     },
     methods: {
+        
         textIndent(ele, width) {
             this.$nextTick(() => {
                 ele.style.textIndent = width + "px";
@@ -543,7 +545,7 @@ export default {
             console.log(data, "datadatadata");
             var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
-                this.categoryName = categoryName;
+                this.categoryName.push(categoryName) ;
             }
         },
         chooseNode(data) {

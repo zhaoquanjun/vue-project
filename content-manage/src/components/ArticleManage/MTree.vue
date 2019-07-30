@@ -154,9 +154,10 @@ export default {
             } else if (data.label != "") {
                 console.log("rename");
                 this.$emit("rename", data.id, data.label);
-            }
-            this.isNewAdd = isNewAdd;
+                 this.isNewAdd = isNewAdd;
             this.renameShowId = this.curId = null;
+            }
+           
         },
         //
         cancelhadnleTreeInput(data, node) {
@@ -240,7 +241,7 @@ export default {
                 this.curClickData.children.unshift(newChild);
             }
             this.curId = null;
-            this.newAddData = data;
+            this.newAddData = this.curClickData;
         },
         getAllNodeIds(node, isChildNode) {
             var idList = isChildNode ? [] : [node.id];

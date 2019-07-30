@@ -200,7 +200,7 @@ export default {
             } else {
                 value = null;
             }
-            this.articleSearchOptions.isOnSell = value;
+            this.articleSearchOptions.isTop = value;
             this.getArticleList();
         },
         switchIsDesc(flag) {

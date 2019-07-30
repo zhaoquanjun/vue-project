@@ -127,7 +127,8 @@ export default {
                 keyword: "", //1
                 isDelete: false, //1
                 isOnSell: null, //is 上架
-                categoryIdList: [] //1,
+                categoryIdList: [], //1,
+                isTop:null,
             }
         };
     },

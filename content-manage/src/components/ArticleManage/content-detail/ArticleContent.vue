@@ -302,13 +302,13 @@ export default {
                 pictureUrl: ""
             },
             rules: {
-                // title: [
-                //     {
-                //         required: true,
-                //         message: "请输入文章标题",
-                //         trigger: "blur"
-                //     }
-                // ],
+                title: [
+                    {
+                        required: true,
+                        message: "请输入文章标题",
+                        trigger: "blur"
+                    }
+                ],
 
                 // searchKeywords: [{ validator: checkWord }]
             },
@@ -360,6 +360,7 @@ export default {
                 }
             }
         };
+       
        
     },
     methods: {

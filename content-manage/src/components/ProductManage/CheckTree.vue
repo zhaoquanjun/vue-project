@@ -13,13 +13,12 @@
 export default {
     props: ["treeResult"],
     mounted(){
-      this.setCheckedKeys()
+     
     },
     methods: {
-        setCheckedKeys() {
-            console.log(this.$refs.tree);
-            this.$refs.tree.setCheckedKeys([3]);
-        },
+       setCheckedKeys() {
+        this.$refs.tree.setCheckedKeys([34]);
+      },
         getCheckedNodes() {
             return this.$refs.tree.getCheckedNodes();
         },

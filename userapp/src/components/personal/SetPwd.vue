@@ -8,7 +8,7 @@
                     <el-input
                         type="password"
                         v-model="ruleForm.passWrod"
-                        autocomplete="on"
+                        auto-complete="new-password"
                         placeholder="输入设置密码"
                         minlength="6"
                         maxlength="16"
@@ -18,7 +18,7 @@
                     <el-input
                         type="password"
                         v-model="ruleForm.beSurePwd"
-                        autocomplete="on"
+                        auto-complete="new-password"
                         placeholder="输入确认密码"
                         minlength="6"
                         maxlength="16"
@@ -234,6 +234,24 @@ import {
                         message: "验证失败!"
                     });
                 }
+            }
+        }
+    },
+    computed:{
+        pannelShow(){
+            return this.$store.state.isRightPanelShow
+        }
+    },
+    watch:{
+        pannelShow(){
+            this.$refs.ruleForm.clearValidate()
+             this.ruleForm = {
+                passWrod: "",
+                beSurePwd: ""
+            };
+              this.ruleFormCode = {
+                phone: "",
+                code: ""
             }
         }
     }
