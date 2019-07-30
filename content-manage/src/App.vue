@@ -4,19 +4,21 @@
             <el-header style="height:50px;position: fixed;width: 100%;z-index:1">
                 <m-header></m-header>
             </el-header>
-            <el-container style="position: absolute;top: 50px;width: 100%;    height: calc(100vh - 50px);overflow: hidden;">
+            <el-container
+                style="position: absolute;top: 50px;width: 100%;    height: calc(100vh - 50px);overflow: hidden;"
+            >
                 <el-aside width="50px">
                     <m-aside></m-aside>
                 </el-aside>
-                <el-main >
+                <el-main>
                     <el-container>
-                        <el-aside class="page-sub-aside" width="120px"  v-show="isSub">
+                        <el-aside class="page-sub-aside" width="120px" v-show="isSub">
                             <page-submenu>
                                 <i slot="title">内容管理</i>
                             </page-submenu>
                         </el-aside>
                         <el-main class="content-table-wrap">
-                            <router-view/>
+                            <router-view />
                         </el-main>
                     </el-container>
                 </el-main>
@@ -36,20 +38,18 @@ export default {
         PageSubmenu,
         MContainer
     },
-     computed:{
-        isSub(){
-            return this.$route.meta.isSub
+    computed: {
+        isSub() {
+            return this.$route.meta.isSub;
         }
     }
 };
 </script>
 <style >
-    @import url('./assets/quill.css');
+@import url("./assets/quill.css");
 </style>
 <style scoped>
-
 </style>
 
 <style lang="scss">
-   
 </style>

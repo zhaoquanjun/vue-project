@@ -128,7 +128,7 @@ export default {
                 isDelete: false, //1
                 isOnSell: null, //is 上架
                 categoryIdList: [], //1,
-                isTop:null,
+                isTop: null
             }
         };
     },
@@ -153,9 +153,11 @@ export default {
                 (options = this.productSearchOptions)
             );
             this.articlePageResult = data;
-            this.articlePageResult.list.forEach( (item, index) => {
-                item.createTimeStr = this.articlePageResult.list[index].createTimeStr.split(" ")[0]
-            } )
+            this.articlePageResult.list.forEach((item, index) => {
+                item.createTimeStr = this.articlePageResult.list[
+                    index
+                ].createTimeStr.split(" ")[0];
+            });
         },
         //z 批量删除 批量置顶 批量上下线
         async batchSwitchStatus(options) {
@@ -410,15 +412,14 @@ export default {
                     path: "/product/create"
                 });
             } else {
-                 this.$router.push({
-                path: "/product/create",
-                query: {
-                    categoryName: this.selectCategory.label || "全部分类",
-                    categoryId: this.selectCategory.id || 0
-                }
-            });
+                this.$router.push({
+                    path: "/product/create",
+                    query: {
+                        categoryName: this.selectCategory.label || "全部分类",
+                        categoryId: this.selectCategory.id || 0
+                    }
+                });
             }
-           
         },
         handleEditArticle(row) {
             console.log(row);
