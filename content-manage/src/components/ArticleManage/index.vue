@@ -456,8 +456,8 @@ export default {
                 this.$router.push({
                     path: "/news/create",
                     query: {
-                        categoryName: this.selectCategory.label,
-                        categoryId: this.selectCategory.id
+                        categoryName: this.selectCategory.label || "全部分类",
+                        categoryId: this.selectCategory.id || 0
                     }
                 });
             }

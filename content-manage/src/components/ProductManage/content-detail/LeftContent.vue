@@ -394,6 +394,7 @@ export default {
         };
     },
     created() {
+         this.detailData.productCategoryList =[{id:this.$route.query.categoryId||0}] ;
         console.log(this.$route.query);
         var id = this.$route.query.id;
         this.curProduct = id;
@@ -509,7 +510,7 @@ export default {
                     message: "添加成功!"
                 });
                 // this.$router.push(`/product/create?id=${data}`);
-                this.$router.push(`/content/product`);
+                this.$router.go(-1);
             }
         },
         // 编辑提交
