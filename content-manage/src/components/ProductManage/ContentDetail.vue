@@ -68,10 +68,13 @@ export default {
     },
     methods:{
       submitForm(){
-        let flieUrls = [...this.$refs.articleRight.fileList1,...this.$refs.articleRight.fileList2]    
+        let flieUrls = [...this.$refs.articleRight.fileList1,...this.$refs.articleRight.fileList2];
+       
         let fileList =flieUrls.map(item=>{
             return item.response
         });
+
+         console.log(fileList,'999999')
         // editArticle
         let isEditor = this.$route.query.isEditor;
         if(!!isEditor){

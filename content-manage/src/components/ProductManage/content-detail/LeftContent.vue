@@ -485,6 +485,7 @@ export default {
         },
         // 新建保存
         submitForm(formName, fileList) {
+            console.log(fileList,'--------===========')
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
@@ -514,7 +515,8 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName) {
+        editArticle(formName,fileList) {
+              this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle();

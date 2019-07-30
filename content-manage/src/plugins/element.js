@@ -40,7 +40,8 @@ import {
     DropdownMenu,
     Image,
     Popover,
-    Notification
+    Notification,
+    Scrollbar
   
 } from 'element-ui';
 Vue.use(Container)
@@ -81,6 +82,7 @@ Vue.use(Container)
     .use(DropdownMenu)
     .use(Image)
     .use(Popover)
+    .use(Scrollbar)
     
 ;
 Vue.prototype.$message = Message;
