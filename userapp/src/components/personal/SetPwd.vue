@@ -62,10 +62,13 @@ import {
     export default {
         props: ["isSetPassWord", "sourcePhone"],
         data() {
-            var regex = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[$.@$,.!%*#?&])[A-Za-z\\d$@$,.!%*#?&]{6,16}$");
+            var regex1 = new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$");
+            var regex2 = new RegExp("^(?=.*\\d)(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$");
+            var regex3 = new RegExp("^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$");
+
         var checPwd = (rule, value, callback) => {            
-            if (!regex.test(value)) {
-                callback(new Error("密码长度为6-16位,并且必须包函数字、大小写字母以及标点符号！"));
+            if (!regex1.test(value) && !regex2.test(value) && !regex3.test(value)) {
+                callback(new Error("长度为6-16位,数字、字母及标点符号至少包含两种！"));
             }
             if (value.length > 16) {
                 callback(new Error("密码长度不能超过16位！"));
@@ -77,8 +80,8 @@ import {
             let reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
         };
         var checBeSurePwd = (rule, value, callback) => {
-            if (!regex.test(value)) {
-                callback(new Error("密码长度为6-16位,并且必须包函数字、大小写字母以及标点符号！"));
+            if (!regex1.test(value) && !regex2.test(value) && !regex3.test(value)) {
+                callback(new Error("长度为6-16位,数字、字母及标点符号至少包含两种！"));
             }
             if (value.length > 16) {
                 callback(new Error("密码长度不能超过16位！"));
