@@ -40,7 +40,7 @@ export const resolveCdnByAliYunToken = (params) => {
         "resolveValue": "string",
         "isForceUpdate": true
     }
-    return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/ResolveCdnByAliYunToken/${siteId}`, params);
+    return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/ResolveCdnByAliYunToken/`, params);
 }
 
 

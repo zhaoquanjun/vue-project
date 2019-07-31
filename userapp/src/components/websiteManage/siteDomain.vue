@@ -134,13 +134,14 @@ export default {
          */
         async _resolveCdnByAliYunToken(
             params = {
-                siteId: this.siteInfo.id,
+                siteId: this.siteId,
                 resolveType: "",
                 domain: this.domainValue,
                 resolveValue: "",
                 isForceUpdate: false
             }
         ) {
+            console.log(this.siteId,22222222222222);
             let { data } = await domainApi.resolveCdnByAliYunToken(params);
             if (!data.isSuccess && data.redirectUrl) {
                 window.open(data.redirectUrl);
