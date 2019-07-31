@@ -1,36 +1,37 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',transition: 'width .5s linear',backgroundColor:'#fff'}"
+        :style="{width:width+'px',backgroundColor:'#fff'}"
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <!-- @mouseleave="collapseClose" -->
         <el-aside class="m-asideleft" :style="{width:width+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
                     class="left-menu-item"
+                    :class="[active==i?'menu-bg':'']"
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(i)"
                     @mouseleave="itemhandlerLeave"
                     @click="skipPages(it,i)"
-                  
                 >
-                    <!-- <svg-icon :icon-class="'l-' + it.code"></svg-icon> -->
-                    <!-- :class="curIndex==i ? it.code+"-on" : it.code" -->
-                    <i class="menu-icon" :class="[curIndex==i ? it.code+'-on' : it.code]"></i>
-                    <span class="menu-item-content" >{{it.name}}</span>
+                    <i
+                        class="menu-icon"
+                        :class="[curIndex==i ? it.code+'-on' : it.code,active==i? it.code+'-on' : it.code]"
+                    ></i>
+                    <span class="menu-item-content" :class="curIndex==i ?'menu-color':''">{{it.name}}</span>
                 </li>
             </ul>
         </el-aside>
         <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
             v-if="isLeftNavComponentsShow"
-            :style="{width:width1+'px !important',transition: 'width '+time+' linear',backgroundColor:'#fff',height: '100%'}"
+            :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%'}"
             class="m-asideright"
             :menuList="menuListChild"
+            @changeIndex="changeIndex"
         ></LeftNavComponents>
     </div>
 </template>
@@ -42,6 +43,8 @@ import { mapGetters } from "vuex";
 export default {
     data() {
         return {
+            flag:0,
+            active: 0,
             flag: 0,
             width: 50,
             width1: 0,
@@ -58,6 +61,7 @@ export default {
     methods: {
         changeCurHoverItem(i) {
             this.curIndex = i;
+            this.flag =i
         },
         itemhandlerLeave() {
             //this.curIndex = 0;
@@ -68,6 +72,7 @@ export default {
             if (!item.path) {
                 return;
             }
+            this.active = this.curIndex = i;
             this.$router.push(item.path);
         },
         collapseOpen(width, time) {
@@ -79,6 +84,11 @@ export default {
             this.width = 50;
             this.width1 = 0;
             this.time = "0s";
+            this.curIndex = -1;
+        },
+        changeIndex(index){
+           
+            this.active  = this.flag
         }
     },
     computed: {
@@ -132,7 +142,13 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 手写菜单
-
+.menu-bg {
+    background: #e5f8fa;
+    color: #00c1de;
+}
+.menu-color{
+     color: #00c1de;
+}
 .left-menu {
     height: 100%;
     border-right: solid 1px #e6e6e6;
@@ -142,17 +158,15 @@ export default {
         padding: 0 20px;
         line-height: 40px;
         white-space: nowrap;
-        .menu-bg{
-            background: #E5F8FA
-        }
-        &:hover {
-            background: #e5f8fa;
-            color: #00c1de;
-        }
-         &:active {
-            background: #e5f8fa;
-            color: #00c1de;
-        }
+
+        // &:hover {
+        //     background: #E5F8FA;
+        //     color: #00c1de;
+        // }
+        //  &:active {
+
+        //     color: #00c1de;
+        // }
         .menu-item-content {
             margin-left: 20px;
         }

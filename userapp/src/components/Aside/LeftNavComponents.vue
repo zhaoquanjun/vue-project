@@ -1,7 +1,7 @@
 <template>
   <el-aside>
     <el-menu :default-active="$route.path" class="el-menu-vertical-demo" >
-      <el-menu-item v-for="(item,index) in menuList.children" :key="index" :index="item.menuUrl.split('/')[1]" @click="handlerRoute(item)">
+      <el-menu-item v-for="(item,index) in menuList.children" :key="index" :index="item.menuUrl.split('/')[1]" @click.native="handlerRoute(item,index)">
         <span>{{item.name}}</span>
       </el-menu-item>
     </el-menu>
@@ -17,10 +17,13 @@ export default {
     }
   },
   methods: {
-    handlerRoute(item){
-       let [a,b]= item.menuUrl.split('/')
+    handlerRoute(item,index){
+     
+       let [a,b]= item.menuUrl.split('/');
+        this.$emit("changeIndex",3)
       if(this.curWebsite == a){
-           this.$router.push(item.path)
+           this.$router.push(item.path);
+         
       }else{
         window.location.href ='//'+ item.menuUrl
       }
