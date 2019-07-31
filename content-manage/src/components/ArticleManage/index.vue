@@ -5,8 +5,6 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>文章分类</span>
             </h4>
-            <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
-            <!--  @getList="getArticleListAsync" -->
             <m-tree
                 :treeResult="treeResult"
                 :articleSearchOptions="articleSearchOptions"

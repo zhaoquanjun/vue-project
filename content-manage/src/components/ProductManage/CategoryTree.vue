@@ -158,7 +158,9 @@ export default {
                 }
                 case "before":
                 case "after": {
-                    targetNode.parentId ? targetNode.parentId : 0;
+                    draggingNode.parentId = targetNode.parentId
+                        ? targetNode.parentId
+                        : 0;
                     break;
                 }
                 case "none":

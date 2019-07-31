@@ -12,7 +12,7 @@
             <template slot="empty">
                 <div class="empty-table">
                     <img src="~img/memberManage/table-empty.png" />
-                    <span>无搜索结果</span>
+                    <span>暂无数据</span>
                 </div>
             </template>
             <el-table-column prop="domain" label="域名"></el-table-column>
@@ -218,6 +218,7 @@ export default {
         //一键解析域名
         resolveCdnByAliYunToken(row) {
             let params = {
+                siteId: row.siteId,
                 resolveType: row.cdnDomainResolveType,
                 domain: row.domain,
                 resolveValue: row.cdnDomainResolveValue,

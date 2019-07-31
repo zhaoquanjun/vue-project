@@ -5,8 +5,6 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>产品分类</span>
             </h4>
-            <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
-            <!--   @getProList="getArticleList" -->
             <category-tree
                 :tree-result="treeResult"
                 :product-search-options="productSearchOptions"

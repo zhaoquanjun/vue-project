@@ -7,7 +7,7 @@
                     <div class="item-title">{{item.appName}}</div>
                     <div class="item-icon"></div>
                     <span class="item-content">{{item.appDescription}}</span>
-                    <div class="item-btn">查看详情</div>
+                    <div class="item-btn" @click="open(item.appUrl)">查看详情</div>
                 </div>
             </el-col>
         </el-row>
@@ -26,7 +26,9 @@ export default {
 
     },
     methods:{
-
+        open(url) {
+            window.open(url)
+        }
     }
 };
 </script>
@@ -99,6 +101,7 @@ export default {
                     position: absolute;
                     bottom: 32px;
                     left: 0px;
+                    cursor:pointer;
                 }
             }
         }

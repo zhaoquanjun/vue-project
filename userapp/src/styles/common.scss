@@ -77,3 +77,14 @@ button{
         color: rgba(0, 193, 222, 1);
     }
 }
+// 暂无数据
+.empty-table {
+    img {
+        width: 54px;
+        vertical-align: middle;
+        padding: 18px 28px;
+    }
+    span {
+        color: #8c8c8c;
+    }
+}

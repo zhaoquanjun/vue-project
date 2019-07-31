@@ -9,6 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "core-js": "^2.6.5",
     "element-ui": "^2.8.2",
     "js-base64": "^2.5.1",

@@ -5,8 +5,7 @@
                 <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
-            <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
-            <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
+
             <m-tree
                 :tree-result="treeResult"
                 :pic-search-options="picSearchOptions"
