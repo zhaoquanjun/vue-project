@@ -4,7 +4,6 @@ import store from "@/store/index";
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
 console.log(designerManageApi)
 const siteId = store.state.dashboard.siteId;
-
 /**
  * 获取域名列表
  */
@@ -41,7 +40,7 @@ export const resolveCdnByAliYunToken = (params) => {
         "resolveValue": "string",
         "isForceUpdate": true
     }
-    return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/ResolveCdnByAliYunToken`, params);
+    return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/ResolveCdnByAliYunToken/${siteId}`, params);
 }
 
 

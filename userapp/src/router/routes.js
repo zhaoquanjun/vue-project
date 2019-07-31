@@ -48,6 +48,15 @@ export const defaultRoutes = [
     },
     children: [
       {
+        path: "selectTemplate",
+        name: "selectTemplate",
+        component: () => import("@/views/website-manage/selectTemplate.vue"),
+        meta: {
+          title: "选择模版",
+          isSub:true
+        }
+      },
+      {
         path: "backup",
         name: "backup",
         component: () => import("@/views/website-manage/websiteBackup.vue"),

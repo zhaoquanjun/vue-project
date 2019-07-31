@@ -2,7 +2,7 @@
     <div>
         <el-card class="box-card">
             <div slot="header">
-                <span class="article-cover">产品封面</span>
+                <span class="article-cover">产品图片</span>
             </div>
             <div>
                 <el-upload
@@ -17,8 +17,8 @@
                     :on-remove="handleRemove"
                     :multiple="true"
                 >
-                    <!-- <img v-if="imageUrl1" :src="imageUrl1" class="avatar"> -->
-                    <template >
+                   <!-- <div v-for="(item,index) in fileList1" :key="index"><img :src="item.response" alt=""></div> -->
+                    <template>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;font-size:12px">添加图片</i>
                     </template>
@@ -46,7 +46,7 @@ export default {
             activeName: "",
             uploadDisabled: true,
             fileList1: [],
-            fileList2:[],
+            fileList2: [],
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
             headers: {
@@ -59,17 +59,37 @@ export default {
     },
     watch: {
         fileList() {
-            console.log(this.fileList, "0000");
             this.fileList1 = this.fileList;
+            this.$nextTick(() => {
+                if (this.fileList1.length >= 9) {
+                    document.querySelector(".el-upload").style.display = "none";
+                }
+            });
+        },
+        fileList2() {
+            this.$nextTick(() => {
+                if (this.fileList2.length >= 9) {
+                    document.querySelector(".el-upload").style.display = "none";
+                }
+            });
         }
     },
-     mounted(){
-         this.headers.appId = this.$store.state.dashboard.appid;
+    mounted() {
+        this.headers.appId = this.$store.state.dashboard.appid;
     },
     methods: {
         handleSucess(response, file, fileList) {},
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            this.fileList1 = this.fileList1.filter((item)=>{
+                if(item.status=="success"){
+                    return item.response != file.response
+                }
+            })
+             this.fileList2=this.fileList2.filter((item)=>{
+                if(item.status!="success"){
+                    return item.response != file.response
+                }
+            })
         },
         handlePreview(file) {
             console.log(file);
@@ -77,13 +97,12 @@ export default {
 
         ///////
         handleAvatarSuccess(res, file) {
-             let fileList ={
-                    name:file.name,
-                    response:file.response,
-                    url:file.response
-                }
-             this.fileList2.push(fileList);
-            
+            let fileList = {
+                name: file.name,
+                response: file.response,
+                url: file.response
+            };
+            this.fileList2.push(fileList);
         },
         beforeAvatarUpload(file, fileList) {
             this.headers.Authorization =

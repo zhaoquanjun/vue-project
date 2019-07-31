@@ -56,7 +56,7 @@
                        :class="[{'handle-upload-disabled':uploadDisabled}]"
                        style="float:right"
                        size="small"
-                       @click="submitUpload">{{isUploading?"上传中":"开始上传"}}</el-button>
+                       @click="submitUpload">{{isUploading?"上传中…":"开始上传"}}</el-button>
         </el-row>
         <!-- 图片上传组件 end-->
         <!-- 图片预览 begin -->
@@ -109,42 +109,20 @@ export default {
         // 选择图片时触发
         handleChange(file, fileList) {
             console.log(fileList);
-            this.uploadDisabled = false;
+            
 
-            fileList.forEach((item, index) => {
-                const isSizeOk = imgSize(file.size);
-                const isPic = isImgFile(item.raw.type);
-                if (!isPic) {
+           fileList.filter((item,index)=>{
+                if(!imgSize(item.size,10)){
                     fileList.splice(index, 1);
                 };
                 if(!isImgFile(item.raw.type)){
                     fileList.splice(index, 1);
                 };
+                  if(imgSize(item.size,10) && isImgFile(item.raw.type)){
+                this.uploadDisabled = false;
+            }
             })
-            // fileList.forEach((item, index) => {
-            //     const isSizeOk = imgSize(file.size,10);
-            //     const isPic = isImgFile(item.raw.type);
-            //     console.log(isPic,'isPicisPic')
-            //     console.log(index,'iiiiiiii')
-            //     console.log(isSizeOk,'isSizeOkisSizeOk')
-            //     console.log(item.raw.type,'item.raw.typeitem.raw.type')
-            //     if (!isPic) {
-            //         fileList.splice(index, 1);
-            //     } else if (!isSizeOk) {
-            //         fileList.splice(index, 1);
-            //         index--;
-            //     }
-            // });
-            // console.log(file,'filefile')
-            // console.log(fileList.length)
-            // fileList = fileList.filter((item, index) => {
-            //      const isSizeOk = imgSize(file.size,10);
-            //        if(isSizeOk){
-            //            return true
-            //        }else{
-            //            return false
-            //        }
-            // });
+          
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
@@ -161,13 +139,14 @@ export default {
                     message: `成功上传${fileList.length}图片`,
                     duration: 1000
                 });
-                this.isUploading = false;
+               
                 setTimeout(() => {
                     this.$emit("switchUploadBoxShowStatus", "uploadImg");
-
-
+                     this.uploadDisabled = true;
+                     this.isUploading = false;
                     // this.$emit("getTree");
                     this.$refs.upload.clearFiles();
+
                 }, 500);
             }
         },

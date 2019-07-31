@@ -1,6 +1,6 @@
 
 .aside-tree{
-    height: calc(100% - 60px);
+    // height: calc(100% - 60px);
     .custom-tree-node {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -55,7 +55,7 @@
         right: 5px;
         padding: 0 5px;
         z-index: 10;
-        background: #fff;
+        // background: #fff;
     }
     .cancel .svg-icon{
         width: 12px;

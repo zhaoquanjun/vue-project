@@ -11,21 +11,27 @@
 </template>
 <script>
 export default {
-    props:["treeResult"],
-     methods: {
-      getCheckedNodes() {
-        return this.$refs.tree.getCheckedNodes();
+    props: ["treeResult"],
+    mounted(){
+     
+    },
+    methods: {
+       setCheckedKeys() {
+        this.$refs.tree.setCheckedKeys([34]);
       },
-      resetChecked() {
-        this.$refs.tree.setCheckedKeys([]);
-      }
-     }
-}
+        getCheckedNodes() {
+            return this.$refs.tree.getCheckedNodes();
+        },
+        resetChecked() {
+            this.$refs.tree.setCheckedKeys([]);
+        }
+    }
+};
 </script>
 <style scoped>
-.el-tree  {
-      max-height: 65vh;
-     overflow-y: auto;
+.el-tree {
+    max-height: 65vh;
+    overflow-y: auto;
 }
 </style>
 

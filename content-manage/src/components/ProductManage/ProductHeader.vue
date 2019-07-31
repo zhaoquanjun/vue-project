@@ -194,13 +194,12 @@ export default {
             this.getArticleList();
         },
         changeStickStatus(value) {
-            console.log(value, "nullnullnull");
-            if (!isNaN(value)) {
-                value = !!value;
-            } else {
+            if (isNaN(parseInt(value))) {
                 value = null;
+            } else {
+               value = !!value;
             }
-            this.articleSearchOptions.isOnSell = value;
+            this.articleSearchOptions.isTop = value;
             this.getArticleList();
         },
         switchIsDesc(flag) {

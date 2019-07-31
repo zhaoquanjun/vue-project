@@ -2,8 +2,8 @@
     <div class="content-num-section">
         <p class="section-title">内容管理</p>
         <el-row class="content" :gutter="16">
-            <el-col class="item" :span="6" v-for="(it, idx) in content" :key="idx">
-                <div class="item-box">
+            <el-col class="item" :span="6" v-for="(it, idx) in content" :key="idx" >
+                <div class="item-box" @click="go(it.url)">
                     <div class="item-l">
                         <span :class="contentIcon(it)"></span>
                         <span>{{ it.name }}</span>
@@ -29,13 +29,16 @@ export default {
     },
     created() {
         this.content = [
-            { name: "文章", num: this.contentNumber.newsCount, type: "/篇" },
-            { name: "产品", num: this.contentNumber.productsCount, type: "/个" },
-            { name: "图片", num: this.contentNumber.picturesCount, type: "/个" },
-            { name: "文件", num: this.contentNumber.filesCount, type: "/件" }
+            { name: "文章", num: this.contentNumber.newsCount, type: "/篇", url: "http://content.console.wezhan.cn/content/news" },
+            { name: "产品", num: this.contentNumber.productsCount, type: "/个", url: "http://content.console.wezhan.cn/content/product" },
+            { name: "图片", num: this.contentNumber.picturesCount, type: "/张", url: "http://content.console.wezhan.cn/content/picture" },
+            { name: "文件", num: this.contentNumber.filesCount, type: "/个", url: "http://content.console.wezhan.cn/content/file" }
         ];
     },
     methods:{
+        go(url) {
+            window.location.href = url;
+        },
       contentIcon(item){
         switch (item.name){
           case "文章":
@@ -83,6 +86,7 @@ export default {
                 align-items: center;
                 padding: 0 16px;
                 background:rgba(251,251,251,1);
+                cursor:pointer;
                 span {
                     display: block;
                 }

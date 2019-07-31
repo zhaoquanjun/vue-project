@@ -18,7 +18,8 @@
                 @getList="getArticleListAsync"
             ></m-tree>
         </el-aside>
-        <el-main>
+        <el-main style="height: calc(100vh - 50px);
+    overflow-y: auto;">
             <content-header
                 :count="count"
                 :is-batch-header-show="isBatchHeaderShow"
@@ -66,6 +67,7 @@
                     </div>
                     <SelectTree
                         :categoryName="curArticleInfo.categoryName"
+                        :categoryId="curArticleInfo.categoryId"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
                     />
@@ -155,9 +157,11 @@ export default {
                 (options = this.articleSearchOptions)
             );
             this.articlePageResult = data;
-            this.articlePageResult.list.forEach( (item, index) => {
-                item.createTimePrt = this.articlePageResult.list[index].createTimePrt.split(" ")[0]
-            } )
+            this.articlePageResult.list.forEach((item, index) => {
+                item.createTimePrt = this.articlePageResult.list[
+                    index
+                ].createTimePrt.split(" ")[0];
+            });
         },
         // 批量删除
         async batchRemoveNews(idlist) {
@@ -283,7 +287,7 @@ export default {
         },
         //选择移动分类时的节点
         chooseNode(node) {
-            console.log(node);
+            console.log(node, "nnnnnnnnnn");
             this.moveToClassiFy = node;
         },
         // 点击左侧分类树菜单时的节点
@@ -310,16 +314,21 @@ export default {
         },
         // 点击确定按钮 更新文章所属分类
         async updateCategoryArticle() {
-            if (!this.moveToClassiFy) {
-                this.$message({
-                    type: "error",
-                    message: "请选择移动的分类!"
-                });
-                return;
+            // if (!this.moveToClassiFy) {
+            //     this.$message({
+            //         type: "error",
+            //         message: "请选择移动的分类!"
+            //     });
+            //     return;
+            // }
+            console.log(this.moveToClassiFy,'moveToClassiFymoveToClassiFy');
+            let cateId;
+            if (this.moveToClassiFy) {
+                cateId = this.moveToClassiFy.id;
+            }else{
+                 cateId = this.curArticleInfo.categoryId;
             }
-
-            let cateId = this.moveToClassiFy.id;
-                
+            
             let { data, status } = await articleManageApi.batchMove(
                 cateId,
                 this.newsIdList
@@ -447,8 +456,8 @@ export default {
                 this.$router.push({
                     path: "/news/create",
                     query: {
-                        categoryName: this.selectCategory.label,
-                        categoryId: this.selectCategory.id
+                        categoryName: this.selectCategory.label || "全部分类",
+                        categoryId: this.selectCategory.id || 0
                     }
                 });
             }

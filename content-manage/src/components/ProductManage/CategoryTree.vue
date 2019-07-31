@@ -40,27 +40,6 @@
                 >
                     <svg-icon icon-class="tree-handler"></svg-icon>
                 </span>
-                <div class="tree-handle" v-show="node.data.id === curId">
-                    <button
-                        v-if="node.data.level <3"
-                        type="text"
-                        size="mini"
-                        @click.stop=" create($event,node,data)"
-                    >添加子分类</button>
-                    <button
-                        v-if="node.data.level>0"
-                        type="text"
-                        size="mini"
-                        @click.stop="rename($event,node,data)"
-                    >编辑分类</button>
-
-                    <button
-                        v-if="node.data.level>0"
-                        type="text"
-                        size="mini"
-                        @click.stop="batchRemove( node,data)"
-                    >删除分类</button>
-                </div>
             </div>
         </el-tree>
         <div class="category-name-pic" ref="operateSection">
@@ -69,6 +48,17 @@
                 @createCategory="createCategory"
                 @closeUploadCategoryPic="closeUploadCategoryPic"
             />
+        </div>
+        <div @click="handleCategory1" class="tree-handle" ref="operateSection1">
+            <button v-if="curClickNode.data.level <3" type="text" size="mini" @click="create">添加子分类</button>
+            <button v-if="curClickNode.data.level>0" type="text" size="mini" @click="rename">修改名称</button>
+
+            <button
+                v-if="curClickNode.data.level>0"
+                type="text"
+                size="mini"
+                @click="batchRemove"
+            >删除分类</button>
         </div>
     </div>
 </template>
@@ -92,10 +82,12 @@ export default {
             renameData: "",
             createCategoryData: "", // 当前点击的创建分类节点
             isAdd: false, // true 添加 false编辑
-            modifyCategoryData: {} // 编辑分类需要传当前节点的名称和imgurl
+            modifyCategoryData: {}, // 编辑分类需要传当前节点的名称和imgurl,
+
+            curClickNode: { data: { level: "" } }
         };
     },
-      mounted() {
+    mounted() {
         // document.addEventListener("click", () => {
         //     this.$nextTick(() => {
         //         if (this.$refs.operateSection)
@@ -105,6 +97,7 @@ export default {
     },
     methods: {
         createCategory(displayName, thumbnailPicUrl) {
+
             if (this.isAdd) {
                 this.$emit("create", {
                     DisplayName: displayName,
@@ -165,7 +158,9 @@ export default {
                 }
                 case "before":
                 case "after": {
-                    targetNode.parentId ? targetNode.parentId : 0;
+                    draggingNode.parentId = targetNode.parentId
+                        ? targetNode.parentId
+                        : 0;
                     break;
                 }
                 case "none":
@@ -198,7 +193,6 @@ export default {
         },
         // 添加分类  0720
         create(ev, node, data) {
-           
             this.modifyCategoryData = ""; //创建新分类 不需传
             this._handleShowMoreOperate(ev, node, data);
             this.isAdd = true;
@@ -224,7 +218,7 @@ export default {
         // 编辑分类 0720
         rename(ev, node, data) {
             this.isAdd = false;
-            this.modifyCategoryData = data;
+            this.modifyCategoryData =  this.curClickData;
             this._handleShowMoreOperate(ev, node, data);
         },
         modifyNode(id, parentId, idOrderByArr) {
@@ -232,7 +226,8 @@ export default {
         },
         // 描述： 删除分类
         batchRemove(node, data) {
-            console.log(data, "remove-----");
+          
+            data = this.curClickData
             this.$emit("batchRemove", this.getAllNodeIds(data));
         },
         // 点击节点的时候
@@ -240,7 +235,7 @@ export default {
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
 
-           if (data.level === 0) {
+            if (data.level === 0) {
                 this.setCss(allCategoryEle, {
                     background: "#f7f7f7",
                     color: "#00C1DE",
@@ -254,9 +249,10 @@ export default {
                 });
             }
             this.closeUploadCategoryPic();
-              this.productSearchOptions.categoryIdList = this.getAllNodeIds(data);
-            this.$emit("getProList")
-            this.$emit("chooseCategoryNode",data)
+             this.closeUploadCategoryPic1();
+            this.productSearchOptions.categoryIdList = this.getAllNodeIds(data);
+            this.$emit("getProList");
+            this.$emit("chooseCategoryNode", data);
         },
         // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {
@@ -264,27 +260,56 @@ export default {
                 obj.style[attr] = css[attr];
             }
         },
-        // 操作按钮出现
-        handleShow(ev, node, val) {
-            console.log(node)
-            node.checked = true;
-            this.curId = node.data.id;
+        // 操作按钮出现 || 消失
+        handleShow(ev, node, data) {
+            console.log(node);
+            if (this.curId === node.data.id) {
+                node.checked = false;
+                this.curId = 1;
+            } else {
+                node.checked = true;
+                this.curId = node.data.id;
+            }
+            this.curClickData = data;
+            this.curClickNode = node;
+            this._handleShowMoreOperate1(ev, node);
         },
-
+        // 分类上传图片
         _handleShowMoreOperate(ev, node, data) {
-            this.createCategoryData = data;
+            console.log(this.curClickNode)
+            this.createCategoryData = this.curClickData;
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
             this.$refs.operateSection.style.display = "block";
+        },
+
+        // 新增 0730  关闭分类操作菜单
+        closeUploadCategoryPic1() {
+            this.$refs.operateSection1.style.display = "none";
+        },
+        handleCategory1() {
+            this.closeUploadCategoryPic1();
+        },
+        // 新增0730   分类操作菜单显示
+        _handleShowMoreOperate1(ev, row) {
+            this.$refs.operateSection1.style.left =
+                ev.pageX - ev.offsetX + 16 + "px";
+            this.$refs.operateSection1.style.top =
+                ev.pageY - ev.offsetY - 50 + "px";
+            if (this.$refs.operateSection1.style.display === "block") {
+                this.$refs.operateSection1.style.display = "none";
+            } else {
+                this.$refs.operateSection1.style.display = "block";
+            }
         }
     }
 };
 </script>
 <style>
-#content-manage .el-aside {
-      overflow: visible !important;
-    }
+/* #content-manage .el-aside {
+    overflow: visible !important;
+} */
 </style>
 
 <style lang="scss" scoped>

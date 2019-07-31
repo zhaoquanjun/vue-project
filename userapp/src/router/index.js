@@ -13,24 +13,26 @@ const router = new VueRouter({
   routes: defaultRoutes
 });
 export default router;
-
+let accessToken = store.state.user.accessToken.Authorization;
+console.log(accessToken,'accessTokenaccessToken')
 router.beforeEach(async (to, from, next) => {
   if (!to.meta.requiresAuth) {
     store.dispatch('_getMenuListData')
     next()
     return
   }
-  if (getLocal("token")) {
+
+  if (accessToken) {
     if (!Cookies.get('AppId')) {
       await store.dispatch('_updateAppIdAndSiteIdToCookie')
     }
-   
     let r = await store.dispatch('getCurRouteAuth', to.path);
     if (r) {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
-      next()
+      next();
+      
     } else {
       next('/404')
     }

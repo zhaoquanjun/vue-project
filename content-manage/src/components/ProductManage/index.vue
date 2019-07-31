@@ -18,7 +18,8 @@
                 @chooseCategoryNode="chooseCategoryNode"
             ></category-tree>
         </el-aside>
-        <el-main>
+        <el-main style="height: calc(100vh - 50px);
+    overflow-y: auto;">
             <content-header
                 :count="count"
                 :article-search-options="productSearchOptions"
@@ -48,7 +49,9 @@
                     width="0"
                     style="z-index:10"
                     :close-on-click-modal="false"
+                    :modal-append-to-body="false"
                     :show-close="false"
+                    :append-to-body="true"
                     :visible.sync="isInvitationPanelShow"
                 ></el-dialog>
                 <right-pannel
@@ -124,7 +127,8 @@ export default {
                 keyword: "", //1
                 isDelete: false, //1
                 isOnSell: null, //is 上架
-                categoryIdList: [] //1,
+                categoryIdList: [], //1,
+                isTop: null
             }
         };
     },
@@ -149,9 +153,11 @@ export default {
                 (options = this.productSearchOptions)
             );
             this.articlePageResult = data;
-            this.articlePageResult.list.forEach( (item, index) => {
-                item.createTimeStr = this.articlePageResult.list[index].createTimeStr.split(" ")[0]
-            } )
+            this.articlePageResult.list.forEach((item, index) => {
+                item.createTimeStr = this.articlePageResult.list[
+                    index
+                ].createTimeStr.split(" ")[0];
+            });
         },
         //z 批量删除 批量置顶 批量上下线
         async batchSwitchStatus(options) {
@@ -406,15 +412,14 @@ export default {
                     path: "/product/create"
                 });
             } else {
-                 this.$router.push({
-                path: "/product/create",
-                query: {
-                    categoryName: this.selectCategory.label || "全部分类",
-                    categoryId: this.selectCategory.id || 0
-                }
-            });
+                this.$router.push({
+                    path: "/product/create",
+                    query: {
+                        categoryName: this.selectCategory.label || "全部分类",
+                        categoryId: this.selectCategory.id || 0
+                    }
+                });
             }
-           
         },
         handleEditArticle(row) {
             console.log(row);

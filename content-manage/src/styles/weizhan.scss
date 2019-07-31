@@ -1,5 +1,5 @@
 #content-manage {
-    padding-bottom: 30px;
+    //padding-bottom: 30px;
     
     .el-aside {
       //  overflow: visible !important;
@@ -9,15 +9,16 @@
         // height: 100vh;
         background: #fff;
         margin: 0 0 0 13px;
+         height: calc(100vh - 50px);
     }
     .el-dialog__body {
         padding-top: 0;
         padding-bottom: 38px;
     }
-    .tree-aside {
-        height: auto;
+   
+    .content-table-wrap{
+        height: calc(100vh - 50px);
     }
-    
 
 
     .pannle-footer {
@@ -149,5 +150,14 @@
         background: rgba(238, 238, 238, 1);
     }
 }
-
-// 图片选择弹窗 
+// table 无内容时的样式
+.empty-table {
+    img {
+        width: 54px;
+        vertical-align: middle;
+        padding: 18px 28px;
+    }
+    span {
+        color: #8c8c8c;
+    }
+}

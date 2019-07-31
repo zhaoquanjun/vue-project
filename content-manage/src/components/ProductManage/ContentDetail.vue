@@ -6,14 +6,14 @@
                 <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item  :to="{ path:'/content/product' }">内容管理</el-breadcrumb-item>
                 <el-breadcrumb-item  :to="{ path:'/content/product' }">产品管理</el-breadcrumb-item>
-                <el-breadcrumb-item >新增产品</el-breadcrumb-item>
+                <el-breadcrumb-item >{{isEditor==1?'编辑产品':'新增产品'}}</el-breadcrumb-item>
             </el-breadcrumb>
            </div>
         </header>
         <el-container class="article-container" style>
             <el-header>
                 <el-row class="article-head">
-                    <el-col :span="13" :offset="3" style=" font-size: 22px;">新增产品</el-col>
+                    <el-col :span="13" :offset="3" style=" font-size: 22px;">{{isEditor==1?'编辑产品':'新增产品'}}</el-col>
                     <el-col :span="6">
                         <div class="article-btn">
                             <button  @click="()=>$router.go(-1)">返回</button>
@@ -57,16 +57,24 @@ export default {
             detailData:{},
         }
     },
+
     components: {
         RightContent,
         leftContent
     },
+    created(){
+          console.log(this.$route.query);
+         console.log(this.$route.query.isEditor,'this.$route.query.isEditor')
+    },
     methods:{
       submitForm(){
-        let flieUrls = [...this.$refs.articleRight.fileList1,...this.$refs.articleRight.fileList2]    
+        let flieUrls = [...this.$refs.articleRight.fileList1,...this.$refs.articleRight.fileList2];
+       
         let fileList =flieUrls.map(item=>{
             return item.response
         });
+
+         console.log(fileList,'999999')
         // editArticle
         let isEditor = this.$route.query.isEditor;
         if(!!isEditor){
@@ -92,6 +100,12 @@ export default {
         var id = this.$route.query.id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
+        }
+    },
+    computed:{
+        isEditor(){
+            console.log(this.$route.query.isEditor,'this.$route.query.isEditor')
+            return this.$route.query.isEditor
         }
     }
 };

@@ -394,6 +394,7 @@ export default {
         };
     },
     created() {
+         this.detailData.productCategoryList =[{id:this.$route.query.categoryId||0}] ;
         console.log(this.$route.query);
         var id = this.$route.query.id;
         this.curProduct = id;
@@ -433,8 +434,10 @@ export default {
                 }
             }
         };
+       
     },
     methods: {
+        
         textIndent(ele, width) {
             this.$nextTick(() => {
                 ele.style.textIndent = width + "px";
@@ -482,6 +485,7 @@ export default {
         },
         // 新建保存
         submitForm(formName, fileList) {
+            console.log(fileList,'--------===========')
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
@@ -507,11 +511,12 @@ export default {
                     message: "添加成功!"
                 });
                 // this.$router.push(`/product/create?id=${data}`);
-                this.$router.push(`/content/product`);
+                this.$router.go(-1);
             }
         },
         // 编辑提交
-        editArticle(formName) {
+        editArticle(formName,fileList) {
+              this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle();
@@ -543,7 +548,7 @@ export default {
             console.log(data, "datadatadata");
             var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
-                this.categoryName = categoryName;
+                this.categoryName.push(categoryName) ;
             }
         },
         chooseNode(data) {

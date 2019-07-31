@@ -1,5 +1,5 @@
 <template>
-    <div id="asideTree" class="aside-tree">
+    <div id="asideTree" class="aside-tree" >
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -154,9 +154,10 @@ export default {
             } else if (data.label != "") {
                 console.log("rename");
                 this.$emit("rename", data.id, data.label);
-            }
-            this.isNewAdd = isNewAdd;
+                 this.isNewAdd = isNewAdd;
             this.renameShowId = this.curId = null;
+            }
+           
         },
         //
         cancelhadnleTreeInput(data, node) {
@@ -240,7 +241,7 @@ export default {
                 this.curClickData.children.unshift(newChild);
             }
             this.curId = null;
-            this.newAddData = data;
+            this.newAddData = this.curClickData;
         },
         getAllNodeIds(node, isChildNode) {
             var idList = isChildNode ? [] : [node.id];
@@ -347,8 +348,13 @@ export default {
         _handleShowMoreOperate(ev, row) {
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY -50 + "px";
+            if(this.$refs.operateSection.style.display==="block"){
+                this.$refs.operateSection.style.display = "none";
+            }else{
             this.$refs.operateSection.style.display = "block";
+            }
+           
         },
         // 新增 0722  关闭分类操作菜单
         closeUploadCategoryPic() {
@@ -366,4 +372,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";
+.tree-handle {
+        display: none;
+}
 </style>
