@@ -134,6 +134,7 @@ export default {
          */
         async _resolveCdnByAliYunToken(
             params = {
+                siteId: this.siteInfo.id,
                 resolveType: "",
                 domain: this.domainValue,
                 resolveValue: "",
