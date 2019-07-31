@@ -24,3 +24,21 @@ export const getVersions = () => {
 export const getRecommends = () => {
     return ajaxRequest.get(`/api/appInfo/GetRecommends`);
 }
+/**
+ * 获取app列表
+ */
+export const getApplicationsByUserId = () => {
+    return ajaxRequest.get(`/api/appInfo/GetApplicationsByUserId`);
+}
+/**
+ * 切换app记录appId
+ */
+export const updateUserLastAppIdAndCookie = (appId) => {
+    return ajaxRequest.put(`/api/userInfo/UpdateUserLastAppIdAndCookie`, appId);
+}
+/**
+ * 切换site记录siteId
+ */
+export const updateUserLastSiteIdAndCookie = (siteId) => {
+    return ajaxRequest.put(`/api/userInfo/UpdateUserLastSiteIdAndCookie`, siteId);
+}
