@@ -398,6 +398,12 @@ export default {
     }
 };
 </script>
+<style>
+.v-modal{
+    z-index: 1000 !important;
+}
+</style>
+
 <style scoped>
 .el-input /deep/ .el-input__inner {
     padding-right: 60px;
@@ -408,9 +414,7 @@ export default {
 .el-dialog__wrapper{
     z-index: 1000 !important;
 }
-.v-modal{
-    z-index: 1000 !important;
-}
+
 </style>
 
 <style lang="scss" scoped>
