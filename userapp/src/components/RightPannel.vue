@@ -28,11 +28,6 @@ export default {
             default: "534"
         }
     },
-    data() {
-        return {
-            aa: 123
-        };
-    },
     methods: {
         closePanel() {
             this.$store.commit("CLOSERIGHTPANNEL", false);
@@ -49,12 +44,12 @@ export default {
 .right-pannel {
     background: #ffffff;
     position: fixed;
-    z-index: 2200;
+    z-index: 1500;
     right: 0;
     top: 0;
     bottom: 0;
     box-shadow: 0 0 3px #ccc;
-    transition: width 0.2s linear;
+    transition: width 0.1s linear;
     color: #262626;
     overflow: hidden;
     .pannel-head {
