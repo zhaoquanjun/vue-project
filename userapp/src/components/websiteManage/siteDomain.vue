@@ -42,6 +42,7 @@
             <BindDomain
                 :domain-amount="domainAmount"
                 @closeDialog="closeDialog"
+                @getCdnDomainList="_getCdnDomainList"
                 @resolveCdnByAliYunToken="_resolveCdnByAliYunToken"
             ></BindDomain>
         </el-dialog>
@@ -91,7 +92,8 @@ export default {
             // recovery: false,
             remarkInfo: "",
             domainAmount: 0,
-            siteInfo: {}
+            siteInfo: {},
+            resolveDomainData:""
         };
     },
     created() {
@@ -102,7 +104,6 @@ export default {
     mounted() {
         this._getCdnDomainList();
         this.getSiteInfo();
-        this._removeAliYunToken();
     },
     methods: {
         async _removeAliYunToken() {
@@ -136,13 +137,13 @@ export default {
         /**
          * 解析域名
          */
-        async _resolveCdnByAliYunToken(id) {
+        async _resolveCdnByAliYunToken(opt) {
+            this.resolveDomainData = opt;
             let params = {
+                id: opt.id,
                 siteId: this.$store.state.dashboard.siteId,
-                resolveType: "",
-                domain: this.domainValue,
-                resolveValue: "",
-                isForceUpdate: false
+                isForceUpdate: opt.isForceUpdate,
+
             };
             let { data } = await domainApi.resolveCdnByAliYunToken(params);
             if (!data.isSuccess && data.redirectUrl) {
@@ -157,12 +158,13 @@ export default {
             }
             if (data.isExistResolveCdnRecord) {
                 this.$confirm("提示", {
-                    // message: ,
+                    message: `${opt.curDomain}解析记录值已存在，是否覆盖？`,
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
                     callback: async action => {
                         if (action === "confirm") {
+                            this._resolveCdnByAliYunToken(this.resolveDomainData)
                         }
                     }
                 });
@@ -276,6 +278,7 @@ export default {
     .member-content {
         padding: 21px 14px;
     }
+
     .user-list {
         border-bottom: 1px solid #eee;
         padding-bottom: 10px;
@@ -294,6 +297,7 @@ export default {
         width: 17px;
         height: 16px;
     }
+
     .backup-btn {
         background: url("~img/siteManage/backup.png") no-repeat center;
         background-size: 100%;
@@ -302,6 +306,7 @@ export default {
             background-size: 100%;
         }
     }
+
     .download-btn {
         background: url("~img/siteManage/download.png") no-repeat center;
         background-size: 100%;
@@ -310,6 +315,7 @@ export default {
             background-size: 100%;
         }
     }
+
     .delete-btn {
         background: url("~img/siteManage/delete.png") no-repeat center;
         background-size: 100%;

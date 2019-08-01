@@ -219,11 +219,9 @@ export default {
         //一键解析域名
         resolveCdnByAliYunToken(row) {
             let params = {
-                siteId: row.siteId,
-                resolveType: row.cdnDomainResolveType,
-                domain: row.domain,
-                resolveValue: row.cdnDomainResolveValue,
-                isForceUpdate: false
+                id:row.id,
+                isForceUpdate: false,
+                curDomain:row.domain
             };
             this.$emit("resolveCdnByAliYunToken", params);
         },

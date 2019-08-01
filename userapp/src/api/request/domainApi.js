@@ -34,10 +34,8 @@ export const oneKeyEnableHttps = (siteDomainId) => {
  */
 export const resolveCdnByAliYunToken = (params) => {
     let option = {
+        "id":0,
         "siteId": 0,
-        "resolveType": "string",
-        "domain": "string",
-        "resolveValue": "string",
         "isForceUpdate": true
     }
     return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/ResolveCdnByAliYunToken/`, params);
