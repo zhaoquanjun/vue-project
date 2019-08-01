@@ -124,8 +124,10 @@ export default {
          * 获取域名列表
          */
         async _getCdnDomainList() {
+            
             let { data } = await domainApi.getCdnDomainList();
             this.domainListData = data;
+            console.log(this.domainListData,'this.domainListDatathis.domainListData')
             this.domainAmount = data.length;
         },
 
@@ -134,7 +136,7 @@ export default {
          */
         async _resolveCdnByAliYunToken(
             params = {
-                siteId: this.siteId,
+                siteId: this.$store.state.dashboard.siteId,
                 resolveType: "",
                 domain: this.domainValue,
                 resolveValue: "",

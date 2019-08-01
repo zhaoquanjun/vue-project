@@ -9,21 +9,23 @@
             </dt>
             <dd class="account-info">
                 <p class="user-name">
-                    <span v-if="flag">
+                    <span class="name" v-if="flag">
                         {{input!=''? input : '设置您的名字'}}
                         <i
                             @click="setName"
                             class="icon-size icon-editor"
                         ></i>
                     </span>
-                    <el-input
-                        @blur="blur"
-                        v-else
-                        maxlength="20"
-                        show-word-limit
-                        v-model="input"
-                        placeholder="请输入内容"
-                    ></el-input>
+                    <template v-else>
+                        <el-input
+                            maxlength="20"
+                            show-word-limit
+                            v-model="input"
+                            placeholder="请输入内容"
+                        ></el-input>
+                        <span @click="blur">保存</span>
+                        <span @click="cancelSetName">取消</span>
+                    </template>
                 </p>
                 <p class="create-time">
                     创建时间:
@@ -118,7 +120,6 @@
                         <button
                             class="bind"
                             :class="AlipayUser?'isbind':'notbind'"
-                            v-if="AlipayUser"
                         >{{AlipayUser?'已绑定':'未绑定'}}</button>|
                         <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button>
                         <button v-else @click="_bindingAlipay()">绑定</button>
@@ -126,7 +127,7 @@
                 </div>
             </li>
         </ul>
-        <right-pannel :style="{width:pannelWidth+'px'}">
+            <right-pannel :style="{width:pannelWidth+'px'}">
             <span slot="title-text">{{titText}}</span>
             <component
                 :is="curComponent"
@@ -145,11 +146,13 @@
         </right-pannel>
         <el-dialog
             width="0"
-            style="z-index:10"
             :close-on-click-modal="false"
             :show-close="false"
+          :append-to-body="false"
             :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
-        ></el-dialog>
+        >
+          
+        </el-dialog>
         <el-dialog
             title="提示"
             :visible.sync="alipayBindTip"
@@ -235,6 +238,7 @@ export default {
             let { data } = await getUserProfile();
             this.userInfo = data;
             this.input = data.displayName;
+            this.oldUserName = data.displayName;
             this.createTime = formatDateTime(
                 data.createTime,
                 "yyyy-MM-dd hh:mm:ss"
@@ -357,6 +361,7 @@ export default {
         setName() {
             this.flag = false;
         },
+        // 修改名称
         async blur() {
             this.flag = true;
             let { status } = await updateUserName(this.input);
@@ -371,6 +376,11 @@ export default {
                     message: "设置失败!"
                 });
             }
+        },
+        // 取消修改名称
+        cancelSetName(){
+            this.input = this.oldUserName;
+            this.flag = true
         },
         modifyAvatar() {
             this.curComponent = SetAvatar;
@@ -391,6 +401,15 @@ export default {
 <style scoped>
 .el-input /deep/ .el-input__inner {
     padding-right: 60px;
+}
+.el-input /deep/ .el-input__inner:focus{
+        border-color: #00C1DE;
+}
+.el-dialog__wrapper{
+    z-index: 1000 !important;
+}
+.v-modal{
+    z-index: 1000 !important;
 }
 </style>
 
@@ -443,6 +462,19 @@ export default {
                 line-height: 22px;
             }
             .user-name {
+                display: flex;
+                align-items: center;
+                .name {
+                    color: #262626;
+                    font-size: 14px;
+                    padding-left: 0;
+                }
+                > span {
+                    cursor: pointer;
+                    flex: none;
+                    color: #0070cc;
+                    padding-left: 16px;
+                }
                 .icon-editor {
                     background: url("~img/personal/editor.png") no-repeat center;
                     background-size: contain;
@@ -495,26 +527,16 @@ export default {
         .mobilePhone {
             .set-name {
                 &::before {
-                    background: url("~img/personal/wechat-icon.png") no-repeat
-                        center;
+                    background: url("~img/personal/phone.png") no-repeat center;
                     background-size: contain;
                 }
             }
         }
-        .email {
-            .set-name {
-                &::before {
-                    background: url("~img/personal/wechat-icon.png") no-repeat
-                        center;
-                    background-size: contain;
-                }
-            }
-        }
+
         .password {
             .set-name {
                 &::before {
-                    background: url("~img/personal/wechat-icon.png") no-repeat
-                        center;
+                    background: url("~img/personal/pwd.png") no-repeat center;
                     background-size: contain;
                 }
             }
@@ -522,8 +544,7 @@ export default {
         .wechat {
             .set-name {
                 &::before {
-                    background: url("~img/personal/wechat-icon.png") no-repeat
-                        center;
+                    background: url("~img/personal/wechat.png") no-repeat center;
                     background-size: contain;
                 }
             }
@@ -531,7 +552,7 @@ export default {
         .dingtalk {
             .set-name {
                 &::before {
-                    background: url("~img/personal/wechat-icon.png") no-repeat
+                    background: url("~img/personal/dingtalk.png") no-repeat
                         center;
                     background-size: contain;
                 }
@@ -540,8 +561,7 @@ export default {
         .alipay {
             .set-name {
                 &::before {
-                    background: url("~img/personal/wechat-icon.png") no-repeat
-                        center;
+                    background: url("~img/personal/alipay.png") no-repeat center;
                     background-size: contain;
                 }
             }
@@ -574,7 +594,8 @@ export default {
             .notbind {
                 color: #f54743;
                 &::before {
-                    background: url("~img/jian-icon.png") no-repeat center;
+                    background: url("~img/personal/wraning.png") no-repeat
+                        center;
                     background-size: contain;
                 }
             }
@@ -582,7 +603,7 @@ export default {
                 display: inline-block;
                 color: #35b24b;
                 &::before {
-                    background: url("~img/jian-icon.png") no-repeat center;
+                    background: url("~img/personal/sucess.png") no-repeat center;
                     background-size: contain;
                 }
             }

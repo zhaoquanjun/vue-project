@@ -104,14 +104,6 @@ export default {
                     { required: true, message: "请输入验证码", trigger: "blur" },
                    
                 ]
-                //verification: [
-                //    {
-                //        required: true,
-                //        message: "请输入验证码",
-                //        trigger: "blur"
-                //    },
-                //    { trigger: "blur" }
-                //]
             },
             checked: false,
             isPwd: true,
@@ -219,6 +211,7 @@ export default {
                 }
             }
         },
+        
         change(item) {
             this.value = item;
         },
@@ -248,11 +241,17 @@ export default {
             });
         },
         submitForm1(){
+            let result ;
              this.$refs.ruleForm.validate(async valid => {
                 if (valid) {
-
+                   result = true
+                    return true;
+                }else{
+                    result = false
+                    return false
                 }
              })
+             return result;
         }
     },
      computed:{

@@ -66,11 +66,9 @@ export default {
     methods: {
         async nextStep() {
             let code = this.$refs.getSms.ruleForm.verification;
-            if (code == null || code == "") {
-                this.$message({
-                    type: "failed",
-                    message: "请输入验证码!"
-                });
+           
+            if (!this.$refs.getSms.submitForm1()) {
+                return false
             } else {
                 let { status } = await isInvalidCode(this.sourcePhone, code);
                 if (status === 200) {
