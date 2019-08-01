@@ -219,8 +219,11 @@ export default {
     float: right;
     display: flex;
     align-items: center;
+
 }
 .head-middle {
+   margin-left: auto;
+   padding-right: 82px;
     .sort-icon {
         display: inline-block;
         width: 16px;
@@ -246,7 +249,6 @@ export default {
 .upload-wrap {
     border: none;
     font-size: 12px;
-    border-radius: 3px;
     margin-right: 25px;
     cursor: pointer;
     display: inline-block;

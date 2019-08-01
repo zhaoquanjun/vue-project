@@ -240,7 +240,6 @@ export default {
 .upload-wrap {
     border: none;
     font-size: 12px;
-    border-radius: 3px;
     margin-right: 25px;
     cursor: pointer;
     display: inline-block;

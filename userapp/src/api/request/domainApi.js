@@ -76,3 +76,4 @@ export const deleteCdnDomain = (siteDomainId) => {
     return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteDomainId}`);
 }
 
+// IsAliYunTokenSet

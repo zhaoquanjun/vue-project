@@ -27,6 +27,7 @@
                         v-if="(index == scope.$index)"
                         type="text"
                         size="small"
+                        ref="renameInput"
                         placeholder="请输入内容"
                         v-model="scope.row.title"
                         maxlength="30"
@@ -182,6 +183,9 @@ export default {
                 return;
             }
             this.index = index;
+           this.$nextTick(()=>[
+               this.$refs.renameInput.focus()
+           ])
             //this.$emit("rename", id, newName);
         },
         blurRename(id, newName) {},

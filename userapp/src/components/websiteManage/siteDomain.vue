@@ -124,10 +124,12 @@ export default {
          * 获取域名列表
          */
         async _getCdnDomainList() {
-            
             let { data } = await domainApi.getCdnDomainList();
             this.domainListData = data;
-            console.log(this.domainListData,'this.domainListDatathis.domainListData')
+            console.log(
+                this.domainListData,
+                "this.domainListDatathis.domainListData"
+            );
             this.domainAmount = data.length;
         },
 
@@ -135,13 +137,12 @@ export default {
          * 解析域名
          */
         async _resolveCdnByAliYunToken(id) {
-          
             let params = {
                 siteId: this.$store.state.dashboard.siteId,
                 resolveType: "",
                 domain: this.domainValue,
                 resolveValue: "",
-                isForceUpdate: false,
+                isForceUpdate: false
             };
             let { data } = await domainApi.resolveCdnByAliYunToken(params);
             if (!data.isSuccess && data.redirectUrl) {
@@ -150,6 +151,27 @@ export default {
             if (!data.isSuccess && !data.redirectUrl) {
                 this.$notify({
                     message: data.errorMessage,
+                    type: "error",
+                    duration: 1500
+                });
+            }
+            if (data.isExistResolveCdnRecord) {
+                this.$confirm("提示", {
+                    // message: ,
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        if (action === "confirm") {
+                        }
+                    }
+                });
+                //confirm()//ok: this.isForceUpdate() isForceUpdate:true
+            }
+            // data.is
+            if (data.isSuccess) {
+                this.$notify({
+                    message: "大约需要5分钟解析成功",
                     type: "error",
                     duration: 1500
                 });

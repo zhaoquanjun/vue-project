@@ -97,7 +97,6 @@ export default {
     },
     methods: {
         createCategory(displayName, thumbnailPicUrl) {
-
             if (this.isAdd) {
                 this.$emit("create", {
                     DisplayName: displayName,
@@ -218,7 +217,7 @@ export default {
         // 编辑分类 0720
         rename(ev, node, data) {
             this.isAdd = false;
-            this.modifyCategoryData =  this.curClickData;
+            this.modifyCategoryData = this.curClickData;
             this._handleShowMoreOperate(ev, node, data);
         },
         modifyNode(id, parentId, idOrderByArr) {
@@ -226,8 +225,7 @@ export default {
         },
         // 描述： 删除分类
         batchRemove(node, data) {
-          
-            data = this.curClickData
+            data = this.curClickData;
             this.$emit("batchRemove", this.getAllNodeIds(data));
         },
         // 点击节点的时候
@@ -249,8 +247,9 @@ export default {
                 });
             }
             this.closeUploadCategoryPic();
-             this.closeUploadCategoryPic1();
+            this.closeUploadCategoryPic1();
             this.productSearchOptions.categoryIdList = this.getAllNodeIds(data);
+            this.productSearchOptions.pageIndex = 1;
             this.$emit("getProList");
             this.$emit("chooseCategoryNode", data);
         },
@@ -276,7 +275,7 @@ export default {
         },
         // 分类上传图片
         _handleShowMoreOperate(ev, node, data) {
-            console.log(this.curClickNode)
+            console.log(this.curClickNode);
             this.createCategoryData = this.curClickData;
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";

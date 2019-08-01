@@ -27,7 +27,6 @@
                         class="category-name"
                         maxlength="20"
                         v-model="data.label"
-                        v-filter-special-char
                         @input="changeCategoryInput(data.label)"
                     />
                     <span class="enter" @click.stop="hadnleTreeInput(data,data.isNewAdd)">
@@ -262,7 +261,7 @@ export default {
             if (data.isNewAdd) return;
             this.curlabelName = data.label;
             this.picSearchOptions.categoryIdList = this.getAllNodeIds(data);
-
+             this.picSearchOptions.pageIndex = 1;
             // 点击其他区域 把当前新增但未确定的节点删除掉
             this.newAddData && this.newAddData.children.shift();
             if (this.renameShowId !== data.id) this.isNewAdd = false;
