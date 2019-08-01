@@ -11,6 +11,7 @@
   "dependencies": {
     "@toast-ui/vue-image-editor": "^1.0.2",
     "axios": "^0.19.0",
+    "babel-polyfill": "^6.26.0",
     "core-js": "^2.6.5",
     "element-ui": "^2.9.1",
     "js-cookie": "^2.2.0",

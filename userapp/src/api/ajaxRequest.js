@@ -88,7 +88,12 @@ axios.interceptors.response.use(
                     // 404请求不存在                
                     case 404:
                         // alert('404')
-                        router.push({ path: '/404' })
+                        // Notification({
+                        //     message: error.response.data.message,
+                        //     showClose: false,
+                        //     type:"error",
+                        //     duration:2000
+                        // })
                         break;
                     // 其他错误，直接抛出错误提示                
                     default:
