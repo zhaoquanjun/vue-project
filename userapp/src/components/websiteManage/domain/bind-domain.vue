@@ -116,7 +116,7 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            this.$emit("resolveCdnByAliYunToken", data.id);
+                            this.$emit("resolveCdnByAliYunToken", { id: data.id, isForceUpdate:false} );
                             this.handleCancel();
                         } else {
                             this.elemnetConfirm(
