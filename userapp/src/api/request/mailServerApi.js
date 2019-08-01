@@ -12,13 +12,13 @@ import enbironmemy from "@/environment/index.js";
  * @param {*} option 
  */
 export const getMailAccountDetail = (options) => {
-    return ajaxRequest.get(`${enbironmemy.siteManageApi}/api/MailServer/GetMailAccountDetail`);
+    return ajaxRequest.get(`${enbironmemy.memberManageApi}/api/MailServer/GetMailAccountDetail`);
 }
 // 创建邮件配置
 export const createMailAccount = (options) => {
-    return ajaxRequest.post(`${enbironmemy.siteManageApi}/api/MailServer/CreateMailAccount`, options);
+    return ajaxRequest.post(`${enbironmemy.memberManageApi}/api/MailServer/CreateMailAccount`, options);
 }
 // 编辑邮件配置
 export const editMailAccount = (options) => {
-    return ajaxRequest.put(`${enbironmemy.siteManageApi}/api/MailServer/EditMailAccount`, options);
+    return ajaxRequest.put(`${enbironmemy.memberManageApi}/api/MailServer/EditMailAccount`, options);
 }
