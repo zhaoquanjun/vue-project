@@ -43,10 +43,10 @@ router.beforeEach(async (to, from, next) => {
           securityService.signIn();
          return
         } else {
-          store.commit("SET_USER", data);
+          await store.commit("SET_USER", data);
           await store.dispatch('_updateAppIdAndSiteIdToCookie')
           await store.dispatch('_getMenuListData')
-          await store.dispatch('_getUserProfile')
+          await store.dispatch('_getAppHeadInfo')
           next()
         }
       })

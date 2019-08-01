@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="auth-tip" v-if="authtipShow">{{authtipText}}</div>
         <el-upload
             class="avatar-uploader"
             :action="uploadPicAction"
@@ -10,16 +11,25 @@
         >
             <img v-if="picUrl" :src="picUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <el-button
+            <button
                 class="upload-btn"
                 size="small"
                 plain
                 type="primary"
-            > {{ !!picUrl ?'重新上传':'上传头像'}}</el-button>
+            >{{ !!picUrl ?'重新上传':'上传头像'}}</button>
         </el-upload>
-        <div class="picture-format">支持jpg、png、jpeg、bmp格式，小于10M</div>
+        <div class="picture-format">
+            <span class="gray8c">支持格式</span>
+            <div class="black tip">支持jpg、png、jpeg、bmp格式</div>
+            <div class="black tip">小于10M</div>
+        </div>
         <div class="footer">
-            <button class="confirm footer-btn" @click="comfirm">确定</button>
+            <button
+                class="confirm footer-btn"
+                :disabled="disabled"
+                :class="{'disabled-btn':disabled}"
+                @click="comfirm"
+            >确定</button>
             <button class="cancel footer-btn" @click="close">取消</button>
         </div>
     </div>
@@ -38,16 +48,23 @@ export default {
                 Authorization: ""
             },
             picUrl: "",
-            textName: "上传头像"
+            textName: "上传头像",
+            disabled: false,
+            authtipShow: false,
+            authtipText: ""
         };
     },
     created() {
         this.picUrl = this.imageUrl;
+        if (!this.imageUrl) {
+            this.disabled = true;
+        }
     },
     mounted() {},
     methods: {
         handleAvatarSuccess(res, file) {
             this.picUrl = file.response;
+            this.disabled = false;
         },
         beforeAvatarUpload(file) {
             this.headers.Authorization =
@@ -61,11 +78,16 @@ export default {
             const isSizeOk = file.size / 1024 / 1024 < maxMb;
 
             if (!isPic) {
-                this.$message.error("上传头像图片只能是 图片 格式!");
+                this.authtipShow = true;
+                this.authtipText = "格式错误";
+                return false
             }
             if (!isSizeOk) {
-                this.$message.error(`请上传小于${maxMb}M的图片!`);
+                this.authtipShow = true;
+                this.authtipText = `请上传小于${maxMb}M的图片!`;
+                 return false
             }
+            this.authtipShow = false;
             return isPic && isSizeOk;
         },
         async comfirm() {
@@ -78,6 +100,16 @@ export default {
         close() {
             this.$store.commit("CLOSERIGHTPANNEL", false);
         }
+    },
+    computed:{
+        pannelShow(){
+            return this.$store.state.isRightPanelShow
+        }
+    },
+    watch:{
+        pannelShow(){
+            this.picUrl = this.imageUrl;
+        }
     }
 };
 </script>
@@ -88,8 +120,12 @@ export default {
     margin-top: 40px;
     position: relative;
     .upload-btn {
+        width: 90px;
+        height: 32px;
+        color: #fff;
+        background: rgba(1, 192, 222, 1);
         position: absolute;
-        bottom: -70px;
+        bottom: -64px;
         left: 50%;
         margin-left: -40px;
     }
@@ -107,20 +143,28 @@ export default {
 .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
+    width: 160px;
+    height: 160px;
+    line-height: 160px;
     text-align: center;
     border: 1px dashed #ccc;
 }
 .avatar {
-    width: 178px;
-    height: 178px;
+    width: 160px;
+    height: 160px;
     display: block;
 }
 .picture-format {
     text-align: center;
     margin-top: 100px;
+    .tip {
+        line-height: 17px;
+        padding-top: 8px;
+        font-weight: 500;
+    }
+}
+.disabled-btn {
+    background: rgba(1, 192, 222, 1);
 }
 </style>
 

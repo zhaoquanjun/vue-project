@@ -1,5 +1,5 @@
 import { setLocal, removeLocal } from '@/libs/local'
-import { getUserProfile } from "@/api/index"
+import { getAppHeadInfo } from "@/api/request/dashboardApi.js"
 const user = {
   state: {
     accessToken: { Authorization: '' },
@@ -23,8 +23,8 @@ const user = {
     }
   },
   actions: {
-    async _getUserProfile({ commit }) {
-      let { data } = await getUserProfile();
+    async _getAppHeadInfo({ commit }) {
+      let { data } = await getAppHeadInfo();
       console.log(data,'用户信息')
       commit("SET_USERINFO", data)
     },

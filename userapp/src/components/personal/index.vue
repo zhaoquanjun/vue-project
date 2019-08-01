@@ -1,7 +1,6 @@
 <template>
     <div class="personal">
-        <h3>个人账号管理</h3>
-
+        <h3 class="personal-title">个人账号管理</h3>
         <dl class="user-account clear">
             <dt class="avatar">
                 <img v-if="userInfo.userHeadUrl" :src="userInfo.userHeadUrl" />
@@ -9,10 +8,13 @@
                 <span class="modify-avatar" @click="modifyAvatar">修改头像</span>
             </dt>
             <dd class="account-info">
-                <p>
+                <p class="user-name">
                     <span v-if="flag">
                         {{input!=''? input : '设置您的名字'}}
-                        <i @click="setName" class="el-icon-edit"></i>
+                        <i
+                            @click="setName"
+                            class="icon-size icon-editor"
+                        ></i>
                     </span>
                     <el-input
                         @blur="blur"
@@ -22,119 +24,103 @@
                         v-model="input"
                         placeholder="请输入内容"
                     ></el-input>
-                    <!--<el-input @blur="blur"
-                              v-else
-                              maxlength="20"
-                              show-word-limit
-                              size="small"
-                              v-model="input"
-                    placeholder="请输入内容"></el-input>-->
                 </p>
-                <p>
-                    创建时间
+                <p class="create-time">
+                    创建时间:
                     <i>{{createTime}}</i>
                 </p>
             </dd>
         </dl>
         <ul class="social-list">
-            <li>
+            <li class="mobilePhone clear">
                 <div class="fleft">
-                    <span>
-                        <i>x</i>
-                        <b>手机号码</b>
-                    </span>
+                    <span class="set-name">手机号码</span>
                     <span
-                        class="pd-left social-desc"
+                        class="social-desc"
                     >手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net.cn</span>
                 </div>
                 <div class="fright">
-                    <span>{{userInfo.phoneNumber | geTel }}</span>
+                    <span class="user-value">{{userInfo.phoneNumber | geTel }}</span>
 
                     <span class="pd-left">
-                        <button >已绑定</button> |
+                        <button class="bind isbind">已绑定</button>|
                         <button @click="modifiPhoneNum">修改</button>
                     </span>
                 </div>
             </li>
-            <li>
+            <li class="password clear">
                 <div class="fleft">
-                    <span>
-                        <i>x</i>
-                        <b>登录密码</b>
-                    </span>
-                    <span class="pd-left social-desc">设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码</span>
+                    <span class="set-name">登录密码</span>
+                    <span class="social-desc">设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码</span>
                 </div>
                 <div class="fright">
-                    <span></span>
-
-                    <span class="pd-left">                        
-                        <button>{{pwdTitle}}</button> | <button @click="modifiPwd">{{pwdBtn}}</button>
+                    <span class="user-value" v-if="!!pwdTitle">******</span>
+                    <span class="pd-left">
+                        <button
+                            class="bind"
+                            :class="!!pwdTitle?'isbind':'notbind'"
+                        >{{!!pwdTitle?"已设置":"设置"}}</button>|
+                        <button @click="modifiPwd">{{pwdBtn}}</button>
                     </span>
                 </div>
             </li>
-            <li>
+            <li class="wechat clear">
                 <div class="fleft">
-                    <span>
-                        <i>x</i>
-                        <b>绑定微信</b>
-                    </span>
-                    <span class="pd-left social-desc">绑定微信，可使用微信登录管理平台</span>
+                    <span class="set-name">绑定微信</span>
+                    <span class="social-desc">绑定微信，可使用微信登录管理平台</span>
                 </div>
                 <div class="fright">
-                    <span v-if="WeChatUser">{{WeChatUser.externalName}}</span>
-                    <span v-else></span>
-
+                    <span class="user-value" v-if="WeChatUser">
+                        <img src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png" />
+                        <b>{{WeChatUser.externalName}}</b>
+                    </span>
                     <span class="pd-left">
-                        <button v-if="WeChatUser">已绑定</button>
-                        <button v-else>未绑定</button>
-                        |
                         <button
-                            v-if="WeChatUser"
-                            @click="_untyingWeixin(WeChatUser.provider)"
-                        >解绑</button>
+                            class="bind"
+                            :class="WeChatUser?'isbind':'notbind'"
+                        >{{WeChatUser?"已绑定":"未绑定"}}</button>|
+                        <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button>
                         <button v-else @click="_bindingWeixin()">绑定</button>
                     </span>
                 </div>
             </li>
-            <li>
+            <li class="dingtalk clear">
                 <div class="fleft">
-                    <span>
-                        <i>x</i>
-                        <b>绑定钉钉</b>
-                    </span>
-                    <span class="pd-left social-desc">绑定钉钉，可使用钉钉登录管理平台</span>
+                    <span class="set-name">绑定钉钉</span>
+                    <span class="social-desc">绑定钉钉，可使用钉钉登录管理平台</span>
                 </div>
                 <div class="fright">
-                    <button v-if="DingDingUser">已绑定</button>
-                    <button v-else>未绑定</button>
-                    |
-                    <button
-                        v-if="DingDingUser"
-                        @click="_untyingDing(DingDingUser.provider)"
-                    >解绑</button>
-                    <button v-else @click="_bindingDing()">绑定</button>
+                    <span class="user-value" v-if="WeChatUser">
+                        <img src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png" />
+                        <b>{{WeChatUser.externalName}}</b>
+                    </span>
+                    <span class="pd-left">
+                        <button
+                            class="bind"
+                            :class="DingDingUser?'isbind':'notbind'"
+                        >{{DingDingUser?"已绑定":"未绑定"}}</button>|
+                        <button v-if="DingDingUser" @click="_untyingDing(DingDingUser.provider)">解绑</button>
+                        <button v-else @click="_bindingDing()">绑定</button>
+                    </span>
                 </div>
             </li>
-            <li>
+            <li class="alipay clear">
                 <div class="fleft">
-                    <span>
-                        <i>x</i>
-                        <b>绑定支付宝</b>
-                    </span>
-                    <span class="pd-left social-desc">绑定支付宝，可使用支付宝登录管理平台</span>
+                    <span class="set-name">绑定支付宝</span>
+                    <span class="social-desc">绑定支付宝，可使用支付宝登录管理平台</span>
                 </div>
                 <div class="fright">
-                    <span v-if="AlipayUser">{{AlipayUser.externalName}}</span>
-                    <span v-else></span>
-
+                    <span class="user-value" v-if="AlipayUser">
+                        <img src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png" />
+                        <b>{{AlipayUser.externalName}}</b>
+                    </span>
                     <span class="pd-left">
-                        <button v-if="AlipayUser">已绑定</button>
-                        <button v-else>未绑定</button>
-                        |
                         <button
+                            class="bind"
+                            :class="AlipayUser?'isbind':'notbind'"
                             v-if="AlipayUser"
-                            @click="_untyingAlipay(AlipayUser.provider)"
-                        >解绑</button>
+                        >{{AlipayUser?'已绑定':'未绑定'}}</button>|
+                        <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button>
                         <button v-else @click="_bindingAlipay()">绑定</button>
                     </span>
                 </div>
@@ -168,7 +154,8 @@
             title="提示"
             :visible.sync="alipayBindTip"
             width="30%"
-            @close="alipayBindHandleClose">
+            @close="alipayBindHandleClose"
+        >
             <span>支付宝绑定完成</span>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="alipayBindTip = false">确 定</el-button>
@@ -186,7 +173,7 @@ import UntyingWeChat from "./UntyingWeChat";
 import GetSms from "./GetSms";
 import { mapState, mapMutations, mapGetters } from "vuex";
 import securityService from "@/services/authentication/securityService";
-    import {
+import {
     getUserProfile,
     getExternalUserInfo,
     removeExternalUser,
@@ -213,8 +200,8 @@ export default {
             weixinHtml: "",
             createTime: "",
             alipayBindTip: false,
-            pwdTitle: '未设置',
-            pwdBtn:'设置'
+            pwdTitle: "0",
+            pwdBtn: "设置"
         };
     },
     components: {
@@ -231,65 +218,67 @@ export default {
         this._getExternalUserAsync();
         this._getWeChatJsLoginParams();
     },
-       /* 局部过滤器 */
+    /* 局部过滤器 */
     filters: {
         geTel(tel) {
             var reg = /^(\d{3})\d{4}(\d{4})$/;
             return tel.replace(reg, "$1****$2");
         }
     },
-      methods: {
-          ...mapMutations(["ISRIGHTPANNELSHOW"]),     
-          _setPwdTitleAndBtn() {
-              this.pwdTitle = "已设置";
-              this.pwdBtn = "修改";
-          },
+    methods: {
+        ...mapMutations(["ISRIGHTPANNELSHOW"]),
+        _setPwdTitleAndBtn() {
+            this.pwdTitle = "1";
+            this.pwdBtn = "修改";
+        },
         async _getUserProfileAsync() {
             let { data } = await getUserProfile();
             this.userInfo = data;
-            this.input = data.displayName;                
-            this.createTime = formatDateTime(data.createTime, "yyyy-MM-dd hh:mm:ss");
+            this.input = data.displayName;
+            this.createTime = formatDateTime(
+                data.createTime,
+                "yyyy-MM-dd hh:mm:ss"
+            );
             if (this.userInfo.isSetPassWord) {
                 this._setPwdTitleAndBtn();
             }
             // console.log(this.userInfo)
         },
         async _getExternalUserAsync() {
-            this.WeChatUser=null;
-            this.AlipayUser=null;
-            this.DingDingUser=null;
+            this.WeChatUser = null;
+            this.AlipayUser = null;
+            this.DingDingUser = null;
             let { data } = await getExternalUserInfo();
             // console.log(data);
-            this.ExternalUsers = data; 
-            if(this.ExternalUsers && this.ExternalUsers.length>0  ){
+            this.ExternalUsers = data;
+            if (this.ExternalUsers && this.ExternalUsers.length > 0) {
                 this.ExternalUsers.forEach(element => {
-                    if(element.provider=="Weixin"){
-                        this.WeChatUser=element;
-                    }else if(element.provider=="Alipay"){
-                        this.AlipayUser=element;
-                    }else if(element.provider=="DingDing"){
-                        this.DingDingUser=element;
+                    if (element.provider == "Weixin") {
+                        this.WeChatUser = element;
+                    } else if (element.provider == "Alipay") {
+                        this.AlipayUser = element;
+                    } else if (element.provider == "DingDing") {
+                        this.DingDingUser = element;
                     }
                 });
             }
         },
         //获取微信Js相关参数
-        async _getWeChatJsLoginParams(){
+        async _getWeChatJsLoginParams() {
             let { data } = await getWeChatJsLoginParams();
             this.WeChatJsLoginParams = data;
         },
         //解绑第三方账号
-        async _removeExternalUserAsync(provider){
+        async _removeExternalUserAsync(provider) {
             let { data } = await removeExternalUser(provider);
-            if(data!=undefined && (data == "true" || data == true)){
+            if (data != undefined && (data == "true" || data == true)) {
                 this.$message({
                     type: "success",
                     message: "解绑成功!"
                 });
-                this.ISRIGHTPANNELSHOW(false)
+                this.ISRIGHTPANNELSHOW(false);
                 this._getExternalUserAsync();
-            }else
-            {
+            } else {
                 this.$message({
                     type: "failed",
                     message: "解绑失败!"
@@ -302,33 +291,32 @@ export default {
             this.titText = "修改头像";
             this.ISRIGHTPANNELSHOW(true);
         },
-        updateWeiXinHtml(){
-            this.weixinHtml="绑定微信" +new Date();
-
+        updateWeiXinHtml() {
+            this.weixinHtml = "绑定微信" + new Date();
         },
         // 修改手机号
         modifiPhoneNum() {
             this.titText = "修改手机号";
             this.curComponent = SetPhoneNumber;
-            this.ISRIGHTPANNELSHOW(true)
-        },            
+            this.ISRIGHTPANNELSHOW(true);
+        },
         //修改密码||设置密码
         modifiPwd() {
             this.curComponent = SetPwd;
             if (this.userInfo.isSetPassWord) {
                 this.titText = "修改密码";
-            } else{
+            } else {
                 this.titText = "设置密码";
             }
-            this.ISRIGHTPANNELSHOW(true)
-          },
-        
+            this.ISRIGHTPANNELSHOW(true);
+        },
+
         // 解绑微信
-        _untyingWeixin(provider) { 
-            this.titText="微信解绑";
-            this.CurrentProvider=provider;
+        _untyingWeixin(provider) {
+            this.titText = "微信解绑";
+            this.CurrentProvider = provider;
             this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true)
+            this.ISRIGHTPANNELSHOW(true);
         },
         //绑定微信
         _bindingWeixin() {
@@ -339,32 +327,32 @@ export default {
             this.ISRIGHTPANNELSHOW(true);
         },
         //钉钉 解绑
-        _untyingDing(provider) { 
-            this.titText="钉钉解绑";
-            this.CurrentProvider=provider;
+        _untyingDing(provider) {
+            this.titText = "钉钉解绑";
+            this.CurrentProvider = provider;
             //this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true)
+            this.ISRIGHTPANNELSHOW(true);
         },
         //钉钉 绑定
-        _bindingDing() { 
-            this.titText="绑定钉钉";
-            this.CurrentProvider="Dingding";
+        _bindingDing() {
+            this.titText = "绑定钉钉";
+            this.CurrentProvider = "Dingding";
         },
         //支付宝 解绑
         _untyingAlipay(provider) {
-            this.titText="支付宝解绑";
-            this.CurrentProvider=provider;
+            this.titText = "支付宝解绑";
+            this.CurrentProvider = provider;
             this.curComponent = UntyingWeChat;
-            this.ISRIGHTPANNELSHOW(true)
+            this.ISRIGHTPANNELSHOW(true);
         },
         //支付宝 绑定
         async _bindingAlipay() {
-            this.titText="绑定支付宝";
-            this.CurrentProvider="Alipay";
+            this.titText = "绑定支付宝";
+            this.CurrentProvider = "Alipay";
             this.alipayBindTip = true;
-            let result  = await getAlipayBindUrl();
-            if(result != undefined && result.data)
-                window.open(result.data, '_blank')
+            let result = await getAlipayBindUrl();
+            if (result != undefined && result.data)
+                window.open(result.data, "_blank");
         },
         setName() {
             this.flag = false;
@@ -384,91 +372,224 @@ export default {
                 });
             }
         },
-        modifyAvatar(){
+        modifyAvatar() {
             this.curComponent = SetAvatar;
             this.titText = "修改头像";
             this.ISRIGHTPANNELSHOW(true);
         },
-        async alipayBindHandleClose(){
+        async alipayBindHandleClose() {
             await this._getExternalUserAsync();
         }
     },
     computed: {
         pannelWidth() {
-            return this.$store.state.isRightPanelShow === true ? 390 : 0;
+            return this.$store.state.isRightPanelShow === true ? 470 : 0;
         }
     }
 };
 </script>
 <style scoped>
-.el-input /deep/ .el-input__inner{
-    
+.el-input /deep/ .el-input__inner {
     padding-right: 60px;
 }
 </style>
 
 <style lang="scss" scoped>
 .personal {
-    padding: 30px 20px 20px 40px;
+    padding: 32px 16px;
     background: #fff;
-}
-.user-account {
-    line-height: 30px;
-    display: flex;
-    align-items: center;
-    padding-top: 15px;
-    .avatar {
-        float: left;
-        width: 80px;
-        height: 80px;
-        position: relative;
-        overflow: hidden;
-        img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
+    .personal-title {
+        color: #2e2e2e;
+        font-weight: 500;
+    }
+    .user-account {
+        display: flex;
+        align-items: center;
+        padding: 32px 0;
+        margin: 0 16px;
+        border-bottom: 1px solid #eee;
+        .avatar {
+            float: left;
+            width: 120px;
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+            .modify-avatar {
+                cursor: pointer;
+                display: none;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                background: #262626;
+                opacity: 0.6;
+                color: #fff;
+                padding: 5px;
+                width: 100%;
+                text-align: center;
+            }
+            &:hover .modify-avatar {
+                display: block;
+            }
         }
-        .modify-avatar {
-            display: none;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            background: #000;
-            opacity: 0.5;
-            color: #fff;
-            padding: 5px;
-            width: 100%;
-            text-align: center;
+        .account-info {
+            float: left;
+            padding-left: 20px;
+            p {
+                font-size: 14px;
+                line-height: 22px;
+            }
+            .user-name {
+                .icon-editor {
+                    background: url("~img/personal/editor.png") no-repeat center;
+                    background-size: contain;
+                    padding-left: 16px;
+                    &:hover {
+                        background: url("~img/personal/editor-on.png") no-repeat
+                            center;
+                        background-size: contain;
+                    }
+                }
+            }
+            .create-time {
+                color: #8c8c8c;
+                padding-top: 8px;
+            }
+            // p {
+            //     height: 32px;
+            //     line-height: 32px;
+            // }
         }
-        &:hover .modify-avatar {
-            display: block;
+    }
+    .social-list {
+        li {
+            padding: 16px;
+            border-bottom: 1px dashed #eee;
+            line-height: 20px;
+            .user-value {
+                color: #8c8c8c;
+                img {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    vertical-align: top;
+                    margin-right: 8px;
+                }
+            }
+            .set-name {
+                display: inline-block;
+                width: 111px;
+                &::before {
+                    content: "";
+                    width: 13px;
+                    height: 13px;
+                    display: inline-block;
+                    vertical-align: -2px;
+                    margin-right: 8px;
+                }
+            }
         }
-    }
-    .account-info {
-        float: left;
-        padding-left: 20px;
-        p {
-            height: 32px;
-            line-height: 32px;
+        .mobilePhone {
+            .set-name {
+                &::before {
+                    background: url("~img/personal/wechat-icon.png") no-repeat
+                        center;
+                    background-size: contain;
+                }
+            }
         }
-    }
-}
-.social-list {
-    padding-top: 50px;
-    li {
-        padding: 20px 10px;
-    }
-    .fleft {
-        float: left;
-    }
-    .fright {
-        float: right;
-    }
-    .pd-left {
-        padding-left: 30px;
-    }
-    .social-desc {
-        color: #ccc;
+        .email {
+            .set-name {
+                &::before {
+                    background: url("~img/personal/wechat-icon.png") no-repeat
+                        center;
+                    background-size: contain;
+                }
+            }
+        }
+        .password {
+            .set-name {
+                &::before {
+                    background: url("~img/personal/wechat-icon.png") no-repeat
+                        center;
+                    background-size: contain;
+                }
+            }
+        }
+        .wechat {
+            .set-name {
+                &::before {
+                    background: url("~img/personal/wechat-icon.png") no-repeat
+                        center;
+                    background-size: contain;
+                }
+            }
+        }
+        .dingtalk {
+            .set-name {
+                &::before {
+                    background: url("~img/personal/wechat-icon.png") no-repeat
+                        center;
+                    background-size: contain;
+                }
+            }
+        }
+        .alipay {
+            .set-name {
+                &::before {
+                    background: url("~img/personal/wechat-icon.png") no-repeat
+                        center;
+                    background-size: contain;
+                }
+            }
+        }
+
+        .fleft {
+            float: left;
+        }
+        .fright {
+            float: right;
+        }
+        .pd-left {
+            padding-left: 30px;
+            color: #eee;
+            & :last-child {
+                padding-left: 8px;
+                color: #0070cc;
+            }
+            .bind {
+                padding-right: 8px;
+                &::before {
+                    display: inline-block;
+                    content: "";
+                    width: 12px;
+                    height: 12px;
+                    margin-right: 8px;
+                    vertical-align: -1px;
+                }
+            }
+            .notbind {
+                color: #f54743;
+                &::before {
+                    background: url("~img/jian-icon.png") no-repeat center;
+                    background-size: contain;
+                }
+            }
+            .isbind {
+                display: inline-block;
+                color: #35b24b;
+                &::before {
+                    background: url("~img/jian-icon.png") no-repeat center;
+                    background-size: contain;
+                }
+            }
+        }
+        .social-desc {
+            color: #8c8c8c;
+        }
     }
 }
 </style>

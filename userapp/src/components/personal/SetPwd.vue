@@ -1,7 +1,10 @@
 
 <template>
     <div class="setPwd">
-        <el-alert :closable="false" :title="tipTitle" type="success"></el-alert>
+         <div class="modify-title">
+            <p>{{tipTitle}}</p>
+        </div>
+       
         <template v-if="!isSetPassWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
                 <el-form-item prop="passWrod" class="verification-code">
@@ -263,7 +266,7 @@ import {
 <style lang="scss" scoped>
 @import "./style/personal";
 .setPwd {
-    padding: 10px;
+   padding: 32px;
     .pwd-form {
         padding-top: 20px;
     }
@@ -277,6 +280,7 @@ import {
     bottom: 1px;
     right: 1px;
     border: none;
-    color: red;
+    color: #00C1DE;
+    font-weight: 400;
 }
 </style>

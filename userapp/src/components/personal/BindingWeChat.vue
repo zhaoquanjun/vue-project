@@ -1,7 +1,9 @@
 <template>
     <div class="set-phone-number">
-        <el-row class="demo-autocomplete"></el-row>
-        <el-alert title="绑定微信，可使用微信登录管理平台" type="success"></el-alert>
+         <div class="modify-title">
+            <p>绑定微信，可使用微信登录管理平台</p>
+            
+        </div>
         <div class="from-row">
             <div id="weixin" style="text-align: center">{{weixinHtml}}</div>
             <div id="weixinTip" style="text-align: center">{{bindResultMessage}}</div>
@@ -116,5 +118,4 @@ export default {
         color: rgba(0, 193, 222, 1);
     }
 }
-</style>
 </style>
