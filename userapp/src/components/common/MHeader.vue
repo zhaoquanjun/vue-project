@@ -65,7 +65,7 @@
         >
           <div class="appBackground">
             <div>
-              <el-col :span="8" class="appitem" v-for="(item, index) in appList" :key="index">
+              <el-col :span="24" class="appitem" v-for="(item, index) in appList" :key="index">
                 <div class="appTitle">
                   <span class="appName">{{item.name}}</span>
                   <span
@@ -74,16 +74,16 @@
                   >{{item.isSystem ? "管理员" : "成员"}}</span>
                 </div>
                 <div class="version">
-                  <span>应用版本</span>
-                  <span>{{item.productName}}</span>
+                  <span class="versionText">应用版本</span>
+                  <span class="versionText">{{item.productName}}</span>
                 </div>
                 <div class="expired">
-                  <span>有效期</span>
-                  <span>{{item.expired}}</span>
+                  <span class="expiredText">有效期</span>
+                  <span class="expiredText" style="margin-left:46px">{{item.expired}}</span>
+                  <div class="isExpired" v-show="isExpired(item)">已过期</div>
+                  <button class="renewal" v-show="item.isSystem">续费</button>
+                  <button class="choseApp" @click="choseApp(item)">进入应用</button>
                 </div>
-                <!-- <div v-show="item.appState != 'Running'">已过期</div> -->
-                <button class="renewal" v-show="item.isSystem">续费</button>
-                <button class="choseApp" @click="choseApp(item)">进入应用</button>
               </el-col>
             </div>
           </div>
@@ -97,7 +97,7 @@ import securityService from "@/services/authentication/securityService";
 import { getApplication } from "@/api/request/dashboardApi";
 import { getApplicationsByUserId } from "@/api/request/dashboardApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
-import { formatDateTime } from "@/api/index";
+import { formatDateTime, getShortUrlByInviation } from "@/api/index";
 import { setLocal } from "@/libs/local.js";
 export default {
   data() {
@@ -163,7 +163,7 @@ export default {
       setLocal("appid", item.appId);
       this.$store.commit("SETAPPID", item.appId);
       console.log(item.appId);
-      await updateUserLastAppIdAndCookie(item.appId);
+      await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
       window.location.href = "http://dashboard.console.wezhan.cn/board";
     },
     /**
@@ -175,6 +175,12 @@ export default {
     //显示切换app弹框
     changeApp() {
       this.changeAppShow = true;
+    },
+    // 判断是否过期
+    isExpired(item) {
+      if( new Date(item.expiredTime) < new Date() ) {
+        return true;
+      }
     }
   }
 };
@@ -297,99 +303,119 @@ export default {
       opacity: 0;
     }
   }
-  .appBackground {
-    position: absolute;
-    top: 80px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(245, 245, 245, 1);
-    border-top: 1px solid #eee;
-    .appitem {
-      position: relative;
-      margin: auto;
-      margin-top: 32px;
-      width: 900px;
-      height: 165px;
-      background: rgba(255, 255, 255, 1);
-      border-radius: 2px;
-      //   &:hover {
-      //     background: rgba(175, 175, 175, 1);
-      //     border-radius: 2px;
-      //     opacity: 0.7;
-      //     filter: blur(10px);
-      //   }
-      .appTitle {
-        position: relative;
-        width: 100%;
-        height: 55px;
-        border-bottom: 1px solid #eee;
-        .appName {
-          position: absolute;
-          left: 32px;
-          font-size: 17px;
-          font-family: PingFangSC-Medium;
-          font-weight: 500;
-          color: rgba(38, 38, 38, 1);
-          line-height: 55px;
-        }
-        .appMember {
-          position: absolute;
-          right: 35px;
-          font-size: 14px;
-          font-family: PingFangSC-Regular;
-          font-weight: 400;
-          line-height: 55px;
-        }
-      }
-      .version {
-        margin-top: 10px;
-        span {
-          font-size: 14px;
-          font-family: PingFangSC-Regular;
-          font-weight: 400;
-          color: rgba(140, 140, 140, 1);
-          margin-left: 32px;
-        }
-      }
-      .expired {
-        padding-bottom: 10px;
-        span {
-          font-size: 14px;
-          font-family: PingFangSC-Regular;
-          font-weight: 400;
-          color: rgba(140, 140, 140, 1);
-          margin-left: 32px;
-        }
-      }
-      .choseApp {
-        position: absolute;
-        right: 32px;
-        bottom: 28px;
-        width: 90px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        border-radius: 2px;
-        border: 1px solid rgba(1, 192, 222, 1);
-        font-size: 12px;
+}
+.appBackground {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(245, 245, 245, 1);
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+  .appitem {
+    position: relative;
+    margin-top: 32px;
+    // width: 900px;
+    // height: 165px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 2px;
+    padding-left: 0px;
+    //   &:hover {
+    //     background: rgba(175, 175, 175, 1);
+    //     border-radius: 2px;
+    //     opacity: 0.7;
+    //     filter: blur(10px);
+    //   }
+    .appTitle {
+      width: 100%;
+      height: 55px;
+      border-bottom: 1px solid #eee;
+      .appName {
+        margin-left: 32px;
+        font-size: 17px;
         font-family: PingFangSC-Medium;
         font-weight: 500;
-        color: rgba(255, 255, 255, 1);
-        line-height: 32px;
+        color: rgba(38, 38, 38, 1);
+        line-height: 55px;
       }
-      .renewal {
-        width: 90px;
-        height: 32px;
-        border-radius: 2px;
-        border: 1px solid rgba(1, 192, 222, 1);
-        font-size: 12px;
+      .appMember {
+        float: right;
+        margin-right: 35px;
+        font-size: 14px;
         font-family: PingFangSC-Regular;
         font-weight: 400;
-        color: rgba(0, 193, 222, 1);
-        position: absolute;
-        bottom: 27px;
-        left: 419px;
+        line-height: 55px;
       }
+    }
+    .version {
+      margin-top: 25px;
+      margin-bottom: 2px;
+      line-height: 22px;
+      .versionText {
+        font-size: 14px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(140, 140, 140, 1);
+        margin-left: 32px;
+        line-height: 22px;
+      }
+    }
+    .expired {
+      height: 32px;
+      margin-bottom: 26px;
+      line-height: 32px;
+      .expiredText {
+        font-size: 14px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(140, 140, 140, 1);
+        margin-left: 32px;
+      }
+    }
+    .isExpired {
+      margin-left: 30px;
+      display: inline-block;
+      width: 56px;
+      height: 20px;
+      background: rgba(241, 85, 51, 1);
+      border-radius: 2px;
+      text-align: center;
+      font-size: 10px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+      line-height: 20px;
+    }
+    .choseApp {
+      position: absolute;
+      right: 32px;
+      bottom: 28px;
+      width: 90px;
+      height: 32px;
+      background: rgba(0, 193, 222, 1);
+      border-radius: 2px;
+      border: 1px solid rgba(1, 192, 222, 1);
+      font-size: 12px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 1);
+      line-height: 32px;
+    }
+    .renewal {
+      width: 90px;
+      height: 32px;
+      border-radius: 2px;
+      border: 1px solid rgba(1, 192, 222, 1);
+      font-size: 12px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(0, 193, 222, 1);
+      margin-left: 32px;
+      // position: absolute;
+      // bottom: 27px;
+      // left: 419px;
     }
   }
 }
