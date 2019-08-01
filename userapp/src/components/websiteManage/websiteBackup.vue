@@ -183,7 +183,7 @@ export default {
     this.getBackupSite();
   },
   methods: {
-      chooseWebsite(sitId){
+      chooseWebsite(siteId){
           this.getBackupSite()
       },
     /**

@@ -59,15 +59,15 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getSiteInfo();
+    this.getSiteInfo(this.$store.state.dashboard.siteId);
     this.getSites();
   },
   methods: {
     /**
      * 获取站点信息
      */
-    async getSiteInfo() {
-      let { data } = await siteBackupApi.getSiteInfo(2);
+    async getSiteInfo(siteId) {
+      let { data } = await siteBackupApi.getSiteInfo(siteId);
       console.log(data);
       this.siteName = data.siteName;
       this.secondDomain = data.secondDomain;
@@ -90,12 +90,13 @@ export default {
     },
     // 选择新的site
     async choseSite(item) {
-        console.log(item);
-        this.changeSiteShow = false;
-        setLocal("siteid", item.siteId);
-        this.$store.commit("SETSITEID", item.siteId);
-        await updateUserLastSiteIdAndCookie(item.siteId);
-        this.$emit("chooseWebsite", item.siteId)
+      console.log(item);
+      this.changeSiteShow = false;
+      setLocal("siteid", item.siteId);
+      this.$store.commit("SETSITEID", item.siteId);
+      await dashboardApi.updateUserLastSiteIdAndCookie(item.siteId);
+      this.$emit("chooseWebsite", item.siteId);
+      this.getSiteInfo(item.siteId);
     },
     /**
      * 关闭弹框

@@ -1,19 +1,11 @@
 <template>
   <div class="home-page">
-    <p class="welcome-words">
-      今日，2019年6月22日星期六，欢迎您回到云速成美站控制台。
-    </p>
+    <p class="welcome-words">今日，2019年6月22日星期六，欢迎您回到云速成美站控制台。</p>
     <el-row style="display: flex;">
       <el-col :span="18">
         <siteinfo :siteInfo="siteInfoList" />
-        <plugins
-          :plugins="dashboardData.pluginList"
-          v-if="dashboardData.pluginList && dashboardData.pluginList.length > 0"
-        />
-        <content-num
-          :contentNumber="contentNumber"
-          v-if="Object.keys(contentNumber).length > 0"
-        />
+        <plugins :plugins="pluginList" v-if="pluginList && pluginList.length > 0" />
+        <content-num :contentNumber="contentNumber" v-if="Object.keys(contentNumber).length > 0" />
         <recommend :recommend="recommend" />
       </el-col>
       <!-- <div class="board-right" style="margin-left:19px"></div> -->
@@ -68,10 +60,10 @@ export default {
       siteInfoList: [],
       appInfo: {},
       versionInfo: [],
-      dashboardData: {},
+      pluginList: [],
       contentNumber: {},
       recommend: [],
-      designIsread: false,
+      designIsread: false
     };
   },
   components: {
@@ -81,52 +73,39 @@ export default {
     recommend
   },
   created() {
-    this.getSiteInfo();
     this.getDashboardData();
-    this.getAppInfo();
-    this.getVersions();
-    this.getRecommends();
+    this.getAppExpandInfo()
   },
   methods: {
     /**
-     * 获取site列表
-     */
-    async getSiteInfo() {
-      let { data } = await dashboardApi.getSites();
-      console.log(data);
-      this.siteInfoList = data;
-    },
-    /**
-     * 获取dashboard
+     * 获取dashboard信息
+     * app信息 site列表 内容管理数量 plugin列表
      */
     async getDashboardData() {
       let { data } = await getUserDashboard();
       console.log(data);
-      this.dashboardData = data;
+      this.pluginList = data.pluginList;
       this.contentNumber = {
         newsCount: data.contentsNumber.newsCount,
         filesCount: data.contentsNumber.filesCount,
         picturesCount: data.contentsNumber.picturesCount,
         productsCount: data.contentsNumber.productsCount
       };
+      this.appInfo = data.appInfo;
+      this.appInfo.time =
+        formatDateTime(this.appInfo.createTime, "yyyy年MM月dd日") +
+        "-" +
+        formatDateTime(this.appInfo.expiredTime, "yyyy年MM月dd日");
+      this.siteInfoList = data.siteInfos;
     },
     /**
-     * 获取app信息
+     * 获取 设计秘籍列表，版本更新列表，应用推荐列表
      */
-    async getAppInfo() {
-      let { data } = await dashboardApi.getApplication();
+    async getAppExpandInfo() {
+      let { data } = await dashboardApi.getAppExpandInfo();
       console.log(data);
-      this.appInfo = data;
-      this.appInfo.time = formatDateTime(this.appInfo.createTime, "yyyy年MM月dd日") + "-" + formatDateTime(this.appInfo.expiredTime, "yyyy年MM月dd日");
-
-    },
-    /**
-     * 获取版本更新列表
-     */
-    async getVersions() {
-      let { data } = await dashboardApi.getVersions();
-      console.log(data);
-      this.versionInfo = data;
+      this.recommend = data.appRecommends;
+      this.versionInfo = data.versionUpdates;
       for (var i = 0; i < this.versionInfo.length; i++) {
         this.versionInfo[i].updateTime = formatDateTime(
           this.versionInfo[i].updateTime,
@@ -134,14 +113,7 @@ export default {
         );
       }
     },
-    /**
-     * 获取应用推荐列表
-     */
-    async getRecommends() {
-      let { data } = await dashboardApi.getRecommends();
-      console.log(data);
-      this.recommend = data;
-    },
+
     /**
      * 设计秘籍内容颜色变化
      */
@@ -180,30 +152,30 @@ export default {
   margin-right: 10px;
   margin-left: 29px;
   height: 250px;
-  background:rgba(0,193,222,1);
-  box-shadow:0px 2px 8px 0px rgba(0,0,0,0.14);
+  background: rgba(0, 193, 222, 1);
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.14);
   position: relative;
   .appName {
     position: absolute;
     top: 40px;
     left: 22px;
-    font-size:26px;
-    font-family:PingFangSC-Regular;
-    font-weight:400;
-    color:rgba(255,255,255,1);
+    font-size: 26px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
   }
   .appVersion {
     position: absolute;
     top: 100px;
     left: 22px;
-    font-size:14px;
-    font-family:PingFangSC-Regular;
-    font-weight:400;
-    color:rgba(255,255,255,1);
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
   }
-  .appLine{
+  .appLine {
     // width:100%;
-    height:1px;
+    height: 1px;
     background: #fff;
     position: absolute;
     top: 154px;
@@ -213,120 +185,119 @@ export default {
     position: absolute;
     bottom: 39px;
     left: 22px;
-    font-size:14px;
-    font-family:PingFangSC-Regular;
-    font-weight:400;
-    color:rgba(255,255,255,1);
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
   }
-  .renewalBtn{
+  .renewalBtn {
     position: absolute;
     bottom: 33px;
     left: 270px;
-    width:89px;
-    height:32px;
-    background:rgba(135,223,236,1);
-    opacity:0.56;
-    font-size:14px;
-    font-family:PingFangSC-Regular;
-    font-weight:400;
-    color:rgba(255,255,255,1);
+    width: 89px;
+    height: 32px;
+    background: rgba(135, 223, 236, 1);
+    opacity: 0.56;
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
   }
 }
 .designCheats {
   margin: 24px 10px 24px 28px;
-  background:rgba(255,255,255,1);
-  box-shadow:0px 2px 8px 0px rgba(0,0,0,0.14);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.14);
   padding-bottom: 10px;
-  .designCheatsTitle{
-    font-size:18px;
-    font-family:PingFangSC-Medium;
-    font-weight:500;
-    color:rgba(38,38,38,1);
+  .designCheatsTitle {
+    font-size: 18px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(38, 38, 38, 1);
     margin-top: 20px;
     margin-left: 16px;
     margin-bottom: 24px;
   }
-  .designItem{
+  .designItem {
     margin: 0px 22px 16px 16px;
-    height:70px;
-    border-radius:3px;
-    border:1px solid rgba(238,238,238,1);
+    height: 70px;
+    border-radius: 3px;
+    border: 1px solid rgba(238, 238, 238, 1);
     position: relative;
-    .designDiv{
-      width:5px;
-      height:70px;
-      background:rgba(0,193,222,1);
-      border-radius:3px 0px 0px 3px;
+    .designDiv {
+      width: 5px;
+      height: 70px;
+      background: rgba(0, 193, 222, 1);
+      border-radius: 3px 0px 0px 3px;
       position: absolute;
       left: 0px;
       top: 0px;
     }
-    .designColorBlue{
-      background:rgba(0,114,211,1);
+    .designColorBlue {
+      background: rgba(0, 114, 211, 1);
     }
-    .designColorRed{
-      background:rgba(242,102,102,1);
+    .designColorRed {
+      background: rgba(242, 102, 102, 1);
     }
-    .designColorYellow{
-      background:rgba(243,175,67,1);
+    .designColorYellow {
+      background: rgba(243, 175, 67, 1);
     }
-    .designInfo{
-      font-size:14px;
-      font-family:PingFangSC-Regular;
-      font-weight:400;
-      color:rgba(38,38,38,1);
+    .designInfo {
+      font-size: 14px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(38, 38, 38, 1);
       line-height: 70px;
       margin-left: 30px;
     }
-    .designNoread{
+    .designNoread {
       position: absolute;
       right: 23px;
       top: 30px;
-      width:36px;
-      height:17px;
-      font-size:12px;
-      font-family:PingFangSC-Regular;
-      font-weight:400;
-      color:rgba(0,193,222,1);
+      width: 36px;
+      height: 17px;
+      font-size: 12px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(0, 193, 222, 1);
     }
   }
 }
 .versionUpdate {
-  background:rgba(255,255,255,1);
-  box-shadow:0px 2px 8px 0px rgba(0,0,0,0.14);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.14);
   margin-right: 10px;
   margin-left: 28px;
   padding-bottom: 10px;
-  .versionTitle{
-    font-size:18px;
-    font-family:PingFangSC-Medium;
-    font-weight:500;
-    color:rgba(38,38,38,1);
+  .versionTitle {
+    font-size: 18px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(38, 38, 38, 1);
     margin-top: 20px;
     margin-left: 17px;
     margin-bottom: 19px;
   }
-  .versionItem{
-    height:20px;
-    font-size:14px;
-    font-family:PingFangSC-Regular;
-    font-weight:400;
-    color:rgba(38,38,38,1);
+  .versionItem {
+    height: 20px;
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(38, 38, 38, 1);
     position: relative;
     margin-left: 16px;
     margin-bottom: 10px;
     margin-right: 25px;
-    .versionInfo{
+    .versionInfo {
       position: absolute;
       left: 0px;
       color: #262626;
     }
-    .versionDate{
+    .versionDate {
       position: absolute;
       right: 0px;
-      color: #B5B5B5;
+      color: #b5b5b5;
     }
   }
-
 }
 </style>

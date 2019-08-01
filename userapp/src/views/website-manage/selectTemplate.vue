@@ -7,14 +7,18 @@
     </el-aside>
     <el-main class="member-content">
       <el-row>
-          <ChangeSite></ChangeSite>
+        <ChangeSite></ChangeSite>
       </el-row>
       <el-row class="wrap">
-        <el-col :span="9" class="backgroundImg"></el-col>
-        <el-col :span="6">
-          <el-col class="textOne">选择网站模板，立即开启网站管理</el-col>
-          <el-col class="textTwo">建立您的第一个专业网站。</el-col>
-          <button class="select" @click="showTemplate">选择模版</button>
+        <el-col :span="8" style="min-width: 500px; max-width: 688px;">
+          <img src="~img/siteManage/selectTemplate.png" alt class="backgroundImg" />
+        </el-col>
+        <el-col :span="8">
+          <div class="tempalte-selected__section">
+            <el-col class="textOne">选择网站模板，立即开启网站管理</el-col>
+            <el-col class="textTwo">建立您的第一个专业网站。</el-col>
+            <button class="select" @click="showTemplate">选择模版</button>
+          </div>
         </el-col>
       </el-row>
     </el-main>
@@ -51,19 +55,18 @@ export default {
         { name: "邮件服务器", url: "/website/email" }
       ],
       templateShow: false,
-      templateType: "manual",
+      templateType: "manual"
     };
   },
   computed: {},
-  mounted() {
-  },
+  mounted() {},
   methods: {
     /**
      * 显示选择模版弹框
      */
     showTemplate() {
       this.templateShow = true;
-    },
+    }
   }
 };
 </script>
@@ -96,24 +99,22 @@ export default {
 }
 
 .wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
+  width: 100%;
+  height: calc(100% - 120px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .backgroundImg {
-    width: 688px;
-    height: 335px;
-    background: url("~img/siteManage/selectTemplate.png") no-repeat center;
-    background-size: 100%;
+    width: 100%;
+  }
+  .tempalte-selected__section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
   }
   .textOne {
-    margin-top: 70px;
     margin-left: 63px;
-    width: 420px;
     font-size: 28px;
     font-family: PingFangSC-Medium;
     font-weight: 500;
@@ -122,7 +123,6 @@ export default {
   .textTwo {
     margin-top: 16px;
     margin-left: 63px;
-    width: 336px;
     font-size: 28px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
@@ -145,7 +145,6 @@ export default {
     }
   }
 }
-
 
 .my-chose-template .dialog-fade-enter-active {
   animation: my-dialog-fade-in 0.3s;
@@ -172,6 +171,31 @@ export default {
   100% {
     transform: translate3d(0, 100%, 0);
     opacity: 0;
+  }
+}
+@media screen and (max-width: 1650px) {
+  .wrap .textOne, .wrap .textTwo {
+    font-size: 24px !important;
+  }
+  .wrap .select {
+    width: 180px;
+    height: 40px;
+    line-height: 40px;
+  }
+}
+@media screen and (max-width: 1440px) {
+  .wrap .textOne, .wrap .textTwo {
+    font-size: 20px !important;
+  }
+  .wrap .select {
+    width: 140px;
+    height: 30px;
+    line-height: 30px;
+  }
+}
+@media screen and (max-width: 1260px) {
+  .wrap .textOne, .wrap .textTwo {
+    font-size: 16px !important;
   }
 }
 </style>
