@@ -237,7 +237,7 @@ export default {
             this.input = data.displayName;
             this.createTime = formatDateTime(
                 data.createTime,
-                "yyyy-MM-dd hh:mm:ss"
+                "yyyy-MM-dd hh:mm"
             );
             if (this.userInfo.isSetPassWord) {
                 this._setPwdTitleAndBtn();
