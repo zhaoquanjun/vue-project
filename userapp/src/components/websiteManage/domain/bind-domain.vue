@@ -43,44 +43,49 @@
             </div>
         </div>
         <div class="pannel-footer">
-            <button class="footer-btn confirmBtn" :disabled="disabled" @click="handleConfirm">{{btnText}}</button>
+            <button
+                class="footer-btn confirmBtn"
+                :disabled="disabled"
+                @click="handleConfirm"
+            >{{btnText}}</button>
             <button class="footer-btn cancel" @click="handleCancel">取消</button>
         </div>
     </div>
 </template>
 <script>
-import {bindDomainAndEnableCdn} from  "@/api/request/domainApi";
+import { bindDomainAndEnableCdn } from "@/api/request/domainApi";
 export default {
-    props:["domainAmount"],
+    props: ["domainAmount"],
     data() {
         return {
-          
             domainValue: "",
             onerrorTip: false,
             onerrorText: "",
-            disabled:false,
-            btnText:"确定"
+            disabled: false,
+            btnText: "确定"
         };
     },
     methods: {
-          async handleConfirm() {
-            this.disabled=true; 
-            this.btnText="添加中" 
-            if(this.domainAmount==10){
+        async handleConfirm() {
+            if (this.domainAmount == 10) {
                 this.$notify({
                     message: "每个站点最多只能绑定10个域名",
                     type: "warning",
-                    duration:1500
+                    duration: 1500
                 });
                 return false;
             }
             if (!this.changeInput()) return;
+            this.disabled = true;
+            this.btnText = "添加中";
             let { data, status } = await bindDomainAndEnableCdn({
                 domain: this.domainValue
             });
             if (status === 200 && !data.isSuccess) {
                 this.onerrorTip = true;
                 this.onerrorText = data.msg;
+                this.disabled = false;
+                this.btnText = "确定";
                 return;
             }
             if (status === 200 && data.isSuccess) {
@@ -88,8 +93,20 @@ export default {
                 this.$emit("getCdnDomainList"); //添加成功后刷新域名列表
                 // this.onerrorTip = false;
                 let message = [];
-                message.push(this.$createElement("p", { style: "color: #262626" },`${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`));
-                message.push(this.$createElement("p",{ style: "color: #8C8C8C" },"如已存在解析记录，将会修改原有记录"));
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #262626" },
+                        `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`
+                    )
+                );
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #8C8C8C" },
+                        "如已存在解析记录，将会修改原有记录"
+                    )
+                );
                 this.$confirm("提示", {
                     title: "提示",
                     message: this.$createElement("div", null, message),
@@ -99,15 +116,15 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            this.$emit("resolveCdnByAliYunToken")
-                            this.handleCancel()
+                            this.$emit("resolveCdnByAliYunToken", data.id);
+                            this.handleCancel();
                         } else {
                             this.elemnetConfirm(
                                 "warning",
                                 "您可在域名列表中继续完成解析设置。",
                                 `域名未解析！`
                             );
-                            this.handleCancel()
+                            this.handleCancel();
                         }
                     }
                 });
@@ -159,9 +176,7 @@ export default {
                 type: type,
                 callback: async action => {
                     if (action === "confirm") {
-                       
-                    }else{
-                       
+                    } else {
                     }
                 }
             });
@@ -171,21 +186,21 @@ export default {
             var reg = /^([a-z0-9\-\u4E00-\u9FA5]*[\.])+([a-z\u4E00-\u9FA5]{2,10})$/;
             return reg.test(domain);
         },
-       
-         /**
+
+        /**
          * 关闭弹框
          */
         handleCancel() {
-             this.domainValue = "";
-             this.onerrorTip= false;
-             this.onerrorText= "";
-             this.$emit("closeDialog");
+            this.domainValue = "";
+            this.onerrorTip = false;
+            this.onerrorText = "";
+            this.$emit("closeDialog");
         },
-        clickConfirmBtnSet(){
+        clickConfirmBtnSet() {
             this.backupShow = false;
-            this.disabled=false; 
-             this.btnText="确定";
-        },
+            this.disabled = false;
+            this.btnText = "确定";
+        }
     }
 };
 </script>

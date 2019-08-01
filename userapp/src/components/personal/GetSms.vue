@@ -3,8 +3,7 @@
     <div class="login">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <div v-if="!isModifi">
-               
-                    <el-form-item prop="verification" class="verification-code">
+                <el-form-item prop="verification" class="verification-code">
                     <el-input
                         :key="0"
                         type="verification"
@@ -22,7 +21,6 @@
             <div v-else>
                 <el-form-item prop="phone">
                     <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号">
-                      
                         <el-select
                             slot="prefix"
                             style="z-index:10000"
@@ -55,7 +53,11 @@
                         placeholder="验证码"
                         maxlength="6"
                     ></el-input>
-                    <el-button class="verification-text" @click="sendChangePhoneCode" :disabled="disabled=!show">
+                    <el-button
+                        class="verification-text"
+                        @click="sendChangePhoneCode"
+                        :disabled="disabled=!show"
+                    >
                         <span v-show="show">发送验证码</span>
                         <span v-show="!show" class="count">{{count}}秒后可重新获取</span>
                     </el-button>
@@ -66,10 +68,14 @@
 </template>
  
 <script>
-    import { updateUserPhone ,sendSourcePhoneCode ,sendTargetPhoneCode} from "@/api/index.js";
+import {
+    updateUserPhone,
+    sendSourcePhoneCode,
+    sendTargetPhoneCode
+} from "@/api/index.js";
 const TIME_COUNT = 60; //更改倒计时时间
-export default {        
-    props: ["sourcePhone","isModifi"],
+export default {
+    props: ["sourcePhone", "isModifi"],
     created() {},
     data() {
         var checkPhone = (rule, value, callback) => {
@@ -85,7 +91,9 @@ export default {
                     // }
                     callback();
                 } else {
-                    return callback(new Error("您输入的手机号格式有误,请重新输入"));
+                    return callback(
+                        new Error("您输入的手机号格式有误,请重新输入")
+                    );
                 }
             }
         };
@@ -101,23 +109,14 @@ export default {
             rules: {
                 phone: [{ validator: checkPhone, trigger: "blur" }],
                 verification: [
-                    { required: true, message: "请输入验证码", trigger: "blur" },
-                   
+                    { required: true, message: "请输入验证码", trigger: "blur" }
                 ]
-                //verification: [
-                //    {
-                //        required: true,
-                //        message: "请输入验证码",
-                //        trigger: "blur"
-                //    },
-                //    { trigger: "blur" }
-                //]
             },
             checked: false,
             isPwd: true,
             options: [
                 {
-                    value: "中国大陆" ,
+                    value: "中国大陆",
                     label: " +86"
                 },
                 {
@@ -133,11 +132,11 @@ export default {
                     label: "+1"
                 },
                 {
-                    value:"英国",
-                    label: "+44" 
+                    value: "英国",
+                    label: "+44"
                 },
                 {
-                    value: "日本" ,
+                    value: "日本",
                     label: "+81"
                 },
                 {
@@ -162,7 +161,6 @@ export default {
                     message: "发送成功!"
                 });
                 if (!this.timer) {
-
                     this.count = TIME_COUNT;
                     this.show = false;
                     this.timer = setInterval(() => {
@@ -172,6 +170,7 @@ export default {
                             this.show = true;
                             clearInterval(this.timer); // 清除定时器
                             this.timer = null;
+                            this.count = "";
                         }
                     }, 1000);
                 }
@@ -180,45 +179,48 @@ export default {
                     type: "failed",
                     message: "发送失败!"
                 });
-            }           
+            }
         },
         async sendChangePhoneCode() {
-            console.log(this.value+this.ruleForm.phone);
-            let targetPhone = this.ruleForm.phone;//this.value + this.ruleForm.phone;
-            if (this.ruleForm.phone =="" ||this.ruleForm.phone == null) {
+            let targetPhone = this.ruleForm.phone; //this.value + this.ruleForm.phone;
+            if (this.ruleForm.phone == "" || this.ruleForm.phone == null) {
                 this.$message({
                     type: "failed",
                     message: "请先填写要绑定的手机号码!"
                 });
-            }else{
-                let { status } = await sendTargetPhoneCode(this.sourcePhone,targetPhone);
-            if (status === 200) {
-                this.$message({
-                    type: "success",
-                    message: "发送成功!"
-                });
-                if (!this.timer) {
-
-                    this.count = TIME_COUNT;
-                    this.show = false;
-                    this.timer = setInterval(() => {
-                        if (this.count > 0 && this.count <= TIME_COUNT) {
-                            this.count--;
-                        } else {
-                            this.show = true;
-                            clearInterval(this.timer); // 清除定时器
-                            this.timer = null;
-                        }
-                    }, 1000);
-                }
             } else {
-                this.$message({
-                    type: "failed",
-                    message: "发送失败!"
-                });
+                let { status } = await sendTargetPhoneCode(
+                    this.sourcePhone,
+                    targetPhone
+                );
+                if (status === 200) {
+                    this.$message({
+                        type: "success",
+                        message: "发送成功!"
+                    });
+                    if (!this.timer) {
+                        this.count = TIME_COUNT;
+                        this.show = false;
+                        this.timer = setInterval(() => {
+                            if (this.count > 0 && this.count <= TIME_COUNT) {
+                                this.count--;
+                            } else {
+                                this.show = true;
+                                clearInterval(this.timer); // 清除定时器
+                                this.timer = null;
+                                this.count = "";
+                            }
+                        }, 1000);
+                    }
+                } else {
+                    this.$message({
+                        type: "failed",
+                        message: "发送失败!"
+                    });
                 }
             }
         },
+
         change(item) {
             this.value = item;
         },
@@ -228,8 +230,11 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate(async valid => {
                 if (valid) {
-                    console.log(this.$refs[formName]); 
-                    let { status } = await updateUserPhone(this.ruleForm.phone,this.ruleForm.verification);
+                    console.log(this.$refs[formName]);
+                    let { status } = await updateUserPhone(
+                        this.ruleForm.phone,
+                        this.ruleForm.verification
+                    );
                     if (status === 200) {
                         this.$message({
                             type: "success",
@@ -247,28 +252,34 @@ export default {
                 }
             });
         },
-        submitForm1(){
-             this.$refs.ruleForm.validate(async valid => {
+        submitForm1() {
+            let result;
+            this.$refs.ruleForm.validate(async valid => {
                 if (valid) {
-
+                    result = true;
+                    return true;
+                } else {
+                    result = false;
+                    return false;
                 }
-             })
+            });
+            return result;
         }
     },
-     computed:{
-        pannelShow(){
-            return this.$store.state.isRightPanelShow
+    computed: {
+        pannelShow() {
+            return this.$store.state.isRightPanelShow;
         }
     },
-  
-     watch:{
-        pannelShow(){
-            this.$refs.ruleForm.clearValidate()
-            this.ruleForm={
+
+    watch: {
+        pannelShow() {
+            this.$refs.ruleForm.clearValidate();
+            (this.ruleForm = {
                 phone: "",
                 verification: ""
-            },
-            this.show = true;
+            }),
+                (this.show = true);
         }
     }
 };
@@ -318,10 +329,10 @@ export default {
     bottom: 1px;
     right: 1px;
     border: none;
-    color: #00C1DE;
+    color: #00c1de;
     font-weight: 400;
 }
-.count{
-    color: #8C8C8C;
+.count {
+    color: #8c8c8c;
 }
 </style>

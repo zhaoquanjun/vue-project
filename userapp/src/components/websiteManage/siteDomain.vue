@@ -124,23 +124,25 @@ export default {
          * 获取域名列表
          */
         async _getCdnDomainList() {
+            
             let { data } = await domainApi.getCdnDomainList();
             this.domainListData = data;
+            console.log(this.domainListData,'this.domainListDatathis.domainListData')
             this.domainAmount = data.length;
         },
 
         /**
          * 解析域名
          */
-        async _resolveCdnByAliYunToken(
-            params = {
-                siteId: this.siteId,
+        async _resolveCdnByAliYunToken(id) {
+          
+            let params = {
+                siteId: this.$store.state.dashboard.siteId,
                 resolveType: "",
                 domain: this.domainValue,
                 resolveValue: "",
-                isForceUpdate: false
-            }
-        ) {
+                isForceUpdate: false,
+            };
             let { data } = await domainApi.resolveCdnByAliYunToken(params);
             if (!data.isSuccess && data.redirectUrl) {
                 window.open(data.redirectUrl);

@@ -92,7 +92,6 @@ export default {
                     this.$refs.operateSection.style.display = "none";
             });
         });
-        
     },
     methods: {
         handlerOver(data) {
@@ -110,6 +109,7 @@ export default {
                     message: "分类名称不能为空",
                     type: "warning"
                 });
+                return false;
             }
             if (isNewAdd) {
                 this.$emit("create", {
