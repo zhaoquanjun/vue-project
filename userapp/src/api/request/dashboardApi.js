@@ -50,3 +50,10 @@ export const updateUserLastAppIdAndCookie = (appId) => {
 export const updateUserLastSiteIdAndCookie = (siteId) => {
     return ajaxRequest.put(`/api/userInfo/UpdateUserLastSiteIdAndCookie`, siteId);
 }
+
+/**
+ * 获取用户头像 
+ */
+export const getAppHeadInfo = () => {
+    return ajaxRequest.put(`/api/userInfo/GetAppHeadInfo`);
+}

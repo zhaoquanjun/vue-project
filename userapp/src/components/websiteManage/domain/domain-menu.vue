@@ -1,8 +1,8 @@
 <template>
     <div>
          <el-tabs v-model="backupType" type="card" @tab-click="handleTabClick">
-                <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
-                <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
+                <el-tab-pane label="域名列表" name="manual"></el-tab-pane>
+                <el-tab-pane label="301重定向" name="auto"></el-tab-pane>
             </el-tabs>
             <button class="backupBtn" @click="handleBtn">添加域名</button>
     </div>

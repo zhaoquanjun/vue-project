@@ -7,7 +7,7 @@
         </el-aside>
         <el-main class="member-content">
             <el-row class="user-list">
-                <span class="member-list-title fs14">网站管理</span>
+                <span class="member-list-title fs14">域名管理</span>
             </el-row>
             <el-row>
                 <SiteInfo :site-info="siteInfo" />
@@ -19,7 +19,7 @@
             <el-button @click="_reopenCdn">打开cdn加速</el-button>
             <el-button @click="_removeAliYunToken">删除阿里云token</el-button>
             <el-button @click="_disableHttps">禁用https</el-button>
-            <el-button @click="_deleteCdnDomain">删除</el-button> -->
+            <el-button @click="_deleteCdnDomain">删除</el-button>-->
             <el-main>
                 <DomainList
                     :tableData="domainListData"
@@ -90,8 +90,8 @@ export default {
             backuping: false,
             // recovery: false,
             remarkInfo: "",
-            domainAmount:0,
-            siteInfo:{},
+            domainAmount: 0,
+            siteInfo: {}
         };
     },
     created() {
@@ -113,7 +113,7 @@ export default {
          */
         async getSiteInfo() {
             let { data } = await getSiteInfo(2);
-            console.log(data,'000000');
+            console.log(data, "000000");
             this.siteInfo = data;
             // this.siteInfoImg = data.siteImage;
             // this.siteName = data.siteName;
@@ -124,8 +124,10 @@ export default {
          * 获取域名列表
          */
         async _getCdnDomainList() {
+            
             let { data } = await domainApi.getCdnDomainList();
             this.domainListData = data;
+            console.log(this.domainListData,'this.domainListDatathis.domainListData')
             this.domainAmount = data.length;
         },
 
@@ -134,17 +136,23 @@ export default {
          */
         async _resolveCdnByAliYunToken(
             params = {
-                siteId: this.siteId,
+                siteId: this.$store.state.dashboard.siteId,
                 resolveType: "",
                 domain: this.domainValue,
                 resolveValue: "",
                 isForceUpdate: false
             }
         ) {
-            console.log(this.siteId,22222222222222);
             let { data } = await domainApi.resolveCdnByAliYunToken(params);
             if (!data.isSuccess && data.redirectUrl) {
                 window.open(data.redirectUrl);
+            }
+            if (!data.isSuccess && !data.redirectUrl) {
+                this.$notify({
+                    message: data.errorMessage,
+                    type: "error",
+                    duration: 1500
+                });
             }
         },
         /**
@@ -153,12 +161,12 @@ export default {
         async _oneKeyEnableHttps(domainId) {
             let { data, status } = await domainApi.oneKeyEnableHttps(domainId);
             if (status === 200) {
-                // 
+                //
                 this.$notify({
                     title: "成功",
                     message: "证书申请成功！",
                     type: "success",
-                    duration:1500
+                    duration: 1500
                 });
             }
         },
@@ -173,25 +181,24 @@ export default {
          * 关闭cnd加速
          */
         async _pauseCdn(siteDomainId) {
-            let {data,status} = await domainApi.pauseCdn(siteDomainId);
-            if(status===200){
-                  this.$notify({
+            let { data, status } = await domainApi.pauseCdn(siteDomainId);
+            if (status === 200) {
+                this.$notify({
                     message: "已成功关闭CDN",
                     type: "success",
-                    duration:1500
+                    duration: 1500
                 });
                 this._getCdnDomainList();
             }
-            
         },
         /** 开启cdn加速 */
         async _reopenCdn(siteDomainId) {
             let data = await domainApi.reopenCdn(siteDomainId);
-            if(status===200){
-                  this.$notify({
+            if (status === 200) {
+                this.$notify({
                     message: "已开启CDN，等待服务器审核",
                     type: "success",
-                    duration:1500
+                    duration: 1500
                 });
                 this._getCdnDomainList();
             }

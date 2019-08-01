@@ -3,7 +3,7 @@
  */
 
 import axios from 'axios';
-import { MessageBox, Message } from 'element-ui';
+import { MessageBox, Message, Notification } from 'element-ui';
 import { getLocal } from "@/libs/local.js";
 import environment from "@/environment/index.js";
 import store from "@/store/index";
@@ -31,7 +31,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 // 请求拦截器
 axios.interceptors.request.use(
     config => {
-       
+
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');
@@ -48,6 +48,8 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
+       
+
         if (response.status === 200) {
             return Promise.resolve(response);
         } else {
@@ -56,10 +58,19 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     (error) => {
-        try{
+        try {
             let status = error.response.status;
             if (error.response.status) {
                 switch (error.response.status) {
+                    case 400:
+                            Notification({
+                                message: error.response.data,
+                                showClose: false,
+                                type:"error",
+                                duration:2000
+                              
+                            })
+                            break;
                     // 401: 未登录                
                     // 未登录则跳转登录页面，并携带当前页面的路径                
                     // 在登录成功后返回当前页面，这一步需要在登录页操作。                
@@ -83,16 +94,18 @@ axios.interceptors.response.use(
                         break;
                     // 其他错误，直接抛出错误提示                
                     default:
-                        Message({
-                            message: error.response.data,
-                            type: 'error',
-                            duration: 5 * 1000
+                        Notification({
+                            message: error.response.data.message,
+                            showClose: false,
+                            type:"error",
+                            duration:2000
+                          
                         })
-    
+
                 }
                 return Promise.reject(error.response);
             }
-        }catch(e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -111,7 +124,7 @@ export function get(url, params) {
                 resolve(res);
             })
             .catch(err => {
-               
+
                 reject(err)
             })
     });
@@ -121,14 +134,14 @@ export function get(url, params) {
  * @param {String} url [请求的url地址] 
  * @param {Object} params [请求时携带的参数] 
  */
-export function post(url, params,fn) {
+export function post(url, params, fn) {
     return new Promise((resolve, reject) => {
-        axios.post(url, params,fn)
+        axios.post(url, params, fn)
             .then(res => {
                 resolve(res);
             })
             .catch(err => {
-                
+
                 reject(err)
             })
     });

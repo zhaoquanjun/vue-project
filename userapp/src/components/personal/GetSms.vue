@@ -10,21 +10,19 @@
                         type="verification"
                         v-model="ruleForm.verification"
                         autocomplete="on"
-                        placeholder="验证码"
+                        placeholder="短信验证码"
                         maxlength="6"
                     ></el-input>
                     <el-button class="verification-text" @click="send" :disabled="disabled=!show">
-                        <span v-show="show">获取验证码</span>
-                        <span v-show="!show" class="count">{{count}} s</span>
+                        <span v-show="show">发送验证码</span>
+                        <span v-show="!show" class="count">{{count}}秒后可重新获取</span>
                     </el-button>
                 </el-form-item>
             </div>
             <div v-else>
                 <el-form-item prop="phone">
                     <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号">
-                        <span slot="prefix">
-                            <svg-icon icon-class="search-icon"></svg-icon>
-                        </span>
+                      
                         <el-select
                             slot="prefix"
                             style="z-index:10000"
@@ -58,8 +56,8 @@
                         maxlength="6"
                     ></el-input>
                     <el-button class="verification-text" @click="sendChangePhoneCode" :disabled="disabled=!show">
-                        <span v-show="show">获取验证码</span>
-                        <span v-show="!show" class="count">{{count}} s</span>
+                        <span v-show="show">发送验证码</span>
+                        <span v-show="!show" class="count">{{count}}秒后可重新获取</span>
                     </el-button>
                 </el-form-item>
             </div>
@@ -106,14 +104,6 @@ export default {
                     { required: true, message: "请输入验证码", trigger: "blur" },
                    
                 ]
-                //verification: [
-                //    {
-                //        required: true,
-                //        message: "请输入验证码",
-                //        trigger: "blur"
-                //    },
-                //    { trigger: "blur" }
-                //]
             },
             checked: false,
             isPwd: true,
@@ -221,6 +211,7 @@ export default {
                 }
             }
         },
+        
         change(item) {
             this.value = item;
         },
@@ -248,14 +239,34 @@ export default {
                     return false;
                 }
             });
+        },
+        submitForm1(){
+            let result ;
+             this.$refs.ruleForm.validate(async valid => {
+                if (valid) {
+                   result = true
+                    return true;
+                }else{
+                    result = false
+                    return false
+                }
+             })
+             return result;
         }
     },
-    computed: {},
-    watch: {
-        isModifi() {
-            console.log("我变化了");
-            console.log(this.ruleForm.verification);
-            this.ruleForm.verification = "";
+     computed:{
+        pannelShow(){
+            return this.$store.state.isRightPanelShow
+        }
+    },
+  
+     watch:{
+        pannelShow(){
+            this.$refs.ruleForm.clearValidate()
+            this.ruleForm={
+                phone: "",
+                verification: ""
+            },
             this.show = true;
         }
     }
@@ -306,6 +317,10 @@ export default {
     bottom: 1px;
     right: 1px;
     border: none;
-    color: red;
+    color: #00C1DE;
+    font-weight: 400;
+}
+.count{
+    color: #8C8C8C;
 }
 </style>

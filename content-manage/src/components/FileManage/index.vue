@@ -100,7 +100,7 @@
 </template>
 <script>
     import ChunkUpload from "@/components/common/ChunkUpload"
-    import MTree from "./MTree";
+    import MTree from "_c/ImgManage/MTree";
 
     import ListHeader from "./ListHeader";
     import List from "./List";
@@ -366,27 +366,6 @@
     };
 </script>
 
-<style lang="scss" scoped>
-    .pic-type-title {
-        height: 60px;
-        line-height: 60px;
-        padding-left: 14px;
-        border-bottom: 1px solid #e8eaf3;
-        border-right: 1px solid #e8eaf3;
-        box-sizing: border-box;
-        span
-
-    {
-        vertical-align: middle;
-        padding-left: 10px;
-    }
-
-    }
-
-    .title-item {
-        padding: 28px 0 12px 12px;
-    }
-</style>
 
 
 

@@ -262,16 +262,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.empty-table {
-    img {
-        width: 54px;
-        vertical-align: middle;
-        padding: 18px 28px;
-    }
-    span {
-        color: #8c8c8c;
-    }
-}
+
 .textareaWrap {
     background: #fff;
     position: relative;

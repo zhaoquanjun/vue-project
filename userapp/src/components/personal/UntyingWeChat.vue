@@ -1,11 +1,13 @@
 <template>
     <div class="set-phone-number">
-        <el-row class="demo-autocomplete"></el-row>
-        <el-alert title="解绑后，将不能使用钉钉登录管理平台" v-if="this.provider=='DingDing'" type="success"></el-alert>
-        <el-alert title="解绑后，将不能使用支付宝登录管理平台" v-else-if="this.provider=='Alipay'" type="success"></el-alert>
-        <el-alert title="解绑后，将不能使用微信登录管理平台" v-else type="success"></el-alert>
+        <div class="modify-title">
+            <p v-if="this.provider=='DingDing'">解绑后，将不能使用钉钉登录管理平台</p>
+            <p v-else-if="this.provider=='Alipay'">解绑后，将不能使用支付宝登录管理平台</p>
+            <p v-else>解绑后，将不能使用微信登录管理平台</p>
+        </div>
+       
         <div class="from-row">
-            <get-sms ref="getSms" :sourcePhone="sourcePhone"  :is-modifi="isModifi"></get-sms>
+            <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi"></get-sms>
         </div>
         <div class="footer">
             <button class="confirm footer-btn" @click="untyIng ">解绑</button>
@@ -14,42 +16,40 @@
     </div>
 </template>
 <script>
-    import NoCaptcha from "../common/no-captcha";
-    import GetSms from "./GetSms";    
-    import { isInvalidCode } from "@/api/index.js";
-    export default {
-    props: ["sourcePhone","provider"],
+import NoCaptcha from "../common/no-captcha";
+import GetSms from "./GetSms";
+import { isInvalidCode } from "@/api/index.js";
+export default {
+    props: ["sourcePhone", "provider"],
     components: { NoCaptcha, GetSms },
     data() {
         return {
             value: "",
-            isModifi:false,
+            isModifi: false
         };
     },
-    methods: {       
+    methods: {
         async untyIng() {
-            let code = this.$refs.getSms.ruleForm.verification
-            if (code==null) {
-                this.$message({
-                    type: "failed",
-                    message: "请输入验证码!"
-                });
+            let code = this.$refs.getSms.ruleForm.verification;
+            if (!code) {
+                this.$refs.getSms.submitForm1()
+                return
             } else {
                 let { status } = await isInvalidCode(this.sourcePhone, code);
                 if (status === 200) {
-                    this.$emit("removeExternalUserAsync",this.provider);
+                    this.$emit("removeExternalUserAsync", this.provider);
                 } else {
                     this.$message({
-                        type: "failed",
+                        type: "warning",
                         message: "验证失败!"
                     });
                 }
-            }                    
+            }
         },
-        close() {            
+        close() {
             this.$store.commit("CLOSERIGHTPANNEL", false);
         }
-     },
+    },
     mounted() {}
 };
 </script>
@@ -70,8 +70,9 @@
 
 
 <style lang="scss" scoped>
+@import "./style/personal";
 .set-phone-number {
-    padding: 0 15px;
+    padding: 32px;
 }
 .smsCodeWrap {
     position: relative;
@@ -105,26 +106,7 @@
     margin-top: 30px;
 }
 
-.footer {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    padding: 15px 17px;
-    border-top: 1px solid #efefef;
-    .footer-btn {
-        width: 63px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        color: #fff;
-    }
-    .cancel {
-        margin-left: 20px;
-        background: #fff;
-        border: 1px solid rgba(0, 193, 222, 1);
-        color: rgba(0, 193, 222, 1);
-    }
-}
+
 </style>
 
 

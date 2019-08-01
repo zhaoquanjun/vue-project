@@ -14,8 +14,8 @@ const router = new VueRouter({
 });
 export default router;
 let accessToken = store.state.user.accessToken.Authorization;
-console.log(accessToken,'accessTokenaccessToken')
 router.beforeEach(async (to, from, next) => {
+  document.title = to.meta.title;
   if (!to.meta.requiresAuth) {
     store.dispatch('_getMenuListData')
     next()
@@ -43,9 +43,10 @@ router.beforeEach(async (to, from, next) => {
           securityService.signIn();
          return
         } else {
-          store.commit("SET_USER", data);
+          await store.commit("SET_USER", data);
           await store.dispatch('_updateAppIdAndSiteIdToCookie')
           await store.dispatch('_getMenuListData')
+          await store.dispatch('_getAppHeadInfo')
           next()
         }
       })

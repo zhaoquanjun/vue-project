@@ -268,7 +268,7 @@ export default {
          */
         authEdit(data) {
             console.log(data);
-            this.rightPanelTitle = "权限配置";
+            this.rightPanelTitle = "编辑成员";
             this.ISRIGHTPANNELSHOW(true);
             this._getAppPolicies();
             this._getUserPolicy(data.userId);

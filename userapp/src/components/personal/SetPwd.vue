@@ -1,7 +1,9 @@
 
 <template>
     <div class="setPwd">
-        <el-alert :closable="false" :title="tipTitle" type="success"></el-alert>
+         <div class="modify-title">
+            <p>{{tipTitle}}</p>
+        </div>
         <template v-if="!isSetPassWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
                 <el-form-item prop="passWrod" class="verification-code">
@@ -27,7 +29,7 @@
             </el-form>
         </template>
         <template v-else>
-            <el-form :model="ruleFormCode" :rules="rules" ref="ruleForm" class="pwd-form">
+            <!-- <el-form :model="ruleFormCode" :rules="rules1" class="pwd-form">
                 <el-form-item prop="verification" class="verification-code">
                     <el-input
                         type="verification"
@@ -38,11 +40,14 @@
                         maxlength="6"
                     ></el-input>
                     <el-button class="verification-text" @click="send" :disabled="disabled=!show">
-                        <span v-show="show">获取验证码</span>
+                        <span v-show="show">发送验证码</span>
                         <span v-show="!show" class="count">{{count}} s</span>
                     </el-button>
                 </el-form-item>
-            </el-form>
+            </el-form> -->
+            <div class="from-row">
+             <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi"></get-sms>
+            </div>    
         </template>
         <div class="footer">
             <button class="confirm footer-btn" v-if="isSetPassWord" @click="nextStep">下一步</button>
@@ -59,8 +64,10 @@ import {
     changeUserPwd,
     isInvalidCode
 } from "@/api/index.js";
+import GetSms from "./GetSms";
     export default {
         props: ["isSetPassWord", "sourcePhone"],
+          components: {  GetSms },
         data() {
             var regex1 = new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$");
             var regex2 = new RegExp("^(?=.*\\d)(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$");
@@ -125,6 +132,7 @@ import {
                     }
                 ]
             },
+         
             phone: "",
             code: ""
         };
@@ -214,12 +222,10 @@ import {
                 this.submitForm("ruleForm");
                 return;
             }
-            let code = this.ruleFormCode.code;
-            if (!code) {
-                this.$message({
-                    type: "warning",
-                    message: "请输入验证码!"
-                });
+            let code = this.$refs.getSms.ruleForm.verification;
+           
+            if (!this.$refs.getSms.submitForm1()) {
+                return false
             } else {
                 let { status } = await isInvalidCode(this.sourcePhone, code);
                 if (status === 200) {
@@ -263,7 +269,7 @@ import {
 <style lang="scss" scoped>
 @import "./style/personal";
 .setPwd {
-    padding: 10px;
+   padding: 32px;
     .pwd-form {
         padding-top: 20px;
     }
@@ -277,6 +283,11 @@ import {
     bottom: 1px;
     right: 1px;
     border: none;
-    color: red;
+    color: #00C1DE;
+    font-weight: 400;
 }
+.from-row {
+    margin-top: 30px;
+}
+
 </style>

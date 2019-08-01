@@ -16,7 +16,7 @@ export default router;
 let accessToken = store.state.accessToken.Authorization;
 
 router.beforeEach(async (to, from, next) => {
-  console.log(to)
+  document.title = to.meta.title;
   NProgress.start()
   if (!to.meta.requiresAuth) {
     if (!Cookies.get('AppId')) {

@@ -12,7 +12,7 @@
             <template slot="empty">
                 <div class="empty-table">
                     <img src="~img/memberManage/table-empty.png" />
-                    <span>无搜索结果</span>
+                    <span>暂无数据</span>
                 </div>
             </template>
             <el-table-column prop="domain" label="域名"></el-table-column>
@@ -23,10 +23,11 @@
                         @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
                     ></el-switch>-->
                     <template
-                        v-if="scope.row.cdnDomainResolveStatus===2 && scope.row.cdnStatus===5"
+                        v-if="scope.row.cdnDomainResolveStatus===2 && scope.row.cdnStatus===5 &&scope.row.httpsStatus!==1" 
                     >
                         <!-- v-model="scope.row.httpsStatus" -->
                         <el-switch
+
                             :value="scope.row.httpsStatus==4"
                             @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
                         ></el-switch>

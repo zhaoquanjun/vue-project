@@ -133,7 +133,7 @@ export const defaultRoutes = [
     name: 'system',
     component: () => import("@/views/system/system.vue"),
     meta: {
-      title: "",
+      title: "系统设置",
       requiresAuth: true,
       requiresRole: {},
 
@@ -144,7 +144,7 @@ export const defaultRoutes = [
         name: "role",
         component: () => import("@/views/member-manage.vue"),
         meta: {
-          title: "",
+          title: "成员管理",
           requiresAuth: true,
           requiresRole: {},
           isSub:true
