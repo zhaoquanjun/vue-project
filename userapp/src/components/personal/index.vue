@@ -73,7 +73,8 @@
                 </div>
                 <div class="fright">
                     <span class="user-value" v-if="WeChatUser">
-                        <img src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png" />
+                        <img v-if="WeChatUser.headImgUrl" :src="WeChatUser.headImgUrl" />
+                        <img v-else src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"/>
                         <b>{{WeChatUser.externalName}}</b>
                     </span>
                     <span class="pd-left">
@@ -92,9 +93,10 @@
                     <span class="social-desc">绑定钉钉，可使用钉钉登录管理平台</span>
                 </div>
                 <div class="fright">
-                    <span class="user-value" v-if="WeChatUser">
-                        <img src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png" />
-                        <b>{{WeChatUser.externalName}}</b>
+                    <span class="user-value" v-if="DingDingUser">
+                        <img v-if="DingDingUser.headImgUrl" :src="DingDingUser.headImgUrl" />
+                        <img v-else src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"/>
+                        <b>{{DingDingUser.externalName}}</b>
                     </span>
                     <span class="pd-left">
                         <button
@@ -113,7 +115,8 @@
                 </div>
                 <div class="fright">
                     <span class="user-value" v-if="AlipayUser">
-                        <img src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png" />
+                        <img v-if="AlipayUser.headImgUrl" :src="AlipayUser.headImgUrl" />
+                        <img v-else src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"/>
                         <b>{{AlipayUser.externalName}}</b>
                     </span>
                     <span class="pd-left">
@@ -257,6 +260,9 @@ export default {
             this.ExternalUsers = data;
             if (this.ExternalUsers && this.ExternalUsers.length > 0) {
                 this.ExternalUsers.forEach(element => {
+                    if(element!=null && (element.headImgUrl ==null || element.headImgUrl.length <1)){
+                        element.headImgUrl="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png";
+                    }
                     if (element.provider == "Weixin") {
                         this.WeChatUser = element;
                     } else if (element.provider == "Alipay") {
