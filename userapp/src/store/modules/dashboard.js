@@ -1,6 +1,6 @@
-import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList} from "@/api/index"
+import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index"
 import { authRoutes } from "@/router/routes.js";
-import {setLocal} from "@/libs/local"
+import { setLocal } from "@/libs/local"
 
 // 更具后台菜单路由 匹配出 所需要显示的路由
 let getNeedRoutes = auth => {
@@ -18,10 +18,10 @@ let getNeedRoutes = auth => {
 };
 // 序列化菜单
 let filterMenuListData = (source) => {
-   
+
     let cloneData = source;
-    let pathArr=[];
-    let result =  cloneData.filter(father => {
+    let pathArr = [];
+    let result = cloneData.filter(father => {
         pathArr.push(father.path)
         let branchArr = cloneData.filter(
             child => father.id == child.parentId
@@ -32,18 +32,19 @@ let filterMenuListData = (source) => {
     let result1 = Object.values(result).sort((c, d) => {
         return c.orderId - d.orderId;
     });
-    return {result1,pathArr};
-    
+    return { result1, pathArr };
+
 };
 const dashboard = {
     state: {
-        appid:"",
-        siteId:"",
-        validateMenu:"",
-        menuList:[],
-        authList:[], 
-        buttonAuth:{},
-        hasRules:false 
+        appid: "",
+        siteId: "",
+        validateMenu: "",
+        menuList: [],
+        authList: [],
+        buttonAuth: {},
+        hasRules: false,
+        curAppName: ""
     },
     mutations: {
         GETUSERDASHBOARD(state, payload) {
@@ -52,40 +53,43 @@ const dashboard = {
             setLocal('appid', payload.lastAppId);
             setLocal('siteId', payload.lastSiteId);
         },
-        SETSITEID(state, siteId){
+        SETSITEID(state, siteId) {
             state.siteId = siteId
         },
-        SETAPPID(state, appId){
+        SETAPPID(state, appId) {
             state.appid = appId
-        },  
+        },
         GETVALIDATEMENU(state, payload) {
             // Base64.encode()
-             setLocal('validateMenu',payload);
-             state.validateMenu = payload;
-            
-             // setLocal('validateMenu', payload);
-         },
-         set_menuList(state,m){
+            setLocal('validateMenu', payload);
+            state.validateMenu = payload;
+
+            // setLocal('validateMenu', payload);
+        },
+        set_menuList(state, m) {
             // state.menuList = JSON.stringify(m);
             state.menuList = m;
             //setLocal("menulist", m)
 
-           },
-           set_authList(state, a){
-             state.authList = JSON.stringify(a);
-             state.authList = a;
-             state.hasRules = true;
-             setLocal("authList", a)
-           },
+        },
+        set_authList(state, a) {
+            state.authList = JSON.stringify(a);
+            state.authList = a;
+            state.hasRules = true;
+            setLocal("authList", a)
+        },
+        SETCURAPPNAME(state,name){
+            state.curAppName = name;
+        }
     },
     actions: {
-        async _updateAppIdAndSiteIdToCookie({ commit }){
+        async _updateAppIdAndSiteIdToCookie({ commit }) {
             let { data } = await updateAppIdAndSiteIdToCookie();
             commit("GETUSERDASHBOARD", data)
         },
         async _getMenuListData({ commit }) {
-           let { data } = await getSliderMenuList();
-             let { result1, pathArr } = filterMenuListData(data);
+            let { data } = await getSliderMenuList();
+            let { result1, pathArr } = filterMenuListData(data);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
             return data
@@ -96,8 +100,8 @@ const dashboard = {
             // 当前需要动态添加的路由
             return r;
         },
-        async getCurRouteAuth({state,getters}, path) {
-            if(!state.authList) return;
+        async getCurRouteAuth({ state, getters }, path) {
+            if (!state.authList) return;
             // let authList = JSON.parse(state.authList)
             return state.authList.some((item, index, array) => {
                 return item === path;
@@ -105,8 +109,8 @@ const dashboard = {
         }
     },
     getters: {
-        getMenuList(state){
-            if(!state.menuList) return 
+        getMenuList(state) {
+            if (!state.menuList) return
             // return JSON.parse(state.menuList)
             return state.menuList
         }

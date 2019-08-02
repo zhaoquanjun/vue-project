@@ -11,6 +11,7 @@
                 </span>
             </div>
         </el-col>
+       
     </el-row>
 </template>
 
@@ -19,11 +20,10 @@ export default {
     props: ["plugins"],
     data() {
         return {
-            clonePlugins: [],
+            clonePlugins: []
         };
     },
     methods: {
-    
         pluginsPic(it) {
             switch (it.pluginCode) {
                 case "MicroProgram":
@@ -88,8 +88,8 @@ body {
                 background-size: contain;
             }
             .OfficialAccounts {
-                background: url("~img/dashboard/board-wxpublicNumber.png") no-repeat
-                    center;
+                background: url("~img/dashboard/board-wxpublicNumber.png")
+                    no-repeat center;
                 background-size: contain;
             }
             .Form {
@@ -97,7 +97,7 @@ body {
                     center;
                 background-size: contain;
             }
-            .backgroundImg{
+            .backgroundImg {
                 position: absolute;
                 right: 0px;
                 bottom: 0px;
@@ -106,28 +106,28 @@ body {
                 width: 132px;
                 height: 118px;
                 background: url("~img/dashboard/board-pluginImg1.png") no-repeat;
-                background-position:right bottom;
+                background-position: right bottom;
                 background-size: contain;
             }
             .AliPayProgramGround {
                 width: 131px;
                 height: 127px;
                 background: url("~img/dashboard/board-pluginImg2.png") no-repeat;
-                background-position:right bottom;
+                background-position: right bottom;
                 background-size: contain;
             }
-            .OfficialAccountsGround{
+            .OfficialAccountsGround {
                 width: 108px;
                 height: 122px;
                 background: url("~img/dashboard/board-pluginImg3.png") no-repeat;
-                background-position:right bottom;
+                background-position: right bottom;
                 background-size: contain;
             }
-            .FormGround{
+            .FormGround {
                 width: 132px;
                 height: 107px;
                 background: url("~img/dashboard/board-pluginImg4.png") no-repeat;
-                background-position:right bottom;
+                background-position: right bottom;
                 background-size: contain;
             }
             .plugin-r {

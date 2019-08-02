@@ -97,6 +97,7 @@ export default {
         productsCount: data.contentsNumber.productsCount
       };
       this.appInfo = data.appInfo;
+      this.$store.commit("SETCURAPPNAME",data.appInfo.name)
       this.appInfo.time =
         formatDateTime(this.appInfo.createTime, "yyyy年MM月dd日") +
         "-" +

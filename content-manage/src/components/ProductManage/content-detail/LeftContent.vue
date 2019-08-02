@@ -5,7 +5,7 @@
             @submit.native.prevent
             :model="detailData"
             :rules="rules"
-            ref="articleDetail"
+            ref="contentForm"
         >
             <div class="content-item">
                 <el-row>
@@ -231,15 +231,6 @@
                 </el-form-item >-->
             </div>
         </el-form>
-
-        <!-- 
-
-                 <el-form-item>
-        <el-button type="primary" @click="submitForm('detailData')">立即创建</el-button>
-        <el-button @click="resetForm('detailData')">重置</el-button>
-        <el-button type="primary" @click="editArticle('detailData')">编辑保存</el-button>
-      </el-form-item>
-        -->
     </div>
 </template>
 <script>
@@ -287,7 +278,6 @@ Quill.register("formats/lineheight", LineHeight);
 let letterspacings = [false, "5px", "8px", "10px", "15px"];
 Quill.register("formats/letterspacing", LetterSpacing);
 
-
 // 调整大小组件。
 import ImageResize from "quill-image-resize-module";
 Quill.register("modules/imageResize", ImageResize);
@@ -302,8 +292,8 @@ export default {
     },
     data() {
         return {
-            isOutSeo:false,
-            isOutSearch:false,
+            isOutSeo: false,
+            isOutSearch: false,
             checkAll: false,
             checkedviewAuth: [{ name: "登录用户", id: 1 }],
             viewAuth: viewAuth,
@@ -394,7 +384,9 @@ export default {
         };
     },
     created() {
-         this.detailData.productCategoryList =[{id:this.$route.query.categoryId||0}] ;
+        this.detailData.productCategoryList = [
+            { id: this.$route.query.categoryId || 0 }
+        ];
         console.log(this.$route.query);
         var id = this.$route.query.id;
         this.curProduct = id;
@@ -434,10 +426,8 @@ export default {
                 }
             }
         };
-       
     },
     methods: {
-        
         textIndent(ele, width) {
             this.$nextTick(() => {
                 ele.style.textIndent = width + "px";
@@ -485,7 +475,7 @@ export default {
         },
         // 新建保存
         submitForm(formName, fileList) {
-            console.log(fileList,'--------===========')
+            console.log(fileList, "--------===========");
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
@@ -506,17 +496,25 @@ export default {
                 this.detailData
             );
             if (status === 200) {
-                this.$message({
+                this.$confirm("保存成功!", "提示", {
+                    confirmButtonText: "新增下一篇",
                     type: "success",
-                    message: "添加成功!"
+                    callback: async action => {
+                        if (action === "confirm") {
+                            this.resetForm("contentForm");
+                            this.$emit("changeSaveWay", false);
+                        } else {
+                            this.curProduct = data;
+                            this.detailData.id = data;
+                            this.$emit("changeSaveWay", true);
+                        }
+                    }
                 });
-                // this.$router.push(`/product/create?id=${data}`);
-                this.$router.go(-1);
             }
         },
         // 编辑提交
-        editArticle(formName,fileList) {
-              this.detailData.thumbnailPicUrlList = fileList;
+        editArticle(formName, fileList) {
+            this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle();
@@ -533,9 +531,21 @@ export default {
                 this.detailData
             );
             if (status === 200) {
-                this.$message({
+                this.$confirm("保存成功!", "提示", {
+                    confirmButtonText: "新增下一篇",
                     type: "success",
-                    message: "保存成功!"
+                    callback: async action => {
+                        if (action === "confirm") {
+                            this.resetForm("contentForm");
+                            this.resetDetail();
+                            this.$emit("changeSaveWay", false);
+                            this.$route.query.isEditor = 0;
+                        } else {
+                            this.curProduct = data;
+                            this.detailData.id = data;
+                            this.$emit("changeSaveWay", true);
+                        }
+                    }
                 });
             }
         },
@@ -548,7 +558,7 @@ export default {
             console.log(data, "datadatadata");
             var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
-                this.categoryName.push(categoryName) ;
+                this.categoryName.push(categoryName);
             }
         },
         chooseNode(data) {
@@ -614,6 +624,45 @@ export default {
             // this.checkAll = checkedCount === this.cities.length;
             // this.isIndeterminate =
             //     checkedCount > 0 && checkedCount < this.cities.length;
+        },
+        resetDetail() {
+            this.detailData = {
+                name: "",
+                description: "",
+                detailContent: "",
+                price: 1, //
+                costPrice: 1, //
+                originalPrice: 1, //
+                seoKeyword: [],
+                searchKeyword: [],
+                seoDescription: "",
+
+                skuId: "", //
+                publishTime: new Date(),
+                customUrl: "",
+                accessRoleList: [1],
+                thumbnailPicUrlList: [],
+                relatedProductList: [
+                    {
+                        id: "string",
+                        name: "string"
+                    }
+                ],
+                productCategoryList: [
+                    {
+                        id: 1,
+                        displayName: "1", //
+                        thumbnailPicUrl: "2" //
+                    }
+                ],
+                params: { name: 1 }, //
+                isTop: true,
+                isOnSell: true,
+                isTemplate: false, //
+                isSkuSwitchOn: false, //
+                isNeedShipping: false, //
+                isAllowComment: true
+            };
         }
     },
     mounted() {
@@ -627,21 +676,20 @@ export default {
     },
     watch: {
         "detailData.searchKeyword"() {
-           
-             if(this.detailData.searchKeyword.length>=5){
-                this.isOutSearch =true
-            }else{
-                this.isOutSearch =false
+            if (this.detailData.searchKeyword.length >= 5) {
+                this.isOutSearch = true;
+            } else {
+                this.isOutSearch = false;
             }
             // let width = this.detailData.searchKeyword.length * 52 ;
             // let ele = this.$refs.keywordInput.$el.children[0];
             // this.textIndent(ele, width);
         },
         "detailData.seoKeyword"() {
-               if(this.detailData.seoKeyword.length>=5){
-                this.isOutSeo =true
-            }else{
-                this.isOutSeo =false
+            if (this.detailData.seoKeyword.length >= 5) {
+                this.isOutSeo = true;
+            } else {
+                this.isOutSeo = false;
             }
             // let width = this.detailData.seoKeyword.length * 52;
             // let ele = this.$refs.metaKeywordsInput.$el.children[0];

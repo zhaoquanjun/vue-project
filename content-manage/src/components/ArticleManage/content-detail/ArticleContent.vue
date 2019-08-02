@@ -285,7 +285,6 @@ export default {
             value: 1,
             activeName: "",
             activeName1: "",
-
             articleDetail: {
                 NewId: "",
                 title: "",
@@ -315,7 +314,8 @@ export default {
             isModalShow: false,
             editorOption: {},
             keywordValue: "",
-            metaKeyword: ""
+            metaKeyword: "",
+            isNewAdd:false,
         };
     },
     created() {
@@ -458,18 +458,18 @@ export default {
                 this.articleDetail
             );
             if (status === 200) {
-                // this.$message({
-                //     type: "success",
-                //     message: "保存成功!"
-                // });
-
+                console.log(data,'00000------')
+               
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
-
                     type: "success",
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("articleDetail");
+                             this.$emit("changeSaveWay",false);
+                        }else{
+                            this.articleDetail.NewId = data;
+                            this.$emit("changeSaveWay",true);
                         }
                     }
                 });
@@ -495,13 +495,28 @@ export default {
             let { status, data } = await articleManageApi.editArticle(
                 this.articleDetail
             );
-            if (status === 200) {
-                this.$message({
-                    type: "success",
-                    message: "保存成功!"
-                });
+            // if (status === 200) {
+            //     this.$message({
+            //         type: "success",
+            //         message: "保存成功!"
+            //     });
                 // this.$router.push("/content/news");
-            }
+               this.$confirm("保存成功!", "提示", {
+                    confirmButtonText: "新增下一篇",
+                    type: "success",
+                    callback: async action => {
+                        if (action === "confirm") {
+                            this.resetForm("articleDetail");
+                             this.resetDetail()
+                              this.$emit("changeSaveWay",false);
+                              this.$route.query.id=false;
+                        }else{
+                            this.articleDetail.NewId = data;
+                            this.$emit("changeSaveWay",true)
+                        }
+                    }
+                });    
+           
         },
 
         imgChangeSizeHandler(img) {
@@ -556,14 +571,23 @@ export default {
         cancelEditorImg() {
             this.isModalShow = false;
         },
-        addEvent(el, type, fn) {
-            if (el.addEventListener) {
-                el.addEventListener(type, fn, false);
-            } else if (el.attachEvent()) {
-                el.attachEvent("on" + type, fn, false);
-            } else {
-                return false;
+        resetDetail(){
+                this.articleDetail= {
+                NewId: "",
+                title: "",
+                categoryId: 0,
+                summary: "",
+                contentDetail: "",
+                searchKeywords: [],
+                isPublish: false,
+                createTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
+                isTop: false,
+                metaTitle: "",
+                metaKeywords: [],
+                metaDescription: "",
+                pictureUrl: ""
             }
+       
         }
     },
     mounted() {

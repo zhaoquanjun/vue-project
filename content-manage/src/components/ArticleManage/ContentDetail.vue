@@ -1,15 +1,15 @@
 <template>
     <div class="article-box">
         <header class="article-bg">
-           <div class="article-crumbs" style="width:80%;margin:0 auto;padding-top:15px">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path:'/content/news' }">内容管理</el-breadcrumb-item>
-                <!-- :to="{ path: '/content/createarticle' }" -->
-                <el-breadcrumb-item :to="{ path:'/content/news' }">文章管理</el-breadcrumb-item>
-                <el-breadcrumb-item style="font-weight:700">{{operateName}}文章</el-breadcrumb-item>
-            </el-breadcrumb>
-           </div>
+            <div class="article-crumbs" style="width:80%;margin:0 auto;padding-top:15px">
+                <el-breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path:'/content/news' }">内容管理</el-breadcrumb-item>
+                    <!-- :to="{ path: '/content/createarticle' }" -->
+                    <el-breadcrumb-item :to="{ path:'/content/news' }">文章管理</el-breadcrumb-item>
+                    <el-breadcrumb-item style="font-weight:700">{{operateName}}文章</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
         </header>
         <el-container class="article-container" style>
             <el-header>
@@ -18,7 +18,7 @@
                     <el-col :span="10">
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
-                            <button >预览</button>
+                            <button>预览</button>
                             <button @click="submitForm">保存</button>
                         </div>
                     </el-col>
@@ -30,9 +30,11 @@
                         <el-col :span="14" :offset="3">
                             <ArticleContent
                                 @changeOperateName="changeOperateName"
-                                ref="articleContent" />
+                                @changeSaveWay="changeSaveWay"
+                                ref="articleContent"
+                            />
                         </el-col>
-                        <el-col :span="7" >
+                        <el-col :span="7">
                             <RightContent :imageUrl="imageUrl" ref="articleRight" />
                         </el-col>
                     </el-row>
@@ -54,39 +56,47 @@ export default {
             default: environment.uploadPicUrl
         }
     },
-    data(){
+    data() {
         return {
-            imageUrl:"",
-            detailData:{},
-            operateName:"新增"
-        }
+            imageUrl: "",
+            detailData: {},
+            operateName: "新增",
+            isEdit:false
+        };
     },
     components: {
         RightContent,
         ArticleContent
     },
-    methods:{
-      changeOperateName(operate){
-          this.operateName = operate;
-      },
-      submitForm(){
-
-        let imageUrl = this.$refs.articleRight.imageUrl1;
-      
-        if(this.$route.query.id){
-            this.$refs.articleContent.editArticle('articleDetail',imageUrl)
-        }else{
-           
-            this.$refs.articleContent.submitForm('articleDetail',imageUrl)
-        }
-        
-      },
+    methods: {
+        changeOperateName(operate) {
+            this.operateName = operate;
+        },
+        submitForm() {
+            let imageUrl = this.$refs.articleRight.imageUrl1;
+            if(this.isEdit){
+                 this.$refs.articleContent.editArticle(
+                    "articleDetail",
+                    imageUrl
+                );
+                return
+            }
+            if (this.$route.query.id) {
+                this.$refs.articleContent.editArticle(
+                    "articleDetail",
+                    imageUrl
+                );
+            } else {
+                this.$refs.articleContent.submitForm("articleDetail", imageUrl);
+            }
+        },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
-            this.imageUrl =  data.pictureUrl;
-           
+            this.imageUrl = data.pictureUrl;
         },
-     
+        changeSaveWay(isEdit){
+            this.isEdit = isEdit;
+        }
     },
     mounted() {
         var id = this.$route.query.id;
@@ -98,11 +108,11 @@ export default {
 </script>
 
 <style scoped>
-    .article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner{
-        font-weight: 400;
-        color: #262626;
-        font-size: 12px;
-    }
+.article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner {
+    font-weight: 400;
+    color: #262626;
+    font-size: 12px;
+}
 </style>
 
 <style lang="scss" scoped>
@@ -115,8 +125,10 @@ export default {
     background: url("~img/content-icon/content-detaiBg.png") no-repeat center;
     overflow: hidden;
     background-size: cover;
-    .article-crumbs{
-        width:80%;margin:0 auto;padding-top:15px
+    .article-crumbs {
+        width: 80%;
+        margin: 0 auto;
+        padding-top: 15px;
     }
 }
 .article-container {

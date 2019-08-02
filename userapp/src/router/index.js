@@ -8,7 +8,7 @@ import Cookies from "js-cookie"
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-    mode: "history",
+  mode: "history",
   //base: process.env.BASE_URL,
   routes: defaultRoutes
 });
@@ -32,7 +32,7 @@ router.beforeEach(async (to, from, next) => {
         await store.dispatch('_getMenuListData')
       }
       next();
-      
+
     } else {
       next('/404')
     }
@@ -41,12 +41,15 @@ router.beforeEach(async (to, from, next) => {
       securityService.getUser(location.href).then(async (data) => {
         if (!data) {
           securityService.signIn();
-         return
+          return
         } else {
-          await store.commit("SET_USER", data);
-          await store.dispatch('_updateAppIdAndSiteIdToCookie')
-          await store.dispatch('_getMenuListData')
-          await store.dispatch('_getAppHeadInfo')
+          store.dispatch("_set",data)
+          // store.commit("SET_USER", data);
+          // setTimeout(async() => {
+          //   await store.dispatch('_updateAppIdAndSiteIdToCookie')
+          //   await store.dispatch('_getMenuListData')
+          //   await store.dispatch('_getAppHeadInfo')
+          // }, 500)
           next()
         }
       })

@@ -1,22 +1,26 @@
 <template>
     <div class="article-box">
         <header class="article-bg">
-           <div class="article-crumbs" style="width:80%;margin:0 auto;padding-top:15px">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
-                <el-breadcrumb-item  :to="{ path:'/content/product' }">内容管理</el-breadcrumb-item>
-                <el-breadcrumb-item  :to="{ path:'/content/product' }">产品管理</el-breadcrumb-item>
-                <el-breadcrumb-item >{{isEditor==1?'编辑产品':'新增产品'}}</el-breadcrumb-item>
-            </el-breadcrumb>
-           </div>
+            <div class="article-crumbs" style="width:80%;margin:0 auto;padding-top:15px">
+                <el-breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path:'/content/product' }">内容管理</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path:'/content/product' }">产品管理</el-breadcrumb-item>
+                    <el-breadcrumb-item>{{isEditor==1?'编辑产品':'新增产品'}}</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
         </header>
         <el-container class="article-container" style>
             <el-header>
                 <el-row class="article-head">
-                    <el-col :span="13" :offset="3" style=" font-size: 22px;">{{isEditor==1?'编辑产品':'新增产品'}}</el-col>
+                    <el-col
+                        :span="13"
+                        :offset="3"
+                        style=" font-size: 22px;"
+                    >{{isEditor==1?'编辑产品':'新增产品'}}</el-col>
                     <el-col :span="6">
                         <div class="article-btn">
-                            <button  @click="()=>$router.go(-1)">返回</button>
+                            <button @click="()=>$router.go(-1)">返回</button>
                             <button>预览</button>
                             <button @click="submitForm">保存</button>
                         </div>
@@ -27,7 +31,7 @@
                 <div>
                     <el-row>
                         <el-col :span="13" :offset="3">
-                            <leftContent ref="articleContent" />
+                            <leftContent ref="articleContent" @changeSaveWay="changeSaveWay" />
                         </el-col>
                         <el-col :span="6" style="margin-left: 16px;">
                             <RightContent :fileList="fileList" ref="articleRight" />
@@ -51,50 +55,57 @@ export default {
             default: environment.uploadPicUrl
         }
     },
-    data(){
+    data() {
         return {
-            fileList:[],
-            detailData:{},
-        }
+            fileList: [],
+            detailData: {},
+            isEdit: false
+        };
     },
 
     components: {
         RightContent,
         leftContent
     },
-    created(){
-          console.log(this.$route.query);
-         console.log(this.$route.query.isEditor,'this.$route.query.isEditor')
+    created() {
+        console.log(this.$route.query);
+        console.log(this.$route.query.isEditor, "this.$route.query.isEditor");
     },
-    methods:{
-      submitForm(){
-        let flieUrls = [...this.$refs.articleRight.fileList1,...this.$refs.articleRight.fileList2];
-       
-        let fileList =flieUrls.map(item=>{
-            return item.response
-        });
-
-         console.log(fileList,'999999')
-        // editArticle
-        let isEditor = this.$route.query.isEditor;
-        if(!!isEditor){
-             this.$refs.articleContent.editArticle('articleDetail',fileList)
-        }else{
-            this.$refs.articleContent.submitForm('articleDetail',fileList)
-        }
-      },
+    methods: {
+        submitForm() {
+            let flieUrls = [
+                ...this.$refs.articleRight.fileList1,
+                ...this.$refs.articleRight.fileList2
+            ];
+            let fileList = flieUrls.map(item => {
+                return item.response;
+            });
+            if (this.isEdit) {
+                this.$refs.articleContent.editArticle("contentForm", fileList);
+                return;
+            }
+            // editArticle
+            let isEditor = this.$route.query.isEditor;
+            if (!!isEditor) {
+                this.$refs.articleContent.editArticle("contentForm", fileList);
+            } else {
+                this.$refs.articleContent.submitForm("contentForm", fileList);
+            }
+        },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
             let thumbnailPicUrlList = data.thumbnailPicUrlList;
             thumbnailPicUrlList.forEach(item => {
                 this.fileList.push({
-                    name:"123",
-                    response:item,
-                    url:item
-                })
-            })
+                    name: "123",
+                    response: item,
+                    url: item
+                });
+            });
         },
-     
+        changeSaveWay(isEdit) {
+            this.isEdit = isEdit;
+        }
     },
     mounted() {
         var id = this.$route.query.id;
@@ -102,21 +113,24 @@ export default {
             this.getArticleDetail(id);
         }
     },
-    computed:{
-        isEditor(){
-            console.log(this.$route.query.isEditor,'this.$route.query.isEditor')
-            return this.$route.query.isEditor
+    computed: {
+        isEditor() {
+            console.log(
+                this.$route.query.isEditor,
+                "this.$route.query.isEditor"
+            );
+            return this.$route.query.isEditor;
         }
     }
 };
 </script>
 
 <style scoped>
-    .article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner{
-        font-weight: 400;
-        color: #262626;
-        font-size: 12px;
-    }
+.article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner {
+    font-weight: 400;
+    color: #262626;
+    font-size: 12px;
+}
 </style>
 <style lang="scss" scoped>
 .article-box {
@@ -128,8 +142,10 @@ export default {
     background: url("~img/content-icon/content-detaiBg.png") no-repeat center;
     overflow: hidden;
     background-size: cover;
-    .article-crumbs{
-        width:80%;margin:0 auto;padding-top:15px
+    .article-crumbs {
+        width: 80%;
+        margin: 0 auto;
+        padding-top: 15px;
     }
 }
 .article-container {
