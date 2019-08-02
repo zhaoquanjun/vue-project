@@ -26,7 +26,7 @@
         </div>
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
-            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
+            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false" @close="closeDialog">
                 <!-- //<img :src="picUrl"> -->
                 <el-carousel
                     :autoplay="false"
@@ -89,18 +89,18 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
-            console.log(index,'111',row)
-            this.fullOssUrl = "";
             this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
-            this.initial = Number(index);
+            this.changeIndex = index;
         },
-        change(index) {
-            console.log(index,'222');
-            this.fullOssUrl = "";
+        change(index,index1) {
+            index = index === this.changeIndex?this.changeIndex:index;
             this.fullOssUrl = this.imgList[index].fullOssUrl;
             this.picInfo = this.imgList[index];
+        },
+         closeDialog(){
+             this.fullOssUrl = "";
         },
         /**
          * 移动分类

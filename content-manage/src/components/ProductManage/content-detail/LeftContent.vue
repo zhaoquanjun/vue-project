@@ -153,7 +153,7 @@
                             ></el-input>-->
                         </el-form-item>
                         <el-form-item>
-                            <el-checkbox-group
+                            <!-- <el-checkbox-group
                                 v-model="checkedviewAuth"
                                 @change="handleCheckedCitiesChange"
                             >
@@ -162,10 +162,16 @@
                                     :label="item"
                                     :key="item.id"
                                 >{{item.name}}</el-checkbox>
-                            </el-checkbox-group>
+                            </el-checkbox-group>-->
                         </el-form-item>
                         <el-form-item label="置頂" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
+                            <span
+                                style=" font-size: 14px; color: #606266;
+    vertical-align: middle;
+    padding:0  16px 0 32px ;"
+                            >仅登录用户可访问</span>
+                            <el-switch v-model="detailData.isLoggedInCanView"></el-switch>
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -335,7 +341,6 @@ export default {
                 seoKeyword: [],
                 searchKeyword: [],
                 seoDescription: "",
-
                 skuId: "", //
                 publishTime: new Date(),
                 customUrl: "",
@@ -356,6 +361,7 @@ export default {
                 ],
                 params: { name: 1 }, //
                 isTop: true,
+                isLoggedInCanView: false,
                 isOnSell: true,
                 isTemplate: false, //
                 isSkuSwitchOn: false, //

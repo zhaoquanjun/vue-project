@@ -85,7 +85,11 @@
         </div>
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
-            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
+            <el-dialog
+                :visible.sync="imgVisible"
+                :modal-append-to-body="false"
+                @close="closeDialog"
+            >
                 <!-- //<img :src="picUrl"> -->
                 <el-carousel
                     :autoplay="false"
@@ -93,8 +97,9 @@
                     indicator-position="none"
                     :loop="true"
                     @change="change"
+                    ref="carousel"
                 >
-                    <el-carousel-item v-for="item in imgList" :key="item.id">
+                    <el-carousel-item v-for="item in picSearchOptions.pageSize" :key="item">
                         <h3>
                             <img :src="fullOssUrl" />
                         </h3>
@@ -142,7 +147,9 @@ export default {
             categoryVisable: false,
             changeCategoryPicId: null,
             imgList: "",
-            fullOssUrl: ""
+            fullOssUrl: "",
+            changeIndex: -1,
+            firstIndex: ""
         };
     },
     mounted() {
@@ -183,26 +190,47 @@ export default {
                 return;
             }
             this.index = index;
-           this.$nextTick(()=>[
-               this.$refs.renameInput.focus()
-           ])
-            //this.$emit("rename", id, newName);
+            this.$nextTick(() => [this.$refs.renameInput.focus()]);
         },
         blurRename(id, newName) {},
         /**
          * 查看大图
          */
         viewPic(row, index) {
-            this.fullOssUrl = "";
             this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
+            this.changeIndex = index;
         },
         change(index) {
-            this.fullOssUrl = this.imgList[index].fullOssUrl;
-            this.picInfo = this.imgList[index];
+            if (this.firstIndex === "") {
+                this.firstIndex = index;
+                console.log(this.firstIndex, "firstIndexfirstIndex");
+                return;
+            }
+            if (index < 9) {
+              
+                if (this.changeIndex > 9) {
+                    this.changeIndex = 0;
+                    return false;
+                } else {
+                    this.changeIndex = this.changeIndex + 1;
+                }
+            } else {
+                alert(1)
+                if (this.changeIndex > 9) {
+                    this.changeIndex = 0;
+                } else {
+                    this.changeIndex = this.changeIndex - 1;
+                }
+            }
+            this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
+            this.picInfo = this.imgList[this.changeIndex];
+            console.log(this.changeIndex);
         },
-
+        closeDialog() {
+            this.fullOssUrl = "";
+        },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
             this.$emit("getPicList");

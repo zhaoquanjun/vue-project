@@ -304,7 +304,7 @@ export default {
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
             this.curImgInfo = data;
-            console.log(data, "data");
+            console.log(data, "data--=======");
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;

@@ -144,6 +144,12 @@
                         </el-form-item>
                         <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="articleDetail.isTop"></el-switch>
+                            <span
+                                style=" font-size: 14px; color: #606266;
+    vertical-align: middle;
+    padding:0  16px 0 32px ;"
+                            >仅登录用户可访问</span>
+                            <el-switch v-model="articleDetail.isTop"></el-switch>
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -177,7 +183,7 @@
                                     @blur="keywords(metaKeyword,'metaKeywords')"
                                 ></el-input>
                             </ul>
-                             <div class="el-form-item__error" v-if="isOutSeo">每篇文章最多填写5个关键词！</div>
+                            <div class="el-form-item__error" v-if="isOutSeo">每篇文章最多填写5个关键词！</div>
                             <!-- <el-input placeholder="SEO关键词" v-model="articleDetail.metaKeywords"></el-input> -->
                         </el-form-item>
 
@@ -268,8 +274,8 @@ export default {
             }
         };
         return {
-            isOutSeo:false,
-            isOutSearch:false,
+            isOutSeo: false,
+            isOutSearch: false,
             treeResult: null,
             categoryName: "全部分类",
             options: [
@@ -307,7 +313,7 @@ export default {
                         message: "请输入文章标题",
                         trigger: "blur"
                     }
-                ],
+                ]
 
                 // searchKeywords: [{ validator: checkWord }]
             },
@@ -315,7 +321,7 @@ export default {
             editorOption: {},
             keywordValue: "",
             metaKeyword: "",
-            isNewAdd:false,
+            isNewAdd: false
         };
     },
     created() {
@@ -360,11 +366,8 @@ export default {
                 }
             }
         };
-       
-       
     },
     methods: {
-      
         textIndent(ele, width) {
             this.$nextTick(() => {
                 ele.style.textIndent = width + "px";
@@ -458,18 +461,18 @@ export default {
                 this.articleDetail
             );
             if (status === 200) {
-                console.log(data,'00000------')
-               
+                console.log(data, "00000------");
+
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     type: "success",
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("articleDetail");
-                             this.$emit("changeSaveWay",false);
-                        }else{
+                            this.$emit("changeSaveWay", false);
+                        } else {
                             this.articleDetail.NewId = data;
-                            this.$emit("changeSaveWay",true);
+                            this.$emit("changeSaveWay", true);
                         }
                     }
                 });
@@ -500,23 +503,22 @@ export default {
             //         type: "success",
             //         message: "保存成功!"
             //     });
-                // this.$router.push("/content/news");
-               this.$confirm("保存成功!", "提示", {
-                    confirmButtonText: "新增下一篇",
-                    type: "success",
-                    callback: async action => {
-                        if (action === "confirm") {
-                            this.resetForm("articleDetail");
-                             this.resetDetail()
-                              this.$emit("changeSaveWay",false);
-                              this.$route.query.id=false;
-                        }else{
-                            this.articleDetail.NewId = data;
-                            this.$emit("changeSaveWay",true)
-                        }
+            // this.$router.push("/content/news");
+            this.$confirm("保存成功!", "提示", {
+                confirmButtonText: "新增下一篇",
+                type: "success",
+                callback: async action => {
+                    if (action === "confirm") {
+                        this.resetForm("articleDetail");
+                        this.resetDetail();
+                        this.$emit("changeSaveWay", false);
+                        this.$route.query.id = false;
+                    } else {
+                        this.articleDetail.NewId = data;
+                        this.$emit("changeSaveWay", true);
                     }
-                });    
-           
+                }
+            });
         },
 
         imgChangeSizeHandler(img) {
@@ -571,8 +573,8 @@ export default {
         cancelEditorImg() {
             this.isModalShow = false;
         },
-        resetDetail(){
-                this.articleDetail= {
+        resetDetail() {
+            this.articleDetail = {
                 NewId: "",
                 title: "",
                 categoryId: 0,
@@ -586,8 +588,7 @@ export default {
                 metaKeywords: [],
                 metaDescription: "",
                 pictureUrl: ""
-            }
-       
+            };
         }
     },
     mounted() {
@@ -603,10 +604,10 @@ export default {
     computed: {},
     watch: {
         "articleDetail.searchKeywords"() {
-            if(this.articleDetail.searchKeywords.length>=5){
-                this.isOutSearch =true
-            }else{
-                this.isOutSearch =false
+            if (this.articleDetail.searchKeywords.length >= 5) {
+                this.isOutSearch = true;
+            } else {
+                this.isOutSearch = false;
             }
             // this.$nextTick(() => {
             //     let width = this.$refs.keywordList.clientWidth;
@@ -615,10 +616,10 @@ export default {
             // });
         },
         "articleDetail.metaKeywords"() {
-              if(this.articleDetail.metaKeywords.length>=5){
-                this.isOutSeo =true
-            }else{
-                this.isOutSeo =false
+            if (this.articleDetail.metaKeywords.length >= 5) {
+                this.isOutSeo = true;
+            } else {
+                this.isOutSeo = false;
             }
             // this.$nextTick(() => {
             //     let width = this.$refs.metaKeywordList.clientWidth;
