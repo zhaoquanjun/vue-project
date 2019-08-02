@@ -1,10 +1,10 @@
 <template>
     <el-container>
         <el-aside style="width:120px">
-            <slot name="sub-menu">xxx</slot>
+            <slot name="sub-menu"></slot>
         </el-aside>
         <el-main>
-            <slot name="container">xxx</slot>
+            <slot name="container"></slot>
         </el-main>
     </el-container>
 </template>

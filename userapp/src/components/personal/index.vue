@@ -167,7 +167,7 @@
     </div>
 </template>
 <script>
-import RightPannel from "../RightPannel";
+import RightPannel from "_c/RightPannel";
 import SetAvatar from "./SetAvatar";
 import SetPhoneNumber from "./SetPhoneNumber";
 import SetPwd from "./SetPwd";

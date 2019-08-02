@@ -55,5 +55,5 @@ export const updateUserLastSiteIdAndCookie = (siteId) => {
  * 获取用户头像 
  */
 export const getAppHeadInfo = () => {
-    return ajaxRequest.get(`/api/userInfo/GetAppHeadInfo`);
+    return ajaxRequest.get(`/api/appInfo/GetAppHeadInfo`);
 }

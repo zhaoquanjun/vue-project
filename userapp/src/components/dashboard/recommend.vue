@@ -17,14 +17,6 @@
 <script>
 export default {
     props: ["recommend"],
-    data() {
-        return {
-
-        };
-    },
-    created() {
-
-    },
     methods:{
         open(url) {
             window.open(url)

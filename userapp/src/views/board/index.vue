@@ -5,7 +5,7 @@
       <el-col :span="18">
         <siteinfo :siteInfo="siteInfoList" />
         <plugins :plugins="pluginList" v-if="pluginList && pluginList.length > 0" />
-        <content-num :contentNumber="contentNumber" v-if="Object.keys(contentNumber).length > 0" />
+        <content-num :contentNumber="contentNumber"/>
         <recommend :recommend="recommend" />
       </el-col>
       <!-- <div class="board-right" style="margin-left:19px"></div> -->
@@ -61,7 +61,12 @@ export default {
       appInfo: {},
       versionInfo: [],
       pluginList: [],
-      contentNumber: {},
+      contentNumber: {
+         newsCount: 0,
+        filesCount: 0,
+        picturesCount: 0,
+        productsCount: 0
+      },
       recommend: [],
       designIsread: false
     };

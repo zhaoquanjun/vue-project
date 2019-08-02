@@ -142,7 +142,7 @@
 </template>
 
 <script>
-import RightPannel from "../RightPannel";
+import RightPannel from "_c/RightPannel";
 import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import { sendTargetPhoneCode } from "@/api/index.js";

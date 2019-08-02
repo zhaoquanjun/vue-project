@@ -28,7 +28,7 @@
         <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
             v-if="isLeftNavComponentsShow"
-            :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%'}"
+            :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
             class="m-asideright"
             :menuList="menuListChild"
             @changeIndex="changeIndex"
@@ -37,8 +37,7 @@
 </template>
 <script>
 import { getSliderMenuList, checkHasRootSkip } from "@/api/index";
-import LeftNavComponents from "../Aside/LeftNavComponents";
-import { mapGetters } from "vuex";
+import LeftNavComponents from "_c/Aside/LeftNavComponents";
 
 export default {
     data() {
@@ -51,13 +50,13 @@ export default {
             time: "0.8s",
             curIndex: 0,
             menuList: [],
-            serversData: []
+            serversData: [],
+            display:"none"
         };
     },
     components: {
         LeftNavComponents
     },
-    mounted() {},
     methods: {
         changeCurHoverItem(i) {
             this.curIndex = i;
@@ -67,7 +66,6 @@ export default {
             //this.curIndex = 0;
         },
         skipPages(item, i) {
-            console.log(this.$refs.menuItem);
             let path = item.menuUrl.split("/")[1];
             if (!item.path) {
                 return;
@@ -78,16 +76,17 @@ export default {
         collapseOpen(width, time) {
             this.width = width;
             this.width1 = 120;
+            this.display="block"
             this.time = time + "s";
         },
         collapseClose() {
             this.width = 50;
             this.width1 = 0;
+             this.display="none"
             this.time = "0s";
             this.curIndex = -1;
         },
-        changeIndex(index){
-           
+        changeIndex(){
             this.active  = this.flag
         }
     },
@@ -110,7 +109,6 @@ export default {
             }
         }
     },
-    watch: {}
 };
 </script>
 

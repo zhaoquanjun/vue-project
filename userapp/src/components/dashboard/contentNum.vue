@@ -7,7 +7,6 @@
                     <div class="item-l">
                         <span :class="contentIcon(it)"></span>
                         <span>{{ it.name }}</span>
-                    
                     </div>
                     <div>
                         <span class="item-r">{{ it.num }}</span>

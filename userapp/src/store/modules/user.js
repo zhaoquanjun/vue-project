@@ -23,6 +23,13 @@ const user = {
     }
   },
   actions: {
+    async _set(context,data){
+      await context.commit("SET_USER",data)
+      alert(data)
+      await context.dispatch('_updateAppIdAndSiteIdToCookie')
+      await context.dispatch('_getMenuListData')
+      await context.dispatch('_getAppHeadInfo')
+    },
     async _getAppHeadInfo({ commit }) {
       let { data } = await getAppHeadInfo();
       console.log(data,'用户信息')

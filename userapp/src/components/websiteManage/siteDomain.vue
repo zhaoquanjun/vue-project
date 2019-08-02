@@ -13,13 +13,6 @@
                 <SiteInfo :site-info="siteInfo" />
             </el-row>
             <DomainMenu @handleBtn="righPanelShow" />
-            <!-- <button @click="_oneKeyEnableHttps">开启https</button>
-            <button @click="_resolveCdnByAliYunToken">解析cdn</button>
-            <el-button @click="_pauseCdn">暂停cdn加速</el-button>
-            <el-button @click="_reopenCdn">打开cdn加速</el-button>
-            <el-button @click="_removeAliYunToken">删除阿里云token</el-button>
-            <el-button @click="_disableHttps">禁用https</el-button>
-            <el-button @click="_deleteCdnDomain">删除</el-button>-->
             <el-main>
                 <DomainList
                     :tableData="domainListData"
@@ -50,7 +43,7 @@
 </template>
 
 <script>
-import RightPannel from "../RightPannel";
+import RightPannel from "_c/RightPannel";
 import PageSubmenu from "@/components/common/PageSubmenu";
 import SiteInfo from "_c/websiteManage/domain/site-info.vue";
 import DomainMenu from "_c/websiteManage/domain/domain-menu.vue";

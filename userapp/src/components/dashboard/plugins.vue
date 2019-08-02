@@ -1,7 +1,7 @@
 <template>
     <el-row class="plugin-section" :gutter="16">
         <el-col class="plugins-box" :span="12" v-for="(it, idx) in  plugins" :key="idx">
-            <div class="box-inner" @click="checkSkipRoot(it)">
+            <div class="box-inner">
                 <span class="plugin-l plugin-item" :class="it.pluginCode"></span>
                 <span class="plugin-r plugin-item">
                     <h2>{{it.name}}</h2>
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { checkHasRootSkip } from "@/api/index";
 export default {
     props: ["plugins"],
     data() {
@@ -23,16 +22,8 @@ export default {
             clonePlugins: [],
         };
     },
-    created() {
-
-    },
     methods: {
-        async checkSkipRoot(it) {
-            let { data, status } = await checkHasRootSkip({ url: it.menuUrl });
-            if (status == 200) {
-                location.href = `//${it.menuUrl}`;
-            }
-        },
+    
         pluginsPic(it) {
             switch (it.pluginCode) {
                 case "MicroProgram":

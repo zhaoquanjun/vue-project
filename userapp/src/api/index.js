@@ -195,13 +195,6 @@ export const getSliderMenuList = () => {
     return ajaxRequest.get('/api/appinfo/GetAppMenusByUserId')
 }
 
-/**
- * @name 跳转权限
- * @method GET
- */
-export const checkHasRootSkip = url => {
-    return ajaxRequest.get('/api/menu/ValidateMenu', url)
-}
 
 /**
  * InterfaceAuthor : litao

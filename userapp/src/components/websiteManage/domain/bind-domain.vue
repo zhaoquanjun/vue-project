@@ -26,7 +26,7 @@
                     <span>1、仅支持添加阿里云域名，非阿里云域名，请先将域名转入阿里云后再添加。</span>
                     <span class="islink">
                         <a
-                            href="https://help.aliyun.com/document_detail/54077.html?spm=a2c4g.11186623.2.10.61ca4c07hLv73n"
+                            :href="shiftToAliyun"
                             target="_blank"
                         >如何将域名转入阿里云？</a>
                     </span>
@@ -35,7 +35,7 @@
                     <span>2、系统将自动为您的域名开启CDN，可在域名列表中手动关闭。</span>
                     <span class="islink">
                         <a
-                            href="https://help.aliyun.com/document_detail/27101.html"
+                            :href="whyOpenCdn"
                             target="_blank"
                         >为什么要开启CDN？</a>
                     </span>
@@ -54,6 +54,7 @@
 </template>
 <script>
 import { bindDomainAndEnableCdn } from "@/api/request/domainApi";
+import { shiftToAliyun,whyOpenCdn } from "@/environment/index"
 export default {
     props: ["domainAmount"],
     data() {
@@ -62,7 +63,10 @@ export default {
             onerrorTip: false,
             onerrorText: "",
             disabled: false,
-            btnText: "确定"
+            btnText: "确定",
+            shiftToAliyun:shiftToAliyun,
+            whyOpenCdn:whyOpenCdn
+
         };
     },
     methods: {
