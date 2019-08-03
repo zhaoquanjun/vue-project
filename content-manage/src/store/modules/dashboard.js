@@ -44,10 +44,13 @@ const dashboard = {
         menuList:[],
         authList:[], 
         buttonAuth:{},
-        hasRules:false 
+        hasRules:false ,
+        curCode:""
     },
     mutations: {
-      
+        SETCODE(state,payload){
+            state.curCode=payload
+        },
         GETUSERDASHBOARD(state, payload) {
             state.appid = payload;
             setLocal('appid', payload);
@@ -89,14 +92,17 @@ const dashboard = {
             return state.authList.some((item, index, array) => {
                 return item === path;
             });
-        }
+        },
+      
+       
     },
     getters: {
         getMenuList(state){
             if(!state.menuList) return 
             // return JSON.parse(state.menuList)
             return state.menuList
-        }
+        },
+      
     }
 };
 export default dashboard;

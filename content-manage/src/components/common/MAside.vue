@@ -1,32 +1,37 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',transition: 'width .5s linear',backgroundColor:'#fff'}"
+        :style="{width:width+'px',backgroundColor:'#fff'}"
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <!-- @mouseleave="collapseClose" -->
         <el-aside class="m-asideleft" :style="{width:width+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
                     class="left-menu-item"
+                    :class="{'menu-bg':curPath==it.code}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(i)"
                     @click="skipPages(it,i)"
                 >
-                    <!-- <svg-icon :icon-class="'l-' + it.code"></svg-icon> -->
-                    <!-- :class="curIndex==i ? it.code+"-on" : it.code" -->
-                    <i class="menu-icon" :class="[curIndex==i ? it.code+'-on' : it.code]"></i>
-                    <span class="menu-item-content">{{it.name}}</span>
+                    <i
+                        class="menu-icon"
+                        :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]"
+                    ></i>
+                    <span
+                        class="menu-item-content"
+                        :class="curIndex==i ?'menu-color':''"
+                    >{{it.name}}</span>
                 </li>
             </ul>
         </el-aside>
         <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
+            :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
-            :style="{width:width1+'px !important',transition: 'width '+time+' linear',backgroundColor:'#fff',height: '100%'}"
+            :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
             class="m-asideright"
             :menuList="menuListChild"
         ></LeftNavComponents>
@@ -34,36 +39,33 @@
 </template>
 <script>
 import { getSliderMenuList } from "@/api/request/user.js";
-import LeftNavComponents from "../Aside/LeftNavComponents";
-
+import LeftNavComponents from "_c/Aside/LeftNavComponents";
+import { siteDomain } from "@/environment/index";
 export default {
     data() {
         return {
-            flag: 0,
             width: 50,
             width1: 0,
             time: "0.8s",
-            curIndex: 0,
+            curIndex: -1,
             menuList: [],
             serversData: [],
-            curWebsite: "content.console.wezhan.cn"
+            display: "none",
+            curPath: "",
+            lastRoute:""
         };
     },
     components: {
         LeftNavComponents
     },
-    mounted() {},
     methods: {
         changeCurHoverItem(i) {
             this.curIndex = i;
         },
         skipPages(item, i) {
-            console.log(this.$refs.menuItem);
-            let [a, b] = item.menuUrl.split("/");
-            if (!item.path) {
-                return;
-            }
-            if (this.curWebsite == a) {
+            let [path, url] = item.menuUrl.split("/");
+            if (!item.path) return;
+            if (siteDomain == path) {
                 this.$router.push(item.path);
             } else {
                 window.location.href = "//" + item.menuUrl;
@@ -72,13 +74,17 @@ export default {
         collapseOpen(width, time) {
             this.width = width;
             this.width1 = 120;
+            this.display = "block";
             this.time = time + "s";
         },
         collapseClose() {
             this.width = 50;
             this.width1 = 0;
+            this.display = "none";
             this.time = "0s";
-        }
+            this.curIndex = -1;
+        },
+      
     },
     computed: {
         getMenuList() {
@@ -97,9 +103,16 @@ export default {
             } else {
                 return false;
             }
-        }
+        },
+      
     },
-    watch: {}
+    watch: {
+        $route(to, from) {
+            let [, firstRoute,lastRoute] = this.$route.path.split("/");
+            this.curPath = firstRoute;
+            this.lastRoute = lastRoute
+        }
+    }
 };
 </script>
 
@@ -122,8 +135,6 @@ export default {
     z-index: 10;
     top: 0;
     text-align: center;
-    overflow: hidden;
-    
     /* border-right: 1px solid #E5E5E5; */
 }
 .el-aside /deep/ .el-menu {
@@ -133,7 +144,13 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 手写菜单
-
+.menu-bg {
+    background: #e5f8fa;
+    color: #00c1de;
+}
+.menu-color {
+    color: #00c1de;
+}
 .left-menu {
     height: 100%;
     border-right: solid 1px #e6e6e6;
@@ -143,10 +160,15 @@ export default {
         padding: 0 20px;
         line-height: 40px;
         white-space: nowrap;
-        &:hover {
-            background: #e5f8fa;
-            color: #00c1de;
-        }
+
+        // &:hover {
+        //     background: #E5F8FA;
+        //     color: #00c1de;
+        // }
+        //  &:active {
+
+        //     color: #00c1de;
+        // }
         .menu-item-content {
             margin-left: 20px;
         }

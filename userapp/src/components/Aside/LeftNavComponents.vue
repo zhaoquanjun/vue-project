@@ -6,7 +6,7 @@
                 :key="index"
                 :index="item.menuUrl.split('/')[1]"
                 @click.native="handlerRoute(item,index)"
-                :class="{'active':item.code == code}"
+                :class="{'active':lastRoute==item.code}"
             >
                 <span>{{item.name}}</span>
             </el-menu-item>
@@ -14,29 +14,22 @@
     </el-aside>
 </template>
 <script>
-import { dashboardDomain } from "@/environment/index";
+import { siteDomain } from "@/environment/index";
 export default {
-    props: ["menuList"],
+    props: ["menuList","lastRoute"],
     methods: {
         handlerRoute(item, index) {
-            this.$emit("changeIndex");
-            this.$store.commit("SETCODE",item.code)
+            
             let domain= item.menuUrl.split("/")[0];
-            if (dashboardDomain == domain) {
+            if (siteDomain == domain) {
                 this.$router.push(item.path);
             } else {
                 window.location.href = "//" + item.menuUrl;
             }
         },
-        match(){
-           
-        },
+
     },
-    computed:{
-        code(){
-            return this.$store.state.website.curCode;
-        }
-    }
+   
 };
 </script>
 <style scoped>

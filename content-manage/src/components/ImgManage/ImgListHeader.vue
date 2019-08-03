@@ -32,12 +32,12 @@
                     </el-select>
                 </span>
                 <span @click="switchIsDesc('asc')">
-                    <i class="sort-icon asc"  :class="{'asc-icon-on ':ascSort}"></i>
+                    <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
                     <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                 </span>
                 <span @click="switchIsDesc('dec')">
-                    <i class="sort-icon dec"  :class="{'dec-icon-on ':descSort}"></i>
+                    <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
                     <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                 </span>
@@ -59,18 +59,20 @@
             </div>
         </template>
         <template v-else>
-            <div style="padding:0 21px;width:100%">
+            <div class="handle-batch" >
                 <span>
                     已选
                     <i>{{countPic}}</i> 张图片
                 </span>
-                <div style="float:right">
-                    <el-button class="deleteActive" style="margin:0 16px" size="small" @click="batchMove">
-                        <!-- <svg-icon icon-class="tab-moved"></svg-icon> -->
+                <div>
+                    <el-button
+                        class="handle-btn"
+                        size="small"
+                        @click="batchMove"
+                    >
                         移动
                     </el-button>
-                    <el-button class="deleteActive" size="small" @click="batchDelete">
-                        <!-- <svg-icon icon-class="l-recyclebin"></svg-icon> -->
+                    <el-button class="handle-btn" size="small" @click="batchDelete">
                         删除
                     </el-button>
                 </div>
@@ -83,9 +85,9 @@ export default {
     props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
     data() {
         return {
-            ascSort:false,
-            descSort:true,
-          
+            ascSort: false,
+            descSort: true,
+
             modeSelecte: true,
             options: [
                 {
@@ -119,17 +121,16 @@ export default {
             this.$emit("switchUploadBoxShowStatus");
         },
         switchIsDesc(flag) {
-            if(flag==="asc"){
+            if (flag === "asc") {
                 this.ascSort = true;
-                 this.descSort = !this.ascSort;
-                  this.picSearchOptions.isDescending = false
-                .isDescending;
-            }else{
+                this.descSort = !this.ascSort;
+                this.picSearchOptions.isDescending = false.isDescending;
+            } else {
                 this.descSort = true;
                 this.ascSort = !this.descSort;
-                 this.picSearchOptions.isDescending = true
+                this.picSearchOptions.isDescending = true;
             }
-           
+
             this.getPicList();
         },
         batchMove() {
@@ -219,17 +220,16 @@ export default {
     float: right;
     display: flex;
     align-items: center;
-
 }
 .head-middle {
-   margin-left: auto;
-   padding-right: 82px;
+    margin-left: auto;
+    padding-right: 82px;
     .sort-icon {
         display: inline-block;
         width: 16px;
         height: 14px;
     }
-    .asc{
+    .asc {
         background: url("~img/content-icon/asc.png") no-repeat center;
         background-size: contain;
     }
@@ -237,12 +237,12 @@ export default {
         background: url("~img/content-icon/asc-on.png") no-repeat center;
         background-size: contain;
     }
-    .dec{
-         background: url("~img/content-icon/desc.png") no-repeat center;
+    .dec {
+        background: url("~img/content-icon/desc.png") no-repeat center;
         background-size: contain;
     }
-     .dec-icon-on{
-         background: url("~img/content-icon/desc-on.png") no-repeat center;
+    .dec-icon-on {
+        background: url("~img/content-icon/desc-on.png") no-repeat center;
         background-size: contain;
     }
 }
@@ -256,5 +256,16 @@ export default {
     background: #00c1de;
     color: #fff;
     font-weight: 400;
+}
+
+// 批量操作的头部样式
+.handle-batch {
+    display: flex;
+    align-items: center;
+    padding: 0px 21px;
+    width: 100%;
+    .handle-btn{
+        margin:0 16px
+    }
 }
 </style>

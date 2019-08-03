@@ -1,5 +1,5 @@
 <template>
-    <div id="asideTree" class="aside-tree" >
+    <div id="asideTree" class="aside-tree">
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -7,43 +7,27 @@
             :expand-on-click-node="false"
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
+            accordion
             ref="tree"
+            draggable
             :allow-drop="allowDrop"
             :highlight-current="true"
         >
-            <!--  draggable -->
             <div
                 class="custom-tree-node"
                 @mouseover="handlerOver(data)"
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
             >
-                <div
-                    style="display: inline-block;"
-                    v-if="renameShowId === data.id || data.isNewAdd"
-                >
-                    <input class="category-name" v-model="data.label" v-filter-special-char />
-                    <span class="enter" @click.stop="hadnleTreeInput(data,data.isNewAdd)">
-                        <svg-icon icon-class="tree-yes"></svg-icon>
-                    </span>
-                    <span class="cancel" @click.stop="cancelhadnleTreeInput(data,node)">
-                        <svg-icon icon-class="tree-no"></svg-icon>
-                    </span>
+                <div class="node-label-wrap">
+                    <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
+                        <span class="node-label">{{data.label}}</span>
+                    </el-tooltip>
+                    <span>({{data.newsCount }})</span>
                 </div>
-                <template v-else>
-                    <div class="node-label-wrap">
-                        <el-tooltip
-                            class="item"
-                            effect="dark"
-                            :content="data.label"
-                            placement="bottom"
-                        >
-                            <span class="node-label">{{data.label}}</span>
-                        </el-tooltip>
-                        <span>({{data.newsCount }})</span>
-                    </div>
-                </template>
                 <!-- 三个点 分类操作 -->
+                <!--  -->
+                <!-- _handleShowMoreOperate($event,node,data) -->
                 <span
                     class="set-tree-type"
                     @click.stop="handleShow($event,node,data)"
@@ -51,62 +35,36 @@
                 >
                     <svg-icon icon-class="tree-handler"></svg-icon>
                 </span>
-                <!-- <div class="tree-handle" v-show="node.data.id === curId">
-                    <button
-                        v-if="node.data.level <3"
-                        type="text"
-                        size="mini"
-                        @click.stop="create(data,node)"
-                    >添加子分类</button>
-                    <button
-                        v-if="node.data.level>0"
-                        type="text"
-                        size="mini"
-                        @click.stop="rename(data)"
-                    >修改名称</button>
-
-                    <button
-                        v-if="node.data.level>0"
-                        type="text"
-                        size="mini"
-                        @click.stop="batchRemove( node,data)"
-                    >删除分类</button>
-                </div>-->
             </div>
-         
         </el-tree>
-           <div @click="handleCategory" class="tree-handle" ref="operateSection">
-                <button
-                     v-if="curClickNode.data.level <3"
-                    type="text"
-                    size="mini"
-                    @click="create"
-                >添加子分类</button>
-                <button
-                    v-if="curClickNode.data.level>0"
-                    type="text"
-                    size="mini"
-                    @click="rename"
-                >修改名称</button>
+        <div class="category-name-pic" ref="operateSection">
+            <UploadCategoryPic
+                :isUpload="false"
+                :modifyCategoryData="modifyCategoryData"
+                @createCategory="createCategory"
+                @closeUploadCategoryPic="closeUploadCategoryPic"
+            />
+        </div>
+        <div @click="closeUploadCategoryPic1" class="tree-handle" ref="operateSection1">
+            <button v-if="curClickNode.data.level <3" type="text" size="mini" @click="create">添加子分类</button>
+            <button v-if="curClickNode.data.level>0" type="text" size="mini" @click="rename">修改名称</button>
 
-                <button
-                     v-if="curClickNode.data.level>0"
-                    type="text"
-                    size="mini"
-                    @click="batchRemove"
-                >删除分类</button>
-            </div>
+            <button
+                v-if="curClickNode.data.level>0"
+                type="text"
+                size="mini"
+                @click="batchRemove"
+            >删除分类</button>
+        </div>
     </div>
 </template>
 <script>
-let id = 1000;
+import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
 export default {
-    props: [
-        "treeResult",
-        "articleSearchOptions",
-        "isrightPannel",
-        "selectCategory"
-    ],
+    props: ["treeResult", "articleSearchOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
+    components: {
+        UploadCategoryPic
+    },
     data() {
         return {
             flag: false,
@@ -118,18 +76,42 @@ export default {
             isRename: false,
             newAddNode: "",
             renameData: "",
-            curClickNode:{data:{level:""}},
+            createCategoryData: "", // 当前点击的创建分类节点
+            isAdd: false, // true 添加 false编辑
+            modifyCategoryData: {}, // 编辑分类需要传当前节点的名称和imgurl,
+
+            curClickNode: { data: { level: "" } }
         };
     },
-     mounted() {
-        document.addEventListener("click", () => {
-            this.$nextTick(() => {
-                if (this.$refs.operateSection)
-                    this.$refs.operateSection.style.display = "none";
-            });
-        });
+    mounted() {
+        // document.addEventListener("click", () => {
+        //     this.$nextTick(() => {
+        //         if (this.$refs.operateSection)
+        //             this.$refs.operateSection.style.display = "none";
+        //     });
+        // });
     },
     methods: {
+        createCategory(displayName, thumbnailPicUrl) {
+            if (this.isAdd) {
+                this.$emit("create", {
+                    CategoryName: displayName,
+                    ParentId: this.createCategoryData.id,
+                });
+            } else {
+                this.$emit(
+                    "rename", // 与产品分类不一致的地方
+                    this.createCategoryData.id,
+                    displayName,
+                    thumbnailPicUrl
+                );
+            }
+            this.closeUploadCategoryPic();
+        },
+        closeUploadCategoryPic() {
+            this.$refs.operateSection.style.display = "none";
+        },
+        //////////////
         handlerOver(data) {
             if (!isNaN(data.id)) this.treeNodeId = data.id;
             if (this.isNewAdd) this.treeNodeId = null;
@@ -137,29 +119,6 @@ export default {
         handlerMouseLeave() {
             this.treeNodeId = this.curId = null;
         },
-        //修改节点名称 OR 新增节点
-        hadnleTreeInput(data, isNewAdd) {
-            this.isNewAdd = false; //点击确定修改后 开启允许创建子节点
-            if (data.label == "") {
-                this.$message({
-                    message: "分类名称不能为空",
-                    type: "warning"
-                });
-                return;
-            } else if (isNewAdd) {
-                this.$emit("create", {
-                    CategoryName: data.label,
-                    ParentId: data.parentId
-                });
-            } else if (data.label != "") {
-                console.log("rename");
-                this.$emit("rename", data.id, data.label);
-                 this.isNewAdd = isNewAdd;
-            this.renameShowId = this.curId = null;
-            }
-           
-        },
-        //
         cancelhadnleTreeInput(data, node) {
             if (this.isRename) {
                 if (data.label == "") {
@@ -193,7 +152,9 @@ export default {
                 }
                 case "before":
                 case "after": {
-                    draggingNode.parentId = targetNode.parentId;
+                    draggingNode.parentId = targetNode.parentId
+                        ? targetNode.parentId
+                        : 0;
                     break;
                 }
                 case "none":
@@ -202,11 +163,7 @@ export default {
                 }
             }
             var idOrderByArr = [];
-            for (
-                var i = targetNodeDom.parent.childNodes.length - 1;
-                i >= 0;
-                i--
-            ) {
+            for (var i = 0; i < targetNodeDom.parent.childNodes.length; i++) {
                 var childNode = targetNodeDom.parent.childNodes[i];
                 idOrderByArr.push(childNode.data.id);
             }
@@ -228,20 +185,11 @@ export default {
             }
             return true;
         },
-
-        create(data, node) {
-            console.log(this.curClickData)
-            if (!this.isNewAdd) {
-                this.isNewAdd = true;
-                const newChild = {
-                    parentId: this.curClickData.id,
-                    label: "",
-                    isNewAdd: true
-                };
-                this.curClickData.children.unshift(newChild);
-            }
-            this.curId = null;
-            this.newAddData = this.curClickData;
+        // 添加分类  0720
+        create(ev, node, data) {
+            this.modifyCategoryData = {}; //创建新分类 不需传
+            this._handleShowMoreOperate(ev, node, data);
+            this.isAdd = true;
         },
         getAllNodeIds(node, isChildNode) {
             var idList = isChildNode ? [] : [node.id];
@@ -261,54 +209,22 @@ export default {
             }
             return level;
         },
-        // 修改分类名称
-        rename(data) {
-            
-            this.renameShowId = this.curClickData.id;
-            this.curId = null;
-            this.isRename = true;
-            this.renameData = this.curClickData;
-            this.isNewAdd = true;
+        // 编辑分类 0720
+        rename(ev, node, data) {
+            this.isAdd = false;
+            this.modifyCategoryData = this.curClickData;
+            this._handleShowMoreOperate(ev, node, data);
         },
         modifyNode(id, parentId, idOrderByArr) {
             this.$emit("modifyNode", id, parentId, idOrderByArr);
         },
-        // 描述： 删除当前分类
-        batchRemove() {
-            console.log(this.curClickData, "remove-----",);
-            //console.log(this.getAllNodeIds(this.curClickData))
-            this.$emit("batchRemove", this.getAllNodeIds(this.curClickData));
+        // 描述： 删除分类
+        batchRemove(node, data) {
+            data = this.curClickData;
+            this.$emit("batchRemove", this.getAllNodeIds(data));
         },
+        // 点击节点的时候
         changeCategory(data) {
-
-            if (this.isrightPannel) {
-                this.$emit("chooseNode", data);
-                for (
-                    var i = 0;
-                    i < this.$refs.tree.store._getAllNodes().length;
-                    i++
-                ) {
-                    this.$refs.tree.store._getAllNodes()[
-                        i
-                    ].expanded = this.isexpand;
-                }
-                return false;
-            }
-            if (data.isNewAdd) return;
-            this.curlabelName = data.label;
-            this.articleSearchOptions.categoryId = data.id;
-            this.articleSearchOptions.pageIndex =1;
-            //this.selectCategory = data; 因提示报错暂时注释
-           
-            // 点击其他区域 把当前新增但未确定的节点删除掉
-            console.log(this.newAddData )
-            this.newAddData && this.newAddData.children.shift();
-            if (this.renameShowId !== data.id) this.isNewAdd = false;
-            // 点击其他区域 把当前重命名但未确定的，恢复重命名之前label
-            if (this.renameData && this.renameShowId !== data.id) {
-                this.renameData.label = this.curlabelName;
-                this.renameShowId = null;
-            }
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
 
@@ -325,9 +241,12 @@ export default {
                     border: "none"
                 });
             }
-             this.$emit("getList");
-            this.$emit("chooseCategoryNode",data)
-            this.closeUploadCategoryPic()
+            this.closeUploadCategoryPic();
+            this.closeUploadCategoryPic1();
+         this.articleSearchOptions.categoryId = data.id;// 与产品分类不一致的地方
+            this.articleSearchOptions.pageIndex =1;// 与产品分类不一致的地方
+          this.$emit("getList");// 与产品分类不一致的地方
+           this.$emit("chooseCategoryNode", data);// 与产品分类不一致的地方
         },
         // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {
@@ -335,45 +254,85 @@ export default {
                 obj.style[attr] = css[attr];
             }
         },
-        // 当前当前分类
+        // 操作按钮出现 || 消失
         handleShow(ev, node, data) {
-            node.checked = true;
-            this.curId = node.data.id;
-            
-            // 07 22新增
-            this._handleShowMoreOperate(ev,node);
+            console.log(node);
+            if (this.curId === node.data.id) {
+                node.checked = false;
+                this.curId = 1;
+            } else {
+                node.checked = true;
+                this.curId = node.data.id;
+            }
             this.curClickData = data;
-            this.curClickNode = node
+            this.curClickNode = node;
+            this._handleShowMoreOperate1(ev, node);
         },
-         // 新增0722   分类操作菜单显示
-        _handleShowMoreOperate(ev, row) {
+        // 分类上传图片
+        _handleShowMoreOperate(ev, node, data) {
+            console.log(this.curClickNode);
+            this.createCategoryData = this.curClickData;
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY -50 + "px";
-            if(this.$refs.operateSection.style.display==="block"){
-                this.$refs.operateSection.style.display = "none";
-            }else{
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
             this.$refs.operateSection.style.display = "block";
+        },
+
+        // 新增 0730  关闭分类操作菜单
+        closeUploadCategoryPic1() {
+            this.$refs.operateSection1.style.display = "none";
+        },
+        handleCategory1() {
+            this.closeUploadCategoryPic1();
+        },
+        // 新增0730   分类操作菜单显示
+        _handleShowMoreOperate1(ev, row) {
+            this.$refs.operateSection1.style.left =
+                ev.pageX - ev.offsetX + 16 + "px";
+            this.$refs.operateSection1.style.top =
+                ev.pageY - ev.offsetY - 50 + "px";
+            if (this.$refs.operateSection1.style.display === "block") {
+                this.$refs.operateSection1.style.display = "none";
+            } else {
+                this.$refs.operateSection1.style.display = "block";
             }
-           
-        },
-        // 新增 0722  关闭分类操作菜单
-        closeUploadCategoryPic() {
-            this.$refs.operateSection.style.display = "none";
-        },
-        handleCategory(){
-            this.closeUploadCategoryPic()
-        },
-        changeCategoryInput(label) {
-            console.log(label);
         }
     }
 };
 </script>
+<style>
+/* #content-manage .el-aside {
+    overflow: visible !important;
+} */
+</style>
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";
-.tree-handle {
-        display: none;
+.category-name-pic {
+    width: 282px;
+    height: 190px;
+    background: #fff;
+    display: none;
+    position: absolute;
+    z-index: 19;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
+    // border: 1px solid rgba(216, 216, 216, 1);
+    // &:after {
+    //     position: absolute;
+    //     content: "";
+    //     left: -21px;
+    //     top: 10px;
+    //     border-top: 10px transparent dashed;
+    //     border-left: 10px transparent dashed;
+    //     border-bottom: 10px transparent dashed;
+    //     border-right: 10px #fff solid;
+    //      border: 1px solid rgba(216, 216, 216, 1);
+    // }
+}
+
+.categoryPic {
+    width: 16px;
+    height: 16px;
+    padding-right: 5px;
 }
 </style>

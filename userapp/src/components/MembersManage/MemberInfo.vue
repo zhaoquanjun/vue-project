@@ -16,15 +16,19 @@
             <span class="remark-wrap">
                <i class="remark-title"> 备注 :</i>
                 <template v-if="isRemarkShow">
-                    <span @click="handleRemark" class="remark-text">
+                    <span  class="remark-text">
                         <i>{{ !!remarkValue?remarkValue:"暂无备注"}}</i>&nbsp;
-                        <svg-icon icon-class="remark"></svg-icon>
+                        <i class="iconWrap" @click="handleRemark">
+                        <svg-icon  icon-class="remark"></svg-icon>
+
+                        </i>
                     </span>
                 </template>
                 <template v-else>
                     <el-input
                         v-if="inputType"
                        class="remark" 
+                       ref="remarkInput"
                         type="text"
                         placeholder="暂无备注"
                         v-model="memberInfo.remark"
@@ -34,7 +38,7 @@
                         @blur="handlerblur"
                         @focus="focus"
                     ></el-input>
-                       <el-input
+                       <!-- <el-input
                         v-else
                        class="remark" 
                         type="text"
@@ -45,7 +49,7 @@
                          @change="change"
                         @blur="handlerblur"
                         @focus="focus"
-                    ></el-input>
+                    ></el-input> -->
                 </template>
             </span>
         </dd>
@@ -69,6 +73,11 @@ export default {
     methods: {
         handleRemark() {
             this.isRemarkShow = false;
+            this.$nextTick(()=>{
+                this.$refs.remarkInput.focus();
+            })
+
+            
         },
         handlerblur() {
             this.isRemarkShow = true;
@@ -133,7 +142,10 @@ export default {
                flex: none;padding-right: 10px;
             }
             .remark-text{
-               display: inline-block;cursor: pointer;
+               display: inline-block;
+               .iconWrap{
+                   cursor: pointer;
+               }
             }
 
         }

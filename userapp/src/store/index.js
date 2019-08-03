@@ -10,6 +10,7 @@ import dashboard from "./modules/dashboard";
 import website from "./modules/website"
 import memberManager from "./modules/member-manager";
 import {setLocal,getLocal} from "@/libs/local"
+import Cookies from "js-cookie"
 Vue.use(Vuex);
 const store = new Vuex.Store({
   modules: {
@@ -42,4 +43,7 @@ if (sessionStorage.getItem("token")){
 }
 if(sessionStorage.getItem("siteId")){
  store.commit("SETSITEID",sessionStorage.getItem("siteId"))
+}
+if(Cookies("navItem")){
+  store.commit("SETCODE",Cookies("navItem"))
 }

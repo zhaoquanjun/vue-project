@@ -81,3 +81,7 @@ export const create = entity => {
 export const deleteNewsCategory = (idList) => {
     return ajaxRequest._delete(`/api/NewsCategory/Delete`,  { data: idList } );
 }
+//拖拽移动分类
+export const modifyNode = (id, parentId, idOrderByArr) => {
+    return ajaxRequest.put(`/api/NewsCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);
+}

@@ -1,6 +1,7 @@
 import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index"
 import { authRoutes } from "@/router/routes.js";
 import { setLocal } from "@/libs/local"
+import { reject } from "q";
 
 // 更具后台菜单路由 匹配出 所需要显示的路由
 let getNeedRoutes = auth => {
@@ -99,11 +100,23 @@ const dashboard = {
             return r;
         },
         async getCurRouteAuth({ state, getters }, path) {
+           
             if (!state.authList) return;
             // let authList = JSON.parse(state.authList)
             return state.authList.some((item, index, array) => {
                 return item === path;
             });
+        },
+        getChildrenMenuList({state},curPath){
+            if (!state.menuList) return
+            return new Promise((resolve,reject)=>{
+                state.menuList.map((item,index)=>{
+                    if(curPath == item.code){
+                        resolve(item)
+                    }
+                })
+            })
+           
         }
     },
     getters: {
@@ -111,7 +124,8 @@ const dashboard = {
             if (!state.menuList) return
             // return JSON.parse(state.menuList)
             return state.menuList
-        }
+        },
+       
     }
 };
 export default dashboard;

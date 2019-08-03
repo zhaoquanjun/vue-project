@@ -90,21 +90,29 @@
                 :modal-append-to-body="false"
                 @close="closeDialog"
             >
-                <!-- //<img :src="picUrl"> -->
-                <el-carousel
-                    :autoplay="false"
-                    arrow="always"
-                    indicator-position="none"
-                    :loop="true"
-                    @change="change"
-                    ref="carousel"
-                >
-                    <el-carousel-item v-for="item in picSearchOptions.pageSize" :key="item">
-                        <h3>
-                            <img :src="fullOssUrl" />
-                        </h3>
-                    </el-carousel-item>
-                </el-carousel>
+            
+                    <el-carousel
+                        :autoplay="false"
+                        arrow="always"
+                        indicator-position="none"
+                        :loop="true"
+                        ref="carousel"
+                    >
+                        <el-button
+                            @click="prev"
+                            class="el-carousel__arrow el-carousel__arrow--left left-prev"
+                        ></el-button>
+                        <el-carousel-item v-for="item in picSearchOptions.pageSize" :key="item">
+                            <h3>
+                                <img :src="fullOssUrl" />
+                            </h3>
+                        </el-carousel-item>
+                        <el-button
+                            @click="next"
+                            class="el-carousel__arrow el-carousel__arrow--right right-next"
+                        ></el-button>
+                    </el-carousel>
+                
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
@@ -126,6 +134,7 @@
 </template>
 
 <script>
+import {trim} from "@/utlis/index.js"
 export default {
     // props:{
     //     imgList:{
@@ -184,49 +193,52 @@ export default {
         },
         // 重命名图片名称
         rename(id, newName, index) {
+            if(!trim(newName)){
+                 this.$notify({
+                    type: "warning",
+                    message: `图片名称不能为空`,
+                    duration: 2000
+                });
+                return false;
+            }
             if (isNaN(index)) {
                 this.index = -1;
                 this.$emit("rename", id, newName);
                 return;
             }
             this.index = index;
-            this.$nextTick(() => [this.$refs.renameInput.focus()]);
+            this.$nextTick(() => {this.$refs.renameInput.focus()});
         },
         blurRename(id, newName) {},
         /**
          * 查看大图
          */
         viewPic(row, index) {
+              this.fullOssUrl = "";
             this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
             this.changeIndex = index;
+            this.picInfo = this.imgList[this.changeIndex];
         },
-        change(index) {
-            if (this.firstIndex === "") {
-                this.firstIndex = index;
-                console.log(this.firstIndex, "firstIndexfirstIndex");
-                return;
-            }
-            if (index < 9) {
-              
-                if (this.changeIndex > 9) {
-                    this.changeIndex = 0;
-                    return false;
-                } else {
-                    this.changeIndex = this.changeIndex + 1;
-                }
-            } else {
-                alert(1)
-                if (this.changeIndex > 9) {
-                    this.changeIndex = 0;
-                } else {
-                    this.changeIndex = this.changeIndex - 1;
-                }
-            }
+        prev() {
+            this.$refs.carousel.prev();
+             if(this.changeIndex>0){
+                  this.changeIndex = this.changeIndex - 1;
+             }else{
+                  this.changeIndex=this.picSearchOptions.pageSize-1
+             }
             this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
             this.picInfo = this.imgList[this.changeIndex];
-            console.log(this.changeIndex);
+        },
+        next() {
+            this.$refs.carousel.next();
+            this.changeIndex = this.changeIndex + 1;
+             if(this.changeIndex>=this.picSearchOptions.pageSize){
+                 this.changeIndex=0
+             }
+            this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
+            this.picInfo = this.imgList[this.changeIndex];
         },
         closeDialog() {
             this.fullOssUrl = "";
@@ -249,6 +261,10 @@ export default {
 </style>
 
 <style scoped>
+.left-prev,
+.right-next {
+    opacity: 0;
+}
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
     align-items: center;

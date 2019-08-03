@@ -1,7 +1,7 @@
 <template>
     <el-container class="member-container">
         <el-aside style="width:120px">
-            <page-submenu :submenu-list="submenuList">
+            <page-submenu >
                 <template v-slot:title>系统设置</template>
             </page-submenu>
         </el-aside>
