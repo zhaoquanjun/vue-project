@@ -2,7 +2,7 @@
     <dl class="members—info" id="members—info">
         <dt class="avatar">
             <img v-if="memberInfo.userHeadUrl" :src="memberInfo.userHeadUrl" >
-            <img v-else src="../../assets/defualtAvater.png" alt="">
+            <img v-else src="../../assets/defualtAvatar.png" alt="">
         </dt>
         <dd class="basic">
             <span>

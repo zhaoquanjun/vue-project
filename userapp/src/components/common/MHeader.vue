@@ -45,7 +45,7 @@
           </span>
           <span @mouseenter="dropdownAvatarShow" @mouseleave="dropdownAvatarhide">
             <p class="avatar">
-              <img src="../../assets/avatar.jpeg" alt />
+              <img :src="headUrl" alt />
             </p>
             <dl class="login-set dropdown-avatar-menu" v-show="isdropdownAvatarShow">
               <dd @click="pannelShow">个人设置</dd>
@@ -182,7 +182,17 @@ export default {
         return true;
       }
     }
-  }
+  },
+  computed:{
+    headUrl(){
+      let avatar = this.$store.state.user.userInfo.headImageUrl
+       if(avatar){
+         return avatar
+       }else{
+         return require("../../assets/defualtAvatar.png")
+       }
+    }
+  },
 };
 </script>
 

@@ -95,6 +95,7 @@ export default {
             if (status === 200) {
                 this.$emit("getUserProfileAsync");
                 this.$store.commit("CLOSERIGHTPANNEL", false);
+                this.$store.dispatch('_getAppHeadInfo');// 更新顶部导航头像
             }
         },
         close() {

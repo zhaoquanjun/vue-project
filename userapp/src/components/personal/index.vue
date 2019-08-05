@@ -61,7 +61,7 @@
                         <button
                             class="bind"
                             :class="!!pwdTitle?'isbind':'notbind'"
-                        >{{!!pwdTitle?"已绑定":"绑定"}}</button>|
+                        >{{!!pwdTitle?"已设置":"修改"}}</button>|
                         <button @click="modifiPwd">{{pwdBtn}}</button>
                     </span>
                 </div>
@@ -191,7 +191,7 @@ import { updateUserName } from "@/api/index.js";
 export default {
     data() {
         return {
-            defaultAvatar: require("../../assets/defualtAvater.png"),
+            defaultAvatar: require("../../assets/defualtAvatar.png"),
             input: "",
             flag: true,
             userInfo: { phoneNumber: "" },

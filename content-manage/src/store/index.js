@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import dashboard from "./modules/dashboard"
+import dashboard from "./modules/dashboard";
+import user from "./modules/user";
 import Cookies from "js-cookie"
 Vue.use(Vuex);
 
@@ -9,6 +10,7 @@ import { setLocal, getLocal, removeLocal } from '@/libs/local'
 const store = new Vuex.Store({
   modules: {
     dashboard,
+    user
   },
   state: {
     accessToken: { Authorization: '' },
@@ -57,4 +59,7 @@ if(getLocal("appid")){
 }
 if(Cookies("routeCode")){
   store.commit("SETCODE",Cookies("routeCode"))
+}
+if(sessionStorage.getItem("userInfo")){
+  store.commit("SET_USERINFO",JSON.parse(sessionStorage.getItem("userInfo")))
 }

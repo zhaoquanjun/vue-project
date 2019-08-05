@@ -1,11 +1,11 @@
 <template>
-  <el-container class="member-container">
+  <el-container class="member-container ">
     <el-aside style="width:120px">
       <page-submenu :submenu-list="submenuList">
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>
-    <el-main class="member-content">
+    <el-main class="member-content page-scroll">
       <ChangeSite @chooseWebsite="chooseWebsite" />
       <el-row class="siteContent">
         <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>

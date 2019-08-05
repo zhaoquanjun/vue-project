@@ -51,6 +51,7 @@ router.beforeEach(async (to, from, next) => {
           store.commit("SET_USER", data);
           await store.dispatch('_updateAppIdToCookie')
           await store.dispatch('_getMenuListData')
+          await store.dispatch('_getAppHeadInfo')
           next()
         }
       })

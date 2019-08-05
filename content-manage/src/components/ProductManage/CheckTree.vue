@@ -13,7 +13,7 @@
 export default {
     props: ["treeResult"],
     mounted(){
-     
+       
     },
     methods: {
        setCheckedKeys() {

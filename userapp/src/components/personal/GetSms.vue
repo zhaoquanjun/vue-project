@@ -151,14 +151,15 @@ export default {
             value: "+86"
         };
     },
-
+    mounted() {},
     methods: {
         async send() {
             let { status } = await sendSourcePhoneCode(this.sourcePhone);
             if (status === 200) {
-                this.$message({
+                this.$notify({
                     type: "success",
-                    message: "发送成功!"
+                    message: "发送成功!",
+                    duration:1000
                 });
                 if (!this.timer) {
                     this.count = TIME_COUNT;
@@ -175,9 +176,10 @@ export default {
                     }, 1000);
                 }
             } else {
-                this.$message({
-                    type: "failed",
-                    message: "发送失败!"
+                this.$notify({
+                    type: "error",
+                    message: "发送失败!",
+                    duration:1000
                 });
             }
         },
@@ -264,6 +266,13 @@ export default {
                 }
             });
             return result;
+        },
+        resetTimer() {
+            clearInterval(this.timer); // 清除定时器
+            this.timer = null;
+            this.count = "";
+            this.show=true;
+            this.ruleForm.verification = "";
         }
     },
     computed: {

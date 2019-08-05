@@ -5,7 +5,7 @@
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>
-    <el-main class="member-content">
+    <el-main class="member-content page-scroll">
       <ChangeSite @chooseWebsite="chooseWebsite" />
       <el-row style="padding:24px 17px">
         <el-row class="user-list">

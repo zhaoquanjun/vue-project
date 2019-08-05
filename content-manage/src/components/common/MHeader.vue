@@ -39,7 +39,7 @@
                     </span>
                     <span @mouseenter="dropdownAvatarShow" @mouseleave="dropdownAvatarhide">
                         <p class="avatar">
-                            <img src="../../assets/avatar.jpeg" alt>
+                            <img :src="headUrl">
                         </p>
                         <dl class="login-set dropdown-avatar-menu" v-show="isdropdownAvatarShow">
                             <dd @click="pannelShow">个人设置</dd>
@@ -53,6 +53,7 @@
 </template>
 <script>
 import securityService from "@/services/authentication/securityService";
+import {personalUrl} from "@/environment/index.js"
 export default {
     data() {
         return {
@@ -68,7 +69,7 @@ export default {
             securityService.signOut(location.href)
         },
         pannelShow() {
-             location.href="//dashboard.console.wezhan.cn/personal"
+             location.href=personalUrl;
             //this.$store.commit("CLOSERIGHTPANNEL",true)
         },
         dropdownAvatarShow() {
@@ -83,7 +84,17 @@ export default {
         dropdownDesignhide() {
             this.isdropdownDesignShow = false;
         }
+    },
+    computed:{
+    headUrl(){
+      let avatar = this.$store.state.user.userInfo.headImageUrl
+       if(avatar){
+         return avatar
+       }else{
+         return require("../../assets/defualtAvater.png")
+       }
     }
+  },
 };
 </script>
 

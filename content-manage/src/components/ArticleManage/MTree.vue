@@ -311,7 +311,7 @@ export default {
 @import "../style/manageAsideTree";
 .category-name-pic {
     width: 282px;
-    height: 190px;
+    height: 140px;
     background: #fff;
     display: none;
     position: absolute;

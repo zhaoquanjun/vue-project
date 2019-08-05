@@ -48,7 +48,37 @@
                                         :value="item.value"
                                     ></el-option>
                                 </el-select>-->
-                                <SelectTree
+                                <div class="product-category"  @click.stop="multipleCatagory">
+                                    <ul class="category-list">
+                                        <li
+                                            class="category-item"
+                                            v-for="(item) in detailData.productCategoryList"
+                                            :key="item.id"
+                                            @click.stop
+                                        >
+                                            <span>{{item.displayName}}</span>
+                                            <i
+                                                class="el-icon-close"
+                                                @click="removeCategory(item.id)"
+                                            ></i>
+                                        </li>
+                                    </ul>
+                                    <span
+                                         @click.stop="multipleCatagory"
+                                        class="el-select__caret "
+                                        :class="[isCheckTreeShow===true?'el-icon-arrow-up':'el-icon-arrow-down']"
+                                    ></span>
+                                </div>
+                                <div class="multipleCatagory" :style="{'height':(isCheckTreeShow?'auto':0)}">
+                                    <DetailCheckTree
+                                        ref="detailCheckTree"
+                                        :tree-result="treeResult"
+                                        :categoryName="categoryName"
+                                        :categoryId="categoryId"
+                                        @chooseNode="chooseNode"
+                                    />
+                                </div>
+                                <!-- <SelectTree
                                     size="small"
                                     placeholder="请选择"
                                     :categoryName="categoryName"
@@ -57,7 +87,7 @@
                                     @chooseNode="chooseNode"
                                     @removeSeletedCategory="removeSeletedCategory"
                                     :multiple="true"
-                                />
+                                />-->
                             </span>
                         </div>
                         <div style="float:right">
@@ -244,6 +274,7 @@
 import * as productManageApi from "@/api/request/productManageApi";
 import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
 import SelectTree from "@/components/common/SelectTree";
+import DetailCheckTree from "./DetailCheckTree";
 const viewAuth = [
     { name: "全选", id: 0 },
     { name: "登录用户", id: 1 },
@@ -295,10 +326,12 @@ import ModalContent from "@/components/ImgManage/index.vue";
 export default {
     components: {
         ModalContent,
-        SelectTree
+        SelectTree,
+        DetailCheckTree
     },
     data() {
         return {
+            isCheckTreeShow: false,
             isOutSeo: false,
             isOutSearch: false,
             checkAll: false,
@@ -331,7 +364,7 @@ export default {
             activeName: "",
             activeName1: "",
             categoryName: [],
-            categoryId:[],
+            categoryId: [],
             treeResult: null,
             detailData: {
                 name: "",
@@ -357,7 +390,7 @@ export default {
                 productCategoryList: [
                     {
                         id: 1,
-                        displayName: "1", //
+                        displayName: "", //
                         thumbnailPicUrl: "2" //
                     }
                 ],
@@ -393,13 +426,14 @@ export default {
     },
     created() {
         this.detailData.productCategoryList = [
-            { id: this.$route.query.categoryId || 0 }
+            { id: this.$route.query.categoryId || 0, displayName: "全部分类" }
         ];
         console.log(this.$route.query);
         var id = this.$route.query.id;
         this.curProduct = id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
+            
         }
         this.getTree();
         this.editorOption = {
@@ -467,7 +501,7 @@ export default {
             this.categoryName = data.productCategoryList.map(item => {
                 return item.displayName;
             });
-            console.log(data,"datadatadata")
+            console.log(data, "datadatadata");
             this.categoryId = data.productCategoryList.map(item => {
                 return item.id;
             });
@@ -676,6 +710,22 @@ export default {
                 isNeedShipping: false, //
                 isAllowComment: true
             };
+        },
+        multipleCatagory() {
+           
+            this.isCheckTreeShow = !this.isCheckTreeShow;
+             console.log(this.isCheckTreeShow)
+        },
+        getCheckedNodes(nodes) {
+            console.log(nodes, "nnnnnnn");
+        },
+        removeCategory(id) {
+            this.$refs.detailCheckTree.setChecked(id);
+            this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
+                item => {
+                    return item.id != id;
+                }
+            );
         }
     },
     mounted() {
@@ -686,6 +736,13 @@ export default {
         // 为视频ICON绑定事件
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         addQuillTitle();
+        document.addEventListener("click",(e)=>{
+            e.stopPropagation()
+            if(this.isCheckTreeShow){
+                this.multipleCatagory()
+            }
+            return false
+        })
     },
     watch: {
         "detailData.searchKeyword"() {
@@ -714,6 +771,53 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../../style/contentDetail";
+.category {
+    position: relative;
+    vertical-align: middle;
+}
+.product-category {
+        display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    min-height: 20px;
+    width: 317px;
+    border: 1px solid #dcdfe6;
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    .category-list {
+        .category-item {
+            display: inline-block;
+            border: 1px solid #eee;
+            color: #606266;
+            border-radius: 30px;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            margin-right: 5px;
+            .el-icon-close {
+                cursor: pointer;
+            }
+        }
+    }
+    .el-select__caret {
+        color: #C0C4CC;
+        font-size: 14px;
+        cursor: pointer;
+    }
+}
+
+.multipleCatagory {
+    height: 0;
+    margin-top: 12px;
+    width: 238px;
+    position: absolute;
+    background: #fff;
+    z-index: 10;
+    box-sizing: border-box;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
 </style>
 <style scoped>
 @import "../../style/contentDetailCommon.css";
