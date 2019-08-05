@@ -17,8 +17,7 @@
                 @modifyNode="modifyNodeCategory"
             ></m-tree>
         </el-aside>
-        <el-main  style="height: calc(100vh - 50px);
-    overflow-y: auto;">
+        <el-main >
             <img-list-header
                 :count-pic="countPic"
                 :pic-search-options="picSearchOptions"

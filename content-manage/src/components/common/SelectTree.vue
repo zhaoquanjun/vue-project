@@ -12,6 +12,7 @@
         @remove-tag="remove"
         @node-expand="nodeExpand"
         size="small"
+       
     >
         <!-- :label="valueTitle" -->
         <el-option :value="valueTitle">
@@ -27,6 +28,9 @@
                 :node-key="props.value"
                 :default-expanded-keys="defaultExpandedKey"
                 @node-click="handleNodeClick"
+                @check="check"
+                :show-checkbox="isSHowCheckBox"
+                
             ></el-tree>
         </el-option>
     </el-select>
@@ -58,9 +62,13 @@ export default {
         categoryName: {
             type: [String, Array]
         },
+      
         /** 分类ID */
         categoryId:{
-            type:Number
+            type:Array,
+             default: () => {
+                return [];
+            }
         },
         /* 初始值 */
         value: {
@@ -94,6 +102,10 @@ export default {
             default: () => {
                 return false;
             }
+        },
+        isSHowCheckBox:{
+            type:Boolean,
+            default:true
         }
     },
     data() {
@@ -104,22 +116,20 @@ export default {
         };
     },
     mounted() {
-        console.log(this.categoryName);
         this.initHandle();
-        // this.setCheckedKeys();
+     
     },
     methods: {
-        // setCheckedKeys() {
-        //     console.log(this.$refs.selectTree);
-        //     this.$nextTick(()=>{
-        //          this.$refs.selectTree.setCurrentKey(34); // 设置默认选中
-        //     })
-        // },
+        setCheckedKeys() {
+            this.$nextTick(()=>{
+                 alert(JSON.stringify( this.categoryId))
+               console.log( this.categoryId,' this.categoryId this.categoryId this.categoryId')
+                 this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
+            })
+        },
         nodeExpand(data, node, slot) {
-            console.log(data, node, slot);
         },
         remove(cur) {
-            console.log(this.valueTitle);
             this.valueTitle = this.valueTitle.filter(item => {
                 return item != cur;
             });
@@ -166,6 +176,21 @@ export default {
             // this.defaultExpandedKey = [];
             this.clearSelected();
         },
+        check(node){
+            console.log(arguments)
+              if (this.multiple) {
+                if (this.valueTitle.indexOf(node[this.props.label]) > -1) {
+                    return;
+                }
+                this.valueTitle.push(node[this.props.label]);
+                this.$emit("chooseNode", node);
+                return;
+            } else {
+                console.log()
+                this.valueTitle = node[this.props.label];
+                this.$emit("chooseNode", node);
+            }
+        },
         // 清除选中
         clearHandle() {
             this.valueTitle = "";
@@ -191,6 +216,12 @@ export default {
         },
         categoryName() {
             this.valueTitle = this.categoryName;
+        },
+        categoryId(){
+             this.$nextTick(()=>{
+                 console.log(this.categoryId)
+                 this.$refs.selectTree.setCurrentKey(63); // 设置默认选中
+            })
         }
     }
 };

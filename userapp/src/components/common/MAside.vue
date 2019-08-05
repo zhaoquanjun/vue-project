@@ -10,48 +10,48 @@
                 <li
                     ref="menuItem"
                     class="left-menu-item"
-                    :class="[active==i?'menu-bg':'']"
+                    :class="{'menu-bg':curPath==it.code}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(i)"
-                    @mouseleave="itemhandlerLeave"
                     @click="skipPages(it,i)"
                 >
                     <i
                         class="menu-icon"
-                        :class="[curIndex==i ? it.code+'-on' : it.code,active==i? it.code+'-on' : it.code]"
+                        :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]"
                     ></i>
-                    <span class="menu-item-content" :class="curIndex==i ?'menu-color':''">{{it.name}}</span>
+                    <span
+                        class="menu-item-content"
+                        :class="curIndex==i ?'menu-color':''"
+                    >{{it.name}}</span>
                 </li>
             </ul>
         </el-aside>
         <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
+            :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
             :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
             class="m-asideright"
             :menuList="menuListChild"
-            @changeIndex="changeIndex"
         ></LeftNavComponents>
     </div>
 </template>
 <script>
-import { getSliderMenuList, checkHasRootSkip } from "@/api/index";
+import { getSliderMenuList } from "@/api/index";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
-
 export default {
     data() {
         return {
-            flag:0,
-            active: 0,
-            flag: 0,
             width: 50,
             width1: 0,
             time: "0.8s",
-            curIndex: 0,
+            curIndex: -1,
             menuList: [],
             serversData: [],
-            display:"none"
+            display: "none",
+            curPath: "",
+            lastRoute:""
         };
     },
     components: {
@@ -60,35 +60,28 @@ export default {
     methods: {
         changeCurHoverItem(i) {
             this.curIndex = i;
-            this.flag =i
-        },
-        itemhandlerLeave() {
-            //this.curIndex = 0;
         },
         skipPages(item, i) {
             let path = item.menuUrl.split("/")[1];
             if (!item.path) {
                 return;
             }
-            this.active = this.curIndex = i;
             this.$router.push(item.path);
         },
         collapseOpen(width, time) {
             this.width = width;
             this.width1 = 120;
-            this.display="block"
+            this.display = "block";
             this.time = time + "s";
         },
         collapseClose() {
             this.width = 50;
             this.width1 = 0;
-             this.display="none"
+            this.display = "none";
             this.time = "0s";
             this.curIndex = -1;
         },
-        changeIndex(){
-            this.active  = this.flag
-        }
+      
     },
     computed: {
         getMenuList() {
@@ -107,8 +100,16 @@ export default {
             } else {
                 return false;
             }
-        }
+        },
+      
     },
+    watch: {
+        $route(to, from) {
+            let [, firstRoute,lastRoute] = this.$route.path.split("/");
+            this.curPath = firstRoute;
+            this.lastRoute = lastRoute
+        }
+    }
 };
 </script>
 
@@ -144,8 +145,8 @@ export default {
     background: #e5f8fa;
     color: #00c1de;
 }
-.menu-color{
-     color: #00c1de;
+.menu-color {
+    color: #00c1de;
 }
 .left-menu {
     height: 100%;

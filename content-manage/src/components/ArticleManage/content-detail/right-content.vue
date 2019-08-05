@@ -7,6 +7,7 @@
             <div>
                 <el-upload
                     class="avatar-uploader"
+                    :class="{'border-line':!imageUrl1}"
                     :action="uploadPicAction"
                     :headers="headers"
                     :show-file-list="false"
@@ -134,18 +135,20 @@ export default {
 .el-collapse /deep/ .el-collapse-item__content {
     padding: 0 10px;
 }
-
+.border-line{
+  border: 1px dashed rgba(144,220,232,1);
+}
 .avatar-uploader {
     margin: 0 auto;
     display: table;
 }
 .avatar-uploader /deep/ .el-upload {
-    border: 1px dashed rgba(144,220,232,1);
+  
     border-radius: 0;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-       height: 200px;
+    height: 200px;
     width: 200px;
     vertical-align: middle;
     display: table-cell;
@@ -168,6 +171,7 @@ export default {
     width: 200px;
     height: 200px;
     display: block;
+    object-fit: scale-down
 }
 .el-upload-list__item-actions {
     

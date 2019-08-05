@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import dashboard from "./modules/dashboard"
+import Cookies from "js-cookie"
 Vue.use(Vuex);
 
 import { setLocal, getLocal, removeLocal } from '@/libs/local'
@@ -53,4 +54,7 @@ if (getLocal("token")) {
 }
 if(getLocal("appid")){
     store.commit("GETUSERDASHBOARD", getLocal("appid"))
+}
+if(Cookies("routeCode")){
+  store.commit("SETCODE",Cookies("routeCode"))
 }

@@ -1,5 +1,6 @@
 <template>
-    <div class="table-wrap" id="img-list">
+    <div class="table-wrap" id="img-list" style="overflow: auto;
+    height: calc(100vh - 200px);">
         <ul class="img-list">
             <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
                 <grid-list-item
@@ -34,13 +35,22 @@
                     arrow="always"
                     indicator-position="none"
                     :loop="true"
-                    @change="change"
+                    ref="carousel"
+                   
                 >
+                       <el-button
+                            @click="prev"
+                            class="el-carousel__arrow el-carousel__arrow--left left-prev"
+                        >左</el-button>
                     <el-carousel-item v-for="item in imgList" :key="item.id">
                         <h3>
                             <img :src="fullOssUrl" />
                         </h3>
                     </el-carousel-item>
+                     <el-button
+                            @click="next"
+                            class="el-carousel__arrow el-carousel__arrow--right right-next"
+                        ></el-button>
                 </el-carousel>
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
@@ -62,7 +72,8 @@ export default {
             imgList: "",
             fullOssUrl: "",
             picInfo: {},
-            initial: -1
+            initial: -1,
+            changeIndex: -1,
         };
     },
     components: {
@@ -88,16 +99,32 @@ export default {
         /**
          * 查看大图
          */
-        viewPic(row, index) {
+         viewPic(row, index) {
+              this.fullOssUrl = "";
             this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
             this.changeIndex = index;
+            this.picInfo = this.imgList[this.changeIndex];
         },
-        change(index,index1) {
-            index = index === this.changeIndex?this.changeIndex:index;
-            this.fullOssUrl = this.imgList[index].fullOssUrl;
-            this.picInfo = this.imgList[index];
+          prev() {
+            this.$refs.carousel.prev();
+             if(this.changeIndex>0){
+                  this.changeIndex = this.changeIndex - 1;
+             }else{
+                  this.changeIndex=this.picSearchOptions.pageSize-1
+             }
+            this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
+            this.picInfo = this.imgList[this.changeIndex];
+        },
+        next() {
+            this.$refs.carousel.next();
+            this.changeIndex = this.changeIndex + 1;
+             if(this.changeIndex>=this.picSearchOptions.pageSize){
+                 this.changeIndex=0
+             }
+            this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
+            this.picInfo = this.imgList[this.changeIndex];
         },
          closeDialog(){
              this.fullOssUrl = "";
@@ -119,6 +146,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.left-prev,
+.right-next {
+    opacity: 0;
+   
+}
 .img-list {
     width: 100%;
     box-sizing: border-box;

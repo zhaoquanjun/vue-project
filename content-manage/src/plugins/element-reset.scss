@@ -113,7 +113,9 @@ button.deleteActive:focus{
         position: relative !important;
         background: #fff;
     }
-   
+    .el-tree-node .el-tree-node__content:hover{
+        color: #00C1DE;
+    }
     .el-tree .el-tree-node__label {
         font-size: 12px;
     }
@@ -121,7 +123,7 @@ button.deleteActive:focus{
             // color: #8C8C8C;
     }
     .el-tree-node > .el-tree-node__children {
-        overflow: visible !important;
+        // overflow: visible !important;
     }
     .el-tree > :first-child > .el-tree-node__content{
         color: #00C1DE;
@@ -138,6 +140,11 @@ button.deleteActive:focus{
     }
     .el-tree > :first-child > .el-tree-node__content .set-tree-type ,.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .set-tree-type{
         background: rgb(247, 247, 247);
+    }
+    .el-tree > :first-child >.el-tree-node__children{
+        height: calc(100vh - 200px);
+      
+        overflow: auto
     }
 }
 

@@ -11,7 +11,7 @@
                 <el-input size="small"  v-model="ruleForm.name" autocomplete="off" placeholder="请输入分类名称"  maxlength="20"
   show-word-limit ></el-input>
             </el-form-item>
-            <el-form-item label="分类图片" >
+            <el-form-item v-if="isUpload" label="分类图片" >
                  <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                      分类图片用于分类控件带图片样式的展示，
@@ -66,9 +66,16 @@
 </template>
 <script>
 import environment from "@/environment/index.js";
-
 export default {
-    props: ["modifyCategoryData"],
+    props: {
+        isUpload:{
+            type:Boolean,
+            default:true
+        },
+        modifyCategoryData:{
+            type:Object
+        }
+    },
     data() {
         return {
             dialogImageUrl: "",

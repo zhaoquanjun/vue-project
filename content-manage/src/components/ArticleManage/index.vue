@@ -14,10 +14,10 @@
                 @rename="renameCategory"
                 @chooseNode="chooseNode"
                 @getList="getArticleListAsync"
+                @modifyNode="modifyNodeCategory"
             ></m-tree>
         </el-aside>
-        <el-main style="height: calc(100vh - 50px);
-    overflow-y: auto;">
+        <el-main >
             <content-header
                 :count="count"
                 :is-batch-header-show="isBatchHeaderShow"
@@ -138,6 +138,7 @@ export default {
         changeOperateName(operate) {
             this.operateName = operate;
         },
+
         /**
          * 获取多选的列表
          */
@@ -283,6 +284,11 @@ export default {
             this.rightPanelType = 2;
             this.newsIdList = idlist;
         },
+        // 拖拽移动分类
+        async modifyNodeCategory(id, parentId, idOrderByArr) {
+            await articleManageApi.modifyNode(id, parentId, idOrderByArr);
+            this.getTreeAsync();
+        },
         //选择移动分类时的节点
         chooseNode(node) {
             console.log(node, "nnnnnnnnnn");
@@ -319,14 +325,14 @@ export default {
             //     });
             //     return;
             // }
-            console.log(this.moveToClassiFy,'moveToClassiFymoveToClassiFy');
+            console.log(this.moveToClassiFy, "moveToClassiFymoveToClassiFy");
             let cateId;
             if (this.moveToClassiFy) {
                 cateId = this.moveToClassiFy.id;
-            }else{
-                 cateId = this.curArticleInfo.categoryId;
+            } else {
+                cateId = this.curArticleInfo.categoryId;
             }
-            
+
             let { data, status } = await articleManageApi.batchMove(
                 cateId,
                 this.newsIdList

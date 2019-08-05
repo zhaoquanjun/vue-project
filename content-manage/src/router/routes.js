@@ -23,6 +23,10 @@ export const defaultRoutes = [
         redirect: { path: '/content/product' },
     },
     {
+        path: "/file",
+        redirect: { path: '/content/file' },
+    },
+    {
         path: "/product/create",
         redirect: { path: '/content/createProduct' },
     },
@@ -61,7 +65,7 @@ export const defaultRoutes = [
                 name: "file",
                 component: () => import('@/views/content-manage/file-manage.vue'),
                 meta: {
-                    // requiresAuth: true,
+                    requiresAuth: true,
                     title: "文件管理",
                     isSub: true
                 },

@@ -1,16 +1,11 @@
 <template>
     <div class="table-content" id="table-list">
-        <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
-        <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
-        <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
-        <el-button type="danger" @click="batchPublish(null,false)">批量上线</el-button>
-        <el-button type="danger" @click="batchPublish(null,true)">批量下线</el-button>
-        <el-button type="danger" @click="batchMove(null)">批量移动</el-button>-->
         <el-table
             ref="multipleTable"
             :data="articlePageResult.list"
             tooltip-effect="dark"
             class="content-table"
+             height="500"
             @selection-change="handleSelectionChange"
         >
             <template slot="empty">
@@ -178,7 +173,7 @@ export default {
                 (this.row = row);
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY -50 + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
             if (this.$refs.operateSection.style.display == "block") {
                 this.$refs.operateSection.style.display = "none";

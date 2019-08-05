@@ -61,7 +61,7 @@
                         <button
                             class="bind"
                             :class="!!pwdTitle?'isbind':'notbind'"
-                        >{{!!pwdTitle?"已设置":"设置"}}</button>|
+                        >{{!!pwdTitle?"已绑定":"绑定"}}</button>|
                         <button @click="modifiPwd">{{pwdBtn}}</button>
                     </span>
                 </div>

@@ -1,7 +1,7 @@
 const website = {
   state: {
     isChooseModul:false,
-    curCode:""
+    navItem:""
   },
 
   mutations: {
@@ -9,7 +9,8 @@ const website = {
         state.isChooseModul=payload
     },
     SETCODE(state,payload){
-      state.curCode=payload
+      console.log(payload)
+      state.navItem=payload
   }
   },
   actions: {
