@@ -14,7 +14,12 @@ let scope = "openid profile dashboard.api designer.api content.api";
 export let designerManageApi = 'http://api.designer.console.wezhan.cn';
 export let dashboardDomain = "dashboard.console.wezhan.cn"
 export let shiftToAliyun = "https://help.aliyun.com/document_detail/54077.html?spm=a2c4g.11186623.2.10.61ca4c07hLv73n";
-export let whyOpenCdn = "https://help.aliyun.com/document_detail/27101.html"
+export let whyOpenCdn = "https://help.aliyun.com/document_detail/27101.html";
+export let articleManageUrl = "http://content.console.wezhan.cn/content/news";
+export let productManageUrl = "http://content.console.wezhan.cn/content/product";
+export let imgManageUrl = "http://content.console.wezhan.cn/content/picture";
+export let fileManageUrl = "http://content.console.wezhan.cn/content/file";
+
 if (process.env.NODE_ENV === 'development') {
     siteManageApi  = 'http://api.designer.console.wezhan.cn';
     memberManageApi = 'http://api.dashboard.console.wezhan.cn';
