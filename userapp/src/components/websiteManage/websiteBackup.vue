@@ -6,7 +6,7 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content">
-      <ChangeSite @chooseWebsite="chooseWebsite" />
+      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
       <el-row style="padding:24px 17px">
         <el-row class="user-list">
           <span class="member-list-title fs14">网站备份</span>
@@ -39,11 +39,20 @@
                     style="padding:0"
                     @show="showRemark(scope.row)"
                   >
-                    <span slot="reference" >
-                        <div @mouseenter="_handleShowEditorIcon(scope.row.id)" @mouseleave="_handleHideEditorIcon(scope.row.id)">
-                            <div class="remark-desc">{{scope.row.description}}</div>
-                            <svg-icon v-if="active == scope.row.id" icon-class="remark" class="remark" :data-type="'remarkIcon'+ scope.$index" :ref="'remarkIcon'+ scope.$index" ></svg-icon>
-                        </div>
+                    <span slot="reference">
+                      <div
+                        @mouseenter="_handleShowEditorIcon(scope.row.id)"
+                        @mouseleave="_handleHideEditorIcon(scope.row.id)"
+                      >
+                        <div class="remark-desc">{{scope.row.description}}</div>
+                        <svg-icon
+                          v-if="active == scope.row.id"
+                          icon-class="remark"
+                          class="remark"
+                          :data-type="'remarkIcon'+ scope.$index"
+                          :ref="'remarkIcon'+ scope.$index"
+                        ></svg-icon>
+                      </div>
                     </span>
                     <div class="textareaWrap">
                       <el-input
@@ -178,19 +187,21 @@ export default {
       remarkInfo: ""
     };
   },
-  mounted() {
-    this.getSiteInfo();
-    this.getBackupSite();
-  },
   methods: {
-      chooseWebsite(siteId){
-          this.getBackupSite()
-      },
+    // 获取siteId
+    getSiteId(siteId) {
+      this.getSiteInfo(siteId);
+      this.getBackupSite(siteId);
+    },
+    // 选择切换网站
+    chooseWebsite(siteId) {
+      this.getBackupSite(siteId);
+    },
     /**
      * 获取站点信息
      */
-    async getSiteInfo() {
-      let { data } = await siteBackupApi.getSiteInfo(2);
+    async getSiteInfo(siteId) {
+      let { data } = await siteBackupApi.getSiteInfo(siteId);
       console.log(data);
       this.siteName = data.siteName;
       this.siteId = data.id;
@@ -210,10 +221,10 @@ export default {
     /**
      * 获取备份信息
      */
-    async getBackupSite() {
-      let manualData = await siteBackupApi.getBackupSite(2, false);
+    async getBackupSite(siteId) {
+      let manualData = await siteBackupApi.getBackupSite(siteId, false);
       this.manualSite = manualData.data.items;
-      let autoData = await siteBackupApi.getBackupSite(2, true);
+      let autoData = await siteBackupApi.getBackupSite(siteId, true);
       this.autoSite = autoData.data.items;
       if (this.backupType === "manual") {
         this.siteInfo = this.manualSite;
@@ -432,10 +443,10 @@ export default {
       // this.$set(this.siteInfo[index], "description", this.remarkValue)
     },
     _handleShowEditorIcon(id) {
-        this.active = id;
+      this.active = id;
     },
     _handleHideEditorIcon(id) {
-        this.active = -1;
+      this.active = -1;
     }
   }
 };
@@ -500,7 +511,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 81%;
-
 }
 .backupTip {
   margin-top: 24px;

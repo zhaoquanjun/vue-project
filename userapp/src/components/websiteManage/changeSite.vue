@@ -73,6 +73,7 @@ export default {
     async getCurSiteId() {
       let { data } = await dashboardApi.getCurSiteId();
       this.curSiteId = data;
+      this.$emit("getSiteId", data);
     },
     /**
      * 获取站点信息

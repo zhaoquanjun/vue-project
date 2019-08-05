@@ -6,7 +6,7 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content">
-      <ChangeSite @chooseWebsite="chooseWebsite" />
+      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
       <el-row class="siteContent">
         <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>
         <div class="siteWrap">
@@ -133,10 +133,11 @@ export default {
     };
   },
   computed: {},
-  mounted() {
-    this.getSiteInfo(this.$store.state.dashboard.siteId);
-  },
   methods: {
+    // 获取siteId
+    getSiteId(siteId) {
+      this.getSiteInfo(siteId);
+    },
     /**
      * 获取站点信息
      */
@@ -169,7 +170,7 @@ export default {
   border-radius: 2px;
   border: 1px solid rgba(229, 229, 229, 1);
 }
-.siteTypeSelect /deep/ .el-input__icon{
+.siteTypeSelect /deep/ .el-input__icon {
   line-height: 32px;
 }
 .siteIndustrySelect {
@@ -183,7 +184,7 @@ export default {
   border-radius: 2px;
   border: 1px solid rgba(229, 229, 229, 1);
 }
-.siteTypeSelect /deep/ .el-input__icon{
+.siteTypeSelect /deep/ .el-input__icon {
   line-height: 32px;
 }
 </style>
