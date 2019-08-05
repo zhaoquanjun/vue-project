@@ -1,5 +1,5 @@
 <template>
-  <div class="home-page">
+  <div class="home-page page-scroll">
     <el-row style="display: flex;">
       <el-col :span="18">
         <div class="welcome-wrap">
@@ -180,7 +180,7 @@ export default {
 .home-page {
   padding: 0 24px 32px;
   background: rgba(255, 255, 255, 1);
-  overflow: hidden;
+
   .welcome-wrap {
     margin-top: 64px;
     text-align: center;

@@ -1,11 +1,9 @@
-import { bindDomainAndEnableCdn } from '@/api/request/domainApi';
 <template>
   <div class="site-section">
     <el-row class="content">
       <el-col
         :class="{'active':siteId == item.siteId,'activePrev':item.prev, 'activeNext': item.next}"
         class="item"
-        :span="6"
         v-for="(item, index) in siteInfo"
         :key="index"
         @click.native="handleClick(item,index)"
@@ -142,7 +140,6 @@ export default {
       position: absolute;
       width: 26%;
       height: 180px;
-      //   border: 1px solid black;
       right: -1px;
       bottom: 31px;
       transform: translateX(100%);
@@ -151,7 +148,6 @@ export default {
         width: 46%;
         height: 72%;
         float: left;
-        // background: green;
         margin-top: 24px;
         margin-left: 21px;
       }
@@ -199,7 +195,7 @@ export default {
       transform: translateX(-50%);
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
     }
-    .active .dialog-fade-enter-active {
+    .active.active {
       animation: active-in 1s;
     }
     .active.hidden {
@@ -211,7 +207,6 @@ export default {
         transform: translateX(0);
       }
     }
-
     @keyframes active-out {
       to {
         // height: 300px;
