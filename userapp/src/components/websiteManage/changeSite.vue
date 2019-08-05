@@ -1,5 +1,5 @@
 <template>
-  <div class="siteBox">
+  <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
       <span class="siteName">{{ siteName }}</span>
       <span class="secondDomain">{{ secondDomain }}</span>
@@ -49,6 +49,7 @@ export default {
   components: {},
   data() {
     return {
+      curSiteId: 0,
       siteName: "",
       siteId: 0,
       secondDomain: "",
@@ -59,16 +60,26 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getSiteInfo(this.$store.state.dashboard.siteId);
+    this.getCurSiteId().then(() => {
+      this.getSiteInfo(this.curSiteId);
+    });
+
     this.getSites();
   },
   methods: {
+    /**
+     * 获取当前siteId
+     */
+    async getCurSiteId() {
+      let { data } = await dashboardApi.getCurSiteId();
+      this.curSiteId = data;
+      this.$emit("getSiteId", data);
+    },
     /**
      * 获取站点信息
      */
     async getSiteInfo(siteId) {
       let { data } = await siteBackupApi.getSiteInfo(siteId);
-      console.log(data);
       this.siteName = data.siteName;
       this.secondDomain = data.secondDomain;
       this.siteId = data.id;
@@ -79,22 +90,20 @@ export default {
      */
     async getSites() {
       let { data } = await dashboardApi.getSites();
-      console.log(data);
       this.siteInfoList = data;
     },
     /**
-     * 切换站点
+     * 显示切换弹框
      */
     changeSite() {
       this.changeSiteShow = true;
     },
     // 选择新的site
     async choseSite(item) {
-      console.log(item);
       this.changeSiteShow = false;
       setLocal("siteid", item.siteId);
       this.$store.commit("SETSITEID", item.siteId);
-      await dashboardApi.updateUserLastSiteIdAndCookie(item.siteId);
+      await dashboardApi.updateUserLastSiteId(item.siteId);
       this.$emit("chooseWebsite", item.siteId);
       this.getSiteInfo(item.siteId);
     },
@@ -114,7 +123,6 @@ export default {
     },
     // 计算site个数
     computeSiteNum() {
-      console.log(this.siteInfoList.length);
       switch (this.siteInfoList.length) {
         case 2:
           return { width: "35%" };

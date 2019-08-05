@@ -1,150 +1,155 @@
 <template>
-    <div class="content-num-section">
-        <p class="section-title">内容管理</p>
-        <el-row class="content" :gutter="16">
-            <el-col class="item" :span="6" v-for="(it, idx) in content" :key="idx" >
-                <div class="item-box" @click="go(it.url)">
-                    <div class="item-l">
-                        <span :class="contentIcon(it)"></span>
-                        <span>{{ it.name }}</span>
-                    </div>
-                    <div>
-                        <span class="item-r">{{ it.num }}</span>
-                        <span class="item-type">{{ it.type }}</span>
-                    </div>
-                </div>
-            </el-col>
-        </el-row>
-    </div>
+  <div class="content-num-section">
+    <p class="section-title">内容管理</p>
+    <el-row class="content">
+      <el-col class="item" :span="6" v-for="(item, index) in content" :key="index">
+        <div class="item-box" @click="jumpToContent(item.url)">
+          <div class="item-name">
+            <span>{{ item.name }}</span>
+          </div>
+          <div class="item-content">
+            <span class="item-num">{{ item.num }}</span>
+            <span class="item-type">{{ item.type }}</span>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
+import {
+  articleManageUrl,
+  productManageUrl,
+  imgManageUrl,
+  fileManageUrl
+} from "@/environment/index";
 export default {
-    props: ["contentNumber"],
-    data() {
-        return {
-            content: []
-        };
-    },
-    created() {
-        this.content = [
-            { name: "文章", num: this.contentNumber.newsCount, type: "/篇", url: "http://content.console.wezhan.cn/content/news" },
-            { name: "产品", num: this.contentNumber.productsCount, type: "/个", url: "http://content.console.wezhan.cn/content/product" },
-            { name: "图片", num: this.contentNumber.picturesCount, type: "/张", url: "http://content.console.wezhan.cn/content/picture" },
-            { name: "文件", num: this.contentNumber.filesCount, type: "/个", url: "http://content.console.wezhan.cn/content/file" }
-        ];
-    },
-    methods:{
-        go(url) {
-            window.location.href = url;
-        },
-      contentIcon(item){
-        switch (item.name){
-          case "文章":
-           return "article"
-          case "产品":
-           return "product"
-          case "图片":
-           return "pictrue"
-          case "文件":
-           return "file"     
-             
-        }
-      }
+  props: ["contentNumber"],
+  data() {
+    return {
+      content: []
+    };
+  },
+  methods: {
+    jumpToContent(url) {
+      window.location.href = url;
     }
+  },
+  watch: {
+    contentNumber() {
+      this.content = [
+        {
+          name: "文章",
+          num: this.contentNumber.newsCount,
+          type: "/篇",
+          url: articleManageUrl
+        },
+        {
+          name: "产品",
+          num: this.contentNumber.productsCount,
+          type: "/个",
+          url: productManageUrl
+        },
+        {
+          name: "图片",
+          num: this.contentNumber.picturesCount,
+          type: "/张",
+          url: imgManageUrl
+        },
+        {
+          name: "文件",
+          num: this.contentNumber.filesCount,
+          type: "/个",
+          url: fileManageUrl
+        }
+      ];
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .content-num-section {
-    background:rgba(255,255,255,1);
-    box-shadow:0px 2px 8px 0px rgba(0,0,0,0.14);
-    .section-title {
-        padding-left: 25px;
-        padding-bottom: 16px;
-        padding-top: 20px;
-        font-size:18px;
-        font-family:PingFangSC-Medium;
-        font-weight:500;
-        color:rgba(38,38,38,1);
-        line-height:25px;
+  border-radius: 3px;
+  border: 1px solid rgba(229, 229, 229, 1);
+  .section-title {
+    padding-left: 25px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    font-size: 18px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(38, 38, 38, 1);
+    line-height: 25px;
+  }
+  .content {
+    .item:first-of-type {
+      background: url("~img/dashboard/board-contentLeftImg.png") no-repeat;
+      background-position: left bottom;
+      background-size: contain;
     }
-    .content {
-        padding: 0 24px 16px;
-        .item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 16px;
-            margin-bottom: 16px;
-            .item-box {
-                width: 100%;
-                height: 100px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 0 16px;
-                background:rgba(251,251,251,1);
-                cursor:pointer;
-                span {
-                    display: block;
-                }
-                .article{
-                    background: url("~img/dashboard/board-article.png") no-repeat
-                    center;
-                   background-size: contain;
-                }
-                .product{
-                    background: url("~img/dashboard/board-product.png") no-repeat
-                    center;
-                   background-size: contain;
-                }
-                .pictrue{
-                    background: url("~img/dashboard/board-pic.png") no-repeat
-                    center;
-                   background-size: contain;
-                }
-                .file{
-                    background: url("~img/dashboard/board-file.png") no-repeat
-                    center;
-                   background-size: contain;
-                }
-                
-                .item-l {
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    span:first-of-type {
-                        width: 40px;
-                        height: 40px;
-                        margin-right: 24px;
-                    }
-                    span:last-of-type {
-                        font-size:20px;
-                        font-family:PingFangSC-Light;
-                        font-weight:300;
-                        color:rgba(38,38,38,1);
-                        line-height:28px;
-                    }
-                }
-                .item-r {
-                    display: inline;
-                    margin-right: 5px;
-                    font-size:32px;
-                    font-family:PingFangSC-Medium;
-                    font-weight:500;
-                    color:rgba(38,38,38,1);
-                }
-                .item-type{
-                    display: inline;
-                    font-size:14px;
-                    font-family:PingFangSC-Regular;
-                    font-weight:400;
-                    color:rgba(181,181,181,1);
-                    line-height:20px;
-                }
-            }
+    .item:last-of-type {
+      background: url("~img/dashboard/board-contentRightImg.png") no-repeat;
+      background-position: right bottom;
+      background-size: contain;
+    }
+    .item:last-of-type .item-box{
+        border-right: 1px solid transparent;
+      }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .item-box {
+        width: 100%;
+        height: 75px;
+        margin-bottom: 32px;
+        border-right: 1px solid #eee;
+        cursor: pointer;
+        span {
+          display: block;
         }
+        .item-name {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          span {
+            font-size: 18px;
+            font-family: PingFangSC-Light;
+            font-weight: 300;
+            color: rgba(38, 38, 38, 1);
+            line-height: 25px;
+          }
+        }
+        .item-content {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          //   vertical-align: top;
+        }
+        .item-num {
+          display: inline;
+          margin-right: 5px;
+          font-size: 36px;
+          font-family: PingFangSC-Medium;
+          font-weight: 500;
+          color: rgba(38, 38, 38, 1);
+          line-height: 50px;
+          //   vertical-align: top;
+        }
+        .item-type {
+          display: inline;
+          font-size: 14px;
+          font-family: PingFangSC-Regular;
+          font-weight: 400;
+          color: rgba(185, 203, 207, 1);
+          line-height: 20px;
+          //   vertical-align: top;
+        }
+      }
     }
+  }
 }
 </style>

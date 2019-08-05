@@ -1,11 +1,15 @@
 <template>
   <div class="home-page">
-    <p class="welcome-words">今日，2019年6月22日星期六，欢迎您回到云速成美站控制台。</p>
     <el-row style="display: flex;">
       <el-col :span="18">
+        <div class="welcome-wrap">
+          <p class="welcome-words">CHRISTIN，欢迎回到微站后台</p>
+          <p class="siteIntroduction">以下是您当前的站点</p>
+        </div>
+
         <siteinfo :siteInfo="siteInfoList" />
-        <plugins :plugins="pluginList" v-if="pluginList && pluginList.length > 0" />
-        <content-num :contentNumber="contentNumber"/>
+        <plugins :plugins="pluginList" />
+        <content-num :contentNumber="contentNumber" />
         <recommend :recommend="recommend" />
       </el-col>
       <!-- <div class="board-right" style="margin-left:19px"></div> -->
@@ -17,16 +21,18 @@
           <el-col class="appVersion">
             <span>{{ appInfo.productName }}</span>
           </el-col>
-          <div class="appLine"></div>
+          <el-col class="appLine">
+            <div class="appLineInside"></div>
+          </el-col>
           <el-col class="appTime">
             <span>{{ appInfo.time }}</span>
+            <button class="renewalBtn" v-show="appInfo.isSystem">续费</button>
           </el-col>
-          <button class="renewalBtn">续费</button>
         </el-row>
 
         <el-row class="designCheats">
           <h3 class="designCheatsTitle">设计秘籍</h3>
-          <div class="designItem" v-for="(item, index) in versionInfo" :key="index">
+          <div class="designItem" v-for="(item, index) in designCheats" :key="index">
             <div class="designDiv" :class="designColor(index)"></div>
             <div class="designInfo">{{ item.versionDescription }}</div>
             <div class="designNoread" v-show="!designIsread">去阅读</div>
@@ -40,6 +46,7 @@
             <div class="versionInfo">{{ item.versionDescription }}</div>
             <div class="versionDate">{{ item.updateTime }}</div>
           </div>
+          <img class="versionImg" src="~img/dashboard/board-versionImg.png" alt />
         </el-row>
       </el-col>
     </el-row>
@@ -57,17 +64,51 @@ import * as dashboardApi from "@/api/request/dashboardApi";
 export default {
   data() {
     return {
-      siteInfoList: [],
+      siteInfoList: [
+        {
+          siteName:1,
+          siteId:1
+        },{
+          siteName:2,
+          siteId:2
+        },{
+          siteName:3,
+          siteId:3
+        },{
+          siteName:4,
+          siteId:4
+        },{
+          siteName:5,
+          siteId:5
+        },
+      ],
       appInfo: {},
       versionInfo: [],
       pluginList: [],
       contentNumber: {
-         newsCount: 0,
+        newsCount: 0,
         filesCount: 0,
         picturesCount: 0,
         productsCount: 0
       },
       recommend: [],
+      designCheats: [
+        {
+          versionDescription: "域名支持一键解析"
+        },
+        {
+          versionDescription: "域名支持一键解析"
+        },
+        {
+          versionDescription: "域名支持一键解析"
+        },
+        {
+          versionDescription: "域名支持一键解析"
+        },
+        {
+            versionDescription: "域名支持一键解析域名支持一键解析域名支持一键解析"
+        }
+      ],
       designIsread: false
     };
   },
@@ -79,7 +120,7 @@ export default {
   },
   created() {
     this.getDashboardData();
-    this.getAppExpandInfo()
+    this.getAppExpandInfo();
   },
   methods: {
     /**
@@ -88,7 +129,6 @@ export default {
      */
     async getDashboardData() {
       let { data } = await getUserDashboard();
-      console.log(data);
       this.pluginList = data.pluginList;
       this.contentNumber = {
         newsCount: data.contentsNumber.newsCount,
@@ -97,19 +137,18 @@ export default {
         productsCount: data.contentsNumber.productsCount
       };
       this.appInfo = data.appInfo;
-      this.$store.commit("SETCURAPPNAME",data.appInfo.name)
+      this.$store.commit("SETCURAPPNAME", data.appInfo.name);
       this.appInfo.time =
         formatDateTime(this.appInfo.createTime, "yyyy年MM月dd日") +
         "-" +
         formatDateTime(this.appInfo.expiredTime, "yyyy年MM月dd日");
-      this.siteInfoList = data.siteInfos;
+      // this.siteInfoList = data.siteInfos;
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表
      */
     async getAppExpandInfo() {
       let { data } = await dashboardApi.getAppExpandInfo();
-      console.log(data);
       this.recommend = data.appRecommends;
       this.versionInfo = data.versionUpdates;
       for (var i = 0; i < this.versionInfo.length; i++) {
@@ -140,12 +179,26 @@ export default {
 <style lang="scss" scoped>
 .home-page {
   padding: 0 24px 32px;
-  background: rgba(245, 245, 246, 1);
+  background: rgba(255, 255, 255, 1);
   overflow: hidden;
-  .welcome-words {
-    padding: 24px 0 16px;
-    color: #262626;
-    line-height: 17px;
+  .welcome-wrap {
+    margin-top: 64px;
+    text-align: center;
+    .welcome-words {
+      font-size: 40px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(38, 38, 38, 1);
+      line-height: 56px;
+    }
+    .siteIntroduction {
+      margin-top: 8px;
+      font-size: 20px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(181, 181, 181, 1);
+      line-height: 28px;
+    }
   }
 }
 .board-right {
@@ -155,66 +208,80 @@ export default {
   background-size: cover;
 }
 .appInfo {
+  margin-top: 125px;
   margin-right: 10px;
   margin-left: 29px;
-  height: 250px;
-  background: rgba(0, 193, 222, 1);
-  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.14);
+  height: 231px;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 3px;
+  border: 1px solid rgba(229, 229, 229, 1);
   position: relative;
   .appName {
-    position: absolute;
-    top: 40px;
-    left: 22px;
+    margin-top: 34px;
+    margin-left: 28px;
     font-size: 26px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
-    color: rgba(255, 255, 255, 1);
+    color: rgba(38, 38, 38, 1);
+    line-height: 37px;
   }
   .appVersion {
-    position: absolute;
-    top: 100px;
-    left: 22px;
+    margin-top: 16px;
+    margin-left: 28px;
     font-size: 14px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
-    color: rgba(255, 255, 255, 1);
+    color: rgba(38, 38, 38, 1);
+    line-height: 20px;
   }
   .appLine {
-    // width:100%;
-    height: 1px;
-    background: #fff;
-    position: absolute;
-    top: 154px;
-    left: 15px;
+    margin-left: 20px;
+    margin-right: 17px;
+    margin-top: 23px;
+    width: 100%;
+    display: inline-block;
+    .appLineInside {
+      width: 100%;
+      height: 1px;
+      background: #eeeeee;
+      opacity: 0.38;
+    }
   }
   .appTime {
-    position: absolute;
-    bottom: 39px;
-    left: 22px;
+    margin-top: 34px;
+    margin-left: 28px;
     font-size: 14px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
-    color: rgba(255, 255, 255, 1);
+    color: rgba(161, 168, 177, 1);
+    line-height: 20px;
   }
   .renewalBtn {
-    position: absolute;
-    bottom: 33px;
-    left: 270px;
-    width: 89px;
+    // position: absolute;
+    // bottom: 33px;
+    // left: 270px;
+    margin-left: 37px;
+    width: 92px;
     height: 32px;
-    background: rgba(135, 223, 236, 1);
-    opacity: 0.56;
+    background: linear-gradient(
+      270deg,
+      rgba(129, 220, 160, 1) 0%,
+      rgba(8, 204, 235, 1) 100%
+    );
+    box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.14);
+    border-radius: 16px;
     font-size: 14px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
+    line-height: 20px;
   }
 }
 .designCheats {
   margin: 24px 10px 24px 28px;
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.14);
   padding-bottom: 10px;
+  border-radius: 3px;
+  border: 1px solid rgba(229, 229, 229, 1);
   .designCheatsTitle {
     font-size: 18px;
     font-family: PingFangSC-Medium;
@@ -233,28 +300,35 @@ export default {
     .designDiv {
       width: 5px;
       height: 70px;
-      background: rgba(0, 193, 222, 1);
+      background: rgba(165, 231, 240, 1);
       border-radius: 3px 0px 0px 3px;
       position: absolute;
       left: 0px;
       top: 0px;
     }
     .designColorBlue {
-      background: rgba(0, 114, 211, 1);
+      background: rgba(121, 185, 241, 1);
     }
     .designColorRed {
-      background: rgba(242, 102, 102, 1);
+      background: rgba(246, 143, 143, 1);
     }
     .designColorYellow {
-      background: rgba(243, 175, 67, 1);
+      background: rgba(241, 200, 134, 1);
     }
     .designInfo {
-      font-size: 14px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(38, 38, 38, 1);
-      line-height: 70px;
-      margin-left: 30px;
+        font-size: 14px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(38, 38, 38, 1);
+        line-height: 70px;
+        margin-left: 30px;
+        display: -webkit-box;
+        width: 60%;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
     }
     .designNoread {
       position: absolute;
@@ -270,16 +344,21 @@ export default {
   }
 }
 .versionUpdate {
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.14);
   margin-right: 10px;
   margin-left: 28px;
-  padding-bottom: 10px;
+  background: linear-gradient(
+    360deg,
+    rgba(0, 193, 222, 0.17) 0%,
+    rgba(188, 245, 253, 0.17) 100%
+  );
+  border-radius: 3px;
+  // opacity: 0.17;
   .versionTitle {
     font-size: 18px;
     font-family: PingFangSC-Medium;
     font-weight: 500;
     color: rgba(38, 38, 38, 1);
+    line-height: 25px;
     margin-top: 20px;
     margin-left: 17px;
     margin-bottom: 19px;
@@ -290,20 +369,31 @@ export default {
     font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(38, 38, 38, 1);
-    position: relative;
+    line-height: 20px;
     margin-left: 16px;
     margin-bottom: 10px;
     margin-right: 25px;
-    .versionInfo {
-      position: absolute;
-      left: 0px;
-      color: #262626;
+    .versionInfo
+    {
+        float: left;
+        color: #262626;
+        width:80%;
+        display: -webkit-box;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
     }
     .versionDate {
-      position: absolute;
-      right: 0px;
-      color: #b5b5b5;
+      float: right;
+      color: #80bbc4;
     }
+  }
+  .versionImg {
+    float: right;
+    margin-top: 25px;
+    width: 339px;
   }
 }
 </style>

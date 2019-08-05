@@ -24,7 +24,7 @@
             </ul>-->
           </span>
           <span @click="changeApp">
-            {{appName}}
+            {{$store.state.dashboard.curAppName}}
             <span class="changeAppImg"></span>
           </span>
         </div>
@@ -59,15 +59,53 @@
           title="我的应用"
           :fullscreen="true"
           :visible.sync="changeAppShow"
-          :modal="false"
           :center="true"
+          :close-on-click-modal="false"
           style="margin-top:50px"
         >
           <div class="appBackground">
             <div>
-              <el-col :span="24" class="appitem" v-for="(item, index) in appList" :key="index">
+              <el-col
+                :span="24"
+                class="appitem"
+                v-for="(item, index) in appList"
+                :key="index"
+                style="padding:0px"
+              >
                 <div class="appTitle">
                   <span class="appName">{{item.name}}</span>
+                  <el-popover
+                    v-show="item.isSystem"
+                    :ref="`popover-${index}`"
+                    placement="bottom"
+                    width="317"
+                    trigger="click"
+                    style="padding:0"
+                    @show="showRemark(index)"
+                  >
+                    <span slot="reference">
+                      <svg-icon icon-class="remark" class="remark"></svg-icon>
+                    </span>
+                    <div class="textareaWrap">
+                      <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 3, maxRows: 3}"
+                        placeholder="请输入内容"
+                        v-model="remarkValue"
+                        maxlength="30"
+                        show-word-limit
+                        resize="none"
+                      ></el-input>
+                      <div class="btn-wrap">
+                        <button
+                          class="popover-btn cancel"
+                          slot="refenrence"
+                          @click="cancelInput(index)"
+                        >取消</button>
+                        <button class="popover-btn save" @click="saveInputValue(index)">保存</button>
+                      </div>
+                    </div>
+                  </el-popover>
                   <span
                     class="appMember"
                     :style="{color:item.isSystem? '#35B24B':'#0070CC'}"
@@ -82,7 +120,7 @@
                   <span class="expiredText" style="margin-left:46px">{{item.expired}}</span>
                   <div class="isExpired" v-show="isExpired(item)">已过期</div>
                   <button class="renewal" v-show="item.isSystem">续费</button>
-                  <button class="choseApp" @click="choseApp(item)">进入应用</button>
+                  <el-button class="choseApp" @click="choseApp(item)" :disabled="isExpired(item)" :class="{'disabled':isExpired(item)}">进入应用</el-button>
                 </div>
               </el-col>
             </div>
@@ -104,15 +142,13 @@ export default {
     return {
       isdropdownAvatarShow: false,
       isdropdownDesignShow: false,
-      appName: "",
+      // appName: "",
       appList: [],
-      changeAppShow: false
+      changeAppShow: false,
+      remarkValue: ""
     };
   },
-  created() {
-    this.getAppName();
-    this.getAppList();
-  },
+  created() {},
   methods: {
     designer() {
       location.href = "//designer.console.wezhan.cn";
@@ -141,10 +177,10 @@ export default {
     /**
      * 获取app信息
      */
-    async getAppName() {
-      let { data } = await getApplication();
-      this.appName = data.name;
-    },
+    // async getAppName() {
+    //   let { data } = await getApplication();
+    //   this.appName = data.name;
+    // },
     /**
      * 获取app列表
      */
@@ -175,12 +211,31 @@ export default {
     //显示切换app弹框
     changeApp() {
       this.changeAppShow = true;
+      // this.getAppName();
+      this.getAppList();
     },
     // 判断是否过期
     isExpired(item) {
-      if( new Date(item.expiredTime) < new Date() ) {
+      if (new Date(item.expiredTime) < new Date()) {
         return true;
       }
+    },
+    /**
+     * 修改appName
+     */
+    showRemark(index) {
+      this.remarkValue = this.appList[index].name
+        ? this.appList[index].name
+        : "";
+    },
+    cancelInput(index) {
+      this.$refs[`popover-${index}`][0].doClose();
+      this.remarkValue = "";
+    },
+    async saveInputValue(index) {
+      this.$refs[`popover-${index}`][0].doClose();
+      await dashboardApi.UpdateAppName(this.remarkValue);
+      this.appList[index].name = this.remarkValue;
     }
   },
   computed:{
@@ -197,6 +252,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.disabled{
+  opacity:0.2;
+}
 .header {
   padding: 0 10px;
   height: 50px;
@@ -412,6 +470,7 @@ export default {
       font-weight: 500;
       color: rgba(255, 255, 255, 1);
       line-height: 32px;
+      padding: 0px;
     }
     .renewal {
       width: 90px;
@@ -428,6 +487,33 @@ export default {
       // left: 419px;
     }
   }
+}
+// 修改app
+.textareaWrap {
+  background: #fff;
+  position: relative;
+  .btn-wrap {
+    text-align: right;
+    padding-top: 10px;
+    button {
+      width: 63px;
+      height: 25px;
+      line-height: 25px;
+      font-size: 12px;
+      border: none;
+    }
+    .cancel {
+      border: 1px solid #eeeeee;
+      margin-right: 10px;
+    }
+    .save {
+      background: #00c1de;
+      color: #fff;
+    }
+  }
+}
+.remark {
+  margin-left: 20px;
 }
 </style>
 

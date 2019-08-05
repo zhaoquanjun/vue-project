@@ -1,6 +1,18 @@
 import * as ajaxRequest from "../ajaxRequest";
 
 /**
+ * 更改appName
+ */
+export const UpdateAppName = (appName) => {
+    return ajaxRequest.put(`/api/appInfo/UpdateAppName`,JSON.stringify(appName));
+};
+/**
+ * 获取当前siteId
+ */
+export const getCurSiteId = () => {
+    return ajaxRequest.get(`/api/userInfo/GetCurrentSiteId`);
+};
+/**
  * 获取site列表
  */
 export const getSites = () => {
@@ -47,8 +59,8 @@ export const updateUserLastAppIdAndCookie = (appId) => {
 /**
  * 切换site记录siteId
  */
-export const updateUserLastSiteIdAndCookie = (siteId) => {
-    return ajaxRequest.put(`/api/userInfo/UpdateUserLastSiteIdAndCookie`, siteId);
+export const updateUserLastSiteId = (siteId) => {
+    return ajaxRequest.put(`/api/userInfo/UpdateUserLastSiteId`, siteId);
 }
 
 /**
@@ -56,4 +68,23 @@ export const updateUserLastSiteIdAndCookie = (siteId) => {
  */
 export const getAppHeadInfo = () => {
     return ajaxRequest.get(`/api/appInfo/GetAppHeadInfo`);
+}
+
+/**
+ *desc:获取第一行业
+ * author:xuzhuan
+ * time:2019.08.05
+ **/
+export const GetFirstIndustries = () => {
+    return ajaxRequest.get(`/api/siteInfo/GetFirstIndustries`);
+}
+
+/**
+ *desc:获取第一行业
+ * author:xuzhuan
+ * time:2019.08.05
+ **/
+export const GetSecondIndustries = (parentId) => {
+    var para = { firstIndustryId: parentId};
+    return ajaxRequest.get(`/api/siteInfo/GetSecondIndustries`, para);
 }

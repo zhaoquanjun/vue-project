@@ -50,10 +50,10 @@ export const exportBackup = (siteName, siteId, fileName) => {
  * 删除备份
  */
 export const deleteBackup = (id, fileName, siteId) => {
-  let params={id: id, fileName: fileName, siteId: siteId}
+  let params = { id: id, fileName: fileName, siteId: siteId }
   return ajaxRequest._delete(
     `${enbironmemy.siteManageApi}/api/v1/Backup/DeleteBackup`,
-    { data:params }
+    { data: params }
   );
 };
 /**
