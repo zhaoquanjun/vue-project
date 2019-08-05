@@ -4,7 +4,7 @@ import * as ajaxRequest from "../ajaxRequest";
  * 更改appName
  */
 export const UpdateAppName = (appName) => {
-    return ajaxRequest.put(`/api/appInfo/UpdateAppName`, appName);
+    return ajaxRequest.put(`/api/appInfo/UpdateAppName`,JSON.stringify(appName));
 };
 /**
  * 获取当前siteId
@@ -68,4 +68,23 @@ export const updateUserLastSiteId = (siteId) => {
  */
 export const getAppHeadInfo = () => {
     return ajaxRequest.get(`/api/appInfo/GetAppHeadInfo`);
+}
+
+/**
+ *desc:获取第一行业
+ * author:xuzhuan
+ * time:2019.08.05
+ **/
+export const GetFirstIndustries = () => {
+    return ajaxRequest.get(`/api/siteInfo/GetFirstIndustries`);
+}
+
+/**
+ *desc:获取第一行业
+ * author:xuzhuan
+ * time:2019.08.05
+ **/
+export const GetSecondIndustries = (parentId) => {
+    var para = { firstIndustryId: parentId};
+    return ajaxRequest.get(`/api/siteInfo/GetSecondIndustries`, para);
 }

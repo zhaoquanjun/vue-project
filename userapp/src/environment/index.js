@@ -22,7 +22,7 @@ export let fileManageUrl = "http://content.console.wezhan.cn/content/file";
 
 if (process.env.NODE_ENV === 'development') {
     siteManageApi  = 'http://api.designer.console.wezhan.cn';
-    memberManageApi = 'http://api.dashboard.console.wezhan.cn';
+    memberManageApi ='http://api.dashboard.console.wezhan.cn';
     designerManageApi = 'http://api.designer.console.wezhan.cn';
     uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
     authorityUrl = "http://api.identity.console.wezhan.cn";

@@ -106,7 +106,7 @@ export default {
           versionDescription: "域名支持一键解析"
         },
         {
-          versionDescription: "域名支持一键解析"
+            versionDescription: "域名支持一键解析域名支持一键解析域名支持一键解析"
         }
       ],
       designIsread: false
@@ -316,12 +316,19 @@ export default {
       background: rgba(241, 200, 134, 1);
     }
     .designInfo {
-      font-size: 14px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(38, 38, 38, 1);
-      line-height: 70px;
-      margin-left: 30px;
+        font-size: 14px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(38, 38, 38, 1);
+        line-height: 70px;
+        margin-left: 30px;
+        display: -webkit-box;
+        width: 60%;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
     }
     .designNoread {
       position: absolute;
@@ -366,9 +373,17 @@ export default {
     margin-left: 16px;
     margin-bottom: 10px;
     margin-right: 25px;
-    .versionInfo {
-      float: left;
-      color: #262626;
+    .versionInfo
+    {
+        float: left;
+        color: #262626;
+        width:80%;
+        display: -webkit-box;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
     }
     .versionDate {
       float: right;
