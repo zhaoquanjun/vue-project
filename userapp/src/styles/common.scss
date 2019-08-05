@@ -11,8 +11,13 @@ $gray: #e5f8fa;
 body{
     background: #F9FAFC;
     color: #262626;
-    min-width: 960px;;
+    min-width: 960px;
+    overflow: hidden;
     font-family:  -apple-system, BlinkMacSystemFont, "PingFang SC",  "Microsoft YaHei", "Helvetica Neue",  Arial
+}
+.page-scroll{
+    overflow: auto;
+    height: calc(100vh - 50px);
 }
 h1{font-size: 28px}
 h2{font-size: 18px}

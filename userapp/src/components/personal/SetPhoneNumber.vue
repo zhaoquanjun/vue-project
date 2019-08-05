@@ -65,6 +65,7 @@ export default {
     },
     methods: {
         async nextStep() {
+            this.$refs.getSms.resetTimer()
             let code = this.$refs.getSms.ruleForm.verification;
            
             if (!this.$refs.getSms.submitForm1()) {

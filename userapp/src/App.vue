@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header style="height:50px;">
+      <el-header style="height:50px;position:fixed;width: 100%;z-index:1000">
         <m-header></m-header>
       </el-header>
-      <el-container>
+      <el-container style="padding-top: 50px;width: 100%;overflow: hidden;">
         <el-aside width="50px">
           <m-aside></m-aside>
         </el-aside>

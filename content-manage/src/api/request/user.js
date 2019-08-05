@@ -18,3 +18,14 @@ export const getUserDashboard = () => {
 export const updateAppIdToCookie = () => {
     return ajaxRequest.put(`${enbironmemy.dashboardApi}/api/userInfo/UpdateAppIdToCookie`);
 }
+
+
+export const updateUserLastAppIdAndCookie = (appId) => {
+    return ajaxRequest.put('/api/userInfo/UpdateUserLastAppIdAndCookie', JSON.stringify(appId));
+}
+/**
+ * 获取用户头像 
+ */
+export const getAppHeadInfo = () => {
+    return ajaxRequest.get(`${enbironmemy.dashboardApi}/api/appInfo/GetAppHeadInfo`);
+}

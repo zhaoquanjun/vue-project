@@ -25,8 +25,8 @@
                     </div>
                    
                     <template v-else>
-                        <i style class="el-icon-plus avatar-uploader-icon"></i>
-                        <i style=" display: block;">添加图片</i>
+                        <i class="el-icon-plus avatar-uploader-icon"></i>
+                        <i class="avatar-text"  style=" display: block;">添加图片</i>
                     </template>
                    
                 </el-upload>
@@ -137,10 +137,11 @@ export default {
 }
 .border-line{
   border: 1px dashed rgba(144,220,232,1);
+  background:rgba(242,250,251,0.501);
 }
 .avatar-uploader {
     margin: 0 auto;
-    display: table;
+    /* display: table; */
 }
 .avatar-uploader /deep/ .el-upload {
   
@@ -148,10 +149,11 @@ export default {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    height: 200px;
+    /* height: 200px; */
     width: 200px;
+   
     vertical-align: middle;
-    display: table-cell;
+    /* display: table-cell; */
 }
 .avatar-uploader /deep/ .el-upload i {
     color: #00c1de;
@@ -160,12 +162,16 @@ export default {
 .avatar-uploader .el-upload:hover {
     border-color: #409eff;
 }
-.avatar-uploader-icon {
+ .avatar-uploader-icon {
     font-size: 28px;
-    color: #8c939d;
     width: 178px;
     text-align: center;
     margin-bottom: 10px;
+    padding-top: 19px;
+    padding-bottom: 0 ;
+}
+.avatar-text{
+     padding-bottom: 19px;
 }
 .avatar {
     width: 200px;

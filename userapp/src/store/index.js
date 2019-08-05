@@ -44,6 +44,9 @@ if (sessionStorage.getItem("token")){
 if(sessionStorage.getItem("siteId")){
  store.commit("SETSITEID",sessionStorage.getItem("siteId"))
 }
+if(sessionStorage.getItem("userInfo")){
+  store.commit("SET_USERINFO",JSON.parse(sessionStorage.getItem("userInfo")))
+}
 if(Cookies("navItem")){
   store.commit("SETCODE",Cookies("navItem"))
 }

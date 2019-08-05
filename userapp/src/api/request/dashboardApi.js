@@ -4,13 +4,26 @@ import * as ajaxRequest from "../ajaxRequest";
  * 更改appName
  */
 export const UpdateAppName = (appName) => {
-    return ajaxRequest.put(`/api/appInfo/UpdateAppName`,JSON.stringify(appName));
+    return ajaxRequest.put(`/api/appInfo/UpdateAppName`, JSON.stringify(appName));
 };
 /**
  * 获取当前siteId
  */
 export const getCurSiteId = () => {
     return ajaxRequest.get(`/api/userInfo/GetCurrentSiteId`);
+};
+/**
+ * 更改siteName
+ */
+export const updateSiteName = (siteId, siteName) => {
+    let para = { siteId: siteId, siteName: siteName }
+    return ajaxRequest.put(`/api/siteInfo/UpdateSiteName`, para);
+};
+/**
+* 更改站点语言
+*/
+export const updateSiteLanguage = (siteId, language) => {
+    return ajaxRequest.put(`/api/siteInfo/UpdateSiteLanguage`, JSON.stringify(appName));
 };
 /**
  * 获取site列表
@@ -85,8 +98,15 @@ export const GetFirstIndustries = () => {
  * time:2019.08.05
  **/
 export const GetSecondIndustries = (parentId) => {
-    var para = { firstIndustryId: parentId};
+    let para = { firstIndustryId: parentId };
     return ajaxRequest.get(`/api/siteInfo/GetSecondIndustries`, para);
+}
+/**
+ * 保存网站类型和所属行业
+ */
+export const updateSiteTypeAndIndustry = (siteId, siteType, firstIndustryId, secondIndustryId) => {
+    let para = { siteId: siteId, siteType: siteType, firstIndustryId: firstIndustryId, secondIndustryId: secondIndustryId };
+    return ajaxRequest.get(`/api/siteInfo/UpdateSiteTypeAndIndustry`, para);
 }
 
 /**
