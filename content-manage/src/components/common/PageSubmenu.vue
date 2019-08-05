@@ -66,7 +66,7 @@ export default {
 <style lang="scss" scoped>
 .submenu {
     max-width: 120px;
-    height: 100vh;
+    height: calc(100vh );
     background: #fff;
     border-right: 1px solid #e5e5e5;
     .submenu-title {

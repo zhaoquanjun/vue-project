@@ -1,7 +1,7 @@
 
 <template>
     <div class="setPwd">
-         <div class="modify-title">
+        <div class="modify-title">
             <p>{{tipTitle}}</p>
         </div>
         <template v-if="!isSetPassWord">
@@ -44,10 +44,10 @@
                         <span v-show="!show" class="count">{{count}} s</span>
                     </el-button>
                 </el-form-item>
-            </el-form> -->
+            </el-form>-->
             <div class="from-row">
-             <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi"></get-sms>
-            </div>    
+                <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi"></get-sms>
+            </div>
         </template>
         <div class="footer">
             <button class="confirm footer-btn" v-if="isSetPassWord" @click="nextStep">下一步</button>
@@ -65,17 +65,29 @@ import {
     isInvalidCode
 } from "@/api/index.js";
 import GetSms from "./GetSms";
-    export default {
-        props: ["isSetPassWord", "sourcePhone"],
-          components: {  GetSms },
-        data() {
-            var regex1 = new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$");
-            var regex2 = new RegExp("^(?=.*\\d)(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$");
-            var regex3 = new RegExp("^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$");
+export default {
+    props: ["isSetPassWord", "sourcePhone"],
+    components: { GetSms },
+    data() {
+        var regex1 = new RegExp(
+            "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$"
+        );
+        var regex2 = new RegExp(
+            "^(?=.*\\d)(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$"
+        );
+        var regex3 = new RegExp(
+            "^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$"
+        );
 
-        var checPwd = (rule, value, callback) => {            
-            if (!regex1.test(value) && !regex2.test(value) && !regex3.test(value)) {
-                callback(new Error("长度为6-16位,数字、字母及标点符号至少包含两种！"));
+        var checPwd = (rule, value, callback) => {
+            if (
+                !regex1.test(value) &&
+                !regex2.test(value) &&
+                !regex3.test(value)
+            ) {
+                callback(
+                    new Error("长度为6-16位,数字、字母及标点符号至少包含两种！")
+                );
             }
             if (value.length > 16) {
                 callback(new Error("密码长度不能超过16位！"));
@@ -87,8 +99,14 @@ import GetSms from "./GetSms";
             let reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
         };
         var checBeSurePwd = (rule, value, callback) => {
-            if (!regex1.test(value) && !regex2.test(value) && !regex3.test(value)) {
-                callback(new Error("长度为6-16位,数字、字母及标点符号至少包含两种！"));
+            if (
+                !regex1.test(value) &&
+                !regex2.test(value) &&
+                !regex3.test(value)
+            ) {
+                callback(
+                    new Error("长度为6-16位,数字、字母及标点符号至少包含两种！")
+                );
             }
             if (value.length > 16) {
                 callback(new Error("密码长度不能超过16位！"));
@@ -132,7 +150,7 @@ import GetSms from "./GetSms";
                     }
                 ]
             },
-         
+
             phone: "",
             code: ""
         };
@@ -192,13 +210,13 @@ import GetSms from "./GetSms";
             console.log(option);
             let { status } = await updateUserPwd(option);
             if (status === 200) {
-                this.isSetPassWord = true;                
-                 this.$message({
+                this.isSetPassWord = true;
+                this.$message({
                     type: "success",
                     message: "设置成功!"
-                });                
+                });
                 this.$store.commit("CLOSERIGHTPANNEL", false);
-                this.$emit('setPwdTitleAndBtn');
+                this.$emit("setPwdTitleAndBtn");
             }
         },
         async modifyPaw() {
@@ -209,11 +227,11 @@ import GetSms from "./GetSms";
             };
             let { status } = await changeUserPwd(option);
             if (status === 200) {
-                 this.$message({
+                this.$message({
                     type: "success",
                     message: "修改成功!"
                 });
-                 this.$store.commit("CLOSERIGHTPANNEL", false);
+                this.$store.commit("CLOSERIGHTPANNEL", false);
             }
         },
         // 点击下一步
@@ -223,9 +241,9 @@ import GetSms from "./GetSms";
                 return;
             }
             let code = this.$refs.getSms.ruleForm.verification;
-           
+
             if (!this.$refs.getSms.submitForm1()) {
-                return false
+                return false;
             } else {
                 let { status } = await isInvalidCode(this.sourcePhone, code);
                 if (status === 200) {
@@ -246,22 +264,24 @@ import GetSms from "./GetSms";
             }
         }
     },
-    computed:{
-        pannelShow(){
-            return this.$store.state.isRightPanelShow
+    computed: {
+        pannelShow() {
+            return this.$store.state.isRightPanelShow;
         }
     },
-    watch:{
-        pannelShow(){
-            this.$refs.ruleForm.clearValidate()
-             this.ruleForm = {
+    watch: {
+        pannelShow() {
+            if (!this.isSetPassWord) {
+                this.$refs.ruleForm.clearValidate();
+            }
+            this.ruleForm = {
                 passWrod: "",
                 beSurePwd: ""
             };
-              this.ruleFormCode = {
+            this.ruleFormCode = {
                 phone: "",
                 code: ""
-            }
+            };
         }
     }
 };
@@ -269,7 +289,7 @@ import GetSms from "./GetSms";
 <style lang="scss" scoped>
 @import "./style/personal";
 .setPwd {
-   padding: 32px;
+    padding: 32px;
     .pwd-form {
         padding-top: 20px;
     }
@@ -283,11 +303,10 @@ import GetSms from "./GetSms";
     bottom: 1px;
     right: 1px;
     border: none;
-    color: #00C1DE;
+    color: #00c1de;
     font-weight: 400;
 }
 .from-row {
     margin-top: 30px;
 }
-
 </style>

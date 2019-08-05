@@ -5,6 +5,7 @@
             :data="articlePageResult.list"
             tooltip-effect="dark"
             class="content-table"
+              height="500"
             @selection-change="handleSelectionChange"
         >
             <template slot="empty">
@@ -172,7 +173,7 @@ export default {
 
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY -50 + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
             if (this.$refs.operateSection.style.display == "block") {
                 this.$refs.operateSection.style.display = "none";

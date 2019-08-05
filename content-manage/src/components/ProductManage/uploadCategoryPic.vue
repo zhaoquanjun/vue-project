@@ -66,9 +66,7 @@
 </template>
 <script>
 import environment from "@/environment/index.js";
-
 export default {
-    //["modifyCategoryData","isUpload"]
     props: {
         isUpload:{
             type:Boolean,

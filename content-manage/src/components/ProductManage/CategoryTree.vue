@@ -25,9 +25,10 @@
                     :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
                 />
                 <div class="node-label-wrap">
-                    <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
-                        <span class="node-label">{{data.label}}</span>
-                    </el-tooltip>
+                    <!-- <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
+                       
+                    </el-tooltip> -->
+                     <span class="node-label">{{data.label}}</span>
                     <span>({{data.leafSum }})</span>
                 </div>
                 <!-- 三个点 分类操作 -->
@@ -192,7 +193,7 @@ export default {
         },
         // 添加分类  0720
         create(ev, node, data) {
-            this.modifyCategoryData = ""; //创建新分类 不需传
+            this.modifyCategoryData = {}; //创建新分类 不需传
             this._handleShowMoreOperate(ev, node, data);
             this.isAdd = true;
         },
@@ -295,7 +296,7 @@ export default {
             this.$refs.operateSection1.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
             this.$refs.operateSection1.style.top =
-                ev.pageY - ev.offsetY - 50 + "px";
+                ev.pageY - ev.offsetY + "px";
             if (this.$refs.operateSection1.style.display === "block") {
                 this.$refs.operateSection1.style.display = "none";
             } else {

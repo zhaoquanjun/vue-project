@@ -1,5 +1,6 @@
 <template>
-    <div class="article-box">
+    <div class="article-box" style="overflow: auto;
+    height: calc(100vh - 50px);">
         <header class="article-bg">
             <div class="article-crumbs" style="width:80%;margin:0 auto;padding-top:15px">
                 <el-breadcrumb separator-class="el-icon-arrow-right">

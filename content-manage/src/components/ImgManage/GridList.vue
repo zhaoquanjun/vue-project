@@ -1,5 +1,6 @@
 <template>
-    <div class="table-wrap" id="img-list">
+    <div class="table-wrap" id="img-list" style="overflow: auto;
+    height: calc(100vh - 200px);">
         <ul class="img-list">
             <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
                 <grid-list-item

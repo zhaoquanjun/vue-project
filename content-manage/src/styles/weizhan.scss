@@ -9,7 +9,7 @@
         // height: 100vh;
         background: #fff;
         margin: 0 0 0 13px;
-         height: calc(100vh - 50px);
+        //  height: calc(100vh);
     }
     .el-dialog__body {
         padding-top: 0;
@@ -17,7 +17,7 @@
     }
    
     .content-table-wrap{
-        height: calc(100vh - 50px);
+        height: calc(100vh );
     }
 
 
@@ -50,6 +50,7 @@
 .pageing {
     float: right;
     margin-top: 24px;
+    padding-bottom: 10px;
 }
 
 .table-wrap {

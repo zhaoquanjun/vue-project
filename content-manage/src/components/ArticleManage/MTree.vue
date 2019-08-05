@@ -20,9 +20,10 @@
                 slot-scope="{ node, data }"
             >
                 <div class="node-label-wrap">
-                    <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
-                        <span class="node-label">{{data.label}}</span>
-                    </el-tooltip>
+                    <!-- <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
+                        
+                    </el-tooltip> -->
+                    <span class="node-label">{{data.label}}</span>
                     <span>({{data.newsCount }})</span>
                 </div>
                 <!-- 三个点 分类操作 -->
@@ -290,7 +291,7 @@ export default {
             this.$refs.operateSection1.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
             this.$refs.operateSection1.style.top =
-                ev.pageY - ev.offsetY - 50 + "px";
+                ev.pageY - ev.offsetY + "px";
             if (this.$refs.operateSection1.style.display === "block") {
                 this.$refs.operateSection1.style.display = "none";
             } else {

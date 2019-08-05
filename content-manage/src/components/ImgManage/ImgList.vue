@@ -1,6 +1,7 @@
 <template>
     <div class="table-wrap" id="table-list">
         <el-table
+            height="500"
             ref="multipleTable"
             :data="imgPageResult.list"
             tooltip-effect="dark"
@@ -258,6 +259,10 @@ export default {
 };
 </script>
 <style>
+/* .table-wrap{
+    height: calc(100vh - 100px);
+    overflow: auto;
+} */
 </style>
 
 <style scoped>

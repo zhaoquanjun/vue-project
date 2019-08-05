@@ -120,13 +120,13 @@ export default {
 .m-aside {
     position: absolute;
     left: 0;
-    top: 0;
-    bottom: 0;
+    top: 50px;
+    /* bottom: 0; */
     z-index: 10;
 }
 .m-asideleft {
     overflow: hidden;
-    height: 100%;
+    /* height: 100%; */
 }
 .m-asideright {
     width: 0px !important;
@@ -138,7 +138,7 @@ export default {
     /* border-right: 1px solid #E5E5E5; */
 }
 .el-aside /deep/ .el-menu {
-    height: 100%;
+    /* height: 100%; */
     border: none;
 }
 </style>
@@ -152,9 +152,10 @@ export default {
     color: #00c1de;
 }
 .left-menu {
-    height: 100%;
+    // height: 100%;
     border-right: solid 1px #e6e6e6;
     background: #fff;
+     height: calc(100vh );
     .left-menu-item {
         cursor: pointer;
         padding: 0 20px;

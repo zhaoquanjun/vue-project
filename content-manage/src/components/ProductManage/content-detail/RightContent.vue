@@ -10,14 +10,16 @@
                     :action="uploadPicAction"
                     :headers="headers"
                     list-type="picture-card"
-                    :file-list="fileList1"
+                    :file-list="fileList"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :multiple="true"
+                    :limit="9"
+                    :onExceed="onExceed"
                 >
-                   <!-- <div v-for="(item,index) in fileList1" :key="index"><img :src="item.response" alt=""></div> -->
+                    <!-- <div v-for="(item,index) in fileList1" :key="index"><img :src="item.response" alt=""></div> -->
                     <template>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;font-size:12px">添加图片</i>
@@ -54,12 +56,18 @@ export default {
                 Authorization: ""
             },
             uploadSucess: false,
-            imageUrl1: ""
+            imageUrl1: "",
+            newFileList: []
         };
     },
+   
     watch: {
         fileList() {
             this.fileList1 = this.fileList;
+            document.querySelector(".el-upload--picture-card").style.width =
+                "97px";
+            document.querySelector(".el-upload--picture-card").style.height =
+                "97px";
             this.$nextTick(() => {
                 if (this.fileList1.length >= 9) {
                     document.querySelector(".el-upload").style.display = "none";
@@ -67,7 +75,13 @@ export default {
             });
         },
         fileList2() {
+            console.log(this.fileList2);
             this.$nextTick(() => {
+                document.querySelector(".el-upload--picture-card").style.width =
+                    "97px";
+                document.querySelector(
+                    ".el-upload--picture-card"
+                ).style.height = "97px";
                 if (this.fileList2.length >= 9) {
                     document.querySelector(".el-upload").style.display = "none";
                 }
@@ -80,23 +94,22 @@ export default {
     methods: {
         handleSucess(response, file, fileList) {},
         handleRemove(file, fileList) {
-            this.fileList1 = this.fileList1.filter((item)=>{
-                if(item.status=="success"){
-                    return item.response != file.response
-                }
-            })
-             this.fileList2=this.fileList2.filter((item)=>{
-                if(item.status!="success"){
-                    return item.response != file.response
-                }
-            })
+            this.newFileList = fileList
         },
         handlePreview(file) {
             console.log(file);
         },
-
+        // 上传图片超出数量限制时触发
+        onExceed(fileList) {
+            this.$message({
+                type: "warning",
+                message: `上传图片文件超过数量限制`
+            });
+        },
         ///////
-        handleAvatarSuccess(res, file) {
+        handleAvatarSuccess(res, file,argfileList) {
+            this.newFileList = argfileList;
+            console.log(arguments)
             let fileList = {
                 name: file.name,
                 response: file.response,
@@ -143,9 +156,38 @@ export default {
 
     vertical-align: middle;
 }
+.avatar-uploader .el-upload > .avatar-uploader-icon {
+    font-size: 22px;
+}
 .avatar-uploader .el-upload i {
     color: #00c1de;
     cursor: pointer;
+    padding-bottom: 5px;
+}
+.avatar-uploader /deep/ .el-upload--picture-card {
+    box-sizing: border-box;
+    width: 100%;
+    height: auto ;
+  line-height: 0;
+    vertical-align: top;
+    display: flex;
+    align-items: center;
+    /* text-align: center; */
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 0;
+}
+.avatar-uploader /deep/ .el-upload-list > li {
+    float: left;
+    border-radius: 0;
+}
+.avatar-uploader /deep/ .el-upload-list > li:first-child {
+    width: 200px;
+    height: 200px;
+}
+.avatar-uploader /deep/ .el-upload-list > li:not(:first-child) {
+    width: 97px;
+    height: 97px;
 }
 </style>
 <style lang="scss" scoped>

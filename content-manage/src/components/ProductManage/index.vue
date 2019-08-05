@@ -16,8 +16,7 @@
                 @chooseCategoryNode="chooseCategoryNode"
             ></category-tree>
         </el-aside>
-        <el-main style="height: calc(100vh - 50px);
-    overflow-y: auto;">
+        <el-main >
             <content-header
                 :count="count"
                 :article-search-options="productSearchOptions"

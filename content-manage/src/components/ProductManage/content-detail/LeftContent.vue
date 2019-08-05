@@ -52,6 +52,7 @@
                                     size="small"
                                     placeholder="请选择"
                                     :categoryName="categoryName"
+                                    :categoryId="categoryId"
                                     :tree-result="treeResult"
                                     @chooseNode="chooseNode"
                                     @removeSeletedCategory="removeSeletedCategory"
@@ -330,6 +331,7 @@ export default {
             activeName: "",
             activeName1: "",
             categoryName: [],
+            categoryId:[],
             treeResult: null,
             detailData: {
                 name: "",
@@ -465,6 +467,11 @@ export default {
             this.categoryName = data.productCategoryList.map(item => {
                 return item.displayName;
             });
+            console.log(data,"datadatadata")
+            this.categoryId = data.productCategoryList.map(item => {
+                return item.id;
+            });
+           
             if (Object.keys(data.seoKeyword).length < 1) {
                 data.seoKeyword = [];
             } else {
