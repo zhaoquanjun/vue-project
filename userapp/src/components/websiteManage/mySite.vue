@@ -32,7 +32,7 @@
                     :autosize="{ minRows: 3, maxRows: 3}"
                     placeholder="请输入内容"
                     v-model="siteNameValue"
-                    maxlength="30"
+                    maxlength="100"
                     show-word-limit
                     resize="none"
                   ></el-input>
@@ -45,7 +45,7 @@
             </div>
             <div class="siteinfoItem siteLanguage">
               <span>网站语言：</span>
-              <span>{{language == "zh-CN" ? "中文" : language}}</span>
+              <span>{{getLanguage()}}</span>
               <div class="edit" @click="showChangeLanguage"></div>
             </div>
             <div class="siteinfoItem siteDomain">
@@ -68,18 +68,18 @@
         <div class="siteTypeWrap">
           <div class="siteType">网站类型</div>
           <div class="siteTypeSelect">
-            <el-select v-model="siteTypeValue" placeholder="请选择站点类型" @change="choseType">
+            <el-select v-model="chosedSiteType" placeholder="请选择站点类型" @change="choseType">
               <el-option
                 v-for="item in siteType"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value"
+                :value="item.label"
               ></el-option>
             </el-select>
           </div>
           <div class="siteIndustry">所属行业</div>
           <div class="siteFirstIndustrySelect">
-            <el-select v-model="siteFirstIndustryValue" placeholder="一级行业" @focus="choseFirstIndustrySelect" @change="choseFirstIndustry">
+            <el-select v-model="siteFirstIndustryValue" placeholder="一级行业"  @change="choseFirstIndustry">
               <el-option
                 v-for="item in siteFirstIndustry"
                 :key="item.id"
@@ -89,7 +89,7 @@
             </el-select>
           </div>
           <div class="siteSecondIndustrySelect">
-            <el-select v-model="siteSecondIndustryValue" placeholder="二级行业" @focus="choseSecondIndustrySelect" @change="choseSecondIndustry">
+            <el-select v-model="siteSecondIndustryValue" placeholder="二级行业" @change="choseSecondIndustry">
               <el-option
                 v-for="item in siteSecondIndustry"
                 :key="item.id"
@@ -138,15 +138,15 @@
             <span class="headTitle">网站语言</span>
             <span class="close-pannel" @click="closeSiteLanguageDialog">X</span>
           </div>
-          <div class="tips">为避免网站内容与网站语言不匹配，更换网站语言后，请及时跟新控件内容</div>
+          <div class="tips">为避免网站内容与网站语言不匹配，更换网站语言后，请及时更新控件内容</div>
           <div class="remark">
             <span class="remarkTitle">请选择您的网站语言：</span>
             <el-radio-group v-model="radio" class="radio">
-              <el-radio label="简体中文">简体中文</el-radio>
-              <el-radio label="English">English</el-radio>
-              <el-radio label="日语">日语</el-radio>
-              <el-radio label="Espanol">Espanol</el-radio>
-              <el-radio label="한국어">한국어</el-radio>
+              <el-radio label="zh-CN">简体中文</el-radio>
+              <el-radio label="en-US">English</el-radio>
+              <el-radio label="ja-JP">日本语</el-radio>
+              <el-radio label="es-ES">Español</el-radio>
+              <el-radio label="ko-KR">한국어</el-radio>
             </el-radio-group>
           </div>
           <div class="confirm">
@@ -183,7 +183,6 @@ export default {
       siteId: 0,
       secondDomain: "",
       language: "",
-      siteTypeValue: "",
       siteType: [
         {
           value: "1",
@@ -207,24 +206,44 @@ export default {
       siteNameValue: "",
       changeSiteLanguageShow: false,
       remarkInfo: "",
-      radio: "简体中文"
+        radio: "简体中文",
+        languageList: { "zh-CN": "简体中文", "en-US": "English", "ja-JP": "日本语", "es-ES": "Español", "ko-KR": "한국어" }      
     };
   },
   methods: {
     // 获取siteId
     getSiteId(siteId) {
-      this.siteId = siteId;
-      this.getSiteInfo(siteId);
-    },
+        this.siteId = siteId;
+        this.getSiteInfo(siteId);
+        
+      },
+      getLanguage() {
+          for (var x in this.languageList) {
+              if (this.language == x) {
+                  return this.languageList[x];
+              }
+          }
+      },
     // 获取站点信息
     async getSiteInfo(siteId) {
       console.log(siteId);
-      let { data } = await siteBackupApi.getSiteInfo(siteId);
-      console.log(data);
-      this.siteName = data.siteName;
-      this.secondDomain = data.secondDomain;
-      this.siteId = data.id;
-      this.language = data.language;
+      let { data,status } = await siteBackupApi.getSiteInfo(siteId);
+        console.log(data);
+        if (status === 200) {
+            this.siteName = data.siteName;
+            this.secondDomain = data.secondDomain;
+            this.siteId = data.id;
+            this.language = data.language;
+            this.firstIndustryId = data.firstIndustryId;
+            this.secondIndustryId = data.secondIndustryId;
+            if (data.siteType) {
+                this.chosedSiteType = data.siteType;
+            }
+            await this.choseFirstIndustrySelect();
+            if (data.firstIndustryId) {
+                await this.choseSecondIndustrySelect(data.firstIndustryId);
+            }           
+        }
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
@@ -239,9 +258,15 @@ export default {
       this.$refs[`popover`].doClose();
       this.siteNameValue = "";
     },
-    async saveInputValue() {
+      async saveInputValue() {
+          if (!this.siteNameValue) {
+              this.$message({
+                  type: "failed",
+                  message: "请输入站点名称"
+              });
+            return;
+        }
       this.$refs[`popover`].doClose();
-      console.log(this.siteId)
       await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
       this.siteName = this.siteNameValue;
     },
@@ -252,12 +277,16 @@ export default {
     },
     //  切换网站语言
     showChangeLanguage() {
-      this.changeSiteLanguageShow = true;
+        this.changeSiteLanguageShow = true;
+        this.radio = this.language;
     },
     async changeLanguage() {
 
-      let { data } = await dashboardApi.updateSiteLanguage(this.siteId, this.radio);
-      this.language = this.radio;
+        let { data,status } = await dashboardApi.updateSiteLanguage(this.siteId, this.radio);
+        if (status == 200) {
+            this.language = this.radio;
+            this.closeSiteLanguageDialog();
+        }
     },
     // 选择网站类型
     choseType(value) {
@@ -266,22 +295,41 @@ export default {
     // 选择一级行业菜单
     async choseFirstIndustrySelect() {
       let { data } = await dashboardApi.GetFirstIndustries();
-      this.siteFirstIndustry = data;
+        this.siteFirstIndustry = data;
+        this.siteFirstIndustryValue = this.firstIndustryId == 0 ?"":this.firstIndustryId;
     },
-    choseFirstIndustry(id) {
-      this.firstIndustryId = id;
+      choseFirstIndustry(id) {
+          this.firstIndustryId = id;
+          this.secondIndustryId = "";
+        this.choseSecondIndustrySelect(this.firstIndustryId);
     },
     // 选择二级行业菜单
-    async choseSecondIndustrySelect(firstIndustryId) {
-      let { data } = await dashboardApi.GetSecondIndustries(this.firstIndustryId);
-      this.siteSecondIndustry = data;
+      async choseSecondIndustrySelect(firstIndustryId) {
+          if (firstIndustryId != 0) {
+              let { data } = await dashboardApi.GetSecondIndustries(firstIndustryId);
+              this.siteSecondIndustry = data;
+              this.siteSecondIndustryValue = this.secondIndustryId;
+          }
     },
     choseSecondIndustry(id) {
       this.secondIndustryId = id;
     },
     // 保存网站信息 
-    async saveSiteInfo() {
-      await dashboardApi.updateSiteTypeAndIndustry(this.siteId, this.chosedSiteType, this.firstIndustryId, this.secondIndustryId);
+      async saveSiteInfo() {
+          if (this.secondIndustryId == ""||this.secondIndustryId ==0) {
+              this.$message({
+                  type: "failed",
+                  message: "请先选择所属行业"
+              });
+              return;
+          }
+        let { data, status } = await dashboardApi.updateSiteTypeAndIndustry(this.siteId, this.chosedSiteType, this.firstIndustryId, this.secondIndustryId);
+        if (status === 200) {
+            this.$message({
+                type: "successed",
+                message: "保存成功"
+            });
+        }
     }
   }
 };

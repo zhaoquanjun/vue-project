@@ -23,7 +23,8 @@ export const updateSiteName = (siteId, siteName) => {
 * 更改站点语言
 */
 export const updateSiteLanguage = (siteId, language) => {
-    return ajaxRequest.put(`/api/siteInfo/UpdateSiteLanguage`, JSON.stringify(appName));
+    let para = { siteId: siteId, language: language }
+    return ajaxRequest.put(`/api/siteInfo/UpdateSiteLanguage`, para);
 };
 /**
  * 获取site列表
@@ -106,5 +107,5 @@ export const GetSecondIndustries = (parentId) => {
  */
 export const updateSiteTypeAndIndustry = (siteId, siteType, firstIndustryId, secondIndustryId) => {
     let para = { siteId: siteId, siteType: siteType, firstIndustryId: firstIndustryId, secondIndustryId: secondIndustryId };
-    return ajaxRequest.get(`/api/siteInfo/UpdateSiteTypeAndIndustry`, para);
+    return ajaxRequest.put(`/api/siteInfo/UpdateSiteTypeAndIndustry`, para);
 }
