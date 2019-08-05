@@ -296,7 +296,8 @@ export default {
     async choseFirstIndustrySelect() {
       let { data } = await dashboardApi.GetFirstIndustries();
         this.siteFirstIndustry = data;
-        this.siteFirstIndustryValue = this.firstIndustryId == 0 ?"":this.firstIndustryId;
+        this.siteFirstIndustryValue = this.firstIndustryId == 0 ? "" : this.firstIndustryId;
+        this.siteSecondIndustryValue = this.secondIndustryId == 0 ? "" : this.secondIndustryId;
     },
       choseFirstIndustry(id) {
           this.firstIndustryId = id;
