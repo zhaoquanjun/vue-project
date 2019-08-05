@@ -118,12 +118,12 @@ export default {
       language: "",
       options: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: "1",
+          label: "个人网站"
         },
         {
-          value: "选项5",
-          label: "北京烤鸭"
+          value: "2",
+          label: "企业网站"
         }
       ],
       value: "",
