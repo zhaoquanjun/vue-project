@@ -72,45 +72,40 @@
                 :key="index"
                 style="padding:0px"
               >
-                <div class="appTitle">
-                  <span class="appName">{{item.name}}</span>
-                  <el-popover
-                    v-show="item.isSystem"
-                    :ref="`popover-${index}`"
-                    placement="bottom"
-                    width="317"
-                    trigger="click"
-                    style="padding:0"
-                    @show="showRemark(index)"
-                  >
-                    <span slot="reference">
-                      <svg-icon icon-class="remark" class="remark"></svg-icon>
-                    </span>
-                    <div class="textareaWrap">
-                      <el-input
-                        type="textarea"
-                        :autosize="{ minRows: 3, maxRows: 3}"
-                        placeholder="请输入内容"
-                        v-model="remarkValue"
-                        maxlength="30"
-                        show-word-limit
-                        resize="none"
-                      ></el-input>
-                      <div class="btn-wrap">
-                        <button
-                          class="popover-btn cancel"
-                          slot="refenrence"
-                          @click="cancelInput(index)"
-                        >取消</button>
-                        <button class="popover-btn save" @click="saveInputValue(index)">保存</button>
-                      </div>
-                    </div>
-                  </el-popover>
-                  <span
-                    class="appMember"
-                    :style="{color:item.isSystem? '#35B24B':'#0070CC'}"
-                  >{{item.isSystem ? "管理员" : "成员"}}</span>
-                </div>
+                  <div class="appTitle">
+                      <span class="appName" v-if="item.name">{{item.name}}</span>
+                      <span class="appName" v-else>公司名称</span>
+                      <el-popover v-show="item.isSystem"
+                                  :ref="`popover-${index}`"
+                                  placement="bottom"
+                                  width="317"
+                                  trigger="click"
+                                  style="padding:0"
+                                  @show="showRemark(index)">
+                          <span slot="reference">
+                              <svg-icon icon-class="remark" class="remark"></svg-icon>
+                          </span>
+                          <div class="textareaWrap">
+                              <el-input type="textarea"
+                                        :autosize="{ minRows: 3, maxRows: 3}"
+                                        placeholder="请输入内容"
+                                        v-model="remarkValue"
+                                        maxlength="30"
+                                        show-word-limit
+                                        resize="none"></el-input>
+                              <div class="btn-wrap">
+                                  <button class="popover-btn cancel"
+                                          slot="refenrence"
+                                          @click="cancelInput(index)">
+                                      取消
+                                  </button>
+                                  <button class="popover-btn save" @click="saveInputValue(index)">保存</button>
+                              </div>
+                          </div>
+                      </el-popover>
+                      <span class="appMember"
+                            :style="{color:item.isSystem? '#35B24B':'#0070CC'}">{{item.isSystem ? "管理员" : "成员"}}</span>
+                  </div>
                 <div class="version">
                   <span class="versionText">应用版本</span>
                   <span class="versionText">{{item.productName}}</span>
@@ -232,7 +227,14 @@ export default {
       this.$refs[`popover-${index}`][0].doClose();
       this.remarkValue = "";
     },
-    async saveInputValue(index) {
+      async saveInputValue(index) {
+          if (!this.remarkValue) {
+              this.$message({
+                  type: "failed",
+                  message: "请输入公司名称"
+              });
+              return;
+          }
       this.$refs[`popover-${index}`][0].doClose();
       await dashboardApi.UpdateAppName(this.remarkValue);
       this.appList[index].name = this.remarkValue;

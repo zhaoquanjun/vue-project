@@ -88,3 +88,13 @@ export const GetSecondIndustries = (parentId) => {
     var para = { firstIndustryId: parentId};
     return ajaxRequest.get(`/api/siteInfo/GetSecondIndustries`, para);
 }
+
+/**
+ *desc:更新site名称
+ * author:xuzhuan
+ * time:2019.08.05
+ **/
+export const updateSiteName = (siteId, siteName) => {
+
+    return ajaxRequest.put(`/api/siteInfo/UpdateSiteName`, JSON.stringify(siteId), JSON.stringify(siteName));
+}
