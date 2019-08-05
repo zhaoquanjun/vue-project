@@ -19,6 +19,7 @@
             <div class="siteinfoItem siteLanguage">
               <span>网站语言：</span>
               <span>{{language == "zh-CN" ? "中文" : language}}</span>
+              <div class="edit" @click="changeLanguage"></div>
             </div>
             <div class="siteinfoItem siteDomain">
               <span>网站地址：</span>
@@ -89,6 +90,34 @@
           ></el-switch>
         </div>
       </el-row>
+      <el-dialog
+        width="0"
+        :visible.sync="backupShow"
+        :show-close="false"
+        :close-on-click-modal="false"
+      >
+        <div class="right-pannel" :style="{width:'470px'}">
+          <div class="pannel-head">
+            <span class="headTitle">网站语言</span>
+            <span class="close-pannel" @click="closeDialog">X</span>
+          </div>
+          <div class="tips">为避免网站内容与网站语言不匹配，更换网站语言后，请及时跟新控件内容</div>
+          <div class="remark">
+            <span class="remarkTitle">请选择您的网站语言：</span>
+            <el-radio-group v-model="radio" class="radio">
+              <el-radio :label="1">简体中文</el-radio>
+              <el-radio :label="2">English</el-radio>
+              <el-radio :label="3">日语</el-radio>
+              <el-radio :label="4">Espanol</el-radio>
+              <el-radio :label="5">한국어</el-radio>
+            </el-radio-group>
+          </div>
+          <div class="confirm">
+            <button class="confirmBtn" @click="backupSite">确定</button>
+            <button class="cancelBtn" @click="closeDialog">取消</button>
+          </div>
+        </div>
+      </el-dialog>
     </el-main>
   </el-container>
 </template>
@@ -129,11 +158,27 @@ export default {
       value: "",
       isShowAliServiceValue: false,
       isOpenPoweredValue: false,
-      isRightClickSaveValue: false
+      isRightClickSaveValue: false,
+      backupShow: false,
+      remarkInfo: "",
+      radio: 1
     };
   },
   computed: {},
   methods: {
+    backupSite() {},
+    /**
+     * 关闭弹框
+     */
+    changeLanguage() {
+      this.backupShow = true;
+    },
+    /**
+     * 关闭弹框
+     */
+    closeDialog() {
+      this.backupShow = false;
+    },
     // 获取siteId
     getSiteId(siteId) {
       this.getSiteInfo(siteId);
@@ -187,6 +232,13 @@ export default {
 .siteTypeSelect /deep/ .el-input__icon {
   line-height: 32px;
 }
+.radio /deep/ .is-checked .el-radio__inner {
+  background: #00c1de;
+  border-color: #00c1de;
+}
+.radio /deep/ .el-radio{
+  
+}
 </style>
 <style lang="scss" scoped>
 .member-content {
@@ -198,6 +250,15 @@ export default {
   font-weight: 500;
   color: rgba(38, 38, 38, 1);
   margin-bottom: 15px;
+}
+.edit {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("~img/siteManage/mysite-edit.png") no-repeat center;
+  background-size: contain;
+  vertical-align: middle;
+  margin-left: 20px;
 }
 .siteContent {
   padding: 23px;
@@ -230,6 +291,7 @@ export default {
       font-size: 14px;
       font-family: PingFangSC-Regular;
       font-weight: 400;
+      line-height: 20px;
       color: rgba(140, 140, 140, 1);
     }
   }
@@ -320,6 +382,83 @@ export default {
   }
   .rightClickSave {
     margin-left: 184px;
+  }
+}
+//右侧弹框
+.right-pannel {
+  background: #ffffff;
+  position: fixed;
+  z-index: 2200;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow: 0 0 3px #ccc;
+  transition: width 0.2s linear;
+  background-color: "#fff";
+  color: #262626;
+  overflow: hidden;
+  .pannel-head {
+    height: 55px;
+    overflow: hidden;
+    border-bottom: 1px solid #efefef;
+    .headTitle {
+      font-size: 16px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      color: rgba(38, 38, 38, 1);
+      line-height: 55px;
+    }
+    span {
+      padding: 0 16px;
+    }
+    .close-pannel {
+      line-height: 55px;
+      float: right;
+      cursor: pointer;
+    }
+  }
+  .tips {
+    width: 406px;
+    height: 36px;
+    background: rgba(253, 240, 237, 1);
+    border: 1px solid rgba(253, 171, 153, 1);
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(255, 69, 29, 1);
+    line-height: 36px;
+    text-align: center;
+    margin: 32px;
+    padding: 0 5px;
+  }
+  .remarkTitle {
+    font-size: 14px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(38, 38, 38, 1);
+    line-height: 22px;
+    margin-left: 32px;
+  }
+  .radio{
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+  .confirm {
+    position: absolute;
+    width: 470px;
+    height: 64px;
+    bottom: 0px;
+    border-top: 1px solid #efefef;
+    .confirmBtn {
+      margin: 16px;
+      width: 58px;
+      height: 32px;
+      background: rgba(0, 193, 222, 1);
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+      line-height: 32px;
+    }
   }
 }
 </style>

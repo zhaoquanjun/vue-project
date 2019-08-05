@@ -1,5 +1,5 @@
 <template>
-  <div class="siteBox">
+  <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
       <span class="siteName">{{ siteName }}</span>
       <span class="secondDomain">{{ secondDomain }}</span>

@@ -60,6 +60,7 @@
           :fullscreen="true"
           :visible.sync="changeAppShow"
           :center="true"
+          :close-on-click-modal="false"
           style="margin-top:50px"
         >
           <div class="appBackground">
@@ -119,7 +120,7 @@
                   <span class="expiredText" style="margin-left:46px">{{item.expired}}</span>
                   <div class="isExpired" v-show="isExpired(item)">已过期</div>
                   <button class="renewal" v-show="item.isSystem">续费</button>
-                  <button class="choseApp" @click="choseApp(item)">进入应用</button>
+                  <el-button class="choseApp" @click="choseApp(item)" :disabled="isExpired(item)" :class="{'disabled':isExpired(item)}">进入应用</el-button>
                 </div>
               </el-col>
             </div>
@@ -241,6 +242,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.disabled{
+  opacity:0.2;
+}
 .header {
   padding: 0 10px;
   height: 50px;
@@ -456,6 +460,7 @@ export default {
       font-weight: 500;
       color: rgba(255, 255, 255, 1);
       line-height: 32px;
+      padding: 0px;
     }
     .renewal {
       width: 90px;
