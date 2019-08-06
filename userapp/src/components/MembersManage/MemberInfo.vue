@@ -134,7 +134,7 @@ export default {
         float: left;
         span {
             display: block;
-            line-height: 20px;
+            line-height: 25px;
         }
         .remark-wrap{
             display: flex;align-items: center;

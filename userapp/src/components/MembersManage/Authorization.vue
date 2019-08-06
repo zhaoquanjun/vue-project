@@ -154,19 +154,4 @@ export default {
   }
 }
 
-.footer {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 10px;
-  border-top: 1px solid #ccc;
-  .footer-btn {
-    font-weight: 400;
-    font-size: 12px;
-  }
-  .confirm {
-    margin-right: 20px;
-  }
-}
 </style>

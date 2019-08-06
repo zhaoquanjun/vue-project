@@ -1,12 +1,13 @@
 <template>
     <div id="app">
         <el-container>
-            <el-header style="height:50px;position:fixed;width: 100%;z-index:1000">
+            <el-header style="height:60px;line-height: 60px;position:fixed;top: 0;
+    left: 0;width: 100%;z-index:1000">
                 <m-header></m-header>
             </el-header>
-            <el-container style="padding-top: 50px;width: 100%;overflow: hidden;"
+            <el-container style="padding-top: 60px;width: 100%;overflow: hidden;"
             >
-                <el-aside width="80px">
+                <el-aside width="80px" style="position: relative;overflow: visible;">
                     <m-aside></m-aside>
                 </el-aside>
                 <el-main style=" overflow: hidden;">

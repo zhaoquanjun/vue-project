@@ -26,7 +26,7 @@
             <el-col :span="8" :offset="8">
                 <div class="head-right head-item">
                     <span>
-                        <svg-icon icon-class="t-issue"></svg-icon>
+                        <i class="iconfont iconfabu" style="vertical-align: -3px;"></i>
                         <b class="item-btn">立即发布</b>
                     </span>
                     <span>
@@ -101,10 +101,9 @@ export default {
 <style lang="scss" scoped>
 .header {
     padding: 0 10px;
-    height: 50px;
-    line-height: 50px;
+ 
     font-size: 14px;
-    background: #000;
+   background: linear-gradient(to right, #08CCEB 50%, #81DCA0); 
     color: #fff;
     position: relative;
     .head-item {

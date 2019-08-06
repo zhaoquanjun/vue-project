@@ -5,7 +5,7 @@
             :data="articlePageResult.list"
             tooltip-effect="dark"
             class="content-table"
-             height="500"
+             :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
             <template slot="empty">
@@ -121,7 +121,8 @@ export default {
                 { name: "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ],
-            row: ""
+            row: "",
+            tableHeight:500,
         };
     },
     mounted() {
@@ -131,6 +132,14 @@ export default {
                     this.$refs.operateSection.style.display = "none";
             });
         });
+           
+        this.$nextTick(()=>{
+             window.addEventListener("resize",()=>{
+           this.tableHeight = window.innerHeight - 230
+            
+        })
+            this.tableHeight = window.innerHeight - 230
+        })
     },
     methods: {
         changePageNum(page) {

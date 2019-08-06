@@ -49,7 +49,7 @@
                 <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi"></get-sms>
             </div>
         </template>
-        <div class="footer">
+        <div class="footer pannel-footer">
             <button class="confirm footer-btn" v-if="isSetPassWord" @click="nextStep">下一步</button>
             <button class="confirm footer-btn" v-else @click="submitForm('ruleForm')">确定</button>
             <button class="cancel footer-btn" @click="close">取消</button>

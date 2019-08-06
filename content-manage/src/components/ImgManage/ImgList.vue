@@ -164,7 +164,7 @@ export default {
             fullOssUrl: "",
             changeIndex: -1,
             firstIndex: "",
-            tableHeight:0
+            tableHeight:500
         };
     },
     mounted() {
@@ -175,9 +175,13 @@ export default {
                 ele.src = ele.attributes["fullsrc"].value;
             }
         };
-        window.addEventListener("resize",()=>{
-           this.tableHeight = window.innerHeight -210
+       
+        this.$nextTick(()=>{
+             window.addEventListener("resize",()=>{
+           this.tableHeight = window.innerHeight - 230
             
+        })
+            this.tableHeight = window.innerHeight - 230
         })
     },
     methods: {

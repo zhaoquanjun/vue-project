@@ -317,7 +317,6 @@ export default {
         height: 32px;
         font-weight: 400;
         border: none;
-        border-radius: 0;
         border: 1px solid #00c1de;
         color: #00c1de;
     }

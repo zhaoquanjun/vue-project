@@ -112,7 +112,7 @@ export default {
 .article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner {
     font-weight: 400;
     color: #262626;
-    font-size: 12px;
+    font-size: 14px;
 }
 </style>
 

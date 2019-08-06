@@ -46,22 +46,24 @@ export default {
 </script>
 <style lang="scss" scoped>
 .submenu {
-    max-width: 120px;
-    height: 100vh;
+    max-width: 100px;
+    height: calc(100vh);
     background: #fff;
-    border-right: 1px solid #E5E5E5;
+    border-right: 1px solid #e5e5e5;
     .submenu-title {
         height: 40px;
         line-height: 40px;
-         padding-left: 12px;
+        padding-left: 12px;
+        padding-top: 5px;
     }
     .submenu-list {
         padding-top: 7px;
         li {
             cursor: pointer;
-            height: 40px;
-            line-height: 40px;
+            height: 50px;
+            line-height: 50px;
             padding-left: 12px;
+            font-weight: 300;
             &:hover {
                 color: #00c1de;
                 // background: #e5f8fa;
@@ -69,12 +71,13 @@ export default {
         }
     }
 }
-.active{
-    color: #00c1de;
-    background: #e5f8fa;
+.active {
+    color: #0595e6;
+    background: #eefcff;
 }
-.active:hover{
-     background: #e5f8fa !important;
+.active:hover {
+    background: #eefcff !important;
 }
 </style>
+
 

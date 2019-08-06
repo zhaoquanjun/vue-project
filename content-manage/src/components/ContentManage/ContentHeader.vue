@@ -77,54 +77,5 @@ export default {
 };
 </script>
 <style <style lang="scss" scoped>
-.content-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #e8eaf3;
-    background: #fff;
-    margin-bottom: 24px;
-}
-.seachInput {
-    display: inline-block;
-    width: 248px;
-    /* height: 36px; */
-    box-sizing: border-box;
-    margin-left: 22px;
-}
-.select-sort {
-    display: inline-block;
-    width: 117px;
-    box-sizing: border-box;
-    height: 32px;
-    margin: 0 16px 0 7px;
-}
-.head-item{
-  display: inline-block;
-  flex: none;
-}
-.mode-item {
-    display: inline-block;
-    width: 45px;
-    padding: 8px 0;
-    text-align: center;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-}
-.list-mode {
-    border-right: none;
-}
-.head-right,.head-middle{
-  float: right;
-}
-.upload-wrap {
-    margin-right: 25px;
-    cursor: pointer;
-    display: inline-block;
-    width: 45px;
-    height: 32px;
-    line-height: 32px;
-    text-align: center;
-    background: #00c1de;
-}
+@import "@/styles/manage-head.scss"
 </style>

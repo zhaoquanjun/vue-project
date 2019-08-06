@@ -7,7 +7,7 @@
         <div class="from-row">
             <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi"></get-sms>
         </div>
-        <div class="footer">
+        <div class="footer pannel-footer">
             <button class="confirm footer-btn" v-if="!isModifi" @click="nextStep">下一步</button>
             <button class="confirm footer-btn" v-else @click="modify ">确认修改</button>
             <button class="cancel footer-btn" @click="close">取消</button>
@@ -163,26 +163,6 @@ export default {
     margin-top: 30px;
 }
 
-.footer {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    padding: 15px 17px;
-    border-top: 1px solid #efefef;
-    .footer-btn {
-        width: 63px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        color: #fff;
-    }
-    .cancel {
-        margin-left: 20px;
-        background: #fff;
-        border: 1px solid rgba(0, 193, 222, 1);
-        color: rgba(0, 193, 222, 1);
-    }
-}
 </style>
 
 

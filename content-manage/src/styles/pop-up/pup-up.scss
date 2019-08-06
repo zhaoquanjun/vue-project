@@ -33,7 +33,13 @@
 .icon-sucess{
     width: 24px;
     height: 24px;
-    background:url("./images/warning.png") no-repeat center;
+    background:url("./images/sucess.png") no-repeat center;
+    background-size: contain;
+}
+.icon-error{
+    width: 24px;
+    height: 24px;
+    background:url("./images/error.png") no-repeat center;
     background-size: contain;
 }
     }

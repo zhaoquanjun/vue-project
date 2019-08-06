@@ -35,20 +35,22 @@ export default {
 <style scoped>
 
 .el-menu /deep/ .el-menu-item {
-    height: 40px;
-    line-height: 40px;
-    font-size: 12px;
-   
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    font-weight: 300;
 }
 .el-menu /deep/ :hover.el-menu-item {
-    color: #15c6e0;
+    color: #00c1de;
     background: #fff;
+    
 }
 .active{
-    color: #00c1de;
-    background: #e5f8fa;
+    color: #0595e6;
+    background: #EEFCFF;
 }
 .active:hover{
-     background: #e5f8fa !important;
+     color: #0595e6;
+     background: #EEFCFF !important;
 }
 </style>

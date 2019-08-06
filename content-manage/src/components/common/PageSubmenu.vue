@@ -3,8 +3,7 @@
         <h4 class="submenu-title">
             <slot name="title"></slot>
         </h4>
-        
-              <ul class="submenu-list">
+        <ul class="submenu-list">
             <li
                 @click="handlerRoute(item,index)"
                 v-for="(item,index) in menuList"
@@ -21,10 +20,10 @@ export default {
         return {
             children: "",
             lastRoute: "",
-            parentPath:""
+            parentPath: ""
         };
     },
-    
+
     methods: {
         handlerRoute(item, index) {
             let domain = item.menuUrl.split("/")[0];
@@ -51,37 +50,39 @@ export default {
                     children = item.children;
                 }
             });
-            return children
+            return children;
         }
     },
-     watch: {
+    watch: {
         $route(to, from) {
-            console.log(this.$route)
-            let [, firstRoute,lastRoute] = this.$route.path.split("/");
+            console.log(this.$route);
+            let [, firstRoute, lastRoute] = this.$route.path.split("/");
             this.lastRoute = lastRoute;
-            this.parentPath = firstRoute
+            this.parentPath = firstRoute;
         }
     }
 };
 </script>
 <style lang="scss" scoped>
 .submenu {
-    max-width: 120px;
-    height: calc(100vh );
+    max-width: 100px;
+    height: calc(100vh);
     background: #fff;
     border-right: 1px solid #e5e5e5;
     .submenu-title {
         height: 40px;
         line-height: 40px;
         padding-left: 12px;
+        padding-top: 5px;
     }
     .submenu-list {
         padding-top: 7px;
         li {
             cursor: pointer;
-            height: 40px;
-            line-height: 40px;
+            height: 50px;
+            line-height: 50px;
             padding-left: 12px;
+            font-weight: 300;
             &:hover {
                 color: #00c1de;
                 // background: #e5f8fa;
@@ -90,11 +91,11 @@ export default {
     }
 }
 .active {
-    color: #00c1de;
-    background: #e5f8fa;
+    color: #0595e6;
+    background: #eefcff;
 }
 .active:hover {
-    background: #e5f8fa !important;
+    background: #eefcff !important;
 }
 </style>
 

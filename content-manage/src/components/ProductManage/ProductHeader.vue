@@ -90,11 +90,11 @@
                     <i>{{count}}</i> 个产品
                 </span>
                 <div style="float:right">
-                    <el-button class="deleteActive btn-defualt" size="small" @click="batchPublish(3, false)">上架</el-button>
-                    <el-button class="deleteActive btn-defualt" size="small" @click="batchPublish(3, true)">下架</el-button>
+                    <el-button class="deleteActive btn-darkblue" size="small" @click="batchPublish(3, false)">上架</el-button>
+                    <el-button class="deleteActive btn-darkblue" size="small" @click="batchPublish(3, true)">下架</el-button>
                     <el-button class="deleteActive btn-defualt" size="small" @click="batchCopy">复制</el-button>
                     <el-button
-                        class=" btn-delete"
+                        class="btn-delete"
                         style="margin-right: 10px;"
                         size="small"
                         @click="batchRemove(1,true)"
@@ -297,6 +297,7 @@ export default {
     background: #fff;
     margin-bottom: 24px;
     padding: 0 24px;
+     height: 70px !important;
 }
 .seachInput {
     display: inline-block;
@@ -328,8 +329,9 @@ export default {
     align-items: center;
     padding-left: 42px;
     button {
-        width: 70px;
+        width: 90px;
         height: 32px;
+        line-height: 32px;
         border: 1px solid rgba(1, 192, 222, 1);
         margin-right: 8px;
         box-sizing: border-box;
@@ -338,6 +340,7 @@ export default {
     .add-article {
         background: rgba(1, 192, 222, 1);
         color: #fff;
+        margin-left: 8px;
     }
 }
 .bach-header {

@@ -2,7 +2,7 @@
     <div
         class="m-aside"
         :style="{width:width+'px',backgroundColor:'#fff'}"
-        @mouseenter="collapseOpen(150,0.8)"
+        @mouseenter="collapseOpen(180,0.8)"
         @mouseleave="collapseClose"
     >
         <el-aside class="m-asideleft" :style="{width:width+'px'}">
@@ -16,9 +16,10 @@
                     @mouseenter="changeCurHoverItem(i)"
                     @click="skipPages(it,i)"
                 >
+                    <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
                     <i
-                        class="menu-icon"
-                        :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]"
+                        class="menu-icon iconfont"
+                        :class="[iconfonts(it.code),curIndex==i ?'menu-color':'']"
                     ></i>
                     <span
                         class="menu-item-content"
@@ -28,9 +29,10 @@
             </ul>
         </el-aside>
         <!--  :menuList="menuList[curIndex]" -->
+        <!--  -->
         <LeftNavComponents
             :lastRoute="lastRoute"
-            v-if="isLeftNavComponentsShow"
+           v-if="isLeftNavComponentsShow" 
             :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
             class="m-asideright"
             :menuList="menuListChild"
@@ -41,6 +43,7 @@
 import { getSliderMenuList } from "@/api/request/user.js";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
 import { siteDomain } from "@/environment/index";
+
 export default {
     data() {
         return {
@@ -52,7 +55,7 @@ export default {
             serversData: [],
             display: "none",
             curPath: "",
-            lastRoute:""
+            lastRoute: ""
         };
     },
     components: {
@@ -73,18 +76,39 @@ export default {
         },
         collapseOpen(width, time) {
             this.width = width;
-            this.width1 = 120;
+            this.width1 = 100;
             this.display = "block";
             this.time = time + "s";
         },
         collapseClose() {
-            this.width = 50;
+            this.width = 80;
             this.width1 = 0;
             this.display = "none";
             this.time = "0s";
             this.curIndex = -1;
         },
-      
+        iconfonts(code) {
+            switch (code) {
+                case "board":
+                    return "iconkongzhitaishouye";
+                case "content":
+                    return "iconneirongguanli";
+                case "website":
+                    return "iconwangzhanguanli";
+                case "system":
+                    return "iconxitongshezhi";
+                case "form":
+                    return "iconbiaodanguanli";
+                case "micro":
+                    return "iconweixinxiaochengxu";
+                case "wechat":
+                    return "iconweixingongzhonghao";
+                case "recycle":
+                    return "iconhuishouzhan";
+                case "business":
+                    return "icondianshanghuiyuan";
+            }
+        }
     },
     computed: {
         getMenuList() {
@@ -103,24 +127,24 @@ export default {
             } else {
                 return false;
             }
-        },
-      
+        }
     },
     watch: {
         $route(to, from) {
-            let [, firstRoute,lastRoute] = this.$route.path.split("/");
+            let [, firstRoute, lastRoute] = this.$route.path.split("/");
             this.curPath = firstRoute;
-            this.lastRoute = lastRoute
+            this.lastRoute = lastRoute;
         }
     }
 };
 </script>
 
 <style scoped>
+@import "../../assets/fonts/aside/iconfont.css";
 .m-aside {
     position: absolute;
     left: 0;
-    top: 50px;
+    top: 0px;
     /* bottom: 0; */
     z-index: 10;
 }
@@ -131,7 +155,7 @@ export default {
 .m-asideright {
     width: 0px !important;
     position: absolute;
-    left: 150px;
+    left: 180px;
     z-index: 10;
     top: 0;
     text-align: center;
@@ -143,25 +167,25 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+
 // 手写菜单
 .menu-bg {
-    background: #e5f8fa;
-    color: #00c1de;
+    background: #eefcff;
+    color: #0595e6;
 }
-.menu-color {
-    color: #00c1de;
-}
+
 .left-menu {
     // height: 100%;
     border-right: solid 1px #e6e6e6;
     background: #fff;
-     height: calc(100vh );
+    height: calc(100vh - 60px);
+    padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
-        padding: 0 20px;
-        line-height: 40px;
+        // padding: 0 40px;
+        line-height: 70px;
         white-space: nowrap;
-
+          font-weight: 300;   
         // &:hover {
         //     background: #E5F8FA;
         //     color: #00c1de;
@@ -171,79 +195,27 @@ export default {
         //     color: #00c1de;
         // }
         .menu-item-content {
-            margin-left: 20px;
+            // margin-left: 30px;
         }
         .menu-icon {
             display: inline-block;
-            width: 16px;
-            height: 16px;
+            font-size: 24px;
+            width: 80px;
+            text-align: center;
             vertical-align: middle;
+            color: #0595e6;
         }
-        .board {
-            background: url("~img/menu-icon/board.png") no-repeat center;
-            background-size: 100%;
+        .menu-color {
+            color: #00c1de;
         }
-        .board-on {
-            background: url("~img/menu-icon/board-on.png") no-repeat center;
-            background-size: 100%;
-        }
-        .content {
-            background: url("~img/menu-icon/content.png") no-repeat center;
-            background-size: 100%;
-        }
-        .content-on {
-            background: url("~img/menu-icon/content-on.png") no-repeat center;
-            background-size: 100%;
-        }
-        .micro {
-            background: url("~img/menu-icon/micro.png") no-repeat center;
-            background-size: 100%;
-        }
-        .micro-on {
-            background: url("~img/menu-icon/micro-on.png") no-repeat center;
-            background-size: 100%;
-        }
-        .website {
-            background: url("~img/menu-icon/website.png") no-repeat center;
-            background-size: 100%;
-        }
-        .website-on {
-            background: url("~img/menu-icon/website-on.png") no-repeat center;
-            background-size: 100%;
-        }
-        .wechat {
-            background: url("~img/menu-icon/wechat.png") no-repeat center;
-            background-size: 100%;
-        }
-        .wechat-on {
-            background: url("~img/menu-icon/wechat-on.png") no-repeat center;
-            background-size: 100%;
-        }
-        .form {
-            background: url("~img/menu-icon/form.png") no-repeat center;
-            background-size: 100%;
-        }
-        .form-on {
-            background: url("~img/menu-icon/form-on.png") no-repeat center;
-            background-size: 100%;
-        }
-        .system {
-            background: url("~img/menu-icon/system.png") no-repeat center;
-            background-size: 100%;
-        }
-        .system-on {
-            background: url("~img/menu-icon/system-on.png") no-repeat center;
-            background-size: 100%;
-        }
-        .recycle {
-            background: url("~img/menu-icon/recycle.png") no-repeat center;
-            background-size: 100%;
-        }
-        .recycle-on {
-            background: url("~img/menu-icon/recycle-on.png") no-repeat center;
-            background-size: 100%;
-        }
+        
     }
+    .menu-bg{
+            .menu-color{
+                background: #eefcff;
+                color: #0595e6 !important;
+            }
+        }
 }
 </style>
 

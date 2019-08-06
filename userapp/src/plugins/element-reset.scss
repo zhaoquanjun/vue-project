@@ -4,7 +4,9 @@
 .el-container .el-header {
     padding: 0;
 }
-.el-table .el-table__body-wrapper .el-table__row .cell{
+.el-input__inner{
+    border-radius:0;
+}.el-table .el-table__body-wrapper .el-table__row .cell{
     display: flex;
     align-items: center;
 }
@@ -183,58 +185,14 @@
     
 }
 
-
-
-// 侧边分类树节点
-.aside-tree{
-    .el-tree .el-tree-node__content {
-        height: 44px;
-        position: relative !important;
-        background: #fff;
-    }
-    .el-tree-node .el-tree-node__content:hover{
-        color: #00C1DE;
-    }
-    .el-tree .el-tree-node__label {
-        font-size: 12px;
-    }
-    .el-tree .el-tree-node__expand-icon{
-            // color: #8C8C8C;
-    }
-    .el-tree-node > .el-tree-node__children {
-        // overflow: visible !important;
-    }
-    .el-tree > :first-child > .el-tree-node__content{
-        color: #00C1DE;
-        background: rgb(247, 247, 247);
-        border-left: 2px solid #00C1DE;
-    }
-    .el-tree > :first-child > .el-tree-node__content:hover .set-tree-type{
-        background: transparent;
-    }
-    .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
-        color: #00C1DE;
-        background: rgb(247, 247, 247);
-        border-left: 2px solid #00C1DE;
-    }
-    .el-tree > :first-child > .el-tree-node__content .set-tree-type ,.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .set-tree-type{
-        background: rgb(247, 247, 247);
-    }
-    .el-tree > :first-child >.el-tree-node__children{
-        height: calc(100vh - 200px);
-      
-        overflow: auto
-    }
-}
-
 // 将圆角改为直角
 .el-input .el-input__inner,.el-button,.el-input-group__append, .el-input-group__prepend{
-     border-radius: 2px;
+    border-radius: 2px;
 }
 
 .el-checkbox__input.is-checked .el-checkbox__inner,.el-checkbox__input.is-indeterminate .el-checkbox__inner,.el-switch.is-checked .el-switch__core{
-    background-color: #09CCEB;
-    border-color: #09CCEB;
+   background-color: #09CCEB;
+   border-color: #09CCEB;
 }
 
 // 修改 button默认样式  begin

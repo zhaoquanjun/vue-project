@@ -1,9 +1,10 @@
 <template>
-    <div id="member-table">
+    <div id="table-list">
         
         <el-table
             :data="memberList"
             style="width: 100%"
+             :height="tableHeight"
             :header-cell-style="{background:'#F5F5F5'}"
             @selection-change="handleSelectionChange"
             :cell-class-name="checkbox"
@@ -88,18 +89,19 @@
             </el-table-column>
         </el-table>
         <div class="pageing" v-if="memberList && memberList.length > 0">
-            <el-pagination
+          
+             <el-pagination
                 background
-                layout="total,slot,sizes, prev, pager, next"
-                :total="memberInfo.totalCount"
+                layout="total, slot, sizes, prev, pager, next,jumper"
+                 :total="memberInfo.totalCount"
                 :page-count="memberInfo.totalPages"
-                :page-sizes="[10, 20, 50]"
-                prev-text="上一页"
-                next-text="下一页"
-                @current-change="changePage"
+               
+                :page-sizes="[10,20,50]"
+                @current-change="changePageNum"
                 @size-change="changePageSize"
             >
-                <div class="sizes-title">每页显示</div>
+              <div class="sizes-title">，每页显示</div>  
+              <button class="paging-confirm">跳转</button> 
             </el-pagination>
         </div>
     </div>
@@ -119,9 +121,19 @@ export default {
     created() {},
     data() {
         return {
-            remarkValue: "123"
+            remarkValue: "123",
+            tableHeight:500,
             //  multipleSelection: []
         };
+    },
+    mounted(){
+          this.$nextTick(()=>{
+             window.addEventListener("resize",()=>{
+           this.tableHeight = window.innerHeight - 260
+            
+        })
+            this.tableHeight = window.innerHeight - 260
+        })
     },
     methods: {
         checkbox(row) {
@@ -166,7 +178,7 @@ export default {
             console.log(val);
             this.$emit("tabSelection", val);
         },
-        changePage(page) {
+        changePageNum(page) {
             console.log(page, "当前页码");
             this.$emit("changePageNum", page);
         },
@@ -297,17 +309,7 @@ export default {
     left: 0;
     z-index: 100000;
 }
-.pageing {
-    display: flex;
-    float: right;
-    margin-top: 30px;
-    .sizes-title {
-        line-height: 28px;
-        color: #8c8c8c;
-        font-weight: 400;
-        display: inline-block;
-    }
-}
+
 .myCell .el-checkbox__input {
     display: none;
 }
