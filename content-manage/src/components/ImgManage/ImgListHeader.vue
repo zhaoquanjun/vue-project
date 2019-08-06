@@ -59,22 +59,14 @@
             </div>
         </template>
         <template v-else>
-            <div class="handle-batch" >
+            <div class="handle-batch">
                 <span>
                     已选
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <div>
-                    <el-button
-                        class="handle-btn btn-defualt"
-                        size="small"
-                        @click="batchMove"
-                    >
-                        移动
-                    </el-button>
-                    <el-button class="handle-btn btn-delete" size="small" @click="batchDelete">
-                        删除
-                    </el-button>
+                    <el-button class="handle-btn btn-defualt" size="small" @click="batchMove">移动</el-button>
+                    <el-button class="handle-btn btn-delete" size="small" @click="batchDelete">删除</el-button>
                 </div>
             </div>
         </template>
@@ -151,6 +143,19 @@ export default {
     }
 };
 </script>
+<style >
+.seachInput .el-input /deep/ .el-input__inner{
+   
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.seachInput /deep/ .el-input-group__append .el-button,.el-input-group__append {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+</style>
+
 <style  lang="scss" scoped>
-@import "@/styles/manage-head.scss"
+@import "@/styles/manage-head.scss";
 </style>

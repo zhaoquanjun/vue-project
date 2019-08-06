@@ -299,7 +299,7 @@ export default {
                 contentDetail: "",
                 searchKeywords: [],
                 isPublish: false,
-                isLoggedInCanView:false,
+                isLoggedInCanView: false,
                 createTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
                 metaTitle: "",
@@ -467,6 +467,8 @@ export default {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     type: "success",
+                    customClass: "medium",
+                    iconClass: "icon-success",
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("articleDetail");
@@ -499,15 +501,11 @@ export default {
             let { status, data } = await articleManageApi.editArticle(
                 this.articleDetail
             );
-            // if (status === 200) {
-            //     this.$message({
-            //         type: "success",
-            //         message: "保存成功!"
-            //     });
-            // this.$router.push("/content/news");
             this.$confirm("保存成功!", "提示", {
                 confirmButtonText: "新增下一篇",
                 type: "success",
+                customClass: "medium",
+                iconClass: "icon-success",
                 callback: async action => {
                     if (action === "confirm") {
                         this.resetForm("articleDetail");

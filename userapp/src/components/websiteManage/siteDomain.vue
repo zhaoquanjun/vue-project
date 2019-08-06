@@ -1,17 +1,17 @@
 <template>
     <el-container class="member-container">
-        <el-aside style="width:120px">
-            <page-submenu :submenu-list="submenuList">
+        <el-aside class="submenu-aside">
+            <page-submenu>
                 <template v-slot:title>网站管理</template>
             </page-submenu>
         </el-aside>
         <el-main class="member-content">
-            <el-row class="user-list">
+            <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
+            <div style="padding: 24px 17px;">
+                <el-row class="user-list" >
                 <span class="member-list-title fs14">域名管理</span>
             </el-row>
-            <el-row>
-                <SiteInfo :site-info="siteInfo" />
-            </el-row>
+           
             <DomainMenu @handleBtn="righPanelShow" />
             <el-main>
                 <DomainList
@@ -25,6 +25,8 @@
                     @getCdnDomainList="_getCdnDomainList"
                 ></DomainList>
             </el-main>
+            </div>
+
         </el-main>
         <el-dialog
             width="0"
@@ -45,10 +47,10 @@
 <script>
 import RightPannel from "_c/RightPannel";
 import PageSubmenu from "@/components/common/PageSubmenu";
-import SiteInfo from "_c/websiteManage/domain/site-info.vue";
 import DomainMenu from "_c/websiteManage/domain/domain-menu.vue";
 import DomainList from "_c/websiteManage/domain/domain-list.vue";
 import BindDomain from "_c/websiteManage/domain/bind-domain.vue";
+import ChangeSite from "_c/websiteManage/changeSite.vue";
 import { sendTargetPhoneCode } from "@/api/index.js";
 import { formatDateTime } from "@/api/index";
 import * as domainApi from "@/api/request/domainApi";
@@ -57,27 +59,17 @@ export default {
     components: {
         RightPannel,
         PageSubmenu,
-        SiteInfo,
+
         DomainMenu,
         DomainList,
-        BindDomain
+        BindDomain,
+        ChangeSite
     },
     data() {
         return {
-            submenuList: [
-                { name: "网站备份", url: "/website/backup" },
-                { name: "我的网站", url: "/website/mysite" },
-                { name: "公司信息", url: "/website/companyinfo" },
-                { name: "域名管理", url: "/website/sitedomain" },
-                { name: "邮件服务器", url: "/website/email" }
-            ],
             domainListData: [], // table列表
-            siteInfoImg: "",
-            siteName: "",
-            siteId: 0,
             secondDomain: "",
             remarkValue: "",
-            siteInfo: [],
             manualSite: [],
             autoSite: [],
             backupShow: false,
@@ -85,8 +77,7 @@ export default {
             // recovery: false,
             remarkInfo: "",
             domainAmount: 0,
-            siteInfo: {},
-            resolveDomainData:""
+            resolveDomainData: ""
         };
     },
     created() {
@@ -95,18 +86,26 @@ export default {
         };
     },
     mounted() {
-        this._getCdnDomainList();
-        this.getSiteInfo();
+        // this._getCdnDomainList();
+        // this.getSiteInfo();
     },
     methods: {
+        // 获取siteId
+        getSiteId(siteId) {
+            this._getCdnDomainList(siteId);
+        },
+        // 选择切换网站
+        chooseWebsite(siteId) {
+            this._getCdnDomainList(siteId);
+        },
         async _removeAliYunToken() {
             await domainApi.removeAliYunToken();
         },
         /**
          * 获取站点信息
          */
-        async getSiteInfo() {
-            let { data } = await getSiteInfo(2);
+        async getSiteInfo(siteId) {
+            let { data } = await getSiteInfo(siteId);
             console.log(data, "000000");
             this.siteInfo = data;
             // this.siteInfoImg = data.siteImage;
@@ -117,8 +116,8 @@ export default {
         /**
          * 获取域名列表
          */
-        async _getCdnDomainList() {
-            let { data } = await domainApi.getCdnDomainList();
+        async _getCdnDomainList(siteId) {
+            let { data } = await domainApi.getCdnDomainList(siteId);
             this.domainListData = data;
             console.log(
                 this.domainListData,
@@ -135,8 +134,7 @@ export default {
             let params = {
                 id: opt.id,
                 siteId: this.$store.state.dashboard.siteId,
-                isForceUpdate: opt.isForceUpdate,
-
+                isForceUpdate: opt.isForceUpdate
             };
             let { data } = await domainApi.resolveCdnByAliYunToken(params);
             if (!data.isSuccess && data.redirectUrl) {
@@ -157,7 +155,9 @@ export default {
                     type: "warning",
                     callback: async action => {
                         if (action === "confirm") {
-                            this._resolveCdnByAliYunToken(this.resolveDomainData)
+                            this._resolveCdnByAliYunToken(
+                                this.resolveDomainData
+                            );
                         }
                     }
                 });
@@ -230,12 +230,12 @@ export default {
          */
         async _deleteCdnDomain(domainId, index) {
             this.$confirm("提示", {
-                title:"提示",
+                title: "提示",
                 message:
                     "确定删除该域名?域名删除后, 您将无法访问该网站.强烈建议您在删除前修改该域名的cname解析. ",
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
-                iconClass:"icon-warning",
+                iconClass: "icon-warning",
                 type: "warning",
                 callback: async action => {
                     if (action === "confirm") {
@@ -271,7 +271,7 @@ export default {
 .member-container {
     position: relative;
     .member-content {
-        padding: 21px 14px;
+        padding: 0px 0px 21px;
     }
 
     .user-list {

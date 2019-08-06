@@ -10,9 +10,10 @@
 .seachInput {
     display: inline-block;
     width: 248px;
-    /* height: 36px; */
+     height: 33px;
     box-sizing: border-box;
     margin-left: 22px;
+    overflow: hidden;
 }
 .select-sort {
     display: inline-block;

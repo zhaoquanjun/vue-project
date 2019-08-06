@@ -16,19 +16,18 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                 >
-                    <div v-if="imageUrl1"  class="imgWrap">
-                         <img :src="imageUrl1" class="avatar" />
-                         <span class="el-upload-list__item-actions">
-                              <i class="icon-change"></i>
+                    <div v-if="imageUrl1" class="imgWrap">
+                        <img :src="imageUrl1" class="avatar" />
+                        <span class="el-upload-list__item-actions">
+                            <i class="icon-change"></i>
                             <i @click.stop="handleRemove" class="el-icon-delete"></i>
                         </span>
                     </div>
-                   
+
                     <template v-else>
                         <i class="el-icon-plus avatar-uploader-icon"></i>
-                        <i class="avatar-text"  style=" display: block;">添加图片</i>
+                        <i class="avatar-text" style=" display: block;">添加图片</i>
                     </template>
-                   
                 </el-upload>
                 <el-dialog :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt />
@@ -72,16 +71,17 @@ export default {
             this.imageUrl1 = this.imageUrl;
         }
     },
-    mounted(){
-         this.headers.appId = this.$store.state.dashboard.appid;
+    mounted() {
+        this.headers.appId = this.$store.state.dashboard.appid;
     },
     methods: {
         handleSucess(response, file, fileList) {
             this.imageUrl1 = file.response;
             if (!this.uploadSucess) {
-                this.$message({
-                    type: "success",
-                    message: "上传成功!"
+                this.$notify({
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `上传成功!`,
+                    duration: 1000
                 });
                 setTimeout(() => {
                     this.$emit("switchUploadBoxShowStatus", "uploadImg");
@@ -90,7 +90,7 @@ export default {
             }
         },
         handleRemove(file, fileList) {
-            this.imageUrl1= ""
+            this.imageUrl1 = "";
             console.log(file, fileList);
         },
         handlePreview(file) {
@@ -115,10 +115,19 @@ export default {
             const isSizeOk = file.size / 1024 / 1024 < maxMb;
 
             if (!isPic) {
-                this.$message.error("上传头像图片只能是 图片 格式!");
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `上传头像图片只能是 图片 格式!`,
+                    duration: 1000
+                });
             }
             if (!isSizeOk) {
-                this.$message.error(`上传图片大小不能超过 ${maxMb}MB!`);
+                 this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `上传图片大小不能超过 ${maxMb}MB!`,
+                    duration: 1000
+                });
+              
             }
             return isPic && isSizeOk;
         }
@@ -135,23 +144,22 @@ export default {
 .el-collapse /deep/ .el-collapse-item__content {
     padding: 0 10px;
 }
-.border-line{
-  border: 1px dashed rgba(144,220,232,1);
-  background:rgba(242,250,251,0.501);
+.border-line {
+    border: 1px dashed rgba(144, 220, 232, 1);
+    background: rgba(242, 250, 251, 0.501);
 }
 .avatar-uploader {
     margin: 0 auto;
     /* display: table; */
 }
 .avatar-uploader /deep/ .el-upload {
-  
     border-radius: 0;
     cursor: pointer;
     position: relative;
     overflow: hidden;
     /* height: 200px; */
     width: 200px;
-   
+
     vertical-align: middle;
     /* display: table-cell; */
 }
@@ -162,25 +170,24 @@ export default {
 .avatar-uploader .el-upload:hover {
     border-color: #409eff;
 }
- .avatar-uploader-icon {
+.avatar-uploader-icon {
     font-size: 28px;
     width: 178px;
     text-align: center;
     margin-bottom: 10px;
     padding-top: 19px;
-    padding-bottom: 0 ;
+    padding-bottom: 0;
 }
-.avatar-text{
-     padding-bottom: 19px;
+.avatar-text {
+    padding-bottom: 19px;
 }
 .avatar {
     width: 200px;
     height: 200px;
     display: block;
-    object-fit: scale-down
+    object-fit: scale-down;
 }
 .el-upload-list__item-actions {
-    
     display: flex;
     align-items: flex-end;
     justify-content: space-around;
@@ -196,30 +203,30 @@ export default {
     font-size: 20px;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s;
-  
 }
-.avatar-uploader .el-upload-list__item-actions  i{
+.avatar-uploader .el-upload-list__item-actions i {
     color: #fff;
     font-size: 21px;
     margin-bottom: 15px;
 }
 .imgWrap:hover .el-upload-list__item-actions {
-   opacity: 1;
+    opacity: 1;
 }
 
-.el-collapse /deep/ .el-collapse-item__header{
+.el-collapse /deep/ .el-collapse-item__header {
     font-weight: 600;
 }
 </style>
 <style lang="scss" scoped>
-.article-cover{
-     color: #262626;
+.article-cover {
+    color: #262626;
     font-weight: 600;
     font-size: 14px;
 }
-.icon-change{
+.icon-change {
     display: inline-block;
-    width: 20px;height: 20px;;
+    width: 20px;
+    height: 20px;
     background: url("~img/content-icon/change.png") no-repeat center;
     background-size: contain;
 }

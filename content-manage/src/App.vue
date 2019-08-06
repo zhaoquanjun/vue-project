@@ -1,13 +1,12 @@
 <template>
     <div id="app">
         <el-container>
-            <el-header style="height:60px;line-height: 60px;position:fixed;top: 0;
-    left: 0;width: 100%;z-index:1000">
+            <el-header class="common-header">
                 <m-header></m-header>
             </el-header>
-            <el-container style="padding-top: 60px;width: 100%;overflow: hidden;"
+            <el-container class="common-container"
             >
-                <el-aside width="80px" style="position: relative;overflow: visible;">
+                <el-aside class="common-aside">
                     <m-aside></m-aside>
                 </el-aside>
                 <el-main style=" overflow: hidden;">
@@ -47,6 +46,24 @@ export default {
 </script>
 <style >
 @import url("./assets/quill.css");
+
+.common-header {
+    height: 60px;
+    line-height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1001;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+.common-container{
+  padding-top: 60px;width: 100%;overflow: hidden;
+}
+.common-aside{
+  width:80px !important;
+   position: relative;overflow: visible;
+}
 </style>
 <style scoped>
 </style>

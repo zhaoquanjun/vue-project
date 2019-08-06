@@ -178,7 +178,7 @@ export default {
     // height: 100%;
     border-right: solid 1px #e6e6e6;
     background: #fff;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 80px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;

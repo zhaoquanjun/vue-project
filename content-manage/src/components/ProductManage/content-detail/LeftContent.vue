@@ -546,6 +546,8 @@ export default {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     type: "success",
+                     customClass:"medium", 
+                    iconClass:"icon-success", 
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
@@ -581,6 +583,8 @@ export default {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     type: "success",
+                     customClass:"medium", 
+                    iconClass:"icon-success", 
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");

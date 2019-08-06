@@ -195,8 +195,8 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
-                    iconClass:"icon-warning",
-                    customClass:"small",
+                     customClass:"medium", 
+                    iconClass:"icon-warning", 
                    
                     callback: async action => {
                         console.log(action);
@@ -264,6 +264,8 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
+                     customClass:"medium", 
+                    iconClass:"icon-warning", 
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {

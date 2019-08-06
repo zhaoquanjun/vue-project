@@ -17,7 +17,7 @@
                 @modifyNode="modifyNodeCategory"
             ></m-tree>
         </el-aside>
-        <el-main >
+        <el-main>
             <content-header
                 :count="count"
                 :is-batch-header-show="isBatchHeaderShow"
@@ -172,6 +172,8 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
+                    customClass: "medium",
+                    iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
@@ -184,18 +186,15 @@ export default {
                             );
                             if (status === 200) {
                                 // this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    message: `删除成功!`,
+                                    duration: 1000
                                 });
                                 this.getTreeAsync();
                                 this.getArticleList();
                             }
                         } else {
-                            // this.$message({
-                            //     type: "info",
-                            //     message: "已取消删除"
-                            // });
                         }
                     }
                 }
@@ -210,6 +209,8 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
+                customClass: "medium",
+                iconClass: "icon-warning",
                 callback: async action => {
                     console.log(action);
                     if (action === "confirm") {
@@ -219,17 +220,14 @@ export default {
                         );
                         if (status === 200) {
                             // this.getTree();
-                            this.$message({
-                                type: "success",
-                                message: message + "成功!"
+                            this.$notify({
+                                customClass: "notify-success", //  notify-success ||  notify-error
+                                message: `${message}成功!`,
+                                duration: 1000
                             });
                             this.getArticleList();
                         }
                     } else {
-                        // this.$message({
-                        //     type: "info",
-                        //     message: "已取消" + message
-                        // });
                     }
                 }
             });
@@ -243,6 +241,8 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
+                customClass: "medium",
+                iconClass: "icon-warning",
                 callback: async action => {
                     console.log(action);
                     if (action === "confirm") {
@@ -255,17 +255,14 @@ export default {
                         );
                         if (status === 200) {
                             // this.getTree();
-                            this.$message({
-                                type: "success",
-                                message: message + "成功!"
+                            this.$notify({
+                                customClass: "notify-success", //  notify-success ||  notify-error
+                                message: `${message}成功!`,
+                                duration: 1000
                             });
                             this.getArticleList();
                         }
                     } else {
-                        // this.$message({
-                        //     type: "info",
-                        //     message: "已取消" + message
-                        // });
                     }
                 }
             });
@@ -318,13 +315,6 @@ export default {
         },
         // 点击确定按钮 更新文章所属分类
         async updateCategoryArticle() {
-            // if (!this.moveToClassiFy) {
-            //     this.$message({
-            //         type: "error",
-            //         message: "请选择移动的分类!"
-            //     });
-            //     return;
-            // }
             console.log(this.moveToClassiFy, "moveToClassiFymoveToClassiFy");
             let cateId;
             if (this.moveToClassiFy) {
@@ -338,9 +328,10 @@ export default {
                 this.newsIdList
             );
             if (status == 200) {
-                this.$message({
-                    type: "success",
-                    message: "移动成功!"
+                this.$notify({
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `移动成功!`,
+                    duration: 1000
                 });
                 this.isInvitationPanelShow = false;
                 this.getTreeAsync();
@@ -350,9 +341,11 @@ export default {
         // 点击确定按钮 复制
         async copyArticle() {
             if (!this.moveToClassiFy) {
-                this.$message({
-                    type: "error",
-                    message: "请选择要复制到的分类!"
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `请选择要复制到的分类!`,
+                    showClose:false,
+                    duration: 2000
                 });
                 return;
             }
@@ -363,9 +356,10 @@ export default {
                 this.newsIdList
             );
             if (status == 200) {
-                this.$message({
-                    type: "success",
-                    message: "复制成功!"
+                 this.$notify({
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `复制成功!`,
+                    duration: 1000
                 });
                 this.isInvitationPanelShow = false;
                 this.getTreeAsync();
@@ -418,6 +412,8 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
+                    customClass: "medium",
+                    iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {

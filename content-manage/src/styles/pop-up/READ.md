@@ -12,3 +12,14 @@
                     callback: async action => {}
                 }
   )    
+
+   this.$notify({
+                    customClass:"notify-error",  //  notify-success ||  notify-error
+                    message: `图片名称不能为空`,
+                    duration: 1000
+                });
+                 this.$notify({
+                    customClass:"notify-error",  //  notify-success ||  notify-error
+                    message: `图片名称不能为空`,
+                    duration: 1000
+                });

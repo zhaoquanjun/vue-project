@@ -16,7 +16,7 @@
                 @chooseCategoryNode="chooseCategoryNode"
             ></category-tree>
         </el-aside>
-        <el-main >
+        <el-main>
             <content-header
                 :count="count"
                 :article-search-options="productSearchOptions"
@@ -181,6 +181,8 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",
+                customClass: "medium",
+                iconClass: "icon-warning",
                 callback: async action => {
                     console.log(action);
                     if (action === "confirm") {
@@ -190,17 +192,18 @@ export default {
                         } = await productManageApi.batchSwitchStatus(options);
                         if (status === 200) {
                             // this.getTree();
-                            this.$message({
-                                type: "success",
-                                message: "成功!"
+                            this.$notify({
+                                customClass: "notify-success", //  notify-success ||  notify-error
+                                message: `成功!`,
+                                duration: 1000
                             });
                             this.contentTableList();
                         }
                     } else {
-                        this.$message({
-                            type: "info",
-                            message: "已取消"
-                        });
+                        // this.$message({
+                        //     type: "info",
+                        //     message: "已取消"
+                        // });
                     }
                 }
             });
@@ -349,6 +352,8 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
+                    customClass: "medium",
+                    iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {

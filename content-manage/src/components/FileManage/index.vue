@@ -182,6 +182,8 @@
                         confirmButtonText: "确定",
                         cancelButtonText: "取消",
                         type: "warning",
+                         customClass:"medium", 
+                    iconClass:"icon-warning", 
                         callback: async action => {
                             console.log(action);
                             if (action === "confirm") {
@@ -249,6 +251,8 @@
                         confirmButtonText: "确定",
                         cancelButtonText: "取消",
                         type: "warning",
+                         customClass:"medium", 
+                    iconClass:"icon-warning", 
                         callback: async action => {
                             console.log(action);
                             if (action === "confirm") {

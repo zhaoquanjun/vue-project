@@ -61,7 +61,9 @@
           :visible.sync="changeAppShow"
           :center="true"
           :close-on-click-modal="false"
+           :modal-append-to-body="false"
           style="margin-top:50px"
+          :modal="false"
         >
           <div class="appBackground">
             <div>
@@ -284,7 +286,7 @@ export default {
   }
 };
 </script>
-<style>
+<style >
 .v-modal {
   z-index: 1000 !important;
 }

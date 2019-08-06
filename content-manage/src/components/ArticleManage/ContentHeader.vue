@@ -257,6 +257,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+@import "@/styles/manage-head.scss";
 .content-header {
     display: flex;
     align-items: center;
@@ -267,12 +268,7 @@ export default {
     padding: 0 24px;
     height: 70px !important;
 }
-.seachInput {
-    display: inline-block;
-    width: 248px;
-    /* height: 36px; */
-    box-sizing: border-box;
-}
+
 .select-item {
     display: inline-block;
     width: 80px;
