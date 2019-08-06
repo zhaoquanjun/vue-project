@@ -45,7 +45,7 @@
             </div>
             <div class="siteinfoItem siteLanguage">
               <span>网站语言：</span>
-              <span>{{getLanguage()}}</span>
+              <span>{{_getLanguage()}}</span>
               <div class="edit" @click="showChangeLanguage"></div>
             </div>
             <div class="siteinfoItem siteDomain">
@@ -164,6 +164,7 @@ import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
+    import { getLanguage} from "@/configure/appCommon";
 // import SiteDomain from "@/components/websiteManage/siteDomain.vue";
 export default {
   components: {
@@ -206,8 +207,7 @@ export default {
       siteNameValue: "",
       changeSiteLanguageShow: false,
       remarkInfo: "",
-        radio: "简体中文",
-        languageList: { "zh-CN": "简体中文", "en-US": "English", "ja-JP": "日本语", "es-ES": "Español", "ko-KR": "한국어" }      
+      radio: "简体中文"
     };
   },
   methods: {
@@ -216,13 +216,9 @@ export default {
         this.siteId = siteId;
         this.getSiteInfo(siteId);
         
-      },
-      getLanguage() {
-          for (var x in this.languageList) {
-              if (this.language == x) {
-                  return this.languageList[x];
-              }
-          }
+      },    
+      _getLanguage() {
+         return getLanguage(this.language);
       },
     // 获取站点信息
     async getSiteInfo(siteId) {
