@@ -2,7 +2,7 @@
   <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
       <span class="siteName">{{ siteName }}</span>
-      <span class="secondDomain">{{ secondDomain }}</span>
+      <a class="secondDomain" :href="secondDomain" target="_blank">{{secondDomain}}</a>
       <span class="language">{{_getLanguage()}}</span>
       <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
     </el-col>
@@ -48,7 +48,7 @@ import * as dashboardApi from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local.js";
 import { getLanguage } from "@/configure/appCommon";
 export default {
-  props: ["changeSiteName"],
+  props: ["changeSiteName", "changeSiteLanguage"],
   components: {},
   data() {
     return {
@@ -67,10 +67,13 @@ export default {
       this.getSiteInfo(this.curSiteId);
     });
     this.getSites();
-        },   
+  },
   watch: {
     changeSiteName() {
       this.siteName = this.changeSiteName;
+    },
+    changeSiteLanguage() {
+      this.language = this.changeSiteLanguage;
     }
   },
   methods: {
@@ -81,10 +84,10 @@ export default {
       let { data } = await dashboardApi.getCurSiteId();
       this.curSiteId = data;
       this.$emit("getSiteId", data);
-      },
-      _getLanguage() {
-          return getLanguage(this.language);
-      },
+    },
+    _getLanguage() {
+      return getLanguage(this.language);
+    },
     /**
      * 获取站点信息
      */

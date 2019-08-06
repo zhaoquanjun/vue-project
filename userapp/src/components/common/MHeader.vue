@@ -72,40 +72,46 @@
                 :key="index"
                 style="padding:0px"
               >
-                  <div class="appTitle">
-                      <span class="appName" v-if="item.name">{{item.name}}</span>
-                      <span class="appName" v-else>公司名称</span>
-                      <el-popover v-show="item.isSystem"
-                                  :ref="`popover-${index}`"
-                                  placement="bottom"
-                                  width="317"
-                                  trigger="click"
-                                  style="padding:0"
-                                  @show="showRemark(index)">
-                          <span slot="reference">
-                              <svg-icon icon-class="remark" class="remark"></svg-icon>
-                          </span>
-                          <div class="textareaWrap">
-                              <el-input type="textarea"
-                                        :autosize="{ minRows: 3, maxRows: 3}"
-                                        placeholder="请输入内容"
-                                        v-model="remarkValue"
-                                        maxlength="30"
-                                        show-word-limit
-                                        resize="none"></el-input>
-                              <div class="btn-wrap">
-                                  <button class="popover-btn cancel"
-                                          slot="refenrence"
-                                          @click="cancelInput(index)">
-                                      取消
-                                  </button>
-                                  <button class="popover-btn save" @click="saveInputValue(index)">保存</button>
-                              </div>
-                          </div>
-                      </el-popover>
-                      <span class="appMember"
-                            :style="{color:item.isSystem? '#35B24B':'#0070CC'}">{{item.isSystem ? "管理员" : "成员"}}</span>
-                  </div>
+                <div class="appTitle">
+                  <span class="appName" v-if="item.name">{{item.name}}</span>
+                  <span class="appName" v-else>公司名称</span>
+                  <el-popover
+                    v-show="item.isSystem"
+                    :ref="`popover-${index}`"
+                    placement="bottom"
+                    width="317"
+                    trigger="click"
+                    style="padding:0"
+                    @show="showRemark(index)"
+                  >
+                    <span slot="reference">
+                      <svg-icon icon-class="remark" class="remark"></svg-icon>
+                    </span>
+                    <div class="textareaWrap">
+                      <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 3, maxRows: 3}"
+                        placeholder="请输入内容"
+                        v-model="remarkValue"
+                        maxlength="30"
+                        show-word-limit
+                        resize="none"
+                      ></el-input>
+                      <div class="btn-wrap">
+                        <button
+                          class="popover-btn cancel"
+                          slot="refenrence"
+                          @click="cancelInput(index)"
+                        >取消</button>
+                        <button class="popover-btn save" @click="saveInputValue(index)">保存</button>
+                      </div>
+                    </div>
+                  </el-popover>
+                  <span
+                    class="appMember"
+                    :style="{color:item.isSystem? '#35B24B':'#0070CC'}"
+                  >{{item.isSystem ? "管理员" : "成员"}}</span>
+                </div>
                 <div class="version">
                   <span class="versionText">应用版本</span>
                   <span class="versionText">{{item.productName}}</span>
@@ -115,7 +121,19 @@
                   <span class="expiredText" style="margin-left:46px">{{item.expired}}</span>
                   <div class="isExpired" v-show="isExpired(item)">已过期</div>
                   <button class="renewal" v-show="item.isSystem">续费</button>
-                  <el-button class="choseApp" @click="choseApp(item)" :disabled="isExpired(item)" :class="{'disabled':isExpired(item)}">进入应用</el-button>
+                  <el-button
+                    class="choseApp"
+                    @click="choseApp(item)"
+                    :disabled="isExpired(item)"
+                    :class="{'disabled':isExpired(item)}"
+                    v-if="curAppId != item.appId"
+                  >进入应用</el-button>
+                  <el-button
+                    class="choseCurApp"
+                    @click="choseApp(item)"
+                    disabled
+                    v-if="curAppId == item.appId"
+                  >我的应用</el-button>
                 </div>
               </el-col>
             </div>
@@ -132,6 +150,7 @@ import { getApplicationsByUserId } from "@/api/request/dashboardApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { formatDateTime, getShortUrlByInviation } from "@/api/index";
 import { setLocal } from "@/libs/local.js";
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -140,10 +159,13 @@ export default {
       // appName: "",
       appList: [],
       changeAppShow: false,
-      remarkValue: ""
+      remarkValue: "",
+      curAppId: ""
     };
   },
-  created() {},
+  created() {
+    this.getCurApp();
+  },
   methods: {
     designer() {
       location.href = "//designer.console.wezhan.cn";
@@ -227,44 +249,50 @@ export default {
       this.$refs[`popover-${index}`][0].doClose();
       this.remarkValue = "";
     },
-      async saveInputValue(index) {
-          if (!this.remarkValue) {
-              this.$message({
-                  type: "failed",
-                  message: "请输入公司名称"
-              });
-              return;
-          }
+    async saveInputValue(index) {
+      if (!this.remarkValue) {
+        this.$message({
+          type: "failed",
+          message: "请输入公司名称"
+        });
+        return;
+      }
       this.$refs[`popover-${index}`][0].doClose();
       await dashboardApi.UpdateAppName(this.remarkValue);
       this.appList[index].name = this.remarkValue;
+    },
+    // 获取当前appId
+    getCurApp() {
+      this.curAppId = Cookies.get("AppId")
+        ? Cookies.get("AppId")
+        : this.$store.state.dashboard.appid;
     }
   },
-  computed:{
-    headUrl(){
-      let avatar = this.$store.state.user.userInfo.headImageUrl
-       if(avatar){
-         return avatar
-       }else{
-         return require("../../assets/defualtAvatar.png")
-       }
+  computed: {
+    headUrl() {
+      let avatar = this.$store.state.user.userInfo.headImageUrl;
+      if (avatar) {
+        return avatar;
+      } else {
+        return require("../../assets/defualtAvatar.png");
+      }
     },
     headAppName() {
-      let appName = this.$store.state.user.userInfo.appName
+      let appName = this.$store.state.user.userInfo.appName;
       return appName;
     }
-  },
+  }
 };
 </script>
 <style>
-.v-modal{
+.v-modal {
   z-index: 1000 !important;
 }
 </style>
 
 <style lang="scss" scoped>
-.disabled{
-  opacity:0.2;
+.disabled {
+  opacity: 0.2;
 }
 .header {
   padding: 0 10px;
@@ -476,6 +504,21 @@ export default {
       background: rgba(0, 193, 222, 1);
       border-radius: 2px;
       border: 1px solid rgba(1, 192, 222, 1);
+      font-size: 12px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 1);
+      line-height: 32px;
+      padding: 0px;
+    }
+    .choseCurApp {
+      position: absolute;
+      right: 32px;
+      bottom: 28px;
+      width: 90px;
+      height: 32px;
+      background: rgba(140, 140, 140, 1);
+      border-radius: 2px;
       font-size: 12px;
       font-family: PingFangSC-Medium;
       font-weight: 500;

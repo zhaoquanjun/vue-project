@@ -92,7 +92,6 @@ export default {
   },
   methods: {
     handleClick(item, index) {
-      console.log(index, this.siteInfo.length);
       if (index == 0 || index == this.siteInfo.length - 1) return;
       this.curIndex = index;
       if (index == 0) {

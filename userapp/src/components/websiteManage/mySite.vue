@@ -6,7 +6,12 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" :changeSiteName="siteName"/>
+      <ChangeSite
+        @chooseWebsite="chooseWebsite"
+        @getSiteId="getSiteId"
+        :changeSiteName="siteName"
+        :changeSiteLanguage="language"
+      />
       <el-row class="siteContent">
         <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>
         <div class="siteWrap">
@@ -43,16 +48,16 @@
                 </div>
               </el-popover>
             </div>
-            <div class="siteinfoItem siteLanguage">
+            <div class="siteinfoItem">
               <span>网站语言：</span>
               <span>{{_getLanguage()}}</span>
               <div class="edit" @click="showChangeLanguage"></div>
             </div>
-            <div class="siteinfoItem siteDomain">
+            <div class="siteinfoItem">
               <span>网站地址：</span>
-              <span class="siteinfoDomain">{{secondDomain}}</span>
+              <a class="siteinfoDomain" :href="secondDomain" target="_blank">{{secondDomain}}</a>
             </div>
-            <div class="siteinfoItem siteTime">
+            <div class="siteinfoItem">
               <span>发布时间：</span>
               <span>未发布</span>
             </div>
@@ -177,7 +182,7 @@ import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
-    import { getLanguage} from "@/configure/appCommon";
+import { getLanguage } from "@/configure/appCommon";
 // import SiteDomain from "@/components/websiteManage/siteDomain.vue";
 export default {
   components: {
@@ -226,13 +231,12 @@ export default {
   methods: {
     // 获取siteId
     getSiteId(siteId) {
-        this.siteId = siteId;
-        this.getSiteInfo(siteId);
-        
-      },    
-      _getLanguage() {
-         return getLanguage(this.language);
-      },
+      this.siteId = siteId;
+      this.getSiteInfo(siteId);
+    },
+    _getLanguage() {
+      return getLanguage(this.language);
+    },
     // 获取站点信息
     async getSiteInfo(siteId) {
       console.log(siteId);
@@ -472,18 +476,23 @@ export default {
       line-height: 20px;
       color: rgba(140, 140, 140, 1);
     }
+    .siteinfoName {
+      color: rgba(38, 38, 38, 1);
+    }
+    .siteinfoDomain {
+      margin-left: 24px;
+      font-size: 14px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      line-height: 20px;
+      color: rgba(0, 194, 222, 1);
+    }
   }
   .siteinfoBackImg {
     // display: inline-block;
     // width: 956px;
     // background: url("~img/siteManage/mysiteBackground.png") no-repeat center;
     // background-size: 100%;
-  }
-  .siteinfoName {
-    color: rgba(38, 38, 38, 1);
-  }
-  .siteinfoDomain {
-    color: rgba(0, 194, 222, 1);
   }
   .siteinfoBtn {
     position: absolute;
@@ -545,7 +554,7 @@ export default {
     color: rgba(255, 255, 255, 1);
     line-height: 32px;
   }
-  .disabled{
+  .disabled {
     opacity: 0.4;
   }
 }
