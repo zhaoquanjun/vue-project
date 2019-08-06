@@ -59,7 +59,7 @@
             </div>
             <div class="siteinfoItem">
               <span>绑定域名：</span>
-              <span style="color:#00C2DE">{{domain}}</span>
+              <span :class="{isBind:domain}">{{domain ? domain : "未绑定"}}</span>
               <button class="bindDomain" @click="bindDomain">绑定域名</button>
             </div>
             <div class="siteinfoItem">
@@ -188,6 +188,7 @@ import ChangeSite from "@/components/websiteManage/changeSite";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { getLanguage } from "@/configure/appCommon";
+import { formatDateTime } from "@/api/index";
 // import SiteDomain from "@/components/websiteManage/siteDomain.vue";
 export default {
   components: {
@@ -253,7 +254,7 @@ export default {
         this.siteName = data.siteName;
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
-        this.lastPublishedTime = data.lastPublishedTime;
+        this.lastPublishedTime = formatDateTime(data.lastPublishedTime, "yyyy-MM-dd hh:mm");
         this.siteId = data.id;
         this.language = data.language;
         this.firstIndustryId = data.firstIndustryId;
@@ -519,6 +520,9 @@ export default {
       color: rgba(1, 192, 222, 1);
       line-height: 32px;
       margin-left: 32px;
+    }
+    .isBind{
+      color:#00C2DE
     }
   }
   .siteinfoBackImg {
