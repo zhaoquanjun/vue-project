@@ -19,11 +19,21 @@
 /* table 头部颜色 和 高度 */
 #table-list .el-table thead  th {
     padding: 0;
-    height: 32px;
-    background: #00c1de !important;
-    color: #fff;
+    height: 70px;
+    background: #fff !important;
+    color: #262626;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 16px;
+    
+}
+#table-list{
+    .el-table td{
+        padding: 19px 0;
+    }
+    .el-table--enable-row-hover .el-table__body tr:hover>td{
+        background-color: #F0FCFE ;
+        }
+        
 }
 
 /* 查看大图 弹出层 */
@@ -86,25 +96,94 @@
 #table-list .el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: #01c0de;
 }
-#table-list .el-pagination .el-pagination__total {
-    color: #8c8c8c;
-}
-#table-list .el-pager li {
-    font-weight: 400;
-    color: #252525;
-    background-color: #fff;
-    border: 1px solid rgba(229, 229, 229, 1);
-}
+
+
 #table-list .el-pager .active {
     background-color: #01c0de;
     color: #fff;
 }
-// button focus样式
-button.deleteActive:focus{
-    color: #606266;
-    background: #fff;
-    border: 1px solid #DCDFE6;
+.pageing{
+    float: right;
+    margin-top: 24px;
+    padding-bottom: 10px;
+    margin-right: 45px;
+    .sizes-title {
+        line-height: 32px;
+        color: #A1A8B1;
+        font-weight: 400;
+        font-size: 14px;
+        display: inline-block;
+        margin-right: 18px;
+    }
+    button.paging-confirm{
+        width: 41px;
+        height: 32px;
+        border: 1px solid #EEEEEE;
+        border-radius: 2px;
+        position: absolute;
+        right: 20px;
+        color: #262626;
+        font-size: 14px;
+        background: #fff;
+        
+    }
+    .el-pagination__editor.el-input .el-input__inner{
+        height: 32px;
+    }
+    .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev{
+        background: #fff;
+        height: 32px;
+        line-height: 32px;
+        margin: 0;
+    }
+    .el-pagination{
+         .el-select .el-input{
+             width: 60px;
+         }
+         .el-input__inner{
+             height: 32px;
+         }
+         .el-pagination__jump{
+             margin-left: 23px;
+         }
+         .el-pager{
+             border: 1px solid #eee;
+             border-left:none; 
+             border-right:none; 
+             box-sizing: border-box;
+         }
+        .el-pager li {
+            font-weight: 400;
+            color: #262626;
+            background-color: #fff;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            margin: 0;
+            border-radius: 0;
+            border-right: 1px solid #eee;
+        }   
+        .btn-prev{
+            border: 1px solid #eee;
+           
+        } 
+        .btn-next{
+            border: 1px solid #eee;
+            border-left: none;
+        }
+        button:hover{
+              color: #09CCEB;  
+        }
+        .el-pagination__total {
+            color: #A1A8B1;
+            margin: 0;
+            line-height: 32px;
+        }
+    }
+    
 }
+
+
 
 // 侧边分类树节点
 .aside-tree{
@@ -150,5 +229,39 @@ button.deleteActive:focus{
 
 // 将圆角改为直角
 .el-input .el-input__inner,.el-button,.el-input-group__append, .el-input-group__prepend{
-    border-radius: 0;
+     border-radius: 2px;
 }
+
+.el-checkbox__input.is-checked .el-checkbox__inner,.el-checkbox__input.is-indeterminate .el-checkbox__inner,.el-switch.is-checked .el-switch__core{
+    background-color: #09CCEB;
+    border-color: #09CCEB;
+}
+
+// 修改 button默认样式  begin
+.el-button{
+    font-weight: 400;
+    font-size: 14px;
+}
+.el-button.btn-delete{
+    border: 1px solid #FE9837;
+    color: #FE9837;
+}
+.el-button.btn-delete:hover{
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.9)
+}
+.el-button.btn-defualt{
+    border: 1px solid #09CCEB;
+    color: #09CCEB;
+}
+.el-button.btn-defualt:hover{
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.9)
+}
+// button focus样式
+button.deleteActive:focus{
+    color: #09CCEB;
+    background: #fff;
+    border: 1px solid #09CCEB;
+}
+/* button  end */

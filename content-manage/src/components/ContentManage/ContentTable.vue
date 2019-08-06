@@ -202,8 +202,5 @@ export default {
     //padding-right: 54px;
 }
 
-.pageing {
-    float: right;
-    margin-top: 24px;
-}
+
 </style>

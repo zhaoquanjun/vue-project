@@ -6,6 +6,7 @@ import './plugins/element';
 import "./assets/reset.css";
 import "./styles/common.scss";
 import "./plugins/element-reset.scss"
+import "./styles/pop-up/pup-up.scss"
 import "./styles/weizhan.scss";
 import "@/directive/index.js"
 import './icons';

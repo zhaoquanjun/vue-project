@@ -1,5 +1,6 @@
 <template>
     <div id="member-table">
+        
         <el-table
             :data="memberList"
             style="width: 100%"
@@ -96,7 +97,7 @@
                 prev-text="上一页"
                 next-text="下一页"
                 @current-change="changePage"
-                 @size-change="changePageSize"
+                @size-change="changePageSize"
             >
                 <div class="sizes-title">每页显示</div>
             </el-pagination>

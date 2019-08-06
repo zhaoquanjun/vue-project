@@ -11,7 +11,7 @@
             <template slot="empty">
                 <div class="empty-table">
                     <img src="~img/table-empty.png" />
-                    <span>无搜索结果</span>
+                    <span>无数据</span>
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
@@ -76,16 +76,20 @@
             </el-table-column>
         </el-table>
         <div class="pageing">
-            <el-pagination
+          
+               <el-pagination
                 background
-                layout="total, sizes, prev, pager, next"
+                layout="total, slot, sizes, prev, pager, next,jumper"
                 :total="articlePageResult.totalRecord"
                 :page-count="articlePageResult.totalPage"
                 :page-size="articlePageResult.pageSize"
-                :page-sizes="[1,5,10,15,20,50,100]"
+                :page-sizes="[10,20,50]"
                 @current-change="changePageNum"
                 @size-change="changePageSize"
-            ></el-pagination>
+            >
+              <div class="sizes-title">，每页显示</div>  
+              <button class="paging-confirm">跳转</button> 
+            </el-pagination>
         </div>
         <ul class="operate-section" ref="operateSection">
             <li
@@ -292,68 +296,5 @@ export default {
 }
 </style>
 
-<style >
-/* .table-content /deep/ .el-table__header-wrapper thead tr th {
-  text-align: center;
-  color: #fff;
-  background: #00c1de;
-}
-.table-content
-  /deep/
-  .el-table__header-wrapper
-  thead
-  tr
-  th.el-table_3_column_18 {
-  text-align: left;
-}
-.table-content
-  /deep/
-  .el-table__header-wrapper
-  thead
-  tr
-  th.el-table_3_column_24 {
-  text-align: left;
-}
-.table-content /deep/ .el-table__body-wrapper tbody tr td {
-  text-align: center;
-}
-.table-content /deep/ .el-table__body-wrapper tbody tr td.el-table_3_column_18 {
-  text-align: left;
-}
-.table-content /deep/ .el-table__body-wrapper tbody tr td.el-table_3_column_24 {
-  text-align: left;
-} */
-
-#table-list .el-table th > .cell {
-    color: #fff;
-    font-weight: 400;
-    font-size: 12px;
-}
-#table-list .el-table .el-table__row {
-    height: 60px;
-}
-#table-list .el-pagination.is-background .el-pager li:not(.disabled).active {
-    background-color: #01c0de;
-}
-#table-list .el-pagination .el-pagination__total {
-    color: #8c8c8c;
-}
-#table-list .el-pager li {
-    font-weight: 400;
-    color: #252525;
-    background-color: #fff;
-    border: 1px solid rgba(229, 229, 229, 1);
-}
-#table-list .el-pager .active {
-    background-color: #01c0de;
-    color: #fff;
-}
-
-#table-list .el-carousel__item.is-animating {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
-
+<
 

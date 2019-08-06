@@ -3,7 +3,8 @@
         <h4 class="submenu-title">
             <slot name="title"></slot>
         </h4>
-        <ul class="submenu-list">
+        
+              <ul class="submenu-list">
             <li
                 @click="handlerRoute(item,index)"
                 v-for="(item,index) in menuList"

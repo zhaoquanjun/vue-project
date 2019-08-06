@@ -226,21 +226,6 @@ export default {
     opacity: 0.7;
     height: auto;
 }
-/* 
 
-#table-list .el-table .el-table__header .has-gutter th {
-    padding: 0;
-    height: 32px;
-    background: #00c1de !important;
-}
-
-/* #table-list .el-table th > .cell {
-    color: #fff;
-    font-weight: 400;
-    font-size: 12px;
-} */
-/*#table-list .el-table .el-table__row {
-    height: 60px;
-} */
 </style>
 

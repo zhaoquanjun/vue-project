@@ -17,7 +17,7 @@
                 @modifyNode="modifyNodeCategory"
             ></m-tree>
         </el-aside>
-        <el-main >
+        <el-main style="    overflow: hidden;">
             <img-list-header
                 :count-pic="countPic"
                 :pic-search-options="picSearchOptions"
@@ -195,6 +195,9 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
+                    iconClass:"icon-warning",
+                    customClass:"small",
+                   
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {

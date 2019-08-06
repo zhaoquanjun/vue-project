@@ -1,0 +1,93 @@
+// confirm 修改弹窗组件样式 
+/*  confirm begin */
+.el-message-box{
+    padding: 34px 24px 29px;
+    width: 520px;
+    box-sizing: border-box;
+    .el-message-box__header{
+        padding:0;
+        .el-message-box__title{
+            font-size: 16px;
+            line-height: 1;
+            color: #262626;
+            font-weight: 500;
+        }
+        .el-message-box__headerbtn{
+            top: 0;
+            .el-icon-close{
+                font-size: 20px;
+            }
+        }
+    }
+    .el-message-box__content{
+        padding: 40px;
+        color: #A1A8B1;
+        font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+       
+    }
+    .el-message-box__btns{
+        .el-button{
+            min-width: 76px;
+            height: 40px;
+            font-size: 14px;
+            border-radius:2px; 
+            font-weight: 400;
+            color: #09CCEB;
+            border-color: #09CCEB;
+        }
+        .el-button:hover{
+            color: #09CCEB;
+            border-color: #09CCEB;
+            background-color: #fff;
+        }
+        .el-button--primary{
+            color: #fff;
+            background: #09CCEB;
+            border: 1px solid #09CCEB;
+        }
+        .el-button--primary:hover{
+            color: #fff;
+            background: #09CCEB;
+            border: 1px solid #09CCEB;
+        }
+         button:nth-child(2){
+             margin-left: 16px;
+         }
+        
+        
+    }
+    .icon-warning{
+        width: 24px;
+        height: 24px;
+        background:url("./images/warning.png") no-repeat center;
+        background-size: contain;
+    }
+    .icon-sucess{
+        width: 24px;
+        height: 24px;
+        background:url("./images/warning.png") no-repeat center;
+        background-size: contain;
+    }
+   
+}
+.large{
+    width: 700px;
+    .el-message-box__btns{
+        .el-button{
+            min-width: 90px;
+        } 
+    }
+   
+ }
+ .small{
+     width: 360px;
+     height: 220px;
+     .el-message-box__btns{
+        .el-button{
+            min-width: 90px;
+        } 
+    }
+ }
+
+
+/*  confirm end */

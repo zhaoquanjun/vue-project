@@ -90,11 +90,11 @@
                     <i>{{count}}</i> 个产品
                 </span>
                 <div style="float:right">
-                    <el-button class="deleteActive" size="small" @click="batchPublish(3, false)">上架</el-button>
-                    <el-button class="deleteActive" size="small" @click="batchPublish(3, true)">下架</el-button>
-                    <el-button class="deleteActive" size="small" @click="batchCopy">复制</el-button>
+                    <el-button class="deleteActive btn-defualt" size="small" @click="batchPublish(3, false)">上架</el-button>
+                    <el-button class="deleteActive btn-defualt" size="small" @click="batchPublish(3, true)">下架</el-button>
+                    <el-button class="deleteActive btn-defualt" size="small" @click="batchCopy">复制</el-button>
                     <el-button
-                        class="deleteActive"
+                        class=" btn-delete"
                         style="margin-right: 10px;"
                         size="small"
                         @click="batchRemove(1,true)"

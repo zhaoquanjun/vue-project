@@ -1,5 +1,6 @@
 <template>
     <div id="asideTree" class="aside-tree">
+        <el-scrollbar >
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -13,6 +14,7 @@
             :allow-drop="allowDrop"
             :highlight-current="true"
         >
+        
             <div
                 class="custom-tree-node"
                 @mouseover="handlerOver(data)"
@@ -38,6 +40,7 @@
                 </span>
             </div>
         </el-tree>
+        </el-scrollbar>
         <div class="category-name-pic" ref="operateSection">
             <UploadCategoryPic
                 :isUpload="false"

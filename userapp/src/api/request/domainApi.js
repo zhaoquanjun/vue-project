@@ -3,7 +3,7 @@ import * as ajaxRequest from "../ajaxRequest";
 import store from "@/store/index";
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
 console.log(designerManageApi)
-const siteId = store.state.dashboard.siteId;
+const siteId =2;
 /**
  * 获取域名列表
  */

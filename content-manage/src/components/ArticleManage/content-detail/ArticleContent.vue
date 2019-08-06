@@ -143,7 +143,7 @@
                             <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
                         </el-form-item>
                         <el-form-item label="置顶" prop="delivery">
-                            <el-switch v-model="articleDetail.isTop"></el-switch>
+                            <el-switch v-model="articleDetail.isLoggedInCanView"></el-switch>
                             <span
                                 style=" font-size: 14px; color: #606266;
     vertical-align: middle;
@@ -299,6 +299,7 @@ export default {
                 contentDetail: "",
                 searchKeywords: [],
                 isPublish: false,
+                isLoggedInCanView:false,
                 createTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
                 metaTitle: "",

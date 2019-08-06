@@ -230,10 +230,12 @@ export default {
          */
         async _deleteCdnDomain(domainId, index) {
             this.$confirm("提示", {
+                title:"提示",
                 message:
                     "确定删除该域名?域名删除后, 您将无法访问该网站.强烈建议您在删除前修改该域名的cname解析. ",
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
+                iconClass:"icon-warning",
                 type: "warning",
                 callback: async action => {
                     if (action === "confirm") {

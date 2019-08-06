@@ -45,20 +45,17 @@
     }
 }
 
-
-
-.pageing {
-    float: right;
-    margin-top: 24px;
-    padding-bottom: 10px;
+.el-table::before{
+    height: 0;
 }
-
 .table-wrap {
     margin: 0 21px;
 }
 .content-table {
     width: 100%;
     box-sizing: border-box;
+    background: #F9FAFC;
+    color: #262626
 }
 .handle-btn-wrap {
     width: 70%;

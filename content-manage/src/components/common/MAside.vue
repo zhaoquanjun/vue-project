@@ -44,7 +44,7 @@ import { siteDomain } from "@/environment/index";
 export default {
     data() {
         return {
-            width: 50,
+            width: 80,
             width1: 0,
             time: "0.8s",
             curIndex: -1,

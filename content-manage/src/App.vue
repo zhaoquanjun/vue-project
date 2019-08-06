@@ -6,7 +6,7 @@
             </el-header>
             <el-container style="padding-top: 50px;width: 100%;overflow: hidden;"
             >
-                <el-aside width="50px">
+                <el-aside width="80px">
                     <m-aside></m-aside>
                 </el-aside>
                 <el-main style=" overflow: hidden;">

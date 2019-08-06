@@ -66,13 +66,13 @@
                 </span>
                 <div>
                     <el-button
-                        class="handle-btn"
+                        class="handle-btn btn-defualt"
                         size="small"
                         @click="batchMove"
                     >
                         移动
                     </el-button>
-                    <el-button class="handle-btn" size="small" @click="batchDelete">
+                    <el-button class="handle-btn btn-delete" size="small" @click="batchDelete">
                         删除
                     </el-button>
                 </div>
@@ -264,8 +264,11 @@ export default {
     align-items: center;
     padding: 0px 21px;
     width: 100%;
+    >div{
+        margin-left: 16px;
+    }
     .handle-btn{
-        margin:0 16px
+        margin:0 8px
     }
 }
 </style>

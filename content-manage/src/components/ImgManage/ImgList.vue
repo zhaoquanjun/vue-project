@@ -1,7 +1,7 @@
 <template>
     <div class="table-wrap" id="table-list">
         <el-table
-            height="500"
+            :height="tableHeight"
             ref="multipleTable"
             :data="imgPageResult.list"
             tooltip-effect="dark"
@@ -11,7 +11,7 @@
             <template slot="empty">
                 <div class="empty-table">
                     <img src="~img/table-empty.png" />
-                    <span>无搜索结果</span>
+                    <span>无数据</span>
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
@@ -72,17 +72,20 @@
             </el-table-column>
         </el-table>
         <div class="pageing" id="pageing">
-            <slot name="paging"></slot>
+           
             <el-pagination
                 background
-                layout="total, sizes, prev, pager, next"
+                :layout="layout"
                 :total="imgPageResult.totalRecord"
                 :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePage"
                 @size-change="changeSize"
-            ></el-pagination>
+            >
+              <div class="sizes-title">，每页显示</div>  
+              <button class="paging-confirm">跳转</button> 
+            </el-pagination>
         </div>
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
@@ -146,6 +149,7 @@ export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
         return {
+            layout:"total, slot, sizes, prev, pager, next,jumper",
             picInfo: {},
             index: -1, //
             isRename: true, // 重命名图片名称
@@ -159,7 +163,8 @@ export default {
             imgList: "",
             fullOssUrl: "",
             changeIndex: -1,
-            firstIndex: ""
+            firstIndex: "",
+            tableHeight:0
         };
     },
     mounted() {
@@ -170,6 +175,10 @@ export default {
                 ele.src = ele.attributes["fullsrc"].value;
             }
         };
+        window.addEventListener("resize",()=>{
+           this.tableHeight = window.innerHeight -210
+            
+        })
     },
     methods: {
         /**
@@ -196,9 +205,9 @@ export default {
         rename(id, newName, index) {
             if(!trim(newName)){
                  this.$notify({
-                    type: "warning",
+                    customClass:"notify-error", 
                     message: `图片名称不能为空`,
-                    duration: 2000
+                    duration: 1000
                 });
                 return false;
             }
@@ -258,12 +267,7 @@ export default {
     }
 };
 </script>
-<style>
-/* .table-wrap{
-    height: calc(100vh - 100px);
-    overflow: auto;
-} */
-</style>
+
 
 <style scoped>
 .left-prev,
@@ -297,21 +301,6 @@ export default {
     opacity: 0.7;
     height: auto;
 }
-/*
 
-    #table-list .el-table .el-table__header .has-gutter th {
-        padding: 0;
-        height: 32px;
-        background: #00c1de !important;
-    }
-
-    /* #table-list .el-table th > .cell {
-        color: #fff;
-        font-weight: 400;
-        font-size: 12px;
-    } */
-/*#table-list .el-table .el-table__row {
-        height: 60px;
-    } */
 </style>
 

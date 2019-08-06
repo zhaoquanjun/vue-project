@@ -123,7 +123,7 @@
                                 </div>
                             </el-col>
                         </el-row>
-                        <el-row class="step-explain">
+                        <el-row class="step-explain" :gutter="20">
                             <el-col :span="7" v-if="active >= 0">
                                 <div>
                                     <div
@@ -330,6 +330,7 @@ export default {
                 message: this.$createElement("div", null, message),
                 confirmButtonText: "确定",
                 type: type,
+                // customClass:"large", // 弹窗大小  large / medium / small 	
                 callback: async action => {
                     if (action === "confirm") {
                         callback(this);
