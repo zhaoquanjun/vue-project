@@ -24,7 +24,7 @@
             </ul>-->
           </span>
           <span @click="changeApp">
-            {{$store.state.dashboard.curAppName}}
+            {{headAppName}}
             <span class="changeAppImg"></span>
           </span>
         </div>
@@ -248,6 +248,10 @@ export default {
        }else{
          return require("../../assets/defualtAvatar.png")
        }
+    },
+    headAppName() {
+      let appName = this.$store.state.user.userInfo.appName
+      return appName;
     }
   },
 };
