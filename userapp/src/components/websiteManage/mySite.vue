@@ -1,12 +1,12 @@
 <template>
-  <el-container class="member-container ">
+  <el-container class="member-container">
     <el-aside style="width:120px">
       <page-submenu :submenu-list="submenuList">
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>
-    <el-main class="member-content  page-scroll">
-      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
+    <el-main class="member-content page-scroll">
+      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" :changeSiteName="siteName"/>
       <el-row class="siteContent">
         <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>
         <div class="siteWrap">
@@ -79,7 +79,11 @@
           </div>
           <div class="siteIndustry">所属行业</div>
           <div class="siteFirstIndustrySelect">
-            <el-select v-model="siteFirstIndustryValue" placeholder="一级行业"  @change="choseFirstIndustry">
+            <el-select
+              v-model="siteFirstIndustryValue"
+              placeholder="一级行业"
+              @change="choseFirstIndustry"
+            >
               <el-option
                 v-for="item in siteFirstIndustry"
                 :key="item.id"
@@ -89,7 +93,11 @@
             </el-select>
           </div>
           <div class="siteSecondIndustrySelect">
-            <el-select v-model="siteSecondIndustryValue" placeholder="二级行业" @change="choseSecondIndustry">
+            <el-select
+              v-model="siteSecondIndustryValue"
+              placeholder="二级行业"
+              @change="choseSecondIndustry"
+            >
               <el-option
                 v-for="item in siteSecondIndustry"
                 :key="item.id"
@@ -98,7 +106,12 @@
               ></el-option>
             </el-select>
           </div>
-          <button class="saveBtn" @click="saveSiteInfo">保存</button>
+          <el-button
+            class="saveBtn"
+            @click="saveSiteInfo"
+            :disabled="chosedSiteType == '' || siteFirstIndustryValue == '' || siteSecondIndustryValue == ''"
+            :class="{disabled:chosedSiteType == '' || siteFirstIndustryValue == '' || siteSecondIndustryValue == ''}"
+          >保存</el-button>
         </div>
       </el-row>
       <el-row class="siteContent">
@@ -223,23 +236,23 @@ export default {
     // 获取站点信息
     async getSiteInfo(siteId) {
       console.log(siteId);
-      let { data,status } = await siteBackupApi.getSiteInfo(siteId);
-        console.log(data);
-        if (status === 200) {
-            this.siteName = data.siteName;
-            this.secondDomain = data.secondDomain;
-            this.siteId = data.id;
-            this.language = data.language;
-            this.firstIndustryId = data.firstIndustryId;
-            this.secondIndustryId = data.secondIndustryId;
-            if (data.siteType) {
-                this.chosedSiteType = data.siteType;
-            }
-            await this.choseFirstIndustrySelect();
-            if (data.firstIndustryId) {
-                await this.choseSecondIndustrySelect(data.firstIndustryId);
-            }           
+      let { data, status } = await siteBackupApi.getSiteInfo(siteId);
+      console.log(data);
+      if (status === 200) {
+        this.siteName = data.siteName;
+        this.secondDomain = data.secondDomain;
+        this.siteId = data.id;
+        this.language = data.language;
+        this.firstIndustryId = data.firstIndustryId;
+        this.secondIndustryId = data.secondIndustryId;
+        if (data.siteType) {
+          this.chosedSiteType = data.siteType;
         }
+        await this.choseFirstIndustrySelect();
+        if (data.firstIndustryId) {
+          await this.choseSecondIndustrySelect(data.firstIndustryId);
+        }
+      }
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
@@ -254,14 +267,14 @@ export default {
       this.$refs[`popover`].doClose();
       this.siteNameValue = "";
     },
-      async saveInputValue() {
-          if (!this.siteNameValue) {
-              this.$message({
-                  type: "failed",
-                  message: "请输入站点名称"
-              });
-            return;
-        }
+    async saveInputValue() {
+      if (!this.siteNameValue) {
+        this.$message({
+          type: "failed",
+          message: "请输入站点名称"
+        });
+        return;
+      }
       this.$refs[`popover`].doClose();
       await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
       this.siteName = this.siteNameValue;
@@ -273,60 +286,69 @@ export default {
     },
     //  切换网站语言
     showChangeLanguage() {
-        this.changeSiteLanguageShow = true;
-        this.radio = this.language;
+      this.changeSiteLanguageShow = true;
+      this.radio = this.language;
     },
     async changeLanguage() {
-
-        let { data,status } = await dashboardApi.updateSiteLanguage(this.siteId, this.radio);
-        if (status == 200) {
-            this.language = this.radio;
-            this.closeSiteLanguageDialog();
-        }
+      let { data, status } = await dashboardApi.updateSiteLanguage(
+        this.siteId,
+        this.radio
+      );
+      if (status == 200) {
+        this.language = this.radio;
+        this.closeSiteLanguageDialog();
+      }
     },
     // 选择网站类型
     choseType(value) {
-      this.chosedSiteType = value
+      this.chosedSiteType = value;
     },
     // 选择一级行业菜单
     async choseFirstIndustrySelect() {
       let { data } = await dashboardApi.GetFirstIndustries();
-        this.siteFirstIndustry = data;
-        this.siteFirstIndustryValue = this.firstIndustryId == 0 ? "" : this.firstIndustryId;
-        this.siteSecondIndustryValue = this.secondIndustryId == 0 ? "" : this.secondIndustryId;
+      this.siteFirstIndustry = data;
+      this.siteFirstIndustryValue =
+        this.firstIndustryId == 0 ? "" : this.firstIndustryId;
+      this.siteSecondIndustryValue =
+        this.secondIndustryId == 0 ? "" : this.secondIndustryId;
     },
-      choseFirstIndustry(id) {
-          this.firstIndustryId = id;
-          this.secondIndustryId = "";
-        this.choseSecondIndustrySelect(this.firstIndustryId);
+    choseFirstIndustry(id) {
+      this.firstIndustryId = id;
+      this.secondIndustryId = "";
+      this.choseSecondIndustrySelect(this.firstIndustryId);
     },
     // 选择二级行业菜单
-      async choseSecondIndustrySelect(firstIndustryId) {
-          if (firstIndustryId != 0) {
-              let { data } = await dashboardApi.GetSecondIndustries(firstIndustryId);
-              this.siteSecondIndustry = data;
-              this.siteSecondIndustryValue = this.secondIndustryId;
-          }
+    async choseSecondIndustrySelect(firstIndustryId) {
+      if (firstIndustryId != 0) {
+        let { data } = await dashboardApi.GetSecondIndustries(firstIndustryId);
+        this.siteSecondIndustry = data;
+        this.siteSecondIndustryValue = this.secondIndustryId;
+      }
     },
     choseSecondIndustry(id) {
       this.secondIndustryId = id;
     },
-    // 保存网站信息 
-      async saveSiteInfo() {
-          if (this.secondIndustryId == ""||this.secondIndustryId ==0) {
-              this.$message({
-                  type: "failed",
-                  message: "请先选择所属行业"
-              });
-              return;
-          }
-        let { data, status } = await dashboardApi.updateSiteTypeAndIndustry(this.siteId, this.chosedSiteType, this.firstIndustryId, this.secondIndustryId);
-        if (status === 200) {
-            this.$message({
-                type: "successed",
-                message: "保存成功"
-            });
-        }
+    // 保存网站信息
+    async saveSiteInfo() {
+      if (this.secondIndustryId == "" || this.secondIndustryId == 0) {
+        this.$message({
+          type: "failed",
+          message: "请先选择所属行业"
+        });
+        return;
+      }
+      let { data, status } = await dashboardApi.updateSiteTypeAndIndustry(
+        this.siteId,
+        this.chosedSiteType,
+        this.firstIndustryId,
+        this.secondIndustryId
+      );
+      if (status === 200) {
+        this.$message({
+          type: "successed",
+          message: "保存成功"
+        });
+      }
     }
   }
 };
@@ -430,7 +452,7 @@ export default {
     width: 259px;
     height: 169px;
     margin-left: 32px;
-    background: green;
+    background: #01c0de;
     vertical-align: top;
   }
   .siteinfoWrap {
@@ -514,6 +536,7 @@ export default {
     right: 50px;
     width: 110px;
     height: 32px;
+    padding: 0;
     background: rgba(1, 192, 222, 1);
     border-radius: 2px;
     font-size: 12px;
@@ -521,6 +544,9 @@ export default {
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
     line-height: 32px;
+  }
+  .disabled{
+    opacity: 0.4;
   }
 }
 

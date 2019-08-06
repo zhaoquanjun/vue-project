@@ -45,7 +45,6 @@ const dashboard = {
         authList: [],
         buttonAuth: {},
         hasRules: false,
-        curAppName: ""
     },
     mutations: {
         GETUSERDASHBOARD(state, payload) {
@@ -76,9 +75,6 @@ const dashboard = {
             state.authList = a;
             state.hasRules = true;
             setLocal("authList", a)
-        },
-        SETCURAPPNAME(state,name){
-            state.curAppName = name;
         }
     },
     actions: {
