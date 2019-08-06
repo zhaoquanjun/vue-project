@@ -62,7 +62,7 @@
           :center="true"
           :close-on-click-modal="false"
            :modal-append-to-body="false"
-          style="margin-top:50px"
+          style="margin-top:60px"
           :modal="false"
         >
           <div class="appBackground">
@@ -135,7 +135,7 @@
                     @click="choseApp(item)"
                     disabled
                     v-if="curAppId == item.appId"
-                  >我的应用</el-button>
+                  >当前应用</el-button>
                 </div>
               </el-col>
             </div>
