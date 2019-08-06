@@ -2,7 +2,7 @@
   <div id="app">
     <el-container>
       <el-header  style="height:60px;line-height: 60px;position:fixed;    top: 0;
-    left: 0;width: 100%;z-index:1000">
+    left: 0;width: 100%;z-index:10001">
         <m-header></m-header>
       </el-header>
       <el-container style="padding-top: 60px;width: 100%;overflow: hidden;">

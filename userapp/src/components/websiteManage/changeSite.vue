@@ -2,8 +2,8 @@
   <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
       <span class="siteName">{{ siteName }}</span>
-      <span class="secondDomain">{{ secondDomain }}</span>
-      <span class="language">{{ language == "zh-CN" ? "中文" : language }}</span>
+      <a class="secondDomain" :href="secondDomain" target="_blank">{{secondDomain}}</a>
+      <span class="language">{{_getLanguage()}}</span>
       <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
     </el-col>
     <el-dialog
@@ -26,9 +26,10 @@
           >
             <div class="itemSiteImage">
               <img src class />
-              <div class="modal">
+              <div class="modal" v-if="item.siteId != curSiteId">
                 <button class="choseSite" @click="choseSite(item)">选择网站</button>
               </div>
+              <div class="curModal" v-show="item.siteId == curSiteId">当前选用</div>
             </div>
             <div>
               <div class="itemSiteName">{{item.siteName}}</div>
@@ -45,7 +46,9 @@
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local.js";
+import { getLanguage } from "@/configure/appCommon";
 export default {
+  props: ["changeSiteName", "changeSiteLanguage"],
   components: {},
   data() {
     return {
@@ -63,8 +66,15 @@ export default {
     this.getCurSiteId().then(() => {
       this.getSiteInfo(this.curSiteId);
     });
-
     this.getSites();
+  },
+  watch: {
+    changeSiteName() {
+      this.siteName = this.changeSiteName;
+    },
+    changeSiteLanguage() {
+      this.language = this.changeSiteLanguage;
+    }
   },
   methods: {
     /**
@@ -74,6 +84,9 @@ export default {
       let { data } = await dashboardApi.getCurSiteId();
       this.curSiteId = data;
       this.$emit("getSiteId", data);
+    },
+    _getLanguage() {
+      return getLanguage(this.language);
     },
     /**
      * 获取站点信息
@@ -97,6 +110,7 @@ export default {
      */
     changeSite() {
       this.changeSiteShow = true;
+      this.getSites();
     },
     // 选择新的site
     async choseSite(item) {
@@ -106,6 +120,7 @@ export default {
       await dashboardApi.updateUserLastSiteId(item.siteId);
       this.$emit("chooseWebsite", item.siteId);
       this.getSiteInfo(item.siteId);
+      this.curSiteId = item.siteId;
     },
     /**
      * 关闭弹框
@@ -222,7 +237,7 @@ export default {
       position: relative;
       width: 100%;
       height: 200px;
-      background: green;
+      background: #01c0de;
       transition: all 0.3s ease-in;
       .choseSite {
         width: 90px;
@@ -250,6 +265,23 @@ export default {
         .modal {
           opacity: 1;
         }
+      }
+      .curModal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.7);
+        font-size: 16px;
+        font-family: PingFangSC-Semibold;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 1);
+        line-height: 22px;
       }
     }
     .itemSiteName {
