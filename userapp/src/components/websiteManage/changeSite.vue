@@ -47,6 +47,7 @@ import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local.js";
 export default {
+  props: ["changeSiteName"],
   components: {},
   data() {
     return {
@@ -64,8 +65,12 @@ export default {
     this.getCurSiteId().then(() => {
       this.getSiteInfo(this.curSiteId);
     });
-
     this.getSites();
+  },
+  watch: {
+    changeSiteName() {
+      this.siteName = this.changeSiteName;
+    }
   },
   methods: {
     /**
@@ -98,6 +103,7 @@ export default {
      */
     changeSite() {
       this.changeSiteShow = true;
+      this.getSites();
     },
     // 选择新的site
     async choseSite(item) {
@@ -224,7 +230,7 @@ export default {
       position: relative;
       width: 100%;
       height: 200px;
-      background: #01C0DE;
+      background: #01c0de;
       transition: all 0.3s ease-in;
       .choseSite {
         width: 90px;
