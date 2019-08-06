@@ -1,7 +1,7 @@
 <template>
     <div class="table-wrap" id="img-list" style="overflow: auto;
     height: calc(100vh - 200px);">
-        <ul class="img-list">
+        <ul class="img-list" >
             <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
                 <grid-list-item
                     :curItem="item"
@@ -13,7 +13,13 @@
                 ></grid-list-item>
             </li>
         </ul>
-        <div class="pageing">
+        <div v-if="imgPageResult.list.length<1">
+              <div class="empty-table" >
+                    <img src="~img/table-empty.png" />
+                    <span>无数据</span>
+                </div>
+        </div>
+        <div class="pageing" v-if="imgPageResult.list.length>0">
             <el-pagination
                 background
                 layout="total, sizes, prev, pager, next"
@@ -55,7 +61,7 @@
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
-                    <span>大小: {{picInfo.size}}</span>
+                    <span>大小: {{picInfo.sizeStr}}</span>
                 </div>
             </el-dialog>
         </div>

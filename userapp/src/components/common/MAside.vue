@@ -44,7 +44,7 @@ import LeftNavComponents from "_c/Aside/LeftNavComponents";
 export default {
     data() {
         return {
-             width: 80,
+             width: 70,
             width1: 0,
             time: "0.8s",
             curIndex: -1,
@@ -76,7 +76,7 @@ export default {
             this.time = time + "s";
         },
         collapseClose() {
-            this.width = 80;
+            this.width = 70;
             this.width1 = 0;
             this.display = "none";
             this.time = "0s";
@@ -146,6 +146,7 @@ export default {
 }
 .m-asideleft {
     overflow: hidden;
+   
     /* height: 100%; */
 }
 .m-asideright {
@@ -196,7 +197,7 @@ export default {
         .menu-icon {
             display: inline-block;
             font-size: 24px;
-            width: 80px;
+            width: 70px;
             text-align: center;
             vertical-align: middle;
             color: #0595e6;

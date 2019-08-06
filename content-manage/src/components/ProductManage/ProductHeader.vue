@@ -8,6 +8,7 @@
                     placeholder="请输入名称或ID进行精准查询"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
+                     clearable
                 >
                     <el-button slot="append" @click="getArticleList">
                         <svg-icon icon-class="search-icon"></svg-icon>

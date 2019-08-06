@@ -347,9 +347,10 @@ export default {
     position: absolute;
     z-index: 100;
     right: 0;
-    top: 50px;
+    top: 60px;
     color: #fff;
     padding: 10px 30px;
+    border-radius: 2px;
     dd {
       line-height: 30px;
     }

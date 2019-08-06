@@ -58,11 +58,6 @@
                     <div class="category-content">
                         <span name="cur-tip">移动至</span>
                     </div>
-                    <!-- <m-tree
-                        :isright-pannel="true"
-                        :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    ></m-tree>-->
                     <SelectTree
                         :categoryName="curImgInfo.categoryName"
                         :tree-result="treeResult"
