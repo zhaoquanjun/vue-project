@@ -1,10 +1,11 @@
 import {designerManageApi} from "@/environment/index"
 import * as ajaxRequest from "../ajaxRequest";
-import store from "@/store/index";
+// import store from "@/store/index";
 import Cookies from "js-cookie"
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
 console.log(designerManageApi)
 const siteId =Cookies("SiteId")
+
 /**
  * 获取域名列表
  */
@@ -66,13 +67,13 @@ export const removeAliYunToken = () => {
  * 禁用https
  */
 export const disableHttps = (siteDomainId) => {
-    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DisableHttps/${siteDomainId}`);
+    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DisableHttps/${siteId}/${siteDomainId}`);
 }
 /**
  *  删除绑定域名
  */
 export const deleteCdnDomain = (siteDomainId) => {
-    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteDomainId}`);
+    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteId}/${siteDomainId}`);
 }
 
 // IsAliYunTokenSet

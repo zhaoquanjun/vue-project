@@ -55,6 +55,8 @@ import { sendTargetPhoneCode } from "@/api/index.js";
 import { formatDateTime } from "@/api/index";
 import * as domainApi from "@/api/request/domainApi";
 import { getSiteInfo } from "@/api/request/siteBackupApi";
+import Cookies from "js-cookie"
+
 export default {
     components: {
         RightPannel,
@@ -93,6 +95,7 @@ export default {
         // 获取siteId
         getSiteId(siteId) {
             this._getCdnDomainList(siteId);
+            Cookies("SiteId",siteId)
         },
         // 选择切换网站
         chooseWebsite(siteId) {
