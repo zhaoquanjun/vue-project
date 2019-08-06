@@ -107,6 +107,7 @@ export default {
       await dashboardApi.updateUserLastSiteId(item.siteId);
       this.$emit("chooseWebsite", item.siteId);
       this.getSiteInfo(item.siteId);
+      this.curSiteId = item.siteId;
     },
     /**
      * 关闭弹框

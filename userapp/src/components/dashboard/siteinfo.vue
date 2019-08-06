@@ -2,7 +2,7 @@
   <div class="site-section">
     <el-row class="content">
       <el-col
-        :class="{'active':siteId == item.siteId,'activePrev':item.prev, 'activeNext': item.next}"
+        :class="{active: index == curIndex, prevActive: index == curIndex - 1, nextActive: index == curIndex + 1, hidden: index < curIndex - 1 || index > curIndex + 1}"
         class="item"
         v-for="(item, index) in siteInfo"
         :key="index"
@@ -53,12 +53,14 @@ export default {
     return {
       createShow: false,
       createSiteName: "",
-      siteId: 2
+      siteId: 2,
+      curIndex: 1
     };
   },
 
   created() {
     this.initial();
+    console.log(this.siteInfo)
   },
   methods: {
     initial() {
@@ -70,22 +72,9 @@ export default {
       }
     },
     handleClick(item, index) {
-      this.siteId = item.siteId;
-      for (let i = 0; i < this.siteInfo.length; i++) {
-        this.$set(this.siteInfo[i], "prev", false);
-        this.$set(this.siteInfo[i], "next", false);
-      }
-      if (index == 0) {
-        this.$set(this.siteInfo[this.siteInfo.length - 1], "prev", true);
-      } else {
-        this.$set(this.siteInfo[index - 1], "prev", true);
-      }
-
-      if (index == this.siteInfo.length - 1) {
-        this.$set(this.siteInfo[0], "next", true);
-      } else {
-        this.$set(this.siteInfo[index + 1], "next", true);
-      }
+      console.log(index, this.siteInfo.length)
+      if (index == 0 || index == this.siteInfo.length - 1) return;
+      this.curIndex = index;
     },
     showCreate() {
       this.createShow = true;
@@ -144,6 +133,7 @@ export default {
       bottom: 31px;
       transform: translateX(100%);
       border-radius: 3px;
+      transition: all .3s linear;
       .siteImg {
         width: 46%;
         height: 72%;
@@ -151,14 +141,6 @@ export default {
         margin-top: 24px;
         margin-left: 21px;
       }
-    //   .siteImg :after {
-    //     clear: both;
-    //     content: ".";
-    //     display: block;
-    //     width: 0;
-    //     height: 0;
-    //     visibility: hidden;
-    //   }
       .siteName {
         // display: inline-block;
         font-size: 22px;
@@ -195,71 +177,20 @@ export default {
       transform: translateX(-50%);
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
     }
-    .active.active {
-      animation: active-in 1s;
-    }
-    .active.hidden {
-      animation: active-out 1s;
-    }
-    @keyframes active-in {
-      from {
-        height: 180px;
-        transform: translateX(0);
-      }
-    }
-    @keyframes active-out {
-      to {
-        // height: 300px;
-        left: 0px;
-        transform: translateX(0);
-      }
-    }
-    .activePrev {
-      left: 0px;
+    .prevActive {
+      height: 180px;
+      left: 0;
       transform: translateX(0);
-      opacity: 0.79;
+      opacity: 1;
     }
-    .activePrev.active {
-      animation: activePrev-in 1s;
-    }
-    .activePrev.hidden {
-      animation: activePrev-out 1s;
-    }
-    @keyframes activePrev-in {
-      from {
-        height: 300px;
-        left: 50%;
-        transform: translateX(-50%);
-        box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
-      }
-    }
-    @keyframes activePrev-out {
-      to {
-        transform: translateX(-100%);
-      }
-    }
-    .activeNext {
+    .nextActive {
+      height: 180px;
       transform: translateX(0);
-      opacity: 0.79;
+      opacity: 1;
     }
-    .activeNext.active {
-      animation: activeNext-in 1s;
-    }
-    .activeNext.hidden {
-      animation: activeNext-out 1s;
-    }
-    @keyframes activeNext-in {
-      from {
-        transform: translateX(100%);
-      }
-    }
-    @keyframes activeNext-out {
-      to {
-        height: 300px;
-        left: 50%;
-        transform: translateX(-50%);
-        box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
-      }
+    .hidden {
+      opacity: 0;
+      // display: none;
     }
   }
 }
