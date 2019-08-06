@@ -32,7 +32,7 @@
       <el-col :span="8" :offset="8">
         <div class="head-right head-item">
           <span>
-            <svg-icon icon-class="t-issue"></svg-icon>
+            <i class="iconfont iconfabu" style="vertical-align: -3px;"></i>
             <b class="item-btn">立即发布</b>
           </span>
           <span>
@@ -296,10 +296,8 @@ export default {
 }
 .header {
   padding: 0 10px;
-  height: 50px;
-  line-height: 50px;
   font-size: 14px;
-  background: #000;
+  background: linear-gradient(to right, #08cceb 50%, #81dca0);
   color: #fff;
   position: relative;
   //     position: fixed;
