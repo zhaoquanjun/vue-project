@@ -23,7 +23,7 @@
             <div class="black tip">支持jpg、png、jpeg、bmp格式</div>
             <div class="black tip">小于10M</div>
         </div>
-        <div class="footer">
+        <div class="footer pannel-footer">
             <button
                 class="confirm footer-btn"
                 :disabled="disabled"

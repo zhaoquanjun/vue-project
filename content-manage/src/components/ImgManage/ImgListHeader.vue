@@ -8,6 +8,7 @@
                     placeholder="输入图片名称搜索"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
+                     clearable
                 >
                     <el-button slot="append" @click="getPicList">
                         <svg-icon icon-class="search-icon"></svg-icon>

@@ -44,7 +44,7 @@ export default {
 .common-aside {
     width: 80px !important;
     position: relative;
-    overflow: visible;
+    overflow: visible !important;
 }
 </style>
 

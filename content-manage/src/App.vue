@@ -62,7 +62,8 @@ export default {
 }
 .common-aside{
   width:80px !important;
-   position: relative;overflow: visible;
+   position: relative;
+   overflow: visible !important;
 }
 </style>
 <style scoped>

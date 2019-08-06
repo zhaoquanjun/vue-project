@@ -8,6 +8,7 @@
                     placeholder="请输入文章标题搜索"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
+                    clearable
                 >
                     <el-button slot="append" @click="getArticleList">
                         <svg-icon icon-class="search-icon"></svg-icon>
