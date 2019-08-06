@@ -205,11 +205,11 @@ export default {
       siteType: [
         {
           value: "1",
-          label: "个人网站"
+          label: "个人"
         },
         {
           value: "2",
-          label: "企业网站"
+          label: "网站"
         }
       ],
       chosedSiteType: "",
@@ -249,9 +249,11 @@ export default {
         this.language = data.language;
         this.firstIndustryId = data.firstIndustryId;
         this.secondIndustryId = data.secondIndustryId;
-        if (data.siteType) {
-          this.chosedSiteType = data.siteType;
-        }
+          if (data.siteType) {
+              this.chosedSiteType = data.siteType;
+          } else {
+              this.chosedSiteType = null;
+          }
         await this.choseFirstIndustrySelect();
         if (data.firstIndustryId) {
           await this.choseSecondIndustrySelect(data.firstIndustryId);
@@ -333,11 +335,18 @@ export default {
       this.secondIndustryId = id;
     },
     // 保存网站信息
-    async saveSiteInfo() {
+      async saveSiteInfo() {
+          if (!this.chosedSiteType) {
+              this.$message({
+                  type: "failed",
+                  message: "请选择网站类型"
+              });
+              return;
+          }
       if (this.secondIndustryId == "" || this.secondIndustryId == 0) {
         this.$message({
           type: "failed",
-          message: "请先选择所属行业"
+          message: "请选择所属行业"
         });
         return;
       }
