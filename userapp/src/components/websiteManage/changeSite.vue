@@ -3,7 +3,7 @@
     <el-col :span="24" class="siteInfo">
       <span class="siteName">{{ siteName }}</span>
       <span class="secondDomain">{{ secondDomain }}</span>
-      <span class="language">{{ language == "zh-CN" ? "中文" : language }}</span>
+      <span class="language">{{_getLanguage()}}</span>
       <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
     </el-col>
     <el-dialog
@@ -46,6 +46,7 @@
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local.js";
+import { getLanguage } from "@/configure/appCommon";
 export default {
   props: ["changeSiteName"],
   components: {},
@@ -66,7 +67,7 @@ export default {
       this.getSiteInfo(this.curSiteId);
     });
     this.getSites();
-  },
+        },   
   watch: {
     changeSiteName() {
       this.siteName = this.changeSiteName;
@@ -80,7 +81,10 @@ export default {
       let { data } = await dashboardApi.getCurSiteId();
       this.curSiteId = data;
       this.$emit("getSiteId", data);
-    },
+      },
+      _getLanguage() {
+          return getLanguage(this.language);
+      },
     /**
      * 获取站点信息
      */
