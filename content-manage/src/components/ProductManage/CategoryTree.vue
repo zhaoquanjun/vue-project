@@ -29,7 +29,7 @@
                        
                     </el-tooltip> -->
                      <span class="node-label">{{data.label}}</span>
-                    <span>({{data.leafSum }})</span>
+                    <!--<span>({{data.leafSum }})暂取消显示</span>-->
                 </div>
                 <!-- 三个点 分类操作 -->
                 <!--  -->
