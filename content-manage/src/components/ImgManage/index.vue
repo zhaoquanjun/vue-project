@@ -7,7 +7,7 @@
 
             <m-tree
                 :tree-result="treeResult"
-                :pic-search-options="picSearchOptions"
+                :list-options="picSearchOptions"
                 :isexpand="true"
                 @getPicList="getPicList"
                 @create="newCategory"

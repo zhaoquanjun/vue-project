@@ -15,7 +15,6 @@
             :highlight-current="true"
             
         >
-        
             <div
                 class="custom-tree-node"
                 @mouseover="handlerOver(data)"
@@ -62,7 +61,8 @@
 import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
 import { trim } from "@/utlis/index"
 export default {
-    props: ["treeResult", "picSearchOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
+    // picSearchOptions
+    props: ["treeResult", "listOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
     components: {
         UploadCategoryPic
     },
@@ -154,9 +154,7 @@ export default {
                 }
                 case "before":
                 case "after": {
-                    draggingNode.parentId = targetNode.parentId
-                        ? targetNode.parentId
-                        : 0;
+                    draggingNode.parentId = targetNode.parentId ? targetNode.parentId: 0;
                     break;
                 }
                 case "none":
@@ -176,6 +174,8 @@ export default {
             );
         },
         allowDrop(draggingNode, targetNode, dropType) {
+
+            console.log(draggingNode, targetNode, dropType)
             draggingNode = draggingNode.data;
             targetNode = targetNode.data;
             //判断是否大于三层
@@ -184,6 +184,8 @@ export default {
                 draggingNode.parentId !== targetNode.parentId
             ) {
                 return this.getLevel(draggingNode, 1) + targetNode.level <= 3;
+            }else{
+               
             }
             return true;
         },
@@ -246,8 +248,8 @@ export default {
            
             this.closeUploadCategoryPic();
             this.closeUploadCategoryPic1();
-          this.picSearchOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
-          this.picSearchOptions.pageIndex = 1;// 与产品分类不一致的地方
+          this.listOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
+          this.listOptions.pageIndex = 1;// 与产品分类不一致的地方
            this.$emit("getPicList", data);
            this.$emit("chooseCategoryNode", data);// 与产品分类不一致的地方
         },

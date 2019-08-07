@@ -1,9 +1,7 @@
 
-
-
-
 .aside-tree{
     // height: calc(100% - 60px);
+    padding-top: 25px;
     .drop-btn{
         display: none;
         width:20px;height:20px;
@@ -70,12 +68,16 @@
     .set-tree-type {
         position: absolute;
         right: 5px;
-        padding: 0 5px;
+        width: 33px;
+        height: 28px;
         z-index: 10;
+        border-radius: 2px;
+        text-align: center;
         background: #e0faff;
     }
     .set-tree-type:hover{
-        background: #e0fcff
+        background: #C5F0F8;
+       
     }
     .cancel .svg-icon{
         width: 12px;
