@@ -5,6 +5,7 @@
             :data="imgPageResult.list"
             tooltip-effect="dark"
             class="content-table"
+            :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection"></el-table-column>
@@ -131,10 +132,19 @@ export default {
             categoryVisable: false,
             changeCategoryPicId: null,
             imgList:"",
-            fullOssUrl:""
+            fullOssUrl:"",
+             loadingShow: true,
+            tableHeight: 500
         };
     },
-
+     mounted() {
+        this.$nextTick(() => {
+            window.addEventListener("resize", () => {
+                this.tableHeight = window.innerHeight - 260;
+            });
+            this.tableHeight = window.innerHeight - 260;
+        });
+    },
     methods: {
         /**
          * 单选或全选操作
@@ -192,6 +202,11 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
+        }
+    },
+     watch: {
+        imgPageResult() {
+            this.loadingShow = false;
         }
     }
 };

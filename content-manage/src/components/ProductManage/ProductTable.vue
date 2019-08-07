@@ -1,6 +1,5 @@
 <template>
     <div class="table-content" id="table-list">
-        
         <el-table
             ref="multipleTable"
             :data="articlePageResult.list"
@@ -64,19 +63,18 @@
             </el-table-column>
         </el-table>
         <div class="pageing">
-            
-             <el-pagination
+            <el-pagination
                 background
                 layout="total, slot, sizes, prev, pager, next,jumper"
-                 :total="articlePageResult.totalRecord"
+                :total="articlePageResult.totalRecord"
                 :page-count="articlePageResult.totalPage"
                 :page-size="articlePageResult.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePageNum"
                 @size-change="changePageSize"
             >
-              <div class="sizes-title">，每页显示</div>  
-              <button class="paging-confirm">跳转</button> 
+                <div class="sizes-title">，每页显示</div>
+                <button class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <ul class="operate-section" ref="operateSection">
@@ -87,17 +85,19 @@
                 @click="handleMoreOperate(it.flag)"
             >{{it.name}}</li>
         </ul>
-        <!-- <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
-            <el-card :body-style="{ padding: '0px' }">
-                <img src="../../assets/avatar.jpeg" width="100%" height="100%">
-            </el-card>
-        </el-dialog>-->
+
+        <Loading v-if="loadingShow" />
     </div>
 </template>
 
 <script>
+import Loading from "@/base/loading.vue";
 export default {
     props: ["articlePageResult", "articleSearchOptions"],
+    components: {
+        Loading
+    },
+
     data() {
         return {
             defaultImg: require("../../../static/images/content-default-pic.png"),
@@ -110,24 +110,26 @@ export default {
                 { name: "删除", flag: "delete" }
             ],
             row: "",
-            tableHeight:500,
+            tableHeight: 500,
+            loadingShow: true,
+            tableData: ""
         };
     },
     mounted() {
+        this.tableData = this.articlePageResult;
         document.addEventListener("click", () => {
             this.$nextTick(() => {
                 if (this.$refs.operateSection)
                     this.$refs.operateSection.style.display = "none";
             });
         });
-           
-        this.$nextTick(()=>{
-             window.addEventListener("resize",()=>{
-           this.tableHeight = window.innerHeight - 260
-            
-        })
-            this.tableHeight = window.innerHeight - 260
-        })
+
+        this.$nextTick(() => {
+            window.addEventListener("resize", () => {
+                this.tableHeight = window.innerHeight - 260;
+            });
+            this.tableHeight = window.innerHeight - 260;
+        });
     },
     methods: {
         changePageNum(page) {
@@ -246,14 +248,27 @@ export default {
         clearSelection() {
             this.$refs.multipleTable.clearSelection();
         }
+    },
+    watch: {
+        tableData: {
+            handler(newValue, oldValue) {
+                if (this.tableData.list.length > 1) {
+                    setTimeout(() => {
+                        this.loadingShow = false;
+                    }, 500);
+                }
+            },
+            deep: true
+        }
     }
 };
 </script>
 
 <style lang="scss" scoped>
 .table-content {
-       margin-right: 16px;
-    border: 1px solid #E5E5E5;
+    position: relative;
+    margin-right: 16px;
+    border: 1px solid #e5e5e5;
     border-radius: 2px;
     .handle-btn-wrap {
         justify-content: flex-start;

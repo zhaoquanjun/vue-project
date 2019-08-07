@@ -72,7 +72,6 @@
             </el-table-column>
         </el-table>
         <div class="pageing" id="pageing">
-           
             <el-pagination
                 background
                 :layout="layout"
@@ -83,8 +82,8 @@
                 @current-change="changePage"
                 @size-change="changeSize"
             >
-              <div class="sizes-title">，每页显示</div>  
-              <button class="paging-confirm">跳转</button> 
+                <div class="sizes-title">，每页显示</div>
+                <button class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <!-- :title="picTitle" -->
@@ -94,29 +93,28 @@
                 :modal-append-to-body="false"
                 @close="closeDialog"
             >
-            
-                    <el-carousel
-                        :autoplay="false"
-                        arrow="always"
-                        indicator-position="none"
-                        :loop="true"
-                        ref="carousel"
-                    >
-                        <el-button
-                            @click="prev"
-                            class="el-carousel__arrow el-carousel__arrow--left left-prev"
-                        ></el-button>
-                        <el-carousel-item v-for="item in picSearchOptions.pageSize" :key="item">
-                            <h3>
-                                <img :src="fullOssUrl" />
-                            </h3>
-                        </el-carousel-item>
-                        <el-button
-                            @click="next"
-                            class="el-carousel__arrow el-carousel__arrow--right right-next"
-                        ></el-button>
-                    </el-carousel>
-                
+                <el-carousel
+                    :autoplay="false"
+                    arrow="always"
+                    indicator-position="none"
+                    :loop="true"
+                    ref="carousel"
+                >
+                    <el-button
+                        @click="prev"
+                        class="el-carousel__arrow el-carousel__arrow--left left-prev"
+                    ></el-button>
+                    <el-carousel-item v-for="item in picSearchOptions.pageSize" :key="item">
+                        <h3>
+                            <img :src="fullOssUrl" />
+                        </h3>
+                    </el-carousel-item>
+                    <el-button
+                        @click="next"
+                        class="el-carousel__arrow el-carousel__arrow--right right-next"
+                    ></el-button>
+                </el-carousel>
+
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
@@ -124,32 +122,21 @@
                 </div>
             </el-dialog>
         </div>
-
-        <!-- <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
-            <el-tree
-                :data="treeResult"
-                node-key="id"
-                accordion
-                :expand-on-click-node="false"
-                @node-click="changeCategory"
-            ></el-tree>
-        </el-dialog>-->
+        <Loading v-if="loadingShow" />
     </div>
 </template>
 
 <script>
-import {trim} from "@/utlis/index.js"
+import { trim } from "@/utlis/index.js";
+import Loading  from "@/base/loading.vue"
 export default {
-    // props:{
-    //     imgList:{
-    //         type:Object,
-    //         default:()=>({})
-    //     }
-    // },
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
+    components:{
+        Loading
+    },
     data() {
         return {
-            layout:"total, slot, sizes, prev, pager, next,jumper",
+            layout: "total, slot, sizes, prev, pager, next,jumper",
             picInfo: {},
             index: -1, //
             isRename: true, // 重命名图片名称
@@ -164,7 +151,8 @@ export default {
             fullOssUrl: "",
             changeIndex: -1,
             firstIndex: "",
-            tableHeight:500
+            tableHeight: 500,
+            loadingShow:true,
         };
     },
     mounted() {
@@ -175,14 +163,13 @@ export default {
                 ele.src = ele.attributes["fullsrc"].value;
             }
         };
-       
-        this.$nextTick(()=>{
-             window.addEventListener("resize",()=>{
-           this.tableHeight = window.innerHeight - 260
-            
-        })
-            this.tableHeight = window.innerHeight - 260
-        })
+
+        this.$nextTick(() => {
+            window.addEventListener("resize", () => {
+                this.tableHeight = window.innerHeight - 260;
+            });
+            this.tableHeight = window.innerHeight - 260;
+        });
     },
     methods: {
         /**
@@ -207,11 +194,11 @@ export default {
         },
         // 重命名图片名称
         rename(id, newName, index) {
-            if(!trim(newName)){
-                 this.$notify({
-                    customClass:"notify-error", 
+            if (!trim(newName)) {
+                this.$notify({
+                    customClass: "notify-error",
                     message: `图片名称不能为空`,
-                     showClose: false,
+                    showClose: false,
                     duration: 2000
                 });
                 return false;
@@ -222,14 +209,16 @@ export default {
                 return;
             }
             this.index = index;
-            this.$nextTick(() => {this.$refs.renameInput.focus()});
+            this.$nextTick(() => {
+                this.$refs.renameInput.focus();
+            });
         },
         blurRename(id, newName) {},
         /**
          * 查看大图
          */
         viewPic(row, index) {
-              this.fullOssUrl = "";
+            this.fullOssUrl = "";
             this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
@@ -238,20 +227,20 @@ export default {
         },
         prev() {
             this.$refs.carousel.prev();
-             if(this.changeIndex>0){
-                  this.changeIndex = this.changeIndex - 1;
-             }else{
-                  this.changeIndex=this.picSearchOptions.pageSize-1
-             }
+            if (this.changeIndex > 0) {
+                this.changeIndex = this.changeIndex - 1;
+            } else {
+                this.changeIndex = this.picSearchOptions.pageSize - 1;
+            }
             this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
             this.picInfo = this.imgList[this.changeIndex];
         },
         next() {
             this.$refs.carousel.next();
             this.changeIndex = this.changeIndex + 1;
-             if(this.changeIndex>=this.picSearchOptions.pageSize){
-                 this.changeIndex=0
-             }
+            if (this.changeIndex >= this.picSearchOptions.pageSize) {
+                this.changeIndex = 0;
+            }
             this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
             this.picInfo = this.imgList[this.changeIndex];
         },
@@ -269,9 +258,20 @@ export default {
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
         }
+    },
+    watch:{
+        imgPageResult(){
+            this.loadingShow=false;
+        },
     }
 };
 </script>
+<style lang="scss" scoped>
+.table-wrap {
+    position: relative;
+  
+}
+</style>
 
 
 <style scoped>
@@ -306,6 +306,5 @@ export default {
     opacity: 0.7;
     height: auto;
 }
-
 </style>
 

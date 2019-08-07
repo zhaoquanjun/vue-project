@@ -64,7 +64,7 @@ axios.interceptors.request.use(
         } else {
             config.headers.AppId = Cookies.get('AppId');
         }
-        showFullScreenLoading()
+        //showFullScreenLoading()
         return config;
     },
     error => {
@@ -74,7 +74,7 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
-        tryHideFullScreenLoading()
+       // tryHideFullScreenLoading()
 
         if (response.status === 200) {
             return Promise.resolve(response);
@@ -84,7 +84,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
-        tryHideFullScreenLoading()
+       // tryHideFullScreenLoading()
         console.log(error, "error");
         let status = error.response.status;
         if (error.response.status) {
