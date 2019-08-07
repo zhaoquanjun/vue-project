@@ -27,7 +27,7 @@ axios.defaults.timeout = 5000;
 axios.defaults.headers.put['Content-Type'] = 'application/json-patch+json;charset=UTF-8';
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-
+axios.defaults.withCredentials = true;
 // 请求拦截器
 axios.interceptors.request.use(
     config => {
@@ -36,8 +36,8 @@ axios.interceptors.request.use(
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');
         token && (config.headers.Authorization = "Bearer " + token);
-        config.headers.AppId = Cookies.get('AppId') ? Cookies.get('AppId') : store.state.dashboard.appid;
-        config.headers.SiteId = Cookies.get('SiteId') ? Cookies.get('SiteId') : store.state.dashboard.siteId;
+        //config.headers.AppId = Cookies.get('AppId') ? Cookies.get('AppId') : store.state.dashboard.appid;
+        //config.headers.SiteId = Cookies.get('SiteId') ? Cookies.get('SiteId') : store.state.dashboard.siteId;
         // config.headers.AppId = "823EB3BD-93F4-4655-B833-D604A6EF2032";//store.state.dashboard.appid;
         return config;
     },
