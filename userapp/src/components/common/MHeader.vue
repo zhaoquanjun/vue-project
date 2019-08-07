@@ -190,7 +190,7 @@ export default {
       //Cookies("AppId", item.appId)
         let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
         if (status === 200) {
-           // window.location.href ="#";//"http://dashboard.console.wezhan.cn/board";
+           window.location.href ="http://dashboard.console.wezhan.cn/board";
         }        
     },
     /**
