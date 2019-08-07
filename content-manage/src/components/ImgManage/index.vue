@@ -2,7 +2,6 @@
     <el-container id="content-manage">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
-                <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
 

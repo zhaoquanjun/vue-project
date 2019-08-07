@@ -66,8 +66,8 @@
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <div>
-                    <el-button class="handle-btn btn-defualt" size="small" @click="batchMove">移动</el-button>
-                    <el-button class="handle-btn btn-delete" size="small" @click="batchDelete">删除</el-button>
+                    <button class="btn-small  btn-lightblue-notboard" @click="batchMove">移动</button>
+                    <button class="btn-small  btn-red-notboard"  @click="batchDelete">删除</button>
                 </div>
             </div>
         </template>
@@ -96,7 +96,7 @@ export default {
                     label: "文件名"
                 }
             ],
-            orderByLabel: "创建时间"
+            orderByLabel: "CreateTime"
         };
     },
     methods: {

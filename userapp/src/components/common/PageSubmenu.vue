@@ -63,20 +63,20 @@ export default {
             height: 50px;
             line-height: 50px;
             padding-left: 12px;
-            font-weight: 300;
+            margin-bottom: 10px;
             &:hover {
-                color: #00c1de;
-                // background: #e5f8fa;
+              color: #262626;
+               background: #e0fcff;
             }
         }
     }
 }
 .active {
+   background: #e0faff;
     color: #0595e6;
-    background: #eefcff;
 }
 .active:hover {
-    background: #eefcff !important;
+    background: #e0fcff !important;
 }
 </style>
 

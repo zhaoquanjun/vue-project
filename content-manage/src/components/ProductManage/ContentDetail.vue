@@ -13,13 +13,13 @@
         </header>
         <el-container class="article-container" style>
             <el-header>
-                <el-row class="article-head">
+                <el-row class="article-head" >
                     <el-col
-                        :span="13"
+                        :span="7"
                         :offset="3"
                         style=" font-size: 22px;"
                     >{{isEditor==1?'编辑产品':'新增产品'}}</el-col>
-                    <el-col :span="6">
+                    <el-col :span="9" :offset="3">
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
                             <button>预览</button>
@@ -34,7 +34,7 @@
                         <el-col :span="13" :offset="3">
                             <leftContent ref="articleContent" @changeSaveWay="changeSaveWay" />
                         </el-col>
-                        <el-col :span="6" style="margin-left: 16px;">
+                        <el-col :span="6" style="margin-left: 16px;max-width:345px;min-width:345px">
                             <RightContent :fileList="fileList" ref="articleRight" />
                         </el-col>
                     </el-row>
@@ -157,6 +157,7 @@ export default {
 }
 .article-head {
     .article-btn {
+        text-align: right;
         button {
             width: 70px;
             height: 32px;

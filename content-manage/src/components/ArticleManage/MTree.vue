@@ -61,6 +61,7 @@
 </template>
 <script>
 import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
+import { trim } from "@/utlis/index"
 export default {
     props: ["treeResult", "articleSearchOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
     components: {
@@ -96,14 +97,14 @@ export default {
         createCategory(displayName, thumbnailPicUrl) {
             if (this.isAdd) {
                 this.$emit("create", {
-                    CategoryName: displayName,
+                    CategoryName:  trim(displayName),
                     ParentId: this.createCategoryData.id,
                 });
             } else {
                 this.$emit(
                     "rename", // 与产品分类不一致的地方
                     this.createCategoryData.id,
-                    displayName,
+                    trim(displayName),
                     thumbnailPicUrl
                 );
             }

@@ -2,7 +2,6 @@
     <el-container id="content-manage">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
-                <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>文章分类</span>
             </h4>
             <m-tree
@@ -86,6 +85,7 @@ import ContentTable from "./ContentTable";
 import RightPannel from "../ImgManage/RightPannel";
 import SelectTree from "@/components/common/SelectTree";
 import * as articleManageApi from "@/api/request/articleManageApi";
+import { isArray } from "util";
 export default {
     components: {
         MTree,
@@ -189,6 +189,7 @@ export default {
                                 this.$notify({
                                     customClass: "notify-success", //  notify-success ||  notify-error
                                     message: `删除成功!`,
+                                     showClose: false,
                                     duration: 1000
                                 });
                                 this.getTreeAsync();
@@ -223,6 +224,7 @@ export default {
                             this.$notify({
                                 customClass: "notify-success", //  notify-success ||  notify-error
                                 message: `${message}成功!`,
+                                 showClose: false,
                                 duration: 1000
                             });
                             this.getArticleList();
@@ -258,6 +260,7 @@ export default {
                             this.$notify({
                                 customClass: "notify-success", //  notify-success ||  notify-error
                                 message: `${message}成功!`,
+                                 showClose: false,
                                 duration: 1000
                             });
                             this.getArticleList();
@@ -331,6 +334,7 @@ export default {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
                     message: `移动成功!`,
+                    showClose:false,
                     duration: 1000
                 });
                 this.isInvitationPanelShow = false;
@@ -344,11 +348,17 @@ export default {
                 this.$notify({
                     customClass: "notify-error", //  notify-success ||  notify-error
                     message: `请选择要复制到的分类!`,
-                    showClose:false,
+                    showClose: false,
                     duration: 2000
                 });
                 return;
             }
+            console.log(
+                this.moveToClassiFy,
+                "this.moveToClassiFythis.moveToClassiFythis.moveToClassiFy"
+            );
+            console.log(this.newsIdList);
+
             let cateId = this.moveToClassiFy.id;
 
             let { data, status } = await articleManageApi.batchCopy(
@@ -356,11 +366,41 @@ export default {
                 this.newsIdList
             );
             if (status == 200) {
-                 this.$notify({
-                    customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `复制成功!`,
-                    duration: 1000
-                });
+                //  this.$notify({
+                //     customClass: "notify-success", //  notify-success ||  notify-error
+                //     message: `复制成功!`,
+                //     duration: 1000
+                // });
+                if (Array.isArray(this.newsIdList) && this.newsIdList.length>1) {
+                    this.$notify({
+                        customClass: "notify-success", //  notify-success ||  notify-error
+                        message: `批量复制成功!`,
+                         showClose: false,
+                        duration: 1000
+                    });
+                } else {
+                    this.$confirm("复制成功是否前往编辑文章", "提示", {
+                        confirmButtonText: "立即前往",
+                        cancelButtonText: "暂不前往",
+                        type: "success",
+                        customClass: "medium",
+                        iconClass: "icon-success",
+                        callback: async action => {
+                            if (action === "confirm") {
+                                this.$router.push({
+                                    path: "/news/create",
+                                    query: {
+                                        id: this.newsIdList,
+                                        categoryName: this.moveToClassiFy.label,
+                                        categoryId: this.moveToClassiFy.id
+                                    }
+                                });
+                            } else {
+                            }
+                        }
+                    });
+                }
+
                 this.isInvitationPanelShow = false;
                 this.getTreeAsync();
                 this.getArticleList();

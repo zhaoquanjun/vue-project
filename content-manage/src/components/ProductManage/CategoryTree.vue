@@ -65,6 +65,7 @@
 </template>
 <script>
 import UploadCategoryPic from "./uploadCategoryPic";
+import { trim } from "@/utlis/index"
 export default {
     props: ["treeResult", "productSearchOptions", "isrightPannel"],
     components: {
@@ -100,7 +101,7 @@ export default {
         createCategory(displayName, thumbnailPicUrl) {
             if (this.isAdd) {
                 this.$emit("create", {
-                    DisplayName: displayName,
+                    DisplayName: trim(displayName),
                     ParentId: this.createCategoryData.id,
                     thumbnailPicUrl: thumbnailPicUrl
                 });
@@ -108,7 +109,7 @@ export default {
                 this.$emit(
                     "update",
                     this.createCategoryData.id,
-                    displayName,
+                    trim(displayName),
                     thumbnailPicUrl
                 );
             }
@@ -316,7 +317,7 @@ export default {
 @import "../style/manageAsideTree";
 .category-name-pic {
     width: 282px;
-    height: 190px;
+    height: 200px;
     background: #fff;
     display: none;
     position: absolute;

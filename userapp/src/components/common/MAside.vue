@@ -10,7 +10,7 @@
                 <li
                     ref="menuItem"
                     class="left-menu-item"
-                    :class="{'menu-bg':curPath==it.code}"
+                    :class="{'menu-bg':curPath==it.code,'menu-hover':curIndex==i}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(i)"
@@ -19,11 +19,10 @@
                     <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
                     <i
                         class="menu-icon iconfont"
-                        :class="[iconfonts(it.code),curIndex==i ?'menu-color':'']"
+                        :class="[iconfonts(it.code)]"
                     ></i>
                     <span
                         class="menu-item-content"
-                        :class="curIndex==i ?'menu-color':''"
                     >{{it.name}}</span>
                 </li>
             </ul>
@@ -164,56 +163,34 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-
-// 手写菜单
-.menu-bg {
-    background: #eefcff;
+// 选中的样式
+.menu-bg{
+    background: #e0faff;
     color: #0595e6;
 }
-
+.menu-hover{
+     background: #e0fcff;
+}
 .left-menu {
-    // height: 100%;
     border-right: solid 1px #e6e6e6;
     background: #fff;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 80px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
-        // padding: 0 40px;
-        line-height: 70px;
+        line-height: 50px;
         white-space: nowrap;
-          font-weight: 300;   
-        // &:hover {
-        //     background: #E5F8FA;
-        //     color: #00c1de;
-        // }
-        //  &:active {
-
-        //     color: #00c1de;
-        // }
-        .menu-item-content {
-            // margin-left: 30px;
-        }
+        margin-bottom: 14px;
         .menu-icon {
             display: inline-block;
-            font-size: 24px;
+            font-size: 22px;
             width: 70px;
             text-align: center;
             vertical-align: middle;
             color: #0595e6;
         }
-        .menu-color {
-            color: #00c1de;
-        }
-        
     }
-    .menu-bg{
-            .menu-color{
-                background: #eefcff;
-                color: #0595e6 !important;
-            }
-        }
+   
 }
 </style>
-
 

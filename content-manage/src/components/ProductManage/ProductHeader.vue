@@ -91,20 +91,17 @@
                     <i>{{count}}</i> 个产品
                 </span>
                 <div style="float:right">
-                    <el-button class="deleteActive btn-darkblue" size="small" @click="batchPublish(3, false)">上架</el-button>
-                    <el-button class="deleteActive btn-darkblue" size="small" @click="batchPublish(3, true)">下架</el-button>
-                    <el-button class="deleteActive btn-defualt" size="small" @click="batchCopy">复制</el-button>
-                    <el-button
-                        class="btn-delete"
-                        style="margin-right: 10px;"
-                        size="small"
+                    <button class="btn-small  btn-lightblue-notboard" @click="batchPublish(3, false)">上架</button>
+                    <button class="btn-small  btn-lightblue-notboard" @click="batchPublish(3, true)">下架</button>
+                    <button class="btn-small  btn-lightblue-notboard" @click="batchCopy">复制</button>
+                    <button class="btn-small  btn-red-notboard" 
                         @click="batchRemove(1,true)"
-                    >删除</el-button>
+                    >删除</button>
                     <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
-                            <el-button size="small">
+                            <button class="btn-small btn-notboard">
                                 <svg-icon icon-class="across-dot"></svg-icon>
-                            </el-button>
+                            </button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <!-- <span size="small" @click="batchclassifySet">移动</span> -->
@@ -157,7 +154,7 @@ export default {
                     orderLabel: "创建时间"
                 },
             ],
-            orderValue: "创建时间",
+            orderValue: "CreateTime",
             topOptions: [
                 {
                     orderValue: "",
@@ -172,7 +169,7 @@ export default {
                     orderLabel: "否"
                 }
             ],
-            topValue: "全部"
+            topValue: ""
         };
     },
     methods: {
@@ -291,16 +288,7 @@ export default {
 
 <style <style lang="scss" scoped>
 @import "@/styles/manage-head.scss";
-.content-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #e8eaf3;
-    background: #fff;
-    margin-bottom: 24px;
-    padding: 0 24px;
-     height: 70px !important;
-}
+
 
 .select-item {
     display: inline-block;
@@ -320,54 +308,5 @@ export default {
     padding-left: 40px;
 }
 
-.head-right {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-left: 42px;
-    button {
-        width: 90px;
-        height: 32px;
-        line-height: 32px;
-        border: 1px solid rgba(1, 192, 222, 1);
-        margin-right: 8px;
-        box-sizing: border-box;
-        color: #01c0de;
-    }
-    .add-article {
-        background: rgba(1, 192, 222, 1);
-        color: #fff;
-        margin-left: 8px;
-    }
-}
-.bach-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    // padding:0 21px;
-    width: 100%;
-}
-.head-right {
-    .sort-icon {
-        display: inline-block;
-        width: 16px;
-        height: 14px;
-    }
-    .asc {
-        background: url("~img/content-icon/asc.png") no-repeat center;
-        background-size: contain;
-    }
-    .asc-icon-on {
-        background: url("~img/content-icon/asc-on.png") no-repeat center;
-        background-size: contain;
-    }
-    .dec {
-        background: url("~img/content-icon/desc.png") no-repeat center;
-        background-size: contain;
-    }
-    .dec-icon-on {
-        background: url("~img/content-icon/desc-on.png") no-repeat center;
-        background-size: contain;
-    }
-}
+
 </style>
