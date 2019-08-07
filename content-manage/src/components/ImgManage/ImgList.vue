@@ -178,10 +178,10 @@ export default {
        
         this.$nextTick(()=>{
              window.addEventListener("resize",()=>{
-           this.tableHeight = window.innerHeight - 230
+           this.tableHeight = window.innerHeight - 260
             
         })
-            this.tableHeight = window.innerHeight - 230
+            this.tableHeight = window.innerHeight - 260
         })
     },
     methods: {
@@ -211,7 +211,8 @@ export default {
                  this.$notify({
                     customClass:"notify-error", 
                     message: `图片名称不能为空`,
-                    duration: 1000
+                     showClose: false,
+                    duration: 2000
                 });
                 return false;
             }

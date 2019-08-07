@@ -81,6 +81,7 @@ export default {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
                     message: `上传成功!`,
+                     showClose: false,
                     duration: 1000
                 });
                 setTimeout(() => {
@@ -118,6 +119,7 @@ export default {
                 this.$notify({
                     customClass: "notify-error", //  notify-success ||  notify-error
                     message: `上传头像图片只能是 图片 格式!`,
+                     showClose: false,
                     duration: 1000
                 });
             }
@@ -125,6 +127,7 @@ export default {
                  this.$notify({
                     customClass: "notify-error", //  notify-success ||  notify-error
                     message: `上传图片大小不能超过 ${maxMb}MB!`,
+                     showClose: false,
                     duration: 1000
                 });
               

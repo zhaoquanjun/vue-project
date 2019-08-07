@@ -3,7 +3,6 @@
 
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
-                <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>{{displayName}}分类</span>
             </h4>
             <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->

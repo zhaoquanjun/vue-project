@@ -29,9 +29,11 @@ export default {
             let domain = item.menuUrl.split("/")[0];
             if (siteDomain == domain) {
                 this.$router.push(item.path);
+                return
             } else {
                 window.location.href = "//" + item.menuUrl;
             }
+             
         },
         getChildrenMenuList(curPath) {
             this.menuList.forEach(item => {
@@ -55,6 +57,7 @@ export default {
     },
     watch: {
         $route(to, from) {
+           // alert(1)
             console.log(this.$route);
             let [, firstRoute, lastRoute] = this.$route.path.split("/");
             this.lastRoute = lastRoute;
@@ -82,20 +85,19 @@ export default {
             height: 50px;
             line-height: 50px;
             padding-left: 12px;
-            font-weight: 300;
+            margin-bottom: 10px;
             &:hover {
-                color: #00c1de;
-                // background: #e5f8fa;
+              color: #262626;
+               background: #e0fcff;
             }
         }
     }
 }
 .active {
+   background: #e0faff;
     color: #0595e6;
-    background: #eefcff;
 }
 .active:hover {
-    background: #eefcff !important;
+    background: #e0fcff !important;
 }
 </style>
-

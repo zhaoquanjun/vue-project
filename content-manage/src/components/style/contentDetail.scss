@@ -61,15 +61,16 @@
 
 // 侧边分类title样式
 .pic-type-title {
-    height: 70px;
-    line-height: 70px;
-    padding-left: 14px;
-    border-bottom: 1px solid #e8eaf3;
-    border-right: 1px solid #e8eaf3;
+    padding: 0 10px;
     box-sizing: border-box;
     span {
-        vertical-align: middle;
-        padding-left: 10px;
+        display: inline-block;
+        height: 70px;
+        line-height: 70px;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+        border-bottom: 1px solid #e5e5e5;
     }
 }
 .title-item {
@@ -103,7 +104,7 @@
     width: 117px;
     box-sizing: border-box;
     height: 32px;
-    margin: 0 16px 0 7px;
+    margin: 0 0 0 7px;
 }
 .category{
     width: 300px;

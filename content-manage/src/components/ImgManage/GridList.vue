@@ -13,13 +13,13 @@
                 ></grid-list-item>
             </li>
         </ul>
-        <div v-if="imgPageResult.list.length<1">
+        <div v-if="imgPageResult && imgPageResult.list && imgPageResult.list.length<1">
               <div class="empty-table" >
                     <img src="~img/table-empty.png" />
                     <span>无数据</span>
                 </div>
         </div>
-        <div class="pageing" v-if="imgPageResult.list.length>0">
+        <div class="pageing" v-if="imgPageResult&& imgPageResult.list && imgPageResult.list.length>0">
             <el-pagination
                 background
                 layout="total, sizes, prev, pager, next"

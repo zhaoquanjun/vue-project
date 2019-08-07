@@ -38,19 +38,17 @@ export default {
     height: 50px;
     line-height: 50px;
     font-size: 14px;
-    font-weight: 300;
+    margin-bottom: 10px;
 }
 .el-menu /deep/ :hover.el-menu-item {
-    color: #00c1de;
-    background: #fff;
-    
+    background: #e0fcff;
 }
 .active{
     color: #0595e6;
-    background: #EEFCFF;
+    background: #e0faff;
 }
 .active:hover{
      color: #0595e6;
-     background: #EEFCFF !important;
+     background: #e0faff !important;
 }
 </style>

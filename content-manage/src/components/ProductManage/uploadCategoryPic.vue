@@ -8,7 +8,7 @@
             class="demo-ruleForm"
             @submit.native.prevent
         >
-            <el-form-item label="分类名称" prop="name">
+            <el-form-item label="分类名称" prop="name" class="category-name">
                 <el-input
                     size="small"
                     v-model="ruleForm.name"
@@ -18,13 +18,13 @@
                     show-word-limit
                 ></el-input>
             </el-form-item>
-            <el-form-item v-if="isUpload" label="分类图片">
+            <el-form-item class="upload-item" v-if="isUpload" label="分类图片">
                 <el-tooltip class="item" effect="dark" placement="right">
                     <div slot="content">
                         分类图片用于分类控件带图片样式的展示，
                         <br />建议上传尺寸为400✕400像素的图片
                     </div>
-                    <span style="position: absolute;left: -21px;">
+                    <span style="position: absolute;left: -13px;">
                         <svg-icon icon-class="tip-icon"></svg-icon>
                     </span>
                 </el-tooltip>
@@ -90,7 +90,7 @@ export default {
             if (!trim(value)) {
                 return callback(new Error("请输入分类名称"));
             } else {
-              callback();
+                callback();
             }
         };
         return {
@@ -129,12 +129,20 @@ export default {
         };
     },
     watch: {
-        modifyCategoryData() {
-            this.ruleForm.name = this.modifyCategoryData.label;
-            this.imageUrl1 = this.modifyCategoryData.thumbnailPicUrl;
-            console.log(this.modifyCategoryData);
-        },
-        deep: true
+        modifyCategoryData: {
+            handler(newName, oldName) {
+                this.ruleForm.name = newName.label;
+                this.imageUrl1 = newName.thumbnailPicUrl;
+            },
+            immediate: true,
+            deep: true
+        }
+        // modifyCategoryData() {
+        //     alert(this.modifyCategoryData.label);
+        //     this.ruleForm.name = this.modifyCategoryData.label;
+        //     this.imageUrl1 = this.modifyCategoryData.thumbnailPicUrl;
+        //     console.log(this.modifyCategoryData);
+        // },
     },
     mounted() {
         this.headers.appId = this.$store.state.dashboard.appid;
@@ -189,13 +197,13 @@ export default {
         // 确定按钮
         confrim() {
             let displayName = this.ruleForm.name;
-
             this.$emit("createCategory", displayName, this.imageUrl1);
             this.ruleForm.name = "";
             this.imageUrl1 = "";
         },
         //取消按钮
         cancel() {
+            this.$refs.ruleForm.resetFields();
             this.$emit("closeUploadCategoryPic");
             this.ruleForm.name = "";
             this.imageUrl1 = "";
@@ -214,8 +222,17 @@ export default {
     font-size: 12px;
     text-align: left;
 }
+.uploadCategoryPic /deep/ .el-form .el-form-item__error{
+    padding-top: 0;
+}
+.uploadCategoryPic .category-name /deep/ .el-form-item__content {
+    margin-left: 82px !important;
+}
+.uploadCategoryPic .upload-item /deep/ .el-form-item__label {
+    margin-left: 10px;
+}
 .uploadCategoryPic /deep/ .el-form .el-form-item {
-    margin-bottom: 8px;
+    margin-bottom: 15px;
 }
 
 .uploadCategoryPic /deep/ .el-form .el-form-item__error {

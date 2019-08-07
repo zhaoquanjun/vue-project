@@ -13,6 +13,7 @@
             draggable
             :allow-drop="allowDrop"
             :highlight-current="true"
+            
         >
         
             <div
@@ -21,16 +22,11 @@
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
             >
+               <button class="drop-btn" v-show="data.id === treeNodeId"><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
-                    <!-- <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
-                      
-                    </el-tooltip> -->
                     <span class="node-label">{{data.label}}</span>
                     <span>({{data.leafSum }})</span>
                 </div>
-                <!-- 三个点 分类操作 -->
-                <!--  -->
-                <!-- _handleShowMoreOperate($event,node,data) -->
                 <span
                     class="set-tree-type"
                     @click.stop="handleShow($event,node,data)"
@@ -64,6 +60,7 @@
 </template>
 <script>
 import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
+import { trim } from "@/utlis/index"
 export default {
     props: ["treeResult", "picSearchOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
     components: {
@@ -99,7 +96,7 @@ export default {
         createCategory(displayName, thumbnailPicUrl) {
             if (this.isAdd) {
                 this.$emit("create", {
-                    DisplayName: displayName,
+                    DisplayName: trim(displayName),
                     ParentId: this.createCategoryData.id,
                     thumbnailPicUrl: thumbnailPicUrl
                 });
@@ -107,7 +104,7 @@ export default {
                 this.$emit(
                     "rename", // 与产品分类不一致的地方
                     this.createCategoryData.id,
-                    displayName,
+                    trim(displayName),
                     thumbnailPicUrl
                 );
             }
@@ -232,20 +229,21 @@ export default {
         changeCategory(data) {
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
-
             if (data.level === 0) {
                 this.setCss(allCategoryEle, {
-                    background: "#f7f7f7",
+                    background: "#e0faff",
                     color: "#00C1DE",
-                    border: "2px solid #00C1DE;"
+                    borderLeft: "2px solid #0595E6"
                 });
             } else {
                 this.setCss(allCategoryEle, {
                     background: "#fff",
                     color: "#606266",
-                    border: "none"
+                    border:0
                 });
             }
+            console.log(data,'   dfadfad')
+           
             this.closeUploadCategoryPic();
             this.closeUploadCategoryPic1();
           this.picSearchOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
@@ -305,10 +303,11 @@ export default {
     }
 };
 </script>
-<style>
+<style >
 /* #content-manage .el-aside {
     overflow: visible !important;
 } */
+
 </style>
 
 <style lang="scss" scoped>
@@ -321,18 +320,6 @@ export default {
     position: absolute;
     z-index: 19;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
-    // border: 1px solid rgba(216, 216, 216, 1);
-    // &:after {
-    //     position: absolute;
-    //     content: "";
-    //     left: -21px;
-    //     top: 10px;
-    //     border-top: 10px transparent dashed;
-    //     border-left: 10px transparent dashed;
-    //     border-bottom: 10px transparent dashed;
-    //     border-right: 10px #fff solid;
-    //      border: 1px solid rgba(216, 216, 216, 1);
-    // }
 }
 
 .categoryPic {
