@@ -22,7 +22,7 @@
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
             >
-               <button class="drop-btn" v-show="data.id === treeNodeId"><i class="iconfont icontuodongdian"></i></button>
+               <button class="drop-btn" ><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
                     <span class="node-label">{{data.label}}</span>
                     <span>({{data.leafSum }})</span>
@@ -32,7 +32,7 @@
                     @click.stop="handleShow($event,node,data)"
                     v-show="data.id === treeNodeId"
                 >
-                    <svg-icon icon-class="tree-handler"></svg-icon>
+                    <i class="iconfont iconsangedian" style="font-size:30px"></i>
                 </span>
             </div>
         </el-tree>
@@ -85,12 +85,12 @@ export default {
         };
     },
     mounted() {
-        // document.addEventListener("click", () => {
-        //     this.$nextTick(() => {
-        //         if (this.$refs.operateSection)
-        //             this.$refs.operateSection.style.display = "none";
-        //     });
-        // });
+        document.addEventListener("click", () => {
+            this.$nextTick(() => {
+                if (this.$refs.operateSection1)
+                    this.$refs.operateSection1.style.display = "none";
+            });
+        });
     },
     methods: {
         createCategory(displayName, thumbnailPicUrl) {
@@ -291,7 +291,7 @@ export default {
         // 新增0730   分类操作菜单显示
         _handleShowMoreOperate1(ev, row) {
             this.$refs.operateSection1.style.left =
-                ev.pageX - ev.offsetX + 16 + "px";
+                ev.pageX - ev.offsetX + 46 + "px";
             this.$refs.operateSection1.style.top =
                 ev.pageY - ev.offsetY  + "px";
             if (this.$refs.operateSection1.style.display === "block") {

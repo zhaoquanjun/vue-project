@@ -205,6 +205,7 @@
     .el-tree .el-tree__drop-indicator{
         background-color: #0595E6 !important;
         height: 2px !important;
+        left: 0 !important;
     }
     .el-tree .el-tree-node__content {
         height: 40px;
@@ -213,6 +214,9 @@
     }
     .el-tree-node .el-tree-node__content:hover{
         background: #e0fcff;
+    }
+    .el-tree-node .el-tree-node__content:hover .drop-btn{
+        display: block
     }
     .el-tree .el-tree-node__label {
         font-size: 12px;
