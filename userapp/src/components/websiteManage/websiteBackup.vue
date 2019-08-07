@@ -1,7 +1,7 @@
 <template>
   <el-container class="member-container">
-    <el-aside style="width:120px">
-      <page-submenu :submenu-list="submenuList">
+    <el-aside class="submenu-aside">
+      <page-submenu >
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>

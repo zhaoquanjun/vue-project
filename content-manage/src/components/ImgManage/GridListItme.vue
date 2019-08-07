@@ -6,7 +6,6 @@
             @mouseleave="handleMouseLeave"
             class="img-item"
             :style="{background: 'url(' + (curItem.fullOssUrl +'?x-oss-process=image/resize,m_lfit,h_400,w_400' ) + ') no-repeat center',}"
-
         >
             <span class="img-wrap">
                 <div class="mask" :class="isMaskShow"></div>
@@ -51,6 +50,7 @@
     </div>
 </template>
 <script>
+import { trim } from "@/utlis/index.js";
 export default {
     props: ["curItem"],
     data() {
@@ -90,6 +90,15 @@ export default {
         // 重命名图片名称
         rename(id, newName) {
             if (id) {
+                if (!trim(newName)) {
+                    this.$notify({
+                        customClass: "notify-error",
+                        message: `图片名称不能为空`,
+                        showClose: false,
+                        duration: 2000
+                    });
+                    return false;
+                }
                 this.isRename = true;
                 this.$emit("rename", id, newName);
             } else {
@@ -149,7 +158,7 @@ export default {
         width: 100%;
         padding-bottom: 100%;
         overflow: hidden;
-   
+
         // width: 141px;
         // height: 141px;
         .mask {
@@ -205,6 +214,5 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-   
 }
 </style>

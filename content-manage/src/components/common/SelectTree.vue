@@ -65,10 +65,8 @@ export default {
       
         /** 分类ID */
         categoryId:{
-            type:Array,
-             default: () => {
-                return [];
-            }
+            type:Number,
+            default:0
         },
         /* 初始值 */
         value: {
@@ -105,7 +103,7 @@ export default {
         },
         isSHowCheckBox:{
             type:Boolean,
-            default:true
+            default:false
         }
     },
     data() {
@@ -220,7 +218,7 @@ export default {
         categoryId(){
              this.$nextTick(()=>{
                  console.log(this.categoryId)
-                 this.$refs.selectTree.setCurrentKey(63); // 设置默认选中
+                 this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
             })
         }
     }

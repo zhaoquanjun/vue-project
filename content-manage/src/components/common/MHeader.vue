@@ -1,10 +1,12 @@
 <template>
-    <div class="header" >
-        <el-row :gutter="20">
+    <div class="header">
+        <el-row>
             <el-col :span="8">
                 <div class="head-left head-item">
-                    <span><svg-icon  icon-class="logo"></svg-icon></span>
-                    <span>云～速成美站</span>
+                    <span class="logo-icon">
+                        <svg-icon icon-class="logo"></svg-icon>
+                    </span>
+
                     <span
                         class="designTitle"
                         @click="designer"
@@ -19,7 +21,7 @@
                             <li>user_name1</li>
                             <li>user_name1</li>
                             <li>user_name1</li>
-                        </ul> -->
+                        </ul>-->
                     </span>
                 </div>
             </el-col>
@@ -39,7 +41,7 @@
                     </span>
                     <span @mouseenter="dropdownAvatarShow" @mouseleave="dropdownAvatarhide">
                         <p class="avatar">
-                            <img :src="headUrl">
+                            <img :src="headUrl" />
                         </p>
                         <dl class="login-set dropdown-avatar-menu" v-show="isdropdownAvatarShow">
                             <dd @click="pannelShow">个人设置</dd>
@@ -53,7 +55,7 @@
 </template>
 <script>
 import securityService from "@/services/authentication/securityService";
-import {personalUrl} from "@/environment/index.js"
+import { personalUrl } from "@/environment/index.js";
 export default {
     data() {
         return {
@@ -62,14 +64,14 @@ export default {
         };
     },
     methods: {
-         designer(){
-            location.href="//designer.console.wezhan.cn"
+        designer() {
+            location.href = "//designer.console.wezhan.cn";
         },
-         signOut(){
-            securityService.signOut(location.href)
+        signOut() {
+            securityService.signOut(location.href);
         },
         pannelShow() {
-             location.href=personalUrl;
+            location.href = personalUrl;
             //this.$store.commit("CLOSERIGHTPANNEL",true)
         },
         dropdownAvatarShow() {
@@ -85,31 +87,37 @@ export default {
             this.isdropdownDesignShow = false;
         }
     },
-    computed:{
-    headUrl(){
-      let avatar = this.$store.state.user.userInfo.headImageUrl
-       if(avatar){
-         return avatar
-       }else{
-         return require("../../assets/defualtAvater.png")
-       }
+    computed: {
+        headUrl() {
+            let avatar = this.$store.state.user.userInfo.headImageUrl;
+            if (avatar) {
+                return avatar;
+            } else {
+                return require("../../assets/defualtAvater.png");
+            }
+        }
     }
-  },
 };
 </script>
 
 <style lang="scss" scoped>
 .header {
-    padding: 0 10px;
- 
+    padding-right: 23px;
     font-size: 14px;
-   background: linear-gradient(to right, #08CCEB 50%, #81DCA0); 
+    background: linear-gradient(to right, #08cceb 50%, #81dca0);
     color: #fff;
     position: relative;
     .head-item {
+        .logo-icon {
+            border-right: 1px solid rgba(216, 216, 216, 0.7);
+            width: 100px;
+            box-sizing: border-box;
+            text-align: center;
+            display: inline-block;
+        }
         span {
             display: inline-block;
-           // vertical-align: middle;
+            // vertical-align: middle;
             padding: 0 15px;
             // margin-right: 10px;
             .item-btn {
@@ -139,9 +147,10 @@ export default {
         position: absolute;
         z-index: 100;
         right: 0;
-        top: 50px;
+        top: 60px;
         color: #fff;
         padding: 10px 30px;
+        border-radius: 2px;
         dd {
             line-height: 30px;
         }

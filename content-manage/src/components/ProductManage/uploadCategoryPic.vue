@@ -6,21 +6,28 @@
             ref="ruleForm"
             label-width="76px"
             class="demo-ruleForm"
+            @submit.native.prevent
         >
-            <el-form-item label="分类名称" prop="name">
-                <el-input size="small"  v-model="ruleForm.name" autocomplete="off" placeholder="请输入分类名称"  maxlength="20"
-  show-word-limit ></el-input>
+            <el-form-item label="分类名称" prop="name" class="category-name">
+                <el-input
+                    size="small"
+                    v-model="ruleForm.name"
+                    autocomplete="off"
+                    placeholder="请输入分类名称"
+                    maxlength="20"
+                    show-word-limit
+                ></el-input>
             </el-form-item>
-            <el-form-item v-if="isUpload" label="分类图片" >
-                 <el-tooltip class="item" effect="dark" placement="right">
-                                <div slot="content">
-                                     分类图片用于分类控件带图片样式的展示，
-                                    <br />建议上传尺寸为400✕400像素的图片
-                                </div>
-                                <span style="position: absolute;left: -21px;">
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
-                            </el-tooltip>
+            <el-form-item class="upload-item" v-if="isUpload" label="分类图片">
+                <el-tooltip class="item" effect="dark" placement="right">
+                    <div slot="content">
+                        分类图片用于分类控件带图片样式的展示，
+                        <br />建议上传尺寸为400✕400像素的图片
+                    </div>
+                    <span style="position: absolute;left: -13px;">
+                        <svg-icon icon-class="tip-icon"></svg-icon>
+                    </span>
+                </el-tooltip>
                 <el-upload
                     class="avatar-uploader"
                     :action="uploadPicAction"
@@ -48,7 +55,7 @@
             <!-- <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
-            </el-form-item> -->
+            </el-form-item>-->
         </el-form>
 
         <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
@@ -57,7 +64,7 @@
           
         </el-form>
 
-       -->
+        -->
         <div class="pannle-footer">
             <button class="confrim" @click="submitForm('ruleForm')">确定</button>
             <button class="cancel" @click="cancel">取消</button>
@@ -66,17 +73,26 @@
 </template>
 <script>
 import environment from "@/environment/index.js";
+import { trim } from "@/utlis/index.js";
 export default {
     props: {
-        isUpload:{
-            type:Boolean,
-            default:true
+        isUpload: {
+            type: Boolean,
+            default: true
         },
-        modifyCategoryData:{
-            type:Object
+        modifyCategoryData: {
+            type: Object
         }
     },
     data() {
+        var checkInput = (rule, value, callback) => {
+            console.log(this.activeName);
+            if (!trim(value)) {
+                return callback(new Error("请输入分类名称"));
+            } else {
+                callback();
+            }
+        };
         return {
             dialogImageUrl: "",
             dialogVisible: false,
@@ -106,28 +122,34 @@ export default {
                         max: 100,
                         message: "长度在 1 到 20 个字符",
                         trigger: "blur"
-                    }
-                  
+                    },
+                    { validator: checkInput, trigger: "blur" }
                 ]
             }
         };
     },
     watch: {
-        modifyCategoryData() {
-            this.ruleForm.name =  this.modifyCategoryData.label
-           this.imageUrl1 = this.modifyCategoryData.thumbnailPicUrl;
-           console.log(this.modifyCategoryData )
-        },
-        deep:true,
-
+        modifyCategoryData: {
+            handler(newName, oldName) {
+                this.ruleForm.name = newName.label;
+                this.imageUrl1 = newName.thumbnailPicUrl;
+            },
+            immediate: true,
+            deep: true
+        }
+        // modifyCategoryData() {
+        //     alert(this.modifyCategoryData.label);
+        //     this.ruleForm.name = this.modifyCategoryData.label;
+        //     this.imageUrl1 = this.modifyCategoryData.thumbnailPicUrl;
+        //     console.log(this.modifyCategoryData);
+        // },
     },
-    mounted(){
-         this.headers.appId = this.$store.state.dashboard.appid;
+    mounted() {
+        this.headers.appId = this.$store.state.dashboard.appid;
     },
     methods: {
         handleSucess(response, file, fileList) {
             this.imageUrl1 = file.response;
-           
         },
         handleRemove(file, fileList) {
             this.imageUrl1 = "";
@@ -162,7 +184,7 @@ export default {
             }
             return isPic && isSizeOk;
         },
-         // 新建保存
+        // 新建保存
         submitForm(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
@@ -173,20 +195,19 @@ export default {
             });
         },
         // 确定按钮
-        confrim(){
+        confrim() {
             let displayName = this.ruleForm.name;
-            
-            this.$emit("createCategory",displayName, this.imageUrl1)
-             this.ruleForm.name ="";
-             this.imageUrl1=""
+            this.$emit("createCategory", displayName, this.imageUrl1);
+            this.ruleForm.name = "";
+            this.imageUrl1 = "";
         },
         //取消按钮
-        cancel(){
-            this.$emit("closeUploadCategoryPic")
-            this.ruleForm.name ="";
-             this.imageUrl1=""
+        cancel() {
+            this.$refs.ruleForm.resetFields();
+            this.$emit("closeUploadCategoryPic");
+            this.ruleForm.name = "";
+            this.imageUrl1 = "";
         }
-       
     }
 };
 </script>
@@ -194,24 +215,32 @@ export default {
 .el-input /deep/ .el-input__inner {
     padding-right: 50px;
 }
-.uploadCategoryPic /deep/ .el-form{
+.uploadCategoryPic /deep/ .el-form {
     padding: 10px;
 }
-.uploadCategoryPic /deep/ .el-form .el-form-item__label{
+.uploadCategoryPic /deep/ .el-form .el-form-item__label {
     font-size: 12px;
     text-align: left;
 }
-.uploadCategoryPic /deep/ .el-form .el-form-item{
-    margin-bottom: 8px;
+.uploadCategoryPic /deep/ .el-form .el-form-item__error{
+    padding-top: 0;
+}
+.uploadCategoryPic .category-name /deep/ .el-form-item__content {
+    margin-left: 82px !important;
+}
+.uploadCategoryPic .upload-item /deep/ .el-form-item__label {
+    margin-left: 10px;
+}
+.uploadCategoryPic /deep/ .el-form .el-form-item {
+    margin-bottom: 15px;
 }
 
-.uploadCategoryPic /deep/ .el-form .el-form-item__error{
+.uploadCategoryPic /deep/ .el-form .el-form-item__error {
     background: #fff;
     z-index: 1;
 }
 .avatar-uploader {
     margin: 0 auto;
-   
 }
 .avatar-uploader /deep/ .el-upload {
     border: 1px dashed rgba(144, 220, 232, 1);
@@ -260,7 +289,6 @@ export default {
     font-size: 20px;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s;
-  
 }
 .avatar-uploader .el-upload-list__item-actions i {
     color: #fff;

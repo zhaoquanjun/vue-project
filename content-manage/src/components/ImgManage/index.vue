@@ -2,7 +2,6 @@
     <el-container id="content-manage">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
-                <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
 
@@ -58,11 +57,6 @@
                     <div class="category-content">
                         <span name="cur-tip">移动至</span>
                     </div>
-                    <!-- <m-tree
-                        :isright-pannel="true"
-                        :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    ></m-tree>-->
                     <SelectTree
                         :categoryName="curImgInfo.categoryName"
                         :tree-result="treeResult"
@@ -195,8 +189,8 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
-                    iconClass:"icon-warning",
-                    customClass:"small",
+                     customClass:"medium", 
+                    iconClass:"icon-warning", 
                    
                     callback: async action => {
                         console.log(action);
@@ -264,6 +258,8 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
+                     customClass:"medium", 
+                    iconClass:"icon-warning", 
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {

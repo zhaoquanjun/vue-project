@@ -22,12 +22,14 @@
                         show-word-limit
                     ></el-input>
                 </el-form-item>
-                <el-form-item label prop="summary">
+                <el-form-item label prop="summary" class="desc-textarea">
                     <el-input
                         type="textarea"
-                        :rows="5"
+                        :autosize="{ minRows:3, maxRows: 3}"
                         placeholder="请输入产品简介"
                         v-model="detailData.description"
+                          maxlength="500"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -546,6 +548,8 @@ export default {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     type: "success",
+                     customClass:"medium", 
+                    iconClass:"icon-success", 
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
@@ -581,6 +585,8 @@ export default {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     type: "success",
+                     customClass:"medium", 
+                    iconClass:"icon-success", 
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
@@ -823,6 +829,9 @@ export default {
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 400px;
+}
+.desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
+    padding-bottom: 50px;
 }
 </style>
 

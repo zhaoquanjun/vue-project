@@ -17,6 +17,38 @@
         <el-row class="appInfo">
           <el-col class="appName">
             <span>{{ appInfo.name }}</span>
+            <el-popover
+              v-show="appInfo.isSystem"
+              ref="popover"
+              placement="bottom"
+              width="317"
+              trigger="click"
+              style="padding:0"
+              @show="showRemark"
+            >
+              <span slot="reference">
+                <i class="iconfont iconbianji" style="color:#09CCEB;margin-left:23px"></i>
+              </span>
+              <div class="textareaWrap">
+                <el-input
+                  type="textarea"
+                  :autosize="{ minRows: 3, maxRows: 3}"
+                  placeholder="请输入内容"
+                  v-model="remarkValue"
+                  maxlength="30"
+                  show-word-limit
+                  resize="none"
+                ></el-input>
+                <div class="btn-wrap">
+                  <button
+                    class="popover-btn cancel"
+                    slot="refenrence"
+                    @click="cancelInput"
+                  >取消</button>
+                  <button class="popover-btn save" @click="saveInputValue">保存</button>
+                </div>
+              </div>
+            </el-popover>
           </el-col>
           <el-col class="appVersion">
             <span>{{ appInfo.productName }}</span>
@@ -66,21 +98,25 @@ export default {
     return {
       siteInfoList: [
         {
-          siteName:1,
-          siteId:1
-        },{
-          siteName:2,
-          siteId:2
-        },{
-          siteName:3,
-          siteId:3
-        },{
-          siteName:4,
-          siteId:4
-        },{
-          siteName:5,
-          siteId:5
+          siteName: 1,
+          siteId: 1
         },
+        {
+          siteName: 2,
+          siteId: 2
+        },
+        {
+          siteName: 3,
+          siteId: 3
+        },
+        {
+          siteName: 4,
+          siteId: 4
+        },
+        {
+          siteName: 5,
+          siteId: 5
+        }
       ],
       appInfo: {},
       versionInfo: [],
@@ -106,9 +142,10 @@ export default {
           versionDescription: "域名支持一键解析"
         },
         {
-            versionDescription: "域名支持一键解析域名支持一键解析域名支持一键解析"
+          versionDescription: "域名支持一键解析域名支持一键解析域名支持一键解析"
         }
       ],
+      remarkValue: "",
       designIsread: false
     };
   },
@@ -157,7 +194,28 @@ export default {
         );
       }
     },
-
+    /**
+     * 修改appName
+     */
+    showRemark() {
+      this.remarkValue = this.appInfo.name ? this.appInfo.name : "";
+    },
+    cancelInput() {
+      this.$refs[`popover`].doClose();
+      this.remarkValue = "";
+    },
+    async saveInputValue() {
+      if (!this.remarkValue) {
+        this.$message({
+          type: "failed",
+          message: "请输入公司名称"
+        });
+        return;
+      }
+      this.$refs[`popover`].doClose();
+      await dashboardApi.UpdateAppName(this.remarkValue);
+      this.appInfo.name = this.remarkValue;
+    },
     /**
      * 设计秘籍内容颜色变化
      */
@@ -315,19 +373,19 @@ export default {
       background: rgba(241, 200, 134, 1);
     }
     .designInfo {
-        font-size: 14px;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        color: rgba(38, 38, 38, 1);
-        line-height: 70px;
-        margin-left: 30px;
-        display: -webkit-box;
-        width: 60%;
-        word-break: break-all;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
+      font-size: 14px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(38, 38, 38, 1);
+      line-height: 70px;
+      margin-left: 30px;
+      display: -webkit-box;
+      width: 60%;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
     }
     .designNoread {
       position: absolute;
@@ -372,17 +430,16 @@ export default {
     margin-left: 16px;
     margin-bottom: 10px;
     margin-right: 25px;
-    .versionInfo
-    {
-        float: left;
-        color: #262626;
-        width:80%;
-        display: -webkit-box;
-        word-break: break-all;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
+    .versionInfo {
+      float: left;
+      color: #262626;
+      width: 80%;
+      display: -webkit-box;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
     }
     .versionDate {
       float: right;
@@ -393,6 +450,30 @@ export default {
     float: right;
     margin-top: 25px;
     width: 339px;
+  }
+}
+// 修改app
+.textareaWrap {
+  background: #fff;
+  position: relative;
+  .btn-wrap {
+    text-align: right;
+    padding-top: 10px;
+    button {
+      width: 63px;
+      height: 25px;
+      line-height: 25px;
+      font-size: 12px;
+      border: none;
+    }
+    .cancel {
+      border: 1px solid #eeeeee;
+      margin-right: 10px;
+    }
+    .save {
+      background: #00c1de;
+      color: #fff;
+    }
   }
 }
 </style>

@@ -6,24 +6,7 @@
           <span>
             <svg-icon icon-class="logo"></svg-icon>
           </span>
-          <span>云 · 速成美站</span>
-          <span
-            class="designTitle"
-            @click="designer"
-            @mouseenter="dropdownDesignShow"
-            @mouseleave="dropdownDesignhide"
-          >
-            进入设计
-            <!-- <ul class="intoDesign" v-show="isdropdownDesignShow">
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-            </ul>-->
-          </span>
-          <span @click="changeApp">
+          <span @click="changeApp" class="headAppName">
             {{headAppName}}
             <span class="changeAppImg"></span>
           </span>
@@ -31,10 +14,6 @@
       </el-col>
       <el-col :span="8" :offset="8">
         <div class="head-right head-item">
-          <span>
-            <i class="iconfont iconfabu" style="vertical-align: -3px;"></i>
-            <b class="item-btn">立即发布</b>
-          </span>
           <span>
             <svg-icon icon-class="t-help"></svg-icon>
             <b class="item-btn">帮助</b>
@@ -61,7 +40,9 @@
           :visible.sync="changeAppShow"
           :center="true"
           :close-on-click-modal="false"
-          style="margin-top:50px"
+           :modal-append-to-body="false"
+          style="margin-top:60px"
+          :modal="false"
         >
           <div class="appBackground">
             <div>
@@ -133,7 +114,7 @@
                     @click="choseApp(item)"
                     disabled
                     v-if="curAppId == item.appId"
-                  >我的应用</el-button>
+                  >当前应用</el-button>
                 </div>
               </el-col>
             </div>
@@ -155,7 +136,6 @@ export default {
   data() {
     return {
       isdropdownAvatarShow: false,
-      isdropdownDesignShow: false,
       // appName: "",
       appList: [],
       changeAppShow: false,
@@ -167,9 +147,6 @@ export default {
     this.getCurApp();
   },
   methods: {
-    designer() {
-      location.href = "//designer.console.wezhan.cn";
-    },
     signOut() {
       securityService.signOut(location.href);
     },
@@ -184,12 +161,6 @@ export default {
     },
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
-    },
-    dropdownDesignShow() {
-      this.isdropdownDesignShow = true;
-    },
-    dropdownDesignhide() {
-      this.isdropdownDesignShow = false;
     },
     /**
      * 获取app信息
@@ -216,8 +187,11 @@ export default {
       setLocal("appid", item.appId);
       this.$store.commit("SETAPPID", item.appId);
       console.log(item.appId);
-      await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
-      window.location.href = "http://dashboard.console.wezhan.cn/board";
+      //Cookies("AppId", item.appId)
+        let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
+        if (status === 200) {
+           // window.location.href ="#";//"http://dashboard.console.wezhan.cn/board";
+        }        
     },
     /**
      * 关闭弹框
@@ -284,7 +258,7 @@ export default {
   }
 };
 </script>
-<style>
+<style >
 .v-modal {
   z-index: 1000 !important;
 }
@@ -316,6 +290,10 @@ export default {
         padding-left: 5px;
       }
     }
+    .headAppName{
+      margin-left: 20px;
+      cursor: pointer;
+    }
     .changeAppImg {
       width: 15px;
       height: 11px;
@@ -345,16 +323,13 @@ export default {
     position: absolute;
     z-index: 100;
     right: 0;
-    top: 50px;
+    top: 60px;
     color: #fff;
     padding: 10px 30px;
+    border-radius: 2px;
     dd {
       line-height: 30px;
     }
-  }
-  .designTitle {
-    cursor: pointer;
-    position: relative;
   }
   .intoDesign {
     width: 120px;

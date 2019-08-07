@@ -7,13 +7,13 @@ import { getLocal } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 import store from "@/store/index"
 import router from '@/router/index'
-import { MessageBox, Message , Loading} from 'element-ui';
+import { MessageBox, Message, Loading } from 'element-ui';
 import securityService from "@/services/authentication/securityService";
 import Cookies from "js-cookie";
 let loading        //定义loading变量
 function startLoading() {    //使用Element loading-start 方法
     loading = Loading.service({
-       
+
         lock: true,
         text: '拼命加载中……',
         // background: 'rgba(255, 255, 255, 0.7)',
@@ -56,12 +56,12 @@ axios.interceptors.request.use(
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = store.getters.token;
-        token && (config.headers.Authorization = 'Bearer ' +token);
+        token && (config.headers.Authorization = 'Bearer ' + token);
         //todo 测试阶段写死
-        
-        if(!Cookies.get('AppId')){
+
+        if (!Cookies.get('AppId')) {
             config.headers.AppId = store.state.dashboard.appid;
-        }else{
+        } else {
             config.headers.AppId = Cookies.get('AppId');
         }
         showFullScreenLoading()
@@ -75,7 +75,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         tryHideFullScreenLoading()
-       
+
         if (response.status === 200) {
             return Promise.resolve(response);
         } else {
@@ -84,6 +84,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
+        tryHideFullScreenLoading()
         console.log(error, "error");
         let status = error.response.status;
         if (error.response.status) {
@@ -92,11 +93,11 @@ axios.interceptors.response.use(
                 // 未登录则跳转登录页面，并携带当前页面的路径                
                 // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                 case 401:
-                   // router.push({ path: '/401' })
-                   store.commit("SET_USER")
+                    // router.push({ path: '/401' })
+                    store.commit("SET_USER")
                     window.sessionStorage.clear()
-                   securityService.signIn();
-                  
+                    securityService.signIn();
+
                     break;
                 // 403 token过期                
                 // 登录过期对用户进行提示                
@@ -107,16 +108,26 @@ axios.interceptors.response.use(
                     break;
                 // 404请求不存在                
                 case 404:
-                   // router.push({ path: '/404' })
+                    // router.push({ path: '/404' })
                     break;
-                // 其他错误，直接抛出错误提示                
+                // 其他错误，直接抛出错误提示  
+                case 500:
+                    Message({
+                        message: error.response.data.message,
+                        type: 'error',
+                        duration: 5 * 1000
+                    })
+                    return;
                 default:
                     Message({
                         message: error.response.data.message,
                         type: 'error',
                         duration: 5 * 1000
                     })
+                  
+                    break;
             }
+           
             return Promise.reject(error.response);
         }
     }

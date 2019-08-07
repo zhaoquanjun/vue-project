@@ -17,7 +17,7 @@
         <div class="siteWrap">
           <div class="siteImg"></div>
           <div class="siteinfoWrap">
-            <div class="siteinfoItem siteName" style="margin-top:26px">
+            <div class="siteinfoItem siteName">
               <span>网站名称：</span>
               <span class="siteinfoName">{{siteName}}</span>
               <el-popover
@@ -58,8 +58,13 @@
               <a class="siteinfoDomain" :href="secondDomain" target="_blank">{{secondDomain}}</a>
             </div>
             <div class="siteinfoItem">
+              <span>绑定域名：</span>
+              <span :class="{isBind:domain}">{{domain ? domain : "未绑定"}}</span>
+              <button class="bindDomain" @click="bindDomain">绑定域名</button>
+            </div>
+            <div class="siteinfoItem">
               <span>发布时间：</span>
-              <span>未发布</span>
+              <span>{{lastPublishedTime ? lastPublishedTime : "未发布"}}</span>
             </div>
           </div>
           <div class="siteinfoBackImg"></div>
@@ -183,6 +188,7 @@ import ChangeSite from "@/components/websiteManage/changeSite";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { getLanguage } from "@/configure/appCommon";
+import { formatDateTime } from "@/api/index";
 // import SiteDomain from "@/components/websiteManage/siteDomain.vue";
 export default {
   components: {
@@ -200,7 +206,9 @@ export default {
       ],
       siteName: "",
       siteId: 0,
+      domain: "",
       secondDomain: "",
+      lastPublishedTime: "",
       language: "",
       siteType: [
         {
@@ -244,16 +252,18 @@ export default {
       console.log(data);
       if (status === 200) {
         this.siteName = data.siteName;
+        this.domain = data.domain;
         this.secondDomain = data.secondDomain;
+        this.lastPublishedTime = formatDateTime(data.lastPublishedTime, "yyyy-MM-dd hh:mm");
         this.siteId = data.id;
         this.language = data.language;
         this.firstIndustryId = data.firstIndustryId;
         this.secondIndustryId = data.secondIndustryId;
-          if (data.siteType) {
-              this.chosedSiteType = data.siteType;
-          } else {
-              this.chosedSiteType = null;
-          }
+        if (data.siteType) {
+          this.chosedSiteType = data.siteType;
+        } else {
+          this.chosedSiteType = null;
+        }
         await this.choseFirstIndustrySelect();
         if (data.firstIndustryId) {
           await this.choseSecondIndustrySelect(data.firstIndustryId);
@@ -335,14 +345,14 @@ export default {
       this.secondIndustryId = id;
     },
     // 保存网站信息
-      async saveSiteInfo() {
-          if (!this.chosedSiteType) {
-              this.$message({
-                  type: "failed",
-                  message: "请选择网站类型"
-              });
-              return;
-          }
+    async saveSiteInfo() {
+      if (!this.chosedSiteType) {
+        this.$message({
+          type: "failed",
+          message: "请选择网站类型"
+        });
+        return;
+      }
       if (this.secondIndustryId == "" || this.secondIndustryId == 0) {
         this.$message({
           type: "failed",
@@ -362,6 +372,9 @@ export default {
           message: "保存成功"
         });
       }
+    },
+    bindDomain() {
+      this.$router.push("/website/sitedomain")
     }
   }
 };
@@ -495,6 +508,21 @@ export default {
       font-weight: 400;
       line-height: 20px;
       color: rgba(0, 194, 222, 1);
+    }
+    .bindDomain {
+      width: 90px;
+      height: 32px;
+      border-radius: 2px;
+      border: 1px solid rgba(1, 192, 222, 1);
+      font-size: 12px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(1, 192, 222, 1);
+      line-height: 32px;
+      margin-left: 32px;
+    }
+    .isBind{
+      color:#00C2DE
     }
   }
   .siteinfoBackImg {

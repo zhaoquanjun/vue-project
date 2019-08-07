@@ -9,12 +9,12 @@ $blue-gray: #657C99;
 $blue09c : #0099cc;
 $gray: #e5f8fa;
 body{
-    background: #F9FAFC;
     color: #262626;
     min-width: 960px;
     overflow: hidden;
-    
-    font-family:  -apple-system, BlinkMacSystemFont, "PingFang SC",  "Microsoft YaHei", "Helvetica Neue",  Arial
+    font-family:  -apple-system, BlinkMacSystemFont, "PingFang SC",  "Microsoft YaHei", "Helvetica Neue",  Arial;
+    background:rgba(255,255,255,1);
+
 }
 .page-scroll{
     overflow: auto;
@@ -113,4 +113,6 @@ button{
     background: rgba(253, 240, 237, 1);
     border: 1px solid rgba(253, 171, 153, 1);
 }
-
+.submenu-aside{
+    width: 100px !important;
+}

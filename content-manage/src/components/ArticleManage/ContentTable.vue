@@ -135,10 +135,10 @@ export default {
            
         this.$nextTick(()=>{
              window.addEventListener("resize",()=>{
-           this.tableHeight = window.innerHeight - 230
+           this.tableHeight = window.innerHeight - 260
             
         })
-            this.tableHeight = window.innerHeight - 230
+            this.tableHeight = window.innerHeight - 260
         })
     },
     methods: {
@@ -256,7 +256,9 @@ export default {
 
 <style lang="scss" scoped>
 .table-content {
-    padding: 0 24px;
+       margin-right: 16px;
+    border: 1px solid #E5E5E5;
+    border-radius: 2px;
     .handle-btn-wrap {
         justify-content: flex-start;
         .edit-icon {

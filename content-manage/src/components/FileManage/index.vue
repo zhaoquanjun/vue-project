@@ -3,7 +3,6 @@
 
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
-                <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>{{displayName}}分类</span>
             </h4>
             <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
@@ -182,6 +181,8 @@
                         confirmButtonText: "确定",
                         cancelButtonText: "取消",
                         type: "warning",
+                         customClass:"medium", 
+                    iconClass:"icon-warning", 
                         callback: async action => {
                             console.log(action);
                             if (action === "confirm") {
@@ -249,6 +250,8 @@
                         confirmButtonText: "确定",
                         cancelButtonText: "取消",
                         type: "warning",
+                         customClass:"medium", 
+                    iconClass:"icon-warning", 
                         callback: async action => {
                             console.log(action);
                             if (action === "confirm") {

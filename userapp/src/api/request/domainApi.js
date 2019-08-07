@@ -1,13 +1,15 @@
 import {designerManageApi} from "@/environment/index"
 import * as ajaxRequest from "../ajaxRequest";
-import store from "@/store/index";
+// import store from "@/store/index";
+import Cookies from "js-cookie"
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
 console.log(designerManageApi)
-const siteId =2;
+const siteId =Cookies("SiteId")
+
 /**
  * 获取域名列表
  */
-export const getCdnDomainList = () => {
+export const getCdnDomainList = (siteId) => {
   
     return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/GetCdnDomainList/${siteId}`);
 }
