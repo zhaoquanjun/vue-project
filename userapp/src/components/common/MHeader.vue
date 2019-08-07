@@ -6,24 +6,7 @@
           <span>
             <svg-icon icon-class="logo"></svg-icon>
           </span>
-          <span>云 · 速成美站</span>
-          <span
-            class="designTitle"
-            @click="designer"
-            @mouseenter="dropdownDesignShow"
-            @mouseleave="dropdownDesignhide"
-          >
-            进入设计
-            <!-- <ul class="intoDesign" v-show="isdropdownDesignShow">
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-                            <li>user_name1</li>
-            </ul>-->
-          </span>
-          <span @click="changeApp">
+          <span @click="changeApp" class="headAppName">
             {{headAppName}}
             <span class="changeAppImg"></span>
           </span>
@@ -31,10 +14,6 @@
       </el-col>
       <el-col :span="8" :offset="8">
         <div class="head-right head-item">
-          <span>
-            <i class="iconfont iconfabu" style="vertical-align: -3px;"></i>
-            <b class="item-btn">立即发布</b>
-          </span>
           <span>
             <svg-icon icon-class="t-help"></svg-icon>
             <b class="item-btn">帮助</b>
@@ -157,7 +136,6 @@ export default {
   data() {
     return {
       isdropdownAvatarShow: false,
-      isdropdownDesignShow: false,
       // appName: "",
       appList: [],
       changeAppShow: false,
@@ -169,9 +147,6 @@ export default {
     this.getCurApp();
   },
   methods: {
-    designer() {
-      location.href = "//designer.console.wezhan.cn";
-    },
     signOut() {
       securityService.signOut(location.href);
     },
@@ -186,12 +161,6 @@ export default {
     },
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
-    },
-    dropdownDesignShow() {
-      this.isdropdownDesignShow = true;
-    },
-    dropdownDesignhide() {
-      this.isdropdownDesignShow = false;
     },
     /**
      * 获取app信息
@@ -319,6 +288,10 @@ export default {
         padding-left: 5px;
       }
     }
+    .headAppName{
+      margin-left: 20px;
+      cursor: pointer;
+    }
     .changeAppImg {
       width: 15px;
       height: 11px;
@@ -355,10 +328,6 @@ export default {
     dd {
       line-height: 30px;
     }
-  }
-  .designTitle {
-    cursor: pointer;
-    position: relative;
   }
   .intoDesign {
     width: 120px;
