@@ -33,7 +33,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1001;
+    z-index: 1000;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 }
 .common-container {

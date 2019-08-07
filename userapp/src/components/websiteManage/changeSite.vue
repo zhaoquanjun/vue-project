@@ -33,7 +33,7 @@
             </div>
             <div>
               <div class="itemSiteName">{{item.siteName}}</div>
-              <div class="itemSiteDomain">{{item.secondDomain}}</div>
+              <a class="itemSiteDomain" href="item.secondDomain" target="_blank">{{item.secondDomain}}</a>
             </div>
           </el-col>
         </el-row>
