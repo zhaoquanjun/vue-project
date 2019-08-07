@@ -5,6 +5,7 @@
             :data="imgPageResult.list"
             tooltip-effect="dark"
             class="content-table"
+            :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection"></el-table-column>
@@ -84,7 +85,7 @@
                 >
                     <el-carousel-item v-for="item in imgList" :key="item.id">
                         <h3>
-                            <video :src="fullOssUrl"  controls="controls"/>
+                            <video :src="fullOssUrl" controls="controls" />
                         </h3>
                     </el-carousel-item>
                 </el-carousel>
@@ -96,31 +97,17 @@
                 </div>
             </el-dialog>
         </div>
-
-        <!-- <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
-            <el-tree
-                :data="treeResult"
-                node-key="id"
-                accordion
-                :expand-on-click-node="false"
-                @node-click="changeCategory"
-            ></el-tree>
-        </el-dialog>-->
+        <Loading v-if="loadingShow" />
     </div>
 </template>
 
 <script>
+import Loading from "@/base/loading.vue";
 export default {
-    // props:{
-    //     imgList:{
-    //         type:Object,
-    //         default:()=>({})
-    //     }
-    // },
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
         return {
-            picInfo:{},
+            picInfo: {},
             index: -1, //
             isRename: true, // 重命名图片名称
             initial: 0,
@@ -130,11 +117,23 @@ export default {
             picTitle: null,
             categoryVisable: false,
             changeCategoryPicId: null,
-            imgList:"",
-            fullOssUrl:""
+            imgList: "",
+            fullOssUrl: "",
+            loadingShow: true,
+            tableHeight: 500
         };
     },
-
+    components: {
+        Loading
+    },
+    mounted() {
+        this.$nextTick(() => {
+            window.addEventListener("resize", () => {
+                this.tableHeight = window.innerHeight - 260;
+            });
+            this.tableHeight = window.innerHeight - 260;
+        });
+    },
     methods: {
         /**
          * 单选或全选操作
@@ -171,15 +170,14 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
-            this.fullOssUrl = row.fullOssUrl
-            this.imgList = this.imgPageResult.list
+            this.fullOssUrl = row.fullOssUrl;
+            this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
             this.initial = Number(index);
-            
         },
-        change(index){
-            this.fullOssUrl=  this.imgList[index].fullOssUrl;
-              this.picInfo = this.imgList[index];
+        change(index) {
+            this.fullOssUrl = this.imgList[index].fullOssUrl;
+            this.picInfo = this.imgList[index];
         },
 
         changePage(page) {
@@ -193,11 +191,15 @@ export default {
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
         }
+    },
+    watch: {
+        imgPageResult() {
+            this.loadingShow = false;
+        }
     }
 };
 </script>
 <style>
-
 </style>
 
 <style scoped>
@@ -209,23 +211,21 @@ export default {
     cursor: pointer;
 }
 
-#img-list-dialog .dislog-footer{
+#img-list-dialog .dislog-footer {
     text-align: center;
     position: fixed;
-        width: 100%;
+    width: 100%;
     left: 0;
     bottom: 15px;
-   
 }
-#img-list-dialog .dislog-footer span{
+#img-list-dialog .dislog-footer span {
     padding: 0 20px;
     color: #fff;
 }
-#img-list-dialog .el-dialog{
+#img-list-dialog .el-dialog {
     background: #262626;
     opacity: 0.7;
     height: auto;
 }
-
 </style>
 

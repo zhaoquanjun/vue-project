@@ -367,6 +367,10 @@
     };
 </script>
 
+<style lang="scss" scoped>
+@import "../style/contentDetail";
+</style>
+
 
 
 

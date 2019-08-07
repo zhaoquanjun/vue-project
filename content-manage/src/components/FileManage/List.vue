@@ -5,6 +5,7 @@
             :data="imgPageResult.list"
             tooltip-effect="dark"
             class="content-table"
+             :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection"></el-table-column>
@@ -96,20 +97,12 @@
                 </div>
             </el-dialog>
         </div>
-
-        <!-- <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
-            <el-tree
-                :data="treeResult"
-                node-key="id"
-                accordion
-                :expand-on-click-node="false"
-                @node-click="changeCategory"
-            ></el-tree>
-        </el-dialog>-->
+        <Loading v-if="loadingShow"/>
     </div>
 </template>
 
 <script>
+import Loading from "@/base/loading.vue";
 export default {
     // props:{
     //     imgList:{
@@ -118,6 +111,9 @@ export default {
     //     }
     // },
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
+     components: {
+        Loading
+    },
     data() {
         return {
             picInfo:{},
@@ -131,10 +127,19 @@ export default {
             categoryVisable: false,
             changeCategoryPicId: null,
             imgList:"",
-            fullOssUrl:""
+            fullOssUrl:"",
+             loadingShow: true,
+              tableHeight: 500,
         };
     },
-
+    mounted(){
+         this.$nextTick(() => {
+            window.addEventListener("resize", () => {
+                this.tableHeight = window.innerHeight - 260;
+            });
+            this.tableHeight = window.innerHeight - 260;
+        });
+    },
     methods: {
         /**
          * 单选或全选操作
@@ -193,6 +198,11 @@ export default {
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
         }
+    },
+    watch:{
+        imgPageResult(){
+           this.loadingShow = false;
+        }
     }
 };
 </script>
@@ -201,6 +211,10 @@ export default {
 </style>
 
 <style scoped>
+.table-wrap {
+    position: relative;
+  
+}
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
     align-items: center;

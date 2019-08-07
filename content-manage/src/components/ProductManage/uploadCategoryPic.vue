@@ -81,7 +81,8 @@ export default {
             default: true
         },
         modifyCategoryData: {
-            type: Object
+            type: Object,
+            default : ()=> ({})
         }
     },
     data() {

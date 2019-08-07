@@ -21,7 +21,7 @@
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
             >
-               <button class="drop-btn" ><i class="iconfont icontuodongdian"></i></button>
+               <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
                     <span class="node-label">{{data.label}}</span>
                     <span>({{data.leafSum }})</span>
@@ -191,7 +191,7 @@ export default {
         },
         // 添加分类  0720
         create(ev, node, data) {
-            this.modifyCategoryData = ""; //创建新分类 不需传
+            this.modifyCategoryData = {}; //创建新分类 不需传
             this._handleShowMoreOperate(ev, node, data);
             this.isAdd = true;
         },
@@ -305,12 +305,6 @@ export default {
     }
 };
 </script>
-<style >
-/* #content-manage .el-aside {
-    overflow: visible !important;
-} */
-
-</style>
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";

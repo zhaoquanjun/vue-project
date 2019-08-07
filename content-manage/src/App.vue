@@ -65,8 +65,6 @@ export default {
    position: relative;
    overflow: visible !important;
 }
-.content-table-wrap{
-    margin-top: 24px;
-}
+
 </style>
 

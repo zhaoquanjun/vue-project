@@ -63,40 +63,16 @@ export default {
         };
     },
    
-    watch: {
-        fileList() {
-            this.fileList1 = this.fileList;
-            document.querySelector(".el-upload--picture-card").style.width =
-                "97px";
-            document.querySelector(".el-upload--picture-card").style.height =
-                "97px";
-            this.$nextTick(() => {
-                if (this.fileList1.length >= 9) {
-                    document.querySelector(".el-upload").style.display = "none";
-                }
-            });
-        },
-        fileList2() {
-            console.log(this.fileList2);
-            this.$nextTick(() => {
-                document.querySelector(".el-upload--picture-card").style.width =
-                    "97px";
-                document.querySelector(
-                    ".el-upload--picture-card"
-                ).style.height = "97px";
-                if (this.fileList2.length >= 9) {
-                    document.querySelector(".el-upload").style.display = "none";
-                }
-            });
-        }
-    },
     mounted() {
         this.headers.appId = this.$store.state.dashboard.appid;
     },
     methods: {
         handleSucess(response, file, fileList) {},
         handleRemove(file, fileList) {
-            this.newFileList = fileList
+            this.newFileList = fileList;
+            if(fileList.length>=9){
+                 document.querySelector(".el-upload").style.display = "none";
+            }
         },
         handlePreview(file) {
             console.log(file);
@@ -189,8 +165,8 @@ export default {
     height: 200px;
 }
 .avatar-uploader /deep/ .el-upload-list > li:not(:first-child) {
-    width: 97px;
-    height: 97px;
+    width: 96px;
+    height: 96px;
    
 }
  .avatar-uploader /deep/ .el-upload-list > li:not(:first-child) img{

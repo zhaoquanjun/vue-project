@@ -1,5 +1,7 @@
+
 <template>
     <div id="asideTree" class="aside-tree">
+        <el-scrollbar >
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -12,6 +14,7 @@
             draggable
             :allow-drop="allowDrop"
             :highlight-current="true"
+            
         >
             <div
                 class="custom-tree-node"
@@ -19,25 +22,21 @@
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
             >
+               <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
-                    <!-- <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
-                        
-                    </el-tooltip> -->
                     <span class="node-label">{{data.label}}</span>
                     <span>({{data.newsCount }})</span>
                 </div>
-                <!-- 三个点 分类操作 -->
-                <!--  -->
-                <!-- _handleShowMoreOperate($event,node,data) -->
                 <span
                     class="set-tree-type"
                     @click.stop="handleShow($event,node,data)"
                     v-show="data.id === treeNodeId"
                 >
-                    <svg-icon icon-class="tree-handler"></svg-icon>
+                    <i class="iconfont iconsangedian" style="font-size:30px"></i>
                 </span>
             </div>
         </el-tree>
+        </el-scrollbar>
         <div class="category-name-pic" ref="operateSection">
             <UploadCategoryPic
                 :isUpload="false"
@@ -302,11 +301,6 @@ export default {
     }
 };
 </script>
-<style>
-/* #content-manage .el-aside {
-    overflow: visible !important;
-} */
-</style>
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";

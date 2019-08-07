@@ -304,13 +304,6 @@ export default {
     }
 };
 </script>
-<style >
-/* #content-manage .el-aside {
-    overflow: visible !important;
-} */
-
-</style>
-
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";
 .category-name-pic {

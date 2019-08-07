@@ -308,5 +308,22 @@ export default {
     padding-left: 40px;
 }
 
-
+.head-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-left: 42px;
+    button {
+        width: 70px;
+        height: 32px;
+        border: 1px solid rgba(1, 192, 222, 1);
+        margin-right: 8px;
+        box-sizing: border-box;
+        color: #01c0de;
+    }
+    .add-article {
+        background: rgba(1, 192, 222, 1);
+        color: #fff;
+    }
+}
 </style>
