@@ -97,22 +97,22 @@ export default {
   data() {
     return {
       siteInfoList: [
-        {
-          siteName: 1,
-          siteId: 1
-        },
-        {
-          siteName: 2,
-          siteId: 2
-        },
-        {
-          siteName: 3,
-          siteId: 3
-        },
-        {
-          siteName: 4,
-          siteId: 4
-        },
+        // {
+        //   siteName: 1,
+        //   siteId: 1
+        // },
+        // {
+        //   siteName: 2,
+        //   siteId: 2
+        // },
+        // {
+        //   siteName: 3,
+        //   siteId: 3
+        // },
+        // {
+        //   siteName: 4,
+        //   siteId: 4
+        // },
         // {
         //   siteName: 5,
         //   siteId: 5
@@ -178,7 +178,7 @@ export default {
         formatDateTime(this.appInfo.createTime, "yyyy年MM月dd日") +
         "-" +
         formatDateTime(this.appInfo.expiredTime, "yyyy年MM月dd日");
-      // this.siteInfoList = data.siteCarousels;
+      this.siteInfoList = data.siteCarousels;
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表
