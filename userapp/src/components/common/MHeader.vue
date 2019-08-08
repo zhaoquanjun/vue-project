@@ -4,7 +4,7 @@
       <el-col :span="8">
         <div class="head-left head-item">
           <span>
-            <svg-icon icon-class="logo"></svg-icon>
+             <i class="iconfont iconlogo"></i>
           </span>
           <span @click="changeApp" class="headAppName">
             {{headAppName}}
@@ -267,6 +267,9 @@ export default {
 <style lang="scss" scoped>
 .disabled {
   opacity: 0.2;
+}
+.iconlogo{
+    font-size: 22px;
 }
 .header {
   padding: 0 10px;

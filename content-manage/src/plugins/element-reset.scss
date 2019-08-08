@@ -293,6 +293,10 @@ button.deleteActive:focus{
     background: rgba(255, 255, 255, 0.9)
 }
 
+.btn-small{
+    padding: 9px 15px;
+    border-radius: 2px;
+}
 //lightblue
 button.btn-lightblue{
     border: 1px solid #09CCEB;
@@ -304,9 +308,6 @@ button.btn-darkblue{
 }
 /* button  end */
 
-.btn-small{
-    padding: 9px 15px;
-}
 // button 无边框
 .btn-notboard{
     border: none;
@@ -316,8 +317,7 @@ button.btn-darkblue{
     color: rgba(9, 204, 235, 1 );
     margin: 0
 }
-.btn-lightblue-notboard:hover{
-    border: none;
+.btn-lightblue-notboard:hover,.btn-lightblue:hover{
     color: #09CCEB;
     background: rgba(9, 204, 235, 0.1)
 }

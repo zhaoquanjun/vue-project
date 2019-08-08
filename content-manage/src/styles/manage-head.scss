@@ -9,13 +9,13 @@
     border: 1px solid #E5E5E5;
     border-radius: 2px;
     margin-right: 16px;
+    padding: 0 24px;
 }
 .seachInput {
     display: inline-block;
     width: 248px;
-     height: 33px;
+    height: 33px;
     box-sizing: border-box;
-    margin-left: 22px;
     overflow: hidden;
 }
 .select-sort {
@@ -102,15 +102,8 @@
     }
 }
 .upload-wrap {
-    border: none;
-    font-size: 14px;
-    margin-right: 25px;
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
     background: #00c1de;
     color: #fff;
-    font-weight: 400;
 }
 
 // IMG 批量操作的头部样式
@@ -130,8 +123,9 @@
 .bach-header {
     display: flex;
     align-items: center;
-    padding:0 16px;
+    
     width: 100%;
+    
     .bach-hanlder{
         padding-left: 24px;
     }

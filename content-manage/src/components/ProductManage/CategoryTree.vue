@@ -25,7 +25,7 @@
                     </button>
                     <div class="node-label-wrap">
                         <span class="node-label">{{data.label}}</span>
-                        <span>({{data.leafSum }})</span>
+                       
                     </div>
                     <span
                         class="set-tree-type"

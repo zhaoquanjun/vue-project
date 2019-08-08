@@ -78,8 +78,8 @@
                     </span>
                 </div>
                 <div class="head-item head-handle-btn">
-                    <button @click="importArticle">导入产品</button>
-                    <button class="add-article" @click="addArticle">新增产品</button>
+                    <button class="btn-lightblue btn-small" @click="importArticle">导入产品</button>
+                    <button class="add-article btn-lightblue btn-small" @click="addArticle">新增产品</button>
                 </div>
             </div>
         </template>
@@ -90,7 +90,7 @@
                     已选
                     <i>{{count}}</i> 个产品
                 </span>
-                <div style="float:right">
+                <div class="bach-hanlder">
                     <button class="btn-small  btn-lightblue-notboard" @click="batchPublish(3, false)">上架</button>
                     <button class="btn-small  btn-lightblue-notboard" @click="batchPublish(3, true)">下架</button>
                     <button class="btn-small  btn-lightblue-notboard" @click="batchCopy">复制</button>
@@ -314,16 +314,12 @@ export default {
     align-items: center;
     padding-left: 42px;
     button {
-        width: 70px;
-        height: 32px;
-        border: 1px solid rgba(1, 192, 222, 1);
-        margin-right: 8px;
-        box-sizing: border-box;
-        color: #01c0de;
+      
     }
     .add-article {
-        background: rgba(1, 192, 222, 1);
+        background: rgba(9, 204, 235, 1 );
         color: #fff;
+        margin-left: 16px;
     }
 }
 </style>

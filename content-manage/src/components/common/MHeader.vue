@@ -3,8 +3,8 @@
         <el-row>
             <el-col :span="8">
                 <div class="head-left head-item">
-                    <span class="logo-icon">
-                        <svg-icon icon-class="logo"></svg-icon>
+                    <span class="logo-icon" >
+                       <i class="iconfont iconlogo"></i>
                     </span>
 
                     <span
@@ -101,6 +101,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.iconlogo{
+    font-size: 22px;
+}
 .header {
     padding-right: 23px;
     font-size: 14px;

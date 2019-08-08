@@ -75,7 +75,7 @@
                 </div>
                 <div class="head-item head-handle-btn">
                     <!-- <button @click="importArticle">导入文章</button> -->
-                    <button class="add-article" @click="addArticle">新增文章</button>
+                    <button class="btn-lightblue btn-small add-article" @click="addArticle">新增文章</button>
                 </div>
             </div>
         </template>
@@ -283,15 +283,7 @@ export default {
     justify-content: flex-end;
     align-items: center;
     padding-left: 42px;
-    button {
-        width: 90px;
-        height: 32px;
-        line-height: 32px;
-        border: 1px solid rgba(1, 192, 222, 1);
-        margin-right: 8px;
-        box-sizing: border-box;
-        color: #01c0de;
-    }
+   
     .add-article {
         background: rgba(1, 192, 222, 1);
         color: #fff;
