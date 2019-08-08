@@ -1,7 +1,7 @@
 <template>
   <div class="home-page page-scroll">
     <el-row style="display: flex;">
-      <el-col :span="18">
+      <div style="margin-right:487px;width:100%">
         <div class="welcome-wrap">
           <p class="welcome-words">CHRISTIN，欢迎回到微站后台</p>
           <p class="siteIntroduction">以下是您当前的站点</p>
@@ -11,9 +11,9 @@
         <plugins :plugins="pluginList" />
         <content-num :contentNumber="contentNumber" />
         <recommend :recommend="recommend" />
-      </el-col>
+      </div>
       <!-- <div class="board-right" style="margin-left:19px"></div> -->
-      <el-col :span="6">
+      <div style="position:absolute;right:0;width:487px;">
         <el-row class="appInfo">
           <el-col class="appName">
             <span>{{ appInfo.name }}</span>
@@ -23,7 +23,7 @@
               placement="bottom"
               width="317"
               trigger="click"
-              style="padding:0"
+              style="padding:0;cursor: pointer;"
               @show="showRemark"
             >
               <span slot="reference">
@@ -80,7 +80,7 @@
           </div>
           <img class="versionImg" src="~img/dashboard/board-versionImg.png" alt />
         </el-row>
-      </el-col>
+      </div>
     </el-row>
   </div>
 </template>
@@ -113,10 +113,10 @@ export default {
           siteName: 4,
           siteId: 4
         },
-        {
-          siteName: 5,
-          siteId: 5
-        }
+        // {
+        //   siteName: 5,
+        //   siteId: 5
+        // }
       ],
       appInfo: {},
       versionInfo: [],
@@ -178,7 +178,7 @@ export default {
         formatDateTime(this.appInfo.createTime, "yyyy年MM月dd日") +
         "-" +
         formatDateTime(this.appInfo.expiredTime, "yyyy年MM月dd日");
-      // this.siteInfoList = data.siteInfos;
+      // this.siteInfoList = data.siteCarousels;
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表
@@ -243,16 +243,14 @@ export default {
     text-align: center;
     .welcome-words {
       font-size: 40px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
+      font-weight: 300;
       color: rgba(38, 38, 38, 1);
       line-height: 56px;
     }
     .siteIntroduction {
       margin-top: 8px;
       font-size: 20px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
+      font-weight: 300;
       color: rgba(181, 181, 181, 1);
       line-height: 28px;
     }
@@ -354,6 +352,7 @@ export default {
     border-radius: 3px;
     border: 1px solid rgba(238, 238, 238, 1);
     position: relative;
+    cursor: pointer;
     .designDiv {
       width: 5px;
       height: 70px;
@@ -430,6 +429,7 @@ export default {
     margin-left: 16px;
     margin-bottom: 10px;
     margin-right: 25px;
+    cursor: pointer;
     .versionInfo {
       float: left;
       color: #262626;

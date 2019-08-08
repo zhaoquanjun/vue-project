@@ -14,16 +14,16 @@
       </el-col>
       <el-col :span="8" :offset="8">
         <div class="head-right head-item">
-          <span>
+          <span style="cursor: pointer">
             <svg-icon icon-class="t-help"></svg-icon>
             <b class="item-btn">帮助</b>
           </span>
-          <span>
+          <span style="cursor: pointer">
             <svg-icon icon-class="t-notifi"></svg-icon>
             <b class="item-btn">通知</b>
           </span>
           <span @mouseenter="dropdownAvatarShow" @mouseleave="dropdownAvatarhide">
-            <p class="avatar">
+            <p class="avatar" style="cursor: pointer">
               <img :src="headUrl" alt />
             </p>
             <dl class="login-set dropdown-avatar-menu" v-show="isdropdownAvatarShow">

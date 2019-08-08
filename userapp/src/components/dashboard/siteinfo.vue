@@ -1,22 +1,40 @@
 <template>
   <div class="site-section">
     <el-row class="content">
-      <el-col
-        :class="{active: index == curIndex, prevActive: index == curIndex - 1, nextActive: index == curIndex + 1, prevActivePrev: index == curIndex - 2,hidden: index < curIndex - 1 || index > curIndex + 1}"
-        class="item"
-        v-for="(item, index) in siteInfo"
-        :key="index"
-        @click.native="handleClick(item,index)"
-      >
-        <div class="siteImg"></div>
-        <div class="siteName">{{item.siteName}}</div>
-        <div class="siteText siteLanguage">
-          <span>语言：</span>
-          {{item.language == "zh-CN" ? "中" : "EN"}}
+      <div v-if="siteInfo.length != 2">
+        <el-col
+          :ref="`siteInfo-${index}`"
+          :class="{active: index == curIndex, prevActive: item.prev, nextActive: item.next, prevActivePrev: item.prevPrev}"
+          class="item"
+          v-for="(item, index) in siteInfo"
+          :key="index"
+          @click.native="handleClick(item,index)"
+        >
+          <div class="siteImg"></div>
+          <div class="siteName">{{item.siteName}}</div>
+          <div class="siteText siteLanguage">
+            <span>语言：</span>
+            {{item.language == "zh-CN" ? "中" : "EN"}}
+          </div>
+          <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
+          <!-- <div class="siteText details" v-show="index == curIndex">查看详情</div> -->
+        </el-col>
+        <div class="leftModul"></div>
+        <div class="rightModul"></div>
+      </div>
+
+      <div style="height:300px;" v-if="siteInfo.length == 2">
+        <div class="siteInfoTwo" v-for="(item, index) in siteInfo" :key="index">
+          <div class="siteImg"></div>
+          <div class="siteName">{{item.siteName}}</div>
+          <div class="siteText siteLanguage">
+            <span>语言：</span>
+            {{item.language == "zh-CN" ? "中" : "EN"}}
+          </div>
+          <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
         </div>
-        <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
-        <!-- <div class="siteText details" v-show="index == curIndex">查看详情</div> -->
-      </el-col>
+      </div>
+
       <div class="sliderWrap">
         <div
           class="slider"
@@ -26,7 +44,10 @@
         ></div>
       </div>
 
-      <div class="createSite" @click="showCreate">+</div>
+      <div
+        :class="{createSiteNumThree:siteInfo.length > 2,createSiteNumTwo:siteInfo.length == 2,}"
+        @click="showCreate"
+      ></div>
     </el-row>
     <el-dialog
       width="0"
@@ -77,6 +98,7 @@ export default {
       createShow: false,
       createSiteName: "",
       radio: "",
+      lock: true,
       languageList: {
         "zh-CN": "简体中文",
         "en-US": "English",
@@ -88,13 +110,82 @@ export default {
   },
 
   created() {
+    this.initial();
     console.log(this.siteInfo);
   },
   methods: {
+    initial() {
+      if (this.siteInfo.length > 2) {
+        for (let i = 0; i < this.siteInfo.length; i++) {
+          if (this.siteInfo[i].siteId == this.siteId) {
+            if (i == 0) {
+              this.$set(
+                this.siteInfo[this.siteInfo.length - 2],
+                "prevPrev",
+                true
+              );
+            } else if (i == 1) {
+              this.$set(
+                this.siteInfo[this.siteInfo.length - 1],
+                "prevPrev",
+                true
+              );
+            } else {
+              this.$set(this.siteInfo[i - 2], "prevPrev", true);
+            }
+            this.$set(this.siteInfo[i - 1], "prev", true);
+            this.$set(this.siteInfo[i + 1], "next", true);
+          }
+        }
+      }
+    },
     handleClick(item, index) {
-      if (index == 0 || index == this.siteInfo.length - 1) return;
-      this.curIndex = index;
-      if (index == 0) {
+      console.log(this.$refs[`siteInfo-${index}`][0].style)
+      // if (index == 0 || index == this.siteInfo.length - 1) return;
+      // this.curIndex = index;
+      console.log(this.lock);
+      if (this.siteInfo.length == 1) {
+        this.lock = false;
+      }
+
+      if (this.lock) {
+        this.lock = false;
+        for (let i = 0; i < this.siteInfo.length; i++) {
+          this.$set(this.siteInfo[i], "prev", false);
+          this.$set(this.siteInfo[i], "next", false);
+          this.$set(this.siteInfo[i], "prevPrev", false);
+        }
+
+        if (index == 0) {
+          this.$set(this.siteInfo[this.siteInfo.length - 1], "prev", true);
+        } else {
+          this.$set(this.siteInfo[index - 1], "prev", true);
+        }
+        if (index == this.siteInfo.length - 1) {
+          this.$set(this.siteInfo[0], "next", true);
+        } else {
+          this.$set(this.siteInfo[index + 1], "next", true);
+        }
+
+        // if(this.siteInfo.length != 4 && !(index == 3 || index < this.curIndex)){
+        if (index == 0) {
+          this.$set(this.siteInfo[this.siteInfo.length - 2], "prevPrev", true);
+        } else if (index == 1) {
+          this.$set(this.siteInfo[this.siteInfo.length - 1], "prevPrev", true);
+        } else {
+          this.$set(this.siteInfo[index - 2], "prevPrev", true);
+        }
+        // }
+
+        // setTimeout(() => {
+        //   for (let i = 0; i < this.siteInfo.length; i++) {
+        //     this.$set(this.siteInfo[i], "prevPrev", false);
+        //   }
+        this.lock = true;
+        // }, 500);
+
+        this.curIndex = index;
+        // this.$set(this.siteInfo[index - 2], "prevPrev", true);
       }
     },
     showCreate() {
@@ -152,26 +243,47 @@ export default {
   position: relative;
   .content {
     overflow: hidden;
-    width: 100%;
+    width: 94%;
     height: 331px;
     position: relative;
-    .item:nth-child(3n + 1) {
+    margin-left: 3%;
+    margin-right: 3%;
+    .leftModul {
+      position: absolute;
+      left: 0;
+      bottom: 31px;
+      width: 20%;
+      height: 180px;
       background: linear-gradient(
-        315deg,
-        rgba(70, 180, 254, 0.79) 0%,
-        rgba(28, 218, 254, 0.79) 100%
+        90deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(93, 209, 255, 0) 100%
       );
-      //   background: linear-gradient(
-      //     90deg,
-      //     rgba(255, 255, 255, 1) 0%,
-      //     rgba(146, 170, 254, 0) 100%
-      //   );
     }
-    .item:nth-child(3n + 2) {
+    .rightModul {
+      position: absolute;
+      right: 0;
+      bottom: 31px;
+      width: 20%;
+      height: 180px;
+      background: linear-gradient(
+        90deg,
+        rgba(146, 170, 254, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+      );
+    }
+    .item:nth-child(3n + 1) {
       background: linear-gradient(
         315deg,
         rgba(8, 204, 235, 1) 0%,
         rgba(129, 220, 160, 1) 100%
+      );
+    }
+    .item:nth-child(3n + 2) {
+      background: linear-gradient(
+        315deg,
+        rgba(70, 180, 254, 0.79) 0%,
+        rgba(28, 218, 254, 0.79) 100%
       );
     }
     .item:nth-child(3n + 3) {
@@ -190,6 +302,7 @@ export default {
       transform: translateX(100%);
       border-radius: 3px;
       transition: all 0.5s linear;
+      opacity: 0;
       .siteImg {
         width: 46%;
         height: 72%;
@@ -231,12 +344,14 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
+      opacity: 1;
     }
     .prevActive {
       height: 180px;
       left: 0;
       transform: translateX(0);
       opacity: 0.79;
+      cursor: pointer;
     }
     .nextActive {
       height: 180px;
@@ -244,6 +359,7 @@ export default {
       // right: 0;
       transform: translateX(0);
       opacity: 0.79;
+      cursor: pointer;
     }
     .prevActivePrev {
       left: 0;
@@ -252,24 +368,27 @@ export default {
     .hidden {
       opacity: 0;
     }
-    .createSite {
+    .createSiteNumTwo {
+      position: absolute;
+      right: 5%;
+      top: 5px;
+      width: 6%;
+      padding-bottom: 6%;
+      max-width: 60px;
+      background: url("~img/dashboard/board-createSite.png") no-repeat center;
+      background-size: contain;
+      cursor: pointer;
+    }
+    .createSiteNumThree {
       position: absolute;
       right: 0px;
       top: 23px;
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(
-        270deg,
-        rgba(129, 220, 160, 1) 0%,
-        rgba(8, 204, 235, 1) 100%
-      );
-      border-radius: 30px;
-      font-size: 42px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 52px;
-      text-align: center;
+      width: 6%;
+      padding-bottom: 6%;
+      max-width: 60px;
+      background: url("~img/dashboard/board-createSite.png") no-repeat center;
+      background-size: contain;
+      cursor: pointer;
     }
     .sliderWrap {
       position: absolute;
@@ -293,15 +412,61 @@ export default {
         border-radius: 4px;
       }
     }
-    // .activePrev {
-    //   left: 0px;
-    //   transform: translateX(0);
-    //   opacity: 0.79;
-    // }
-    // .activeNext {
-    //   transform: translateX(0);
-    //   opacity: 0.79;
-    // }
+    .siteInfoTwo {
+      width: 33%;
+      height: 300px;
+      position: absolute;
+      box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
+      opacity: 1;
+    }
+    .siteInfoTwo:nth-child(1) {
+      left: 15.5%;
+      background: linear-gradient(
+        315deg,
+        rgba(70, 180, 254, 0.79) 0%,
+        rgba(28, 218, 254, 0.79) 100%
+      );
+    }
+    .siteInfoTwo:nth-child(2) {
+      left: 51.5%;
+      background: linear-gradient(
+        315deg,
+        rgba(8, 204, 235, 1) 0%,
+        rgba(129, 220, 160, 1) 100%
+      );
+    }
+    .siteImg {
+      width: 46%;
+      height: 72%;
+      float: left;
+      margin-top: 24px;
+      margin-left: 21px;
+    }
+    .siteName {
+      // display: inline-block;
+      font-size: 22px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+      line-height: 30px;
+      margin-top: 57px;
+      padding-left: 30px;
+    }
+    .siteText {
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+      line-height: 22px;
+      margin-left: 30px;
+    }
+    .siteLanguage {
+      margin-top: 16px;
+    }
+    .isPublished {
+      margin-top: 32px;
+    }
+    .details {
+      margin-top: 60px;
+    }
   }
 }
 .right-pannel {
