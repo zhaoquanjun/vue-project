@@ -206,8 +206,8 @@ export default {
                 status
             } = await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
             if (status === 200) {
-                await getAppHeadInfo();
-                window.location.href = "http://dashboard.console.wezhan.cn/board";               
+                this.$store.dispatch('_getAppHeadInfo');
+                window.location.href ="http://dashboard.console.wezhan.cn/board";               
             }
         },
         /**

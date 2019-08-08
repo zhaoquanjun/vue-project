@@ -1,7 +1,7 @@
 <template>
   <el-container class="member-container">
     <el-aside class="submenu-aside">
-      <page-submenu >
+      <page-submenu>
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>
@@ -166,13 +166,6 @@ export default {
   },
   data() {
     return {
-      submenuList: [
-        { name: "网站备份", url: "/website/backup" },
-        { name: "我的网站", url: "/website/mysite" },
-        { name: "公司信息", url: "/website/companyinfo" },
-        { name: "域名管理", url: "/website/sitedomain" },
-        { name: "邮件服务器", url: "/website/email" }
-      ],
       active: -1,
       showBackup: true,
       siteName: "",

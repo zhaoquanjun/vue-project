@@ -25,7 +25,7 @@
             :key="index"
           >
             <div class="itemSiteImage">
-              <img src class />
+              <img :src="item.siteImage" alt class="itemSiteImageBackground" />
               <div class="modal" v-if="item.siteId != curSiteId">
                 <button class="choseSite" @click="choseSite(item)">选择网站</button>
               </div>
@@ -231,7 +231,7 @@ export default {
   background-color: "#fff";
   color: #262626;
   overflow: hidden;
-  padding: 20px;
+  padding: 20px 20px 32px;
   .dialogTitle {
     height: 71px;
     .dialogTitleText {
@@ -247,14 +247,15 @@ export default {
     cursor: pointer;
   }
   .templateItem {
-    height: 275px;
     padding: 5px;
     .itemSiteImage {
       position: relative;
       width: 100%;
-      height: 200px;
-      background: #01c0de;
       transition: all 0.3s ease-in;
+      .itemSiteImageBackground {
+        width: 100%;
+        height: 100%;
+      }
       .choseSite {
         width: 90px;
         height: 32px;

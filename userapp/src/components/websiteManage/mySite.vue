@@ -1,7 +1,7 @@
 <template>
   <el-container class="member-container">
-    <el-aside style="width:120px">
-      <page-submenu :submenu-list="submenuList">
+    <el-aside class="submenu-aside">
+      <page-submenu>
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>
@@ -15,7 +15,9 @@
       <el-row class="siteContent">
         <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>
         <div class="siteWrap">
-          <div class="siteImg"></div>
+          <div class="siteImg">
+            <img :src="siteImage" alt class="siteImgBackground" />
+          </div>
           <div class="siteinfoWrap">
             <div class="siteinfoItem siteName">
               <span>网站名称：</span>
@@ -197,14 +199,8 @@ export default {
   },
   data() {
     return {
-      submenuList: [
-        { name: "网站备份", url: "/website/backup" },
-        { name: "我的网站", url: "/website/mysite" },
-        { name: "公司信息", url: "/website/companyinfo" },
-        { name: "域名管理", url: "/website/sitedomain" },
-        { name: "邮件服务器", url: "/website/email" }
-      ],
       siteName: "",
+      siteImage: "",
       siteId: 0,
       domain: "",
       secondDomain: "",
@@ -251,11 +247,10 @@ export default {
     },
     // 获取站点信息
     async getSiteInfo(siteId) {
-      console.log(siteId);
       let { data, status } = await siteBackupApi.getSiteInfo(siteId);
-      console.log(data);
       if (status === 200) {
         this.siteName = data.siteName;
+        this.siteImage = data.siteImage;
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
         this.lastPublishedTime = formatDateTime(
@@ -298,8 +293,8 @@ export default {
         });
         return;
       }
-        this.$refs[`popover`].doClose();
-        console.log('siteid:', this.siteId)
+      this.$refs[`popover`].doClose();
+      console.log("siteid:", this.siteId);
       await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
       this.siteName = this.siteNameValue;
     },
@@ -483,11 +478,14 @@ export default {
   padding-top: 32px;
   .siteImg {
     display: inline-block;
-    width: 259px;
-    height: 169px;
+    width: 260px;
+    height: 170px;
     margin-left: 32px;
-    background: #01c0de;
     vertical-align: top;
+    .siteImgBackground {
+      width: 100%;
+      height: 100%;
+    }
   }
   .siteinfoWrap {
     display: inline-block;
@@ -532,6 +530,12 @@ export default {
     .isBind {
       color: #00c2de;
     }
+  }
+  .siteinfoItem:nth-child(4){
+    margin-top: 10px;
+  }
+  .siteinfoItem:last-child{
+    margin-top: 10px;
   }
   .siteinfoBackImg {
     // display: inline-block;
