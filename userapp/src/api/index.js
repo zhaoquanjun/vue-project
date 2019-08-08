@@ -1,4 +1,5 @@
 import * as ajaxRequest from "./ajaxRequest";
+import environment from "@/environment/index.js"
 /**
  *  InterfaceAuthor : 福全
  * 获取个人信息含权限
@@ -227,7 +228,7 @@ export const getWeChatJsLoginParams = (provider) => {
  * 更新cookie中的appid
  */
 export const updateAppIdAndSiteIdToCookie = () => {
-    return ajaxRequest.get('/api/userInfo/GetAppIdAndUpdateToCookie');
+    return ajaxRequest.get(`${environment.memberManageApi}/api/userInfo/GetAppIdAndUpdateToCookie`);
 }
 
 /**

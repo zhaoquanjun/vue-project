@@ -17,12 +17,12 @@
         </el-tabs>
         <button class="backupBtn" @click="backup" v-show="showBackup">备份当前版本</button>
         <el-main>
-          <div class="table-wrap" id="table-list">
+          <div class="table-wrap table-list" id="table-list">
             <el-table
               ref="multipleTable"
               :data="siteInfo"
               tooltip-effect="dark"
-              class="content-table"
+              class="content-table "
               :default-sort="{prop: 'backupTime', order: 'descending'}"
             >
               <el-table-column prop="siteName" label="站点名称"></el-table-column>
@@ -147,6 +147,7 @@
         </el-main>
       </el-row>
     </el-main>
+    <Loading v-if="loadingShow" />
   </el-container>
 </template>
 
@@ -184,7 +185,8 @@ export default {
       backupShow: false,
       backuping: false,
       // recovery: false,
-      remarkInfo: ""
+      remarkInfo: "",
+      loadingShow:true,
     };
   },
   methods: {
@@ -447,6 +449,11 @@ export default {
     },
     _handleHideEditorIcon(id) {
       this.active = -1;
+    }
+  },
+  watch:{
+    siteInfo(){
+      this.loadingShow = false;
     }
   }
 };

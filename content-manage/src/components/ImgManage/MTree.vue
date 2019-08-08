@@ -38,7 +38,7 @@
         </el-scrollbar>
         <div class="category-name-pic" ref="operateSection">
             <UploadCategoryPic
-                :isUpload="false"
+                :isUpload="isProduct?true:false"
                 :modifyCategoryData="modifyCategoryData"
                 @createCategory="createCategory"
                 @closeUploadCategoryPic="closeUploadCategoryPic"
@@ -62,7 +62,7 @@ import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
 import { trim } from "@/utlis/index";
 export default {
     // picSearchOptions
-    props: ["treeResult", "listOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
+    props: ["treeResult", "listOptions", "isArticle","isProduct"], // 与产品分类不一致的地方 picSearchOptions
     components: {
         UploadCategoryPic
     },
@@ -80,7 +80,6 @@ export default {
             createCategoryData: "", // 当前点击的创建分类节点
             isAdd: false, // true 添加 false编辑
             modifyCategoryData: {}, // 编辑分类需要传当前节点的名称和imgurl,
-
             curClickNode: { data: { level: "" } }
         };
     },
@@ -95,11 +94,18 @@ export default {
     methods: {
         createCategory(displayName, thumbnailPicUrl) {
             if (this.isAdd) {
-                this.$emit("create", {
-                    DisplayName: trim(displayName),
-                    ParentId: this.createCategoryData.id,
-                    thumbnailPicUrl: thumbnailPicUrl
-                });
+                if (this.isArticle) {
+                    this.$emit("create", {
+                        CategoryName: trim(displayName),
+                        ParentId: this.createCategoryData.id
+                    });
+                } else {
+                    this.$emit("create", {
+                        DisplayName: trim(displayName),
+                        ParentId: this.createCategoryData.id,
+                        thumbnailPicUrl: thumbnailPicUrl
+                    });
+                }
             } else {
                 this.$emit(
                     "rename", // 与产品分类不一致的地方
@@ -145,7 +151,7 @@ export default {
             var draggingNode = draggingNodeDom.data;
             var targetNode = targetNodeDom.data;
             // let level = this.getLevel(draggingNodeDom, 1) + targetNodeDom.level;
-      
+
             switch (dropType) {
                 case "inner": {
                     draggingNode.parentId = targetNode.id;
@@ -245,14 +251,17 @@ export default {
                     border: 0
                 });
             }
-            console.log(data, "   dfadfad");
-
             this.closeUploadCategoryPic();
             this.closeUploadCategoryPic1();
-            this.listOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
+            console.log(this.getAllNodeIds(data));
+            if (this.isArticle) {
+                this.listOptions.categoryId = data.id; // 与产品分类不一致的地方// 与产品分类不一致的地方
+            } else {
+                this.listOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
+            }
             this.listOptions.pageIndex = 1; // 与产品分类不一致的地方
-            this.$emit("getPicList", data);
             this.$emit("chooseCategoryNode", data); // 与产品分类不一致的地方
+            this.$emit("getList", data);
         },
         // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {

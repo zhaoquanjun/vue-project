@@ -6,12 +6,13 @@
             </h4>
             <m-tree
                 :treeResult="treeResult"
-                :articleSearchOptions="articleSearchOptions"
-                @chooseCategoryNode="chooseCategoryNode"
+                :list-options="articleSearchOptions"
+                :isArticle="true"
+                @chooseCategoryNode="chooseNode"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
-                @chooseNode="chooseNode"
+               
                 @getList="getArticleListAsync"
                 @modifyNode="modifyNodeCategory"
             ></m-tree>
@@ -79,7 +80,7 @@
     </el-container>
 </template>
 <script>
-import MTree from "./MTree";
+import MTree from "@/components/ImgManage/MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
 import RightPannel from "../ImgManage/RightPannel";
@@ -408,9 +409,9 @@ export default {
             this.isInvitationPanelShow = true;
         },
         //获取文章table列表
-        async getArticleListAsync(options) {
+        async getArticleListAsync() {
             let { data } = await articleManageApi.getArticleList(
-                (options = this.articleSearchOptions)
+                ( this.articleSearchOptions)
             );
             this.articlePageResult = data;
         },

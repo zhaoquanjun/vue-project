@@ -4,16 +4,17 @@
             <h4 class="pic-type-title">
                 <span>产品分类</span>
             </h4>
-            <category-tree
+            <m-tree
+                :is-product="true"
                 :tree-result="treeResult"
-                :product-search-options="productSearchOptions"
+                :list-options="productSearchOptions"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
-                @update="updateCategory"
-                @getProList="contentTableList"
+                @rename="updateCategory"
+                @getList="contentTableList"
                 @modifyNode="modifyNodeCategory"
                 @chooseCategoryNode="chooseCategoryNode"
-            ></category-tree>
+            ></m-tree>
         </el-aside>
         <el-main>
             <content-header
@@ -87,8 +88,9 @@
     </el-container>
 </template>
 <script>
-import CategoryTree from "./CategoryTree";
+// import CategoryTree from "./CategoryTree";
 import CheckTree from "./CheckTree";
+import MTree from "@/components/ImgManage/MTree";
 import ContentHeader from "./ProductHeader";
 import ContentTable from "./ProductTable";
 import RightPannel from "../ImgManage/RightPannel";
@@ -97,7 +99,7 @@ import * as productCategoryManageApi from "@/api/request/productCategoryManageAp
 
 export default {
     components: {
-        CategoryTree,
+        MTree,
         CheckTree,
         ContentHeader,
         ContentTable,

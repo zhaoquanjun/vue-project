@@ -1,10 +1,9 @@
 <template>
-    <div id="table-list">
-        
+    <div id="table-list" class="table-list">
         <el-table
             :data="memberList"
             style="width: 100%"
-             :height="tableHeight"
+            :height="tableHeight"
             :header-cell-style="{background:'#F5F5F5'}"
             @selection-change="handleSelectionChange"
             :cell-class-name="checkbox"
@@ -89,21 +88,20 @@
             </el-table-column>
         </el-table>
         <div class="pageing" v-if="memberList && memberList.length > 0">
-          
-             <el-pagination
+            <el-pagination
                 background
                 layout="total, slot, sizes, prev, pager, next,jumper"
-                 :total="memberInfo.totalCount"
+                :total="memberInfo.totalCount"
                 :page-count="memberInfo.totalPages"
-               
                 :page-sizes="[10,20,50]"
                 @current-change="changePageNum"
                 @size-change="changePageSize"
             >
-              <div class="sizes-title">，每页显示</div>  
-              <button class="paging-confirm">跳转</button> 
+                <div class="sizes-title">，每页显示</div>
+                <button class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
+        <Loading v-if="loadingShow" />
     </div>
 </template>
 <script>
@@ -118,22 +116,24 @@ export default {
             default: () => []
         }
     },
-    created() {},
+   
+    created() {
+        console.log(this)
+    },
     data() {
         return {
             remarkValue: "123",
-            tableHeight:500,
-            //  multipleSelection: []
+            tableHeight: 500,
+            loadingShow:true,
         };
     },
-    mounted(){
-          this.$nextTick(()=>{
-             window.addEventListener("resize",()=>{
-           this.tableHeight = window.innerHeight - 260
-            
-        })
-            this.tableHeight = window.innerHeight - 260
-        })
+    mounted() {
+        this.$nextTick(() => {
+            window.addEventListener("resize", () => {
+                this.tableHeight = window.innerHeight - 260;
+            });
+            this.tableHeight = window.innerHeight - 260;
+        });
     },
     methods: {
         checkbox(row) {
@@ -182,8 +182,8 @@ export default {
             console.log(page, "当前页码");
             this.$emit("changePageNum", page);
         },
-        changePageSize(size){
-           this.$emit("changePageSize", size);
+        changePageSize(size) {
+            this.$emit("changePageSize", size);
         },
         cancelInput(id) {
             this.$refs[`popover-${id}`].doClose();
@@ -211,6 +211,11 @@ export default {
         //     return
         //   })
         // }
+    },
+    watch:{
+        memberList(){
+            this.loadingShow =false;
+        }
     }
 };
 </script>
@@ -275,7 +280,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-
+@import "../../styles/table-list.scss";
 .textareaWrap {
     background: #fff;
     position: relative;

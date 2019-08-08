@@ -194,6 +194,7 @@
                 </template>
             </el-table-column>
         </el-table>
+         <Loading v-if="loadingShow" />
     </div>
 </template>
 <script>
@@ -211,7 +212,8 @@ export default {
             expands: [],
             getRowKeys(row) {
                 return row.id;
-            }
+            },
+            loadingShow:true,
         };
     },
     mounted() {},
@@ -357,6 +359,7 @@ export default {
     },
     watch: {
         tableData() {
+            this.loadingShow = false;
             this.$nextTick(() => {
                 let eles = document.getElementsByClassName(
                     "el-table__expand-icon"

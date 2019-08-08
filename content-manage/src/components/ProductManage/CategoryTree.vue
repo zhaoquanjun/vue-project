@@ -61,7 +61,7 @@
 import UploadCategoryPic from "./uploadCategoryPic";
 import { trim } from "@/utlis/index";
 export default {
-    props: ["treeResult", "productSearchOptions", "isrightPannel"],
+    props: ["treeResult", "productSearchOptions"],
     components: {
         UploadCategoryPic
     },

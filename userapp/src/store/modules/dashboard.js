@@ -49,11 +49,11 @@ const dashboard = {
     mutations: {
         GETUSERDASHBOARD(state, payload) {
             state.appid = payload;
-            setLocal('appid', payload);
+            //setLocal('appid', payload);
         },
         SETSITEID(state, siteId) {
             state.siteId = siteId;
-            setLocal('siteId', siteId);
+           // setLocal('siteId', siteId);
         },
         SETAPPID(state, appId) {
             state.appid = appId

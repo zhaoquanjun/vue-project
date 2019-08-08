@@ -63,3 +63,6 @@ if(Cookies("routeCode")){
 if(sessionStorage.getItem("userInfo")){
   store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
 }
+
+
+Cookies.set("cookie",1, { domain: '.wezhan.cn' })
