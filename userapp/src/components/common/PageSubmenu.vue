@@ -76,6 +76,7 @@ export default {
     color: #0595e6;
 }
 .active:hover {
+    color: #0595e6 !important;
     background: #e0fcff !important;
 }
 </style>

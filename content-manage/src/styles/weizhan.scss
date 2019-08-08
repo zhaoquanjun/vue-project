@@ -131,9 +131,12 @@
     width: 70%;
     display: flex;
     justify-content: space-between;
+    .iconfont{
+        font-size: 23px;
+    }
     .handle-btn {
-        width: 17px;
-        height: 16px;
+        width: 23px;
+        height: 23px;
     }
     .move-btn {
         background: url("~img/move.png") no-repeat center;

@@ -278,7 +278,10 @@ export default {
             this.newsIdList = idlist;
         },
         // 批量复制分类
-        async batchCopyNews(idlist) {
+        async batchCopyNews(idlist,row) {
+            if(idlist.length<=1){
+                this.row = row
+            }
             idlist = idlist == null ? this.idsList : idlist;
             this.isInvitationPanelShow = true;
             this.rightPanelType = 2;
@@ -344,23 +347,17 @@ export default {
         },
         // 点击确定按钮 复制
         async copyArticle() {
-            if (!this.moveToClassiFy) {
-                this.$notify({
-                    customClass: "notify-error", //  notify-success ||  notify-error
-                    message: `请选择要复制到的分类!`,
-                    showClose: false,
-                    duration: 2000
-                });
-                return;
-            }
-            console.log(
-                this.moveToClassiFy,
-                "this.moveToClassiFythis.moveToClassiFythis.moveToClassiFy"
-            );
-            console.log(this.newsIdList);
-
-            let cateId = this.moveToClassiFy.id;
-
+            console.log(this.row,'-------')
+            // if (!this.moveToClassiFy) {
+            //     this.$notify({
+            //         customClass: "notify-error", //  notify-success ||  notify-error
+            //         message: `请选择要复制到的分类!`,
+            //         showClose: false,
+            //         duration: 2000
+            //     });
+            //     return;
+            // }
+            let cateId = (this.moveToClassiFy && this.moveToClassiFy.id) || this.row.categoryId;
             let { data, status } = await articleManageApi.batchCopy(
                 cateId,
                 this.newsIdList

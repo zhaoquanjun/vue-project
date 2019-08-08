@@ -216,7 +216,7 @@ export default {
          */
         batchCopy(row) {
             this.$emit("changeOperateName", "复制");
-            this.$emit("batchCopy", [row.id]);
+            this.$emit("batchCopy", [row.id],row);
         },
 
         handleMoreOperate(flag) {
