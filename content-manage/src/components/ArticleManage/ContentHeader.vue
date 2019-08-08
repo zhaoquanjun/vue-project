@@ -86,16 +86,16 @@
                     已选
                     <i>{{count}}</i> 个文章
                 </span>
-                <div style="float:right">
-                    <el-button class="deleteActive btn-darkblue" size="small" @click="batchPublish(false)">上线</el-button>
-                    <el-button class="deleteActive btn-darkblue" size="small" @click="batchPublish(true)">下线</el-button>
-                    <el-button class="btn-defualt" size="small" @click="batchCopy">复制</el-button>
-                    <el-button class="deleteActive btn-delete" style="margin-right: 10px;" size="small" @click="batchRemove">删除</el-button>
+                <div class="bach-hanlder">
+                    <button class="btn-small  btn-lightblue-notboard" @click="batchPublish(false)">上线</button>
+                    <button class="btn-small  btn-lightblue-notboard"  @click="batchPublish(true)">下线</button>
+                    <button class="btn-small  btn-lightblue-notboard"  @click="batchCopy">复制</button>
+                    <button class="btn-small  btn-red-notboard"  @click="batchRemove">删除</button>
                     <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
-                            <el-button size="small">
+                            <button class="btn-small btn-notboard">
                                 <svg-icon icon-class="across-dot"></svg-icon>
-                            </el-button>
+                            </button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <!-- <span size="small" @click="batchclassifySet">移动</span> -->
@@ -259,16 +259,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/manage-head.scss";
-.content-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #e8eaf3;
-    background: #fff;
-    margin-bottom: 24px;
-    padding: 0 24px;
-    height: 70px !important;
-}
 
 .select-item {
     display: inline-block;
@@ -310,35 +300,4 @@ export default {
     }
 }
 
-.bach-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    // padding:0 21px;
-    width: 100%;
-}
-
-.head-right {
-    .sort-icon {
-        display: inline-block;
-        width: 16px;
-        height: 14px;
-    }
-    .asc {
-        background: url("~img/content-icon/asc.png") no-repeat center;
-        background-size: contain;
-    }
-    .asc-icon-on {
-        background: url("~img/content-icon/asc-on.png") no-repeat center;
-        background-size: contain;
-    }
-    .dec {
-        background: url("~img/content-icon/desc.png") no-repeat center;
-        background-size: contain;
-    }
-    .dec-icon-on {
-        background: url("~img/content-icon/desc-on.png") no-repeat center;
-        background-size: contain;
-    }
-}
 </style>

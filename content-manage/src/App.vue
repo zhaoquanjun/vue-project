@@ -11,7 +11,7 @@
                 </el-aside>
                 <el-main style=" overflow: hidden;">
                     <el-container>
-                        <el-aside class="page-sub-aside" width="120px" v-show="isSub">
+                        <el-aside class="page-sub-aside" width="100px" v-show="isSub">
                             <page-submenu>
                                 <i slot="title">内容管理</i>
                             </page-submenu>
@@ -61,13 +61,10 @@ export default {
   padding-top: 60px;width: 100%;overflow: hidden;
 }
 .common-aside{
-  width:80px !important;
+  width:70px !important;
    position: relative;
    overflow: visible !important;
 }
-</style>
-<style scoped>
+
 </style>
 
-<style lang="scss">
-</style>

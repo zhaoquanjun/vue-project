@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div >
         <el-card class="box-card">
             <div slot="header">
-                <span class="article-cover">产品图片</span>
+                <span class="article-cover">产品封面</span>
             </div>
             <div>
                 <el-upload
@@ -18,12 +18,14 @@
                     :multiple="true"
                     :limit="9"
                     :onExceed="onExceed"
+                    accept=".jpg,.jpeg,.png,.gif,.svg,.JPG,.JPEG,.GIF"
                 >
                     <!-- <div v-for="(item,index) in fileList1" :key="index"><img :src="item.response" alt=""></div> -->
                     <template>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;font-size:12px">添加图片</i>
                     </template>
+                   
                     <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
                 </el-upload>
             </div>
@@ -61,40 +63,16 @@ export default {
         };
     },
    
-    watch: {
-        fileList() {
-            this.fileList1 = this.fileList;
-            document.querySelector(".el-upload--picture-card").style.width =
-                "97px";
-            document.querySelector(".el-upload--picture-card").style.height =
-                "97px";
-            this.$nextTick(() => {
-                if (this.fileList1.length >= 9) {
-                    document.querySelector(".el-upload").style.display = "none";
-                }
-            });
-        },
-        fileList2() {
-            console.log(this.fileList2);
-            this.$nextTick(() => {
-                document.querySelector(".el-upload--picture-card").style.width =
-                    "97px";
-                document.querySelector(
-                    ".el-upload--picture-card"
-                ).style.height = "97px";
-                if (this.fileList2.length >= 9) {
-                    document.querySelector(".el-upload").style.display = "none";
-                }
-            });
-        }
-    },
     mounted() {
         this.headers.appId = this.$store.state.dashboard.appid;
     },
     methods: {
         handleSucess(response, file, fileList) {},
         handleRemove(file, fileList) {
-            this.newFileList = fileList
+            this.newFileList = fileList;
+            if(fileList.length>=9){
+                 document.querySelector(".el-upload").style.display = "none";
+            }
         },
         handlePreview(file) {
             console.log(file);
@@ -140,6 +118,7 @@ export default {
 <style scoped>
 .el-card /deep/ .el-card__body {
     text-align: center;
+    padding: 15px;
 }
 .el-collapse /deep/ .el-collapse-item__header {
     padding: 0 10px;
@@ -186,9 +165,50 @@ export default {
     height: 200px;
 }
 .avatar-uploader /deep/ .el-upload-list > li:not(:first-child) {
-    width: 97px;
-    height: 97px;
+    width: 96px;
+    height: 96px;
+   
 }
+ .avatar-uploader /deep/ .el-upload-list > li:not(:first-child) img{
+            object-fit: contain;
+    }
+
+
+ .avatar-uploader /deep/ .el-upload-list__item-actions > span {
+    position: absolute;
+    right: 17px;
+    bottom: 19px;
+    top: auto;
+    width: 27px;
+    border: 1px solid #fff;
+    height: 27px;
+    border-radius: 50%;
+}
+
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
+    left: 17px;
+    bottom: 20px;
+    border: none;
+    width: 27px;
+    height: 27px;
+    background: url("~img/pic-icon/look.png") no-repeat center;
+    background-size: contain;
+}
+
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-upload-list__item-delete{
+    right: 17px;
+    bottom: 20px;
+    border: none;
+    width: 27px;
+    height: 27px;
+    background: url("~img/pic-icon/delete-icon.png") no-repeat center;
+    background-size: contain;
+}
+
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-zoom-in,.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete {
+    display: none;
+}   
+  
 </style>
 <style lang="scss" scoped>
 .article-cover {

@@ -22,12 +22,14 @@
                         show-word-limit
                     ></el-input>
                 </el-form-item>
-                <el-form-item label prop="summary">
+                <el-form-item label prop="summary" class="desc-textarea">
                     <el-input
                         type="textarea"
-                        :rows="5"
+                        :autosize="{ minRows:3, maxRows: 3}"
                         placeholder="请输入产品简介"
                         v-model="detailData.description"
+                        maxlength="500"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -48,7 +50,7 @@
                                         :value="item.value"
                                     ></el-option>
                                 </el-select>-->
-                                <div class="product-category"  @click.stop="multipleCatagory">
+                                <div class="product-category" @click.stop="multipleCatagory">
                                     <ul class="category-list">
                                         <li
                                             class="category-item"
@@ -64,12 +66,15 @@
                                         </li>
                                     </ul>
                                     <span
-                                         @click.stop="multipleCatagory"
-                                        class="el-select__caret "
+                                        @click.stop="multipleCatagory"
+                                        class="el-select__caret"
                                         :class="[isCheckTreeShow===true?'el-icon-arrow-up':'el-icon-arrow-down']"
                                     ></span>
                                 </div>
-                                <div class="multipleCatagory" :style="{'height':(isCheckTreeShow?'auto':0)}">
+                                <div
+                                    class="multipleCatagory"
+                                    :style="{'height':(isCheckTreeShow?'auto':0)}"
+                                >
                                     <DetailCheckTree
                                         ref="detailCheckTree"
                                         :tree-result="treeResult"
@@ -433,7 +438,6 @@ export default {
         this.curProduct = id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
-            
         }
         this.getTree();
         this.editorOption = {
@@ -505,7 +509,7 @@ export default {
             this.categoryId = data.productCategoryList.map(item => {
                 return item.id;
             });
-           
+
             if (Object.keys(data.seoKeyword).length < 1) {
                 data.seoKeyword = [];
             } else {
@@ -546,8 +550,8 @@ export default {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     type: "success",
-                     customClass:"medium", 
-                    iconClass:"icon-success", 
+                    customClass: "medium",
+                    iconClass: "icon-success",
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
@@ -583,8 +587,8 @@ export default {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     type: "success",
-                     customClass:"medium", 
-                    iconClass:"icon-success", 
+                    customClass: "medium",
+                    iconClass: "icon-success",
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
@@ -606,19 +610,26 @@ export default {
         async getTree() {
             let { data } = await productCategoryManageApi.get();
             this.treeResult = data.treeArray;
-            console.log(data, "datadatadata");
             var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
                 this.categoryName.push(categoryName);
             }
         },
-        chooseNode(data) {
-            this.detailData.productCategoryList.push({
-                displayName: data.label,
-                id: data.id,
-                thumbnailPicUrl: data.thumbnailPicUrl
-            });
-            console.log(data);
+        chooseNode(data, boolean) {
+            if(this.detailData.productCategoryList.length>=5){
+                return
+            };
+            if (!!boolean) {
+                this.detailData.productCategoryList.push({
+                    displayName: data.label,
+                    id: data.id,
+                    thumbnailPicUrl: data.thumbnailPicUrl
+                });
+            } else {
+                this.detailData.productCategoryList = this.detailData.productCategoryList.filter((item)=>{
+                     return item.id != data.id
+                 })
+            }
         },
         //  移除已选择的分类
         removeSeletedCategory(cur) {
@@ -716,9 +727,8 @@ export default {
             };
         },
         multipleCatagory() {
-           
             this.isCheckTreeShow = !this.isCheckTreeShow;
-             console.log(this.isCheckTreeShow)
+            console.log(this.isCheckTreeShow);
         },
         getCheckedNodes(nodes) {
             console.log(nodes, "nnnnnnn");
@@ -740,13 +750,13 @@ export default {
         // 为视频ICON绑定事件
         // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         addQuillTitle();
-        document.addEventListener("click",(e)=>{
-            e.stopPropagation()
-            if(this.isCheckTreeShow){
-                this.multipleCatagory()
+        document.addEventListener("click", e => {
+            e.stopPropagation();
+            if (this.isCheckTreeShow) {
+                this.multipleCatagory();
             }
-            return false
-        })
+            return false;
+        });
     },
     watch: {
         "detailData.searchKeyword"() {
@@ -780,7 +790,7 @@ export default {
     vertical-align: middle;
 }
 .product-category {
-        display: flex;
+    display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 5px;
@@ -804,7 +814,7 @@ export default {
         }
     }
     .el-select__caret {
-        color: #C0C4CC;
+        color: #c0c4cc;
         font-size: 14px;
         cursor: pointer;
     }
@@ -827,6 +837,9 @@ export default {
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 400px;
+}
+.desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
+    padding-bottom: 50px;
 }
 </style>
 

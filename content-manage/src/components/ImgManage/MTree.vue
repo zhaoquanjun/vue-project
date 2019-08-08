@@ -13,30 +13,25 @@
             draggable
             :allow-drop="allowDrop"
             :highlight-current="true"
+            
         >
-        
             <div
                 class="custom-tree-node"
                 @mouseover="handlerOver(data)"
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
             >
+               <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
-                    <!-- <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
-                      
-                    </el-tooltip> -->
                     <span class="node-label">{{data.label}}</span>
-                    <span>({{data.leafSum }})</span>
+                    <span>({{data.inUseSum }})</span>
                 </div>
-                <!-- 三个点 分类操作 -->
-                <!--  -->
-                <!-- _handleShowMoreOperate($event,node,data) -->
                 <span
                     class="set-tree-type"
                     @click.stop="handleShow($event,node,data)"
                     v-show="data.id === treeNodeId"
                 >
-                    <svg-icon icon-class="tree-handler"></svg-icon>
+                    <i class="iconfont iconsangedian" style="font-size:30px"></i>
                 </span>
             </div>
         </el-tree>
@@ -64,8 +59,10 @@
 </template>
 <script>
 import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
+import { trim } from "@/utlis/index"
 export default {
-    props: ["treeResult", "picSearchOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
+    // picSearchOptions
+    props: ["treeResult", "listOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
     components: {
         UploadCategoryPic
     },
@@ -88,18 +85,18 @@ export default {
         };
     },
     mounted() {
-        // document.addEventListener("click", () => {
-        //     this.$nextTick(() => {
-        //         if (this.$refs.operateSection)
-        //             this.$refs.operateSection.style.display = "none";
-        //     });
-        // });
+        document.addEventListener("click", () => {
+            this.$nextTick(() => {
+                if (this.$refs.operateSection1)
+                    this.$refs.operateSection1.style.display = "none";
+            });
+        });
     },
     methods: {
         createCategory(displayName, thumbnailPicUrl) {
             if (this.isAdd) {
                 this.$emit("create", {
-                    DisplayName: displayName,
+                    DisplayName: trim(displayName),
                     ParentId: this.createCategoryData.id,
                     thumbnailPicUrl: thumbnailPicUrl
                 });
@@ -107,7 +104,7 @@ export default {
                 this.$emit(
                     "rename", // 与产品分类不一致的地方
                     this.createCategoryData.id,
-                    displayName,
+                    trim(displayName),
                     thumbnailPicUrl
                 );
             }
@@ -157,9 +154,7 @@ export default {
                 }
                 case "before":
                 case "after": {
-                    draggingNode.parentId = targetNode.parentId
-                        ? targetNode.parentId
-                        : 0;
+                    draggingNode.parentId = targetNode.parentId ? targetNode.parentId: 0;
                     break;
                 }
                 case "none":
@@ -179,6 +174,8 @@ export default {
             );
         },
         allowDrop(draggingNode, targetNode, dropType) {
+
+            console.log(draggingNode, targetNode, dropType)
             draggingNode = draggingNode.data;
             targetNode = targetNode.data;
             //判断是否大于三层
@@ -187,12 +184,14 @@ export default {
                 draggingNode.parentId !== targetNode.parentId
             ) {
                 return this.getLevel(draggingNode, 1) + targetNode.level <= 3;
+            }else{
+               
             }
             return true;
         },
         // 添加分类  0720
         create(ev, node, data) {
-            this.modifyCategoryData = ""; //创建新分类 不需传
+            this.modifyCategoryData = {}; //创建新分类 不需传
             this._handleShowMoreOperate(ev, node, data);
             this.isAdd = true;
         },
@@ -232,24 +231,25 @@ export default {
         changeCategory(data) {
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
-
             if (data.level === 0) {
                 this.setCss(allCategoryEle, {
-                    background: "#f7f7f7",
+                    background: "#e0faff",
                     color: "#00C1DE",
-                    border: "2px solid #00C1DE;"
+                    borderLeft: "2px solid #0595E6"
                 });
             } else {
                 this.setCss(allCategoryEle, {
                     background: "#fff",
                     color: "#606266",
-                    border: "none"
+                    border:0
                 });
             }
+            console.log(data,'   dfadfad')
+           
             this.closeUploadCategoryPic();
             this.closeUploadCategoryPic1();
-          this.picSearchOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
-          this.picSearchOptions.pageIndex = 1;// 与产品分类不一致的地方
+          this.listOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
+          this.listOptions.pageIndex = 1;// 与产品分类不一致的地方
            this.$emit("getPicList", data);
            this.$emit("chooseCategoryNode", data);// 与产品分类不一致的地方
         },
@@ -293,7 +293,7 @@ export default {
         // 新增0730   分类操作菜单显示
         _handleShowMoreOperate1(ev, row) {
             this.$refs.operateSection1.style.left =
-                ev.pageX - ev.offsetX + 16 + "px";
+                ev.pageX - ev.offsetX + 46 + "px";
             this.$refs.operateSection1.style.top =
                 ev.pageY - ev.offsetY  + "px";
             if (this.$refs.operateSection1.style.display === "block") {
@@ -305,11 +305,6 @@ export default {
     }
 };
 </script>
-<style>
-/* #content-manage .el-aside {
-    overflow: visible !important;
-} */
-</style>
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";
@@ -321,18 +316,6 @@ export default {
     position: absolute;
     z-index: 19;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
-    // border: 1px solid rgba(216, 216, 216, 1);
-    // &:after {
-    //     position: absolute;
-    //     content: "";
-    //     left: -21px;
-    //     top: 10px;
-    //     border-top: 10px transparent dashed;
-    //     border-left: 10px transparent dashed;
-    //     border-bottom: 10px transparent dashed;
-    //     border-right: 10px #fff solid;
-    //      border: 1px solid rgba(216, 216, 216, 1);
-    // }
 }
 
 .categoryPic {

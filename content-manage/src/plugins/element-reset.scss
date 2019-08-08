@@ -19,12 +19,15 @@
 /* table 头部颜色 和 高度 */
 #table-list .el-table thead  th {
     padding: 0;
-    height: 70px;
+    height: 60px;
     background: #fff !important;
-    color: #262626;
+    color: #A1A8B1;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     
+}
+#table-list .el-table td{
+    border-bottom: 1px solid #e5e5e5;
 }
 #table-list{
     .el-table td{
@@ -32,7 +35,17 @@
     }
     .el-table--enable-row-hover .el-table__body tr:hover>td{
         background-color: #F0FCFE ;
+    }
+    .el-table-column--selection{
+        .el-checkbox__inner{
+            width: 18px;
+            height: 18px;
         }
+        .el-checkbox__inner::after{
+            left: 6px;
+            top: 3px;
+        }     
+    } 
         
 }
 
@@ -102,11 +115,15 @@
     background-color: #01c0de;
     color: #fff;
 }
+
+
+
+// 分页样式
 .pageing{
     float: right;
     margin-top: 24px;
     padding-bottom: 10px;
-    margin-right: 45px;
+    margin-right: 65px;
     .sizes-title {
         line-height: 32px;
         color: #A1A8B1;
@@ -183,17 +200,26 @@
     
 }
 
-
-
 // 侧边分类树节点
 .aside-tree{
+    .el-tree .el-tree__drop-indicator{
+        background-color: #0595E6 !important;
+        height: 2px !important;
+        left: 0 !important;
+    }
+    .el-tree .el-tree-node__expand-icon.expanded{
+        color: #A1A8B1;
+    }
     .el-tree .el-tree-node__content {
-        height: 44px;
+        height: 40px;
         position: relative !important;
         background: #fff;
     }
     .el-tree-node .el-tree-node__content:hover{
-        color: #00C1DE;
+        background: #e0fcff;
+    }
+    .el-tree-node .el-tree-node__content:hover .drop-btn{
+        display: block
     }
     .el-tree .el-tree-node__label {
         font-size: 12px;
@@ -205,27 +231,27 @@
         // overflow: visible !important;
     }
     .el-tree > :first-child > .el-tree-node__content{
-        color: #00C1DE;
-        background: rgb(247, 247, 247);
-        border-left: 2px solid #00C1DE;
+      
+        background: #e0faff;
+        border-left: 2px solid #0595E6;
     }
     .el-tree > :first-child > .el-tree-node__content:hover .set-tree-type{
         background: transparent;
     }
     .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
-        color: #00C1DE;
-        background: rgb(247, 247, 247);
-        border-left: 2px solid #00C1DE;
+       
+        background: #e0faff;
+        border-left: 2px solid #0595E6;
     }
     .el-tree > :first-child > .el-tree-node__content .set-tree-type ,.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .set-tree-type{
-        background: rgb(247, 247, 247);
+        background: #e0faff;
     }
     .el-tree > :first-child >.el-tree-node__children{
         height: calc(100vh - 200px);
-      
         overflow: auto
     }
 }
+
 
 // 将圆角改为直角
 .el-input .el-input__inner,.el-button,.el-input-group__append, .el-input-group__prepend{
@@ -244,6 +270,12 @@
     background: transparent;
     margin: 0 8px;
 }
+// button focus样式
+button.deleteActive:focus{
+    color: #09CCEB;
+    background: #fff;
+    border: 1px solid #09CCEB;
+}
 .el-button.btn-delete{
     border: 1px solid #FE9837;
     color: #FE9837;
@@ -260,12 +292,7 @@
     opacity: 0.8;
     background: rgba(255, 255, 255, 0.9)
 }
-// button focus样式
-button.deleteActive:focus{
-    color: #09CCEB;
-    background: #fff;
-    border: 1px solid #09CCEB;
-}
+
 //lightblue
 button.btn-lightblue{
     border: 1px solid #09CCEB;
@@ -276,3 +303,51 @@ button.btn-darkblue{
     color: #0595E6;
 }
 /* button  end */
+
+.btn-small{
+    padding: 9px 15px;
+}
+// button 无边框
+.btn-notboard{
+    border: none;
+}
+.btn-lightblue-notboard{
+    border: none;
+    color: rgba(9, 204, 235, 1 );
+    margin: 0
+}
+.btn-lightblue-notboard:hover{
+    border: none;
+    color: #09CCEB;
+    background: rgba(9, 204, 235, 0.1)
+}
+.btn-darkblue-notboard{
+    border: none;
+    color: rgba(5, 149, 230, 1 );
+    margin: 0
+}
+.btn-darkblue-notboard:hover{
+    border: none;
+    color: #0595E6;
+    background: rgba(5, 149, 230, 0.1 )
+}
+.btn-yellow-notboard{
+    border: none;
+    color: #FE9837;
+    margin: 0
+}
+.btn-yellow-notboard:hover{
+    border: none;
+    color: #FE9837;
+    background: rgba(254, 152, 55, 0.1 );
+}
+.btn-red-notboard{
+    margin: 0;
+    border: none;
+    color: rgba(251, 77, 104, 1 );
+}
+.btn-red-notboard:hover{
+    color: rgba(251, 77, 104, 1 );
+    background: rgba(251, 77, 104, 0.1);
+}
+

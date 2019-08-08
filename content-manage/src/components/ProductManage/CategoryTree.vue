@@ -1,5 +1,6 @@
 <template>
     <div id="asideTree" class="aside-tree">
+        <el-scrollbar >
         <el-tree
             :data="treeResult"
             node-key="id"
@@ -12,6 +13,7 @@
             draggable
             :allow-drop="allowDrop"
             :highlight-current="true"
+            
         >
             <div
                 class="custom-tree-node"
@@ -19,30 +21,21 @@
                 @mouseleave="handlerMouseLeave"
                 slot-scope="{ node, data }"
             >
-                <img
-                    class="categoryPic"
-                    v-if="data.thumbnailPicUrl"
-                    :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
-                />
+               <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
-                    <!-- <el-tooltip class="item" effect="dark" :content="data.label" placement="bottom">
-                       
-                    </el-tooltip> -->
-                     <span class="node-label">{{data.label}}</span>
-                    <span>({{data.leafSum }})</span>
+                    <span class="node-label">{{data.label}}</span>
+                    <span>({{data.inUseSum }})</span>
                 </div>
-                <!-- 三个点 分类操作 -->
-                <!--  -->
-                <!-- _handleShowMoreOperate($event,node,data) -->
                 <span
                     class="set-tree-type"
                     @click.stop="handleShow($event,node,data)"
                     v-show="data.id === treeNodeId"
                 >
-                    <svg-icon icon-class="tree-handler"></svg-icon>
+                    <i class="iconfont iconsangedian" style="font-size:30px"></i>
                 </span>
             </div>
         </el-tree>
+        </el-scrollbar>
         <div class="category-name-pic" ref="operateSection">
             <UploadCategoryPic
                 :modifyCategoryData="modifyCategoryData"
@@ -50,7 +43,7 @@
                 @closeUploadCategoryPic="closeUploadCategoryPic"
             />
         </div>
-        <div @click="handleCategory1" class="tree-handle" ref="operateSection1">
+        <div @click="closeUploadCategoryPic1" class="tree-handle" ref="operateSection1">
             <button v-if="curClickNode.data.level <3" type="text" size="mini" @click="create">添加子分类</button>
             <button v-if="curClickNode.data.level>0" type="text" size="mini" @click="rename">修改名称</button>
 
@@ -65,6 +58,7 @@
 </template>
 <script>
 import UploadCategoryPic from "./uploadCategoryPic";
+import { trim } from "@/utlis/index"
 export default {
     props: ["treeResult", "productSearchOptions", "isrightPannel"],
     components: {
@@ -100,7 +94,7 @@ export default {
         createCategory(displayName, thumbnailPicUrl) {
             if (this.isAdd) {
                 this.$emit("create", {
-                    DisplayName: displayName,
+                    DisplayName: trim(displayName),
                     ParentId: this.createCategoryData.id,
                     thumbnailPicUrl: thumbnailPicUrl
                 });
@@ -108,7 +102,7 @@ export default {
                 this.$emit(
                     "update",
                     this.createCategoryData.id,
-                    displayName,
+                    trim(displayName),
                     thumbnailPicUrl
                 );
             }
@@ -306,17 +300,12 @@ export default {
     }
 };
 </script>
-<style>
-/* #content-manage .el-aside {
-    overflow: visible !important;
-} */
-</style>
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";
 .category-name-pic {
     width: 282px;
-    height: 190px;
+    height: 200px;
     background: #fff;
     display: none;
     position: absolute;

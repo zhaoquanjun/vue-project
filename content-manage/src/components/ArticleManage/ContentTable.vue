@@ -5,7 +5,7 @@
             :data="articlePageResult.list"
             tooltip-effect="dark"
             class="content-table"
-             :height="tableHeight"
+            :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
             <template slot="empty">
@@ -59,25 +59,12 @@
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
                         ></span>
-                        <!-- <button class="handle-btn" @click="handleLook(scope.$index, scope.row)">
-              <svg-icon icon-class="tab-look"></svg-icon>
-            </button>
-            <button class="handle-btn" @click="batchRemove( scope.row)">
-              <svg-icon icon-class="l-recyclebin"></svg-icon>
-            </button>
-            <button class="handle-btn" @click="batchTop( scope.row)">
-              <svg-icon icon-class="l-recyclebin"></svg-icon>
-            </button>
-            <button class="handle-btn" @click="batchPublish( scope.row)">
-              <svg-icon icon-class="l-recyclebin"></svg-icon>
-                        </button>-->
                     </div>
                 </template>
             </el-table-column>
         </el-table>
         <div class="pageing">
-          
-               <el-pagination
+            <el-pagination
                 background
                 layout="total, slot, sizes, prev, pager, next,jumper"
                 :total="articlePageResult.totalRecord"
@@ -87,8 +74,8 @@
                 @current-change="changePageNum"
                 @size-change="changePageSize"
             >
-              <div class="sizes-title">，每页显示</div>  
-              <button class="paging-confirm">跳转</button> 
+                <div class="sizes-title">，每页显示</div>
+                <button class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <ul class="operate-section" ref="operateSection">
@@ -99,17 +86,17 @@
                 @click="handleMoreOperate(it.flag)"
             >{{it.name}}</li>
         </ul>
-        <!-- <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
-            <el-card :body-style="{ padding: '0px' }">
-                <img src="../../assets/avatar.jpeg" width="100%" height="100%">
-            </el-card>
-        </el-dialog>-->
+       <Loading v-if="loadingShow"/>
     </div>
 </template>
 
 <script>
+import Loading from "@/base/loading.vue";
 export default {
     props: ["articlePageResult", "articleSearchOptions", "treeResult"],
+    components: {
+        Loading
+    },
     data() {
         return {
             defaultImg: require("../../../static/images/content-default-pic.png"),
@@ -122,24 +109,27 @@ export default {
                 { name: "删除", flag: "delete" }
             ],
             row: "",
-            tableHeight:500,
+            tableHeight: 500,
+            loadingShow: true,
+            tableData:""
         };
     },
     mounted() {
+        
+        this.tableData = this.articlePageResult
         document.addEventListener("click", () => {
             this.$nextTick(() => {
                 if (this.$refs.operateSection)
                     this.$refs.operateSection.style.display = "none";
             });
         });
-           
-        this.$nextTick(()=>{
-             window.addEventListener("resize",()=>{
-           this.tableHeight = window.innerHeight - 230
-            
-        })
-            this.tableHeight = window.innerHeight - 230
-        })
+
+        this.$nextTick(() => {
+            window.addEventListener("resize", () => {
+                this.tableHeight = window.innerHeight - 260;
+            });
+            this.tableHeight = window.innerHeight - 260;
+        });
     },
     methods: {
         changePageNum(page) {
@@ -250,13 +240,31 @@ export default {
                     break;
             }
         }
+    },
+    watch:{
+        tableData:{
+          handler(newValue,oldValue){
+              if(this.tableData.list.length>1){
+                  setTimeout(() => {
+                      this.loadingShow = false
+                  }, 500);
+              }
+          },
+          deep:true,
+         
+       }, 
+       
     }
+   
 };
 </script>
 
 <style lang="scss" scoped>
 .table-content {
-    padding: 0 24px;
+    position: relative;
+    margin-right: 16px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
     .handle-btn-wrap {
         justify-content: flex-start;
         .edit-icon {

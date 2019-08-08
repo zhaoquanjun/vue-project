@@ -227,7 +227,7 @@ export const getWeChatJsLoginParams = (provider) => {
  * 更新cookie中的appid
  */
 export const updateAppIdAndSiteIdToCookie = () => {
-    return ajaxRequest.put('/api/userInfo/UpdateAppIdToCookie');
+    return ajaxRequest.get('/api/userInfo/GetAppIdAndUpdateToCookie');
 }
 
 /**
@@ -235,7 +235,7 @@ export const updateAppIdAndSiteIdToCookie = () => {
  * 更新用户当前使用的appid
  */
 export const updateUserLastAppIdAndCookie = (appId) => {
-    return ajaxRequest.put('/api/userInfo/UpdateUserLastAppIdAndCookie', JSON.stringify(appId));
+    return ajaxRequest.post(`/api/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
 }
 //更新头像
 export const updateUserPicture = (pictureUrl) => {

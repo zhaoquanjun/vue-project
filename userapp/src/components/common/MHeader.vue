@@ -187,9 +187,11 @@ export default {
       setLocal("appid", item.appId);
       this.$store.commit("SETAPPID", item.appId);
       console.log(item.appId);
-      Cookies("AppId", item.appId)
-      await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
-      window.location.href = "http://dashboard.console.wezhan.cn/board";
+      //Cookies("AppId", item.appId)
+        let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
+        if (status === 200) {
+           window.location.href ="http://dashboard.console.wezhan.cn/board";
+        }        
     },
     /**
      * 关闭弹框

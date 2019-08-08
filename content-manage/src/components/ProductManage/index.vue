@@ -2,7 +2,6 @@
     <el-container id="content-manage">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
-                <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>产品分类</span>
             </h4>
             <category-tree
@@ -195,6 +194,7 @@ export default {
                             this.$notify({
                                 customClass: "notify-success", //  notify-success ||  notify-error
                                 message: `成功!`,
+                                 showClose: false,
                                 duration: 1000
                             });
                             this.contentTableList();
@@ -293,11 +293,33 @@ export default {
             let { data, status } = await productManageApi.copyBatchProduct(
                 options
             );
+            console.log()
             if (status == 200) {
-                this.$message({
-                    type: "success",
-                    message: "成功!"
-                });
+                if (Array.isArray(options.idList) && options.idList.length > 1) {
+                    this.$notify({
+                        customClass: "notify-success", //  notify-success ||  notify-error
+                        message: `批量复制成功!`,
+                         showClose: false,
+                        duration: 1000
+                    });
+                } else {
+                    this.$confirm("复制成功是否前往编辑产品", "提示", {
+                        confirmButtonText: "立即前往",
+                        cancelButtonText: "暂不前往",
+                        type: "success",
+                        customClass: "medium",
+                        iconClass: "icon-success",
+                        callback: async action => {
+                            if (action === "confirm") {
+                                this.$router.push({
+                                    path: "/product/create",
+                                    query: { id: options.idList[0], isEditor: 1 }
+                                });
+                            } else {
+                            }
+                        }
+                    });
+                }
                 this.isInvitationPanelShow = false;
                 this.contentTableList();
                 this.$refs.checkTree.resetChecked();

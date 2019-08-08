@@ -55,8 +55,8 @@ export const getApplicationsByUserId = () => {
 /**
  * 切换app记录appId
  */
-export const updateUserLastAppIdAndCookie = (appId) => {
-    return ajaxRequest.put(`/api/userInfo/UpdateUserLastAppIdAndCookie`, JSON.stringify(appId));
+export const updateUserLastAppIdAndCookie = (appId) => {    
+    return ajaxRequest.post(`/api/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
 }
 /**
  * 切换site记录siteId

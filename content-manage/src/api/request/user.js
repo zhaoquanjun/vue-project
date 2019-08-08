@@ -16,7 +16,7 @@ export const getUserDashboard = () => {
     return ajaxRequest.get(`${enbironmemy.dashboardApi}/api/userInfo/GetUserDashboard`, params);
 }
 export const updateAppIdToCookie = () => {
-    return ajaxRequest.put(`${enbironmemy.dashboardApi}/api/userInfo/UpdateAppIdToCookie`);
+    return ajaxRequest.get(`${enbironmemy.dashboardApi}/api/userInfo/GetAppIdAndUpdateToCookie`);
 }
 
 

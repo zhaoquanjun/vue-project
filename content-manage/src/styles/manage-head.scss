@@ -5,7 +5,10 @@
     border-bottom: 1px solid #e8eaf3;
     background: #fff;
     margin-bottom: 24px;
-     height: 70px !important;
+    height: 70px !important;
+    border: 1px solid #E5E5E5;
+    border-radius: 2px;
+    margin-right: 16px;
 }
 .seachInput {
     display: inline-block;
@@ -100,7 +103,7 @@
 }
 .upload-wrap {
     border: none;
-    font-size: 12px;
+    font-size: 14px;
     margin-right: 25px;
     cursor: pointer;
     display: inline-block;
@@ -110,7 +113,7 @@
     font-weight: 400;
 }
 
-// 批量操作的头部样式
+// IMG 批量操作的头部样式
 .handle-batch {
     display: flex;
     align-items: center;
@@ -121,5 +124,15 @@
     }
     .handle-btn{
         margin:0 8px
+    }
+}
+// 文章 产品
+.bach-header {
+    display: flex;
+    align-items: center;
+    padding:0 16px;
+    width: 100%;
+    .bach-hanlder{
+        padding-left: 24px;
     }
 }

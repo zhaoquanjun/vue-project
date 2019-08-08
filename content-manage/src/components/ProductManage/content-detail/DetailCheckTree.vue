@@ -6,7 +6,7 @@
         node-key="id"
         ref="tree"
         :check-strictly="true"
-        @check="check"
+        @check-change="checkChange"
     ></el-tree>
 </template>
 <script>
@@ -27,11 +27,9 @@ export default {
         setChecked(id) {
             this.$refs.tree.setChecked(id);
         },
-        check(data) {
-            console.log(this.categoryId);
-            console.log(arguments);
-            let getCheckedNodes = this.getCheckedNodes();
-            this.$emit("chooseNode", data);
+       
+        checkChange(data,boolen){
+          this.$emit("chooseNode", data,boolen);
         }
     },
     watch: {

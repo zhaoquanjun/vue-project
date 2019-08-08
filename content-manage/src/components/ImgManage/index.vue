@@ -2,13 +2,12 @@
     <el-container id="content-manage">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
-                <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
 
             <m-tree
                 :tree-result="treeResult"
-                :pic-search-options="picSearchOptions"
+                :list-options="picSearchOptions"
                 :isexpand="true"
                 @getPicList="getPicList"
                 @create="newCategory"

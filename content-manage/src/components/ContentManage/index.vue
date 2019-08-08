@@ -2,7 +2,6 @@
     <el-container>
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
-                <svg-icon icon-class="img-type-title"></svg-icon>
                 <span>图片分类</span>
             </h4>
             <h5 class="title-item">全部分类(12)</h5>
