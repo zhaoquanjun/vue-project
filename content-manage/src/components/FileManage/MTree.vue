@@ -8,7 +8,6 @@
             :expand-on-click-node="false"
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
-            accordion
             ref="tree"
             draggable
             :allow-drop="allowDrop"

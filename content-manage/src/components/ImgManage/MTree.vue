@@ -8,7 +8,6 @@
             :expand-on-click-node="false"
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
-            accordion
             ref="tree"
             draggable
             :allow-drop="allowDrop"
@@ -234,13 +233,13 @@ export default {
             if (data.level === 0) {
                 this.setCss(allCategoryEle, {
                     background: "#e0faff",
-                    color: "#00C1DE",
+                    color: "#262626",
                     borderLeft: "2px solid #0595E6"
                 });
             } else {
                 this.setCss(allCategoryEle, {
                     background: "#fff",
-                    color: "#606266",
+                    color: "#262626",
                     border:0
                 });
             }

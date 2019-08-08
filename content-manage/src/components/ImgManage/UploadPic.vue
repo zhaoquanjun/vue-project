@@ -135,6 +135,7 @@ export default {
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
+            console.log(fileList)
             this.$notify({
                 customClass: "notify-error", //  notify-success ||  notify-error
                 message: `上传图片文件超过数量限制`,

@@ -1,40 +1,41 @@
 <template>
     <div id="asideTree" class="aside-tree">
-        <el-scrollbar >
-        <el-tree
-            :data="treeResult"
-            node-key="id"
-            default-expand-all
-            :expand-on-click-node="false"
-            @node-drag-end="handleDragEnd"
-            @node-click="changeCategory"
-            accordion
-            ref="tree"
-            draggable
-            :allow-drop="allowDrop"
-            :highlight-current="true"
-            
-        >
-            <div
-                class="custom-tree-node"
-                @mouseover="handlerOver(data)"
-                @mouseleave="handlerMouseLeave"
-                slot-scope="{ node, data }"
+        <el-scrollbar>
+            <el-tree
+                :data="treeResult"
+                node-key="id"
+                default-expand-all
+                :expand-on-click-node="false"
+                @node-drag-end="handleDragEnd"
+                @node-click="changeCategory"
+                accordion
+                ref="tree"
+                draggable
+                :allow-drop="allowDrop"
+                :highlight-current="true"
             >
-               <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
-                <div class="node-label-wrap">
-                    <span class="node-label">{{data.label}}</span>
-                    <span>({{data.leafSum }})</span>
-                </div>
-                <span
-                    class="set-tree-type"
-                    @click.stop="handleShow($event,node,data)"
-                    v-show="data.id === treeNodeId"
+                <div
+                    class="custom-tree-node"
+                    @mouseover="handlerOver(data)"
+                    @mouseleave="handlerMouseLeave"
+                    slot-scope="{ node, data }"
                 >
-                    <i class="iconfont iconsangedian" style="font-size:30px"></i>
-                </span>
-            </div>
-        </el-tree>
+                    <button class="drop-btn" v-if="node.data.level>0">
+                        <i class="iconfont icontuodongdian"></i>
+                    </button>
+                    <div class="node-label-wrap">
+                        <span class="node-label">{{data.label}}</span>
+                        <span>({{data.leafSum }})</span>
+                    </div>
+                    <span
+                        class="set-tree-type"
+                        @click.stop="handleShow($event,node,data)"
+                        v-show="data.id === treeNodeId"
+                    >
+                        <i class="iconfont iconsangedian" style="font-size:30px"></i>
+                    </span>
+                </div>
+            </el-tree>
         </el-scrollbar>
         <div class="category-name-pic" ref="operateSection">
             <UploadCategoryPic
@@ -58,7 +59,7 @@
 </template>
 <script>
 import UploadCategoryPic from "./uploadCategoryPic";
-import { trim } from "@/utlis/index"
+import { trim } from "@/utlis/index";
 export default {
     props: ["treeResult", "productSearchOptions", "isrightPannel"],
     components: {
@@ -230,15 +231,15 @@ export default {
 
             if (data.level === 0) {
                 this.setCss(allCategoryEle, {
-                    background: "#f7f7f7",
-                    color: "#00C1DE",
-                    border: "2px solid #00C1DE;"
+                    background: "#e0faff",
+                    color: "#262626",
+                    borderLeft: "2px solid #0595E6"
                 });
             } else {
                 this.setCss(allCategoryEle, {
                     background: "#fff",
-                    color: "#606266",
-                    border: "none"
+                    color: "#262626",
+                    border: 0
                 });
             }
             this.closeUploadCategoryPic();
@@ -289,8 +290,7 @@ export default {
         _handleShowMoreOperate1(ev, row) {
             this.$refs.operateSection1.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection1.style.top =
-                ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + "px";
             if (this.$refs.operateSection1.style.display === "block") {
                 this.$refs.operateSection1.style.display = "none";
             } else {
