@@ -376,6 +376,7 @@ export default {
                     type: "success",
                     message: "设置成功!"
                 });
+                this.$store.dispatch('_getAppHeadInfo');
             } else {
                 this.$message({
                     type: "failed",

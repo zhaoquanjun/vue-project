@@ -3,7 +3,7 @@
     <el-row style="display: flex;">
       <div style="margin-right:487px;width:100%">
         <div class="welcome-wrap">
-          <p class="welcome-words">CHRISTIN，欢迎回到微站后台</p>
+            <p class="welcome-words">{{userName}}，欢迎回到微站后台</p>
           <p class="siteIntroduction">以下是您当前的站点</p>
         </div>
 
@@ -230,7 +230,14 @@ export default {
           return "designColorYellow";
       }
     }
-  }
+        },
+   computed: {           
+            userName() {
+                let userName = this.$store.state.user.userInfo.userName;
+                let phone = this.$store.state.user.userInfo.phone;
+                return userName?userName:phone;
+            }
+        },
 };
 </script>
 
