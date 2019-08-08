@@ -25,7 +25,7 @@
                <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
                     <span class="node-label">{{data.label}}</span>
-                    <span>({{data.newsCount }})</span>
+                    <span>({{data.inUseSum }})</span>
                 </div>
                 <span
                     class="set-tree-type"
@@ -229,17 +229,17 @@ export default {
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
 
-            if (data.level === 0) {
+              if (data.level === 0) {
                 this.setCss(allCategoryEle, {
-                    background: "#f7f7f7",
-                    color: "#00C1DE",
-                    border: "2px solid #00C1DE;"
+                    background: "#e0faff",
+                    color: "#262626",
+                    borderLeft: "2px solid #0595E6"
                 });
             } else {
                 this.setCss(allCategoryEle, {
                     background: "#fff",
-                    color: "#606266",
-                    border: "none"
+                    color: "#262626",
+                    border:0
                 });
             }
             this.closeUploadCategoryPic();

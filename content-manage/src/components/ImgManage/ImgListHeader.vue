@@ -53,10 +53,10 @@
                 </span>
             </div>
             <div class="head-item head-right">
-                <el-button class="upload-wrap" @click="switchUploadBoxShowStatus">
+                <button class="btn-lightblue btn-small upload-wrap" @click="switchUploadBoxShowStatus">
                     <!-- <svg-icon icon-class="upload-img"></svg-icon> -->
                     上传图片
-                </el-button>
+                </button>
             </div>
         </template>
         <template v-else>

@@ -70,7 +70,7 @@
           <div class="siteinfoBackImg"></div>
           <button class="siteinfoBtn release">发布</button>
           <button class="siteinfoBtn prev">预览</button>
-          <button class="siteinfoBtn design">设计</button>
+          <button class="siteinfoBtn design" @click="toDesign">设计</button>
         </div>
       </el-row>
       <el-row class="siteContent">
@@ -237,6 +237,10 @@ export default {
     };
   },
   methods: {
+    // 跳转至设计器
+    toDesign() {
+      window.location.href = `http://designer.console.wezhan.cn?siteId=${this.siteId}`;
+    },
     // 获取siteId
     getSiteId(siteId) {
       this.siteId = siteId;
@@ -254,7 +258,10 @@ export default {
         this.siteName = data.siteName;
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
-        this.lastPublishedTime = formatDateTime(data.lastPublishedTime, "yyyy-MM-dd hh:mm");
+        this.lastPublishedTime = formatDateTime(
+          data.lastPublishedTime,
+          "yyyy-MM-dd hh:mm"
+        );
         this.siteId = data.siteId;
         this.language = data.language;
         this.firstIndustryId = data.firstIndustryId;
@@ -375,7 +382,7 @@ export default {
       }
     },
     bindDomain() {
-      this.$router.push("/website/sitedomain")
+      this.$router.push("/website/sitedomain");
     }
   }
 };
@@ -522,8 +529,8 @@ export default {
       line-height: 32px;
       margin-left: 32px;
     }
-    .isBind{
-      color:#00C2DE
+    .isBind {
+      color: #00c2de;
     }
   }
   .siteinfoBackImg {

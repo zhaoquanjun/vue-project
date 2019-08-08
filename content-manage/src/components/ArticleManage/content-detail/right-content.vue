@@ -219,6 +219,29 @@ export default {
 .el-collapse /deep/ .el-collapse-item__header {
     font-weight: 600;
 }
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
+    left: 17px;
+    bottom: 20px;
+    border: none;
+    width: 27px;
+    height: 27px;
+    background: url("~img/pic-icon/look.png") no-repeat center;
+    background-size: contain;
+}
+
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete{
+    right: 17px;
+    bottom: 20px;
+    border: none;
+    width: 27px;
+    height: 27px;
+    background: url("~img/pic-icon/delete-icon.png") no-repeat center;
+    background-size: contain;
+}
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete:before{
+    content: ""
+}
+ 
 </style>
 <style lang="scss" scoped>
 .article-cover {
@@ -228,9 +251,9 @@ export default {
 }
 .icon-change {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url("~img/content-icon/change.png") no-repeat center;
+    width: 27px;
+    height: 27px;
+    background: url("~img/pic-icon/look.png") no-repeat center;
     background-size: contain;
 }
 </style>

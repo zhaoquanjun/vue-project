@@ -8,7 +8,6 @@
             :expand-on-click-node="false"
             @node-drag-end="handleDragEnd"
             @node-click="changeCategory"
-            accordion
             ref="tree"
             draggable
             :allow-drop="allowDrop"
@@ -24,7 +23,7 @@
                <button class="drop-btn" ><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
                     <span class="node-label">{{data.label}}</span>
-                    <span>({{data.leafSum }})</span>
+                    <span>({{data.inUseSum }})</span>
                 </div>
                 <span
                     class="set-tree-type"

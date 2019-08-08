@@ -252,7 +252,8 @@ export default {
     watch: {
         tableData: {
             handler(newValue, oldValue) {
-                if (this.tableData.list.length > 1) {
+                
+                if (this.tableData.list.length >= 1) {
                     setTimeout(() => {
                         this.loadingShow = false;
                     }, 500);
@@ -266,7 +267,6 @@ export default {
 
 <style lang="scss" scoped>
 .table-content {
-    position: relative;
     margin-right: 16px;
     border: 1px solid #e5e5e5;
     border-radius: 2px;
