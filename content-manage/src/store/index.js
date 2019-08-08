@@ -60,6 +60,6 @@ if(getLocal("appid")){
 if(Cookies("routeCode")){
   store.commit("SETCODE",Cookies("routeCode"))
 }
-if(sessionStorage.getItem("userInfo")){
+if(Cookies("userInfo")){
   store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
 }
