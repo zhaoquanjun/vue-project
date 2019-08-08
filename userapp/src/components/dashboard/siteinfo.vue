@@ -93,6 +93,7 @@ export default {
   props: ["siteInfo"],
   data() {
     return {
+      isFirst: true,
       siteId: 2,
       curIndex: 1,
       createShow: false,
@@ -109,13 +110,21 @@ export default {
     };
   },
 
-  created() {
-    this.initial();
+  mounted() {
+    // this.initial();
     console.log(this.siteInfo);
+  },
+  watch: {
+    siteInfo() {
+      if (this.isFirst) {
+        this.initial();
+      }
+    }
   },
   methods: {
     initial() {
-      if (this.siteInfo.length > 2) {
+      this.isFirst = false;
+      if (this.siteInfo.length > 3) {
         for (let i = 0; i < this.siteInfo.length; i++) {
           if (this.siteInfo[i].siteId == this.siteId) {
             if (i == 0) {
@@ -137,13 +146,19 @@ export default {
             this.$set(this.siteInfo[i + 1], "next", true);
           }
         }
+      } else if (this.siteInfo.length == 3) {
+        for (let i = 0; i < this.siteInfo.length; i++) {
+          if (this.siteInfo[i].siteId == this.siteId) {
+            this.$set(this.siteInfo[i - 1], "prev", true);
+            this.$set(this.siteInfo[i + 1], "next", true);
+          }
+        }
       }
     },
     handleClick(item, index) {
-      console.log(this.$refs[`siteInfo-${index}`][0].style)
+      // console.log(this.$refs[`siteInfo-${index}`][0].style);
       // if (index == 0 || index == this.siteInfo.length - 1) return;
       // this.curIndex = index;
-      console.log(this.lock);
       if (this.siteInfo.length == 1) {
         this.lock = false;
       }
@@ -168,13 +183,24 @@ export default {
         }
 
         // if(this.siteInfo.length != 4 && !(index == 3 || index < this.curIndex)){
-        if (index == 0) {
-          this.$set(this.siteInfo[this.siteInfo.length - 2], "prevPrev", true);
-        } else if (index == 1) {
-          this.$set(this.siteInfo[this.siteInfo.length - 1], "prevPrev", true);
-        } else {
-          this.$set(this.siteInfo[index - 2], "prevPrev", true);
+        if (this.siteInfo.length != 3) {
+          if (index == 0) {
+            this.$set(
+              this.siteInfo[this.siteInfo.length - 2],
+              "prevPrev",
+              true
+            );
+          } else if (index == 1) {
+            this.$set(
+              this.siteInfo[this.siteInfo.length - 1],
+              "prevPrev",
+              true
+            );
+          } else {
+            this.$set(this.siteInfo[index - 2], "prevPrev", true);
+          }
         }
+
         // }
 
         // setTimeout(() => {
@@ -312,20 +338,18 @@ export default {
       }
       .siteName {
         // display: inline-block;
-        font-size: 22px;
-        font-family: PingFangSC-Regular;
+        font-size: 16px;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
-        line-height: 30px;
+        line-height: 22px;
         margin-top: 33px;
         padding-left: 30px;
       }
       .siteText {
-        font-size: 16px;
-        font-family: PingFangSC-Regular;
+        font-size: 12px;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
-        line-height: 22px;
+        line-height: 17px;
         margin-left: 30px;
       }
       .siteLanguage {
@@ -345,6 +369,27 @@ export default {
       transform: translateX(-50%);
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
       opacity: 1;
+      .siteName {
+        font-size: 22px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 1);
+        line-height: 30px;
+        margin-top: 57px;
+        padding-left: 30px;
+      }
+      .siteText {
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 1);
+        line-height: 22px;
+        margin-left: 30px;
+      }
+      .siteLanguage {
+        margin-top: 16px;
+      }
+      .isPublished {
+        margin-top: 30px;
+      }
     }
     .prevActive {
       height: 180px;
