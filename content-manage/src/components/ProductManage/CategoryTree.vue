@@ -24,7 +24,7 @@
                <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
                 <div class="node-label-wrap">
                     <span class="node-label">{{data.label}}</span>
-                    <span>({{data.leafSum }})</span>
+                    <span>({{data.inUseSum }})</span>
                 </div>
                 <span
                     class="set-tree-type"
