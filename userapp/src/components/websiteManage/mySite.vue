@@ -298,7 +298,8 @@ export default {
         });
         return;
       }
-      this.$refs[`popover`].doClose();
+        this.$refs[`popover`].doClose();
+        console.log('siteid:', this.siteId)
       await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
       this.siteName = this.siteNameValue;
     },

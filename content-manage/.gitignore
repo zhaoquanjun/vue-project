@@ -5,7 +5,7 @@ node_modules
 !node_modules/simple-uploader.js
 !node_modules/element-ui/lib/pagination.js
 /dist
-
+.MERGE_MSG.swp
 # local env files
 .env.local
 .env.*.local
