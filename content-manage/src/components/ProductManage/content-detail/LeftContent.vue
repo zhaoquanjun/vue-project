@@ -616,6 +616,9 @@ export default {
             }
         },
         chooseNode(data, boolean) {
+            if(this.detailData.productCategoryList.length>=5){
+                return
+            };
             if (!!boolean) {
                 this.detailData.productCategoryList.push({
                     displayName: data.label,
