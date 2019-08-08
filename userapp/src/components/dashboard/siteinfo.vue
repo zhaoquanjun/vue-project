@@ -10,14 +10,16 @@
           :key="index"
           @click.native="handleClick(item,index)"
         >
-          <div class="siteImg"></div>
+          <div class="siteImg">
+            <img :src="item.image" alt class="siteImgBackground" />
+          </div>
           <div class="siteName">{{item.siteName}}</div>
           <div class="siteText siteLanguage">
             <span>语言：</span>
             {{item.language == "zh-CN" ? "中" : "EN"}}
           </div>
           <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
-          <!-- <div class="siteText details" v-show="index == curIndex">查看详情</div> -->
+          <div class="siteText details" v-show="index == curIndex">查看详情</div>
         </el-col>
         <div class="leftModul"></div>
         <div class="rightModul"></div>
@@ -80,6 +82,7 @@
               class="createBtn"
               :disabled="radio == '' || createSiteName == ''"
               :class="{disabled: radio == '' || createSiteName == ''}"
+              @click="createSite"
             >立即创建</el-button>
           </div>
         </div>
@@ -89,6 +92,7 @@
 </template>
 
 <script>
+import * as dashboardApi from "@/api/request/dashboardApi";
 export default {
   props: ["siteInfo"],
   data() {
@@ -99,14 +103,7 @@ export default {
       createShow: false,
       createSiteName: "",
       radio: "",
-      lock: true,
-      languageList: {
-        "zh-CN": "简体中文",
-        "en-US": "English",
-        "ja-JP": "日本语",
-        "es-ES": "Español",
-        "ko-KR": "한국어"
-      }
+      lock: true
     };
   },
 
@@ -221,6 +218,11 @@ export default {
       this.radio = "";
       this.createSiteName = "";
       this.createShow = false;
+    },
+    // 创建site
+    async createSite() {
+      await dashboardApi.CreateSite(this.radio, this.createSiteName);
+      this.createShow = false;
     }
   }
 };
@@ -278,7 +280,7 @@ export default {
       position: absolute;
       left: 0;
       bottom: 31px;
-      width: 20%;
+      width: 17%;
       height: 180px;
       background: linear-gradient(
         90deg,
@@ -290,7 +292,7 @@ export default {
       position: absolute;
       right: 0;
       bottom: 31px;
-      width: 20%;
+      width: 17%;
       height: 180px;
       background: linear-gradient(
         90deg,
@@ -304,6 +306,9 @@ export default {
         rgba(8, 204, 235, 1) 0%,
         rgba(129, 220, 160, 1) 100%
       );
+      // background: url("~img/dashboard/board-greenbackground.png") no-repeat
+      //   center;
+      // background-size: contain;
     }
     .item:nth-child(3n + 2) {
       background: linear-gradient(
@@ -335,6 +340,10 @@ export default {
         float: left;
         margin-top: 24px;
         margin-left: 21px;
+        .siteImgBackground {
+          width: 100%;
+          height: 100%;
+        }
       }
       .siteName {
         // display: inline-block;
@@ -369,6 +378,10 @@ export default {
       transform: translateX(-50%);
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
       opacity: 1;
+      .siteImg {
+        margin-top: 43px;
+        margin-left: 30px;
+      }
       .siteName {
         font-size: 22px;
         font-weight: 400;
