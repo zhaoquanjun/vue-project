@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="图片名称" show-overflow-tooltip>
+            <el-table-column label="图片名称" show-overflow-tooltip width="200">
                 <template slot-scope="scope">
                     <img
                         :src="scope.row.zoomOssUrl"

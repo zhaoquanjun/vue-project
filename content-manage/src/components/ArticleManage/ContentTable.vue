@@ -54,11 +54,13 @@
             <el-table-column width="200" label="操作">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <span class="edit-icon" @click="handleEdit(scope.row)"></span>
+                        <span class="edit-icon" @click="handleEdit(scope.row)"><i class="iconfont iconcaozuo"></i></span>
                         <span
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
-                        ></span>
+                        >
+                            <i class="iconfont iconsangedian"></i>
+                        </span>
                     </div>
                 </template>
             </el-table-column>
@@ -86,7 +88,7 @@
                 @click="handleMoreOperate(it.flag)"
             >{{it.name}}</li>
         </ul>
-       <Loading v-if="loadingShow"/>
+        <Loading v-if="loadingShow" />
     </div>
 </template>
 
@@ -111,12 +113,11 @@ export default {
             row: "",
             tableHeight: 500,
             loadingShow: true,
-            tableData:""
+            tableData: ""
         };
     },
     mounted() {
-        
-        this.tableData = this.articlePageResult
+        this.tableData = this.articlePageResult;
         document.addEventListener("click", () => {
             this.$nextTick(() => {
                 if (this.$refs.operateSection)
@@ -241,77 +242,24 @@ export default {
             }
         }
     },
-    watch:{
-        tableData:{
-          handler(newValue,oldValue){
-              if(this.tableData.list.length>=1){
-                  setTimeout(() => {
-                      this.loadingShow = false
-                  }, 500);
-              }
-          },
-          deep:true,
-         
-       }, 
-       
+    watch: {
+        tableData: {
+            handler(newValue, oldValue) {
+                if (this.tableData.list.length >= 1) {
+                    setTimeout(() => {
+                        this.loadingShow = false;
+                    }, 500);
+                }
+            },
+            deep: true
+        }
     }
-   
 };
 </script>
 
 <style lang="scss" scoped>
-.table-content {
-   
-    margin-right: 16px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    .handle-btn-wrap {
-        justify-content: flex-start;
-        .edit-icon {
-            margin-right: 32px;
-            cursor: pointer;
-            width: 16px;
-            height: 16px;
-            background: url("../../../static/images/news_edit.png") no-repeat
-                center center;
-            background-size: 100% 100%;
-        }
-        .more-operate {
-            position: relative;
-            cursor: pointer;
-            width: 20px;
-            height: 15px;
-            background: url("../../../static/images/more_operate.png") no-repeat
-                center center;
-            background-size: contain;
-            &::before {
-                content: "";
-                position: absolute;
-                top: -10px;
-                right: -10px;
-                bottom: -10px;
-                left: -10px;
-            }
-        }
-    }
-    .operate-section {
-        display: none;
-        position: absolute;
-        z-index: 19;
-        background: #fff;
-        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.07);
-        li {
-            cursor: pointer;
-            padding: 8px 16px;
-            line-height: 17px;
-            &:hover {
-                color: #00c1de;
-                background: rgba(0, 193, 222, 0.2);
-            }
-        }
-    }
-}
+@import "../../styles/manege-table.scss";
 </style>
 
-<
+
 

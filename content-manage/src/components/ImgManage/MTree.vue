@@ -1,39 +1,40 @@
 <template>
     <div id="asideTree" class="aside-tree">
-        <el-scrollbar >
-        <el-tree
-            :data="treeResult"
-            node-key="id"
-            default-expand-all
-            :expand-on-click-node="false"
-            @node-drag-end="handleDragEnd"
-            @node-click="changeCategory"
-            ref="tree"
-            draggable
-            :allow-drop="allowDrop"
-            :highlight-current="true"
-            
-        >
-            <div
-                class="custom-tree-node"
-                @mouseover="handlerOver(data)"
-                @mouseleave="handlerMouseLeave"
-                slot-scope="{ node, data }"
+        <el-scrollbar>
+            <el-tree
+                :data="treeResult"
+                node-key="id"
+                default-expand-all
+                :expand-on-click-node="false"
+                @node-drag-end="handleDragEnd"
+                @node-click="changeCategory"
+                ref="tree"
+                draggable
+                :allow-drop="allowDrop"
+                :highlight-current="true"
             >
-               <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
-                <div class="node-label-wrap">
-                    <span class="node-label">{{data.label}}</span>
-                    <span>({{data.inUseSum }})</span>
-                </div>
-                <span
-                    class="set-tree-type"
-                    @click.stop="handleShow($event,node,data)"
-                    v-show="data.id === treeNodeId"
+                <div
+                    class="custom-tree-node"
+                    @mouseover="handlerOver(data)"
+                    @mouseleave="handlerMouseLeave"
+                    slot-scope="{ node, data }"
                 >
-                    <i class="iconfont iconsangedian" style="font-size:30px"></i>
-                </span>
-            </div>
-        </el-tree>
+                    <button class="drop-btn" v-if="node.data.level>0">
+                        <i class="iconfont icontuodongdian"></i>
+                    </button>
+                    <div class="node-label-wrap">
+                        <span class="node-label">{{data.label}}</span>
+                        <span>({{data.inUseSum }})</span>
+                    </div>
+                    <span
+                        class="set-tree-type"
+                        @click.stop="handleShow($event,node,data)"
+                        v-show="data.id === treeNodeId"
+                    >
+                        <i class="iconfont iconsangedian" style="font-size:30px"></i>
+                    </span>
+                </div>
+            </el-tree>
         </el-scrollbar>
         <div class="category-name-pic" ref="operateSection">
             <UploadCategoryPic
@@ -58,7 +59,7 @@
 </template>
 <script>
 import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
-import { trim } from "@/utlis/index"
+import { trim } from "@/utlis/index";
 export default {
     // picSearchOptions
     props: ["treeResult", "listOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
@@ -143,9 +144,8 @@ export default {
         handleDragEnd(draggingNodeDom, targetNodeDom, dropType, ev) {
             var draggingNode = draggingNodeDom.data;
             var targetNode = targetNodeDom.data;
-            if (dropType === "none") {
-                return;
-            }
+            // let level = this.getLevel(draggingNodeDom, 1) + targetNodeDom.level;
+      
             switch (dropType) {
                 case "inner": {
                     draggingNode.parentId = targetNode.id;
@@ -153,14 +153,18 @@ export default {
                 }
                 case "before":
                 case "after": {
-                    draggingNode.parentId = targetNode.parentId ? targetNode.parentId: 0;
+                    draggingNode.parentId = targetNode.parentId
+                        ? targetNode.parentId
+                        : 0;
                     break;
                 }
                 case "none":
+                    return;
                 default: {
                     return;
                 }
             }
+
             var idOrderByArr = [];
             for (var i = 0; i < targetNodeDom.parent.childNodes.length; i++) {
                 var childNode = targetNodeDom.parent.childNodes[i];
@@ -173,8 +177,6 @@ export default {
             );
         },
         allowDrop(draggingNode, targetNode, dropType) {
-
-            console.log(draggingNode, targetNode, dropType)
             draggingNode = draggingNode.data;
             targetNode = targetNode.data;
             //判断是否大于三层
@@ -182,9 +184,9 @@ export default {
                 dropType === "inner" ||
                 draggingNode.parentId !== targetNode.parentId
             ) {
-                return this.getLevel(draggingNode, 1) + targetNode.level <= 3;
-            }else{
-               
+                let level = this.getLevel(draggingNode, 1) + targetNode.level;
+                return level <= 3;
+            } else {
             }
             return true;
         },
@@ -240,17 +242,17 @@ export default {
                 this.setCss(allCategoryEle, {
                     background: "#fff",
                     color: "#262626",
-                    border:0
+                    border: 0
                 });
             }
-            console.log(data,'   dfadfad')
-           
+            console.log(data, "   dfadfad");
+
             this.closeUploadCategoryPic();
             this.closeUploadCategoryPic1();
-          this.listOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
-          this.listOptions.pageIndex = 1;// 与产品分类不一致的地方
-           this.$emit("getPicList", data);
-           this.$emit("chooseCategoryNode", data);// 与产品分类不一致的地方
+            this.listOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
+            this.listOptions.pageIndex = 1; // 与产品分类不一致的地方
+            this.$emit("getPicList", data);
+            this.$emit("chooseCategoryNode", data); // 与产品分类不一致的地方
         },
         // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {
@@ -293,8 +295,7 @@ export default {
         _handleShowMoreOperate1(ev, row) {
             this.$refs.operateSection1.style.left =
                 ev.pageX - ev.offsetX + 46 + "px";
-            this.$refs.operateSection1.style.top =
-                ev.pageY - ev.offsetY  + "px";
+            this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + "px";
             if (this.$refs.operateSection1.style.display === "block") {
                 this.$refs.operateSection1.style.display = "none";
             } else {

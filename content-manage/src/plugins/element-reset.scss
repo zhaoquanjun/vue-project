@@ -265,6 +265,7 @@
 
 .seachInput .el-input .el-input__inner {
     border-radius: 2px;
+    font-size: 14px;
 }
 .seachInput .el-input  .el-input__inner:focus,.seachInput .el-input  .el-input__inner:hover{
     border-color: #09CCEB
@@ -278,12 +279,7 @@
     background: transparent;
     margin: 0 8px;
 }
-// button focus样式
-button.deleteActive:focus{
-    color: #09CCEB;
-    background: #fff;
-    border: 1px solid #09CCEB;
-}
+
 .el-button.btn-delete{
     border: 1px solid #FE9837;
     color: #FE9837;
@@ -300,10 +296,21 @@ button.deleteActive:focus{
     opacity: 0.8;
     background: rgba(255, 255, 255, 0.9)
 }
+/* el-buttom -----  end */
 
+
+button{
+    border-radius: 2px;
+}
 .btn-small{
     padding: 9px 15px;
     border-radius: 2px;
+}
+// button focus样式
+button.deleteActive:focus{
+    color: #09CCEB;
+    background: #fff;
+    border: 1px solid #09CCEB;
 }
 //lightblue
 button.btn-lightblue{

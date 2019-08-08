@@ -109,20 +109,20 @@ export default {
     data() {
         return {
             valueId: null, // 初始值
-            valueTitle: this.categoryName ,
+            valueTitle:"",
             defaultExpandedKey: []
         };
     },
     mounted() {
-        this.initHandle();
-     
+       this.valueTitle = this.categoryName 
     },
     methods: {
         setCheckedKeys() {
             this.$nextTick(()=>{
                  alert(JSON.stringify( this.categoryId))
                console.log( this.categoryId,' this.categoryId this.categoryId this.categoryId')
-                 this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
+                 this.$refs.selectTree.setCurrentKey(0); // 设置默认选中
+                //   this.$refs.tree.setCheckedKeys(ids);
             })
         },
         nodeExpand(data, node, slot) {
@@ -135,14 +135,14 @@ export default {
         },
         // 初始化值
         initHandle() {
-            console.log(this.valueId, "0000000");
-            if (this.valueId) {
-                this.valueTitle = this.$refs.selectTree.getNode(
-                    this.valueId
-                ).data[this.props.label]; // 初始化显示
-                this.$refs.selectTree.setCurrentKey(this.valueId); // 设置默认选中
-                this.defaultExpandedKey = [this.valueId]; // 设置默认展开
-            }
+            console.log(this.categoryId, "0000000");
+         
+                // this.valueTitle = this.$refs.selectTree.getNode(
+                //     this.valueId
+                // ).data[this.props.label]; // 初始化显示
+                this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
+                // this.defaultExpandedKey = [this.valueId]; // 设置默认展开
+           
             this.$nextTick(() => {
                 let scrollWrap = document.querySelectorAll(
                     ".el-scrollbar .el-select-dropdown__wrap"
@@ -207,17 +207,14 @@ export default {
         }
     },
     watch: {
-        value() {
-            console.log(this.value);
-            this.valueId = this.value;
-            this.initHandle();
-        },
+     
         categoryName() {
             this.valueTitle = this.categoryName;
+            
         },
         categoryId(){
              this.$nextTick(()=>{
-                 console.log(this.categoryId)
+                 this.initHandle()
                  this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
             })
         }

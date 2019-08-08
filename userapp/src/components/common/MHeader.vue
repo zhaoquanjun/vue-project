@@ -271,7 +271,8 @@ export default {
             let appName = this.$store.state.user.userInfo.appName;
             return appName;
         }
-    }
+    },
+   
 };
 </script>
 <style >

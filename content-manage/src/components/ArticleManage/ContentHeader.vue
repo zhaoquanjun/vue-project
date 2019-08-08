@@ -6,7 +6,7 @@
                   <el-input
                     size="medium"
                     v-model="articleSearchOptions.title"
-                    placeholder="输入图片名称搜索"
+                    placeholder="输入名称搜索"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
                     

@@ -41,6 +41,7 @@
                                     size="small"
                                     placeholder="请选择"
                                     :categoryName="categoryName"
+                                    :categoryId="categoryId"
                                     :tree-result="treeResult"
                                     @chooseNode="chooseNode"
                                 />
@@ -278,6 +279,7 @@ export default {
             isOutSearch: false,
             treeResult: null,
             categoryName: "全部分类",
+            categoryId:0,
             options: [
                 {
                     value: true,
@@ -416,6 +418,7 @@ export default {
             var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
                 this.categoryName = categoryName;
+                this.categoryId = parseFloat(this.$route.query.categoryId)
             }
         },
         async getArticleDetail(id) {

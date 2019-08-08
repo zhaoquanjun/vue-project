@@ -214,7 +214,8 @@ export default {
       }
       this.$refs[`popover`].doClose();
       await dashboardApi.UpdateAppName(this.remarkValue);
-      this.appInfo.name = this.remarkValue;
+       this.$store.dispatch('_getAppHeadInfo');// 
+       this.appInfo.name = this.remarkValue;
     },
     /**
      * 设计秘籍内容颜色变化

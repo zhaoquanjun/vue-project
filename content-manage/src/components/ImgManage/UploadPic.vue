@@ -32,12 +32,10 @@
             :auto-upload="false"
             :multiple="true"
             ref="upload"
-            :limit="60"
             drag
             :isFolder="isFolder"
-            :onExceed="onExceed"
             :before-upload="beforeUpload"
-             accept=".jpg,.jpeg,.png,.gif,.svg,.JPG,.JPEG,.GIF"
+            
         >
             <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
             <div @click="setFolder(false)" class="el-upload__text">
@@ -102,7 +100,8 @@ export default {
                 Authorization: ""
             },
             uploadSucess: false,
-            count: 0
+            count: 0,
+            limit:60,// 自定义允许上传的个数
         };
     },
     mounted() {
@@ -119,8 +118,6 @@ export default {
         },
         // 选择图片时触发
         handleChange(file, fileList) {
-            console.log(fileList);
-
             fileList.filter((item, index) => {
                 if (!imgSize(item.size, 10)) {
                     fileList.splice(index, 1);
@@ -132,16 +129,24 @@ export default {
                     this.uploadDisabled = false;
                 }
             });
+            // 
+            if(fileList && fileList.length>this.limit){
+                 this.onExceed(fileList)
+            }
+           
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
-            console.log(fileList)
+           if(fileList.length > this.limit){
+                fileList = fileList.splice(this.limit)
+            };
             this.$notify({
                 customClass: "notify-error", //  notify-success ||  notify-error
                 message: `上传图片文件超过数量限制`,
                 showClose: false,
-                duration: 1000
+                duration: 1500
             });
+             
         },
         // 图片上传成功时触发
         handleSucess(response, file, fileList) {
@@ -176,6 +181,8 @@ export default {
         },
         // 点击上传按钮
         submitUpload() {
+          
+            this.hideImgName()
             this.isUploading = true;
             this.uploadDisabled = true;
             this.count = 0;
@@ -188,6 +195,8 @@ export default {
         },
         // 上传图片时
         beforeUpload(file) {
+             
+         
             const isPic = isImgFile(file.type);
             const isSizeOk = imgSize(file.size);
             let maxMb = 10;
@@ -210,6 +219,13 @@ export default {
                 return false;
             }
             return isPic && isSizeOk;
+        },
+        hideImgName(){
+            // 点击上传时隐藏图片名称避免样式错乱
+              let imgName =  document.querySelectorAll(".el-upload-list__item-name");
+            for(let i=0;i<imgName.length;i++){
+                imgName[i].style.display="none"
+            }
         }
     }
 };

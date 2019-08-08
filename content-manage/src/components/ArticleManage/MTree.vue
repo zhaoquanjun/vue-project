@@ -270,7 +270,7 @@ export default {
             this._handleShowMoreOperate1(ev, node);
         },
         // 分类上传图片
-        _handleShowMoreOperate(ev, node, data) {
+        _handleShowMoreOperate(ev) {
             console.log(this.curClickNode);
             this.createCategoryData = this.curClickData;
             this.$refs.operateSection.style.left =
@@ -287,7 +287,7 @@ export default {
             this.closeUploadCategoryPic1();
         },
         // 新增0730   分类操作菜单显示
-        _handleShowMoreOperate1(ev, row) {
+        _handleShowMoreOperate1(ev) {
             this.$refs.operateSection1.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
             this.$refs.operateSection1.style.top =

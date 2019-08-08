@@ -25,7 +25,7 @@
                         <br />建议上传尺寸为400✕400像素的图片
                     </div>
                     <span style="position: absolute;left: -13px;">
-                        <svg-icon icon-class="tip-icon"></svg-icon>
+                        <i class="iconfont iconyiwen"></i>
                     </span>
                 </el-tooltip>
                 <el-upload

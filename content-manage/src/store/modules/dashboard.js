@@ -64,7 +64,7 @@ const dashboard = {
            set_authList(state, a){
              state.authList = a;
              state.hasRules = true;
-             setLocal("authList", a)
+             sessionStorage.setItem("authList", a)
            },
     },
     actions: {

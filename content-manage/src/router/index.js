@@ -31,6 +31,10 @@ router.beforeEach(async (to, from, next) => {
       await store.dispatch('_updateAppIdToCookie')
       next()
     }
+    console.log(sessionStorage.getItem("authList"))
+    if(!sessionStorage.getItem("authList")){
+      await store.dispatch('_getMenuListData')
+    }
     let r = await store.dispatch('getCurRouteAuth', to.path);
   
     if (r) {

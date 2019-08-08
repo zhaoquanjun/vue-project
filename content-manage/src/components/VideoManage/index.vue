@@ -99,7 +99,7 @@
     import ChunkUpload from "@/components/common/ChunkUpload"
     import MTree from "./MTree";
 
-    import ListHeader from "./ListHeader";
+    import ListHeader from "@/components/ImgManage/ImgListHeader";
     import List from "./List";
     import SelectTree from "@/components/common/SelectTree"
 

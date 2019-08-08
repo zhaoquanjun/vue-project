@@ -3,14 +3,17 @@
         <template v-if="!isBatchHeaderShow">
             <div class="seachInput head-item">
                 <el-input
-                    size="small"
+                    size="medium"
                     v-model="picSearchOptions.keyword"
-                    placeholder="输入视频名称搜索"
+                    placeholder="输入名称搜索"
+                    @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
+                    
                 >
-                    <el-button slot="append" @click="getPicList">
+                    <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getPicList"></i>
+                    <!-- <el-button slot="append" @click="getPicList">
                         <svg-icon icon-class="search-icon"></svg-icon>
-                    </el-button>
+                    </el-button>-->
                 </el-input>
             </div>
             <div class="head-item head-middle">
@@ -31,12 +34,12 @@
                     </el-select>
                 </span>
                 <span @click="switchIsDesc('asc')">
-                    <i class="sort-icon asc"  :class="{'asc-icon-on ':ascSort}"></i>
+                    <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
                     <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                 </span>
                 <span @click="switchIsDesc('dec')">
-                    <i class="sort-icon dec"  :class="{'dec-icon-on ':descSort}"></i>
+                    <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
                     <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
                 </span>
@@ -51,27 +54,24 @@
                 </span>
             </div>
             <div class="head-item head-right">
-                <el-button class="upload-wrap" @click="switchUploadBoxShowStatus">
+                <button
+                    class="btn-lightblue btn-small upload-wrap"
+                    @click="switchUploadBoxShowStatus"
+                >
                     <!-- <svg-icon icon-class="upload-img"></svg-icon> -->
-                    上传{{displayName}}
-                </el-button>
+                    上传图片
+                </button>
             </div>
         </template>
         <template v-else>
-            <div style="padding:0 21px;width:100%">
+            <div class="handle-batch">
                 <span>
                     已选
                     <i>{{countPic}}</i> 张图片
                 </span>
-                <div style="float:right">
-                    <el-button class="deleteActive" style="margin:0 16px" size="small" @click="batchMove">
-                        <!-- <svg-icon icon-class="tab-moved"></svg-icon> -->
-                        移动
-                    </el-button>
-                    <el-button class="deleteActive" size="small" @click="batchDelete">
-                        <!-- <svg-icon icon-class="l-recyclebin"></svg-icon> -->
-                        删除
-                    </el-button>
+                <div>
+                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
+                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
                 </div>
             </div>
         </template>
@@ -79,12 +79,12 @@
 </template>
 <script>
 export default {
-        props: ["picSearchOptions", "isBatchHeaderShow", "countPic","displayName"],
+    props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
     data() {
         return {
-            ascSort:false,
-            descSort:false,
-          
+            ascSort: false,
+            descSort: true,
+
             modeSelecte: true,
             options: [
                 {
@@ -100,7 +100,7 @@ export default {
                     label: "文件名"
                 }
             ],
-            orderByLabel: ""
+            orderByLabel: "CreateTime"
         };
     },
     methods: {
@@ -111,19 +111,23 @@ export default {
         getPicList() {
             this.$emit("getPicList");
         },
+        searchEnterFun() {
+            this.getPicList();
+        },
         switchUploadBoxShowStatus() {
             this.$emit("switchUploadBoxShowStatus");
         },
         switchIsDesc(flag) {
-            if(flag==="asc"){
+            if (flag === "asc") {
                 this.ascSort = true;
-                 this.descSort = !this.ascSort
-            }else{
+                this.descSort = !this.ascSort;
+                this.picSearchOptions.isDescending = false.isDescending;
+            } else {
                 this.descSort = true;
-                this.ascSort = !this.descSort
+                this.ascSort = !this.descSort;
+                this.picSearchOptions.isDescending = true;
             }
-            this.picSearchOptions.isDescending = !this.picSearchOptions
-                .isDescending;
+
             this.getPicList();
         },
         batchMove() {
@@ -144,6 +148,8 @@ export default {
     }
 };
 </script>
+
+
 <style  lang="scss" scoped>
-@import "@/styles/manage-head.scss"
+@import "@/styles/manage-head.scss";
 </style>

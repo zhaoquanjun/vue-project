@@ -88,7 +88,7 @@
                         content="一次可上传60张图片，单张图片大小不超过10MB"
                         placement="right"
                     >
-                        <svg-icon icon-class="tip-icon"></svg-icon>
+                       <i class="iconfont iconyiwen"></i>
                     </el-tooltip>
                 </span>
             </span>
