@@ -133,7 +133,8 @@
 <script>
 import securityService from "@/services/authentication/securityService";
 import { getApplication } from "@/api/request/dashboardApi";
-import { getApplicationsByUserId } from "@/api/request/dashboardApi";
+    import { getApplicationsByUserId } from "@/api/request/dashboardApi";
+    import { getAppHeadInfo } from "@/api/request/dashboardApi"; 
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { formatDateTime, getShortUrlByInviation } from "@/api/index";
 import { setLocal } from "@/libs/local.js";
@@ -205,8 +206,8 @@ export default {
                 status
             } = await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
             if (status === 200) {
-                window.location.href =
-                    "http://dashboard.console.wezhan.cn/board";
+                await getAppHeadInfo();
+                window.location.href = "http://dashboard.console.wezhan.cn/board";               
             }
         },
         /**

@@ -111,7 +111,7 @@ export default {
       let { data } = await siteBackupApi.getSiteInfo(siteId);
       this.siteName = data.siteName;
       this.secondDomain = data.secondDomain;
-      this.siteId = data.id;
+      this.siteId = data.siteId;
       this.language = data.language;
     },
     /**
