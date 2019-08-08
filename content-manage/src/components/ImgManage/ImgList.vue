@@ -65,7 +65,7 @@
                             <svg-icon icon-class="tab-look"></svg-icon>
                         </button>
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
-                            <svg-icon icon-class="l-recyclebin"></svg-icon>
+                            <i class="iconfont iconhuishouzhan "></i>
                         </button>
                     </div>
                 </template>

@@ -279,7 +279,7 @@ export default {
         },
         // 批量复制分类
         async batchCopyNews(idlist,row) {
-            if(idlist.length<1){
+            if(idlist.length<=1){
                 this.row = row
             }
             idlist = idlist == null ? this.idsList : idlist;
@@ -347,7 +347,7 @@ export default {
         },
         // 点击确定按钮 复制
         async copyArticle() {
-            console.log(this.row)
+            console.log(this.row,'-------')
             // if (!this.moveToClassiFy) {
             //     this.$notify({
             //         customClass: "notify-error", //  notify-success ||  notify-error
@@ -357,7 +357,7 @@ export default {
             //     });
             //     return;
             // }
-            let cateId = (this.moveToClassiFy && this.moveToClassiFy.id) || this.row.id;
+            let cateId = (this.moveToClassiFy && this.moveToClassiFy.id) || this.row.categoryId;
             let { data, status } = await articleManageApi.batchCopy(
                 cateId,
                 this.newsIdList
