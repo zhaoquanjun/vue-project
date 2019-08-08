@@ -52,7 +52,8 @@ const dashboard = {
             setLocal('appid', payload);
         },
         SETSITEID(state, siteId) {
-            state.siteId = siteId
+            state.siteId = siteId;
+            setLocal('siteId', siteId);
         },
         SETAPPID(state, appId) {
             state.appid = appId

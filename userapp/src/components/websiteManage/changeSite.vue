@@ -33,7 +33,11 @@
             </div>
             <div>
               <div class="itemSiteName">{{item.siteName}}</div>
-              <a class="itemSiteDomain" href="item.secondDomain" target="_blank">{{item.secondDomain}}</a>
+              <a
+                class="itemSiteDomain"
+                href="item.secondDomain"
+                target="_blank"
+              >{{item.secondDomain}}</a>
             </div>
           </el-col>
         </el-row>
@@ -47,6 +51,7 @@ import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local.js";
 import { getLanguage } from "@/configure/appCommon";
+import { getApplication } from "@/api/request/dashboardApi";
 export default {
   props: ["changeSiteName", "changeSiteLanguage"],
   components: {},
@@ -63,9 +68,7 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getCurSiteId().then(() => {
-      this.getSiteInfo(this.curSiteId);
-    });
+    this.getSiteId();
     this.getSites();
   },
   watch: {
@@ -77,13 +80,26 @@ export default {
     }
   },
   methods: {
+    getSiteId() {
+      console.log(this.$store.state.dashboard.siteId);
+      if (this.$store.state.dashboard.siteId) {
+        this.curSiteId = this.$store.state.dashboard.siteId;
+        this.$emit("getSiteId", this.curSiteId);
+        this.getSiteInfo(this.curSiteId);
+      } else {
+        this.getCurSiteId().then(() => {
+          this.getSiteInfo(this.curSiteId);
+        });
+      }
+    },
     /**
      * 获取当前siteId
      */
     async getCurSiteId() {
       let { data } = await dashboardApi.getCurSiteId();
       this.curSiteId = data;
-      this.$emit("getSiteId", data);
+      this.$emit("getSiteId", this.curSiteId);
+      this.$store.commit("SETSITEID", this.curSiteId);
     },
     _getLanguage() {
       return getLanguage(this.language);
