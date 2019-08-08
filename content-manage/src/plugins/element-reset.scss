@@ -263,6 +263,14 @@
     border-color: #09CCEB;
 }
 
+.seachInput .el-input .el-input__inner {
+    border-radius: 2px;
+}
+.seachInput .el-input  .el-input__inner:focus,.seachInput .el-input  .el-input__inner:hover{
+    border-color: #09CCEB
+}
+
+
 // 修改 button默认样式  begin
 .el-button{
     font-weight: 400;

@@ -262,10 +262,22 @@ export default {
     transform: translate(-50%, -50%);
 }
 
-.upload-pic /deep/ .el-upload-list__item-actions .el-icon-zoom-in {
-    font-size: 30px;
+.upload-pic /deep/ .el-upload-list__item-actions .el-icon-zoom-in:before {
+    content: ""
 }
 
+.upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
+    left: 17px;
+    bottom: 20px;
+    border: none;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    background: url("~img/pic-icon/eye.png") no-repeat center;
+    background-size: 60%;
+    box-sizing: border-box;
+}
 .upload-pic
     /deep/
     .el-upload-list__item-actions

@@ -42,6 +42,7 @@
                 </el-collapse-item>
             </el-collapse>
         </el-col>
+       
     </div>
 </template>
 <script>
@@ -51,8 +52,8 @@ export default {
     props: ["imageUrl"],
     data() {
         return {
-            dialogImageUrl: "",
-            dialogVisible: false,
+            
+
             activeName: "",
             uploadDisabled: true,
             fileList: [],
@@ -63,7 +64,9 @@ export default {
                 Authorization: ""
             },
             uploadSucess: false,
-            imageUrl1: ""
+            imageUrl1: "",
+            dialogVisible: false,
+            dialogImageUrl: "",
         };
     },
     watch: {
@@ -220,23 +223,23 @@ export default {
     font-weight: 600;
 }
 .avatar-uploader /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
-    left: 17px;
+    /* left: 17px;
     bottom: 20px;
     border: none;
     width: 27px;
     height: 27px;
-    background: url("~img/pic-icon/look.png") no-repeat center;
-    background-size: contain;
+    background: url("~img/pic-icon/switch.png") no-repeat center;
+    background-size: contain; */
 }
 
 .avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete{
-    right: 17px;
+    /* right: 17px;
     bottom: 20px;
     border: none;
     width: 27px;
     height: 27px;
-    background: url("~img/pic-icon/delete-icon.png") no-repeat center;
-    background-size: contain;
+    background: url("~img/pic-icon/delete-1.png") no-repeat center;
+      background-size: 50%; */
 }
 .avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete:before{
     content: ""
@@ -253,7 +256,20 @@ export default {
     display: inline-block;
     width: 27px;
     height: 27px;
-    background: url("~img/pic-icon/look.png") no-repeat center;
-    background-size: contain;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    background: url("~img/pic-icon/switch.png") no-repeat center;
+    background-size: 50%;
+}
+.el-icon-delete{
+    right: 17px;
+    bottom: 20px;
+     display: inline-block;
+    width: 27px;
+    height: 27px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    background: url("~img/pic-icon/delete-1.png") no-repeat center;
+      background-size: 50%;
 }
 </style>

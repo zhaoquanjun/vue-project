@@ -3,16 +3,17 @@
         <template v-if="!isBatchHeaderShow">
             <div class="seachInput head-item">
                 <el-input
-                    size="small"
+                    size="medium"
                     v-model="picSearchOptions.keyword"
                     placeholder="输入图片名称搜索"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
-                     clearable
+                    
                 >
-                    <el-button slot="append" @click="getPicList">
+                    <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getPicList"></i>
+                    <!-- <el-button slot="append" @click="getPicList">
                         <svg-icon icon-class="search-icon"></svg-icon>
-                    </el-button>
+                    </el-button>-->
                 </el-input>
             </div>
             <div class="head-item head-middle">
@@ -53,7 +54,10 @@
                 </span>
             </div>
             <div class="head-item head-right">
-                <button class="btn-lightblue btn-small upload-wrap" @click="switchUploadBoxShowStatus">
+                <button
+                    class="btn-lightblue btn-small upload-wrap"
+                    @click="switchUploadBoxShowStatus"
+                >
                     <!-- <svg-icon icon-class="upload-img"></svg-icon> -->
                     上传图片
                 </button>
@@ -66,8 +70,8 @@
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <div>
-                    <button class="btn-small  btn-lightblue-notboard" @click="batchMove">移动</button>
-                    <button class="btn-small  btn-red-notboard"  @click="batchDelete">删除</button>
+                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
+                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
                 </div>
             </div>
         </template>
@@ -144,18 +148,7 @@ export default {
     }
 };
 </script>
-<style >
-.seachInput .el-input /deep/ .el-input__inner{
-   
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
 
-.seachInput /deep/ .el-input-group__append .el-button,.el-input-group__append {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-</style>
 
 <style  lang="scss" scoped>
 @import "@/styles/manage-head.scss";

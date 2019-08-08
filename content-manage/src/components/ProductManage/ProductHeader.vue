@@ -2,17 +2,16 @@
     <el-header class="content-header">
         <template v-if="!isBatchHeaderShow">
             <div class="seachInput head-item">
-                <el-input
-                    size="small"
+              
+                      <el-input
+                    size="medium"
                     v-model="articleSearchOptions.keyword"
-                    placeholder="请输入名称或ID进行精准查询"
+                    placeholder="输入图片名称搜索"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
-                     clearable
+                    
                 >
-                    <el-button slot="append" @click="getArticleList">
-                        <svg-icon icon-class="search-icon"></svg-icon>
-                    </el-button>
+                    <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getArticleList"></i>
                 </el-input>
             </div>
 

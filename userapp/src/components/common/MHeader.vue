@@ -4,7 +4,7 @@
             <el-col :span="8">
                 <div class="head-left head-item">
                     <span class="logo-icon" >
-                        <i class="iconfont iconlogo"></i>
+                        <i class="iconfont iconlogo1"></i>
                     </span>
                     <span @click="changeApp" class="headAppName">
                         {{headAppName}}
@@ -284,7 +284,7 @@ export default {
 .disabled {
     opacity: 0.2;
 }
-.iconlogo {
+.iconlogo1 {
     font-size: 22px;
 }
 .header {

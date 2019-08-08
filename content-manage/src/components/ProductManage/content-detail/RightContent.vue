@@ -38,6 +38,11 @@
                 </el-collapse-item>
             </el-collapse>
         </el-col>
+         <!-- 图片预览 begin -->
+        <el-dialog :append-to-body="true" :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt />
+        </el-dialog>
+        <!-- 图片预览 end -->
     </div>
 </template>
 <script>
@@ -59,7 +64,9 @@ export default {
             },
             uploadSucess: false,
             imageUrl1: "",
-            newFileList: []
+            newFileList: [],
+             dialogVisible: false,
+            dialogImageUrl: "",
         };
     },
    
@@ -76,6 +83,8 @@ export default {
         },
         handlePreview(file) {
             console.log(file);
+              this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
