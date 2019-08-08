@@ -3,11 +3,11 @@
     <el-row style="display: flex;">
       <div style="margin-right:487px;width:100%">
         <div class="welcome-wrap">
-            <p class="welcome-words">{{userName}}，欢迎回到微站后台</p>
+          <p class="welcome-words">{{userName}}，欢迎回到微站后台</p>
           <p class="siteIntroduction">以下是您当前的站点</p>
         </div>
 
-        <siteinfo :siteInfo="siteInfoList" />
+        <siteinfo :siteInfo="siteInfoList" :siteCount="siteCount" />
         <plugins :plugins="pluginList" />
         <content-num :contentNumber="contentNumber" />
         <recommend :recommend="recommend" />
@@ -40,11 +40,7 @@
                   resize="none"
                 ></el-input>
                 <div class="btn-wrap">
-                  <button
-                    class="popover-btn cancel"
-                    slot="refenrence"
-                    @click="cancelInput"
-                  >取消</button>
+                  <button class="popover-btn cancel" slot="refenrence" @click="cancelInput">取消</button>
                   <button class="popover-btn save" @click="saveInputValue">保存</button>
                 </div>
               </div>
@@ -96,28 +92,8 @@ import * as dashboardApi from "@/api/request/dashboardApi";
 export default {
   data() {
     return {
-      siteInfoList: [
-        // {
-        //   siteName: 1,
-        //   siteId: 1
-        // },
-        // {
-        //   siteName: 2,
-        //   siteId: 2
-        // },
-        // {
-        //   siteName: 3,
-        //   siteId: 3
-        // },
-        // {
-        //   siteName: 4,
-        //   siteId: 4
-        // },
-        // {
-        //   siteName: 5,
-        //   siteId: 5
-        // }
-      ],
+      siteInfoList: [],
+      siteCount: 0,
       appInfo: {},
       versionInfo: [],
       pluginList: [],
@@ -178,6 +154,7 @@ export default {
         formatDateTime(this.appInfo.createTime, "yyyy年MM月dd日") +
         "-" +
         formatDateTime(this.appInfo.expiredTime, "yyyy年MM月dd日");
+      this.siteCount = data.appInfo.siteCount;
       this.siteInfoList = data.siteCarousels;
     },
     /**
@@ -214,8 +191,8 @@ export default {
       }
       this.$refs[`popover`].doClose();
       await dashboardApi.UpdateAppName(this.remarkValue);
-       this.$store.dispatch('_getAppHeadInfo');// 
-       this.appInfo.name = this.remarkValue;
+      this.$store.dispatch("_getAppHeadInfo"); //
+      this.appInfo.name = this.remarkValue;
     },
     /**
      * 设计秘籍内容颜色变化
@@ -230,14 +207,14 @@ export default {
           return "designColorYellow";
       }
     }
-        },
-   computed: {           
-            userName() {
-                let userName = this.$store.state.user.userInfo.userName;
-                let phone = this.$store.state.user.userInfo.phone;
-                return userName?userName:phone;
-            }
-        },
+  },
+  computed: {
+    userName() {
+      let userName = this.$store.state.user.userInfo.userName;
+      let phone = this.$store.state.user.userInfo.phone;
+      return userName ? userName : phone;
+    }
+  }
 };
 </script>
 

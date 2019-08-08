@@ -31,7 +31,6 @@ const user = {
     },
     async _getAppHeadInfo({ commit }) {
       let { data } = await getAppHeadInfo();
-      console.log(data,'用户信息')
       commit("SET_USERINFO", data)
     },
   }

@@ -270,7 +270,6 @@ export default {
         },
         headAppName() {
             let appName = this.$store.state.user.userInfo.appName;
-            console.log(appName);
             return appName;
         }
     },

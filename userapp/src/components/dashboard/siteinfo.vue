@@ -19,7 +19,10 @@
             {{item.language == "zh-CN" ? "中" : "EN"}}
           </div>
           <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
-          <div class="siteText details" v-show="index == curIndex">查看详情</div>
+          <div class="siteText details" v-show="index == curIndex">
+            查看详情
+            <div class="detailsBackground"></div>
+          </div>
         </el-col>
         <div class="leftModul"></div>
         <div class="rightModul"></div>
@@ -47,6 +50,7 @@
       </div>
 
       <div
+        v-show="siteCount != siteInfo.length"
         :class="{createSiteNumThree:siteInfo.length > 2,createSiteNumTwo:siteInfo.length == 2,}"
         @click="showCreate"
       ></div>
@@ -94,7 +98,7 @@
 <script>
 import * as dashboardApi from "@/api/request/dashboardApi";
 export default {
-  props: ["siteInfo"],
+  props: ["siteInfo", "siteCount"],
   data() {
     return {
       isFirst: true,
@@ -347,6 +351,7 @@ export default {
       }
       .siteName {
         // display: inline-block;
+        overflow: hidden;
         font-size: 16px;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
@@ -355,11 +360,12 @@ export default {
         padding-left: 30px;
       }
       .siteText {
+        overflow: hidden;
         font-size: 12px;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
         line-height: 17px;
-        margin-left: 30px;
+        padding-left: 30px;
       }
       .siteLanguage {
         margin-top: 8px;
@@ -368,7 +374,16 @@ export default {
         margin-top: 16px;
       }
       .details {
+        cursor: pointer;
         margin-top: 60px;
+        .detailsBackground {
+          display: inline-block;
+          width: 14px;
+          height: 13px;
+          margin-left: 5px;
+          background: url("~img/dashboard/board-details.png") no-repeat center;
+          background-size: contain;
+        }
       }
     }
     .active {
@@ -523,7 +538,16 @@ export default {
       margin-top: 32px;
     }
     .details {
+      cursor: pointer;
       margin-top: 60px;
+      .detailsBackground {
+        display: inline-block;
+        width: 14px;
+        height: 13px;
+        margin-left: 5px;
+        background: url("~img/dashboard/board-details.png") no-repeat center;
+        background-size: contain;
+      }
     }
   }
 }
