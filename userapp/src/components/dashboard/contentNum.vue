@@ -42,25 +42,25 @@ export default {
         {
           name: "文章",
           num: this.contentNumber.newsCount,
-          type: "/篇",
+          type: "/ 篇",
           url: articleManageUrl
         },
         {
           name: "产品",
           num: this.contentNumber.productsCount,
-          type: "/个",
+          type: "/ 个",
           url: productManageUrl
         },
         {
           name: "图片",
           num: this.contentNumber.picturesCount,
-          type: "/张",
+          type: "/ 张",
           url: imgManageUrl
         },
         {
           name: "文件",
           num: this.contentNumber.filesCount,
-          type: "/个",
+          type: "/ 个",
           url: fileManageUrl
         }
       ];
@@ -133,7 +133,7 @@ export default {
           display: inline;
           margin-right: 5px;
           font-size: 36px;
-          font-family: PingFangSC-Medium;
+        //   font-family: PingFangSC-Medium;
           font-weight: 500;
           color: rgba(38, 38, 38, 1);
           line-height: 50px;
@@ -142,8 +142,7 @@ export default {
         .item-type {
           display: inline;
           font-size: 14px;
-          font-family: PingFangSC-Regular;
-          font-weight: 400;
+          font-weight: 300;
           color: rgba(185, 203, 207, 1);
           line-height: 20px;
           //   vertical-align: top;
