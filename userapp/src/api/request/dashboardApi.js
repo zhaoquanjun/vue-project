@@ -100,3 +100,13 @@ export const updateSiteTypeAndIndustry = (siteId, siteType, firstIndustryId, sec
     let para = { siteId: siteId, siteType: siteType, firstIndustryId: firstIndustryId, secondIndustryId: secondIndustryId };
     return ajaxRequest.put(`${environment.designerManageApi}/api/siteInfo/UpdateSiteTypeAndIndustry`, para);
 }
+
+/**
+ *desc:创建站点
+ * author:xuzhuan
+ * time:2019.08.08
+ **/
+export const CreateSite = (language, siteName) => {
+    let para = { language: language, siteName: siteName};
+    return ajaxRequest.post(`${environment.designerManageApi}/api/siteInfo/CreateSite`, para);
+}
