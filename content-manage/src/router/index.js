@@ -6,6 +6,7 @@ import securityService from "@/services/authentication/securityService";
 import Cookies from "js-cookie";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import {setLocal,getLocal,removeLocal} from '@/libs/local'
 Vue.use(VueRouter);
 let router = new VueRouter({
   mode: "history",
@@ -31,8 +32,7 @@ router.beforeEach(async (to, from, next) => {
       await store.dispatch('_updateAppIdToCookie')
       next()
     }
-    console.log(sessionStorage.getItem("authList"))
-    if(!sessionStorage.getItem("authList")){
+    if(!getLocal("authList")){
       await store.dispatch('_getMenuListData')
     }
     let r = await store.dispatch('getCurRouteAuth', to.path);

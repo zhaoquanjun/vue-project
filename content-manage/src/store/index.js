@@ -52,7 +52,7 @@ if (getLocal("token")) {
   }
   store.commit("SET_USER", obj)
   // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
-  sessionStorage.getItem("authList") && store.commit("set_authList", JSON.parse(sessionStorage.getItem("authList")))
+  getLocal("authList") && store.commit("set_authList", JSON.parse(getLocal("authList")))
 }
 if(getLocal("appid")){
     store.commit("GETUSERDASHBOARD", getLocal("appid"))
@@ -61,5 +61,5 @@ if(Cookies("routeCode")){
   store.commit("SETCODE",Cookies("routeCode"))
 }
 if(sessionStorage.getItem("userInfo")){
-  store.commit("SET_USERINFO",JSON.parse(sessionStorage.getItem("userInfo")))
+  store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
 }
