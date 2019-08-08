@@ -255,7 +255,7 @@ export default {
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
         this.lastPublishedTime = formatDateTime(data.lastPublishedTime, "yyyy-MM-dd hh:mm");
-        this.siteId = data.id;
+        this.siteId = data.siteId;
         this.language = data.language;
         this.firstIndustryId = data.firstIndustryId;
         this.secondIndustryId = data.secondIndustryId;
@@ -291,7 +291,8 @@ export default {
         });
         return;
       }
-      this.$refs[`popover`].doClose();
+        this.$refs[`popover`].doClose();
+        console.log('siteid:', this.siteId)
       await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
       this.siteName = this.siteNameValue;
     },
