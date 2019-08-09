@@ -464,7 +464,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1500px) {
   .home-page .welcome-wrap {
     margin-top: 34px;
     .welcome-words {

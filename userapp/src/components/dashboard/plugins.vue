@@ -102,7 +102,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1500px) {
   .plugin-section {
     .plugins-box {
       margin-right: 20px;
