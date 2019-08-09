@@ -34,7 +34,7 @@
                     chunkSize: 2048000,   //分块大小,
                     simultaneousUploads: 1,
                     headers: {
-                        AppId: this.$store.state.dashboard.appid,
+                        AppId: this.$store.state.dashboard.appId,
                         Authorization: "Bearer " + this.$store.state.accessToken.Authorization
                     },
                     checkChunkUploadedByResponse: (chunk, message) => {

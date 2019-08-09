@@ -15,12 +15,12 @@ let router = new VueRouter({
 });
 export default router;
 let accessToken = store.state.accessToken.Authorization;
-
+let appId =  store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
   NProgress.start()
   if (!to.meta.requiresAuth) {
-    if (!Cookies.get('AppId')) {
+    if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
     }
     store.dispatch('_getMenuListData')
@@ -28,7 +28,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
   if (accessToken) {
-    if (!Cookies.get('AppId')) {
+    if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
       next()
     }

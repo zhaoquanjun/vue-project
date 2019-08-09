@@ -16,10 +16,13 @@
    this.$notify({
                     customClass:"notify-error",  //  notify-success ||  notify-error
                     message: `图片名称不能为空`,
-                    duration: 1000
+                    duration: 1000,
+                     showClose: false,
+
                 });
                  this.$notify({
                     customClass:"notify-error",  //  notify-success ||  notify-error
                     message: `图片名称不能为空`,
-                    duration: 1000
+                    duration: 1000,
+                     showClose: false,
                 });

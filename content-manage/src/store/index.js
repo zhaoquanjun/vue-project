@@ -55,12 +55,12 @@ if (getLocal("token")) {
   getLocal("authList") && store.commit("set_authList", JSON.parse(getLocal("authList")))
 }
 if(getLocal("ymId")){
-   // store.commit("GETUSERDASHBOARD", getLocal("ymId"))
+    store.commit("SETAPPID", getLocal("ymId"))
 }
-if(Cookies("routeCode")){
-  store.commit("SETCODE",Cookies("routeCode"))
-}
-if(Cookies("userInfo")){
+// if(Cookies("routeCode")){
+//   store.commit("SETCODE",Cookies("routeCode"))
+// }
+if(getLocal("userInfo")){
   store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
 }
 

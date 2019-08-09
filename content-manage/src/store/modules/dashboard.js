@@ -39,7 +39,7 @@ const dashboard = {
   
     state: {
       
-        appid:"",
+        appId:"",
         validateMenu:"",
         menuList:[],
         authList:[], 
@@ -48,13 +48,10 @@ const dashboard = {
         curCode:""
     },
     mutations: {
-        SETCODE(state,payload){
-            state.curCode=payload
-        },
-        GETUSERDASHBOARD(state, payload) {
-            state.appid = payload;
-            //setLocal('appid', payload);
-            /// setLocal('ymId', payload);
+     
+        SETAPPID(state, payload) {
+            state.appId = payload;
+            setLocal('ymId', payload);
         },
          set_menuList(state,m){
             // state.menuList = JSON.stringify(m);
@@ -72,7 +69,7 @@ const dashboard = {
         async _updateAppIdToCookie({ commit }){
             let { data } = await updateAppIdToCookie();
             console.log(data)
-            commit("GETUSERDASHBOARD", data)
+            commit("SETAPPID", data)
         },
         async _getMenuListData({ commit }) {
            let { data } = await getSliderMenuList();

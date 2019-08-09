@@ -146,7 +146,7 @@ export default {
         // },
     },
     mounted() {
-        this.headers.appId = this.$store.state.dashboard.appid;
+        this.headers.appId = this.$store.state.dashboard.appId;
     },
     methods: {
         handleSucess(response, file, fileList) {

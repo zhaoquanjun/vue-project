@@ -1,10 +1,10 @@
 import {designerManageApi} from "@/environment/index"
 import * as ajaxRequest from "../ajaxRequest";
-// import store from "@/store/index";
+ import store from "@/store/index";
 import Cookies from "js-cookie"
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
-console.log(designerManageApi)
-const siteId =Cookies("SiteId")
+console.log(store)
+//const siteId =Cookies("SiteId")?Cookies("SiteId"):store.state.dashoboard.siteId
 
 /**
  * 获取域名列表

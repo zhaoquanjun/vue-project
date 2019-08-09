@@ -25,19 +25,13 @@
                 <p class="tips-item">
                     <span>1、仅支持添加阿里云域名，非阿里云域名，请先将域名转入阿里云后再添加。</span>
                     <span class="islink">
-                        <a
-                            :href="shiftToAliyun"
-                            target="_blank"
-                        >如何将域名转入阿里云？</a>
+                        <a :href="shiftToAliyun" target="_blank">如何将域名转入阿里云？</a>
                     </span>
                 </p>
                 <p class="tips-item">
                     <span>2、系统将自动为您的域名开启CDN，可在域名列表中手动关闭。</span>
                     <span class="islink">
-                        <a
-                            :href="whyOpenCdn"
-                            target="_blank"
-                        >为什么要开启CDN？</a>
+                        <a :href="whyOpenCdn" target="_blank">为什么要开启CDN？</a>
                     </span>
                 </p>
             </div>
@@ -54,7 +48,7 @@
 </template>
 <script>
 import { bindDomainAndEnableCdn } from "@/api/request/domainApi";
-import { shiftToAliyun,whyOpenCdn } from "@/environment/index"
+import { shiftToAliyun, whyOpenCdn } from "@/environment/index";
 export default {
     props: ["domainAmount"],
     data() {
@@ -64,9 +58,8 @@ export default {
             onerrorText: "",
             disabled: false,
             btnText: "确定",
-            shiftToAliyun:shiftToAliyun,
-            whyOpenCdn:whyOpenCdn
-
+            shiftToAliyun: shiftToAliyun,
+            whyOpenCdn: whyOpenCdn
         };
     },
     methods: {
@@ -120,14 +113,24 @@ export default {
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            this.$emit("resolveCdnByAliYunToken", { id: data.id, isForceUpdate:false} );
+                            this.$emit("resolveCdnByAliYunToken", {
+                                id: data.id,
+                                isForceUpdate: false
+                            });
                             this.handleCancel();
                         } else {
-                            this.elemnetConfirm(
-                                "warning",
-                                "您可在域名列表中继续完成解析设置。",
-                                `域名未解析！`
-                            );
+                            // this.elemnetConfirm(
+                            //     "warning",
+                            //     "您可在域名列表中继续完成解析设置。",
+                            //     `域名未解析！`
+                            // );
+                            this.$notify({
+                                customClass: "notify-error", //  notify-success ||  notify-error
+                                title: '域名未解析！',
+                                message: `您可在域名列表中继续完成解析设置。`,
+                                duration: 102200,
+                                showClose: false
+                            });
                             this.handleCancel();
                         }
                     }

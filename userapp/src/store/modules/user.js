@@ -24,6 +24,7 @@ const user = {
   },
   actions: {
     async _set(context,data){
+     
       await context.commit("SET_USER",data)
       await context.dispatch('_updateAppIdAndSiteIdToCookie')
       await context.dispatch('_getMenuListData')

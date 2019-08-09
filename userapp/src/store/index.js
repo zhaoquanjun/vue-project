@@ -41,9 +41,9 @@ if (Cookies("token")){
     // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
      getLocal("authList")&& store.commit("set_authList",JSON.parse(getLocal("authList")))
 }
-// if(sessionStorage.getItem("siteId")){
-//  store.commit("SETSITEID",sessionStorage.getItem("siteId"))
-// }
+if(getLocal("ymSd")){
+ store.commit("SETSITEID",getLocal("ymSd"))
+}
 if(Cookies("userInfo")){
   store.commit("SET_USERINFO",JSON.parse(Cookies("userInfo")))
 }

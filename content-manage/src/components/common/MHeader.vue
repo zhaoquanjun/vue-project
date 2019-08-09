@@ -130,7 +130,7 @@ import { personalUrl } from "@/environment/index.js";
 // import { getApplication } from "@/api/request/dashboardApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { formatDateTime, getShortUrlByInviation } from "@/api/index";
-import { setLocal } from "@/libs/local.js";
+import { setLocal,getLocal } from "@/libs/local.js";
 import Cookies from "js-cookie";
 export default {
   data() {
@@ -182,10 +182,8 @@ export default {
     },
     //切换app 选择新的app
     async choseApp(item) {
-      setLocal("appid", item.appId);
+      setLocal("ymId", item.appId);
       this.$store.commit("SETAPPID", item.appId);
-      console.log(item.appId);
-      //Cookies("AppId", item.appId)
       let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(
         item.appId
       );
@@ -238,9 +236,10 @@ export default {
     },
     // 获取当前appId
     getCurApp() {
-      this.curAppId = Cookies.get("AppId")
-        ? Cookies.get("AppId")
-        : this.$store.state.dashboard.appid;
+      let appId = this.$store.state.dashboard.appId;
+      this.curAppId =appId
+        ? appId
+        :getLocal("ymId");
     }
   },
   computed: {

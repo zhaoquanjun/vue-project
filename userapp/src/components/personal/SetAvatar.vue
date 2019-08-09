@@ -69,7 +69,7 @@ export default {
         beforeAvatarUpload(file) {
             this.headers.Authorization =
                 "Bearer " + this.$store.state.user.accessToken.Authorization;
-            this.headers.appId = this.$store.state.dashboard.appid;
+            this.headers.appId = this.$store.state.dashboard.appId;
 
             const isPic =
                 ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==

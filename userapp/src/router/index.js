@@ -15,15 +15,23 @@ const router = new VueRouter({
 export default router;
 let accessToken = store.state.user.accessToken.Authorization;
 router.beforeEach(async (to, from, next) => {
+
   document.title = to.meta.title;
   if (!to.meta.requiresAuth) {
+    if (!getLocal('ymId')) {
+     
+      await store.dispatch('_updateAppIdAndSiteIdToCookie')
+    }
     store.dispatch('_getMenuListData')
     next()
     return
   }
 
   if (accessToken) {
-    if (!Cookies.get('AppId')) {
+   
+  
+    if (!parseFloat(getLocal('ymId'))) {
+     
       await store.dispatch('_updateAppIdAndSiteIdToCookie')
     }
     let r = await store.dispatch('getCurRouteAuth', to.path);

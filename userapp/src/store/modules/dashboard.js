@@ -1,7 +1,6 @@
 import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index"
 import { authRoutes } from "@/router/routes.js";
 import { setLocal } from "@/libs/local"
-import { reject } from "q";
 
 // 更具后台菜单路由 匹配出 所需要显示的路由
 let getNeedRoutes = auth => {
@@ -38,7 +37,7 @@ let filterMenuListData = (source) => {
 };
 const dashboard = {
     state: {
-        appid: "",
+        appId: "",
         siteId: "",
         validateMenu: "",
         menuList: [],
@@ -48,15 +47,17 @@ const dashboard = {
     },
     mutations: {
         GETUSERDASHBOARD(state, payload) {
-            state.appid = payload;
+            state.appId = payload;
             //setLocal('appid', payload);
         },
         SETSITEID(state, siteId) {
             state.siteId = siteId;
-           // setLocal('siteId', siteId);
+            setLocal('ymSd', siteId);
         },
         SETAPPID(state, appId) {
-            state.appid = appId
+            state.appId = appId;
+            console.log(appId,'appIdappIdappIdappIdappIdappId')
+            setLocal('ymId', appId);
         },
         GETVALIDATEMENU(state, payload) {
             // Base64.encode()
@@ -81,7 +82,7 @@ const dashboard = {
     actions: {
         async _updateAppIdAndSiteIdToCookie({ commit }) {
             let { data } = await updateAppIdAndSiteIdToCookie();
-            commit("GETUSERDASHBOARD", data)
+            commit("SETAPPID", data)
         },
         async _getMenuListData({ commit }) {
             let { data } = await getSliderMenuList();

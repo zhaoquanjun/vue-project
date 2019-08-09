@@ -105,7 +105,7 @@ export default {
         };
     },
     mounted() {
-        this.headers.appId = this.$store.state.dashboard.appid;
+        this.headers.appId = this.$store.state.dashboard.appId;
         if (this.nodeData) {
             this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
         }
