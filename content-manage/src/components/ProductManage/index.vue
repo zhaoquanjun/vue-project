@@ -90,7 +90,8 @@
 <script>
 // import CategoryTree from "./CategoryTree";
 import CheckTree from "./CheckTree";
-import MTree from "@/components/ImgManage/MTree";
+ import MTree from "@/components/ImgManage/MTree";
+
 import ContentHeader from "./ProductHeader";
 import ContentTable from "./ProductTable";
 import RightPannel from "../ImgManage/RightPannel";

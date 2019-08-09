@@ -19,6 +19,11 @@
                     @mouseleave="handlerMouseLeave"
                     slot-scope="{ node, data }"
                 >
+                    <img
+                        class="categoryPic"
+                        v-if="data.thumbnailPicUrl && isProduct"
+                        :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
+                    />
                     <button class="drop-btn" v-if="node.data.level>0">
                         <i class="iconfont icontuodongdian"></i>
                     </button>
@@ -62,7 +67,7 @@ import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
 import { trim } from "@/utlis/index";
 export default {
     // picSearchOptions
-    props: ["treeResult", "listOptions", "isArticle","isProduct"], // 与产品分类不一致的地方 picSearchOptions
+    props: ["treeResult", "listOptions", "isArticle", "isProduct"], // 与产品分类不一致的地方 picSearchOptions
     components: {
         UploadCategoryPic
     },
@@ -326,7 +331,7 @@ export default {
     z-index: 19;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
 }
-.upload{
+.upload {
     height: 200px;
 }
 .categoryPic {
