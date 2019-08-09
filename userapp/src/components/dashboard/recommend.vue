@@ -28,6 +28,7 @@ export default {
 <style lang="scss" scoped>
 .content-num-section {
   margin-top: 40px;
+  margin-bottom: 20px;
   border-radius: 3px;
   border: 1px solid rgba(229, 229, 229, 1);
   .section-title {
@@ -35,7 +36,6 @@ export default {
     padding-bottom: 14px;
     padding-top: 20px;
     font-size: 18px;
-    font-family: PingFangSC-Semibold;
     font-weight: 600;
     color: rgba(38, 38, 38, 1);
   }
@@ -62,7 +62,6 @@ export default {
         .item-title {
           text-align: center;
           font-size: 20px;
-          font-family: AlibabaPuHuiTiR;
           color: rgba(38, 38, 38, 1);
           line-height: 27px;
           margin-top: 12px;
@@ -72,7 +71,7 @@ export default {
           display: block;
           width: 40px;
           height: 40px;
-          background: url("~img/dashboard/board-aliyun.png") no-repeat center;
+          background: url("~img/dashboard/board-aliyunMax.png") no-repeat center;
           background-size: contain;
           margin: 7px auto 0px;
         }
@@ -84,7 +83,6 @@ export default {
         }
         .item-content {
           font-size: 14px;
-          font-family: PingFangSC-Regular;
           font-weight: 400;
           color: rgba(140, 140, 140, 1);
           line-height: 20px;
@@ -103,7 +101,6 @@ export default {
           margin-bottom: 5px;
           .item-link {
             font-size: 16px;
-            font-family: PingFangSC-Regular;
             font-weight: 400;
             color: rgba(0, 193, 222, 1);
             line-height: 22px;
@@ -117,6 +114,47 @@ export default {
             background-size: contain;
           }
         }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1440px) {
+  .content-num-section {
+    margin-top: 32px;
+    .section-title {
+      padding-top: 12px;
+      padding-left: 13px;
+      font-size: 16px;
+      line-height: 22px;
+    }
+    .content .item .item-box .item-title {
+      font-size: 16px;
+      line-height: 22px;
+      margin-bottom: 9px;
+    }
+    .content .item .item-box .item-icon {
+      width: 31px;
+      height: 31px;
+      background: url("~img/dashboard/board-aliyunMin.png") no-repeat center;
+      background-size: contain;
+    }
+    .content .item .item-box .item-content-wrap {
+      height: 60px;
+    }
+    .content .item .item-box .item-content {
+      display: -webkit-box;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      -webkit-text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+    .content .item .item-box .item-btn {
+      margin-top: 17px;
+      .item-link {
+        font-size: 14px;
+        line-height: 20px;
       }
     }
   }
