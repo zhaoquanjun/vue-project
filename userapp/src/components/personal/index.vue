@@ -3,8 +3,8 @@
         <h3 class="personal-title">个人账号管理</h3>
         <dl class="user-account clear">
             <dt class="avatar">
-                <img v-if="userInfo.userHeadUrl" :src="userInfo.userHeadUrl" />
-                <img v-else :src="defaultAvatar" />
+                <img  :src="userInfo.userHeadUrl" />
+               
                 <span class="modify-avatar" @click="modifyAvatar">修改头像</span>
             </dt>
             <dd class="account-info">
@@ -74,7 +74,10 @@
                 <div class="fright">
                     <span class="user-value" v-if="WeChatUser">
                         <img v-if="WeChatUser.headImgUrl" :src="WeChatUser.headImgUrl" />
-                        <img v-else src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"/>
+                        <img
+                            v-else
+                            src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"
+                        />
                         <b>{{WeChatUser.externalName}}</b>
                     </span>
                     <span class="pd-left">
@@ -95,7 +98,10 @@
                 <div class="fright">
                     <span class="user-value" v-if="DingDingUser">
                         <img v-if="DingDingUser.headImgUrl" :src="DingDingUser.headImgUrl" />
-                        <img v-else src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"/>
+                        <img
+                            v-else
+                            src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"
+                        />
                         <b>{{DingDingUser.externalName}}</b>
                     </span>
                     <span class="pd-left">
@@ -116,7 +122,10 @@
                 <div class="fright">
                     <span class="user-value" v-if="AlipayUser">
                         <img v-if="AlipayUser.headImgUrl" :src="AlipayUser.headImgUrl" />
-                        <img v-else src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"/>
+                        <img
+                            v-else
+                            src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"
+                        />
                         <b>{{AlipayUser.externalName}}</b>
                     </span>
                     <span class="pd-left">
@@ -130,7 +139,7 @@
                 </div>
             </li>
         </ul>
-            <right-pannel :style="{width:pannelWidth+'px'}">
+        <right-pannel :style="{width:pannelWidth+'px'}">
             <span slot="title-text">{{titText}}</span>
             <component
                 :is="curComponent"
@@ -151,11 +160,9 @@
             width="0"
             :close-on-click-modal="false"
             :show-close="false"
-          :append-to-body="false"
+            :append-to-body="false"
             :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
-        >
-          
-        </el-dialog>
+        ></el-dialog>
         <el-dialog
             title="提示"
             :visible.sync="alipayBindTip"
@@ -249,6 +256,9 @@ export default {
             if (this.userInfo.isSetPassWord) {
                 this._setPwdTitleAndBtn();
             }
+            if (!data.userHeadUrl) {
+                this.userInfo.userHeadUrl = this.defaultAvatar;
+            }
             // console.log(this.userInfo)
         },
         async _getExternalUserAsync() {
@@ -260,8 +270,13 @@ export default {
             this.ExternalUsers = data;
             if (this.ExternalUsers && this.ExternalUsers.length > 0) {
                 this.ExternalUsers.forEach(element => {
-                    if(element!=null && (element.headImgUrl ==null || element.headImgUrl.length <1)){
-                        element.headImgUrl="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png";
+                    if (
+                        element != null &&
+                        (element.headImgUrl == null ||
+                            element.headImgUrl.length < 1)
+                    ) {
+                        element.headImgUrl =
+                            "https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png";
                     }
                     if (element.provider == "Weixin") {
                         this.WeChatUser = element;
@@ -376,7 +391,7 @@ export default {
                     type: "success",
                     message: "设置成功!"
                 });
-                this.$store.dispatch('_getAppHeadInfo');
+                this.$store.dispatch("_getAppHeadInfo");
             } else {
                 this.$message({
                     type: "failed",
@@ -385,9 +400,9 @@ export default {
             }
         },
         // 取消修改名称
-        cancelSetName(){
+        cancelSetName() {
             this.input = this.oldUserName;
-            this.flag = true
+            this.flag = true;
         },
         modifyAvatar() {
             this.curComponent = SetAvatar;
@@ -406,7 +421,7 @@ export default {
 };
 </script>
 <style>
-.v-modal{
+.v-modal {
     z-index: 1000 !important;
 }
 </style>
@@ -415,13 +430,12 @@ export default {
 .el-input /deep/ .el-input__inner {
     padding-right: 60px;
 }
-.el-input /deep/ .el-input__inner:focus{
-        border-color: #00C1DE;
+.el-input /deep/ .el-input__inner:focus {
+    border-color: #00c1de;
 }
-.el-dialog__wrapper{
+.el-dialog__wrapper {
     z-index: 1000 !important;
 }
-
 </style>
 
 <style lang="scss" scoped>

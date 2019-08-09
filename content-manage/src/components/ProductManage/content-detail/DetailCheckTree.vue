@@ -14,6 +14,10 @@ export default {
     props: ["treeResult", "categoryId", "categoryName"],
     mounted() {
       this.$refs.tree.setCheckedKeys([0]);
+      this.$nextTick(()=>{
+          console.log(this.categoryId)
+          this.setCheckedKeys(this.categoryId);
+      })
     },
     methods: {
         setCheckedKeys(ids) {
@@ -30,10 +34,15 @@ export default {
        
         checkChange(data,boolen){
           this.$emit("chooseNode", data,boolen);
+        },
+        // 清空选中
+        resetChecked() {
+            this.$refs.tree.setCheckedKeys([]);
         }
     },
     watch: {
         categoryId() {
+           
             this.setCheckedKeys(this.categoryId);
         }
     }

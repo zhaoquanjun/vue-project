@@ -12,7 +12,6 @@
         @remove-tag="remove"
         @node-expand="nodeExpand"
         size="small"
-       
     >
         <!-- :label="valueTitle" -->
         <el-option :value="valueTitle">
@@ -30,7 +29,6 @@
                 @node-click="handleNodeClick"
                 @check="check"
                 :show-checkbox="isSHowCheckBox"
-                
             ></el-tree>
         </el-option>
     </el-select>
@@ -62,11 +60,11 @@ export default {
         categoryName: {
             type: [String, Array]
         },
-      
+
         /** 分类ID */
-        categoryId:{
-            type:Number,
-            default:0
+        categoryId: {
+            type: Number,
+            default: 0
         },
         /* 初始值 */
         value: {
@@ -101,32 +99,34 @@ export default {
                 return false;
             }
         },
-        isSHowCheckBox:{
-            type:Boolean,
-            default:false
+        isSHowCheckBox: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
         return {
             valueId: null, // 初始值
-            valueTitle:"",
+            valueTitle: "",
             defaultExpandedKey: []
         };
     },
     mounted() {
-       this.valueTitle = this.categoryName 
+        this.valueTitle = this.categoryName;
     },
     methods: {
         setCheckedKeys() {
-            this.$nextTick(()=>{
-                 alert(JSON.stringify( this.categoryId))
-               console.log( this.categoryId,' this.categoryId this.categoryId this.categoryId')
-                 this.$refs.selectTree.setCurrentKey(0); // 设置默认选中
+            this.$nextTick(() => {
+                alert(JSON.stringify(this.categoryId));
+                console.log(
+                    this.categoryId,
+                    " this.categoryId this.categoryId this.categoryId"
+                );
+                this.$refs.selectTree.setCurrentKey(0); // 设置默认选中
                 //   this.$refs.tree.setCheckedKeys(ids);
-            })
+            });
         },
-        nodeExpand(data, node, slot) {
-        },
+        nodeExpand(data, node, slot) {},
         remove(cur) {
             this.valueTitle = this.valueTitle.filter(item => {
                 return item != cur;
@@ -136,13 +136,13 @@ export default {
         // 初始化值
         initHandle() {
             console.log(this.categoryId, "0000000");
-         
-                // this.valueTitle = this.$refs.selectTree.getNode(
-                //     this.valueId
-                // ).data[this.props.label]; // 初始化显示
-                this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
-                // this.defaultExpandedKey = [this.valueId]; // 设置默认展开
-           
+
+            // this.valueTitle = this.$refs.selectTree.getNode(
+            //     this.valueId
+            // ).data[this.props.label]; // 初始化显示
+            this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
+            // this.defaultExpandedKey = [this.valueId]; // 设置默认展开
+
             this.$nextTick(() => {
                 let scrollWrap = document.querySelectorAll(
                     ".el-scrollbar .el-select-dropdown__wrap"
@@ -166,7 +166,7 @@ export default {
                 this.$emit("chooseNode", node);
                 return;
             } else {
-                console.log()
+                console.log();
                 this.valueTitle = node[this.props.label];
                 this.$emit("chooseNode", node);
             }
@@ -174,9 +174,9 @@ export default {
             // this.defaultExpandedKey = [];
             this.clearSelected();
         },
-        check(node){
-            console.log(arguments)
-              if (this.multiple) {
+        check(node) {
+            console.log(arguments);
+            if (this.multiple) {
                 if (this.valueTitle.indexOf(node[this.props.label]) > -1) {
                     return;
                 }
@@ -184,7 +184,7 @@ export default {
                 this.$emit("chooseNode", node);
                 return;
             } else {
-                console.log()
+                console.log();
                 this.valueTitle = node[this.props.label];
                 this.$emit("chooseNode", node);
             }
@@ -202,21 +202,19 @@ export default {
             let allNode = document.querySelectorAll(
                 "#tree-option .el-tree-node"
             );
-
             allNode.forEach(element => element.classList.remove("is-current"));
-        }
+        },
+        
     },
     watch: {
-     
         categoryName() {
             this.valueTitle = this.categoryName;
-            
         },
-        categoryId(){
-             this.$nextTick(()=>{
-                 this.initHandle()
-                 this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
-            })
+        categoryId() {
+            this.$nextTick(() => {
+                this.initHandle();
+                this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
+            });
         }
     }
 };

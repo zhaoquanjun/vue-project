@@ -386,7 +386,6 @@ export default {
                 if (this.articleDetail.metaKeywords.length >= 5 || !value) {
                     return;
                 }
-                 
                 this.articleDetail.metaKeywords.push(value);
                 // let ele = this.$refs.metaKeywordsInput.$el.children[0];
                 // let width = this.$refs.metaKeywordList.clientWidth;
@@ -512,7 +511,6 @@ export default {
             );
             this.$confirm("保存成功!", "提示", {
                 confirmButtonText: "新增下一篇",
-                type: "success",
                 customClass: "medium",
                 iconClass: "icon-success",
                 cancelButtonText:"关闭",

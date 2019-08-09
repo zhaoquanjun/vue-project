@@ -7,7 +7,7 @@ import { getLocal } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 import store from "@/store/index"
 import router from '@/router/index'
-import { MessageBox, Message, Loading } from 'element-ui';
+import { MessageBox, Message, Loading, Notification } from 'element-ui';
 import securityService from "@/services/authentication/securityService";
 import Cookies from "js-cookie";
 let loading        //定义loading变量
@@ -58,7 +58,7 @@ axios.interceptors.request.use(
         const token = store.getters.token;
         token && (config.headers.Authorization = 'Bearer ' + token);
         //todo 测试阶段写死
-        let appId = store.state.dashboard.appId;    
+        let appId = store.state.dashboard.appId;
         if (appId) {
             config.headers.AppId = store.state.dashboard.appId;
         } else {
@@ -74,7 +74,7 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
-       // tryHideFullScreenLoading()
+        // tryHideFullScreenLoading()
 
         if (response.status === 200) {
             return Promise.resolve(response);
@@ -84,7 +84,7 @@ axios.interceptors.response.use(
     },
     // 服务器状态码不是200的情况    
     error => {
-       // tryHideFullScreenLoading()
+        // tryHideFullScreenLoading()
         console.log(error, "error");
         let status = error.response.status;
         if (error.response.status) {
@@ -112,22 +112,24 @@ axios.interceptors.response.use(
                     break;
                 // 其他错误，直接抛出错误提示  
                 case 500:
-                    Message({
+                    Notification({
                         message: error.response.data.message,
-                        type: 'error',
-                        duration: 5 * 1000
+                        duration: 5 * 1000,
+                        customClass: "notify-error",  //  notify-success ||  notify-error
+                        showClose: false,
                     })
                     return;
                 default:
-                    Message({
+                    Notification({
                         message: error.response.data.message,
-                        type: 'error',
-                        duration: 5 * 1000
+                        duration: 5 * 1000,
+                        customClass: "notify-error",  //  notify-success ||  notify-error
+                        showClose: false,
                     })
-                  
+
                     break;
             }
-           
+
             return Promise.reject(error.response);
         }
     }

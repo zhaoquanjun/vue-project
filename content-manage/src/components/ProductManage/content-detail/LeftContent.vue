@@ -175,6 +175,7 @@
                                     ></i>
                                 </li>
                                 <el-input
+                                    maxlength="10"
                                     ref="keywordInput"
                                     placeholder="每个关键词之间用回车键分离"
                                     v-model="keywordValue"
@@ -234,6 +235,7 @@
                                     ></i>
                                 </li>
                                 <el-input
+                                    maxlength="10"
                                     ref="metaKeywordsInput"
                                     placeholder="每个关键词之间用回车键分离"
                                     v-model="metaKeyword"
@@ -433,7 +435,7 @@ export default {
         this.detailData.productCategoryList = [
             { id: this.$route.query.categoryId || 0, displayName: "全部分类" }
         ];
-        console.log(this.$route.query);
+       
         var id = this.$route.query.id;
         this.curProduct = id;
         if (id != null || id != undefined) {
@@ -480,6 +482,7 @@ export default {
             });
         },
         keywords(value, name) {
+            this.metaKeyword = this.keywordValue = "";
             if (name === "seoKeyword") {
                 if (this.detailData.seoKeyword.length >= 5 || !value) {
                     return;
@@ -502,10 +505,12 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
+            console.log(data, "datadatadata"); 
+            this.categoryName =  this.categoryId =[];
             this.categoryName = data.productCategoryList.map(item => {
                 return item.displayName;
             });
-            console.log(data, "datadatadata");
+            
             this.categoryId = data.productCategoryList.map(item => {
                 return item.id;
             });
@@ -549,13 +554,15 @@ export default {
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
-                    type: "success",
+                    cancelButtonText:"关闭",
                     customClass: "medium",
                     iconClass: "icon-success",
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
                             this.$emit("changeSaveWay", false);
+                           
+                            this.$refs.detailCheckTree.resetChecked()
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -595,7 +602,9 @@ export default {
                             this.resetDetail();
                             this.$emit("changeSaveWay", false);
                             this.$route.query.isEditor = 0;
+                            this.$refs.detailCheckTree.resetChecked()
                         } else {
+                            
                             this.curProduct = data;
                             this.detailData.id = data;
                             this.$emit("changeSaveWay", true);
@@ -610,15 +619,15 @@ export default {
         async getTree() {
             let { data } = await productCategoryManageApi.get();
             this.treeResult = data.treeArray;
-            var categoryName = this.$route.query.categoryName;
-            if (categoryName != null || categoryName != undefined) {
-                this.categoryName.push(categoryName);
-            }
+            // var categoryName = this.$route.query.categoryName;
+            // if (categoryName != null || categoryName != undefined) {
+            //     this.categoryName.push(categoryName);
+            // }
         },
         chooseNode(data, boolean) {
-            if(this.detailData.productCategoryList.length>=5){
-                return
-            };
+            if (this.detailData.productCategoryList.length >= 5) {
+                return;
+            }
             if (!!boolean) {
                 this.detailData.productCategoryList.push({
                     displayName: data.label,
@@ -626,9 +635,11 @@ export default {
                     thumbnailPicUrl: data.thumbnailPicUrl
                 });
             } else {
-                this.detailData.productCategoryList = this.detailData.productCategoryList.filter((item)=>{
-                     return item.id != data.id
-                 })
+                this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
+                    item => {
+                        return item.id != data.id;
+                    }
+                );
             }
         },
         //  移除已选择的分类
@@ -712,9 +723,9 @@ export default {
                 ],
                 productCategoryList: [
                     {
-                        id: 1,
-                        displayName: "1", //
-                        thumbnailPicUrl: "2" //
+                        id: 0,
+                        displayName: "全部分类", //
+                        thumbnailPicUrl: "" //
                     }
                 ],
                 params: { name: 1 }, //
@@ -802,12 +813,13 @@ export default {
         .category-item {
             display: inline-block;
             border: 1px solid #eee;
-            color: #606266;
+            color: #fff;
             border-radius: 30px;
             padding: 5px 10px;
             margin-bottom: 5px;
             font-size: 12px;
             margin-right: 5px;
+            background: #609ee9;
             .el-icon-close {
                 cursor: pointer;
             }
