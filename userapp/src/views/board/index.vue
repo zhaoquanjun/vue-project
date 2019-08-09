@@ -1,7 +1,7 @@
 <template>
   <div class="home-page page-scroll">
     <el-row style="display: flex;">
-      <div style="margin-right:487px;width:100%">
+      <div class="leftContent">
         <div class="welcome-wrap">
           <p class="welcome-words">{{userName}}，欢迎回到微站后台</p>
           <p class="siteIntroduction">以下是您当前的站点</p>
@@ -12,8 +12,7 @@
         <content-num :contentNumber="contentNumber" />
         <recommend :recommend="recommend" />
       </div>
-      <!-- <div class="board-right" style="margin-left:19px"></div> -->
-      <div style="position:absolute;right:0;width:487px;">
+      <div class="rightContent">
         <el-row class="appInfo">
           <el-col class="appName">
             <span>{{ appInfo.name }}</span>
@@ -74,7 +73,8 @@
             <div class="versionInfo">{{ item.versionDescription }}</div>
             <div class="versionDate">{{ item.updateTime }}</div>
           </div>
-          <img class="versionImg" src="~img/dashboard/board-versionImg.png" alt />
+          <div class="versionImg"></div>
+          <!-- <img  src="~img/dashboard/board-versionImg.png" alt /> -->
         </el-row>
       </div>
     </el-row>
@@ -219,6 +219,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.leftContent {
+  margin-right: 487px;
+  width: 100%;
+}
+.rightContent {
+  position: absolute;
+  right: 0;
+  width: 487px;
+}
 .home-page {
   padding: 0 24px 32px;
   background: rgba(255, 255, 255, 1);
@@ -260,7 +269,6 @@ export default {
     margin-top: 34px;
     margin-left: 28px;
     font-size: 26px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(38, 38, 38, 1);
     line-height: 37px;
@@ -269,16 +277,15 @@ export default {
     margin-top: 16px;
     margin-left: 28px;
     font-size: 14px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(38, 38, 38, 1);
     line-height: 20px;
   }
   .appLine {
-    margin-left: 20px;
+    margin-left: 28px;
     margin-right: 17px;
     margin-top: 23px;
-    width: 100%;
+    width: 403px;
     display: inline-block;
     .appLineInside {
       width: 100%;
@@ -291,7 +298,6 @@ export default {
     margin-top: 34px;
     margin-left: 28px;
     font-size: 14px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(161, 168, 177, 1);
     line-height: 20px;
@@ -311,7 +317,6 @@ export default {
     box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.14);
     border-radius: 16px;
     font-size: 14px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
     line-height: 20px;
@@ -324,7 +329,6 @@ export default {
   border: 1px solid rgba(229, 229, 229, 1);
   .designCheatsTitle {
     font-size: 18px;
-    font-family: PingFangSC-Medium;
     font-weight: 500;
     color: rgba(38, 38, 38, 1);
     margin-top: 20px;
@@ -358,7 +362,6 @@ export default {
     }
     .designInfo {
       font-size: 14px;
-      font-family: PingFangSC-Regular;
       font-weight: 400;
       color: rgba(38, 38, 38, 1);
       line-height: 70px;
@@ -375,10 +378,9 @@ export default {
       position: absolute;
       right: 23px;
       top: 30px;
-      width: 36px;
-      height: 17px;
+      // width: 36px;
+      // height: 17px;
       font-size: 12px;
-      font-family: PingFangSC-Regular;
       font-weight: 400;
       color: rgba(0, 193, 222, 1);
     }
@@ -396,7 +398,6 @@ export default {
   // opacity: 0.17;
   .versionTitle {
     font-size: 18px;
-    font-family: PingFangSC-Medium;
     font-weight: 500;
     color: rgba(38, 38, 38, 1);
     line-height: 25px;
@@ -407,7 +408,6 @@ export default {
   .versionItem {
     height: 20px;
     font-size: 14px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(38, 38, 38, 1);
     line-height: 20px;
@@ -435,6 +435,9 @@ export default {
     float: right;
     margin-top: 25px;
     width: 339px;
+    height: 190px;
+    background: url("~img/dashboard/board-versionImgMax.png") no-repeat center;
+    background-size: cover;
   }
 }
 // 修改app
@@ -458,6 +461,100 @@ export default {
     .save {
       background: #00c1de;
       color: #fff;
+    }
+  }
+}
+@media screen and (max-width: 1440px) {
+  .home-page .welcome-wrap {
+    margin-top: 34px;
+    .welcome-words {
+      font-size: 28px;
+      line-height: 40px;
+    }
+    .siteIntroduction {
+      margin-top: 0;
+      font-size: 16px;
+      line-height: 22px;
+    }
+  }
+  .leftContent {
+    margin-right: 339px;
+  }
+  .rightContent {
+    margin-left: 29px;
+    width: 310px;
+    .appInfo {
+      height: 210px;
+      margin-top: 71px;
+      margin-left: 0px;
+      margin-right: 0px;
+      .appName {
+        margin-top: 24px;
+        margin-left: 21px;
+        font-size: 18px;
+        line-height: 25px;
+      }
+      .appVersion {
+        margin-left: 21px;
+      }
+      .appLine {
+        margin-top: 15px;
+        margin-left: 21px;
+      }
+      .appTime {
+        margin-top: 16px;
+        margin-left: 21px;
+      }
+      .renewalBtn {
+        margin-top: 16px;
+        margin-left: 0px;
+        // margin-bottom: 20px;
+      }
+    }
+    .designCheats {
+      margin: 21px 0px 20px;
+      .designCheatsTitle {
+        margin-top: 14px;
+        margin-left: 14px;
+        margin-bottom: 22px;
+        font-size: 15px;
+        line-height: 21px;
+      }
+      .designItem {
+        height: 50px;
+        margin: 0px 12px 16px;
+        .designDiv {
+          height: 50px;
+        }
+        .designInfo {
+          line-height: 50px;
+        }
+        .designNoread {
+          top: 20px;
+        }
+      }
+    }
+    .versionUpdate {
+      margin: 0px;
+      .versionTitle {
+        margin-top: 12px;
+        margin-left: 13px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        line-height: 22px;
+      }
+      .versionItem {
+        margin-left: 12px;
+        margin-bottom: 4px;
+        margin-right: 12px;
+      }
+      .versionImg {
+        width: 195px;
+        height: 109px;
+        background: url("~img/dashboard/board-versionImgMin.png") no-repeat
+          center;
+        background-size: cover;
+      }
     }
   }
 }

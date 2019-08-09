@@ -78,30 +78,29 @@ export default {
     padding-bottom: 20px;
     padding-top: 20px;
     font-size: 18px;
-    font-family: PingFangSC-Medium;
     font-weight: 500;
     color: rgba(38, 38, 38, 1);
     line-height: 25px;
   }
   .content {
     .item:first-of-type {
-      background: url("~img/dashboard/board-contentLeftImg.png") no-repeat;
+      background: url("~img/dashboard/board-contentLeftImgMax.png") no-repeat;
       background-position: left bottom;
       background-size: contain;
     }
     .item:last-of-type {
-      background: url("~img/dashboard/board-contentRightImg.png") no-repeat;
+      background: url("~img/dashboard/board-contentRightImgMax.png") no-repeat;
       background-position: right bottom;
       background-size: contain;
     }
-    .item:last-of-type .item-box{
-        border-right: 1px solid transparent;
-      }
+    .item:last-of-type .item-box {
+      border-right: 1px solid transparent;
+    }
     .item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
+
       .item-box {
         width: 100%;
         height: 75px;
@@ -117,7 +116,6 @@ export default {
           align-items: center;
           span {
             font-size: 18px;
-            font-family: PingFangSC-Light;
             font-weight: 300;
             color: rgba(38, 38, 38, 1);
             line-height: 25px;
@@ -133,7 +131,6 @@ export default {
           display: inline;
           margin-right: 5px;
           font-size: 36px;
-        //   font-family: PingFangSC-Medium;
           font-weight: 500;
           color: rgba(38, 38, 38, 1);
           line-height: 50px;
@@ -146,6 +143,41 @@ export default {
           color: rgba(185, 203, 207, 1);
           line-height: 20px;
           //   vertical-align: top;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1440px) {
+  .content-num-section {
+    .section-title {
+      padding-top: 12px;
+      padding-left: 13px;
+      padding-bottom: 7px;
+      font-size: 16px;
+      line-height: 22px;
+    }
+    .content {
+      .item:first-of-type {
+        background: url("~img/dashboard/board-contentLeftImgMin.png") no-repeat;
+        background-position: left bottom;
+        background-size: contain;
+      }
+      .item:last-of-type {
+        background: url("~img/dashboard/board-contentRightImgMax.png") no-repeat;
+        background-position: right bottom;
+        background-size: contain;
+      }
+      .item .item-box {
+        height: 54px;
+        margin-bottom: 17px;
+        .item-name span {
+          font-size: 14px;
+          line-height: 20px;
+        }
+        .item-num {
+          font-size: 28px;
+          line-height: 40px;
         }
       }
     }

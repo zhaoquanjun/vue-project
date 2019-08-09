@@ -1,5 +1,5 @@
 <template>
-  <el-row class="plugin-section" :gutter="40">
+  <el-row class="plugin-section">
     <el-col class="plugins-box" :span="6" v-for="(it, idx) in  plugins" :key="idx">
       <div class="box-inner">
         <span class="plugin-item plugin-img" :class="it.pluginCode"></span>
@@ -20,19 +20,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-body {
-  background: #f5f5f6;
-}
 .plugin-section {
   display: flex;
   justify-content: space-between;
   align-content: center;
-  flex-wrap: wrap;
+  .plugins-box:last-child {
+    margin-right: 0;
+  }
   .plugins-box {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     margin-bottom: 42px;
+    margin-right: 40px;
     cursor: pointer;
     .box-inner {
       width: 100%;
@@ -43,7 +43,7 @@ body {
       border: 1px solid rgba(229, 229, 229, 1);
       text-align: center;
 
-      background: url("~img/dashboard/board-pluginImg.png");
+      background: url("~img/dashboard/board-pluginImgMax.png");
       background-repeat: no-repeat;
       background-position: right bottom;
       background-size: 143px 131px;
@@ -59,33 +59,32 @@ body {
         margin: 20px auto 0px;
       }
       .MicroProgram {
-        background: url("~img/dashboard/board-wxprogram.png") no-repeat center;
+        background: url("~img/dashboard/board-wxprogramMax.png") no-repeat
+          center;
         background-size: contain;
       }
       .AliPayProgram {
-        background: url("~img/dashboard/board-alipay.png") no-repeat center;
+        background: url("~img/dashboard/board-alipayMax.png") no-repeat center;
         background-size: contain;
       }
       .OfficialAccounts {
-        background: url("~img/dashboard/board-wxpublicNumber.png") no-repeat
+        background: url("~img/dashboard/board-wxpublicNumberMax.png") no-repeat
           center;
         background-size: contain;
       }
       .Form {
-        background: url("~img/dashboard/board-form.png") no-repeat center;
+        background: url("~img/dashboard/board-formMax.png") no-repeat center;
         background-size: contain;
       }
       .plugin-text {
         h2 {
           font-size: 18px;
-          font-family: PingFangSC-Medium;
           font-weight: 500;
           color: rgba(38, 38, 38, 1);
           line-height: 25px;
         }
         p:first-of-type {
           font-size: 14px;
-          font-family: PingFangSC-Regular;
           font-weight: 400;
           color: rgba(161, 168, 177, 1);
           line-height: 20px;
@@ -93,12 +92,62 @@ body {
         }
         p:last-of-type {
           font-size: 14px;
-          font-family: PingFangSC-Regular;
           font-weight: 400;
           color: rgba(9, 204, 235, 1);
           line-height: 20px;
           margin-top: 24px;
           margin-bottom: 36px;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1440px) {
+  .plugin-section {
+    .plugins-box {
+      margin-right: 20px;
+      margin-bottom: 33px;
+      .box-inner {
+        background: url("~img/dashboard/board-pluginImgMin.png");
+        background-repeat: no-repeat;
+        background-position: right bottom;
+        background-size: 71px 65px;
+        .plugin-img {
+          width: 72px;
+          height: 72px;
+          margin: 12px auto 7px;
+        }
+        .MicroProgram {
+          background: url("~img/dashboard/board-wxprogramMin.png") no-repeat
+            center;
+          background-size: contain;
+        }
+        .AliPayProgram {
+          background: url("~img/dashboard/board-alipayMin.png") no-repeat center;
+          background-size: contain;
+        }
+        .OfficialAccounts {
+          background: url("~img/dashboard/board-wxpublicNumberMin.png")
+            no-repeat center;
+          background-size: contain;
+        }
+        .Form {
+          background: url("~img/dashboard/board-formMin.png") no-repeat center;
+          background-size: contain;
+        }
+        .plugin-text {
+          h2 {
+            font-size: 14px;
+            line-height: 20px;
+          }
+          p:first-of-type {
+            font-size: 14px;
+            line-height: 20px;
+          }
+          p:last-of-type {
+            margin-top: 5px;
+            margin-bottom: 26px;
+          }
         }
       }
     }

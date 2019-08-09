@@ -16,12 +16,14 @@
           <div class="siteName">{{item.siteName}}</div>
           <div class="siteText siteLanguage">
             <span>语言：</span>
-            {{item.language == "zh-CN" ? "中" : "EN"}}
+            {{item.language == "zh-CN" ? "中文" : "英语"}}
           </div>
           <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
-          <div class="siteText details" v-show="index == curIndex">
-            查看详情
-            <div class="detailsBackground"></div>
+          <div>
+            <div class="siteText details" v-show="index == curIndex">
+              进入设计
+              <div class="detailsBackground"></div>
+            </div>
           </div>
         </el-col>
         <div class="leftModul"></div>
@@ -97,6 +99,7 @@
 
 <script>
 import * as dashboardApi from "@/api/request/dashboardApi";
+import LeftNavComponents from "_c/Aside/LeftNavComponents";
 export default {
   props: ["siteInfo", "siteCount"],
   data() {
@@ -249,14 +252,12 @@ export default {
 }
 .radio /deep/ .el-radio__label {
   font-size: 12px;
-  font-family: PingFangSC-Regular;
   font-weight: 400;
   color: rgba(140, 140, 140, 1);
   line-height: 20px;
 }
 .radio /deep/ .is-checked .el-radio__label {
   font-size: 12px;
-  font-family: PingFangSC-Regular;
   font-weight: 400;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
@@ -358,6 +359,15 @@ export default {
         line-height: 22px;
         margin-top: 33px;
         padding-left: 30px;
+        padding-right: 20px;
+
+        display: -webkit-box;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        -webkit-text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
       }
       .siteText {
         overflow: hidden;
@@ -381,8 +391,10 @@ export default {
           width: 14px;
           height: 13px;
           margin-left: 5px;
-          background: url("~img/dashboard/board-details.png") no-repeat center;
+          background: url("~img/dashboard/board-detailsMax.png") no-repeat
+            center;
           background-size: contain;
+          vertical-align: middle;
         }
       }
     }
@@ -545,8 +557,9 @@ export default {
         width: 14px;
         height: 13px;
         margin-left: 5px;
-        background: url("~img/dashboard/board-details.png") no-repeat center;
+        background: url("~img/dashboard/board-detailsMax.png") no-repeat center;
         background-size: contain;
+        vertical-align: middle;
       }
     }
   }
@@ -571,7 +584,6 @@ export default {
     border-bottom: 2px solid #efefef;
     .headTitle {
       font-size: 16px;
-      font-family: PingFangSC-Medium;
       font-weight: 500;
       color: rgba(38, 38, 38, 1);
       line-height: 70px;
@@ -590,7 +602,6 @@ export default {
     padding-left: 32px;
     .createSiteNameTitle {
       font-size: 12px;
-      font-family: PingFangSC-Medium;
       font-weight: 500;
       color: rgba(38, 38, 38, 1);
       line-height: 20px;
@@ -598,7 +609,6 @@ export default {
   }
   .createSiteLanguageTitle {
     font-size: 12px;
-    font-family: PingFangSC-Medium;
     font-weight: 500;
     color: rgba(38, 38, 38, 1);
     line-height: 20px;
@@ -618,10 +628,143 @@ export default {
       padding: 0px;
       margin-top: 24px;
       font-size: 12px;
-      font-family: PingFangSC-Medium;
       font-weight: 500;
       color: rgba(255, 255, 255, 1);
       line-height: 32px;
+    }
+  }
+}
+@media screen and (max-width: 1440px) {
+  .site-section {
+    margin-top: 22px;
+    margin-bottom: 29px;
+    height: 180px;
+    .content {
+      height: 180px;
+      .leftModul {
+        height: 94px;
+      }
+      .rightModul {
+        height: 94px;
+      }
+      .item {
+        height: 94px;
+        .siteImg {
+          margin-top: 15px;
+          margin-left: 11px;
+        }
+        .siteName {
+          margin-top: 20px;
+          padding-left: 18px;
+          font-size: 10px;
+          line-height: 14px;
+        }
+        .siteText {
+          font-size: 10px;
+          line-height: 14px;
+          padding-left: 18px;
+        }
+        .siteLanguage {
+          margin-top: 2px;
+        }
+        .isPublished {
+          margin-top: 6px;
+        }
+        .details {
+          margin-top: 21px;
+        }
+      }
+      .active {
+        height: 156px;
+        .siteImg {
+          margin-top: 25px;
+          margin-left: 16px;
+        }
+        .siteName {
+          margin-top: 20px;
+          padding-left: 18px;
+          font-size: 16px;
+          line-height: 22px;
+        }
+        .siteText {
+          font-size: 14px;
+          line-height: 20px;
+          padding-left: 18px;
+        }
+        .siteLanguage {
+          margin-top: 2px;
+        }
+        .isPublished {
+          margin-top: 6px;
+        }
+        .details {
+          margin-top: 21px;
+          .detailsBackground {
+            width: 7px;
+            height: 6px;
+            margin-left: 5px;
+            background: url("~img/dashboard/board-detailsMin.png") no-repeat
+              center;
+            background-size: contain;
+          }
+        }
+      }
+      .prevActive {
+        height: 94px;
+      }
+      .nextActive {
+        height: 94px;
+      }
+      .sliderWrap {
+        .slider {
+          width: 4px;
+          height: 4px;
+          margin-left: 6px;
+          transition: all 0.3s linear;
+        }
+        .sliderActive {
+          width: 10px;
+          height: 4px;
+        }
+      }
+      .createSiteNumTwo {
+        right: 5%;
+        top: 5px;
+        width: 3.5%;
+        padding-bottom: 3.5%;
+      }
+      .createSiteNumThree {
+        top: 9px;
+        width: 3.5%;
+        padding-bottom: 3.5%;
+      }
+      .siteInfoTwo {
+        height: 156px;
+      }
+      .siteImg {
+        margin-top: 25px;
+        margin-left: 16px;
+      }
+      .siteName {
+        margin-top: 20px;
+        padding-left: 18px;
+        font-size: 16px;
+        line-height: 22px;
+      }
+      .siteText {
+        font-size: 14px;
+        line-height: 20px;
+        padding-left: 18px;
+      }
+      .siteLanguage {
+        margin-top: 2px;
+      }
+      .isPublished {
+        margin-top: 6px;
+      }
+      .details {
+        margin-top: 21px;
+      }
     }
   }
 }
