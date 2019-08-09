@@ -4,10 +4,11 @@ export const setLocal = (key,value)=>{
     if(typeof value == 'object'){
         value = JSON.stringify(value);
     }
-    Cookies(key,value);
+    //{ domain: '.wezhan.cn' })
+    Cookies.set(key,value);
 }
 export const getLocal = (key)=>{
-    return Cookies(key);
+    return Cookies.get(key);
 }
 
 export const removeLocal = (key)=>{

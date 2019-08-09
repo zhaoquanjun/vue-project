@@ -44,6 +44,7 @@ router.beforeEach(async (to, from, next) => {
           return
         } else {
           store.dispatch("_set",data)
+          console.log(data)
           // store.commit("SET_USER", data);
           // setTimeout(async() => {
           //   await store.dispatch('_updateAppIdAndSiteIdToCookie')

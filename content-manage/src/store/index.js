@@ -54,8 +54,8 @@ if (getLocal("token")) {
   // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
   getLocal("authList") && store.commit("set_authList", JSON.parse(getLocal("authList")))
 }
-if(getLocal("appid")){
-    store.commit("GETUSERDASHBOARD", getLocal("appid"))
+if(getLocal("ymId")){
+   // store.commit("GETUSERDASHBOARD", getLocal("ymId"))
 }
 if(Cookies("routeCode")){
   store.commit("SETCODE",Cookies("routeCode"))
@@ -65,4 +65,3 @@ if(Cookies("userInfo")){
 }
 
 
-Cookies.set("cookie",1, { domain: '.wezhan.cn' })

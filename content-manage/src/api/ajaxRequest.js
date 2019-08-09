@@ -58,7 +58,7 @@ axios.interceptors.request.use(
         const token = store.getters.token;
         token && (config.headers.Authorization = 'Bearer ' + token);
         //todo 测试阶段写死
-
+          
         if (!Cookies.get('AppId')) {
             config.headers.AppId = store.state.dashboard.appid;
         } else {

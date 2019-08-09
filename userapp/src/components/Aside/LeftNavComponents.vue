@@ -1,16 +1,16 @@
 <template>
     <el-aside class="leftNavAside">
-        <el-menu class="el-menu-vertical-demo">
-            <el-menu-item
+        <ul class="el-menu-vertical-demo el-menu">
+            <li
+                class="el-menu-item "
                 v-for="(item,index) in menuList.children"
                 :key="index"
-                :index="item.menuUrl.split('/')[1]"
-                @click.native="handlerRoute(item,index)"
+                @click="handlerRoute(item,index)"
                 :class="{'active':lastRoute==item.code}"
             >
                 <span>{{item.name}}</span>
-            </el-menu-item>
-        </el-menu>
+            </li>
+        </ul>
     </el-aside>
 </template>
 <script>
@@ -33,13 +33,13 @@ export default {
 };
 </script>
 <style scoped>
-.el-menu /deep/ .el-menu-item {
+.el-menu .el-menu-item {
     height: 50px;
     line-height: 50px;
     font-size: 14px;
     margin-bottom: 10px;
 }
-.el-menu /deep/ :hover.el-menu-item {
+.el-menu :hover.el-menu-item {
     background: #e0fcff;
 }
 .active{

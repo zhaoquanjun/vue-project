@@ -53,7 +53,8 @@ const dashboard = {
         },
         GETUSERDASHBOARD(state, payload) {
             state.appid = payload;
-            setLocal('appid', payload);
+            //setLocal('appid', payload);
+            /// setLocal('ymId', payload);
         },
          set_menuList(state,m){
             // state.menuList = JSON.stringify(m);

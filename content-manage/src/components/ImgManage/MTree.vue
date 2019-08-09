@@ -36,7 +36,7 @@
                 </div>
             </el-tree>
         </el-scrollbar>
-        <div class="category-name-pic" ref="operateSection">
+        <div class="category-name-pic" :class="{upload:isProduct}" ref="operateSection">
             <UploadCategoryPic
                 :isUpload="isProduct?true:false"
                 :modifyCategoryData="modifyCategoryData"
@@ -326,7 +326,9 @@ export default {
     z-index: 19;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
 }
-
+.upload{
+    height: 200px;
+}
 .categoryPic {
     width: 16px;
     height: 16px;
