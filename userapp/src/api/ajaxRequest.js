@@ -184,7 +184,6 @@ export function _delete(url, params) {
     return new Promise((resolve, reject) => {
         axios.delete(url, params)
             .then(res => {
-                console.log(res, '删除方法')
                 resolve(res);
             })
             .catch(err => {

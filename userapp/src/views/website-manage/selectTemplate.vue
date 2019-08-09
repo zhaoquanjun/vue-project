@@ -76,7 +76,7 @@ export default {
 }
 .el-tabs /deep/ .el-tabs__item {
   height: 38px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   color: rgba(51, 51, 51, 1);
   line-height: 36px;

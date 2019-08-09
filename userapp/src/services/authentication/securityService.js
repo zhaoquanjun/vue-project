@@ -1,4 +1,5 @@
 import oidcMgr from '@/services/authentication/oidcService';
+import {removeLocal } from "@/libs/local.js";
 const globalAuthData = {
   isAuthenticated: false,
   token: ''
@@ -29,8 +30,7 @@ class SecurityService {
   signOut(returnPath) {
    
     oidcMgr.signoutRedirect({ state: returnPath }).then(function(resp) {
-      console.log('signed out', resp)
-      sessionStorage.clear();
+      removeLocal("token")
     }).catch(function(err) {
       console.log(err)
     })

@@ -15,7 +15,11 @@
                     <span>暂无数据</span>
                 </div>
             </template>
-            <el-table-column prop="domain" label="域名"></el-table-column>
+            <el-table-column prop="domain" label="域名" class="domain-name">
+                  <template slot-scope="scope">
+                      <span class="domain-name">{{scope.row.domain}}</span>
+                  </template>
+            </el-table-column>
             <el-table-column prop="httpsStatusDesc" label="HTTPS状态">
                 <template slot-scope="scope">
                     <!-- <el-switch
@@ -23,11 +27,10 @@
                         @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
                     ></el-switch>-->
                     <template
-                        v-if="scope.row.cdnDomainResolveStatus===2 && scope.row.cdnStatus===5 &&scope.row.httpsStatus!==1" 
+                        v-if="scope.row.cdnDomainResolveStatus===2 && scope.row.cdnStatus===5 &&scope.row.httpsStatus!==1"
                     >
                         <!-- v-model="scope.row.httpsStatus" -->
                         <el-switch
-
                             :value="scope.row.httpsStatus==4"
                             @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
                         ></el-switch>
@@ -35,8 +38,28 @@
                     <span v-else>—</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="cdnDomainResolveStatusDesc" label="解析状态"></el-table-column>
-            <el-table-column width="100" type="expand" label="操作">
+            <el-table-column prop="cdnDomainResolveStatusDesc" label="解析状态">
+                <template slot-scope="props">
+                    <el-tooltip
+                        v-if="props.row.cdnDomainResolveStatus!==2"
+                        class="item"
+                        effect="dark"
+                        content="请根据“域名解析”中的解析步骤完成域名解析"
+                        placement="top-start"
+                    >
+                        <span
+                        class="resolve-status"
+                        :class="resolveStatus(props.row.cdnDomainResolveStatus)"
+                    >{{props.row.cdnDomainResolveStatusDesc}}</span>
+                    </el-tooltip>
+                    <span
+                         v-else
+                        class="resolve-status"
+                        :class="resolveStatus(props.row.cdnDomainResolveStatus)"
+                    >{{props.row.cdnDomainResolveStatusDesc}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column width="100" type="expand" label="操作" >
                 <template slot-scope="props">
                     <div class="relove-step">
                         <el-row>
@@ -118,7 +141,7 @@
                                 <div class="step-content">
                                     <span
                                         class="relove-msg"
-                                        v-if="props.row.cdnDomainResolveStatus===2"
+                                        v-if="props.row.cdnDomainResolveStatus===3"
                                     >{{props.row.cdnDomainResolveStatusDesc}}</span>
                                 </div>
                             </el-col>
@@ -164,7 +187,11 @@
                         <el-row>
                             <div class="cnd-status">
                                 <span>CDN状态：</span>
+                                <span v-if="props.row.cdnStatus===3" style="cursor: pointer;" @click="notPassTip">
+                                    {{props.row.cdnStatusDesc}}
+                                </span>
                                 <span
+                                    v-else
                                     :class="props.row.cdnStatus===4?'cndStop':''"
                                 >{{props.row.cdnStatusDesc}}</span>
                                 <button
@@ -194,7 +221,46 @@
                 </template>
             </el-table-column>
         </el-table>
-         <Loading v-if="loadingShow" />
+         <el-dialog title="提示" :visible.sync="passTip" width="50%">
+            <span>
+                审核未通过？请排查以下事项并在调整后重新开启
+                <br />
+                <br />● 内容不合规：
+                <br />
+                <br />无法正常访问或内容不含有任何实质信息
+                <br />
+                <br />游戏私服类
+                <br />
+                <br />传奇类游戏、纸牌类游戏
+                <br />
+                <br />盗版软件等无版权下载网站
+                <br />
+                <br />P2P类金融网站
+                <br />
+                <br />彩票类网站
+                <br />
+                <br />违规医院和药品类网站
+                <br />
+                <br />涉黄、涉毒、涉赌等
+                <br />
+                <br />自动超时拒绝：您的域名因不符合CDN接入规则而拒绝，请您
+                <br />
+                <br />查看之前的反馈结果，合规后可再行申请提交审核
+                <br />
+                <br />● 域名已被添加至CDN域名列表。
+                <br />
+                <br />处理方式：
+                <br />
+                <br />a、登录您的阿里云账户删除该域名并在该页面“重新提交”。
+                <br />
+                <br />b、如果您未添加过该域名，请在阿里云提交工单并等待处理。 如何提交工单?
+                <br />
+                <br />● 中文域名暂不支持开启CDN。
+                <br />
+                <br />
+            </span>
+        </el-dialog>
+        <Loading v-if="loadingShow" />
     </div>
 </template>
 <script>
@@ -213,7 +279,8 @@ export default {
             getRowKeys(row) {
                 return row.id;
             },
-            loadingShow:true,
+            loadingShow: true,
+            passTip:false
         };
     },
     mounted() {},
@@ -221,9 +288,9 @@ export default {
         //一键解析域名
         resolveCdnByAliYunToken(row) {
             let params = {
-                id:row.id,
+                id: row.id,
                 isForceUpdate: false,
-                curDomain:row.domain
+                curDomain: row.domain
             };
             this.$emit("resolveCdnByAliYunToken", params);
         },
@@ -271,24 +338,31 @@ export default {
                     "将为您申请免费证书，请发布您的网站并确保可正常访问！",
                     "开启HTTPS",
                     {
+                        distinguishCancelAndClose: true,
                         confirmButtonText: "发布网站并申请",
                         cancelButtonText: "已发布，直接申请",
                         type: "success"
                     }
                 )
                     .then(() => {
-                        // 发布网站并申请 暂时无此接口 后续增加
+                        this.$emit("disableHttps", domainId);
                     })
-                    .catch(() => {
-                        this.$emit("oneKeyEnableHttps", domainId);
+                    .catch(action => {
+                        if (action === "cancel") {
+                            this.$emit("oneKeyEnableHttps", domainId);
+                        }
                     });
             } else {
                 this.$confirm("确定要停用HTTPS吗？", "提示", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
-                    type: "success"
-                }).then(() => {
-                    this.$emit("disableHttps", domainId);
+                    type: "success",
+                    callback: action => {
+                        if (action === "confirm") {
+                            this.$emit("disableHttps", domainId);
+                        } else {
+                        }
+                    }
                 });
             }
         },
@@ -320,6 +394,18 @@ export default {
                 return;
             }
         },
+        resolveStatus(status) {
+            switch (status) {
+                case 0:
+                    return "domainStatus0";
+                case 1:
+                    return "domainStatus1";
+                case 2:
+                    return "domainStatus2";
+                default:
+                    return "domainStatus0";
+            }
+        },
         elemnetConfirm(type, content, callback, index, status, title) {
             let message = [];
             content.forEach(item => {
@@ -332,7 +418,7 @@ export default {
                 message: this.$createElement("div", null, message),
                 confirmButtonText: "确定",
                 type: type,
-                // customClass:"large", // 弹窗大小  large / medium / small 	
+                // customClass:"large", // 弹窗大小  large / medium / small
                 callback: async action => {
                     if (action === "confirm") {
                         callback(this);
@@ -356,6 +442,9 @@ export default {
                 that.expands = [];
             }
         },
+        notPassTip(){
+            this.passTip =true;
+        }
     },
     watch: {
         tableData() {
@@ -367,7 +456,7 @@ export default {
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
                     ele.innerHTML =
-                        "<span style='color: #00c1de;' >解析设置</span>";
+                        "<span style='color: #00c1de;font-size:14px' >域名解析</span>";
                 }
             });
         }
@@ -375,29 +464,11 @@ export default {
 };
 </script>
 <style scoped>
-.el-tabs{
-    margin-top: 24px
-}
-.el-tabs /deep/ .el-tabs__item{
-    width: 88px;
-    height: 38px;
-    font-size: 12px;
-    font-weight: 400;
-    color:rgba(51,51,51,1);
-    line-height: 36px;
-    border-bottom: 1px solid #E4E7ED;
-    background:rgba(245,245,245,1);
-    vertical-align: top;
-    border-top: 2px solid transparent;
-}
-.el-tabs /deep/ .is-active{
-    color:rgba(1,192,222,1);
-    border-top: 2px solid rgb(72,201,226);
-    border-bottom: 1px solid transparent;
-    background: rgb(255, 255, 255)
-}
 
-.el-table /deep/ thead  th {
+.el-table /deep/ thead :first-child>.cell{
+    padding-left: 40px;
+}
+.el-table /deep/ thead th {
     padding: 0;
     height: 35px;
     background: #00c1de !important;
@@ -413,6 +484,10 @@ export default {
     background: #eee;
     padding: 16px 32px;
 }
+.el-table /deep/ th>.cell{
+    text-align: left;
+}
+
 /* .el-table /deep/ .el-table__expand-column .cell{
         width: 160px;
 } */
@@ -480,8 +555,9 @@ export default {
         background: #fff;
         color: #262626;
         .explain-item {
-            line-height: 17px;
+            line-height: 25px;
             padding-bottom: 11px;
+            word-wrap: break-word;
         }
         .islink {
             color: #00c1de;
@@ -528,6 +604,18 @@ export default {
 }
 .cndStop {
     color: #b5b5b5;
+}
+.domainStatus0 {
+    color: #8c8c8c;
+}
+.domainStatus1 {
+    color: #f5a623;
+}
+.domainStatus2 {
+    color: #00b539;
+}
+.domain-name{
+    padding-left: 30px;
 }
 </style>
 
