@@ -118,7 +118,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1500px) {
   .content-num-section {
     margin-top: 32px;
     .section-title {

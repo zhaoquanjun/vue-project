@@ -634,7 +634,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1500px) {
   .site-section {
     margin-top: 22px;
     margin-bottom: 29px;

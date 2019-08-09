@@ -148,7 +148,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1500px) {
   .content-num-section {
     .section-title {
       padding-top: 12px;
