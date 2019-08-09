@@ -5,28 +5,27 @@
                 <template v-slot:title>网站管理</template>
             </page-submenu>
         </el-aside>
-        <el-main class="member-content">
+        <el-main class="member-content page-scroll">
             <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
             <div style="padding: 24px 17px;">
-                <el-row class="user-list" >
-                <span class="member-list-title fs14">域名管理</span>
-            </el-row>
-           
-            <DomainMenu @handleBtn="righPanelShow" />
-            <el-main>
-                <DomainList
-                    :tableData="domainListData"
-                    @_deleteCdnDomain="_deleteCdnDomain"
-                    @oneKeyEnableHttps="_oneKeyEnableHttps"
-                    @disableHttps="_disableHttps"
-                    @resolveCdnByAliYunToken="_resolveCdnByAliYunToken"
-                    @reopenCdn="_reopenCdn"
-                    @pauseCdn="_pauseCdn"
-                    @getCdnDomainList="_getCdnDomainList"
-                ></DomainList>
-            </el-main>
-            </div>
+                <el-row class="user-list">
+                    <span class="member-list-title fs14">域名管理</span>
+                </el-row>
 
+                <DomainMenu @handleBtn="righPanelShow" />
+                <el-main>
+                    <DomainList
+                        :tableData="domainListData"
+                        @_deleteCdnDomain="_deleteCdnDomain"
+                        @oneKeyEnableHttps="_oneKeyEnableHttps"
+                        @disableHttps="_disableHttps"
+                        @resolveCdnByAliYunToken="_resolveCdnByAliYunToken"
+                        @reopenCdn="_reopenCdn"
+                        @pauseCdn="_pauseCdn"
+                        @getCdnDomainList="_getCdnDomainList"
+                    ></DomainList>
+                </el-main>
+            </div>
         </el-main>
         <el-dialog
             width="0"
@@ -55,7 +54,8 @@ import { sendTargetPhoneCode } from "@/api/index.js";
 import { formatDateTime } from "@/api/index";
 import * as domainApi from "@/api/request/domainApi";
 import { getSiteInfo } from "@/api/request/siteBackupApi";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
+import { clearTimeout, setTimeout } from "timers";
 
 export default {
     components: {
@@ -70,16 +70,11 @@ export default {
     data() {
         return {
             domainListData: [], // table列表
-            secondDomain: "",
-            remarkValue: "",
-            manualSite: [],
-            autoSite: [],
             backupShow: false,
-            backuping: false,
-            // recovery: false,
-            remarkInfo: "",
+            flag: false,
             domainAmount: 0,
-            resolveDomainData: ""
+            resolveDomainData: "",
+            curSiteId: ""
         };
     },
     created() {
@@ -95,11 +90,17 @@ export default {
         // 获取siteId
         getSiteId(siteId) {
             this._getCdnDomainList(siteId);
-            Cookies("SiteId",siteId)
+            this.curSiteId = siteId;
+            Cookies("SiteId", siteId);
         },
         // 选择切换网站
         chooseWebsite(siteId) {
             this._getCdnDomainList(siteId);
+        },
+        async _isAliYunTokenSet() {
+            let { data } = await domainApi.isAliYunTokenSet();
+
+            return data;
         },
         async _removeAliYunToken() {
             await domainApi.removeAliYunToken();
@@ -120,12 +121,10 @@ export default {
          * 获取域名列表
          */
         async _getCdnDomainList(siteId) {
+            siteId = siteId || this.curSiteId;
             let { data } = await domainApi.getCdnDomainList(siteId);
             this.domainListData = data;
-            console.log(
-                this.domainListData,
-                "this.domainListDatathis.domainListData"
-            );
+
             this.domainAmount = data.length;
         },
 
@@ -142,22 +141,34 @@ export default {
             let { data } = await domainApi.resolveCdnByAliYunToken(params);
             if (!data.isSuccess && data.redirectUrl) {
                 window.open(data.redirectUrl);
+                clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    this._isAliYunTokenSet().then(data => {
+                        clearInterval(this.timer);
+                        this._resolveCdnByAliYunToken(this.resolveDomainData);
+                    });
+                }, 2000);
             }
-            if (!data.isSuccess && !data.redirectUrl) {
+            if (
+                !data.isSuccess &&
+                !data.redirectUrl &&
+                !data.isExistResolveCdnRecord
+            ) {
                 this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
                     message: data.errorMessage,
-                    type: "error",
-                    duration: 1500
+                    duration: 1500,
+                    showClose: false
                 });
             }
             if (data.isExistResolveCdnRecord) {
                 this.$confirm("提示", {
+                    title: "提示",
                     message: `${opt.curDomain}解析记录值已存在，是否覆盖？`,
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
+                    iconClass: "icon-warning",
                     callback: async action => {
                         if (action === "confirm") {
+                            this.resolveDomainData.isForceUpdate = true;
                             this._resolveCdnByAliYunToken(
                                 this.resolveDomainData
                             );
@@ -169,9 +180,10 @@ export default {
             // data.is
             if (data.isSuccess) {
                 this.$notify({
-                    message: "大约需要5分钟解析成功",
-                    type: "error",
-                    duration: 1500
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `大约需要5分钟解析成功`,
+                    duration: 2000,
+                    showClose: false
                 });
             }
         },
@@ -182,20 +194,47 @@ export default {
             let { data, status } = await domainApi.oneKeyEnableHttps(domainId);
             if (status === 200) {
                 //
-                this.$notify({
-                    title: "成功",
-                    message: "证书申请成功！",
-                    type: "success",
-                    duration: 1500
-                });
+
+                if (!data.isSuccess) {
+                    this.$confirm("提示", {
+                        title: "提示",
+                        message:
+                            "申请失败！请在发布网站并确保可正常访问后重试。",
+                        showCancelButton: false,
+                        iconClass: "icon-warning",
+                        callback: async action => {
+                            if (action === "confirm") {
+                            }
+                        }
+                    });
+                } else {
+                    this.$notify({
+                        customClass: "notify-success",
+                        title: "成功",
+                        message: "证书申请成功！",
+                        duration: 1500,
+                        showClose: false
+                    });
+                }
+                this._getCdnDomainList(this.curSiteId);
             }
         },
         /**
          * 关闭https
          */
         async _disableHttps(domainId) {
-            let data = await domainApi.disableHttps(domainId);
-            console.log(data);
+            let { data, status } = await domainApi.disableHttps(domainId);
+            if (status === 200) {
+                //
+                this.$notify({
+                    customClass: "notify-success",
+                    title: "成功",
+                    message: "HTTPS关闭成功！",
+                    duration: 1500,
+                    showClose: false
+                });
+                this._getCdnDomainList(this.curSiteId);
+            }
         },
         /**
          * 关闭cnd加速
@@ -204,21 +243,23 @@ export default {
             let { data, status } = await domainApi.pauseCdn(siteDomainId);
             if (status === 200) {
                 this.$notify({
+                    customClass: "notify-success",
                     message: "已成功关闭CDN",
-                    type: "success",
-                    duration: 1500
+                    duration: 1500,
+                    showClose: false
                 });
                 this._getCdnDomainList();
             }
         },
         /** 开启cdn加速 */
         async _reopenCdn(siteDomainId) {
-            let data = await domainApi.reopenCdn(siteDomainId);
+            let { data, status } = await domainApi.reopenCdn(siteDomainId);
             if (status === 200) {
                 this.$notify({
                     message: "已开启CDN，等待服务器审核",
-                    type: "success",
-                    duration: 1500
+                    customClass: "notify-success",
+                    duration: 1500,
+                    showClose: false
                 });
                 this._getCdnDomainList();
             }
@@ -236,10 +277,7 @@ export default {
                 title: "提示",
                 message:
                     "确定删除该域名?域名删除后, 您将无法访问该网站.强烈建议您在删除前修改该域名的cname解析. ",
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
                 iconClass: "icon-warning",
-                type: "warning",
                 callback: async action => {
                     if (action === "confirm") {
                         let { data, status } = await domainApi.deleteCdnDomain(
@@ -248,6 +286,12 @@ export default {
                         if (status === 200) {
                             this.domainListData.splice(index, 1);
                             this.domainAmount--;
+                            this.$notify({
+                                customClass: "notify-success", //  notify-success ||  notify-error
+                                message: `域名删除成功`,
+                                duration: 2000,
+                                showClose: false
+                            });
                         }
                     }
                 }

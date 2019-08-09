@@ -3,8 +3,8 @@ import * as ajaxRequest from "../ajaxRequest";
  import store from "@/store/index";
 import Cookies from "js-cookie"
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
-console.log(store)
-//const siteId =Cookies("SiteId")?Cookies("SiteId"):store.state.dashoboard.siteId
+
+const siteId =Cookies("siteId")?Cookies("siteId"):store.state.dashboard.siteId
 
 /**
  * 获取域名列表
@@ -18,10 +18,8 @@ export const getCdnDomainList = (siteId) => {
  * 绑定域名并授权cdn
  */
 export const bindDomainAndEnableCdn = (domain) => {
-    let fn =function(ex){
-        console.log(ex)
-    }
-    return ajaxRequest.post(`${designerManageApi}/api/v1/DomainManage/BindDomainAndEnableCdn/${siteId}`, domain,fn);
+
+    return ajaxRequest.post(`${designerManageApi}/api/v1/DomainManage/BindDomainAndEnableCdn/${siteId}`, domain);
 }
 
 /**
@@ -76,4 +74,8 @@ export const deleteCdnDomain = (siteDomainId) => {
     return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteId}/${siteDomainId}`);
 }
 
-// IsAliYunTokenSet
+
+// 轮询阿里云是否授权成功
+export const isAliYunTokenSet = () => {
+    return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/IsAliYunTokenSet/${siteId}`);
+}

@@ -9,7 +9,6 @@ if (process.env.NODE_ENV === 'development') {
 
 
 export const setLocal = (key,value)=>{
-    console.log(value)
     if(typeof value == 'object'){
         value = JSON.stringify(value);
     }

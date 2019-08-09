@@ -181,7 +181,6 @@ export default {
         position: relative;
         .siteName {
             font-size: 14px;
-            font-family: PingFangSC-Regular;
             font-weight: 400;
             color: rgba(38, 38, 38, 1);
             line-height: 69px;
@@ -190,7 +189,6 @@ export default {
         }
         .secondDomain {
             font-size: 12px;
-            font-family: PingFangSC-Regular;
             font-weight: 400;
             color: rgba(1, 192, 222, 1);
             line-height: 69px;
@@ -199,7 +197,6 @@ export default {
         }
         .language {
             font-size: 12px;
-            font-family: PingFangSC-Regular;
             font-weight: 400;
             color: rgba(38, 38, 38, 1);
             line-height: 69px;
@@ -210,8 +207,7 @@ export default {
             width: 90px;
             height: 32px;
             border: 1px solid rgba(1, 192, 222, 1);
-            font-size: 12px;
-            font-family: PingFangSC-Regular;
+           
             font-weight: 400;
             color: rgba(1, 192, 222, 1);
             position: absolute;
@@ -265,7 +261,6 @@ export default {
                 height: 32px;
                 background: rgba(1, 192, 222, 1);
                 font-size: 12px;
-                font-family: PingFangSC-Medium;
                 font-weight: 500;
                 color: rgba(255, 255, 255, 1);
             }
@@ -299,7 +294,6 @@ export default {
                 opacity: 1;
                 background: rgba(0, 0, 0, 0.7);
                 font-size: 16px;
-                font-family: PingFangSC-Semibold;
                 font-weight: 600;
                 color: rgba(255, 255, 255, 1);
                 line-height: 22px;
@@ -307,15 +301,12 @@ export default {
         }
         .itemSiteName {
             font-size: 14px;
-            font-family: PingFangSC-Regular;
             font-weight: 400;
             color: rgba(38, 38, 38, 1);
             margin-bottom: 14px;
             margin-top: 14px;
         }
         .itemSiteDomain {
-            font-size: 12px;
-            font-family: PingFangSC-Regular;
             font-weight: 400;
             color: rgba(0, 193, 222, 1);
         }

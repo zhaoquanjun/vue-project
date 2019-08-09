@@ -25,13 +25,13 @@
                 <p class="tips-item">
                     <span>1、仅支持添加阿里云域名，非阿里云域名，请先将域名转入阿里云后再添加。</span>
                     <span class="islink">
-                        <a :href="shiftToAliyun" target="_blank">如何将域名转入阿里云？</a>
+                        <a class="href-color" :href="shiftToAliyun" target="_blank">如何将域名转入阿里云？</a>
                     </span>
                 </p>
                 <p class="tips-item">
                     <span>2、系统将自动为您的域名开启CDN，可在域名列表中手动关闭。</span>
                     <span class="islink">
-                        <a :href="whyOpenCdn" target="_blank">为什么要开启CDN？</a>
+                        <a class="href-color" :href="whyOpenCdn" target="_blank">为什么要开启CDN？</a>
                     </span>
                 </p>
             </div>
@@ -66,9 +66,10 @@ export default {
         async handleConfirm() {
             if (this.domainAmount == 10) {
                 this.$notify({
-                    message: "每个站点最多只能绑定10个域名",
-                    type: "warning",
-                    duration: 1500
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `每个站点最多只能绑定10个域名`,
+                    duration: 1500,
+                    showClose: false
                 });
                 return false;
             }
@@ -109,9 +110,9 @@ export default {
                     message: this.$createElement("div", null, message),
                     confirmButtonText: "授权并一键解析",
                     cancelButtonText: "暂不授权",
-                    type: "success",
+                    customClass:"large",
                     callback: async action => {
-                        console.log(action);
+                       
                         if (action === "confirm") {
                             this.$emit("resolveCdnByAliYunToken", {
                                 id: data.id,
@@ -119,16 +120,11 @@ export default {
                             });
                             this.handleCancel();
                         } else {
-                            // this.elemnetConfirm(
-                            //     "warning",
-                            //     "您可在域名列表中继续完成解析设置。",
-                            //     `域名未解析！`
-                            // );
                             this.$notify({
                                 customClass: "notify-error", //  notify-success ||  notify-error
-                                title: '域名未解析！',
+                                title: "域名未解析！",
                                 message: `您可在域名列表中继续完成解析设置。`,
-                                duration: 102200,
+                                duration: 1500,
                                 showClose: false
                             });
                             this.handleCancel();
@@ -136,9 +132,6 @@ export default {
                     }
                 });
             }
-
-            //    this.onerrorTip=true;
-            //    this.onerrorText="不好是"
         },
         changeInput() {
             if (this.domainValue === "") {
@@ -246,15 +239,15 @@ export default {
         overflow: hidden;
         margin-top: 36px;
         padding: 10px;
-        background: rgba(242, 255, 234, 1);
+        background: #86DEA4;
         border: 1px solid rgba(199, 221, 185, 1);
         font-size: 12px;
-        color: rgba(0, 182, 57, 1);
+        color: #63DC8C;
         text-align: left;
-        line-height: 17px;
+        line-height: 25px;
         h4,
         p {
-            line-height: 17px;
+            line-height: 25px;
         }
         .tips-title {
             font-weight: 500;
@@ -316,7 +309,9 @@ export default {
     cursor: pointer;
     display: block;
     padding-left: 17px;
-    color: blue;
+    a{
+        color: #0595e6;
+    }
 }
 </style>
 

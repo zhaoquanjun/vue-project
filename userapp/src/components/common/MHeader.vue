@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :span="8">
                 <div class="head-left head-item">
-                    <span class="logo-icon" >
+                    <span class="logo-icon">
                         <i class="iconfont iconlogo1"></i>
                     </span>
                     <span @click="changeApp" class="headAppName">
@@ -133,11 +133,11 @@
 <script>
 import securityService from "@/services/authentication/securityService";
 import { getApplication } from "@/api/request/dashboardApi";
-    import { getApplicationsByUserId } from "@/api/request/dashboardApi";
-    import { getAppHeadInfo } from "@/api/request/dashboardApi"; 
+import { getApplicationsByUserId } from "@/api/request/dashboardApi";
+import { getAppHeadInfo } from "@/api/request/dashboardApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { formatDateTime, getShortUrlByInviation } from "@/api/index";
-import { setLocal,getLocal } from "@/libs/local.js";
+import { setLocal, getLocal,removeLocal } from "@/libs/local.js";
 import Cookies from "js-cookie";
 export default {
     data() {
@@ -200,14 +200,15 @@ export default {
             setLocal("ymId", item.appId);
             this.$store.commit("SETAPPID", item.appId);
             console.log(item.appId);
-          
+
             let {
                 data,
                 status
             } = await dashboardApi.updateUserLastAppIdAndCookie(item.appId);
             if (status === 200) {
-                this.$store.dispatch('_getAppHeadInfo');
-                window.location.href ="http://dashboard.console.wezhan.cn/board";               
+                this.$store.dispatch("_getAppHeadInfo");
+                window.location.href =
+                    "http://dashboard.console.wezhan.cn/board";
             }
         },
         /**
@@ -272,8 +273,7 @@ export default {
             let appName = this.$store.state.user.userInfo.appName;
             return appName;
         }
-    },
-   
+    }
 };
 </script>
 <style >

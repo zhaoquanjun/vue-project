@@ -467,7 +467,7 @@ export default {
 .el-tabs /deep/ .el-tabs__item {
   width: 88px;
   height: 38px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   color: rgba(51, 51, 51, 1);
   line-height: 36px;
@@ -489,7 +489,7 @@ export default {
   position: absolute;
   right: 16px;
   top: 70px;
-  font-size: 12px;
+  
   font-weight: 400;
   color: rgba(255, 255, 255, 1);
 }
@@ -499,7 +499,7 @@ export default {
   background: #00c1de !important;
   color: #fff;
   font-weight: 400;
-  font-size: 12px;
+  
 }
 .content-table {
   width: 100%;
