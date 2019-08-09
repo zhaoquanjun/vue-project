@@ -199,7 +199,7 @@ export default {
       let { data } = await siteBackupApi.getSiteInfo(siteId);
       console.log(data);
       this.siteName = data.siteName;
-      this.siteId = data.id;
+      this.siteId = data.siteId;
     },
     /**
      * 切换手动备份和自动备份

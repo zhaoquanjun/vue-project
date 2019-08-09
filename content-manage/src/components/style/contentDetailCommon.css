@@ -16,6 +16,8 @@
 /* 关键词样式修改 */
 .keyword-list /deep/ .el-input{
     width: auto;
+    min-width: 185px;
+
 }
 .keyword-list /deep/ .el-input .el-input__inner{
        border: none;

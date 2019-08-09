@@ -111,6 +111,7 @@ export default {
                     confirmButtonText: "授权并一键解析",
                     cancelButtonText: "暂不授权",
                     customClass:"large",
+                    closeOnClickModal:false,
                     callback: async action => {
                        
                         if (action === "confirm") {
@@ -239,8 +240,8 @@ export default {
         overflow: hidden;
         margin-top: 36px;
         padding: 10px;
-        background: #86DEA4;
-        border: 1px solid rgba(199, 221, 185, 1);
+        background: #F5FFEF;
+        border: 1px solid #86DEA4;
         font-size: 12px;
         color: #63DC8C;
         text-align: left;

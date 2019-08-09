@@ -134,6 +134,7 @@
                                     ></i>
                                 </li>
                                 <el-input
+                                     maxlength="10"
                                     ref="keywordInput"
                                     placeholder="每个关键词之间用回车键分离"
                                     v-model="keywordValue"
@@ -177,6 +178,7 @@
                                     ></i>
                                 </li>
                                 <el-input
+                                    maxlength="10"
                                     ref="metaKeywordsInput"
                                     placeholder="每个关键词之间用回车键分离"
                                     v-model="metaKeyword"
@@ -293,6 +295,7 @@ export default {
             value: 1,
             activeName: "",
             activeName1: "",
+            NewId:"",
             articleDetail: {
                 NewId: "",
                 title: "",
@@ -377,11 +380,13 @@ export default {
             });
         },
         keywords(value, name) {
+           
+           this.metaKeyword =this.keywordValue = "";
             if (name === "metaKeywords") {
                 if (this.articleDetail.metaKeywords.length >= 5 || !value) {
                     return;
                 }
-                this.metaKeyword = "";
+                 
                 this.articleDetail.metaKeywords.push(value);
                 // let ele = this.$refs.metaKeywordsInput.$el.children[0];
                 // let width = this.$refs.metaKeywordList.clientWidth;
@@ -390,12 +395,12 @@ export default {
                 if (this.articleDetail.searchKeywords.length >= 5 || !value) {
                     return;
                 }
-                this.keywordValue = "";
                 this.articleDetail.searchKeywords.push(value);
                 // let ele = this.$refs.keywordInput.$el.children[0];
                 // let width = this.$refs.keywordList.clientWidth;
                 // this.textIndent(ele, width);
             }
+            
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
@@ -469,14 +474,15 @@ export default {
 
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
-                    type: "success",
                     customClass: "medium",
                     iconClass: "icon-success",
+                    cancelButtonText:"关闭",
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("articleDetail");
                             this.$emit("changeSaveWay", false);
                         } else {
+                            this.NewId = data
                             this.articleDetail.NewId = data;
                             this.$emit("changeSaveWay", true);
                         }
@@ -509,6 +515,7 @@ export default {
                 type: "success",
                 customClass: "medium",
                 iconClass: "icon-success",
+                cancelButtonText:"关闭",
                 callback: async action => {
                     if (action === "confirm") {
                         this.resetForm("articleDetail");
@@ -516,7 +523,7 @@ export default {
                         this.$emit("changeSaveWay", false);
                         this.$route.query.id = false;
                     } else {
-                        this.articleDetail.NewId = data;
+                        this.articleDetail.NewId = this.$route.query.id || this.NewId;
                         this.$emit("changeSaveWay", true);
                     }
                 }
