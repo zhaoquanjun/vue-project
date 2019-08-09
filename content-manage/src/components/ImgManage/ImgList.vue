@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="图片名称" show-overflow-tooltip width="200">
+            <el-table-column label="图片名称" show-overflow-tooltip  width="250">
                 <template slot-scope="scope">
                     <img
                         :src="scope.row.zoomOssUrl"
@@ -52,7 +52,7 @@
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作">
+            <el-table-column label="操作" width="250">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn move-btn" @click="handleMove(scope.row)">
@@ -269,6 +269,9 @@ export default {
 <style lang="scss" scoped>
 .table-wrap {
     position: relative;
+     margin-right: 16px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
   
 }
 </style>

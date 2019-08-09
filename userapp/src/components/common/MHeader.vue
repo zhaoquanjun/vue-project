@@ -287,7 +287,7 @@ export default {
     opacity: 0.2;
 }
 .iconlogo1 {
-    font-size: 22px;
+    font-size: 24px;
 }
 .header {
     padding: 0 10px;
@@ -297,11 +297,13 @@ export default {
     position: relative;
     .head-item {
         .logo-icon {
-            border-right: 1px solid rgba(216, 216, 216, 0.7);
-            width: 100px;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+            width: 70px;
             box-sizing: border-box;
             text-align: center;
             display: inline-block;
+            padding: 0;
+            margin-left: -10px;
         }
         span {
             display: inline-block;
