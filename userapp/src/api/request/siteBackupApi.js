@@ -70,7 +70,7 @@ export const getBackupCount = (siteId) => {
  */
 export const getSiteInfo = siteId => {
   return ajaxRequest.get(
-    `${enbironmemy.memberManageApi}/api/SiteInfo/GetSiteInfo`,
+      `${enbironmemy.designerManageApi}/api/SiteInfo/GetSiteInfo`,
     { siteId: siteId }
   );
 };
