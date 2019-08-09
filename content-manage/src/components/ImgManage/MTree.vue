@@ -24,7 +24,7 @@
                     </button>
                     <div class="node-label-wrap">
                         <span class="node-label">{{data.label}}</span>
-                        <span>({{data.inUseSum }})</span>
+                        <span v-if="!isProduct">({{data.inUseSum }})</span>
                     </div>
                     <span
                         class="set-tree-type"
