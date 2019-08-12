@@ -291,11 +291,13 @@ export default {
     position: relative;
     .head-item {
         .logo-icon {
-            border-right: 1px solid rgba(255, 255, 255, 0.3);
+            border-right: 1px solid hsla(0, 0%, 100%, 0.3);
             width: 70px;
             box-sizing: border-box;
             text-align: center;
             display: inline-block;
+            padding: 0;
+            margin-left: -10px;
         }
         span {
             display: inline-block;

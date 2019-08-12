@@ -55,6 +55,7 @@ export default {
     left: 0;
     width: 100%;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    z-index: 100;
 }
 .common-container{
   padding-top: 60px;width: 100%;overflow: hidden;
