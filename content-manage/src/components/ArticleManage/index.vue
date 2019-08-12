@@ -280,6 +280,7 @@ export default {
         },
         // 批量复制分类
         async batchCopyNews(idlist,row) {
+            console.log(idlist,'idlistidlistidlistidlist')
             if(idlist.length<=1){
                 this.row = row
             }

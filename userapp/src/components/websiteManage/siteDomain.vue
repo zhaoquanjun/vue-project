@@ -199,6 +199,7 @@ export default {
                     duration: 2000,
                     showClose: false
                 });
+                this._getCdnDomainList(this.curSiteId)
             }
         },
         /**

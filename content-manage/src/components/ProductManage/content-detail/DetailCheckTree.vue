@@ -42,7 +42,6 @@ export default {
     },
     watch: {
         categoryId() {
-           
             this.setCheckedKeys(this.categoryId);
         }
     }
