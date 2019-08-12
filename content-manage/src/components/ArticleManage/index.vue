@@ -281,7 +281,7 @@ export default {
         // 批量复制分类
         async batchCopyNews(idlist,row) {
             
-            if(idlist.length<=1){
+            if(idlist && idlist.length<=1){
                 this.row = row
             }
             idlist = idlist == null ? this.idsList : idlist;
@@ -312,12 +312,15 @@ export default {
         },
         // 判断是 移动还是复制
         handOperateArticle() {
+        
             switch (this.rightPanelType) {
+              
                 case 1:
                     this.updateCategoryArticle();
                     break;
                 case 2:
                     this.copyArticle();
+                 
                     break;
             }
         },

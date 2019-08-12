@@ -483,7 +483,6 @@ export default {
         });
         let categoryId = this.$route.query.categoryId;
         let categoryName = this.$route.query.categoryName;
-        console.log(categoryId, "categoryIdcategoryId");
         if (!!categoryId) {
             this.detailData.productCategoryList = [
                 { id: categoryId, displayName: categoryName }
@@ -562,7 +561,6 @@ export default {
         },
         // 新建保存
         submitForm(formName, fileList) {
-            console.log(fileList, "--------===========");
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
@@ -659,6 +657,7 @@ export default {
                 return;
             }
             if (!!boolean) {
+                console.log(data,'datadatadatadata11111')
                 this.detailData.productCategoryList.push({
                     displayName: data.label,
                     id: data.id,
@@ -688,13 +687,12 @@ export default {
             this.isModalShow = !this.isModalShow;
         },
         getImgInfo(info) {
-            //console.log(info, "0000000");
+           
             this.imgData = info;
         },
         getEditorImg() {
             // 获取选中的图片信息 有两种方式
-            //console.log(this.imgData, "imgData");
-            //console.log(this.$refs.imgList.selectedImg, "selectedImg");
+          
             this.isModalShow = false;
             this.insertEditorImg(this.imgData);
         },
@@ -722,7 +720,7 @@ export default {
             // this.isIndeterminate = false;
         },
         handleCheckedCitiesChange(value) {
-            console.log(value);
+           
             // let checkedCount = value.length;
             // this.checkAll = checkedCount === this.cities.length;
             // this.isIndeterminate =
@@ -769,10 +767,10 @@ export default {
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
-            console.log(this.isCheckTreeShow);
+           
         },
         getCheckedNodes(nodes) {
-            console.log(nodes, "nnnnnnn");
+           
         },
         removeCategory(id) {
             this.$refs.detailCheckTree.setChecked(id);
