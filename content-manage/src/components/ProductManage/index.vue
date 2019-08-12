@@ -67,7 +67,8 @@
                     </template>
                     <template v-else>
                         <div class="category-content">
-                            <span name="cur-tip">移动至</span>
+                            <span name="cur-tip">{{tipText}}</span>
+                            <!-- 移动至 -->
                         </div>
 
                         <CheckTree
@@ -110,6 +111,7 @@ export default {
         return {
             clickType: "", // 选择的是那种类型  移动 | 复制 ……
             panelTitle: "分类设置", // 右侧面板提示title
+            tipText:"移动至",
             switchVal: true, // 是否仅登录用户可看
             articlePageResult: null,
             treeResult: null,
@@ -217,6 +219,10 @@ export default {
             this.clickType = type;
             if (type === "permission") {
                 this.panelTitle = "访问权限";
+            }else if(type === "batchCopy"){
+                this.tipText ="复制至"
+            }else if(type === "batchmove"){
+                  this.tipText ="移动至"
             }
         },
         //选择移动分类时的节点
@@ -234,6 +240,12 @@ export default {
             this.isInvitationPanelShow = false;
         },
         moveClassify(data, flag) {
+            if(flag === "move"){
+                 this.tipText="移动至"
+            }else if(flag === "copy"){
+                this.tipText="复制至"
+            }
+           
             this.isInvitationPanelShow = true;
             this.curArticleInfo = data;
             this.type = flag;

@@ -34,6 +34,7 @@ class SecurityService {
       removeLocal("ymId");
       removeLocal("ymSd");
       removeLocal("userInfo");
+      removeLocal("authList");
       
     }).catch(function(err) {
       console.log(err)

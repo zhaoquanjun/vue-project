@@ -466,7 +466,7 @@ export default {
             }
         };
     },
-     mounted() {
+    mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
         this.$refs.myQuillEditor.quill
             .getModule("toolbar")
@@ -483,15 +483,15 @@ export default {
         });
         let categoryId = this.$route.query.categoryId;
         let categoryName = this.$route.query.categoryName;
-        console.log(categoryId,'categoryIdcategoryId')
-        if(!!categoryId){
-             this.detailData.productCategoryList = [
-            { id: categoryId ,displayName:categoryName }
-        ];
-        }else{
-             this.detailData.productCategoryList = [
-            { id: categoryId || 0, displayName: "全部分类" }
-        ];
+        console.log(categoryId, "categoryIdcategoryId");
+        if (!!categoryId) {
+            this.detailData.productCategoryList = [
+                { id: categoryId, displayName: categoryName }
+            ];
+        } else {
+            this.detailData.productCategoryList = [
+                { id: 0, displayName: "全部分类" }
+            ];
         }
         var id = this.$route.query.id;
         this.curProduct = id;
@@ -529,16 +529,8 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
-           
-             console.log(data, "datadatadata");
-            this.categoryName = this.categoryId = [];
-          
-             data.productCategoryList && data.productCategoryList.forEach(item => {
-                this.categoryName.push(item.displayName);
-                 this.categoryId.push(item.id);
-            });
 
-          
+            this.categoryId = [];
 
             if (Object.keys(data.seoKeyword).length < 1) {
                 data.seoKeyword = [];
@@ -550,9 +542,22 @@ export default {
             } else {
                 data.searchKeyword = data.searchKeyword.split(",");
             }
-
             this.detailData = data;
             this.detailData.NewId = data.id;
+
+            //  let categoryList22 = JSON.stringify(this.detailData.productCategoryList);
+            //  JSON.parse(categoryList22).forEach(item=>{
+            //       this.categoryId.push(item.id);
+            //  })
+            this.categoryIdList(this.detailData.productCategoryList);
+            this.detailData.productCategoryList = this.detailData.productCategoryList.filter(item=>{
+                return item !=item
+            })
+        },
+        categoryIdList(list) {
+            list.forEach(item => {
+                this.categoryId.push(item.id);
+            });
         },
         // 新建保存
         submitForm(formName, fileList) {
@@ -777,7 +782,7 @@ export default {
             );
         }
     },
-   
+
     watch: {
         "detailData.searchKeyword"() {
             if (this.detailData.searchKeyword.length >= 5) {
