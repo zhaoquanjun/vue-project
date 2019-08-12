@@ -10,7 +10,7 @@ import router from '@/router/index'
 import { MessageBox, Message, Loading, Notification } from 'element-ui';
 import securityService from "@/services/authentication/securityService";
 import Cookies from "js-cookie";
-let loading        //定义loading变量
+let loading;        //定义loading变量
 function startLoading() {    //使用Element loading-start 方法
     loading = Loading.service({
 
@@ -41,7 +41,7 @@ export function tryHideFullScreenLoading() {
         endLoading()
     }
 }
-axios.defaults.baseURL = environment.memberManageApi;
+axios.defaults.baseURL = environment.contentApi;
 // 请求超时时间
 axios.defaults.timeout = 15000;
 //axios.defaults.withCredentials = true; //允许携带cookie

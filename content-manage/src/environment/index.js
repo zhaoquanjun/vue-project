@@ -5,7 +5,7 @@
 
 
 /**生产环境-- */
-let memberManageApi = 'http://api.content.console.wezhan.cn';
+let contentApi = 'http://api.content.console.wezhan.cn';
 let dashboardApi = 'http://api.dashboard.console.wezhan.cn';
 let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
 let authorityUrl = "http://api.identity.console.wezhan.cn";
@@ -22,7 +22,7 @@ export let personalUrl = "//dashboard.console.wezhan.cn/personal";
  */
 
 if (process.env.NODE_ENV === 'development') {
-    memberManageApi = 'http://api.content.console.wezhan.cn';
+    contentApi = 'http://api.content.console.wezhan.cn';
     dashboardApi = 'http://api.dashboard.console.wezhan.cn';
     uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
     authorityUrl = "http://api.identity.console.wezhan.cn";
@@ -36,7 +36,7 @@ const enbironmemy = {
     authorityUrl,
     redirectUrl,
     logoutRedirectUri,
-    memberManageApi,
+    contentApi,
     dashboardApi,
     uploadPicUrl,
     silentRedirectUri,

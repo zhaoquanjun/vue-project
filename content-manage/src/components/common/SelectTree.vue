@@ -229,7 +229,7 @@ export default {
 }
 .el-scrollbar .el-scrollbar__view .el-select-dropdown__item {
     height: auto;
-    max-height: 274px;
+    /* max-height: 274px; */
     padding: 0;
     overflow: hidden;
     overflow-y: auto;
