@@ -488,6 +488,7 @@ export default {
             this.detailData.productCategoryList = [
                 { id: categoryId, displayName: categoryName }
             ];
+            this.categoryId = [categoryId]
         } else {
             this.detailData.productCategoryList = [
                 { id: 0, displayName: "全部分类" }
