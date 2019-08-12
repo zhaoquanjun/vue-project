@@ -62,6 +62,7 @@ axios.interceptors.response.use(
                 switch (error.response.status) {
                     case 400:
                             Notification({
+                                customClass: "notify-error", //  notify-success ||  notify-error
                                 message: error.response.data,
                                 showClose: false,
                                 type:"error",
@@ -98,6 +99,7 @@ axios.interceptors.response.use(
                     // 其他错误，直接抛出错误提示                
                     default:
                         Notification({
+                            customClass: "notify-error", //  notify-success ||  notify-error
                             message: error.response.data.message,
                             showClose: false,
                             type:"error",

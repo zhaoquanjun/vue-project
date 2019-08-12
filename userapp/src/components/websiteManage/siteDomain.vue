@@ -25,6 +25,15 @@
                         @getCdnDomainList="_getCdnDomainList"
                     ></DomainList>
                 </el-main>
+                <div class="handle-guide">
+                    <h3>操作指引</h3>
+                    <ul>
+                        <li>1、域名添加后，请根据“域名解析”中的解析步骤完成域名解析；</li>
+                        <li>2、域名解析第一步（生成解析记录值）完成后，可使用一键解析自动完成域名解析，也可前往阿里云控制台自行设置解析；</li>
+                        <li>3、添加域名时会自动为您开启CDN，可在域名解析中手动关闭；</li>
+                        <li>4、已开启CDN且解析成功的域名，可在域名列表中选择开启HTTPS;</li>
+                    </ul>
+                </div>
             </div>
         </el-main>
         <el-dialog
@@ -87,6 +96,7 @@ export default {
         // this.getSiteInfo();
     },
     methods: {
+     
         // 获取siteId
         getSiteId(siteId) {
             this._getCdnDomainList(siteId);
@@ -144,8 +154,12 @@ export default {
                 clearInterval(this.timer);
                 this.timer = setInterval(() => {
                     this._isAliYunTokenSet().then(data => {
-                        clearInterval(this.timer);
-                        this._resolveCdnByAliYunToken(this.resolveDomainData);
+                        if (data) {
+                            clearInterval(this.timer);
+                            this._resolveCdnByAliYunToken(
+                                this.resolveDomainData
+                            );
+                        }
                     });
                 }, 2000);
             }
@@ -155,7 +169,7 @@ export default {
                 !data.isExistResolveCdnRecord
             ) {
                 this.$notify({
-                    customClass: "notify-error", //  notify-success ||  notify-error
+                    customClass: "notify-error",
                     message: data.errorMessage,
                     duration: 1500,
                     showClose: false
@@ -180,7 +194,7 @@ export default {
             // data.is
             if (data.isSuccess) {
                 this.$notify({
-                    customClass: "notify-success", //  notify-success ||  notify-error
+                    customClass: "notify-success", 
                     message: `大约需要5分钟解析成功`,
                     duration: 2000,
                     showClose: false
@@ -287,7 +301,7 @@ export default {
                             this.domainListData.splice(index, 1);
                             this.domainAmount--;
                             this.$notify({
-                                customClass: "notify-success", //  notify-success ||  notify-error
+                                customClass: "notify-success", 
                                 message: `域名删除成功`,
                                 duration: 2000,
                                 showClose: false
@@ -364,6 +378,21 @@ export default {
         &:hover {
             background: url("~img/siteManage/delete-on.png") no-repeat center;
             background-size: 100%;
+        }
+    }
+}
+.handle-guide {
+    margin-top: 48px;
+    border: 1px solid #e1e6ea;
+    h3 {
+        border-bottom: 1px solid #e1e6ea;
+        padding: 24px 32px;
+    }
+    ul{
+        padding: 16px 32px;
+        li{
+            padding-bottom: 16px;
+            color: #8C8C8C;
         }
     }
 }

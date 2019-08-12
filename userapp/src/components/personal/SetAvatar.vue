@@ -42,7 +42,7 @@ export default {
     data() {
         return {
             picUrl: "",
-            uploadPicAction: `${environment.uploadPicUrl}/0`,
+            uploadPicAction: `${environment.uploadPicUrl}/-1`,
             headers: {
                 appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
                 Authorization: ""
@@ -69,6 +69,7 @@ export default {
         beforeAvatarUpload(file) {
             this.headers.Authorization =
                 "Bearer " + this.$store.state.user.accessToken.Authorization;
+                console.log(this.$store.state.dashboard)
             this.headers.appId = this.$store.state.dashboard.appId;
 
             const isPic =

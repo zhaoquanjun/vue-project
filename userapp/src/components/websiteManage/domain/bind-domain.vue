@@ -76,9 +76,15 @@ export default {
             if (!this.changeInput()) return;
             this.disabled = true;
             this.btnText = "添加中";
+            const loading = this.$loading({
+                lock: true,
+                spinner: "loading-icon",
+                background: "rgba(255, 255, 255, 0.75)"
+            });
             let { data, status } = await bindDomainAndEnableCdn({
                 domain: this.domainValue
             });
+            loading.close()
             if (status === 200 && !data.isSuccess) {
                 this.onerrorTip = true;
                 this.onerrorText = data.msg;
@@ -110,10 +116,9 @@ export default {
                     message: this.$createElement("div", null, message),
                     confirmButtonText: "授权并一键解析",
                     cancelButtonText: "暂不授权",
-                    customClass:"large",
-                    closeOnClickModal:false,
+                    customClass: "large",
+                    closeOnClickModal: false,
                     callback: async action => {
-                       
                         if (action === "confirm") {
                             this.$emit("resolveCdnByAliYunToken", {
                                 id: data.id,
@@ -205,6 +210,16 @@ export default {
     }
 };
 </script>
+<style>
+.loading-icon {
+    display: inline-block;
+    width: 50px;
+    height: 52px;
+    background: url("~img/loading.gif") no-repeat center;
+    background-size: contain;
+}
+</style>
+
 <style scoped lang="scss">
 // 右侧弹框
 .right-pannel {
@@ -240,10 +255,10 @@ export default {
         overflow: hidden;
         margin-top: 36px;
         padding: 10px;
-        background: #F5FFEF;
-        border: 1px solid #86DEA4;
+        background: #f5ffef;
+        border: 1px solid #86dea4;
         font-size: 12px;
-        color: #63DC8C;
+        color: #63dc8c;
         text-align: left;
         line-height: 25px;
         h4,
@@ -310,7 +325,7 @@ export default {
     cursor: pointer;
     display: block;
     padding-left: 17px;
-    a{
+    a {
         color: #0595e6;
     }
 }

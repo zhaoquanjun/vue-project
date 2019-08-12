@@ -30,7 +30,11 @@ class SecurityService {
   signOut(returnPath) {
    
     oidcMgr.signoutRedirect({ state: returnPath }).then(function(resp) {
-      removeLocal("token")
+      removeLocal("token");
+      removeLocal("ymId");
+      removeLocal("ymSd");
+      removeLocal("userInfo");
+      
     }).catch(function(err) {
       console.log(err)
     })

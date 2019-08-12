@@ -44,6 +44,9 @@ if (Cookies("token")){
 if(getLocal("ymSd")){
  store.commit("SETSITEID",getLocal("ymSd"))
 }
+if(getLocal("ymId")){
+  store.commit("SETAPPID",getLocal("ymId"))
+ }
 if(Cookies("userInfo")){
   store.commit("SET_USERINFO",JSON.parse(Cookies("userInfo")))
 }

@@ -4,7 +4,7 @@ import * as ajaxRequest from "../ajaxRequest";
 import Cookies from "js-cookie"
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
 
-const siteId =Cookies("siteId")?Cookies("siteId"):store.state.dashboard.siteId
+const siteId =Cookies("ymSd")?Cookies("ymSd"):store.state.dashboard.siteId
 
 /**
  * 获取域名列表

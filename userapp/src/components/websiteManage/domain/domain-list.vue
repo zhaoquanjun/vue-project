@@ -165,7 +165,7 @@
                                     </div>
                                     <div class="explain-item islink">如何进行域名解析？</div>
                                     <button
-                                        class="explain-item wezhan-btn"
+                                        class="wezhan-btn btn-small btn-lightblue"
                                         @click="resolveCdnByAliYunToken(props.row)"
                                     >一键解析</button>
                                 </div>
@@ -373,10 +373,6 @@ export default {
             this.$emit("_deleteCdnDomain", domainId, index);
         },
         stepClass(row, index) {
-            console.log(row);
-            // if (index === 2) {
-            //     this.active = 2;
-            // }
             if (
                 row.cdnDomainResolveStatus === 0 &&
                 !row.cdnDomainResolveValue
@@ -590,7 +586,6 @@ export default {
 }
 .wezhan-btn {
     width: 90px;
-    padding: 10px 0;
     color: #fff;
     background: rgba(0, 193, 222, 1);
 }
@@ -606,7 +601,7 @@ export default {
     color: #b5b5b5;
 }
 .domainStatus0 {
-    color: #8c8c8c;
+    color: #F15533;
 }
 .domainStatus1 {
     color: #f5a623;
@@ -614,6 +609,7 @@ export default {
 .domainStatus2 {
     color: #00b539;
 }
+
 .domain-name{
     padding-left: 30px;
 }

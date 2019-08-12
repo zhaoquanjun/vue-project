@@ -507,6 +507,7 @@ export default {
             let { data } = await productManageApi.getProductDetail(id);
             console.log(data, "datadatadata"); 
             this.categoryName =  this.categoryId =[];
+            alert(1)
             this.categoryName = data.productCategoryList.map(item => {
                 return item.displayName;
             });
