@@ -2,7 +2,7 @@
 /**
  * 开发环境的URL
  */
-let siteManageApi  = 'http://api.designer.console.wezhan.cn';
+let siteManageApi = 'http://api.designer.console.wezhan.cn';
 let memberManageApi = 'http://api.dashboard.console.wezhan.cn';
 let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
 let authorityUrl = "http://api.identity.console.wezhan.cn";
@@ -19,10 +19,13 @@ export let articleManageUrl = "http://content.console.wezhan.cn/content/news";
 export let productManageUrl = "http://content.console.wezhan.cn/content/product";
 export let imgManageUrl = "http://content.console.wezhan.cn/content/picture";
 export let fileManageUrl = "http://content.console.wezhan.cn/content/file";
+export let designerUrl = "http://designer.console.wezhan.cn";
+export let mySiteUrl = "http://dashboard.console.wezhan.cn/website/mysite";
+export let dashboardUrl = "http://dashboard.console.wezhan.cn/board";
 
 if (process.env.NODE_ENV === 'development') {
-    siteManageApi  = 'http://api.designer.console.wezhan.cn';
-    memberManageApi ='http://api.dashboard.console.wezhan.cn';
+    siteManageApi = 'http://api.designer.console.wezhan.cn';
+    memberManageApi = 'http://api.dashboard.console.wezhan.cn';
     designerManageApi = 'http://api.designer.console.wezhan.cn';
     uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
     authorityUrl = "http://api.identity.console.wezhan.cn";

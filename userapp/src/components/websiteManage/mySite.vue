@@ -191,6 +191,7 @@ import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { getLanguage } from "@/configure/appCommon";
 import { formatDateTime } from "@/api/index";
+import { designerUrl } from "@/environment/index";
 // import SiteDomain from "@/components/websiteManage/siteDomain.vue";
 export default {
   components: {
@@ -203,6 +204,7 @@ export default {
       siteImage: "",
       siteId: 0,
       domain: "",
+      theme: "",
       secondDomain: "",
       lastPublishedTime: "",
       language: "",
@@ -235,7 +237,7 @@ export default {
   methods: {
     // 跳转至设计器
     toDesign() {
-      window.location.href = `http://designer.console.wezhan.cn?siteId=${this.siteId}`;
+      window.location.href = `${designerUrl}?siteId=${this.siteId}&theme=${this.theme}`;
     },
     // 获取siteId
     getSiteId(siteId) {
@@ -251,6 +253,7 @@ export default {
       if (status === 200) {
         this.siteName = data.siteName;
         this.siteImage = data.siteImage;
+        this.theme = data.theme;
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
         this.lastPublishedTime = formatDateTime(
@@ -287,9 +290,11 @@ export default {
     },
     async saveInputValue() {
       if (!this.siteNameValue) {
-        this.$message({
-          type: "failed",
-          message: "请输入站点名称"
+        this.$notify({
+          customClass: "notify-error",
+          message: `请输入站点名称`,
+          duration: 2000,
+          showClose: false
         });
         return;
       }
@@ -357,9 +362,11 @@ export default {
         return;
       }
       if (this.secondIndustryId == "" || this.secondIndustryId == 0) {
-        this.$message({
-          type: "failed",
-          message: "请选择所属行业"
+        this.$notify({
+          customClass: "notify-error",
+          message: `请选择所属行业`,
+          duration: 2000,
+          showClose: false
         });
         return;
       }
@@ -370,9 +377,11 @@ export default {
         this.secondIndustryId
       );
       if (status === 200) {
-        this.$message({
-          type: "successed",
-          message: "保存成功"
+        this.$notify({
+          customClass: "notify-success",
+          message: `保存成功`,
+          duration: 2000,
+          showClose: false
         });
       }
     },
@@ -531,10 +540,10 @@ export default {
       color: #00c2de;
     }
   }
-  .siteinfoItem:nth-child(4){
+  .siteinfoItem:nth-child(4) {
     margin-top: 10px;
   }
-  .siteinfoItem:last-child{
+  .siteinfoItem:last-child {
     margin-top: 10px;
   }
   .siteinfoBackImg {
