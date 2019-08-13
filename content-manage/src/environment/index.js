@@ -17,6 +17,8 @@ let scope = 'openid profile dashboard.api content.api';
 export let siteDomain = "content.console.wezhan.cn";
 // 个人中心
 export let personalUrl = "//dashboard.console.wezhan.cn/personal";
+export let dashboardUrl = "http://dashboard.console.wezhan.cn/board";
+
 /**
  * 开发环境的URL
  */

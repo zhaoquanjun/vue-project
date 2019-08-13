@@ -15,7 +15,9 @@
       <div class="right-pannel" :style="computeSiteNum()">
         <div class="dialogTitle">
           <span class="dialogTitleText">切换网站</span>
-          <span class="close-pannel" @click="closeDialog">X</span>
+          <span class="close-pannel" @click="closeDialog">
+            <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
+          </span>
         </div>
         <el-row :gutter="10">
           <el-col
@@ -305,7 +307,7 @@ export default {
       font-size: 16px;
       font-weight: 400;
       color: rgba(38, 38, 38, 1);
-      line-height:24px;
+      line-height: 24px;
       margin-bottom: 14px;
       margin-top: 14px;
 
