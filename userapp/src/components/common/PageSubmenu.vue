@@ -29,11 +29,9 @@ export default {
     },
      methods: {
         handlerRoute(item, index) {
-            
             let domain= item.menuUrl.split("/")[0];
             if (siteDomain == domain) {
                 this.$router.push(item.path);
-                
 
             } else {
                 window.location.href = "//" + item.menuUrl;

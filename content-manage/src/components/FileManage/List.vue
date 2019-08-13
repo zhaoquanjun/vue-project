@@ -1,16 +1,16 @@
 <template>
-    <div class="table-wrap" id="table-list">
+    <div class="table-content" id="table-list">
         <el-table
             ref="multipleTable"
             :data="imgPageResult.list"
             tooltip-effect="dark"
             class="content-table"
-             :height="tableHeight"
+            :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="视频名称">
+            <el-table-column label="文件名称">
                 <template slot-scope="scope">
                     <el-input
                         v-if="(index == scope.$index)"
@@ -35,25 +35,33 @@
             <el-table-column prop="categoryName" label="分类"></el-table-column>
 
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-
-            <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
+            <el-table-column prop="downloadCount" label="置顶">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.isTop?"是":"否" }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="downloadCount" label="下载次数"></el-table-column>
             <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作">
+            <el-table-column label="操作" width="250">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn move-btn" @click="handleMove(scope.row)">
-                            <!-- <svg-icon style="width:27px;height:27px" icon-class="tab-move"></svg-icon> -->
+                        <button class="handle-btn edit-icon"  @click="handleMove(scope.row)">
+                            <i class="iconfont iconcaozuo"></i>
                         </button>
                         <button
-                            class="handle-btn look-btn"
+                            class="handle-btn look-btn edit-icon"
                             @click="viewPic( scope.row,scope.$index)"
                         >
                             <svg-icon icon-class="tab-look"></svg-icon>
                         </button>
-                        <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
+                        <!-- <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
                             <svg-icon icon-class="l-recyclebin"></svg-icon>
-                        </button>
+                        </button> -->
+                          <span
+                            class="more-operate"
+                            @click.stop="_handleShowMoreOperate($event,scope.row)"
+                        ><i class="iconfont iconsangedian"></i></span>
                     </div>
                 </template>
             </el-table-column>
@@ -85,7 +93,7 @@
                 >
                     <el-carousel-item v-for="item in imgList" :key="item.id">
                         <h3>
-                            <video :src="fullOssUrl"  controls="controls"/>
+                            <video :src="fullOssUrl" controls="controls" />
                         </h3>
                     </el-carousel-item>
                 </el-carousel>
@@ -97,7 +105,16 @@
                 </div>
             </el-dialog>
         </div>
-        <Loading v-if="loadingShow"/>
+        <ul class="operate-section" ref="operateSection">
+            <li
+                class="operate-item"
+                v-for="(it, index) in operateList"
+                :key="index"
+                @click="handleMoreOperate(it.flag)"
+            >{{it.name}}</li>
+        </ul>
+
+        <Loading v-if="loadingShow" />
     </div>
 </template>
 
@@ -111,12 +128,12 @@ export default {
     //     }
     // },
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
-     components: {
+    components: {
         Loading
     },
     data() {
         return {
-            picInfo:{},
+            picInfo: {},
             index: -1, //
             isRename: true, // 重命名图片名称
             initial: 0,
@@ -126,14 +143,18 @@ export default {
             picTitle: null,
             categoryVisable: false,
             changeCategoryPicId: null,
-            imgList:"",
-            fullOssUrl:"",
-             loadingShow: true,
-              tableHeight: 500,
+            imgList: "",
+            fullOssUrl: "",
+            loadingShow: true,
+            tableHeight: 500,
+            operateList: [
+                { name: "置顶", flag: "isTop" },
+                { name: "删除", flag: "delete" }
+            ],
         };
     },
-    mounted(){
-         this.$nextTick(() => {
+    mounted() {
+        this.$nextTick(() => {
             window.addEventListener("resize", () => {
                 this.tableHeight = window.innerHeight - 260;
             });
@@ -161,30 +182,19 @@ export default {
             this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
             this.categoryVisable = false;
         },
-        // 重命名图片名称
-        rename(id, newName, index) {
-            if (isNaN(index)) {
-                this.index = -1;
-                this.$emit("rename", id, newName);
-                return;
-            }
-            this.index = index;
-            //this.$emit("rename", id, newName);
-        },
-        blurRename(id, newName) {},
+       
         /**
          * 查看大图
          */
         viewPic(row, index) {
-            this.fullOssUrl = row.fullOssUrl
-            this.imgList = this.imgPageResult.list
+            this.fullOssUrl = row.fullOssUrl;
+            this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
             this.initial = Number(index);
-            
         },
-        change(index){
-            this.fullOssUrl=  this.imgList[index].fullOssUrl;
-              this.picInfo = this.imgList[index];
+        change(index) {
+            this.fullOssUrl = this.imgList[index].fullOssUrl;
+            this.picInfo = this.imgList[index];
         },
 
         changePage(page) {
@@ -197,23 +207,56 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
-        }
+        },
+         _handleShowMoreOperate(ev, row) {
+            this.row = row;
+            this.operateList = [
+                { name: row.isTop ? "取消置顶" : "置顶", flag: "stick" },
+                { name: "删除", flag: "delete" }
+            ];
+            let clientH =
+                document.getElementsByClassName("more-operate")[0]
+                    .clientHeight + 10;
+            let clientW = this.$refs.operateSection.clientWidth;
+
+            this.$refs.operateSection.style.left =
+                ev.pageX - ev.offsetX + 20 + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+
+            if (this.$refs.operateSection.style.display == "block") {
+                this.$refs.operateSection.style.display = "none";
+            } else {
+                this.$refs.operateSection.style.display = "block";
+            }
+        },
+         handleMoreOperate(flag) {
+           
+            let row = this.row;
+            switch (flag) {
+               
+                case "stick":
+                   
+                    break;
+                case "delete":
+                      this.$emit("batchRemove", [row.id]);
+                    break;
+            }
+        },
     },
-    watch:{
-        imgPageResult(){
-           this.loadingShow = false;
+    watch: {
+        imgPageResult() {
+            this.loadingShow = false;
         }
     }
 };
 </script>
-<style>
-
+<style lang="scss" scoped>
+@import "../../styles/manege-table.scss";
 </style>
 
 <style scoped>
 .table-wrap {
     position: relative;
-  
 }
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
@@ -223,23 +266,21 @@ export default {
     cursor: pointer;
 }
 
-#img-list-dialog .dislog-footer{
+#img-list-dialog .dislog-footer {
     text-align: center;
     position: fixed;
-        width: 100%;
+    width: 100%;
     left: 0;
     bottom: 15px;
-   
 }
-#img-list-dialog .dislog-footer span{
+#img-list-dialog .dislog-footer span {
     padding: 0 20px;
     color: #fff;
 }
-#img-list-dialog .el-dialog{
+#img-list-dialog .el-dialog {
     background: #262626;
     opacity: 0.7;
     height: auto;
 }
-
 </style>
 

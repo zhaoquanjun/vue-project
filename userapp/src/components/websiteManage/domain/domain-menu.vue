@@ -1,28 +1,38 @@
 <template>
     <div class="domain-menu">
-        <el-tabs v-model="backupType" type="card" @tab-click="handleTabClick">
-            <el-tab-pane label="域名列表" name="manual"></el-tab-pane>
-            <el-tab-pane label="301重定向" name="auto"></el-tab-pane>
+        <el-tabs v-model="backupType" type="card" @tab-click="handleTabClick('')">
+            <el-tab-pane label="域名列表" name="domainList"></el-tab-pane>
+            <el-tab-pane label="301重定向" name="301Redirect"></el-tab-pane>
         </el-tabs>
-        <button class="backupBtn" @click="handleBtn">添加域名</button>
+        <button class="backupBtn" @click="handleBtn">{{handlerBtnText}}</button>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            backupType: "manual"
+            backupType: "domainList",
+            handlerBtnText:"添加域名"
         };
     },
     methods: {
         /**
          * 切换列表
          */
-        handleTabClick() {},
+        handleTabClick(backupType) {
+           this.backupType = backupType || this.backupType ;
+            this.$emit("handleTabClick",this.backupType)
+            if(this.backupType=="301Redirect"){
+                this.handlerBtnText="添加重定向"
+            }else{
+                 this.handlerBtnText="添加域名"
+            }
+        },
         /**
          * 点击右侧btn
          */
         handleBtn() {
+           
             this.$emit("handleBtn");
         }
     }
