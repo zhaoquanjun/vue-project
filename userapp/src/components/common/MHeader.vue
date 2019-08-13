@@ -8,10 +8,7 @@
           </span>
           <span @click="changeApp" class="headAppName">
             <span class="headAppNameInfo">{{headAppName}}</span>
-            <i
-              class="iconfont iconqiehuan"
-              style="font-size:22px;vertical-align:middle"
-            ></i>
+            <i class="iconfont iconqiehuan" style="font-size:22px;vertical-align:middle"></i>
           </span>
         </div>
       </el-col>

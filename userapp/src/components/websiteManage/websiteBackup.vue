@@ -59,7 +59,7 @@
                           style="vertical-align: text-top;"
                           :data-type="'remarkIcon'+ scope.$index"
                           :ref="'remarkIcon'+ scope.$index"
-                        ></svg-icon> -->
+                        ></svg-icon>-->
                       </div>
                     </span>
                     <div class="textareaWrap">
@@ -120,7 +120,9 @@
                 <span>
                   <span>备份当前版本</span>
                 </span>
-                <span class="close-pannel" @click="closeDialog">X</span>
+                <span class="close-pannel" @click="closeDialog">
+                  <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
+                </span>
               </div>
               <div class="tips">温馨提示：备份当前站点设计页面，包括电脑版、手机版和Pad版</div>
               <div class="remark">
@@ -199,7 +201,7 @@ export default {
     },
     // 获取siteName
     getSiteName(siteName) {
-      this.siteName = siteName
+      this.siteName = siteName;
     },
     // 选择切换网站
     chooseWebsite(siteId) {
