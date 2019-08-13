@@ -19,10 +19,13 @@
             {{item.language == "zh-CN" ? "中文" : "英语"}}
           </div>
           <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
-          <div>
-            <div class="siteText details" v-show="index == curIndex">
+          <div v-show="index == curIndex" class="siteManageWrap">
+            <div class="siteManage" @click="toSiteManage(item.siteId)">
+              <div class="arrowLeft"></div>网站管理
+            </div>
+            <div class="siteManage siteManageRight" @click="toDesign(item.siteId)">
               进入设计
-              <div class="detailsBackground"></div>
+              <div class="arrowRight"></div>
             </div>
           </div>
         </el-col>
@@ -42,7 +45,7 @@
         </div>
       </div>
 
-      <div class="sliderWrap">
+      <div class="sliderWrap" v-show="siteInfo.length != 1">
         <div
           class="slider"
           :class="{sliderActive: index == curIndex}"
@@ -100,13 +103,15 @@
 <script>
 import * as dashboardApi from "@/api/request/dashboardApi";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
+import { designerUrl, mySiteUrl } from "@/environment/index";
+
 export default {
   props: ["siteInfo", "siteCount"],
   data() {
     return {
       isFirst: true,
-      siteId: 2,
-      curIndex: 1,
+      siteId: 1,
+      curIndex: 0,
       createShow: false,
       createSiteName: "",
       radio: "",
@@ -118,41 +123,69 @@ export default {
     // this.initial();
     console.log(this.siteInfo);
   },
+  computed: {
+    mySiteId() {
+      return this.$store.state.dashboard.siteId;
+    }
+  },
   watch: {
     siteInfo() {
       if (this.isFirst) {
-        this.initial();
+        if (this.mySiteId) {
+          this.siteId = this.mySiteId;
+          this.initial();
+        } else {
+          this.getCurSiteId().then(() => {
+            this.initial();
+          });
+        }
       }
     }
   },
   methods: {
+    /**
+     * 获取当前siteId
+     */
+    async getCurSiteId() {
+      let { data } = await dashboardApi.getCurSiteId();
+      this.siteId = data;
+      this.$store.commit("SETSITEID", this.siteId);
+    },
     initial() {
       this.isFirst = false;
       if (this.siteInfo.length > 3) {
         for (let i = 0; i < this.siteInfo.length; i++) {
           if (this.siteInfo[i].siteId == this.siteId) {
+            this.curIndex = i;
             if (i == 0) {
               this.$set(
                 this.siteInfo[this.siteInfo.length - 2],
                 "prevPrev",
                 true
               );
+              this.$set(this.siteInfo[this.siteInfo.length - 1], "prev", true);
             } else if (i == 1) {
               this.$set(
                 this.siteInfo[this.siteInfo.length - 1],
                 "prevPrev",
                 true
               );
+              this.$set(this.siteInfo[i - 1], "prev", true);
             } else {
+              this.$set(this.siteInfo[i - 1], "prev", true);
               this.$set(this.siteInfo[i - 2], "prevPrev", true);
             }
-            this.$set(this.siteInfo[i - 1], "prev", true);
-            this.$set(this.siteInfo[i + 1], "next", true);
+            if (i == this.siteInfo.length - 1) {
+              this.$set(this.siteInfo[0], "next", true);
+            } else {
+              this.$set(this.siteInfo[i + 1], "next", true);
+            }
           }
         }
       } else if (this.siteInfo.length == 3) {
         for (let i = 0; i < this.siteInfo.length; i++) {
           if (this.siteInfo[i].siteId == this.siteId) {
+            this.curIndex = i;
             this.$set(this.siteInfo[i - 1], "prev", true);
             this.$set(this.siteInfo[i + 1], "next", true);
           }
@@ -226,6 +259,15 @@ export default {
       this.createSiteName = "";
       this.createShow = false;
     },
+    // 跳转至设计器
+    toDesign(siteId) {
+      window.location.href = `${designerUrl}?siteId=${siteId}&theme=${this.theme}`;
+    },
+    // 跳转至我的网站
+    toSiteManage(siteId) {
+      this.$store.commit("SETSITEID", siteId);
+      window.location.href = mySiteUrl;
+    },
     // 创建site
     async createSite() {
       await dashboardApi.CreateSite(this.radio, this.createSiteName);
@@ -286,7 +328,7 @@ export default {
       left: 0;
       bottom: 31px;
       width: 17%;
-      height: 180px;
+      height: 300px;
       background: linear-gradient(
         90deg,
         rgba(255, 255, 255, 1) 0%,
@@ -298,7 +340,7 @@ export default {
       right: 0;
       bottom: 31px;
       width: 17%;
-      height: 180px;
+      height: 300px;
       background: linear-gradient(
         90deg,
         rgba(146, 170, 254, 0) 0%,
@@ -348,6 +390,7 @@ export default {
         .siteImgBackground {
           width: 100%;
           height: 100%;
+          object-fit: cover;
         }
       }
       .siteName {
@@ -383,18 +426,40 @@ export default {
       .isPublished {
         margin-top: 16px;
       }
-      .details {
-        cursor: pointer;
+      .siteManageWrap {
+        overflow: hidden;
+        padding-left: 30px;
         margin-top: 60px;
-        .detailsBackground {
+        .siteManage {
           display: inline-block;
-          width: 14px;
-          height: 13px;
-          margin-left: 5px;
-          background: url("~img/dashboard/board-detailsMax.png") no-repeat
-            center;
-          background-size: contain;
-          vertical-align: middle;
+          font-size: 16px;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 1);
+          line-height: 22px;
+          cursor: pointer;
+          .arrowLeft {
+            display: inline-block;
+            width: 14px;
+            height: 13px;
+            margin-right: 5px;
+            background: url("~img/dashboard/board-arrowLeftMax.png") no-repeat
+              center;
+            background-size: contain;
+            vertical-align: inherit;
+          }
+          .arrowRight {
+            display: inline-block;
+            width: 14px;
+            height: 13px;
+            margin-left: 5px;
+            background: url("~img/dashboard/board-arrowRightMax.png") no-repeat
+              center;
+            background-size: contain;
+            vertical-align: inherit;
+          }
+        }
+        .siteManageRight {
+          margin-left: 30px;
         }
       }
     }
@@ -549,17 +614,37 @@ export default {
     .isPublished {
       margin-top: 32px;
     }
-    .details {
-      cursor: pointer;
+    .siteManageWrap {
+      overflow: hidden;
+      padding-left: 30px;
       margin-top: 60px;
-      .detailsBackground {
+      .siteManage {
         display: inline-block;
-        width: 14px;
-        height: 13px;
-        margin-left: 5px;
-        background: url("~img/dashboard/board-detailsMax.png") no-repeat center;
-        background-size: contain;
-        vertical-align: middle;
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 1);
+        line-height: 22px;
+        cursor: pointer;
+        .arrowLeft {
+          display: inline-block;
+          width: 14px;
+          height: 13px;
+          margin-right: 5px;
+          background: url("~img/dashboard/board-arrowLeftMax.png") no-repeat
+            center;
+          background-size: contain;
+          vertical-align: inherit;
+        }
+        .arrowRight {
+          display: inline-block;
+          width: 14px;
+          height: 13px;
+          margin-left: 5px;
+          background: url("~img/dashboard/board-arrowRightMax.png") no-repeat
+            center;
+          background-size: contain;
+          vertical-align: inherit;
+        }
       }
     }
   }
@@ -642,10 +727,10 @@ export default {
     .content {
       height: 180px;
       .leftModul {
-        height: 94px;
+        height: 156px;
       }
       .rightModul {
-        height: 94px;
+        height: 156px;
       }
       .item {
         height: 94px;
@@ -697,15 +782,31 @@ export default {
         .isPublished {
           margin-top: 6px;
         }
-        .details {
+        .siteManageWrap {
           margin-top: 21px;
-          .detailsBackground {
-            width: 7px;
-            height: 6px;
-            margin-left: 5px;
-            background: url("~img/dashboard/board-detailsMin.png") no-repeat
-              center;
-            background-size: contain;
+          padding-left: 18px;
+          .siteManage {
+            font-size: 14px;
+            line-height: 20px;
+            .arrowLeft {
+              width: 7px;
+              height: 6px;
+              margin-right: 5px;
+              background: url("~img/dashboard/board-arrowLeftMin.png") no-repeat
+                center;
+              background-size: contain;
+            }
+            .arrowRight {
+              width: 7px;
+              height: 6px;
+              margin-left: 5px;
+              background: url("~img/dashboard/board-arrowRightMin.png")
+                no-repeat center;
+              background-size: contain;
+            }
+          }
+          .siteManageRight {
+            margin-left: 20px;
           }
         }
       }

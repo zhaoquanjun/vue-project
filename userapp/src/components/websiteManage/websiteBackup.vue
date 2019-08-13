@@ -6,7 +6,7 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
+      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" @getSiteName="getSiteName" />
       <el-row style="padding:24px 17px">
         <el-row class="user-list">
           <span class="member-list-title fs14">网站备份</span>
@@ -22,7 +22,7 @@
               ref="multipleTable"
               :data="siteInfo"
               tooltip-effect="dark"
-              class="content-table "
+              class="content-table"
               :default-sort="{prop: 'backupTime', order: 'descending'}"
             >
               <el-table-column prop="siteName" label="站点名称"></el-table-column>
@@ -36,7 +36,7 @@
                     placement="bottom"
                     width="317"
                     trigger="click"
-                    style="padding:0"
+                    style="padding:0;width:100%"
                     @show="showRemark(scope.row)"
                   >
                     <span slot="reference">
@@ -45,13 +45,21 @@
                         @mouseleave="_handleHideEditorIcon(scope.row.id)"
                       >
                         <div class="remark-desc">{{scope.row.description}}</div>
-                        <svg-icon
+                        <i
+                          v-if="active == scope.row.id"
+                          class="iconfont iconbianji"
+                          style="color:#09CCEB;width:17px;height:17px;"
+                          :data-type="'remarkIcon'+ scope.$index"
+                          :ref="'remarkIcon'+ scope.$index"
+                        ></i>
+                        <!-- <svg-icon
                           v-if="active == scope.row.id"
                           icon-class="remark"
                           class="remark"
+                          style="vertical-align: text-top;"
                           :data-type="'remarkIcon'+ scope.$index"
                           :ref="'remarkIcon'+ scope.$index"
-                        ></svg-icon>
+                        ></svg-icon> -->
                       </div>
                     </span>
                     <div class="textareaWrap">
@@ -179,27 +187,23 @@ export default {
       backuping: false,
       // recovery: false,
       remarkInfo: "",
-      loadingShow:true,
+      loadingShow: true
     };
   },
   methods: {
     // 获取siteId
     getSiteId(siteId) {
-      this.getSiteInfo(siteId);
+      this.siteId = siteId;
+      // this.getSiteInfo(siteId);
       this.getBackupSite(siteId);
+    },
+    // 获取siteName
+    getSiteName(siteName) {
+      this.siteName = siteName
     },
     // 选择切换网站
     chooseWebsite(siteId) {
       this.getBackupSite(siteId);
-    },
-    /**
-     * 获取站点信息
-     */
-    async getSiteInfo(siteId) {
-      let { data } = await siteBackupApi.getSiteInfo(siteId);
-      console.log(data);
-      this.siteName = data.siteName;
-      this.siteId = data.siteId;
     },
     /**
      * 切换手动备份和自动备份
@@ -264,8 +268,7 @@ export default {
         message: this.$createElement(
           "div",
           {
-            style:
-              "font-size:14px;font-family:PingFangSC-Regular;font-weight:400;color:rgba(38,38,38,1);"
+            style: "font-size:14px;font-weight:400;color:rgba(38,38,38,1);"
           },
           message
         ),
@@ -290,7 +293,7 @@ export default {
                     type: "success",
                     message: "网站还原成功"
                   });
-                  this.getBackupSite();
+                  this.getBackupSite(this.siteId);
                   this.backuping = false;
                 } else {
                   this.$message({
@@ -309,7 +312,7 @@ export default {
      */
     async backup() {
       if (this.manualSite.length < 20) {
-        let { status } = await siteBackupApi.getBackupCount(2);
+        let { status } = await siteBackupApi.getBackupCount(this.siteId);
         if (status == 200) {
           this.remarkInfo = "";
           this.backupShow = true;
@@ -338,7 +341,7 @@ export default {
           type: "success",
           message: "备份成功"
         });
-        this.getBackupSite();
+        this.getBackupSite(this.siteId);
       } else {
         this.$message({
           type: "error",
@@ -403,7 +406,7 @@ export default {
                 type: "success",
                 message: "删除成功"
               });
-              this.getBackupSite();
+              this.getBackupSite(this.siteId);
             } else {
               this.$message({
                 type: "error",
@@ -433,7 +436,7 @@ export default {
     async saveInputValue(index, row) {
       this.$refs[`popover-${index}`].doClose();
       await siteBackupApi.updateDescription(row.id, this.remarkValue);
-      this.getBackupSite();
+      this.getBackupSite(this.siteId);
       // this.siteInfo[index].description = this.remarkValue
       // this.$set(this.siteInfo[index], "description", this.remarkValue)
     },
@@ -444,8 +447,8 @@ export default {
       this.active = -1;
     }
   },
-  watch:{
-    siteInfo(){
+  watch: {
+    siteInfo() {
       this.loadingShow = false;
     }
   }
@@ -489,7 +492,7 @@ export default {
   position: absolute;
   right: 16px;
   top: 70px;
-  
+
   font-weight: 400;
   color: rgba(255, 255, 255, 1);
 }
@@ -499,7 +502,6 @@ export default {
   background: #00c1de !important;
   color: #fff;
   font-weight: 400;
-  
 }
 .content-table {
   width: 100%;
