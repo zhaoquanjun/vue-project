@@ -16,7 +16,7 @@
         <div class="domain-wrap">
             <el-form @submit.native.prevent>
                 <el-form-item style="color:#262626" label="域名">
-                    <el-input v-model="domainValue" placeholder="请输入备注信息（非必填" @change="changeInput"></el-input>
+                    <el-input v-model="domainValue" placeholder="请输入域名" @change="changeInput"></el-input>
                     <div class="el-form-item__error" v-if="onerrorTip">{{onerrorText}}</div>
                 </el-form-item>
             </el-form>

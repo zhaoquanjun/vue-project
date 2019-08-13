@@ -151,17 +151,17 @@
                                 <div>
                                     <div
                                         class="explain-item"
-                                    >解析类型:{{props.row.cdnDomainResolveType?props.row.cdnDomainResolveType:'—'}}</div>
+                                    >解析类型 :&nbsp; {{props.row.cdnDomainResolveType?props.row.cdnDomainResolveType:'—'}}</div>
                                     <div
                                         class="explain-item"
-                                    >解析记录值:{{props.row.cdnDomainResolveValue?props.row.cdnDomainResolveValue:'—'}}</div>
+                                    >解析记录值 : &nbsp;{{props.row.cdnDomainResolveValue?props.row.cdnDomainResolveValue:'—'}}</div>
                                 </div>
                             </el-col>
                             <el-col :span="7" v-if="active >= 1">
                                 <div>
                                     <div class="explain-item">
                                         使用“一键解析”自动完成域名解析或前往阿里云控制台
-                                        <br />自行设置解析
+                                        自行设置解析
                                     </div>
                                     <div class="explain-item islink">如何进行域名解析？</div>
                                     <button
@@ -179,7 +179,7 @@
                             </el-col>
                             <el-col :span="3" v-if="active >= 3">
                                 <div>
-                                    <div class="explain-item">解析成功！可根据您的需 要，在域名列表中选择开 启HTTPS。</div>
+                                    <div class="explain-item">解析成功！可根据您的需要,在域名列表中选择开启HTTPS。</div>
                                     <div class="explain-item islink">为什么要开启HTTPS</div>
                                 </div>
                             </el-col>
@@ -262,7 +262,6 @@
                 <br />
             </span>
         </el-dialog>
-     
     </div>
 </template>
 <script>
@@ -281,12 +280,12 @@ export default {
             getRowKeys(row) {
                 return row.id;
             },
-          
+
             passTip: false
         };
     },
     mounted() {
-          this.resetExpandText()
+        this.resetExpandText();
     },
     methods: {
         //一键解析域名
@@ -447,8 +446,8 @@ export default {
         notPassTip() {
             this.passTip = true;
         },
-        resetExpandText(){
-             this.$nextTick(() => {
+        resetExpandText() {
+            this.$nextTick(() => {
                 let eles = document.getElementsByClassName(
                     "el-table__expand-icon"
                 );
@@ -462,7 +461,7 @@ export default {
     },
     watch: {
         tableData() {
-            this.resetExpandText()
+            this.resetExpandText();
         }
     }
 };
@@ -507,10 +506,25 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.table-list {
+    border: 1px solid #e1e6ea;
+}
 .relove-step {
     margin-top: 12px;
     background: #eeeeee;
     color: #262626;
+    position: relative;
+    &::before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: -52px;
+        right: 199px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent transparent #eee transparent;
+    }
     &:hover {
         background: #eeeeee !important;
     }
@@ -545,6 +559,7 @@ export default {
 
             .step-desc {
                 padding-left: 8px;
+                font-weight: 500;
             }
         }
 

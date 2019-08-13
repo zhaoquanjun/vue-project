@@ -12,7 +12,11 @@
                     <span class="member-list-title fs14">域名管理</span>
                 </el-row>
 
-                <DomainMenu ref="domainMenu" @handleTabClick="handleTabClick" @handleBtn="righPanelShow" />
+                <DomainMenu
+                    ref="domainMenu"
+                    @handleTabClick="handleTabClick"
+                    @handleBtn="righPanelShow"
+                />
                 <el-main>
                     <DomainList
                         v-if="showType"
@@ -63,10 +67,10 @@
                 @resolveCdnByAliYunToken="_resolveCdnByAliYunToken"
             ></BindDomain>
             <AddRedirectDomain
-            v-else
-            :domain-list="getActiveAndNotInUseDomainList"
-            @closeDialog="closeDialog"
-            @get301List="_get301List"
+                v-else
+                :domain-list="getActiveAndNotInUseDomainList"
+                @closeDialog="closeDialog"
+                @get301List="_get301List"
             />
         </el-dialog>
     </el-container>
@@ -111,7 +115,8 @@ export default {
             resolveDomainData: "",
             curSiteId: "",
             showType: true,
-            getActiveAndNotInUseDomainList:[]
+            getActiveAndNotInUseDomainList: [],
+            domainValue:"",
         };
     },
     created() {
@@ -169,6 +174,7 @@ export default {
          * 解析域名
          */
         async _resolveCdnByAliYunToken(opt) {
+            
             this.resolveDomainData = opt;
             let params = {
                 id: opt.id,
@@ -219,12 +225,35 @@ export default {
                 //confirm()//ok: this.isForceUpdate() isForceUpdate:true
             }
             // data.is
-            if (data.isSuccess) {
-                this.$notify({
-                    customClass: "notify-success",
-                    message: `大约需要5分钟解析成功`,
-                    duration: 2000,
-                    showClose: false
+            if (data.isSuccess ) {
+               
+                // this.$notify({
+                //     customClass: "notify-success",
+                //     message: `大约需要5分钟解析成功`,
+                //     duration: 2000,
+                //     showClose: false
+                // });
+                let message = [];
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #262626" },
+                        `${this.resolveDomainData.curDomain}，添加解析成功！`
+                    )
+                );
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #8C8C8C" },
+                        "解析生效需要一定的时间，如网站不能正常访问，请耐心等待。"
+                    )
+                );
+                this.$confirm("提示", {
+                    title: "提示",
+                     iconClass: "icon-success",
+                    message: this.$createElement("div", null, message),
+                    confirmButtonText: "确定",
+                    closeOnClickModal: false
                 });
                 this._getCdnDomainList(this.curSiteId);
             }
@@ -340,12 +369,14 @@ export default {
             });
         },
         //// 301 ////
-         async _getActiveAndNotInUseDomainList() {
-            let { data } = await domainRedirectApi.getActiveAndNotInUseDomainList();
-            this.getActiveAndNotInUseDomainList =data
+        async _getActiveAndNotInUseDomainList() {
+            let {
+                data
+            } = await domainRedirectApi.getActiveAndNotInUseDomainList();
+            this.getActiveAndNotInUseDomainList = data;
         },
-        _get301List(){
-            this.$refs.redirectDomainList._get301List()
+        _get301List() {
+            this.$refs.redirectDomainList._get301List();
         },
         righPanelShow() {
             this.backupShow = true;
@@ -362,8 +393,8 @@ export default {
                 this._getActiveAndNotInUseDomainList();
             }
         },
-        toSet(){
-            this.$refs.domainMenu.handleTabClick("domainList")
+        toSet() {
+            this.$refs.domainMenu.handleTabClick("domainList");
         }
     }
 };
