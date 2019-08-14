@@ -34,7 +34,9 @@
                             :value="scope.row.httpsStatus==4"
                             @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
                         ></el-switch>
+                        
                     </template>
+                    <span v-else-if="scope.row.httpsStatus===1">{{scope.row.httpsStatusDesc}}</span>
                     <span v-else>—</span>
                 </template>
             </el-table-column>

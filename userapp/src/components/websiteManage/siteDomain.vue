@@ -282,7 +282,7 @@ export default {
                     this.$notify({
                         customClass: "notify-success",
                         title: "成功",
-                        message: "证书申请成功！",
+                        message: "申请成功！正在为您配置证书",
                         duration: 1500,
                         showClose: false
                     });
