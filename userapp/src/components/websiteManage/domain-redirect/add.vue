@@ -31,7 +31,7 @@
                     <el-input
                         v-model="form.targetDomain"
                         placeholder="请输入目标域名"
-                        @change="changeInput"
+                        @blur="changeInput"
                     ></el-input>
                     <div class="el-form-item__error" v-if="error.onerrorTip">{{error.onerrorText}}</div>
                 </el-form-item>
@@ -93,7 +93,7 @@ export default {
                     message: "为保证301重定向生效，请点击发布您的网站。",
                     confirmButtonText: "立即发布",
                     cancelButtonText: "稍后发布",
-                    customClass: "medium",
+                    iconClass: "icon-success",
                     closeOnClickModal: false,
                     callback: async action => {
                         if (action === "confirm") {
@@ -119,6 +119,7 @@ export default {
             }
         },
         changeInput() {
+           
             if (!this.form.sourceDomain) {
                 this.error.souceErrorTip = true;
                 this.error.souceOnerrorText = "请选择源域名";
