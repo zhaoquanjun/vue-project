@@ -466,7 +466,7 @@ export default {
             }
         };
     },
-     mounted() {
+    mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
         this.$refs.myQuillEditor.quill
             .getModule("toolbar")
@@ -483,15 +483,15 @@ export default {
         });
         let categoryId = this.$route.query.categoryId;
         let categoryName = this.$route.query.categoryName;
-        console.log(categoryId,'categoryIdcategoryId')
-        if(!!categoryId){
-             this.detailData.productCategoryList = [
-            { id: categoryId ,displayName:categoryName }
-        ];
-        }else{
-             this.detailData.productCategoryList = [
-            { id: categoryId || 0, displayName: "全部分类" }
-        ];
+        if (!!categoryId) {
+            this.detailData.productCategoryList = [
+                { id: categoryId, displayName: categoryName }
+            ];
+            this.categoryId = [categoryId];
+        } else {
+            this.detailData.productCategoryList = [
+                { id: 0, displayName: "全部分类" }
+            ];
         }
         var id = this.$route.query.id;
         this.curProduct = id;
@@ -529,16 +529,8 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
-           
-             console.log(data, "datadatadata");
-            this.categoryName = this.categoryId = [];
-          
-             data.productCategoryList && data.productCategoryList.forEach(item => {
-                this.categoryName.push(item.displayName);
-                 this.categoryId.push(item.id);
-            });
 
-          
+            this.categoryId = [];
 
             if (Object.keys(data.seoKeyword).length < 1) {
                 data.seoKeyword = [];
@@ -550,13 +542,23 @@ export default {
             } else {
                 data.searchKeyword = data.searchKeyword.split(",");
             }
-
             this.detailData = data;
             this.detailData.NewId = data.id;
+
+            //  let categoryList22 = JSON.stringify(this.detailData.productCategoryList);
+            //  JSON.parse(categoryList22).forEach(item=>{
+            //       this.categoryId.push(item.id);
+            //  })
+            this.categoryIdList(this.detailData.productCategoryList);
+        
+        },
+        categoryIdList(list) {
+            list.forEach(item => {
+                this.categoryId.push(item.id);
+            });
         },
         // 新建保存
         submitForm(formName, fileList) {
-            console.log(fileList, "--------===========");
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
@@ -653,11 +655,16 @@ export default {
                 return;
             }
             if (!!boolean) {
-                this.detailData.productCategoryList.push({
-                    displayName: data.label,
-                    id: data.id,
-                    thumbnailPicUrl: data.thumbnailPicUrl
-                });
+                this.detailData.productCategoryList &&
+                    this.detailData.productCategoryList.forEach(item => {
+                        if (item.id != data.id) {
+                            this.detailData.productCategoryList.push({
+                                displayName: data.label,
+                                id: data.id,
+                                thumbnailPicUrl: data.thumbnailPicUrl
+                            });
+                        }
+                    });
             } else {
                 this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
                     item => {
@@ -682,13 +689,11 @@ export default {
             this.isModalShow = !this.isModalShow;
         },
         getImgInfo(info) {
-            //console.log(info, "0000000");
             this.imgData = info;
         },
         getEditorImg() {
             // 获取选中的图片信息 有两种方式
-            //console.log(this.imgData, "imgData");
-            //console.log(this.$refs.imgList.selectedImg, "selectedImg");
+
             this.isModalShow = false;
             this.insertEditorImg(this.imgData);
         },
@@ -716,7 +721,6 @@ export default {
             // this.isIndeterminate = false;
         },
         handleCheckedCitiesChange(value) {
-            console.log(value);
             // let checkedCount = value.length;
             // this.checkAll = checkedCount === this.cities.length;
             // this.isIndeterminate =
@@ -763,11 +767,8 @@ export default {
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
-            console.log(this.isCheckTreeShow);
         },
-        getCheckedNodes(nodes) {
-            console.log(nodes, "nnnnnnn");
-        },
+        getCheckedNodes(nodes) {},
         removeCategory(id) {
             this.$refs.detailCheckTree.setChecked(id);
             this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
@@ -777,7 +778,7 @@ export default {
             );
         }
     },
-   
+
     watch: {
         "detailData.searchKeyword"() {
             if (this.detailData.searchKeyword.length >= 5) {

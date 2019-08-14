@@ -29,6 +29,7 @@ export default {
 .common-header {
     height: 60px;
     line-height: 60px;
+    overflow: hidden;
     position: fixed;
     top: 0;
     left: 0;

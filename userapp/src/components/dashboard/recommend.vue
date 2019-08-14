@@ -28,7 +28,7 @@ export default {
 <style lang="scss" scoped>
 .content-num-section {
   margin-top: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   border-radius: 3px;
   border: 1px solid rgba(229, 229, 229, 1);
   .section-title {

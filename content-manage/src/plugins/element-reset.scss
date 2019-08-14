@@ -299,6 +299,7 @@
 /* el-buttom -----  end */
 
 
+
 button{
     border-radius: 2px;
 }
@@ -316,6 +317,14 @@ button.deleteActive:focus{
 button.btn-lightblue{
     border: 1px solid #09CCEB;
     color: #09CCEB;
+    box-sizing: border-box;
+}
+//lightblue
+button.btn-bglightblue{
+    border: 1px solid #09CCEB;
+    color: #fff;
+    background-color: #09CCEB;
+    box-sizing: border-box;
 }
 button.btn-darkblue{
     border: 1px solid #0595E6;

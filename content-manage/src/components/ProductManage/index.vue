@@ -67,7 +67,8 @@
                     </template>
                     <template v-else>
                         <div class="category-content">
-                            <span name="cur-tip">移动至</span>
+                            <span name="cur-tip">{{tipText}}</span>
+                            <!-- 移动至 -->
                         </div>
 
                         <CheckTree
@@ -90,8 +91,7 @@
 <script>
 // import CategoryTree from "./CategoryTree";
 import CheckTree from "./CheckTree";
- import MTree from "@/components/ImgManage/MTree";
-
+import MTree from "@/components/ImgManage/MTree";
 import ContentHeader from "./ProductHeader";
 import ContentTable from "./ProductTable";
 import RightPannel from "../ImgManage/RightPannel";
@@ -110,6 +110,7 @@ export default {
         return {
             clickType: "", // 选择的是那种类型  移动 | 复制 ……
             panelTitle: "分类设置", // 右侧面板提示title
+            tipText: "移动至",
             switchVal: true, // 是否仅登录用户可看
             articlePageResult: null,
             treeResult: null,
@@ -197,7 +198,7 @@ export default {
                             this.$notify({
                                 customClass: "notify-success", //  notify-success ||  notify-error
                                 message: `成功!`,
-                                 showClose: false,
+                                showClose: false,
                                 duration: 1000
                             });
                             this.contentTableList();
@@ -217,6 +218,10 @@ export default {
             this.clickType = type;
             if (type === "permission") {
                 this.panelTitle = "访问权限";
+            } else if (type === "copy") {
+                this.tipText = "复制至";
+            } else if (type === "batchmove") {
+                this.tipText = "移动至";
             }
         },
         //选择移动分类时的节点
@@ -234,12 +239,19 @@ export default {
             this.isInvitationPanelShow = false;
         },
         moveClassify(data, flag) {
+            if (flag === "move") {
+                this.tipText = "移动至";
+            } else if (flag === "copy") {
+                this.tipText = "复制至";
+            }
+
             this.isInvitationPanelShow = true;
             this.curArticleInfo = data;
             this.type = flag;
         },
-        // 点击确定按钮 移动更新文章分类
+        // 点击确定按钮 移动 复制 更新文章分类
         async updateCategoryArticle(params) {
+            //批量设置访问权限
             if (this.clickType === "permission") {
                 let options = {
                     switchType: 4,
@@ -257,28 +269,29 @@ export default {
                 });
                 return;
             }
-            let cateId = this.curArticleInfo.id;
-            console.log(this.curArticleInfo);
-            let categoryIdList = [];
-            checkNodes.forEach(item => {
-                categoryIdList.push(item.id);
+            let categoryIdList = checkNodes.map(item => {
+                return item.id;
             });
             let cateIdsAry = [];
             if (this.idsList.length > 1) {
                 cateIdsAry = this.idsList;
             } else {
+                let cateId = this.curArticleInfo.id;
                 cateIdsAry.push(cateId);
             }
             let options = {
                 idList: cateIdsAry,
                 categoryIdList: categoryIdList
             };
-            console.log(options);
-            if (this.type === "copy") {
+            // 复制
+            if (this.type === "copy" || this.clickType === "batchCopy") {
                 this.copy(options);
                 return;
             }
-
+            // 移动
+            this.move(options);
+        },
+        async move(options) {
             let { data, status } = await productManageApi.batchChangeCategory(
                 options
             );
@@ -296,13 +309,16 @@ export default {
             let { data, status } = await productManageApi.copyBatchProduct(
                 options
             );
-            console.log()
+            console.log();
             if (status == 200) {
-                if (Array.isArray(options.idList) && options.idList.length > 1) {
+                if (
+                    Array.isArray(options.idList) &&
+                    options.idList.length > 1
+                ) {
                     this.$notify({
                         customClass: "notify-success", //  notify-success ||  notify-error
                         message: `批量复制成功!`,
-                         showClose: false,
+                        showClose: false,
                         duration: 1000
                     });
                 } else {
@@ -316,7 +332,10 @@ export default {
                             if (action === "confirm") {
                                 this.$router.push({
                                     path: "/product/create",
-                                    query: { id: options.idList[0], isEditor: 1 }
+                                    query: {
+                                        id: options.idList[0],
+                                        isEditor: 1
+                                    }
                                 });
                             } else {
                             }

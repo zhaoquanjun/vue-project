@@ -8,9 +8,11 @@
                 :expand-on-click-node="false"
                 @node-drag-end="handleDragEnd"
                 @node-click="changeCategory"
+                @node-drag-enter="dragEnter"
                 ref="tree"
                 draggable
                 :allow-drop="allowDrop"
+                :allow-drag="allowDrag"
                 :highlight-current="true"
             >
                 <div
@@ -156,7 +158,11 @@ export default {
             var draggingNode = draggingNodeDom.data;
             var targetNode = targetNodeDom.data;
             // let level = this.getLevel(draggingNodeDom, 1) + targetNodeDom.level;
-
+            let eles = document.getElementsByClassName("el-tree-node__content");
+            for (let i = 0; i < eles.length; i++) {
+                let ele = eles[i];
+                ele.style.background = "";
+            }
             switch (dropType) {
                 case "inner": {
                     draggingNode.parentId = targetNode.id;
@@ -170,6 +176,7 @@ export default {
                     break;
                 }
                 case "none":
+                    console.log("none");
                     return;
                 default: {
                     return;
@@ -188,6 +195,7 @@ export default {
             );
         },
         allowDrop(draggingNode, targetNode, dropType) {
+               if (targetNode.data.level == 0) return;
             draggingNode = draggingNode.data;
             targetNode = targetNode.data;
             //判断是否大于三层
@@ -200,6 +208,21 @@ export default {
             } else {
             }
             return true;
+        },
+        allowDrag(draggingNode) {
+            return draggingNode.data.level !== 0;
+        },
+        dragEnter(draggingNode, targetNode, ev) {
+            if (targetNode.data.level == 0) return;
+            // document.querySelectorAll('.el-tree-node__content').style.background=""
+            let eles = document.getElementsByClassName("el-tree-node__content");
+            for (let i = 0; i < eles.length; i++) {
+                let ele = eles[i];
+                ele.style.background = "";
+            }
+            if (targetNode.id) {
+                ev.srcElement.style.background = "#0595e6";
+            }
         },
         // 添加分类  0720
         create(ev, node, data) {

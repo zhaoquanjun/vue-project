@@ -3,11 +3,13 @@
     <el-row style="display: flex;">
       <div class="leftContent">
         <div class="welcome-wrap">
-          <p class="welcome-words">{{userName}}，欢迎回到微站后台</p>
+          <p class="welcome-words">
+            <span class="welcome-words" style="font-family:PingFangSC-Regular;">{{userName}}</span>
+            <span class="welcome-words">，欢迎回到微站后台</span>
+          </p>
           <p class="siteIntroduction">以下是您当前的站点</p>
         </div>
-
-        <siteinfo :siteInfo="siteInfoList" :siteCount="siteCount" />
+        <siteinfo :siteInfo="siteInfoList" :siteCount="siteCount" v-show="siteInfoList.length" />
         <plugins :plugins="pluginList" />
         <content-num :contentNumber="contentNumber" />
         <recommend :recommend="recommend" />
@@ -15,7 +17,7 @@
       <div class="rightContent">
         <el-row class="appInfo">
           <el-col class="appName">
-            <span>{{ appInfo.name }}</span>
+            <span class="appNameInfo">{{ appInfo.name }}</span>
             <el-popover
               v-show="appInfo.isSystem"
               ref="popover"
@@ -58,7 +60,16 @@
         </el-row>
 
         <el-row class="designCheats">
-          <h3 class="designCheatsTitle">设计秘籍</h3>
+          <h3 class="designCheatsTitle">
+            设计秘籍
+            <div class="more">
+              更多
+              <i
+                class="iconfont iconjiantou"
+                style="font-size:12px;color:#09CCEB;margin-left:3px"
+              ></i>
+            </div>
+          </h3>
           <div class="designItem" v-for="(item, index) in designCheats" :key="index">
             <div class="designDiv" :class="designColor(index)"></div>
             <div class="designInfo">{{ item.versionDescription }}</div>
@@ -68,7 +79,16 @@
         </el-row>
 
         <el-row class="versionUpdate">
-          <h3 class="versionTitle">版本更新</h3>
+          <h3 class="versionTitle">
+            版本更新
+            <div class="more">
+              更多
+              <i
+                class="iconfont iconjiantou"
+                style="font-size:12px;color:#09CCEB;margin-left:3px"
+              ></i>
+            </div>
+          </h3>
           <div class="versionItem" v-for="(item, index) in versionInfo" :key="index">
             <div class="versionInfo">{{ item.versionDescription }}</div>
             <div class="versionDate">{{ item.updateTime }}</div>
@@ -272,6 +292,26 @@ export default {
     font-weight: 400;
     color: rgba(38, 38, 38, 1);
     line-height: 37px;
+    .appNameInfo {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 70%;
+      vertical-align: middle;
+      // display: inline-block;
+      // overflow: hidden;
+      // text-overflow: ellipsis;
+      // white-space: nowrap;
+      // width: 60%;
+      // display: -webkit-box;
+      // word-break: break-all;
+      // text-overflow: ellipsis;
+      // -webkit-text-overflow: ellipsis;
+      // overflow: hidden;
+      // -webkit-line-clamp: 1;
+      // -webkit-box-orient: vertical;
+    }
   }
   .appVersion {
     margin-top: 16px;
@@ -334,6 +374,15 @@ export default {
     margin-top: 20px;
     margin-left: 16px;
     margin-bottom: 24px;
+    .more {
+      cursor: pointer;
+      float: right;
+      margin-right: 20px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(9, 204, 235, 1);
+      line-height: 20px;
+    }
   }
   .designItem {
     margin: 0px 22px 16px 16px;
@@ -404,6 +453,15 @@ export default {
     margin-top: 20px;
     margin-left: 17px;
     margin-bottom: 19px;
+    .more {
+      cursor: pointer;
+      float: right;
+      margin-right: 20px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(9, 204, 235, 1);
+      line-height: 20px;
+    }
   }
   .versionItem {
     height: 20px;

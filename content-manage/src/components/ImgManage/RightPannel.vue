@@ -15,13 +15,13 @@
       </span>
       <span class="close-pannel" @click="closePanel">X</span>
     </div>
-    <div style="padding:0 17px">
+    <div class="pannel-main" style="padding:0 17px">
       <slot slot="cur-tip"></slot>
       <div>
         <slot></slot>
       </div>
     </div>
-    <slot name="footer"></slot>
+    <div class="pannel_footer"><slot name="footer"></slot></div>
   </div>
 </template>
 <script>
@@ -88,6 +88,10 @@ export default {
 .category-content {
   padding: 30px 0 13px 0;
 }
+.pannel-main{
+  height: calc(100vh - 107px);
+}
+
 </style>
 
 

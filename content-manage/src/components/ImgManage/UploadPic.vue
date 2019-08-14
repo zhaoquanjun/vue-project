@@ -35,7 +35,6 @@
             drag
             :isFolder="isFolder"
             :before-upload="beforeUpload"
-            
         >
             <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
             <div @click="setFolder(false)" class="el-upload__text">
@@ -58,14 +57,14 @@
             >选择文件夹</el-button>
         </el-upload>
         <el-row class="footer-upload-btn">
-            <el-button
+            <button
                 :disabled="uploadDisabled"
                 class="handle-upload"
                 :class="[{'handle-upload-disabled':uploadDisabled}]"
                 style="float:right"
                 size="small"
                 @click="submitUpload"
-            >{{isUploading?"上传中…":"开始上传"}}</el-button>
+            >{{isUploading?"上传中…":"开始上传"}}</button>
         </el-row>
         <!-- 图片上传组件 end-->
         <!-- 图片预览 begin -->
@@ -101,7 +100,7 @@ export default {
             },
             uploadSucess: false,
             count: 0,
-            limit:60,// 自定义允许上传的个数
+            limit: 60 // 自定义允许上传的个数
         };
     },
     mounted() {
@@ -129,24 +128,22 @@ export default {
                     this.uploadDisabled = false;
                 }
             });
-            // 
-            if(fileList && fileList.length>this.limit){
-                 this.onExceed(fileList)
+            //
+            if (fileList && fileList.length > this.limit) {
+                this.onExceed(fileList);
             }
-           
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
-           if(fileList.length > this.limit){
-                fileList = fileList.splice(this.limit)
-            };
+            if (fileList.length > this.limit) {
+                fileList = fileList.splice(this.limit);
+            }
             this.$notify({
                 customClass: "notify-error", //  notify-success ||  notify-error
                 message: `上传图片文件超过数量限制`,
                 showClose: false,
                 duration: 1500
             });
-             
         },
         // 图片上传成功时触发
         handleSucess(response, file, fileList) {
@@ -181,8 +178,7 @@ export default {
         },
         // 点击上传按钮
         submitUpload() {
-          
-            this.hideImgName()
+            this.hideImgName();
             this.isUploading = true;
             this.uploadDisabled = true;
             this.count = 0;
@@ -195,8 +191,6 @@ export default {
         },
         // 上传图片时
         beforeUpload(file) {
-             
-         
             const isPic = isImgFile(file.type);
             const isSizeOk = imgSize(file.size);
             let maxMb = 10;
@@ -220,11 +214,13 @@ export default {
             }
             return isPic && isSizeOk;
         },
-        hideImgName(){
+        hideImgName() {
             // 点击上传时隐藏图片名称避免样式错乱
-              let imgName =  document.querySelectorAll(".el-upload-list__item-name");
-            for(let i=0;i<imgName.length;i++){
-                imgName[i].style.display="none"
+            let imgName = document.querySelectorAll(
+                ".el-upload-list__item-name"
+            );
+            for (let i = 0; i < imgName.length; i++) {
+                imgName[i].style.display = "none";
             }
         }
     }
@@ -233,12 +229,20 @@ export default {
 <style scoped>
 .upload-pic /deep/ .el-upload-dragger {
     position: static;
-    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
-
+.upload-pic /deep/ .el-upload-dragger .el-upload__text em{
+    display: block;
+    padding-top: 10px;
+}
 .upload-pic /deep/ .el-upload--picture-card {
     display: block;
     border: none;
+    line-height: 1;
 }
 
 .upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item {
@@ -279,7 +283,7 @@ export default {
 }
 
 .upload-pic /deep/ .el-upload-list__item-actions .el-icon-zoom-in:before {
-    content: ""
+    content: "";
 }
 
 .upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {

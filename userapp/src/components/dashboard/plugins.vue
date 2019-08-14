@@ -1,12 +1,12 @@
 <template>
   <el-row class="plugin-section">
-    <el-col class="plugins-box" :span="6" v-for="(it, idx) in  plugins" :key="idx">
+    <el-col class="plugins-box" :span="6" v-for="(item, index) in  plugins" :key="index">
       <div class="box-inner">
-        <span class="plugin-item plugin-img" :class="it.pluginCode"></span>
+        <span class="plugin-item plugin-img" :class="item.pluginCode"></span>
         <span class="plugin-item plugin-text">
-          <h2>{{it.name}}</h2>
-          <p>{{it.description}}</p>
-          <p>{{it.isActive ? '激活' : '未激活'}}</p>
+          <h2>{{item.name}}</h2>
+          <p>{{item.description}}</p>
+          <p>{{isActive(item.pluginCode, item.isActive)}}</p>
         </span>
       </div>
     </el-col>
@@ -15,12 +15,27 @@
 
 <script>
 export default {
-  props: ["plugins"]
+  props: ["plugins"],
+  methods: {
+    isActive(pluginCode, isActive) {
+      switch (pluginCode) {
+        case "MicroProgram":
+          return isActive ? "已发布" : "未授权";
+        case "AliPayProgram":
+          return isActive ? "已下载" : "未绑定";
+        case "OfficialAccounts":
+          return isActive ? "已授权" : "未授权";
+        case "Form":
+          return isActive ? "已创建" : "未创建";
+      }
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .plugin-section {
+  margin-top: 49px;
   display: flex;
   justify-content: space-between;
   align-content: center;
@@ -104,6 +119,7 @@ export default {
 }
 @media screen and (max-width: 1500px) {
   .plugin-section {
+    margin-top: 29px;
     .plugins-box {
       margin-right: 20px;
       margin-bottom: 33px;
