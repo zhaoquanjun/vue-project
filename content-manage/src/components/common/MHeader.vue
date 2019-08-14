@@ -32,7 +32,7 @@
             <p class="avatar" style="cursor: pointer">
               <img :src="headUrl" alt />
             </p>
-            <dl class="login-set dropdown-avatar-menu" v-show="isdropdownAvatarShow">
+            <dl class="login-set dropdown-avatar-menu" v-if="isdropdownAvatarShow">
               <dd @click="pannelShow">个人设置</dd>
               <dd @click="signOut">退出控制台</dd>
             </dl>
@@ -300,6 +300,7 @@ export default {
     }
     .headAppName {
       cursor: pointer;
+          display: flex;
       .headAppNameInfo {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -315,6 +316,9 @@ export default {
       background: url("~img/dashboard/board-changeApp.png") no-repeat center;
       background-size: contain;
     }
+  }
+  .head-left {
+        display: flex;
   }
   .head-right {
     text-align: right;
@@ -335,7 +339,7 @@ export default {
     text-align: left;
     background: #131518;
     position: absolute;
-    z-index: 100;
+    z-index: 1000;
     right: 0;
     top: 60px;
     color: #fff;

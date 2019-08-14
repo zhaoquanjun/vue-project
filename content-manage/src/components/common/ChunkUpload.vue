@@ -127,7 +127,9 @@ export default {
             //  file.resume();
             this.computeMD5(file);
         },
-        uploadStart() {},
+        uploadStart(file) {
+
+        },
         computeMD5(file) {
             console.log(file, "00090000");
             let url = URL.createObjectURL(file.file)
