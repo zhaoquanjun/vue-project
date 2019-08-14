@@ -189,6 +189,8 @@ export default {
         item.appId
       );
       if (status === 200) {
+        let { data } = await dashboardApi.getCurSiteId();
+        this.$store.commit("SETSITEID", data);
         this.$store.dispatch("_getAppHeadInfo");
         window.location.href = dashboardUrl;
       }
@@ -300,7 +302,7 @@ export default {
     }
     .headAppName {
       cursor: pointer;
-          display: flex;
+      display: flex;
       .headAppNameInfo {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -318,7 +320,7 @@ export default {
     }
   }
   .head-left {
-        display: flex;
+    display: flex;
   }
   .head-right {
     text-align: right;
