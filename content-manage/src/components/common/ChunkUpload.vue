@@ -11,7 +11,6 @@
                     accordion
                     :expand-on-click-node="true"
                     @chooseNode="chooseNode"
-                    :categoryName="nodeData.label"
                 />
             </el-col>
             <div></div>
@@ -27,9 +26,10 @@
         >
             <uploader-unsupport></uploader-unsupport>
             <uploader-drop>
-                <!-- <p>将{{displayName}}拖到此处，或 </p><br /> -->
+                <p>将{{displayName}}拖到此处，或</p>
+                <br />
                 <uploader-btn :attrs="attrs">选择{{displayName}}</uploader-btn>
-                <!-- <uploader-btn :directory="true">选择文件夹</uploader-btn> -->
+                <uploader-btn :directory="true">选择文件夹</uploader-btn>
             </uploader-drop>
             <uploader-list></uploader-list>
         </uploader>
@@ -129,6 +129,17 @@ export default {
         },
         uploadStart() {},
         computeMD5(file) {
+            console.log(file, "00090000");
+            let url = URL.createObjectURL(file.file)
+            var audioElement = new Audio(url);
+            console.log(audioElement)
+            var duration;
+            audioElement.addEventListener("loadedmetadata", function(_event) {
+                alert(123)
+                duration = audioElement.duration;
+                console.log(duration + "s");
+            });
+
             let fileReader = new FileReader();
             let time = new Date().getTime();
             let md5 = "";
@@ -145,7 +156,7 @@ export default {
                         time} ms,自动开始上传,\n 香槟boy 监听事件在此触发`
                 );
                 file.uniqueIdentifier = md5;
-                file.resume();
+                // file.resume();
             };
 
             fileReader.onerror = function() {
@@ -169,7 +180,7 @@ export default {
     padding: 15px;
     min-height: 320px;
     border: 1px solid #eee;
-        margin: 13px 0 16px 0;
+    margin: 13px 0 16px 0;
     padding: 18px 20px;
     .uploader-drop {
         border: none;
@@ -178,9 +189,9 @@ export default {
         right: 0;
         top: -40px;
         padding: 0;
-        .uploader-btn{
-            border: 1px solid #09CCEB;
-            color: #09CCEB;
+        .uploader-btn {
+            border: 1px solid #09cceb;
+            color: #09cceb;
         }
     }
 }
