@@ -12,19 +12,13 @@
 
             <el-table-column label="文件名称">
                 <template slot-scope="scope">
-                    <el-input
-                        v-if="(index == scope.$index)"
-                        type="text"
-                        size="small"
-                        placeholder="请输入内容"
-                        v-model="scope.row.title"
-                        maxlength="30"
-                        show-word-limit
-                        @blur="rename(scope.row.id,scope.row.title)"
-                    ></el-input>
+                      <img
+                        :src="scope.row.fullOssUrl"
+                        onerror="onImgError(this)"
+                        class="cover"
+                    />
                     <span
                         class="img-name"
-                        v-else
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
                     >{{scope.row.title}}</span>
                     <!-- <input v-model="scope.row.title" />
@@ -154,6 +148,13 @@ export default {
         };
     },
     mounted() {
+         window.onImgError = function(ele) {
+            if (ele.src === ele.attributes["fullsrc"].value) {
+                return;
+            } else {
+                ele.src = ele.attributes["fullsrc"].value;
+            }
+        };
         this.$nextTick(() => {
             window.addEventListener("resize", () => {
                 this.tableHeight = window.innerHeight - 260;
