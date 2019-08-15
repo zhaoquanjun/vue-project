@@ -227,6 +227,9 @@ export default {
     display: flex;
     align-items: center;
 }
+.uploader-list /deep/ .uploader-file-actions,.uploader-list /deep/ .uploader-file-status{
+    justify-content: flex-end;
+}
 .uploader-list /deep/ .uploader-file {
     border: none;
 }
