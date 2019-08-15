@@ -159,7 +159,15 @@ export default {
      * app信息 site列表 内容管理数量 plugin列表
      */
     async getDashboardData() {
-      let { data } = await getUserDashboard();
+      const loading = this.$loading({
+        lock: true,
+        spinner: "loading-icon",
+        background: "rgba(255, 255, 255, 0.75)"
+      });
+      let { data, status } = await getUserDashboard();
+      if (status === 200) {
+        loading.close();
+      }
       this.pluginList = data.pluginList;
       this.contentNumber = {
         newsCount: data.contentsNumber.newsCount,
@@ -174,8 +182,8 @@ export default {
         formatDateTime(this.appInfo.expiredTime, "yyyy年MM月dd日");
       this.siteCount = data.appInfo.siteCount;
       this.siteInfoList = data.siteCarousels;
-      if( this.siteCount == this.siteInfoList.length){
-        this.isCanCreate = false
+      if (this.siteCount == this.siteInfoList.length) {
+        this.isCanCreate = false;
       }
     },
     /**
