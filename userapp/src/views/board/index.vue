@@ -9,7 +9,7 @@
           </p>
           <p class="siteIntroduction">以下是您当前的站点</p>
         </div>
-        <siteinfo :siteInfo="siteInfoList" :siteCount="siteCount" v-show="siteInfoList.length" />
+        <siteinfo :siteInfo="siteInfoList" :isCanCreate="isCanCreate" v-show="siteInfoList.length" />
         <plugins :plugins="pluginList" />
         <content-num :contentNumber="contentNumber" />
         <recommend :recommend="recommend" />
@@ -142,7 +142,8 @@ export default {
         }
       ],
       remarkValue: "",
-      designIsread: false
+      designIsread: false,
+      isCanCreate: true
     };
   },
   components: {
@@ -173,6 +174,9 @@ export default {
         formatDateTime(this.appInfo.expiredTime, "yyyy年MM月dd日");
       this.siteCount = data.appInfo.siteCount;
       this.siteInfoList = data.siteCarousels;
+      if( this.siteCount == this.siteInfoList.length){
+        this.isCanCreate = false
+      }
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表
