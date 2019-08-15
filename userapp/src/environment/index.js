@@ -10,7 +10,7 @@ let redirectUrl = "http://dashboard.console.wezhan.cn/callback"
 let logoutRedirectUri = "http://dashboard.console.wezhan.cn/index.html";
 let silentRedirectUri = 'http://dashboard.console.wezhan.cn/static/silent-renew.html';
 let clientId = 'dashboard.api';
-let scope = "openid profile dashboard.api designer.api content.api";
+let scope = "openid profile dashboard.api content.api designer.api produce.api";
 export let designerManageApi = 'http://api.designer.console.wezhan.cn';
 export let siteDomain = "dashboard.console.wezhan.cn"
 export let shiftToAliyun = "https://help.aliyun.com/document_detail/54077.html?spm=a2c4g.11186623.2.10.61ca4c07hLv73n";
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'development') {
     logoutRedirectUri = "http://dashboard.console.wezhan.cn/index.html";
     silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
     clientId = 'dev.dashboard.api';
-    scope = "openid profile dashboard.api designer.api content.api";
+    scope = "openid profile dashboard.api content.api designer.api produce.api";
 }
 
 
