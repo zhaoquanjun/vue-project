@@ -108,5 +108,5 @@ export const updateSiteTypeAndIndustry = (siteId, siteType, firstIndustryId, sec
  **/
 export const CreateSite = (language, siteName) => {
     let para = { language: language, siteName: siteName};
-    return ajaxRequest.post(`${environment.designerManageApi}/api/siteInfo/CreateSite`, para);
+    return ajaxRequest.post(`${environment.memberManageApi}/api/siteInfo/CreateSite`, para);
 }
