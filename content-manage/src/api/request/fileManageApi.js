@@ -32,4 +32,8 @@ export const download = option => {
 export const switchIsTopStatus = (isTop, idList) => {
     return ajaxRequest.put(`/api/File/SwitchIsTopStatus/${isTop}`, idList);
 }
+// 设置文件密码
 
+export const batchSetPwd = (params) => {
+    return ajaxRequest.put(`/api/File/BatchSetPwd`, params);
+}

@@ -64,14 +64,17 @@
                         <el-form
                             :model="ruleForm"
                             ref="ruleForm"
-                            label-width="70px"
                             class="file-ruleForm"
                             @submit.native.prevent
                         >
-                            <el-form-item label="文件名称" prop="name">
-                                <el-input v-model="ruleForm.name"></el-input>
+                            <el-form-item label="文件名称" prop="name" class="input-border">
+                                <el-input v-model="ruleForm.name" @blur="fileNameBlur"></el-input>
+                                <div
+                                    class="el-form-item__error"
+                                    v-if="error.errorTip"
+                                >{{error.errorText}}</div>
                             </el-form-item>
-                            <el-form-item label="文件类型" prop="delivery">
+                            <el-form-item label="文件类型" prop="delivery" class="select-tree">
                                 <SelectTree
                                     :categoryName="curRowData.categoryName"
                                     :tree-result="treeResult"
@@ -82,22 +85,29 @@
                             <el-form-item label="下载链接">
                                 <div class="download-link">
                                     <span class="ellipsis download-url">{{ruleForm.link}}</span>
-                                    <button class="btn-small btn-bglightblue">复制</button>
+                                    <button
+                                        class="btn-small btn-bglightblue file-editor-btn"
+                                        :class="{'link-btn-green':isCopy}"
+                                        v-clipboard:copy="ruleForm.link"
+                                        v-clipboard:success="onCopy"
+                                        v-clipboard:error="onError"
+                                    >{{copyTip}}</button>
                                 </div>
                             </el-form-item>
                             <el-form-item label="下载密码">
                                 <el-input
+                                    class="input-border"
                                     type="password"
                                     v-model="ruleForm.pass"
                                     autocomplete="off"
+                                    @blur="fileNameBlur"
                                 ></el-input>
+                                <div
+                                    class="el-form-item__error"
+                                    v-if="error.pwdTip"
+                                >{{error.pwdErrorText}}</div>
                             </el-form-item>
                         </el-form>
-
-                        <div slot="footer" class="pannle-footer">
-                            <button @click="updateCategoryPic" class="sure">确定</button>
-                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
-                        </div>
                     </template>
                     <template v-else>
                         <span slot="title-text">编辑文件</span>
@@ -110,11 +120,11 @@
                             @chooseNode="chooseNode"
                             :isexpand="true"
                         ></SelectTree>
-                        <div slot="footer" class="pannle-footer">
-                            <button @click="updateCategoryPic" class="sure">确定</button>
-                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
-                        </div>
                     </template>
+                    <div slot="footer" class="pannle-footer">
+                        <button @click="updateCategoryPic" class="sure">确定</button>
+                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                    </div>
                 </right-pannel>
             </el-main>
             <el-footer>
@@ -154,11 +164,12 @@ import ListHeader from "./ListHeader";
 import List from "./List";
 import SelectTree from "_c//common/SelectTree";
 import RightPannel from "_c//ImgManage/RightPannel";
-import * as videoManageApi from "@/api/request/fileManageApi";
-import * as videoCategoryManageApi from "@/api/request/fileCategoryManageApi";
-import { getStorageUsage } from "@/api/request/contentCommonApi.js"
+import * as fileManageApi from "@/api/request/fileManageApi";
+// fileCategoryManageApi fileManageApi
+import * as fileCategoryManageApi from "@/api/request/fileCategoryManageApi";
+import { getStorageUsage } from "@/api/request/contentCommonApi.js";
 import environment from "@/environment/index.js";
-
+import { trim } from "@/utlis/index.js";
 export default {
     components: {
         MTree,
@@ -175,6 +186,8 @@ export default {
                 pass: "",
                 link: ""
             },
+            copyTip: "复制",
+            isCopy: false,
             displayName: "文件",
             nodeData: "", // 分类节点的名称
             componentId: "List",
@@ -199,21 +212,28 @@ export default {
                 isDescending: true,
                 categoryIdList: [],
                 keyword: "",
-                isDelete: false
+                isDelete: false,
+                downloadCount: null
             },
             editorOrMove: true, // false:move | true:editor
-            useStorage:{}
+            useStorage: {},
+            error: {
+                errorTip: false,
+                errorText: "",
+                pwdTip: false,
+                pwdErrorText: ""
+            }
         };
     },
     mounted() {
         this.getPicList();
         this.getTree();
-        this.getStorageUsage()
+        this.getStorageUsage();
     },
     methods: {
         // 获取使用的内容
-        async getStorageUsage(){
-            let {data,status} = await getStorageUsage("File");
+        async getStorageUsage() {
+            let { data, status } = await getStorageUsage("File");
             this.useStorage = data;
         },
         // 获取列表
@@ -226,7 +246,7 @@ export default {
             if (node) {
                 this.nodeData = node;
             }
-            let { data, status } = await videoManageApi.getPicList(
+            let { data, status } = await fileManageApi.getPicList(
                 this.picSearchOptions
             );
             if (status === 200) {
@@ -248,7 +268,7 @@ export default {
                             let {
                                 status,
                                 data
-                            } = await videoManageApi.batchRemove(true, idlist);
+                            } = await fileManageApi.batchRemove(true, idlist);
                             if (status === 200) {
                                 this.getTree();
                                 this.$notify({
@@ -275,12 +295,11 @@ export default {
         },
         // 移动分类
         async changeCategory(categoryId, idList) {
-            let { data, status } = await videoManageApi.changeCategory(
+            let { data, status } = await fileManageApi.changeCategory(
                 categoryId,
                 idList
             );
             if (status == 200) {
-            
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
                     message: `移动成功`,
@@ -293,19 +312,19 @@ export default {
         },
         // 重命名
         async rename(id, newname) {
-            await videoManageApi.rename(id, newname);
+            await fileManageApi.rename(id, newname);
             this.getPicList();
         },
         // 获取树节点
         async getTree() {
-            let { data } = await videoCategoryManageApi.get();
+            let { data } = await fileCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
         },
         // 创建新的分类
         async newCategory(entity) {
             console.log(entity);
-            await videoCategoryManageApi.create(entity);
+            await fileCategoryManageApi.create(entity);
             this.getTree();
         },
         // 删除分类
@@ -320,9 +339,7 @@ export default {
                         if (action === "confirm") {
                             let {
                                 status
-                            } = await videoCategoryManageApi.batchRemove(
-                                idList
-                            );
+                            } = await fileCategoryManageApi.batchRemove(idList);
                             if (status === 200) {
                                 this.getTree();
                                 this.$notify({
@@ -339,12 +356,12 @@ export default {
         },
         // 重命名分类名称
         async renameCategory(id, newName) {
-            await videoCategoryManageApi.rename(id, newName);
+            await fileCategoryManageApi.rename(id, newName);
             this.getTree();
         },
         // 树节点移动
         async modifyNodeCategory(id, parentId, idOrderByArr) {
-            await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
+            await fileCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTree();
         },
         // 置顶
@@ -357,13 +374,19 @@ export default {
                 iconClass: "icon-warning",
                 callback: async action => {
                     if (action === "confirm") {
-                        await videoManageApi.switchIsTopStatus(isTop, idList);
+                        await fileManageApi.switchIsTopStatus(isTop, idList);
                         this.getPicList();
                     }
                 }
             });
         },
-
+        async batchSetPwd(ids) {
+            let option = {
+                idList: ids,
+                pwd: ""
+            };
+            let { data, status } = await fileManageApi.batchSetPwd(option);
+        },
         // 点击上传文件
         switchUploadBoxShowStatus(uploadImg) {
             this.dialogTableVisible = !this.dialogTableVisible;
@@ -400,12 +423,13 @@ export default {
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
+            if (!this.fileNameBlur()) return;
             let categoryId =
                 this.moveToClassiFy.id || this.curRowData.categoryId; // 分类ID
-            if (!!editorOrMove) {
+            if (!!this.editorOrMove) {
+                this.batchSetPwd(this.curRowData.id, this.ruleForm.pass)
                 this.rename(this.curRowData.id, this.ruleForm.name);
             }
-
             this.changeCategory(categoryId, [this.curRowData.id]);
         },
         // 取消移动分类 关闭panel
@@ -421,6 +445,44 @@ export default {
         //批量删除
         batchDelete() {
             this.batchRemovePic(this.idsList);
+        },
+        // 验证编辑面板
+        fileNameBlur() {
+            if (!trim(this.ruleForm.name)) {
+                this.error.errorTip = true;
+                this.error.errorText = "文件名称不能为空";
+                return false;
+            } else if (trim(this.ruleForm.name).length > 250) {
+                this.error.errorTip = true;
+                this.error.errorText = "文件名称不能超过250个字符";
+                return false;
+            } else {
+                this.error.errorTip = false;
+                this.error.errorText = "";
+            }
+            let pwdReg = /^[a-zA-Z0-9\p{P}\p{S}]{6,16}$/;
+            if (trim(this.ruleForm.pass) && !pwdReg.test(this.ruleForm.pass)) {
+                this.error.pwdTip = true;
+                this.error.pwdErrorText = "密码设置不符合要求";
+                return false;
+            } else {
+                this.error.pwdTip = false;
+                this.error.pwdErrorText = "";
+                return true;
+            }
+        },
+        onCopy() {
+            this.$notify({
+                customClass: "notify-success", //  notify-success ||  notify-error
+                message: `复制成功`,
+                duration: 1500,
+                showClose: false
+            });
+            this.copyTip = "复制成功";
+            this.isCopy = true;
+        },
+        onError() {
+            this.$message.error("prompt.copyFail");
         }
     },
     computed: {
@@ -432,23 +494,75 @@ export default {
             return this.idsList.length > 0 ? true : false;
         }
     },
-    watch: {}
+    watch: {
+        isInvitationlWidth() {
+            this.isCopy = false;
+            this.copyTip = "复制";
+        }
+    }
 };
 </script>
-
+<style  scoped>
+.el-form /deep/ .el-form-item__label {
+    float: none;
+    text-align: left;
+}
+.el-form /deep/ .input-border .el-input__inner {
+    border: none;
+    border-bottom: 1px solid #b9cbcf;
+}
+.el-form /deep/ .input-border .el-input__inner:hover {
+    border-bottom: 1px solid #0595e6;
+}
+.el-form /deep/ .select-tree .el-select {
+    width: 100%;
+}
+.el-form /deep/ .select-tree .el-input__inner {
+    height: 40px;
+    height: 40px;
+}
+</style>
 <style lang="scss" scoped>
 @import "../style/contentDetail";
 .file-ruleForm {
-    padding: 32px 0;
+    padding: 32px 15px;
 }
 .download-link {
     overflow: hidden;
-    background-color: #eee;
+
     display: flex;
     justify-content: space-between;
-    padding-left: 16px;
     .download-url {
+        box-sizing: border-box;
+        padding: 0 8px;
         width: 80%;
+        background-color: #eaeaea;
+    }
+    .file-editor-btn {
+        width: 80px;
+        padding: 0;
+        margin-left: 8px;
+        color: #8c8c8c;
+        border: 1px solid #b9cbcf;
+        background: #fff;
+        box-sizing: border-box;
+    }
+    .link-btn-green {
+        color: #35b24b;
+    }
+}
+.el-form-item__error {
+    color: #262626;
+    padding-top: 8px;
+    &::before {
+        display: inline-block;
+        content: "";
+        width: 13px;
+        height: 13px;
+        vertical-align: bottom;
+        padding-right: 8px;
+        background: url("~img/jian-icon.png") no-repeat center;
+        background-size: contain;
     }
 }
 </style>

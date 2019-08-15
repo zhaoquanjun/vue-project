@@ -71,7 +71,7 @@ export default {
     },
    
     mounted() {
-        this.headers.appId = this.$store.state.dashboard.aappIdppid;
+        this.headers.appId = this.$store.state.dashboard.appId;
     },
     methods: {
         handleSucess(response, file, fileList) {},

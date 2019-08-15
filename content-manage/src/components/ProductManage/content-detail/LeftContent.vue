@@ -371,7 +371,7 @@ export default {
             activeName: "",
             activeName1: "",
             categoryName: [],
-            categoryId: [],
+            categoryId: [0],
             treeResult: null,
             detailData: {
                 name: "",
