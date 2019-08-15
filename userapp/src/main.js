@@ -7,9 +7,9 @@ import globComponents from "@/globalComponents/index.js"
 import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/reset.css";
 import "./styles/common.scss";
+import "./styles/wezhan.scss";
 import "./plugins/element-reset.scss"
 import "./styles/pop-up/pup-up.scss"
-import './icons'
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 // 验证码滑块
