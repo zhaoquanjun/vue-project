@@ -24,3 +24,6 @@ export const changeCategory = (categoryId, idList) => {
 export const rename = (id, newName) => {
     return ajaxRequest.put(`/api/Video/${id}`, JSON.stringify(newName));
 }
+
+
+///api/Download/{type}/{appId}/{id}

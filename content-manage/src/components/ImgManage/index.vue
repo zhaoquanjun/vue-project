@@ -18,6 +18,7 @@
         </el-aside>
         <el-main style="    overflow: hidden;">
             <img-list-header
+                 v-if="$store.state.dashboard.isContentwrite"
                 :count-pic="countPic"
                 :pic-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"

@@ -45,7 +45,8 @@ const dashboard = {
         authList:[], 
         buttonAuth:{},
         hasRules:false ,
-        curCode:""
+        curCode:"",
+        isContentwrite:false,
     },
     mutations: {
      
@@ -71,11 +72,16 @@ const dashboard = {
             console.log(data)
             commit("SETAPPID", data)
         },
-        async _getMenuListData({ commit }) {
+        async _getMenuListData({ commit,state }) {
            let { data } = await getSliderMenuList();
              let { result1, pathArr } = filterMenuListData(data);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
+            data && data.forEach(item=>{
+                if(item.code === "contentwrite"){
+                    state.isContentwrite=true;
+                }
+            })
             return data
         },
         async getAuthRoute({ commit, state }) {

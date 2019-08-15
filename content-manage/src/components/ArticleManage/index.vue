@@ -12,13 +12,13 @@
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
-               
                 @getList="getArticleListAsync"
                 @modifyNode="modifyNodeCategory"
             ></m-tree>
         </el-aside>
         <el-main>
             <content-header
+                v-if="$store.state.dashboard.isContentwrite"
                 :count="count"
                 :is-batch-header-show="isBatchHeaderShow"
                 :article-search-options="articleSearchOptions"
@@ -190,7 +190,7 @@ export default {
                                 this.$notify({
                                     customClass: "notify-success", //  notify-success ||  notify-error
                                     message: `删除成功!`,
-                                     showClose: false,
+                                    showClose: false,
                                     duration: 1000
                                 });
                                 this.getTreeAsync();
@@ -225,7 +225,7 @@ export default {
                             this.$notify({
                                 customClass: "notify-success", //  notify-success ||  notify-error
                                 message: `${message}成功!`,
-                                 showClose: false,
+                                showClose: false,
                                 duration: 1000
                             });
                             this.getArticleList();
@@ -261,7 +261,7 @@ export default {
                             this.$notify({
                                 customClass: "notify-success", //  notify-success ||  notify-error
                                 message: `${message}成功!`,
-                                 showClose: false,
+                                showClose: false,
                                 duration: 1000
                             });
                             this.getArticleList();
@@ -279,10 +279,9 @@ export default {
             this.newsIdList = idlist;
         },
         // 批量复制分类
-        async batchCopyNews(idlist,row) {
-            
-            if(idlist && idlist.length<=1){
-                this.row = row
+        async batchCopyNews(idlist, row) {
+            if (idlist && idlist.length <= 1) {
+                this.row = row;
             }
             idlist = idlist == null ? this.idsList : idlist;
             this.isInvitationPanelShow = true;
@@ -312,15 +311,13 @@ export default {
         },
         // 判断是 移动还是复制
         handOperateArticle() {
-        
             switch (this.rightPanelType) {
-              
                 case 1:
                     this.updateCategoryArticle();
                     break;
                 case 2:
                     this.copyArticle();
-                 
+
                     break;
             }
         },
@@ -342,7 +339,7 @@ export default {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
                     message: `移动成功!`,
-                    showClose:false,
+                    showClose: false,
                     duration: 1000
                 });
                 this.isInvitationPanelShow = false;
@@ -352,7 +349,7 @@ export default {
         },
         // 点击确定按钮 复制
         async copyArticle() {
-            console.log(this.row,'-------')
+            console.log(this.row, "-------");
             // if (!this.moveToClassiFy) {
             //     this.$notify({
             //         customClass: "notify-error", //  notify-success ||  notify-error
@@ -362,7 +359,9 @@ export default {
             //     });
             //     return;
             // }
-            let cateId = (this.moveToClassiFy && this.moveToClassiFy.id) || this.row.categoryId;
+            let cateId =
+                (this.moveToClassiFy && this.moveToClassiFy.id) ||
+                this.row.categoryId;
             let { data, status } = await articleManageApi.batchCopy(
                 cateId,
                 this.newsIdList
@@ -373,11 +372,14 @@ export default {
                 //     message: `复制成功!`,
                 //     duration: 1000
                 // });
-                if (Array.isArray(this.newsIdList) && this.newsIdList.length>1) {
+                if (
+                    Array.isArray(this.newsIdList) &&
+                    this.newsIdList.length > 1
+                ) {
                     this.$notify({
                         customClass: "notify-success", //  notify-success ||  notify-error
                         message: `批量复制成功!`,
-                         showClose: false,
+                        showClose: false,
                         duration: 1000
                     });
                 } else {
@@ -415,7 +417,7 @@ export default {
         //获取文章table列表
         async getArticleListAsync() {
             let { data } = await articleManageApi.getArticleList(
-                ( this.articleSearchOptions)
+                this.articleSearchOptions
             );
             this.articlePageResult = data;
         },

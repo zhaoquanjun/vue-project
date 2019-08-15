@@ -371,7 +371,7 @@ export default {
             activeName: "",
             activeName1: "",
             categoryName: [],
-            categoryId: [],
+            categoryId: [0],
             treeResult: null,
             detailData: {
                 name: "",
@@ -588,7 +588,7 @@ export default {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
                             this.$emit("changeSaveWay", false);
-
+                            this.$emit("handlerClickNewAdd")
                             this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;
@@ -620,7 +620,7 @@ export default {
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
-                    type: "success",
+                    cancelButtonText: "关闭",
                     customClass: "medium",
                     iconClass: "icon-success",
                     callback: async action => {
@@ -628,6 +628,7 @@ export default {
                             this.resetForm("contentForm");
                             this.resetDetail();
                             this.$emit("changeSaveWay", false);
+                            this.$emit("handlerClickNewAdd")
                             this.$route.query.isEditor = 0;
                             this.$refs.detailCheckTree.resetChecked();
                         } else {

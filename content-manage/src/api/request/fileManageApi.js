@@ -24,3 +24,16 @@ export const changeCategory = (categoryId, idList) => {
 export const rename = (id, newName) => {
     return ajaxRequest.put(`/api/File/${id}`, JSON.stringify(newName));
 }
+// 下载文件
+export const download = option => {
+
+    return ajaxRequest.put(`api/Download/${option.type}/${option.appId}/${option.id}`, JSON.stringify('123'));
+}
+export const switchIsTopStatus = (isTop, idList) => {
+    return ajaxRequest.put(`/api/File/SwitchIsTopStatus/${isTop}`, idList);
+}
+// 设置文件密码
+
+export const batchSetPwd = (params) => {
+    return ajaxRequest.put(`/api/File/BatchSetPwd`, params);
+}

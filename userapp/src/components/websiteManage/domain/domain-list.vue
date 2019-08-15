@@ -162,8 +162,7 @@
                             <el-col :span="7" v-if="active >= 1">
                                 <div>
                                     <div class="explain-item">
-                                        使用“一键解析”自动完成域名解析或前往阿里云控制台
-                                        自行设置解析
+                                        使用“一键解析”自动完成域名解析或前往阿里云控制台自行设置解析
                                     </div>
                                     <div class="explain-item islink">如何进行域名解析？</div>
                                     <button

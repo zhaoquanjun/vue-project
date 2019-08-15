@@ -133,7 +133,7 @@ export default {
         getSiteId(siteId) {
             this._getCdnDomainList(siteId);
             this.curSiteId = siteId;
-            Cookies("SiteId", siteId);
+            
         },
         // 选择切换网站
         chooseWebsite(siteId) {
@@ -163,8 +163,16 @@ export default {
          * 获取域名列表
          */
         async _getCdnDomainList(siteId) {
+              const loading = this.$loading({
+                lock: true,
+                spinner: "loading-icon",
+                background: "rgba(255, 255, 255, 0.75)"
+            });
             siteId = siteId || this.curSiteId;
-            let { data } = await domainApi.getCdnDomainList(siteId);
+            let { data,status } = await domainApi.getCdnDomainList(siteId);
+            if(status ===200){
+                loading.close()
+            }
             this.domainListData = data;
 
             this.domainAmount = data.length;

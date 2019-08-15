@@ -51,7 +51,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column width="200" label="操作">
+            <el-table-column width="200" label="操作"  v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)"><i class="iconfont iconcaozuo"></i></span>

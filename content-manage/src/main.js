@@ -12,6 +12,8 @@ import "@/directive/index.js"
 import './icons';
 import VueQuillEditor from 'vue-quill-editor'
 import uploader from 'vue-simple-uploader'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 Vue.use(uploader)
 Vue.use(VueQuillEditor)
 Vue.config.productionTip = false;

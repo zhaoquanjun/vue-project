@@ -18,6 +18,7 @@
         </el-aside>
         <el-main>
             <content-header
+                 v-if="$store.state.dashboard.isContentwrite"
                 :count="count"
                 :article-search-options="productSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"

@@ -220,9 +220,9 @@ export default {
                 let ele = eles[i];
                 ele.style.background = "";
             }
-            if (targetNode.id) {
-                ev.srcElement.style.background = "#0595e6";
-            }
+          
+                ev.srcElement.style.background = "rgba(224,250,255,0.5)";
+          
         },
         // 添加分类  0720
         create(ev, node, data) {
