@@ -1,0 +1,23 @@
+.ym-form-item__error {
+    color: #262626;
+    padding-top: 8px;
+    &::before {
+        display: inline-block;
+        content: "";
+        width: 13px;
+        height: 13px;
+        vertical-align: bottom;
+        padding-right: 8px;
+        background: url("~img/jian-icon.png") no-repeat center;
+        background-size: contain;
+    }
+}
+
+// loading
+.loading-icon {
+    display: inline-block;
+    width: 50px;
+    height: 52px;
+    background: url("~img/loading.gif") no-repeat center;
+    background-size: contain;
+}
