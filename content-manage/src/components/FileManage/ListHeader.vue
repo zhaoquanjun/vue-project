@@ -24,7 +24,7 @@
                         size="small"
                         v-model="fileTypeLabel"
                         placeholder="请选择"
-                        @change="changeSelected"
+                        @change="changeType"
                     >
                         <el-option
                             v-for="item in fileTypeOptions"
@@ -152,40 +152,45 @@ export default {
             topValue: "",
             fileTypeOptions: [
                 {
-                    value: "CreateTime",
+                    value: "",
                     label: "全部"
                 },
                 {
-                    value: "FileSize",
+                    value: "Document",
                     label: "文档"
                 },
                 {
-                    value: "FileName",
+                    value: "Image",
                     label: "图片"
                 },
                 {
-                    value: "1",
+                    value: "Video",
                     label: "视频"
                 },
                 {
-                    value: "2",
+                    value: "Audio",
                     label: "音乐"
                 },
                 {
-                    value: "22",
+                    value: "Rar",
                     label: "压缩包"
                 },
                 {
-                    value: "File3Name",
+                    value: "Others",
                     label: "其他"
                 }
             ],
-            fileTypeLabel: "CreateTime"
+            fileTypeLabel: ""
         };
     },
     methods: {
         changeSelected(value) {
+            
             this.picSearchOptions.orderByType = value;
+            this.getPicList();
+        },
+        changeType(value){
+            this.picSearchOptions.fileExtensionType = value;
             this.getPicList();
         },
         getPicList() {

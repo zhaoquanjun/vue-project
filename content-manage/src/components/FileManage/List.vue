@@ -12,7 +12,8 @@
 
             <el-table-column label="文件名称">
                 <template slot-scope="scope">
-                    <img :src="scope.row | fileCover" class="cover" />
+                    <!--  <img :src="scope.row | fileCover" class="cover" /> -->
+                    <img src="../../../static/images/content-icon/file-cover.png" class="cover" />
                     <span
                         class="img-name"
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
@@ -33,7 +34,7 @@
             <el-table-column prop="downloadCount" label="下载次数"></el-table-column>
             <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作" width="250">
+            <el-table-column label="操作" width="250"  v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn edit-icon" @click="handleEditor(scope.row)">

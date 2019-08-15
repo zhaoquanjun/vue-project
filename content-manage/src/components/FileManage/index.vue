@@ -20,6 +20,7 @@
 
         <el-main>
             <list-header
+                v-if="$store.state.dashboard.isContentwrite"
                 :count-pic="countPic"
                 :display-name="displayName"
                 :pic-search-options="picSearchOptions"
@@ -213,7 +214,7 @@ export default {
                 categoryIdList: [],
                 keyword: "",
                 isDelete: false,
-                downloadCount: null
+                fileExtensionType:null,
             },
             editorOrMove: true, // false:move | true:editor
             useStorage: {},
@@ -382,7 +383,7 @@ export default {
         },
         async batchSetPwd(ids) {
             let option = {
-                idList: ids,
+                idList:[ids],
                 pwd: ""
             };
             let { data, status } = await fileManageApi.batchSetPwd(option);
