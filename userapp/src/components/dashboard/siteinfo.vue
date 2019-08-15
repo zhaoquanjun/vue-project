@@ -23,7 +23,10 @@
             <div class="siteManage" @click="toSiteManage(item.siteId)">
               <div class="arrowLeft"></div>网站管理
             </div>
-            <div class="siteManage siteManageRight" @click="toDesign(item.siteId)">
+            <div
+              class="siteManage siteManageRight"
+              @click="toDesign(item.siteId, item.theme, item.font)"
+            >
               进入设计
               <div class="arrowRight"></div>
             </div>
@@ -260,8 +263,8 @@ export default {
       this.createShow = false;
     },
     // 跳转至设计器
-    toDesign(siteId) {
-      window.location.href = `${designerUrl}?siteId=${siteId}&theme=${this.theme}`;
+    toDesign(siteId, themeColor, themeFont) {
+      window.location.href = `${designerUrl}?siteId=${siteId}&themeColor=${themeColor}&themeFont=${themeFont}`;
     },
     // 跳转至我的网站
     toSiteManage(siteId) {
@@ -387,6 +390,7 @@ export default {
         float: left;
         margin-top: 24px;
         margin-left: 21px;
+        cursor: pointer;
         .siteImgBackground {
           width: 100%;
           height: 100%;

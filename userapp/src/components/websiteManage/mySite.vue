@@ -204,7 +204,8 @@ export default {
       siteImage: "",
       siteId: 0,
       domain: "",
-      theme: "",
+      themeColor: "",
+      themeFont: "",
       secondDomain: "",
       lastPublishedTime: "",
       language: "",
@@ -237,7 +238,7 @@ export default {
   methods: {
     // 跳转至设计器
     toDesign() {
-      window.location.href = `${designerUrl}?siteId=${this.siteId}&theme=${this.theme}`;
+      window.location.href = `${designerUrl}?siteId=${this.siteId}&themeColor=${this.themeColor}&themeFont=${this.themeFont}`;
     },
     // 获取siteId
     getSiteId(siteId) {
@@ -253,7 +254,8 @@ export default {
       if (status === 200) {
         this.siteName = data.siteName;
         this.siteImage = data.siteImage;
-        this.theme = data.theme;
+        this.themeColor = data.theme;
+        this.themeFont = data.font;
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
         this.lastPublishedTime = formatDateTime(

@@ -151,10 +151,7 @@ export default {
     ContentNum,
     recommend
   },
-  created() {
-    this.getDashboardData();
-    this.getAppExpandInfo();
-  },
+  created() {},
   methods: {
     /**
      * 获取dashboard信息
@@ -233,7 +230,15 @@ export default {
       let userName = this.$store.state.user.userInfo.userName;
       let phone = this.$store.state.user.userInfo.phone;
       return userName ? userName : phone;
+    },
+    appId() {
+      this.getDashboardData();
+      this.getAppExpandInfo();
+      return this.$store.state.dashboard.appId;
     }
+  },
+  watch: {
+    appId() {}
   }
 };
 </script>

@@ -206,9 +206,13 @@ export default {
     },
     //显示切换app弹框
     changeApp() {
-      this.changeAppShow = true;
-      // this.getAppName();
-      this.getAppList();
+      if (this.changeAppShow) {
+        this.changeAppShow = false;
+      } else {
+        this.getCurApp();
+        this.getAppList();
+        this.changeAppShow = true;
+      }
     },
     // 判断是否过期
     isExpired(item) {
