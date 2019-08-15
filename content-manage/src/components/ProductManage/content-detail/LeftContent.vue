@@ -588,7 +588,7 @@ export default {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
                             this.$emit("changeSaveWay", false);
-
+                            this.$emit("handlerClickNewAdd")
                             this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;
@@ -628,6 +628,7 @@ export default {
                             this.resetForm("contentForm");
                             this.resetDetail();
                             this.$emit("changeSaveWay", false);
+                            this.$emit("handlerClickNewAdd")
                             this.$route.query.isEditor = 0;
                             this.$refs.detailCheckTree.resetChecked();
                         } else {

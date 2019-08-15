@@ -32,7 +32,7 @@
                 <div>
                     <el-row>
                         <el-col :span="13" :offset="3">
-                            <leftContent ref="articleContent" @changeSaveWay="changeSaveWay" />
+                            <leftContent ref="articleContent" @changeSaveWay="changeSaveWay" @handlerClickNewAdd="handlerClickNewAdd"/>
                         </el-col>
                         <el-col :span="6" style="margin-left: 16px;max-width:345px;min-width:345px">
                             <RightContent :fileList="fileList" ref="articleRight" />
@@ -108,6 +108,9 @@ export default {
         },
         changeSaveWay(isEdit) {
             this.isEdit = isEdit;
+        },
+        handlerClickNewAdd(){
+            this.fileList=[];
         }
     },
     mounted() {
