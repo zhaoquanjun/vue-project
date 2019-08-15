@@ -13,7 +13,7 @@ let authorityUrl = "http://api.identity.console.wezhan.cn";
 let redirectUrl = "http://content.console.wezhan.cn/callback";
 let logoutRedirectUri = "http://content.console.wezhan.cn/index.html";
 let silentRedirectUri = 'http://content.console.wezhan.cn/static/silent-renew.html';
-let clientId = 'content.api';
+let clientId = 'produce.api';
 let scope = "openid profile dashboard.api content.api designer.api produce.api";
 export let siteDomain = "content.console.wezhan.cn";
 // 个人中心
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'development') {
     redirectUrl = "http://localhost:8081/callback";
     logoutRedirectUri = "http://content.console.wezhan.cn/index.html";
     silentRedirectUri = 'http://localhost:8081/static/silent-renew.html';
-    clientId = 'dev.content.api';
+    clientId = 'dev.produce.api';
     scope = "openid profile dashboard.api content.api designer.api produce.api";
 };
 const enbironmemy = {
