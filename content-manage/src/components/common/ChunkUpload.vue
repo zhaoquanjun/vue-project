@@ -2,9 +2,9 @@
     <div>
         <el-row class="upload-head" type="flex" justify="space-between">
             <el-col :span="12">
-                <span style="padding-right:8px">上传至:</span>
+                <span style="padding-right:16px">上传至</span>
                 <SelectTree
-                    style="width:140px"
+                    class="chunkUpload-select-tree"
                     ref="treeX"
                     :tree-result="treeResult"
                     node-key="id"
@@ -25,7 +25,7 @@
             @file-error="onFileError"
         >
             <uploader-unsupport></uploader-unsupport>
-            <uploader-list></uploader-list>
+            <uploader-list :uploadType="uploadType"></uploader-list>
             <uploader-drop>
                 <span>将{{displayName}}拖拽到此处或</span>
                 <uploader-btn :attrs="attrs">点击选择{{displayName}}</uploader-btn>
@@ -56,6 +56,7 @@ export default {
         return {
             categoryId: 0,
             options: {
+                uploadType:this.uploadType,
                 target: null,
                 testChunks: true,
                 chunkSize: 2048000, //分块大小,
@@ -183,16 +184,16 @@ export default {
     },
     watch: {
         fileList() {
-            this.$nextTick(() => {
-                let eles = document.getElementsByClassName(
-                    "uploader-file-icon"
-                );
-                for (let i = 0; i < eles.length; i++) {
-                    let ele = eles[i];
-                    ele.style.backgroundImage =
-                        "url('http://img5.imgtn.bdimg.com/it/u=150565144,593293567&fm=26&gp=0.jpg')";
-                }
-            });
+            // this.$nextTick(() => {
+            //     let eles = document.getElementsByClassName(
+            //         "uploader-file-icon"
+            //     );
+            //     for (let i = 0; i < eles.length; i++) {
+            //         let ele = eles[i];
+            //         ele.style.backgroundImage =
+            //             "url('http://img5.imgtn.bdimg.com/it/u=150565144,593293567&fm=26&gp=0.jpg')";
+            //     }
+            // });
         }
     }
 };
@@ -200,13 +201,13 @@ export default {
 
 <style  scoped>
 .uploader-list /deep/ .uploader-file {
-    height: 80px;
-    line-height:1;
+    height: 54px;
+    line-height: 1;
     padding: 8px;
 }
 .uploader-list /deep/ .uploader-file-icon {
-    width: 113px;
-    height: 80px;
+    /* width: 113px;
+    height: 80px; */
     line-height: 1;
     margin: 0;
 }
@@ -218,25 +219,36 @@ export default {
     border: 1px solid #eee;
 }
 /* zxb begin */
-.uploader-list /deep/ .uploader-file-status,.uploader-list /deep/ .uploader-file-actions{
+.uploader-list /deep/ .uploader-file-status,
+.uploader-list /deep/ .uploader-file-actions {
     float: right;
     text-align: right;
     padding-right: 16px;
     display: flex;
     align-items: center;
 }
-.uploader-list /deep/ .uploader-file{
+.uploader-list /deep/ .uploader-file {
     border: none;
 }
-.uploader-list /deep/ .uploader-file-progress{
+.uploader-list /deep/ .uploader-file-progress {
     background: #fff;
 }
-.uploader-list /deep/ .uploader-file-name{
+.uploader-list /deep/ .uploader-file-name {
     display: flex;
     align-items: center;
 }
+.chunkUpload-select-tree /deep/ .el-input--small .el-input__inner{
+    height: 40px;
+    line-height: 40px;
+    border-color: #A1A8B1;
+    font-size: 14px;
+}
 </style>
 <style scoped lang="scss">
+.chunkUpload-select-tree{
+    padding-top: 20px;
+    width: 214px;
+}
 .uploader-example {
     padding: 15px;
     min-height: 320px;
@@ -251,14 +263,20 @@ export default {
         // top: -40px;
         margin-top: 16px;
         padding: 0;
-        height: 100px;
-        border: 1px dashed #eee;
+        height: 68px;
+        background: rgba(245, 245, 245, 1);
+        border-radius: 2px;
+        border: 1px dashed rgba(215, 215, 215, 1);
         text-align: center;
-        line-height: 100px;
+        line-height: 68px;
         .uploader-btn {
             // border: 1px solid #09cceb;
             border: none;
             color: #09cceb;
+            padding-left: 0;
+            &:hover{
+                background: transparent;
+            }
         }
     }
 }

@@ -2,14 +2,15 @@
     <div>123</div>
 </template>
 <script>
-import * as videoManageApi from "@/api/request/fileManageApi";
+import {download} from "@/api/request/fileManageApi";
 
 export default {
     mounted(){
         let query;
+        this._download()
     },
     methods:{
-          async download(row){
+          async _download(row){
             let option ={
                 id:row.id,
                 type:"File",

@@ -22,7 +22,7 @@
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-            <el-table-column prop label="文件类型"></el-table-column>
+            <el-table-column prop="fileExtensionTypeStr" label="文件类型"></el-table-column>
             <el-table-column prop="categoryName" label="分类"></el-table-column>
 
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
@@ -34,7 +34,7 @@
             <el-table-column prop="downloadCount" label="下载次数"></el-table-column>
             <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作" width="250"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn edit-icon" @click="handleEditor(scope.row)">
@@ -138,7 +138,7 @@ export default {
             test: require("../../../static/images/move.png"),
             maxSize: 0,
             currentUsage: 0,
-            prograss:0
+            prograss: 0
         };
     },
     filters: {
@@ -162,16 +162,16 @@ export default {
         });
     },
     methods: {
-        bytesToSize(bytes,flag) {
+        bytesToSize(bytes, flag) {
             if (bytes === 0) return "0 B";
             let k = 1024;
             let sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
             let i = Math.floor(Math.log(bytes) / Math.log(k));
             let b = bytes / Math.pow(k, i);
-            if(flag===1){
-                b= b.toFixed(2)
+            if (flag === 1) {
+                b = b.toFixed(2);
             }
-            let storage =b + sizes[i];
+            let storage = b + sizes[i];
             return storage;
         },
         /**
@@ -195,7 +195,14 @@ export default {
          * 下载
          */
         async download(row) {
-            this.$emit("download", row);
+            this.$router.push({
+                path: "/content/download",
+                query: {
+                    id: row.id,
+                    type: "File",
+                    appId: this.$store.state.dashboard.appId
+                }
+            });
         },
         change(index) {
             this.fullOssUrl = this.imgList[index].fullOssUrl;
@@ -249,8 +256,12 @@ export default {
     watch: {
         useStorage() {
             this.maxSize = this.bytesToSize(this.useStorage.maxSize);
-            this.currentUsage = this.bytesToSize(this.useStorage.currentUsage,1);
-            this.prograss = this.useStorage.currentUsage/this.useStorage.maxSize;
+            this.currentUsage = this.bytesToSize(
+                this.useStorage.currentUsage,
+                1
+            );
+            this.prograss =
+                this.useStorage.currentUsage / this.useStorage.maxSize;
         }
     }
 };
