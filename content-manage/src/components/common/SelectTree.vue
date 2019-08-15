@@ -241,7 +241,7 @@ ul li >>> .el-tree .el-tree-node__content {
     height: auto;
     padding: 0 20px;
     display: block;
-    width: 150px;
+    /* width: 150px; */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

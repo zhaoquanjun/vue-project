@@ -34,6 +34,22 @@
                         ></el-option>
                     </el-select>
                 </span>
+                <span>置顶</span>
+                <span class="select-sort">
+                    <el-select
+                        size="small"
+                        v-model="topValue"
+                        placeholder="请选择"
+                        @change="changeStickStatus"
+                    >
+                        <el-option
+                            v-for="item in topOptions"
+                            :key="item.topValue"
+                            :label="item.topLabel"
+                            :value="item.topValue"
+                        ></el-option>
+                    </el-select>
+                </span>
                 <span>排序</span>
                 <span class="select-sort">
                     <el-select
@@ -73,22 +89,17 @@
                 <div>
                     <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
                     <button class="btn-small btn-lightblue-notboard" @click="batchDownLoad">下载</button>
-                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
-                      <el-dropdown trigger="click" @command="handleCommand">
+
+                    <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard">
                                 <svg-icon icon-class="across-dot"></svg-icon>
                             </button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <!-- <span size="small" @click="batchclassifySet">移动</span> -->
-                            <el-dropdown-item command="move">移动</el-dropdown-item>
-                            <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
                             <el-dropdown-item command="top">置顶</el-dropdown-item>
-                            <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                            <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
-                            <el-dropdown-item command="permission">访问权限</el-dropdown-item>
+                            <el-dropdown-item command="delete">删除</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -108,18 +119,37 @@ export default {
             options: [
                 {
                     value: "CreateTime",
-                    label: "创建时间"
+                    label: "上传时间"
+                },
+                {
+                    value: "FileName",
+                    label: "文件名称"
+                },
+                {
+                    value: "DownloadCount",
+                    label: "下载次数"
                 },
                 {
                     value: "FileSize",
                     label: "文件大小"
-                },
-                {
-                    value: "FileName",
-                    label: "文件名"
                 }
             ],
             orderByLabel: "CreateTime",
+            topOptions: [
+                {
+                    topValue: "",
+                    topLabel: "全部"
+                },
+                {
+                    topValue: 1,
+                    topLabel: "是"
+                },
+                {
+                    topValue: 0,
+                    topLabel: "否"
+                }
+            ],
+            topValue: "",
             fileTypeOptions: [
                 {
                     value: "CreateTime",
@@ -167,6 +197,15 @@ export default {
         switchUploadBoxShowStatus() {
             this.$emit("switchUploadBoxShowStatus");
         },
+        changeStickStatus(value) {
+            if (isNaN(parseInt(value))) {
+                value = null;
+            } else {
+                value = !!value;
+            }
+            this.picSearchOptions.isTop = value;
+            this.getPicList();
+        },
         switchIsDesc(flag) {
             if (flag === "asc") {
                 this.ascSort = true;
@@ -186,22 +225,19 @@ export default {
         batchDelete() {
             this.$emit("batchDelete");
         },
-        batchDownLoad(){
+        batchDownLoad() {
             this.$emit("batchDownLoad");
         },
-         handleCommand(command) {
+        handleCommand(command) {
             switch (command) {
-                case "move":
-                    this.batchclassifySet();
-                    break;
                 case "top":
-                    this.batchTop(2, false);
+                    this.$emit("batchTop", true);
                     break;
                 case "cancelTop":
-                    this.batchTop(2, true);
+                    this.$emit("batchTop", false);
                     break;
-                case "permission":
-                    this.batchViewAuth();
+                case "delete":
+                    this.batchDelete();
                     break;
             }
         }

@@ -34,14 +34,14 @@
             width: 66px;
             height: 32px;
             line-height: 32px;
-            background: rgba(0, 193, 222, 1);
+            background: #09CCEB;
             margin-right: 8px;
             color: #fff;
             text-align: center;
         }
         .cancel{
             color: #262626;
-            background:rgba(238,238,238,1);
+            background:#E5E5E5;
         }
     }
 }
@@ -132,11 +132,12 @@
     display: flex;
     justify-content: space-between;
     .iconfont{
-        font-size: 23px;
+        font-size: 18px;
     }
     .handle-btn {
         width: 23px;
         height: 23px;
+        position: relative;
     }
     .move-btn {
         background: url("~img/move.png") no-repeat center;
@@ -161,4 +162,21 @@
 // icon 统一颜色
 .iconyiwen{
     color: #A1A8B1
+}
+
+.ellipsis{
+    display: inline-block;
+    overflow: hidden;/*超出部分隐藏*/
+    text-overflow:ellipsis;/* 超出部分显示省略号 */
+    white-space: nowrap;/*规定段落中的文本不进行换行 */
+    
+}
+
+// loading
+.loading-icon {
+    display: inline-block;
+    width: 50px;
+    height: 52px;
+    background: url("~img/loading.gif") no-repeat center;
+    background-size: contain;
 }

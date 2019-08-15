@@ -71,6 +71,14 @@ export const defaultRoutes = [
                 },
             },
             {
+                path: "download",
+                name: "download",
+                component: () => import('@/components/FileManage/downloadFile.vue'),
+                meta: {
+                    title: "下载文件",
+                },
+            },
+            {
                 path: "video",
                 name: "video",
                 component: () => import('@/views/content-manage/video-manage.vue'),

@@ -8,9 +8,9 @@
             <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree
                 :tree-result="treeResult"
-                :pic-search-options="picSearchOptions"
+                :list-options="picSearchOptions"
                 :isexpand="true"
-                @getPicList="getPicList"
+                @getList="getPicList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
@@ -26,23 +26,26 @@
                 :is-batch-header-show="isBatchHeaderShow"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 @getPicList="getPicList"
-                @batchMove="batchMove"
+                @editor="editor"
                 @batchDelete="batchDelete"
+                @batchTop="switchIsTopStatus"
+                @batchMove="batchMove"
             ></list-header>
 
             <el-main>
-                <component
-                    :is="componentId"
+                <List
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
+                    :use-storage="useStorage"
                     @getPicList="getPicList"
-                    @changeCategory="changeCategoryPic"
-                    @rename="renamePic"
+                    @changeCategory="changeCategory"
+                    @rename="rename"
                     @batchRemove="batchRemovePic"
-                    @moveClassify="moveClassify"
+                    @editor="editor"
                     @handleSelectionChange="handleSelectionChange"
-                ></component>
+                    @switchIsTopStatus="switchIsTopStatus"
+                ></List>
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -56,40 +59,62 @@
                     @closeRightPanel="closeRightPanel"
                     :tree-result="treeResult"
                 >
-                    <span slot="title-text">编辑文件</span>
-                    <el-form
-                        :model="ruleForm"
-                        ref="ruleForm"
-                        label-width="70px"
-                        class="demo-ruleForm"
-                    >
-                        <el-form-item label="文件名称" prop="name">
-                            <el-input v-model="ruleForm.name"></el-input>
-                        </el-form-item>
-                        <el-form-item label="文件类型" prop="delivery">
-                            <SelectTree
-                                :categoryName="curImgInfo.categoryName"
-                                :tree-result="treeResult"
-                                @chooseNode="chooseNode"
-                                :isexpand="true"
-                            ></SelectTree>
-                        </el-form-item>
-                        <el-form-item label="下载链接">
-                            <div class="download-link">
-                                <span>www.baodu.com</span>
-                                <button class="btn-small btn-bglightblue">复制</button>
-                            </div>
-                        </el-form-item>
-                        <el-form-item label="下载密码">
-                            <el-switch v-model="ruleForm.delivery"></el-switch>
-                            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-                        </el-form-item>
-                    </el-form>
+                    <template v-if="editorOrMove">
+                        <span slot="title-text">编辑文件</span>
+                        <el-form
+                            :model="ruleForm"
+                            ref="ruleForm"
+                            label-width="70px"
+                            class="file-ruleForm"
+                            @submit.native.prevent
+                        >
+                            <el-form-item label="文件名称" prop="name">
+                                <el-input v-model="ruleForm.name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="文件类型" prop="delivery">
+                                <SelectTree
+                                    :categoryName="curRowData.categoryName"
+                                    :tree-result="treeResult"
+                                    @chooseNode="chooseNode"
+                                    :isexpand="true"
+                                ></SelectTree>
+                            </el-form-item>
+                            <el-form-item label="下载链接">
+                                <div class="download-link">
+                                    <span class="ellipsis download-url">{{ruleForm.link}}</span>
+                                    <button class="btn-small btn-bglightblue">复制</button>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="下载密码">
+                                <el-input
+                                    type="password"
+                                    v-model="ruleForm.pass"
+                                    autocomplete="off"
+                                ></el-input>
+                            </el-form-item>
+                        </el-form>
 
-                    <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryPic" class="sure">确定</button>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
-                    </div>
+                        <div slot="footer" class="pannle-footer">
+                            <button @click="updateCategoryPic" class="sure">确定</button>
+                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <span slot="title-text">编辑文件</span>
+                        <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
+                        <SelectTree
+                            :categoryName="curRowData.categoryName"
+                            :tree-result="treeResult"
+                            @chooseNode="chooseNode"
+                            :isexpand="true"
+                        ></SelectTree>
+                        <div slot="footer" class="pannle-footer">
+                            <button @click="updateCategoryPic" class="sure">确定</button>
+                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        </div>
+                    </template>
                 </right-pannel>
             </el-main>
             <el-footer>
@@ -131,6 +156,7 @@ import SelectTree from "_c//common/SelectTree";
 import RightPannel from "_c//ImgManage/RightPannel";
 import * as videoManageApi from "@/api/request/fileManageApi";
 import * as videoCategoryManageApi from "@/api/request/fileCategoryManageApi";
+import { getStorageUsage } from "@/api/request/contentCommonApi.js"
 import environment from "@/environment/index.js";
 
 export default {
@@ -146,15 +172,15 @@ export default {
         return {
             ruleForm: {
                 name: "",
-                delivery: false,
-                pass: ""
+                pass: "",
+                link: ""
             },
             displayName: "文件",
             nodeData: "", // 分类节点的名称
             componentId: "List",
             isImgList: false,
             countPic: 0,
-            curImgInfo: {},
+            curRowData: {},
             moveToClassiFy: "",
             categoryName: "", //当前选中的分类名字
             idsList: [],
@@ -169,26 +195,43 @@ export default {
                 pageSize: 10,
                 pageIndex: 1,
                 orderByType: 1,
+                isTop: null,
                 isDescending: true,
                 categoryIdList: [],
                 keyword: "",
                 isDelete: false
-            }
+            },
+            editorOrMove: true, // false:move | true:editor
+            useStorage:{}
         };
     },
     mounted() {
         this.getPicList();
         this.getTree();
+        this.getStorageUsage()
     },
     methods: {
+        // 获取使用的内容
+        async getStorageUsage(){
+            let {data,status} = await getStorageUsage("File");
+            this.useStorage = data;
+        },
         // 获取列表
         async getPicList(node) {
+            const loading = this.$loading({
+                lock: true,
+                spinner: "loading-icon",
+                background: "rgba(255, 255, 255, 0.75)"
+            });
             if (node) {
                 this.nodeData = node;
             }
-            let { data } = await videoManageApi.getPicList(
+            let { data, status } = await videoManageApi.getPicList(
                 this.picSearchOptions
             );
+            if (status === 200) {
+                loading.close();
+            }
             this.imgPageResult = data;
         },
         // 批量删除列表
@@ -197,9 +240,6 @@ export default {
                 `删除后，网站中引用的文件数据将同步删除，同时文件将被移动到回收站，是否确认删除？`,
                 "提示",
                 {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
                     customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
@@ -211,9 +251,11 @@ export default {
                             } = await videoManageApi.batchRemove(true, idlist);
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    message: `删除成功`,
+                                    duration: 1500,
+                                    showClose: false
                                 });
                                 this.getPicList();
                             }
@@ -231,44 +273,47 @@ export default {
             this.picSearchOptions.categoryIdList = [];
             this.getPicList();
         },
-
-        async changeCategoryPic(categoryId, idList) {
+        // 移动分类
+        async changeCategory(categoryId, idList) {
             let { data, status } = await videoManageApi.changeCategory(
                 categoryId,
                 idList
             );
             if (status == 200) {
-                this.$message({
-                    type: "success",
-                    message: "移动成功!"
+            
+                this.$notify({
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `移动成功`,
+                    duration: 1500,
+                    showClose: false
                 });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
             }
         },
-        async renamePic(id, newname) {
+        // 重命名
+        async rename(id, newname) {
             await videoManageApi.rename(id, newname);
             this.getPicList();
         },
+        // 获取树节点
         async getTree() {
             let { data } = await videoCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
         },
+        // 创建新的分类
         async newCategory(entity) {
             console.log(entity);
             await videoCategoryManageApi.create(entity);
             this.getTree();
         },
+        // 删除分类
         async batchRemoveCategory(idList) {
             this.$confirm(
                 "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
                 "提示",
                 {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
@@ -280,38 +325,61 @@ export default {
                             );
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    message: `删除成功`,
+                                    duration: 1500,
+                                    showClose: false
                                 });
                             }
-                        } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
                         }
                     }
                 }
             );
         },
+        // 重命名分类名称
         async renameCategory(id, newName) {
             await videoCategoryManageApi.rename(id, newName);
             this.getTree();
         },
+        // 树节点移动
         async modifyNodeCategory(id, parentId, idOrderByArr) {
             await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTree();
         },
-        // 点击上传图片
+        // 置顶
+        async switchIsTopStatus(isTop, id) {
+            let idList = id || this.idsList;
+            let msg = !isTop ? "取消置顶" : "置顶";
+            this.$confirm(`您确认要${msg}所选文件吗？`, "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                iconClass: "icon-warning",
+                callback: async action => {
+                    if (action === "confirm") {
+                        await videoManageApi.switchIsTopStatus(isTop, idList);
+                        this.getPicList();
+                    }
+                }
+            });
+        },
+
+        // 点击上传文件
         switchUploadBoxShowStatus(uploadImg) {
             this.dialogTableVisible = !this.dialogTableVisible;
             if (uploadImg === "uploadImg") this.getPicList();
         },
-        moveClassify(b, data) {
+        // 编辑文件
+        editor(b, data) {
+            this.editorOrMove = true;
             this.isInvitationPanelShow = b;
-            this.curImgInfo = data;
+            this.curRowData = data;
             console.log(data, "data");
+            this.ruleForm = {
+                name: data.title,
+                pass: data.pwd || "",
+                link: data.fullOssUrl
+            };
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
@@ -329,34 +397,26 @@ export default {
                 this.idsList.push(item.id);
             });
             this.selectedImg = list;
-            this.$emit("getImgInfo", list);
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
-            if (!this.moveToClassiFy) {
-                this.$message({
-                    type: "error",
-                    message: "请选择移动的分类!"
-                });
-                return;
+            let categoryId =
+                this.moveToClassiFy.id || this.curRowData.categoryId; // 分类ID
+            if (!!editorOrMove) {
+                this.rename(this.curRowData.id, this.ruleForm.name);
             }
-            let categoryId = this.moveToClassiFy.id;
-            let idList = [];
-            if (this.idsList.length > 0) {
-                idList = this.idsList;
-            } else {
-                idList.push(this.curImgInfo.id);
-            }
-            this.changeCategoryPic(categoryId, idList);
+
+            this.changeCategory(categoryId, [this.curRowData.id]);
         },
         // 取消移动分类 关闭panel
         cancelUpdateCategor() {
             this.isInvitationPanelShow = false;
-            this.moveToClassiFy = this.curImgInfo = "";
+            this.moveToClassiFy = this.curRowData = "";
         },
         //批量移动
         batchMove() {
             this.isInvitationPanelShow = true;
+            this.editorOrMove = false;
         },
         //批量删除
         batchDelete() {
@@ -378,13 +438,18 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/contentDetail";
+.file-ruleForm {
+    padding: 32px 0;
+}
 .download-link {
     overflow: hidden;
     background-color: #eee;
     display: flex;
     justify-content: space-between;
-    padding-left:16px;
-
+    padding-left: 16px;
+    .download-url {
+        width: 80%;
+    }
 }
 </style>
 

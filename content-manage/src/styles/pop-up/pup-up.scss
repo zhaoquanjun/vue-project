@@ -108,8 +108,12 @@
     max-width: 330px;
     width: auto;
     min-width: 100px;
+    .el-notification__title{
+        
+    }
     .el-notification__content{
         color: #fff;
+        margin: 0;
     }
     .el-notification__closeBtn{
         color: #fff;

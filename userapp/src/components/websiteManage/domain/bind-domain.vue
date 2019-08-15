@@ -211,13 +211,7 @@ export default {
 };
 </script>
 <style>
-.loading-icon {
-    display: inline-block;
-    width: 50px;
-    height: 52px;
-    background: url("~img/loading.gif") no-repeat center;
-    background-size: contain;
-}
+
 </style>
 
 <style scoped lang="scss">

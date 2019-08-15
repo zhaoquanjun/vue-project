@@ -25,14 +25,14 @@
             @file-error="onFileError"
         >
             <uploader-unsupport></uploader-unsupport>
-            <uploader-drop>
-                <p>将{{displayName}}拖到此处，或</p>
-                <br />
-                <uploader-btn :attrs="attrs">选择{{displayName}}</uploader-btn>
-                <uploader-btn :directory="true">选择文件夹</uploader-btn>
-            </uploader-drop>
             <uploader-list></uploader-list>
+            <uploader-drop>
+                <span>将{{displayName}}拖拽到此处或</span>
+                <uploader-btn :attrs="attrs">点击选择{{displayName}}</uploader-btn>
+                <!-- <uploader-btn :directory="true">选择文件夹</uploader-btn> -->
+            </uploader-drop>
         </uploader>
+        <button class="btn-small btn-bglightblue" @click="upload">开始上传</button>
     </div>
 </template>
 
@@ -108,7 +108,10 @@ export default {
             },
             attrs: {
                 accept: this.accept //'video/*'
-            }
+            },
+            fileList: [],
+            img: require("../../assets/avatar.jpeg"),
+            successFlieList: []
         };
     },
     created() {
@@ -123,21 +126,20 @@ export default {
             this.$emit("getList");
         },
         onFileAdded(file) {
+            this.fileList.push(file);
+            console.log(file, "file");
             this.panelShow = true;
             //  file.resume();
             this.computeMD5(file);
         },
-        uploadStart(file) {
-
-        },
+        uploadStart(file) {},
         computeMD5(file) {
             console.log(file, "00090000");
-            let url = URL.createObjectURL(file.file)
+            let url = URL.createObjectURL(file.file);
             var audioElement = new Audio(url);
-            console.log(audioElement)
+            console.log(audioElement);
             var duration;
             audioElement.addEventListener("loadedmetadata", function(_event) {
-                alert(123)
                 duration = audioElement.duration;
                 console.log(duration + "s");
             });
@@ -158,6 +160,7 @@ export default {
                         time} ms,自动开始上传,\n 香槟boy 监听事件在此触发`
                 );
                 file.uniqueIdentifier = md5;
+                this.successFlieList.push(file);
                 // file.resume();
             };
 
@@ -171,12 +174,68 @@ export default {
         chooseNode(data) {
             this.upload2Category = data;
             this.uploadPicAction = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`;
+        },
+        upload() {
+            this.successFlieList.forEach(item => {
+                item.resume();
+            });
+        }
+    },
+    watch: {
+        fileList() {
+            this.$nextTick(() => {
+                let eles = document.getElementsByClassName(
+                    "uploader-file-icon"
+                );
+                for (let i = 0; i < eles.length; i++) {
+                    let ele = eles[i];
+                    ele.style.backgroundImage =
+                        "url('http://img5.imgtn.bdimg.com/it/u=150565144,593293567&fm=26&gp=0.jpg')";
+                }
+            });
         }
     }
 };
 </script>
 
-
+<style  scoped>
+.uploader-list /deep/ .uploader-file {
+    height: 80px;
+    line-height:1;
+    padding: 8px;
+}
+.uploader-list /deep/ .uploader-file-icon {
+    width: 113px;
+    height: 80px;
+    line-height: 1;
+    margin: 0;
+}
+.uploader-list /deep/ .uploader-file-icon:before {
+    display: none;
+}
+.uploader-list /deep/ ul li {
+    margin-bottom: 14px;
+    border: 1px solid #eee;
+}
+/* zxb begin */
+.uploader-list /deep/ .uploader-file-status,.uploader-list /deep/ .uploader-file-actions{
+    float: right;
+    text-align: right;
+    padding-right: 16px;
+    display: flex;
+    align-items: center;
+}
+.uploader-list /deep/ .uploader-file{
+    border: none;
+}
+.uploader-list /deep/ .uploader-file-progress{
+    background: #fff;
+}
+.uploader-list /deep/ .uploader-file-name{
+    display: flex;
+    align-items: center;
+}
+</style>
 <style scoped lang="scss">
 .uploader-example {
     padding: 15px;
@@ -187,12 +246,18 @@ export default {
     .uploader-drop {
         border: none;
         background: transparent;
-        position: absolute;
-        right: 0;
-        top: -40px;
+        // position: absolute;
+        // right: 0;
+        // top: -40px;
+        margin-top: 16px;
         padding: 0;
+        height: 100px;
+        border: 1px dashed #eee;
+        text-align: center;
+        line-height: 100px;
         .uploader-btn {
-            border: 1px solid #09cceb;
+            // border: 1px solid #09cceb;
+            border: none;
             color: #09cceb;
         }
     }
