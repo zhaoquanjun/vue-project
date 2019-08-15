@@ -189,6 +189,8 @@ export default {
         item.appId
       );
       if (status === 200) {
+        let { data } = await dashboardApi.getCurSiteId();
+        this.$store.commit("SETSITEID", data);
         this.$store.dispatch("_getAppHeadInfo");
         window.location.href = dashboardUrl;
       }
@@ -201,9 +203,13 @@ export default {
     },
     //显示切换app弹框
     changeApp() {
-      this.changeAppShow = true;
-      // this.getAppName();
-      this.getAppList();
+      if (this.changeAppShow) {
+        this.changeAppShow = false;
+      } else {
+        this.getCurApp();
+        this.getAppList();
+        this.changeAppShow = true;
+      }
     },
     // 判断是否过期
     isExpired(item) {
@@ -300,7 +306,7 @@ export default {
     }
     .headAppName {
       cursor: pointer;
-          display: flex;
+      display: flex;
       .headAppNameInfo {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -318,7 +324,7 @@ export default {
     }
   }
   .head-left {
-        display: flex;
+    display: flex;
   }
   .head-right {
     text-align: right;
