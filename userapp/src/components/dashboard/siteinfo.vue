@@ -58,8 +58,8 @@
       </div>
 
       <div
-        v-show="siteCount != siteInfo.length"
-        :class="{createSiteNumThree:siteInfo.length > 2,createSiteNumTwo:siteInfo.length == 2,}"
+        v-show="isCanCreate"
+        :class="{createSiteNumOne:siteInfo.length == 1,createSiteNumTwo:siteInfo.length == 2,createSiteNumThree:siteInfo.length > 2}"
         @click="showCreate"
       ></div>
     </el-row>
@@ -109,7 +109,7 @@ import LeftNavComponents from "_c/Aside/LeftNavComponents";
 import { designerUrl, mySiteUrl } from "@/environment/index";
 
 export default {
-  props: ["siteInfo", "siteCount"],
+  props: ["siteInfo", "isCanCreate"],
   data() {
     return {
       isFirst: true,
@@ -121,11 +121,7 @@ export default {
       lock: true
     };
   },
-
-  mounted() {
-    // this.initial();
-    console.log(this.siteInfo);
-  },
+  mounted() {},
   computed: {
     mySiteId() {
       return this.$store.state.dashboard.siteId;
@@ -273,8 +269,20 @@ export default {
     },
     // 创建site
     async createSite() {
-      await dashboardApi.CreateSite(this.radio, this.createSiteName);
-      this.createShow = false;
+      let { status } = await dashboardApi.CreateSite(
+        this.radio,
+        this.createSiteName
+      );
+      if (status == 200) {
+        this.$emit("getDashboardData");
+        this.createShow = false;
+        this.$notify({
+          customClass: "notify-success",
+          message: `创建成功`,
+          duration: 2000,
+          showClose: false
+        });
+      }
     }
   }
 };
@@ -521,6 +529,17 @@ export default {
     }
     .hidden {
       opacity: 0;
+    }
+    .createSiteNumOne {
+      position: absolute;
+      right: 20%;
+      top: 5px;
+      width: 6%;
+      padding-bottom: 6%;
+      max-width: 60px;
+      background: url("~img/dashboard/board-createSite.png") no-repeat center;
+      background-size: contain;
+      cursor: pointer;
     }
     .createSiteNumTwo {
       position: absolute;
@@ -831,6 +850,12 @@ export default {
           width: 10px;
           height: 4px;
         }
+      }
+      .createSiteNumOne {
+        right: 20%;
+        top: 5px;
+        width: 3.5%;
+        padding-bottom: 3.5%;
       }
       .createSiteNumTwo {
         right: 5%;
