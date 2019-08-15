@@ -620,7 +620,7 @@ export default {
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
-                    type: "success",
+                    cancelButtonText: "关闭",
                     customClass: "medium",
                     iconClass: "icon-success",
                     callback: async action => {
