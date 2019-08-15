@@ -303,7 +303,7 @@ export default {
             if (status == 200) {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `移动成功`,
+                    message: `成功`,
                     duration: 1500,
                     showClose: false
                 });
@@ -424,14 +424,21 @@ export default {
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
-            if (!this.fileNameBlur()) return;
+          
             let categoryId =
                 this.moveToClassiFy.id || this.curRowData.categoryId; // 分类ID
             if (!!this.editorOrMove) {
+                  if (!this.fileNameBlur()) return;
                 this.batchSetPwd(this.curRowData.id, this.ruleForm.pass)
                 this.rename(this.curRowData.id, this.ruleForm.name);
             }
-            this.changeCategory(categoryId, [this.curRowData.id]);
+            let idList=[];
+             if (this.idsList.length > 0) {
+                idList = this.idsList;
+            } else {
+                idList.push(this.curRowData.id);
+            }
+            this.changeCategory(categoryId, idList);
         },
         // 取消移动分类 关闭panel
         cancelUpdateCategor() {
@@ -521,6 +528,9 @@ export default {
 .el-form /deep/ .select-tree .el-input__inner {
     height: 40px;
     height: 40px;
+}
+.select-tree /deep/ .el-tree .el-tree-node__content{
+    width: 100%;
 }
 </style>
 <style lang="scss" scoped>

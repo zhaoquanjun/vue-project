@@ -112,6 +112,7 @@ export default {
         };
     },
     mounted() {
+        this.initHandle()
         this.valueTitle = this.categoryName;
     },
     methods: {
@@ -153,7 +154,9 @@ export default {
                 scrollWrap.style.cssText =
                     "margin: 0px; max-height: none; overflow: hidden;";
                 scrollBar.forEach(ele => (ele.style.width = 0));
+                scrollWrap.style.display = "none"
             });
+            
         },
         // 切换选项
         handleNodeClick(node) {
@@ -229,7 +232,7 @@ export default {
 }
 .el-scrollbar .el-scrollbar__view .el-select-dropdown__item {
     height: auto;
-    /* max-height: 274px; */
+    max-height: 274px;
     padding: 0;
     overflow: hidden;
     overflow-y: auto;
@@ -241,7 +244,7 @@ ul li >>> .el-tree .el-tree-node__content {
     height: auto;
     padding: 0 20px;
     display: block;
-    /* width: 150px; */
+    width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
