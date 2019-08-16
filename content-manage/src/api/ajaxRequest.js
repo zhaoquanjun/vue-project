@@ -188,18 +188,6 @@ export function put(url, params) {
             })
     });
 }
-// export function _delete(url, params){
-//     return new Promise((resolve, reject) => {
-//         axios.delete(url,data:{params})
-//             .then(res => {
-//                 resolve(res);
-//             })
-//             .catch(err => {
-//                 reject(err)
-//             })
-//     });
-// }
-
 
 export function _delete(url, params) {
     return new Promise((resolve, reject) => {
