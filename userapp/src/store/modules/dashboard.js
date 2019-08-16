@@ -44,6 +44,7 @@ const dashboard = {
         authList: [],
         buttonAuth: {},
         hasRules: false,
+        isSiteInfoShow: false,
     },
     mutations: {
         GETUSERDASHBOARD(state, payload) {
@@ -56,7 +57,7 @@ const dashboard = {
         },
         SETAPPID(state, appId) {
             state.appId = appId;
-            console.log(appId,'appIdappIdappIdappIdappIdappId')
+            console.log(appId, 'appIdappIdappIdappIdappIdappId')
             setLocal('ymId', appId);
         },
         GETVALIDATEMENU(state, payload) {
@@ -84,11 +85,16 @@ const dashboard = {
             let { data } = await updateAppIdAndSiteIdToCookie();
             commit("SETAPPID", data)
         },
-        async _getMenuListData({ commit }) {
+        async _getMenuListData({ commit, state }) {
             let { data } = await getSliderMenuList();
             let { result1, pathArr } = filterMenuListData(data);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
+            data.forEach(item => {
+                if (item.code === "design") {
+                    state.isSiteInfoShow = true
+                }
+            })
             return data
         },
         async getAuthRoute({ commit, state }) {
@@ -98,23 +104,23 @@ const dashboard = {
             return r;
         },
         async getCurRouteAuth({ state, getters }, path) {
-           
+
             if (!state.authList) return;
             // let authList = JSON.parse(state.authList)
             return state.authList.some((item, index, array) => {
                 return item === path;
             });
         },
-        getChildrenMenuList({state},curPath){
+        getChildrenMenuList({ state }, curPath) {
             if (!state.menuList) return
-            return new Promise((resolve,reject)=>{
-                state.menuList.map((item,index)=>{
-                    if(curPath == item.code){
+            return new Promise((resolve, reject) => {
+                state.menuList.map((item, index) => {
+                    if (curPath == item.code) {
                         resolve(item)
                     }
                 })
             })
-           
+
         }
     },
     getters: {
@@ -123,7 +129,7 @@ const dashboard = {
             // return JSON.parse(state.menuList)
             return state.menuList
         },
-       
+
     }
 };
 export default dashboard;
