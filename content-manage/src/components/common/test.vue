@@ -29,13 +29,12 @@
                 <!-- <div class="uploader-file-name"><i class="uploader-file-icon" :icon="fileCategory"></i>{{file.name}}</div> -->
                 <div class="uploader-file-name">
                     <i
-                        class="uploader-file-icon upload-file-cover"
+                        class="uploader-file-icon"
                         :icon="fileCategory"
-
                         :class="coverImg(fileCategory)"
                     ></i>
                     <div class="file-info">
-                        <p style="padding: 10px 0;" class="ellipsis">{{file.name}}</p>
+                        <p style="padding: 10px 0;">{{file.name}}</p>
                         <div v-if="this.uploadType!=='File'">
                             <span>大小：{{formatedSize}}</span>
                             <span>时长：{{fileDuration}}</span>
@@ -49,7 +48,7 @@
                     <!-- 重新开始 -->
                     <!-- <span class="uploader-file-resume" @click="resume">️</span>  -->
                     <!-- 重试 -->
-                    <span class="uploader-file-retry" v-if="status === 'error'" @click="retry"></span>
+                    <span class="uploader-file-retry" @click="retry"></span>
                     <span class="uploader-file-remove" @click="remove"></span>
                 </div>
                 <div class="uploader-file-status" v-show="status !== 'paused'">
@@ -63,7 +62,7 @@
                             <i class="upload-prograss">{{progressStyle.progress}}</i>
                         </span>
                         <!-- <em>{{formatedAverageSpeed}}</em> -->
-                        <!-- <i>{{formatedTimeRemaining}}</i> -->
+                        <i>{{formatedTimeRemaining}}</i>
                     </span>
                 </div>
                 <!-- <div class="uploader-file-actions" v-show="status !== 'success'"> -->
@@ -125,11 +124,10 @@ export default {
     },
     computed: {
         fileCategory() {
-            // console.log(this.file, "00090000");
-           
+            console.log(this.file, "00090000");
             let url = URL.createObjectURL(this.file.file);
             var audioElement = new Audio(url);
-            //console.log(audioElement);
+            console.log(audioElement);
             var duration;
             audioElement.addEventListener("loadedmetadata", _event => {
                 duration = audioElement.duration;
@@ -140,7 +138,6 @@ export default {
             const isFolder = this.file.isFolder;
             let type = isFolder ? "folder" : "unknown";
             const categoryMap = this.file.uploader.opts.categoryMap;
-            console.log(categoryMap)
             const typeMap = categoryMap || {
                 image: ["gif", "jpg", "jpeg", "png", "bmp", "webp"],
                 video: [
@@ -168,8 +165,7 @@ export default {
                     "keynote",
                     "ppt",
                     "pptx"
-                ],
-                zip:["rar","zip","cab","iso","jar","ace","7z","tar","gz","arj","lzh","uue","bz2","z"]
+                ]
             };
             Object.keys(typeMap).forEach(_type => {
                 const extensions = typeMap[_type];
@@ -338,10 +334,6 @@ export default {
                     return "image";
                 } else if (this.fileCategory === "audio") {
                     return "audio";
-                }else if (this.fileCategory === "audio") {
-                    return "zip";
-                }else{
-                     return "other";
                 }
             }
         },
@@ -532,11 +524,11 @@ export default {
     /* margin-top: 16px; */
     margin-right: 10px;
     cursor: pointer;
-    /* background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAABkCAYAAAD0ZHJ6AAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAACxMAAAsTAQCanBgAAARkSURBVGje7ZnfS1NRHMAH4ptPkvQSuAdBkCxD8FUQJMEULUgzy1KyyPVQ4JMiiP4Bvg6EwUQQfMmwhwRDshwaKUjDVCgoSdDNHkzTJZ6+Z37Purve8+PeTb2TM/ggu+ew89l33x8H9BBCPG7GowXTJej3+wnDvEm0JuLC04+EYWftVAUv+fiCvDUdQR1BHUEdQR3BTIygvixoQS14XgTtthLVdpNWwXRLqvQ724LplFRtyrYF0yVpFLQrKRVMh6RZ0I6kkmCqklaCqpKZH0FX56Crq9jVfdDVk0RfFrSgFsxkQVmLcdKCVrKySCrryhPEyYShhzOcrFtG0EoilfHHk1CRU5rF6ZjNZhlVOW6RnMSVyyilKies4pO41diVy8wIujoHXV3FGdMHXTtJKLFYTLhZtq4vC1rwXApCZTIqgR6g1PBMCO9DL3bMMSqBHqDU8EyISDAHiGKvWwcCQG2KgjlAFCDAOhAAap0K5gKLphk8mqJgLrCIgoxRJ4J5wKpJ7gAoMkn5EBXBPGDVJHcAFJmkfIhQcAql1oBpTvTol9gG9pm4RHAKpdaAaU706JfYBvaZuJVgPQrt4sFlnOh5MC/p3lmJYD0K7eLBZZzoeTAv6d5ZnuAYHjpgEOnk5F0ufhG6v1ggOIaHDhhEOjl5l4tfhO4vthLcwAMrFNvLJO5vEwhu4IEViu1lEve3WQmyoihQFBzG/V0CQVYUBYqCw7i/SxTBcpsRbFeIYLnNCLZbCY5b5KAnxRwct8hBj9McZFVMW0ihRNBuFdMWUigRlFaxuQ9WWYjRMTiIe5z0wSoLMToGB3GPsA9aTZIJoB+nRgBnM1tzOkkmgH6cGgGczWzNpzqLx3n/aULJJgezeNw07oxQySbVywKjBOgFRnDs+VEsx8FlgVEC9AIjOPb8KJYjvSzoG7UW1IJaUAtqQS14toLNM5fN5APdwBJA8G83Pk/aK/rgzVvXzeQD3cASQPBvNz5P2ssTzAaGUIrHEO6zI5gNDKEUjyHcxxWkh4Ylcowwk1QQpIeGJXKMMJO0EgwqyjGCioJBJvDrxRMSuVOTJEXfbz1/bHwWtBL0yoQehK6RucgE+bGzanzulQh6E3IgQV+xpc8kcrfuSO7eTfJ3ZYmQw0Oy9azVKOk1C/bJ5D5F38YPeLfx0rjWJxHsS0SqsSYuxySjj5qO5Oj7xQWy2VBtFOwzCy6ryH3YfE3uh64Y1xckgstJPydEjkkeHv07Iy4Xaao15+KCWTBx6M/db+T9xivSErqaJDdzXI6yLRE8Vgg0coex/SPJvT0SbWu0KpZtbgSpCH3NRt7I5OxHkObc6heU+/M/J5vrpBFM5GBLqCQux14COXs5CNXK5OjPGm1tSMrJSOMNYQ4mVTGV/L6zTL7+DovkbFUxbSW0Wo05l8hJWsU+cRWfSh+Mt5Lb1ck/J1TvVsdDaR/MiEni+llsdZuZp62EViu+96bpNjNPWwmtVnzvFd5m9IVVC54x/wA7gNvqFG9vXQAAAABJRU5ErkJggg==")
-        no-repeat 0 0; */
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAABkCAYAAAD0ZHJ6AAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAACxMAAAsTAQCanBgAAARkSURBVGje7ZnfS1NRHMAH4ptPkvQSuAdBkCxD8FUQJMEULUgzy1KyyPVQ4JMiiP4Bvg6EwUQQfMmwhwRDshwaKUjDVCgoSdDNHkzTJZ6+Z37Purve8+PeTb2TM/ggu+ew89l33x8H9BBCPG7GowXTJej3+wnDvEm0JuLC04+EYWftVAUv+fiCvDUdQR1BHUEdQR3BTIygvixoQS14XgTtthLVdpNWwXRLqvQ724LplFRtyrYF0yVpFLQrKRVMh6RZ0I6kkmCqklaCqpKZH0FX56Crq9jVfdDVk0RfFrSgFsxkQVmLcdKCVrKySCrryhPEyYShhzOcrFtG0EoilfHHk1CRU5rF6ZjNZhlVOW6RnMSVyyilKies4pO41diVy8wIujoHXV3FGdMHXTtJKLFYTLhZtq4vC1rwXApCZTIqgR6g1PBMCO9DL3bMMSqBHqDU8EyISDAHiGKvWwcCQG2KgjlAFCDAOhAAap0K5gKLphk8mqJgLrCIgoxRJ4J5wKpJ7gAoMkn5EBXBPGDVJHcAFJmkfIhQcAql1oBpTvTol9gG9pm4RHAKpdaAaU706JfYBvaZuJVgPQrt4sFlnOh5MC/p3lmJYD0K7eLBZZzoeTAv6d5ZnuAYHjpgEOnk5F0ufhG6v1ggOIaHDhhEOjl5l4tfhO4vthLcwAMrFNvLJO5vEwhu4IEViu1lEve3WQmyoihQFBzG/V0CQVYUBYqCw7i/SxTBcpsRbFeIYLnNCLZbCY5b5KAnxRwct8hBj9McZFVMW0ihRNBuFdMWUigRlFaxuQ9WWYjRMTiIe5z0wSoLMToGB3GPsA9aTZIJoB+nRgBnM1tzOkkmgH6cGgGczWzNpzqLx3n/aULJJgezeNw07oxQySbVywKjBOgFRnDs+VEsx8FlgVEC9AIjOPb8KJYjvSzoG7UW1IJaUAtqQS14toLNM5fN5APdwBJA8G83Pk/aK/rgzVvXzeQD3cASQPBvNz5P2ssTzAaGUIrHEO6zI5gNDKEUjyHcxxWkh4Ylcowwk1QQpIeGJXKMMJO0EgwqyjGCioJBJvDrxRMSuVOTJEXfbz1/bHwWtBL0yoQehK6RucgE+bGzanzulQh6E3IgQV+xpc8kcrfuSO7eTfJ3ZYmQw0Oy9azVKOk1C/bJ5D5F38YPeLfx0rjWJxHsS0SqsSYuxySjj5qO5Oj7xQWy2VBtFOwzCy6ryH3YfE3uh64Y1xckgstJPydEjkkeHv07Iy4Xaao15+KCWTBx6M/db+T9xivSErqaJDdzXI6yLRE8Vgg0coex/SPJvT0SbWu0KpZtbgSpCH3NRt7I5OxHkObc6heU+/M/J5vrpBFM5GBLqCQux14COXs5CNXK5OjPGm1tSMrJSOMNYQ4mVTGV/L6zTL7+DovkbFUxbSW0Wo05l8hJWsU+cRWfSh+Mt5Lb1ck/J1TvVsdDaR/MiEni+llsdZuZp62EViu+96bpNjNPWwmtVnzvFd5m9IVVC54x/wA7gNvqFG9vXQAAAABJRU5ErkJggg==")
+        no-repeat 0 0;
 }
 .uploader-file-actions > span:hover {
-    /* background-position-x: -21px; */
+    background-position-x: -21px;
 }
 .uploader-file-actions .uploader-file-pause {
     background-position-y: 0;
@@ -558,57 +550,40 @@ export default {
 }
 </style>
 <style scoped>
-/* 文件封面  begin */
-.upload-file-cover{
-      display: inline-block;
+.document {
+    display: inline-block;
     width: 28px;
     height: 28px;
-}
-.document {
-  
     background: url("./images/document.png") no-repeat center;
     background-size: contain;
 }
 .video {
- 
+    display: inline-block;
+    width: 28px;
+    height: 28px;
     background: url("./images/video.png") no-repeat center;
     background-size: contain;
 }
 .image {
- 
+    display: inline-block;
+    width: 28px;
+    height: 28px;
     background: url("./images/img.png") no-repeat center;
     background-size: contain;
 }
 .audio {
-  
+    display: inline-block;
+    width: 28px;
+    height: 28px;
     background: url("./images/audio.png") no-repeat center;
     background-size: contain;
 }
-.zip{
- 
-    background: url("./images/zip.png") no-repeat center;
-    background-size: contain;
-}
-.other{
-    background: url("./images/other.png") no-repeat center;
-    background-size: contain;
-}
-/* 文件封面  end */
-
 .uploader-file-remove {
     display: inline-block;
     width: 16px;
     height: 16px;
     background: url("./images/delete.png") no-repeat center;
     background-size: contain;
-}
-.uploader-file-retry {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background: url("./images/retry.png") no-repeat center;
-    background-size: contain;
-    margin-right: 16px !important;
 }
 .zxb-success {
     color: #63dc8c;
@@ -639,16 +614,4 @@ export default {
 .upload-prograss {
     color: #f15533;
 }
-.uploader-list .uploader-file-status {
-    padding: 0;
-}
-.ellipsis{
-    display: inline-block;
-    width: 200px;
-    overflow: hidden;/*超出部分隐藏*/
-    text-overflow:ellipsis;/* 超出部分显示省略号 */
-    white-space: nowrap;/*规定段落中的文本不进行换行 */
-    
-}
-
 </style>

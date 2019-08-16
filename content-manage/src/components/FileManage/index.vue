@@ -154,6 +154,7 @@
                 :apiHost="apiHost"
                 :accept="'*/*'"
                 @getList="getPicList"
+                @closeDialog="closeDialog"
             />
         </el-dialog>
     </el-container>
@@ -381,6 +382,7 @@ export default {
                 }
             });
         },
+        // 设置密码
         async batchSetPwd(ids) {
             let option = {
                 idList:[ids],
@@ -407,6 +409,10 @@ export default {
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
+        },
+        // 关闭上传文件弹窗
+        closeDialog(){
+            this.dialogTableVisible = false;
         },
         //选择移动分类时的节点
         chooseNode(node) {
@@ -551,7 +557,7 @@ export default {
     }
     .file-editor-btn {
         width: 80px;
-        padding: 0;
+        // padding: 0;
         margin-left: 8px;
         color: #8c8c8c;
         border: 1px solid #b9cbcf;

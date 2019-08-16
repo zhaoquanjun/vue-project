@@ -10,7 +10,7 @@
                 @node-click="changeCategory"
                 @node-drag-enter="dragEnter"
                 ref="tree"
-                draggable
+                :draggable="draggable"
                 :allow-drop="allowDrop"
                 :allow-drag="allowDrag"
                 :highlight-current="true"
@@ -26,7 +26,7 @@
                         v-if="data.thumbnailPicUrl && isProduct"
                         :src="data.thumbnailPicUrl+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
                     />
-                    <button class="drop-btn" v-if="node.data.level>0">
+                    <button class="drop-btn" v-if="node.data.level>0 && draggable">
                         <i class="iconfont icontuodongdian"></i>
                     </button>
                     <div class="node-label-wrap">
@@ -36,7 +36,7 @@
                     <span
                         class="set-tree-type"
                         @click.stop="handleShow($event,node,data)"
-                        v-show="data.id === treeNodeId"
+                        v-show="data.id === treeNodeId && draggable"
                     >
                         <i class="iconfont iconsangedian" style="font-size:30px"></i>
                     </span>
@@ -75,6 +75,7 @@ export default {
     },
     data() {
         return {
+            draggable:true,// 是否允许拖拽
             flag: false,
             curId: null,
             treeNodeId: null,
@@ -97,6 +98,7 @@ export default {
                     this.$refs.operateSection1.style.display = "none";
             });
         });
+        this.draggable = this.isContentwrite;
     },
     methods: {
         createCategory(displayName, thumbnailPicUrl) {
@@ -338,6 +340,11 @@ export default {
             } else {
                 this.$refs.operateSection1.style.display = "block";
             }
+        }
+    },
+    computed:{
+        isContentwrite(){
+            return this.$store.state.dashboard.isContentwrite
         }
     }
 };

@@ -163,6 +163,7 @@ export default {
          * 获取域名列表
          */
         async _getCdnDomainList(siteId) {
+            console.log(this)
               const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",

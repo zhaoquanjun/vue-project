@@ -106,6 +106,15 @@ export const defaultRoutes = [
           isSub:true
         }
       },
+      {
+        path: "siteVerify",
+        name: "siteVerify",
+        component: () => import("@/views/siteVerify.vue"),
+        meta: {
+          title: "站点验证",
+          isSub:true
+        }
+      },
     ]
   },
   {
