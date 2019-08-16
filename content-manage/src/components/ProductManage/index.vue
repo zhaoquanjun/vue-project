@@ -350,9 +350,15 @@ export default {
         },
 
         async getArticleListAsync(options) {
+              const loading = this.$loading({
+                lock: true,
+                spinner: "loading-icon",
+                background: "rgba(255, 255, 255, 0.75)"
+            });
             let { data } = await articleManageApi.getArticleList(
                 (options = this.productSearchOptions)
             );
+             loading.close();
             this.articlePageResult = data;
         },
         /**

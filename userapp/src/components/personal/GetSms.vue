@@ -156,10 +156,11 @@ export default {
         async send() {
             let { status } = await sendSourcePhoneCode(this.sourcePhone);
             if (status === 200) {
-                this.$notify({
-                    type: "success",
-                    message: "发送成功!",
-                    duration:1000
+                   this.$notify({
+                    customClass: "notify-success",
+                    message: "发送成功",
+                    duration: 1500,
+                    showClose: false
                 });
                 if (!this.timer) {
                     this.count = TIME_COUNT;
@@ -176,10 +177,11 @@ export default {
                     }, 1000);
                 }
             } else {
-                this.$notify({
-                    type: "error",
-                    message: "发送失败!",
-                    duration:1000
+                  this.$notify({
+                    customClass: "notify-error",
+                    message: "发送失败",
+                    duration: 1500,
+                    showClose: false
                 });
             }
         },
@@ -340,6 +342,8 @@ export default {
     border: none;
     color: #00c1de;
     font-weight: 400;
+     padding-top: 0;
+    padding-bottom: 0;
 }
 .count {
     color: #8c8c8c;

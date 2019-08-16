@@ -305,6 +305,8 @@ export default {
     border: none;
     color: #00c1de;
     font-weight: 400;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 .from-row {
     margin-top: 30px;

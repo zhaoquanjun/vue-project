@@ -148,12 +148,7 @@ export default {
         // 图片上传成功时触发
         handleSucess(response, file, fileList) {
             if (++this.count == fileList.length) {
-                this.$notify({
-                    customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `成功上传${fileList.length}图片`,
-                    showClose: false,
-                    duration: 1000
-                });
+                
 
                 setTimeout(() => {
                     this.$emit("switchUploadBoxShowStatus", "uploadImg");
@@ -161,6 +156,12 @@ export default {
                     this.isUploading = false;
                     // this.$emit("getTree");
                     this.$refs.upload.clearFiles();
+                    this.$notify({
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `成功上传${fileList.length}图片`,
+                    showClose: false,
+                    duration: 1500
+                });
                 }, 500);
             }
         },

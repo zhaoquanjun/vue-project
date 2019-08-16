@@ -88,18 +88,14 @@
             >{{it.name}}</li>
         </ul>
 
-        <Loading v-if="loadingShow" />
     </div>
 </template>
 
 <script>
-import Loading from "@/base/loading.vue";
+
 export default {
     props: ["articlePageResult", "articleSearchOptions"],
-    components: {
-        Loading
-    },
-
+  
     data() {
         return {
             defaultImg: require("../../../static/images/content-default-pic.png"),
@@ -251,19 +247,7 @@ export default {
             this.$refs.multipleTable.clearSelection();
         }
     },
-    watch: {
-        tableData: {
-            handler(newValue, oldValue) {
-                
-                if (this.tableData.list.length >= 1) {
-                    setTimeout(() => {
-                        this.loadingShow = false;
-                    }, 500);
-                }
-            },
-            deep: true
-        }
-    }
+   
 };
 </script>
 

@@ -29,7 +29,7 @@
                     <button class="drop-btn" v-if="node.data.level>0 && draggable">
                         <i class="iconfont icontuodongdian"></i>
                     </button>
-                    <div class="node-label-wrap">
+                    <div class="node-label-wrap" :class="{'label-weight':node.data.level<1}">
                         <span class="node-label">{{data.label}}</span>
                         <span v-if="!isProduct">({{data.inUseSum }})</span>
                     </div>
@@ -368,5 +368,10 @@ export default {
     width: 16px;
     height: 16px;
     padding-right: 5px;
+}
+.label-weight{
+    font-weight: 500;
+    // line-height: 40px;
+    // height: 40px !important;
 }
 </style>

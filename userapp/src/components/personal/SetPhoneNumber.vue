@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         async nextStep() {
-            this.$refs.getSms.resetTimer()
+          
             let code = this.$refs.getSms.ruleForm.verification;
            
             if (!this.$refs.getSms.submitForm1()) {
@@ -73,6 +73,7 @@ export default {
             } else {
                 let { status } = await isInvalidCode(this.sourcePhone, code);
                 if (status === 200) {
+                      this.$refs.getSms.resetTimer()
                     this.isModifi = true;
                     if (!this.isModifi) {
                         this.$store.commit("CLOSERIGHTPANNEL", false);

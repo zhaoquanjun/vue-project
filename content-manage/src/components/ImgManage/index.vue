@@ -169,11 +169,17 @@ export default {
     methods: {
         // 获取列表
         async getPicList(node) {
+             const loading = this.$loading({
+                lock: true,
+                spinner: "loading-icon",
+                background: "rgba(255, 255, 255, 0.75)"
+            });
             if (node) {
                 this.nodeData = node; // 上传图片所需
             }
 
             let { data } = await imgManageApi.getPicList(this.picSearchOptions);
+             loading.close();
             this.imgPageResult = data;
             this.imgPageResult.list.forEach((item, index) => {
                 item.createTimeStr = this.imgPageResult.list[

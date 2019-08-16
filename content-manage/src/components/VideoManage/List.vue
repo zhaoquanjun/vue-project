@@ -97,12 +97,12 @@
                 </div>
             </el-dialog>
         </div>
-        <Loading v-if="loadingShow" />
+       
     </div>
 </template>
 
 <script>
-import Loading from "@/base/loading.vue";
+
 export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
@@ -123,9 +123,7 @@ export default {
             tableHeight: 500
         };
     },
-    components: {
-        Loading
-    },
+   
     mounted() {
         this.$nextTick(() => {
             window.addEventListener("resize", () => {
@@ -192,11 +190,7 @@ export default {
             this.$emit("batchRemove", [row.id]);
         }
     },
-    watch: {
-        imgPageResult() {
-            this.loadingShow = false;
-        }
-    }
+  
 };
 </script>
 <style>
