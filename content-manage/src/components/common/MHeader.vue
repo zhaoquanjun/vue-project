@@ -326,12 +326,10 @@ export default {
             justify-content: center;
             padding: 0;
             margin-left: 16px;
-
+            height: 40px;
+            line-height: 40px;
             &:hover {
                 background: #06bdda;
-                height: 40px;
-                line-height: 40px;
-                margin-top: 10px;
                 border-radius: 2px;
             }
             .headAppNameInfo {
@@ -354,6 +352,7 @@ export default {
     }
     .head-left {
         display: flex;
+        align-items: center;
     }
     .head-right {
         text-align: right;
@@ -373,7 +372,7 @@ export default {
         cursor: pointer;
         text-align: left;
         background: #fff;
-        color: #A1A8B1;
+        color: #a1a8b1;
         position: absolute;
         z-index: 1000;
         right: 0;
@@ -385,7 +384,7 @@ export default {
             padding: 0 30px;
             line-height: 32px;
             &:hover {
-                 color: #262626;
+                color: #262626;
                 background: #e0faff;
             }
         }

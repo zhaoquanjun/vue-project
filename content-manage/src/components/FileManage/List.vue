@@ -8,6 +8,12 @@
             :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
+               <template slot="empty">
+                <div class="empty-table">
+                    <img src="~img/table-empty.png" />
+                    <span>无数据</span>
+                </div>
+            </template>
             <el-table-column type="selection"></el-table-column>
 
             <el-table-column label="文件名称">
