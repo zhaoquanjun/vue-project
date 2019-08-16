@@ -16,7 +16,7 @@
                 @modifyNode="modifyNodeCategory"
             ></m-tree>
         </el-aside>
-        <el-main style="    overflow: hidden;">
+        <el-main style="overflow: hidden;">
             <img-list-header
                  v-if="$store.state.dashboard.isContentwrite"
                 :count-pic="countPic"

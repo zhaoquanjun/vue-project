@@ -121,7 +121,55 @@ export const defaultRoutes = [
             },
         ]
     },
-
+    {
+       path:"/recycle",
+       redirect: { path: '/recycle/page' },
+       component: () => import('@/views/recycle/page.vue'),
+       children:[
+        {
+            path: "page",
+            name: "page",
+            component: () => import('@/views/recycle/page.vue'),
+            meta: {title: "回收站", isSub: true }
+        },
+        {
+            path: "article",
+            name: "article",
+            component: () => import('@/views/recycle/article.vue'),
+            meta: {title: "回收站", isSub: true }
+        },
+        {
+            path: "product",
+            name: "product",
+            component: () => import('@/views/recycle/product.vue'),
+            meta: {title: "回收站", isSub: true }
+        },
+        {
+            path: "picture",
+            name: "picture",
+            component: () => import('@/views/recycle/picture.vue'),
+            meta: {title: "回收站", isSub: true }
+        },
+        {
+            path: "file",
+            name: "file",
+            component: () => import('@/views/recycle/file.vue'),
+            meta: {title: "回收站", isSub: true }
+        },
+        {
+            path: "video",
+            name: "video",
+            component: () => import('@/views/recycle/video.vue'),
+            meta: {title: "回收站", isSub: true }
+        },
+        {
+            path: "audio",
+            name: "audio",
+            component: () => import('@/views/recycle/audio.vue'),
+            meta: {title: "回收站", isSub: true }
+        },
+       ]
+    },
 
     {
         path: "/callback",
