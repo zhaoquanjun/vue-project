@@ -348,14 +348,7 @@ export default {
                 padding-left: 0;
             }
         }
-        .changeAppImg {
-            width: 15px;
-            height: 11px;
-            padding-left: 5px;
-            background: url("~img/dashboard/board-changeApp.png") no-repeat
-                center;
-            background-size: contain;
-        }
+        
     }
     .head-left {
         display: flex;

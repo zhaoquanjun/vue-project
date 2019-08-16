@@ -377,7 +377,7 @@ export default {
                 );
                 this.$confirm("提示", {
                     title: "提示",
-                     iconClass: "icon-warning",
+                    iconClass: "icon-warning",
                     message: this.$createElement("div", null, message),
                      callback: async action => {
                     if (action === "confirm") {
