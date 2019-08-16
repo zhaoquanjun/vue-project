@@ -103,13 +103,11 @@
 </template>
 <script>
 import ChunkUpload from "@/components/common/ChunkUpload";
-import MTree from "./MTree";
-
+import MTree from "_c/ImgManage/MTree";
 import ListHeader from "@/components/ImgManage/ImgListHeader";
 import List from "./List";
 import SelectTree from "@/components/common/SelectTree";
-
-import RightPannel from "./RightPannel";
+import RightPannel from "_c//ImgManage/RightPannel";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
 import environment from "@/environment/index.js";

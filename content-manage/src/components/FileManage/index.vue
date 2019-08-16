@@ -98,7 +98,7 @@
                             <el-form-item label="下载密码">
                                 <el-input
                                     class="input-border"
-                                    type="password"
+                                    placeholder="请输入下载密码(非必填)"
                                     v-model="ruleForm.pass"
                                     autocomplete="off"
                                     @blur="fileNameBlur"
@@ -154,6 +154,7 @@
                 :apiHost="apiHost"
                 :accept="'*/*'"
                 @getList="getPicList"
+                @closeDialog="closeDialog"
             />
         </el-dialog>
     </el-container>
@@ -381,6 +382,7 @@ export default {
                 }
             });
         },
+        // 设置密码
         async batchSetPwd(ids) {
             let option = {
                 idList:[ids],
@@ -402,11 +404,15 @@ export default {
             this.ruleForm = {
                 name: data.title,
                 pass: data.pwd || "",
-                link: data.fullOssUrl
+                link: `${location.host}${data.downloadPage}`
             };
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
+        },
+        // 关闭上传文件弹窗
+        closeDialog(){
+            this.dialogTableVisible = false;
         },
         //选择移动分类时的节点
         chooseNode(node) {
@@ -518,6 +524,7 @@ export default {
 .el-form /deep/ .input-border .el-input__inner {
     border: none;
     border-bottom: 1px solid #b9cbcf;
+    border-radius: 0;
 }
 .el-form /deep/ .input-border .el-input__inner:hover {
     border-bottom: 1px solid #0595e6;
@@ -546,12 +553,11 @@ export default {
     .download-url {
         box-sizing: border-box;
         padding: 0 8px;
-        width: 80%;
         background-color: #eaeaea;
     }
     .file-editor-btn {
-        width: 80px;
-        padding: 0;
+        flex: none;
+        // padding: 0;
         margin-left: 8px;
         color: #8c8c8c;
         border: 1px solid #b9cbcf;

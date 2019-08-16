@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div>
         <el-card class="box-card">
             <div slot="header">
                 <span class="article-cover">产品封面</span>
@@ -18,14 +18,14 @@
                     :multiple="true"
                     :limit="9"
                     :onExceed="onExceed"
-                    accept=".jpg,.jpeg,.png,.gif,.svg,.JPG,.JPEG,.GIF"
+                    accept=".jpg, .jpeg, .png, .gif, .svg, .JPG, .JPEG, .GIF"
                 >
                     <!-- <div v-for="(item,index) in fileList1" :key="index"><img :src="item.response" alt=""></div> -->
                     <template>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;font-size:12px">添加图片</i>
                     </template>
-                   
+
                     <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
                 </el-upload>
             </div>
@@ -38,7 +38,7 @@
                 </el-collapse-item>
             </el-collapse>
         </el-col>
-         <!-- 图片预览 begin -->
+        <!-- 图片预览 begin -->
         <el-dialog :append-to-body="true" :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt />
         </el-dialog>
@@ -65,25 +65,26 @@ export default {
             uploadSucess: false,
             imageUrl1: "",
             newFileList: [],
-             dialogVisible: false,
-            dialogImageUrl: "",
+            dialogVisible: false,
+            dialogImageUrl: ""
         };
     },
-   
+
     mounted() {
         this.headers.appId = this.$store.state.dashboard.appId;
     },
     methods: {
-        handleSucess(response, file, fileList) {},
         handleRemove(file, fileList) {
             this.newFileList = fileList;
-            if(fileList.length>=9){
-                 document.querySelector(".el-upload").style.display = "none";
+            if (this.newFileList.length >= 9) {
+                document.querySelector(".el-upload").style.display = "none";
+            }else{
+                document.querySelector(".el-upload").style.display = "inline-block";
             }
         },
         handlePreview(file) {
             console.log(file);
-              this.dialogImageUrl = file.url;
+            this.dialogImageUrl = file.url;
             this.dialogVisible = true;
         },
         // 上传图片超出数量限制时触发
@@ -94,9 +95,11 @@ export default {
             });
         },
         ///////
-        handleAvatarSuccess(res, file,argfileList) {
+        handleAvatarSuccess(res, file, argfileList) {
             this.newFileList = argfileList;
-            console.log(arguments)
+            if (this.newFileList.length >= 9) {
+                document.querySelector(".el-upload").style.display = "none";
+            }      
             let fileList = {
                 name: file.name,
                 response: file.response,
@@ -121,6 +124,9 @@ export default {
             }
             return isPic && isSizeOk;
         }
+    },
+    watch: {
+        
     }
 };
 </script>
@@ -155,8 +161,8 @@ export default {
 .avatar-uploader /deep/ .el-upload--picture-card {
     box-sizing: border-box;
     width: 100%;
-    height: auto ;
-  line-height: 0;
+    height: auto;
+    line-height: 0;
     vertical-align: top;
     display: flex;
     align-items: center;
@@ -176,14 +182,12 @@ export default {
 .avatar-uploader /deep/ .el-upload-list > li:not(:first-child) {
     width: 96px;
     height: 96px;
-   
 }
- .avatar-uploader /deep/ .el-upload-list > li:not(:first-child) img{
-            object-fit: contain;
-    }
+.avatar-uploader /deep/ .el-upload-list > li:not(:first-child) img {
+    object-fit: contain;
+}
 
-
- .avatar-uploader /deep/ .el-upload-list__item-actions > span {
+.avatar-uploader /deep/ .el-upload-list__item-actions > span {
     position: absolute;
     right: 17px;
     bottom: 19px;
@@ -194,7 +198,10 @@ export default {
     border-radius: 50%;
 }
 
-.avatar-uploader /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
+.avatar-uploader
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-preview {
     left: 17px;
     bottom: 20px;
     border: none;
@@ -204,7 +211,10 @@ export default {
     background-size: contain;
 }
 
-.avatar-uploader /deep/ .el-upload-list__item-actions .el-upload-list__item-delete{
+.avatar-uploader
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-delete {
     right: 17px;
     bottom: 20px;
     border: none;
@@ -214,10 +224,10 @@ export default {
     background-size: contain;
 }
 
-.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-zoom-in,.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete {
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-zoom-in,
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete {
     display: none;
-}   
-  
+}
 </style>
 <style lang="scss" scoped>
 .article-cover {

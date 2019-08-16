@@ -353,19 +353,39 @@ export default {
          * 删除当前域名
          */
         async _deleteCdnDomain(domainId, index) {
-            this.$confirm("提示", {
-                title: "提示",
-                message:
-                    "确定删除该域名?域名删除后, 您将无法访问该网站.强烈建议您在删除前修改该域名的cname解析. ",
-                iconClass: "icon-warning",
-                callback: async action => {
+              let message = [];
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #262626" },
+                        `确定删除该域名?`
+                    )
+                );
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #8C8C8C" },
+                        "域名删除后, 您将无法访问该网站."
+                    )
+                );
+                  message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #8C8C8C" },
+                        "强烈建议您在删除前修改该域名的cname解析."
+                    )
+                );
+                this.$confirm("提示", {
+                    title: "提示",
+                     iconClass: "icon-warning",
+                    message: this.$createElement("div", null, message),
+                     callback: async action => {
                     if (action === "confirm") {
                         let { data, status } = await domainApi.deleteCdnDomain(
                             domainId
                         );
                         if (status === 200) {
-                            this.domainListData.splice(index, 1);
-                            this.domainAmount--;
+                             this._getCdnDomainList();    
                             this.$notify({
                                 customClass: "notify-success",
                                 message: `域名删除成功`,

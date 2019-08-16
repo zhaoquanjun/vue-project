@@ -12,8 +12,8 @@
 
             <el-table-column label="文件名称">
                 <template slot-scope="scope">
-                    <!--  <img :src="scope.row | fileCover" class="cover" /> -->
-                    <img src="../../../static/images/content-icon/file-cover.png" class="cover" />
+                    <img :src="scope.row | fileCover" class="cover" />
+                    <!-- <img src="../../../static/images/content-icon/file-cover.png" class="cover" /> -->
                     <span
                         class="img-name"
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
@@ -113,6 +113,7 @@
 </template>
 
 <script>
+import { adminDownload } from "@/api/request/contentCommonApi.js";
 export default {
     props: ["imgPageResult", "picSearchOptions", "useStorage"],
     data() {
@@ -135,15 +136,28 @@ export default {
                 { name: "置顶", flag: "isTop" },
                 { name: "删除", flag: "delete" }
             ],
-            test: require("../../../static/images/move.png"),
             maxSize: 0,
             currentUsage: 0,
             prograss: 0
         };
     },
     filters: {
-        fileCover: function(val) {
-            return require("../../../static/images/move.png");
+        fileCover: function(row) {
+            let fileExtensionType = row.fileExtensionType;
+            switch (fileExtensionType) {
+                case 0:
+                    return require("img/file-icon/video.png");
+                case 1:
+                    return require("img/file-icon/audio.png");
+                case 2:
+                    return require("img/file-icon/zip.png");
+                case 3:
+                    return require("img/file-icon/img.png");
+                case 4:
+                    return require("img/file-icon/document.png");
+                default:
+                    return require("img/file-icon/other.png");
+            }
         }
     },
     mounted() {
@@ -191,18 +205,38 @@ export default {
             this.$emit("editor", true, row);
         },
 
+        download(row){
+            //this.userDownload(row)
+             this.adminDownload(row)     
+        },
         /**
-         * 下载
+         * 用户下载
          */
-        async download(row) {
+        async userDownload(row) {
             this.$router.push({
-                path: "/content/download",
-                query: {
-                    id: row.id,
-                    type: "File",
-                    appId: this.$store.state.dashboard.appId
-                }
+                path: row.downloadPage
             });
+        },
+        /**
+         * 管理员下载
+         */
+        async adminDownload(row) {
+            let type = row.fileType;
+            let id = row.id;
+            let {data} = await adminDownload(type, id);
+             var a = document.createElement("a");
+            var binaryData = [];
+            binaryData.push(data);
+            a.href = window.URL.createObjectURL(
+                new Blob(binaryData, { type: "application/dat" })
+            );
+            // var names = row.fileName.split("_");
+            // var filename =row.siteName + "_" + names[1] + "_" + names[2];
+            a.download = row.title; // Set the file name.
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         },
         change(index) {
             this.fullOssUrl = this.imgList[index].fullOssUrl;

@@ -9,7 +9,7 @@
           </p>
           <p class="siteIntroduction">以下是您当前的站点</p>
         </div>
-        <siteinfo :siteInfo="siteInfoList" :isCanCreate="isCanCreate" v-show="siteInfoList.length" />
+        <siteinfo v-if="$store.state.dashboard.isSiteInfoShow" :siteInfo="siteInfoList" :isCanCreate="isCanCreate" v-show="siteInfoList.length" />
         <plugins :plugins="pluginList" />
         <content-num :contentNumber="contentNumber" />
         <recommend :recommend="recommend" />
