@@ -75,7 +75,7 @@
                                         @show="showRemark(index)"
                                     >
                                         <span slot="reference">
-                                            <svg-icon icon-class="remark" class="remark"></svg-icon>
+                                            <i class="iconfont iconbianji edit"></i>
                                         </span>
                                         <div class="textareaWrap">
                                             <el-input
@@ -125,7 +125,7 @@
                                         v-if="curAppId != item.appId"
                                     >进入应用</el-button>
                                     <el-button
-                                        class="choseCurApp"
+                                        class="choseApp disabled"
                                         @click="choseApp(item)"
                                         disabled
                                         v-if="curAppId == item.appId"
@@ -330,7 +330,6 @@ export default {
             line-height: 40px;
             &:hover {
                 background: #06bdda;
-
                 border-radius: 2px;
             }
             .headAppNameInfo {
@@ -341,14 +340,6 @@ export default {
                 vertical-align: middle;
                 padding-left: 0;
             }
-        }
-        .changeAppImg {
-            width: 15px;
-            height: 11px;
-            padding-left: 5px;
-            background: url("~img/dashboard/board-changeApp.png") no-repeat
-                center;
-            background-size: contain;
         }
     }
     .head-left {
@@ -461,12 +452,10 @@ export default {
         background: rgba(255, 255, 255, 1);
         border-radius: 2px;
         padding-left: 0px;
-        //   &:hover {
-        //     background: rgba(175, 175, 175, 1);
-        //     border-radius: 2px;
-        //     opacity: 0.7;
-        //     filter: blur(10px);
-        //   }
+        &:hover {
+            box-shadow:0px 2px 16px 0px rgba(0,0,0,0.2);
+            transform: translateY(-2px)
+        }
         .appTitle {
             width: 100%;
             height: 55px;
@@ -483,7 +472,6 @@ export default {
                 float: right;
                 margin-right: 35px;
                 font-size: 14px;
-                font-family: PingFangSC-Regular;
                 font-weight: 400;
                 line-height: 55px;
             }
@@ -494,9 +482,8 @@ export default {
             line-height: 22px;
             .versionText {
                 font-size: 14px;
-                font-family: PingFangSC-Regular;
                 font-weight: 400;
-                color: rgba(140, 140, 140, 1);
+                color: #a1a8b1;
                 margin-left: 32px;
                 line-height: 22px;
             }
@@ -507,9 +494,8 @@ export default {
             line-height: 32px;
             .expiredText {
                 font-size: 14px;
-                font-family: PingFangSC-Regular;
                 font-weight: 400;
-                color: rgba(140, 140, 140, 1);
+                color: #a1a8b1;
                 margin-left: 32px;
             }
         }
@@ -532,15 +518,14 @@ export default {
             right: 32px;
             bottom: 28px;
             width: 90px;
-            height: 32px;
+            height: 40px;
             background: rgba(0, 193, 222, 1);
             border-radius: 2px;
             border: 1px solid rgba(1, 192, 222, 1);
-            font-size: 12px;
-            font-family: PingFangSC-Medium;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 400;
             color: rgba(255, 255, 255, 1);
-            line-height: 32px;
+            line-height: 40px;
             padding: 0px;
         }
         .choseCurApp {
@@ -560,11 +545,10 @@ export default {
         }
         .renewal {
             width: 90px;
-            height: 32px;
+            height: 40px;
             border-radius: 2px;
             border: 1px solid rgba(1, 192, 222, 1);
-            font-size: 12px;
-            font-family: PingFangSC-Regular;
+            font-size: 14px;
             font-weight: 400;
             color: rgba(0, 193, 222, 1);
             margin-left: 32px;
@@ -598,7 +582,12 @@ export default {
         }
     }
 }
-.remark {
-    margin-left: 20px;
+.edit{
+    color:#09CCEB;
+    margin-left:23px;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.7;
+    }
 }
 </style>
