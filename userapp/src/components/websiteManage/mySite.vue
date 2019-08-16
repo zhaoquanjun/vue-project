@@ -204,8 +204,6 @@ export default {
       siteImage: "",
       siteId: 0,
       domain: "",
-      themeColor: "",
-      themeFont: "",
       secondDomain: "",
       lastPublishedTime: "",
       language: "",
@@ -238,7 +236,7 @@ export default {
   methods: {
     // 跳转至设计器
     toDesign() {
-      window.location.href = `${designerUrl}?siteId=${this.siteId}&themeColor=${this.themeColor}&themeFont=${this.themeFont}`;
+      window.location.href = `${designerUrl}?siteId=${this.siteId}`;
     },
     // 获取siteId
     getSiteId(siteId) {
@@ -250,12 +248,16 @@ export default {
     },
     // 获取站点信息
     async getSiteInfo(siteId) {
+      const loading = this.$loading({
+        lock: true,
+        spinner: "loading-icon",
+        background: "rgba(255, 255, 255, 0.75)"
+      });
       let { data, status } = await siteBackupApi.getSiteInfo(siteId);
       if (status === 200) {
+        loading.close();
         this.siteName = data.siteName;
         this.siteImage = data.siteImage;
-        this.themeColor = data.theme;
-        this.themeFont = data.font;
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
         this.lastPublishedTime = formatDateTime(

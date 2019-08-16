@@ -23,10 +23,7 @@
             <div class="siteManage" @click="toSiteManage(item.siteId)">
               <div class="arrowLeft"></div>网站管理
             </div>
-            <div
-              class="siteManage siteManageRight"
-              @click="toDesign(item.siteId, item.theme, item.font)"
-            >
+            <div class="siteManage siteManageRight" @click="toDesign(item.siteId)">
               进入设计
               <div class="arrowRight"></div>
             </div>
@@ -260,7 +257,7 @@ export default {
     },
     // 跳转至设计器
     toDesign(siteId, themeColor, themeFont) {
-      window.location.href = `${designerUrl}?siteId=${siteId}&themeColor=${themeColor}&themeFont=${themeFont}`;
+      window.location.href = `${designerUrl}?siteId=${siteId}`;
     },
     // 跳转至我的网站
     toSiteManage(siteId) {
