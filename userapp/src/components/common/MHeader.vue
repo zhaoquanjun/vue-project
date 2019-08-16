@@ -374,19 +374,25 @@ export default {
             border-radius: 50%;
         }
     }
-    .login-set {
+      .login-set {
         cursor: pointer;
         text-align: left;
-        background: #131518;
+        background: #fff;
+        color: #A1A8B1;
         position: absolute;
-        z-index: 100;
+        z-index: 1000;
         right: 0;
         top: 60px;
-        color: #fff;
-        padding: 10px 30px;
         border-radius: 2px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+        padding: 9px 0;
         dd {
-            line-height: 30px;
+            padding: 0 30px;
+            line-height: 32px;
+            &:hover {
+                 color: #262626;
+                background: #e0faff;
+            }
         }
     }
     .intoDesign {

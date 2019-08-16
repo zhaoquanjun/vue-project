@@ -91,6 +91,7 @@
             <el-dialog
                 :visible.sync="imgVisible"
                 :modal-append-to-body="false"
+                :close-on-click-modal="false"
                 @close="closeDialog"
             >
                 <el-carousel
@@ -232,6 +233,7 @@ export default {
             this.picInfo = this.imgList[this.changeIndex];
         },
         next() {
+            console.log(this.changeIndex)
             this.$refs.carousel.next();
             this.changeIndex = this.changeIndex + 1;
             if (this.changeIndex >= this.picSearchOptions.pageSize) {
