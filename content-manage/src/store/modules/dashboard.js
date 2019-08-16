@@ -36,9 +36,7 @@ let filterMenuListData = (source) => {
     
 };
 const dashboard = {
-  
     state: {
-      
         appId:"",
         validateMenu:"",
         menuList:[],

@@ -98,7 +98,7 @@
                             <el-form-item label="下载密码">
                                 <el-input
                                     class="input-border"
-                                    type="password"
+                                    placeholder="请输入下载密码(非必填)"
                                     v-model="ruleForm.pass"
                                     autocomplete="off"
                                     @blur="fileNameBlur"
@@ -404,7 +404,7 @@ export default {
             this.ruleForm = {
                 name: data.title,
                 pass: data.pwd || "",
-                link: data.fullOssUrl
+                link: `${location.host}${data.downloadPage}`
             };
         },
         closeRightPanel(b) {
@@ -524,6 +524,7 @@ export default {
 .el-form /deep/ .input-border .el-input__inner {
     border: none;
     border-bottom: 1px solid #b9cbcf;
+    border-radius: 0;
 }
 .el-form /deep/ .input-border .el-input__inner:hover {
     border-bottom: 1px solid #0595e6;
@@ -552,11 +553,10 @@ export default {
     .download-url {
         box-sizing: border-box;
         padding: 0 8px;
-        width: 80%;
         background-color: #eaeaea;
     }
     .file-editor-btn {
-        width: 80px;
+        flex: none;
         // padding: 0;
         margin-left: 8px;
         color: #8c8c8c;

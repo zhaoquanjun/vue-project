@@ -550,7 +550,6 @@ export default {
             //       this.categoryId.push(item.id);
             //  })
             this.categoryIdList(this.detailData.productCategoryList);
-        
         },
         categoryIdList(list) {
             list.forEach(item => {
@@ -588,7 +587,7 @@ export default {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
                             this.$emit("changeSaveWay", false);
-                            this.$emit("handlerClickNewAdd")
+                            this.$emit("handlerClickNewAdd");
                             this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;
@@ -628,7 +627,7 @@ export default {
                             this.resetForm("contentForm");
                             this.resetDetail();
                             this.$emit("changeSaveWay", false);
-                            this.$emit("handlerClickNewAdd")
+                            this.$emit("handlerClickNewAdd");
                             this.$route.query.isEditor = 0;
                             this.$refs.detailCheckTree.resetChecked();
                         } else {
@@ -656,16 +655,26 @@ export default {
                 return;
             }
             if (!!boolean) {
-                this.detailData.productCategoryList &&
-                    this.detailData.productCategoryList.forEach(item => {
-                        if (item.id != data.id) {
-                            this.detailData.productCategoryList.push({
-                                displayName: data.label,
-                                id: data.id,
-                                thumbnailPicUrl: data.thumbnailPicUrl
-                            });
-                        }
+                console.log(this.detailData.productCategoryList);
+                // this.detailData.productCategoryList &&
+                //     this.detailData.productCategoryList.forEach(item => {
+                //         if (item.id != data.id) {
+                //             console.log(123)
+                //             this.detailData.productCategoryList.push({
+                //                 displayName: data.label,
+                //                 id: data.id,
+                //                 thumbnailPicUrl: data.thumbnailPicUrl
+                //             });
+                //         }
+                //     });
+
+                if (this.detailData.productCategoryList.indexOf(data) === -1) {
+                    this.detailData.productCategoryList.push({
+                        displayName: data.label,
+                        id: data.id,
+                        thumbnailPicUrl: data.thumbnailPicUrl
                     });
+                }
             } else {
                 this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
                     item => {
