@@ -27,6 +27,6 @@ export const uploadSiteTemplate = (templateId) => {
     return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/UploadSiteTemplate`, templateId);
 }
 // 删除模版
-export const deleteTemplate = (templateId) => {
-    return ajaxRequest._delete(`${environment.templateApi}/api/v1/Template/DeleteTemplate`, JSON.stringify({ id: templateId }));
+export const deleteTemplate = (id) => {
+    return ajaxRequest._delete(`${environment.templateApi}/api/v1/Template/DeleteTemplate/${id}`);
 }

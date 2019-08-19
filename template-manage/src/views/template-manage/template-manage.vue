@@ -369,7 +369,13 @@ export default {
     this.getTemplateList();
     this.getFirstIndustry();
   },
-  methods: {
+ methods: {
+     //清除开通窗口输入框的值
+     clearOpenDialog() {
+         this.phone = "";
+         this.remark = "";
+         this.errorPhone = "";
+     },
     //   获取模版列表
     async getTemplateList() {
       let para = {
@@ -437,7 +443,8 @@ export default {
             message: `开通成功`,
             duration: 2000,
             showClose: false
-          });
+            });
+            this.searchTemplate();
         }
       }
     },
@@ -504,16 +511,65 @@ export default {
       this.templatePage = data;
       this.templateInfo = data.items;
       this.formatTime();
-    },
-    changePage(page) {
-      console.log(page);
+     },
+     // 分页查询
+     async searchTemplateByPage(pageIndex) {
+         let templateNameText = "";
+         let domainText = "";
+         let designerPhoneText = "";
+         if (this.searchValue == "templateName") {
+             templateNameText = this.search;
+         } else if (this.searchValue == "secondDomaon") {
+             domainText = this.search;
+         } else if (this.searchValue == "designer") {
+             designerPhoneText = this.search;
+         }
+         let orderByOpenTime = false;
+         let orderByUseCount = false;
+         let orderByUpdateTime = false;
+         if (this.sort == "createTime") {
+             orderByOpenTime = true;
+         } else if (this.sort == "updateTime") {
+             orderByUseCount = true;
+         } else if (this.sort == "useCount") {
+             orderByUpdateTime = true;
+         }
+         let para = {
+             TemplateName: templateNameText,
+             Domain: domainText,
+             DesignerPhone: designerPhoneText,
+             FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
+             SecondIndustry: this.secondIndustrySelect
+                 ? this.secondIndustrySelect
+                 : 0,
+             Language: this.languageSelect,
+             SiteTheme: "",
+             IsOnlyRecommend: this.isRecommend,
+             Published: this.templateStatus === "" ? "All" : this.templateStatus,
+             TemplateType: "SiteTemplate",
+             PageIndex: pageIndex,
+             PageSize: 10,
+             IsOrderByOpenTime: orderByOpenTime,
+             IsOrderByUseCount: orderByUseCount,
+             IsOrderByUpdateTime: orderByUpdateTime,
+             IsOrderByDesc: this.isDescSort
+         };
+         let { data, status } = await templateApi.getSiteTemplates(para);
+         console.log(data);
+         this.templatePage = data;
+         this.templateInfo = data.items;
+         this.formatTime();
+     },
+     changePage(page) {
+         this.searchTemplateByPage(page);
     },
     changeSize(page) {
-      console.log(page);
+        this.searchTemplate();
     },
     // 开通模版
-    createTemplatedialogShow() {
-      this.createTemplateShow = true;
+     createTemplatedialogShow() {
+        this.clearOpenDialog();
+        this.createTemplateShow = true;
     },
     cancelCreateTemplate() {
       this.createTemplateShow = false;
@@ -540,7 +596,8 @@ export default {
                 message: `模版更新成功`,
                 duration: 2000,
                 showClose: false
-              });
+                });
+                this.searchTemplate();
             } else {
               this.$notify({
                 customClass: "notify-error",
@@ -569,7 +626,8 @@ export default {
                 message: `模版删除成功`,
                 duration: 2000,
                 showClose: false
-              });
+                });
+                this.searchTemplate();
             } else {
               this.$notify({
                 customClass: "notify-error",
