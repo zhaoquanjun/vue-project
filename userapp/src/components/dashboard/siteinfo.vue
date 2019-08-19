@@ -8,7 +8,7 @@
           class="item"
           v-for="(item, index) in siteInfo"
           :key="index"
-          @click.native="handleClick(item,index)"
+          @click.native="handleClick(index)"
         >
           <div class="siteImg">
             <img :src="item.image" alt class="siteImgBackground" />
@@ -16,41 +16,53 @@
           <div class="siteName">{{item.siteName}}</div>
           <div class="siteText siteLanguage">
             <span>语言：</span>
-            {{item.language == "zh-CN" ? "中文" : "英语"}}
+            {{_getLanguage(item.language)}}
           </div>
           <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
           <div v-show="index == curIndex" class="siteManageWrap">
-            <div class="siteManage" @click="toSiteManage(item.siteId)">
+            <div class="siteManage siteManageLeft" @click="toSiteManage(item.siteId)">
               <div class="arrowLeft"></div>网站管理
             </div>
-            <div class="siteManage siteManageRight" @click="toDesign(item.siteId)">
+            <div class="siteManage" @click="toDesign(item.siteId)">
               进入设计
               <div class="arrowRight"></div>
             </div>
           </div>
         </el-col>
-        <div class="leftModul"></div>
-        <div class="rightModul"></div>
+        <div class="leftModul" @click="leftClick"></div>
+        <div class="rightModul" @click="rightClick"></div>
       </div>
 
       <div style="height:300px;" v-if="siteInfo.length == 2">
         <div class="siteInfoTwo" v-for="(item, index) in siteInfo" :key="index">
-          <div class="siteImg"></div>
+          <div class="siteImg">
+            <img :src="item.image" alt class="siteImgBackground" />
+          </div>
           <div class="siteName">{{item.siteName}}</div>
           <div class="siteText siteLanguage">
             <span>语言：</span>
-            {{item.language == "zh-CN" ? "中" : "EN"}}
+            {{_getLanguage(item.language)}}
           </div>
           <div class="siteText isPublished">{{item.isPublished ? "已发布" : "未发布"}}</div>
+          <div class="siteManageWrap">
+            <div class="siteManage siteManageLeft" @click="toSiteManage(item.siteId)">
+              <div class="arrowLeft"></div>网站管理
+            </div>
+            <div class="siteManage" @click="toDesign(item.siteId)">
+              进入设计
+              <div class="arrowRight"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="sliderWrap" v-show="siteInfo.length != 1">
+      <div class="sliderWrap" v-show="siteInfo.length > 2">
         <div
           class="slider"
           :class="{sliderActive: index == curIndex}"
           v-for="(item, index) in siteInfo"
           :key="index"
+          @click="changeSlider(index)"
         ></div>
       </div>
 
@@ -104,6 +116,7 @@
 import * as dashboardApi from "@/api/request/dashboardApi";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
 import { designerUrl, mySiteUrl } from "@/environment/index";
+import { getLanguage } from "@/configure/appCommon";
 
 export default {
   props: ["siteInfo", "isCanCreate"],
@@ -139,6 +152,25 @@ export default {
     }
   },
   methods: {
+    changeSlider(index) {
+      console.log(index);
+      this.curIndex = index;
+      this.handleClick(index);
+    },
+    leftClick() {
+      if (this.curIndex == 0) {
+        this.handleClick(this.siteInfo.length - 1);
+      } else {
+        this.handleClick(this.curIndex - 1);
+      }
+    },
+    rightClick() {
+      if (this.curIndex == this.siteInfo.length - 1) {
+        this.handleClick(0);
+      } else {
+        this.handleClick(this.curIndex + 1);
+      }
+    },
     /**
      * 获取当前siteId
      */
@@ -188,7 +220,7 @@ export default {
         }
       }
     },
-    handleClick(item, index) {
+    handleClick(index) {
       // console.log(this.$refs[`siteInfo-${index}`][0].style);
       // if (index == 0 || index == this.siteInfo.length - 1) return;
       // this.curIndex = index;
@@ -264,6 +296,10 @@ export default {
       this.$store.commit("SETSITEID", siteId);
       window.location.href = mySiteUrl;
     },
+    // 转换语言
+    _getLanguage(language) {
+      return getLanguage(language);
+    },
     // 创建site
     async createSite() {
       let { status } = await dashboardApi.CreateSite(
@@ -337,6 +373,7 @@ export default {
       bottom: 31px;
       width: 17%;
       height: 300px;
+      cursor: pointer;
       background: linear-gradient(
         90deg,
         rgba(255, 255, 255, 1) 0%,
@@ -349,6 +386,7 @@ export default {
       bottom: 31px;
       width: 17%;
       height: 300px;
+      cursor: pointer;
       background: linear-gradient(
         90deg,
         rgba(146, 170, 254, 0) 0%,
@@ -387,7 +425,7 @@ export default {
       bottom: 31px;
       transform: translateX(100%);
       border-radius: 3px;
-      transition: all 0.5s linear;
+      transition: all 0.3s ease;
       opacity: 0;
       .siteImg {
         width: 46%;
@@ -403,7 +441,6 @@ export default {
         }
       }
       .siteName {
-        // display: inline-block;
         overflow: hidden;
         font-size: 16px;
         font-weight: 400;
@@ -434,42 +471,6 @@ export default {
       }
       .isPublished {
         margin-top: 16px;
-      }
-      .siteManageWrap {
-        overflow: hidden;
-        padding-left: 30px;
-        margin-top: 60px;
-        .siteManage {
-          display: inline-block;
-          font-size: 16px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 1);
-          line-height: 22px;
-          cursor: pointer;
-          .arrowLeft {
-            display: inline-block;
-            width: 14px;
-            height: 13px;
-            margin-right: 5px;
-            background: url("~img/dashboard/board-arrowLeftMax.png") no-repeat
-              center;
-            background-size: contain;
-            vertical-align: inherit;
-          }
-          .arrowRight {
-            display: inline-block;
-            width: 14px;
-            height: 13px;
-            margin-left: 5px;
-            background: url("~img/dashboard/board-arrowRightMax.png") no-repeat
-              center;
-            background-size: contain;
-            vertical-align: inherit;
-          }
-        }
-        .siteManageRight {
-          margin-left: 30px;
-        }
       }
     }
     .active {
@@ -573,6 +574,7 @@ export default {
         border-radius: 50%;
         float: left;
         margin-left: 10px;
+        cursor: pointer;
         transition: all 0.3s linear;
       }
       .sliderActive {
@@ -611,22 +613,37 @@ export default {
       float: left;
       margin-top: 24px;
       margin-left: 21px;
+      cursor: pointer;
+      .siteImgBackground {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
     .siteName {
-      // display: inline-block;
+      overflow: hidden;
       font-size: 22px;
       font-weight: 400;
       color: rgba(255, 255, 255, 1);
       line-height: 30px;
       margin-top: 57px;
       padding-left: 30px;
+
+      display: -webkit-box;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      -webkit-text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
     }
     .siteText {
+      overflow: hidden;
       font-size: 16px;
       font-weight: 400;
       color: rgba(255, 255, 255, 1);
       line-height: 22px;
-      margin-left: 30px;
+      padding-left: 30px;
     }
     .siteLanguage {
       margin-top: 16px;
@@ -636,14 +653,18 @@ export default {
     }
     .siteManageWrap {
       overflow: hidden;
-      padding-left: 30px;
-      margin-top: 60px;
+      padding-left: 15px;
+      margin-top: 45px;
       .siteManage {
+        width: 100px;
+        height: 30px;
+        padding: 8px 10px;
+        text-align: center;
         display: inline-block;
         font-size: 16px;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
-        line-height: 22px;
+        line-height: 30px;
         cursor: pointer;
         .arrowLeft {
           display: inline-block;
@@ -665,7 +686,14 @@ export default {
           background-size: contain;
           vertical-align: inherit;
         }
+        &:hover {
+          background: rgba(255, 255, 255, 0.3);
+          border-radius: 2px;
+        }
       }
+      // .siteManageLeft {
+      // margin-right: 15px;
+      // }
     }
   }
 }
@@ -739,6 +767,14 @@ export default {
     }
   }
 }
+@media screen and (max-width: 1912px) {
+  .site-section .content .item .siteManageWrap {
+    margin-top: 25px;
+  }
+  .site-section .content .siteManageWrap {
+    margin-top: 25px;
+  }
+}
 @media screen and (max-width: 1500px) {
   .site-section {
     margin-top: 22px;
@@ -803,11 +839,14 @@ export default {
           margin-top: 6px;
         }
         .siteManageWrap {
-          margin-top: 21px;
-          padding-left: 18px;
+          margin-top: 15px;
+          padding-left: 10px;
           .siteManage {
+            width: 82px;
+            height: 20px;
             font-size: 14px;
             line-height: 20px;
+            padding: 5px;
             .arrowLeft {
               width: 7px;
               height: 6px;
@@ -815,6 +854,7 @@ export default {
               background: url("~img/dashboard/board-arrowLeftMin.png") no-repeat
                 center;
               background-size: contain;
+              vertical-align: middle;
             }
             .arrowRight {
               width: 7px;
@@ -823,10 +863,8 @@ export default {
               background: url("~img/dashboard/board-arrowRightMin.png")
                 no-repeat center;
               background-size: contain;
+              vertical-align: middle;
             }
-          }
-          .siteManageRight {
-            margin-left: 20px;
           }
         }
       }
@@ -892,7 +930,41 @@ export default {
       .details {
         margin-top: 21px;
       }
+      .siteManageWrap {
+        margin-top: 5px;
+        padding-left: 10px;
+        .siteManage {
+          width: 82px;
+          height: 20px;
+          font-size: 14px;
+          line-height: 20px;
+          padding: 5px;
+          .arrowLeft {
+            width: 7px;
+            height: 6px;
+            margin-right: 5px;
+            background: url("~img/dashboard/board-arrowLeftMin.png") no-repeat
+              center;
+            background-size: contain;
+            vertical-align: middle;
+          }
+          .arrowRight {
+            width: 7px;
+            height: 6px;
+            margin-left: 5px;
+            background: url("~img/dashboard/board-arrowRightMin.png") no-repeat
+              center;
+            background-size: contain;
+            vertical-align: middle;
+          }
+        }
+      }
     }
+  }
+}
+@media screen and (max-width: 1420px) {
+  .site-section .content .active .siteManageWrap {
+    margin-top: 5px;
   }
 }
 </style>
