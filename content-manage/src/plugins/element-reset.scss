@@ -69,6 +69,16 @@
      }
     .el-carousel__arrow--right, .el-carousel__arrow--left {
          background: none;
+         
+     }
+     .left-prev,.right-next{
+        width: 80px;
+     }
+     .right-next{
+         margin-right: -10px;
+     }
+     .left-prev {
+         margin-left: -10px;
      }
     .el-carousel__arrow i {
          font-size: 40px;

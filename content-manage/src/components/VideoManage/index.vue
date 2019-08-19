@@ -104,8 +104,8 @@
 <script>
 import ChunkUpload from "@/components/common/ChunkUpload";
 import MTree from "./MTree";
+import ListHeader from "@/components/FileManage/ListHeader";
 
-import ListHeader from "@/components/ImgManage/ImgListHeader";
 import List from "./List";
 import SelectTree from "@/components/common/SelectTree";
 
@@ -165,6 +165,11 @@ export default {
     methods: {
         // 获取列表
         async getPicList(node) {
+            const loading = this.$loading({
+                lock: true,
+                spinner: "loading-icon",
+                background: "rgba(255, 255, 255, 0.75)"
+            });
             if (node) {
                 this.nodeData = node; // 上传图片所需
             }
@@ -172,6 +177,7 @@ export default {
             let { data } = await videoManageApi.getPicList(
                 this.picSearchOptions
             );
+            loading.close();
             this.imgPageResult = data;
         },
         // 批量删除列表

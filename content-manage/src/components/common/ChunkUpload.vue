@@ -2,9 +2,9 @@
     <div>
         <el-row class="upload-head" type="flex" justify="space-between">
             <el-col :span="12">
-                <span style="padding-right:8px">上传至:</span>
+                <span style="padding-right:16px">上传至</span>
                 <SelectTree
-                    style="width:140px"
+                    class="chunkUpload-select-tree"
                     ref="treeX"
                     :tree-result="treeResult"
                     node-key="id"
@@ -20,19 +20,36 @@
             :autoStart="false"
             class="uploader-example"
             @file-added="onFileAdded"
+            @file-removed="fileRemove"
             @file-success="onFileSuccess"
             @upload-start="uploadStart"
             @file-error="onFileError"
         >
             <uploader-unsupport></uploader-unsupport>
-            <uploader-list></uploader-list>
+            <uploader-list :uploadType="uploadType"></uploader-list>
             <uploader-drop>
                 <span>将{{displayName}}拖拽到此处或</span>
                 <uploader-btn :attrs="attrs">点击选择{{displayName}}</uploader-btn>
                 <!-- <uploader-btn :directory="true">选择文件夹</uploader-btn> -->
             </uploader-drop>
         </uploader>
-        <button class="btn-small btn-bglightblue" @click="upload">开始上传</button>
+        <div class="upload-footer">
+            <ul>
+                <li>共上传{{fileList.length}}个文件，</li>
+                <li v-if="successCount>0">
+                    <i class="success-color">{{successCount}}</i> 个上传成功，
+                </li>
+                <li v-if="errorCount>0">
+                    <i class="error-color">{{errorCount}}</i> 个上传失败
+                </li>
+            </ul>
+            <button
+                class="btn-small"
+                :class="[disable?'disable-btn':'btn-bglightblue']"
+                :disable="disable"
+                @click="upload"
+            >开始上传</button>
+        </div>
     </div>
 </template>
 
@@ -56,6 +73,7 @@ export default {
         return {
             categoryId: 0,
             options: {
+                uploadType: this.uploadType,
                 target: null,
                 testChunks: true,
                 chunkSize: 2048000, //分块大小,
@@ -78,9 +96,20 @@ export default {
                         case 1: {
                             if (chunk.offset === 0) {
                                 //todo 更换alert
-                                alert(
-                                    `${this.displayName}[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`
-                                );
+                                // this.$confirm(
+                                //     `${this.displayName}[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`,
+                                //     "提示",
+                                //     {
+                                //         customClass: "medium",
+                                //         iconClass: "icon-warning"
+                                //     }
+                                // );
+                                this.$notify({
+                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    message: `${this.displayName}[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`,
+                                    duration: 1500,
+                                    showClose: false
+                                });
                             }
                             return true;
                         }
@@ -98,7 +127,13 @@ export default {
                                     CategoryId: this.categoryId
                                 });
                                 //todo 更换alert
-                                alert(`文件秒传成功`);
+
+                                this.$notify({
+                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    message: `文件秒传成功`,
+                                    duration: 1500,
+                                    showClose: false
+                                });
                             }
 
                             return true;
@@ -109,9 +144,12 @@ export default {
             attrs: {
                 accept: this.accept //'video/*'
             },
-            fileList: [],
+
             img: require("../../assets/avatar.jpeg"),
-            successFlieList: []
+            fileList: [],
+            successCount: 0,
+            errorCount: 0,
+            disable: true
         };
     },
     created() {
@@ -121,20 +159,61 @@ export default {
         onFileError(rootFile, file, response, chunk) {
             //todo 更换alert
             alert(JSON.parse(response).message);
+            this.errorCount += 1;
         },
         onFileSuccess() {
-            this.$emit("getList");
+            this.successCount += 1;
+            if (this.successCount > 0 && this.errorCount < 1) {
+                this.$emit("getList");
+                this.$emit("closeDialog")
+                this.fileList.forEach((file)=>{
+                     file.cancel(file);
+                });
+                this.successCount=0;
+                this.errorCount= 0;
+            }
         },
         onFileAdded(file) {
-            this.fileList.push(file);
-            console.log(file, "file");
+            if (file.fileType == "") {
+                file.cancel(file);
+
+                return;
+            }
+            let [, suffix] = file.fileType.split("/");
+            let ary = [
+                "exe",
+                "php",
+                "lnk",
+                "cmd",
+                "bat",
+                "reg",
+                "vb",
+                "vbs",
+                "js",
+                "css",
+                "aspx",
+                "sql",
+                "asp",
+                "jsp",
+                "htm",
+                "html",
+                "java",
+                "json"
+            ];
+            console.log(file);
+            console.log(suffix);
+            if (ary.indexOf(suffix) > -1) {
+                file.cancel(file);
+                return;
+            }
+
+            // console.log(file, "file");
             this.panelShow = true;
             //  file.resume();
             this.computeMD5(file);
         },
         uploadStart(file) {},
         computeMD5(file) {
-            console.log(file, "00090000");
             let url = URL.createObjectURL(file.file);
             var audioElement = new Audio(url);
             console.log(audioElement);
@@ -147,20 +226,20 @@ export default {
             let fileReader = new FileReader();
             let time = new Date().getTime();
             let md5 = "";
-            console.log(`开始计算md5`);
+            // console.log(`开始计算md5`);
 
             fileReader.readAsArrayBuffer(file.file);
             fileReader.onload = e => {
                 md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
                 //todo md5监听事件在此触发
-                console.log(
-                    `MD5计算完毕：${file.id} ${
-                        file.name
-                    } MD5：${md5} 用时：${new Date().getTime() -
-                        time} ms,自动开始上传,\n 香槟boy 监听事件在此触发`
-                );
+                // console.log(
+                //     `MD5计算完毕：${file.id} ${
+                //         file.name
+                //     } MD5：${md5} 用时：${new Date().getTime() -
+                //         time} ms,自动开始上传,\n 香槟boy 监听事件在此触发`
+                // );
                 file.uniqueIdentifier = md5;
-                this.successFlieList.push(file);
+                this.fileList.push(file);
                 // file.resume();
             };
 
@@ -176,23 +255,33 @@ export default {
             this.uploadPicAction = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`;
         },
         upload() {
-            this.successFlieList.forEach(item => {
+            this.fileList.forEach(item => {
                 item.resume();
+            });
+        },
+        fileRemove(file) {
+            this.fileList = this.fileList.filter(item => {
+                return item != file;
             });
         }
     },
     watch: {
         fileList() {
-            this.$nextTick(() => {
-                let eles = document.getElementsByClassName(
-                    "uploader-file-icon"
-                );
-                for (let i = 0; i < eles.length; i++) {
-                    let ele = eles[i];
-                    ele.style.backgroundImage =
-                        "url('http://img5.imgtn.bdimg.com/it/u=150565144,593293567&fm=26&gp=0.jpg')";
-                }
-            });
+            if (this.fileList.length > 0) {
+                this.disable = false;
+            } else {
+                this.disable = true;
+            }
+            // this.$nextTick(() => {
+            //     let eles = document.getElementsByClassName(
+            //         "uploader-file-icon"
+            //     );
+            //     for (let i = 0; i < eles.length; i++) {
+            //         let ele = eles[i];
+            //         ele.style.backgroundImage =
+            //             "url('http://img5.imgtn.bdimg.com/it/u=150565144,593293567&fm=26&gp=0.jpg')";
+            //     }
+            // });
         }
     }
 };
@@ -200,13 +289,13 @@ export default {
 
 <style  scoped>
 .uploader-list /deep/ .uploader-file {
-    height: 80px;
-    line-height:1;
-    padding: 8px;
+    height: 54px;
+    line-height: 1;
+    padding: 8px 32px;
 }
 .uploader-list /deep/ .uploader-file-icon {
-    width: 113px;
-    height: 80px;
+    /* width: 113px;
+    height: 80px; */
     line-height: 1;
     margin: 0;
 }
@@ -215,28 +304,43 @@ export default {
 }
 .uploader-list /deep/ ul li {
     margin-bottom: 14px;
-    border: 1px solid #eee;
+    border: 1px solid #e5e5e5;
 }
 /* zxb begin */
-.uploader-list /deep/ .uploader-file-status,.uploader-list /deep/ .uploader-file-actions{
+.uploader-list /deep/ .uploader-file-status,
+.uploader-list /deep/ .uploader-file-actions {
     float: right;
     text-align: right;
     padding-right: 16px;
     display: flex;
     align-items: center;
 }
-.uploader-list /deep/ .uploader-file{
+.uploader-list /deep/ .uploader-file-actions,
+.uploader-list /deep/ .uploader-file-status {
+    justify-content: flex-end;
+}
+.uploader-list /deep/ .uploader-file {
     border: none;
 }
-.uploader-list /deep/ .uploader-file-progress{
+.uploader-list /deep/ .uploader-file-progress {
     background: #fff;
 }
-.uploader-list /deep/ .uploader-file-name{
+.uploader-list /deep/ .uploader-file-name {
     display: flex;
     align-items: center;
 }
+.chunkUpload-select-tree /deep/ .el-input--small .el-input__inner {
+    height: 40px;
+    line-height: 40px;
+    border-color: #a1a8b1;
+    font-size: 14px;
+}
 </style>
 <style scoped lang="scss">
+.chunkUpload-select-tree {
+    padding-top: 20px;
+    width: 214px;
+}
 .uploader-example {
     padding: 15px;
     min-height: 320px;
@@ -251,14 +355,20 @@ export default {
         // top: -40px;
         margin-top: 16px;
         padding: 0;
-        height: 100px;
-        border: 1px dashed #eee;
+        height: 68px;
+        background: rgba(245, 245, 245, 1);
+        border-radius: 2px;
+        border: 1px dashed rgba(215, 215, 215, 1);
         text-align: center;
-        line-height: 100px;
+        line-height: 68px;
         .uploader-btn {
             // border: 1px solid #09cceb;
             border: none;
             color: #09cceb;
+            padding-left: 0;
+            &:hover {
+                background: transparent;
+            }
         }
     }
 }
@@ -271,5 +381,27 @@ export default {
     overflow: auto;
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+.upload-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    ul {
+        display: flex;
+        align-items: center;
+    }
+}
+.success-color {
+    color: #35b24b;
+}
+.error-color {
+    color: #f15533;
+}
+.disable-btn {
+    background: rgba(229, 229, 229, 1);
+    border-radius: 2px;
+    border: 1px solid rgba(229, 229, 229, 1);
+    color: #fff;
 }
 </style>

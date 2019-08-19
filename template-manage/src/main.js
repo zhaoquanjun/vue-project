@@ -8,7 +8,6 @@ import "./assets/reset.css";
 import "./styles/common.scss";
 import "./styles/pop-up/pup-up.scss"
 import "./styles/weizhan.scss";
-import './icons';
 Vue.config.productionTip = false;
 new Vue({
   router,

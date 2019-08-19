@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 import { defaultRoutes } from "./routes"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
-import Cookies from "js-cookie";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import {setLocal,getLocal,removeLocal} from '@/libs/local'
@@ -64,22 +63,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 });
-
-// if(store.getters.getMenuList.length<1){
-//     await store.dispatch('_getMenuListData')
-//     let authRoute = await store.dispatch('getAuthRoute');
-//     console.log(authRoute,'拿到权限路由')
-//     if(!flag){
-//       router.addRoutes(authRoute)
-//       next({...to,replace:true});
-//       console.log(router)
-//     }else{
-//       next()
-//     }
-
-//   }else{
-//     next()
-//   }
 
 router.afterEach(() => {
   NProgress.done()

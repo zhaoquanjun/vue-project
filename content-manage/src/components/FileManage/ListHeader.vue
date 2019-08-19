@@ -77,7 +77,7 @@
                 <button
                     class="btn-lightblue btn-small upload-wrap"
                     @click="switchUploadBoxShowStatus"
-                >上传文件</button>
+                >上传{{displayName}}</button>
             </div>
         </template>
         <template v-else>
@@ -109,7 +109,7 @@
 </template>
 <script>
 export default {
-    props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
+    props: ["picSearchOptions", "isBatchHeaderShow", "countPic","displayName"],
     data() {
         return {
             ascSort: false,

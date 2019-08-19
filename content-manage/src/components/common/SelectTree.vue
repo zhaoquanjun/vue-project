@@ -154,7 +154,7 @@ export default {
                 scrollWrap.style.cssText =
                     "margin: 0px; max-height: none; overflow: hidden;";
                 scrollBar.forEach(ele => (ele.style.width = 0));
-                scrollWrap.style.display = "none"
+                scrollBar[0].style.display = "none"
             });
             
         },

@@ -91,6 +91,7 @@
             <el-dialog
                 :visible.sync="imgVisible"
                 :modal-append-to-body="false"
+                :close-on-click-modal="false"
                 @close="closeDialog"
             >
                 <el-carousel
@@ -122,18 +123,15 @@
                 </div>
             </el-dialog>
         </div>
-        <Loading v-if="loadingShow" />
+     
     </div>
 </template>
 
 <script>
 import { trim } from "@/utlis/index.js";
-import Loading  from "@/base/loading.vue"
 export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
-    components:{
-        Loading
-    },
+ 
     data() {
         return {
             layout: "total, slot, sizes, prev, pager, next,jumper",
@@ -152,7 +150,6 @@ export default {
             changeIndex: -1,
             firstIndex: "",
             tableHeight: 500,
-            loadingShow:true,
         };
     },
     mounted() {
@@ -236,6 +233,7 @@ export default {
             this.picInfo = this.imgList[this.changeIndex];
         },
         next() {
+            console.log(this.changeIndex)
             this.$refs.carousel.next();
             this.changeIndex = this.changeIndex + 1;
             if (this.changeIndex >= this.picSearchOptions.pageSize) {
@@ -259,11 +257,7 @@ export default {
             this.$emit("batchRemove", [row.id]);
         }
     },
-    watch:{
-        imgPageResult(){
-            this.loadingShow=false;
-        },
-    }
+  
 };
 </script>
 <style lang="scss" scoped>

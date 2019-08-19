@@ -19,7 +19,7 @@
             <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
           </span>
         </div>
-        <el-row :gutter="10">
+        <el-row :gutter="20" style="padding:0 30px; padding-bottom:30px;">
           <el-col
             class="templateItem"
             :span="siteNum()"
@@ -27,7 +27,9 @@
             :key="index"
           >
             <div class="itemSiteImage">
+              <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
               <img :src="item.siteImage" alt class="itemSiteImageBackground" />
+              <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
               <div class="modal" v-if="item.siteId != curSiteId">
                 <button class="choseSite" @click="choseSite(item)">选择网站</button>
               </div>
@@ -40,7 +42,6 @@
                 href="item.secondDomain"
                 target="_blank"
               >{{item.secondDomain}}</a>
-              <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
             </div>
           </el-col>
         </el-row>
@@ -235,9 +236,9 @@ export default {
   background-color: "#fff";
   color: #262626;
   overflow: hidden;
-  padding: 20px 20px 32px;
   .dialogTitle {
-    height: 71px;
+    padding: 24px;
+    border-bottom: 1px solid #eee;
     .dialogTitleText {
       font-size: 16px;
       font-family: PingFangSC-Medium;
@@ -251,22 +252,41 @@ export default {
     cursor: pointer;
   }
   .templateItem {
-    padding: 5px;
+    // padding: 5px;
+    padding-top: 32px;
     .itemSiteImage {
       position: relative;
       width: 100%;
       transition: all 0.3s ease-in;
+      .itemSiteImageHeader {
+        width: 100%;
+      }
+      .siteLanguage {
+        position: absolute;
+        top: 40px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 2px;
+        padding:0 12px;
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(38, 38, 38, 1);
+        line-height: 22px;
+      }
       .itemSiteImageBackground {
+        margin-top: -2px;
         width: 100%;
         height: 100%;
       }
       .choseSite {
         width: 90px;
-        height: 32px;
-        background: rgba(1, 192, 222, 1);
-        font-size: 12px;
-        font-weight: 500;
+        height: 40px;
+        background: rgba(9, 204, 235, 1);
+        border-radius: 2px;
+        font-size: 14px;
+        font-weight: 400;
         color: rgba(255, 255, 255, 1);
+        line-height: 40px;
       }
       .modal {
         display: flex;
@@ -324,13 +344,6 @@ export default {
       font-weight: 400;
       line-height: 22px;
       color: rgba(0, 193, 222, 1);
-    }
-    .siteLanguage {
-      float: right;
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(140, 140, 140, 1);
-      line-height: 22px;
     }
   }
 }

@@ -11,6 +11,7 @@ import "./styles/wezhan.scss";
 import "./plugins/element-reset.scss"
 import "./styles/pop-up/pup-up.scss"
 import VueClipboard from 'vue-clipboard2'
+import './icons';
 Vue.use(VueClipboard)
 // 验证码滑块
 import SliderVerificationCode from 'slider-verification-code';

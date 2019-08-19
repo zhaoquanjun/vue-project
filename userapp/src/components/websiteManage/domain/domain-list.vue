@@ -34,7 +34,6 @@
                             :value="scope.row.httpsStatus==4"
                             @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
                         ></el-switch>
-                        
                     </template>
                     <span v-else-if="scope.row.httpsStatus===1">{{scope.row.httpsStatusDesc}}</span>
                     <span v-else>—</span>
@@ -161,9 +160,7 @@
                             </el-col>
                             <el-col :span="7" v-if="active >= 1">
                                 <div>
-                                    <div class="explain-item">
-                                        使用“一键解析”自动完成域名解析或前往阿里云控制台自行设置解析
-                                    </div>
+                                    <div class="explain-item">使用“一键解析”自动完成域名解析或前往阿里云控制台自行设置解析</div>
                                     <div class="explain-item islink">如何进行域名解析？</div>
                                     <button
                                         class="wezhan-btn btn-small btn-lightblue"
@@ -345,7 +342,7 @@ export default {
                         distinguishCancelAndClose: true,
                         confirmButtonText: "发布网站并申请",
                         cancelButtonText: "已发布，直接申请",
-                        type: "success"
+                        iconClass: "icon-success"
                     }
                 )
                     .then(() => {
@@ -358,9 +355,7 @@ export default {
                     });
             } else {
                 this.$confirm("确定要停用HTTPS吗？", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "success",
+                    iconClass: "icon-success",
                     callback: action => {
                         if (action === "confirm") {
                             this.$emit("disableHttps", domainId);
@@ -410,16 +405,30 @@ export default {
         },
         elemnetConfirm(type, content, callback, index, status, title) {
             let message = [];
-            content.forEach(item => {
-                message.push(
-                    this.$createElement("p", { style: "color: #262626" }, item)
-                );
+            content.forEach((item, index) => {
+                if (index == 0) {
+                    message.push(
+                        this.$createElement(
+                            "p",
+                            { style: "color: #262626" },
+                            item
+                        )
+                    );
+                } else {
+                    message.push(
+                        this.$createElement(
+                            "p",
+                            { style: "color: #8C8C8C" },
+                            item
+                        )
+                    );
+                }
             });
             this.$confirm("提示", {
                 title: title || "提示",
                 message: this.$createElement("div", null, message),
-                confirmButtonText: "确定",
                 type: type,
+                iconClass: `icon-${type}`,
                 // customClass:"large", // 弹窗大小  large / medium / small
                 callback: async action => {
                     if (action === "confirm") {

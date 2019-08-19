@@ -7,7 +7,12 @@
     <el-main class="contentWrap">
       <div class="contentHeader">
         <div>
-          <el-select v-model="searchValue" placeholder="请选择" class="selectSearchValue borderColor">
+          <el-select
+            v-model="searchValue"
+            placeholder="请选择"
+            class="selectSearchValue borderColor"
+            @change="changeSearchType"
+          >
             <el-option
               v-for="item in searchOptions"
               :key="item.value"
@@ -20,12 +25,13 @@
             v-model="firstIndustrySelect"
             placeholder="一级行业"
             class="firstIndustrySelect borderColor"
+            @change="choseFirstIndustry"
           >
             <el-option
               v-for="item in firstIndustryOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
           <span class="line"></span>
@@ -36,9 +42,9 @@
           >
             <el-option
               v-for="item in secondIndustryOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
           <el-select v-model="languageSelect" placeholder="语言" class="languageSelect borderColor">
@@ -59,14 +65,14 @@
           </el-select>
           <el-select v-model="templateStatus" placeholder="模版状态" class="templateStatus borderColor">
             <el-option
-              v-for="item in templateOptions"
+              v-for="item in templateStatusOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             ></el-option>
           </el-select>
           <el-checkbox v-model="isRecommend" class="isRecommend">仅推荐</el-checkbox>
-          <button class="inquire">查询</button>
+          <button class="inquire" @click="searchTemplate">查询</button>
         </div>
         <div style="margin-top:24px;margin-bottom:24px;">
           <span>排序</span>
@@ -79,10 +85,20 @@
             ></el-option>
           </el-select>
           <span>
-            <i class="iconfont iconshang" style="color:#09CCEB;margin-left:32px"></i>
+            <i
+              class="iconfont iconshang"
+              style="margin-left:32px;cursor: pointer;"
+              :class="{blue:!isDescSort,black:isDescSort}"
+              @click="asc"
+            ></i>
           </span>
           <span>
-            <i class="iconfont iconxia" style="color:#262626;margin-left:8px"></i>
+            <i
+              class="iconfont iconxia"
+              style="margin-left:8px;cursor: pointer;"
+              :class="{blue:isDescSort,black:!isDescSort}"
+              @click="desc"
+            ></i>
           </span>
         </div>
       </div>
@@ -94,13 +110,13 @@
             tooltip-effect="dark"
             :row-style="{height:'200px'}"
           >
-            <el-table-column prop="siteName" label="缩略图" style="padding-left:20px;"></el-table-column>
-            <el-table-column label="模板名称|语言|二级域名" width="245px">
+            <el-table-column prop="siteName" label="缩略图"></el-table-column>
+            <el-table-column label="模板名称|语言|二级域名">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.templateName}}</p>
-                  <p class="templateName" style="margin:8px 0;">{{scope.row.language}}</p>
-                  <p class="templateDomain">{{scope.row.templateDomain}}</p>
+                  <p class="templateName" style="margin:8px 0;">{{_getLanguage(scope.row.language)}}</p>
+                  <p class="templateDomain">{{scope.row.domain}}</p>
                 </div>
               </template>
             </el-table-column>
@@ -115,21 +131,30 @@
             <el-table-column label="开通时间|更新时间">
               <template slot-scope="scope">
                 <div>
-                  <p class="templateName">{{scope.row.time.a}}</p>
-                  <p class="templateName" style="margin-top:5px;">{{scope.row.time.b}}</p>
+                  <p class="templateName">{{(scope.row.myCreateTime)}}</p>
+                  <p
+                    class="templateName"
+                    style="margin-top:5px;"
+                  >{{scope.row.myUpdateTime ? scope.row.myUpdateTime : ""}}</p>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="num" label="使用量" width="100"></el-table-column>
+            <el-table-column prop="useCount" label="使用量" width="100"></el-table-column>
             <el-table-column label="设计师">
               <template slot-scope="scope">
                 <div>
-                  <p class="templateName">{{scope.row.designer.a}}</p>
-                  <p class="templateName" style="margin-top:5px;">{{scope.row.designer.b}}</p>
+                  <p class="templateName">{{scope.row.designerPhone}}</p>
+                  <p class="templateName" style="margin-top:5px;">{{scope.row.remark}}</p>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="status" label="模板状态"></el-table-column>
+            <el-table-column label="模板状态">
+              <template slot-scope="scope">
+                <div>
+                  <p class="templateName">{{scope.row.isPublished ? "已上架" : "未上架"}}</p>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
@@ -211,7 +236,7 @@
             <div>
               <el-select v-model="templateStatus" placeholder="模版状态" class="settingStatusSelect">
                 <el-option
-                  v-for="item in templateOptions"
+                  v-for="item in templateStatusOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -237,6 +262,7 @@
 </template>
 <script>
 import * as templateApi from "@/api/request/templateApi";
+import { getLanguage, formatDateTime } from "@/utlis/index";
 
 export default {
   data() {
@@ -266,49 +292,68 @@ export default {
       firstIndustrySelect: "",
       secondIndustryOptions: [],
       secondIndustrySelect: "",
-      languageOptions: [],
-      languageSelect: "",
-      themeOptions: [],
-      themeSelect: "",
-      templateOptions: [],
-      templateStatus: "",
-      isRecommend: false,
-      sortOptions: [],
-      sort: "",
-      ascSort: false,
-      descSort: true,
-      templateInfo: [
+      languageOptions: [
         {
-          templateName: "电商",
-          templateDomain: "http://c1168099161.scd.wezhan.cn",
-          language: "中文",
-          firstIndustry: "传媒/广告/营销策划",
-          secondIndustry: "广告设计",
-          time: { a: "2019-08-12 14:15:25", b: "2019-08-12 14:15:25" },
-          num: 123,
-          designer: { a: "13000000000" },
-          status: "未上架"
+          value: "zh-CN",
+          label: "简体中文"
         },
         {
-          templateName: "电商",
-          templateDomain: "http://c1168099161.scd.wezhan.cn",
-          language: "中文",
-          firstIndustry: "传媒/广告/营销策划",
-          secondIndustry: "广告设计",
-          time: { a: "2019-08-12 14:15:25", b: "2019-08-12 14:15:25" },
-          num: 123,
-          designer: { a: "13000000000" },
-          status: "未上架"
+          value: "en-US",
+          label: "English"
+        },
+        {
+          value: "ja-JP",
+          label: "日本语"
+        },
+        {
+          value: "es-ES",
+          label: "Español"
+        },
+        {
+          value: "ko-KR",
+          label: "한국어"
         }
       ],
+      languageSelect: "zh-CN",
+      themeOptions: [],
+      themeSelect: "",
+      templateStatusOptions: [
+        {
+          value: "up",
+          label: "上架"
+        },
+        {
+          value: "down",
+          label: "下架"
+        }
+      ],
+      templateStatus: "",
+      isRecommend: false,
+      sortOptions: [
+        {
+          value: "createTime",
+          label: "按开通时间"
+        },
+        {
+          value: "updateTime",
+          label: "按更新时间"
+        },
+        {
+          value: "useCount",
+          label: "使用量"
+        }
+      ],
+      sort: "createTime",
+      isDescSort: true,
+      templateInfo: [],
       settingTemplateShow: false,
       settingChecked: false
     };
   },
   components: {},
   mounted() {
-    // this.getTemplateList();
-    // this.getFirstIndustry()
+    this.getTemplateList();
+    this.getFirstIndustry();
   },
   methods: {
     //   获取模版列表
@@ -321,26 +366,63 @@ export default {
         SecondIndustry: 0,
         Language: "",
         SiteTheme: "",
-        IsRecommend: false,
-        OpenStatus: 0,
-        PageIndex: 0,
-        PageSize: 10
+        IsOnlyRecommend: false,
+        Published: "All",
+        TemplateType: "SiteTemplate",
+        PageIndex: 1,
+        PageSize: 10,
+        IsOrderByOpenTime: true,
+        IsOrderByUseCount: false,
+        IsOrderByUpdateTime: false,
+        IsOrderByDesc: true
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
-      this.templateInfo = data;
+      console.log(data);
+      this.templateInfo = data.items;
+      this.formatTime();
     },
-    //
+    // 获取一级行业
     async getFirstIndustry() {
       let { data, status } = await templateApi.getFirstIndustries();
       this.firstIndustryOptions = data;
     },
-    createTemplate() {
+
+    async choseFirstIndustry(id) {
+      console.log(id);
+      console.log(this.firstIndustrySelect);
+      let { data, status } = await templateApi.getSecondIndustries(id);
+      this.secondIndustryOptions = data;
+    },
+    // 升序
+    asc(){
+      this.isDescSort = false
+    },
+    // 降序
+    desc() {
+      this.isDescSort = true
+
+    },
+    async createTemplate() {
       if (this.phone == "") {
         this.errorTip = true;
         this.errorPhone = "请输入设计师手机号";
       } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
+      } else {
+        let { status } = await templateApi.createTemplate(
+          this.phone,
+          this.remark
+        );
+        if (status == 200) {
+          this.createTemplateShow = false;
+          this.$notify({
+            customClass: "notify-success",
+            message: `开通成功`,
+            duration: 2000,
+            showClose: false
+          });
+        }
       }
     },
     blurPhone() {
@@ -355,15 +437,79 @@ export default {
         this.errorPhone = "";
       }
     },
+    // 切换搜索类型 模版/二级域名/设计师
+    changeSearchType() {
+      this.search = "";
+    },
+    // 查询
+    async searchTemplate() {
+      let templateNameText = "";
+      let domainText = "";
+      let designerPhoneText = "";
+      if (this.searchValue == "templateName") {
+        templateNameText = this.search;
+      } else if (this.searchValue == "secondDomaon") {
+        domainText = this.search;
+      } else if (this.searchValue == "designer") {
+        designerPhoneText = this.search;
+      }
+      let orderByOpenTime = false;
+      let orderByUseCount = false;
+      let orderByUpdateTime = false;
+      if(this.sort == "createTime"){
+        orderByOpenTime = true
+      }else if(this.sort == "updateTime"){
+        orderByUseCount  = true
+      }else if(this.sort == "useCount"){
+        orderByUpdateTime = true
+      }
+      let para = {
+        TemplateName: templateNameText,
+        Domain: domainText,
+        DesignerPhone: designerPhoneText,
+        FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
+        SecondIndustry: this.secondIndustrySelect
+          ? this.secondIndustrySelect
+          : 0,
+        Language: this.languageSelect,
+        SiteTheme: "",
+        IsOnlyRecommend: this.isRecommend,
+        Published: "All",
+        TemplateType: "SiteTemplate",
+        PageIndex: 1,
+        PageSize: 10,
+        IsOrderByOpenTime: orderByOpenTime,
+        IsOrderByUseCount: orderByUseCount,
+        IsOrderByUpdateTime: orderByUpdateTime,
+        IsOrderByDesc: this.isDescSort
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      console.log(data);
+      this.templateInfo = data.items;
+      this.formatTime();
+    },
+    // 格式化时间
+    formatTime() {
+      for (let i = 0; i < this.templateInfo.length; i++) {
+        this.templateInfo[i].myCreateTime = formatDateTime(
+          this.templateInfo[i].createTime,
+          "yyyy/MM/dd hh:mm"
+        );
+        if (this.templateInfo[i].updateTime) {
+          this.templateInfo[i].myUpdateTime = formatDateTime(
+            this.templateInfo[i].updateTime,
+            "yyyy/MM/dd hh:mm"
+          );
+        }
+      }
+    },
     dialogShow() {
       this.createTemplateShow = true;
     },
     cancel() {
       this.createTemplateShow = false;
     },
-    /**
-     * 关闭弹框
-     */
+    // 关闭弹窗
     closeDialog() {
       this.createTemplateShow = false;
     },
@@ -374,7 +520,11 @@ export default {
     // 更新模版
     updateTemplate(scope) {},
     // 删除模版
-    deleteTemplate(scope) {}
+    deleteTemplate(scope) {},
+    // 语言转换
+    _getLanguage(language) {
+      return getLanguage(language);
+    }
   }
 };
 </script>
@@ -662,6 +812,12 @@ export default {
       line-height: 32px;
     }
   }
+}
+.blue {
+  color: #09cceb;
+}
+.black {
+  color: #262626;
 }
 </style>
 

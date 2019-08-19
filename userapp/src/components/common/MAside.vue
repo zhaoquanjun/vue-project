@@ -17,18 +17,19 @@
                     @click="skipPages(it,i)"
                 >
                     <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
+                    <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
+                    <span class="menu-item-content">{{it.name}}</span>
                     <i
-                        class="menu-icon iconfont"
-                        :class="[iconfonts(it.code)]"
+                        v-if="menuHasChild(i) && isLeftNavComponentsShow"
+                        :class="{'active-color':curPath==it.code,}"
+                        class="iconfont iconxiangyoufangxiang"
                     ></i>
-                    <span
-                        class="menu-item-content"
-                    >{{it.name}}</span>
                 </li>
             </ul>
         </el-aside>
         <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
+            :subTitle="subTitle"
             :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
             :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
@@ -43,7 +44,7 @@ import LeftNavComponents from "_c/Aside/LeftNavComponents";
 export default {
     data() {
         return {
-             width: 70,
+            width: 70,
             width1: 0,
             time: "0.8s",
             curIndex: -1,
@@ -51,7 +52,8 @@ export default {
             serversData: [],
             display: "none",
             curPath: "",
-            lastRoute: ""
+            lastRoute: "",
+            subTitle:""
         };
     },
     components: {
@@ -68,9 +70,9 @@ export default {
             }
             this.$router.push(item.path);
         },
-       collapseOpen(width, time) {
+        collapseOpen(width, time) {
             this.width = width;
-            this.width1 = 100;
+            this.width1 = 120;
             this.display = "block";
             this.time = time + "s";
         },
@@ -102,8 +104,14 @@ export default {
                 case "business":
                     return "icondianshanghuiyuan";
             }
+        },
+        menuHasChild(index){
+            if(this.getMenuList[index]&&this.getMenuList[index]["children"]){
+                return true
+            }else{
+                false
+            }
         }
-      
     },
     computed: {
         getMenuList() {
@@ -118,18 +126,18 @@ export default {
             if (!this.$store.getters.getMenuList) return;
             let item = this.$store.getters.getMenuList[this.curIndex];
             if (item && item.children) {
+                 this.subTitle=item.name
                 return true;
             } else {
                 return false;
             }
-        },
-      
+        }
     },
     watch: {
         $route(to, from) {
-            let [, firstRoute,lastRoute] = this.$route.path.split("/");
+            let [, firstRoute, lastRoute] = this.$route.path.split("/");
             this.curPath = firstRoute;
-            this.lastRoute = lastRoute
+            this.lastRoute = lastRoute;
         }
     }
 };
@@ -145,7 +153,7 @@ export default {
 }
 .m-asideleft {
     overflow: hidden;
-   
+
     /* height: 100%; */
 }
 .m-asideright {
@@ -164,12 +172,15 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 选中的样式
-.menu-bg{
+.menu-bg {
     background: #e0faff;
     color: #0595e6;
 }
-.menu-hover{
-     background: #e0fcff;
+.menu-hover {
+    background: #e0fcff;
+}
+.active-color {
+    color: #0595e6 !important;
 }
 .left-menu {
     border-right: solid 1px #e6e6e6;
@@ -189,8 +200,14 @@ export default {
             vertical-align: middle;
             color: #0595e6;
         }
+         .iconxiangyoufangxiang {
+            position: absolute;
+            right: 16px;
+            font-size: 14px;
+            vertical-align: middle;
+            color: #B9CBCF;
+        }
     }
-   
 }
 </style>
 

@@ -16,19 +16,20 @@
                     @mouseenter="changeCurHoverItem(i)"
                     @click="skipPages(it,i)"
                 >
+                    <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
+                    <span class="menu-item-content">{{it.name}}</span>
                     <i
-                        class="menu-icon iconfont"
-                        :class="[iconfonts(it.code)]"
+                        v-if="menuHasChild(i) && isLeftNavComponentsShow"
+                        :class="{'active-color':curPath==it.code,}"
+                        class="iconfont iconxiangyoufangxiang"
                     ></i>
-                    <span
-                        class="menu-item-content"
-                    >{{it.name}}</span>
                 </li>
             </ul>
         </el-aside>
         <!--  :menuList="menuList[curIndex]" -->
         <!--  -->
         <LeftNavComponents
+            :subTitle="subTitle"
             :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
             :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
@@ -53,11 +54,15 @@ export default {
             serversData: [],
             display: "none",
             curPath: "",
-            lastRoute: ""
+            lastRoute: "",
+            subTitle:""
         };
     },
     components: {
         LeftNavComponents
+    },
+    mounted(){
+        this.menuHasChild(0)
     },
     methods: {
         changeCurHoverItem(i) {
@@ -74,7 +79,7 @@ export default {
         },
         collapseOpen(width, time) {
             this.width = width;
-            this.width1 = 100;
+            this.width1 = 120;
             this.display = "block";
             this.time = time + "s";
         },
@@ -106,6 +111,13 @@ export default {
                 case "business":
                     return "icondianshanghuiyuan";
             }
+        },
+        menuHasChild(index){
+            if(this.getMenuList[index]&&this.getMenuList[index]["children"]){
+                return true
+            }else{
+                false
+            }
         }
     },
     computed: {
@@ -121,6 +133,7 @@ export default {
             if (!this.$store.getters.getMenuList) return;
             let item = this.$store.getters.getMenuList[this.curIndex];
             if (item && item.children) {
+                this.subTitle=item.name
                 return true;
             } else {
                 return false;
@@ -166,12 +179,15 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 选中的样式
-.menu-bg{
+.menu-bg {
     background: #e0faff;
     color: #0595e6;
 }
-.menu-hover{
-     background: #e0fcff;
+.active-color {
+    color: #0595e6 !important;
+}
+.menu-hover {
+    background: #e0fcff;
 }
 .left-menu {
     border-right: solid 1px #e6e6e6;
@@ -191,8 +207,14 @@ export default {
             vertical-align: middle;
             color: #0595e6;
         }
+        .iconxiangyoufangxiang {
+            position: absolute;
+            right: 16px;
+            font-size: 14px;
+            vertical-align: middle;
+            color: #B9CBCF;
+        }
     }
-   
 }
 </style>
 

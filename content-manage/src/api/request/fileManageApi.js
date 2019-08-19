@@ -26,7 +26,6 @@ export const rename = (id, newName) => {
 }
 // 下载文件
 export const download = option => {
-
     return ajaxRequest.put(`api/Download/${option.type}/${option.appId}/${option.id}`, JSON.stringify('123'));
 }
 export const switchIsTopStatus = (isTop, idList) => {

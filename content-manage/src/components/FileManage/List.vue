@@ -8,12 +8,18 @@
             :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
+               <template slot="empty">
+                <div class="empty-table">
+                    <img src="~img/table-empty.png" />
+                    <span>无数据</span>
+                </div>
+            </template>
             <el-table-column type="selection"></el-table-column>
 
             <el-table-column label="文件名称">
                 <template slot-scope="scope">
-                    <!--  <img :src="scope.row | fileCover" class="cover" /> -->
-                    <img src="../../../static/images/content-icon/file-cover.png" class="cover" />
+                    <img :src="scope.row | fileCover" class="cover" />
+                    <!-- <img src="../../../static/images/content-icon/file-cover.png" class="cover" /> -->
                     <span
                         class="img-name"
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
@@ -22,7 +28,7 @@
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-            <el-table-column prop label="文件类型"></el-table-column>
+            <el-table-column prop="fileExtensionTypeStr" label="文件类型"></el-table-column>
             <el-table-column prop="categoryName" label="分类"></el-table-column>
 
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
@@ -34,7 +40,7 @@
             <el-table-column prop="downloadCount" label="下载次数"></el-table-column>
             <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作" width="250"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn edit-icon" @click="handleEditor(scope.row)">
@@ -113,6 +119,7 @@
 </template>
 
 <script>
+import { adminDownload } from "@/api/request/contentCommonApi.js";
 export default {
     props: ["imgPageResult", "picSearchOptions", "useStorage"],
     data() {
@@ -135,15 +142,28 @@ export default {
                 { name: "置顶", flag: "isTop" },
                 { name: "删除", flag: "delete" }
             ],
-            test: require("../../../static/images/move.png"),
             maxSize: 0,
             currentUsage: 0,
-            prograss:0
+            prograss: 0
         };
     },
     filters: {
-        fileCover: function(val) {
-            return require("../../../static/images/move.png");
+        fileCover: function(row) {
+            let fileExtensionType = row.fileExtensionType;
+            switch (fileExtensionType) {
+                case 0:
+                    return require("img/file-icon/video.png");
+                case 1:
+                    return require("img/file-icon/audio.png");
+                case 2:
+                    return require("img/file-icon/zip.png");
+                case 3:
+                    return require("img/file-icon/img.png");
+                case 4:
+                    return require("img/file-icon/document.png");
+                default:
+                    return require("img/file-icon/other.png");
+            }
         }
     },
     mounted() {
@@ -162,16 +182,16 @@ export default {
         });
     },
     methods: {
-        bytesToSize(bytes,flag) {
+        bytesToSize(bytes, flag) {
             if (bytes === 0) return "0 B";
             let k = 1024;
             let sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
             let i = Math.floor(Math.log(bytes) / Math.log(k));
             let b = bytes / Math.pow(k, i);
-            if(flag===1){
-                b= b.toFixed(2)
+            if (flag === 1) {
+                b = b.toFixed(2);
             }
-            let storage =b + sizes[i];
+            let storage = b + sizes[i];
             return storage;
         },
         /**
@@ -191,11 +211,38 @@ export default {
             this.$emit("editor", true, row);
         },
 
+        download(row){
+            //this.userDownload(row)
+             this.adminDownload(row)     
+        },
         /**
-         * 下载
+         * 用户下载
          */
-        async download(row) {
-            this.$emit("download", row);
+        async userDownload(row) {
+            this.$router.push({
+                path: row.downloadPage
+            });
+        },
+        /**
+         * 管理员下载
+         */
+        async adminDownload(row) {
+            let type = row.fileType;
+            let id = row.id;
+            let {data} = await adminDownload(type, id);
+             var a = document.createElement("a");
+            var binaryData = [];
+            binaryData.push(data);
+            a.href = window.URL.createObjectURL(
+                new Blob(binaryData, { type: "application/dat" })
+            );
+            // var names = row.fileName.split("_");
+            // var filename =row.siteName + "_" + names[1] + "_" + names[2];
+            a.download = row.title; // Set the file name.
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         },
         change(index) {
             this.fullOssUrl = this.imgList[index].fullOssUrl;
@@ -249,8 +296,12 @@ export default {
     watch: {
         useStorage() {
             this.maxSize = this.bytesToSize(this.useStorage.maxSize);
-            this.currentUsage = this.bytesToSize(this.useStorage.currentUsage,1);
-            this.prograss = this.useStorage.currentUsage/this.useStorage.maxSize;
+            this.currentUsage = this.bytesToSize(
+                this.useStorage.currentUsage,
+                1
+            );
+            this.prograss =
+                this.useStorage.currentUsage / this.useStorage.maxSize;
         }
     }
 };

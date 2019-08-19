@@ -8,6 +8,12 @@
             :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
+           <template slot="empty">
+                <div class="empty-table">
+                    <img src="~img/table-empty.png" />
+                    <span>无数据</span>
+                </div>
+            </template>
             <el-table-column type="selection"></el-table-column>
 
             <el-table-column label="视频名称">
@@ -97,12 +103,12 @@
                 </div>
             </el-dialog>
         </div>
-        <Loading v-if="loadingShow" />
+       
     </div>
 </template>
 
 <script>
-import Loading from "@/base/loading.vue";
+
 export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
@@ -123,9 +129,7 @@ export default {
             tableHeight: 500
         };
     },
-    components: {
-        Loading
-    },
+   
     mounted() {
         this.$nextTick(() => {
             window.addEventListener("resize", () => {
@@ -192,11 +196,7 @@ export default {
             this.$emit("batchRemove", [row.id]);
         }
     },
-    watch: {
-        imgPageResult() {
-            this.loadingShow = false;
-        }
-    }
+  
 };
 </script>
 <style>

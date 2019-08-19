@@ -6,14 +6,13 @@
         justify-content: flex-start;
         span{
             i{
-                font-size: 23px;
+                // font-size: 23px;
                 color: #8a8585;
             }
         }
         .edit-icon {
             margin-right: 32px;
             cursor: pointer;
-          
             &::before {
                 content: "";
                 position: absolute;
@@ -29,7 +28,6 @@
         .more-operate {
             position: relative;
             cursor: pointer;
-           
             &::before {
                 content: "";
                 position: absolute;

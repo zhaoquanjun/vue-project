@@ -103,13 +103,11 @@
 </template>
 <script>
 import ChunkUpload from "@/components/common/ChunkUpload";
-import MTree from "./MTree";
-
-import ListHeader from "@/components/ImgManage/ImgListHeader";
+import MTree from "_c/ImgManage/MTree";
+import ListHeader from "@/components/FileManage/ListHeader";
 import List from "./List";
 import SelectTree from "@/components/common/SelectTree";
-
-import RightPannel from "./RightPannel";
+import RightPannel from "_c//ImgManage/RightPannel";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
 import environment from "@/environment/index.js";
@@ -165,13 +163,18 @@ export default {
     methods: {
         // 获取列表
         async getPicList(node) {
+             const loading = this.$loading({
+                lock: true,
+                spinner: "loading-icon",
+                background: "rgba(255, 255, 255, 0.75)"
+            });
             if (node) {
                 this.nodeData = node; // 上传图片所需
             }
-
             let { data } = await videoManageApi.getPicList(
                 this.picSearchOptions
             );
+            loading.close();
             this.imgPageResult = data;
         },
         // 批量删除列表

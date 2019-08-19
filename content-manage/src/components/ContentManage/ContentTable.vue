@@ -198,9 +198,6 @@ export default {
     display: flex;
     justify-content: space-between;
 }
-.handle-btn {
-    //padding-right: 54px;
-}
 
 
 </style>

@@ -1,8 +1,11 @@
 <template>
     <el-aside class="leftNavAside">
+        <h4 class="submenu-title">
+            <i>{{subTitle}}</i>
+        </h4>
         <ul class="el-menu-vertical-demo el-menu">
             <li
-                class="el-menu-item "
+                class="el-menu-item"
                 v-for="(item,index) in menuList.children"
                 :key="index"
                 @click="handlerRoute(item,index)"
@@ -16,20 +19,17 @@
 <script>
 import { siteDomain } from "@/environment/index";
 export default {
-    props: ["menuList","lastRoute"],
+    props: ["menuList", "lastRoute", "subTitle"],
     methods: {
         handlerRoute(item, index) {
-            
-            let domain= item.menuUrl.split("/")[0];
+            let domain = item.menuUrl.split("/")[0];
             if (siteDomain == domain) {
                 this.$router.push(item.path);
             } else {
                 window.location.href = "//" + item.menuUrl;
             }
-        },
-
-    },
-   
+        }
+    }
 };
 </script>
 <style scoped>
@@ -42,12 +42,17 @@ export default {
 .el-menu :hover.el-menu-item {
     background: #e0fcff;
 }
-.active{
+.active {
     color: #0595e6;
     background: #e0faff;
 }
-.active:hover{
-     color: #0595e6;
-     background: #e0faff !important;
+.active:hover {
+    color: #0595e6;
+    background: #e0faff !important;
+}
+.submenu-title {
+    height: 40px;
+    line-height: 40px;
+    padding-top: 5px;
 }
 </style>
