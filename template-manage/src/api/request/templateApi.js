@@ -5,6 +5,11 @@ import environment from "@/environment/index";
 export const getFirstIndustries = () => {
     return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetFirstIndustries`);
 }
+// 获取二级行业
+export const getSecondIndustries = (firstIndustryId) => {
+    let para = { firstIndustryId: firstIndustryId };
+    return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSecondIndustries`, para);
+}
 // 创建模版
 export const createTemplate = (designerPhone, remark) => {
     let para = {
@@ -17,8 +22,11 @@ export const createTemplate = (designerPhone, remark) => {
 export const getSiteTemplates = (para) => {
     return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSiteTemplates`, para);
 }
-// 获取二级行业
-export const getSecondIndustries = (firstIndustryId) => {
-    let para = { firstIndustryId: firstIndustryId };
-    return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSecondIndustries`, para);
+// 更新模版
+export const uploadSiteTemplate = (templateId) => {
+    return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/UploadSiteTemplate`, templateId);
+}
+// 删除模版
+export const deleteTemplate = (id) => {
+    return ajaxRequest._delete(`${environment.templateApi}/api/v1/Template/DeleteTemplate/${id}`);
 }

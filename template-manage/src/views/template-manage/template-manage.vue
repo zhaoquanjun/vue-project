@@ -1,8 +1,8 @@
 <template>
-  <el-container class="templateManage">
+  <el-container class="templateManage page-scroll">
     <el-header class="templateTitle" style="height:86px">
       <span class="titleText">整站模版</span>
-      <button class="createBtn" @click="dialogShow">开通整站模版</button>
+      <button class="createBtn" @click="createTemplatedialogShow">开通整站模版</button>
     </el-header>
     <el-main class="contentWrap">
       <div class="contentHeader">
@@ -174,6 +174,19 @@
             </el-table-column>
           </el-table>
         </div>
+        <div class="pageing" id="pageing">
+          <el-pagination
+            background
+            layout="total, slot, sizes, prev, pager, next"
+            :current-page="templatePage.pageIndex"
+            :total="templatePage.totalCount"
+            :page-count="templatePage.totalPages"
+            :page-size="templatePage.pageSize"
+            :page-sizes="[10,20,50]"
+            @current-change="changePage"
+            @size-change="changeSize"
+          ></el-pagination>
+        </div>
       </el-main>
       <el-dialog
         width="0"
@@ -186,7 +199,7 @@
             <span>
               <span>开通整站模版</span>
             </span>
-            <span class="close-pannel" @click="closeDialog">
+            <span class="close-pannel" @click="cancelCreateTemplate">
               <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
             </span>
           </div>
@@ -202,7 +215,7 @@
           </div>
           <div class="confirm">
             <button class="confirmBtn" @click="createTemplate">开通</button>
-            <button class="cancelBtn" @click="cancel">取消</button>
+            <button class="cancelBtn" @click="cancelCreateTemplate">取消</button>
           </div>
         </div>
       </el-dialog>
@@ -217,7 +230,7 @@
             <span>
               <span>整站模版设置</span>
             </span>
-            <span class="close-pannel" @click="closeDialog">
+            <span class="close-pannel" @click="cancelSettingTemplate">
               <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
             </span>
           </div>
@@ -253,7 +266,7 @@
           </div>
           <div class="confirm">
             <button class="confirmBtn" @click="createTemplate">确定</button>
-            <button class="cancelBtn" @click="cancel">取消</button>
+            <button class="cancelBtn" @click="cancelSettingTemplate">取消</button>
           </div>
         </div>
       </el-dialog>
@@ -319,11 +332,11 @@ export default {
       themeSelect: "",
       templateStatusOptions: [
         {
-          value: "up",
+          value: "OnLine",
           label: "上架"
         },
         {
-          value: "down",
+          value: "OffLine",
           label: "下架"
         }
       ],
@@ -345,6 +358,7 @@ export default {
       ],
       sort: "createTime",
       isDescSort: true,
+      templatePage: {},
       templateInfo: [],
       settingTemplateShow: false,
       settingChecked: false
@@ -355,7 +369,13 @@ export default {
     this.getTemplateList();
     this.getFirstIndustry();
   },
-  methods: {
+ methods: {
+     //清除开通窗口输入框的值
+     clearOpenDialog() {
+         this.phone = "";
+         this.remark = "";
+         this.errorPhone = "";
+     },
     //   获取模版列表
     async getTemplateList() {
       let para = {
@@ -378,6 +398,7 @@ export default {
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
       console.log(data);
+      this.templatePage = data;
       this.templateInfo = data.items;
       this.formatTime();
     },
@@ -394,13 +415,14 @@ export default {
       this.secondIndustryOptions = data;
     },
     // 升序
-    asc(){
-      this.isDescSort = false
+    asc() {
+      this.isDescSort = false;
+      this.searchTemplate();
     },
     // 降序
     desc() {
-      this.isDescSort = true
-
+      this.isDescSort = true;
+      this.searchTemplate();
     },
     async createTemplate() {
       if (this.phone == "") {
@@ -421,7 +443,8 @@ export default {
             message: `开通成功`,
             duration: 2000,
             showClose: false
-          });
+            });
+            this.searchTemplate();
         }
       }
     },
@@ -456,12 +479,12 @@ export default {
       let orderByOpenTime = false;
       let orderByUseCount = false;
       let orderByUpdateTime = false;
-      if(this.sort == "createTime"){
-        orderByOpenTime = true
-      }else if(this.sort == "updateTime"){
-        orderByUseCount  = true
-      }else if(this.sort == "useCount"){
-        orderByUpdateTime = true
+      if (this.sort == "createTime") {
+        orderByOpenTime = true;
+      } else if (this.sort == "updateTime") {
+        orderByUseCount = true;
+      } else if (this.sort == "useCount") {
+        orderByUpdateTime = true;
       }
       let para = {
         TemplateName: templateNameText,
@@ -474,7 +497,7 @@ export default {
         Language: this.languageSelect,
         SiteTheme: "",
         IsOnlyRecommend: this.isRecommend,
-        Published: "All",
+        Published: this.templateStatus === "" ? "All" : this.templateStatus,
         TemplateType: "SiteTemplate",
         PageIndex: 1,
         PageSize: 10,
@@ -485,8 +508,137 @@ export default {
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
       console.log(data);
+      this.templatePage = data;
       this.templateInfo = data.items;
       this.formatTime();
+     },
+     // 分页查询
+     async searchTemplateByPage(pageIndex) {
+         let templateNameText = "";
+         let domainText = "";
+         let designerPhoneText = "";
+         if (this.searchValue == "templateName") {
+             templateNameText = this.search;
+         } else if (this.searchValue == "secondDomaon") {
+             domainText = this.search;
+         } else if (this.searchValue == "designer") {
+             designerPhoneText = this.search;
+         }
+         let orderByOpenTime = false;
+         let orderByUseCount = false;
+         let orderByUpdateTime = false;
+         if (this.sort == "createTime") {
+             orderByOpenTime = true;
+         } else if (this.sort == "updateTime") {
+             orderByUseCount = true;
+         } else if (this.sort == "useCount") {
+             orderByUpdateTime = true;
+         }
+         let para = {
+             TemplateName: templateNameText,
+             Domain: domainText,
+             DesignerPhone: designerPhoneText,
+             FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
+             SecondIndustry: this.secondIndustrySelect
+                 ? this.secondIndustrySelect
+                 : 0,
+             Language: this.languageSelect,
+             SiteTheme: "",
+             IsOnlyRecommend: this.isRecommend,
+             Published: this.templateStatus === "" ? "All" : this.templateStatus,
+             TemplateType: "SiteTemplate",
+             PageIndex: pageIndex,
+             PageSize: 10,
+             IsOrderByOpenTime: orderByOpenTime,
+             IsOrderByUseCount: orderByUseCount,
+             IsOrderByUpdateTime: orderByUpdateTime,
+             IsOrderByDesc: this.isDescSort
+         };
+         let { data, status } = await templateApi.getSiteTemplates(para);
+         console.log(data);
+         this.templatePage = data;
+         this.templateInfo = data.items;
+         this.formatTime();
+     },
+     changePage(page) {
+         this.searchTemplateByPage(page);
+    },
+    changeSize(page) {
+        this.searchTemplate();
+    },
+    // 开通模版
+     createTemplatedialogShow() {
+        this.clearOpenDialog();
+        this.createTemplateShow = true;
+    },
+    cancelCreateTemplate() {
+      this.createTemplateShow = false;
+    },
+    // 设置模版
+    settingTemplate(scope) {
+      this.settingTemplateShow = true;
+    },
+    cancelSettingTemplate() {
+      this.settingTemplateShow = false;
+    },
+    // 更新模版
+    updateTemplate(scope) {
+      this.$confirm(`确定要更新模版吗？`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: async action => {
+          if (action === "confirm") {
+            let { status } = await templateApi.uploadSiteTemplate(scope.row.id);
+            if (status === 200) {
+              this.$notify({
+                customClass: "notify-success",
+                message: `模版更新成功`,
+                duration: 2000,
+                showClose: false
+                });
+                this.searchTemplate();
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 2000,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
+    },
+    // 删除模版
+    deleteTemplate(scope) {
+      this.$confirm(`确定删除该模版吗？`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: async action => {
+          if (action === "confirm") {
+            console.log(scope.row.id)
+            let { status } = await templateApi.deleteTemplate(scope.row.id);
+            if (status === 200) {
+              this.$notify({
+                customClass: "notify-success",
+                message: `模版删除成功`,
+                duration: 2000,
+                showClose: false
+                });
+                this.searchTemplate();
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 2000,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
     },
     // 格式化时间
     formatTime() {
@@ -503,24 +655,6 @@ export default {
         }
       }
     },
-    dialogShow() {
-      this.createTemplateShow = true;
-    },
-    cancel() {
-      this.createTemplateShow = false;
-    },
-    // 关闭弹窗
-    closeDialog() {
-      this.createTemplateShow = false;
-    },
-    // 设置模版
-    settingTemplate(scope) {
-      this.settingTemplateShow = true;
-    },
-    // 更新模版
-    updateTemplate(scope) {},
-    // 删除模版
-    deleteTemplate(scope) {},
     // 语言转换
     _getLanguage(language) {
       return getLanguage(language);
