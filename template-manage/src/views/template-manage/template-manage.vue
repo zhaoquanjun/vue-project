@@ -168,7 +168,12 @@
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
-                  <el-button class="handle-btn" @click="settingTemplate( scope )">设置</el-button>
+                  <el-button
+                    class="handle-btn"
+                    @click="settingTemplate( scope )"
+                    :disabled="scope.row.domain ? false : true"
+                    :class="{disable : scope.row.domain ? false : true}"
+                  >设置</el-button>
                   <el-button
                     class="handle-btn"
                     style="margin-left:32px"
@@ -1122,8 +1127,8 @@ export default {
     color: rgba(9, 204, 235, 1);
     line-height: 20px;
   }
-  .disable{
-    opacity: 0.5
+  .disable {
+    opacity: 0.5;
   }
 }
 // 右侧弹框
