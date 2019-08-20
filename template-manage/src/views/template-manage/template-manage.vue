@@ -237,19 +237,23 @@
           <div class="settingTemplateWrap">
             <div class="templateName">模版名称</div>
             <el-input
-              v-model="phone"
+              v-model="settingTemplateName"
               placeholder="请输入模版名称"
               class="templateNameInput"
-              @blur="blurPhone"
+              @blur="blurTemplateName"
             ></el-input>
-            <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
+            <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
           </div>
           <div class="settingStatusWrap">
             <div class="settingStatus">模版状态</div>
             <div>
-              <el-select v-model="templateStatus" placeholder="模版状态" class="settingStatusSelect">
+              <el-select
+                v-model="settingTemplateStatus"
+                placeholder="模版状态"
+                class="settingStatusSelect"
+              >
                 <el-option
-                  v-for="item in templateStatusOptions"
+                  v-for="item in settingTemplateStatusOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -263,9 +267,33 @@
           </div>
           <div class="imgWrap">
             <div class="imgTitle">缩略图</div>
+            <el-upload
+              class="avatar-uploader"
+              :action="uploadPicAction"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+              :headers="headers"
+            >
+              <img v-if="picUrl" :src="picUrl" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              <button class="upload-btn">{{ !!picUrl ?'重新上传':'上传图片'}}</button>
+            </el-upload>
+            <el-upload
+              class="avatar-mobile-uploader"
+              :action="uploadPicActionMobile"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccessMobile"
+              :before-upload="beforeAvatarUploadMobile"
+              :headers="headersMobile"
+            >
+              <img v-if="picUrlMobile" :src="picUrlMobile" class="avatar-mobile" />
+              <i v-else class="el-icon-plus avatar-mobile-uploader-icon"></i>
+              <button class="upload-btn">{{ !!picUrlMobile ?'重新上传':'上传图片'}}</button>
+            </el-upload>
           </div>
           <div class="confirm">
-            <button class="confirmBtn" @click="createTemplate">确定</button>
+            <button class="confirmBtn" @click="saveSettingTemplate">确定</button>
             <button class="cancelBtn" @click="cancelSettingTemplate">取消</button>
           </div>
         </div>
@@ -276,10 +304,23 @@
 <script>
 import * as templateApi from "@/api/request/templateApi";
 import { getLanguage, formatDateTime } from "@/utlis/index";
+import environment from "@/environment/index.js";
 
 export default {
   data() {
     return {
+      picUrl: "",
+      uploadPicAction: `${environment.uploadPicUrl}/-1`,
+      headers: {
+        appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        Authorization: ""
+      },
+      picUrlMobile: "",
+      uploadPicActionMobile: `${environment.uploadPicUrl}/-1`,
+      headersMobile: {
+        appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        Authorization: ""
+      },
       createTemplateShow: false,
       phone: "",
       remark: "",
@@ -332,7 +373,15 @@ export default {
       themeSelect: "",
       templateStatusOptions: [
         {
-          value: "OnLine",
+          value: "Openning",
+          label: "开通中"
+        },
+        {
+          value: "OpenFailed",
+          label: "开通失败"
+        },
+        {
+          value: "Published",
           label: "上架"
         },
         {
@@ -361,7 +410,31 @@ export default {
       templatePage: {},
       templateInfo: [],
       settingTemplateShow: false,
-      settingChecked: false
+      settingChecked: false,
+      settingTemplateName: "",
+      errorTemplateNameTips: "",
+      errorTemplateName: "",
+      settingTemplateStatusOptions: [
+        {
+          value: "Openning",
+          label: "开通中"
+        },
+        {
+          value: "OpenFailed",
+          label: "开通失败"
+        },
+        {
+          value: "Published",
+          label: "上架"
+        },
+        {
+          value: "OffLine",
+          label: "下架"
+        }
+      ],
+      settingTemplateStatus: "",
+      curTemplateId: 0,
+      curSiteId: 0
     };
   },
   components: {},
@@ -369,13 +442,82 @@ export default {
     this.getTemplateList();
     this.getFirstIndustry();
   },
- methods: {
-     //清除开通窗口输入框的值
-     clearOpenDialog() {
-         this.phone = "";
-         this.remark = "";
-         this.errorPhone = "";
-     },
+  methods: {
+    handleAvatarSuccess(res, file) {
+      this.picUrl = file.response;
+    },
+    beforeAvatarUpload(file) {
+      this.headers.Authorization =
+        "Bearer " + this.$store.state.user.accessToken.Authorization;
+      console.log(this.$store.state.dashboard);
+      this.headers.appId = this.$store.state.dashboard.appId;
+
+      const isPic =
+        ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !== -1;
+      const maxMb = 10;
+      const isSizeOk = file.size / 1024 / 1024 < maxMb;
+
+      if (!isPic) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `格式错误`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      if (!isSizeOk) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `请上传小于${maxMb}M的图片!`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      return isPic && isSizeOk;
+    },
+    handleAvatarSuccessMobile(res, file) {
+      this.picUrlMobile = file.response;
+    },
+    beforeAvatarUploadMobile(file) {
+      this.headersMobile.Authorization =
+        "Bearer " + this.$store.state.user.accessToken.Authorization;
+      console.log(this.$store.state.dashboard);
+      this.headersMobile.appId = this.$store.state.dashboard.appId;
+
+      const isPic =
+        ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !== -1;
+      const maxMb = 10;
+      const isSizeOk = file.size / 1024 / 1024 < maxMb;
+
+      if (!isPic) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `格式错误`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      if (!isSizeOk) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `请上传小于${maxMb}M的图片!`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      return isPic && isSizeOk;
+    },
+    //清除开通窗口输入框的值
+    clearOpenDialog() {
+      this.phone = "";
+      this.remark = "";
+      this.errorTip = false;
+      this.errorPhone = "";
+    },
     //   获取模版列表
     async getTemplateList() {
       let para = {
@@ -387,7 +529,7 @@ export default {
         Language: "",
         SiteTheme: "",
         IsOnlyRecommend: false,
-        Published: "All",
+        // Status: "All",
         TemplateType: "SiteTemplate",
         PageIndex: 1,
         PageSize: 10,
@@ -436,15 +578,22 @@ export default {
           this.phone,
           this.remark
         );
+        this.createTemplateShow = false;
         if (status == 200) {
-          this.createTemplateShow = false;
           this.$notify({
             customClass: "notify-success",
             message: `开通成功`,
             duration: 2000,
             showClose: false
-            });
-            this.searchTemplate();
+          });
+          this.searchTemplate();
+        } else {
+          this.$notify({
+            customClass: "notify-error",
+            message: `开通失败`,
+            duration: 2000,
+            showClose: false
+          });
         }
       }
     },
@@ -458,6 +607,18 @@ export default {
       } else {
         this.errorTip = false;
         this.errorPhone = "";
+      }
+    },
+    blurTemplateName() {
+      if (this.settingTemplateName == "") {
+        this.errorTemplateNameTips = true;
+        this.errorTemplateName = "请输入模版名称";
+      } else if (!/^.{1,100}$/.test(this.settingTemplateName)) {
+        this.errorTemplateNameTips = true;
+        this.errorTemplateName = "模版名称最大长度为100个字符";
+      } else {
+        this.errorTemplateNameTips = false;
+        this.errorTemplateName = "";
       }
     },
     // 切换搜索类型 模版/二级域名/设计师
@@ -497,7 +658,7 @@ export default {
         Language: this.languageSelect,
         SiteTheme: "",
         IsOnlyRecommend: this.isRecommend,
-        Published: this.templateStatus === "" ? "All" : this.templateStatus,
+        Status: this.templateStatus === "" ? "All" : this.templateStatus,
         TemplateType: "SiteTemplate",
         PageIndex: 1,
         PageSize: 10,
@@ -511,72 +672,110 @@ export default {
       this.templatePage = data;
       this.templateInfo = data.items;
       this.formatTime();
-     },
-     // 分页查询
-     async searchTemplateByPage(pageIndex) {
-         let templateNameText = "";
-         let domainText = "";
-         let designerPhoneText = "";
-         if (this.searchValue == "templateName") {
-             templateNameText = this.search;
-         } else if (this.searchValue == "secondDomaon") {
-             domainText = this.search;
-         } else if (this.searchValue == "designer") {
-             designerPhoneText = this.search;
-         }
-         let orderByOpenTime = false;
-         let orderByUseCount = false;
-         let orderByUpdateTime = false;
-         if (this.sort == "createTime") {
-             orderByOpenTime = true;
-         } else if (this.sort == "updateTime") {
-             orderByUseCount = true;
-         } else if (this.sort == "useCount") {
-             orderByUpdateTime = true;
-         }
-         let para = {
-             TemplateName: templateNameText,
-             Domain: domainText,
-             DesignerPhone: designerPhoneText,
-             FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
-             SecondIndustry: this.secondIndustrySelect
-                 ? this.secondIndustrySelect
-                 : 0,
-             Language: this.languageSelect,
-             SiteTheme: "",
-             IsOnlyRecommend: this.isRecommend,
-             Published: this.templateStatus === "" ? "All" : this.templateStatus,
-             TemplateType: "SiteTemplate",
-             PageIndex: pageIndex,
-             PageSize: 10,
-             IsOrderByOpenTime: orderByOpenTime,
-             IsOrderByUseCount: orderByUseCount,
-             IsOrderByUpdateTime: orderByUpdateTime,
-             IsOrderByDesc: this.isDescSort
-         };
-         let { data, status } = await templateApi.getSiteTemplates(para);
-         console.log(data);
-         this.templatePage = data;
-         this.templateInfo = data.items;
-         this.formatTime();
-     },
-     changePage(page) {
-         this.searchTemplateByPage(page);
+    },
+    // 分页查询
+    async searchTemplateByPage(pageIndex, pageSize) {
+      let templateNameText = "";
+      let domainText = "";
+      let designerPhoneText = "";
+      if (this.searchValue == "templateName") {
+        templateNameText = this.search;
+      } else if (this.searchValue == "secondDomaon") {
+        domainText = this.search;
+      } else if (this.searchValue == "designer") {
+        designerPhoneText = this.search;
+      }
+      let orderByOpenTime = false;
+      let orderByUseCount = false;
+      let orderByUpdateTime = false;
+      if (this.sort == "createTime") {
+        orderByOpenTime = true;
+      } else if (this.sort == "updateTime") {
+        orderByUseCount = true;
+      } else if (this.sort == "useCount") {
+        orderByUpdateTime = true;
+      }
+      let para = {
+        TemplateName: templateNameText,
+        Domain: domainText,
+        DesignerPhone: designerPhoneText,
+        FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
+        SecondIndustry: this.secondIndustrySelect
+          ? this.secondIndustrySelect
+          : 0,
+        Language: this.languageSelect,
+        SiteTheme: "",
+        IsOnlyRecommend: this.isRecommend,
+        Published: this.templateStatus === "" ? "All" : this.templateStatus,
+        TemplateType: "SiteTemplate",
+        PageIndex: pageIndex,
+        PageSize: 10,
+        IsOrderByOpenTime: orderByOpenTime,
+        IsOrderByUseCount: orderByUseCount,
+        IsOrderByUpdateTime: orderByUpdateTime,
+        IsOrderByDesc: this.isDescSort
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      console.log(data);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+      this.formatTime();
+    },
+    changePage(page) {
+      this.searchTemplateByPage(page);
     },
     changeSize(page) {
-        this.searchTemplate();
+      this.searchTemplate();
     },
     // 开通模版
-     createTemplatedialogShow() {
-        this.clearOpenDialog();
-        this.createTemplateShow = true;
+    createTemplatedialogShow() {
+      this.clearOpenDialog();
+      this.createTemplateShow = true;
     },
     cancelCreateTemplate() {
       this.createTemplateShow = false;
     },
-    // 设置模版
+    // 设置模版弹窗
     settingTemplate(scope) {
+      this.curTemplateId = scope.row.id;
+      this.curSiteId = scope.row.siteId;
       this.settingTemplateShow = true;
+    },
+    // 保存设置模版
+    async saveSettingTemplate() {
+      if (this.settingTemplateName == "") {
+        this.errorTemplateNameTips = true;
+        this.errorTemplateName = "请输入模版名称";
+      } else if (!/^.{1,100}$/.test(this.settingTemplateName)) {
+        this.errorTemplateNameTips = true;
+        this.errorTemplateName = "模版名称最大长度为100个字符";
+      } else {
+        this.errorTemplateNameTips = false;
+        this.errorTemplateName = "";
+        let para = {
+          siteId: this.curSiteId,
+          tempalteId: this.curTemplateId,
+          templateName: this.settingTemplateName,
+          imageUrl: this.picUrl,
+          mobileImageUrl: this.picUrlMobile,
+          templateType: "SiteTemplate",
+          isRecommend: this.settingChecked,
+          status:
+            this.settingTemplateStatus === ""
+              ? "All"
+              : this.settingTemplateStatus
+        };
+        let { data, status } = await templateApi.saveSiteTemplate(para);
+        this.settingTemplateShow = false;
+        if (status == 200) {
+          this.$notify({
+            customClass: "notify-success",
+            message: `保存成功`,
+            duration: 2000,
+            showClose: false
+          });
+        }
+      }
     },
     cancelSettingTemplate() {
       this.settingTemplateShow = false;
@@ -596,8 +795,8 @@ export default {
                 message: `模版更新成功`,
                 duration: 2000,
                 showClose: false
-                });
-                this.searchTemplate();
+              });
+              this.searchTemplate();
             } else {
               this.$notify({
                 customClass: "notify-error",
@@ -618,7 +817,7 @@ export default {
         type: "warning",
         callback: async action => {
           if (action === "confirm") {
-            console.log(scope.row.id)
+            console.log(scope.row.id);
             let { status } = await templateApi.deleteTemplate(scope.row.id);
             if (status === 200) {
               this.$notify({
@@ -626,8 +825,8 @@ export default {
                 message: `模版删除成功`,
                 duration: 2000,
                 showClose: false
-                });
-                this.searchTemplate();
+              });
+              this.searchTemplate();
             } else {
               this.$notify({
                 customClass: "notify-error",
@@ -693,9 +892,85 @@ export default {
 #table-list /deep/ .el-table thead th:nth-child(1) .cell {
   padding-left: 24px;
 }
+.avatar-uploader /deep/ .el-upload:hover {
+  border-color: rgba(1, 192, 222, 1);
+}
+.avatar-uploader /deep/ .el-upload {
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  overflow: hidden;
+}
+.avatar-mobile-uploader /deep/ .el-upload:hover {
+  border-color: rgba(1, 192, 222, 1);
+}
+.avatar-mobile-uploader /deep/ .el-upload {
+  cursor: pointer;
+  position: absolute;
+  left: 304px;
+  overflow: hidden;
+}
 </style>
 
 <style lang="scss" scoped>
+.avatar-uploader {
+  text-align: center;
+  margin-top: 16px;
+  position: relative;
+  .upload-btn {
+    width: 90px;
+    height: 32px;
+    color: #fff;
+    background: rgba(1, 192, 222, 1);
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    margin-left: -40px;
+  }
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 284px;
+  height: 176px;
+  line-height: 176px;
+  text-align: center;
+  border: 1px dashed #ccc;
+}
+.avatar {
+  width: 284px;
+  height: 176px;
+  display: block;
+}
+.avatar-mobile-uploader {
+  text-align: center;
+  margin-top: 16px;
+  position: relative;
+  .upload-btn {
+    width: 90px;
+    height: 32px;
+    color: #fff;
+    background: rgba(1, 192, 222, 1);
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    margin-left: -45px;
+  }
+}
+.avatar-mobile-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 105px;
+  height: 176px;
+  line-height: 176px;
+  text-align: center;
+  border: 1px dashed #ccc;
+}
+.avatar-mobile {
+  width: 105px;
+  height: 176px;
+  display: block;
+}
 .templateTitle {
   height: 86px;
   width: 100%;

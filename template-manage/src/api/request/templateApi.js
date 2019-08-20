@@ -22,6 +22,10 @@ export const createTemplate = (designerPhone, remark) => {
 export const getSiteTemplates = (para) => {
     return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSiteTemplates`, para);
 }
+// 保存模版
+export const saveSiteTemplate = (para) => {
+    return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/SaveSiteTemplate`, para);
+}
 // 更新模版
 export const uploadSiteTemplate = (templateId) => {
     return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/UploadSiteTemplate`, templateId);
