@@ -763,10 +763,14 @@ export default {
       this.createTemplateShow = false;
     },
     // 设置模版弹窗
-    settingTemplate(scope) {
+    async settingTemplate(scope) {
       this.curTemplateId = scope.row.id;
       this.curSiteId = scope.row.siteId;
       this.settingTemplateShow = true;
+      let { data } = await templateApi.getSiteTemplate(scope.row.id);
+      this.settingTemplateName = data.templateName;
+      this.settingTemplateStatus = data.status == 1 ? "上架" : "下架";
+      this.settingChecked = data.isRecommend;
     },
     // 保存设置模版
     async saveSettingTemplate() {

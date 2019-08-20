@@ -26,6 +26,10 @@ export const getSiteTemplates = (para) => {
 export const saveSiteTemplate = (para) => {
     return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/SaveSiteTemplate`, para);
 }
+// 获取模板详细信息
+export const getSiteTemplate = (templateId) => {
+    return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSiteTemplate`, {templateId:templateId});
+}
 // 更新模版
 export const uploadSiteTemplate = (templateId) => {
     return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/UploadSiteTemplate`, templateId);
