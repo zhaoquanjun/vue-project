@@ -110,7 +110,17 @@
             tooltip-effect="dark"
             :row-style="{height:'200px'}"
           >
-            <el-table-column prop="siteName" label="缩略图"></el-table-column>
+            <el-table-column prop="siteName" label="缩略图" width="250">
+              <template slot-scope="scope">
+                <div class="siteImg">
+                  <img
+                    :src="scope.row.imageUrl"
+                    alt
+                    style="width:100%;height:100%;object-fit: cover;"
+                  />
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column label="模板名称|语言|二级域名">
               <template slot-scope="scope">
                 <div>
@@ -151,24 +161,28 @@
             <el-table-column label="模板状态">
               <template slot-scope="scope">
                 <div>
-                  <p class="templateName">{{scope.row.isPublished ? "已上架" : "未上架"}}</p>
+                  <p class="templateName">{{getTemplateStatus(scope.row.status)}}</p>
                 </div>
               </template>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
-                  <button class="handle-btn" @click="settingTemplate( scope )">设置</button>
-                  <button
+                  <el-button class="handle-btn" @click="settingTemplate( scope )">设置</el-button>
+                  <el-button
                     class="handle-btn"
                     style="margin-left:32px"
                     @click="updateTemplate( scope )"
-                  >更新</button>
-                  <button
+                    :disabled="scope.row.domain ? false : true"
+                    :class="{disable : scope.row.domain ? false : true}"
+                  >更新</el-button>
+                  <el-button
                     class="handle-btn"
                     style="margin-left:32px"
                     @click="deleteTemplate( scope )"
-                  >删除</button>
+                    :disabled="scope.row.domain ? false : true"
+                    :class="{disable : scope.row.domain ? false : true}"
+                  >删除</el-button>
                 </div>
               </template>
             </el-table-column>
@@ -443,6 +457,18 @@ export default {
     this.getFirstIndustry();
   },
   methods: {
+    getTemplateStatus(status) {
+      switch (status) {
+        case "Openning":
+          return "开通中";
+        case "OpenFailed":
+          return "开通失败";
+        case "Published":
+          return "上架";
+        case "OffLine":
+          return "下架";
+      }
+    },
     handleAvatarSuccess(res, file) {
       this.picUrl = file.response;
     },
@@ -1071,6 +1097,10 @@ export default {
     height: 40px;
     margin-left: 12px;
   }
+  .siteImg {
+    width: 200px;
+    height: 133px;
+  }
   .templateName {
     font-size: 14px;
     font-weight: 400;
@@ -1085,10 +1115,15 @@ export default {
     cursor: pointer;
   }
   .handle-btn {
+    padding: 0;
+    border: none;
     font-size: 14px;
     font-weight: 400;
     color: rgba(9, 204, 235, 1);
     line-height: 20px;
+  }
+  .disable{
+    opacity: 0.5
   }
 }
 // 右侧弹框
