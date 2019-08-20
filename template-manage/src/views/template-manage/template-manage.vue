@@ -126,7 +126,7 @@
                 <div>
                   <p class="templateName">{{scope.row.templateName}}</p>
                   <p class="templateName" style="margin:8px 0;">{{_getLanguage(scope.row.language)}}</p>
-                  <p class="templateDomain">{{scope.row.domain}}</p>
+                  <a class="templateDomain" :href="scope.row.domain" target="_blank">{{scope.row.domain}}</a>
                 </div>
               </template>
             </el-table-column>
@@ -392,19 +392,19 @@ export default {
       themeSelect: "",
       templateStatusOptions: [
         {
-          value: "Openning",
+          value: 0,
           label: "开通中"
         },
         {
-          value: "OpenFailed",
+          value: 2,
           label: "开通失败"
         },
         {
-          value: "Published",
+          value: 1,
           label: "上架"
         },
         {
-          value: "OffLine",
+          value: 3,
           label: "下架"
         }
       ],
@@ -435,19 +435,19 @@ export default {
       errorTemplateName: "",
       settingTemplateStatusOptions: [
         {
-          value: "Openning",
+          value: 0,
           label: "开通中"
         },
         {
-          value: "OpenFailed",
+          value: 2,
           label: "开通失败"
         },
         {
-          value: "Published",
+          value: 1,
           label: "上架"
         },
         {
-          value: "OffLine",
+          value: 3,
           label: "下架"
         }
       ],
@@ -463,14 +463,15 @@ export default {
   },
   methods: {
     getTemplateStatus(status) {
+      console.log(status)
       switch (status) {
-        case "Openning":
+        case 0:
           return "开通中";
-        case "OpenFailed":
+        case 2:
           return "开通失败";
-        case "Published":
+        case 1:
           return "上架";
-        case "OffLine":
+        case 3:
           return "下架";
       }
     },
