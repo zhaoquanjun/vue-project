@@ -126,7 +126,11 @@
                 <div>
                   <p class="templateName">{{scope.row.templateName}}</p>
                   <p class="templateName" style="margin:8px 0;">{{_getLanguage(scope.row.language)}}</p>
-                  <a class="templateDomain" :href="scope.row.domain" target="_blank">{{scope.row.domain}}</a>
+                  <a
+                    class="templateDomain"
+                    :href="scope.row.domain"
+                    target="_blank"
+                  >{{scope.row.domain}}</a>
                 </div>
               </template>
             </el-table-column>
@@ -171,22 +175,22 @@
                   <el-button
                     class="handle-btn"
                     @click="settingTemplate( scope )"
-                    :disabled="scope.row.domain ? false : true"
-                    :class="{disable : scope.row.domain ? false : true}"
+                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
+                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >设置</el-button>
                   <el-button
                     class="handle-btn"
                     style="margin-left:32px"
                     @click="updateTemplate( scope )"
-                    :disabled="scope.row.domain ? false : true"
-                    :class="{disable : scope.row.domain ? false : true}"
+                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
+                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >更新</el-button>
                   <el-button
                     class="handle-btn"
                     style="margin-left:32px"
                     @click="deleteTemplate( scope )"
-                    :disabled="scope.row.domain ? false : true"
-                    :class="{disable : scope.row.domain ? false : true}"
+                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
+                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >删除</el-button>
                 </div>
               </template>
@@ -435,14 +439,6 @@ export default {
       errorTemplateName: "",
       settingTemplateStatusOptions: [
         {
-          value: 0,
-          label: "开通中"
-        },
-        {
-          value: 2,
-          label: "开通失败"
-        },
-        {
           value: 1,
           label: "上架"
         },
@@ -463,7 +459,6 @@ export default {
   },
   methods: {
     getTemplateStatus(status) {
-      console.log(status)
       switch (status) {
         case 0:
           return "开通中";
@@ -793,9 +788,7 @@ export default {
           templateType: "SiteTemplate",
           isRecommend: this.settingChecked,
           status:
-            this.settingTemplateStatus === ""
-              ? "All"
-              : this.settingTemplateStatus
+            this.settingTemplateStatus === "" ? "" : this.settingTemplateStatus
         };
         let { data, status } = await templateApi.saveSiteTemplate(para);
         this.settingTemplateShow = false;
@@ -810,6 +803,13 @@ export default {
       }
     },
     cancelSettingTemplate() {
+      this.settingTemplateName = "";
+      this.errorTemplateNameTips = false;
+      this.errorTemplateName = "";
+      this.picUrl = "";
+      this.picUrlMobile = "";
+      this.settingChecked = false;
+      this.settingTemplateStatus = "";
       this.settingTemplateShow = false;
     },
     // 更新模版
