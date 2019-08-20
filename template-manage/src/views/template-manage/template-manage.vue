@@ -529,7 +529,7 @@ export default {
         Language: "",
         SiteTheme: "",
         IsOnlyRecommend: false,
-        // Status: "All",
+        Status: "All",
         TemplateType: "SiteTemplate",
         PageIndex: 1,
         PageSize: 10,
@@ -643,9 +643,9 @@ export default {
       if (this.sort == "createTime") {
         orderByOpenTime = true;
       } else if (this.sort == "updateTime") {
-        orderByUseCount = true;
-      } else if (this.sort == "useCount") {
         orderByUpdateTime = true;
+      } else if (this.sort == "useCount") {
+        orderByUseCount = true;
       }
       let para = {
         TemplateName: templateNameText,
@@ -706,7 +706,7 @@ export default {
         Language: this.languageSelect,
         SiteTheme: "",
         IsOnlyRecommend: this.isRecommend,
-        Published: this.templateStatus === "" ? "All" : this.templateStatus,
+        Status: this.templateStatus === "" ? "All" : this.templateStatus,
         TemplateType: "SiteTemplate",
         PageIndex: pageIndex,
         PageSize: 10,
