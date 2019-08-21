@@ -4,8 +4,8 @@
             <div class="seachInput head-item">
                 <el-input
                     size="medium"
-                    v-model="picSearchOptions.keyword"
-                    placeholder="输入名称搜索"
+                    v-model="title"
+                    :placeholder="recycleTempData.placeholder"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
                 >
@@ -13,7 +13,7 @@
                         class="el-icon-search el-input__icon"
                         style="cursor: pointer;"
                         slot="suffix"
-                        @click="getPicList"
+                        @click="getRecycleDataList"
                     ></i>
                 </el-input>
             </div>
@@ -47,10 +47,10 @@
             <div class="handle-batch">
                 <span>
                     已选
-                    <i>{{countPic}}</i> 个文件
+                    <i>{{countData}}</i> {{recycleTempData.batchText}}
                 </span>
                 <div>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">恢复</button>
+                    <button class="btn-small btn-lightblue-notboard" @click="batchRecovery">恢复</button>
                
                 </div>
             </div>
@@ -59,7 +59,7 @@
 </template>
 <script>
 export default {
-    props: ["picSearchOptions", "isBatchHeaderShow", "countPic","displayName"],
+    props: ["recycleSearchOptions", "isBatchHeaderShow", "countData","displayName", "recycleTempData"],
     data() {
         return {
             ascSort: false,
@@ -67,88 +67,50 @@ export default {
             modeSelecte: true,
             options: [
                 {
-                    value: "CreateTime",
-                    label: "上传时间"
-                },
-                {
-                    value: "FileName",
-                    label: "文件名称"
-                },
-                {
-                    value: "DownloadCount",
-                    label: "下载次数"
-                },
-                {
-                    value: "FileSize",
-                    label: "文件大小"
+                    value: "deletetime",
+                    label: "删除时间"
                 }
             ],
-            orderByLabel: "CreateTime",
+            orderByLabel: "deletetime",
             
         };
     },
+    computed: {
+        title : {
+            get: function() {
+                return this.recycleSearchOptions[this.recycleTempData.keyword];
+            },
+            set: function(newVal) {
+                this.recycleSearchOptions[this.recycleTempData.keyword] = newVal;
+            }
+        }
+    },
     methods: {
         changeSelected(value) {
-            
-            this.picSearchOptions.orderByType = value;
-            this.getPicList();
+            this.recycleSearchOptions.orderByType = value;
+            this.getRecycleDataList();
         },
-        changeType(value){
-            this.picSearchOptions.fileExtensionType = value;
-            this.getPicList();
-        },
-        getPicList() {
-            this.$emit("getPicList");
+        getRecycleDataList() {
+            this.$emit("getRecycleDataList");
         },
         searchEnterFun() {
-            this.getPicList();
-        },
-        switchUploadBoxShowStatus() {
-            this.$emit("switchUploadBoxShowStatus");
-        },
-        changeStickStatus(value) {
-            if (isNaN(parseInt(value))) {
-                value = null;
-            } else {
-                value = !!value;
-            }
-            this.picSearchOptions.isTop = value;
-            this.getPicList();
+            this.getRecycleDataList();
         },
         switchIsDesc(flag) {
             if (flag === "asc") {
                 this.ascSort = true;
                 this.descSort = !this.ascSort;
-                this.picSearchOptions.isDescending = false.isDescending;
+                this.recycleSearchOptions.isDescending = false.isDescending;
             } else {
                 this.descSort = true;
                 this.ascSort = !this.descSort;
-                this.picSearchOptions.isDescending = true;
+                this.recycleSearchOptions.isDescending = true;
             }
 
-            this.getPicList();
+            this.getRecycleDataList();
         },
-        batchMove() {
-            this.$emit("batchMove");
-        },
-        batchDelete() {
-            this.$emit("batchDelete");
-        },
-        batchDownLoad() {
-            this.$emit("batchDownLoad");
-        },
-        handleCommand(command) {
-            switch (command) {
-                case "top":
-                    this.$emit("batchTop", true);
-                    break;
-                case "cancelTop":
-                    this.$emit("batchTop", false);
-                    break;
-                case "delete":
-                    this.batchDelete();
-                    break;
-            }
+        batchRecovery() {
+            this.$emit("batchRecovery");
         }
     }
 };

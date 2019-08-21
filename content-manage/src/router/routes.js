@@ -123,8 +123,7 @@ export const defaultRoutes = [
     },
     {
        path:"/recycle",
-       redirect: { path: '/recycle/page' },
-       component: () => import('@/views/recycle/page.vue'),
+       component: () => import('@/views/recycle/content.vue'),
        children:[
         {
             path: "page",

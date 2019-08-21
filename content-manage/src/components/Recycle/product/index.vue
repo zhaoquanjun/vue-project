@@ -4,22 +4,24 @@
             <list-header
             style="margin-left: 16px;    margin-bottom: 16px;"
                 v-if="$store.state.dashboard.isContentwrite"
-                :count-pic="countPic"
+                :count-data="countData"
                 :display-name="displayName"
-                :pic-search-options="picSearchOptions"
+                :recycle-search-options="productSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
-                @getPicList="getPicList"
-                @batchDelete="batchDelete"
+                :recycle-temp-data="recycleTempData"
+                @getRecycleDataList="getProductList"
+                @batchRecovery="batchRecovery"
                 
             ></list-header>
             <el-main>
                 <div class="recycle-tip">回收站的内容可保存30天，30天之后将永久删除</div>
                 <List
                     style="margin-left: 16px;"
-                    :img-page-result="imgPageResult"
-                    :pic-search-options="picSearchOptions"
-                    @getPicList="getPicList"
-                    @batchRemove="batchRemovePic"
+                    :recycle-page-result="recyclePageResult"
+                    :recycle-search-options="productSearchOptions"
+                    :recycle-temp-data="recycleTempData"
+                    @getRecycleDataList="getProductList"
+                    @batchRecovery="batchRecovery"
                     @handleSelectionChange="handleSelectionChange"
                 ></List>
             </el-main>
@@ -29,8 +31,7 @@
 <script>
 import ListHeader from "_c/Recycle/components/ListHeader";
 import List from "_c/Recycle/components/List";
-import * as fileManageApi from "@/api/request/fileManageApi";
-import * as fileCategoryManageApi from "@/api/request/fileCategoryManageApi";
+import * as recycleManageApi from "@/api/request/recycleManageApi";
 import environment from "@/environment/index.js";
 import { trim } from "@/utlis/index.js";
 export default {
@@ -40,50 +41,65 @@ export default {
     },
     data() {
         return {
-            displayName: "文件",
-            isImgList: false,
-            countPic: 0,
+            recycleTempData: {
+                type:"product",
+                keyword:"keyword",
+                batchText:"个产品",
+                placeholder: '输入产品标题搜索',
+                firstColumnName:"产品标题",
+                secondColumnName:"分类",
+                thirdColumnName:"删除时间",
+                forthColumnName:"保留天数"
+            },
+            displayName: "产品",
+            countData: 0,
             idsList: [],
-            selectedImg: [],
+            selectedData: [],
             isInvitationPanelShow: false,
-            imgPageResult: {},
+            recyclePageResult: {},
             dialogTableVisible: false,
             totalSum: 0,
-            picSearchOptions: {
-                pageSize: 10,
-                pageIndex: 1,
-                orderByType: 1,
-                isTop: null,
-                isDescending: true,
-                categoryIdList: [],
-                keyword: "",
-                isDelete: false,
-                fileExtensionType: null
-            },
+            productSearchOptions: {
+                pageSize: 10, //11
+                pageIndex: 1, //1
+                orderByType: "deletetime", //1 创建时间 2:名字
+                isDescending: true, // 倒叙 或 正序
+                keyword: "", //1
+                isDelete: true, //1
+                isOnSell: null, //is 上架
+                categoryIdList: [], //1,
+                isTop: null
+            }
         };
     },
     mounted() {
-        this.getPicList();
+        this.getProductList();
     },
     methods: {
      
         // 获取列表
-        async getPicList(node) {
+        async getProductList(node) {
             const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",
                 background: "rgba(255, 255, 255, 0.75)"
             });
-            let { data, status } = await fileManageApi.getPicList(
-                this.picSearchOptions
+            let { data, status } = await recycleManageApi.getProductList(
+                this.productSearchOptions
             );
            loading.close();
-            this.imgPageResult = data;
+        this.recyclePageResult = data;
         },
-        // 批量删除列表
-        async batchRemovePic(idlist) {
+        // 批量恢复产品
+        async batchRecovery(idlist) {
+            idlist = idlist == null ? this.idsList : idlist;
+            let options = {
+                switchType: 1,
+                flag: false,
+                idList: idlist
+            };
             this.$confirm(
-                `删除后，网站中引用的文件数据将同步删除，同时文件将被移动到回收站，是否确认删除？`,
+                `产品将恢复到对应分类下，确定恢复吗？`,
                 "提示",
                 {
                     customClass: "medium",
@@ -94,16 +110,24 @@ export default {
                             let {
                                 status,
                                 data
-                            } = await fileManageApi.batchRemove(true, idlist);
+                            } = await recycleManageApi.batchSwitchStatus(options);
                             if (status === 200) {
                               
                                 this.$notify({
                                     customClass: "notify-success", //  notify-success ||  notify-error
-                                    message: `删除成功`,
+                                    message: `恢复成功`,
                                     duration: 1500,
                                     showClose: false
                                 });
-                                this.getPicList();
+                                this.getProductList();
+                            }
+                            else{
+                                this.$notify({
+                                    customClass: "notify-error", //  notify-success ||  notify-error
+                                    message: `恢复失败，请重试`,
+                                    duration: 1500,
+                                    showClose: false
+                                });
                             }
                         } else {
                             // this.$message({
@@ -119,18 +143,13 @@ export default {
         // 批量更新的选中数量
         handleSelectionChange(list) {
             this.idsList = [];
-            this.countPic = list.length;
+            this.countData = list.length;
             if (list.length < 1) return;
             list.forEach(item => {
                 this.idsList.push(item.id);
             });
-            this.selectedImg = list;
-        },
-       
-        //批量删除
-        batchDelete() {
-            this.batchRemovePic(this.idsList);
-        },
+            this.selectedData = list;
+        }
       
     },
     computed: {

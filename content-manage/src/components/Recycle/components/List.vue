@@ -2,7 +2,7 @@
     <div class="table-content" id="table-list">
         <el-table
             ref="multipleTable"
-            :data="imgPageResult.list"
+            :data="recyclePageResult.list"
             tooltip-effect="dark"
             class="content-table"
             :height="tableHeight"
@@ -16,23 +16,38 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="文件名称">
+            <el-table-column :label="recycleTempData.firstColumnName">
                 <template slot-scope="scope">
-                    <img :src="scope.row | fileCover" class="cover" />
+                    <img v-if="['file'].includes(recycleTempData.type)" :src="scope.row | fileCover" class="cover" />
+                    <img v-if="['news'].includes(recycleTempData.type)" :src="scope.row.pictureUrl ? scope.row.pictureUrl : newsDefaultImg" class="cover" />
+                    <img v-if="['product'].includes(recycleTempData.type)" :src="scope.row.thumbnailPicUrlList[0] ? scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40' : newsDefaultImg" class="cover" />
+                    <img v-if="['audio'].includes(recycleTempData.type)" :src="audioDefaultImg ? audioDefaultImg : newsDefaultImg" class="cover" />
+                    <img v-if="['pic'].includes(recycleTempData.type)" :src="scope.row.zoomOssUrl" class="cover" />
                     <!-- <img src="../../../static/images/content-icon/file-cover.png" class="cover" /> -->
                     <span
                         class="img-name"
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
-                    >{{scope.row.title}}</span>
+                    >{{ recycleTempData.type == 'product' ? scope.row.name : scope.row.title}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
-            <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="downloadCount" label="删除时间"></el-table-column>
+            <el-table-column v-if="['file'].includes(recycleTempData.type)" prop="fileExtensionTypeStr" label="文件类型"></el-table-column>
+            <el-table-column v-if="['audio'].includes(recycleTempData.type)" prop="fileExtension" label="格式"></el-table-column>
+            <el-table-column v-if="['pic','file','video','audio'].includes(recycleTempData.type)" prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="categoryName" :label="recycleTempData.secondColumnName" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <span>{{ recycleTempData.type == 'product' ? getProductCateNames(scope.row.productCategoryList) : scope.row.categoryName }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="deleteTimePrt" :label="recycleTempData.thirdColumnName" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <span>{{ recycleTempData.type == 'news' ? scope.row.deleteTimePrt : scope.row.deleteTimeStr }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="deleteDeadline" :label="recycleTempData.forthColumnName"></el-table-column>
             <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn edit-icon" @click="handleEditor(scope.row)">
+                        <button class="handle-btn edit-icon" @click="handleRecoveryData(scope.row)">
                             <i class="iconfont iconqiehuan"></i>
                         </button>
                     </div>
@@ -44,9 +59,9 @@
             <el-pagination
                 background
                 layout="total, sizes, prev, pager, next"
-                :total="imgPageResult.totalRecord"
-                :page-count="imgPageResult.totalPage"
-                :page-size="picSearchOptions.pageSize"
+                :total="recyclePageResult.totalRecord"
+                :page-count="recyclePageResult.totalPage"
+                :page-size="recycleSearchOptions.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePage"
                 @size-change="changeSize"
@@ -57,9 +72,11 @@
 
 <script>
 export default {
-    props: ["imgPageResult", "picSearchOptions"],
+    props: ["recyclePageResult", "recycleSearchOptions", "recycleTempData"],
     data() {
         return {
+            newsDefaultImg: require("../../../../static/images/content-default-pic.png"),
+            audioDefaultImg: require("../../../../static/images/content-default-pic.png"),
             multipleSelection: [],
             changeCategoryPicId: null,
             tableHeight: 500
@@ -86,6 +103,7 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
+            console.log(this.recyclePageResult)
             window.addEventListener("resize", () => {
                 this.tableHeight = window.innerHeight - 310;
             });
@@ -93,6 +111,13 @@ export default {
         });
     },
     methods: {
+        /**
+         * 恢复数据
+         */
+        handleRecoveryData(row) {
+            console.log(row);
+            this.$emit("batchRecovery", [row.id]);
+        },
         /**
          * 单选或全选操作
          */
@@ -102,21 +127,21 @@ export default {
             this.$emit("handleSelectionChange", list);
         },
 
-        change(index) {
-            this.fullOssUrl = this.imgList[index].fullOssUrl;
-            this.picInfo = this.imgList[index];
-        },
-
         changePage(page) {
-            this.picSearchOptions.pageIndex = page;
-            this.$emit("getPicList");
+            this.recycleSearchOptions.pageIndex = page;
+            this.$emit("getRecycleDataList");
         },
         changeSize(size) {
-            this.picSearchOptions.pageSize = size;
-            this.$emit("getPicList");
+            this.recycleSearchOptions.pageSize = size;
+            this.$emit("getRecycleDataList");
         },
-        batchRemove(row) {
-            this.$emit("batchRemove", [row.id]);
+        getProductCateNames(cateList){
+            let cateNames = "";
+            cateList.forEach((item) => {
+                cateNames += item.displayName+";";
+            });
+            cateNames = cateNames.slice(0,cateNames.length -1);
+            return cateNames;
         }
     }
 };

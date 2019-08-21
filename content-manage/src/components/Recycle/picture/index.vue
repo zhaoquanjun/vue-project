@@ -4,22 +4,24 @@
             <list-header
             style="margin-left: 16px;    margin-bottom: 16px;"
                 v-if="$store.state.dashboard.isContentwrite"
-                :count-pic="countPic"
+                :count-data="countData"
                 :display-name="displayName"
-                :pic-search-options="picSearchOptions"
+                :recycle-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
-                @getPicList="getPicList"
-                @batchDelete="batchDelete"
+                :recycle-temp-data="recycleTempData"
+                @getRecycleDataList="getPicList"
+                @batchRecovery="batchRecovery"
                 
             ></list-header>
             <el-main>
                 <div class="recycle-tip">回收站的内容可保存30天，30天之后将永久删除</div>
                 <List
                     style="margin-left: 16px;"
-                    :img-page-result="imgPageResult"
-                    :pic-search-options="picSearchOptions"
-                    @getPicList="getPicList"
-                    @batchRemove="batchRemovePic"
+                    :recycle-page-result="recyclePageResult"
+                    :recycle-search-options="picSearchOptions"
+                    :recycle-temp-data="recycleTempData"
+                    @getRecycleDataList="getPicList"
+                    @batchRecovery="batchRecovery"
                     @handleSelectionChange="handleSelectionChange"
                 ></List>
             </el-main>
@@ -29,8 +31,7 @@
 <script>
 import ListHeader from "_c/Recycle/components/ListHeader";
 import List from "_c/Recycle/components/List";
-import * as fileManageApi from "@/api/request/fileManageApi";
-import * as fileCategoryManageApi from "@/api/request/fileCategoryManageApi";
+import * as recycleManageApi from "@/api/request/recycleManageApi";
 import environment from "@/environment/index.js";
 import { trim } from "@/utlis/index.js";
 export default {
@@ -40,24 +41,33 @@ export default {
     },
     data() {
         return {
-            displayName: "文件",
-            isImgList: false,
-            countPic: 0,
+            recycleTempData: {
+                type:"pic",
+                keyword:"keyword",
+                batchText:"张图片",
+                placeholder: '输入图片名称搜索',
+                firstColumnName:"图片名称",
+                secondColumnName:"分类",
+                thirdColumnName:"删除时间",
+                forthColumnName:"保留天数"
+            },
+            displayName: "图片",
+            countData: 0,
             idsList: [],
-            selectedImg: [],
+            selectedData: [],
             isInvitationPanelShow: false,
-            imgPageResult: {},
+            recyclePageResult: {},
             dialogTableVisible: false,
             totalSum: 0,
             picSearchOptions: {
                 pageSize: 10,
                 pageIndex: 1,
-                orderByType: 1,
+                orderByType: "deletetime",
                 isTop: null,
                 isDescending: true,
                 categoryIdList: [],
                 keyword: "",
-                isDelete: false,
+                isDelete: true,
                 fileExtensionType: null
             },
         };
@@ -74,16 +84,17 @@ export default {
                 spinner: "loading-icon",
                 background: "rgba(255, 255, 255, 0.75)"
             });
-            let { data, status } = await fileManageApi.getPicList(
+            let { data, status } = await recycleManageApi.getPicList(
                 this.picSearchOptions
             );
            loading.close();
-            this.imgPageResult = data;
+            this.recyclePageResult = data;
         },
-        // 批量删除列表
-        async batchRemovePic(idlist) {
+        // 批量恢复图片
+        async batchRecovery(idlist) {
+            idlist = idlist == null ? this.idsList : idlist;
             this.$confirm(
-                `删除后，网站中引用的文件数据将同步删除，同时文件将被移动到回收站，是否确认删除？`,
+                `图片将恢复到对应分类下，确定恢复吗？`,
                 "提示",
                 {
                     customClass: "medium",
@@ -94,16 +105,24 @@ export default {
                             let {
                                 status,
                                 data
-                            } = await fileManageApi.batchRemove(true, idlist);
+                            } = await recycleManageApi.picBatchRecovery(false, idlist);
                             if (status === 200) {
                               
                                 this.$notify({
                                     customClass: "notify-success", //  notify-success ||  notify-error
-                                    message: `删除成功`,
+                                    message: `恢复成功`,
                                     duration: 1500,
                                     showClose: false
                                 });
                                 this.getPicList();
+                            }
+                            else{
+                                this.$notify({
+                                    customClass: "notify-error", //  notify-success ||  notify-error
+                                    message: `恢复失败，请重试`,
+                                    duration: 1500,
+                                    showClose: false
+                                });
                             }
                         } else {
                             // this.$message({
@@ -119,18 +138,13 @@ export default {
         // 批量更新的选中数量
         handleSelectionChange(list) {
             this.idsList = [];
-            this.countPic = list.length;
+            this.countData = list.length;
             if (list.length < 1) return;
             list.forEach(item => {
                 this.idsList.push(item.id);
             });
-            this.selectedImg = list;
-        },
-       
-        //批量删除
-        batchDelete() {
-            this.batchRemovePic(this.idsList);
-        },
+            this.selectedData = list;
+        }
       
     },
     computed: {
