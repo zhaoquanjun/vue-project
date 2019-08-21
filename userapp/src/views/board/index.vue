@@ -1,15 +1,24 @@
 <template>
   <div class="home-page page-scroll">
-    <el-row style="display: flex;">
+    <el-row style="display: flex;" class="mainBackground">
       <div class="leftContent">
         <div class="welcome-wrap">
           <p class="welcome-words">
             <span class="welcome-words" style="font-family:PingFangSC-Regular;">{{userName}}</span>
             <span class="welcome-words">，欢迎回到微站后台</span>
           </p>
-          <p class="siteIntroduction">以下是您当前的站点</p>
+          <p
+            class="siteIntroduction"
+            v-if="$store.state.dashboard.isSiteInfoShow"
+            v-show="siteInfoList.length"
+          >以下是您当前的站点</p>
         </div>
-        <siteinfo v-if="$store.state.dashboard.isSiteInfoShow" :siteInfo="siteInfoList" :isCanCreate="isCanCreate" v-show="siteInfoList.length" />
+        <siteinfo
+          v-if="$store.state.dashboard.isSiteInfoShow"
+          :siteInfo="siteInfoList"
+          :isCanCreate="isCanCreate"
+          v-show="siteInfoList.length"
+        />
         <plugins :plugins="pluginList" />
         <content-num :contentNumber="contentNumber" />
         <recommend :recommend="recommend" />
@@ -259,6 +268,10 @@ export default {
 .leftContent {
   margin-right: 487px;
   width: 100%;
+  background: url("~img/dashboard/board-backgroundLeft.png");
+  background-repeat: no-repeat;
+  background-position: 17% top;
+  background-size: 31%;
 }
 .rightContent {
   position: absolute;
@@ -268,7 +281,12 @@ export default {
 .home-page {
   padding: 0 24px 32px;
   background: rgba(255, 255, 255, 1);
-
+  .mainBackground {
+    background: url("~img/dashboard/board-backgroundRight.png");
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: 38%;
+  }
   .welcome-wrap {
     margin-top: 64px;
     text-align: center;
@@ -575,6 +593,7 @@ export default {
       .appLine {
         margin-top: 15px;
         margin-left: 21px;
+        width: 273px;
       }
       .appTime {
         margin-top: 16px;

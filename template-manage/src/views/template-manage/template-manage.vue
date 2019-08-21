@@ -1,13 +1,18 @@
 <template>
-  <el-container class="templateManage">
+  <el-container class="templateManage page-scroll">
     <el-header class="templateTitle" style="height:86px">
       <span class="titleText">整站模版</span>
-      <button class="createBtn" @click="dialogShow">开通整站模版</button>
+      <button class="createBtn" @click="createTemplatedialogShow">开通整站模版</button>
     </el-header>
     <el-main class="contentWrap">
       <div class="contentHeader">
         <div>
-          <el-select v-model="searchValue" placeholder="请选择" class="selectSearchValue borderColor">
+          <el-select
+            v-model="searchValue"
+            placeholder="请选择"
+            class="selectSearchValue borderColor"
+            @change="changeSearchType"
+          >
             <el-option
               v-for="item in searchOptions"
               :key="item.value"
@@ -20,12 +25,13 @@
             v-model="firstIndustrySelect"
             placeholder="一级行业"
             class="firstIndustrySelect borderColor"
+            @change="choseFirstIndustry"
           >
             <el-option
               v-for="item in firstIndustryOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
           <span class="line"></span>
@@ -36,9 +42,9 @@
           >
             <el-option
               v-for="item in secondIndustryOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
           <el-select v-model="languageSelect" placeholder="语言" class="languageSelect borderColor">
@@ -59,14 +65,14 @@
           </el-select>
           <el-select v-model="templateStatus" placeholder="模版状态" class="templateStatus borderColor">
             <el-option
-              v-for="item in templateOptions"
+              v-for="item in templateStatusOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             ></el-option>
           </el-select>
           <el-checkbox v-model="isRecommend" class="isRecommend">仅推荐</el-checkbox>
-          <button class="inquire">查询</button>
+          <button class="inquire" @click="searchTemplate">查询</button>
         </div>
         <div style="margin-top:24px;margin-bottom:24px;">
           <span>排序</span>
@@ -79,10 +85,20 @@
             ></el-option>
           </el-select>
           <span>
-            <i class="iconfont iconshang" style="color:#09CCEB;margin-left:32px"></i>
+            <i
+              class="iconfont iconshang"
+              style="margin-left:32px;cursor: pointer;"
+              :class="{blue:!isDescSort,black:isDescSort}"
+              @click="asc"
+            ></i>
           </span>
           <span>
-            <i class="iconfont iconxia" style="color:#262626;margin-left:8px"></i>
+            <i
+              class="iconfont iconxia"
+              style="margin-left:8px;cursor: pointer;"
+              :class="{blue:isDescSort,black:!isDescSort}"
+              @click="desc"
+            ></i>
           </span>
         </div>
       </div>
@@ -94,13 +110,27 @@
             tooltip-effect="dark"
             :row-style="{height:'200px'}"
           >
-            <el-table-column prop="siteName" label="缩略图" style="padding-left:20px;"></el-table-column>
-            <el-table-column label="模板名称|语言|二级域名" width="245px">
+            <el-table-column prop="siteName" label="缩略图" width="250">
+              <template slot-scope="scope">
+                <div class="siteImg">
+                  <img
+                    :src="scope.row.imageUrl"
+                    alt
+                    style="width:100%;height:100%;object-fit: cover;"
+                  />
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="模板名称|语言|二级域名">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.templateName}}</p>
-                  <p class="templateName" style="margin:8px 0;">{{scope.row.language}}</p>
-                  <p class="templateDomain">{{scope.row.templateDomain}}</p>
+                  <p class="templateName" style="margin:8px 0;">{{_getLanguage(scope.row.language)}}</p>
+                  <a
+                    class="templateDomain"
+                    :href="scope.row.domain"
+                    target="_blank"
+                  >{{scope.row.domain}}</a>
                 </div>
               </template>
             </el-table-column>
@@ -115,39 +145,70 @@
             <el-table-column label="开通时间|更新时间">
               <template slot-scope="scope">
                 <div>
-                  <p class="templateName">{{scope.row.time.a}}</p>
-                  <p class="templateName" style="margin-top:5px;">{{scope.row.time.b}}</p>
+                  <p class="templateName">{{(scope.row.myCreateTime)}}</p>
+                  <p
+                    class="templateName"
+                    style="margin-top:5px;"
+                  >{{scope.row.myUpdateTime ? scope.row.myUpdateTime : ""}}</p>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="num" label="使用量" width="100"></el-table-column>
+            <el-table-column prop="useCount" label="使用量" width="100"></el-table-column>
             <el-table-column label="设计师">
               <template slot-scope="scope">
                 <div>
-                  <p class="templateName">{{scope.row.designer.a}}</p>
-                  <p class="templateName" style="margin-top:5px;">{{scope.row.designer.b}}</p>
+                  <p class="templateName">{{scope.row.designerPhone}}</p>
+                  <p class="templateName" style="margin-top:5px;">{{scope.row.remark}}</p>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="status" label="模板状态"></el-table-column>
+            <el-table-column label="模板状态">
+              <template slot-scope="scope">
+                <div>
+                  <p class="templateName">{{getTemplateStatus(scope.row.status)}}</p>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
-                  <button class="handle-btn" @click="settingTemplate( scope )">设置</button>
-                  <button
+                  <el-button
+                    class="handle-btn"
+                    @click="settingTemplate( scope )"
+                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
+                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
+                  >设置</el-button>
+                  <el-button
                     class="handle-btn"
                     style="margin-left:32px"
                     @click="updateTemplate( scope )"
-                  >更新</button>
-                  <button
+                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
+                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
+                  >更新</el-button>
+                  <el-button
                     class="handle-btn"
                     style="margin-left:32px"
                     @click="deleteTemplate( scope )"
-                  >删除</button>
+                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
+                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
+                  >删除</el-button>
                 </div>
               </template>
             </el-table-column>
           </el-table>
+        </div>
+        <div class="pageing" id="pageing">
+          <el-pagination
+            background
+            layout="total, slot, sizes, prev, pager, next"
+            :current-page="templatePage.pageIndex"
+            :total="templatePage.totalCount"
+            :page-count="templatePage.totalPages"
+            :page-size="templatePage.pageSize"
+            :page-sizes="[10,20,50]"
+            @current-change="changePage"
+            @size-change="changeSize"
+          ></el-pagination>
         </div>
       </el-main>
       <el-dialog
@@ -161,7 +222,7 @@
             <span>
               <span>开通整站模版</span>
             </span>
-            <span class="close-pannel" @click="closeDialog">
+            <span class="close-pannel" @click="cancelCreateTemplate">
               <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
             </span>
           </div>
@@ -177,7 +238,7 @@
           </div>
           <div class="confirm">
             <button class="confirmBtn" @click="createTemplate">开通</button>
-            <button class="cancelBtn" @click="cancel">取消</button>
+            <button class="cancelBtn" @click="cancelCreateTemplate">取消</button>
           </div>
         </div>
       </el-dialog>
@@ -192,26 +253,30 @@
             <span>
               <span>整站模版设置</span>
             </span>
-            <span class="close-pannel" @click="closeDialog">
+            <span class="close-pannel" @click="cancelSettingTemplate">
               <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
             </span>
           </div>
           <div class="settingTemplateWrap">
             <div class="templateName">模版名称</div>
             <el-input
-              v-model="phone"
+              v-model="settingTemplateName"
               placeholder="请输入模版名称"
               class="templateNameInput"
-              @blur="blurPhone"
+              @blur="blurTemplateName"
             ></el-input>
-            <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
+            <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
           </div>
           <div class="settingStatusWrap">
             <div class="settingStatus">模版状态</div>
             <div>
-              <el-select v-model="templateStatus" placeholder="模版状态" class="settingStatusSelect">
+              <el-select
+                v-model="settingTemplateStatus"
+                placeholder="模版状态"
+                class="settingStatusSelect"
+              >
                 <el-option
-                  v-for="item in templateOptions"
+                  v-for="item in settingTemplateStatusOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -225,10 +290,42 @@
           </div>
           <div class="imgWrap">
             <div class="imgTitle">缩略图</div>
+            <el-upload
+              class="avatar-uploader"
+              :action="uploadPicAction"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+              :headers="headers"
+            >
+              <img v-if="picUrl" :src="picUrl" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              <button class="upload-btn">{{ !!picUrl ?'重新上传':'上传图片'}}</button>
+            </el-upload>
+            <el-upload
+              class="avatar-mobile-uploader"
+              :action="uploadPicActionMobile"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccessMobile"
+              :before-upload="beforeAvatarUploadMobile"
+              :headers="headersMobile"
+            >
+              <img v-if="picUrlMobile" :src="picUrlMobile" class="avatar-mobile" />
+              <i v-else class="el-icon-plus avatar-mobile-uploader-icon"></i>
+              <button class="upload-btn">{{ !!picUrlMobile ?'重新上传':'上传图片'}}</button>
+            </el-upload>
+          </div>
+          <div style="margin-top:212px">
+            <span class="tipTypeText" style="margin-left:149px">PC端</span>
+            <span class="tipTypeText" style="margin-left:164px">Mobile端</span>
+          </div>
+          <div style="margin-top:8px">
+            <span class="tipInfoText" style="margin-left:102px">推荐尺寸655×380px</span>
+            <span class="tipInfoText" style="margin-left:79px">推荐尺寸148×236px</span>
           </div>
           <div class="confirm">
-            <button class="confirmBtn" @click="createTemplate">确定</button>
-            <button class="cancelBtn" @click="cancel">取消</button>
+            <button class="confirmBtn" @click="saveSettingTemplate">确定</button>
+            <button class="cancelBtn" @click="cancelSettingTemplate">取消</button>
           </div>
         </div>
       </el-dialog>
@@ -237,10 +334,24 @@
 </template>
 <script>
 import * as templateApi from "@/api/request/templateApi";
+import { getLanguage, formatDateTime } from "@/utlis/index";
+import environment from "@/environment/index.js";
 
 export default {
   data() {
     return {
+      picUrl: "",
+      uploadPicAction: `${environment.uploadPicUrl}/-1`,
+      headers: {
+        appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        Authorization: ""
+      },
+      picUrlMobile: "",
+      uploadPicActionMobile: `${environment.uploadPicUrl}/-1`,
+      headersMobile: {
+        appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        Authorization: ""
+      },
       createTemplateShow: false,
       phone: "",
       remark: "",
@@ -266,51 +377,182 @@ export default {
       firstIndustrySelect: "",
       secondIndustryOptions: [],
       secondIndustrySelect: "",
-      languageOptions: [],
-      languageSelect: "",
-      themeOptions: [],
-      themeSelect: "",
-      templateOptions: [],
-      templateStatus: "",
-      isRecommend: false,
-      sortOptions: [],
-      sort: "",
-      ascSort: false,
-      descSort: true,
-      templateInfo: [
+      languageOptions: [
         {
-          templateName: "电商",
-          templateDomain: "http://c1168099161.scd.wezhan.cn",
-          language: "中文",
-          firstIndustry: "传媒/广告/营销策划",
-          secondIndustry: "广告设计",
-          time: { a: "2019-08-12 14:15:25", b: "2019-08-12 14:15:25" },
-          num: 123,
-          designer: { a: "13000000000" },
-          status: "未上架"
+          value: "zh-CN",
+          label: "简体中文"
         },
         {
-          templateName: "电商",
-          templateDomain: "http://c1168099161.scd.wezhan.cn",
-          language: "中文",
-          firstIndustry: "传媒/广告/营销策划",
-          secondIndustry: "广告设计",
-          time: { a: "2019-08-12 14:15:25", b: "2019-08-12 14:15:25" },
-          num: 123,
-          designer: { a: "13000000000" },
-          status: "未上架"
+          value: "en-US",
+          label: "English"
+        },
+        {
+          value: "ja-JP",
+          label: "日本语"
+        },
+        {
+          value: "es-ES",
+          label: "Español"
+        },
+        {
+          value: "ko-KR",
+          label: "한국어"
         }
       ],
+      languageSelect: "zh-CN",
+      themeOptions: [],
+      themeSelect: "",
+      templateStatusOptions: [
+        {
+          value: 0,
+          label: "开通中"
+        },
+        {
+          value: 2,
+          label: "开通失败"
+        },
+        {
+          value: 1,
+          label: "上架"
+        },
+        {
+          value: 3,
+          label: "下架"
+        }
+      ],
+      templateStatus: "",
+      isRecommend: false,
+      sortOptions: [
+        {
+          value: "createTime",
+          label: "按开通时间"
+        },
+        {
+          value: "updateTime",
+          label: "按更新时间"
+        },
+        {
+          value: "useCount",
+          label: "使用量"
+        }
+      ],
+      sort: "createTime",
+      isDescSort: true,
+      templatePage: {},
+      templateInfo: [],
       settingTemplateShow: false,
-      settingChecked: false
+      settingChecked: false,
+      settingTemplateName: "",
+      errorTemplateNameTips: "",
+      errorTemplateName: "",
+      settingTemplateStatusOptions: [
+        {
+          value: 1,
+          label: "上架"
+        },
+        {
+          value: 3,
+          label: "下架"
+        }
+      ],
+      settingTemplateStatus: "",
+      curTemplateId: 0,
+      curSiteId: 0
     };
   },
   components: {},
   mounted() {
-    // this.getTemplateList();
-    // this.getFirstIndustry()
+    this.getTemplateList();
+    this.getFirstIndustry();
   },
   methods: {
+    getTemplateStatus(status) {
+      switch (status) {
+        case 0:
+          return "开通中";
+        case 2:
+          return "开通失败";
+        case 1:
+          return "上架";
+        case 3:
+          return "下架";
+      }
+    },
+    handleAvatarSuccess(res, file) {
+      this.picUrl = file.response;
+    },
+    beforeAvatarUpload(file) {
+      this.headers.Authorization =
+        "Bearer " + this.$store.state.user.accessToken.Authorization;
+      console.log(this.$store.state.dashboard);
+      this.headers.appId = this.$store.state.dashboard.appId;
+
+      const isPic =
+        ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !== -1;
+      const maxMb = 10;
+      const isSizeOk = file.size / 1024 / 1024 < maxMb;
+
+      if (!isPic) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `格式错误`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      if (!isSizeOk) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `请上传小于${maxMb}M的图片!`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      return isPic && isSizeOk;
+    },
+    handleAvatarSuccessMobile(res, file) {
+      this.picUrlMobile = file.response;
+    },
+    beforeAvatarUploadMobile(file) {
+      this.headersMobile.Authorization =
+        "Bearer " + this.$store.state.user.accessToken.Authorization;
+      console.log(this.$store.state.dashboard);
+      this.headersMobile.appId = this.$store.state.dashboard.appId;
+
+      const isPic =
+        ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !== -1;
+      const maxMb = 10;
+      const isSizeOk = file.size / 1024 / 1024 < maxMb;
+
+      if (!isPic) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `格式错误`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      if (!isSizeOk) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `请上传小于${maxMb}M的图片!`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      return isPic && isSizeOk;
+    },
+    //清除开通窗口输入框的值
+    clearOpenDialog() {
+      this.phone = "";
+      this.remark = "";
+      this.errorTip = false;
+      this.errorPhone = "";
+    },
     //   获取模版列表
     async getTemplateList() {
       let para = {
@@ -321,26 +563,73 @@ export default {
         SecondIndustry: 0,
         Language: "",
         SiteTheme: "",
-        IsRecommend: false,
-        OpenStatus: 0,
-        PageIndex: 0,
-        PageSize: 10
+        IsOnlyRecommend: false,
+        Status: "All",
+        TemplateType: "SiteTemplate",
+        PageIndex: 1,
+        PageSize: 10,
+        IsOrderByOpenTime: true,
+        IsOrderByUseCount: false,
+        IsOrderByUpdateTime: false,
+        IsOrderByDesc: true
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
-      this.templateInfo = data;
+      console.log(data);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+      this.formatTime();
     },
-    //
+    // 获取一级行业
     async getFirstIndustry() {
       let { data, status } = await templateApi.getFirstIndustries();
       this.firstIndustryOptions = data;
     },
-    createTemplate() {
+
+    async choseFirstIndustry(id) {
+      console.log(id);
+      console.log(this.firstIndustrySelect);
+      let { data, status } = await templateApi.getSecondIndustries(id);
+      this.secondIndustryOptions = data;
+    },
+    // 升序
+    asc() {
+      this.isDescSort = false;
+      this.searchTemplate();
+    },
+    // 降序
+    desc() {
+      this.isDescSort = true;
+      this.searchTemplate();
+    },
+    async createTemplate() {
       if (this.phone == "") {
         this.errorTip = true;
         this.errorPhone = "请输入设计师手机号";
       } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
+      } else {
+        let { status } = await templateApi.createTemplate(
+          this.phone,
+          this.remark
+        );
+        this.createTemplateShow = false;
+        if (status == 200) {
+          this.$notify({
+            customClass: "notify-success",
+            message: `开通成功`,
+            duration: 2000,
+            showClose: false
+          });
+          this.searchTemplate();
+        } else {
+          this.$notify({
+            customClass: "notify-error",
+            message: `开通失败`,
+            duration: 2000,
+            showClose: false
+          });
+        }
       }
     },
     blurPhone() {
@@ -355,26 +644,265 @@ export default {
         this.errorPhone = "";
       }
     },
-    dialogShow() {
+    blurTemplateName() {
+      if (this.settingTemplateName == "") {
+        this.errorTemplateNameTips = true;
+        this.errorTemplateName = "请输入模版名称";
+      } else if (!/^.{1,100}$/.test(this.settingTemplateName)) {
+        this.errorTemplateNameTips = true;
+        this.errorTemplateName = "模版名称最大长度为100个字符";
+      } else {
+        this.errorTemplateNameTips = false;
+        this.errorTemplateName = "";
+      }
+    },
+    // 切换搜索类型 模版/二级域名/设计师
+    changeSearchType() {
+      this.search = "";
+    },
+    // 查询
+    async searchTemplate() {
+      let templateNameText = "";
+      let domainText = "";
+      let designerPhoneText = "";
+      if (this.searchValue == "templateName") {
+        templateNameText = this.search;
+      } else if (this.searchValue == "secondDomaon") {
+        domainText = this.search;
+      } else if (this.searchValue == "designer") {
+        designerPhoneText = this.search;
+      }
+      let orderByOpenTime = false;
+      let orderByUseCount = false;
+      let orderByUpdateTime = false;
+      if (this.sort == "createTime") {
+        orderByOpenTime = true;
+      } else if (this.sort == "updateTime") {
+        orderByUpdateTime = true;
+      } else if (this.sort == "useCount") {
+        orderByUseCount = true;
+      }
+      let para = {
+        TemplateName: templateNameText,
+        Domain: domainText,
+        DesignerPhone: designerPhoneText,
+        FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
+        SecondIndustry: this.secondIndustrySelect
+          ? this.secondIndustrySelect
+          : 0,
+        Language: this.languageSelect,
+        SiteTheme: "",
+        IsOnlyRecommend: this.isRecommend,
+        Status: this.templateStatus === "" ? "All" : this.templateStatus,
+        TemplateType: "SiteTemplate",
+        PageIndex: 1,
+        PageSize: 10,
+        IsOrderByOpenTime: orderByOpenTime,
+        IsOrderByUseCount: orderByUseCount,
+        IsOrderByUpdateTime: orderByUpdateTime,
+        IsOrderByDesc: this.isDescSort
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      console.log(data);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+      this.formatTime();
+    },
+    // 分页查询
+    async searchTemplateByPage(pageIndex, pageSize) {
+      let templateNameText = "";
+      let domainText = "";
+      let designerPhoneText = "";
+      if (this.searchValue == "templateName") {
+        templateNameText = this.search;
+      } else if (this.searchValue == "secondDomaon") {
+        domainText = this.search;
+      } else if (this.searchValue == "designer") {
+        designerPhoneText = this.search;
+      }
+      let orderByOpenTime = false;
+      let orderByUseCount = false;
+      let orderByUpdateTime = false;
+      if (this.sort == "createTime") {
+        orderByOpenTime = true;
+      } else if (this.sort == "updateTime") {
+        orderByUseCount = true;
+      } else if (this.sort == "useCount") {
+        orderByUpdateTime = true;
+      }
+      let para = {
+        TemplateName: templateNameText,
+        Domain: domainText,
+        DesignerPhone: designerPhoneText,
+        FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
+        SecondIndustry: this.secondIndustrySelect
+          ? this.secondIndustrySelect
+          : 0,
+        Language: this.languageSelect,
+        SiteTheme: "",
+        IsOnlyRecommend: this.isRecommend,
+        Status: this.templateStatus === "" ? "All" : this.templateStatus,
+        TemplateType: "SiteTemplate",
+        PageIndex: pageIndex,
+        PageSize: 10,
+        IsOrderByOpenTime: orderByOpenTime,
+        IsOrderByUseCount: orderByUseCount,
+        IsOrderByUpdateTime: orderByUpdateTime,
+        IsOrderByDesc: this.isDescSort
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      console.log(data);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+      this.formatTime();
+    },
+    changePage(page) {
+      this.searchTemplateByPage(page);
+    },
+    changeSize(page) {
+      this.searchTemplate();
+    },
+    // 开通模版
+    createTemplatedialogShow() {
+      this.clearOpenDialog();
       this.createTemplateShow = true;
     },
-    cancel() {
+    cancelCreateTemplate() {
       this.createTemplateShow = false;
     },
-    /**
-     * 关闭弹框
-     */
-    closeDialog() {
-      this.createTemplateShow = false;
-    },
-    // 设置模版
-    settingTemplate(scope) {
+    // 设置模版弹窗
+    async settingTemplate(scope) {
+      this.curTemplateId = scope.row.id;
+      this.curSiteId = scope.row.siteId;
       this.settingTemplateShow = true;
+      let { data } = await templateApi.getSiteTemplate(scope.row.id);
+      this.settingTemplateName = data.templateName;
+      this.settingTemplateStatus = data.status;
+      this.settingChecked = data.isRecommend;
+    },
+    // 保存设置模版
+    async saveSettingTemplate() {
+      if (this.settingTemplateName == "") {
+        this.errorTemplateNameTips = true;
+        this.errorTemplateName = "请输入模版名称";
+      } else if (!/^.{1,100}$/.test(this.settingTemplateName)) {
+        this.errorTemplateNameTips = true;
+        this.errorTemplateName = "模版名称最大长度为100个字符";
+      } else {
+        this.errorTemplateNameTips = false;
+        this.errorTemplateName = "";
+        let para = {
+          siteId: this.curSiteId,
+          tempalteId: this.curTemplateId,
+          templateName: this.settingTemplateName,
+          imageUrl: this.picUrl,
+          mobileImageUrl: this.picUrlMobile,
+          templateType: "SiteTemplate",
+          isRecommend: this.settingChecked,
+          status:
+            this.settingTemplateStatus === "" ? "" : this.settingTemplateStatus
+        };
+        let { data, status } = await templateApi.saveSiteTemplate(para);
+        this.settingTemplateShow = false;
+        if (status == 200) {
+          this.$notify({
+            customClass: "notify-success",
+            message: `保存成功`,
+            duration: 2000,
+            showClose: false
+          });
+          this.searchTemplate();
+        }
+      }
+    },
+    cancelSettingTemplate() {
+      this.settingTemplateName = "";
+      this.errorTemplateNameTips = false;
+      this.errorTemplateName = "";
+      this.picUrl = "";
+      this.picUrlMobile = "";
+      this.settingChecked = false;
+      this.settingTemplateStatus = "";
+      this.settingTemplateShow = false;
     },
     // 更新模版
-    updateTemplate(scope) {},
+    updateTemplate(scope) {
+      this.$confirm(`确定要更新模版吗？`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: async action => {
+          if (action === "confirm") {
+            let { status } = await templateApi.uploadSiteTemplate(scope.row.id);
+            if (status === 200) {
+              this.$notify({
+                customClass: "notify-success",
+                message: `模版更新成功`,
+                duration: 2000,
+                showClose: false
+              });
+              this.searchTemplate();
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 2000,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
+    },
     // 删除模版
-    deleteTemplate(scope) {}
+    deleteTemplate(scope) {
+      this.$confirm(`确定删除该模版吗？`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: async action => {
+          if (action === "confirm") {
+            console.log(scope.row.id);
+            let { status } = await templateApi.deleteTemplate(scope.row.id);
+            if (status === 200) {
+              this.$notify({
+                customClass: "notify-success",
+                message: `模版删除成功`,
+                duration: 2000,
+                showClose: false
+              });
+              this.searchTemplate();
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 2000,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
+    },
+    // 格式化时间
+    formatTime() {
+      for (let i = 0; i < this.templateInfo.length; i++) {
+        this.templateInfo[i].myCreateTime = formatDateTime(
+          this.templateInfo[i].createTime,
+          "yyyy/MM/dd hh:mm"
+        );
+        if (this.templateInfo[i].updateTime) {
+          this.templateInfo[i].myUpdateTime = formatDateTime(
+            this.templateInfo[i].updateTime,
+            "yyyy/MM/dd hh:mm"
+          );
+        }
+      }
+    },
+    // 语言转换
+    _getLanguage(language) {
+      return getLanguage(language);
+    }
   }
 };
 </script>
@@ -409,9 +937,85 @@ export default {
 #table-list /deep/ .el-table thead th:nth-child(1) .cell {
   padding-left: 24px;
 }
+.avatar-uploader /deep/ .el-upload:hover {
+  border-color: rgba(1, 192, 222, 1);
+}
+.avatar-uploader /deep/ .el-upload {
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  overflow: hidden;
+}
+.avatar-mobile-uploader /deep/ .el-upload:hover {
+  border-color: rgba(1, 192, 222, 1);
+}
+.avatar-mobile-uploader /deep/ .el-upload {
+  cursor: pointer;
+  position: absolute;
+  left: 304px;
+  overflow: hidden;
+}
 </style>
 
 <style lang="scss" scoped>
+.avatar-uploader {
+  text-align: center;
+  margin-top: 16px;
+  position: relative;
+  .upload-btn {
+    width: 90px;
+    height: 32px;
+    color: #fff;
+    background: rgba(1, 192, 222, 1);
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    margin-left: -40px;
+  }
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 284px;
+  height: 176px;
+  line-height: 176px;
+  text-align: center;
+  border: 1px dashed #ccc;
+}
+.avatar {
+  width: 284px;
+  height: 176px;
+  display: block;
+}
+.avatar-mobile-uploader {
+  text-align: center;
+  margin-top: 16px;
+  position: relative;
+  .upload-btn {
+    width: 90px;
+    height: 32px;
+    color: #fff;
+    background: rgba(1, 192, 222, 1);
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    margin-left: -45px;
+  }
+}
+.avatar-mobile-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 105px;
+  height: 176px;
+  line-height: 176px;
+  text-align: center;
+  border: 1px dashed #ccc;
+}
+.avatar-mobile {
+  width: 105px;
+  height: 176px;
+  display: block;
+}
 .templateTitle {
   height: 86px;
   width: 100%;
@@ -512,6 +1116,10 @@ export default {
     height: 40px;
     margin-left: 12px;
   }
+  .siteImg {
+    width: 200px;
+    height: 133px;
+  }
   .templateName {
     font-size: 14px;
     font-weight: 400;
@@ -526,10 +1134,15 @@ export default {
     cursor: pointer;
   }
   .handle-btn {
+    padding: 0;
+    border: none;
     font-size: 14px;
     font-weight: 400;
     color: rgba(9, 204, 235, 1);
     line-height: 20px;
+  }
+  .disable {
+    opacity: 0.5;
   }
 }
 // 右侧弹框
@@ -636,6 +1249,19 @@ export default {
     }
   }
 
+  .tipTypeText {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(38, 38, 38, 1);
+    line-height: 20px;
+  }
+  .tipInfoText {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(140, 140, 140, 1);
+    line-height: 20px;
+  }
+
   .confirm {
     position: absolute;
     width: 470px;
@@ -662,6 +1288,12 @@ export default {
       line-height: 32px;
     }
   }
+}
+.blue {
+  color: #09cceb;
+}
+.black {
+  color: #262626;
 }
 </style>
 
