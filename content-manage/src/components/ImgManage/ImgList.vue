@@ -223,11 +223,12 @@ export default {
             this.picInfo = this.imgList[this.changeIndex];
         },
         prev() {
+            console.log(this.imgPageResult.list.length)
             this.$refs.carousel.prev();
             if (this.changeIndex > 0) {
                 this.changeIndex = this.changeIndex - 1;
             } else {
-                this.changeIndex = this.picSearchOptions.pageSize - 1;
+                this.changeIndex = this.imgPageResult.list.length - 1;
             }
             this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
             this.picInfo = this.imgList[this.changeIndex];
@@ -236,7 +237,7 @@ export default {
             console.log(this.changeIndex)
             this.$refs.carousel.next();
             this.changeIndex = this.changeIndex + 1;
-            if (this.changeIndex >= this.picSearchOptions.pageSize) {
+            if (this.changeIndex >= this.imgPageResult.list.length) {
                 this.changeIndex = 0;
             }
             this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;

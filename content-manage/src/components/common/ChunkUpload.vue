@@ -11,6 +11,8 @@
                     accordion
                     :expand-on-click-node="true"
                     @chooseNode="chooseNode"
+                    :categoryName="nodeData.label"
+                    :categoryId="nodeData.id"
                 />
             </el-col>
             <div></div>
@@ -71,7 +73,7 @@ export default {
     },
     data() {
         return {
-            categoryId: 0,
+           
             options: {
                 uploadType: this.uploadType,
                 target: null,
@@ -124,7 +126,7 @@ export default {
                                     FromId: data.existInAnotherAppInfo.fromId,
                                     Title: chunk.file.name,
                                     ContentType: chunk.file.fileType,
-                                    CategoryId: this.categoryId
+                                    CategoryId: this.nodeData.id||0
                                 });
                                 //todo 更换alert
 
@@ -153,7 +155,7 @@ export default {
         };
     },
     created() {
-        this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.categoryId}`;
+        this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
     },
     methods: {
         onFileError(rootFile, file, response, chunk) {

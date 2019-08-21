@@ -13,11 +13,11 @@
 export default {
     props: ["treeResult", "categoryId", "categoryName"],
     mounted() {
-      this.$refs.tree.setCheckedKeys([0]);
-      this.$nextTick(()=>{
-          console.log(this.categoryId)
-          this.setCheckedKeys(this.categoryId);
-      })
+        this.$refs.tree.setCheckedKeys([0]);
+
+        this.$nextTick(() => {
+            this.setCheckedKeys(this.categoryId);
+        });
     },
     methods: {
         setCheckedKeys(ids) {
@@ -31,9 +31,14 @@ export default {
         setChecked(id) {
             this.$refs.tree.setChecked(id);
         },
-       
-        checkChange(data,boolen){
-          this.$emit("chooseNode", data,boolen);
+
+        checkChange(data, boolen) {
+            if (data.level == 0) {
+                data.disabled = true;
+            }
+
+            console.log(arguments);
+            this.$emit("chooseNode", data, boolen);
         },
         // 清空选中
         resetChecked() {
@@ -43,6 +48,11 @@ export default {
     watch: {
         categoryId() {
             this.setCheckedKeys(this.categoryId);
+        },
+        treeResult() {
+            if (this.treeResult[0].level === 0) {
+                this.treeResult[0].disabled = true;
+            }
         }
     }
 };

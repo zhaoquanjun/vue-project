@@ -47,6 +47,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
     if (to.name !== "callback") {
       securityService.getUser().then(async (data) => {
+        alert(1)
         if (!data) {
           securityService.signIn();
           next()
