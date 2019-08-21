@@ -107,7 +107,7 @@ export default {
                                 //     }
                                 // );
                                 this.$notify({
-                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    customClass: "notify-error", //  notify-success ||  notify-error
                                     message: `${this.displayName}[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`,
                                     duration: 1500,
                                     showClose: false

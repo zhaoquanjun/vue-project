@@ -172,6 +172,7 @@ import * as fileCategoryManageApi from "@/api/request/fileCategoryManageApi";
 import { getStorageUsage } from "@/api/request/contentCommonApi.js";
 import environment from "@/environment/index.js";
 import { trim } from "@/utlis/index.js";
+
 export default {
     components: {
         MTree,
@@ -231,8 +232,10 @@ export default {
         this.getPicList();
         this.getTree();
         this.getStorageUsage();
+         
     },
     methods: {
+      
         // 获取使用的内容
         async getStorageUsage() {
             let { data, status } = await getStorageUsage("File");

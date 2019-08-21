@@ -151,7 +151,7 @@ export default {
             picSearchOptions: {
                 pageSize: 10,
                 pageIndex: 1,
-                orderByType: 1,
+                orderByType: "CreateTime",
                 isDescending: true,
                 categoryIdList: [],
                 keyword: "",

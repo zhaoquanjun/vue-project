@@ -55,13 +55,13 @@ const dashboard = {
          set_menuList(state,m){
             // state.menuList = JSON.stringify(m);
             state.menuList = m;
-            setLocal("menulist", m)
+            //setLocal("menulist", m)
 
            },
            set_authList(state, a){
              state.authList = a;
              state.hasRules = true;
-             setLocal("authList", a)
+            // setLocal("authList", a)
            },
     },
     actions: {

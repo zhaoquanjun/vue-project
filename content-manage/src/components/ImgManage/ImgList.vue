@@ -223,7 +223,6 @@ export default {
             this.picInfo = this.imgList[this.changeIndex];
         },
         prev() {
-            console.log(this.imgPageResult.list.length)
             this.$refs.carousel.prev();
             if (this.changeIndex > 0) {
                 this.changeIndex = this.changeIndex - 1;
@@ -234,7 +233,6 @@ export default {
             this.picInfo = this.imgList[this.changeIndex];
         },
         next() {
-            console.log(this.changeIndex)
             this.$refs.carousel.next();
             this.changeIndex = this.changeIndex + 1;
             if (this.changeIndex >= this.imgPageResult.list.length) {
