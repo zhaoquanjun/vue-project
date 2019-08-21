@@ -21,5 +21,5 @@ export const getFirstIndustries = () => {
 }
 // 选择模版
 export const updateSiteTemplate = (para) => {
-    return ajaxRequest.get(`${environment.siteManageApi}/api/siteInfo/UpdateSiteTemplate`, para);
+    return ajaxRequest.put(`${environment.siteManageApi}/api/siteInfo/UpdateSiteTemplate`, para);
 }

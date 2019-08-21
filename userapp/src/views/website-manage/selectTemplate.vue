@@ -7,7 +7,10 @@
     </el-aside>
     <el-main class="member-content">
       <el-row>
-        <ChangeSite></ChangeSite>
+        <ChangeSite
+            @getSiteId="getSiteId"
+            @getSiteName="getSiteName"
+        ></ChangeSite>
       </el-row>
       <el-row class="wrap">
         <el-col :span="8" style="min-width: 500px; max-width: 688px;">
@@ -159,7 +162,9 @@ export default {
     ChangeSite
   },
   data() {
-    return {
+      return {
+          siteId: 0,
+          siteName: "",
       templateShow: false,
       templatePage: {},
       templateInfo: [],
@@ -200,6 +205,14 @@ export default {
     this.getFirstIndustry();
   },
   methods: {
+      // 获取siteId
+      getSiteId(siteId) {
+          this.siteId = siteId;
+      },
+      // 获取siteName
+      getSiteName(siteName) {
+          this.siteName = siteName;
+      },
     async getFirstIndustry() {
       let { data, status } = await templateApi.getFirstIndustries();
       if (status == 200) {
@@ -207,9 +220,10 @@ export default {
       }
     },
     // 选择模版
-    async choseSite(item) {
-      console.log(item);
-      // await templateApi.updateSiteTemplate();
+      async choseSite(item) {
+          let para = { TemplateId: item.id, CurrentSiteId: this.siteId, TemplateSiteId: item.siteId, SiteName: this.siteName }; 
+          console.log(para);
+         await templateApi.updateSiteTemplate(para);
     },
     // 预览模版
     previewSite() {},
