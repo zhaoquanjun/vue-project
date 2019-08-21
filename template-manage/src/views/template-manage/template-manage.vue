@@ -315,6 +315,14 @@
               <button class="upload-btn">{{ !!picUrlMobile ?'重新上传':'上传图片'}}</button>
             </el-upload>
           </div>
+          <div style="margin-top:212px">
+            <span class="tipTypeText" style="margin-left:149px">PC端</span>
+            <span class="tipTypeText" style="margin-left:164px">Mobile端</span>
+          </div>
+          <div style="margin-top:8px">
+            <span class="tipInfoText" style="margin-left:102px">推荐尺寸655×380px</span>
+            <span class="tipInfoText" style="margin-left:79px">推荐尺寸148×236px</span>
+          </div>
           <div class="confirm">
             <button class="confirmBtn" @click="saveSettingTemplate">确定</button>
             <button class="cancelBtn" @click="cancelSettingTemplate">取消</button>
@@ -769,7 +777,7 @@ export default {
       this.settingTemplateShow = true;
       let { data } = await templateApi.getSiteTemplate(scope.row.id);
       this.settingTemplateName = data.templateName;
-      this.settingTemplateStatus = data.status == 1 ? "上架" : "下架";
+      this.settingTemplateStatus = data.status;
       this.settingChecked = data.isRecommend;
     },
     // 保存设置模版
@@ -803,6 +811,7 @@ export default {
             duration: 2000,
             showClose: false
           });
+          this.searchTemplate();
         }
       }
     },
@@ -1238,6 +1247,19 @@ export default {
       color: rgba(38, 38, 38, 1);
       line-height: 20px;
     }
+  }
+
+  .tipTypeText {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(38, 38, 38, 1);
+    line-height: 20px;
+  }
+  .tipInfoText {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(140, 140, 140, 1);
+    line-height: 20px;
   }
 
   .confirm {
