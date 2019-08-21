@@ -12,7 +12,7 @@
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
-                @getList="getArticleListAsync"
+                @getList="getArticleList"
                 @modifyNode="modifyNodeCategory"
             ></m-tree>
         </el-aside>
@@ -420,22 +420,13 @@ export default {
         closeRightPanel() {
             this.isInvitationPanelShow = true;
         },
-        //获取文章table列表
-        async getArticleListAsync() {
-            let { data } = await articleManageApi.getArticleList(
-                this.articleSearchOptions
-            );
-            this.articlePageResult = data;
-        },
+       
         // 获取文章分类的树菜单
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
         },
-        // resetCategoryId() {
-        //     this.articleSearchOptions.categoryId = null;
-        //     this.getArticleListAsync();
-        // },
+    
         // 重命名分类名称
         async renameCategory(id, newName) {
             await articleManageApi.reName(id, newName);

@@ -1,5 +1,5 @@
 import oidcMgr from '@/services/authentication/oidcService';
-import {removeLocal } from "@/libs/local.js";
+import {clearAllCookie } from "@/libs/local.js";
 class SecurityService {
   async authenticate(returnPath) {
     const user = await this.getUser() // see if the user details are in local storage
@@ -21,11 +21,7 @@ class SecurityService {
   signOut() {
     oidcMgr.signoutRedirect().then(function(resp) {
       console.log('signed out', resp)
-      removeLocal("token");
-      removeLocal("ymId");
-      removeLocal("ymSd");
-      removeLocal("userInfo");
-      removeLocal("authList");
+      clearAllCookie()
     }).catch(function(err) {
       console.log(err)
     })

@@ -7,7 +7,7 @@ const user = {
   mutations: {
     SET_USERINFO: (state, payload) => {
       state.userInfo = payload;
-      setLocal("userInfo",payload)
+      //setLocal("userInfo",payload)
     }
   },
   actions: {

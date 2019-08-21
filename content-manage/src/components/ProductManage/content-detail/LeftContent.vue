@@ -53,16 +53,19 @@
                                 <div class="product-category" @click.stop="multipleCatagory">
                                     <ul class="category-list">
                                         <li
-                                            class="category-item"
+                                            style="display:inline-block"     
                                             v-for="(item) in detailData.productCategoryList"
                                             :key="item.id"
                                             @click.stop
                                         >
-                                            <span>{{item.displayName}}</span>
+                                        <div class="category-item" v-if="item.id!==0">   
+                                              <span>{{item.displayName}}</span>
                                             <i
                                                 class="el-icon-close"
                                                 @click="removeCategory(item.id)"
                                             ></i>
+                                        </div>
+                                          
                                         </li>
                                     </ul>
                                     <span
@@ -280,7 +283,6 @@
 <script>
 import * as productManageApi from "@/api/request/productManageApi";
 import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
-import SelectTree from "@/components/common/SelectTree";
 import DetailCheckTree from "./DetailCheckTree";
 const viewAuth = [
     { name: "全选", id: 0 },
@@ -333,7 +335,6 @@ import ModalContent from "@/components/ImgManage/index.vue";
 export default {
     components: {
         ModalContent,
-        SelectTree,
         DetailCheckTree
     },
     data() {
@@ -371,7 +372,7 @@ export default {
             activeName: "",
             activeName1: "",
             categoryName: [],
-            categoryId: [0],
+            categoryId: [],
             treeResult: null,
             detailData: {
                 name: "",
@@ -489,9 +490,7 @@ export default {
             ];
             this.categoryId = [categoryId];
         } else {
-            this.detailData.productCategoryList = [
-                { id: 0, displayName: "全部分类" }
-            ];
+            this.detailData.productCategoryList = [{ id: 0, displayName: "" }];
         }
         var id = this.$route.query.id;
         this.curProduct = id;
@@ -552,6 +551,7 @@ export default {
             this.categoryIdList(this.detailData.productCategoryList);
         },
         categoryIdList(list) {
+            this.categoryId=[]
             list.forEach(item => {
                 this.categoryId.push(item.id);
             });
@@ -655,20 +655,22 @@ export default {
                 return;
             }
             if (!!boolean) {
-                console.log(this.detailData.productCategoryList);
+                // console.log(this.detailData.productCategoryList);
                 // this.detailData.productCategoryList &&
                 //     this.detailData.productCategoryList.forEach(item => {
                 //         if (item.id != data.id) {
-                //             console.log(123)
-                //             this.detailData.productCategoryList.push({
+                //             if( !this.categoryId.includes(data.id)){
+                //                  this.detailData.productCategoryList.push({
                 //                 displayName: data.label,
                 //                 id: data.id,
                 //                 thumbnailPicUrl: data.thumbnailPicUrl
                 //             });
+                //             }
+
                 //         }
                 //     });
 
-                if (this.detailData.productCategoryList.indexOf(data) === -1) {
+                if (!this.categoryId.includes(data.id)) {
                     this.detailData.productCategoryList.push({
                         displayName: data.label,
                         id: data.id,
