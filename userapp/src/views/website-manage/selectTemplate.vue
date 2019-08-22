@@ -138,7 +138,7 @@
                   </el-col>
                 </el-row>
                 <div>
-                  <span class="dislikeTemplate">未找到想要的模版？</span>
+                  <!-- <span class="dislikeTemplate">未找到想要的模版？</span> -->
                   <div class="pageing" id="pageing" style="margin-bottom:20px">
                     <el-pagination
                       background
@@ -331,15 +331,11 @@ export default {
       this.templatePage = data;
       this.templateInfo = data.items;
     },
+    // 获取行业树
     async getIndustryTree() {
       let { data, status } = await templateApi.getIndustryTree();
       if (status == 200) {
         this.firstIndustry = data;
-        console.log(data);
-        this.firstIndustry.forEach((item, index) => {
-          this.firstIndustry[index].label = item.lable;
-          this.firstIndustry[index].children = item.secondIndustries;
-        });
       }
     },
     // 选择模版
@@ -449,6 +445,9 @@ export default {
 .languageSelect /deep/ .el-input__suffix-inner .el-select__caret {
   display: none;
 } */
+.tree /deep/ .is-leaf{
+  display: none
+}
 .tree /deep/ .el-tree-node__content {
   height: 46px;
 }
