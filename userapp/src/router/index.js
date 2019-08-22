@@ -45,8 +45,6 @@ router.beforeEach(async (to, from, next) => {
       } else {
         next();
       }
-      console.log(to)
-
     } else {
       next('/404')
     }

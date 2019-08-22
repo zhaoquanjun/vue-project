@@ -1,10 +1,5 @@
 <template>
   <el-container class="member-container">
-    <el-aside class="submenu-aside">
-      <page-submenu>
-        <template v-slot:title>网站管理</template>
-      </page-submenu>
-    </el-aside>
     <el-main class="member-content">
       <el-row>
         <ChangeSite @getSiteId="getSiteId" @getSiteName="getSiteName"></ChangeSite>
@@ -56,8 +51,10 @@
                 :data="firstIndustry"
                 node-key="id"
                 ref="tree"
+                accordion
                 :highlight-current="true"
                 class="tree"
+                @node-click="changeIndustry"
               ></el-tree>
             </el-aside>
             <el-main>
@@ -123,12 +120,15 @@
                   >
                     <div class="itemSiteImage">
                       <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
-                      <img :src="item.imageUrl" alt class="itemSiteImageBackground" />
+                      <div
+                        class="itemSiteImageBackground"
+                        :style="{background: 'url(' + (item.imageUrl ) + ') no-repeat center/cover'}"
+                      ></div>
                       <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
                       <div class="modal">
                         <div>
                           <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <div class="previewSite" @click="previewSite(item)">预览</div>
+                          <a :href="item.domain" class="previewSite" target="_blank">预览</a>
                         </div>
                       </div>
                     </div>
@@ -167,6 +167,7 @@ import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import * as templateApi from "@/api/request/templateApi";
 import { getLanguage } from "@/configure/appCommon";
+import { designerUrl } from "@/environment/index";
 
 export default {
   components: {
@@ -255,7 +256,12 @@ export default {
           type: "IsRecommend"
         }
       ],
-      firstIndustry: []
+      firstIndustry: [],
+      isOrderByUpdateTime: true,
+      isMostPopular: false,
+      isRecommend: false,
+      firstIndustryId: 0,
+      secondIndustryId: 0
     };
   },
   computed: {},
@@ -264,22 +270,29 @@ export default {
     this.getIndustryTree();
   },
   methods: {
-    // 切换语言
-    async changeLanguage(language) {
+    async changeIndustry(item) {
+      console.log(item);
+      this.firstIndustryId = 0;
+      this.secondIndustryId = 0;
+      if (item.parentId == 0) {
+        this.firstIndustryId = item.id;
+      } else {
+        this.firstIndustryId = item.parentId;
+        this.secondIndustryId = item.id;
+      }
       let para = {
         TemplateName: "",
-        FirstIndustry: 0,
-        SecondIndustry: 0,
+        FirstIndustry: this.firstIndustryId,
+        SecondIndustry: this.secondIndustryId,
         Theme: "",
-        Language: language,
-        IsRecommend: false,
+        Language: this.languageSelect,
+        IsRecommend: this.isRecommend,
         PageIndex: 1,
         PageSize: 10,
-        IsOrderByUpdateTime: true,
-        IsMostPopular: false
+        IsOrderByUpdateTime: this.isOrderByUpdateTime,
+        IsMostPopular: this.isMostPopular
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
-      console.log(data);
       this.templatePage = data;
       this.templateInfo = data.items;
     },
@@ -291,6 +304,31 @@ export default {
     getSiteName(siteName) {
       this.siteName = siteName;
     },
+    // 获取行业树
+    async getIndustryTree() {
+      let { data, status } = await templateApi.getIndustryTree();
+      if (status == 200) {
+        this.firstIndustry = data;
+      }
+    },
+    // 切换语言
+    async changeLanguage() {
+      let para = {
+        TemplateName: "",
+        FirstIndustry: 0,
+        SecondIndustry: 0,
+        Theme: "",
+        Language: this.languageSelect,
+        IsRecommend: this.isRecommend,
+        PageIndex: 1,
+        PageSize: 10,
+        IsOrderByUpdateTime: this.isOrderByUpdateTime,
+        IsMostPopular: this.isMostPopular
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+    },
     // 选择主题颜色
     changeColor(item) {
       this.colorArray.forEach((item, index) => {
@@ -299,45 +337,40 @@ export default {
       item.isCur = true;
       console.log(item);
     },
+    // 选择最新/最热/推荐
     async changeOrder(item) {
       this.orderType.forEach((item, index) => {
         item.isOrder = false;
       });
       item.isOrder = true;
-      let isOrderByUpdateTime = false;
-      let isMostPopular = false;
-      let isRecommend = false;
+      this.isOrderByUpdateTime = false;
+      this.isMostPopular = false;
+      this.isRecommend = false;
       if (item.type == "updataTime") {
-        isOrderByUpdateTime = true;
+        this.isOrderByUpdateTime = true;
       } else if (item.type == "mostPopular") {
-        isMostPopular = true;
+        this.isMostPopular = true;
       } else if (item.type == "IsRecommend") {
-        isRecommend = true;
+        this.isRecommend = true;
       }
       let para = {
         TemplateName: "",
         FirstIndustry: 0,
         SecondIndustry: 0,
         Theme: "",
-        Language: "",
-        IsRecommend: isRecommend,
+        Language: this.languageSelect,
+        IsRecommend: this.isRecommend,
         PageIndex: 1,
         PageSize: 10,
-        IsOrderByUpdateTime: isOrderByUpdateTime,
-        IsMostPopular: isMostPopular
+        IsOrderByUpdateTime: this.isOrderByUpdateTime,
+        IsMostPopular: this.isMostPopular
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
       console.log(data);
       this.templatePage = data;
       this.templateInfo = data.items;
     },
-    // 获取行业树
-    async getIndustryTree() {
-      let { data, status } = await templateApi.getIndustryTree();
-      if (status == 200) {
-        this.firstIndustry = data;
-      }
-    },
+
     // 选择模版
     async choseSite(item) {
       let para = {
@@ -346,11 +379,24 @@ export default {
         TemplateSiteId: item.siteId,
         SiteName: this.siteName
       };
-      console.log(para);
-      await templateApi.updateSiteTemplate(para);
+      // await templateApi.updateSiteTemplate(para);
+      this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
+        confirmButtonText: "前往设计页面",
+        cancelButtonText: "取消",
+        iconClass: "icon-success",
+        distinguishCancelAndClose: true
+      })
+        .then(() => {
+          window.location.href = `${designerUrl}?siteId=${this.siteId}`;
+        })
+        .catch(action => {
+          if (action == "cancel") {
+            this.$router.push({
+              path: "/website/mysite"
+            });
+          }
+        });
     },
-    // 预览模版
-    previewSite() {},
     //   获取模版列表
     async getTemplateList() {
       let para = {
@@ -377,12 +423,12 @@ export default {
         FirstIndustry: 0,
         SecondIndustry: 0,
         ColorType: -1,
-        Language: "",
-        IsRecommend: false,
+        Language: this.languageSelect,
+        IsRecommend: this.isRecommend,
         PageIndex: 1,
         PageSize: 10,
-        IsOrderByUpdateTime: true,
-        IsMostPopular: false
+        IsOrderByUpdateTime: this.isOrderByUpdateTime,
+        IsMostPopular: this.isMostPopular
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
       console.log(data);
@@ -393,6 +439,7 @@ export default {
     changeSize() {},
     // 关闭弹窗
     closeDialog() {
+      this.search = "";
       this.templateShow = false;
     },
     // 显示选择模版弹框
@@ -436,17 +483,8 @@ export default {
 .languageSelect /deep/ .el-input__inner {
   border: none;
 }
-/* .languageSelect /deep/ .el-input__suffix-inner:before {
-  width: 0;
-  height: 0;
-  padding-top: 5px;
-  content: ""
-}
-.languageSelect /deep/ .el-input__suffix-inner .el-select__caret {
+.tree /deep/ .is-leaf {
   display: none;
-} */
-.tree /deep/ .is-leaf{
-  display: none
 }
 .tree /deep/ .el-tree-node__content {
   height: 46px;
@@ -630,7 +668,7 @@ export default {
       .itemSiteImageBackground {
         margin-top: -2px;
         width: 100%;
-        height: 100%;
+        padding-bottom: 62%;
       }
       .choseSite {
         width: 90px;
@@ -645,9 +683,11 @@ export default {
         cursor: pointer;
       }
       .previewSite {
+        display: inline-block;
         margin-top: 24px;
         width: 88px;
         height: 38px;
+        background: rgba(255, 255, 255, 1);
         border-radius: 2px;
         border: 1px solid rgba(9, 204, 235, 1);
         font-size: 14px;
@@ -705,6 +745,7 @@ export default {
 }
 .member-container {
   position: relative;
+  height: 100vh;
 }
 
 .wrap {

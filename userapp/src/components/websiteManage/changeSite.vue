@@ -122,6 +122,18 @@ export default {
       this.siteId = data.siteId;
       this.language = data.language;
       this.$emit("getSiteName", this.siteName);
+
+      if (data.templateId == 0) {
+        this.$router.push({
+          path: "/website/selectTemplate"
+        });
+      } else {
+        if (this.$route.path == "/website/selectTemplate") {
+          this.$router.push({
+            path: "/website/mysite"
+          });
+        }
+      }
     },
     /**
      * 获取站点列表
@@ -267,7 +279,7 @@ export default {
         right: 12px;
         background: rgba(255, 255, 255, 0.8);
         border-radius: 2px;
-        padding:0 12px;
+        padding: 0 12px;
         font-size: 14px;
         font-weight: 400;
         color: rgba(38, 38, 38, 1);
