@@ -16,29 +16,87 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column :label="recycleTempData.firstColumnName">
+            <el-table-column :label="recycleTempData.firstColumnName" :width="videoWidth">
                 <template slot-scope="scope">
-                    <img v-if="['file'].includes(recycleTempData.type)" :src="scope.row | fileCover" class="cover" />
-                    <img v-if="['news'].includes(recycleTempData.type)" :src="scope.row.pictureUrl ? scope.row.pictureUrl : newsDefaultImg" class="cover" />
-                    <img v-if="['product'].includes(recycleTempData.type)" :src="scope.row.thumbnailPicUrlList[0] ? scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40' : newsDefaultImg" class="cover" />
-                    <img v-if="['audio'].includes(recycleTempData.type)" :src="audioDefaultImg ? audioDefaultImg : newsDefaultImg" class="cover" />
-                    <img v-if="['pic'].includes(recycleTempData.type)" :src="scope.row.zoomOssUrl" class="cover" />
+                    <img
+                        v-if="['file'].includes(recycleTempData.type)"
+                        :src="scope.row | fileCover"
+                        class="cover"
+                    />
+                    <img
+                        v-if="['news'].includes(recycleTempData.type)"
+                        :src="scope.row.pictureUrl ? scope.row.pictureUrl : newsDefaultImg"
+                        class="cover"
+                    />
+                    <img
+                        v-if="['product'].includes(recycleTempData.type)"
+                        :src="scope.row.thumbnailPicUrlList[0] ? scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40' : newsDefaultImg"
+                        class="cover"
+                    />
+
+                    <!-- <img v-if="['audio'].includes(recycleTempData.type)" :src="audioDefaultImg ? audioDefaultImg : newsDefaultImg" class="cover" /> -->
+                    <div class="cover" v-if="['audio'].includes(recycleTempData.type)">
+                        <img width="100%" src="~img/file-icon/audio.png" />
+                        <!-- <span class="play" @click="viewPic( scope.row,scope.$index)">
+                            <img src="~img/file-icon/play.png" alt />
+                        </span> -->
+                    </div>
+                    <div class="video-cover" v-if="['video'].includes(recycleTempData.type)">
+                        <img width="100%" :src="scope.row.coverUrl" />
+                        <!-- <span class="play" @click="viewPic( scope.row,scope.$index)">
+                            <img src="~img/file-icon/play.png" alt />
+                        </span> -->
+                    </div>
+                    <img
+                        v-if="['pic'].includes(recycleTempData.type)"
+                        :src="scope.row.zoomOssUrl"
+                        class="cover"
+                    />
                     <!-- <img src="../../../static/images/content-icon/file-cover.png" class="cover" /> -->
+                    <div v-if="contentType==='video'">
+                        <div
+                            class="video-img-name"
+                            @click="rename(scope.row.id,scope.row.title,scope.$index)"
+                        >{{scope.row.title}}</div>
+                        <div class="format">格式： {{scope.row.fileExtension}}</div>
+                    </div>
                     <span
+                        v-else
                         class="img-name"
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
                     >{{ recycleTempData.type == 'product' ? scope.row.name : scope.row.title}}</span>
                 </template>
             </el-table-column>
-            <el-table-column v-if="['file'].includes(recycleTempData.type)" prop="fileExtensionTypeStr" label="文件类型"></el-table-column>
-            <el-table-column v-if="['audio'].includes(recycleTempData.type)" prop="fileExtension" label="格式"></el-table-column>
-            <el-table-column v-if="['pic','file','video','audio'].includes(recycleTempData.type)" prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="categoryName" :label="recycleTempData.secondColumnName" show-overflow-tooltip>
+            <el-table-column
+                v-if="['file'].includes(recycleTempData.type)"
+                prop="fileExtensionTypeStr"
+                label="文件类型"
+            ></el-table-column>
+            <el-table-column
+                v-if="['audio'].includes(recycleTempData.type)"
+                prop="fileExtension"
+                label="格式"
+            ></el-table-column>
+            <el-table-column
+                v-if="['pic','file','video','audio'].includes(recycleTempData.type)"
+                prop="sizeStr"
+                label="大小"
+                show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+                prop="categoryName"
+                :label="recycleTempData.secondColumnName"
+                show-overflow-tooltip
+            >
                 <template slot-scope="scope">
                     <span>{{ recycleTempData.type == 'product' ? getProductCateNames(scope.row.productCategoryList) : scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="deleteTimePrt" :label="recycleTempData.thirdColumnName" show-overflow-tooltip>
+            <el-table-column
+                prop="deleteTimePrt"
+                :label="recycleTempData.thirdColumnName"
+                show-overflow-tooltip
+            >
                 <template slot-scope="scope">
                     <span>{{ recycleTempData.type == 'news' ? scope.row.deleteTimePrt : scope.row.deleteTimeStr }}</span>
                 </template>
@@ -67,19 +125,41 @@
                 @size-change="changeSize"
             ></el-pagination>
         </div>
+        <div id="img-list-dialog">
+            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
+                <video v-if="contentType==='video'" class="video" :src="fullOssUrl" controls="controls" />
+                 <audio v-else class="audio" :src="fullOssUrl" controls="controls" />
+                <div class="dislog-footer" slot="footer">
+                    <span>{{picInfo.title}}</span>
+                    <span>分类: {{picInfo.categoryName}}</span>
+                    <span>大小: {{picInfo.sizeStr}}</span>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
 <script>
+import { adminDownload } from "@/api/request/contentCommonApi.js";
 export default {
-    props: ["recyclePageResult", "recycleSearchOptions", "recycleTempData"],
+    props: [
+        "recyclePageResult",
+        "recycleSearchOptions",
+        "recycleTempData",
+        "contentType"
+    ],
     data() {
         return {
-            newsDefaultImg: require("../../../../static/images/content-default-pic.png"),
-            audioDefaultImg: require("../../../../static/images/content-default-pic.png"),
+            videoWidth: "",
+            newsDefaultImg: require("img/content-default-pic.png"),
+            audioDefaultImg: require("img/content-default-pic.png"),
             multipleSelection: [],
             changeCategoryPicId: null,
-            tableHeight: 500
+            tableHeight: 500,
+            fullOssUrl: "",
+            imgVisible: false,
+            picInfo: {},
+            imgList: ""
         };
     },
     filters: {
@@ -103,14 +183,18 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            console.log(this.recyclePageResult)
+            console.log(this.recyclePageResult);
             window.addEventListener("resize", () => {
                 this.tableHeight = window.innerHeight - 310;
             });
             this.tableHeight = window.innerHeight - 310;
         });
+        if (this.contentType === "video") {
+            this.videoWidth = 500;
+        }
     },
     methods: {
+
         /**
          * 恢复数据
          */
@@ -135,19 +219,59 @@ export default {
             this.recycleSearchOptions.pageSize = size;
             this.$emit("getRecycleDataList");
         },
-        getProductCateNames(cateList){
+        getProductCateNames(cateList) {
             let cateNames = "";
-            cateList.forEach((item) => {
-                cateNames += item.displayName+";";
+            cateList.forEach(item => {
+                cateNames += item.displayName + ";";
             });
-            cateNames = cateNames.slice(0,cateNames.length -1);
+            cateNames = cateNames.slice(0, cateNames.length - 1);
             return cateNames;
-        }
+        },
+        viewPic(row, index) {
+            this.imgList = this.recyclePageResult.list;
+            this.picInfo = this.imgList[index];
+          
+            if(this.contentType==="video"){
+             this.fullOssUrl = row.ossFullUrl;
+            this.imgVisible = true;
+            }else{
+                this._adminDownload(row)
+            }
+        },
+         async _adminDownload(row) {
+            console.log();
+            let type = row.fileType;
+            let id = row.id;
+            let { data } = await adminDownload(type, id);
+            this.fullOssUrl = data;
+            this.imgVisible = true;
+        },
     }
 };
 </script>
 <style lang="scss" scoped>
 @import "@/styles/manege-table.scss";
+
+.video-img-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-wrap: break-word;
+    margin-bottom: 30px;
+}
+.format {
+    white-space: unset !important;
+}
+.video-cover {
+    width: 190px;
+    height: 130px;
+    margin-right: 10px;
+    position: relative;
+   
+}
+
 </style>
 
 

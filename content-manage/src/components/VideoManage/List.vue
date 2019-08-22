@@ -215,6 +215,7 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
+           
             this.imgList = this.imgPageResult.list;
             this.picInfo = this.imgList[index];
              this.fullOssUrl = row.ossFullUrl;

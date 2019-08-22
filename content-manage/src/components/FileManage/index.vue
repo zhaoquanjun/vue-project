@@ -142,8 +142,8 @@
             <span slot="title">
                 <span class="fs14">
                     上传{{displayName}}
-                    <el-tooltip class="item" effect="dark" placement="right">
-                        <svg-icon icon-class="tip-icon"></svg-icon>
+                    <el-tooltip class="item" effect="dark" placement="right" content="单个文件不允许超过50M，一次最多可上传100个文件">
+                         <i class="iconfont iconyiwen"></i>
                     </el-tooltip>
                 </span>
             </span>
