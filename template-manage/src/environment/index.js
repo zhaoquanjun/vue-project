@@ -1,4 +1,4 @@
-/**
+﻿/**
  *系统配置管理
  *
  */
@@ -9,10 +9,10 @@ let memberManageApi = 'http://api.content.console.wezhan.cn';
 let dashboardApi = 'http://api.dashboard.console.wezhan.cn';
 let templateApi = "http://api.wezhanproduce.console.wezhan.cn";
 let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
-let authorityUrl = "http://api.identity.console.wezhan.cn";
-let redirectUrl = "http://content.console.wezhan.cn/callback";
-let logoutRedirectUri = "http://content.console.wezhan.cn/index.html";
-let silentRedirectUri = 'http://content.console.wezhan.cn/static/silent-renew.html';
+let authorityUrl = "http://login.console.wezhan.cn";
+let redirectUrl = "http://wezhanproduce.console.wezhan.cn/callback";
+let logoutRedirectUri = "http://wezhanproduce.console.wezhan.cn/index.html";
+let silentRedirectUri = 'http://wezhanproduce.console.wezhan.cn/static/silent-renew.html';
 let clientId = 'produce.api';
 let scope = "openid profile dashboard.api content.api designer.api produce.api";
 export let siteDomain = "content.console.wezhan.cn";
@@ -29,10 +29,10 @@ if (process.env.NODE_ENV === 'development') {
     dashboardApi = 'http://api.dashboard.console.wezhan.cn';
     templateApi = "http://api.wezhanproduce.console.wezhan.cn"
     uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
-    authorityUrl = "http://api.identity.console.wezhan.cn";
-    redirectUrl = "http://localhost:8081/callback";
-    logoutRedirectUri = "http://content.console.wezhan.cn/index.html";
-    silentRedirectUri = 'http://localhost:8081/static/silent-renew.html';
+    authorityUrl = "http://login.console.wezhan.cn";
+    redirectUrl = "http://localhost:8083/callback";
+    logoutRedirectUri = "http://localhost:8083/index.html";
+    silentRedirectUri = 'http://localhost:8083/static/silent-renew.html';
     clientId = 'dev.produce.api';
     scope = "openid profile dashboard.api content.api designer.api produce.api";
 };

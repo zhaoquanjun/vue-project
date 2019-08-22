@@ -18,38 +18,40 @@
                 </el-input>
             </div>
             <div class="head-item head-middle">
-                <span>文件类型</span>
-                <span class="select-sort">
-                    <el-select
-                        size="small"
-                        v-model="fileTypeLabel"
-                        placeholder="请选择"
-                        @change="changeType"
-                    >
-                        <el-option
-                            v-for="item in fileTypeOptions"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </span>
-                <span>置顶</span>
-                <span class="select-sort">
-                    <el-select
-                        size="small"
-                        v-model="topValue"
-                        placeholder="请选择"
-                        @change="changeStickStatus"
-                    >
-                        <el-option
-                            v-for="item in topOptions"
-                            :key="item.topValue"
-                            :label="item.topLabel"
-                            :value="item.topValue"
-                        ></el-option>
-                    </el-select>
-                </span>
+                <template v-if="contentType==='File'">
+                    <span>文件类型</span>
+                    <span class="select-sort">
+                        <el-select
+                            size="small"
+                            v-model="fileTypeLabel"
+                            placeholder="请选择"
+                            @change="changeType"
+                        >
+                            <el-option
+                                v-for="item in fileTypeOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </span>
+                    <span>置顶</span>
+                    <span class="select-sort">
+                        <el-select
+                            size="small"
+                            v-model="topValue"
+                            placeholder="请选择"
+                            @change="changeStickStatus"
+                        >
+                            <el-option
+                                v-for="item in topOptions"
+                                :key="item.topValue"
+                                :label="item.topLabel"
+                                :value="item.topValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
+                </template>
                 <span>排序</span>
                 <span class="select-sort">
                     <el-select
@@ -88,9 +90,18 @@
                 </span>
                 <div>
                     <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchDownLoad">下载</button>
+                    <button
+                        v-if="contentType!='Video'"
+                        class="btn-small btn-lightblue-notboard"
+                        @click="batchDownLoad"
+                    >下载</button>
+                    <button v-else class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
 
-                    <el-dropdown trigger="click" @command="handleCommand">
+                    <el-dropdown
+                        trigger="click"
+                        @command="handleCommand"
+                        v-if="contentType!='Video'"
+                    >
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard">
                                 <svg-icon icon-class="across-dot"></svg-icon>
@@ -109,7 +120,13 @@
 </template>
 <script>
 export default {
-    props: ["picSearchOptions", "isBatchHeaderShow", "countPic","displayName"],
+    props: [
+        "picSearchOptions",
+        "isBatchHeaderShow",
+        "countPic",
+        "displayName",
+        "contentType"
+    ],
     data() {
         return {
             ascSort: false,
@@ -183,13 +200,40 @@ export default {
             fileTypeLabel: ""
         };
     },
+    mounted() {
+        this.sortType();
+    },
     methods: {
+        sortType() {
+            if (this.contentType === "Video") {
+                this.options = [
+                    {
+                        value: "CreateTime",
+                        label: "上传时间"
+                    },
+                    {
+                        value: "FileSize",
+                        label: "视频大小"
+                    }
+                ];
+            } else if (this.contentType === "") {
+                this.options = [
+                    {
+                        value: "CreateTime",
+                        label: "上传时间"
+                    },
+                    {
+                        value: "FileSize",
+                        label: "音频大小"
+                    }
+                ];
+            }
+        },
         changeSelected(value) {
-            
             this.picSearchOptions.orderByType = value;
             this.getPicList();
         },
-        changeType(value){
+        changeType(value) {
             this.picSearchOptions.fileExtensionType = value;
             this.getPicList();
         },

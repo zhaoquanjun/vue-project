@@ -25,6 +25,7 @@
                 :display-name="displayName"
                 :pic-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
+                :content-type="contentType"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 @getPicList="getPicList"
                 @editor="editor"
@@ -172,6 +173,7 @@ import * as fileCategoryManageApi from "@/api/request/fileCategoryManageApi";
 import { getStorageUsage } from "@/api/request/contentCommonApi.js";
 import environment from "@/environment/index.js";
 import { trim } from "@/utlis/index.js";
+
 export default {
     components: {
         MTree,
@@ -191,7 +193,11 @@ export default {
             copyTip: "复制",
             isCopy: false,
             displayName: "文件",
-            nodeData: "", // 分类节点的名称
+            contentType:"File",
+            nodeData: {
+               label:"全部分类",
+               id:0
+            },
             componentId: "List",
             isImgList: false,
             countPic: 0,
@@ -231,9 +237,11 @@ export default {
         this.getPicList();
         this.getTree();
         this.getStorageUsage();
+         
     },
     methods: {
-        // 获取使用的内容
+      
+        // 获取使用的内存
         async getStorageUsage() {
             let { data, status } = await getStorageUsage("File");
             this.useStorage = data;

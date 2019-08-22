@@ -9,9 +9,14 @@
             @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection"></el-table-column>
-
-            <el-table-column label="视频名称">
+            <el-table-column label="音频名称">
                 <template slot-scope="scope">
+                    <div class="cover">
+                        <img width="100%" src="~img/file-icon/audio.png" />
+                        <span class="play"  @click="viewPic( scope.row,scope.$index)">
+                            <img src="~img/file-icon/play.png" alt />
+                        </span>
+                    </div>
                     <el-input
                         v-if="(index == scope.$index)"
                         type="text"
@@ -31,26 +36,26 @@
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
-
+            <el-table-column prop="fileExtension" label="格式" show-overflow-tooltip></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="durationOfSecond" label="时长"></el-table-column>
+            <el-table-column prop="categoryName" label="分类"></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn move-btn" @click="handleMove(scope.row)">
                             <!-- <svg-icon style="width:27px;height:27px" icon-class="tab-move"></svg-icon> -->
                         </button>
-                        <button
+                        <!-- <button
                             class="handle-btn look-btn"
                             @click="viewPic( scope.row,scope.$index)"
                         >
                             <svg-icon icon-class="tab-look"></svg-icon>
-                        </button>
+                        </button> -->
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
                             <svg-icon icon-class="l-recyclebin"></svg-icon>
                         </button>
@@ -58,6 +63,12 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div class="storage-wrap">
+            <div class="use-storage">
+                <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
+            </div>
+            <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
+        </div>
         <div class="pageing" id="pageing">
             <slot name="paging"></slot>
             <el-pagination
@@ -74,54 +85,24 @@
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
             <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
-                <!-- //<img :src="picUrl"> -->
-                <el-carousel
-                    :autoplay="false"
-                    :initial-index="initial"
-                    arrow="always"
-                    indicator-position="none"
-                    :loop="true"
-                    @change="change"
-                >
-                    <el-carousel-item v-for="item in imgList" :key="item.id">
-                        <h3>
-                            <video :src="fullOssUrl"  controls="controls"/>
-                        </h3>
-                    </el-carousel-item>
-                </el-carousel>
+                <audio class="audio" :src="fullOssUrl" controls="controls" />
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
-                    <span>尺寸: {{picInfo.sizeStr}}</span>
-                    <span>大小: {{picInfo.size}}</span>
+                    <span>大小: {{picInfo.sizeStr}}</span>
                 </div>
             </el-dialog>
         </div>
-
-        <!-- <el-dialog title="更换分类至" :visible.sync="categoryVisable ">
-            <el-tree
-                :data="treeResult"
-                node-key="id"
-                accordion
-                :expand-on-click-node="false"
-                @node-click="changeCategory"
-            ></el-tree>
-        </el-dialog>-->
     </div>
 </template>
 
 <script>
+import { adminDownload } from "@/api/request/contentCommonApi.js";
 export default {
-    // props:{
-    //     imgList:{
-    //         type:Object,
-    //         default:()=>({})
-    //     }
-    // },
-    props: ["imgPageResult", "picSearchOptions", "treeResult"],
+    props: ["imgPageResult", "picSearchOptions","useStorage"],
     data() {
         return {
-            picInfo:{},
+            picInfo: {},
             index: -1, //
             isRename: true, // 重命名图片名称
             initial: 0,
@@ -131,13 +112,16 @@ export default {
             picTitle: null,
             categoryVisable: false,
             changeCategoryPicId: null,
-            imgList:"",
-            fullOssUrl:"",
-             loadingShow: true,
-            tableHeight: 500
+            imgList: "",
+            fullOssUrl: "",
+            loadingShow: true,
+            tableHeight: 500,
+            maxSize: 0,
+            currentUsage: 0,
+            prograss: 0
         };
     },
-     mounted() {
+    mounted() {
         this.$nextTick(() => {
             window.addEventListener("resize", () => {
                 this.tableHeight = window.innerHeight - 260;
@@ -146,6 +130,29 @@ export default {
         });
     },
     methods: {
+         bytesToSize(bytes, flag) {
+            if (bytes === 0) return "0 B";
+            let k = 1024;
+            let sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+            let i = Math.floor(Math.log(bytes) / Math.log(k));
+            let b = bytes / Math.pow(k, i);
+            if (flag === 1) {
+                b = b.toFixed(2);
+            }
+            let storage = b + sizes[i];
+            return storage;
+        },
+        /**
+         * 管理员下载
+         */
+        async _adminDownload(row) {
+            console.log();
+            let type = row.fileType;
+            let id = row.id;
+            let { data } = await adminDownload(type, id);
+            this.fullOssUrl = data;
+            this.imgVisible = true;
+        },
         /**
          * 单选或全选操作
          */
@@ -181,15 +188,9 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
-            this.fullOssUrl = row.fullOssUrl
-            this.imgList = this.imgPageResult.list
-            this.imgVisible = true;
-            this.initial = Number(index);
-            
-        },
-        change(index){
-            this.fullOssUrl=  this.imgList[index].fullOssUrl;
-              this.picInfo = this.imgList[index];
+            this.imgList = this.imgPageResult.list;
+            this.picInfo = this.imgList[index];
+            this._adminDownload(row);
         },
 
         changePage(page) {
@@ -204,43 +205,46 @@ export default {
             this.$emit("batchRemove", [row.id]);
         }
     },
-     watch: {
-        imgPageResult() {
-            this.loadingShow = false;
+    watch: {
+          useStorage() {
+            this.maxSize = this.bytesToSize(this.useStorage.maxSize);
+            this.currentUsage = this.bytesToSize(
+                this.useStorage.currentUsage,
+                1
+            );
+            this.prograss =(this.useStorage.currentUsage / this.useStorage.maxSize)*100;
         }
     }
 };
 </script>
-<style>
-
-</style>
-
 <style scoped>
+.el-table /deep/ .el-table__row .el-input .el-input__inner {
+    padding-right: 50px;
+}
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
     align-items: center;
 }
-.img-name {
-    cursor: pointer;
-}
-
-#img-list-dialog .dislog-footer{
-    text-align: center;
-    position: fixed;
-        width: 100%;
-    left: 0;
-    bottom: 15px;
-   
-}
-#img-list-dialog .dislog-footer span{
-    padding: 0 20px;
-    color: #fff;
-}
-#img-list-dialog .el-dialog{
-    background: #262626;
-    opacity: 0.7;
-    height: auto;
-}
-
 </style>
+<style lang="scss" scoped>
+@import "../../styles/manege-table.scss";
+.cover {
+    position: relative;
+    &:hover .play {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        top: 0;
+        border-radius: 2px;
+        text-align: center;
+        img {
+            width: 12px;
+            transform: translateY(50%);
+        }
+    }
+}
+</style>
+
+
 

@@ -11,6 +11,8 @@
                     accordion
                     :expand-on-click-node="true"
                     @chooseNode="chooseNode"
+                    :categoryName="nodeData.label"
+                    :categoryId="nodeData.id"
                 />
             </el-col>
             <div></div>
@@ -71,7 +73,6 @@ export default {
     },
     data() {
         return {
-            categoryId: 0,
             options: {
                 uploadType: this.uploadType,
                 target: null,
@@ -105,7 +106,7 @@ export default {
                                 //     }
                                 // );
                                 this.$notify({
-                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    customClass: "notify-error", //  notify-success ||  notify-error
                                     message: `${this.displayName}[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`,
                                     duration: 1500,
                                     showClose: false
@@ -124,7 +125,7 @@ export default {
                                     FromId: data.existInAnotherAppInfo.fromId,
                                     Title: chunk.file.name,
                                     ContentType: chunk.file.fileType,
-                                    CategoryId: this.categoryId
+                                    CategoryId: this.nodeData.id || 0
                                 });
                                 //todo 更换alert
 
@@ -153,7 +154,7 @@ export default {
         };
     },
     created() {
-        this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.categoryId}`;
+        this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
     },
     methods: {
         onFileError(rootFile, file, response, chunk) {
@@ -165,18 +166,18 @@ export default {
             this.successCount += 1;
             if (this.successCount > 0 && this.errorCount < 1) {
                 this.$emit("getList");
-                this.$emit("closeDialog")
-                this.fileList.forEach((file)=>{
-                     file.cancel(file);
+                this.$emit("closeDialog");
+
+                this.fileList.forEach(file => {
+                    file.cancel(file);
                 });
-                this.successCount=0;
-                this.errorCount= 0;
+                this.successCount = 0;
+                this.errorCount = 0;
             }
         },
         onFileAdded(file) {
             if (file.fileType == "") {
                 file.cancel(file);
-
                 return;
             }
             let [, suffix] = file.fileType.split("/");
@@ -200,23 +201,18 @@ export default {
                 "java",
                 "json"
             ];
-            console.log(file);
-            console.log(suffix);
             if (ary.indexOf(suffix) > -1) {
                 file.cancel(file);
                 return;
             }
-
-            // console.log(file, "file");
             this.panelShow = true;
-            //  file.resume();
+            //   file.resume();
             this.computeMD5(file);
         },
         uploadStart(file) {},
         computeMD5(file) {
             let url = URL.createObjectURL(file.file);
             var audioElement = new Audio(url);
-            console.log(audioElement);
             var duration;
             audioElement.addEventListener("loadedmetadata", function(_event) {
                 duration = audioElement.duration;
@@ -240,7 +236,8 @@ export default {
                 // );
                 file.uniqueIdentifier = md5;
                 this.fileList.push(file);
-                // file.resume();
+                // this.limitCount(file)
+                //file.resume();
             };
 
             fileReader.onerror = function() {
@@ -248,6 +245,21 @@ export default {
                     "FileReader onerror was triggered, maybe the browser aborted due to high memory usage."
                 );
             };
+        },
+        limitCount(file) {
+            if (this.uploadType === "Audio") {
+                if (this.fileList.length < 10) {
+                    this.fileList.push(file);
+                } else {
+                    alert("一次最多可上传10个音频");
+                }
+            } else if (this.uploadType === "Video") {
+                if (this.fileList.length < 10) {
+                    this.fileList.push(file);
+                } else {
+                    alert("一次最多可上传10个音频");
+                }
+            }
         },
         // 选择分类节点
         chooseNode(data) {
@@ -289,9 +301,8 @@ export default {
 
 <style  scoped>
 .uploader-list /deep/ .uploader-file {
-    height: 54px;
+    /* min-height: 54px; */
     line-height: 1;
-    padding: 8px 32px;
 }
 .uploader-list /deep/ .uploader-file-icon {
     /* width: 113px;

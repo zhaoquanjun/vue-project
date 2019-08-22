@@ -2,12 +2,22 @@ import { setLocal } from '@/libs/local'
 import { getAppHeadInfo } from "@/api/request/user.js"
 const user = {
   state: {
-    userInfo:""
+    accessToken: { Authorization: '' },
+    userInfo: ""
   },
   mutations: {
+    SET_USER: (state, user) => {
+      if (user) {
+        state.accessToken.Authorization = user.access_token;
+        setLocal('token', user.access_token);
+      } else {
+        state.accessToken.Authorization = '';
+        removeLocal('token');
+      }
+    },
     SET_USERINFO: (state, payload) => {
       state.userInfo = payload;
-      setLocal("userInfo",payload)
+      setLocal("userInfo", payload)
     }
   },
   actions: {

@@ -6,9 +6,9 @@
             </h4>
             <m-tree
                 :tree-result="treeResult"
-                :pic-search-options="picSearchOptions"
+                :list-options="picSearchOptions"
                 :isexpand="true"
-                @getPicList="getPicList"
+                @getList="getPicList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
@@ -23,11 +23,12 @@
                 :display-name="displayName"
                 :pic-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
+                :content-type="contentType"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 @getPicList="getPicList"
                 @batchMove="batchMove"
                 @batchDelete="batchDelete"
-                @showType="showType"
+               
             ></list-header>
 
             <el-main>
@@ -36,6 +37,7 @@
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
+                    :use-storage="useStorage"
                     @getPicList="getPicList"
                     @changeCategory="changeCategoryPic"
                     @rename="renamePic"
@@ -92,11 +94,13 @@
                 </span>
             </span>
             <chunk-upload
+                :node-data="nodeData"
                 :displayName="displayName"
-                :uploadType="'Audio'"
+                :uploadType="contentType"
                 :apiHost="apiHost"
                 :accept="'audio/*'"
                 @getList="getPicList"
+                 @closeDialog="closeDialog"
             />
         </el-dialog>
     </el-container>
@@ -108,8 +112,9 @@ import ListHeader from "@/components/FileManage/ListHeader";
 import List from "./List";
 import SelectTree from "@/components/common/SelectTree";
 import RightPannel from "_c//ImgManage/RightPannel";
-import * as videoManageApi from "@/api/request/videoManageApi";
-import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
+import * as audioManageApi from "@/api/request/audioManageApi";
+import * as audioCategoryManageApi from "@/api/request/audioCategoryManageApi";
+import { getStorageUsage } from "@/api/request/contentCommonApi.js";
 import environment from "@/environment/index.js";
 
 export default {
@@ -130,11 +135,16 @@ export default {
     data() {
         return {
             displayName: "音频",
-            nodeData: "", // 分类节点的名称
+            contentType:"Audio",
+             nodeData: {
+               label:"全部分类",
+               id:0
+            },
             componentId: "List",
             isImgList: false,
             countPic: 0,
             curImgInfo: {},
+            
             moveToClassiFy: "",
             categoryName: "", //当前选中的分类名字
             idsList: [],
@@ -153,14 +163,21 @@ export default {
                 categoryIdList: [],
                 keyword: "",
                 isDelete: false
-            }
+            },
+            useStorage:{}
         };
     },
     mounted() {
         this.getPicList();
         this.getTree();
+        this.getStorageUsage()
     },
     methods: {
+         // 获取使用的内容
+        async getStorageUsage() {
+            let { data, status } = await getStorageUsage("Audio");
+            this.useStorage = data;
+        },
         // 获取列表
         async getPicList(node) {
              const loading = this.$loading({
@@ -169,9 +186,10 @@ export default {
                 background: "rgba(255, 255, 255, 0.75)"
             });
             if (node) {
+                console.log(node)
                 this.nodeData = node; // 上传图片所需
             }
-            let { data } = await videoManageApi.getPicList(
+            let { data } = await audioManageApi.getPicList(
                 this.picSearchOptions
             );
             loading.close();
@@ -194,7 +212,7 @@ export default {
                             let {
                                 status,
                                 data
-                            } = await videoManageApi.batchRemove(true, idlist);
+                            } = await audioManageApi.batchRemove(true, idlist);
                             if (status === 200) {
                                 this.getTree();
                                 this.$message({
@@ -219,7 +237,7 @@ export default {
         },
 
         async changeCategoryPic(categoryId, idList) {
-            let { data, status } = await videoManageApi.changeCategory(
+            let { data, status } = await audioManageApi.changeCategory(
                 categoryId,
                 idList
             );
@@ -233,17 +251,17 @@ export default {
             }
         },
         async renamePic(id, newname) {
-            await videoManageApi.rename(id, newname);
+            await audioManageApi.rename(id, newname);
             this.getPicList();
         },
         async getTree() {
-            let { data } = await videoCategoryManageApi.get();
+            let { data } = await audioCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
         },
         async newCategory(entity) {
             console.log(entity);
-            await videoCategoryManageApi.create(entity);
+            await audioCategoryManageApi.create(entity);
             this.getTree();
         },
         async batchRemoveCategory(idList) {
@@ -261,7 +279,7 @@ export default {
                         if (action === "confirm") {
                             let {
                                 status
-                            } = await videoCategoryManageApi.batchRemove(
+                            } = await audioCategoryManageApi.batchRemove(
                                 idList
                             );
                             if (status === 200) {
@@ -282,11 +300,11 @@ export default {
             );
         },
         async renameCategory(id, newName) {
-            await videoCategoryManageApi.rename(id, newName);
+            await audioCategoryManageApi.rename(id, newName);
             this.getTree();
         },
         async modifyNodeCategory(id, parentId, idOrderByArr) {
-            await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
+            await audioCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTree();
         },
         // 点击上传图片
@@ -348,18 +366,10 @@ export default {
         batchDelete() {
             this.batchRemovePic(this.idsList);
         },
-        //展示方式
-        showType(val) {
-            if (val === "list") {
-                this.componentId = "List";
-                this.picSearchOptions.pageSize = 10;
-                this.getPicList();
-            } else {
-                this.componentId = "GridList";
-                this.picSearchOptions.pageSize = 20;
-                this.getPicList();
-            }
-        }
+       // 关闭上传文件弹窗
+        closeDialog(){
+            this.dialogTableVisible = false;
+        },
     },
     computed: {
         isInvitationlWidth() {

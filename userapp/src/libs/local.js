@@ -12,8 +12,6 @@ export const setLocal = (key,value)=>{
     if(typeof value == 'object'){
         value = JSON.stringify(value);
     }
-   
-   
     Cookies.set(key,value,domain);
 }
 
@@ -24,4 +22,13 @@ export const getLocal = (key)=>{
 
 export const removeLocal = (key)=>{
     return Cookies.remove(key,domain);
+}
+//清除所有cookie函数
+export  const clearAllCookie = ()=> {
+    var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+    if(keys) {
+        for(var i = keys.length; i--;){
+            removeLocal(keys[i])
+        }
+    }
 }

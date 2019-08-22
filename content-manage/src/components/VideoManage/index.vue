@@ -17,19 +17,20 @@
         </el-aside>
 
         <el-main>
-            <list-header
+             <list-header
                 v-if="$store.state.dashboard.isContentwrite"
                 :count-pic="countPic"
                 :display-name="displayName"
                 :pic-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
+                :content-type="contentType"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 @getPicList="getPicList"
-                @batchMove="batchMove"
                 @batchDelete="batchDelete"
-                @showType="showType"
+                @batchMove="batchMove"
+                
+               
             ></list-header>
-
             <el-main>
                 <component
                     :is="componentId"
@@ -92,11 +93,14 @@
                 </span>
             </span>
             <chunk-upload
+                :tree-result="treeResult"
                 :displayName="displayName"
-                :uploadType="'Video'"
+                :uploadType="contentType"
+                :node-data="nodeData"
                 :apiHost="apiHost"
                 :accept="'video/*'"
                 @getList="getPicList"
+                 @closeDialog="closeDialog"
             />
         </el-dialog>
     </el-container>
@@ -105,10 +109,8 @@
 import ChunkUpload from "@/components/common/ChunkUpload";
 import MTree from "./MTree";
 import ListHeader from "@/components/FileManage/ListHeader";
-
 import List from "./List";
 import SelectTree from "@/components/common/SelectTree";
-
 import RightPannel from "./RightPannel";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
@@ -132,7 +134,11 @@ export default {
     data() {
         return {
             displayName: "视频",
-            nodeData: "", // 分类节点的名称
+            contentType:"Video",
+            nodeData: {
+               label:"全部分类",
+               id:0
+            },
             componentId: "List",
             isImgList: false,
             countPic: 0,
@@ -351,18 +357,10 @@ export default {
         batchDelete() {
             this.batchRemovePic(this.idsList);
         },
-        //展示方式
-        showType(val) {
-            if (val === "list") {
-                this.componentId = "List";
-                this.picSearchOptions.pageSize = 10;
-                this.getPicList();
-            } else {
-                this.componentId = "GridList";
-                this.picSearchOptions.pageSize = 20;
-                this.getPicList();
-            }
-        }
+         // 关闭上传文件弹窗
+        closeDialog(){
+            this.dialogTableVisible = false;
+        },
     },
     computed: {
         isInvitationlWidth() {
