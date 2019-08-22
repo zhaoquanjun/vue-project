@@ -169,7 +169,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" width="210">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
                   <el-button
@@ -197,7 +197,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="pageing" id="pageing">
+        <div class="pageing" id="pageing" style="margin-bottom:20px">
           <el-pagination
             background
             layout="total, slot, sizes, prev, pager, next"
@@ -779,6 +779,8 @@ export default {
       this.settingTemplateName = data.templateName;
       this.settingTemplateStatus = data.status;
       this.settingChecked = data.isRecommend;
+      this.picUrl = data.imageUrl;
+      this.picUrlMobile = data.mobileImageUrl;
     },
     // 保存设置模版
     async saveSettingTemplate() {
