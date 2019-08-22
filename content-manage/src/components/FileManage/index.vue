@@ -241,7 +241,7 @@ export default {
     },
     methods: {
       
-        // 获取使用的内容
+        // 获取使用的内存
         async getStorageUsage() {
             let { data, status } = await getStorageUsage("File");
             this.useStorage = data;

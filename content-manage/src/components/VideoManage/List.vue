@@ -18,7 +18,7 @@
 
             <el-table-column label="视频名称" width="500">
                 <template slot-scope="scope">
-                    <img src="~img/content-icon/video-default.png" class="cover" />
+                    <img  @click="viewPic( scope.row,scope.$index)" src="~img/content-icon/video-default.png" class="cover" />
                     <el-input
                         v-if="(index == scope.$index)"
                         type="text"
@@ -67,6 +67,18 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div class="storage-wrap">
+            <div class="use-storage">
+                <div class="progress-bar" :style="{'width':storageUsage.prograss+'%'}"></div>
+            </div>
+            <span class="storage-content">{{storageUsage.currentUsage}} / {{storageUsage.maxSize}}</span>
+        </div>
+        <div class="storage-wrap">
+            <div class="use-storage">
+                <div class="progress-bar" :style="{'width':storageUsage.prograss+'%'}"></div>
+            </div>
+            <span class="storage-content">{{storageUsage.currentUsage}} / {{storageUsage.maxSize}}</span>
+        </div>
         <div class="pageing" id="pageing">
             <slot name="paging"></slot>
             <el-pagination
@@ -80,24 +92,9 @@
                 @size-change="changeSize"
             ></el-pagination>
         </div>
-        <!-- :title="picTitle" -->
         <div id="img-list-dialog">
             <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
-                <!-- //<img :src="picUrl"> -->
-                <el-carousel
-                    :autoplay="false"
-                    :initial-index="initial"
-                    arrow="always"
-                    indicator-position="none"
-                    :loop="true"
-                    @change="change"
-                >
-                    <el-carousel-item v-for="item in imgList" :key="item.id">
-                        <h3>
-                            <video :src="fullOssUrl" controls="controls" />
-                        </h3>
-                    </el-carousel-item>
-                </el-carousel>
+                <video :src="fullOssUrl" controls="controls" />
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
@@ -109,6 +106,10 @@
 </template>
 
 <script>
+import {
+    getStorageUsage,
+    getCurrentUsageTraffic
+} from "@/api/request/contentCommonApi.js";
 export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
@@ -126,7 +127,9 @@ export default {
             imgList: "",
             fullOssUrl: "",
             loadingShow: true,
-            tableHeight: 500
+            tableHeight: 500,
+            storageUsage: {},
+            usageTraffic: {}
         };
     },
 
@@ -137,8 +140,40 @@ export default {
             });
             this.tableHeight = window.innerHeight - 260;
         });
+        this._getStorageUsage();
+        this._getCurrentUsageTraffic();
     },
     methods: {
+        bytesToSize(bytes, flag) {
+            if (bytes === 0) return "0 B";
+            let k = 1024;
+            let sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+            let i = Math.floor(Math.log(bytes) / Math.log(k));
+            let b = bytes / Math.pow(k, i);
+            if (flag === 1) {
+                b = b.toFixed(2);
+            }
+            let storage = b + sizes[i];
+            return storage;
+        },
+        // 获取使用的内存
+        async _getStorageUsage() {
+            let { data, status } = await getStorageUsage("Video");
+            this.storageUsage = {
+                maxSize: this.bytesToSize(data.maxSize),
+                currentUsage: this.bytesToSize(data.currentUsage, 1),
+                prograss: (data.currentUsage / data.maxSize) * 100
+            };
+        },
+        // 获取使用的内存
+        async _getCurrentUsageTraffic() {
+            let { data, status } = await getCurrentUsageTraffic("Video");
+            this.usageTraffic = {
+                maxSize: this.bytesToSize(data.maxSize),
+                currentUsage: this.bytesToSize(data.currentUsage, 1),
+                prograss: (data.currentUsage / data.maxSize) * 100
+            };
+        },
         /**
          * 单选或全选操作
          */
@@ -174,16 +209,17 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
-            this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
-            this.imgVisible = true;
-            this.initial = Number(index);
-        },
-        change(index) {
-            this.fullOssUrl = this.imgList[index].fullOssUrl;
             this.picInfo = this.imgList[index];
+            this._adminDownload(row);
         },
-
+        async _adminDownload(row) {
+            let type = row.fileType;
+            let id = row.id;
+            let { data } = await adminDownload(type, id);
+            this.fullOssUrl = data;
+            this.imgVisible = true;
+        },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
             this.$emit("getPicList");
@@ -199,6 +235,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "../../styles/manege-table.scss";
 .cover {
     width: 190px;
     height: 130px;
@@ -221,26 +258,6 @@ export default {
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
     align-items: center;
-}
-.img-name {
-    cursor: pointer;
-}
-
-#img-list-dialog .dislog-footer {
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    left: 0;
-    bottom: 15px;
-}
-#img-list-dialog .dislog-footer span {
-    padding: 0 20px;
-    color: #fff;
-}
-#img-list-dialog .el-dialog {
-    background: #262626;
-    opacity: 0.7;
-    height: auto;
 }
 </style>
 

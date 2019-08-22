@@ -73,7 +73,6 @@ export default {
     },
     data() {
         return {
-           
             options: {
                 uploadType: this.uploadType,
                 target: null,
@@ -126,7 +125,7 @@ export default {
                                     FromId: data.existInAnotherAppInfo.fromId,
                                     Title: chunk.file.name,
                                     ContentType: chunk.file.fileType,
-                                    CategoryId: this.nodeData.id||0
+                                    CategoryId: this.nodeData.id || 0
                                 });
                                 //todo 更换alert
 
@@ -169,18 +168,16 @@ export default {
                 this.$emit("getList");
                 this.$emit("closeDialog");
 
-                this.fileList.forEach((file)=>{
-                     file.cancel(file);
+                this.fileList.forEach(file => {
+                    file.cancel(file);
                 });
-                this.successCount=0;
-                this.errorCount= 0;
+                this.successCount = 0;
+                this.errorCount = 0;
             }
         },
         onFileAdded(file) {
-
             if (file.fileType == "") {
                 file.cancel(file);
-
                 return;
             }
             let [, suffix] = file.fileType.split("/");
@@ -204,8 +201,6 @@ export default {
                 "java",
                 "json"
             ];
-            console.log(file);
-            console.log(suffix);
             if (ary.indexOf(suffix) > -1) {
                 file.cancel(file);
                 return;
@@ -218,15 +213,11 @@ export default {
         computeMD5(file) {
             let url = URL.createObjectURL(file.file);
             var audioElement = new Audio(url);
-            console.log(audioElement.duration)
             var duration;
             audioElement.addEventListener("loadedmetadata", function(_event) {
-              
                 duration = audioElement.duration;
                 console.log(duration + "s");
             });
-          
-
 
             let fileReader = new FileReader();
             let time = new Date().getTime();
@@ -245,6 +236,7 @@ export default {
                 // );
                 file.uniqueIdentifier = md5;
                 this.fileList.push(file);
+                // this.limitCount(file)
                 //file.resume();
             };
 
@@ -254,6 +246,21 @@ export default {
                 );
             };
         },
+        limitCount(file) {
+            if (this.uploadType === "Audio") {
+                if (this.fileList.length < 10) {
+                    this.fileList.push(file);
+                } else {
+                    alert("一次最多可上传10个音频");
+                }
+            } else if (this.uploadType === "Video") {
+                if (this.fileList.length < 10) {
+                    this.fileList.push(file);
+                } else {
+                    alert("一次最多可上传10个音频");
+                }
+            }
+        },
         // 选择分类节点
         chooseNode(data) {
             this.upload2Category = data;
@@ -261,7 +268,6 @@ export default {
         },
         upload() {
             this.fileList.forEach(item => {
-            
                 item.resume();
             });
         },
@@ -297,7 +303,6 @@ export default {
 .uploader-list /deep/ .uploader-file {
     /* min-height: 54px; */
     line-height: 1;
-    
 }
 .uploader-list /deep/ .uploader-file-icon {
     /* width: 113px;

@@ -79,7 +79,9 @@ html {
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: 100%
 }
-
+audio{
+  outline: none
+}
 input, textarea, button, a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
 }

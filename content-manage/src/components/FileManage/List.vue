@@ -300,42 +300,14 @@ export default {
                 this.useStorage.currentUsage,
                 1
             );
-            this.prograss =
-                this.useStorage.currentUsage / this.useStorage.maxSize;
+            this.prograss =(this.useStorage.currentUsage / this.useStorage.maxSize)*100;
         }
     }
 };
 </script>
 <style lang="scss" scoped>
 @import "../../styles/manege-table.scss";
-.storage-wrap {
-    float: left;
-    margin-top: 24px;
-    .use-storage {
-        display: inline-block;
-        width: 186px;
-        background: rgba(109, 114, 120, 0.09);
-        padding: 4px;
-        border-radius: 30px;
 
-        .progress-bar {
-            height: 5px;
-            width: 100%;
-            border-radius: 30px;
-            background: linear-gradient(
-                270deg,
-                rgba(21, 232, 247, 1) 0%,
-                rgba(9, 204, 235, 1) 100%
-            );
-            box-shadow: 0px 0px 4px 0px rgba(105, 242, 255, 1);
-        }
-    }
-    .storage-content {
-        padding-left: 21px;
-        font-size: 16px;
-        color: #666666;
-    }
-}
 </style>
 
 

@@ -37,6 +37,7 @@
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
+                    :use-storage="useStorage"
                     @getPicList="getPicList"
                     @changeCategory="changeCategoryPic"
                     @rename="renamePic"
@@ -113,6 +114,7 @@ import SelectTree from "@/components/common/SelectTree";
 import RightPannel from "_c//ImgManage/RightPannel";
 import * as audioManageApi from "@/api/request/audioManageApi";
 import * as audioCategoryManageApi from "@/api/request/audioCategoryManageApi";
+import { getStorageUsage } from "@/api/request/contentCommonApi.js";
 import environment from "@/environment/index.js";
 
 export default {
@@ -161,14 +163,21 @@ export default {
                 categoryIdList: [],
                 keyword: "",
                 isDelete: false
-            }
+            },
+            useStorage:{}
         };
     },
     mounted() {
         this.getPicList();
         this.getTree();
+        this.getStorageUsage()
     },
     methods: {
+         // 获取使用的内容
+        async getStorageUsage() {
+            let { data, status } = await getStorageUsage("Audio");
+            this.useStorage = data;
+        },
         // 获取列表
         async getPicList(node) {
              const loading = this.$loading({
