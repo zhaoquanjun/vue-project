@@ -207,6 +207,7 @@ export default {
             }
             this.panelShow = true;
             //   file.resume();
+            this.limitCount(file);
             this.computeMD5(file);
         },
         uploadStart(file) {},
@@ -235,8 +236,8 @@ export default {
                 //         time} ms,自动开始上传,\n 香槟boy 监听事件在此触发`
                 // );
                 file.uniqueIdentifier = md5;
-                this.fileList.push(file);
-                // this.limitCount(file)
+                //this.fileList.push(file);
+
                 //file.resume();
             };
 
@@ -247,17 +248,23 @@ export default {
             };
         },
         limitCount(file) {
-            if (this.uploadType === "Audio") {
-                if (this.fileList.length < 10) {
+            if (this.uploadType === "File") {
+                if (this.fileList.length < 100) {
                     this.fileList.push(file);
                 } else {
-                    alert("一次最多可上传10个音频");
+                    alert("单个文件不允许超过50M，一次最多可上传100个文件");
                 }
-            } else if (this.uploadType === "Video") {
+            } else {
                 if (this.fileList.length < 10) {
                     this.fileList.push(file);
                 } else {
-                    alert("一次最多可上传10个音频");
+                    file.cancel(file);
+                    this.$notify({
+                        customClass: "notify-error",
+                        message: `一次最多可上传10个${displayName}`,
+                        duration: 1500,
+                        showClose: false
+                    });
                 }
             }
         },
