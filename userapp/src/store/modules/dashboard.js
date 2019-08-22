@@ -1,4 +1,6 @@
-import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index"
+import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index";
+import { getSiteInfo } from "@/api/request/siteBackupApi";
+import { getCurSiteId } from "@/api/request/dashboardApi";
 import { authRoutes } from "@/router/routes.js";
 import { setLocal } from "@/libs/local"
 
@@ -81,6 +83,18 @@ const dashboard = {
         }
     },
     actions: {
+        async _haveTemplate({ commit, state }) {
+            if (!state.siteId) {
+                let { data } = await getCurSiteId();
+                commit("SETSITEID", data)
+            }
+            let { data } = await getSiteInfo(state.siteId);
+            if (data.templateId == 0) {
+                return false
+            } else {
+                return true
+            }
+        },
         async _updateAppIdAndSiteIdToCookie({ commit }) {
             let { data } = await updateAppIdAndSiteIdToCookie();
             commit("SETAPPID", data)
