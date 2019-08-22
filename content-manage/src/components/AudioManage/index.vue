@@ -107,11 +107,11 @@
 </template>
 <script>
 import ChunkUpload from "@/components/common/ChunkUpload";
-import MTree from "_c/ImgManage/MTree";
+import MTree from "@/components/ImgManage/MTree";
 import ListHeader from "@/components/FileManage/ListHeader";
 import List from "./List";
 import SelectTree from "@/components/common/SelectTree";
-import RightPannel from "_c//ImgManage/RightPannel";
+import RightPannel from "@/components/ImgManage/RightPannel";
 import * as audioManageApi from "@/api/request/audioManageApi";
 import * as audioCategoryManageApi from "@/api/request/audioCategoryManageApi";
 import { getStorageUsage } from "@/api/request/contentCommonApi.js";

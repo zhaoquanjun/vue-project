@@ -96,13 +96,20 @@ export default {
                         }
                         case 1: {
                             if (chunk.offset === 0) {
-                               let tip;
-                               if(data.existInCurrentAppInfo.isDelete){
-
-                               }
+                                let tip;
+                                if (data.existInCurrentAppInfo.isDelete) {
+                                }
                                 this.$notify({
                                     customClass: "notify-error", //  notify-success ||  notify-error
-                                    message: `${this.displayName}[${chunk.file.name}]已存在于${data.existInCurrentAppInfo.isDelete?"回收站-":""}[${data.existInCurrentAppInfo.categoryName}]分类下`,
+                                    message: `${this.displayName}[${
+                                        chunk.file.name
+                                    }]已存在于${
+                                        data.existInCurrentAppInfo.isDelete
+                                            ? "回收站-"
+                                            : ""
+                                    }[${
+                                        data.existInCurrentAppInfo.categoryName
+                                    }]分类下`,
                                     duration: 3000,
                                     showClose: false
                                 });
@@ -166,7 +173,13 @@ export default {
         },
         onFileError(rootFile, file, response, chunk) {
             //todo 更换alert
-            alert(JSON.parse(response).message);
+            // alert(JSON.parse(response).message);
+            this.$notify({
+                customClass: "notify-error",
+                message: `${JSON.parse(response).message}`,
+                duration: 1500,
+                showClose: false
+            });
             this.errorCount += 1;
         },
         onFileSuccess() {
@@ -293,25 +306,25 @@ export default {
                 if (videoFormat.indexOf("." + format) === -1) {
                     file.cancel(file);
                     this.$notify({
-                            customClass: "notify-error",
-                            message: `请添加${this.displayName}格式文件`,
-                            duration: 1500,
-                            showClose: false
-                        });
+                        customClass: "notify-error",
+                        message: `请添加${this.displayName}格式文件`,
+                        duration: 1500,
+                        showClose: false
+                    });
                     return false;
                 }
             }
-             if (this.uploadType === "Audio") {
+            if (this.uploadType === "Audio") {
                 console.log(file);
                 let format = file.fileType.split("/")[1];
                 if (audioFormat.indexOf("." + format) === -1) {
                     file.cancel(file);
                     this.$notify({
-                            customClass: "notify-error",
-                            message: `请添加${this.displayName}格式文件`,
-                            duration: 1500,
-                            showClose: false
-                        });
+                        customClass: "notify-error",
+                        message: `请添加${this.displayName}格式文件`,
+                        duration: 1500,
+                        showClose: false
+                    });
                     return false;
                 }
             }

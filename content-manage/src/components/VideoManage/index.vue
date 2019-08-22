@@ -4,11 +4,12 @@
             <h4 class="pic-type-title">
                 <span>{{displayName}}分类</span>
             </h4>
-            <m-tree
-                :tree-result="treeResult"
-                :pic-search-options="picSearchOptions"
-                :isexpand="true"
-                @getPicList="getPicList"
+          
+              <m-tree
+                :treeResult="treeResult"
+                :list-options="picSearchOptions"
+                @getList="getPicList"
+                @chooseCategoryNode="chooseNode"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
@@ -107,11 +108,11 @@
 </template>
 <script>
 import ChunkUpload from "@/components/common/ChunkUpload";
-import MTree from "./MTree";
+import MTree from "@/components/ImgManage/MTree";
 import ListHeader from "@/components/FileManage/ListHeader";
 import List from "./List";
 import SelectTree from "@/components/common/SelectTree";
-import RightPannel from "./RightPannel";
+import RightPannel from "_c/ImgManage/RightPannel";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
 import environment from "@/environment/index.js";

@@ -18,7 +18,13 @@
 
             <el-table-column label="视频名称" width="500">
                 <template slot-scope="scope">
-                    <img  @click="viewPic( scope.row,scope.$index)" src="~img/content-icon/video-default.png" class="cover" />
+                    <div class="cover">
+                        <img width="100%" :src="scope.row.coverUrl" />
+                        <span class="play" @click="viewPic( scope.row,scope.$index)">
+                            <img src="~img/file-icon/play.png" alt />
+                        </span>
+                    </div>
+                    <!-- <img  @click="viewPic( scope.row,scope.$index)" :src="scope.row.coverUrl" class="cover" /> -->
                     <el-input
                         v-if="(index == scope.$index)"
                         type="text"
@@ -94,7 +100,7 @@
         </div>
         <div id="img-list-dialog">
             <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
-                <video :src="fullOssUrl" controls="controls" />
+                <video class="video" :src="fullOssUrl" controls="controls" />
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
@@ -211,7 +217,8 @@ export default {
         viewPic(row, index) {
             this.imgList = this.imgPageResult.list;
             this.picInfo = this.imgList[index];
-            this._adminDownload(row);
+             this.fullOssUrl = row.ossFullUrl;
+              this.imgVisible = true;
         },
         async _adminDownload(row) {
             let type = row.fileType;
@@ -251,6 +258,29 @@ export default {
 }
 .format {
     white-space: unset !important;
+}
+.cover {
+    position: relative;
+    .play {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        top: 0;
+        border-radius: 2px;
+        text-align: center;
+        img {
+            width: 30px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+.video{
+    outline: none;
+    width: 100%;
 }
 </style>
 
