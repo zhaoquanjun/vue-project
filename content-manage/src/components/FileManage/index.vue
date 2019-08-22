@@ -25,6 +25,7 @@
                 :display-name="displayName"
                 :pic-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
+                :content-type="contentType"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 @getPicList="getPicList"
                 @editor="editor"
@@ -192,7 +193,11 @@ export default {
             copyTip: "复制",
             isCopy: false,
             displayName: "文件",
-            nodeData: "", // 分类节点的名称
+            contentType:"File",
+            nodeData: {
+               label:"全部分类",
+               id:0
+            },
             componentId: "List",
             isImgList: false,
             countPic: 0,

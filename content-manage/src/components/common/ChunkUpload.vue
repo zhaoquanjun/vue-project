@@ -167,7 +167,8 @@ export default {
             this.successCount += 1;
             if (this.successCount > 0 && this.errorCount < 1) {
                 this.$emit("getList");
-                this.$emit("closeDialog")
+                this.$emit("closeDialog");
+
                 this.fileList.forEach((file)=>{
                      file.cancel(file);
                 });
@@ -176,6 +177,7 @@ export default {
             }
         },
         onFileAdded(file) {
+
             if (file.fileType == "") {
                 file.cancel(file);
 
@@ -208,22 +210,23 @@ export default {
                 file.cancel(file);
                 return;
             }
-
-            // console.log(file, "file");
             this.panelShow = true;
-            //  file.resume();
+            //   file.resume();
             this.computeMD5(file);
         },
         uploadStart(file) {},
         computeMD5(file) {
             let url = URL.createObjectURL(file.file);
             var audioElement = new Audio(url);
-            console.log(audioElement);
+            console.log(audioElement.duration)
             var duration;
             audioElement.addEventListener("loadedmetadata", function(_event) {
+              
                 duration = audioElement.duration;
                 console.log(duration + "s");
             });
+          
+
 
             let fileReader = new FileReader();
             let time = new Date().getTime();
@@ -242,7 +245,7 @@ export default {
                 // );
                 file.uniqueIdentifier = md5;
                 this.fileList.push(file);
-                // file.resume();
+                //file.resume();
             };
 
             fileReader.onerror = function() {
@@ -258,6 +261,7 @@ export default {
         },
         upload() {
             this.fileList.forEach(item => {
+            
                 item.resume();
             });
         },
@@ -291,9 +295,9 @@ export default {
 
 <style  scoped>
 .uploader-list /deep/ .uploader-file {
-    height: 54px;
+    /* min-height: 54px; */
     line-height: 1;
-    padding: 8px 32px;
+    
 }
 .uploader-list /deep/ .uploader-file-icon {
     /* width: 113px;

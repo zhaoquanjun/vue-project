@@ -10,8 +10,9 @@
         >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="视频名称">
+            <el-table-column label="音频名称">
                 <template slot-scope="scope">
+                     <img src="~img/file-icon/audio.png" class="cover" />
                     <el-input
                         v-if="(index == scope.$index)"
                         type="text"
@@ -31,10 +32,12 @@
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-
+               <el-table-column prop="fileExtension" label="格式" show-overflow-tooltip></el-table-column>
+               <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+               <el-table-column prop="durationOfSecond" label="时长"></el-table-column>
             <el-table-column prop="categoryName" label="分类"></el-table-column>
 
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+         
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
@@ -85,15 +88,14 @@
                 >
                     <el-carousel-item v-for="item in imgList" :key="item.id">
                         <h3>
-                            <video :src="fullOssUrl"  controls="controls"/>
+                            <audio :src="fullOssUrl"  controls="controls"/>
                         </h3>
                     </el-carousel-item>
                 </el-carousel>
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
-                    <span>尺寸: {{picInfo.sizeStr}}</span>
-                    <span>大小: {{picInfo.size}}</span>
+                    <span>大小: {{picInfo.sizeStr}}</span>
                 </div>
             </el-dialog>
         </div>
@@ -111,6 +113,7 @@
 </template>
 
 <script>
+import { adminDownload } from "@/api/request/contentCommonApi.js";
 export default {
     // props:{
     //     imgList:{
@@ -146,6 +149,31 @@ export default {
         });
     },
     methods: {
+         /**
+         * 管理员下载
+         */
+        async _adminDownload(row) {
+            console.log()
+            let type = row.fileType;
+            let id = row.id;
+            let {data} = await adminDownload(type, id);
+             this.fullOssUrl = data
+            this.imgVisible = true;
+           
+            //  var a = document.createElement("a");
+            // var binaryData = [];
+            // binaryData.push(data);
+            // a.href = window.URL.createObjectURL(
+            //     new Blob(binaryData, { type: "application/dat" })
+            // );
+            // // var names = row.fileName.split("_");
+            // // var filename =row.siteName + "_" + names[1] + "_" + names[2];
+            // a.download = row.title; // Set the file name.
+            // a.style.display = "none";
+            // document.body.appendChild(a);
+            // a.click();
+            // document.body.removeChild(a);
+        },
         /**
          * 单选或全选操作
          */
@@ -181,15 +209,13 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
-            this.fullOssUrl = row.fullOssUrl
-            this.imgList = this.imgPageResult.list
-            this.imgVisible = true;
-            this.initial = Number(index);
+            this._adminDownload(row)
+            this.picInfo = this.imgList[index];
             
         },
         change(index){
-            this.fullOssUrl=  this.imgList[index].fullOssUrl;
-              this.picInfo = this.imgList[index];
+            // this.fullOssUrl=  this.imgList[index].fullOssUrl;
+             
         },
 
         changePage(page) {

@@ -42,7 +42,7 @@ router.beforeEach(async (to, from, next) => {
       }
       next()
     } else {
-      alert(1)
+    
       next('/404')
     }
   } else {
