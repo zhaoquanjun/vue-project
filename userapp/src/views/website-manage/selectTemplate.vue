@@ -7,10 +7,7 @@
     </el-aside>
     <el-main class="member-content">
       <el-row>
-        <ChangeSite
-            @getSiteId="getSiteId"
-            @getSiteName="getSiteName"
-        ></ChangeSite>
+        <ChangeSite @getSiteId="getSiteId" @getSiteName="getSiteName"></ChangeSite>
       </el-row>
       <el-row class="wrap">
         <el-col :span="8" style="min-width: 500px; max-width: 688px;">
@@ -38,9 +35,13 @@
             <el-aside class="aside" style="width:250px">
               <div class="title">选择模版</div>
               <div class="order">
-                <span class="orderText active">最新</span>
-                <span class="orderText">最热</span>
-                <span class="orderText">推荐</span>
+                <span
+                  v-for="(item, index) in orderType"
+                  :key="index"
+                  class="orderText"
+                  :class="{active:item.isOrder}"
+                  @click="changeOrder(item)"
+                >{{item.text}}</span>
               </div>
               <div style="margin-top:26px">
                 <div class="tab curTab">
@@ -50,29 +51,14 @@
                   <div class="myBackground"></div>已有网站
                 </div>
               </div>
-              <el-tree :data="firstIndustry" node-key="id" ref="tree" :highlight-current="true">
-                <!-- <div
-                  class="custom-tree-node"
-                  @mouseover="handlerOver(data)"
-                  @mouseleave="handlerMouseLeave"
-                  slot-scope="{ node, data }"
-                >
-                  <button class="drop-btn" v-if="node.data.level>0 && draggable">
-                    <i class="iconfont icontuodongdian"></i>
-                  </button>
-                  <div class="node-label-wrap" :class="{'label-weight':node.data.level<=1}">
-                    <span class="node-label">{{data.label}}</span>
-                    <span v-if="!isProduct">({{data.inUseSum }})</span>
-                  </div>
-                  <span
-                    class="set-tree-type"
-                    @click.stop="handleShow($event,node,data)"
-                    v-show="data.id === treeNodeId && draggable"
-                  >
-                    <i class="iconfont iconsangedian" style="font-size:30px"></i>
-                  </span>
-                </div>-->
-              </el-tree>
+              <el-tree
+                style="margin-top:20px"
+                :data="firstIndustry"
+                node-key="id"
+                ref="tree"
+                :highlight-current="true"
+                class="tree"
+              ></el-tree>
             </el-aside>
             <el-main>
               <el-header
@@ -95,12 +81,22 @@
                 </el-input>
                 <div class="colorType">
                   <span class="colorTheme">主题</span>
-                  <span class="color"></span>
+                  <span class="color">
+                    <div
+                      v-for="(item, index) in colorArray"
+                      :key="index"
+                      class="colorItem"
+                      :class="{curColorItem:item.isCur}"
+                      :style="{background:item.color}"
+                      @click="changeColor(item)"
+                    ></div>
+                  </span>
                   <el-select
                     v-model="languageSelect"
                     placeholder="全部语言"
-                    class="firstIndustrySelect borderColor"
-                    style="width:100px;vertical-align: middle;"
+                    class="languageSelect"
+                    style="width:100px;vertical-align: middle;margin-left:32px"
+                    @change="changeLanguage"
                   >
                     <el-option
                       v-for="item in languageOptions"
@@ -131,8 +127,8 @@
                       <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
                       <div class="modal">
                         <div>
-                          <button class="choseSite" @click="choseSite(item)">选择</button>
-                          <button class="previewSite" @click="previewSite(item)">预览</button>
+                          <div class="choseSite" @click="choseSite(item)">选择</div>
+                          <div class="previewSite" @click="previewSite(item)">预览</div>
                         </div>
                       </div>
                     </div>
@@ -141,6 +137,22 @@
                     </div>
                   </el-col>
                 </el-row>
+                <div>
+                  <span class="dislikeTemplate">未找到想要的模版？</span>
+                  <div class="pageing" id="pageing" style="margin-bottom:20px">
+                    <el-pagination
+                      background
+                      layout="total, slot, sizes, prev, pager, next"
+                      :current-page="templatePage.pageIndex"
+                      :total="templatePage.totalCount"
+                      :page-count="templatePage.totalPages"
+                      :page-size="templatePage.pageSize"
+                      :page-sizes="[10,20,50]"
+                      @current-change="changePage"
+                      @size-change="changeSize"
+                    ></el-pagination>
+                  </div>
+                </div>
               </el-main>
             </el-main>
           </el-container>
@@ -162,17 +174,17 @@ export default {
     ChangeSite
   },
   data() {
-      return {
-          siteId: 0,
-          siteName: "",
+    return {
+      siteId: 0,
+      siteName: "",
       templateShow: false,
       templatePage: {},
       templateInfo: [],
       languageSelect: "",
       languageOptions: [
         {
-          value: "zh",
-          label: "全部"
+          value: "",
+          label: "全部语言"
         },
         {
           value: "zh-CN",
@@ -196,34 +208,150 @@ export default {
         }
       ],
       search: "",
+      colorArray: [
+        {
+          color: "rgba(98,54,255,1)",
+          isCur: true
+        },
+        {
+          color: "rgba(5,149,230,1)",
+          isCur: false
+        },
+        {
+          color: "rgba(99,220,140,1)",
+          isCur: false
+        },
+        {
+          color: "rgba(254,152,55,1)",
+          isCur: false
+        },
+        {
+          color: "rgba(251,77,104,1)",
+          isCur: false
+        },
+        {
+          color: "rgba(74,72,249,1)",
+          isCur: false
+        },
+        {
+          color: "rgba(185,203,207,1)",
+          isCur: false
+        }
+      ],
+      orderType: [
+        {
+          text: "最新",
+          isOrder: true,
+          type: "updataTime"
+        },
+        {
+          text: "最热",
+          isOrder: false,
+          type: "mostPopular"
+        },
+        {
+          text: "推荐",
+          isOrder: false,
+          type: "IsRecommend"
+        }
+      ],
       firstIndustry: []
     };
   },
   computed: {},
   mounted() {
     this.getTemplateList();
-    this.getFirstIndustry();
+    this.getIndustryTree();
   },
   methods: {
-      // 获取siteId
-      getSiteId(siteId) {
-          this.siteId = siteId;
-      },
-      // 获取siteName
-      getSiteName(siteName) {
-          this.siteName = siteName;
-      },
-    async getFirstIndustry() {
-      let { data, status } = await templateApi.getFirstIndustries();
+    // 切换语言
+    async changeLanguage(language) {
+      let para = {
+        TemplateName: "",
+        FirstIndustry: 0,
+        SecondIndustry: 0,
+        Theme: "",
+        Language: language,
+        IsRecommend: false,
+        PageIndex: 1,
+        PageSize: 10,
+        IsOrderByUpdateTime: true,
+        IsMostPopular: false
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      console.log(data);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+    },
+    // 获取siteId
+    getSiteId(siteId) {
+      this.siteId = siteId;
+    },
+    // 获取siteName
+    getSiteName(siteName) {
+      this.siteName = siteName;
+    },
+    // 选择主题颜色
+    changeColor(item) {
+      this.colorArray.forEach((item, index) => {
+        item.isCur = false;
+      });
+      item.isCur = true;
+      console.log(item);
+    },
+    async changeOrder(item) {
+      this.orderType.forEach((item, index) => {
+        item.isOrder = false;
+      });
+      item.isOrder = true;
+      let isOrderByUpdateTime = false;
+      let isMostPopular = false;
+      let isRecommend = false;
+      if (item.type == "updataTime") {
+        isOrderByUpdateTime = true;
+      } else if (item.type == "mostPopular") {
+        isMostPopular = true;
+      } else if (item.type == "IsRecommend") {
+        isRecommend = true;
+      }
+      let para = {
+        TemplateName: "",
+        FirstIndustry: 0,
+        SecondIndustry: 0,
+        Theme: "",
+        Language: "",
+        IsRecommend: isRecommend,
+        PageIndex: 1,
+        PageSize: 10,
+        IsOrderByUpdateTime: isOrderByUpdateTime,
+        IsMostPopular: isMostPopular
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      console.log(data);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+    },
+    async getIndustryTree() {
+      let { data, status } = await templateApi.getIndustryTree();
       if (status == 200) {
         this.firstIndustry = data;
+        console.log(data);
+        this.firstIndustry.forEach((item, index) => {
+          this.firstIndustry[index].label = item.lable;
+          this.firstIndustry[index].children = item.secondIndustries;
+        });
       }
     },
     // 选择模版
-      async choseSite(item) {
-          let para = { TemplateId: item.id, CurrentSiteId: this.siteId, TemplateSiteId: item.siteId, SiteName: this.siteName }; 
-          console.log(para);
-         await templateApi.updateSiteTemplate(para);
+    async choseSite(item) {
+      let para = {
+        TemplateId: item.id,
+        CurrentSiteId: this.siteId,
+        TemplateSiteId: item.siteId,
+        SiteName: this.siteName
+      };
+      console.log(para);
+      await templateApi.updateSiteTemplate(para);
     },
     // 预览模版
     previewSite() {},
@@ -231,6 +359,25 @@ export default {
     async getTemplateList() {
       let para = {
         TemplateName: "",
+        FirstIndustry: 0,
+        SecondIndustry: 0,
+        Theme: "",
+        Language: "",
+        IsRecommend: false,
+        PageIndex: 1,
+        PageSize: 10,
+        IsOrderByUpdateTime: true,
+        IsMostPopular: false
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      console.log(data);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+    },
+    // 查询
+    async searchTemplate() {
+      let para = {
+        TemplateName: this.search,
         FirstIndustry: 0,
         SecondIndustry: 0,
         ColorType: -1,
@@ -246,7 +393,8 @@ export default {
       this.templatePage = data;
       this.templateInfo = data.items;
     },
-    searchTemplate() {},
+    changePage() {},
+    changeSize() {},
     // 关闭弹窗
     closeDialog() {
       this.templateShow = false;
@@ -285,6 +433,41 @@ export default {
 }
 .input-with-select /deep/ .el-input__inner {
   height: 40px;
+}
+.el-select-dropdown {
+  margin-top: 0;
+}
+.languageSelect /deep/ .el-input__inner {
+  border: none;
+}
+/* .languageSelect /deep/ .el-input__suffix-inner:before {
+  width: 0;
+  height: 0;
+  padding-top: 5px;
+  content: ""
+}
+.languageSelect /deep/ .el-input__suffix-inner .el-select__caret {
+  display: none;
+} */
+.tree /deep/ .el-tree-node__content {
+  height: 46px;
+}
+.tree /deep/ .el-tree-node__expand-icon {
+  position: absolute;
+  right: 30px;
+  transform: rotate(180deg);
+  color: rgba(38, 38, 38, 1);
+}
+.tree /deep/ .expanded {
+  transform: rotate(135deg);
+}
+.tree /deep/ .el-tree-node__label {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  line-height: 22px;
+  display: inline-block;
+  margin-left: 30px;
 }
 </style>
 
@@ -329,7 +512,7 @@ export default {
         font-size: 14px;
         font-weight: 400;
         color: rgba(38, 38, 38, 1);
-        line-height: 20px;
+        line-height: 26px;
         margin-top: 29px;
         cursor: pointer;
       }
@@ -402,9 +585,23 @@ export default {
         display: inline-block;
         width: 194px;
         height: 40px;
-        background: rgba(9, 204, 235, 1);
+        background: rgba(9, 204, 235, 0.1);
         border-radius: 0px 2px 2px 0px;
-        opacity: 0.1;
+        .colorItem {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          border-radius: 2px;
+          margin-top: 12px;
+          margin-left: 8px;
+          vertical-align: middle;
+        }
+        .colorItem:first-child {
+          margin-left: 16px;
+        }
+        .curColorItem {
+          border: 2px solid rgba(9, 204, 235, 1);
+        }
       }
     }
   }
@@ -445,8 +642,21 @@ export default {
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
         line-height: 40px;
+        text-align: center;
+        cursor: pointer;
       }
       .previewSite {
+        margin-top: 24px;
+        width: 88px;
+        height: 38px;
+        border-radius: 2px;
+        border: 1px solid rgba(9, 204, 235, 1);
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(9, 204, 235, 1);
+        line-height: 40px;
+        text-align: center;
+        cursor: pointer;
       }
       .modal {
         display: flex;
@@ -458,10 +668,13 @@ export default {
         width: 100%;
         height: 100%;
         opacity: 0;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 4px 4px 0px 0px;
+        border: 1px solid rgba(185, 203, 207, 1);
       }
       &:hover {
-        transform: translateY(-10px);
+        transform: translateY(-15px);
+        box-shadow: 0px 15px 15px -15px #b9cbcf;
         .modal {
           opacity: 1;
         }
@@ -483,6 +696,12 @@ export default {
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
     }
+  }
+  .dislikeTemplate {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(0, 112, 204, 1);
+    line-height: 20px;
   }
 }
 .member-container {
