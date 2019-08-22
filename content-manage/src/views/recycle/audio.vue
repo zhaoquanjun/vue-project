@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import RecycleComponents from '@/components/Recycle/page/index.vue'
+import RecycleComponents from '@/components/Recycle/audio/index.vue'
 export default {
     components:{
        RecycleComponents

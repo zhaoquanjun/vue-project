@@ -63,6 +63,7 @@ export default {
         };
     },
     mounted() {
+        console.log('page');
         this.getPicList();
     },
     methods: {
