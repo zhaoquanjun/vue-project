@@ -281,7 +281,6 @@ export default {
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
-      console.log(siteId);
       this.getSiteInfo(siteId);
     },
     // 切换网站名称

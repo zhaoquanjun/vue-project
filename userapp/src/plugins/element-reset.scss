@@ -111,7 +111,10 @@
     background-color: #01c0de;
 }
 
-
+/* 列表分页样式  */
+#pageing .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #01c0de;
+}
 #table-list .el-pager .active {
     background-color: #01c0de;
     color: #fff;

@@ -830,9 +830,7 @@ export default {
     // 更新模版
     updateTemplate(scope) {
       this.$confirm(`确定要更新模版吗？`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+        iconClass:"icon-warning",
         callback: async action => {
           if (action === "confirm") {
             let { status } = await templateApi.uploadSiteTemplate(scope.row.id);
@@ -859,9 +857,7 @@ export default {
     // 删除模版
     deleteTemplate(scope) {
       this.$confirm(`确定删除该模版吗？`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+        iconClass:"icon-warning",
         callback: async action => {
           if (action === "confirm") {
             console.log(scope.row.id);
