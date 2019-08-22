@@ -379,7 +379,7 @@ export default {
         TemplateSiteId: item.siteId,
         SiteName: this.siteName
       };
-      // await templateApi.updateSiteTemplate(para);
+      await templateApi.updateSiteTemplate(para);
       this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
         confirmButtonText: "前往设计页面",
         cancelButtonText: "取消",
