@@ -132,40 +132,40 @@ export const defaultRoutes = [
             meta: {title: "回收站", isSub: true }
         },
         {
-            path: "article",
-            name: "article",
+            path: "recyclenews",
+            name: "recyclenews",
             component: () => import('@/views/recycle/article.vue'),
-            meta: {title: "回收站", isSub: true }
+            meta: {title: "回收站", isSub: true,requiresAuth: true, }
         },
         {
-            path: "product",
-            name: "product",
+            path: "recycleproduct",
+            name: "recycleproduct",
             component: () => import('@/views/recycle/product.vue'),
-            meta: {title: "回收站", isSub: true }
+            meta: {title: "回收站", isSub: true,requiresAuth: true, }
         },
         {
-            path: "picture",
-            name: "picture",
+            path: "recyclepicture",
+            name: "recyclepicture",
             component: () => import('@/views/recycle/picture.vue'),
-            meta: {title: "回收站", isSub: true }
+            meta: {title: "回收站", isSub: true,requiresAuth: true, }
         },
         {
-            path: "file",
-            name: "file",
+            path: "recyclefile",
+            name: "recyclefile",
             component: () => import('@/views/recycle/file.vue'),
-            meta: {title: "回收站", isSub: true }
+            meta: {title: "回收站", isSub: true,requiresAuth: true, }
         },
         {
-            path: "video",
-            name: "video",
+            path: "recyclevideo",
+            name: "recyclevideo",
             component: () => import('@/views/recycle/video.vue'),
-            meta: {title: "回收站", isSub: true }
+            meta: {title: "回收站", isSub: true ,requiresAuth: true,}
         },
         {
-            path: "audio",
-            name: "audio",
+            path: "recycleaudio",
+            name: "recycleaudio",
             component: () => import('@/views/recycle/audio.vue'),
-            meta: {title: "回收站", isSub: true }
+            meta: {title: "回收站", isSub: true ,requiresAuth: true,}
         },
        ]
     },

@@ -37,9 +37,9 @@
         </uploader>
         <div class="upload-footer">
             <ul>
-                <li>共上传{{fileList.length}}个文件，</li>
+                <li>共上传{{fileList.length}}个文件</li>
                 <li v-if="successCount>0">
-                    <i class="success-color">{{successCount}}</i> 个上传成功，
+                    <i class="success-color">{{successCount}}</i> ，个上传成功，
                 </li>
                 <li v-if="errorCount>0">
                     <i class="error-color">{{errorCount}}</i> 个上传失败
@@ -96,19 +96,14 @@ export default {
                         }
                         case 1: {
                             if (chunk.offset === 0) {
-                                //todo 更换alert
-                                // this.$confirm(
-                                //     `${this.displayName}[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`,
-                                //     "提示",
-                                //     {
-                                //         customClass: "medium",
-                                //         iconClass: "icon-warning"
-                                //     }
-                                // );
+                               let tip;
+                               if(data.existInCurrentAppInfo.isDelete){
+
+                               }
                                 this.$notify({
                                     customClass: "notify-error", //  notify-success ||  notify-error
-                                    message: `${this.displayName}[${chunk.file.name}]已存在于[${data.existInCurrentAppInfo.categoryName}]分类下`,
-                                    duration: 1500,
+                                    message: `${this.displayName}[${chunk.file.name}]已存在于${data.existInCurrentAppInfo.isDelete?"回收站-":""}[${data.existInCurrentAppInfo.categoryName}]分类下`,
+                                    duration: 3000,
                                     showClose: false
                                 });
                             }
@@ -157,6 +152,18 @@ export default {
         this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
     },
     methods: {
+        bytesToSize(bytes, flag) {
+            if (bytes === 0) return "0 B";
+            let k = 1024;
+            let sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+            let i = Math.floor(Math.log(bytes) / Math.log(k));
+            let b = bytes / Math.pow(k, i);
+            if (flag === 1) {
+                b = b.toFixed(2);
+            }
+            let storage = b + sizes[i];
+            return storage;
+        },
         onFileError(rootFile, file, response, chunk) {
             //todo 更换alert
             alert(JSON.parse(response).message);
@@ -181,7 +188,7 @@ export default {
                 return;
             }
             let [, suffix] = file.fileType.split("/");
-            let ary = [
+            let forbidUpload = [
                 "exe",
                 "php",
                 "lnk",
@@ -201,7 +208,7 @@ export default {
                 "java",
                 "json"
             ];
-            if (ary.indexOf(suffix) > -1) {
+            if (forbidUpload.indexOf(suffix) > -1) {
                 file.cancel(file);
                 return;
             }
@@ -248,20 +255,118 @@ export default {
             };
         },
         limitCount(file) {
+            let videoFormat = [
+                ".avi",
+                ".rmvb",
+                ".rm",
+                ".asf",
+                ".divx",
+                ".mpg",
+                ".mpeg",
+                ".mpe",
+                ".wmv",
+                ".mp4",
+                ".mkv",
+                ".vob",
+                ".swf",
+                ".flv"
+            ];
+            let audioFormat = [
+                ".mp3",
+                ".cd",
+                ".wav",
+                ".aiff",
+                ".au",
+                ".wma",
+                ".ogg",
+                ".mp3pro",
+                ".real",
+                ".ape",
+                ".module",
+                ".midi",
+                ".vqf",
+                ".flac"
+            ];
+            if (this.uploadType === "Video") {
+                console.log(file);
+                let format = file.fileType.split("/")[1];
+                if (videoFormat.indexOf("." + format) === -1) {
+                    file.cancel(file);
+                    this.$notify({
+                            customClass: "notify-error",
+                            message: `请添加${this.displayName}格式文件`,
+                            duration: 1500,
+                            showClose: false
+                        });
+                    return false;
+                }
+            }
+             if (this.uploadType === "Audio") {
+                console.log(file);
+                let format = file.fileType.split("/")[1];
+                if (audioFormat.indexOf("." + format) === -1) {
+                    file.cancel(file);
+                    this.$notify({
+                            customClass: "notify-error",
+                            message: `请添加${this.displayName}格式文件`,
+                            duration: 1500,
+                            showClose: false
+                        });
+                    return false;
+                }
+            }
             if (this.uploadType === "File") {
                 if (this.fileList.length < 100) {
                     this.fileList.push(file);
+                    if (file.size / 1024 / 1024 > file.size) {
+                        this.$notify({
+                            customClass: "notify-error",
+                            message: `${displayName}大小不可超过50M`,
+                            duration: 1500,
+                            showClose: false
+                        });
+                        file.cancel(file);
+                    }
                 } else {
-                    alert("单个文件不允许超过50M，一次最多可上传100个文件");
+                    this.$notify({
+                        customClass: "notify-error",
+                        message: `一次最多可上传10个${displayName}`,
+                        duration: 1500,
+                        showClose: false
+                    });
+                    file.cancel(file);
                 }
             } else {
-                if (this.fileList.length < 10) {
+                if (this.fileList.length < 3) {
                     this.fileList.push(file);
+                    if (
+                        file.size / 1024 / 1024 > file.size &&
+                        this.uploadType === "Audio"
+                    ) {
+                        this.$notify({
+                            customClass: "notify-error",
+                            message: `${this.displayName}大小不可超过50M`,
+                            duration: 1500,
+                            showClose: false
+                        });
+                        file.cancel(file);
+                    } else if (
+                        this.uploadType === "Video" &&
+                        file.size / 1024 / 1024 / 1024 > 2
+                    ) {
+                        this.$notify({
+                            customClass: "notify-error",
+                            message: `${this.displayName}大小不可超过2G`,
+                            duration: 1500,
+                            showClose: false
+                        });
+                        file.cancel(file);
+                    }
                 } else {
                     file.cancel(file);
                     this.$notify({
                         customClass: "notify-error",
-                        message: `一次最多可上传10个${displayName}`,
+                        message: `一次最多可上传10个${this.displayName}`,
                         duration: 1500,
                         showClose: false
                     });
