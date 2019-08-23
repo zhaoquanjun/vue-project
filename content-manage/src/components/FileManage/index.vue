@@ -79,6 +79,7 @@
                             <el-form-item label="文件类型" prop="delivery" class="select-tree">
                                 <SelectTree
                                     :categoryName="curRowData.categoryName"
+                                    :categoryId="curRowData.categoryId"
                                     :tree-result="treeResult"
                                     @chooseNode="chooseNode"
                                     :isexpand="true"
@@ -165,8 +166,8 @@ import ChunkUpload from "_c//common/ChunkUpload";
 import MTree from "_c/ImgManage/MTree";
 import ListHeader from "./ListHeader";
 import List from "./List";
-import SelectTree from "_c//common/SelectTree";
-import RightPannel from "_c//ImgManage/RightPannel";
+import SelectTree from "_c/common/SelectTree";
+import RightPannel from "_c/ImgManage/RightPannel";
 import * as fileManageApi from "@/api/request/fileManageApi";
 // fileCategoryManageApi fileManageApi
 import * as fileCategoryManageApi from "@/api/request/fileCategoryManageApi";
@@ -312,7 +313,7 @@ export default {
             if (status == 200) {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `成功`,
+                    message: `移动成功`,
                     duration: 1500,
                     showClose: false
                 });
@@ -394,7 +395,7 @@ export default {
         async batchSetPwd(ids) {
             let option = {
                 idList:[ids],
-                pwd: ""
+                pwd: this.ruleForm.pass
             };
             let { data, status } = await fileManageApi.batchSetPwd(option);
         },
@@ -436,22 +437,16 @@ export default {
             });
             this.selectedImg = list;
         },
-        // 点击确定按钮 更新图片分类
+        // 点击确定按钮 更新分类
         updateCategoryPic() {
           
-            let categoryId =
-                this.moveToClassiFy.id || this.curRowData.categoryId; // 分类ID
+            let categoryId = this.moveToClassiFy? this.moveToClassiFy.id: this.curRowData.categoryId;
             if (!!this.editorOrMove) {
                   if (!this.fileNameBlur()) return;
                 this.batchSetPwd(this.curRowData.id, this.ruleForm.pass)
                 this.rename(this.curRowData.id, this.ruleForm.name);
             }
-            let idList=[];
-             if (this.idsList.length > 0) {
-                idList = this.idsList;
-            } else {
-                idList.push(this.curRowData.id);
-            }
+            let idList =this.idsList.length > 0 ? this.idsList : [this.curRowData.id];
             this.changeCategory(categoryId, idList);
         },
         // 取消移动分类 关闭panel
@@ -525,6 +520,9 @@ export default {
 };
 </script>
 <style  scoped>
+.el-dialog__wrapper /deep/ .el-dialog__body{
+    padding: 0;
+}
 .el-form /deep/ .el-form-item__label {
     float: none;
     text-align: left;

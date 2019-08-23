@@ -13,7 +13,7 @@
                     <el-container>
                         <el-aside class="page-sub-aside" width="100px" v-show="isSub">
                             <page-submenu>
-                                <i slot="title">内容管理</i>
+                              
                             </page-submenu>
                         </el-aside>
                         <el-main class="content-table-wrap" >

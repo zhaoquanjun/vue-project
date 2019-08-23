@@ -60,9 +60,9 @@
                     </div>
                     <SelectTree
                         :categoryName="curImgInfo.categoryName"
+                        :categoryId="curImgInfo.categoryId"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
-                        :isexpand="true"
                     ></SelectTree>
                     <div slot="footer" class="pannle-footer">
                         <span @click="updateCategoryPic" class="sure">确定</span>

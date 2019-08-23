@@ -8,7 +8,7 @@
             :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
-               <template slot="empty">
+            <template slot="empty">
                 <div class="empty-table">
                     <img src="~img/table-empty.png" />
                     <span>无数据</span>
@@ -211,9 +211,9 @@ export default {
             this.$emit("editor", true, row);
         },
 
-        download(row){
+        download(row) {
             //this.userDownload(row)
-             this.adminDownload(row)     
+            this.adminDownload(row);
         },
         /**
          * 用户下载
@@ -224,25 +224,19 @@ export default {
             });
         },
         /**
-         * 管理员下载
+         * 下载
          */
         async adminDownload(row) {
             let type = row.fileType;
             let id = row.id;
-            let {data} = await adminDownload(type, id);
-             var a = document.createElement("a");
-            var binaryData = [];
-            binaryData.push(data);
-            a.href = window.URL.createObjectURL(
-                new Blob(binaryData, { type: "application/dat" })
-            );
-            // var names = row.fileName.split("_");
-            // var filename =row.siteName + "_" + names[1] + "_" + names[2];
-            a.download = row.title; // Set the file name.
-            a.style.display = "none";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            let { data } = await adminDownload(type, id);
+            var link = document.createElement("a");
+            link.download = row.title;;
+            link.style.display = "none";
+            link.href = data;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link); 
         },
         change(index) {
             this.fullOssUrl = this.imgList[index].fullOssUrl;
@@ -300,14 +294,14 @@ export default {
                 this.useStorage.currentUsage,
                 1
             );
-            this.prograss =(this.useStorage.currentUsage / this.useStorage.maxSize)*100;
+            this.prograss =
+                (this.useStorage.currentUsage / this.useStorage.maxSize) * 100;
         }
     }
 };
 </script>
 <style lang="scss" scoped>
 @import "../../styles/manege-table.scss";
-
 </style>
 
 
