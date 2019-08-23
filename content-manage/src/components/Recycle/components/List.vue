@@ -42,7 +42,7 @@
                         </span> -->
                     </div>
                     <div class="video-cover" v-if="['video'].includes(recycleTempData.type)">
-                        <img width="100%" :src="scope.row.coverUrl" />
+                        <img width="100%" height="100%" :src="scope.row.coverUrl" />
                         <!-- <span class="play" @click="viewPic( scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
                         </span> -->

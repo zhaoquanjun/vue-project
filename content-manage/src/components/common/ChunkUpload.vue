@@ -37,7 +37,7 @@
         </uploader>
         <div class="upload-footer">
             <ul>
-                <li v-if="fileList.length">已添加{{fileList.length}}个文件，共 <i>{{formatSize}}</i> </li>
+                <li v-if="fileList.length">已添加 <i class="defult-color">{{fileList.length}}</i> 个文件，共 <i class="defult-color">{{formatSize}}</i> </li>
                 <li v-if="successCount>0">
                     <i class="success-color">{{successCount}}</i> ，个上传成功，
                 </li>
@@ -497,6 +497,9 @@ border-radius:3px;
 }
 </style>
 <style scoped lang="scss">
+.defult-color{
+    color: #09CCEB
+}
 .upload-head{
     padding: 0 32px;
 }
