@@ -121,16 +121,11 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="模板名称|语言|二级域名">
+            <el-table-column label="模板名称|语言">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.templateName}}</p>
-                  <p class="templateName" style="margin:8px 0;">{{_getLanguage(scope.row.language)}}</p>
-                  <a
-                    class="templateDomain"
-                    :href="scope.row.domain"
-                    target="_blank"
-                  >{{scope.row.domain}}</a>
+                  <p class="templateName" style="margin-top:8px;">{{_getLanguage(scope.row.language)}}</p>
                 </div>
               </template>
             </el-table-column>
@@ -169,7 +164,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="210">
+            <el-table-column label="操作" width="260">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
                   <el-button
@@ -185,6 +180,13 @@
                     :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
                     :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >更新</el-button>
+                  <a
+                    class="handle-btn"
+                    style="margin-left:32px"
+                    :href="scope.row.domain"
+                    target="_blank"
+                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
+                  >预览</a>
                   <el-button
                     class="handle-btn"
                     style="margin-left:32px"
@@ -555,6 +557,11 @@ export default {
     },
     //   获取模版列表
     async getTemplateList() {
+      const loading = this.$loading({
+        lock: true,
+        spinner: "loading-icon",
+        background: "rgba(255, 255, 255, 0.75)"
+      });
       let para = {
         TemplateName: "",
         Domain: "",
@@ -574,10 +581,13 @@ export default {
         IsOrderByDesc: true
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
-      console.log(data);
-      this.templatePage = data;
-      this.templateInfo = data.items;
-      this.formatTime();
+      if (status == 200) {
+        console.log(data);
+        this.templatePage = data;
+        this.templateInfo = data.items;
+        this.formatTime();
+        loading.close();
+      }
     },
     // 获取一级行业
     async getFirstIndustry() {
@@ -601,6 +611,14 @@ export default {
       this.isDescSort = true;
       this.searchTemplate();
     },
+    // 开通模版
+    createTemplatedialogShow() {
+      this.clearOpenDialog();
+      this.createTemplateShow = true;
+    },
+    cancelCreateTemplate() {
+      this.createTemplateShow = false;
+    },
     async createTemplate() {
       if (this.phone == "") {
         this.errorTip = true;
@@ -614,7 +632,15 @@ export default {
           this.remark
         );
         this.createTemplateShow = false;
+        const loading = this.$loading({
+          lock: true,
+          text: "正在开通模版",
+          spinner: "copy-icon",
+          customClass: "createTemplateLoading",
+          background: "rgba(255, 255, 255, 0.75)"
+        });
         if (status == 200) {
+          loading.close();
           this.$notify({
             customClass: "notify-success",
             message: `开通成功`,
@@ -762,14 +788,6 @@ export default {
     changeSize(page) {
       this.searchTemplate();
     },
-    // 开通模版
-    createTemplatedialogShow() {
-      this.clearOpenDialog();
-      this.createTemplateShow = true;
-    },
-    cancelCreateTemplate() {
-      this.createTemplateShow = false;
-    },
     // 设置模版弹窗
     async settingTemplate(scope) {
       this.curTemplateId = scope.row.id;
@@ -830,7 +848,7 @@ export default {
     // 更新模版
     updateTemplate(scope) {
       this.$confirm(`确定要更新模版吗？`, "提示", {
-        iconClass:"icon-warning",
+        iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
             let { status } = await templateApi.uploadSiteTemplate(scope.row.id);
@@ -857,7 +875,7 @@ export default {
     // 删除模版
     deleteTemplate(scope) {
       this.$confirm(`确定删除该模版吗？`, "提示", {
-        iconClass:"icon-warning",
+        iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
             console.log(scope.row.id);
@@ -904,6 +922,22 @@ export default {
   }
 };
 </script>
+<style>
+.createTemplateLoading .el-loading-spinner {
+  margin-top: 0 !important;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background: #fff;
+}
+.createTemplateLoading .el-loading-spinner .el-loading-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(38, 38, 38, 1);
+  line-height: 20px;
+}
+</style>
 <style scoped>
 .phoneInput /deep/ input {
   border-top-color: transparent;
@@ -1124,13 +1158,13 @@ export default {
     color: rgba(102, 102, 102, 1);
     line-height: 20px;
   }
-  .templateDomain {
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(9, 204, 235, 1);
-    line-height: 20px;
-    cursor: pointer;
-  }
+  // .templateDomain {
+  //   font-size: 14px;
+  //   font-weight: 400;
+  //   color: rgba(9, 204, 235, 1);
+  //   line-height: 20px;
+  //   cursor: pointer;
+  // }
   .handle-btn {
     padding: 0;
     border: none;
@@ -1141,6 +1175,7 @@ export default {
   }
   .disable {
     opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 // 右侧弹框
