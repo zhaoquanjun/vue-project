@@ -4,8 +4,8 @@
             <h4 class="pic-type-title">
                 <span>{{displayName}}分类</span>
             </h4>
-          
-              <m-tree
+
+            <m-tree
                 :treeResult="treeResult"
                 :list-options="picSearchOptions"
                 @getList="getPicList"
@@ -18,7 +18,7 @@
         </el-aside>
 
         <el-main>
-             <list-header
+            <list-header
                 v-if="$store.state.dashboard.isContentwrite"
                 :count-pic="countPic"
                 :display-name="displayName"
@@ -29,8 +29,6 @@
                 @getPicList="getPicList"
                 @batchDelete="batchDelete"
                 @batchMove="batchMove"
-                
-               
             ></list-header>
             <el-main>
                 <component
@@ -58,15 +56,15 @@
                     @closeRightPanel="closeRightPanel"
                     :tree-result="treeResult"
                 >
-                    <span slot="title-text">移动图片</span>
+                    <span slot="title-text">移动视频</span>
                     <div class="category-content">
                         <span name="cur-tip">移动至</span>
                     </div>
                     <SelectTree
                         :categoryName="curImgInfo.categoryName"
+                        :categoryId="curImgInfo.categoryId"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
-                        :isexpand="true"
                     ></SelectTree>
 
                     <div slot="footer" class="pannle-footer">
@@ -88,7 +86,12 @@
             <span slot="title">
                 <span class="fs14">
                     上传{{displayName}}
-                    <el-tooltip class="item" effect="dark" placement="right" content="一次最多可上传10个视频，单个视频大小不超过200M">
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        placement="right"
+                        content="一次最多可上传10个视频，单个视频大小不超过200M"
+                    >
                         <i class="iconfont iconyiwen"></i>
                     </el-tooltip>
                 </span>
@@ -101,7 +104,7 @@
                 :apiHost="apiHost"
                 :accept="'video/*'"
                 @getList="getPicList"
-                 @closeDialog="closeDialog"
+                @closeDialog="closeDialog"
             />
         </el-dialog>
     </el-container>
@@ -135,10 +138,10 @@ export default {
     data() {
         return {
             displayName: "视频",
-            contentType:"Video",
+            contentType: "Video",
             nodeData: {
-               label:"全部分类",
-               id:0
+                label: "全部分类",
+                id: 0
             },
             componentId: "List",
             isImgList: false,
@@ -234,12 +237,15 @@ export default {
                 idList
             );
             if (status == 200) {
-                this.$message({
-                    type: "success",
-                    message: "移动成功!"
+                  this.$notify({
+                    customClass: "notify-success", 
+                    message: `移动成功!`,
+                    showClose: false,
+                    duration: 1500
                 });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
+                this.getTree();
             }
         },
         async renamePic(id, newname) {
@@ -252,7 +258,6 @@ export default {
             this.totalSum = data.totalSum;
         },
         async newCategory(entity) {
-            console.log(entity);
             await videoCategoryManageApi.create(entity);
             this.getTree();
         },
@@ -307,7 +312,6 @@ export default {
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
             this.curImgInfo = data;
-            console.log(data, "data");
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
@@ -329,20 +333,8 @@ export default {
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
-            if (!this.moveToClassiFy) {
-                this.$message({
-                    type: "error",
-                    message: "请选择移动的分类!"
-                });
-                return;
-            }
-            let categoryId = this.moveToClassiFy.id;
-            let idList = [];
-            if (this.idsList.length > 0) {
-                idList = this.idsList;
-            } else {
-                idList.push(this.curImgInfo.id);
-            }
+            let categoryId = this.moveToClassiFy? this.moveToClassiFy.id: this.curImgInfo.categoryId;
+            let idList =this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
             this.changeCategoryPic(categoryId, idList);
         },
         // 取消移动分类 关闭panel
@@ -358,10 +350,10 @@ export default {
         batchDelete() {
             this.batchRemovePic(this.idsList);
         },
-         // 关闭上传文件弹窗
-        closeDialog(){
+        // 关闭上传文件弹窗
+        closeDialog() {
             this.dialogTableVisible = false;
-        },
+        }
     },
     computed: {
         isInvitationlWidth() {

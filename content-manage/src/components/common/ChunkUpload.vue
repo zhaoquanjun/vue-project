@@ -37,7 +37,7 @@
         </uploader>
         <div class="upload-footer">
             <ul>
-                <li>共上传{{fileList.length}}个文件</li>
+                <li>已添加{{fileList.length}}个文件,{{formatSize}}</li>
                 <li v-if="successCount>0">
                     <i class="success-color">{{successCount}}</i> ，个上传成功，
                 </li>
@@ -152,7 +152,8 @@ export default {
             fileList: [],
             successCount: 0,
             errorCount: 0,
-            disable: true
+            disable: true,
+            formatSize:""
         };
     },
     created() {
@@ -227,8 +228,10 @@ export default {
             }
             this.panelShow = true;
             //   file.resume();
-            this.limitCount(file);
-            this.computeMD5(file);
+            if(this.limitCount(file)){
+                this.computeMD5(file);
+            }
+            
         },
         uploadStart(file) {},
         computeMD5(file) {
@@ -255,8 +258,9 @@ export default {
                 //     } MD5：${md5} 用时：${new Date().getTime() -
                 //         time} ms,自动开始上传,\n 香槟boy 监听事件在此触发`
                 // );
+                
                 file.uniqueIdentifier = md5;
-                //this.fileList.push(file);
+               this.fileList.push(file);
 
                 //file.resume();
             };
@@ -301,7 +305,7 @@ export default {
                 ".flac"
             ];
             if (this.uploadType === "Video") {
-                console.log(file);
+               
                 let format = file.fileType.split("/")[1];
                 if (videoFormat.indexOf("." + format) === -1) {
                     file.cancel(file);
@@ -315,7 +319,6 @@ export default {
                 }
             }
             if (this.uploadType === "Audio") {
-                console.log(file);
                 let format = file.fileType.split("/")[1];
                 if (audioFormat.indexOf("." + format) === -1) {
                     file.cancel(file);
@@ -330,7 +333,6 @@ export default {
             }
             if (this.uploadType === "File") {
                 if (this.fileList.length < 100) {
-                    this.fileList.push(file);
                     if (file.size / 1024 / 1024 > file.size) {
                         this.$notify({
                             customClass: "notify-error",
@@ -339,6 +341,10 @@ export default {
                             showClose: false
                         });
                         file.cancel(file);
+                        return false
+                    }else{
+                        return true;
+                        
                     }
                 } else {
                     this.$notify({
@@ -348,10 +354,11 @@ export default {
                         showClose: false
                     });
                     file.cancel(file);
+                    return false;
                 }
             } else {
-                if (this.fileList.length < 3) {
-                    this.fileList.push(file);
+                if (this.fileList.length < 10) {
+                    
                     if (
                         file.size / 1024 / 1024 > file.size &&
                         this.uploadType === "Audio"
@@ -363,6 +370,7 @@ export default {
                             showClose: false
                         });
                         file.cancel(file);
+                        return false;
                     } else if (
                         this.uploadType === "Video" &&
                         file.size / 1024 / 1024 / 1024 > 2
@@ -374,6 +382,7 @@ export default {
                             showClose: false
                         });
                         file.cancel(file);
+                        return false
                     }
                 } else {
                     file.cancel(file);
@@ -383,7 +392,9 @@ export default {
                         duration: 1500,
                         showClose: false
                     });
+                    return false;
                 }
+                return true
             }
         },
         // 选择分类节点
@@ -425,6 +436,7 @@ export default {
 </script>
 
 <style  scoped>
+
 .uploader-list /deep/ .uploader-file {
     /* min-height: 54px; */
     line-height: 1;
@@ -438,9 +450,17 @@ export default {
 .uploader-list /deep/ .uploader-file-icon:before {
     display: none;
 }
+.uploader-list /deep/ ul{
+    margin-top: 20px;
+}
 .uploader-list /deep/ ul li {
     margin-bottom: 14px;
     border: 1px solid #e5e5e5;
+}
+.uploader-list /deep/ ul li:hover{
+    background:rgba(255,255,255,1);
+box-shadow:0px 2px 16px 0px rgba(0,0,0,0.2);
+border-radius:3px;
 }
 /* zxb begin */
 .uploader-list /deep/ .uploader-file-status,
@@ -473,6 +493,9 @@ export default {
 }
 </style>
 <style scoped lang="scss">
+.upload-head{
+    padding: 0 32px;
+}
 .chunkUpload-select-tree {
     padding-top: 20px;
     width: 214px;
@@ -480,9 +503,10 @@ export default {
 .uploader-example {
     padding: 15px;
     min-height: 320px;
-    border: 1px solid #eee;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     margin: 13px 0 16px 0;
-    padding: 18px 20px;
+    padding:0 32px;
     .uploader-drop {
         border: none;
         background: transparent;
@@ -523,6 +547,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 32px;
     ul {
         display: flex;
         align-items: center;

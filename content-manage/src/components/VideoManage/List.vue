@@ -73,40 +73,48 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="storage-wrap">
-            <div class="use-storage">
-                <div class="progress-bar" :style="{'width':storageUsage.prograss+'%'}"></div>
-            </div>
-            <span class="storage-content">{{storageUsage.currentUsage}} / {{storageUsage.maxSize}}</span>
-        </div>
-        <div class="storage-wrap">
-            <div class="use-storage">
-                <div class="progress-bar" :style="{'width':storageUsage.prograss+'%'}"></div>
-            </div>
-            <span class="storage-content">{{storageUsage.currentUsage}} / {{storageUsage.maxSize}}</span>
-        </div>
-        <div class="pageing" id="pageing">
-            <slot name="paging"></slot>
-            <el-pagination
-                background
-                layout="total, sizes, prev, pager, next"
-                :total="imgPageResult.totalRecord"
-                :page-count="imgPageResult.totalPage"
-                :page-size="picSearchOptions.pageSize"
-                :page-sizes="[10,20,50]"
-                @current-change="changePage"
-                @size-change="changeSize"
-            ></el-pagination>
-        </div>
-        <div id="img-list-dialog">
-            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
-                <video class="video" :src="fullOssUrl" controls="controls" />
-                <div class="dislog-footer" slot="footer">
-                    <span>{{picInfo.title}}</span>
-                    <span>分类: {{picInfo.categoryName}}</span>
-                    <span>大小: {{picInfo.sizeStr}}</span>
+        <div style="padding-left:16px;overflow: hidden;">
+            <div class="storage-wrap">
+                <span class="title">已用空间</span>
+                <div class="use-storage">
+                    <div class="progress-bar" :style="{'width':storageUsage.prograss+'%'}"></div>
                 </div>
-            </el-dialog>
+                <span
+                    class="storage-content"
+                >{{storageUsage.currentUsage}} / {{storageUsage.maxSize}}</span>
+            </div>
+            <div class="storage-wrap">
+                <span class="title">已用流量</span>
+                <div class="use-storage">
+                    <div class="progress-bar" :style="{'width':usageTraffic.prograss+'%'}"></div>
+                </div>
+                <span
+                    class="storage-content"
+                >{{usageTraffic.currentUsage}} / {{usageTraffic.maxSize}}</span>
+            </div>
+            <div class="pageing" id="pageing">
+                <slot name="paging"></slot>
+                <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next"
+                    :total="imgPageResult.totalRecord"
+                    :page-count="imgPageResult.totalPage"
+                    :page-size="picSearchOptions.pageSize"
+                    :page-sizes="[10,20,50]"
+                    @current-change="changePage"
+                    @size-change="changeSize"
+                ></el-pagination>
+            </div>
+            <div id="img-list-dialog">
+                <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
+                    <video class="video" :src="fullOssUrl" controls="controls" />
+                    <div class="dislog-footer" slot="footer">
+                        <span>{{picInfo.title}}</span>
+                        <span>分类: {{picInfo.categoryName}}</span>
+                        <span>大小: {{picInfo.sizeStr}}</span>
+                    </div>
+                </el-dialog>
+            </div>
         </div>
     </div>
 </template>
@@ -215,11 +223,10 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
-           
             this.imgList = this.imgPageResult.list;
             this.picInfo = this.imgList[index];
-             this.fullOssUrl = row.ossFullUrl;
-              this.imgVisible = true;
+            this.fullOssUrl = row.ossFullUrl;
+            this.imgVisible = true;
         },
         async _adminDownload(row) {
             let type = row.fileType;
@@ -279,7 +286,7 @@ export default {
         }
     }
 }
-.video{
+.video {
     outline: none;
     width: 100%;
 }

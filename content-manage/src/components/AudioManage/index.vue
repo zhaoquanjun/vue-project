@@ -64,6 +64,7 @@
                     </div>
                     <SelectTree
                         :categoryName="curImgInfo.categoryName"
+                        :categoryId="curImgInfo.categoryId"
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
                         :isexpand="true"
@@ -242,12 +243,15 @@ export default {
                 idList
             );
             if (status == 200) {
-                this.$message({
-                    type: "success",
-                    message: "移动成功!"
+                this.$notify({
+                    customClass: "notify-success", 
+                    message: `移动成功!`,
+                    showClose: false,
+                    duration: 1000
                 });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
+                this.getTree();
             }
         },
         async renamePic(id, newname) {
@@ -337,20 +341,8 @@ export default {
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
-            if (!this.moveToClassiFy) {
-                this.$message({
-                    type: "error",
-                    message: "请选择移动的分类!"
-                });
-                return;
-            }
-            let categoryId = this.moveToClassiFy.id;
-            let idList = [];
-            if (this.idsList.length > 0) {
-                idList = this.idsList;
-            } else {
-                idList.push(this.curImgInfo.id);
-            }
+            let categoryId = this.moveToClassiFy? this.moveToClassiFy.id: this.curImgInfo.categoryId;
+            let idList =this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
             this.changeCategoryPic(categoryId, idList);
         },
         // 取消移动分类 关闭panel

@@ -20,7 +20,7 @@
             <div class="head-item head-middle">
                 <template v-if="contentType==='File'">
                     <span>文件类型</span>
-                    <span class="select-sort">
+                    <span class="select-sort ">
                         <el-select
                             size="small"
                             v-model="fileTypeLabel"
@@ -36,7 +36,7 @@
                         </el-select>
                     </span>
                     <span>置顶</span>
-                    <span class="select-sort">
+                    <span class="select-sort select-item">
                         <el-select
                             size="small"
                             v-model="topValue"
@@ -53,7 +53,7 @@
                     </span>
                 </template>
                 <span>排序</span>
-                <span class="select-sort">
+                <span class="select-sort ">
                     <el-select
                         size="small"
                         v-model="orderByLabel"

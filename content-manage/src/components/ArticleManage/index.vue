@@ -329,14 +329,7 @@ export default {
         },
         // 点击确定按钮 更新文章所属分类
         async updateCategoryArticle() {
-            console.log(this.moveToClassiFy, "moveToClassiFymoveToClassiFy");
-            let cateId;
-            if (this.moveToClassiFy) {
-                cateId = this.moveToClassiFy.id;
-            } else {
-                cateId = this.curArticleInfo.categoryId;
-            }
-
+            let cateId = this.moveToClassiFy?this.moveToClassiFy.id:this.curArticleInfo.categoryId;
             let { data, status } = await articleManageApi.batchMove(
                 cateId,
                 this.newsIdList

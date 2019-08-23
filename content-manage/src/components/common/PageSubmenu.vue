@@ -1,7 +1,7 @@
 <template>
     <div class="submenu">
         <h4 class="submenu-title">
-            <slot name="title"></slot>
+             <i>{{subTitle}}</i>
         </h4>
         <ul class="submenu-list">
             <li
@@ -20,7 +20,9 @@ export default {
         return {
             children: "",
             lastRoute: "",
-            parentPath: ""
+            parentPath: "",
+            subTitle:""
+
         };
     },
 
@@ -49,6 +51,7 @@ export default {
             let children = [];
             menuList1.map(item => {
                 if (this.parentPath == item.code) {
+                     this.subTitle=item.name
                     children = item.children;
                 }
             });

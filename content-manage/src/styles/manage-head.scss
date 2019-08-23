@@ -13,7 +13,7 @@
 }
 .seachInput {
     display: inline-block;
-    width: 248px;
+    width: 200px;
     // height: 33px;
     box-sizing: border-box;
     overflow: hidden;
@@ -129,4 +129,11 @@
     .bach-hanlder{
         padding-left: 24px;
     }
+}
+.select-item {
+    display: inline-block;
+    width: 80px;
+    box-sizing: border-box;
+    height: 32px;
+    margin: 0 16px 0 7px;
 }
