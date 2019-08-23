@@ -23,3 +23,15 @@ export const getLocal = (key)=>{
 export const removeLocal = (key)=>{
     return Cookies.remove(key,domain);
 }
+//清除所有cookie函数
+export  const clearAllCookie = ()=> {
+    
+    var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+    if(keys) {
+        for(var i = keys.length; i--;){
+            removeLocal(keys[i])
+        }
+    }
+}
+
+
