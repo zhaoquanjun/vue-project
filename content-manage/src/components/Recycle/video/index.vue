@@ -20,6 +20,7 @@
                     :recycle-page-result="recyclePageResult"
                     :recycle-search-options="videoSearchOptions"
                     :recycle-temp-data="recycleTempData"
+                     content-type="video"
                     @getRecycleDataList="getVideoList"
                     @batchRecovery="batchRecovery"
                     @handleSelectionChange="handleSelectionChange"

@@ -88,8 +88,8 @@
             <span slot="title">
                 <span class="fs14">
                     上传{{displayName}}
-                    <el-tooltip class="item" effect="dark" placement="right">
-                        <svg-icon icon-class="tip-icon"></svg-icon>
+                    <el-tooltip class="item" effect="dark" placement="right" content="一次最多可上传10个视频，单个视频大小不超过200M">
+                        <i class="iconfont iconyiwen"></i>
                     </el-tooltip>
                 </span>
             </span>
