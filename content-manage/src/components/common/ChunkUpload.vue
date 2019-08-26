@@ -204,6 +204,12 @@ export default {
         },
         onFileAdded(file) {
             if (file.fileType == "") {
+                 this.$notify({
+                        customClass: "notify-error",
+                        message: `请添加${this.displayName}格式文件`,
+                        duration: 1500,
+                        showClose: false
+                    });
                 file.cancel(file);
                 return;
             }
@@ -234,6 +240,7 @@ export default {
             }
             this.panelShow = true;
             //   file.resume();
+           
             if(this.limitCount(file)){
                 this.computeMD5(file);
             }
@@ -315,7 +322,6 @@ export default {
                 ".flac"
             ];
             if (this.uploadType === "Video") {
-               
                 let format = file.fileType.split("/")[1];
                 if (videoFormat.indexOf("." + format) === -1) {
                     file.cancel(file);
@@ -342,7 +348,9 @@ export default {
                 }
             }
             if (this.uploadType === "File") {
+                 
                 if (this.fileList.length < 100) {
+                    
                     if (file.size / 1024 / 1024 > file.size) {
                         this.$notify({
                             customClass: "notify-error",
@@ -368,7 +376,7 @@ export default {
                 }
             } else {
                 if (this.fileList.length < 10) {
-                    
+                  
                     if (
                         file.size / 1024 / 1024 > file.size &&
                         this.uploadType === "Audio"
