@@ -63,7 +63,8 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="storage-wrap">
+         <div style="padding-left:16px;overflow: hidden;">
+                <div class="storage-wrap">
             <div class="use-storage">
                 <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
             </div>
@@ -93,6 +94,8 @@
                 </div>
             </el-dialog>
         </div>
+         </div>
+     
     </div>
 </template>
 

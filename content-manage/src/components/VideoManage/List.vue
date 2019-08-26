@@ -25,19 +25,18 @@
                         </span>
                     </div>
                     <!-- <img  @click="viewPic( scope.row,scope.$index)" :src="scope.row.coverUrl" class="cover" /> -->
-                   <div v-if="(index == scope.$index)">
+                    <div v-if="(index == scope.$index)">
                         <el-input
-                        
-                        type="text"
-                        size="small"
-                        placeholder="请输入内容"
-                        v-model="scope.row.title"
-                        maxlength="50"
-                        show-word-limit
-                        @blur="rename(scope.row.id,scope.row.title)"
-                    ></el-input>
-                     <div class="format">格式： {{scope.row.fileExtension}}</div>
-                   </div>
+                            type="text"
+                            size="small"
+                            placeholder="请输入内容"
+                            v-model="scope.row.title"
+                            maxlength="50"
+                            show-word-limit
+                            @blur="rename(scope.row.id,scope.row.title)"
+                        ></el-input>
+                        <div class="format">格式： {{scope.row.fileExtension}}</div>
+                    </div>
                     <div v-else>
                         <div
                             class="img-name"
@@ -106,7 +105,11 @@
                 ></el-pagination>
             </div>
             <div id="img-list-dialog">
-                <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false" @close="closeDialog">
+                <el-dialog
+                    :visible.sync="imgVisible"
+                    :modal-append-to-body="false"
+                    @close="closeDialog"
+                >
                     <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
                     <div class="dislog-footer" slot="footer">
                         <span>{{picInfo.title}}</span>
@@ -154,7 +157,6 @@ export default {
                 this.tableHeight = window.innerHeight - 260;
             });
             this.tableHeight = window.innerHeight - 260;
-           
         });
         this._getStorageUsage();
         this._getCurrentUsageTraffic();
@@ -180,7 +182,6 @@ export default {
                 currentUsage: this.bytesToSize(data.currentUsage, 1),
                 prograss: (data.currentUsage / data.maxSize) * 100
             };
-            
         },
         // 获取使用的流量
         async _getCurrentUsageTraffic() {
@@ -236,8 +237,8 @@ export default {
         viewPic(row, index) {
             this.imgList = this.imgPageResult.list;
             this.picInfo = this.imgList[index];
-         
-            this._adminDownload(row)
+
+            this._adminDownload(row);
         },
         async _adminDownload(row) {
             let type = row.fileType;
@@ -245,9 +246,9 @@ export default {
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
-            this.$nextTick(()=>{
-                  this.$refs.video.play()
-            })
+            this.$nextTick(() => {
+                this.$refs.video.play();
+            });
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
@@ -260,8 +261,8 @@ export default {
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
         },
-        closeDialog(){
-          this.$refs.video.pause()
+        closeDialog() {
+            this.$refs.video.pause();
         }
     }
 };
@@ -314,7 +315,8 @@ export default {
 }
 .video {
     outline: none;
-  
+        width: 800px;
+    height: 700px;
 }
 </style>
 
