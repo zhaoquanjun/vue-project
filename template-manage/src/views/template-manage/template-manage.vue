@@ -630,10 +630,10 @@ export default {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
       } else {
-        // let { status } = await templateApi.createTemplate(
-        //   this.phone,
-        //   this.remark
-        // );
+        let { status } = await templateApi.createTemplate(
+          this.phone,
+          this.remark
+        );
         this.createTemplateShow = false;
         const loading = this.$loading({
           lock: true,
@@ -642,23 +642,23 @@ export default {
           customClass: "createTemplateLoading",
           background: "rgba(38,38,38,0.7)"
         });
-        // if (status == 200) {
-        //   loading.close();
-        //   this.$notify({
-        //     customClass: "notify-success",
-        //     message: `开通成功`,
-        //     duration: 2000,
-        //     showClose: false
-        //   });
-        //   this.searchTemplate();
-        // } else {
-        //   this.$notify({
-        //     customClass: "notify-error",
-        //     message: `开通失败`,
-        //     duration: 2000,
-        //     showClose: false
-        //   });
-        // }
+        if (status == 200) {
+          loading.close();
+          this.$notify({
+            customClass: "notify-success",
+            message: `开通成功`,
+            duration: 2000,
+            showClose: false
+          });
+          this.searchTemplate();
+        } else {
+          this.$notify({
+            customClass: "notify-error",
+            message: `开通失败`,
+            duration: 2000,
+            showClose: false
+          });
+        }
       }
     },
     blurPhone() {
