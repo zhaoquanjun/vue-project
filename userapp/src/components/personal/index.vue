@@ -3,8 +3,8 @@
         <h3 class="personal-title">个人账号管理</h3>
         <dl class="user-account clear">
             <dt class="avatar">
-                <img  :src="userInfo.userHeadUrl" />
-               
+                <img :src="userInfo.userHeadUrl" />
+
                 <span class="modify-avatar" @click="modifyAvatar">修改头像</span>
             </dt>
             <dd class="account-info">
@@ -37,9 +37,7 @@
             <li class="mobilePhone clear">
                 <div class="fleft">
                     <span class="set-name">手机号码</span>
-                    <span
-                        class="social-desc"
-                    >手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net</span>
+                    <span class="social-desc">手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net</span>
                 </div>
                 <div class="fright">
                     <span class="user-value">{{userInfo.phoneNumber | geTel }}</span>
@@ -164,7 +162,7 @@
                 ></component>
             </right-pannel>
         </el-dialog>
-        <el-dialog
+        <!-- <el-dialog
             title="提示"
             :visible.sync="alipayBindTip"
             width="30%"
@@ -174,7 +172,7 @@
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="alipayBindTip = false">确 定</el-button>
             </span>
-        </el-dialog>
+        </el-dialog>-->
     </div>
 </template>
 <script>
@@ -213,7 +211,7 @@ export default {
             CurrentProvider: "",
             weixinHtml: "",
             createTime: "",
-            alipayBindTip: false,
+            // alipayBindTip: false,
             pwdTitle: "0",
             pwdBtn: "设置"
         };
@@ -298,16 +296,20 @@ export default {
         async _removeExternalUserAsync(provider) {
             let { data } = await removeExternalUser(provider);
             if (data != undefined && (data == "true" || data == true)) {
-                this.$message({
-                    type: "success",
-                    message: "解绑成功!"
+                 this.$notify({
+                    customClass: "notify-success",
+                    message: `解绑成功!`,
+                    showClose: false,
+                    duration: 1500
                 });
                 this.ISRIGHTPANNELSHOW(false);
                 this._getExternalUserAsync();
             } else {
-                this.$message({
-                    type: "failed",
-                    message: "解绑失败!"
+                 this.$notify({
+                    customClass: "notify-error",
+                    message: `解绑失败!`,
+                    showClose: false,
+                    duration: 1500
                 });
             }
         },
@@ -375,7 +377,11 @@ export default {
         async _bindingAlipay() {
             this.titText = "绑定支付宝";
             this.CurrentProvider = "Alipay";
-            this.alipayBindTip = true;
+
+            this.$confirm("支付宝绑定完成", "提示", {
+                showCancelButton: false, // 是否显示取消按钮
+                iconClass: "icon-success" // 自定义图标
+            });
             let result = await getAlipayBindUrl();
             if (result != undefined && result.data)
                 window.open(result.data, "_blank");
@@ -388,15 +394,19 @@ export default {
             this.flag = true;
             let { status } = await updateUserName(this.input);
             if (status === 200) {
-                this.$message({
-                    type: "success",
-                    message: "设置成功!"
+                this.$notify({
+                    customClass: "notify-success",
+                    message: `设置成功!`,
+                    showClose: false,
+                    duration: 1500
                 });
                 this.$store.dispatch("_getAppHeadInfo");
             } else {
-                this.$message({
-                    type: "failed",
-                    message: "设置失败!"
+                 this.$notify({
+                    customClass: "notify-error",
+                    message: `设置失败!`,
+                    showClose: false,
+                    duration: 1500
                 });
             }
         },

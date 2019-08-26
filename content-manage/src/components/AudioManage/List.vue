@@ -86,7 +86,7 @@
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
             <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false" @close="closeDialog">
-                <audio class="audio" :src="fullOssUrl" controls="controls" />
+                <audio ref="audio" class="audio" :src="fullOssUrl" controls="controls" />
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
@@ -156,7 +156,7 @@ export default {
             this.fullOssUrl = data;
             this.imgVisible = true;
              this.$nextTick(()=>{
-                 this.$refs.video.play()
+                 this.$refs.audio.play()
             })
         },
         /**

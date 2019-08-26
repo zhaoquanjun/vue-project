@@ -107,8 +107,8 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "siteVerify",
-        name: "siteVerify",
+        path: "sitevalidation",
+        name: "sitevalidation",
         component: () => import("@/views/siteVerify.vue"),
         meta: {
           title: "站点验证",
