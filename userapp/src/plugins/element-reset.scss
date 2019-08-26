@@ -6,16 +6,18 @@
 }
 .el-input__inner{
     border-radius:0;
-}.el-table .el-table__body-wrapper .el-table__row .cell{
+}
+.el-table .el-table__body-wrapper .el-table__row .cell{
     display: flex;
     align-items: center;
 }
 .el-table .el-table__body-wrapper .el-table__row .cell span{
-    display: block;
+    display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    display: block;
+    display: flex;
+    align-items: center;
    
 }
 /* table 头部颜色 和 高度 */

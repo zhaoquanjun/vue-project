@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="图片名称" show-overflow-tooltip  width="250">
+            <el-table-column label="图片名称" show-overflow-tooltip >
                 <template slot-scope="scope">
                     <img
                         :src="scope.row.zoomOssUrl"
@@ -271,6 +271,7 @@ export default {
 
 
 <style scoped>
+
 .left-prev,
 .right-next {
     opacity: 0;

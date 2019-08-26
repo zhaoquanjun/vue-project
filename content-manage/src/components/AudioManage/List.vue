@@ -9,7 +9,7 @@
             @selection-change="handleSelectionChange"
         >
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="音频名称">
+            <el-table-column label="音频名称" >
                 <template slot-scope="scope">
                     <div class="cover">
                         <img width="100%" src="~img/file-icon/audio.png" />
@@ -36,7 +36,7 @@
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-            <el-table-column prop="fileExtension" label="格式" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="fileExtension" label="格式" ></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
             <el-table-column prop="categoryName" label="分类"></el-table-column>
@@ -84,7 +84,7 @@
         </div>
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
-            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
+            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false" @close="closeDialog">
                 <audio class="audio" :src="fullOssUrl" controls="controls" />
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
@@ -152,6 +152,9 @@ export default {
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
+             this.$nextTick(()=>{
+                 this.$refs.video.play()
+            })
         },
         /**
          * 单选或全选操作
@@ -203,6 +206,9 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
+        },
+        closeDialog(){
+           this.$refs.audio.pause()
         }
     },
     watch: {

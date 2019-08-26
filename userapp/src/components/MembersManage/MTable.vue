@@ -28,8 +28,9 @@
                 </template>
             </el-table-column>
             <el-table-column prop="remark" label="备注" show-overflow-tooltip>
-                <template slot-scope="scope" v-if="!scope.row.isSystem">
+                <template slot-scope="scope" >
                     <el-popover
+                    v-if="!scope.row.isSystem"
                         :ref="`popover-${scope.$index}`"
                         placement="bottom"
                         width="317"
@@ -37,16 +38,19 @@
                         style="padding:0"
                         @show="showRemark(scope.row)"
                     >
-                        <span slot="reference">
+                      
+                        <span slot="reference" >
                             <el-tooltip class="item" effect="dark" placement="bottom">
                                 <div style="width:150px;" slot="content">{{scope.row.remark}}</div>
                                 <div
+                                   
                                     class="remark-desc"
                                 >{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
+                            
                             </el-tooltip>
-                            <svg-icon icon-class="remark"></svg-icon>
+                            <svg-icon icon-class="remark" ></svg-icon>
                         </span>
-                        <div class="textareaWrap">
+                        <div  class="textareaWrap">
                             <el-input
                                 type="textarea"
                                 :autosize="{ minRows: 3, maxRows: 3}"
@@ -71,6 +75,7 @@
                             </div>
                         </div>
                     </el-popover>
+                        <div v-else>超级管理员</div>
                 </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -143,13 +148,13 @@ export default {
             }
         },
         handleDisable(row, index) {
-            return true;
+           
             // 函数需要一个返回值,true为可选,false为不可选择
-            //if (index == 0) {
-            //  return false;
-            //} else {
-            //  return true;
-            //}
+            if (index == 0) {
+             return false;
+            } else {
+             return true;
+            }
         },
         /**
          * 编辑操作
@@ -221,7 +226,7 @@ export default {
 </script>
 <style>
 .mycell .el-checkbox__input {
-    display: none;
+    display: none !important;
 }
 #member-table .el-table th {
     padding: 10px 0;

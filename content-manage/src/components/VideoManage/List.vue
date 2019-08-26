@@ -106,8 +106,8 @@
                 ></el-pagination>
             </div>
             <div id="img-list-dialog">
-                <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
-                    <video class="video" :src="fullOssUrl" controls="controls" />
+                <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false" @close="closeDialog">
+                    <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
                     <div class="dislog-footer" slot="footer">
                         <span>{{picInfo.title}}</span>
                         <span>分类: {{picInfo.categoryName}}</span>
@@ -154,6 +154,7 @@ export default {
                 this.tableHeight = window.innerHeight - 260;
             });
             this.tableHeight = window.innerHeight - 260;
+           
         });
         this._getStorageUsage();
         this._getCurrentUsageTraffic();
@@ -179,6 +180,7 @@ export default {
                 currentUsage: this.bytesToSize(data.currentUsage, 1),
                 prograss: (data.currentUsage / data.maxSize) * 100
             };
+            
         },
         // 获取使用的流量
         async _getCurrentUsageTraffic() {
@@ -243,6 +245,9 @@ export default {
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
+            this.$nextTick(()=>{
+                  this.$refs.video.play()
+            })
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
@@ -254,6 +259,9 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
+        },
+        closeDialog(){
+          this.$refs.video.pause()
         }
     }
 };
@@ -306,7 +314,7 @@ export default {
 }
 .video {
     outline: none;
-    width: 100%;
+  
 }
 </style>
 
