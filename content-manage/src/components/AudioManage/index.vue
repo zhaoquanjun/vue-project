@@ -55,9 +55,8 @@
                 <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="closeRightPanel"
-                    :tree-result="treeResult"
                 >
-                    <span slot="title-text">移动图片</span>
+                    <span slot="title-text">移动音频</span>
                     <div class="category-content">
                         <span name="cur-tip">移动至</span>
                     </div>
@@ -99,12 +98,14 @@
                 </span>
             </span>
             <chunk-upload
+                :tree-result="treeResult"
                 :node-data="nodeData"
                 :displayName="displayName"
                 :uploadType="contentType"
                 :apiHost="apiHost"
                 :accept="'audio/*'"
                 @getList="getPicList"
+                @getTree="getTree"
                 @closeDialog="closeDialog"
             />
         </el-dialog>

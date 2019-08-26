@@ -156,6 +156,7 @@
                 :apiHost="apiHost"
                 :accept="'*/*'"
                 @getList="getPicList"
+                @getTree="getTree"
                 @closeDialog="closeDialog"
             />
         </el-dialog>

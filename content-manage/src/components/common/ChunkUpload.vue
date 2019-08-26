@@ -18,6 +18,7 @@
             <div></div>
         </el-row>
         <uploader
+            ref="uploader"
             :options="options"
             :autoStart="false"
             class="uploader-example"
@@ -26,6 +27,7 @@
             @file-success="onFileSuccess"
             @upload-start="uploadStart"
             @file-error="onFileError"
+            @reset-option="resetOption"
         >
             <uploader-unsupport></uploader-unsupport>
             <uploader-list :uploadType="uploadType"></uploader-list>
@@ -42,7 +44,7 @@
                     <i class="success-color">{{successCount}}</i> ，个上传成功，
                 </li>
                 <li v-if="errorCount>0">
-                    <i class="error-color">{{errorCount}}</i> 个上传失败
+                    &nbsp;&nbsp;<i class="error-color">{{errorCount}}</i> 个上传失败
                 </li>
             </ul>
             <button
@@ -121,6 +123,7 @@ export default {
                             if (chunk.offset === 0) {
                                 chunkUploadManageApi.createFileWithoutUpload({
                                     UploadFileType: this.uploadType,
+                                 
                                     Size: chunk.file.size,
                                     Md5Hash: data.existInAnotherAppInfo.md5Hash,
                                     FromAppId:
@@ -154,11 +157,13 @@ export default {
             successCount: 0,
             errorCount: 0,
             disable: true,
-            formatSize:0
+            formatSize:0,
+            upload2Category:0,
         };
     },
     created() {
         this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
+        console.log(this.options.target ,'1')
     },
     methods: {
         bytesToSize(bytes, flag) {
@@ -188,9 +193,11 @@ export default {
             this.successCount += 1;
             if (this.successCount > 0 && this.errorCount < 1) {
                 this.$emit("getList");
+                this.$emit("getTree")
                 this.$emit("closeDialog");
                 this.fileList.forEach(file => {
                     file.cancel(file);
+
                 });
                  this.$notify({
                         customClass: "notify-success", //  notify-success ||  notify-error
@@ -211,6 +218,7 @@ export default {
                         showClose: false
                     });
                 file.cancel(file);
+                this.errorCount-=1;
                 return;
             }
             let [, suffix] = file.fileType.split("/");
@@ -236,6 +244,7 @@ export default {
             ];
             if (forbidUpload.indexOf(suffix) > -1) {
                 file.cancel(file);
+                this.errorCount-=1;
                 return;
             }
             this.panelShow = true;
@@ -325,6 +334,7 @@ export default {
                 let format = file.fileType.split("/")[1];
                 if (videoFormat.indexOf("." + format) === -1) {
                     file.cancel(file);
+                    this.errorCount-=1;
                     this.$notify({
                         customClass: "notify-error",
                         message: `请添加${this.displayName}格式文件`,
@@ -338,6 +348,7 @@ export default {
                 let format = file.fileType.split("/")[1];
                 if (audioFormat.indexOf("." + format) === -1) {
                     file.cancel(file);
+                    this.errorCount-=1;
                     this.$notify({
                         customClass: "notify-error",
                         message: `请添加${this.displayName}格式文件`,
@@ -359,6 +370,7 @@ export default {
                             showClose: false
                         });
                         file.cancel(file);
+                        this.errorCount-=1;
                         return false
                     }else{
                         return true;
@@ -372,6 +384,7 @@ export default {
                         showClose: false
                     });
                     file.cancel(file);
+                    this.errorCount-=1;
                     return false;
                 }
             } else {
@@ -388,6 +401,7 @@ export default {
                             showClose: false
                         });
                         file.cancel(file);
+                        this.errorCount-=1;
                         return false;
                     } else if (
                         this.uploadType === "Video" &&
@@ -400,10 +414,12 @@ export default {
                             showClose: false
                         });
                         file.cancel(file);
+                        this.errorCount-=1;
                         return false
                     }
                 } else {
                     file.cancel(file);
+                    this.errorCount-=1;
                     this.$notify({
                         customClass: "notify-error",
                         message: `一次最多可上传10个${this.displayName}`,
@@ -418,7 +434,11 @@ export default {
         // 选择分类节点
         chooseNode(data) {
             this.upload2Category = data;
-            this.uploadPicAction = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`;
+            this.$set(this.options,'target',`${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`)
+            console.log(this.options)
+            console.log(this.$refs.uploader.resetOption())
+        },
+        resetOption(){
         },
         upload() {
             this.fileList.forEach(item => {
