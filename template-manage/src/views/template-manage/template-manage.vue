@@ -125,7 +125,10 @@
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.templateName}}</p>
-                  <p class="templateName" style="margin-top:8px;">{{_getLanguage(scope.row.language)}}</p>
+                  <p
+                    class="templateName"
+                    style="margin-top:8px;"
+                  >{{_getLanguage(scope.row.language)}}</p>
                 </div>
               </template>
             </el-table-column>
@@ -301,7 +304,7 @@
               :headers="headers"
             >
               <img v-if="picUrl" :src="picUrl" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
               <button class="upload-btn">{{ !!picUrl ?'重新上传':'上传图片'}}</button>
             </el-upload>
             <el-upload
@@ -313,8 +316,8 @@
               :headers="headersMobile"
             >
               <img v-if="picUrlMobile" :src="picUrlMobile" class="avatar-mobile" />
-              <i v-else class="el-icon-plus avatar-mobile-uploader-icon"></i>
-              <button class="upload-btn">{{ !!picUrlMobile ?'重新上传':'上传图片'}}</button>
+              <img v-else src="~img/siteTemplate/defaultMobileImg.png" class="avatar-mobile" />
+              <button class="upload-mobile-btn">{{ !!picUrlMobile ?'重新上传':'上传图片'}}</button>
             </el-upload>
           </div>
           <div style="margin-top:212px">
@@ -382,23 +385,23 @@ export default {
       languageOptions: [
         {
           value: "zh-CN",
-          label: "简体中文"
+          label: "中文"
         },
         {
           value: "en-US",
-          label: "English"
+          label: "英文"
         },
         {
           value: "ja-JP",
-          label: "日本语"
+          label: "日语"
         },
         {
           value: "es-ES",
-          label: "Español"
+          label: "西班牙语"
         },
         {
           value: "ko-KR",
-          label: "한국어"
+          label: "韩语"
         }
       ],
       languageSelect: "zh-CN",
@@ -627,35 +630,35 @@ export default {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
       } else {
-        let { status } = await templateApi.createTemplate(
-          this.phone,
-          this.remark
-        );
+        // let { status } = await templateApi.createTemplate(
+        //   this.phone,
+        //   this.remark
+        // );
         this.createTemplateShow = false;
         const loading = this.$loading({
           lock: true,
           text: "正在开通模版",
           spinner: "copy-icon",
           customClass: "createTemplateLoading",
-          background: "rgba(255, 255, 255, 0.75)"
+          background: "rgba(38,38,38,0.7)"
         });
-        if (status == 200) {
-          loading.close();
-          this.$notify({
-            customClass: "notify-success",
-            message: `开通成功`,
-            duration: 2000,
-            showClose: false
-          });
-          this.searchTemplate();
-        } else {
-          this.$notify({
-            customClass: "notify-error",
-            message: `开通失败`,
-            duration: 2000,
-            showClose: false
-          });
-        }
+        // if (status == 200) {
+        //   loading.close();
+        //   this.$notify({
+        //     customClass: "notify-success",
+        //     message: `开通成功`,
+        //     duration: 2000,
+        //     showClose: false
+        //   });
+        //   this.searchTemplate();
+        // } else {
+        //   this.$notify({
+        //     customClass: "notify-error",
+        //     message: `开通失败`,
+        //     duration: 2000,
+        //     showClose: false
+        //   });
+        // }
       }
     },
     blurPhone() {
@@ -878,7 +881,6 @@ export default {
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
-            console.log(scope.row.id);
             let { status } = await templateApi.deleteTemplate(scope.row.id);
             if (status === 200) {
               this.$notify({
@@ -927,9 +929,10 @@ export default {
   margin-top: 0 !important;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
-  height: 300px;
+  width: 150px;
+  height: 150px;
   background: #fff;
+  border-radius: 4px;
 }
 .createTemplateLoading .el-loading-spinner .el-loading-text {
   font-size: 14px;
@@ -969,17 +972,11 @@ export default {
 #table-list /deep/ .el-table thead th:nth-child(1) .cell {
   padding-left: 24px;
 }
-.avatar-uploader /deep/ .el-upload:hover {
-  border-color: rgba(1, 192, 222, 1);
-}
 .avatar-uploader /deep/ .el-upload {
   cursor: pointer;
   position: absolute;
   left: 0;
   overflow: hidden;
-}
-.avatar-mobile-uploader /deep/ .el-upload:hover {
-  border-color: rgba(1, 192, 222, 1);
 }
 .avatar-mobile-uploader /deep/ .el-upload {
   cursor: pointer;
@@ -994,7 +991,13 @@ export default {
   text-align: center;
   margin-top: 16px;
   position: relative;
+  &:hover {
+    .upload-btn {
+      display: inline-block;
+    }
+  }
   .upload-btn {
+    display: none;
     width: 90px;
     height: 32px;
     color: #fff;
@@ -1005,15 +1008,6 @@ export default {
     margin-left: -40px;
   }
 }
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 284px;
-  height: 176px;
-  line-height: 176px;
-  text-align: center;
-  border: 1px dashed #ccc;
-}
 .avatar {
   width: 284px;
   height: 176px;
@@ -1023,7 +1017,13 @@ export default {
   text-align: center;
   margin-top: 16px;
   position: relative;
-  .upload-btn {
+  &:hover {
+    .upload-mobile-btn {
+      display: inline-block;
+    }
+  }
+  .upload-mobile-btn {
+    display: none;
     width: 90px;
     height: 32px;
     color: #fff;

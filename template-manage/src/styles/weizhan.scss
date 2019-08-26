@@ -1,6 +1,7 @@
 .ym-form-item__error {
     color: #262626;
     padding-top: 8px;
+
     &::before {
         display: inline-block;
         content: "";
@@ -23,9 +24,10 @@
 }
 
 .copy-icon {
+    margin-top: 17px;
     display: inline-block;
-    width: 284px;
-    height: 180px;
+    width: 142px;
+    height: 89px;
     background: url("~img/copy.gif") no-repeat center;
     background-size: contain;
 }
