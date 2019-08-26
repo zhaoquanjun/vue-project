@@ -37,7 +37,7 @@
         </uploader>
         <div class="upload-footer">
             <ul>
-                <li>已添加{{fileList.length}}个文件,{{formatSize}}</li>
+                <li v-if="fileList.length">已添加 <i class="defult-color">{{fileList.length}}</i> 个文件，共 <i class="defult-color">{{formatSize}}</i> </li>
                 <li v-if="successCount>0">
                     <i class="success-color">{{successCount}}</i> ，个上传成功，
                 </li>
@@ -153,7 +153,7 @@ export default {
             successCount: 0,
             errorCount: 0,
             disable: true,
-            formatSize:""
+            formatSize:0
         };
     },
     created() {
@@ -261,7 +261,11 @@ export default {
                 
                 file.uniqueIdentifier = md5;
                this.fileList.push(file);
-
+              let fileSize=0;
+               this.fileList.forEach(item=>{
+                   fileSize+=item.size
+               });
+               this.formatSize = this.bytesToSize(fileSize,1)
                 //file.resume();
             };
 
@@ -493,6 +497,9 @@ border-radius:3px;
 }
 </style>
 <style scoped lang="scss">
+.defult-color{
+    color: #09CCEB
+}
 .upload-head{
     padding: 0 32px;
 }

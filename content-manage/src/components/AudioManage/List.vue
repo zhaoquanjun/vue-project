@@ -38,7 +38,7 @@
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" show-overflow-tooltip></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="durationOfSecond" label="时长"></el-table-column>
+            <el-table-column prop="durationStr" label="时长"></el-table-column>
             <el-table-column prop="categoryName" label="分类"></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
