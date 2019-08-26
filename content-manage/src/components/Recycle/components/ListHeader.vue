@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="recycle-count">产品({{totalRecord}})</div>
+        <div class="recycle-count">{{recycleTempData.batchText.slice(1)}}({{totalRecord}})</div>
         <el-header class="content-header">
             <template v-if="!isBatchHeaderShow">
                 <div class="seachInput head-item">
