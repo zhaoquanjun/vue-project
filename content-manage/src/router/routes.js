@@ -27,6 +27,14 @@ export const defaultRoutes = [
         redirect: { path: '/content/file' },
     },
     {
+        path: "/video",
+        redirect: { path: '/content/video' },
+    },
+    {
+        path: "/audio",
+        redirect: { path: '/content/audio' },
+    },
+    {
         path: "/product/create",
         redirect: { path: '/content/createProduct' },
     },
