@@ -279,11 +279,6 @@ export default {
     }
 };
 </script>
-<style >
-.v-modal {
-    z-index: 1000 !important;
-}
-</style>
 
 <style lang="scss" scoped>
 .disabled {
