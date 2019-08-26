@@ -25,26 +25,25 @@
                         </span>
                     </div>
                     <!-- <img  @click="viewPic( scope.row,scope.$index)" :src="scope.row.coverUrl" class="cover" /> -->
-                    <el-input
-                        v-if="(index == scope.$index)"
-                        type="text"
-                        size="small"
-                        placeholder="请输入内容"
-                        v-model="scope.row.title"
-                        maxlength="30"
-                        show-word-limit
-                        @blur="rename(scope.row.id,scope.row.title)"
-                    ></el-input>
+                    <div v-if="(index == scope.$index)">
+                        <el-input
+                            type="text"
+                            size="small"
+                            placeholder="请输入内容"
+                            v-model="scope.row.title"
+                            maxlength="50"
+                            show-word-limit
+                            @blur="rename(scope.row.id,scope.row.title)"
+                        ></el-input>
+                        <div class="format">格式： {{scope.row.fileExtension}}</div>
+                    </div>
                     <div v-else>
-                        <!-- {{scope.row.title}} -->
                         <div
                             class="img-name"
                             @click="rename(scope.row.id,scope.row.title,scope.$index)"
                         >{{scope.row.title}}</div>
                         <div class="format">格式： {{scope.row.fileExtension}}</div>
                     </div>
-                    <!-- <input v-model="scope.row.title" />
-                    <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
@@ -106,8 +105,12 @@
                 ></el-pagination>
             </div>
             <div id="img-list-dialog">
-                <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
-                    <video class="video" :src="fullOssUrl" controls="controls" />
+                <el-dialog
+                    :visible.sync="imgVisible"
+                    :modal-append-to-body="false"
+                    @close="closeDialog"
+                >
+                    <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
                     <div class="dislog-footer" slot="footer">
                         <span>{{picInfo.title}}</span>
                         <span>分类: {{picInfo.categoryName}}</span>
@@ -121,6 +124,7 @@
 
 <script>
 import {
+    adminDownload,
     getStorageUsage,
     getCurrentUsageTraffic
 } from "@/api/request/contentCommonApi.js";
@@ -179,14 +183,22 @@ export default {
                 prograss: (data.currentUsage / data.maxSize) * 100
             };
         },
-        // 获取使用的内存
+        // 获取使用的流量
         async _getCurrentUsageTraffic() {
             let { data, status } = await getCurrentUsageTraffic("Video");
+
             this.usageTraffic = {
                 maxSize: this.bytesToSize(data.maxSize),
                 currentUsage: this.bytesToSize(data.currentUsage, 1),
                 prograss: (data.currentUsage / data.maxSize) * 100
             };
+            if (data.currentUsage >= data.maxSize) {
+                this.$notify({
+                    customClass: "notify-error",
+                    message: `您的视频流量剩余量为0，为不影响您的网站效果，请及时联系管理员！!`,
+                    duration: 1500
+                });
+            }
         },
         /**
          * 单选或全选操作
@@ -225,8 +237,8 @@ export default {
         viewPic(row, index) {
             this.imgList = this.imgPageResult.list;
             this.picInfo = this.imgList[index];
-            this.fullOssUrl = row.ossFullUrl;
-            this.imgVisible = true;
+
+            this._adminDownload(row);
         },
         async _adminDownload(row) {
             let type = row.fileType;
@@ -234,6 +246,9 @@ export default {
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
+            this.$nextTick(() => {
+                this.$refs.video.play();
+            });
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
@@ -245,10 +260,22 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
+        },
+        closeDialog() {
+            this.$refs.video.pause();
         }
     }
 };
 </script>
+<style scoped>
+.el-input /deep/ .el-input__inner {
+    padding-right: 50px;
+}
+.el-table /deep/ .el-table__row .el-input .el-input__suffix {
+    display: flex;
+    align-items: center;
+}
+</style>
 <style lang="scss" scoped>
 @import "../../styles/manege-table.scss";
 .cover {
@@ -288,14 +315,9 @@ export default {
 }
 .video {
     outline: none;
-    width: 100%;
+        width: 800px;
+    height: 700px;
 }
 </style>
 
-<style scoped>
-.el-table /deep/ .el-table__row .el-input .el-input__suffix {
-    display: flex;
-    align-items: center;
-}
-</style>
 

@@ -148,8 +148,6 @@ export default {
         // 图片上传成功时触发
         handleSucess(response, file, fileList) {
             if (++this.count == fileList.length) {
-                
-
                 setTimeout(() => {
                     this.$emit("switchUploadBoxShowStatus", "uploadImg");
                     this.uploadDisabled = true;
@@ -157,11 +155,11 @@ export default {
                     // this.$emit("getTree");
                     this.$refs.upload.clearFiles();
                     this.$notify({
-                    customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `成功上传${fileList.length}图片`,
-                    showClose: false,
-                    duration: 1500
-                });
+                        customClass: "notify-success", //  notify-success ||  notify-error
+                        message: `成功上传${fileList.length}图片`,
+                        showClose: false,
+                        duration: 1500
+                    });
                 }, 500);
             }
         },
@@ -236,7 +234,7 @@ export default {
     width: 100%;
     height: 100%;
 }
-.upload-pic /deep/ .el-upload-dragger .el-upload__text em{
+.upload-pic /deep/ .el-upload-dragger .el-upload__text em {
     display: block;
     padding-top: 10px;
 }

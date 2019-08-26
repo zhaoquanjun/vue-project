@@ -107,7 +107,6 @@ export default {
             rightPanelType: 1, // 1 移动文章 2 复制文章
             selectCategory: "",
             operateName: "移动",
-
             isInvitationPanelShow: false,
             articleSearchOptions: {
                 title: "",
@@ -329,7 +328,9 @@ export default {
         },
         // 点击确定按钮 更新文章所属分类
         async updateCategoryArticle() {
-            let cateId = this.moveToClassiFy?this.moveToClassiFy.id:this.curArticleInfo.categoryId;
+            let cateId = this.moveToClassiFy
+                ? this.moveToClassiFy.id
+                : this.curArticleInfo.categoryId;
             let { data, status } = await articleManageApi.batchMove(
                 cateId,
                 this.newsIdList
@@ -348,16 +349,6 @@ export default {
         },
         // 点击确定按钮 复制
         async copyArticle() {
-            console.log(this.row, "-------");
-            // if (!this.moveToClassiFy) {
-            //     this.$notify({
-            //         customClass: "notify-error", //  notify-success ||  notify-error
-            //         message: `请选择要复制到的分类!`,
-            //         showClose: false,
-            //         duration: 2000
-            //     });
-            //     return;
-            // }
             let cateId =
                 (this.moveToClassiFy && this.moveToClassiFy.id) ||
                 this.row.categoryId;
@@ -390,12 +381,18 @@ export default {
                         iconClass: "icon-success",
                         callback: async action => {
                             if (action === "confirm") {
+                                let categoryId = this.moveToClassiFy
+                                    ? this.moveToClassiFy.id
+                                    : this.curArticleInfo.categoryId;
+                                let categoryName = this.moveToClassiFy
+                                    ? this.moveToClassiFy.label
+                                    : this.curArticleInfo.categoryName;
                                 this.$router.push({
                                     path: "/news/create",
                                     query: {
                                         id: this.newsIdList,
-                                        categoryName: this.moveToClassiFy.label,
-                                        categoryId: this.moveToClassiFy.id
+                                        categoryName: categoryName,
+                                        categoryId: categoryId
                                     }
                                 });
                             } else {
@@ -413,13 +410,13 @@ export default {
         closeRightPanel() {
             this.isInvitationPanelShow = true;
         },
-       
+
         // 获取文章分类的树菜单
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
         },
-    
+
         // 重命名分类名称
         async renameCategory(id, newName) {
             await articleManageApi.reName(id, newName);
@@ -458,16 +455,14 @@ export default {
                             );
                             if (status === 200) {
                                 this.getTreeAsync();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                 this.getArticleList();
+                                this.$notify({
+                                    customClass: "notify-success",
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1500
                                 });
                             }
-                        } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
                         }
                     }
                 }

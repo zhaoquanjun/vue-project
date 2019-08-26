@@ -16,7 +16,7 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="文件名称">
+            <el-table-column label="文件名称" width="250">
                 <template slot-scope="scope">
                     <img :src="scope.row | fileCover" class="cover" />
                     <!-- <img src="../../../static/images/content-icon/file-cover.png" class="cover" /> -->

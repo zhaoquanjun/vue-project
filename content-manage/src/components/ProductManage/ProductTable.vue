@@ -16,7 +16,7 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column min-width="150" prop="name" label="产品标题" show-overflow-tooltip>
+            <el-table-column width="300" prop="name" label="产品标题" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <img
                         v-if="scope.row.thumbnailPicUrlList.length"

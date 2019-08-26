@@ -39,7 +39,7 @@
                     <span class="set-name">手机号码</span>
                     <span
                         class="social-desc"
-                    >手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net.cn</span>
+                    >手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net</span>
                 </div>
                 <div class="fright">
                     <span class="user-value">{{userInfo.phoneNumber | geTel }}</span>

@@ -101,9 +101,7 @@ export default {
                                 }
                                 this.$notify({
                                     customClass: "notify-error", //  notify-success ||  notify-error
-                                    message: `${this.displayName}[${
-                                        chunk.file.name
-                                    }]已存在于${
+                                    message: `${this.displayName}[${chunk.file.name}]已存在于${
                                         data.existInCurrentAppInfo.isDelete
                                             ? "回收站-"
                                             : ""
@@ -113,6 +111,9 @@ export default {
                                     duration: 3000,
                                     showClose: false
                                 });
+                                console.log(chunk)
+                                this.successCount-=1
+                                 chunk.file.cancel(chunk.file);
                             }
                             return true;
                         }
@@ -188,10 +189,15 @@ export default {
             if (this.successCount > 0 && this.errorCount < 1) {
                 this.$emit("getList");
                 this.$emit("closeDialog");
-
                 this.fileList.forEach(file => {
                     file.cancel(file);
                 });
+                 this.$notify({
+                        customClass: "notify-success", //  notify-success ||  notify-error
+                        message: `成功上传${this.successCount}个${this.displayName}`,
+                        showClose: false,
+                        duration: 1500
+                    });
                 this.successCount = 0;
                 this.errorCount = 0;
             }
