@@ -5,6 +5,7 @@
             style="margin-left: 16px;    margin-bottom: 16px;"
                 v-if="$store.state.dashboard.isContentwrite"
                 :count-data="countData"
+                :totalRecord="recyclePageResult.totalRecord"
                 :display-name="displayName"
                 :recycle-search-options="videoSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"

@@ -2,9 +2,10 @@
     <el-container id="content-manage">
         <el-main>
             <list-header
-            style="margin-left: 16px;    margin-bottom: 16px;"
+                style="margin-left: 16px;margin-bottom: 16px;"
                 v-if="$store.state.dashboard.isContentwrite"
                 :count-data="countData"
+                :totalRecord="recyclePageResult.totalRecord"
                 :display-name="displayName"
                 :recycle-search-options="productSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
