@@ -210,9 +210,11 @@ export default {
                             } = await videoManageApi.batchRemove(true, idlist);
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success",
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1500
                                 });
                                 this.getPicList();
                             }
@@ -237,8 +239,8 @@ export default {
                 idList
             );
             if (status == 200) {
-                  this.$notify({
-                    customClass: "notify-success", 
+                this.$notify({
+                    customClass: "notify-success",
                     message: `移动成功!`,
                     showClose: false,
                     duration: 1500
@@ -333,8 +335,11 @@ export default {
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
-            let categoryId = this.moveToClassiFy? this.moveToClassiFy.id: this.curImgInfo.categoryId;
-            let idList =this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
+            let categoryId = this.moveToClassiFy
+                ? this.moveToClassiFy.id
+                : this.curImgInfo.categoryId;
+            let idList =
+                this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
             this.changeCategoryPic(categoryId, idList);
         },
         // 取消移动分类 关闭panel

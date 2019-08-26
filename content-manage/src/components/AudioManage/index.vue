@@ -28,7 +28,6 @@
                 @getPicList="getPicList"
                 @batchMove="batchMove"
                 @batchDelete="batchDelete"
-               
             ></list-header>
 
             <el-main>
@@ -89,8 +88,13 @@
             <span slot="title">
                 <span class="fs14">
                     上传{{displayName}}
-                    <el-tooltip class="item" effect="dark" placement="right"  content="一次最多可上传10个音频，单个音频大小不超过50M">
-                         <i class="iconfont iconyiwen"></i>
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        placement="right"
+                        content="一次最多可上传10个音频，单个音频大小不超过50M"
+                    >
+                        <i class="iconfont iconyiwen"></i>
                     </el-tooltip>
                 </span>
             </span>
@@ -101,7 +105,7 @@
                 :apiHost="apiHost"
                 :accept="'audio/*'"
                 @getList="getPicList"
-                 @closeDialog="closeDialog"
+                @closeDialog="closeDialog"
             />
         </el-dialog>
     </el-container>
@@ -136,16 +140,16 @@ export default {
     data() {
         return {
             displayName: "音频",
-            contentType:"Audio",
-             nodeData: {
-               label:"全部分类",
-               id:0
+            contentType: "Audio",
+            nodeData: {
+                label: "全部分类",
+                id: 0
             },
             componentId: "List",
             isImgList: false,
             countPic: 0,
             curImgInfo: {},
-            
+
             moveToClassiFy: "",
             categoryName: "", //当前选中的分类名字
             idsList: [],
@@ -165,29 +169,29 @@ export default {
                 keyword: "",
                 isDelete: false
             },
-            useStorage:{}
+            useStorage: {}
         };
     },
     mounted() {
         this.getPicList();
         this.getTree();
-        this.getStorageUsage()
+        this.getStorageUsage();
     },
     methods: {
-         // 获取使用的内容
+        // 获取使用的内容
         async getStorageUsage() {
             let { data, status } = await getStorageUsage("Audio");
             this.useStorage = data;
         },
         // 获取列表
         async getPicList(node) {
-             const loading = this.$loading({
+            const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",
                 background: "rgba(255, 255, 255, 0.75)"
             });
             if (node) {
-                console.log(node)
+                console.log(node);
                 this.nodeData = node; // 上传图片所需
             }
             let { data } = await audioManageApi.getPicList(
@@ -199,7 +203,7 @@ export default {
         // 批量删除列表
         async batchRemovePic(idlist) {
             this.$confirm(
-                `删除后，${this.displayName}将被移动到回收站，可在回收站中恢复，是否确定删除？`,
+                `删除后，网站中引用的音频将被同步删除，同时音频将被移动到回收站，是否确认删除？`,
                 "提示",
                 {
                     confirmButtonText: "确定",
@@ -216,9 +220,11 @@ export default {
                             } = await audioManageApi.batchRemove(true, idlist);
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success",
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1500
                                 });
                                 this.getPicList();
                             }
@@ -244,7 +250,7 @@ export default {
             );
             if (status == 200) {
                 this.$notify({
-                    customClass: "notify-success", 
+                    customClass: "notify-success",
                     message: `移动成功!`,
                     showClose: false,
                     duration: 1000
@@ -288,16 +294,14 @@ export default {
                             );
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success",
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1000
                                 });
                             }
                         } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
                         }
                     }
                 }
@@ -341,8 +345,11 @@ export default {
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
-            let categoryId = this.moveToClassiFy? this.moveToClassiFy.id: this.curImgInfo.categoryId;
-            let idList =this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
+            let categoryId = this.moveToClassiFy
+                ? this.moveToClassiFy.id
+                : this.curImgInfo.categoryId;
+            let idList =
+                this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
             this.changeCategoryPic(categoryId, idList);
         },
         // 取消移动分类 关闭panel
@@ -358,10 +365,10 @@ export default {
         batchDelete() {
             this.batchRemovePic(this.idsList);
         },
-       // 关闭上传文件弹窗
-        closeDialog(){
+        // 关闭上传文件弹窗
+        closeDialog() {
             this.dialogTableVisible = false;
-        },
+        }
     },
     computed: {
         isInvitationlWidth() {

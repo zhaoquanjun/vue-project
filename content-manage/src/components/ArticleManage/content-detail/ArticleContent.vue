@@ -469,11 +469,8 @@ export default {
                 this.articleDetail
             );
             if (status === 200) {
-                console.log(data, "00000------");
-
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
-                    customClass: "medium",
                     iconClass: "icon-success",
                     cancelButtonText:"关闭",
                     callback: async action => {
