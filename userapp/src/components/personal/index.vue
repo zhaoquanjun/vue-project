@@ -139,30 +139,31 @@
                 </div>
             </li>
         </ul>
-        <right-pannel :style="{width:pannelWidth+'px'}">
-            <span slot="title-text">{{titText}}</span>
-            <component
-                :is="curComponent"
-                :sourcePhone="userInfo.phoneNumber"
-                :provider="CurrentProvider"
-                :imageUrl="userInfo.userHeadUrl"
-                :isSetPassWord="userInfo.isSetPassWord"
-                @setPwdTitleAndBtn="_setPwdTitleAndBtn"
-                @removeExternalUserAsync="_removeExternalUserAsync"
-                @updateWeiXinHtml="updateWeiXinHtml"
-                @getUserProfileAsync="_getUserProfileAsync"
-                @getExternalUserAsync="_getExternalUserAsync"
-                :weixinHtml="weixinHtml"
-                :WeChatJsLoginParams="WeChatJsLoginParams"
-            ></component>
-        </right-pannel>
         <el-dialog
             width="0"
             :close-on-click-modal="false"
             :show-close="false"
             :append-to-body="false"
             :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
-        ></el-dialog>
+        >
+            <right-pannel :style="{width:pannelWidth+'px'}">
+                <span slot="title-text">{{titText}}</span>
+                <component
+                    :is="curComponent"
+                    :sourcePhone="userInfo.phoneNumber"
+                    :provider="CurrentProvider"
+                    :imageUrl="userInfo.userHeadUrl"
+                    :isSetPassWord="userInfo.isSetPassWord"
+                    @setPwdTitleAndBtn="_setPwdTitleAndBtn"
+                    @removeExternalUserAsync="_removeExternalUserAsync"
+                    @updateWeiXinHtml="updateWeiXinHtml"
+                    @getUserProfileAsync="_getUserProfileAsync"
+                    @getExternalUserAsync="_getExternalUserAsync"
+                    :weixinHtml="weixinHtml"
+                    :WeChatJsLoginParams="WeChatJsLoginParams"
+                ></component>
+            </right-pannel>
+        </el-dialog>
         <el-dialog
             title="提示"
             :visible.sync="alipayBindTip"
@@ -420,11 +421,6 @@ export default {
     }
 };
 </script>
-<style>
-.v-modal {
-    z-index: 1000 !important;
-}
-</style>
 
 <style scoped>
 .el-input /deep/ .el-input__inner {
@@ -432,9 +428,6 @@ export default {
 }
 .el-input /deep/ .el-input__inner:focus {
     border-color: #00c1de;
-}
-.el-dialog__wrapper {
-    z-index: 1000 !important;
 }
 </style>
 
