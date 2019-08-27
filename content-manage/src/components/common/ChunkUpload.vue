@@ -435,8 +435,7 @@ export default {
         chooseNode(data) {
             this.upload2Category = data;
             this.$set(this.options,'target',`${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`)
-            console.log(this.options)
-            console.log(this.$refs.uploader.resetOption())
+            this.$refs.uploader.resetOption();
         },
         resetOption(){
         },
