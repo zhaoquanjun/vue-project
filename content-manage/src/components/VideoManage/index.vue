@@ -79,7 +79,6 @@
         </el-main>
         <el-dialog
             title="上传"
-            width="50%"
             :visible.sync="dialogTableVisible"
             :modal-append-to-body="false"
         >
@@ -373,7 +372,11 @@ export default {
     watch: {}
 };
 </script>
-
+<style scoped>
+.el-dialog__wrapper /deep/ .el-dialog{
+    width: 900px;
+}
+</style>
 <style lang="scss" scoped>
 @import "../style/contentDetail";
 </style>
