@@ -25,3 +25,9 @@ export const UpdateAppName = (appName) => {
 export const updateUserLastAppIdAndCookie = (appId) => {    
     return ajaxRequest.post(`${environment.dashboardApi}/api/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
 }
+/**
+ * 获取当前siteId
+ */
+export const getCurSiteId = () => {
+    return ajaxRequest.get(`${environment.dashboardApi}/api/userInfo/GetCurrentSiteId`);
+};
