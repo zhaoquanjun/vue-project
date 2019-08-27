@@ -465,26 +465,26 @@ export default {
         TemplateSiteId: item.siteId,
         SiteName: this.siteName
       };
-      // let { status } = await templateApi.updateSiteTemplate(para);
-      // if (status == 200) {
-      // loading.close();
-      // this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
-      //   confirmButtonText: "前往设计页面",
-      //   cancelButtonText: "取消",
-      //   iconClass: "icon-success",
-      //   distinguishCancelAndClose: true
-      // })
-      //   .then(() => {
-      //     window.location.href = `${designerUrl}?siteId=${this.siteId}`;
-      //   })
-      //   .catch(action => {
-      //     if (action == "cancel") {
-      //       this.$router.push({
-      //         path: "/website/mysite"
-      //       });
-      //     }
-      //   });
-      // }
+      let { status } = await templateApi.updateSiteTemplate(para);
+      if (status == 200) {
+      loading.close();
+      this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
+        confirmButtonText: "前往设计页面",
+        cancelButtonText: "取消",
+        iconClass: "icon-success",
+        distinguishCancelAndClose: true
+      })
+        .then(() => {
+          window.location.href = `${designerUrl}?siteId=${this.siteId}`;
+        })
+        .catch(action => {
+          if (action == "cancel") {
+            this.$router.push({
+              path: "/website/mysite"
+            });
+          }
+        });
+      }
     },
     //   获取模版列表
     async getTemplateList() {
