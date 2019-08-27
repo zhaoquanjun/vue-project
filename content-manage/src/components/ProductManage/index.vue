@@ -310,7 +310,6 @@ export default {
             let { data, status } = await productManageApi.copyBatchProduct(
                 options
             );
-            console.log();
             if (status == 200) {
                 if (
                     Array.isArray(options.idList) &&
@@ -334,7 +333,7 @@ export default {
                                 this.$router.push({
                                     path: "/product/create",
                                     query: {
-                                        id: options.idList[0],
+                                        id: data,
                                         isEditor: 1
                                     }
                                 });

@@ -13,7 +13,7 @@
         </header>
         <el-container class="article-container" style>
             <el-header>
-                <el-row class="article-head" >
+                <el-row class="article-head">
                     <el-col
                         :span="7"
                         :offset="3"
@@ -32,7 +32,11 @@
                 <div>
                     <el-row>
                         <el-col :span="13" :offset="3">
-                            <leftContent ref="articleContent" @changeSaveWay="changeSaveWay" @handlerClickNewAdd="handlerClickNewAdd"/>
+                            <leftContent
+                                ref="articleContent"
+                                @changeSaveWay="changeSaveWay"
+                                @handlerClickNewAdd="handlerClickNewAdd"
+                            />
                         </el-col>
                         <el-col :span="6" style="margin-left: 16px;max-width:345px;min-width:345px">
                             <RightContent :fileList="fileList" ref="articleRight" />
@@ -68,18 +72,15 @@ export default {
         RightContent,
         leftContent
     },
-    created() {
-        console.log(this.$route.query);
-        console.log(this.$route.query.isEditor, "this.$route.query.isEditor");
-    },
+    created() {},
     methods: {
         submitForm() {
             // let flieUrls = [
             //     ...this.$refs.articleRight.fileList1,
             //     ...this.$refs.articleRight.fileList2
             // ];
-            let flieUrls  =this.$refs.articleRight.newFileList;
-            console.log(this.$refs.articleRight)
+            let flieUrls = this.$refs.articleRight.newFileList;
+            console.log(this.$refs.articleRight);
             let fileList = flieUrls.map(item => {
                 return item.response;
             });
@@ -105,12 +106,13 @@ export default {
                     url: item
                 });
             });
+          
         },
         changeSaveWay(isEdit) {
             this.isEdit = isEdit;
         },
-        handlerClickNewAdd(){
-            this.fileList=[];
+        handlerClickNewAdd() {
+            this.fileList = [];
         }
     },
     mounted() {
@@ -121,10 +123,6 @@ export default {
     },
     computed: {
         isEditor() {
-            console.log(
-                this.$route.query.isEditor,
-                "this.$route.query.isEditor"
-            );
             return this.$route.query.isEditor;
         }
     }

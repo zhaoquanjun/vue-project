@@ -104,6 +104,7 @@
                 :apiHost="apiHost"
                 :accept="'video/*'"
                 @getList="getPicList"
+                @getTree="getTree"
                 @closeDialog="closeDialog"
             />
         </el-dialog>

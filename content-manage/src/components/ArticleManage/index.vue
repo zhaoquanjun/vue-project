@@ -130,7 +130,7 @@ export default {
         },
         isBatchHeaderShow() {
             console.log(this.idsList);
-            return this.idsList.length > 1 ? true : false;
+            return this.idsList.length > 0 ? true : false;
         }
     },
     methods: {
@@ -376,8 +376,6 @@ export default {
                     this.$confirm("复制成功是否前往编辑文章", "提示", {
                         confirmButtonText: "立即前往",
                         cancelButtonText: "暂不前往",
-                        type: "success",
-                        customClass: "medium",
                         iconClass: "icon-success",
                         callback: async action => {
                             if (action === "confirm") {
@@ -390,7 +388,7 @@ export default {
                                 this.$router.push({
                                     path: "/news/create",
                                     query: {
-                                        id: this.newsIdList,
+                                        id: data,
                                         categoryName: categoryName,
                                         categoryId: categoryId
                                     }

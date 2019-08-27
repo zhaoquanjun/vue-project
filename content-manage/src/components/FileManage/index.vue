@@ -91,7 +91,7 @@
                                     <button
                                         class="btn-small btn-bglightblue file-editor-btn"
                                         :class="{'link-btn-green':isCopy}"
-                                        v-clipboard:copy="ruleForm.link"
+                                        v-clipboard:copy="`${ruleForm.link}`"
                                         v-clipboard:success="onCopy"
                                         v-clipboard:error="onError"
                                     >{{copyTip}}</button>
@@ -156,6 +156,7 @@
                 :apiHost="apiHost"
                 :accept="'*/*'"
                 @getList="getPicList"
+                @getTree="getTree"
                 @closeDialog="closeDialog"
             />
         </el-dialog>
@@ -413,7 +414,7 @@ export default {
             this.ruleForm = {
                 name: data.title,
                 pass: data.pwd || "",
-                link: `${location.host}${data.downloadPage}`
+                link: `${location.origin}${data.downloadPage}`
             };
         },
         closeRightPanel(b) {

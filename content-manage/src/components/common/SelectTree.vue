@@ -173,7 +173,6 @@ export default {
             this.clearSelected();
         },
         check(node) {
-            console.log(arguments);
             if (this.multiple) {
                 if (this.valueTitle.indexOf(node[this.props.label]) > -1) {
                     return;
@@ -182,7 +181,6 @@ export default {
                 this.$emit("chooseNode", node);
                 return;
             } else {
-                console.log();
                 this.valueTitle = node[this.props.label];
                 this.$emit("chooseNode", node);
             }

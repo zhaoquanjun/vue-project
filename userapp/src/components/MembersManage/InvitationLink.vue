@@ -4,7 +4,7 @@
             <i class="back-icon" @click="backInvite"></i>
             <p class="invita-title invita-item">将链接发送给成员, 成员加入后即可协助您管理站点</p>
             <p class="link-wrap">
-                <span class="link">{{link}}</span>
+                <span class="link ellipsis">{{link}}</span>
                 <button
                     v-clipboard:copy="link"
                     v-clipboard:success="onCopy"
@@ -146,6 +146,7 @@ export default {
                 background: #e8f8fb;
                 width: 300px;
                 padding-left: 15px;
+                vertical-align: middle;
             }
             .link-btn {
                 background: #00c1de;

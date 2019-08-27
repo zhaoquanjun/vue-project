@@ -111,6 +111,7 @@ export default {
     watch:{
         pannelShow(){
             this.picUrl = this.imageUrl;
+            this.authtipShow=false;
         }
     }
 };

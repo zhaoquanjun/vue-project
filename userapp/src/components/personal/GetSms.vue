@@ -334,6 +334,9 @@ export default {
 .verification-code {
     position: relative;
 }
+.verification-code .el-button:hover{
+    background: transparent;
+}
 .verification-text {
     position: absolute;
     top: 1px;
