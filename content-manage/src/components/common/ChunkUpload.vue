@@ -45,7 +45,7 @@
                     <i class="defult-color">{{formatSize}}</i>
                 </li>
                 <li v-if="successCount>0">
-                    <i class="success-color">{{successCount}}</i> ，个上传成功，
+                    <i class="success-color">，{{successCount}}</i> 个上传成功，
                 </li>
                 <li v-if="errorCount>0">
                     &nbsp;&nbsp;
@@ -456,6 +456,9 @@ export default {
             });
         },
         fileRemove(file) {
+            if(!!file.error){
+                 this.errorCount -= 1;
+            }
             this.fileList = this.fileList.filter(item => {
                 return item != file;
             });
