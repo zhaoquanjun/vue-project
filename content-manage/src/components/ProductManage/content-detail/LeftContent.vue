@@ -629,7 +629,7 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$route.query.isEditor = 0;
-                            this.$refs.detailCheckTree.resetChecked();
+                            //this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -776,6 +776,7 @@ export default {
                 isNeedShipping: false, //
                 isAllowComment: true
             };
+            console.log(this.detailData.detailContent)
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;

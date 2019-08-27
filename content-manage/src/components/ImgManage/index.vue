@@ -235,10 +235,13 @@ export default {
                 idList
             );
             if (status == 200) {
-                this.$message({
-                    type: "success",
-                    message: "移动成功!"
-                });
+                
+                  this.$notify({
+                        customClass: "notify-success", //  notify-success ||  notify-error
+                        message: `移动成功!`,
+                        showClose: false,
+                        duration: 1500
+                    });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
             }
@@ -332,10 +335,13 @@ export default {
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
             if (!this.moveToClassiFy) {
-                this.$message({
-                    type: "error",
-                    message: "请选择移动的分类!"
-                });
+              
+                 this.$notify({
+                        customClass: "notify-error", //  notify-success ||  notify-error
+                        message: `请选择移动的分类!`,
+                        showClose: false,
+                        duration: 1500
+                    });
                 return;
             }
             let categoryId = this.moveToClassiFy.id;
