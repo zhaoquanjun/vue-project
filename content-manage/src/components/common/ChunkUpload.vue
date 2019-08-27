@@ -108,15 +108,14 @@ export default {
                                 }
                                 this.$notify({
                                     customClass: "notify-error", //  notify-success ||  notify-error
-                                    message: `${this.displayName}[${
-                                        chunk.file.name
+                                    message: `${this.displayName}[${chunk.file.name
                                     }]已存在于${
                                         data.existInCurrentAppInfo.isDelete
                                             ? "回收站-"
                                             : ""
                                     }[${
                                         data.existInCurrentAppInfo.categoryName
-                                    }]分类下`,
+                                    }]分类下-${data.existInCurrentAppInfo.fileName}`,
                                     duration: 3000,
                                     showClose: false
                                 });
@@ -200,8 +199,8 @@ export default {
             this.successCount += 1;
             console.log(this.successCount);
             if (
-                this.successCount == this.fileList.length &&
-                this.errorCount < 1
+                this.successCount == this.fileList.length &&this.successCount>=1 &&
+                this.errorCount < 1 
             ) {
                 this.$emit("getList");
                 this.$emit("getTree");
