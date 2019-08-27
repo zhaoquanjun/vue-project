@@ -186,7 +186,7 @@
                   <a
                     class="handle-btn"
                     style="margin-left:32px"
-                    :href="scope.row.domain"
+                    :href="`//${scope.row.domain}`"
                     target="_blank"
                     :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >预览</a>
@@ -204,6 +204,7 @@
         </div>
         <div class="pageing" id="pageing" style="margin-bottom:20px">
           <el-pagination
+            v-show="templatePage.totalCount > 10"
             background
             layout="total, slot, sizes, prev, pager, next"
             :current-page="templatePage.pageIndex"
@@ -462,7 +463,9 @@ export default {
       ],
       settingTemplateStatus: "",
       curTemplateId: 0,
-      curSiteId: 0
+      curSiteId: 0,
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   components: {},
@@ -576,8 +579,8 @@ export default {
         IsOnlyRecommend: false,
         Status: "All",
         TemplateType: "SiteTemplate",
-        PageIndex: 1,
-        PageSize: 10,
+        PageIndex: this.pageIndex,
+        PageSize: this.pageSize,
         IsOrderByOpenTime: true,
         IsOrderByUseCount: false,
         IsOrderByUpdateTime: false,
@@ -724,71 +727,24 @@ export default {
         IsOnlyRecommend: this.isRecommend,
         Status: this.templateStatus === "" ? "All" : this.templateStatus,
         TemplateType: "SiteTemplate",
-        PageIndex: 1,
-        PageSize: 10,
+        PageIndex: this.pageIndex,
+        PageSize: this.pageSize,
         IsOrderByOpenTime: orderByOpenTime,
         IsOrderByUseCount: orderByUseCount,
         IsOrderByUpdateTime: orderByUpdateTime,
         IsOrderByDesc: this.isDescSort
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
-      console.log(data);
-      this.templatePage = data;
-      this.templateInfo = data.items;
-      this.formatTime();
-    },
-    // 分页查询
-    async searchTemplateByPage(pageIndex, pageSize) {
-      let templateNameText = "";
-      let domainText = "";
-      let designerPhoneText = "";
-      if (this.searchValue == "templateName") {
-        templateNameText = this.search;
-      } else if (this.searchValue == "secondDomaon") {
-        domainText = this.search;
-      } else if (this.searchValue == "designer") {
-        designerPhoneText = this.search;
-      }
-      let orderByOpenTime = false;
-      let orderByUseCount = false;
-      let orderByUpdateTime = false;
-      if (this.sort == "createTime") {
-        orderByOpenTime = true;
-      } else if (this.sort == "updateTime") {
-        orderByUseCount = true;
-      } else if (this.sort == "useCount") {
-        orderByUpdateTime = true;
-      }
-      let para = {
-        TemplateName: templateNameText,
-        Domain: domainText,
-        DesignerPhone: designerPhoneText,
-        FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
-        SecondIndustry: this.secondIndustrySelect
-          ? this.secondIndustrySelect
-          : 0,
-        Language: this.languageSelect,
-        SiteTheme: "",
-        IsOnlyRecommend: this.isRecommend,
-        Status: this.templateStatus === "" ? "All" : this.templateStatus,
-        TemplateType: "SiteTemplate",
-        PageIndex: pageIndex,
-        PageSize: 10,
-        IsOrderByOpenTime: orderByOpenTime,
-        IsOrderByUseCount: orderByUseCount,
-        IsOrderByUpdateTime: orderByUpdateTime,
-        IsOrderByDesc: this.isDescSort
-      };
-      let { data, status } = await templateApi.getSiteTemplates(para);
-      console.log(data);
       this.templatePage = data;
       this.templateInfo = data.items;
       this.formatTime();
     },
     changePage(page) {
-      this.searchTemplateByPage(page);
+      this.pageIndex = page;
+      this.searchTemplate();
     },
     changeSize(page) {
+      this.pageSize = page;
       this.searchTemplate();
     },
     // 设置模版弹窗
@@ -1246,7 +1202,8 @@ export default {
     }
   }
   .settingTemplateWrap {
-    margin: 32px 24px;
+    margin: 32px 24px 10px;
+    height: 97px;
     .templateName {
       font-size: 14px;
       font-weight: 500;

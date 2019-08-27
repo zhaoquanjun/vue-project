@@ -19,6 +19,7 @@
     </el-main>
     <div class="my-chose-template">
       <el-dialog
+        style="margin-top:60px"
         width="0"
         :show-close="false"
         :close-on-click-modal="false"
@@ -39,10 +40,15 @@
                 >{{item.text}}</span>
               </div>
               <div style="margin-top:26px">
-                <div class="tab curTab">
+                <div class="tab" :class="{allTab:isAllTab}" @click="choseAllTab">
                   <div class="allBackground"></div>全部
                 </div>
-                <div class="tab" style="margin-top:10px">
+                <div
+                  class="tab"
+                  :class="{myTab:!isAllTab}"
+                  style="margin-top:10px"
+                  @click="choseMyTab"
+                >
                   <div class="myBackground"></div>已有网站
                 </div>
               </div>
@@ -65,7 +71,7 @@
                 <el-input
                   size="medium"
                   v-model="search"
-                  placeholder="输入名称搜索"
+                  placeholder="输入关键词搜索"
                   class="input-with-select"
                   style="width:260px"
                 >
@@ -76,7 +82,7 @@
                     @click="searchTemplate"
                   ></i>
                 </el-input>
-                <div class="colorType">
+                <div class="colorType" v-show="isAllTab">
                   <span class="colorTheme">主题</span>
                   <span class="color">
                     <div
@@ -128,7 +134,7 @@
                       <div class="modal">
                         <div>
                           <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <a :href="item.domain" class="previewSite" target="_blank">预览</a>
+                          <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
                         </div>
                       </div>
                     </div>
@@ -138,21 +144,84 @@
                   </el-col>
                 </el-row>
                 <div>
-                  <!-- <span class="dislikeTemplate">未找到想要的模版？</span> -->
+                  <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
                   <div class="pageing" id="pageing" style="margin-bottom:20px">
                     <el-pagination
+                      v-show="templatePage.totalCount > 9"
                       background
                       layout="total, slot, sizes, prev, pager, next"
                       :current-page="templatePage.pageIndex"
                       :total="templatePage.totalCount"
                       :page-count="templatePage.totalPages"
                       :page-size="templatePage.pageSize"
-                      :page-sizes="[10,20,50]"
+                      :page-sizes="[9,18,45]"
                       @current-change="changePage"
                       @size-change="changeSize"
                     ></el-pagination>
                   </div>
                 </div>
+                <el-dialog
+                  width="0"
+                  :visible.sync="notFindTemplateShow"
+                  :show-close="false"
+                  :close-on-click-modal="false"
+                  :modal-append-to-body="false"
+                >
+                  <div class="notFindTemplate-pannel" :style="{width:'600px'}">
+                    <div class="pannel-head">
+                      <span class="headTitle">未找到想要的模版</span>
+                      <span class="close-pannel" @click="closeNotFindTemplateDialog">
+                        <i
+                          class="iconfont iconX"
+                          style="line-height:70px;font-size:14px;color:rgba(140,140,140,1);"
+                        ></i>
+                      </span>
+                    </div>
+                    <div class="tips">请填写您的网站需求，帮助我们改进模版库</div>
+                    <div class="industry">
+                      网站行业：
+                      <el-input
+                        v-model="notFindName"
+                        placeholder="请输入您想要的行业名称"
+                        @blur="blurIndustryName"
+                        style="width:470px"
+                      ></el-input>
+                      <div
+                        class="ym-form-item__error"
+                        style="margin-left:68px"
+                        v-show="errorIndustry"
+                      >{{errorIndustryName}}</div>
+                    </div>
+                    <div class="reference">
+                      参考网站：
+                      <el-input
+                        v-model="notFindSite"
+                        placeholder="请输入您想参考的网站链接"
+                        style="width:470px"
+                        @blur="blurReferenceSite"
+                      ></el-input>
+                      <div
+                        class="ym-form-item__error"
+                        style="margin-left:68px"
+                        v-show="errorReference"
+                      >{{errorSite}}</div>
+                    </div>
+                    <div class="description">
+                      网站描述：
+                      <el-input
+                        type="textarea"
+                        :rows="4"
+                        placeholder="请描述您想要的网站效果"
+                        style="width:470px;vertical-align: text-top;"
+                        v-model="notFindRemark"
+                      ></el-input>
+                    </div>
+
+                    <div class="confirm">
+                      <button class="confirmBtn" @click="submit">提交</button>
+                    </div>
+                  </div>
+                </el-dialog>
               </el-main>
             </el-main>
           </el-container>
@@ -180,6 +249,7 @@ export default {
       siteName: "",
       templateShow: false,
       templatePage: {},
+      isAllTab: true,
       templateInfo: [],
       languageSelect: "",
       languageOptions: [
@@ -261,12 +331,21 @@ export default {
       isMostPopular: false,
       isRecommend: false,
       firstIndustryId: 0,
-      secondIndustryId: 0
+      secondIndustryId: 0,
+      pageIndex: 1,
+      pageSize: 9,
+      notFindTemplateShow: false,
+      notFindName: "",
+      notFindSite: "",
+      notFindRemark: "",
+      errorIndustry: false,
+      errorIndustryName: "",
+      errorReference: false,
+      errorSite: ""
     };
   },
   computed: {},
   mounted() {
-    this.getTemplateList();
     this.getIndustryTree();
   },
   methods: {
@@ -287,8 +366,8 @@ export default {
         Theme: "",
         Language: this.languageSelect,
         IsRecommend: this.isRecommend,
-        PageIndex: 1,
-        PageSize: 10,
+        PageIndex: this.pageIndex,
+        PageSize: this.pageSize,
         IsOrderByUpdateTime: this.isOrderByUpdateTime,
         IsMostPopular: this.isMostPopular
       };
@@ -320,8 +399,8 @@ export default {
         Theme: "",
         Language: this.languageSelect,
         IsRecommend: this.isRecommend,
-        PageIndex: 1,
-        PageSize: 10,
+        PageIndex: this.pageIndex,
+        PageSize: this.pageSize,
         IsOrderByUpdateTime: this.isOrderByUpdateTime,
         IsMostPopular: this.isMostPopular
       };
@@ -360,8 +439,8 @@ export default {
         Theme: "",
         Language: this.languageSelect,
         IsRecommend: this.isRecommend,
-        PageIndex: 1,
-        PageSize: 10,
+        PageIndex: this.pageIndex,
+        PageSize: this.pageSize,
         IsOrderByUpdateTime: this.isOrderByUpdateTime,
         IsMostPopular: this.isMostPopular
       };
@@ -373,29 +452,39 @@ export default {
 
     // 选择模版
     async choseSite(item) {
+      const loading = this.$loading({
+        lock: true,
+        text: "正在复制模版",
+        spinner: "copy-icon",
+        customClass: "copyTemplateLoading",
+        background: "rgba(255, 255, 255, 0.75)"
+      });
       let para = {
         TemplateId: item.id,
         CurrentSiteId: this.siteId,
         TemplateSiteId: item.siteId,
         SiteName: this.siteName
       };
-      await templateApi.updateSiteTemplate(para);
-      this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
-        confirmButtonText: "前往设计页面",
-        cancelButtonText: "取消",
-        iconClass: "icon-success",
-        distinguishCancelAndClose: true
-      })
-        .then(() => {
-          window.location.href = `${designerUrl}?siteId=${this.siteId}`;
-        })
-        .catch(action => {
-          if (action == "cancel") {
-            this.$router.push({
-              path: "/website/mysite"
-            });
-          }
-        });
+      // let { status } = await templateApi.updateSiteTemplate(para);
+      // if (status == 200) {
+      // loading.close();
+      // this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
+      //   confirmButtonText: "前往设计页面",
+      //   cancelButtonText: "取消",
+      //   iconClass: "icon-success",
+      //   distinguishCancelAndClose: true
+      // })
+      //   .then(() => {
+      //     window.location.href = `${designerUrl}?siteId=${this.siteId}`;
+      //   })
+      //   .catch(action => {
+      //     if (action == "cancel") {
+      //       this.$router.push({
+      //         path: "/website/mysite"
+      //       });
+      //     }
+      //   });
+      // }
     },
     //   获取模版列表
     async getTemplateList() {
@@ -406,8 +495,8 @@ export default {
         Theme: "",
         Language: "",
         IsRecommend: false,
-        PageIndex: 1,
-        PageSize: 10,
+        PageIndex: this.pageIndex,
+        PageSize: this.pageSize,
         IsOrderByUpdateTime: true,
         IsMostPopular: false
       };
@@ -422,11 +511,11 @@ export default {
         TemplateName: this.search,
         FirstIndustry: 0,
         SecondIndustry: 0,
-        ColorType: -1,
+        Theme: "",
         Language: this.languageSelect,
         IsRecommend: this.isRecommend,
-        PageIndex: 1,
-        PageSize: 10,
+        PageIndex: this.pageIndex,
+        PageSize: this.pageSize,
         IsOrderByUpdateTime: this.isOrderByUpdateTime,
         IsMostPopular: this.isMostPopular
       };
@@ -435,16 +524,109 @@ export default {
       this.templatePage = data;
       this.templateInfo = data.items;
     },
-    changePage() {},
-    changeSize() {},
+    async changePage(page) {
+      this.pageIndex = page;
+      this.searchTemplate();
+    },
+    changeSize(page) {
+      this.pageSize = page;
+      this.searchTemplate();
+    },
     // 关闭弹窗
     closeDialog() {
-      this.search = "";
+      this.pageIndex = 1;
+      this.pageSize = 9;
       this.templateShow = false;
+      this.languageSelect = "";
+      this.search = "";
+      this.orderType.forEach((item, index) => {
+        item.isOrder = false;
+      });
+      this.orderType[0].isOrder = true;
+    },
+    choseAllTab() {
+      this.isAllTab = true;
+      this.getTemplateList();
+    },
+    async choseMyTab() {
+      this.isAllTab = false;
+      let { data, status } = await templateApi.getTemplateSites();
+      console.log(data);
+      this.templatePage = data;
+      this.templateInfo = data.items;
+    },
+    notFindTemplate() {
+      this.notFindTemplateShow = true;
+    },
+    closeNotFindTemplateDialog() {
+      this.notFindName = "";
+      this.notFindSite = "";
+      this.notFindRemark = "";
+      this.errorIndustry = false;
+      this.errorIndustryName = "";
+      this.errorReference = false;
+      this.errorSite = "";
+      this.notFindTemplateShow = false;
+    },
+    blurIndustryName() {
+      if (this.notFindName == "") {
+        this.errorIndustry = true;
+        this.errorIndustryName = "请输入想要的行业名称";
+      } else {
+        this.errorIndustry = false;
+        this.errorIndustryName = "";
+      }
+    },
+    blurReferenceSite() {
+      if (this.notFindSite == "") {
+        this.errorReference = true;
+        this.errorSite = "请输入想参考的网站链接";
+      } else if (
+        !/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/.test(
+          this.notFindSite
+        )
+      ) {
+        this.errorReference = true;
+        this.errorSite = "输入正确的网站链接";
+      } else {
+        this.errorReference = false;
+        this.errorSite = "";
+      }
+    },
+    async submit() {
+      if (this.notFindName == "") {
+        this.errorIndustry = true;
+        this.errorIndustryName = "请输入想要的行业名称";
+      } else if (this.notFindSite == "") {
+        this.errorReference = true;
+        this.errorSite = "请输入想参考的网站链接";
+      } else if (
+        !/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/.test(
+          this.notFindSite
+        )
+      ) {
+        this.errorReference = true;
+        this.errorSite = "输入正确的网站链接";
+      } else {
+        this.errorIndustry = false;
+        this.errorIndustryName = "";
+        this.errorReference = false;
+        this.errorSite = "";
+        let para = {
+          name: this.notFindName,
+          firstIndustryId: 1,
+          secondIndustryId: 0,
+          webDescription: this.notFindRemark,
+          referenceWebSite: this.notFindSite
+        };
+        let { status } = await templateApi.createReferenceIndustry(para);
+        this.notFindTemplateShow = false;
+      }
     },
     // 显示选择模版弹框
     showTemplate() {
       this.templateShow = true;
+      this.getTemplateList();
     },
     // 转换语言
     _getLanguage(language) {
@@ -453,6 +635,23 @@ export default {
   }
 };
 </script>
+<style>
+.copyTemplateLoading .el-loading-spinner {
+  margin-top: 0 !important;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  background: #fff;
+  border-radius: 4px;
+}
+.copyTemplateLoading .el-loading-spinner .el-loading-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(38, 38, 38, 1);
+  line-height: 20px;
+}
+</style>
 <style scoped>
 .el-tabs {
   margin-top: 24px;
@@ -566,6 +765,8 @@ export default {
       font-weight: 400;
       color: rgba(38, 38, 38, 1);
       line-height: 36px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
       .allBackground {
         margin-left: 34px;
         margin-right: 15px;
@@ -585,8 +786,12 @@ export default {
         background-size: contain;
       }
     }
-    .curTab {
+    .allTab {
       background: rgba(9, 204, 235, 0.1);
+      border-left: 3px solid #09cceb;
+    }
+    .myTab {
+      background: rgba(216, 216, 216, 0.2);
       border-left: 3px solid #09cceb;
     }
   }
@@ -736,11 +941,96 @@ export default {
       -webkit-box-orient: vertical;
     }
   }
-  .dislikeTemplate {
+  .notFindTemplate {
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 24px;
     font-size: 14px;
     font-weight: 400;
     color: rgba(0, 112, 204, 1);
     line-height: 20px;
+  }
+  //右侧弹框
+  .notFindTemplate-pannel {
+    background: #ffffff;
+    position: fixed;
+    z-index: 2200;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 3px #ccc;
+    transition: width 0.2s linear;
+    background-color: "#fff";
+    color: #262626;
+    overflow: hidden;
+    .pannel-head {
+      padding: 0 32px;
+      height: 70px;
+      overflow: hidden;
+      border-bottom: 2px solid #eee;
+      .headTitle {
+        font-size: 16px;
+        font-family: PingFangSC-Medium;
+        font-weight: 500;
+        color: rgba(38, 38, 38, 1);
+        line-height: 70px;
+      }
+      .close-pannel {
+        float: right;
+        cursor: pointer;
+      }
+    }
+    .tips {
+      width: 537px;
+      height: 32px;
+      background: rgba(242, 255, 234, 1);
+      border: 1px solid rgba(199, 221, 185, 1);
+      font-size: 12px;
+      font-family: PingFangSC;
+      font-weight: 400;
+      color: rgba(0, 182, 57, 1);
+      line-height: 32px;
+      text-align: center;
+      margin: 16px 32px 24px;
+    }
+    .industry {
+      height: 72px;
+      padding-left: 32px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(38, 38, 38, 1);
+      line-height: 20px;
+    }
+    .reference {
+      height: 72px;
+      padding-left: 32px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(38, 38, 38, 1);
+      line-height: 20px;
+    }
+    .description {
+      padding-left: 32px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(38, 38, 38, 1);
+      line-height: 22px;
+    }
+    .confirm {
+      width: 100%;
+      height: 64px;
+      text-align: center;
+      margin-top: 24px;
+      .confirmBtn {
+        width: 116px;
+        height: 32px;
+        background: rgba(1, 192, 222, 1);
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 1);
+        line-height: 32px;
+      }
+    }
   }
 }
 .member-container {
