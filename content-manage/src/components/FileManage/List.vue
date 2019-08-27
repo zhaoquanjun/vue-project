@@ -38,7 +38,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="downloadCount" label="下载次数"></el-table-column>
-            <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr"  width="150" label="上传时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">

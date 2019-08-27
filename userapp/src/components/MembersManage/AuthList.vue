@@ -14,32 +14,18 @@
                     @click="curAuth(item,index)"
                     :class="{'choose-bg':item.show == true && isSelect}"
                 >
-                    <el-tooltip
-                        :content="item.name"
-                        placement="top-start"
-                        transition="0"
-                    >
-                           <span class="item-left ellipsis">{{item.name}}</span>
-                      </el-tooltip>
-                     
-                  
-                     <!-- <el-tooltip
-                     v-if="isSelect"
-                        :content="item.mark"
-                        placement="top-start"
-                    >
-                       
-                          
-                    </el-tooltip> -->
-                     <span class="item-right ellipsis"  v-if="isSelect">{{item.mark}}</span>
+                    <el-tooltip :content="item.name" placement="top-start" transition="0">
+                        <span class="item-left ellipsis">{{item.name}}</span>
+                    </el-tooltip>
+                    <span class="item-right ellipsis" v-if="isSelect">{{item.mark}}</span>
                     <span class="item-right auth-icon" v-else @click.stop="removeAuth(item,index)">
-                                <i class="iconfont clear-icon"></i>
+                        <i class="iconfont clear-icon"></i>
                     </span>
-                 
-                       
                 </li>
             </template>
-            <template v-else ><p style="text-align: center; line-height: 242px;">没有匹配的结果</p></template>
+            <template v-else>
+                <p style="text-align: center; line-height: 242px;">没有匹配的结果</p>
+            </template>
         </ul>
     </div>
 </template>
@@ -85,67 +71,66 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.memenber-auth{
+.memenber-auth {
     font-size: 12px;
     .choose-bg {
-    background: #e8f8fb;
-}
-
-.auth-name-title {
-    height: 40px;
-    line-height: 40px;
-    border-bottom: 1px solid #efefef;
-    padding: 0 5px;
-}
-.auth-list {
-    min-height: 242px;
-}
-.right-authname {
-    min-height: 274px;
-}
-.auth-list .list-item {
-    cursor: pointer;
-    height: 40px;
-    line-height: 40px;
-    width: 100%;
-    padding: 0 5px;
-    box-sizing: border-box;
-    span {
-        display: inline-block;
+        background: #e8f8fb;
     }
-    &:hover span {
-        color:#00c1de;
+
+    .auth-name-title {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #efefef;
+        padding: 0 5px;
+    }
+    .auth-list {
+        min-height: 242px;
+    }
+    .right-authname {
+        min-height: 274px;
+    }
+    .auth-list .list-item {
+        cursor: pointer;
+        height: 40px;
+        line-height: 40px;
+        width: 100%;
+        padding: 0 5px;
+        box-sizing: border-box;
+        span {
+            display: inline-block;
+        }
+        &:hover span {
+            color: #00c1de;
+        }
+    }
+    .item-left {
+        width: 40%;
+        float: left;
+        color: #262626;
+    }
+    .item-right {
+        width: 60%;
+        padding-left: 10px;
+        height: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        color: #8c8c8c;
+    }
+    .empty {
+        cursor: pointer;
+        width: 30%;
+        color: #00c1de;
+        text-align: right;
+        float: right;
+    }
+    .auth-icon {
+        text-align: right;
+    }
+    .clear-icon {
+        background: url("~img/memberManage/clear-icon.png") no-repeat center;
+        background-size: contain;
     }
 }
-.item-left {
-    width: 40%;
-    float: left;
-    color: #262626;
-}
-.item-right {
-    width: 60%;
-    padding-left: 10px;
-    height: 40px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    box-sizing: border-box;
-    color: #8c8c8c;
-}
-.empty {
-    cursor: pointer;
-    width: 30%;
-    color: #00c1de;
-    text-align: right;
-    float: right;
-}
-.auth-icon {
-    text-align: right;
-}
-.clear-icon{
-   background: url("~img/memberManage/clear-icon.png") no-repeat center;
-   background-size:contain; 
-}
-}
-
 </style>

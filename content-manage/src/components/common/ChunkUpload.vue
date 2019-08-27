@@ -235,33 +235,43 @@ export default {
             }
             let [, suffix] = file.fileType.split("/");
             let forbidUpload = [
-                "exe",
-                "php",
-                "lnk",
-                "cmd",
-                "bat",
-                "reg",
-                "vb",
-                "vbs",
-                "js",
-                "css",
-                "aspx",
-                "sql",
-                "asp",
-                "jsp",
-                "htm",
-                "html",
-                "java",
-                "json"
+                ".exe",
+                ".php",
+                ".lnk",
+                ".cmd",
+                ".bat",
+                ".reg",
+                ".vb",
+                ".vbs",
+                ".js",
+                ".css",
+                ".aspx",
+                ".sql",
+                ".asp",
+                ".jsp",
+                ".htm",
+                ".html",
+                ".java",
+                ".json"
             ];
-            if (forbidUpload.indexOf(suffix) > -1) {
+            
+          let fileNameIndex = file.name.lastIndexOf(".");
+          let fileName=file.name.slice(fileNameIndex);
+            if (forbidUpload.indexOf(fileName) > -1) {
+               
                 file.cancel(file);
                 this.errorCount -= 1;
+                  this.$notify({
+                        customClass: "notify-error",
+                        message: `请添加${this.displayName}格式的文件`,
+                        duration: 1500,
+                        showClose: false
+                    });
                 return;
             }
             this.panelShow = true;
             //   file.resume();
-
+            this.fileList.push(file);
             if (this.limitCount(file)) {
                 this.computeMD5(file);
             }
@@ -284,16 +294,8 @@ export default {
             fileReader.readAsArrayBuffer(file.file);
             fileReader.onload = e => {
                 md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
-                //todo md5监听事件在此触发
-                // console.log(
-                //     `MD5计算完毕：${file.id} ${
-                //         file.name
-                //     } MD5：${md5} 用时：${new Date().getTime() -
-                //         time} ms,自动开始上传,\n 香槟boy 监听事件在此触发`
-                // );
-
                 file.uniqueIdentifier = md5;
-                this.fileList.push(file);
+                
                 let fileSize = 0;
                 this.fileList.forEach(item => {
                     fileSize += item.size;
@@ -371,10 +373,10 @@ export default {
             }
             if (this.uploadType === "File") {
                 if (this.fileList.length < 100) {
-                    if (file.size / 1024 / 1024 > file.size) {
+                    if (file.size / 1024 / 1024 > 50) {
                         this.$notify({
                             customClass: "notify-error",
-                            message: `${displayName}大小不可超过50M`,
+                            message: `${this.displayName}大小不可超过50M`,
                             duration: 1500,
                             showClose: false
                         });
@@ -396,9 +398,10 @@ export default {
                     return false;
                 }
             } else {
-                if (this.fileList.length < 10) {
+                console.log(this.fileList.length,'111')
+                if (this.fileList.length <= 10) {
                     if (
-                        file.size / 1024 / 1024 > file.size &&
+                        file.size / 1024 / 1024 > 50 &&
                         this.uploadType === "Audio"
                     ) {
                         this.$notify({
@@ -455,6 +458,7 @@ export default {
             });
         },
         fileRemove(file) {
+             console.log(this.fileList.length,'333')
             if(!!file.error){
                  this.errorCount -= 1;
             }
