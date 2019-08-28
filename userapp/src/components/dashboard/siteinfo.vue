@@ -81,7 +81,9 @@
       <div class="right-pannel" :style="{width:'600px'}">
         <div class="pannel-head">
           <span class="headTitle">创建网站</span>
-          <span class="close-pannel" @click="closeDialog">X</span>
+          <span class="close-pannel" @click="closeDialog">
+            <i class="iconfont iconX" style="font-size:12px;color:#ccc"></i>
+          </span>
         </div>
         <div>
           <div class="createSiteName">
@@ -91,11 +93,11 @@
           <div style="margin-top:24px;margin-left:32px;">
             <div class="createSiteLanguageTitle">请选择您的网站语言：</div>
             <el-radio-group v-model="radio" class="radio">
-              <el-radio label="zh-CN">简体中文</el-radio>
-              <el-radio label="en-US">English</el-radio>
-              <el-radio label="ja-JP">日本语</el-radio>
-              <el-radio label="es-ES">Español</el-radio>
-              <el-radio label="ko-KR">한국어</el-radio>
+              <el-radio label="zh-CN">中文</el-radio>
+              <el-radio label="en-US">英文</el-radio>
+              <el-radio label="ja-JP">日语</el-radio>
+              <el-radio label="es-ES">西班牙语</el-radio>
+              <el-radio label="ko-KR">韩语</el-radio>
             </el-radio-group>
           </div>
           <div class="create">
@@ -279,14 +281,6 @@ export default {
         // this.$set(this.siteInfo[index - 2], "prevPrev", true);
       }
     },
-    showCreate() {
-      this.createShow = true;
-    },
-    closeDialog() {
-      this.radio = "";
-      this.createSiteName = "";
-      this.createShow = false;
-    },
     // 跳转至设计器
     toDesign(siteId, themeColor, themeFont) {
       window.location.href = `${designerUrl}?siteId=${siteId}`;
@@ -300,6 +294,14 @@ export default {
     _getLanguage(language) {
       return getLanguage(language);
     },
+    showCreate() {
+      this.createShow = true;
+    },
+    closeDialog() {
+      this.radio = "";
+      this.createSiteName = "";
+      this.createShow = false;
+    },
     // 创建site
     async createSite() {
       let { status } = await dashboardApi.CreateSite(
@@ -307,6 +309,8 @@ export default {
         this.createSiteName
       );
       if (status == 200) {
+        this.radio = "";
+        this.createSiteName = "";
         this.$emit("getDashboardData");
         this.createShow = false;
         this.$notify({

@@ -4,7 +4,7 @@
       <div class="leftContent">
         <div class="welcome-wrap">
           <p class="welcome-words">
-            <span class="welcome-words" style="font-family:PingFangSC-Regular;">{{userName}}</span>
+            <span class="welcome-words" style="font-weight:400">{{userName}}</span>
             <span class="welcome-words">，欢迎回到微站后台</span>
           </p>
           <p
@@ -334,18 +334,6 @@ export default {
       white-space: nowrap;
       width: 70%;
       vertical-align: middle;
-      // display: inline-block;
-      // overflow: hidden;
-      // text-overflow: ellipsis;
-      // white-space: nowrap;
-      // width: 60%;
-      // display: -webkit-box;
-      // word-break: break-all;
-      // text-overflow: ellipsis;
-      // -webkit-text-overflow: ellipsis;
-      // overflow: hidden;
-      // -webkit-line-clamp: 1;
-      // -webkit-box-orient: vertical;
     }
   }
   .appVersion {
