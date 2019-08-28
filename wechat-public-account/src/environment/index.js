@@ -9,11 +9,11 @@ let contentApi = 'http://api.content.console.wezhan.cn';
 let dashboardApi = 'http://api.dashboard.console.wezhan.cn';
 let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
 let authorityUrl = "http://login.console.wezhan.cn";
-let redirectUrl = "http://content.console.wezhan.cn/callback";
-let logoutRedirectUri = "http://content.console.wezhan.cn/index.html";
-let silentRedirectUri = 'http://content.console.wezhan.cn/static/silent-renew.html';
-let clientId = 'content.api';
-let scope = "openid profile dashboard.api content.api designer.api produce.api";
+let redirectUrl = "http://wechat.console.wezhan.cn/callback";
+let logoutRedirectUri = "http://wechat.console.wezhan.cn/index.html";
+let silentRedirectUri = 'http://wechat.console.wezhan.cn/static/silent-renew.html';
+let clientId = 'weixinopen.api';
+let scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
 export let siteDomain = "content.console.wezhan.cn";
 export let wechataccountDomain="wechataccount.console.wezhan.cn"
 // 个人中心
@@ -29,11 +29,11 @@ if (process.env.NODE_ENV === 'development') {
     dashboardApi = 'http://api.dashboard.console.wezhan.cn';
     uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
     authorityUrl = "http://login.console.wezhan.cn";
-    redirectUrl = "http://localhost:8081/callback";
-    logoutRedirectUri = "http://content.console.wezhan.cn/index.html";
-    silentRedirectUri = 'http://localhost:8081/static/silent-renew.html';
-    clientId = 'dev.content.api';
-    scope = "openid profile dashboard.api content.api designer.api produce.api";
+    redirectUrl = "http://localhost:8084/callback";
+    logoutRedirectUri = "http://localhost:8084/index.html";
+    silentRedirectUri = 'http://localhost:8084/static/silent-renew.html';
+    clientId = 'dev.weixinopen.api';
+    scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
 } 
 const enbironmemy = {
     authorityUrl,
