@@ -14,7 +14,6 @@ body{
     height: 100%;
     overflow: hidden;
     font-size: 14px;
-    background: #F9FAFC;
 
 }
 h1{font-size: 28px}
@@ -34,3 +33,28 @@ h4{font-size: 14px}
 }
 
 
+.el-radio-group  .el-radio__label{
+    color: #A1A8B1;
+    font-size: 16px;
+    padding-left: 16px;
+    font-weight: 400
+}
+.el-radio-group  .el-radio__inner{
+    width: 18px;
+    height: 18px;
+}
+.el-radio-group .el-radio__input.is-checked .el-radio__inner{
+    border-color: #09CCEB;
+    background: #fff;
+}
+.el-radio-group .el-radio__inner:hover{
+    border-color:#09CCEB;
+}
+.el-radio-group .el-radio__input.is-checked+.el-radio__label{
+    color: #09CCEB;
+}
+.el-radio-group .el-radio__inner::after{
+    width: 9px;
+    height: 9px;
+    background: #09CCEB;
+}

@@ -41,7 +41,9 @@ import {
     Notification,
     Loading,
     Tabs,
-    TabPane
+    TabPane,
+    Radio,
+    RadioGroup
   
 } from 'element-ui';
 Vue.use(Container)
@@ -82,6 +84,8 @@ Vue.use(Container)
     .use(DropdownMenu)
     .use(Tabs)
     .use(TabPane)
+    .use(Radio)
+    .use(RadioGroup)
     
 ;
 Vue.prototype.$message = Message;
