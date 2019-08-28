@@ -39,7 +39,9 @@ import {
     DropdownItem,
     DropdownMenu,
     Notification,
-    Loading
+    Loading,
+    Tabs,
+    TabPane
   
 } from 'element-ui';
 Vue.use(Container)
@@ -78,6 +80,8 @@ Vue.use(Container)
     .use(Dropdown)
     .use(DropdownItem)
     .use(DropdownMenu)
+    .use(Tabs)
+    .use(TabPane)
     
 ;
 Vue.prototype.$message = Message;
