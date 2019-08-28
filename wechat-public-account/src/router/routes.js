@@ -5,6 +5,7 @@ export const defaultRoutes = [{
             path: '/wechataccount/custommenu'
         },
     },
+    
     {
         path: "/wechataccount",
         component: () => import('@/views/wechat-account/index.vue'),
