@@ -275,7 +275,13 @@ export default {
             this.$emit("batchDelete");
         },
         batchDownLoad() {
-            this.$emit("batchDownLoad");
+             this.$confirm(`您确定要下载所选文件吗？`, "提示", {
+                iconClass: "icon-warning",
+                callback: async action => {
+                     this.$emit("batchDownLoad");
+                }
+             })
+           
         },
         handleCommand(command) {
             switch (command) {

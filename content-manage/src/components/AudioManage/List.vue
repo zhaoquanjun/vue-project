@@ -38,11 +38,11 @@
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" ></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="durationStr" label="时长"></el-table-column>
+            <el-table-column prop="durationStr"  label="时长"></el-table-column>
             <el-table-column prop="categoryName" label="分类"></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr"  width="150"  label="上传时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
@@ -127,9 +127,9 @@ export default {
     mounted() {
         this.$nextTick(() => {
             window.addEventListener("resize", () => {
-                this.tableHeight = window.innerHeight - 260;
+                this.tableHeight = window.innerHeight - 290;
             });
-            this.tableHeight = window.innerHeight - 260;
+            this.tableHeight = window.innerHeight - 290;
         });
     },
     methods: {
@@ -155,9 +155,9 @@ export default {
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
-             this.$nextTick(()=>{
-                 this.$refs.audio.play()
-            })
+            //  this.$nextTick(()=>{
+            //      this.$refs.audio.play()
+            // })
         },
         /**
          * 单选或全选操作

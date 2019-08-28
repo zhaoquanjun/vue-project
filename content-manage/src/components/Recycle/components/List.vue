@@ -39,13 +39,13 @@
                         <img width="100%" src="~img/file-icon/audio.png" />
                         <!-- <span class="play" @click="viewPic( scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
-                        </span> -->
+                        </span>-->
                     </div>
                     <div class="video-cover" v-if="['video'].includes(recycleTempData.type)">
                         <img width="100%" height="100%" :src="scope.row.coverUrl" />
                         <!-- <span class="play" @click="viewPic( scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
-                        </span> -->
+                        </span>-->
                     </div>
                     <img
                         v-if="['pic'].includes(recycleTempData.type)"
@@ -105,9 +105,14 @@
             <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn edit-icon" @click="handleRecoveryData(scope.row)">
-                            <i class="iconfont iconqiehuan"></i>
-                        </button>
+                        <el-tooltip class="item" effect="dark" content="恢复" placement="top">
+                            <button
+                                class="handle-btn edit-icon"
+                                @click="handleRecoveryData(scope.row)"
+                            >
+                                <i class="iconfont iconqiehuan"></i>
+                            </button>
+                        </el-tooltip>
                     </div>
                 </template>
             </el-table-column>
@@ -127,8 +132,13 @@
         </div>
         <div id="img-list-dialog">
             <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
-                <video v-if="contentType==='video'" class="video" :src="fullOssUrl" controls="controls" />
-                 <audio v-else class="audio" :src="fullOssUrl" controls="controls" />
+                <video
+                    v-if="contentType==='video'"
+                    class="video"
+                    :src="fullOssUrl"
+                    controls="controls"
+                />
+                <audio v-else class="audio" :src="fullOssUrl" controls="controls" />
                 <div class="dislog-footer" slot="footer">
                     <span>{{picInfo.title}}</span>
                     <span>分类: {{picInfo.categoryName}}</span>
@@ -185,16 +195,15 @@ export default {
         this.$nextTick(() => {
             console.log(this.recyclePageResult);
             window.addEventListener("resize", () => {
-                this.tableHeight = window.innerHeight - 310;
+                this.tableHeight = window.innerHeight - 350;
             });
-            this.tableHeight = window.innerHeight - 310;
+            this.tableHeight = window.innerHeight - 350;
         });
         if (this.contentType === "video") {
             this.videoWidth = 500;
         }
     },
     methods: {
-
         /**
          * 恢复数据
          */
@@ -230,22 +239,22 @@ export default {
         viewPic(row, index) {
             this.imgList = this.recyclePageResult.list;
             this.picInfo = this.imgList[index];
-          
-            if(this.contentType==="video"){
-             this.fullOssUrl = row.ossFullUrl;
-            this.imgVisible = true;
-            }else{
-                this._adminDownload(row)
+
+            if (this.contentType === "video") {
+                this.fullOssUrl = row.ossFullUrl;
+                this.imgVisible = true;
+            } else {
+                this._adminDownload(row);
             }
         },
-         async _adminDownload(row) {
+        async _adminDownload(row) {
             console.log();
             let type = row.fileType;
             let id = row.id;
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
-        },
+        }
     }
 };
 </script>
@@ -269,9 +278,7 @@ export default {
     height: 130px;
     margin-right: 10px;
     position: relative;
-   
 }
-
 </style>
 
 

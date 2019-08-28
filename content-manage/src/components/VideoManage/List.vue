@@ -51,7 +51,7 @@
             <el-table-column prop="categoryName" label="分类"></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" label="上传时间"  width="150"  show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
@@ -113,8 +113,9 @@
                     <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
                     <div class="dislog-footer" slot="footer">
                         <span>{{picInfo.title}}</span>
-                        <span>分类: {{picInfo.categoryName}}</span>
+                      
                         <span>大小: {{picInfo.sizeStr}}</span>
+                          <span>格式: {{picInfo.fileExtension}}</span>
                     </div>
                 </el-dialog>
             </div>
@@ -154,9 +155,9 @@ export default {
     mounted() {
         this.$nextTick(() => {
             window.addEventListener("resize", () => {
-                this.tableHeight = window.innerHeight - 260;
+                this.tableHeight = window.innerHeight - 290;
             });
-            this.tableHeight = window.innerHeight - 260;
+            this.tableHeight = window.innerHeight - 290;
         });
         this._getStorageUsage();
         this._getCurrentUsageTraffic();
@@ -246,9 +247,9 @@ export default {
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
-            this.$nextTick(() => {
-                this.$refs.video.play();
-            });
+            // this.$nextTick(() => {
+            //     this.$refs.video.play();
+            // });
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;

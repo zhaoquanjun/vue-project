@@ -144,7 +144,7 @@ export default {
         },
         isBatchHeaderShow() {
             console.log(this.idsList.length);
-            return this.idsList.length > 1 ? true : false;
+            return this.idsList.length > 0 ? true : false;
         }
     },
     methods: {
