@@ -117,11 +117,9 @@
           >
             <div class="right-pannel" :style="{width:'470px'}">
               <div class="pannel-head">
-                <span>
-                  <span>备份当前版本</span>
-                </span>
+                <span>备份当前版本</span>
                 <span class="close-pannel" @click="closeDialog">
-                  <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
+                  <i class="iconfont iconX" style="font-size:12px;color:#ccc"></i>
                 </span>
               </div>
               <div class="tips">温馨提示：备份当前站点设计页面，包括电脑版、手机版和Pad版</div>
@@ -291,16 +289,20 @@ export default {
               .then(res => {
                 console.log(res.status);
                 if (res.status === 200) {
-                  this.$message({
-                    type: "success",
-                    message: "网站还原成功"
+                  this.$notify({
+                    customClass: "notify-success",
+                    message: `网站还原成功`,
+                    duration: 2000,
+                    showClose: false
                   });
                   this.getBackupSite(this.siteId);
                   this.backuping = false;
                 } else {
-                  this.$message({
-                    type: "error",
-                    message: "系统正忙，请稍后再试！"
+                  this.$notify({
+                    customClass: "notify-error",
+                    message: `系统正忙，请稍后再试！`,
+                    duration: 2000,
+                    showClose: false
                   });
                   this.backuping = false;
                 }
@@ -319,9 +321,11 @@ export default {
           this.remarkInfo = "";
           this.backupShow = true;
         } else {
-          this.$message({
-            type: "error",
-            message: "系统正忙，请稍后再试！"
+          this.$notify({
+            customClass: "notify-error",
+            message: `系统正忙，请稍后再试！`,
+            duration: 2000,
+            showClose: false
           });
         }
       } else {
@@ -339,15 +343,19 @@ export default {
         this.remarkInfo
       );
       if (status == 200) {
-        this.$message({
-          type: "success",
-          message: "备份成功"
+        this.$notify({
+          customClass: "notify-success",
+          message: `备份成功`,
+          duration: 2000,
+          showClose: false
         });
         this.getBackupSite(this.siteId);
       } else {
-        this.$message({
-          type: "error",
-          message: "备份失败，请稍后再试！"
+        this.$notify({
+          customClass: "notify-error",
+          message: `备份失败，请稍后再试！`,
+          duration: 2000,
+          showClose: false
         });
       }
       this.backupShow = false;
@@ -404,15 +412,19 @@ export default {
             );
             console.log(status);
             if (status === 200) {
-              this.$message({
-                type: "success",
-                message: "删除成功"
+              this.$notify({
+                customClass: "notify-success",
+                message: `删除成功`,
+                duration: 2000,
+                showClose: false
               });
               this.getBackupSite(this.siteId);
             } else {
-              this.$message({
-                type: "error",
-                message: "系统正忙，请稍后再试！"
+              this.$notify({
+                customClass: "notify-error",
+                message: `系统正忙，请稍后再试！`,
+                duration: 2000,
+                showClose: false
               });
             }
           }
@@ -588,16 +600,13 @@ export default {
   color: #262626;
   overflow: hidden;
   .pannel-head {
-    height: 40px;
-    line-height: 40px;
+    height: 48px;
+    line-height: 48px;
     font-size: 14px;
     overflow: hidden;
     border-bottom: 1px solid #efefef;
     span {
-      padding: 0 10px;
-    }
-    .auth-title {
-      margin-right: 10px;
+      padding: 0 16px;
     }
     .close-pannel {
       float: right;

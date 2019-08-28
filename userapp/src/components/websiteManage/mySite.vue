@@ -12,7 +12,7 @@
         :changeSiteName="siteName"
         :changeSiteLanguage="language"
       />
-      <el-row class="siteContent">
+      <el-row class="siteContent" style="padding-bottom:0">
         <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>
         <div class="siteWrap">
           <div class="siteImg">
@@ -57,7 +57,7 @@
             </div>
             <div class="siteinfoItem">
               <span>网站地址：</span>
-              <a class="siteinfoDomain" :href="secondDomain" target="_blank">{{secondDomain}}</a>
+              <a class="siteinfoDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
             </div>
             <div class="siteinfoItem">
               <span>绑定域名：</span>
@@ -161,17 +161,19 @@
         <div class="right-pannel" :style="{width:'470px'}">
           <div class="pannel-head">
             <span class="headTitle">网站语言</span>
-            <span class="close-pannel" @click="closeSiteLanguageDialog">X</span>
+            <span class="close-pannel" @click="closeSiteLanguageDialog">
+              <i class="iconfont iconX" style="font-size:12px;color:#ccc"></i>
+            </span>
           </div>
           <div class="tips">为避免网站内容与网站语言不匹配，更换网站语言后，请及时更新控件内容</div>
           <div class="remark">
             <span class="remarkTitle">请选择您的网站语言：</span>
             <el-radio-group v-model="radio" class="radio">
-              <el-radio label="zh-CN">简体中文</el-radio>
-              <el-radio label="en-US">English</el-radio>
-              <el-radio label="ja-JP">日本语</el-radio>
-              <el-radio label="es-ES">Español</el-radio>
-              <el-radio label="ko-KR">한국어</el-radio>
+              <el-radio label="zh-CN">中文</el-radio>
+              <el-radio label="en-US">英文</el-radio>
+              <el-radio label="ja-JP">日语</el-radio>
+              <el-radio label="es-ES">西班牙语</el-radio>
+              <el-radio label="ko-KR">韩语</el-radio>
             </el-radio-group>
           </div>
           <div class="confirm">
@@ -230,7 +232,7 @@ export default {
       siteNameValue: "",
       changeSiteLanguageShow: false,
       remarkInfo: "",
-      radio: "简体中文"
+      radio: "zh-CN"
     };
   },
   methods: {
@@ -271,7 +273,7 @@ export default {
         if (data.siteType) {
           this.chosedSiteType = data.siteType;
         } else {
-          this.chosedSiteType = null;
+          this.chosedSiteType = "";
         }
         await this.choseFirstIndustrySelect();
         if (data.firstIndustryId) {
@@ -336,8 +338,6 @@ export default {
       this.siteFirstIndustry = data;
       this.siteFirstIndustryValue =
         this.firstIndustryId == 0 ? "" : this.firstIndustryId;
-      this.siteSecondIndustryValue =
-        this.secondIndustryId == 0 ? "" : this.secondIndustryId;
     },
     choseFirstIndustry(id) {
       this.firstIndustryId = id;
@@ -349,7 +349,8 @@ export default {
       if (firstIndustryId != 0) {
         let { data } = await dashboardApi.GetSecondIndustries(firstIndustryId);
         this.siteSecondIndustry = data;
-        this.siteSecondIndustryValue = this.secondIndustryId;
+        this.siteSecondIndustryValue =
+          this.secondIndustryId == 0 ? "" : this.secondIndustryId;
       }
     },
     choseSecondIndustry(id) {
@@ -358,9 +359,11 @@ export default {
     // 保存网站信息
     async saveSiteInfo() {
       if (!this.chosedSiteType) {
-        this.$message({
-          type: "failed",
-          message: "请选择网站类型"
+        this.$notify({
+          customClass: "notify-error",
+          message: `请选择网站类型`,
+          duration: 2000,
+          showClose: false
         });
         return;
       }
@@ -488,6 +491,10 @@ export default {
   height: 201px;
   position: relative;
   padding-top: 32px;
+  background: url("~img/siteManage/mysiteBackground.png");
+  background-repeat: no-repeat;
+  background-position: 80% center;
+  background-size: contain;
   .siteImg {
     display: inline-block;
     width: 260px;
@@ -601,6 +608,8 @@ export default {
     color: rgba(140, 140, 140, 1);
   }
   .saveBtn {
+    margin: 0;
+    border: none;
     position: absolute;
     bottom: 32px;
     right: 50px;

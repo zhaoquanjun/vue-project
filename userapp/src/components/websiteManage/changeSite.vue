@@ -2,7 +2,7 @@
   <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
       <span class="siteName">{{ siteName }}</span>
-      <a class="secondDomain" :href="secondDomain" target="_blank">{{secondDomain}}</a>
+      <a class="secondDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
       <span class="language">{{_getLanguage(language)}}</span>
       <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
     </el-col>
@@ -28,7 +28,11 @@
           >
             <div class="itemSiteImage">
               <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
-              <img :src="item.siteImage" alt class="itemSiteImageBackground" />
+              <div
+                class="itemSiteImageBackground"
+                :style="{background: 'url(' + (item.siteImage ) + ') no-repeat center/cover'}"
+              ></div>
+              <!-- <img :src="item.siteImage" alt class="itemSiteImageBackground" /> -->
               <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
               <div class="modal" v-if="item.siteId != curSiteId">
                 <button class="choseSite" @click="choseSite(item)">选择网站</button>
@@ -39,7 +43,7 @@
               <div class="itemSiteName">{{item.siteName}}</div>
               <a
                 class="itemSiteDomain"
-                href="item.secondDomain"
+                :href="`//${item.secondDomain}`"
                 target="_blank"
               >{{item.secondDomain}}</a>
             </div>
@@ -288,7 +292,7 @@ export default {
       .itemSiteImageBackground {
         margin-top: -2px;
         width: 100%;
-        height: 100%;
+        padding-bottom: 62%;
       }
       .choseSite {
         width: 90px;
@@ -299,11 +303,12 @@ export default {
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
         line-height: 40px;
+        position: absolute;
+        left: 50%;
+        top: 68%;
+        transform: translateX(-50%);
       }
       .modal {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         position: absolute;
         top: 0;
         left: 0;
