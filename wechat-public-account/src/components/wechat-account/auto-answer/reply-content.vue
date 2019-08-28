@@ -1,6 +1,7 @@
 <template>
     <div class="reply">
         <header class="reply-title">回复内容</header>
+        <div> <slot name="keyword"></slot></div>
         <section class="reply-content">
             <div class="radio-tabs">
                 <el-radio-group v-model="radio">

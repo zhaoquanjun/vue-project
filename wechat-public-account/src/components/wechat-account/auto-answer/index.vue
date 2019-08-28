@@ -12,6 +12,7 @@
             <!--  :isPicture="true" -->
             <reply-content>
                <!-- <Picture ></Picture> -->
+                <keyword-answer slot="keyword"></keyword-answer>
                 <anser-text></anser-text>
             </reply-content>
         </div>
@@ -22,6 +23,7 @@ import WechatTitle from "@/components/common/WechatTitle.vue";
 import ReplyContent from "@/components/wechat-account/auto-answer/reply-content.vue";
 import Picture from "@/components/wechat-account/auto-answer/picture.vue";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue"
+import KeywordAnswer from "@/components/wechat-account/auto-answer/keyword-answer.vue"
 export default {
     data() {
         return {
@@ -29,7 +31,7 @@ export default {
         };
     },
     components:{
-        WechatTitle,ReplyContent,Picture,AnserText
+        WechatTitle,ReplyContent,Picture,AnserText,KeywordAnswer
     },
     methods: {
         handleClick(tab, event) {
