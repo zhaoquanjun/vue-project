@@ -1,36 +1,4 @@
-$blue : #00c1de;
-$black :#262626;
-$white : #fff;
-$green : #35B24B;
-$red : #F54743;
-$yello : #FFDE03;
-$link : #DD70CC;
-$blue-gray: #657C99;
-$blue09c : #0099cc;
-$gray: #e5f8fa;
-body{
-    min-width: 960px;
-    font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    height: 100%;
-    overflow: hidden;
-    font-size: 14px;
 
-}
-h1{font-size: 28px}
-h2{font-size: 18px}
-h3{font-size: 16px}
-h4{font-size: 14px}
-
-
-.fs14{
-    font-size: 14px
-}
-.fs16{
-    font-size: 18px
-}
-.fs18{
-    font-size: 18px
-}
 
 
 .el-radio-group  .el-radio__label{
@@ -57,4 +25,17 @@ h4{font-size: 14px}
     width: 9px;
     height: 9px;
     background: #09CCEB;
+}
+.primary-button__nomal {
+    display: inline-block;
+    font-size: 16px;
+    font-family: "PingFangSC";
+    font-weight: 400;
+    color: #fff;
+    padding: 14px 36px;
+    text-align: center;
+    background: rgba(9, 204, 235, 1);
+    box-shadow: 0px 2px 16px 0px rgba(9, 204, 235, 0.43);
+    border-radius: 4px;
+    cursor: pointer;
 }

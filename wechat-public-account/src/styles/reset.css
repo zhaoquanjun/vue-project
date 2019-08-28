@@ -4,13 +4,16 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, button,
   margin: 0;
   padding: 0;
   line-height: 1;
-  /*font-family: "微软雅黑";*/
-  /* font-family:Helvetica; */
 }
 
-body {
-  font-size: 12px;
-  font-style: normal;
+body{
+  font-family:  "PingFang Regular", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial;
+  height: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  color: #262626;
+  background: #F9FAFC;
+
 }
 /**{ touch-action: none; }*/
 small {
