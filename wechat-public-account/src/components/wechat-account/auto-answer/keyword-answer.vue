@@ -186,7 +186,7 @@ button {
 }
 .keyword-answer {
     .keyword-answer-content {
-        padding: 24px 0 44px 16px;
+        padding: 24px 0 0 16px;
         border-top: 1px solid #e5e5e5;
         .keyword-list{
             padding-bottom: 32px;

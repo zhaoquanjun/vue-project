@@ -1,6 +1,9 @@
 <template>
     <div class="reply">
-        <header class="reply-title">回复内容</header>
+        <header class="reply-title">
+            <span>回复内容</span>
+            <span>（内容三选一）</span>
+        </header>
         <div>
             <slot name="keyword"></slot>
         </div>
@@ -53,8 +56,16 @@ export default {
 <style lang="scss" scoped>
 .reply {
     .reply-title {
+        font-size: 16px;
+        font-weight: 500;
         line-height: 22px;
         padding-bottom: 24px;
+        :last-child{
+            font-size: 14px;
+            color: #B9CBCF;
+            font-weight: 400;
+            padding-left: 12px;
+        }
     }
     .reply-content {
         min-height: 444px;
@@ -66,6 +77,8 @@ export default {
         }
         .slot-content {
             min-height: 373px;
+            overflow: auto;
+            height: 373px;
         }
         .picture {
             display: flex;
@@ -82,15 +95,14 @@ export default {
         background: rgba(9, 204, 235, 1);
         color: #fff;
     }
-    :first-child{
+    :first-child {
         margin-right: 24px;
         border: 1px solid transparent;
     }
-    .handler-delete{
+    .handler-delete {
         border: 1px solid rgba(9, 204, 235, 1);
         background: #fff;
-        color: #09CCEB;
+        color: #09cceb;
     }
-    
 }
 </style>

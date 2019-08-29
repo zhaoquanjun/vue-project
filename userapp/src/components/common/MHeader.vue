@@ -61,38 +61,6 @@
               <div class="appTitle">
                 <span class="appName" v-if="item.name">{{item.name}}</span>
                 <span class="appName" v-else>公司名称</span>
-                <el-popover
-                  v-show="item.isSystem"
-                  :ref="`popover-${index}`"
-                  placement="bottom"
-                  width="317"
-                  trigger="click"
-                  style="padding:0"
-                  @show="showRemark(index)"
-                >
-                  <span slot="reference">
-                    <i class="iconfont iconbianji edit"></i>
-                  </span>
-                  <div class="textareaWrap">
-                    <el-input
-                      type="textarea"
-                      :autosize="{ minRows: 3, maxRows: 3}"
-                      placeholder="请输入内容"
-                      v-model="remarkValue"
-                      maxlength="30"
-                      show-word-limit
-                      resize="none"
-                    ></el-input>
-                    <div class="btn-wrap">
-                      <button
-                        class="popover-btn cancel"
-                        slot="refenrence"
-                        @click="cancelInput(index)"
-                      >取消</button>
-                      <button class="popover-btn save" @click="saveInputValue(index)">保存</button>
-                    </div>
-                  </div>
-                </el-popover>
                 <span
                   class="appMember"
                   :style="{color:item.isSystem? '#35B24B':'#0070CC'}"
@@ -142,7 +110,6 @@ export default {
       // appName: "",
       appList: [],
       changeAppShow: false,
-      remarkValue: "",
       curAppId: ""
     };
   },
@@ -221,30 +188,6 @@ export default {
         return true;
       }
     },
-    /**
-     * 修改appName
-     */
-    showRemark(index) {
-      this.remarkValue = this.appList[index].name
-        ? this.appList[index].name
-        : "";
-    },
-    cancelInput(index) {
-      this.$refs[`popover-${index}`][0].doClose();
-      this.remarkValue = "";
-    },
-    async saveInputValue(index) {
-      if (!this.remarkValue) {
-        this.$message({
-          type: "failed",
-          message: "请输入公司名称"
-        });
-        return;
-      }
-      this.$refs[`popover-${index}`][0].doClose();
-      await dashboardApi.UpdateAppName(this.remarkValue);
-      this.appList[index].name = this.remarkValue;
-    },
     // 获取当前appId
     getCurApp() {
       this.curAppId = getLocal("ymId")
@@ -296,9 +239,7 @@ export default {
     }
     span {
       display: inline-block;
-      // vertical-align: middle;
       padding: 0 15px;
-      // margin-right: 10px;
       .item-btn {
         vertical-align: middle;
         padding-left: 5px;
@@ -539,42 +480,7 @@ export default {
       font-weight: 400;
       color: rgba(0, 193, 222, 1);
       margin-left: 32px;
-      // position: absolute;
-      // bottom: 27px;
-      // left: 419px;
     }
-  }
-}
-// 修改app
-.textareaWrap {
-  background: #fff;
-  position: relative;
-  .btn-wrap {
-    text-align: right;
-    padding-top: 10px;
-    button {
-      width: 63px;
-      height: 25px;
-      line-height: 25px;
-      font-size: 12px;
-      border: none;
-    }
-    .cancel {
-      border: 1px solid #eeeeee;
-      margin-right: 10px;
-    }
-    .save {
-      background: #00c1de;
-      color: #fff;
-    }
-  }
-}
-.edit {
-  color: #09cceb;
-  margin-left: 23px;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.7;
   }
 }
 </style>

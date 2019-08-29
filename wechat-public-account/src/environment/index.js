@@ -14,6 +14,8 @@ let logoutRedirectUri = "http://wechat.console.wezhan.cn/index.html";
 let silentRedirectUri = 'http://wechat.console.wezhan.cn/static/silent-renew.html';
 let clientId = 'weixinopen.api';
 let scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
+let wechat = 'http://open.weixin.console.wezhan.cn';
+let wechataccountApi = "http://gonghd.imwork.net/"
 export let siteDomain = "content.console.wezhan.cn";
 export let wechataccountDomain="wechataccount.console.wezhan.cn"
 // 个人中心
@@ -34,6 +36,8 @@ if (process.env.NODE_ENV === 'development') {
     silentRedirectUri = 'http://localhost:8084/static/silent-renew.html';
     clientId = 'dev.weixinopen.api';
     scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
+    wechat = 'http://open.weixin.console.wezhan.cn';
+    wechataccountApi = "http://gonghd.imwork.net"
 } 
 const enbironmemy = {
     authorityUrl,
@@ -44,6 +48,8 @@ const enbironmemy = {
     uploadPicUrl,
     silentRedirectUri,
     clientId,
-    scope
+    scope,
+    wechat,
+    wechataccountApi
 };
 export default enbironmemy;

@@ -5,6 +5,13 @@
         border-radius: 2px;
     }
 }
+.textarea{
+    .el-textarea__inner {
+        padding: 0 15px;
+        border: 1px solid #B9CBCF;
+        border-radius: 2px;
+    }
+}
 .el-radio__input {
     .el-radio__inner {
         width: 18px;
@@ -20,6 +27,7 @@
 .el-main {
     padding: 0;
 }
+
 /* 列表分页样式 begin  */
  .el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: #01c0de;
@@ -112,3 +120,32 @@
     
 }
 /* 列表分页样式  end  */
+
+
+
+.el-radio-group  .el-radio__label{
+    color: #A1A8B1;
+    font-size: 16px;
+    padding-left: 16px;
+    font-weight: 400
+}
+.el-radio-group  .el-radio__inner{
+    width: 18px;
+    height: 18px;
+}
+.el-radio-group .el-radio__input.is-checked .el-radio__inner{
+    border-color: #09CCEB;
+    background: #fff;
+}
+.el-radio-group .el-radio__inner:hover{
+    border-color:#09CCEB;
+}
+.el-radio-group .el-radio__input.is-checked+.el-radio__label{
+    color: #09CCEB;
+}
+.el-radio-group .el-radio__inner::after{
+    width: 9px;
+    height: 9px;
+    background: #09CCEB;
+}
+
