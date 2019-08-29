@@ -62,7 +62,7 @@ export default {
     methods: {
         handleClick(tab, event) {
             this.answerWay = 1;
-            this.addAnswer = true;
+            this.addAnswer =this.isPicture= true;
             if (this.activeName !== "third") {
                 this.$nextTick(()=>{
                     this.$refs.replycontent.radio = 1;

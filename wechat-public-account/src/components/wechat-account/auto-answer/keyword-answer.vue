@@ -1,13 +1,13 @@
 <template>
     <div class="keyword-answer">
         <div v-if="!addAnswer" class="keyword-answer-content">
-            <div v-for="item in keywordCount" :key="item" class="keyword-list">
+            <div v-for="item in keywordList" :key="item" class="keyword-list">
                 <span>
                     <span>状态</span>
                     <span class="select-item">
                         <el-select
                             size="small"
-                            v-model="matchValue"
+                            v-model="item.matchName"
                             placeholder="请选择"
                             @change="changeStatus"
                             :popper-append-to-body="false"
@@ -25,7 +25,7 @@
                     <el-input
                         type="text"
                         placeholder="请输入关键词"
-                        v-model="keyword"
+                        v-model="item.keyword"
                         maxlength="30"
                         show-word-limit
                         @blur="checkKeyword"
@@ -90,22 +90,30 @@ export default {
                 onerrorTip: false,
                 onerrorText: ""
             },
-            matchOption: [
-                {
-                    matchValue: "true",
-                    matchLabel: "半匹配"
-                },
-                {
-                    matchValue: "false",
-                    matchLabel: "全匹配"
-                }
-            ],
+          
             matchValue: "true",
             data: [
                 {
                     title:
                         "微信推广（可自定义页面、文章、产品分享到微信时显示的封面、标题、描述）",
                     condition: "的服务号或订阅号,并且设置了JS接口安全域名"
+                }
+            ],
+              matchOption: [
+                {
+                    matchValue: "2",
+                    matchLabel: "半匹配"
+                },
+                {
+                    matchValue: "1",
+                    matchLabel: "全匹配"
+                }
+            ],
+            keywordList:[
+                {
+                    matchType:2,
+                    matchName:"半匹配",
+                    keyword:"123"
                 }
             ]
         };
