@@ -21,7 +21,7 @@
           <div class="siteinfoWrap">
             <div class="siteinfoItem siteName">
               <span>网站名称：</span>
-              <span class="siteinfoName">{{siteName}}</span>
+              <span class="siteinfoName">{{siteName && siteName.trim().length > 20 ? siteName.slice(0, 20) + '...' : siteName}}</span>
               <el-popover
                 ref="popover"
                 placement="bottom"

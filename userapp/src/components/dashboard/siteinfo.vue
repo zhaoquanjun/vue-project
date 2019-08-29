@@ -301,7 +301,7 @@ export default {
       this.radio = "";
       this.createSiteName = "";
       this.createShow = false;
-    },
+      },
     // 创建site
     async createSite() {
       let { status } = await dashboardApi.CreateSite(
