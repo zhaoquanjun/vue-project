@@ -17,6 +17,7 @@
           v-if="$store.state.dashboard.isSiteInfoShow"
           :siteInfo="siteInfoList"
           :isCanCreate="isCanCreate"
+          @getDashboardData="getDashboardData"
           v-show="siteInfoList.length"
         />
         <plugins :plugins="pluginList" />
