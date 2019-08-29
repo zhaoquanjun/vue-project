@@ -19,11 +19,11 @@
                 <!-- 添加关键词回复 addAnswer===false" 下方出现 -->
                 <keyword-answer v-if="addAnswer===false" slot="keyword" :addAnswer="addAnswer"></keyword-answer>
                 <!-- 图片 -->
-                <Picture :isPicture="isPicture" v-if="answerWay===1 && addAnswer"></Picture>
+                <Picture  v-if="answerWay===1 && addAnswer"></Picture>
                 <!-- 文字 -->
                 <anser-text v-if="answerWay===2"></anser-text>
                 <!-- 图文 -->
-                <div v-if="false"></div>
+                <image-text v-if="answerWay===3" :isPicture="true"></image-text>
                 
             </reply-content>
             <!-- 初始关键词回复 begin -->
@@ -42,6 +42,7 @@ import WechatTitle from "@/components/common/WechatTitle.vue";
 import ReplyContent from "@/components/wechat-account/auto-answer/reply-content.vue";
 import Picture from "@/components/wechat-account/auto-answer/picture.vue";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
+import ImageText from "@/components/wechat-account/auto-answer/image-text.vue";
 import KeywordAnswer from "@/components/wechat-account/auto-answer/keyword-answer.vue";
 export default {
     data() {
@@ -57,7 +58,8 @@ export default {
         ReplyContent,
         Picture,
         AnserText,
-        KeywordAnswer
+        KeywordAnswer,
+        ImageText
     },
     methods: {
         handleClick(tab, event) {

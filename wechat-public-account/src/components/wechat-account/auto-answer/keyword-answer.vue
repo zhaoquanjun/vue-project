@@ -1,7 +1,7 @@
 <template>
     <div class="keyword-answer">
         <div v-if="!addAnswer" class="keyword-answer-content">
-            <div v-for="item in keywordList" :key="item" class="keyword-list">
+            <div v-for="(item,index) in keywordList" :key="index" class="keyword-list">
                 <span>
                     <span>状态</span>
                     <span class="select-item">
@@ -9,7 +9,7 @@
                             size="small"
                             v-model="item.matchName"
                             placeholder="请选择"
-                            @change="changeStatus"
+                            @change="changeStatus($event,index)"
                             :popper-append-to-body="false"
                         >
                             <el-option
@@ -32,7 +32,7 @@
                     ></el-input>
                     <div class="ym-form-item__error" v-show="error.onerrorTip">{{error.onerrorText}}</div>
                 </span>
-                <button class="addKeyword">
+                <button class="addKeyword" @click="addKeyword">
                     <i class="iconfont iconX"></i>
                 </button>
             </div>
@@ -119,7 +119,10 @@ export default {
         };
     },
     methods: {
-        changeStatus() {},
+        changeStatus(value,index) {
+            this.keywordList.index.matchType=value;
+            this.keywordList.index.matchName = this.value==1?"全匹配":"半匹配"
+        },
         //校验关键词
         checkKeyword() {
             if (!trim(this.keyword)) {
@@ -137,6 +140,13 @@ export default {
         // 添加回复
         handlerAdd() {
             this.$emit("handlerAddAnswer", false);
+        },
+        addKeyword(){
+            this.keywordList.push({
+                    matchType:2,
+                    matchName:"半匹配",
+                    keyword:"123"
+            })
         }
     }
 };

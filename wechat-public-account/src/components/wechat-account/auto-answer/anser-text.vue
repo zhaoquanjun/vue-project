@@ -3,11 +3,13 @@
         <el-input
             class="textarea"
             type="textarea"
-            placeholder="请输入内容"
+            placeholder="请输入回复内容"
             v-model="textarea"
             maxlength="600"
-            show-word-limit
+            :show-word-limit="isLimitShow"
             resize="none"
+            @focus="focus"
+            @blur="blur"
         ></el-input>
     </div>
 </template>
@@ -15,8 +17,17 @@
 export default {
     data() {
         return {
-            textarea: ""
+            textarea: "",
+            isLimitShow:false
         };
+    },
+    methods:{
+        focus(){
+            this.isLimitShow=true;
+        },
+        blur(){
+            this.isLimitShow = false
+        }
     }
 };
 </script>

@@ -20,7 +20,7 @@
         </section>
         <footer class="footer-btn">
             <button class="handler-item">保存</button>
-            <button class="handler-item">删除</button>
+            <button class="handler-item handler-delete">删除回复</button>
         </footer>
     </div>
 </template>
@@ -84,6 +84,13 @@ export default {
     }
     :first-child{
         margin-right: 24px;
+        border: 1px solid transparent;
     }
+    .handler-delete{
+        border: 1px solid rgba(9, 204, 235, 1);
+        background: #fff;
+        color: #09CCEB;
+    }
+    
 }
 </style>
