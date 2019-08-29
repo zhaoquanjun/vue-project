@@ -1,48 +1,153 @@
 <template>
     <div class="keyword-answer">
-        <span>
-            <span>状态</span>
-            <span class="select-item">
-                <el-select
-                    size="small"
-                    v-model="matchValue"
-                    placeholder="请选择"
-                    @change="changeStatus"
-                     :popper-append-to-body="false"
+        <div v-if="!addAnswer" class="keyword-answer-content">
+            <div v-for="(item,index) in keywordList" :key="index" class="keyword-list">
+                <span>
+                    <span>状态</span>
+                    <span class="select-item">
+                        <el-select
+                            size="small"
+                            v-model="item.matchName"
+                            placeholder="请选择"
+                            @change="changeStatus($event,index)"
+                            :popper-append-to-body="false"
+                        >
+                            <el-option
+                                v-for="item in matchOption"
+                                :key="item.matchValue"
+                                :label="item.matchLabel"
+                                :value="item.matchValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
+                </span>
+                <span class="keyword">
+                    <el-input
+                        type="text"
+                        placeholder="请输入关键词"
+                        v-model="item.keyword"
+                        maxlength="30"
+                        show-word-limit
+                        @blur="checkKeyword"
+                    ></el-input>
+                    <div class="ym-form-item__error" v-show="error.onerrorTip">{{error.onerrorText}}</div>
+                </span>
+                <button class="addKeyword" @click="addKeyword">
+                    <i class="iconfont iconX"></i>
+                </button>
+            </div>
+        </div>
+        <div v-else class="table-list">
+            <header class="reply-title">回复内容</header>
+            <div class="handler-menu">
+                <el-input
+                    size="medium"
+                    v-model="serchTitle"
+                    placeholder="输入名称搜索"
+                    @keyup.enter.native="searchEnterFun"
+                    class="input-with-select"
                 >
-                    <el-option
-                        v-for="item in matchOption"
-                        :key="item.matchValue"
-                        :label="item.matchLabel"
-                        :value="item.matchValue"
-                    ></el-option>
-                </el-select>
-            </span>
-        </span>
-        <span class="keyword">
-            <input class="keyword-input" placeholder="请输入关键词" type="text" />
-        </span>
+                    <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix"></i>
+                </el-input>
+                <button class="answer-btn" @click="handlerAdd">添加回复</button>
+            </div>
+
+            <ul class="advance-list__area">
+                <li>
+                    <p class="list-columns__1">功能</p>
+                    <p class="list-columns__2">条件</p>
+                    <p class="list-columns__3">操作</p>
+                </li>
+                <li v-for="(item, index) in data" :key="index">
+                    <p class="list-columns__1 ellipsis">{{item.title}}</p>
+                    <p class="list-columns__2 ellipsis">{{item.condition}}</p>
+                    <div class="list-columns__3 handler-btn">
+                        <button>
+                            <i class="iconfont iconcaozuo"></i>
+                        </button>
+                        <button>
+                            <i class="iconfont iconhuishouzhan"></i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+            <div class="paging">
+                <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+            </div>
+        </div>
     </div>
 </template>
 <script>
+import { trim } from "@/utlis/index.js";
 export default {
+    props: ["addAnswer"],
     data() {
         return {
-            matchOption: [
+            keywordCount:2,
+            serchTitle: "",
+            keyword: "",
+            error: {
+                onerrorTip: false,
+                onerrorText: ""
+            },
+          
+            matchValue: "true",
+            data: [
                 {
-                    matchValue: "true",
+                    title:
+                        "微信推广（可自定义页面、文章、产品分享到微信时显示的封面、标题、描述）",
+                    condition: "的服务号或订阅号,并且设置了JS接口安全域名"
+                }
+            ],
+              matchOption: [
+                {
+                    matchValue: "2",
                     matchLabel: "半匹配"
                 },
                 {
-                    matchValue: "false",
+                    matchValue: "1",
                     matchLabel: "全匹配"
                 }
             ],
-            matchValue: "true"
+            keywordList:[
+                {
+                    matchType:2,
+                    matchName:"半匹配",
+                    keyword:"123"
+                }
+            ]
         };
     },
     methods: {
-        changeStatus() {}
+        changeStatus(value,index) {
+            this.keywordList.index.matchType=value;
+            this.keywordList.index.matchName = this.value==1?"全匹配":"半匹配"
+        },
+        //校验关键词
+        checkKeyword() {
+            if (!trim(this.keyword)) {
+                this.error.onerrorTip = true;
+                this.error.onerrorText = "关键词不能为空";
+                return false;
+            } else {
+                this.error.onerrorTip = false;
+                this.error.onerrorText = "";
+                return true;
+            }
+        },
+        // 回车搜索
+        searchEnterFun() {},
+        // 添加回复
+        handlerAdd() {
+            this.$emit("handlerAddAnswer", false);
+        },
+        addKeyword(){
+            this.keywordList.push({
+                    matchType:2,
+                    matchName:"半匹配",
+                    keyword:"123"
+            })
+        }
     }
 };
 </script>
@@ -75,24 +180,85 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.keyword-answer {
-    padding: 24px 0 44px 16px;
-    border-top: 1px solid #e5e5e5;
-    .select-item {
-        padding-left: 16px;
-    }
+button {
+    border: none;
+    background: transparent;
 }
-.keyword {
-    padding-left: 16px;
-    .keyword-input {
-        text-indent: 14px;
-        height: 40px;
-        border: none;
-        border: 1px solid #b9cbcf;
-        box-sizing: border-box;
-        width: 60%;
-        border-radius: 2px;
-        vertical-align: middle;
+.keyword-answer {
+    .keyword-answer-content {
+        padding: 24px 0 0 16px;
+        border-top: 1px solid #e5e5e5;
+        .keyword-list{
+            padding-bottom: 32px;
+        }
+        .select-item {
+            padding-left: 16px;
+        }
+        .addKeyword {
+            padding-left: 24px;
+        }
+        .keyword {
+            padding-left: 16px;
+            position: relative;
+            display: inline-block;
+            width: 60%;
+        }
+    }
+    .table-list {
+        .advance-list__area {
+            border: 1px solid #e5e5e5;
+            li {
+                display: flex;
+                align-items: center;
+                padding: 24px 32px;
+                p {
+                    display: inline-block;
+                    font-size: 14px;
+                    line-height: 22px;
+                    padding-right: 16px;
+                }
+                p.list-columns__1,
+                p.list-columns__2 {
+                    width: 45%;
+                }
+                .list-columns__3 {
+                    width: 10%;
+                    color: #0595e6;
+                    cursor: pointer;
+                }
+            }
+            li:first-of-type {
+                border-bottom: 1px solid #e5e5e5;
+                p {
+                    color: #a1a8b1;
+                }
+            }
+            .handler-btn {
+                display: flex;
+                justify-content: space-between;
+                .iconfont {
+                    color: #262626;
+                }
+            }
+        }
+        .paging {
+            float: right;
+            padding-top: 33px;
+        }
+        .handler-menu {
+            padding: 32px 0;
+            .answer-btn {
+                float: right;
+                width: 90px;
+                height: 40px;
+                background: rgba(9, 204, 235, 1);
+                border-radius: 2px;
+                color: #fff;
+            }
+            .input-with-select {
+                width: 260px;
+            }
+        }
     }
 }
 </style>

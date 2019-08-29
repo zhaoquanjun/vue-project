@@ -5,6 +5,13 @@
         border-radius: 2px;
     }
 }
+.textarea{
+    .el-textarea__inner {
+        padding: 0 15px;
+        border: 1px solid #B9CBCF;
+        border-radius: 2px;
+    }
+}
 .el-radio__input {
     .el-radio__inner {
         width: 18px;
@@ -20,3 +27,125 @@
 .el-main {
     padding: 0;
 }
+
+/* 列表分页样式 begin  */
+ .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #01c0de;
+}
+ .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #01c0de;
+}
+.el-pager .active {
+    background-color: #01c0de;
+    color: #fff;
+}
+.pageing{
+    float: right;
+    margin-top: 24px;
+    padding-bottom: 10px;
+    margin-right: 45px;
+    .sizes-title {
+        line-height: 32px;
+        color: #A1A8B1;
+        font-weight: 400;
+        font-size: 14px;
+        display: inline-block;
+        margin-right: 18px;
+    }
+    button.paging-confirm{
+        width: 41px;
+        height: 32px;
+        border: 1px solid #EEEEEE;
+        border-radius: 2px;
+        position: absolute;
+        right: 20px;
+        color: #262626;
+        font-size: 14px;
+        background: #fff;
+        
+    }
+    .el-pagination__editor.el-input .el-input__inner{
+        height: 32px;
+    }
+    .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev{
+        background: #fff;
+        height: 32px;
+        line-height: 32px;
+        margin: 0;
+    }
+    .el-pagination{
+         .el-select .el-input{
+             width: 60px;
+         }
+         .el-input__inner{
+             height: 32px;
+         }
+         .el-pagination__jump{
+             margin-left: 23px;
+         }
+         .el-pager{
+             border: 1px solid #eee;
+             border-left:none; 
+             border-right:none; 
+             box-sizing: border-box;
+         }
+        .el-pager li {
+            font-weight: 400;
+            color: #262626;
+            background-color: #fff;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            margin: 0;
+            border-radius: 0;
+            border-right: 1px solid #eee;
+        }   
+        .btn-prev{
+            border: 1px solid #eee;
+           
+        } 
+        .btn-next{
+            border: 1px solid #eee;
+            border-left: none;
+        }
+        button:hover{
+              color: #09CCEB;  
+        }
+        .el-pagination__total {
+            color: #A1A8B1;
+            margin: 0;
+            line-height: 32px;
+        }
+    }
+    
+}
+/* 列表分页样式  end  */
+
+
+
+.el-radio-group  .el-radio__label{
+    color: #A1A8B1;
+    font-size: 16px;
+    padding-left: 16px;
+    font-weight: 400
+}
+.el-radio-group  .el-radio__inner{
+    width: 18px;
+    height: 18px;
+}
+.el-radio-group .el-radio__input.is-checked .el-radio__inner{
+    border-color: #09CCEB;
+    background: #fff;
+}
+.el-radio-group .el-radio__inner:hover{
+    border-color:#09CCEB;
+}
+.el-radio-group .el-radio__input.is-checked+.el-radio__label{
+    color: #09CCEB;
+}
+.el-radio-group .el-radio__inner::after{
+    width: 9px;
+    height: 9px;
+    background: #09CCEB;
+}
+
