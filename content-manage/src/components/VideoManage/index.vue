@@ -373,12 +373,18 @@ export default {
 };
 </script>
 <style scoped>
+div{
+    display: flex;
+}
 .el-dialog__wrapper /deep/ .el-dialog{
     width: 900px;
 }
 </style>
 <style lang="scss" scoped>
 @import "../style/contentDetail";
+div{
+   display: flex
+}
 </style>
 
 

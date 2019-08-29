@@ -39,7 +39,11 @@ import {
     DropdownItem,
     DropdownMenu,
     Notification,
-    Loading
+    Loading,
+    Tabs,
+    TabPane,
+    Radio,
+    RadioGroup
   
 } from 'element-ui';
 Vue.use(Container)
@@ -78,6 +82,10 @@ Vue.use(Container)
     .use(Dropdown)
     .use(DropdownItem)
     .use(DropdownMenu)
+    .use(Tabs)
+    .use(TabPane)
+    .use(Radio)
+    .use(RadioGroup)
     
 ;
 Vue.prototype.$message = Message;

@@ -1,5 +1,12 @@
 // 默认访问的路由
 export const defaultRoutes = [{
+        path: "/",
+        redirect: {
+            path: '/wechataccount/custommenu'
+        },
+    },
+    
+    {
         path: "/wechataccount",
         component: () => import('@/views/wechat-account/index.vue'),
         children: [{
