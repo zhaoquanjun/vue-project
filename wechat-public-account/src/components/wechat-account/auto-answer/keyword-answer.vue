@@ -1,39 +1,41 @@
 <template>
     <div class="keyword-answer">
         <div v-if="!addAnswer" class="keyword-answer-content">
-            <span>
-                <span>状态</span>
-                <span class="select-item">
-                    <el-select
-                        size="small"
-                        v-model="matchValue"
-                        placeholder="请选择"
-                        @change="changeStatus"
-                        :popper-append-to-body="false"
-                    >
-                        <el-option
-                            v-for="item in matchOption"
-                            :key="item.matchValue"
-                            :label="item.matchLabel"
-                            :value="item.matchValue"
-                        ></el-option>
-                    </el-select>
+            <div v-for="item in keywordCount" :key="item" class="keyword-list">
+                <span>
+                    <span>状态</span>
+                    <span class="select-item">
+                        <el-select
+                            size="small"
+                            v-model="matchValue"
+                            placeholder="请选择"
+                            @change="changeStatus"
+                            :popper-append-to-body="false"
+                        >
+                            <el-option
+                                v-for="item in matchOption"
+                                :key="item.matchValue"
+                                :label="item.matchLabel"
+                                :value="item.matchValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
                 </span>
-            </span>
-            <span class="keyword">
-                <el-input
-                    type="text"
-                    placeholder="请输入关键词"
-                    v-model="keyword"
-                    maxlength="30"
-                    show-word-limit
-                    @blur="checkKeyword"
-                ></el-input>
-                <div class="ym-form-item__error" v-show="error.onerrorTip">{{error.onerrorText}}</div>
-            </span>
-            <button class="addKeyword">
-                <i class="iconfont iconX"></i>
-            </button>
+                <span class="keyword">
+                    <el-input
+                        type="text"
+                        placeholder="请输入关键词"
+                        v-model="keyword"
+                        maxlength="30"
+                        show-word-limit
+                        @blur="checkKeyword"
+                    ></el-input>
+                    <div class="ym-form-item__error" v-show="error.onerrorTip">{{error.onerrorText}}</div>
+                </span>
+                <button class="addKeyword">
+                    <i class="iconfont iconX"></i>
+                </button>
+            </div>
         </div>
         <div v-else class="table-list">
             <header class="reply-title">回复内容</header>
@@ -81,6 +83,7 @@ export default {
     props: ["addAnswer"],
     data() {
         return {
+            keywordCount:2,
             serchTitle: "",
             keyword: "",
             error: {
@@ -167,6 +170,9 @@ button {
     .keyword-answer-content {
         padding: 24px 0 44px 16px;
         border-top: 1px solid #e5e5e5;
+        .keyword-list{
+            padding-bottom: 32px;
+        }
         .select-item {
             padding-left: 16px;
         }
