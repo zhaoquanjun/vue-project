@@ -13,7 +13,6 @@
                         src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
                     />
                 </div>
-
                 <div class="mask">
                     <button @click="upward(item,index)" v-if="index!==0">
                         <i class="iconfont iconshang"></i>
@@ -29,28 +28,6 @@
                     </button>
                 </div>
             </li>
-            <!-- <li class="list-item">
-                <div class="headline">我是标题</div>
-                <div class="imgwrap">
-                    <img
-                        src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
-                    />
-                </div>
-                <div class="mask">
-                    <button>
-                        <i class="iconfont iconshang"></i>
-                    </button>
-                    <button>
-                        <i class="iconfont iconxia"></i>
-                    </button>
-                    <button>
-                        <i class="iconfont iconcaozuo"></i>
-                    </button>
-                    <button>
-                        <i class="iconfont iconhuishouzhan"></i>
-                    </button>
-                </div>
-            </li>-->
             <li class="fist-item editor" ref="editor">
                 <div class="example">
                     <div class="headline">这里是标题</div>
@@ -145,7 +122,10 @@ export default {
             let list = this.$refs.list;
             let editor = this.$refs.editor;
             let listItems = this.$refs.listItem;
-            list.insertBefore(editor,listItems[index])    
+            listItems[index].style.display="none";
+            list.insertBefore(editor,listItems[index]);
+            
+
         }
     }
 };
