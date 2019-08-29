@@ -71,7 +71,7 @@
           </div>
           <div class="siteinfoBackImg"></div>
           <button class="siteinfoBtn release">发布</button>
-          <button class="siteinfoBtn prev">预览</button>
+          <button class="siteinfoBtn prev" @click="toPrev">预览</button>
           <button class="siteinfoBtn design" @click="toDesign">设计</button>
         </div>
       </el-row>
@@ -235,7 +235,11 @@ export default {
       radio: "zh-CN"
     };
   },
-  methods: {
+methods: {
+    //预览
+    toPrev() {
+        window.location.href = `http://${this.secondDomain}`;
+    },
     // 跳转至设计器
     toDesign() {
       window.location.href = `${designerUrl}?siteId=${this.siteId}`;
