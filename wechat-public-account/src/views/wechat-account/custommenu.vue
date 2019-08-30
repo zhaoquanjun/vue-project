@@ -44,7 +44,7 @@ export default {
   },
   created() {
     
-    this._getMenuTree();
+    // this._getMenuTree();
   },
   methods: {
     async _getMenuTree() {

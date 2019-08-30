@@ -14,9 +14,9 @@ let logoutRedirectUri = "http://wechataccount.console.wezhan.cn/index.html";
 let silentRedirectUri = 'http://wechataccount.console.wezhan.cn/static/silent-renew.html';
 let clientId = 'weixinopen.api';
 let scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
-let wechataccountApi = "http://open.weixin.console.wezhan.cn";
 let pageApi = 'http://api.designer.console.wezhan.cn';
 let newsApi = 'http://api.content.console.wezhan.cn';
+let wechataccountApi = "http://gonghd.imwork.net";//"http://open.weixin.console.wezhan.cn"
 export let siteDomain = "content.console.wezhan.cn";
 export let wechataccountDomain = "wechataccount.console.wezhan.cn"
 // 个人中心

@@ -19,9 +19,15 @@
                 @handlerDelete="handlerDelete"
             >
                 <!-- 添加关键词回复 addAnswer===false" 下方出现 -->
-                <keyword-answer v-show="addAnswer===false" slot="keyword" :addAnswer="addAnswer"></keyword-answer>
+                <keyword-answer
+                    v-show="addAnswer===false"
+                    slot="keyword"
+                    ref="keywordAnswer"
+                    :addAnswer="addAnswer"
+                     :keyword-data="keywordData"
+                ></keyword-answer>
                 <!-- 图片 -->
-                <Picture v-show="msgType===1 && addAnswer"></Picture>
+                <Picture v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)" ></Picture>
                 <!-- 文字 -->
                 <anser-text
                     :serve-text="replycontentData.textMsg.text"
@@ -31,7 +37,7 @@
                 <!-- 图文 -->
                 <image-text
                     v-show="msgType===3"
-                    :isPicture="true"
+                    
                     :news-msg="replycontentData.newsMsg"
                     @handlerSaveImgText="handlerSaveImgText"
                 ></image-text>
@@ -72,15 +78,24 @@ export default {
                 textMsg: {
                     text: ""
                 },
-                newsMsg: [
-                  
-                ]
+                newsMsg: []
             },
             myText: "",
             lastSaveId: "",
             isSet: false, // 是否设置过回复
             replyDetail: "", // 接口返回
-            keywordData: "" //关键词列表
+            keywordData: "", //关键词列表,
+            searchOption: {
+                pageSize: 10,
+                pageIndex: 1
+            },
+            keywordContentData: {
+                msgType: "",
+                keywordList: [],
+                imageMsg: {},
+                textMsg: { text: "" },
+                newsMsg: []
+            }
         };
     },
     components: {
@@ -112,8 +127,8 @@ export default {
             }
         },
         //获取关键词回复列表
-        async _getKeywordReplyList() {
-            let { data } = await autoAnswerApi.getKeywordReplyList();
+        async _getKeywordReplyList(option) {
+            let { data } = await autoAnswerApi.getKeywordReplyList(option);
             this.keywordData = data;
             console.log(data, "获取关键词回复列表");
         },
@@ -130,7 +145,26 @@ export default {
         },
         //删除关键词回复信息
         async _removeKeywordReply(id) {
-            let data = await autoAnswerApi.removeKeywordReply();
+            this.$confirm("提示", {
+                title: "提示",
+                iconClass: "icon-warning",
+                message: "是否删除关键词",
+                callback: async action => {
+                    if (action === "confirm") {
+                        let {
+                            data,
+                            status
+                        } = await autoAnswerApi.removeKeywordReply(id);
+                        this.$notify({
+                            customClass: "notify-success",
+                            message: `删除成功`,
+                            showClose: false,
+                            duration: 1500
+                        });
+                        this._getKeywordReplyList(this.searchOption);
+                    }
+                }
+            });
             console.log(data, "删除关键词回复信息");
         },
         //新增关键词回复信息
@@ -190,25 +224,55 @@ export default {
                             text: text
                         }
                     };
+                } else if (this.msgType == 3) {
+                    let newsMsg = this.replycontentData.newsMsg;
+                    if (newsMsg.length === 0) {
+                        notify(this, "无法保存，请完善页面信息!", "error");
+                        return;
+                    }
+                    option.content = {
+                        newsMsg: newsMsg
+                    };
                 }
             } else if (this.replyType == 3) {
-                let newsMsg = this.replycontentData.newsMsg;
+                let keywordList = this.$refs.keywordAnswer.keywordList;
+                let flag = keywordList.every((item,index)=>{
+                   if(!trim(item.keyword)){
+                       return false
+                   }else{
+                       return true
+                   }
+                })
+               if(!flag) return notify(this, "无法保存，请完善页面信息!", "error");
                 let option = {
                     msgType: this.msgType,
-                    newsMsg:[  {
-                        title: "string",
-                        description: "string",
-                        picUrl: "string",
-                        url: "string"
-                    }],
-                    keywordList: [
-                        {
-                            keyword: "string",
-                            matchType: "Contains"
-                        }
-                    ]
+                    keywordList
                 };
-                this._addKeywordReply(option);
+                let newOption;
+                if (this.msgType == 1) {
+                    let picUrl = this.replycontentData.imageMsg.picUrl;
+                    if (!trim(picUrl)) {
+                        notify(this, "无法保存，请完善页面信息!", "error");
+                        return;
+                    }
+                    newOption = { ...option, imageMsg: {...this.replycontentData.imageMsg} };
+                } else if (this.msgType == 2) {
+                    let text = this.replycontentData.textMsg.text;
+                    if (!trim(text)) {
+                        notify(this, "无法保存，请完善页面信息!", "error");
+                        return;
+                    }
+                    newOption = { ...option, textMsg: {...this.replycontentData.textMsg} };
+                } else if (this.msgType == 3) {
+                    let newsMsg = this.replycontentData.newsMsg;
+                    if (newsMsg.length === 0) {
+                        notify(this, "无法保存，请完善页面信息!", "error");
+                        return;
+                    }
+
+                    newOption = { ...option, newsMsg: newsMsg };
+                }
+                this._addKeywordReply(newOption);
                 return;
             }
             this._addOrOverrideReply(option);
@@ -261,7 +325,8 @@ export default {
                     this.$refs.replycontent.radio = 1;
                 });
             } else if (this.replyType === "3") {
-                this._getKeywordReplyList();
+                this._getKeywordReplyList(this.searchOption);
+                
             }
         },
         // 重置replycontentData

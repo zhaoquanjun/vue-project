@@ -15,8 +15,8 @@ export const getReplyDetail = replyType => {
 /**
  * 获取关键词回复列表
  */
-export const getKeywordReplyList = () => {
-    return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Reply/GetKeywordReplyList`);
+export const getKeywordReplyList = (option) => {
+    return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Reply/GetKeywordReplyList`,option);
 }
 /**
  * 删除回复信息
@@ -30,7 +30,8 @@ export const removeReply = id => {
  * @param {*} id 
  */
 export const removeKeywordReply = id => {
-    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/RemoveKeywordReply`,{ data: id });
+    let param = [id]
+    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/BatchRemoveKeywordReply`,{data:param});
 }
 
 /**
