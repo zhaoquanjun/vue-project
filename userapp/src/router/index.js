@@ -35,8 +35,8 @@ router.beforeEach(async (to, from, next) => {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
-      let haveTemplate = await store.dispatch('_haveTemplate');
       if (to.path.includes("/website")) {
+        let haveTemplate = await store.dispatch('_haveTemplate');
         if (!haveTemplate) {
           next('/website/selectTemplate')
         } else {
