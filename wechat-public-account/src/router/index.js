@@ -25,7 +25,6 @@ router.beforeEach(async (to, from, next) => {
     next()
     return
   }
-  console.log(accessToken)
   if (accessToken) {
     
     if (!appId) {
@@ -36,17 +35,19 @@ router.beforeEach(async (to, from, next) => {
       await store.dispatch('_getMenuListData')
     }
     let r = await store.dispatch('getCurRouteAuth', to.path);
-  
     if (r) {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
       if (!store.getters.wx_status.isAuth) {
         await store.dispatch('_getWxStatus')
+        next('/wechataccount/wxauther');
+        return;
       }
       let wx_status = store.getters.wx_status;
       if (!wx_status.isAuth) {
         next('/wechataccount/wxauther');
+        return;
       }
       next();
     } else {

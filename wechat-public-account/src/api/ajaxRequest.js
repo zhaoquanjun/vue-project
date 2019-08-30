@@ -3,10 +3,14 @@
  */
 import axios from 'axios';
 import qs from 'qs';
-import { getLocal } from "@/libs/local.js"
+import {
+    getLocal
+} from "@/libs/local.js"
 import environment from "@/environment/index.js"
 import store from "@/store/index"
-import { Notification } from 'element-ui';
+import {
+    Notification
+} from 'element-ui';
 import securityService from "@/services/authentication/securityService";
 
 axios.defaults.baseURL = environment.contentApi;
@@ -63,23 +67,23 @@ axios.interceptors.response.use(
                     securityService.signIn();
 
                     break;
-                // 403 token过期                
-                // 登录过期对用户进行提示                
-                // 清除本地token和清空vuex中token对象                
-                // 跳转登录页面                
+                    // 403 token过期                
+                    // 登录过期对用户进行提示                
+                    // 清除本地token和清空vuex中token对象                
+                    // 跳转登录页面                
                 case 403:
                     alert('403')
                     break;
-                // 404请求不存在                
+                    // 404请求不存在                
                 case 404:
                     // router.push({ path: '/404' })
                     break;
-                // 其他错误，直接抛出错误提示  
+                    // 其他错误，直接抛出错误提示  
                 case 500:
                     Notification({
                         message: error.response.data.message,
                         duration: 5 * 1000,
-                        customClass: "notify-error",  //  notify-success ||  notify-error
+                        customClass: "notify-error", //  notify-success ||  notify-error
                         showClose: false,
                     })
                     return;
@@ -87,7 +91,7 @@ axios.interceptors.response.use(
                     Notification({
                         message: error.response.data.message,
                         duration: 5 * 1000,
-                        customClass: "notify-error",  //  notify-success ||  notify-error
+                        customClass: "notify-error", //  notify-success ||  notify-error
                         showClose: false,
                     })
 
@@ -106,11 +110,13 @@ axios.interceptors.response.use(
 export function get(url, params) {
     return new Promise((resolve, reject) => {
         axios.get(url, {
-            params: params,
-            paramsSerializer: params => {
-                return qs.stringify(params, { indices: false })
-            }
-        })
+                params: params,
+                paramsSerializer: params => {
+                    return qs.stringify(params, {
+                        indices: false
+                    })
+                }
+            })
             .then(res => {
                 resolve(res);
             })

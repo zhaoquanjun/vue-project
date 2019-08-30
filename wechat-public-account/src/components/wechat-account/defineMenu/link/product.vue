@@ -2,12 +2,6 @@
   <div class="popup-content__area">
     <div class="popup-content__add">
       <p>请选择所需链接的产品</p>
-      <el-button
-        type="primary"
-        icon="el-icon-plus"
-        size="small"
-        @click.stop="_handleAddProduct"
-      >添加产品</el-button>
     </div>
     <div class="popup-content__main">
       <div class="content-main__slider">
@@ -28,44 +22,42 @@
             @input="_handleSearch"
           ></el-input>
         </div>
-        <div class="content-main__list--outer">
-          <div v-show="productList.length">
-            <ul class="content-main__list--item">
-              <li
-                v-for="(it, i) in productList"
-                :key="i"
-                :class="{active: it.url == selectedUrl && curType == 'product'}"
-                @click.stop="_handleSelectPage(i)"
-              >
-                <p class="single-line__overflow--hide">{{it.name}}</p>
-                <p class="date single-line__overflow--hide">
-                  <span>{{it.createTime && it.createTime.slice(0, 10)}}</span>
-                  <span
-                    :style="{visibility: it.url == selectedUrl && curType == 'product' ? 'visible' : 'hidden'}"
-                  ></span>
-                </p>
-              </li>
-            </ul>
-            <el-pagination
-              background
-              layout="prev, pager, next"
-              :page-size="pageSize"
-              :total="total"
-              :current-page="pageIndex"
-              @current-change="_handleChangeCurrent"
-              style="margin-top: 12px"
-            ></el-pagination>
-          </div>
-          <none-area v-show="!productList.length" :target="target">
+        <div class="content-main__list--outer" v-show="productList.length">
+          <ul class="content-main__list--item">
+            <li
+              v-for="(it, i) in productList"
+              :key="i"
+              :class="{active: it.url == selectedUrl && curType == 'product'}"
+              @click.stop="_handleSelectPage(i)"
+            >
+              <p class="single-line__overflow--hide ellipsis">{{it.name}}</p>
+              <p class="date">
+                <span
+                  :style="{visibility: it.url == selectedUrl && curType == 'product' ? 'visible' : 'hidden'}"
+                ></span>
+              </p>
+            </li>
+          </ul>
+          <none-area v-show="!productList.length" style="height: calc(100% - 72px);">
             <span v-if="!search">
-              暂无产品，请先
-              <span style="color: #00C1DE;cursor: pointer;" @click="_handleAddProduct">添加产品</span>
+              暂无文章，请先
+              <span style="color: #00C1DE;cursor: pointer;" @click="_handleAddProduct">添加文章</span>
             </span>
             <span v-else>暂无搜索数据，请重新输入</span>
           </none-area>
-          <loading v-show="loading" />
+          <!-- <loading v-show="loading" /> -->
         </div>
       </div>
+    </div>
+    <div class="footer-pegitation__area">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="pageSize"
+        :total="total"
+        :current-page="pageIndex"
+        @current-change="_handleChangeCurrent"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -73,6 +65,7 @@
 <script>
 import noneArea from "./none";
 import Loading from "../loading/loading";
+import { getProductList, getProductCategory } from "@/api/request/account.js";
 export default {
   props: {
     model: {
@@ -99,6 +92,7 @@ export default {
       defaultExpandedKeys: [],
       treeArray: [],
       productList: [],
+      pageIndex: 1,
       loading: false,
       search: false,
       target: "createProduct"
@@ -149,13 +143,13 @@ export default {
         categoryIdList: idArray //1,
       };
       this.loading = true;
-      let { data } = await linkApi.getProductList(options);
+      let { data } = await getProductList(options);
       this.total = data.totalRecord;
       this.productList = data.list;
       this.loading = false;
     },
     async getProductTree() {
-      let { data } = await linkApi.getProductCategory();
+      let { data } = await getProductCategory();
       this.defaultExpandedKeys = this._handleRecursive(data.treeArray, []);
       this.treeArray = data.treeArray;
     },
@@ -195,68 +189,60 @@ export default {
 
 <style lang="scss" scoped>
 .popup-content__area {
-  width: 590px;
-  height: 454px;
   .popup-content__add {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 56px;
-    padding: 0 12px;
+    padding: 24px;
     p {
-      color: #00c1de;
       font-size: 14px;
-      line-height: 17px;
+      font-family: "PingFangSC";
+      font-weight: 400;
+      color: rgba(5, 149, 230, 1);
+      line-height: 20px;
     }
   }
-
   .popup-content__main {
-    margin: 0 auto;
+    margin: 0 24px;
     display: flex;
     justify-content: flex-start;
-    width: 563px;
-    height: 297px;
+    height: 300px;
     text-align: right;
-    border: 1px solid rgba(238, 238, 238, 1);
+    border: 1px solid #c9d9dc;
     .content-main__slider {
-      padding: 16px 8px;
-      width: 128px;
-      height: 294px;
+      width: 156px;
+      height: 300px;
       overflow-y: auto;
-      border-right: 1px solid #eee;
+      border-right: 1px solid #c9d9dc;
     }
 
     .content-main__list {
-      width: 434px;
-      height: 297px;
+      position: relative;
+      width: 264px;
+      height: 300px;
       .content-main__search {
         display: flex;
         align-items: flex-end;
-        margin-left: 8px;
-        width: 415px;
-        height: 36px;
-        border-bottom: 1px solid #e5e5e5;
+        margin: 16px;
+        width: 224px;
+        height: 40px;
       }
 
       .content-main__list--outer {
-        position: relative;
         overflow: hidden;
-        height: calc(100% - 36px);
         .content-main__list--item {
           padding: 10px 6px 0;
-          width: 434px;
-          height: 200px;
+          height: 214px;
           overflow-y: auto;
           li {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
-            padding: 0 8px;
-            height: 26px;
+            padding: 0 6px;
+            height: 40px;
+            line-height: 40px;
             cursor: pointer;
             p {
-              width: 300px;
               padding: 0;
               font-size: 14px;
               color: #262626;
@@ -275,8 +261,8 @@ export default {
                 margin-left: 14px;
                 width: 18px;
                 height: 18px;
-                background: url("~img/account/selected.png") no-repeat
-                  center center;
+                background: url("~img/account/selected.png") no-repeat center
+                  center;
                 background-size: 100% 100%;
               }
             }
@@ -300,11 +286,16 @@ export default {
       }
     }
   }
+  .footer-pegitation__area {
+    margin-top: 24px;
+    padding: 0 24px;
+    text-align: right;
+  }
 }
 </style>
 
 <style scoped>
-.popup-content__add /deep/ .el-button--small {
+<style scoped > .popup-content__add /deep/ .el-button--small {
   width: 120px;
   height: 32px;
   background: rgba(0, 193, 222, 1);
@@ -328,15 +319,15 @@ i {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 12px;
 }
 .content-main__search /deep/ .el-icon-search {
   color: #b5b5b5;
 }
 .content-main__search /deep/ .el-input__inner {
-  border: none !important;
-  height: 28px;
-  line-height: 28px;
+  border: 1px solid #c9d9dc !important;
+  height: 40px;
+  line-height: 40px;
   text-align: left;
 }
 .popup-content__main /deep/ .btn-prev,
@@ -348,4 +339,5 @@ i {
 .popup-content__main /deep/ .el-pager li:not(.disabled).active {
   background: #01c0de;
 }
+</style>
 </style>

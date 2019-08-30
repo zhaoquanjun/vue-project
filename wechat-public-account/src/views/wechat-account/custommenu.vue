@@ -12,11 +12,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import PageSubNav from "_c/common/WechatTitle";
 import WarmPronpt from "_c/wechat-account/menu/warm-prompt";
 import DefineMenu from "_c/wechat-account/menu/define-menu";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
+import { getMenuTree } from "@/api/request/account.js";
 export default {
   data() {
     return {
@@ -33,11 +34,22 @@ export default {
   },
   computed: {
     ...mapGetters(["wx_status"]),
+    ...mapState(['dashboard']),
     isVerify: {
       get: function() {
         return this.wx_status.isCertification ? true : false;
       },
       set: function() {}
+    }
+  },
+  created() {
+    
+    // this._getMenuTree();
+  },
+  methods: {
+    async _getMenuTree() {
+      console.log(this.dashboard.appId)
+      let {data} = await getMenuTree({platformAppId: this.dashboard.appId})
     }
   }
 };

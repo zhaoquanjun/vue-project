@@ -24,9 +24,10 @@ const user = {
   actions: {
     async _getWxStatus({commit}) {
       let data = await isAuth({openPlatformType: "WeixinOA"});
+      // debugger;
       let verify = {
-        isAuth: data.isAuth,
-        isCertification: data.isVerify
+        isAuth: data.data.isAuth,
+        isCertification: data.data.isVerify
       }
       let accountInfo = {
         platformName: data.platformNiceName,
