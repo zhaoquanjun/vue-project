@@ -27,11 +27,13 @@
                     :addAnswer="addAnswer"
                     :keyword-data="keywordData"
                     :propKeywordList="propKeywordList"
+                    
                 ></keyword-answer>
                 <!-- 图片 -->
                 <Picture
                     ref="pictureComponent"
                     v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)"
+                      @handlerPic="handlerPic"
                 ></Picture>
                 <!-- 文字 -->
                 <anser-text
@@ -341,6 +343,9 @@ export default {
         handlerText(text) {
             this.replycontentData.textMsg.text = text;
         },
+        handlerPic(picUrl){
+             this.replycontentData.imageMsg.picUrl = picUrl;
+        },
         // 切换菜单
         handleClick(tab, event) {
             this.resetReplycontentData();
@@ -395,17 +400,13 @@ export default {
                 this.propKeywordList = item.keywordList;
                 this.msgType = item.msgType;
                 this.isSet = item.isSet;
-                // if(this.msgType!=1){
-                //     this.Picture = false
-                // }else{
-                //     this.Picture = true
-                // }
+               
                 if (item.msgType === 1) {
-
                     this.replycontentData.imageMsg = item.data;
                 } else if (item.msgType === 2) {
                     this.replycontentData.textMsg = item.data;
                 } else if (item.msgType === 3) {
+                     console.log(item,'0000000000')
                     this.replycontentData.newsMsg = item.data;
                 }
             }

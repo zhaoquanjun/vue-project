@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="picture-wrap" v-if="isUploaded">
+        <div class="picture-wrap" v-if="picUrl">
             <img :src="picUrl" alt />
             <span class="mask">
                 <button>
@@ -11,26 +11,50 @@
                 </button>
             </span>
         </div>
-        <div class="upload-wrap" v-else>
+        <div @click="handlerUpload"  class="upload-wrap" v-else>
             <div class="upload-icon"></div>
             <button class="handler-upload">点击上传</button>
         </div>
+         <image-manage
+            :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
+            @getImage="getImage"
+            @handleCloseModal="handleCloseModal"
+        ></image-manage>
     </div>
 </template>
 <script>
+import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
+import { uploadImg } from "@/api/request/account.js";
 export default {
     data() {
         return {
             isUploaded: true,
-            picUrl:
-                "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/09bbb65d854f4821acd1b27f2ffc89b8"
+             picUrl: "",
+             imageChooseAreaShowFlag: false,
         };
+    },
+     components: {
+        ImageManage
     },
     methods: {
         handlerDelete() {
             this.isUploaded = false;
             this.picUrl = "";
-        }
+        },
+        handlerUpload(){
+            this.imageChooseAreaShowFlag=true
+        },
+           // 获取图片
+        async getImage(src) {
+            // let {data} = await uploadImg(src);
+            //this.picUrl = data;
+            this.picUrl = src;
+            this.$emit("handlerPic",src)
+        },
+        // 关闭弹层
+        handleCloseModal() {
+            this.imageChooseAreaShowFlag = false;
+        },
     }
 };
 </script>

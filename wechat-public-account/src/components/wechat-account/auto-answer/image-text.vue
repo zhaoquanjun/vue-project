@@ -210,17 +210,10 @@ export default {
         },
         // 获取图片
         async getImage(src) {
-            console.log(src);
-            this.chooseImg = src;
-            this.picUrl = src;
-            let appId = this.$store.state.dashboard.appId
-            let option = {
-                authorizerAppId:appId,
-                imgUrl:src
-            }
-            let data = await uploadImg(option);
-
-            console.log(data);
+            // let {data} = await uploadImg(src);
+            // this.picUrl = data;
+             this.picUrl = src;
+          
         },
         // 关闭弹层
         handleCloseModal() {
