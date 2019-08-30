@@ -43,8 +43,8 @@ import {
     Tabs,
     TabPane,
     Radio,
-    RadioGroup
-  
+    RadioGroup,
+    Drawer
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
@@ -86,6 +86,7 @@ Vue.use(Container)
     .use(TabPane)
     .use(Radio)
     .use(RadioGroup)
+    .use(Drawer)
     
 ;
 Vue.prototype.$message = Message;

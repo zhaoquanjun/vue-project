@@ -23,7 +23,7 @@ export default {
           return isActive ? "已发布" : "未授权";
         case "AliPayProgram":
           return isActive ? "已下载" : "未绑定";
-        case "OfficialAccounts":
+        case "WeChatAccount":
           return isActive ? "已授权" : "未授权";
         case "Form":
           return isActive ? "已创建" : "未创建";
@@ -82,7 +82,7 @@ export default {
         background: url("~img/dashboard/board-alipayMax.png") no-repeat center;
         background-size: contain;
       }
-      .OfficialAccounts {
+      .WeChatAccount {
         background: url("~img/dashboard/board-wxpublicNumberMax.png") no-repeat
           center;
         background-size: contain;
