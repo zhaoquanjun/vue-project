@@ -4,8 +4,8 @@ import {
 const user = {
   state: {
     wx_status: {
-      isAuth: true,
-      isCertification: true
+      isAuth: false,
+      isCertification: false
     },
     account_info: {}
   },
