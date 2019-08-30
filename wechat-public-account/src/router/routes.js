@@ -57,6 +57,15 @@ export const defaultRoutes = [{
                     title: "账号设置",
                     isSub: true
                 }
+            },
+            {
+                path: 'wxtransit',
+                name: 'wxtransit',
+                component: () => import('@/views/wechat-account/transitpage.vue'),
+                meta: {
+                    title: "",
+                    isSub: true
+                }
             }
         ]
     },

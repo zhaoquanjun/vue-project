@@ -4,7 +4,7 @@
     <div class="define-menu__content" v-if="isVerify">
       <warm-pronpt :desc="tips" style="margin-top: 16px;"></warm-pronpt>
       <div class="menu-setting__area">
-        <define-menu></define-menu>
+        <define-menu :menuData="menuData" :menuDetail="menuDetail"></define-menu>
       </div>
     </div>
     <account-certification v-else></account-certification>
@@ -17,10 +17,12 @@ import PageSubNav from "_c/common/WechatTitle";
 import WarmPronpt from "_c/wechat-account/menu/warm-prompt";
 import DefineMenu from "_c/wechat-account/menu/define-menu";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
-import { getMenuTree } from "@/api/request/account.js";
+import { getMenuTree, getMenuDetail } from "@/api/request/account.js";
 export default {
   data() {
     return {
+      menuData: [],
+      menuDetail: {},
       title: "自定义菜单",
       tips:
         "温馨提示：自定义菜单发布后因为微信缓存不会立即更新，但对新关注用户立即生效，若需查看，请取消关注并重新关注后查看。"
@@ -48,8 +50,19 @@ export default {
   },
   methods: {
     async _getMenuTree() {
-      console.log(this.dashboard.appId)
-      let {data} = await getMenuTree({platformAppId: 'wx4e25803a4fadd328'})
+      let {data} = await getMenuTree()
+      this.menuData = data;
+      if (this.menuData.length == 0) return;
+      let id = this.menuData[0].id
+      this._getMenuDetail(id);
+    },
+    async _getMenuDetail(id) {
+      let params = {
+        id: id,
+        authorizerAppId: 'wx4e25803a4fadd328'
+      }
+      let {data} = await getMenuDetail()
+      this.menuDetail= data;
     }
   }
 };

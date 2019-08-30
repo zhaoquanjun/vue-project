@@ -36,8 +36,13 @@ export const getProductCategory = () => {
   return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetProductCategoryTree`);
 }
 
-export const getMenuTree = options => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuTree/${options.platformAppId}`, options);
+// 获取菜单树结构
+export const getMenuTree = () => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuTree`);
+}
+// 获取菜单单个详情
+export const getMenuDetail = options => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuDetail/${options.authorizerAppId}/${options.id}`);
 }
 
 // 图片区域
@@ -70,4 +75,9 @@ export const rename = (id, newName) => {
 }
 export const modifyNode = (id, parentId, idOrderByArr) => {
   return ajaxRequest.put(`${environment.imageApi}/api/PictureCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);
+}
+
+// 中转页面
+export const transit = param => {
+  return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/oauth/success`, param);
 }
