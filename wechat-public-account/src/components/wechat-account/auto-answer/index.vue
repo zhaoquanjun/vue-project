@@ -72,15 +72,17 @@ export default {
                 textMsg: {
                     text: ""
                 },
-                newsMsg: [
-                  
-                ]
+                newsMsg: []
             },
             myText: "",
             lastSaveId: "",
             isSet: false, // 是否设置过回复
             replyDetail: "", // 接口返回
-            keywordData: "" //关键词列表
+            keywordData: "", //关键词列表,
+            searchOption: {
+                pageSize: 10,
+                pageIndex: 1
+            }
         };
     },
     components: {
@@ -112,8 +114,8 @@ export default {
             }
         },
         //获取关键词回复列表
-        async _getKeywordReplyList() {
-            let { data } = await autoAnswerApi.getKeywordReplyList();
+        async _getKeywordReplyList(option) {
+            let { data } = await autoAnswerApi.getKeywordReplyList(option);
             this.keywordData = data;
             console.log(data, "获取关键词回复列表");
         },
@@ -130,7 +132,25 @@ export default {
         },
         //删除关键词回复信息
         async _removeKeywordReply(id) {
-            let data = await autoAnswerApi.removeKeywordReply();
+            this.$confirm("提示", {
+                title: "提示",
+                iconClass: "icon-warning",
+                message: "是否删除关键词",
+                callback: async action => {
+                    if (action === "confirm") {
+                        let {
+                            data,
+                            status
+                        } = await autoAnswerApi.removeKeywordReply(id);
+                        this.$notify({
+                            customClass: "notify-success",
+                            message: `删除成功`,
+                            showClose: false,
+                            duration: 1500
+                        });
+                    }
+                }
+            });
             console.log(data, "删除关键词回复信息");
         },
         //新增关键词回复信息
@@ -194,17 +214,19 @@ export default {
             } else if (this.replyType == 3) {
                 let newsMsg = this.replycontentData.newsMsg;
                 let option = {
-                    msgType: this.msgType,
-                    newsMsg:[  {
-                        title: "string",
-                        description: "string",
-                        picUrl: "string",
-                        url: "string"
-                    }],
+                    msgType: 3,
+                    newsMsg: [
+                        {
+                            title: "1",
+                            description: "2",
+                            picUrl: "2",
+                            url: "3"
+                        }
+                    ],
                     keywordList: [
                         {
-                            keyword: "string",
-                            matchType: "Contains"
+                            keyword: "2",
+                            matchType: "1"
                         }
                     ]
                 };
@@ -261,7 +283,7 @@ export default {
                     this.$refs.replycontent.radio = 1;
                 });
             } else if (this.replyType === "3") {
-                this._getKeywordReplyList();
+                this._getKeywordReplyList(this.searchOption);
             }
         },
         // 重置replycontentData
