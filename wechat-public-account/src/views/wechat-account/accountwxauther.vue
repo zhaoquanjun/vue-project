@@ -7,7 +7,10 @@
           <div class="bind-icon__area">
             <img :src="wechanIcon" alt />
           </div>
-          <div class="bind-button--normal primary-button__nomal--shadow" @click="_handleWxAuth">微信公众号授权绑定</div>
+          <div
+            class="bind-button--normal primary-button__nomal--shadow"
+            @click="_handleWxAuth"
+          >微信公众号授权绑定</div>
         </div>
       </div>
       <div class="account-bind__tips border">
@@ -42,8 +45,24 @@ export default {
     // 微信授权
     async _handleWxAuth() {
       let data = await wxAuth();
-      // console.log(data.data)
-      location.href = data.data;
+      let oA = document.createElement("a");
+      oA.setAttribute("href", data.data);
+      oA.setAttribute("id", "authBtn");
+      oA.setAttribute("target", "_blank");
+      document.body.appendChild(oA);
+      let btn = document.getElementById("authBtn");
+      btn.click();
+      if (btn) document.body.removeChild(document.getElementById("authBtn"));
+      this.$confirm("提示", {
+        title: "提示",
+        showCancelButton: false,
+        message: this.$createElement("div", null, '是否授权成功'),
+        callback: async action => {
+          if (action === "confirm") {
+            this.$router.push('/wechataccount/accountsetting')
+          }
+        }
+      });
     }
   }
 };

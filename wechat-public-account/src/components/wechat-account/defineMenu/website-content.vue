@@ -2,19 +2,18 @@
   <div class="website-content__section">
     <div class="content-header__area">设置链接</div>
     <div class="content-content__area">
-      <!-- <website-link></website-link> -->
+      <slot></slot>
     </div>
   </div>
 </template>
 
 <script>
-// import WebsiteLink from './link/link';
 export default {
   data() {
     return {};
   },
   components: {
-    // WebsiteLink
+    
   }
 };
 </script>

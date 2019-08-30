@@ -28,24 +28,11 @@ export default {
       radio: 'picture'
     };
   },
-  computed: {
-    tabRadio: {
-      get: function() {
-        if (this.menuData['type'] != this.radio) {
-          this.radio = this.menuData['type']
-        }
-      },
-      set: function() {}
-    }
-  },
   methods: {
-
-  },
-  watch: {
-    tabRadio(newVal, oldVal) {
-      console.log(newVal, oldVal)
+    changeReplyContent(val) {
+      console.log(val)
     }
-  }
+  },
 };
 </script>
 <style scoped>

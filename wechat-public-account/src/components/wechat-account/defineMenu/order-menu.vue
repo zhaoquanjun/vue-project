@@ -19,9 +19,10 @@ export default {};
   height: 100%;
   .order-content {
     .order-icon {
-      width: 163px;
+      margin: 0 auto;
+      width: 136px;
       height: 157px;
-      background: url() no-repeat center center;
+      background: url('~img/account/define_menu_order.png') no-repeat center center;
       background-size: 100% 100%;
     }
     p {

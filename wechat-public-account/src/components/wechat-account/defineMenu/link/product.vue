@@ -67,33 +67,18 @@
         </div>
       </div>
     </div>
-    <div class="popup-content__open">
-      <p>页面打开方式</p>
-      <div class="way-list__box">
-        <el-radio v-model="way" label="_self" @change="_handleChageLinkTarget">当前窗口打开</el-radio>
-        <el-radio
-          v-model="way"
-          label="_blank"
-          style="margin-left: 24px;"
-          @change="_handleChageLinkTarget"
-        >新窗口打开</el-radio>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import noneArea from "./none";
-import Loading from "@comp/loading/loading";
+import Loading from "../loading/loading";
 export default {
   props: {
     model: {
       type: Object
     },
     selectedUrl: {
-      type: String
-    },
-    way: {
       type: String
     },
     type: {
@@ -190,9 +175,6 @@ export default {
       this.model["PageIndex"] = val;
       this.pageIndex = val;
       this.getProductList([]);
-    },
-    _handleChageLinkTarget(val) {
-      this.$emit("handleChangeTarget", val);
     },
     _handleAddProduct() {
       location.href = environment.redirectUrl.createProduct;
@@ -293,7 +275,7 @@ export default {
                 margin-left: 14px;
                 width: 18px;
                 height: 18px;
-                background: url("~@static/images/link/selected.png") no-repeat
+                background: url("~img/account/selected.png") no-repeat
                   center center;
                 background-size: 100% 100%;
               }
@@ -316,25 +298,6 @@ export default {
           }
         }
       }
-    }
-  }
-
-  .popup-content__open {
-    margin-top: 16px;
-    padding: 16px 16px 0;
-    width: 590px;
-    height: 78px;
-    border-top: 1px solid #eee;
-    p {
-      padding: 0 0 12px;
-      font-size: 14px;
-      line-height: 17px;
-      color: #00c1de;
-    }
-    .way-list__box {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
     }
   }
 }
