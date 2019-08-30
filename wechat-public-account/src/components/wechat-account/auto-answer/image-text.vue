@@ -108,10 +108,12 @@ export default {
                 title: "",
                 description: "",
                 picUrl: "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
-                url: ""
+                url: "",
+                isShow:false
             },
             isUploaded: false,
-            isEditorShow: false
+            isEditorShow: false,
+            isEditor:true
         };
     },
     mounted() {
@@ -162,7 +164,7 @@ export default {
                 this.$set(this.list,this.index,this.curEditorItem)
             }
             this.$emit("handlerSaveImgText", this.list);
-            this.isEditorShow = false;
+            this.isEditorShow = this.isEditor = false;
             // 添加完成后重置一下 
              this.curEditorItem={
                 title: "",
@@ -173,7 +175,7 @@ export default {
         },
         handlerAddNewsImg(){
             this.index = this.list.length+1;
-            console.log(this.index)
+           
               this.isEditorShow = true
               this.isEditor = false;
         },
@@ -185,7 +187,7 @@ export default {
                 item["isShow"] = true
             })
             this.isEditorShow = this.list.length > 0 ? false : true;
-            console.log(this.isEditorShow,'this.isEditorShowthis.isEditorShow')
+           
         }
     }
 };

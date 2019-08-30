@@ -29,11 +29,14 @@
 </template>
 <script>
 export default {
-    props: ["isPicture","isSet"],
+    props: ["isPicture","isSet","msgType"],
     data() {
         return {
             radio: 1
         };
+    },
+    mounted(){
+        this.radio = this.msgType
     },
     methods: {
         changeHandler(value) {
@@ -50,6 +53,11 @@ export default {
         picture() {
             console.log(this.isPicture)
             return !!this.isPicture && "picture";
+        }
+    },
+    watch:{
+        msgType(){
+            this.radio = this.msgType
         }
     }
 };
