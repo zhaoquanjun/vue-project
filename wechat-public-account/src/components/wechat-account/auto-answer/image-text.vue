@@ -6,7 +6,7 @@
                 :class="index===0?'fist-item':'list-item'"
                 v-for="(item,index) in list"
                 :key="index"
-                
+                v-show="item.isShow"
             >
                 <div class="headline">{{item.title}}</div>
                 <div class="imgwrap">
@@ -24,14 +24,14 @@
                     <button @click="editor(item,index)">
                         <i class="iconfont iconcaozuo"></i>
                     </button>
-                    <button>
+                    <button @click="remove(item,index)">
                         <i class="iconfont iconhuishouzhan"></i>
                     </button>
                 </div>
             </li>
             <li class="fist-item editor" ref="editor" v-show="isEditorShow">
                 <div class="example">
-                    <div class="headline">{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
+                    <div class="headline ellipsis">{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
                     <div class="imgwrap">
                         <img
                             src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
@@ -68,7 +68,8 @@
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">图文标题</div>
-                        <el-input v-model="curEditorItem.title" size="small" placeholder="不超过64个字符"></el-input>
+                        <el-input v-model="curEditorItem.title" size="small" placeholder="不超过64个字符"  maxlength="64"
+                        show-word-limit></el-input>
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">简介</div>
@@ -89,13 +90,14 @@
                 </div>
             </li>
         </ul>
-        <div class="footer-add">
+        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8">
             <span class="el-icon-plus avatar-uploader-icon"></span>
             <span>最多添加8个图文消息</span>
         </div>
     </div>
 </template>
 <script>
+import { trim,notify } from "@/utlis/index.js";
 export default {
     props: ["newsMsg"],
     data() {
@@ -105,7 +107,7 @@ export default {
             curEditorItem: {
                 title: "",
                 description: "",
-                picUrl: "123",
+                picUrl: "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
                 url: ""
             },
             isUploaded: false,
@@ -114,7 +116,8 @@ export default {
     },
     mounted() {
         this.list = this.newsMsg;
-        this.$nextTick(() => {});
+         this.isEditorShow = this.list.length > 0 ? false : true;
+        console.log(this.list )
     },
     methods: {
         downward(item, index) {
@@ -132,36 +135,57 @@ export default {
             let list = this.$refs.list;
             let editor = this.$refs.editor;
             let listItems = this.$refs.listItem;
-            // for (let i = 0; i < listItems.length; i++) {
-            //     listItems[index].style.display = "block";
-            // }
             this.listItems= listItems
             this.index = index;
             this.isEditor = true;
-            listItems[index].style.display = "none";
+            this.$set(this.list[index],'isShow' ,false)    
             this.isEditorShow = true
             list.insertBefore(editor, listItems[index]);
         },
+        remove(item, index){
+            this.list = this.list.splice(index,1)
+        },
         handlerConfirm() {
-            this.listItems[this.index].style.display = "block";
-            if(!this.isEditor){
-                // 新增
+        
+           for(let key in this.curEditorItem){
+               if(typeof this.curEditorItem[key]=="string" &&!trim(this.curEditorItem[key])){
+                    notify(this, "请完善图文信息!", "error");
+                   return false;
+               }
+           }
+            if(!this.isEditor ){   
                this.list.push(this.curEditorItem);
                this.isEditorShow = false;
             }else{
                 // 编辑
+                this.$set(this.list[this.index],'isShow' ,true)   
                 this.$set(this.list,this.index,this.curEditorItem)
             }
-            
             this.$emit("handlerSaveImgText", this.list);
             this.isEditorShow = false;
-        }
+            // 添加完成后重置一下 
+             this.curEditorItem={
+                title: "",
+                description: "",
+                picUrl: "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                url: ""
+            }
+        },
+        handlerAddNewsImg(){
+            this.index = this.list.length+1;
+            console.log(this.index)
+              this.isEditorShow = true
+              this.isEditor = false;
+        },
     },
-    computed: {},
     watch: {
         newsMsg() {
             this.list = this.newsMsg;
+            this.list.forEach((item,index)=>{
+                item["isShow"] = true
+            })
             this.isEditorShow = this.list.length > 0 ? false : true;
+            console.log(this.isEditorShow,'this.isEditorShowthis.isEditorShow')
         }
     }
 };
