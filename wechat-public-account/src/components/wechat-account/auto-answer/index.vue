@@ -8,7 +8,7 @@
                 <el-tab-pane label="关键词回复" name="3"></el-tab-pane>
             </el-tabs>
         </div>
-        <div class="reply-wrap">
+        <div class="reply-wrap" :style="{height:scrollHeight+'px'}">
             <reply-content
                 ref="replycontent"
                 v-if="replyType!=='3' || addAnswer===false"
@@ -24,7 +24,8 @@
                     slot="keyword"
                     ref="keywordAnswer"
                     :addAnswer="addAnswer"
-                     :keyword-data="keywordData"
+                    :keyword-data="keywordData"
+                    :propKeywordList="propKeywordList"
                 ></keyword-answer>
                 <!-- 图片 -->
                 <Picture v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)" ></Picture>
@@ -46,10 +47,12 @@
             <keyword-answer
                 :addAnswer="addAnswer"
                 :keyword-data="keywordData"
+                :searchOption="searchOption"
                 v-if="replyType==='3'&&addAnswer===true"
                 slot="keyword"
                 @handlerAddAnswer="handlerAddAnswer"
                 @removeKeywordReply="_removeKeywordReply"
+                @getKeywordReplyList="_getKeywordReplyList"
             ></keyword-answer>
             <!-- 初始关键词回复 end -->
         </div>
@@ -87,7 +90,8 @@ export default {
             keywordData: "", //关键词列表,
             searchOption: {
                 pageSize: 10,
-                pageIndex: 1
+                pageIndex: 1,
+                Keyword:""
             },
             keywordContentData: {
                 msgType: "",
@@ -95,7 +99,9 @@ export default {
                 imageMsg: {},
                 textMsg: { text: "" },
                 newsMsg: []
-            }
+            },
+            scrollHeight:500,
+            propKeywordList:""
         };
     },
     components: {
@@ -108,6 +114,13 @@ export default {
     },
     mounted() {
         this._getReplyDetail(1);
+        this.$nextTick(()=>{
+               window.addEventListener("resize", () => {
+                this.scrollHeight = window.innerHeight - 290;
+            });
+            this.scrollHeight = window.innerHeight - 290;
+            
+        })
     },
     methods: {
         //获取回复详情
@@ -128,7 +141,7 @@ export default {
         },
         //获取关键词回复列表
         async _getKeywordReplyList(option) {
-            let { data } = await autoAnswerApi.getKeywordReplyList(option);
+            let { data } = await autoAnswerApi.getKeywordReplyList(this.searchOption);
             this.keywordData = data;
             console.log(data, "获取关键词回复列表");
         },
@@ -357,8 +370,10 @@ export default {
             }
         },
         // 添加关键词回复
-        handlerAddAnswer(value) {
+        handlerAddAnswer(value,item) {
             this.addAnswer = value;
+            console.log(item)
+            this.propKeywordList = item.keywordList
         }
     }
 };
@@ -391,6 +406,7 @@ export default {
     }
     .reply-wrap {
         padding: 32px;
+        overflow-y: auto;
     }
 }
 </style>
