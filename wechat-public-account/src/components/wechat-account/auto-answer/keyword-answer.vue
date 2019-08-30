@@ -7,16 +7,16 @@
                     <span class="select-item">
                         <el-select
                             size="small"
-                            v-model="item.matchName"
+                            v-model="matchLabel"
                             placeholder="请选择"
                             @change="changeStatus($event,index)"
                             :popper-append-to-body="false"
                         >
                             <el-option
                                 v-for="item in matchOption"
-                                :key="item.matchValue"
+                                :key="item.matchType"
                                 :label="item.matchLabel"
-                                :value="item.matchValue"
+                                :value="item.matchType"
                             ></el-option>
                         </el-select>
                     </span>
@@ -32,8 +32,11 @@
                     ></el-input>
                     <div class="ym-form-item__error" v-show="error.onerrorTip">{{error.onerrorText}}</div>
                 </span>
-                <button class="addKeyword" @click="addKeyword">
-                    <i class="iconfont iconX"></i>
+                <button class="keyword-btn addKeyword" @click="addKeyword">
+                    <i class="iconfont iconjian"></i>
+                </button>
+                <button class="keyword-btn addKeyword" @click="addKeyword">
+                    <i class="iconfont iconjia"></i>
                 </button>
             </div>
         </div>
@@ -65,7 +68,7 @@
                         <button>
                             <i class="iconfont iconcaozuo"></i>
                         </button>
-                        <button>
+                        <button @click="handlerDelete(item.id)">
                             <i class="iconfont iconhuishouzhan"></i>
                         </button>
                     </div>
@@ -80,7 +83,7 @@
 <script>
 import { trim } from "@/utlis/index.js";
 export default {
-    props: ["addAnswer"],
+    props: ["addAnswer","keywordData"],
     data() {
         return {
             keywordCount:2,
@@ -101,27 +104,26 @@ export default {
             ],
               matchOption: [
                 {
-                    matchValue: "2",
+                    matchType: "2",
                     matchLabel: "半匹配"
                 },
                 {
-                    matchValue: "1",
+                    matchType: "1",
                     matchLabel: "全匹配"
                 }
             ],
+             matchLabel: "2",
             keywordList:[
                 {
                     matchType:2,
-                    matchName:"半匹配",
-                    keyword:"123"
+                    keyword:""
                 }
             ]
         };
     },
     methods: {
         changeStatus(value,index) {
-            this.keywordList.index.matchType=value;
-            this.keywordList.index.matchName = this.value==1?"全匹配":"半匹配"
+            this.keywordList[index].matchType=value;
         },
         //校验关键词
         checkKeyword() {
@@ -147,6 +149,9 @@ export default {
                     matchName:"半匹配",
                     keyword:"123"
             })
+        },
+        handlerDelete(id){
+            this.$emit("removeKeywordReply",id)
         }
     }
 };
@@ -259,6 +264,13 @@ button {
                 width: 260px;
             }
         }
+    }
+}
+.keyword-btn {
+    .iconfont{
+        font-size: 32px;
+        color: #09CCEB;
+        vertical-align: middle;
     }
 }
 </style>

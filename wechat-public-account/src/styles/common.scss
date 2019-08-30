@@ -1,5 +1,5 @@
-
-.primary-button__nomal {
+// 常规按钮
+.primary-button__nomal--shadow {
     display: inline-block;
     font-size: 16px;
     font-family: "PingFangSC";
@@ -9,6 +9,35 @@
     text-align: center;
     background: rgba(9, 204, 235, 1);
     box-shadow: 0px 2px 16px 0px rgba(9, 204, 235, 0.43);
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.primary-button__nomal {
+    display: inline-block;
+    font-size: 14px;
+    font-family: "PingFangSC";
+    font-weight: 400;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: center;
+    background: rgba(9, 204, 235, 1);
+    border-radius: 2px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.primary-button__default {
+    display: inline-block;
+    font-size: 12px;
+    font-family: "PingFangSC";
+    font-weight: 400;
+    color: rgba(9, 204, 235, 1);
+    border: 1px solid rgba(9, 204, 235, 1);
+    padding: 10px 16px;
+    text-align: center;
+    background: #fff;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -49,7 +78,7 @@ button{
 .scroll-section {
     box-sizing: border-box;
     width: 100%;
-    height: calc(100% - 73px);
+    height: calc(100% - 120px);
     overflow-y: auto;
 }
 

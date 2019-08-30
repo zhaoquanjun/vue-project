@@ -232,10 +232,10 @@
               <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
             </span>
           </div>
-          <div class="tips">为保证设计师可正常登录系统，请填写真实的</div>
+          <div class="tips">为保证设计师可正常登录系统，请填写真实的手机号</div>
           <div class="phoneWrap">
             <div class="phoneTitle">设计师手机号</div>
-            <el-input v-model="phone" placeholder="请输入手机号" class="phoneInput" @blur="blurPhone"></el-input>
+            <el-input v-model="phone" placeholder="请输入手机号" class="phoneInput" @blur="blurPhone" :maxlength="11"></el-input>
             <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
           </div>
           <div class="remarkWrap">

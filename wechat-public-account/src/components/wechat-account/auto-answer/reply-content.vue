@@ -22,14 +22,14 @@
             </div>
         </section>
         <footer class="footer-btn">
-            <button class="handler-item">保存</button>
-            <button class="handler-item handler-delete">删除回复</button>
+            <button class="handler-item" @click="handlerSave">保存</button>
+            <button class="handler-item handler-delete" :class="{'disabled-btn':!isSet}" @click="handlerDelete" :disabled="!isSet">删除回复</button>
         </footer>
     </div>
 </template>
 <script>
 export default {
-    props: ["isPicture"],
+    props: ["isPicture","isSet"],
     data() {
         return {
             radio: 1
@@ -37,8 +37,13 @@ export default {
     },
     methods: {
         changeHandler(value) {
-            console.log(value);
             this.$emit("changeAnswerMode", value);
+        },
+        handlerSave(){
+            this.$emit("handlerSave")
+        },
+        handlerDelete(){
+            this.$emit("handlerDelete")
         }
     },
     computed: {
@@ -103,6 +108,12 @@ export default {
         border: 1px solid rgba(9, 204, 235, 1);
         background: #fff;
         color: #09cceb;
+    }
+    .disabled-btn{
+        border: 1px solid transparent;
+        background: rgba(9, 204, 235, 0.5);
+        color: #fff;
+
     }
 }
 </style>

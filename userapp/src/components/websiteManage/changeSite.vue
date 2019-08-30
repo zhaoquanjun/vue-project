@@ -1,7 +1,7 @@
 <template>
   <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
-      <span class="siteName">{{ siteName }}</span>
+        <span class="siteName">{{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}</span>
       <a class="secondDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
       <span class="language">{{_getLanguage(language)}}</span>
       <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>

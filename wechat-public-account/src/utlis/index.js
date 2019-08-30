@@ -20,3 +20,12 @@ export function imgSize(size, maxMb) {
     const isSizeOk = size / 1024 / 1024 < maxSize;
     return isSizeOk;
 }
+
+export const notify = (that,mag, type) => {
+    that.$notify({
+        customClass: `notify-${type}`,
+        message: mag,
+        showClose: false,
+        duration: 1500
+    });
+}

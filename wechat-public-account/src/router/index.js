@@ -15,6 +15,7 @@ export default router;
 let accessToken = store.state.accessToken.Authorization;
 let appId =  store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {
+ 
   document.title = to.meta.title;
   if (!to.meta.requiresAuth) {
     if (!appId) {
@@ -24,7 +25,9 @@ router.beforeEach(async (to, from, next) => {
     next()
     return
   }
+  console.log(accessToken)
   if (accessToken) {
+    
     if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
       next()
@@ -38,9 +41,15 @@ router.beforeEach(async (to, from, next) => {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
-      next()
+      if (!store.getters.wx_status.isAuth) {
+        await store.dispatch('_getWxStatus')
+      }
+      let wx_status = store.getters.wx_status;
+      if (!wx_status.isAuth) {
+        next('/wechataccount/wxauther');
+      }
+      next();
     } else {
-    
       next('/404')
     }
   } else {
