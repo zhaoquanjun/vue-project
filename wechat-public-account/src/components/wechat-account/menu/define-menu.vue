@@ -29,7 +29,7 @@
     <div class="menu-operate__arae">
       <order-menu v-show="isOrder"></order-menu>
       <div v-show="!isOrder" class="menu-operate__none">
-        <div class="empty" v-if="menuData.length == 0">
+        <div class="empty" v-if="menuData.length > 0">
           <div class="empty-icon"></div>
           <p>您还没有添加菜单</p>
         </div>
@@ -39,25 +39,27 @@
             <div class="menu-operate__delete" @click="_handleDeleteMenu">删除菜单</div>
           </div>
           <div class="menu-operate__content">
-            <el-form :model="form" label-width="80px">
+            <el-form label-width="80px">
               <el-form-item label="菜单名称">
                 <el-input v-model="menu_reply_behavior.name" placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母"></el-input>
               </el-form-item>
               <el-form-item label="菜单内容">
-                <el-radio-group v-model="menu_reply_behavior.type" @change="_handleBehaviorType">
-                  <el-radio label="message">发送消息</el-radio>
-                  <el-radio label="website">跳转网页</el-radio>
-                  <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
-                </el-radio-group>
+                <el-radio label="message" @change="_handleBehaviorType">发送消息</el-radio>
+                <el-radio label="website"  @change="_handleBehaviorType">跳转网页</el-radio>
+                <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
               </el-form-item>
             </el-form>
-            <message-area :menuData="menuData[curIndex]" v-show="form.type == 'message'">
-              <div class="picture-menu" v-show="menuData[curIndex].type == 'picture'">
+            <message-area :menuData="menuData[curIndex]" v-show="menuDetail.clickBehavior == 'message'">
+              <div class="picture-menu" v-show="menu_reply_behavior.type == 'picture'">
                 <div class="choose-picture__area" v-show="chooseImg.length < 0">
                   <div class="choose-icon" @click="_handleUploadPicture"></div>
                   <p @click="_handleUploadPicture">点击上传</p>
                 </div>
-                <div class="picture-show" v-show="chooseImg.length > 0" :style="{backgroundImage: `url(${chooseImg}`}">
+                <div
+                  class="picture-show"
+                  v-show="chooseImg.length > 0"
+                  :style="{backgroundImage: `url(${chooseImg}`}"
+                >
                   <div class="show-mask__area">
                     <div class="icon-box">
                       <i class="iconfont iconqiehuan" @click="_handleSwitchImg"></i>
@@ -66,7 +68,7 @@
                   </div>
                 </div>
               </div>
-              <div class="words-menu" v-show="menuData[curIndex].type == 'words'">
+              <div class="words-menu" v-show="menu_reply_behavior.type == 'words'">
                 <el-input
                   type="textarea"
                   maxlength="600"
@@ -75,16 +77,20 @@
                   v-model="menuWords"
                 ></el-input>
               </div>
-              <div class="picture-words__menu" v-show="menuData[curIndex].type == 'picture_words'"></div>
+              <div class="picture-words__menu" v-show="menu_reply_behavior.type == 'picture_words'"></div>
             </message-area>
-            <website-area :menuData="menuData[curIndex]" v-show="form.type == 'website'">
+            <website-area :menuData="menuData[curIndex]" v-show="menu_reply_behavior.type == 'website'">
               <website-link></website-link>
             </website-area>
           </div>
         </div>
       </div>
     </div>
-    <image-manage :imageChooseAreaShowFlag="imageChooseAreaShowFlag" @getImage="getImage" @handleCloseModal="handleCloseModal"></image-manage>
+    <image-manage
+      :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
+      @getImage="getImage"
+      @handleCloseModal="handleCloseModal"
+    ></image-manage>
   </div>
 </template>
 <script>
@@ -121,10 +127,10 @@ export default {
     ImageManage
   },
   computed: {
-    ...mapGetters(['menu_reply_behavior'])
+    ...mapGetters(["menu_reply_behavior"])
   },
   created() {
-    
+    console.log(this.menu_reply_behavior)
   },
   methods: {
     // 菜单排序
@@ -132,8 +138,8 @@ export default {
       this.isOrder = !this.isOrder;
     },
     _handleBehaviorType(val) {
-      console.log(val)
-      this.$store.commit('SET_MENU_BEHAVIOR', val);
+      console.log(val);
+      this.$store.commit("SET_MENU_BEHAVIOR", val);
     },
     // 切换menu
     _handleSelectMenu(i) {
@@ -159,7 +165,7 @@ export default {
     _handleDeleteImg() {},
     // 获取图片
     getImage(src) {
-      console.log(src)
+      console.log(src);
       this.chooseImg = src;
     },
     // 关闭弹层
