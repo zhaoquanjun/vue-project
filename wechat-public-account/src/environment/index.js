@@ -16,7 +16,8 @@ let clientId = 'weixinopen.api';
 let scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
 let pageApi = 'http://api.designer.console.wezhan.cn';
 let newsApi = 'http://api.content.console.wezhan.cn';
-let wechataccountApi = "http://gonghd.imwork.net";//"http://open.weixin.console.wezhan.cn"
+let imageApi = 'http://api.content.console.wezhan.cn';
+let wechataccountApi = "http://gonghd.imwork.net"; //"http://open.weixin.console.wezhan.cn"
 export let siteDomain = "content.console.wezhan.cn";
 export let wechataccountDomain = "wechataccount.console.wezhan.cn"
 // 个人中心
@@ -40,6 +41,7 @@ if (process.env.NODE_ENV === 'development') {
     wechataccountApi = "http://gonghd.imwork.net"
     pageApi = 'http://api.designer.console.wezhan.cn';
     newsApi = 'http://api.content.console.wezhan.cn';
+    imageApi = 'http://api.content.console.wezhan.cn';
 }
 const enbironmemy = {
     authorityUrl,
@@ -53,6 +55,7 @@ const enbironmemy = {
     scope,
     wechataccountApi,
     pageApi,
-    newsApi
+    newsApi,
+    imageApi
 };
 export default enbironmemy;

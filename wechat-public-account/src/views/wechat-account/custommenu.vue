@@ -44,12 +44,12 @@ export default {
   },
   created() {
     
-    // this._getMenuTree();
+    this._getMenuTree();
   },
   methods: {
     async _getMenuTree() {
       console.log(this.dashboard.appId)
-      let {data} = await getMenuTree({platformAppId: this.dashboard.appId})
+      let {data} = await getMenuTree({platformAppId: 'wx4e25803a4fadd328'})
     }
   }
 };
