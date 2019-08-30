@@ -196,10 +196,6 @@ export default {
                 `删除后，${this.displayName}将被移动到回收站，可在回收站中恢复，是否确定删除？`,
                 "提示",
                 {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);

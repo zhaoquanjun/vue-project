@@ -15,6 +15,7 @@ export default router;
 let accessToken = store.state.accessToken.Authorization;
 let appId =  store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {
+ 
   document.title = to.meta.title;
   if (!to.meta.requiresAuth) {
     if (!appId) {
@@ -24,7 +25,9 @@ router.beforeEach(async (to, from, next) => {
     next()
     return
   }
+  console.log(accessToken)
   if (accessToken) {
+    
     if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
       next()

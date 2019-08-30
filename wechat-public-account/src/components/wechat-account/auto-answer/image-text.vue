@@ -116,7 +116,8 @@ export default {
     },
     mounted() {
         this.list = this.newsMsg;
-        this.$nextTick(() => {});
+         this.isEditorShow = this.list.length > 0 ? false : true;
+        console.log(this.list )
     },
     methods: {
         downward(item, index) {
@@ -177,15 +178,14 @@ export default {
               this.isEditor = false;
         },
     },
-    computed: {},
     watch: {
         newsMsg() {
             this.list = this.newsMsg;
             this.list.forEach((item,index)=>{
-                console.log(item)
                 item["isShow"] = true
             })
             this.isEditorShow = this.list.length > 0 ? false : true;
+            console.log(this.isEditorShow,'this.isEditorShowthis.isEditorShow')
         }
     }
 };

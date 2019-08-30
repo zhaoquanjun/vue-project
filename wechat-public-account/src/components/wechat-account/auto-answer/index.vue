@@ -29,12 +29,17 @@
                     @handlerText="handlerText"
                 ></anser-text>
                 <!-- 图文 -->
-                <image-text v-show="msgType===3" :isPicture="true"  :news-msg="replycontentData.newsMsg" @handlerSaveImgText="handlerSaveImgText"></image-text>
+                <image-text
+                    v-show="msgType===3"
+                    :isPicture="true"
+                    :news-msg="replycontentData.newsMsg"
+                    @handlerSaveImgText="handlerSaveImgText"
+                ></image-text>
             </reply-content>
             <!-- 初始关键词回复 begin -->
             <keyword-answer
                 :addAnswer="addAnswer"
-
+                :keyword-data="keywordData"
                 v-if="replyType==='3'&&addAnswer===true"
                 slot="keyword"
                 @handlerAddAnswer="handlerAddAnswer"
@@ -73,7 +78,9 @@ export default {
             },
             myText: "",
             lastSaveId: "",
-            isSet:false,// 是否设置过回复
+            isSet: false, // 是否设置过回复
+            replyDetail: "", // 接口返回
+            keywordData: "" //关键词列表
         };
     },
     components: {
@@ -93,6 +100,7 @@ export default {
             let data = await autoAnswerApi.getReplyDetail(replyType);
             console.log(data, "获取回复详情");
             let jsonData = data.data;
+            this.replyDetail = jsonData;
             if (jsonData.isSet) {
                 if (jsonData.msgType === 1) {
                     this.replycontentData.imageMsg = jsonData.data;
@@ -105,15 +113,18 @@ export default {
         },
         //获取关键词回复列表
         async _getKeywordReplyList() {
-            let data = await autoAnswerApi.getKeywordReplyList();
+            let { data } = await autoAnswerApi.getKeywordReplyList();
+            this.keywordData = data;
             console.log(data, "获取关键词回复列表");
         },
         //删除回复信息
         async _removeReply(id) {
             let { data, status } = await autoAnswerApi.removeReply(id);
             if (status === 200) {
+                this._getReplyDetail(this.replyType);
                 this.resetReplycontentData();
                 notify(this, "删除成功", "success");
+                this.isSet = false;
             }
             console.log(data, "删除回复信息");
         },
@@ -123,8 +134,8 @@ export default {
             console.log(data, "删除关键词回复信息");
         },
         //新增关键词回复信息
-        async _addKeywordReply() {
-            let data = await autoAnswerApi.addKeywordReply();
+        async _addKeywordReply(option) {
+            let data = await autoAnswerApi.addKeywordReply(option);
             console.log(data, "新增关键词回复信息");
         },
         //新增或者覆盖回复信息
@@ -140,6 +151,8 @@ export default {
                     showClose: false,
                     duration: 1500
                 });
+                this.isSet = true;
+                this.replyDetail.id = data;
             }
         },
         //编辑关键词回复信息
@@ -154,44 +167,55 @@ export default {
                 msgType: this.msgType,
                 content: {}
             };
-            if (this.msgType == 1) {
-                let picUrl = this.replycontentData.imageMsg.picUrl;
-                if (!trim(picUrl)) {
-                    notify(this, "无法保存，请完善页面信息!", "error");
-                    return;
-                }
-                option.content = {
-                    imageMsg: {
-                        picUrl: picUrl
+            if (this.replyType != 3) {
+                if (this.msgType == 1) {
+                    let picUrl = this.replycontentData.imageMsg.picUrl;
+                    if (!trim(picUrl)) {
+                        notify(this, "无法保存，请完善页面信息!", "error");
+                        return;
                     }
-                };
-            } else if (this.msgType == 2) {
-                let text = this.replycontentData.textMsg.text;
-                if (!trim(text)) {
-                    notify(this, "无法保存，请完善页面信息!", "error");
-                    return;
-                }
-                option.content = {
-                    textMsg: {
-                        text: text
+                    option.content = {
+                        imageMsg: {
+                            picUrl: picUrl
+                        }
+                    };
+                } else if (this.msgType == 2) {
+                    let text = this.replycontentData.textMsg.text;
+                    if (!trim(text)) {
+                        notify(this, "无法保存，请完善页面信息!", "error");
+                        return;
                     }
-                };
-            }else if (this.msgType == 3) {
+                    option.content = {
+                        textMsg: {
+                            text: text
+                        }
+                    };
+                }
+            } else if (this.replyType == 3) {
                 let newsMsg = this.replycontentData.newsMsg;
-                // if (!trim(text)) {
-                //     notify(this, "无法保存，请完善页面信息!", "error");
-                //     return;
-                // }
-                option.content = {
-                    newsMsg:newsMsg
+                let option = {
+                    msgType: this.msgType,
+                    newsMsg:[  {
+                        title: "string",
+                        description: "string",
+                        picUrl: "string",
+                        url: "string"
+                    }],
+                    keywordList: [
+                        {
+                            keyword: "string",
+                            matchType: "Contains"
+                        }
+                    ]
                 };
+                this._addKeywordReply(option);
+                return;
             }
-            console.log(option);
             this._addOrOverrideReply(option);
         },
-        handlerSaveImgText(list){
-            console.log(list)
-            this.replycontentData.newsMsg = list
+        handlerSaveImgText(list) {
+            console.log(list);
+            this.replycontentData.newsMsg = list;
         },
         // 删除回复
         handlerDelete() {
@@ -217,7 +241,7 @@ export default {
                 message: this.$createElement("div", null, message),
                 callback: async action => {
                     if (action === "confirm") {
-                        this._removeReply(3);
+                        this._removeReply(this.replyDetail.id);
                     }
                 }
             });
@@ -249,20 +273,23 @@ export default {
                 textMsg: {
                     text: ""
                 },
-                newsMsg: [
-                    {
-                        title: "",
-                        description: "",
-                        picUrl: "",
-                        url: ""
-                    }
-                ]
+                newsMsg: []
             };
         },
         // 改变回复方式
         changeAnswerMode(value) {
             this.isPicture = value === 1 ? true : false;
             this.msgType = value;
+            console.log(this.replyType, this.msgType);
+            console.log(this.replyDetail);
+            if (
+                this.replyType == this.replyDetail.replyType &&
+                this.msgType == this.replyDetail.msgType
+            ) {
+                this.isSet = this.replyDetail.isSet;
+            } else {
+                this.isSet = false;
+            }
         },
         // 添加关键词回复
         handlerAddAnswer(value) {

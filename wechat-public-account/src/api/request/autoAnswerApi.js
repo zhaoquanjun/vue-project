@@ -36,8 +36,8 @@ export const removeKeywordReply = id => {
 /**
  * 新增关键词回复信息
  */
-export const addKeywordReply = () => {
-    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddKeywordReply`);
+export const addKeywordReply = (option) => {
+    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddKeywordReply`,option);
 }
 
 /**
