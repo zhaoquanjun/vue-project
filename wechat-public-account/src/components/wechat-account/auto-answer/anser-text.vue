@@ -16,31 +16,30 @@
 </template>
 <script>
 export default {
-    props:["serveText"],
+    props: ["serveText"],
     data() {
         return {
             textarea: "",
-            isLimitShow:false
+            isLimitShow: false
         };
     },
-    mounted(){
-        this.textarea = this.serveText
+    mounted() {
+        this.textarea = this.serveText;
     },
-    methods:{
-        focus(){
-            this.isLimitShow=true;
+    methods: {
+        focus() {
+            this.isLimitShow = true;
         },
-        blur(){
-            this.isLimitShow = false
+        blur() {
+            this.isLimitShow = false;
         },
-        handlerChange(){
-            this.$emit("handlerText",this.textarea)
-          
+        handlerChange() {
+            this.$emit("handlerText", this.textarea);
         }
     },
-    watch:{
-        serveText(){
-           this.textarea = this.serveText
+    watch: {
+        serveText() {
+            this.textarea = this.serveText;
         }
     }
 };
