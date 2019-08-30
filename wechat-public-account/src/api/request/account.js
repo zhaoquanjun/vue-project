@@ -79,5 +79,5 @@ export const modifyNode = (id, parentId, idOrderByArr) => {
 
 // 中转页面
 export const transit = param => {
-  return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/oauth/success`, param);
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/oauth/success`, param);
 }
