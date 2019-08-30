@@ -12,7 +12,7 @@
             <reply-content
                 ref="replycontent"
                 v-if="replyType!=='3' || addAnswer===false"
-                :isPicture="isPicture"
+                :isPicture="msgType==1?true:false"
                 :is-set="isSet"
                 :msg-type="msgType"
                 @changeAnswerMode="changeAnswerMode"
@@ -132,7 +132,7 @@ export default {
             console.log(data, "获取回复详情");
             let jsonData = data.data;
             this.replyDetail = jsonData;
-             this.msgType = jsonData.msgType
+            this.msgType = jsonData.msgType;
             if (jsonData.isSet) {
                 if (jsonData.msgType === 1) {
                     this.replycontentData.imageMsg = jsonData.data;
@@ -184,7 +184,6 @@ export default {
                     }
                 }
             });
-         
         },
         //新增关键词回复信息
         async _addKeywordReply(option) {
@@ -245,9 +244,7 @@ export default {
                     };
                 } else if (this.msgType == 3) {
                     let curEditorItem = this.$refs.newMsg.curEditorItem;
-                      console.log(this.$refs.newMsg.isEditor)
                     let newsMsg = this.replycontentData.newsMsg;
-
                     if (newsMsg.length === 0) {
                         notify(this, "无法保存，请完善页面信息!", "error");
                         return;
@@ -258,7 +255,7 @@ export default {
                 }
             } else if (this.replyType == 3) {
                 let keywordList = this.$refs.keywordAnswer.keywordList;
-              
+
                 let flag = keywordList.every((item, index) => {
                     if (!trim(item.keyword)) {
                         return false;
@@ -356,13 +353,12 @@ export default {
                 });
             } else if (this.replyType === "3") {
                 this._getKeywordReplyList(this.searchOption);
-            };
-            if(this.msgType==2){
-                 this.isPicture = false
-            }else if(this.msgType==1){
-                this.isPicture = true
             }
-           
+            if (this.msgType == 2) {
+                this.isPicture = false;
+            } else if (this.msgType == 1) {
+                this.isPicture = true;
+            }
         },
         // 重置replycontentData
         resetReplycontentData() {
@@ -395,10 +391,24 @@ export default {
         handlerAddAnswer(value, item) {
             this.addAnswer = value;
             console.log(item);
-            if(item && item.keywordList){
+            if (item && item.keywordList) {
                 this.propKeywordList = item.keywordList;
+                this.msgType = item.msgType;
+                this.isSet = item.isSet;
+                // if(this.msgType!=1){
+                //     this.Picture = false
+                // }else{
+                //     this.Picture = true
+                // }
+                if (item.msgType === 1) {
+
+                    this.replycontentData.imageMsg = item.data;
+                } else if (item.msgType === 2) {
+                    this.replycontentData.textMsg = item.data;
+                } else if (item.msgType === 3) {
+                    this.replycontentData.newsMsg = item.data;
+                }
             }
-            
         }
     }
 };

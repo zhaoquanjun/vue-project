@@ -44,7 +44,7 @@ export default {
             picUrl: "",
             uploadPicAction: `${environment.uploadPicUrl}/-1`,
             headers: {
-                appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+                appId: "",
                 Authorization: ""
             },
             picUrl: "",

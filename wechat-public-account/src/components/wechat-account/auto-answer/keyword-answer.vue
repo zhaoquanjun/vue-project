@@ -242,6 +242,9 @@ export default {
     line-height: 40px;
     border: 1px solid #b9cbcf;
 }
+.el-input /deep/ .el-input__inner{
+        border: 1px solid #c9d9dc;
+}   
 .el-select /deep/ .el-input__inner::-webkit-input-placeholder {
     color: #262626;
 }
@@ -262,6 +265,9 @@ export default {
     position: absolute;
     right: 10px;
     top: 6px;
+}
+.el-input /deep/ input{
+    
 }
 </style>
 <style lang="scss" scoped>

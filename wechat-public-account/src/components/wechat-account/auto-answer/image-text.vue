@@ -113,7 +113,8 @@ export default {
             },
             isUploaded: false,
             isEditorShow: false,
-            isEditor:true
+            isEditor:true,
+            index:0
         };
     },
     mounted() {
@@ -155,14 +156,18 @@ export default {
                    return false;
                }
            }
+          
+           
+            
             if(!this.isEditor ){   
                this.list.push(this.curEditorItem);
                this.isEditorShow = false;
             }else{
                 // 编辑
-                this.$set(this.list[this.index],'isShow' ,true)   
+                
                 this.$set(this.list,this.index,this.curEditorItem)
             }
+             this.$set(this.list[this.index],'isShow' ,true)  
             this.$emit("handlerSaveImgText", this.list);
             this.isEditorShow = this.isEditor = false;
             // 添加完成后重置一下 
