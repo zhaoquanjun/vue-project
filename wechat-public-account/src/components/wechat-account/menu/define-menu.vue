@@ -14,7 +14,7 @@
           >
             {{item.name || '主菜单'}}
             <ul class="menu-child__area">
-              <li v-for="(child, idx) in item.children" :key="idx">
+              <li v-for="(child, idx) in item.subMenuList" :key="idx">
                 <i class="iconfont icontuodongdian menu-move__icon" v-show="isOrder"></i>
                 {{child.name || '子菜单'}}
               </li>
@@ -53,12 +53,11 @@
             </el-form>
             <message-area :menuData="menuData[curIndex]" v-show="form.type == 'message'">
               <div class="picture-menu" v-show="menuData[curIndex].type == 'picture'">
-                <div class="choose-picture__area" v-show="!chooseImg">
+                <div class="choose-picture__area" v-show="chooseImg.length < 0">
                   <div class="choose-icon" @click="_handleUploadPicture"></div>
                   <p @click="_handleUploadPicture">点击上传</p>
                 </div>
-                <div class="picture-show" v-show="chooseImg">
-                  <img :src="chooseImg" alt />
+                <div class="picture-show" v-show="chooseImg.length > 0" :style="{backgroundImage: `url(${chooseImg}`}">
                   <div class="show-mask__area">
                     <div class="icon-box">
                       <i class="iconfont iconqiehuan" @click="_handleSwitchImg"></i>
@@ -89,25 +88,33 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import OrderMenu from "_c/wechat-account/defineMenu/order-menu";
 import MessageArea from "_c/wechat-account/defineMenu/message-content";
 import WebsiteArea from "_c/wechat-account/defineMenu/website-content";
 import WebsiteLink from "_c/wechat-account/defineMenu/link/link";
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 export default {
+  props: {
+    menuData: {
+      type: Array
+    },
+    menuDetail: {
+      type: Object
+    }
+  },
   data() {
     return {
       curIndex: 0,
       isOrder: false,
-      imageChooseAreaShowFlag: true,
       form: {
-        name: "",
-        type: "message"
+        name: '',
+        type: 'message'
       },
+      imageChooseAreaShowFlag: false,
       replyContentType: "picture",
       menuWords: "",
-      chooseImg: "",
-      menuData: []
+      chooseImg: ""
     };
   },
   components: {
@@ -117,33 +124,15 @@ export default {
     WebsiteLink,
     ImageManage
   },
+  computed: {
+    // ...mapGetters(['menuReplyMessageBehavior'])
+  },
   created() {
     this._handleGetMenuData();
   },
   methods: {
     // 获取菜单数据
     _handleGetMenuData() {
-      let menuData = [
-        {
-          name: "主要菜单",
-          type: "picture",
-          menuType: "message",
-          children: [{ name: "" }, { name: "" }]
-        },
-        {
-          name: "www",
-          children: [
-            { name: "2222" },
-            { name: "3333" },
-            { name: 444 },
-            { name: "3333" },
-            { name: 444 }
-          ]
-        }
-      ];
-      this.menuData = menuData;
-      this.form.name = menuData[this.curIndex].name;
-      this.form.type = menuData[this.curIndex].menuType;
       if (menuData[this.curIndex].type !== this.replyContentType) {
         this.$emit("changeReplyContent", menuData[this.curIndex].type);
       }
