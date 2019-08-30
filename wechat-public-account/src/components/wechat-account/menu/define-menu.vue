@@ -44,7 +44,7 @@
                 <el-input v-model="menu_reply_behavior.name" placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母"></el-input>
               </el-form-item>
               <el-form-item label="菜单内容">
-                <el-radio-group v-model="menu_reply_behavior.type">
+                <el-radio-group v-model="menu_reply_behavior.type" @change="_handleBehaviorType">
                   <el-radio label="message">发送消息</el-radio>
                   <el-radio label="website">跳转网页</el-radio>
                   <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
@@ -130,6 +130,10 @@ export default {
     // 菜单排序
     _handleMenuOrder() {
       this.isOrder = !this.isOrder;
+    },
+    _handleBehaviorType(val) {
+      console.log(val)
+      this.$store.commit('SET_MENU_BEHAVIOR', val);
     },
     // 切换menu
     _handleSelectMenu(i) {
