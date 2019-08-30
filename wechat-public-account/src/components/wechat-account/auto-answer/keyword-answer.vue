@@ -160,8 +160,9 @@ export default {
         };
     },
     mounted(){
-       this.keywordList = this.propKeywordList;
+       
        if(this.propKeywordList && this.propKeywordList.length>0){
+           this.keywordList = this.propKeywordList;
             this.error= []
        }
        this.propKeywordList && this.propKeywordList.forEach((index)=>{
@@ -213,6 +214,7 @@ export default {
             this.keywordList.splice(index, 1);
         },
         handlerDelete(id) {
+            
             this.$emit("removeKeywordReply", id);
         },
         magTypeFn(type) {
@@ -228,9 +230,9 @@ export default {
     },
     watch:{
         propKeywordList(){
-            alert(1)
+           
             this.keywordList = this.propKeywordList
-        }
+        },
     }
 };
 </script>

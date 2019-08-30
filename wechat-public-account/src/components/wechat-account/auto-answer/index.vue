@@ -14,6 +14,7 @@
                 v-if="replyType!=='3' || addAnswer===false"
                 :isPicture="isPicture"
                 :is-set="isSet"
+                :msg-type="msgType"
                 @changeAnswerMode="changeAnswerMode"
                 @handlerSave="handlerSave"
                 @handlerDelete="handlerDelete"
@@ -28,7 +29,10 @@
                     :propKeywordList="propKeywordList"
                 ></keyword-answer>
                 <!-- 图片 -->
-                <Picture v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)" ></Picture>
+                <Picture
+                    ref="pictureComponent"
+                    v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)"
+                ></Picture>
                 <!-- 文字 -->
                 <anser-text
                     :serve-text="replycontentData.textMsg.text"
@@ -37,8 +41,8 @@
                 ></anser-text>
                 <!-- 图文 -->
                 <image-text
+                    ref="newMsg"
                     v-show="msgType===3"
-                    
                     :news-msg="replycontentData.newsMsg"
                     @handlerSaveImgText="handlerSaveImgText"
                 ></image-text>
@@ -91,7 +95,7 @@ export default {
             searchOption: {
                 pageSize: 10,
                 pageIndex: 1,
-                Keyword:""
+                Keyword: ""
             },
             keywordContentData: {
                 msgType: "",
@@ -100,8 +104,8 @@ export default {
                 textMsg: { text: "" },
                 newsMsg: []
             },
-            scrollHeight:500,
-            propKeywordList:""
+            scrollHeight: 500,
+            propKeywordList: ""
         };
     },
     components: {
@@ -114,13 +118,12 @@ export default {
     },
     mounted() {
         this._getReplyDetail(1);
-        this.$nextTick(()=>{
-               window.addEventListener("resize", () => {
+        this.$nextTick(() => {
+            window.addEventListener("resize", () => {
                 this.scrollHeight = window.innerHeight - 290;
             });
             this.scrollHeight = window.innerHeight - 290;
-            
-        })
+        });
     },
     methods: {
         //获取回复详情
@@ -129,6 +132,7 @@ export default {
             console.log(data, "获取回复详情");
             let jsonData = data.data;
             this.replyDetail = jsonData;
+            // this.msgType = jsonData.msgType
             if (jsonData.isSet) {
                 if (jsonData.msgType === 1) {
                     this.replycontentData.imageMsg = jsonData.data;
@@ -141,7 +145,9 @@ export default {
         },
         //获取关键词回复列表
         async _getKeywordReplyList(option) {
-            let { data } = await autoAnswerApi.getKeywordReplyList(this.searchOption);
+            let { data } = await autoAnswerApi.getKeywordReplyList(
+                this.searchOption
+            );
             this.keywordData = data;
             console.log(data, "获取关键词回复列表");
         },
@@ -178,7 +184,7 @@ export default {
                     }
                 }
             });
-            console.log(data, "删除关键词回复信息");
+         
         },
         //新增关键词回复信息
         async _addKeywordReply(option) {
@@ -238,7 +244,10 @@ export default {
                         }
                     };
                 } else if (this.msgType == 3) {
+                    let curEditorItem = this.$refs.newMsg.curEditorItem;
+                      console.log(this.$refs.newMsg.isEditor)
                     let newsMsg = this.replycontentData.newsMsg;
+
                     if (newsMsg.length === 0) {
                         notify(this, "无法保存，请完善页面信息!", "error");
                         return;
@@ -249,14 +258,16 @@ export default {
                 }
             } else if (this.replyType == 3) {
                 let keywordList = this.$refs.keywordAnswer.keywordList;
-                let flag = keywordList.every((item,index)=>{
-                   if(!trim(item.keyword)){
-                       return false
-                   }else{
-                       return true
-                   }
-                })
-               if(!flag) return notify(this, "无法保存，请完善页面信息!", "error");
+              
+                let flag = keywordList.every((item, index) => {
+                    if (!trim(item.keyword)) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+                if (!flag)
+                    return notify(this, "无法保存，请完善页面信息!", "error");
                 let option = {
                     msgType: this.msgType,
                     keywordList
@@ -268,14 +279,20 @@ export default {
                         notify(this, "无法保存，请完善页面信息!", "error");
                         return;
                     }
-                    newOption = { ...option, imageMsg: {...this.replycontentData.imageMsg} };
+                    newOption = {
+                        ...option,
+                        imageMsg: { ...this.replycontentData.imageMsg }
+                    };
                 } else if (this.msgType == 2) {
                     let text = this.replycontentData.textMsg.text;
                     if (!trim(text)) {
                         notify(this, "无法保存，请完善页面信息!", "error");
                         return;
                     }
-                    newOption = { ...option, textMsg: {...this.replycontentData.textMsg} };
+                    newOption = {
+                        ...option,
+                        textMsg: { ...this.replycontentData.textMsg }
+                    };
                 } else if (this.msgType == 3) {
                     let newsMsg = this.replycontentData.newsMsg;
                     if (newsMsg.length === 0) {
@@ -339,7 +356,6 @@ export default {
                 });
             } else if (this.replyType === "3") {
                 this._getKeywordReplyList(this.searchOption);
-                
             }
         },
         // 重置replycontentData
@@ -370,10 +386,13 @@ export default {
             }
         },
         // 添加关键词回复
-        handlerAddAnswer(value,item) {
+        handlerAddAnswer(value, item) {
             this.addAnswer = value;
-            console.log(item)
-            this.propKeywordList = item.keywordList
+            console.log(item);
+            if(item && item.keywordList){
+                this.propKeywordList = item.keywordList;
+            }
+            
         }
     }
 };
