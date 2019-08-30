@@ -159,9 +159,8 @@ export default {
         },
         addKeyword() {
             this.keywordList.push({
-                matchType: 2,
-                matchName: "半匹配",
-                keyword: "123"
+                  matchType: 2,
+                  keyword: ""
             });
         },
         handlerDelete(id) {

@@ -30,9 +30,7 @@ export const removeReply = id => {
  * @param {*} id 
  */
 export const removeKeywordReply = id => {
-    let param = {
-        idList:[id]
-    }
+    let param = [id]
     return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/BatchRemoveKeywordReply`,{data:param});
 }
 

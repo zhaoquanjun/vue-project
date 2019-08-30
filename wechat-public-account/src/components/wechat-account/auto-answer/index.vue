@@ -148,6 +148,7 @@ export default {
                             showClose: false,
                             duration: 1500
                         });
+                          this._getKeywordReplyList(this.searchOption);
                     }
                 }
             });
