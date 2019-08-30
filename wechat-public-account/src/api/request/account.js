@@ -1,5 +1,6 @@
 import * as ajaxRequest from "../ajaxRequest";
 import environment from "@/environment/index";
+import store from "@/store/index";
 
 // 授权区域
 export const isAuth = param => {
@@ -77,7 +78,16 @@ export const modifyNode = (id, parentId, idOrderByArr) => {
   return ajaxRequest.put(`${environment.imageApi}/api/PictureCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);
 }
 
+
 // 中转页面
 export const transit = param => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/oauth/success`, param);
 }
+
+export const uploadImg = (params) => {
+  // let param = {
+  //   authorizerAppId:this.
+  // }
+  return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/UploadImg`, params);
+}
+

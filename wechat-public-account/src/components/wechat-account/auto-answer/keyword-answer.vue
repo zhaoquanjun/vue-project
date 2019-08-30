@@ -3,11 +3,11 @@
         <div v-if="!addAnswer" class="keyword-answer-content">
             <div v-for="(item,index) in keywordList" :key="index" class="keyword-list">
                 <span>
-                    <span>状态</span>
+                    <span>关键词</span>
                     <span class="select-item">
                         <el-select
                             size="small"
-                            :value="item.matchType==1?'全匹配':'半匹配'"
+                            :value="matchLabel"
                             placeholder="请选择"
                             @change="changeStatus($event,index)"
                             :popper-append-to-body="false"
@@ -30,14 +30,27 @@
                         show-word-limit
                         @blur="checkKeyword(index)"
                     ></el-input>
-                    <div class="ym-form-item__error" v-show="error[index].onerrorTip">{{error[index].onerrorText}}</div>
+                    <div
+                        class="ym-form-item__error"
+                        v-show="error[index].onerrorTip"
+                    >{{error[index].onerrorText}}</div>
                 </span>
-                <button class="keyword-btn addKeyword" @click="addKeyword">
-                    <i class="iconfont iconjian"></i>
-                </button>
-                <button class="keyword-btn addKeyword" @click="addKeyword">
-                    <i class="iconfont iconjia"></i>
-                </button>
+                <div style="display:inline-block">
+                    <button
+                        class="keyword-btn addKeyword"
+                        @click="removeKeyword(index)"
+                        v-if="keywordList &&keywordList.length>1"
+                    >
+                        <i class="iconfont iconjian"></i>
+                    </button>
+                    <button
+                        class="keyword-btn addKeyword"
+                        @click="addKeyword"
+                        v-if="keywordList.length-1==index&&keywordList.length!=10"
+                    >
+                        <i class="iconfont iconjia"></i>
+                    </button>
+                </div>
             </div>
         </div>
         <div v-else class="table-list">
@@ -50,7 +63,12 @@
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
                 >
-                    <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix"></i>
+                    <i
+                        class="el-icon-search el-input__icon"
+                        style="cursor: pointer;"
+                        slot="suffix"
+                        @click="searchEnterFun"
+                    ></i>
                 </el-input>
                 <button class="answer-btn" @click="handlerAdd">添加回复</button>
             </div>
@@ -63,32 +81,36 @@
                 </li>
                 <li v-for="(item, index) in keywordData.list" :key="index">
                     <p class="list-columns__1 ellipsis">
-                        <span
-                            v-for="(child,index) in item.keywordList"
-                            :key="index"
-                        >{{child.keyword}}<i v-if="item.keywordList.length-1 !=index && index ==0">，</i> </span>
+                        <span v-for="(child,index) in item.keywordList" :key="index">
+                            {{child.keyword}}
+                            <i
+                                v-if="item.keywordList.length-1 !=index && index ==0"
+                            >，</i>
+                        </span>
                     </p>
                     <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
                         <button>
-                            <i class="iconfont iconcaozuo"></i>
+                            <i class="iconfont iconcaozuo" @click="handlerAdd(item)"></i>
                         </button>
                         <button @click="handlerDelete(item.id)">
                             <i class="iconfont iconhuishouzhan"></i>
                         </button>
                     </div>
                 </li>
+                <div class="empty-table" v-if="keywordData.list && keywordData.list.length===0">
+                    <img src="~img/table-empty.png" />
+                    <span>无数据</span>
+                </div>
             </ul>
             <div class="paging">
-              
-                 <el-pagination
+                <el-pagination
                     background
                     layout="total, sizes, prev, pager, next"
                     :total="keywordData.totalRecord"
                     :page-count="keywordData.totalPage"
                     :page-size="keywordData.pageSize"
                     :page-sizes="[10,20,50]"
-                   
                 ></el-pagination>
             </div>
         </div>
@@ -97,16 +119,18 @@
 <script>
 import { trim } from "@/utlis/index.js";
 export default {
-    props: ["addAnswer", "keywordData"],
+    props: ["addAnswer", "keywordData", "searchOption","propKeywordList"],
     data() {
         return {
             keywordCount: 2,
             serchTitle: "",
             keyword: "",
-            error:[ {
-                onerrorTip: false,
-                onerrorText: ""
-            }],
+            error: [
+                {
+                    onerrorTip: false,
+                    onerrorText: ""
+                }
+            ],
 
             matchValue: "true",
             data: [
@@ -129,11 +153,24 @@ export default {
             matchLabel: "2",
             keywordList: [
                 {
-                    matchType: 2,
+                    matchType: "2",
                     keyword: ""
                 }
             ]
         };
+    },
+    mounted(){
+       
+       if(this.propKeywordList && this.propKeywordList.length>0){
+           this.keywordList = this.propKeywordList;
+            this.error= []
+       }
+       this.propKeywordList && this.propKeywordList.forEach((index)=>{
+             this.error.push({
+                   onerrorTip: false,
+                    onerrorText: ""
+             })
+       })
     },
     methods: {
         changeStatus(value, index) {
@@ -152,23 +189,32 @@ export default {
             }
         },
         // 回车搜索
-        searchEnterFun() {},
+        searchEnterFun() {
+            this.searchOption.Keyword = this.serchTitle;
+            this.$emit("getKeywordReplyList");
+        },
         // 添加回复
-        handlerAdd() {
-            this.$emit("handlerAddAnswer", false);
+        handlerAdd(item) {
+            this.$emit("handlerAddAnswer", false,item);
         },
         addKeyword() {
+            if (this.keywordList.length >= 10) {
+                return;
+            }
             this.keywordList.push({
-                  matchType: 2,
-                  keyword: ""
+                matchType: 2,
+                keyword: ""
             });
             this.error.push({
                 onerrorTip: false,
                 onerrorText: ""
-            })
-
+            });
+        },
+        removeKeyword(index) {
+            this.keywordList.splice(index, 1);
         },
         handlerDelete(id) {
+            
             this.$emit("removeKeywordReply", id);
         },
         magTypeFn(type) {
@@ -181,6 +227,12 @@ export default {
                     return "图文";
             }
         }
+    },
+    watch:{
+        propKeywordList(){
+           
+            this.keywordList = this.propKeywordList
+        },
     }
 };
 </script>
@@ -190,6 +242,9 @@ export default {
     line-height: 40px;
     border: 1px solid #b9cbcf;
 }
+.el-input /deep/ .el-input__inner{
+        border: 1px solid #c9d9dc;
+}   
 .el-select /deep/ .el-input__inner::-webkit-input-placeholder {
     color: #262626;
 }
@@ -210,6 +265,9 @@ export default {
     position: absolute;
     right: 10px;
     top: 6px;
+}
+.el-input /deep/ input{
+    
 }
 </style>
 <style lang="scss" scoped>
@@ -234,7 +292,7 @@ button {
             padding-left: 16px;
             position: relative;
             display: inline-block;
-            width: 60%;
+            width: 30%;
         }
     }
     .table-list {
