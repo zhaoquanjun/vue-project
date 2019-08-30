@@ -14,7 +14,7 @@
           >
             {{item.name || '主菜单'}}
             <ul class="menu-child__area">
-              <li v-for="(child, idx) in item.children" :key="idx">
+              <li v-for="(child, idx) in item.subMenuList" :key="idx">
                 <i class="iconfont icontuodongdian menu-move__icon" v-show="isOrder"></i>
                 {{child.name || '子菜单'}}
               </li>
@@ -53,15 +53,11 @@
             </el-form>
             <message-area :menuData="menuData[curIndex]" v-show="form.type == 'message'">
               <div class="picture-menu" v-show="menuData[curIndex].type == 'picture'">
-                <div class="choose-picture__area" v-show="true">
-                  <div
-                    class="choose-icon"
-                    @click="_handleUploadPicture"
-                  ></div>
+                <div class="choose-picture__area" v-show="chooseImg.length < 0">
+                  <div class="choose-icon" @click="_handleUploadPicture"></div>
                   <p @click="_handleUploadPicture">点击上传</p>
                 </div>
-                <div class="picture-show" v-show="false">
-                  <img src alt />
+                <div class="picture-show" v-show="chooseImg.length > 0" :style="{backgroundImage: `url(${chooseImg}`}">
                   <div class="show-mask__area">
                     <div class="icon-box">
                       <i class="iconfont iconqiehuan" @click="_handleSwitchImg"></i>
@@ -82,39 +78,54 @@
               <div class="picture-words__menu" v-show="menuData[curIndex].type == 'picture_words'"></div>
             </message-area>
             <website-area :menuData="menuData[curIndex]" v-show="form.type == 'website'">
-              <website-link ></website-link>
+              <website-link></website-link>
             </website-area>
           </div>
         </div>
       </div>
     </div>
+    <image-manage :imageChooseAreaShowFlag="imageChooseAreaShowFlag" @getImage="getImage" @handleCloseModal="handleCloseModal"></image-manage>
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import OrderMenu from "_c/wechat-account/defineMenu/order-menu";
 import MessageArea from "_c/wechat-account/defineMenu/message-content";
 import WebsiteArea from "_c/wechat-account/defineMenu/website-content";
-import WebsiteLink from '_c/wechat-account/defineMenu/link/link';
+import WebsiteLink from "_c/wechat-account/defineMenu/link/link";
+import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 export default {
+  props: {
+    menuData: {
+      type: Array
+    },
+    menuDetail: {
+      type: Object
+    }
+  },
   data() {
     return {
       curIndex: 0,
       isOrder: false,
       form: {
-        name: "",
-        type: "message"
+        name: '',
+        type: 'message'
       },
-      replyContentType: 'picture',
+      imageChooseAreaShowFlag: false,
+      replyContentType: "picture",
       menuWords: "",
-      chooseImg: "",
-      menuData: []
+      chooseImg: ""
     };
   },
   components: {
     OrderMenu,
     MessageArea,
     WebsiteArea,
-    WebsiteLink
+    WebsiteLink,
+    ImageManage
+  },
+  computed: {
+    // ...mapGetters(['menuReplyMessageBehavior'])
   },
   created() {
     this._handleGetMenuData();
@@ -122,34 +133,13 @@ export default {
   methods: {
     // 获取菜单数据
     _handleGetMenuData() {
-      let menuData = [
-        {
-          name: "主要菜单",
-          type: "words",
-          menuType: "message",
-          children: [{ name: "" }, { name: "" }]
-        },
-        {
-          name: "www",
-          children: [
-            { name: "2222" },
-            { name: "3333" },
-            { name: 444 },
-            { name: "3333" },
-            { name: 444 }
-          ]
-        }
-      ];
-      this.menuData = menuData;
-      this.form.name = menuData[this.curIndex].name;
-      this.form.type = menuData[this.curIndex].menuType;
       if (menuData[this.curIndex].type !== this.replyContentType) {
-        this.$emit('changeReplyContent', menuData[this.curIndex].type)
+        this.$emit("changeReplyContent", menuData[this.curIndex].type);
       }
     },
     // 菜单排序
     _handleMenuOrder() {
-      this.isOrder = !this.isOrder
+      this.isOrder = !this.isOrder;
     },
     // 切换menu
     _handleSelectMenu(i) {
@@ -161,8 +151,10 @@ export default {
     _handleAddChildMenu() {},
     // 删除菜单
     _handleDeleteMenu() {},
-    // 上传图片
-    _handleUploadPicture() {},
+    // 打开选择图片弹层
+    _handleUploadPicture() {
+      this.imageChooseAreaShowFlag = true;
+    },
     // 保存并发布
     _handleSaveAndPublish() {
       console.log(this.form);
@@ -170,7 +162,16 @@ export default {
     // 替换菜单编辑图片部分
     _handleSwitchImg() {},
     // 删除菜单编辑图片部分
-    _handleDeleteImg() {}
+    _handleDeleteImg() {},
+    // 获取图片
+    getImage(src) {
+      console.log(src)
+      this.chooseImg = src;
+    },
+    // 关闭弹层
+    handleCloseModal() {
+      this.imageChooseAreaShowFlag = false;
+    }
   }
 };
 </script>
@@ -207,8 +208,8 @@ export default {
         margin: 8px;
         width: 26px;
         height: 17px;
-        background: url("~img/account/define_menu_keyboard.png") no-repeat center
-          center;
+        background: url("~img/account/define_menu_keyboard.png") no-repeat
+          center center;
         background-size: 100% 100%;
       }
       .phone-menu__divider {
@@ -265,7 +266,7 @@ export default {
               .menu-move__icon {
                 margin-right: 4px;
                 font-size: 16px;
-                color: #A1A8B1;
+                color: #a1a8b1;
                 cursor: pointer;
               }
             }
@@ -367,8 +368,10 @@ export default {
             margin: 0 auto;
             width: 60px;
             height: 60px;
-            background: url('~img/account/define_menu_add.png') no-repeat center center;
+            background: url("~img/account/define_menu_add.png") no-repeat center
+              center;
             background-size: 100% 100%;
+            cursor: pointer;
           }
           p {
             padding-top: 24px;
@@ -378,6 +381,7 @@ export default {
             color: rgba(9, 204, 235, 1);
             line-height: 20px;
             text-align: center;
+            cursor: pointer;
           }
         }
         .picture-show {
@@ -436,6 +440,28 @@ export default {
     .define-menu__confirm--button {
       text-align: center;
     }
+  }
+  .image-choose__mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .image-choose__section {
+    position: fixed;
+    width: 80%;
+    min-width: 800px;
+    max-width: 1200px;
+    height: 800px;
+    margin: auto;
+    z-index: 112;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    overflow: hidden;
   }
 }
 </style>

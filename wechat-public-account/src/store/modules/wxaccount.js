@@ -7,7 +7,8 @@ const user = {
       isAuth: false,
       isCertification: false
     },
-    account_info: {}
+    account_info: {},
+    menu_reply_behavior: {}
   },
   getters: {
     wx_status: state => state.wx_status,
@@ -19,6 +20,9 @@ const user = {
     },
     SET_ACCOUNT_INFO: (state, payload) => { 
       state.account_info = payload;
+    },
+    SET_MENU_BEHAVIOR: (state, payload) => {
+      state.menuReplyMessageBehavior = payload
     }
   },
   actions: {
@@ -32,7 +36,8 @@ const user = {
       let accountInfo = {
         platformName: data.platformNiceName,
         platformAvator: data.platformHeadImg,
-        serviceTypeInfo: data.serviceTypeInfo
+        serviceTypeInfo: data.serviceTypeInfo,
+        platformAppId: data.platformAppId
       }
       commit("SET_WX_STATUS", verify);
       commit("SET_ACCOUNT_INFO", accountInfo)
