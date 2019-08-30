@@ -12,6 +12,7 @@
     </ul>
     <popup
       :model="model"
+      :popupShow="popupShow"
       @handleClosePopup="handleClosePopup"
       v-if="popupShow"
     />

@@ -1,60 +1,58 @@
 <template>
-  <div class="link-popup__container" id="popup" @click="_handleClosePopup($event)">
-    <div class="link-popup__section">
-      <div class="popup-header__area">
-        <span>设置链接</span>
-        <span @click.stop="_handleCancle"></span>
-      </div>
-      <ul class="popup-content__slider">
-        <li v-for="(it ,i) in sliderList" :key="i">
-          <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
-        </li>
-      </ul>
-      <div class="popup-content__box">
-        <none-area :tips="tips" v-show="slider == 'none'" :noneWords="noneWords" />
-        <url-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          v-if="slider == 'link'"
-        />
-        <page-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          v-if="slider == 'page'"
-        />
-        <news-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          v-if="slider == 'news'"
-        />
-        <product-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          v-if="slider == 'product'"
-        />
-      </div>
-      <div class="popup-footer__area">
-        <el-button type="primary" size="small" @click.stop="_handleConfirm">确定</el-button>
-        <el-button size="small" @click.stop="_handleCancle">取消</el-button>
-      </div>
+  <el-drawer :visible.sync="popupShow" :before-close="_handleClose">
+    <div class="popup-header__area">
+      <span>设置链接</span>
+      <span @click.stop="_handleCancle"></span>
     </div>
-  </div>
+    <ul class="popup-content__slider">
+      <li v-for="(it ,i) in sliderList" :key="i">
+        <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
+      </li>
+    </ul>
+    <div class="popup-content__box">
+      <none-area :tips="tips" v-show="slider == 'none'" :noneWords="noneWords" />
+      <url-area
+        :model="model"
+        :selectedUrl="selectedUrl"
+        :way="way"
+        :type="type"
+        :curType="curType"
+        @handleChangeUrl="handleChangeUrl"
+        v-if="slider == 'link'"
+      />
+      <page-area
+        :model="model"
+        :selectedUrl="selectedUrl"
+        :way="way"
+        :type="type"
+        :curType="curType"
+        @handleChangeUrl="handleChangeUrl"
+        v-if="slider == 'page'"
+      />
+      <news-area
+        :model="model"
+        :selectedUrl="selectedUrl"
+        :way="way"
+        :type="type"
+        :curType="curType"
+        @handleChangeUrl="handleChangeUrl"
+        v-if="slider == 'news'"
+      />
+      <product-area
+        :model="model"
+        :selectedUrl="selectedUrl"
+        :way="way"
+        :type="type"
+        :curType="curType"
+        @handleChangeUrl="handleChangeUrl"
+        v-if="slider == 'product'"
+      />
+    </div>
+    <div class="popup-footer__area">
+      <el-button type="primary" size="small" @click.stop="_handleConfirm">确定</el-button>
+      <el-button size="small" @click.stop="_handleCancle">取消</el-button>
+    </div>
+  </el-drawer>
 </template>
 
 <script>
@@ -67,6 +65,9 @@ export default {
   props: {
     model: {
       type: Object
+    },
+    popupShow: {
+      type: Boolean
     }
   },
   data() {
@@ -115,6 +116,7 @@ export default {
     }
   },
   methods: {
+    _handleClose() {},
     _handleSliderChange(val) {
       this.slider = val;
       if (val == "none") {
@@ -195,74 +197,54 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.link-popup__container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  z-index: 110;
-  .link-popup__section {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 470px;
-    height: 100%;
-    min-height: 620px;
-    background: rgba(255, 255, 255, 1);
-    // box-shadow: 0px 0px 8px 2px rgba(228, 234, 239, 1);
-    border-radius: 2px;
-    .popup-header__area {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 24px;
-      height: 70px;
-      border-bottom: 1px solid #c9d9dc;
-      cursor: auto;
-      span:first-of-type {
-        font-size: 16px;
-        font-family: "PingFangSC";
-        font-weight: 500;
-        color: rgba(38, 38, 38, 1);
-        line-height: 24px;
-      }
-      span:last-of-type {
-        width: 14px;
-        height: 14px;
-        background: url("~img/account/close.png") no-repeat center center;
-        background-size: 100% 100%;
-        cursor: pointer;
-      }
-    }
-    .popup-content__slider {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      width: 100%;
-      height: 66px;
-      padding: 24px;
-      border-bottom: 1px solid #c9d9dc;
-      cursor: auto;
-      li {
-        margin-right: 32px;
-        font-size: 14px;
-        padding-bottom: 16px;
-      }
-    }
-    .popup-content__box {
-      overflow: hidden;
-      height: 420px;
-    }
-    .popup-footer__area {
-      position: absolute;
-      left: 24px;
-      bottom: 24px;
-      display: flex;
-      justify-content: flex-end;
-    }
+.popup-header__area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  height: 70px;
+  border-bottom: 1px solid #c9d9dc;
+  cursor: auto;
+  span:first-of-type {
+    font-size: 16px;
+    font-family: "PingFangSC";
+    font-weight: 500;
+    color: rgba(38, 38, 38, 1);
+    line-height: 24px;
   }
+  span:last-of-type {
+    width: 14px;
+    height: 14px;
+    background: url("~img/account/close.png") no-repeat center center;
+    background-size: 100% 100%;
+    cursor: pointer;
+  }
+}
+.popup-content__slider {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: 66px;
+  padding: 24px;
+  border-bottom: 1px solid #c9d9dc;
+  cursor: auto;
+  li {
+    margin-right: 32px;
+    font-size: 14px;
+    padding-bottom: 16px;
+  }
+}
+.popup-content__box {
+  overflow: hidden;
+  height: 420px;
+}
+.popup-footer__area {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
 <style scoped>
@@ -284,6 +266,9 @@ export default {
 }
 .popup-footer__area /deep/ .el-button--primary span {
   color: #fff;
+}
+.el-dialog__wrapper /deep/ .el-drawer__header {
+  display: none;
 }
 </style>
 
