@@ -28,9 +28,9 @@
                         v-model="item.keyword"
                         maxlength="30"
                         show-word-limit
-                        @blur="checkKeyword"
+                        @blur="checkKeyword(index)"
                     ></el-input>
-                    <div class="ym-form-item__error" v-show="error.onerrorTip">{{error.onerrorText}}</div>
+                    <div class="ym-form-item__error" v-show="error[index].onerrorTip">{{error[index].onerrorText}}</div>
                 </span>
                 <button class="keyword-btn addKeyword" @click="addKeyword">
                     <i class="iconfont iconjian"></i>
@@ -66,7 +66,7 @@
                         <span
                             v-for="(child,index) in item.keywordList"
                             :key="index"
-                        >{{child.keyword}}</span>
+                        >{{child.keyword}}<i v-if="item.keywordList.length-1 !=index && index ==0">，</i> </span>
                     </p>
                     <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
@@ -103,10 +103,10 @@ export default {
             keywordCount: 2,
             serchTitle: "",
             keyword: "",
-            error: {
+            error:[ {
                 onerrorTip: false,
                 onerrorText: ""
-            },
+            }],
 
             matchValue: "true",
             data: [
@@ -140,14 +140,14 @@ export default {
             this.keywordList[index].matchType = value;
         },
         //校验关键词
-        checkKeyword() {
-            if (!trim(this.keyword)) {
-                this.error.onerrorTip = true;
-                this.error.onerrorText = "关键词不能为空";
+        checkKeyword(index) {
+            if (!trim(this.keywordList[index].keyword)) {
+                this.error[index].onerrorTip = true;
+                this.error[index].onerrorText = "关键词不能为空";
                 return false;
             } else {
-                this.error.onerrorTip = false;
-                this.error.onerrorText = "";
+                this.error[index].onerrorTip = false;
+                this.error[index].onerrorText = "";
                 return true;
             }
         },
@@ -159,10 +159,14 @@ export default {
         },
         addKeyword() {
             this.keywordList.push({
-                matchType: 2,
-                matchName: "半匹配",
-                keyword: "123"
+                  matchType: 2,
+                  keyword: ""
             });
+            this.error.push({
+                onerrorTip: false,
+                onerrorText: ""
+            })
+
         },
         handlerDelete(id) {
             this.$emit("removeKeywordReply", id);

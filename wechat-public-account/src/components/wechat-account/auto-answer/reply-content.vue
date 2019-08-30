@@ -48,6 +48,7 @@ export default {
     },
     computed: {
         picture() {
+            console.log(this.isPicture)
             return !!this.isPicture && "picture";
         }
     }
