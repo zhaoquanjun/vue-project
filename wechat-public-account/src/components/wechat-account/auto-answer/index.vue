@@ -75,7 +75,7 @@ export default {
     data() {
         return {
             replyType: "1", //replyType 回复类型
-            isPicture: true,
+            isPicture: false,
             msgType: 1, //msgType 消息类型
             addAnswer: true,
             replycontentData: {
@@ -132,7 +132,7 @@ export default {
             console.log(data, "获取回复详情");
             let jsonData = data.data;
             this.replyDetail = jsonData;
-            // this.msgType = jsonData.msgType
+             this.msgType = jsonData.msgType
             if (jsonData.isSet) {
                 if (jsonData.msgType === 1) {
                     this.replycontentData.imageMsg = jsonData.data;
@@ -348,7 +348,7 @@ export default {
         handleClick(tab, event) {
             this.resetReplycontentData();
             this.msgType = 1;
-            this.addAnswer = this.isPicture = true;
+            this.addAnswer = true;
             if (this.replyType !== "3") {
                 this._getReplyDetail(this.replyType);
                 this.$nextTick(() => {
@@ -356,7 +356,13 @@ export default {
                 });
             } else if (this.replyType === "3") {
                 this._getKeywordReplyList(this.searchOption);
+            };
+            if(this.msgType==2){
+                 this.isPicture = false
+            }else if(this.msgType==1){
+                this.isPicture = true
             }
+           
         },
         // 重置replycontentData
         resetReplycontentData() {
