@@ -3,7 +3,6 @@ import Vuex from "vuex";
 import dashboard from "./modules/dashboard";
 import user from "./modules/user";
 import wxaccount from './modules/wxaccount';
-import Cookies from "js-cookie"
 Vue.use(Vuex);
 
 import { setLocal, getLocal, removeLocal } from '@/libs/local'
