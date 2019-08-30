@@ -7,7 +7,7 @@
                     <span class="select-item">
                         <el-select
                             size="small"
-                            v-model="matchLabel"
+                            :value="item.matchType==1?'全匹配':'半匹配'"
                             placeholder="请选择"
                             @change="changeStatus($event,index)"
                             :popper-append-to-body="false"
@@ -57,13 +57,18 @@
 
             <ul class="advance-list__area">
                 <li>
-                    <p class="list-columns__1">功能</p>
-                    <p class="list-columns__2">条件</p>
+                    <p class="list-columns__1">关键词</p>
+                    <p class="list-columns__2">回复内容</p>
                     <p class="list-columns__3">操作</p>
                 </li>
-                <li v-for="(item, index) in data" :key="index">
-                    <p class="list-columns__1 ellipsis">{{item.title}}</p>
-                    <p class="list-columns__2 ellipsis">{{item.condition}}</p>
+                <li v-for="(item, index) in keywordData.list" :key="index">
+                    <p class="list-columns__1 ellipsis">
+                        <span
+                            v-for="(child,index) in item.keywordList"
+                            :key="index"
+                        >{{child.keyword}}</span>
+                    </p>
+                    <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
                         <button>
                             <i class="iconfont iconcaozuo"></i>
@@ -75,7 +80,16 @@
                 </li>
             </ul>
             <div class="paging">
-                <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+              
+                 <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next"
+                    :total="keywordData.totalRecord"
+                    :page-count="keywordData.totalPage"
+                    :page-size="keywordData.pageSize"
+                    :page-sizes="[10,20,50]"
+                   
+                ></el-pagination>
             </div>
         </div>
     </div>
@@ -83,17 +97,17 @@
 <script>
 import { trim } from "@/utlis/index.js";
 export default {
-    props: ["addAnswer","keywordData"],
+    props: ["addAnswer", "keywordData"],
     data() {
         return {
-            keywordCount:2,
+            keywordCount: 2,
             serchTitle: "",
             keyword: "",
             error: {
                 onerrorTip: false,
                 onerrorText: ""
             },
-          
+
             matchValue: "true",
             data: [
                 {
@@ -102,7 +116,7 @@ export default {
                     condition: "的服务号或订阅号,并且设置了JS接口安全域名"
                 }
             ],
-              matchOption: [
+            matchOption: [
                 {
                     matchType: "2",
                     matchLabel: "半匹配"
@@ -112,18 +126,18 @@ export default {
                     matchLabel: "全匹配"
                 }
             ],
-             matchLabel: "2",
-            keywordList:[
+            matchLabel: "2",
+            keywordList: [
                 {
-                    matchType:2,
-                    keyword:""
+                    matchType: 2,
+                    keyword: ""
                 }
             ]
         };
     },
     methods: {
-        changeStatus(value,index) {
-            this.keywordList[index].matchType=value;
+        changeStatus(value, index) {
+            this.keywordList[index].matchType = value;
         },
         //校验关键词
         checkKeyword() {
@@ -143,15 +157,25 @@ export default {
         handlerAdd() {
             this.$emit("handlerAddAnswer", false);
         },
-        addKeyword(){
+        addKeyword() {
             this.keywordList.push({
-                    matchType:2,
-                    matchName:"半匹配",
-                    keyword:"123"
-            })
+                matchType: 2,
+                matchName: "半匹配",
+                keyword: "123"
+            });
         },
-        handlerDelete(id){
-            this.$emit("removeKeywordReply",id)
+        handlerDelete(id) {
+            this.$emit("removeKeywordReply", id);
+        },
+        magTypeFn(type) {
+            switch (type) {
+                case 1:
+                    return "图片";
+                case 2:
+                    return "文字";
+                case 3:
+                    return "图文";
+            }
         }
     }
 };
@@ -193,7 +217,7 @@ button {
     .keyword-answer-content {
         padding: 24px 0 0 16px;
         border-top: 1px solid #e5e5e5;
-        .keyword-list{
+        .keyword-list {
             padding-bottom: 32px;
         }
         .select-item {
@@ -267,9 +291,9 @@ button {
     }
 }
 .keyword-btn {
-    .iconfont{
+    .iconfont {
         font-size: 32px;
-        color: #09CCEB;
+        color: #09cceb;
         vertical-align: middle;
     }
 }
