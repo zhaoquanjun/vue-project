@@ -1,9 +1,5 @@
 <template>
-  <el-drawer :visible.sync="popupShow" :before-close="_handleClose">
-    <div class="popup-header__area">
-      <span>设置链接</span>
-      <span @click.stop="_handleCancle"></span>
-    </div>
+  <el-drawer :visible.sync="popupShow" :size="'470px'" :title="'设置链接'" :before-close="_handleClose">
     <ul class="popup-content__slider">
       <li v-for="(it ,i) in sliderList" :key="i">
         <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
@@ -14,7 +10,7 @@
       <url-area
         :model="model"
         :selectedUrl="selectedUrl"
-        :way="way"
+        
         :type="type"
         :curType="curType"
         @handleChangeUrl="handleChangeUrl"
@@ -23,7 +19,7 @@
       <page-area
         :model="model"
         :selectedUrl="selectedUrl"
-        :way="way"
+        
         :type="type"
         :curType="curType"
         @handleChangeUrl="handleChangeUrl"
@@ -32,7 +28,7 @@
       <news-area
         :model="model"
         :selectedUrl="selectedUrl"
-        :way="way"
+        
         :type="type"
         :curType="curType"
         @handleChangeUrl="handleChangeUrl"
@@ -41,7 +37,7 @@
       <product-area
         :model="model"
         :selectedUrl="selectedUrl"
-        :way="way"
+        
         :type="type"
         :curType="curType"
         @handleChangeUrl="handleChangeUrl"
@@ -50,7 +46,7 @@
     </div>
     <div class="popup-footer__area">
       <el-button type="primary" size="small" @click.stop="_handleConfirm">确定</el-button>
-      <el-button size="small" @click.stop="_handleCancle">取消</el-button>
+      <el-button size="small" @click.stop="_handleClose">取消</el-button>
     </div>
   </el-drawer>
 </template>
@@ -116,7 +112,14 @@ export default {
     }
   },
   methods: {
-    _handleClose() {},
+    _handleClose() {
+      this.selectedUrl = this.model["Href"];
+      this.curType = this.model["Type"];
+      this.way = this.model["Target"];
+      this.slider = this.model["Type"];
+      this.model["PageIndex"] = this.pageIndex;
+      this.$emit("handleClosePopup", false);
+    },
     _handleSliderChange(val) {
       this.slider = val;
       if (val == "none") {
@@ -143,14 +146,6 @@ export default {
         data["PageIndex"] = this.model["PageIndex"];
         this.handleChangeMenuContent(null, oldData, data);
       }
-      this.$emit("handleClosePopup", false);
-    },
-    _handleCancle() {
-      this.selectedUrl = this.model["Href"];
-      this.curType = this.model["Type"];
-      this.way = this.model["Target"];
-      this.slider = this.model["Type"];
-      this.model["PageIndex"] = this.pageIndex;
       this.$emit("handleClosePopup", false);
     },
     _handleClosePopup(e) {
@@ -268,7 +263,9 @@ export default {
   color: #fff;
 }
 .el-dialog__wrapper /deep/ .el-drawer__header {
-  display: none;
+  padding: 24px;
+  margin-bottom: 0;
+  border-bottom: 1px solid #c9d9dc;
 }
 </style>
 

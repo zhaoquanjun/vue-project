@@ -36,7 +36,7 @@ router.beforeEach(async (to, from, next) => {
       await store.dispatch('_getMenuListData')
     }
     let r = await store.dispatch('getCurRouteAuth', to.path);
-  
+    console.log(store)
     if (r) {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')

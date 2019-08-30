@@ -2,12 +2,6 @@
   <div class="popup-content__area">
     <div class="popup-content__add">
       <p>请选择所需链接的文章</p>
-      <el-button
-        type="primary"
-        icon="el-icon-plus"
-        size="small"
-        @click.stop="_handleAddArticle"
-      >添加文章</el-button>
     </div>
     <div class="popup-content__main">
       <div class="content-main__slider">
@@ -37,34 +31,34 @@
               :class="{active: (it.url == selectedUrl && curType == 'news')}"
               @click.stop="_handleSelectPage(i)"
             >
-              <p class="single-line__overflow--hide">{{it.title}}</p>
+              <p class="single-line__overflow--hide ellipsis">{{it.title}}</p>
               <p class="date single-line__overflow--hide">
-                <span>{{it.createTimeStr && it.createTimeStr.slice(0, 10)}}</span>
                 <span
                   :style="{visibility: it.url == selectedUrl && curType == 'news' ? 'visible' : 'hidden'}"
                 ></span>
               </p>
             </li>
           </ul>
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :page-size="pageSize"
-            :total="total"
-            :current-page="pageIndex"
-            @current-change="_handleChangeCurrent"
-            style="margin-top: 12px"
-          ></el-pagination>
         </div>
-        <none-area v-show="!newsList.length">
+        <none-area v-show="!newsList.length" style="height: calc(100% - 72px);">
           <span v-if="!search">
             暂无文章，请先
             <span style="color: #00C1DE;cursor: pointer;" @click="_handleAddArticle">添加文章</span>
           </span>
           <span v-else>暂无搜索数据，请重新输入</span>
         </none-area>
-        <loading v-show="loading" />
+        <!-- <loading v-show="loading" /> -->
       </div>
+    </div>
+    <div class="footer-pegitation__area">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="pageSize"
+        :total="total"
+        :current-page="pageIndex"
+        @current-change="_handleChangeCurrent"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -72,6 +66,7 @@
 <script>
 import NoneArea from "./none";
 import Loading from "../loading/loading";
+import { getArticleList, getArticleCategory } from "@/api/request/account.js";
 export default {
   props: {
     model: {
@@ -95,6 +90,7 @@ export default {
       defaultExpandedKeys: [],
       treeArray: [],
       newsList: [],
+      pageIndex: 1,
       loading: false,
       target: "createArticle",
       search: false,
@@ -136,13 +132,13 @@ export default {
         isDescending: true
       };
       this.loading = true;
-      let { data } = await linkApi.getArticleList(options);
+      let { data } = await getArticleList(options);
       this.total = data.totalRecord;
       this.newsList = data.list;
       this.loading = false;
     },
     async getCategorytree() {
-      let { data } = await linkApi.getArticleCategory();
+      let { data } = await getArticleCategory();
       this.defaultExpandedKeys = this._handleRecursive(data, []);
       this.treeArray = data;
     },
@@ -192,68 +188,60 @@ export default {
 
 <style lang="scss" scoped>
 .popup-content__area {
-  width: 590px;
-  height: 454px;
   .popup-content__add {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 56px;
-    padding: 0 12px;
+    padding: 24px;
     p {
-      color: #00c1de;
       font-size: 14px;
-      line-height: 17px;
-      cursor: auto;
+      font-family: "PingFangSC";
+      font-weight: 400;
+      color: rgba(5, 149, 230, 1);
+      line-height: 20px;
     }
   }
-
   .popup-content__main {
-    margin: 0 auto;
+    margin: 0 24px;
     display: flex;
     justify-content: flex-start;
-    width: 563px;
-    height: 297px;
+    height: 300px;
     text-align: right;
-    border: 1px solid rgba(238, 238, 238, 1);
+    border: 1px solid #c9d9dc;
     .content-main__slider {
-      padding: 16px 8px;
-      width: 128px;
-      height: 294px;
+      width: 156px;
+      height: 300px;
       overflow-y: auto;
-      border-right: 1px solid #eee;
+      border-right: 1px solid #c9d9dc;
     }
 
     .content-main__list {
       position: relative;
-      width: 434px;
-      height: 297px;
+      width: 264px;
+      height: 300px;
       .content-main__search {
         display: flex;
         align-items: flex-end;
-        margin-left: 8px;
-        width: 415px;
-        height: 36px;
-        border-bottom: 1px solid #e5e5e5;
+        margin: 16px;
+        width: 224px;
+        height: 40px;
       }
 
       .content-main__list--outer {
         overflow: hidden;
         .content-main__list--item {
           padding: 10px 6px 0;
-          width: 434px;
-          height: 200px;
+          height: 214px;
           overflow-y: auto;
           li {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
-            padding: 0 8px;
-            height: 26px;
+            padding: 0 6px;
+            height: 40px;
+            line-height: 40px;
             cursor: pointer;
             p {
-              width: 300px;
               padding: 0;
               font-size: 14px;
               color: #262626;
@@ -272,8 +260,8 @@ export default {
                 margin-left: 14px;
                 width: 18px;
                 height: 18px;
-                background: url("~img/account/selected.png") no-repeat
-                  center center;
+                background: url("~img/account/selected.png") no-repeat center
+                  center;
                 background-size: 100% 100%;
               }
             }
@@ -296,6 +284,11 @@ export default {
         }
       }
     }
+  }
+  .footer-pegitation__area {
+    margin-top: 24px;
+    padding: 0 24px;
+    text-align: right;
   }
 }
 </style>
@@ -331,9 +324,9 @@ i {
   color: #b5b5b5;
 }
 .content-main__search /deep/ .el-input__inner {
-  border: none !important;
-  height: 28px;
-  line-height: 28px;
+  border: 1px solid #c9d9dc !important;
+  height: 40px;
+  line-height: 40px;
   text-align: left;
 }
 .popup-content__main /deep/ .btn-prev,
