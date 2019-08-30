@@ -18,18 +18,6 @@
           </p>
         </li>
       </ul>
-      <div class="popup-content__open">
-        <p>页面打开方式</p>
-        <div class="way-list__box">
-          <el-radio v-model="way" label="_self" @change="_handleChageLinkTarget">当前窗口打开</el-radio>
-          <el-radio
-            v-model="way"
-            label="_blank"
-            style="margin-left: 24px;"
-            @change="_handleChageLinkTarget"
-          >新窗口打开</el-radio>
-        </div>
-      </div>
     </template>
     <none-area :tips="tips" v-else />
   </div>
@@ -43,9 +31,6 @@ export default {
       type: Object
     },
     selectedUrl: {
-      type: String
-    },
-    way: {
       type: String
     },
     type: {
@@ -83,9 +68,6 @@ export default {
         cType: "page"
       });
     },
-    _handleChageLinkTarget(val) {
-      this.$emit("handleChangeTarget", val);
-    }
   }
 };
 </script>
@@ -133,7 +115,7 @@ export default {
           margin-left: 14px;
           width: 18px;
           height: 18px;
-          background: url("~@static/images/link/selected.png") no-repeat center
+          background: url("~img/account/selected.png") no-repeat center
             center;
           background-size: 100% 100%;
         }
@@ -153,23 +135,6 @@ export default {
           color: #fff;
         }
       }
-    }
-  }
-  .popup-content__open {
-    padding: 16px 16px 0;
-    width: 590px;
-    height: 78px;
-    border-top: 1px solid #eee;
-    p {
-      padding: 0 0 12px;
-      font-size: 14px;
-      line-height: 17px;
-      color: #00C1DE;
-    }
-    .way-list__box {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
     }
   }
 }

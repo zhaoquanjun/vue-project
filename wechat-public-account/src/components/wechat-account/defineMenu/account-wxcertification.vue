@@ -10,7 +10,7 @@
           <img :src="certificationIcon" alt />
         </div>
         <p class="certification-desc">请先认证再使用该功能</p>
-        <a class="certification-button--normal primary-button__nomal--shadow" :href="certificationHref">去认证</a>
+        <div class="certification-button--normal primary-button__nomal--shadow" @click="_handleCertification">去认证</div>
       </div>
     </div>
   </div>
@@ -26,7 +26,26 @@ export default {
   },
   methods: {
     // 微信认证
-    _handleCertification() {}
+    _handleCertification() {
+      let oA = document.createElement("a");
+      oA.setAttribute("href", this.certificationHref);
+      oA.setAttribute("id", "authBtn");
+      oA.setAttribute("target", "_blank");
+      document.body.appendChild(oA);
+      let btn = document.getElementById("authBtn");
+      btn.click();
+      if (btn) document.body.removeChild(document.getElementById("authBtn"));
+      this.$confirm("提示", {
+        title: "提示",
+        showCancelButton: false,
+        message: this.$createElement("div", null, '是否认证成功'),
+        callback: async action => {
+          if (action === "confirm") {
+            location.reload();
+          }
+        }
+      });
+    }
   }
 };
 </script>

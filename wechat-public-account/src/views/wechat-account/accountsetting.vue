@@ -37,7 +37,7 @@
 
 <script>
 import PageSubNav from "_c/common/WechatTitle";
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -63,19 +63,15 @@ export default {
   created() {
     this._getWxIsAuth();
     setTimeout(() => {
-      console.log(this.account_info)
+      console.log(this.account_info);
     }, 5000);
   },
   computed: {
- ...mapGetters([
-      'account_info',
-    ])
+    ...mapGetters(["account_info"])
   },
   methods: {
     // 校验是否已经授权认证
-    async _getWxIsAuth() {
-      
-    }
+    async _getWxIsAuth() {}
   }
 };
 </script>

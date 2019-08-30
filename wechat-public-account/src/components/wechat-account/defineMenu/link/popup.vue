@@ -5,12 +5,12 @@
         <span>设置链接</span>
         <span @click.stop="_handleCancle"></span>
       </div>
+      <ul class="popup-content__slider">
+        <li v-for="(it ,i) in sliderList" :key="i">
+          <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
+        </li>
+      </ul>
       <div class="popup-content__box">
-        <ul class="popup-content__slider">
-          <li v-for="(it ,i) in sliderList" :key="i">
-            <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
-          </li>
-        </ul>
         <none-area :tips="tips" v-show="slider == 'none'" :noneWords="noneWords" />
         <page-area
           :model="model"
@@ -19,7 +19,6 @@
           :type="type"
           :curType="curType"
           @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
           v-if="slider == 'page'"
         />
         <news-area
@@ -29,7 +28,6 @@
           :type="type"
           :curType="curType"
           @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
           v-if="slider == 'news'"
         />
         <product-area
@@ -39,7 +37,6 @@
           :type="type"
           :curType="curType"
           @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
           v-if="slider == 'product'"
         />
         <url-area
@@ -49,18 +46,7 @@
           :type="type"
           :curType="curType"
           @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
           v-if="slider == 'link'"
-        />
-        <mask-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
-          v-if="slider == 'popup'"
         />
       </div>
       <div class="popup-footer__area">
@@ -77,7 +63,6 @@ import PageArea from "./page";
 import NewsArea from "./news";
 import ProductArea from "./product";
 import UrlArea from "./url";
-import MaskArea from "./mask";
 export default {
   props: {
     model: {
@@ -91,32 +76,29 @@ export default {
         { name: "页面", label: "page" },
         { name: "文章", label: "news" },
         { name: "产品", label: "product" },
-        { name: "链接", label: "link" },
-        { name: "邮件", label: "email" },
-        { name: "文件", label: "file" },
-        { name: "电话", label: "tel" },
-        { name: "弹窗", label: "popup" }
+        { name: "链接", label: "link" }
       ],
       noneWords: {
         words: "暂无链接",
         target: []
       },
-      pageIndex: this.model["PageIndex"],
+      // pageIndex: this.model["PageIndex"],
       slider: this.model["Type"],
       curType: this.model["Type"],
       selectedUrl: this.model["Href"],
-      way: this.model["Target"],
       tips: "无链接",
       title: ""
     };
+  },
+  created() {
+    console.log(this.model, this.slider);
   },
   components: {
     NoneArea,
     PageArea,
     NewsArea,
     ProductArea,
-    UrlArea,
-    MaskArea
+    UrlArea
   },
   computed: {
     type: {
@@ -146,29 +128,18 @@ export default {
       var flag = this._handleNext(this.slider);
       if (!flag) return;
       let oldUrl = this.model["Href"];
-      let oldTarget = this.model["Target"];
-      let oldTitle = this.model["Title"];
-      let oldType = this.model["Type"];
-      let oldPageIndex = this.pageIndex;
-      if (oldUrl !== this.selectedUrl || oldTarget !== this.way) {
+      if (oldUrl !== this.selectedUrl) {
         this.model["Href"] = this.selectedUrl;
         this.model["Target"] = this.way;
         this.model["Type"] = this.slider;
         this.model["Title"] = this.title;
-        this.pageIndex = this.model["PageIndex"];
-        let oldData = {},
-          data = {};
-        oldData["Type"] = oldType;
-        oldData["Href"] = oldUrl;
-        oldData["Target"] = oldTarget;
-        oldData["Title"] = oldTitle;
-        oldData["PageIndex"] = oldPageIndex;
+        let data = {};
         data["Type"] = this.slider;
         data["Href"] = this.selectedUrl;
         data["Target"] = this.way;
         data["Title"] = this.title;
         data["PageIndex"] = this.model["PageIndex"];
-        this.onDataChange(null, oldData, data);
+        this.handleChangeMenuContent(null, oldData, data);
       }
       this.$emit("handleClosePopup", false);
     },
@@ -218,15 +189,7 @@ export default {
       this.title = val.title;
       return false;
     },
-    handleChangeTarget(val) {
-      console.log(val);
-      this.way = val;
-    },
-    onDataChange(action, oldData, data) {
-      if (window.smSite) {
-        window.smSite.onDataChange(action, oldData, data);
-      }
-    }
+    handleChangeMenuContent(action, oldData, data) {}
   }
 };
 </script>
@@ -239,14 +202,13 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
-  z-index: 19;
+  z-index: 110;
   .link-popup__section {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 680px;
-    height: 560px;
+    top: 0;
+    right: 0;
+    width: 470px;
+    height: 100%;
     background: rgba(255, 255, 255, 1);
     // box-shadow: 0px 0px 8px 2px rgba(228, 234, 239, 1);
     border-radius: 2px;
@@ -254,40 +216,43 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 8px;
-      height: 39px;
-      border-bottom: 1px solid #eee;
+      padding: 0 24px;
+      height: 70px;
+      border-bottom: 1px solid #c9d9dc;
       cursor: auto;
       span:first-of-type {
-        font-size: 14px;
+        font-size: 16px;
+        font-family: "PingFangSC";
+        font-weight: 500;
+        color: rgba(38, 38, 38, 1);
+        line-height: 24px;
       }
       span:last-of-type {
-        width: 12px;
-        height: 12px;
-        background: url("~@static/images/link/close.png") no-repeat center
-          center;
+        width: 14px;
+        height: 14px;
+        background: url("~img/account/close.png") no-repeat center center;
         background-size: 100% 100%;
         cursor: pointer;
       }
     }
-    .popup-content__box {
+    .popup-content__slider {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
-      height: 454px;
-      overflow: hidden;
-      border-bottom: 1px solid #eee;
-      .popup-content__slider {
-        width: 90px;
-        height: 454px;
-        padding: 21px 12px;
-        border-right: 1px solid #eee;
-        cursor: auto;
-        li {
-          font-size: 14px;
-          padding-bottom: 16px;
-        }
+      width: 100%;
+      height: 66px;
+      padding: 24px;
+      border-bottom: 1px solid #c9d9dc;
+      cursor: auto;
+      li {
+        margin-right: 32px;
+        font-size: 14px;
+        padding-bottom: 16px;
       }
+    }
+    .popup-content__box {
+      overflow: hidden;
+      height: 420px;
     }
     .popup-footer__area {
       padding: 15px 20px 20px;
@@ -309,14 +274,14 @@ export default {
   background: #fff;
 }
 .popup-footer__area /deep/ .el-button--small span {
-    color: #00c1de;
-  }
+  color: #00c1de;
+}
 .popup-footer__area /deep/ .el-button--primary {
   background: #00c1de;
 }
 .popup-footer__area /deep/ .el-button--primary span {
-    color: #fff;
-  }
+  color: #fff;
+}
 </style>
 
 

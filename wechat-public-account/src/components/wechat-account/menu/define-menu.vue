@@ -15,7 +15,7 @@
             {{item.name || '主菜单'}}
             <ul class="menu-child__area">
               <li v-for="(child, idx) in item.children" :key="idx">
-                <i class="iconfont iconshang menu-move__icon"></i>
+                <i class="iconfont icontuodongdian menu-move__icon" v-show="isOrder"></i>
                 {{child.name || '子菜单'}}
               </li>
               <li @click="_handleAddChildMenu" v-show="item.children.length < 5">+</li>
@@ -53,15 +53,14 @@
             </el-form>
             <message-area :menuData="menuData[curIndex]" v-show="form.type == 'message'">
               <div class="picture-menu" v-show="menuData[curIndex].type == 'picture'">
-                <div class="choose-picture__area" v-show="false">
+                <div class="choose-picture__area" v-show="true">
                   <div
                     class="choose-icon"
-                    :style="{backgroundImage: chooseImg}"
                     @click="_handleUploadPicture"
                   ></div>
                   <p @click="_handleUploadPicture">点击上传</p>
                 </div>
-                <div class="picture-show" style="background: #ccc;">
+                <div class="picture-show" v-show="false">
                   <img src alt />
                   <div class="show-mask__area">
                     <div class="icon-box">
@@ -82,7 +81,9 @@
               </div>
               <div class="picture-words__menu" v-show="menuData[curIndex].type == 'picture_words'"></div>
             </message-area>
-            <website-area :menuData="menuData[curIndex]" v-show="form.type == 'website'"></website-area>
+            <website-area :menuData="menuData[curIndex]" v-show="form.type == 'website'">
+              <website-link ></website-link>
+            </website-area>
           </div>
         </div>
       </div>
@@ -93,6 +94,7 @@
 import OrderMenu from "_c/wechat-account/defineMenu/order-menu";
 import MessageArea from "_c/wechat-account/defineMenu/message-content";
 import WebsiteArea from "_c/wechat-account/defineMenu/website-content";
+import WebsiteLink from '_c/wechat-account/defineMenu/link/link';
 export default {
   data() {
     return {
@@ -102,6 +104,7 @@ export default {
         name: "",
         type: "message"
       },
+      replyContentType: 'picture',
       menuWords: "",
       chooseImg: "",
       menuData: []
@@ -110,7 +113,8 @@ export default {
   components: {
     OrderMenu,
     MessageArea,
-    WebsiteArea
+    WebsiteArea,
+    WebsiteLink
   },
   created() {
     this._handleGetMenuData();
@@ -121,7 +125,7 @@ export default {
       let menuData = [
         {
           name: "主要菜单",
-          type: "picture",
+          type: "words",
           menuType: "message",
           children: [{ name: "" }, { name: "" }]
         },
@@ -139,9 +143,14 @@ export default {
       this.menuData = menuData;
       this.form.name = menuData[this.curIndex].name;
       this.form.type = menuData[this.curIndex].menuType;
+      if (menuData[this.curIndex].type !== this.replyContentType) {
+        this.$emit('changeReplyContent', menuData[this.curIndex].type)
+      }
     },
     // 菜单排序
-    _handleMenuOrder() {},
+    _handleMenuOrder() {
+      this.isOrder = !this.isOrder
+    },
     // 切换menu
     _handleSelectMenu(i) {
       this.curIndex = i;
@@ -198,7 +207,7 @@ export default {
         margin: 8px;
         width: 26px;
         height: 17px;
-        background: url("~img/account/account_type_icon.png") no-repeat center
+        background: url("~img/account/define_menu_keyboard.png") no-repeat center
           center;
         background-size: 100% 100%;
       }
@@ -248,13 +257,16 @@ export default {
               line-height: 34px;
               text-align: center;
               width: 144px;
+              font-size: 14px;
               color: #262626;
               border-right: none;
               border-top: 1px solid #c9d9dc;
+              cursor: auto;
               .menu-move__icon {
                 margin-right: 4px;
                 font-size: 16px;
-                color: #262626;
+                color: #A1A8B1;
+                cursor: pointer;
               }
             }
             li:first-of-type {
@@ -355,10 +367,8 @@ export default {
             margin: 0 auto;
             width: 60px;
             height: 60px;
-            img {
-              width: 100%;
-              height: 100%;
-            }
+            background: url('~img/account/define_menu_add.png') no-repeat center center;
+            background-size: 100% 100%;
           }
           p {
             padding-top: 24px;
@@ -373,8 +383,6 @@ export default {
         .picture-show {
           position: relative;
           display: inline-block;
-          width: 500px;
-          height: 300px;
           max-height: 306px;
           max-width: 504px;
           background-repeat: no-repeat;

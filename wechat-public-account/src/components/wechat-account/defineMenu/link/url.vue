@@ -12,13 +12,6 @@
     <p class="error-tips" :style="{visibility: !isLinkUrl ? 'visible' : 'hidden'}">
       <span></span>请输入正确的链接地址
     </p>
-    <div class="popup-content__open">
-      <p>页面打开方式</p>
-      <div class="way-list__box">
-        <el-radio v-model="way" label="_self">当前窗口打开</el-radio>
-        <el-radio v-model="way" label="_blank" style="margin-left: 24px;">新窗口打开</el-radio>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -109,27 +102,9 @@ export default {
       display: block;
       width: 12px;
       height: 12px;
-      background: url("~@static/images/link/error_tips.png") no-repeat center
+      background: url("~img/jian-icon.png") no-repeat center
         center;
       background-size: 100% 100%;
-    }
-  }
-  .popup-content__open {
-    margin-top: 16px;
-    padding: 16px 16px 0;
-    width: 590px;
-    height: 78px;
-    border-top: 1px solid #eee;
-    p {
-      padding: 0 0 12px;
-      font-size: 12px;
-      line-height: 17px;
-      color: #00c1de;
-    }
-    .way-list__box {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
     }
   }
 }
