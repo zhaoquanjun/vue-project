@@ -12,6 +12,15 @@
       </ul>
       <div class="popup-content__box">
         <none-area :tips="tips" v-show="slider == 'none'" :noneWords="noneWords" />
+        <url-area
+          :model="model"
+          :selectedUrl="selectedUrl"
+          :way="way"
+          :type="type"
+          :curType="curType"
+          @handleChangeUrl="handleChangeUrl"
+          v-if="slider == 'link'"
+        />
         <page-area
           :model="model"
           :selectedUrl="selectedUrl"
@@ -39,15 +48,6 @@
           @handleChangeUrl="handleChangeUrl"
           v-if="slider == 'product'"
         />
-        <url-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          v-if="slider == 'link'"
-        />
       </div>
       <div class="popup-footer__area">
         <el-button type="primary" size="small" @click.stop="_handleConfirm">确定</el-button>
@@ -73,10 +73,10 @@ export default {
     return {
       sliderList: [
         { name: "无链接", label: "none" },
+        { name: "网址", label: "link" },
         { name: "页面", label: "page" },
         { name: "文章", label: "news" },
-        { name: "产品", label: "product" },
-        { name: "链接", label: "link" }
+        { name: "产品", label: "product" }
       ],
       noneWords: {
         words: "暂无链接",
@@ -209,6 +209,7 @@ export default {
     right: 0;
     width: 470px;
     height: 100%;
+    min-height: 620px;
     background: rgba(255, 255, 255, 1);
     // box-shadow: 0px 0px 8px 2px rgba(228, 234, 239, 1);
     border-radius: 2px;
@@ -255,7 +256,9 @@ export default {
       height: 420px;
     }
     .popup-footer__area {
-      padding: 15px 20px 20px;
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
       display: flex;
       justify-content: flex-end;
     }
