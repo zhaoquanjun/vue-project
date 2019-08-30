@@ -6,6 +6,7 @@
                 :class="index===0?'fist-item':'list-item'"
                 v-for="(item,index) in list"
                 :key="index"
+                
             >
                 <div class="headline">{{item.title}}</div>
                 <div class="imgwrap">
@@ -28,9 +29,9 @@
                     </button>
                 </div>
             </li>
-            <li class="fist-item editor" ref="editor">
+            <li class="fist-item editor" ref="editor" v-show="isEditorShow">
                 <div class="example">
-                    <div class="headline">这里是标题</div>
+                    <div class="headline">{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
                     <div class="imgwrap">
                         <img
                             src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
@@ -40,7 +41,12 @@
                 <div class="seting-info">
                     <div class="seting-item">
                         <div class="seting-title">设置链接</div>
-                        <el-input size="small" placeholder="输入名称搜索" class="input-with-select">
+                        <el-input
+                            size="small"
+                            placeholder="请选择链接"
+                            v-model="curEditorItem.url"
+                            class="input-with-select"
+                        >
                             <i
                                 class="el-icon-link el-input__icon"
                                 style="cursor: pointer;"
@@ -52,7 +58,7 @@
                         <div class="seting-title">设置封面</div>
                         <div class="cover">
                             <div class="upload-icon" v-if="!isUploaded">
-                                <span class="el-icon-plus "></span>
+                                <span class="el-icon-plus"></span>
                             </div>
                             <img
                                 v-else
@@ -62,23 +68,28 @@
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">图文标题</div>
-                        <el-input size="small" placeholder="不超过64个字符"></el-input>
+                        <el-input v-model="curEditorItem.title" size="small" placeholder="不超过64个字符"></el-input>
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">简介</div>
                         <el-input
                             class="textarea"
                             type="textarea"
+                            v-model="curEditorItem.description"
+                            rows="5"
                             placeholder="非必填，不超过120个字符，该摘要只在发送图文消息为单条时显示"
                             maxlength="120"
                             show-word-limit
                             resize="none"
                         ></el-input>
                     </div>
+                    <div class="seting-item">
+                        <button class="editor-comfirm" @click="handlerConfirm">确定</button>
+                    </div>
                 </div>
             </li>
         </ul>
-        <div class="footer-add" >
+        <div class="footer-add">
             <span class="el-icon-plus avatar-uploader-icon"></span>
             <span>最多添加8个图文消息</span>
         </div>
@@ -86,26 +97,24 @@
 </template>
 <script>
 export default {
+    props: ["newsMsg"],
     data() {
         return {
-            list: [
-                {
-                    title: "1"
-                },
-                {
-                    title: "2"
-                },
-                {
-                    title: "3"
-                }
-            ],
-            isUploaded:false,
+            list: [],
+            defualtTitle: "这里是标题",
+            curEditorItem: {
+                title: "",
+                description: "",
+                picUrl: "123",
+                url: ""
+            },
+            isUploaded: false,
+            isEditorShow: false
         };
     },
-    mounted(){
-        this.$nextTick(()=>{
-          
-        })
+    mounted() {
+        this.list = this.newsMsg;
+        this.$nextTick(() => {});
     },
     methods: {
         downward(item, index) {
@@ -118,14 +127,41 @@ export default {
             this.$set(this.list, index - 1, this.list[index]);
             this.$set(this.list, index, tempOption);
         },
-        editor(item, index){
+        editor(item, index) {
+            this.curEditorItem = item;
             let list = this.$refs.list;
             let editor = this.$refs.editor;
             let listItems = this.$refs.listItem;
-            listItems[index].style.display="none";
-            list.insertBefore(editor,listItems[index]);
+            // for (let i = 0; i < listItems.length; i++) {
+            //     listItems[index].style.display = "block";
+            // }
+            this.listItems= listItems
+            this.index = index;
+            this.isEditor = true;
+            listItems[index].style.display = "none";
+            this.isEditorShow = true
+            list.insertBefore(editor, listItems[index]);
+        },
+        handlerConfirm() {
+            this.listItems[this.index].style.display = "block";
+            if(!this.isEditor){
+                // 新增
+               this.list.push(this.curEditorItem);
+               this.isEditorShow = false;
+            }else{
+                // 编辑
+                this.$set(this.list,this.index,this.curEditorItem)
+            }
             
-
+            this.$emit("handlerSaveImgText", this.list);
+            this.isEditorShow = false;
+        }
+    },
+    computed: {},
+    watch: {
+        newsMsg() {
+            this.list = this.newsMsg;
+            this.isEditorShow = this.list.length > 0 ? false : true;
         }
     }
 };
@@ -225,6 +261,15 @@ export default {
             .seting-title {
                 padding-bottom: 8px;
             }
+            .editor-comfirm {
+                display: block;
+                width: 70px;
+                height: 32px;
+                background: rgba(9, 204, 235, 1);
+                border-radius: 2px;
+                color: #fff;
+                margin: 0 auto;
+            }
             .cover {
                 width: 70px;
                 height: 70px;
@@ -245,7 +290,7 @@ export default {
                     align-items: center;
                     .el-icon-plus {
                         font-size: 24px;
-                        color: #09CCEB;
+                        color: #09cceb;
                     }
                 }
             }

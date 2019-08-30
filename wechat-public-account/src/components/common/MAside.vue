@@ -104,11 +104,13 @@ export default {
                     return "iconbiaodanguanli";
                 case "micro":
                     return "iconweixinxiaochengxu";
-                case "wechat":
+                case "wechataccount":
                     return "iconweixingongzhonghao";
                 case "recycle":
                     return "iconhuishouzhan";
                 case "business":
+                    return "icondianshanghuiyuan";
+                case "template":
                     return "icondianshanghuiyuan";
             }
         },

@@ -23,7 +23,7 @@ export const getKeywordReplyList = () => {
  * @param {Int} id 
  */
 export const removeReply = id => {
-    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/RemoveReply`,{ data: id });
+    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/RemoveReply/${id}`);
 }
 /**
  * 删除关键词回复信息
@@ -45,8 +45,9 @@ export const addKeywordReply = () => {
  * Available values : Follow, Receive
  * 回复类型 1 被关注时回复 2 收到消息时回复
  */
-export const addOrOverrideReply = (replyType,msgType) => {
-    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/AddOrOverrideReply/${replyType}/${msgType}`);
+export const addOrOverrideReply = (option) => {
+    console.log(option)
+    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddOrOverrideReply/${option.replyType}/${option.msgType}`,option.content);
 }
 /**
  * 编辑关键词回复信息
