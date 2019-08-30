@@ -106,7 +106,12 @@ export default {
       type: Array
     },
     menuDetail: {
-      type: Object
+      type: Object,
+      default: () => {
+        return {
+          clickBehavior: "picture",
+        }
+      }
     }
   },
   data() {

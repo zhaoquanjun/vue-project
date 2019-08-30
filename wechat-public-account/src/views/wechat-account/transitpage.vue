@@ -7,12 +7,13 @@ export default {
   created() {
     this._appendSpace();
     let param = this.$route.query;
-    let options = {};
+    let str = '';
+    console.log(param)
     for (var k in param) {
-      options[k] = param[k];
+      str += `${k}=${param[k]}&`;
     }
-    console.log(options)
-    this._transitPage(options);
+    str.slice(0, str.length - 1)
+    this._transitPage(str);
   },
   methods: {
     async _transitPage() {

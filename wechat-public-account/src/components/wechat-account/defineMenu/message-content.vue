@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-content__section">
+  <div class="message-content__section">
     <section class="menu-content__area">
       <div class="radio-tabs">
         <el-radio-group v-model="radio">
@@ -44,7 +44,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.menu-content__section {
+.message-content__section{
   .menu-content__area {
     margin-left: -24px;
     width: calc(100% + 48px);

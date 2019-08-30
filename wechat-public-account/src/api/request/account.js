@@ -81,7 +81,7 @@ export const modifyNode = (id, parentId, idOrderByArr) => {
 
 // 中转页面
 export const transit = param => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/oauth/success?a=1&b=2`, param);
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/oauth/success?${param}`);
 }
 
 export const uploadImg = (params) => {
