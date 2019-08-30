@@ -38,9 +38,15 @@ router.beforeEach(async (to, from, next) => {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
-      next()
+      if (!store.getters.wx_status.isAuth) {
+        await store.dispatch('_getWxStatus')
+      }
+      let wx_status = store.getters.wx_status;
+      if (!wx_status.isAuth) {
+        next('/wechataccount/wxauther');
+      }
+      next();
     } else {
-    
       next('/404')
     }
   } else {

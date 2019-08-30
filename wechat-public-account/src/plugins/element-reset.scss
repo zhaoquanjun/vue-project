@@ -1,22 +1,9 @@
-.el-input {
-    input {
-        padding: 0 15px;
-        border: 1px solid #B9CBCF;
-        border-radius: 2px;
-    }
-}
+
 .textarea{
     .el-textarea__inner {
         padding: 0 15px;
         border: 1px solid #B9CBCF;
         border-radius: 2px;
-    }
-}
-.el-radio__input {
-    .el-radio__inner {
-        width: 18px;
-        height: 18px;
-        border-color: #B9CBCF;
     }
 }
 
@@ -123,6 +110,15 @@
 
 
 
+.el-input {
+    input {
+        padding: 0 15px;
+        border: none;
+        border-bottom: 1px solid #c9d9dc;;
+        border-radius: 2px;
+    }
+}
+// radio
 .el-radio-group  .el-radio__label{
     color: #A1A8B1;
     font-size: 16px;
@@ -149,3 +145,7 @@
     background: #09CCEB;
 }
 
+// label
+.el-form-item__label {
+    text-align: left;
+}
