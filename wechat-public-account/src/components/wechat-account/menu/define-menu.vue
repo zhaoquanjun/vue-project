@@ -51,7 +51,7 @@
             </el-form>
             <message-area :menuData="menuData[curIndex]" v-show="menuDetail.clickBehavior == 'message'">
               <div class="picture-menu" v-show="menu_reply_behavior.type == 'picture'">
-                <div class="choose-picture__area" v-show="chooseImg.length < 0">
+                <div class="choose-picture__area" v-show="chooseImg.length == 0">
                   <div class="choose-icon" @click="_handleUploadPicture"></div>
                   <p @click="_handleUploadPicture">点击上传</p>
                 </div>
@@ -109,7 +109,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          clickBehavior: "picture",
+          clickBehavior: "message",
         }
       }
     }

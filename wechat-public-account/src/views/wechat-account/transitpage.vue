@@ -12,12 +12,12 @@ export default {
     for (var k in param) {
       str += `${k}=${param[k]}&`;
     }
-    str.slice(0, str.length - 1)
+    str = str.slice(0, str.length - 1)
     this._transitPage(str);
   },
   methods: {
-    async _transitPage() {
-      let { data } = await transit();
+    async _transitPage(str) {
+      let { data } = await transit(str);
       window.close();
     },
     _appendSpace() {

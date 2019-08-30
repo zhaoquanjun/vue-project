@@ -4,7 +4,8 @@
     <div class="define-menu__content" v-if="isVerify">
       <warm-pronpt :desc="tips" style="margin-top: 16px;"></warm-pronpt>
       <div class="menu-setting__area">
-        <define-menu :menuData="menuData" :menuDetail="menuDetail"></define-menu>
+        <define-menu :menuData="menuData" ></define-menu>
+        <!-- :menuDetail="menuDetail" -->
       </div>
     </div>
     <account-certification v-else></account-certification>
