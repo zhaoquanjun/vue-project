@@ -1,6 +1,6 @@
 import {designerManageApi} from "@/environment/index"
 import * as ajaxRequest from "../ajaxRequest";
- import store from "@/store/index";
+import store from "@/store/index";
 import Cookies from "js-cookie"
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
 

@@ -88,3 +88,16 @@ button{
     clear: both;
     zoom: 1;
 }
+// table 无内容时的样式
+.empty-table {
+    padding: 40px;
+    text-align: center;
+    img {
+        width: 54px;
+        vertical-align: middle;
+        padding: 18px 28px;
+    }
+    span {
+        color: #8c8c8c;
+    }
+}

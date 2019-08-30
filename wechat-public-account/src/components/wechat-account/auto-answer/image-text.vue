@@ -31,7 +31,9 @@
             </li>
             <li class="fist-item editor" ref="editor" v-show="isEditorShow">
                 <div class="example">
-                    <div class="headline ellipsis">{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
+                    <div
+                        class="headline ellipsis"
+                    >{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
                     <div class="imgwrap">
                         <img
                             src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
@@ -57,19 +59,28 @@
                     <div class="seting-item">
                         <div class="seting-title">设置封面</div>
                         <div class="cover">
-                            <div class="upload-icon" v-if="!isUploaded">
+                            <div class="upload-icon" @click="setCover" v-if="!picUrl">
                                 <span class="el-icon-plus"></span>
                             </div>
-                            <img
-                                v-else
-                                src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
-                            />
+                            <div  v-else>
+                                <img :src="picUrl" />
+                                <div class="mask1">
+                                    <button @click="removePic">
+                                        <i class="iconfont iconhuishouzhan"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">图文标题</div>
-                        <el-input v-model="curEditorItem.title" size="small" placeholder="不超过64个字符"  maxlength="64"
-                        show-word-limit></el-input>
+                        <el-input
+                            v-model="curEditorItem.title"
+                            size="small"
+                            placeholder="不超过64个字符"
+                            maxlength="64"
+                            show-word-limit
+                        ></el-input>
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">简介</div>
@@ -94,12 +105,22 @@
             <span class="el-icon-plus avatar-uploader-icon"></span>
             <span>最多添加8个图文消息</span>
         </div>
+        <image-manage
+            :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
+            @getImage="getImage"
+            @handleCloseModal="handleCloseModal"
+        ></image-manage>
     </div>
 </template>
 <script>
-import { trim,notify } from "@/utlis/index.js";
+import { trim, notify } from "@/utlis/index.js";
+import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
+import { uploadImg } from "@/api/request/account.js";
 export default {
     props: ["newsMsg"],
+    components: {
+        ImageManage
+    },
     data() {
         return {
             list: [],
@@ -107,17 +128,23 @@ export default {
             curEditorItem: {
                 title: "",
                 description: "",
-                picUrl: "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
-                url: ""
+                picUrl:
+                    "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                url: "",
+                isShow: false
             },
             isUploaded: false,
-            isEditorShow: false
+            isEditorShow: false,
+            isEditor: true,
+            index: 0,
+            imageChooseAreaShowFlag: false,
+            picUrl: ""
         };
     },
     mounted() {
         this.list = this.newsMsg;
-         this.isEditorShow = this.list.length > 0 ? false : true;
-        console.log(this.list )
+        this.isEditorShow = this.list.length > 0 ? false : true;
+        console.log(this.list);
     },
     methods: {
         downward(item, index) {
@@ -135,57 +162,84 @@ export default {
             let list = this.$refs.list;
             let editor = this.$refs.editor;
             let listItems = this.$refs.listItem;
-            this.listItems= listItems
+            this.listItems = listItems;
             this.index = index;
             this.isEditor = true;
-            this.$set(this.list[index],'isShow' ,false)    
-            this.isEditorShow = true
+            this.$set(this.list[index], "isShow", false);
+            this.isEditorShow = true;
             list.insertBefore(editor, listItems[index]);
         },
-        remove(item, index){
-            this.list = this.list.splice(index,1)
+        remove(item, index) {
+            this.list = this.list.splice(index, 1);
         },
         handlerConfirm() {
-        
-           for(let key in this.curEditorItem){
-               if(typeof this.curEditorItem[key]=="string" &&!trim(this.curEditorItem[key])){
+            for (let key in this.curEditorItem) {
+                if (
+                    typeof this.curEditorItem[key] == "string" &&
+                    !trim(this.curEditorItem[key])
+                ) {
                     notify(this, "请完善图文信息!", "error");
-                   return false;
-               }
-           }
-            if(!this.isEditor ){   
-               this.list.push(this.curEditorItem);
-               this.isEditorShow = false;
-            }else{
-                // 编辑
-                this.$set(this.list[this.index],'isShow' ,true)   
-                this.$set(this.list,this.index,this.curEditorItem)
+                    return false;
+                }
             }
+
+            if (!this.isEditor) {
+                this.list.push(this.curEditorItem);
+                this.isEditorShow = false;
+            } else {
+                // 编辑
+
+                this.$set(this.list, this.index, this.curEditorItem);
+            }
+            this.$set(this.list[this.index], "isShow", true);
             this.$emit("handlerSaveImgText", this.list);
-            this.isEditorShow = false;
-            // 添加完成后重置一下 
-             this.curEditorItem={
+            this.isEditorShow = this.isEditor = false;
+            // 添加完成后重置一下
+            this.curEditorItem = {
                 title: "",
                 description: "",
-                picUrl: "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                picUrl:
+                    "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
                 url: ""
+            };
+        },
+        handlerAddNewsImg() {
+            this.index = this.list.length + 1;
+            this.isEditorShow = true;
+            this.isEditor = false;
+        },
+        // 获取图片
+        async getImage(src) {
+            console.log(src);
+            this.chooseImg = src;
+            this.picUrl = src;
+            let appId = this.$store.state.dashboard.appId
+            let option = {
+                authorizerAppId:appId,
+                imgUrl:src
             }
+            let data = await uploadImg(option);
+
+            console.log(data);
         },
-        handlerAddNewsImg(){
-            this.index = this.list.length+1;
-            console.log(this.index)
-              this.isEditorShow = true
-              this.isEditor = false;
+        // 关闭弹层
+        handleCloseModal() {
+            this.imageChooseAreaShowFlag = false;
         },
+        removePic() {
+            this.picUrl = "";
+        },
+        setCover() {
+            this.imageChooseAreaShowFlag = true;
+        }
     },
     watch: {
         newsMsg() {
             this.list = this.newsMsg;
-            this.list.forEach((item,index)=>{
-                item["isShow"] = true
-            })
+            this.list.forEach((item, index) => {
+                item["isShow"] = true;
+            });
             this.isEditorShow = this.list.length > 0 ? false : true;
-            console.log(this.isEditorShow,'this.isEditorShowthis.isEditorShow')
         }
     }
 };
@@ -299,9 +353,13 @@ export default {
                 height: 70px;
                 border-radius: 2px;
                 overflow: hidden;
+                position: relative;
                 img {
                     width: 100%;
                     height: 100%;
+                }
+                &:hover .mask1 {
+                    opacity: 1;
                 }
                 .upload-icon {
                     cursor: pointer;
@@ -334,6 +392,25 @@ export default {
     margin-bottom: 16px;
     .el-icon-plus {
         margin-right: 16px;
+    }
+}
+.mask1 {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(38, 38, 38, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    button {
+        padding: 10px;
+        .iconfont {
+            color: #fff;
+        }
     }
 }
 </style>

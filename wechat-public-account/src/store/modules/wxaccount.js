@@ -8,11 +8,15 @@ const user = {
       isCertification: false
     },
     account_info: {},
-    menu_reply_behavior: {}
+    menu_reply_behavior: {
+      name: '111',
+      type: 'picture'
+    }
   },
   getters: {
     wx_status: state => state.wx_status,
-    account_info: state => state.account_info
+    account_info: state => state.account_info,
+    menu_reply_behavior: state => state.menu_reply_behavior
   },
   mutations: {
     SET_WX_STATUS: (state, payload) => {
@@ -22,7 +26,7 @@ const user = {
       state.account_info = payload;
     },
     SET_MENU_BEHAVIOR: (state, payload) => {
-      state.menuReplyMessageBehavior = payload
+      state.menuReplyMessageBehavior = payload;
     }
   },
   actions: {

@@ -36,7 +36,10 @@ axios.interceptors.request.use(
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         const token = getLocal('token');
         token && (config.headers.Authorization = "Bearer " + token);
-        config.headers.AppId = getLocal('ymId') ? getLocal('ymId') : store.state.dashboard.appId;
+        if (process.env.NODE_ENV === 'development') {
+            config.headers.AppId = getLocal('ymId') ? getLocal('ymId') : store.state.dashboard.appId;
+        }
+       
         //config.headers.SiteId = Cookies.get('SiteId') ? Cookies.get('SiteId') : store.state.dashboard.siteId;
         // config.headers.AppId = "823EB3BD-93F4-4655-B833-D604A6EF2032";//store.state.dashboard.appid;
         return config;

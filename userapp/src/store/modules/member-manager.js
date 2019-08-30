@@ -5,7 +5,7 @@ const memberManager = {
         memberInfo: null,
         memberPolicy: [],
         userPermission: [],
-        userId:'823EB3BD-93F4-4655-B833-D604A6EF2032',
+       
     },
     mutations: {
         /**
