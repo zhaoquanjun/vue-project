@@ -10,16 +10,21 @@
             resize="none"
             @focus="focus"
             @blur="blur"
+            @change="handlerChange"
         ></el-input>
     </div>
 </template>
 <script>
 export default {
+    props:["serveText"],
     data() {
         return {
             textarea: "",
             isLimitShow:false
         };
+    },
+    mounted(){
+        this.textarea = this.serveText
     },
     methods:{
         focus(){
@@ -27,6 +32,15 @@ export default {
         },
         blur(){
             this.isLimitShow = false
+        },
+        handlerChange(){
+            this.$emit("handlerText",this.textarea)
+          
+        }
+    },
+    watch:{
+        serveText(){
+           this.textarea = this.serveText
         }
     }
 };

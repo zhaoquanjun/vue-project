@@ -65,7 +65,7 @@
                         <button>
                             <i class="iconfont iconcaozuo"></i>
                         </button>
-                        <button>
+                        <button @click="handlerDelete(item.id)">
                             <i class="iconfont iconhuishouzhan"></i>
                         </button>
                     </div>
@@ -147,6 +147,9 @@ export default {
                     matchName:"半匹配",
                     keyword:"123"
             })
+        },
+        handlerDelete(id){
+            this.$emit("removeKeywordReply",id)
         }
     }
 };
