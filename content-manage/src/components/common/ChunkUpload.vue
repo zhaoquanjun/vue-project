@@ -108,14 +108,17 @@ export default {
                                 }
                                 this.$notify({
                                     customClass: "notify-error", //  notify-success ||  notify-error
-                                    message: `${this.displayName}[${chunk.file.name
+                                    message: `${this.displayName}[${
+                                        chunk.file.name
                                     }]已存在于${
                                         data.existInCurrentAppInfo.isDelete
                                             ? "回收站-"
                                             : ""
                                     }[${
                                         data.existInCurrentAppInfo.categoryName
-                                    }]分类下-${data.existInCurrentAppInfo.fileName}`,
+                                    }]分类下-${
+                                        data.existInCurrentAppInfo.fileName
+                                    }`,
                                     duration: 3000,
                                     showClose: false
                                 });
@@ -199,8 +202,9 @@ export default {
             this.successCount += 1;
             console.log(this.successCount);
             if (
-                this.successCount == this.fileList.length &&this.successCount>=1 &&
-                this.errorCount < 1 
+                this.successCount == this.fileList.length &&
+                this.successCount >= 1 &&
+                this.errorCount < 1
             ) {
                 this.$emit("getList");
                 this.$emit("getTree");
@@ -222,6 +226,7 @@ export default {
             // }
         },
         onFileAdded(file) {
+            console.log(file);
             if (file.fileType == "") {
                 this.$notify({
                     customClass: "notify-error",
@@ -254,19 +259,18 @@ export default {
                 ".java",
                 ".json"
             ];
-            
-          let fileNameIndex = file.name.lastIndexOf(".");
-          let fileName=file.name.slice(fileNameIndex);
+
+            let fileNameIndex = file.name.lastIndexOf(".");
+            let fileName = file.name.slice(fileNameIndex);
             if (forbidUpload.indexOf(fileName) > -1) {
-               
                 file.cancel(file);
                 this.errorCount -= 1;
-                  this.$notify({
-                        customClass: "notify-error",
-                        message: `请添加${this.displayName}格式的文件`,
-                        duration: 1500,
-                        showClose: false
-                    });
+                this.$notify({
+                    customClass: "notify-error",
+                    message: `请添加${this.displayName}格式的文件`,
+                    duration: 1500,
+                    showClose: false
+                });
                 return;
             }
             this.panelShow = true;
@@ -275,16 +279,21 @@ export default {
             if (this.limitCount(file)) {
                 this.computeMD5(file);
             }
+            console.log(this.fileList);
         },
         uploadStart(file) {},
         computeMD5(file) {
-            let url = URL.createObjectURL(file.file);
-            var audioElement = new Audio(url);
-            var duration;
-            audioElement.addEventListener("loadedmetadata", function(_event) {
-                duration = audioElement.duration;
-                console.log(duration + "s");
-            });
+            if (this.displayName !== "File") {
+                let url = URL.createObjectURL(file.file);
+                var audioElement = new Audio(url);
+                var duration;
+                audioElement.addEventListener("loadedmetadata", function(
+                    _event
+                ) {
+                    duration = audioElement.duration;
+                    console.log(duration + "s");
+                });
+            }
 
             let fileReader = new FileReader();
             let time = new Date().getTime();
@@ -295,7 +304,7 @@ export default {
             fileReader.onload = e => {
                 md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
                 file.uniqueIdentifier = md5;
-                
+
                 let fileSize = 0;
                 this.fileList.forEach(item => {
                     fileSize += item.size;
@@ -389,7 +398,7 @@ export default {
                 } else {
                     this.$notify({
                         customClass: "notify-error",
-                        message: `一次最多可上传10个${displayName}`,
+                        message: `一次最多可上传10个${this.displayName}`,
                         duration: 1500,
                         showClose: false
                     });
@@ -398,7 +407,7 @@ export default {
                     return false;
                 }
             } else {
-                console.log(this.fileList.length,'111')
+                console.log(this.fileList.length, "111");
                 if (this.fileList.length <= 10) {
                     if (
                         file.size / 1024 / 1024 > 50 &&
@@ -458,9 +467,9 @@ export default {
             });
         },
         fileRemove(file) {
-             console.log(this.fileList.length,'333')
-            if(!!file.error){
-                 this.errorCount -= 1;
+            console.log(this.fileList.length, "333");
+            if (!!file.error) {
+                this.errorCount -= 1;
             }
             this.fileList = this.fileList.filter(item => {
                 return item != file;
