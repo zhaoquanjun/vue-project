@@ -20,7 +20,7 @@
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
                             <button>预览</button>
-                            <button @click="submitForm">保存</button>
+                            <button :disabled="disableRefObj.inSaveProcess"  @click="submitForm">保存</button>
                         </div>
                     </el-col>
                 </el-row>
@@ -59,6 +59,7 @@ export default {
     },
     data() {
         return {
+            disableRefObj: { inSaveProcess: false },
             imageUrl: "",
             detailData: {},
             operateName: "新增",
@@ -74,21 +75,22 @@ export default {
             this.operateName = operate;
         },
         submitForm() {
+            this.disableRefObj.inSaveProcess = true;
             let imageUrl = this.$refs.articleRight.imageUrl1;
             if(this.isEdit){
                  this.$refs.articleContent.editArticle(
                     "articleDetail",
-                    imageUrl
+                     imageUrl, this.disableRefObj
                 );
                 return
             }
             if (this.$route.query.id) {
                 this.$refs.articleContent.editArticle(
                     "articleDetail",
-                    imageUrl
+                    imageUrl, this.disableRefObj
                 );
             } else {
-                this.$refs.articleContent.submitForm("articleDetail", imageUrl);
+                this.$refs.articleContent.submitForm("articleDetail", imageUrl, this.disableRefObj);
             }
         },
         async getArticleDetail(id) {

@@ -23,7 +23,7 @@
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
                             <button>预览</button>
-                            <button @click="submitForm">保存</button>
+                            <button :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
                         </div>
                     </el-col>
                 </el-row>
@@ -62,6 +62,7 @@ export default {
     },
     data() {
         return {
+            disableRefObj: { inSaveProcess: false},
             fileList: [],
             detailData: {},
             isEdit: false
@@ -79,21 +80,23 @@ export default {
             //     ...this.$refs.articleRight.fileList1,
             //     ...this.$refs.articleRight.fileList2
             // ];
+        
+            this.disableRefObj.inSaveProcess = true;
             let flieUrls = this.$refs.articleRight.newFileList;
             console.log(this.$refs.articleRight);
             let fileList = flieUrls.map(item => {
                 return item.response;
             });
             if (this.isEdit) {
-                this.$refs.articleContent.editArticle("contentForm", fileList);
+                this.$refs.articleContent.editArticle("contentForm", fileList, this.disableRefObj);
                 return;
             }
             // editArticle
             let isEditor = this.$route.query.isEditor;
             if (!!isEditor) {
-                this.$refs.articleContent.editArticle("contentForm", fileList);
+                this.$refs.articleContent.editArticle("contentForm", fileList, this. disableRefObj);
             } else {
-                this.$refs.articleContent.submitForm("contentForm", fileList);
+                this.$refs.articleContent.submitForm("contentForm", fileList, this. disableRefObj);
             }
         },
         async getArticleDetail(id) {
