@@ -20,6 +20,15 @@ export const getAppPolicies = () => {
     return ajaxRequest.get('/api/appInfo/GetAppPolicies');
 }
 /**
+ * InterfaceAuthor : 徐专
+ * CreateTime:2019.09.02
+ * 获取当前用户应用可配置的权限包括他已有权限
+ */
+export const getEditUserAppPolicies = (userId) => {
+    let para = { editUserId: userId };
+    return ajaxRequest.get('/api/appInfo/GetEditUserAppPolicies', para);
+}
+/**
  * 更新当前成员权限
  * @param {*} ids 
  */

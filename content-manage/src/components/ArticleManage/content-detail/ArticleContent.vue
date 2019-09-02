@@ -447,12 +447,12 @@ export default {
             this.categoryName = node.label;
         },
         // 新建保存
-        submitForm(formName, imageUrl) {
+        submitForm(formName, imageUrl, disableRefObj) {
             this.articleDetail.pictureUrl = imageUrl;
 
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.insertArticle();
+                    this.insertArticle(disableRefObj);
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -464,10 +464,11 @@ export default {
             this.$refs[formName].resetFields();
         },
         //插入文章
-        async insertArticle() {
+        async insertArticle(disableRefObj) {
             let { status, data } = await articleManageApi.createArticle(
                 this.articleDetail
             );
+            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
@@ -490,11 +491,11 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, imageUrl) {
+        editArticle(formName, imageUrl, disableRefObj) {
             this.articleDetail.pictureUrl = imageUrl;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.saveArticle();
+                    this.saveArticle(disableRefObj);
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -502,10 +503,11 @@ export default {
             });
         },
         //编辑保存文章
-        async saveArticle() {
+        async saveArticle(disableRefObj) {
             let { status, data } = await articleManageApi.editArticle(
                 this.articleDetail
             );
+            disableRefObj.inSaveProcess = false;
             this.$confirm("保存成功!", "提示", {
                 confirmButtonText: "新增下一篇",
                 customClass: "medium",

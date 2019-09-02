@@ -117,6 +117,7 @@
                     :src="scope.row.imageUrl"
                     alt
                     style="width:100%;height:100%;object-fit: cover;"
+                    :href="`//${scope.row.domain}`"
                   />
                 </div>
               </template>
@@ -240,7 +241,7 @@
           </div>
           <div class="remarkWrap">
             <span class="remarkTitle">备注</span>
-            <el-input v-model="remark" placeholder="请输入备注信息" class="remarkInput"></el-input>
+            <el-input v-model="remark" placeholder="请输入备注信息" class="remarkInput" maxlength="20"></el-input>
           </div>
           <div class="confirm">
             <button class="confirmBtn" @click="createTemplate">开通</button>

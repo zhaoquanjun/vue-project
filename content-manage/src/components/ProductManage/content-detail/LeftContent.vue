@@ -557,11 +557,11 @@ export default {
             });
         },
         // 新建保存
-        submitForm(formName, fileList) {
+        submitForm(formName, fileList, disableRefObj) {
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.insertArticle();
+                    this.insertArticle(disableRefObj);
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -573,10 +573,11 @@ export default {
             this.$refs[formName].resetFields();
         },
         //新建产品
-        async insertArticle() {
+        async insertArticle(disableRefObj) {
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
             );
+            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
@@ -599,11 +600,11 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, fileList) {
+        editArticle(formName, fileList,disableRefObj) {
             this.detailData.thumbnailPicUrlList = fileList;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.saveArticle();
+                    this.saveArticle(disableRefObj);
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -611,11 +612,12 @@ export default {
             });
         },
         //编辑保存产品
-        async saveArticle() {
+        async saveArticle(disableRefObj) {
             let { status, data } = await productManageApi.update(
                 this.curProduct,
                 this.detailData
             );
+            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",

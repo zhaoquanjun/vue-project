@@ -1,4 +1,4 @@
-import { getAppPolicies, getUserPolicy, getBeInvitedUsers, updateUserPolicy, batchUpdateUserPolicy, deleteCurMember, batchDeletMember, getShortUrlByInviation, updateUserRemark, getUserDashboard} from "@/api/index";
+import { getAppPolicies, getEditUserAppPolicies, getUserPolicy, getBeInvitedUsers, updateUserPolicy, batchUpdateUserPolicy, deleteCurMember, batchDeletMember, getShortUrlByInviation, updateUserRemark, getUserDashboard} from "@/api/index";
 const memberManager = {
    // namespaced: false,
     state: {
@@ -91,7 +91,12 @@ const memberManager = {
         * 获取当前登录用户应用下的可配置的权限
         */
         async _getAppPolicies({ commit }, isBatch) {
-            let { data: allPolicies, status } = await getAppPolicies();
+            let { data: allPolicies, status } = await getAppPolicies();            
+            commit("USERPERMISSION", allPolicies)
+            isBatch && commit("CURMEMBVERINFO", [])
+        },
+        async _getEditUserAppPolicies({ commit }, userId) {
+            let { data: allPolicies, status } = await getEditUserAppPolicies(userId);
             allPolicies.forEach((item, index) => {
                 allPolicies[index].show = false
             })
