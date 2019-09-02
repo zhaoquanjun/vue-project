@@ -649,6 +649,11 @@ export default {
 .quill-editor /deep/ .ql-container {
     height: 420px;
 }
+.el-textarea /deep/ .el-input__count{
+     background: transparent;
+    bottom: 0;
+    right: 16px;
+}
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }

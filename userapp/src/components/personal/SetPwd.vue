@@ -6,7 +6,7 @@
         </div>
         <template v-if="!isSetPassWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
-                <el-form-item prop="passWrod" class="verification-code">
+                <el-form-item prop="passWrod" class="verification-code" style="position:relative">
                     <el-input
                         type="password"
                         v-model="ruleForm.passWrod"
@@ -14,9 +14,22 @@
                         placeholder="输入设置密码"
                         minlength="6"
                         maxlength="16"
+                         @blur="fileNameBlur"
+                         @focus="pwdRule"
                     ></el-input>
+                    <div class="pwd-rule" v-if="pwdRuleShow">
+                        <div class="error">
+                            <i class="iconfont iconguanbi"></i>长度为6-16位（字母区分大小写）
+                        </div>
+                        <div class="error">
+                            <i class="iconfont iconguanbi"></i>只能包含数字、字母以及标点符号（除空格）
+                        </div>
+                         <div class="error">
+                            <i class="iconfont iconguanbi"></i>数字、字母及标点符号至少包含两种
+                        </div>
+                    </div>
                 </el-form-item>
-                <el-form-item prop="beSurePwd" class="verification-code">
+                <el-form-item prop="beSurePwd" class="verification-code" style="position:relative">
                     <el-input
                         type="password"
                         v-model="ruleForm.beSurePwd"
@@ -24,7 +37,20 @@
                         placeholder="输入确认密码"
                         minlength="6"
                         maxlength="16"
+                         @blur="fileNameBlur"
+                         @focus="pwdRule"
                     ></el-input>
+                     <!-- <div class="pwd-rule" >
+                        <div class="error">
+                            <i class="iconfont iconguanbi"></i>长度为6-16位（字母区分大小写）
+                        </div>
+                        <div class="error">
+                            <i class="iconfont iconguanbi"></i>只能包含数字、字母以及标点符号（除空格）
+                        </div>
+                         <div class="error">
+                            <i class="iconfont iconguanbi"></i>数字、字母及标点符号至少包含两种
+                        </div>
+                    </div> -->
                 </el-form-item>
             </el-form>
         </template>
@@ -119,6 +145,7 @@ export default {
             }
         };
         return {
+            pwdRuleShow:false,
             show: true, // 初始启用按钮
             count: "", // 初始化次数
             timer: null,
@@ -262,6 +289,12 @@ export default {
                     });
                 }
             }
+        },
+          pwdRule(){
+            this.pwdRuleShow=true
+        },
+        fileNameBlur(){
+            this.pwdRuleShow=false
         }
     },
     computed: {
@@ -296,6 +329,7 @@ export default {
 }
 .verification-code {
     position: relative;
+    margin-bottom: 30px;
 }
 .verification-text {
     position: absolute;
@@ -310,5 +344,39 @@ export default {
 }
 .from-row {
     margin-top: 30px;
+}
+.pwd-rule{
+    position: absolute;
+    box-shadow:0px 2px 16px 0px rgba(0,0,0,0.2);
+    padding: 16px;
+    border-radius: 2px;
+    top: 150px;
+   
+    >div{
+        line-height: 25px;
+    }
+     &::before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: -20px;
+        left: 32px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent transparent #fff transparent;
+        z-index: 4000
+    }
+    .error{
+        font-size: 12px;
+         color: #8C8C8C;
+        i{
+            padding-right: 5px;
+            color: #fb4d68;
+        }
+    }
+    .success{
+        color: #63DC8C
+    }
 }
 </style>

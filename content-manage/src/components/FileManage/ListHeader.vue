@@ -95,12 +95,12 @@
                         class="btn-small btn-lightblue-notboard"
                         @click="batchDownLoad"
                     >下载</button>
-                    <button v-else class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                    <button  class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
 
                     <el-dropdown
                         trigger="click"
                         @command="handleCommand"
-                        v-if="contentType!='Video'"
+                        v-if="contentType=='File'"
                     >
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard">
@@ -110,7 +110,7 @@
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="top">置顶</el-dropdown-item>
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                            <el-dropdown-item command="delete">删除</el-dropdown-item>
+                            <!-- <el-dropdown-item command="delete">删除</el-dropdown-item> -->
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -278,7 +278,9 @@ export default {
              this.$confirm(`您确定要下载所选文件吗？`, "提示", {
                 iconClass: "icon-warning",
                 callback: async action => {
-                     this.$emit("batchDownLoad");
+                   if (action === "confirm") {
+                        this.$emit("batchDownLoad");
+                   }
                 }
              })
            

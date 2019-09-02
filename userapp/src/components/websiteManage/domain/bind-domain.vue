@@ -101,22 +101,22 @@ export default {
                     this.$createElement(
                         "p",
                         { style: "color: #262626" },
-                        `${this.domainValue}，添加成功！可授权阿里云账号完成一键解析`
+                        `${this.domainValue}，添加成功！`
                     )
                 );
                 message.push(
                     this.$createElement(
                         "p",
                         { style: "color: #8C8C8C" },
-                        "如已存在解析记录，将会修改原有记录"
+                        "请在系统生成解析记录值后，在列表中完成域名解析。"
                     )
                 );
                 this.$confirm("提示", {
                     title: "提示",
                     message: this.$createElement("div", null, message),
-                    confirmButtonText: "授权并一键解析",
-                    cancelButtonText: "暂不授权",
-                    customClass: "large",
+                    confirmButtonText: "知道了",
+                     iconClass: "icon-success",
+                    showCancelButton:false,
                     closeOnClickModal: false,
                     callback: async action => {
                         if (action === "confirm") {
