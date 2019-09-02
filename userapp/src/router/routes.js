@@ -115,6 +115,15 @@ export const defaultRoutes = [
           isSub:true
         }
       },
+      {
+        path: "robots",
+        name: "robots",
+        component: () => import("@/views/website-manage/robots.vue"),
+        meta: {
+          title: "Robots.txt",
+          isSub:true
+        }
+      },
     ]
   },
   {

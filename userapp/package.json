@@ -17,6 +17,7 @@
     "oidc-client": "^1.7.1",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
+    "vue-simple-uploader": "^0.7.1",
     "vuex": "^3.0.1",
     "webpack": "^4.33.0"
   },
