@@ -137,9 +137,9 @@ export default {
   methods: {
     async _getMenuTree() {
       let {data} = await getMenuTree()
-      this.menuData = data;
-      if (this.menuData.length == 0) return;
-      let id = this.menuData[0].id
+      this.menuTree= data;
+      if (this.menuTree.length == 0) return;
+      let id = this.menuTree[0].id
       this._getMenuDetail(id);
     },
     async _getMenuDetail(id) {
@@ -165,7 +165,8 @@ export default {
     _handleAddMainMenu() {
       let newMenuItem = {
         hasChildren: false,
-        clickBehavior: "None"
+        clickBehavior: 0,
+        behaviorType: 0
       };
       this.menuTree.push(newMenuItem);
     },
@@ -195,7 +196,9 @@ export default {
     // 关闭弹层
     handleCloseModal() {
       this.imageChooseAreaShowFlag = false;
-    }
+    },
+    // 重置当前菜单右侧数据类型
+    _handle
   }
 };
 </script>
