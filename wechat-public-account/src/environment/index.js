@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'development') {
     silentRedirectUri = 'http://localhost:8084/static/silent-renew.html';
     clientId = 'dev.weixinopen.api';
     scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
-    wechataccountApi = "http://open.weixin.console.wezhan.cn"
+    wechataccountApi = "http://gonghd.imwork.net"
     pageApi = 'http://api.designer.console.wezhan.cn';
     newsApi = 'http://api.content.console.wezhan.cn';
     imageApi = 'http://api.content.console.wezhan.cn';
