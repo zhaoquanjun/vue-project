@@ -121,6 +121,9 @@ export default {
       securityService.signOut(location.href);
     },
     pannelShow() {
+      if (this.changeAppShow) {
+        this.changeAppShow = false;
+      }
       location.href = personalUrl;
       //this.$store.commit("CLOSERIGHTPANNEL",true)
     },

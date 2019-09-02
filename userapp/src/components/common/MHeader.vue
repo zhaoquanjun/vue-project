@@ -121,6 +121,9 @@ export default {
       securityService.signOut(location.href);
     },
     pannelShow() {
+      if (this.changeAppShow) {
+        this.changeAppShow = false;
+      }
       this.$router.push({
         name: "personal"
       });
@@ -131,12 +134,15 @@ export default {
     },
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
-      },
-      //跳转阿里云市场续费
-      goToAliMarket() {
-          console.log('open');
-          window.open('https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0', '_blank');
-      },
+    },
+    //跳转阿里云市场续费
+    goToAliMarket() {
+      console.log("open");
+      window.open(
+        "https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0",
+        "_blank"
+      );
+    },
     /**
      * 获取app列表
      */
