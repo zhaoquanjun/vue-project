@@ -78,8 +78,9 @@ export default {
             this.newFileList = fileList;
             if (this.newFileList.length >= 9) {
                 document.querySelector(".el-upload").style.display = "none";
-            }else{
-                document.querySelector(".el-upload").style.display = "inline-block";
+            } else {
+                document.querySelector(".el-upload").style.display =
+                    "inline-block";
             }
         },
         handlePreview(file) {
@@ -89,9 +90,11 @@ export default {
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
-            this.$message({
-                type: "warning",
-                message: `上传图片文件超过数量限制`
+            this.$notify({
+                customClass: "notify-warning", //  notify-success ||  notify-error
+                message: `上传图片文件超过数量限制!`,
+                showClose: false,
+                duration: 1500
             });
         },
         ///////
@@ -99,7 +102,7 @@ export default {
             this.newFileList = argfileList;
             if (this.newFileList.length >= 9) {
                 document.querySelector(".el-upload").style.display = "none";
-            }      
+            }
             let fileList = {
                 name: file.name,
                 response: file.response,
@@ -125,9 +128,7 @@ export default {
             return isPic && isSizeOk;
         }
     },
-    watch: {
-        
-    }
+    watch: {}
 };
 </script>
 <style scoped>

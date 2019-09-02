@@ -18,7 +18,7 @@
         </el-aside>
         <el-main style="overflow: hidden;">
             <img-list-header
-                 v-if="$store.state.dashboard.isContentwrite"
+                v-if="$store.state.dashboard.isContentwrite"
                 :count-pic="countPic"
                 :pic-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
@@ -89,7 +89,7 @@
                         content="一次可上传60张图片，单张图片大小不超过10MB"
                         placement="right"
                     >
-                       <i class="iconfont iconyiwen"></i>
+                        <i class="iconfont iconyiwen"></i>
                     </el-tooltip>
                 </span>
             </span>
@@ -169,7 +169,7 @@ export default {
     methods: {
         // 获取列表
         async getPicList(node) {
-             const loading = this.$loading({
+            const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",
                 background: "rgba(255, 255, 255, 0.75)"
@@ -179,7 +179,7 @@ export default {
             }
 
             let { data } = await imgManageApi.getPicList(this.picSearchOptions);
-             loading.close();
+            loading.close();
             this.imgPageResult = data;
             this.imgPageResult.list.forEach((item, index) => {
                 item.createTimeStr = this.imgPageResult.list[
@@ -196,9 +196,9 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
-                     customClass:"medium", 
-                    iconClass:"icon-warning", 
-                   
+                    customClass: "medium",
+                    iconClass: "icon-warning",
+
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
@@ -208,17 +208,14 @@ export default {
                             } = await imgManageApi.batchRemove(true, idlist);
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success",
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1500
                                 });
                                 this.getPicList();
                             }
-                        } else {
-                            // this.$message({
-                            //     type: "info",
-                            //     message: "已取消删除"
-                            // });
                         }
                     }
                 }
@@ -235,13 +232,12 @@ export default {
                 idList
             );
             if (status == 200) {
-                
-                  this.$notify({
-                        customClass: "notify-success", //  notify-success ||  notify-error
-                        message: `移动成功!`,
-                        showClose: false,
-                        duration: 1500
-                    });
+                this.$notify({
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `移动成功!`,
+                    showClose: false,
+                    duration: 1500
+                });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
             }
@@ -268,8 +264,8 @@ export default {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
-                     customClass:"medium", 
-                    iconClass:"icon-warning", 
+                    customClass: "medium",
+                    iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
@@ -278,16 +274,14 @@ export default {
                             } = await imgCategoryManageApi.batchRemove(idList);
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+
+                                this.$notify({
+                                    customClass: "notify-success",
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1500
                                 });
                             }
-                        } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
                         }
                     }
                 }
@@ -335,13 +329,12 @@ export default {
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
             if (!this.moveToClassiFy) {
-              
-                 this.$notify({
-                        customClass: "notify-error", //  notify-success ||  notify-error
-                        message: `请选择移动的分类!`,
-                        showClose: false,
-                        duration: 1500
-                    });
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `请选择移动的分类!`,
+                    showClose: false,
+                    duration: 1500
+                });
                 return;
             }
             let categoryId = this.moveToClassiFy.id;

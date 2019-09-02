@@ -1,41 +1,42 @@
 
 <template>
     <div id="asideTree" class="aside-tree">
-        <el-scrollbar >
-        <el-tree
-            :data="treeResult"
-            node-key="id"
-            default-expand-all
-            :expand-on-click-node="false"
-            @node-drag-end="handleDragEnd"
-            @node-click="changeCategory"
-            accordion
-            ref="tree"
-            draggable
-            :allow-drop="allowDrop"
-            :highlight-current="true"
-            
-        >
-            <div
-                class="custom-tree-node"
-                @mouseover="handlerOver(data)"
-                @mouseleave="handlerMouseLeave"
-                slot-scope="{ node, data }"
+        <el-scrollbar>
+            <el-tree
+                :data="treeResult"
+                node-key="id"
+                default-expand-all
+                :expand-on-click-node="false"
+                @node-drag-end="handleDragEnd"
+                @node-click="changeCategory"
+                accordion
+                ref="tree"
+                draggable
+                :allow-drop="allowDrop"
+                :highlight-current="true"
             >
-               <button class="drop-btn" v-if="node.data.level>0"><i class="iconfont icontuodongdian"></i></button>
-                <div class="node-label-wrap">
-                    <span class="node-label">{{data.label}}</span>
-                    <span>({{data.inUseSum }})</span>
-                </div>
-                <span
-                    class="set-tree-type"
-                    @click.stop="handleShow($event,node,data)"
-                    v-show="data.id === treeNodeId"
+                <div
+                    class="custom-tree-node"
+                    @mouseover="handlerOver(data)"
+                    @mouseleave="handlerMouseLeave"
+                    slot-scope="{ node, data }"
                 >
-                    <i class="iconfont iconsangedian" style="font-size:30px"></i>
-                </span>
-            </div>
-        </el-tree>
+                    <button class="drop-btn" v-if="node.data.level>0">
+                        <i class="iconfont icontuodongdian"></i>
+                    </button>
+                    <div class="node-label-wrap">
+                        <span class="node-label">{{data.label}}</span>
+                        <span>({{data.inUseSum }})</span>
+                    </div>
+                    <span
+                        class="set-tree-type"
+                        @click.stop="handleShow($event,node,data)"
+                        v-show="data.id === treeNodeId"
+                    >
+                        <i class="iconfont iconsangedian" style="font-size:30px"></i>
+                    </span>
+                </div>
+            </el-tree>
         </el-scrollbar>
         <div class="category-name-pic" ref="operateSection">
             <UploadCategoryPic
@@ -60,7 +61,7 @@
 </template>
 <script>
 import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
-import { trim } from "@/utlis/index"
+import { trim } from "@/utlis/index";
 export default {
     props: ["treeResult", "articleSearchOptions", "isrightPannel"], // 与产品分类不一致的地方 picSearchOptions
     components: {
@@ -96,8 +97,8 @@ export default {
         createCategory(displayName, thumbnailPicUrl) {
             if (this.isAdd) {
                 this.$emit("create", {
-                    CategoryName:  trim(displayName),
-                    ParentId: this.createCategoryData.id,
+                    CategoryName: trim(displayName),
+                    ParentId: this.createCategoryData.id
                 });
             } else {
                 this.$emit(
@@ -123,9 +124,11 @@ export default {
         cancelhadnleTreeInput(data, node) {
             if (this.isRename) {
                 if (data.label == "") {
-                    this.$message({
-                        message: "分类名称不能为空",
-                        type: "warning"
+                    this.$notify({
+                        customClass: "notify-warning", //  notify-success ||  notify-error
+                        message: `分类名称不能为空!`,
+                        showClose: false,
+                        duration: 1500
                     });
                     return;
                 }
@@ -229,7 +232,7 @@ export default {
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
 
-              if (data.level === 0) {
+            if (data.level === 0) {
                 this.setCss(allCategoryEle, {
                     background: "#e0faff",
                     color: "#262626",
@@ -239,15 +242,15 @@ export default {
                 this.setCss(allCategoryEle, {
                     background: "#fff",
                     color: "#262626",
-                    border:0
+                    border: 0
                 });
             }
             this.closeUploadCategoryPic();
             this.closeUploadCategoryPic1();
-         this.articleSearchOptions.categoryId = data.id;// 与产品分类不一致的地方
-            this.articleSearchOptions.pageIndex =1;// 与产品分类不一致的地方
-          this.$emit("getList");// 与产品分类不一致的地方
-           this.$emit("chooseCategoryNode", data);// 与产品分类不一致的地方
+            this.articleSearchOptions.categoryId = data.id; // 与产品分类不一致的地方
+            this.articleSearchOptions.pageIndex = 1; // 与产品分类不一致的地方
+            this.$emit("getList"); // 与产品分类不一致的地方
+            this.$emit("chooseCategoryNode", data); // 与产品分类不一致的地方
         },
         // 取消第一个全部分类默认选中的样式
         setCss(obj, css) {
@@ -290,8 +293,7 @@ export default {
         _handleShowMoreOperate1(ev) {
             this.$refs.operateSection1.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection1.style.top =
-                ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + "px";
             if (this.$refs.operateSection1.style.display === "block") {
                 this.$refs.operateSection1.style.display = "none";
             } else {

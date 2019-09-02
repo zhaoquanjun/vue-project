@@ -18,7 +18,7 @@
         </el-aside>
         <el-main>
             <content-header
-                 v-if="$store.state.dashboard.isContentwrite"
+                v-if="$store.state.dashboard.isContentwrite"
                 :count="count"
                 :article-search-options="productSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
@@ -204,11 +204,6 @@ export default {
                             });
                             this.contentTableList();
                         }
-                    } else {
-                        // this.$message({
-                        //     type: "info",
-                        //     message: "已取消"
-                        // });
                     }
                 }
             });
@@ -264,9 +259,11 @@ export default {
             }
             let checkNodes = this.$refs.checkTree.getCheckedNodes();
             if (!checkNodes || checkNodes.length < 1) {
-                this.$message({
-                    type: "error",
-                    message: "请选择移动的分类!"
+                  this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `请选择移动的分类!`,
+                    showClose: false,
+                    duration: 1500
                 });
                 return;
             }
@@ -298,9 +295,12 @@ export default {
             );
             if (status == 200) {
                 this.$refs.checkTree.resetChecked(); // 清空选中的 树结构
-                this.$message({
-                    type: "success",
-                    message: "移动成功!"
+
+                this.$notify({
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `移动成功!`,
+                    showClose: false,
+                    duration: 1500
                 });
                 this.isInvitationPanelShow = false;
                 this.contentTableList();
@@ -349,7 +349,7 @@ export default {
         },
 
         async getArticleListAsync(options) {
-              const loading = this.$loading({
+            const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",
                 background: "rgba(255, 255, 255, 0.75)"
@@ -357,7 +357,7 @@ export default {
             let { data } = await articleManageApi.getArticleList(
                 (options = this.productSearchOptions)
             );
-             loading.close();
+            loading.close();
             this.articlePageResult = data;
         },
         /**
@@ -414,16 +414,13 @@ export default {
                             );
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1500
                                 });
                             }
-                        } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
                         }
                     }
                 }

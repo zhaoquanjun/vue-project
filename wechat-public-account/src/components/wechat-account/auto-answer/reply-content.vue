@@ -1,6 +1,5 @@
 <template>
     <div class="reply">
-      
         <div>
             <slot name="keyword"></slot>
         </div>
@@ -86,6 +85,7 @@ export default {
     }
     .reply-content {
         min-height: 444px;
+     
         border: 1px solid #e5e5e5;
         border-radius: 2px;
         .radio-tabs {
