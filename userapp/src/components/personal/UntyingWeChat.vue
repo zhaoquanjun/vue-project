@@ -1,9 +1,9 @@
 <template>
     <div class="set-phone-number">
-        <div class="modify-title">
+        <div class="modify-title unbind">
             <p v-if="this.provider=='DingDing'">解绑后，将不能使用钉钉登录管理平台</p>
             <p v-else-if="this.provider=='Alipay'">解绑后，将不能使用支付宝登录管理平台</p>
-            <p v-else>解绑后，将不能使用微信登录管理平台</p>
+            <p  v-else>解绑后，将不能使用微信登录管理平台</p>
         </div>
        
         <div class="from-row">

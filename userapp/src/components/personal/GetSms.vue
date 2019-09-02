@@ -331,6 +331,9 @@ export default {
  
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.el-form-item.is-error /deep/ .el-input__inner{
+    border-color: #e5e5e5
+}
 .verification-code {
     position: relative;
 }

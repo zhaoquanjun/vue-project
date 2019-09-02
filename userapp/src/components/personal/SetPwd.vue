@@ -4,9 +4,9 @@
         <div class="modify-title">
             <p>{{tipTitle}}</p>
         </div>
-        <template v-if="!isSetPassWord">
+        <template v-if="isSetPassWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
-                <el-form-item prop="passWrod" class="verification-code">
+                <el-form-item prop="passWrod" class="verification-code" style="position:relative">
                     <el-input
                         type="password"
                         v-model="ruleForm.passWrod"
@@ -15,6 +15,17 @@
                         minlength="6"
                         maxlength="16"
                     ></el-input>
+                    <div class="pwd-rule" >
+                        <div class="error">
+                            <i class="iconfont iconguanbi"></i>长度为6-16位（字母区分大小写）
+                        </div>
+                        <div class="error">
+                            <i class="iconfont iconguanbi"></i>只能包含数字、字母以及标点符号（除空格）
+                        </div>
+                         <div class="error">
+                            <i class="iconfont iconguanbi"></i>数字、字母及标点符号至少包含两种
+                        </div>
+                    </div>
                 </el-form-item>
                 <el-form-item prop="beSurePwd" class="verification-code">
                     <el-input
@@ -25,6 +36,14 @@
                         minlength="6"
                         maxlength="16"
                     ></el-input>
+                    <div class="pwd-rule" v-if="pwdRuleShow">
+                        <div class="error">
+                            <i class="iconfont iconguanbi"></i>长度为6～16位（字母区分大小写）
+                        </div>
+                        <div class="success">
+                            <i class="iconfont iconicon-test"></i>只能包含数字、字母以及英文标点符号
+                        </div>
+                    </div>
                 </el-form-item>
             </el-form>
         </template>
@@ -310,5 +329,37 @@ export default {
 }
 .from-row {
     margin-top: 30px;
+}
+.pwd-rule{
+    position: absolute;
+    box-shadow:0px 2px 16px 0px rgba(0,0,0,0.2);
+    padding: 16px;
+    border-radius: 2px;
+    top: 150px;
+   
+    >div{
+        line-height: 25px;
+    }
+     &::before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: -20px;
+        left: 32px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent transparent #fff transparent;
+        z-index: 4000
+    }
+    .error{
+         color: #8C8C8C;
+        i{
+            color: #fb4d68;
+        }
+    }
+    .success{
+        color: #63DC8C
+    }
 }
 </style>
