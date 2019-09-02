@@ -1,9 +1,11 @@
 .DS_Store
 node_modules
 !node_modules/element-ui/lib/upload.js
+!node_modules/vue-simple-uploader
+!node_modules/simple-uploader.js
 !node_modules/element-ui/lib/pagination.js
 /dist
-
+.MERGE_MSG.swp
 # local env files
 .env.local
 .env.*.local
