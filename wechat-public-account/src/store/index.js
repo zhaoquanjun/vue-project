@@ -15,6 +15,7 @@ const store = new Vuex.Store({
   },
   state: {
     accessToken: { Authorization: '' },
+    isAsideDialogShow:false,
   },
   mutations: {
     SET_USER: (state, user) => {
@@ -26,6 +27,9 @@ const store = new Vuex.Store({
         removeLocal('token');
       }
     },
+    SET_DIALOG:(state,payload)=>{
+       state.isAsideDialogShow = payload
+    }
   },
   actions: {
     // 前端 登出

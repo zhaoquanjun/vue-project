@@ -133,7 +133,7 @@ export default {
     },
     data() {
         return {
-            nodeData: "", // 分类节点的名称
+            nodeData: { id: 0, parentId:null},
             componentId: "ImgList",
             isImgList: false,
             countPic: 0,

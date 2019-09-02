@@ -1,34 +1,30 @@
-<template>
+﻿<template>
     <div>
         <el-row class="upload-head" type="flex" justify="space-between">
             <el-col :span="12">
                 <span style="padding-right:16px">上传至</span>
-                <SelectTree
-                    class="chunkUpload-select-tree"
-                    ref="treeX"
-                    :tree-result="treeResult"
-                    node-key="id"
-                    accordion
-                    :expand-on-click-node="true"
-                    @chooseNode="chooseNode"
-                    :categoryName="nodeData.label"
-                    :categoryId="nodeData.id"
-                />
+                <SelectTree class="chunkUpload-select-tree"
+                            ref="treeX"
+                            :tree-result="treeResult"
+                            node-key="id"
+                            accordion
+                            :expand-on-click-node="true"
+                            @chooseNode="chooseNode"
+                            :categoryName="nodeData.label"
+                            :categoryId="nodeData.id" />
             </el-col>
             <div></div>
         </el-row>
-        <uploader
-            ref="uploader"
-            :options="options"
-            :autoStart="false"
-            class="uploader-example"
-            @file-added="onFileAdded"
-            @file-removed="fileRemove"
-            @file-success="onFileSuccess"
-            @upload-start="uploadStart"
-            @file-error="onFileError"
-            @reset-option="resetOption"
-        >
+        <uploader ref="uploader"
+                  :options="options"
+                  :autoStart="false"
+                  class="uploader-example"
+                  @file-added="onFileAdded"
+                  @file-removed="fileRemove"
+                  @file-success="onFileSuccess"
+                  @upload-start="uploadStart"
+                  @file-error="onFileError"
+                  @reset-option="resetOption">
             <uploader-unsupport></uploader-unsupport>
             <uploader-list :uploadType="uploadType"></uploader-list>
             <uploader-drop>
@@ -52,374 +48,380 @@
                     <i class="error-color">{{errorCount}}</i> 个上传失败
                 </li>
             </ul>
-            <button
-                class="btn-small"
-                :class="[disable?'disable-btn':'btn-bglightblue']"
-                :disable="disable"
-                @click="upload"
-            >开始上传</button>
+            <button class="btn-small"
+                    :class="[disable?'disable-btn':'btn-bglightblue']"
+                    :disable="disable"
+                    @click="upload">
+                开始上传
+            </button>
         </div>
     </div>
 </template>
 
 <script>
-import SparkMD5 from "spark-md5";
-import * as chunkUploadManageApi from "@/api/request/chunkUploadManageApi";
-import SelectTree from "@/components/common/SelectTree";
-export default {
-    props: [
-        "displayName",
-        "uploadType",
-        "accept",
-        "apiHost",
-        "treeResult",
-        "nodeData"
-    ],
-    components: {
-        SelectTree
-    },
-    data() {
-        return {
-            options: {
-                uploadType: this.uploadType,
-                target: null,
-                testChunks: true,
-                chunkSize: 2048000, //分块大小,
-                simultaneousUploads: 1,
-                headers: {
-                    AppId: this.$store.state.dashboard.appId,
-                    Authorization:
-                        "Bearer " + this.$store.state.accessToken.Authorization
-                },
-                checkChunkUploadedByResponse: (chunk, message) => {
-                    let data = JSON.parse(message);
-                    switch (data.fileStatus) {
-                        case 0: {
-                            return (
-                                (data.uploadedChunkList || []).indexOf(
-                                    chunk.offset + 1
-                                ) >= 0
-                            );
-                        }
-                        case 1: {
-                            if (chunk.offset === 0) {
-                                let tip;
-                                if (data.existInCurrentAppInfo.isDelete) {
+    import SparkMD5 from "spark-md5";
+    import * as chunkUploadManageApi from "@/api/request/chunkUploadManageApi";
+    import SelectTree from "@/components/common/SelectTree";
+    export default {
+        props: [
+            "displayName",
+            "uploadType",
+            "accept",
+            "apiHost",
+            "treeResult",
+            "nodeData"
+        ],
+        components: {
+            SelectTree
+        },
+        data() {
+            return {
+                options: {
+                    targetNodeId: this.nodeData.id,
+                    uploadType: this.uploadType,
+                    target: null,
+                    testChunks: true,
+                    chunkSize: 2048000, //分块大小,
+                    simultaneousUploads: 1,
+                    headers: {
+                        AppId: this.$store.state.dashboard.appId,
+                        Authorization:
+                            "Bearer " + this.$store.state.accessToken.Authorization
+                    },
+                    checkChunkUploadedByResponse: (chunk, message) => {
+                        let data = JSON.parse(message);
+                        switch (data.fileStatus) {
+                            case 0: {
+                                return (
+                                    (data.uploadedChunkList || []).indexOf(
+                                        chunk.offset + 1
+                                    ) >= 0
+                                );
+                            }
+                            case 1: {
+                                if (chunk.offset === 0) {
+                                    let tip;
+                                    if (data.existInCurrentAppInfo.isDelete) {
+                                    }
+                                    this.$notify({
+                                        customClass: "notify-error", //  notify-success ||  notify-error
+                                        message: `${this.displayName}[${
+                                            chunk.file.name
+                                            }]已存在于${
+                                            data.existInCurrentAppInfo.isDelete
+                                                ? "回收站-"
+                                                : ""
+                                            }[${
+                                            data.existInCurrentAppInfo.categoryName
+                                            }]分类下-${
+                                            data.existInCurrentAppInfo.fileName
+                                            }`,
+                                        duration: 3000,
+                                        showClose: false
+                                    });
+                                    console.log(chunk);
+                                    this.successCount -= 1;
+                                    chunk.file.cancel(chunk.file);
                                 }
-                                this.$notify({
-                                    customClass: "notify-error", //  notify-success ||  notify-error
-                                    message: `${this.displayName}[${chunk.file.name
-                                    }]已存在于${
-                                        data.existInCurrentAppInfo.isDelete
-                                            ? "回收站-"
-                                            : ""
-                                    }[${
-                                        data.existInCurrentAppInfo.categoryName
-                                    }]分类下-${data.existInCurrentAppInfo.fileName}`,
-                                    duration: 3000,
-                                    showClose: false
-                                });
-                                console.log(chunk);
-                                this.successCount -= 1;
-                                chunk.file.cancel(chunk.file);
+                                return true;
                             }
-                            return true;
-                        }
-                        case 2: {
-                            if (chunk.offset === 0) {
-                                chunkUploadManageApi.createFileWithoutUpload({
-                                    UploadFileType: this.uploadType,
+                            case 2: {
+                                if (chunk.offset === 0) {
+                                    chunkUploadManageApi.createFileWithoutUpload({
+                                        UploadFileType: this.uploadType,
 
-                                    Size: chunk.file.size,
-                                    Md5Hash: data.existInAnotherAppInfo.md5Hash,
-                                    FromAppId:
-                                        data.existInAnotherAppInfo.fromAppId,
-                                    FromId: data.existInAnotherAppInfo.fromId,
-                                    Title: chunk.file.name,
-                                    ContentType: chunk.file.fileType,
-                                    CategoryId: this.nodeData.id || 0
-                                });
-                                //todo 更换alert
+                                        Size: chunk.file.size,
+                                        Md5Hash: data.existInAnotherAppInfo.md5Hash,
+                                        FromAppId:
+                                            data.existInAnotherAppInfo.fromAppId,
+                                        FromId: data.existInAnotherAppInfo.fromId,
+                                        Title: chunk.file.name,
+                                        ContentType: chunk.file.fileType,
+                                        CategoryId: this.nodeData.id || 0
+                                    });
+                                    //todo 更换alert
 
-                                this.$notify({
-                                    customClass: "notify-success", //  notify-success ||  notify-error
-                                    message: `文件秒传成功`,
-                                    duration: 1500,
-                                    showClose: false
-                                });
+                                    this.$notify({
+                                        customClass: "notify-success", //  notify-success ||  notify-error
+                                        message: `文件秒传成功`,
+                                        duration: 1500,
+                                        showClose: false
+                                    });
+                                }
+
+                                return true;
                             }
-
-                            return true;
                         }
                     }
+                },
+                attrs: {
+                    accept: this.accept //'video/*'
+                },
+
+                img: require("../../assets/avatar.jpeg"),
+                fileList: [],
+                successCount: 0,
+                errorCount: 0,
+                disable: true,
+                formatSize: 0,
+                upload2Category: 0
+            };
+        },
+        created() {
+            this.targetNodeId = this.nodeData.id;
+            this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
+            console.log(this.options.target, "1");
+        },
+        methods: {
+            bytesToSize(bytes, flag) {
+                if (bytes === 0) return "0 B";
+                let k = 1024;
+                let sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+                let i = Math.floor(Math.log(bytes) / Math.log(k));
+                let b = bytes / Math.pow(k, i);
+                if (flag === 1) {
+                    b = b.toFixed(2);
                 }
+                let storage = b + sizes[i];
+                return storage;
             },
-            attrs: {
-                accept: this.accept //'video/*'
-            },
-
-            img: require("../../assets/avatar.jpeg"),
-            fileList: [],
-            successCount: 0,
-            errorCount: 0,
-            disable: true,
-            formatSize: 0,
-            upload2Category: 0
-        };
-    },
-    created() {
-        this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
-        console.log(this.options.target, "1");
-    },
-    methods: {
-        bytesToSize(bytes, flag) {
-            if (bytes === 0) return "0 B";
-            let k = 1024;
-            let sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-            let i = Math.floor(Math.log(bytes) / Math.log(k));
-            let b = bytes / Math.pow(k, i);
-            if (flag === 1) {
-                b = b.toFixed(2);
-            }
-            let storage = b + sizes[i];
-            return storage;
-        },
-        onFileError(rootFile, file, response, chunk) {
-            this.$notify({
-                customClass: "notify-error",
-                message: `${JSON.parse(response).message}`,
-                duration: 1500,
-                showClose: false
-            });
-            this.errorCount += 1;
-        },
-        onFileSuccess() {
-            console.log(this.fileList);
-
-            this.successCount += 1;
-            console.log(this.successCount);
-            if (
-                this.successCount == this.fileList.length &&this.successCount>=1 &&
-                this.errorCount < 1 
-            ) {
-                this.$emit("getList");
-                this.$emit("getTree");
-                this.$emit("closeDialog");
-                this.fileList.forEach(file => {
-                    file.cancel(file);
-                });
-                this.$notify({
-                    customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `成功上传${this.successCount}个${this.displayName}`,
-                    showClose: false,
-                    duration: 1500
-                });
-                this.successCount = 0;
-                this.errorCount = 0;
-            }
-            // if (this.successCount > 0 && this.errorCount < 1) {
-
-            // }
-        },
-        onFileAdded(file) {
-            if (file.fileType == "") {
+            onFileError(rootFile, file, response, chunk) {
                 this.$notify({
                     customClass: "notify-error",
-                    message: `请添加${this.displayName}格式文件`,
+                    message: `${JSON.parse(response).message}`,
                     duration: 1500,
                     showClose: false
                 });
-                file.cancel(file);
-                this.errorCount -= 1;
-                return;
-            }
-            let [, suffix] = file.fileType.split("/");
-            let forbidUpload = [
-                ".exe",
-                ".php",
-                ".lnk",
-                ".cmd",
-                ".bat",
-                ".reg",
-                ".vb",
-                ".vbs",
-                ".js",
-                ".css",
-                ".aspx",
-                ".sql",
-                ".asp",
-                ".jsp",
-                ".htm",
-                ".html",
-                ".java",
-                ".json"
-            ];
-            
-          let fileNameIndex = file.name.lastIndexOf(".");
-          let fileName=file.name.slice(fileNameIndex);
-            if (forbidUpload.indexOf(fileName) > -1) {
-               
-                file.cancel(file);
-                this.errorCount -= 1;
-                  this.$notify({
-                        customClass: "notify-error",
-                        message: `请添加${this.displayName}格式的文件`,
-                        duration: 1500,
-                        showClose: false
+                this.errorCount += 1;
+            },
+            getNodeByParentId(tree, parentId) {
+                if (parentId === null) {
+                    return null;
+                }
+                if (tree.id === parentId) {
+                    return tree;
+                }
+                for (var i = 0; i < tree.children.length; i++) {
+                    var result = this.getNodeByParentId(tree.children[i], parentId)
+                    if (result !== null) {
+                        return result;
+                    }
+                }
+                return null;
+            },
+            updateNodeSum(tree, nodeId, count) {
+                var targetNode = this.getNodeByParentId(tree, nodeId);
+                do {
+                    targetNode.inUseSum += count;
+                    targetNode = this.getNodeByParentId(tree, targetNode.parentId);
+                }
+                while (targetNode !== null);
+            },
+            onFileSuccess() {
+                console.log(this.fileList);
+
+                this.successCount += 1;
+                console.log(this.successCount);
+                if (
+                    this.successCount == this.fileList.length &&
+                    this.successCount >= 1 &&
+                    this.errorCount < 1
+                ) {
+                    this.$emit("getList");
+                    console.log(this.treeResult[0], this.targetNodeId, this.successCount, "666666666666")
+                    this.updateNodeSum(this.treeResult[0], this.targetNodeId, this.successCount);
+                    this.$emit("closeDialog");
+                    this.fileList.forEach(file => {
+                        file.cancel(file);
                     });
-                return;
-            }
-            this.panelShow = true;
-            //   file.resume();
-            this.fileList.push(file);
-            if (this.limitCount(file)) {
-                this.computeMD5(file);
-            }
-        },
-        uploadStart(file) {},
-        computeMD5(file) {
-            let url = URL.createObjectURL(file.file);
-            var audioElement = new Audio(url);
-            var duration;
-            audioElement.addEventListener("loadedmetadata", function(_event) {
-                duration = audioElement.duration;
-                console.log(duration + "s");
-            });
+                    this.$notify({
+                        customClass: "notify-success", //  notify-success ||  notify-error
+                        message: `成功上传${this.successCount}个${this.displayName}`,
+                        showClose: false,
+                        duration: 1500
+                    });
+                    this.successCount = 0;
+                    this.errorCount = 0;
+                }
+                // if (this.successCount > 0 && this.errorCount < 1) {
 
-            let fileReader = new FileReader();
-            let time = new Date().getTime();
-            let md5 = "";
-            // console.log(`开始计算md5`);
-
-            fileReader.readAsArrayBuffer(file.file);
-            fileReader.onload = e => {
-                md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
-                file.uniqueIdentifier = md5;
-                
-                let fileSize = 0;
-                this.fileList.forEach(item => {
-                    fileSize += item.size;
-                });
-                this.formatSize = this.bytesToSize(fileSize, 1);
-                //file.resume();
-            };
-
-            fileReader.onerror = function() {
-                this.error(
-                    "FileReader onerror was triggered, maybe the browser aborted due to high memory usage."
-                );
-            };
-        },
-        limitCount(file) {
-            let videoFormat = [
-                ".avi",
-                ".rmvb",
-                ".rm",
-                ".asf",
-                ".divx",
-                ".mpg",
-                ".mpeg",
-                ".mpe",
-                ".wmv",
-                ".mp4",
-                ".mkv",
-                ".vob",
-                ".swf",
-                ".flv"
-            ];
-            let audioFormat = [
-                ".mp3",
-                ".cd",
-                ".wav",
-                ".aiff",
-                ".au",
-                ".wma",
-                ".ogg",
-                ".mp3pro",
-                ".real",
-                ".ape",
-                ".module",
-                ".midi",
-                ".vqf",
-                ".flac"
-            ];
-            if (this.uploadType === "Video") {
-                let format = file.fileType.split("/")[1];
-                if (videoFormat.indexOf("." + format) === -1) {
-                    file.cancel(file);
-                    this.errorCount -= 1;
+                // }
+            },
+            onFileAdded(file) {
+                console.log(file);
+                if (file.fileType == "") {
                     this.$notify({
                         customClass: "notify-error",
                         message: `请添加${this.displayName}格式文件`,
                         duration: 1500,
                         showClose: false
                     });
-                    return false;
+                    file.cancel(file);
+                    this.errorCount -= 1;
+                    return;
                 }
-            }
-            if (this.uploadType === "Audio") {
-                let format = file.fileType.split("/")[1];
-                if (audioFormat.indexOf("." + format) === -1) {
+                let [, suffix] = file.fileType.split("/");
+                let forbidUpload = [
+                    ".exe",
+                    ".php",
+                    ".lnk",
+                    ".cmd",
+                    ".bat",
+                    ".reg",
+                    ".vb",
+                    ".vbs",
+                    ".js",
+                    ".css",
+                    ".aspx",
+                    ".sql",
+                    ".asp",
+                    ".jsp",
+                    ".htm",
+                    ".html",
+                    ".java",
+                    ".json"
+                ];
+
+            let fileNameIndex = file.name.lastIndexOf(".");
+            let fileName = file.name.slice(fileNameIndex);
+                if (forbidUpload.indexOf(fileName) > -1) {
                     file.cancel(file);
                     this.errorCount -= 1;
                     this.$notify({
                         customClass: "notify-error",
-                        message: `请添加${this.displayName}格式文件`,
+                        message: `不允许上传${fileName}格式的文件`,
                         duration: 1500,
                         showClose: false
                     });
-                    return false;
+
+                    return;
                 }
-            }
-            if (this.uploadType === "File") {
-                if (this.fileList.length < 100) {
-                    if (file.size / 1024 / 1024 > 50) {
+                this.panelShow = true;
+                //   file.resume();
+                this.fileList.push(file);
+                if (this.limitCount(file)) {
+                    this.computeMD5(file);
+                }
+                console.log(this.fileList);
+            },
+            uploadStart(file) { },
+            computeMD5(file) {
+                if (this.displayName !== "File") {
+                    let url = URL.createObjectURL(file.file);
+                    var audioElement = new Audio(url);
+                    var duration;
+                    audioElement.addEventListener("loadedmetadata", function (
+                        _event
+                    ) {
+                        duration = audioElement.duration;
+                        console.log(duration + "s");
+                    });
+                }
+
+                let fileReader = new FileReader();
+                let time = new Date().getTime();
+                let md5 = "";
+                // console.log(`开始计算md5`);
+
+                fileReader.readAsArrayBuffer(file.file);
+                fileReader.onload = e => {
+                    md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
+                    file.uniqueIdentifier = md5;
+
+                    let fileSize = 0;
+                    this.fileList.forEach(item => {
+                        fileSize += item.size;
+                    });
+                    this.formatSize = this.bytesToSize(fileSize, 1);
+                    //file.resume();
+                };
+
+                fileReader.onerror = function () {
+                    this.error(
+                        "FileReader onerror was triggered, maybe the browser aborted due to high memory usage."
+                    );
+                };
+            },
+            limitCount(file) {
+                let videoFormat = [
+                    ".avi",
+                    ".rmvb",
+                    ".rm",
+                    ".asf",
+                    ".divx",
+                    ".mpg",
+                    ".mpeg",
+                    ".mpe",
+                    ".wmv",
+                    ".mp4",
+                    ".mkv",
+                    ".vob",
+                    ".swf",
+                    ".flv"
+                ];
+                let audioFormat = [
+                    ".mp3",
+                    ".cd",
+                    ".wav",
+                    ".aiff",
+                    ".au",
+                    ".wma",
+                    ".ogg",
+                    ".mp3pro",
+                    ".real",
+                    ".ape",
+                    ".module",
+                    ".midi",
+                    ".vqf",
+                    ".flac"
+                ];
+                if (this.uploadType === "Video") {
+                    let format = file.fileType.split("/")[1];
+                    if (videoFormat.indexOf("." + format) === -1) {
+                        file.cancel(file);
+                        this.errorCount -= 1;
                         this.$notify({
                             customClass: "notify-error",
-                            message: `${this.displayName}大小不可超过50M`,
+                            message: `请添加${this.displayName}格式文件`,
                             duration: 1500,
                             showClose: false
                         });
+                        return false;
+                    }
+                }
+                if (this.uploadType === "Audio") {
+                    let format = file.fileType.split("/")[1];
+                    if (audioFormat.indexOf("." + format) === -1) {
                         file.cancel(file);
                         this.errorCount -= 1;
+                        this.$notify({
+                            customClass: "notify-error",
+                            message: `请添加${this.displayName}格式文件`,
+                            duration: 1500,
+                            showClose: false
+                        });
                         return false;
+                    }
+                }
+                if (this.uploadType === "File") {
+                    if (this.fileList.length < 100) {
+                        if (file.size / 1024 / 1024 > 50) {
+                            this.$notify({
+                                customClass: "notify-error",
+                                message: `${this.displayName}大小不可超过50M`,
+                                duration: 1500,
+                                showClose: false
+                            });
+                            file.cancel(file);
+                            this.errorCount -= 1;
+                            return false;
+                        } else {
+                            return true;
+                        }
                     } else {
-                        return true;
-                    }
-                } else {
-                    this.$notify({
-                        customClass: "notify-error",
-                        message: `一次最多可上传10个${displayName}`,
-                        duration: 1500,
-                        showClose: false
-                    });
-                    file.cancel(file);
-                    this.errorCount -= 1;
-                    return false;
-                }
-            } else {
-                console.log(this.fileList.length,'111')
-                if (this.fileList.length <= 10) {
-                    if (
-                        file.size / 1024 / 1024 > 50 &&
-                        this.uploadType === "Audio"
-                    ) {
                         this.$notify({
                             customClass: "notify-error",
-                            message: `${this.displayName}大小不可超过50M`,
-                            duration: 1500,
-                            showClose: false
-                        });
-                        file.cancel(file);
-                        this.errorCount -= 1;
-                        return false;
-                    } else if (
-                        this.uploadType === "Video" &&
-                        file.size / 1024 / 1024 / 1024 > 2
-                    ) {
-                        this.$notify({
-                            customClass: "notify-error",
-                            message: `${this.displayName}大小不可超过2G`,
+                            message: `一次最多可上传10个${this.displayName}`,
                             duration: 1500,
                             showClose: false
                         });
@@ -428,142 +430,188 @@ export default {
                         return false;
                     }
                 } else {
-                    file.cancel(file);
-                    this.errorCount -= 1;
-                    this.$notify({
-                        customClass: "notify-error",
-                        message: `一次最多可上传10个${this.displayName}`,
-                        duration: 1500,
-                        showClose: false
-                    });
-                    return false;
+                    console.log(this.fileList.length, "111");
+                    if (this.fileList.length <= 10) {
+                        if (
+                            file.size / 1024 / 1024 > 50 &&
+                            this.uploadType === "Audio"
+                        ) {
+                            this.$notify({
+                                customClass: "notify-error",
+                                message: `${this.displayName}大小不可超过50M`,
+                                duration: 1500,
+                                showClose: false
+                            });
+                            file.cancel(file);
+                            this.errorCount -= 1;
+                            return false;
+                        } else if (
+                            this.uploadType === "Video" &&
+                            file.size / 1024 / 1024 / 1024 > 2
+                        ) {
+                            this.$notify({
+                                customClass: "notify-error",
+                                message: `${this.displayName}大小不可超过2G`,
+                                duration: 1500,
+                                showClose: false
+                            });
+                            file.cancel(file);
+                            this.errorCount -= 1;
+                            return false;
+                        }
+                    } else {
+                        file.cancel(file);
+                        this.errorCount -= 1;
+                        this.$notify({
+                            customClass: "notify-error",
+                            message: `一次最多可上传10个${this.displayName}`,
+                            duration: 1500,
+                            showClose: false
+                        });
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
+            },
+            // 选择分类节点
+            chooseNode(data) {
+                this.upload2Category = data;
+                this.targetNodeId = data.id;
+                this.$set(
+                    this.options,
+                    "target",
+                    `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`
+                );
+                this.$refs.uploader.resetOption();
+            },
+            resetOption() { },
+            upload() {
+                this.fileList.forEach(item => {
+                    item.resume();
+                });
+            },
+            fileRemove(file) {
+                console.log(this.fileList.length, "333");
+                if (!!file.error) {
+                    this.errorCount -= 1;
+                }
+                this.fileList = this.fileList.filter(item => {
+                    return item != file;
+                });
             }
         },
-        // 选择分类节点
-        chooseNode(data) {
-            this.upload2Category = data;
-            this.$set(
-                this.options,
-                "target",
-                `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`
-            );
-            this.$refs.uploader.resetOption();
-        },
-        resetOption() {},
-        upload() {
-            this.fileList.forEach(item => {
-                item.resume();
-            });
-        },
-        fileRemove(file) {
-             console.log(this.fileList.length,'333')
-            if(!!file.error){
-                 this.errorCount -= 1;
+        watch: {
+            fileList() {
+                if (this.fileList.length > 0) {
+                    this.disable = false;
+                } else {
+                    this.disable = true;
+                }
+                // this.$nextTick(() => {
+                //     let eles = document.getElementsByClassName(
+                //         "uploader-file-icon"
+                //     );
+                //     for (let i = 0; i < eles.length; i++) {
+                //         let ele = eles[i];
+                //         ele.style.backgroundImage =
+                //             "url('http://img5.imgtn.bdimg.com/it/u=150565144,593293567&fm=26&gp=0.jpg')";
+                //     }
+                // });
             }
-            this.fileList = this.fileList.filter(item => {
-                return item != file;
-            });
         }
-    },
-    watch: {
-        fileList() {
-            if (this.fileList.length > 0) {
-                this.disable = false;
-            } else {
-                this.disable = true;
-            }
-            // this.$nextTick(() => {
-            //     let eles = document.getElementsByClassName(
-            //         "uploader-file-icon"
-            //     );
-            //     for (let i = 0; i < eles.length; i++) {
-            //         let ele = eles[i];
-            //         ele.style.backgroundImage =
-            //             "url('http://img5.imgtn.bdimg.com/it/u=150565144,593293567&fm=26&gp=0.jpg')";
-            //     }
-            // });
-        }
-    }
-};
+    };
 </script>
 
-<style  scoped>
-.uploader-list /deep/ .uploader-file {
-    /* min-height: 54px; */
-    line-height: 1;
-}
-.uploader-list /deep/ .uploader-file-icon {
-    /* width: 113px;
+<style scoped>
+    .uploader-list /deep/ .uploader-file {
+        /* min-height: 54px; */
+        line-height: 1;
+    }
+
+    .uploader-list /deep/ .uploader-file-icon {
+        /* width: 113px;
     height: 80px; */
-    line-height: 1;
-    margin: 0;
-}
-.uploader-list /deep/ .uploader-file-icon:before {
-    display: none;
-}
-.uploader-list /deep/ ul {
-    margin-top: 20px;
-}
-.uploader-list /deep/ ul li {
-    margin-bottom: 14px;
-    border: 1px solid #e5e5e5;
-}
-.uploader-list /deep/ ul li:hover {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-}
-/* zxb begin */
-.uploader-list /deep/ .uploader-file-status,
-.uploader-list /deep/ .uploader-file-actions {
-    float: right;
-    text-align: right;
-    padding-right: 16px;
-    display: flex;
-    align-items: center;
-}
-.uploader-list /deep/ .uploader-file-actions,
-.uploader-list /deep/ .uploader-file-status {
-    justify-content: flex-end;
-}
-.uploader-list /deep/ .uploader-file {
-    border: none;
-}
-.uploader-list /deep/ .uploader-file-progress {
-    background: #fff;
-}
-.uploader-list /deep/ .uploader-file-name {
-    display: flex;
-    align-items: center;
-}
-.chunkUpload-select-tree /deep/ .el-input--small .el-input__inner {
-    height: 40px;
-    line-height: 40px;
-    border-color: #a1a8b1;
-    font-size: 14px;
-}
+        line-height: 1;
+        margin: 0;
+    }
+
+        .uploader-list /deep/ .uploader-file-icon:before {
+            display: none;
+        }
+
+    .uploader-list /deep/ ul {
+        margin-top: 20px;
+    }
+
+        .uploader-list /deep/ ul li {
+            margin-bottom: 14px;
+            border: 1px solid #e5e5e5;
+        }
+
+            .uploader-list /deep/ ul li:hover {
+                background: rgba(255, 255, 255, 1);
+                box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
+                border-radius: 3px;
+            }
+    /* zxb begin */
+    .uploader-list /deep/ .uploader-file-status,
+    .uploader-list /deep/ .uploader-file-actions {
+        float: right;
+        text-align: right;
+        padding-right: 16px;
+        display: flex;
+        align-items: center;
+    }
+
+    .uploader-list /deep/ .uploader-file-actions,
+    .uploader-list /deep/ .uploader-file-status {
+        justify-content: flex-end;
+    }
+
+    .uploader-list /deep/ .uploader-file {
+        border: none;
+    }
+
+    .uploader-list /deep/ .uploader-file-progress {
+        background: #fff;
+    }
+
+    .uploader-list /deep/ .uploader-file-name {
+        display: flex;
+        align-items: center;
+    }
+
+    .chunkUpload-select-tree /deep/ .el-input--small .el-input__inner {
+        height: 40px;
+        line-height: 40px;
+        border-color: #a1a8b1;
+        font-size: 14px;
+    }
 </style>
 <style scoped lang="scss">
-.defult-color {
-    color: #09cceb;
-}
-.upload-head {
-    padding: 0 32px;
-}
-.chunkUpload-select-tree {
-    padding-top: 20px;
-    width: 214px;
-}
-.uploader-example {
-    padding: 15px;
-    min-height: 320px;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    margin: 13px 0 16px 0;
-    padding: 0 32px;
-    .uploader-drop {
+    .defult-color {
+        color: #09cceb;
+    }
+
+    .upload-head {
+        padding: 0 32px;
+    }
+
+    .chunkUpload-select-tree {
+        padding-top: 20px;
+        width: 214px;
+    }
+
+    .uploader-example {
+        padding: 15px;
+        min-height: 320px;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        margin: 13px 0 16px 0;
+        padding: 0 32px;
+        .uploader-drop
+
+    {
         border: none;
         background: transparent;
         // position: absolute;
@@ -577,48 +625,60 @@ export default {
         border: 1px dashed rgba(215, 215, 215, 1);
         text-align: center;
         line-height: 68px;
-        .uploader-btn {
-            // border: 1px solid #09cceb;
-            border: none;
-            color: #09cceb;
-            padding-left: 0;
-            &:hover {
-                background: transparent;
-            }
-        }
+        .uploader-btn
+
+    {
+        // border: 1px solid #09cceb;
+        border: none;
+        color: #09cceb;
+        padding-left: 0;
+        &:hover
+
+    {
+        background: transparent;
     }
-}
-.uploader-example .uploader-btn {
-    margin-right: 4px;
-}
 
-.uploader-example .uploader-list {
-    max-height: 440px;
-    overflow: auto;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
+    }
+    }
+    }
 
-.upload-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 32px;
-    ul {
+    .uploader-example .uploader-btn {
+        margin-right: 4px;
+    }
+
+    .uploader-example .uploader-list {
+        max-height: 440px;
+        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .upload-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 32px;
+        ul
+
+    {
         display: flex;
         align-items: center;
     }
-}
-.success-color {
-    color: #35b24b;
-}
-.error-color {
-    color: #f15533;
-}
-.disable-btn {
-    background: rgba(229, 229, 229, 1);
-    border-radius: 2px;
-    border: 1px solid rgba(229, 229, 229, 1);
-    color: #fff;
-}
+
+    }
+
+    .success-color {
+        color: #35b24b;
+    }
+
+    .error-color {
+        color: #f15533;
+    }
+
+    .disable-btn {
+        background: rgba(229, 229, 229, 1);
+        border-radius: 2px;
+        border: 1px solid rgba(229, 229, 229, 1);
+        color: #fff;
+    }
 </style>

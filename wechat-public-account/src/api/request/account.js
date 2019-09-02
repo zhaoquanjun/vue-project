@@ -4,7 +4,7 @@ import store from "@/store/index";
 
 // 授权区域
 export const isAuth = param => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Platform/SelectPlatformDetailAuth`);
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Platform/SelectPlatformDetailAuth`, param);
   // return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/AuthRequest`);
 }
 
@@ -84,10 +84,12 @@ export const transit = param => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/oauth/success?${param}`);
 }
 
-export const uploadImg = (params) => {
-  // let param = {
-  //   authorizerAppId:this.
-  // }
+export const uploadImg = (imgUrl) => {
+  let params = {
+    authorizerAppId:store.state.wxaccount.account_info.platformAppId,
+    imgUrl
+  }
+  console.log(store)
   return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/UploadImg`, params);
 }
 

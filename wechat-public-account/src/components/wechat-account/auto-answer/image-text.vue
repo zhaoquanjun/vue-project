@@ -101,10 +101,10 @@
                 </div>
             </li>
         </ul>
-        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8">
+        <!-- <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8">
             <span class="el-icon-plus avatar-uploader-icon"></span>
             <span>最多添加8个图文消息</span>
-        </div>
+        </div> -->
         <image-manage
             :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
             @getImage="getImage"
@@ -143,8 +143,12 @@ export default {
     },
     mounted() {
         this.list = this.newsMsg;
+         this.list.forEach((item, index) => {
+                item["isShow"] = true;
+            });
+        console.log(this.newsMsg)
         this.isEditorShow = this.list.length > 0 ? false : true;
-        console.log(this.list);
+        console.log(this.list,'2222');
     },
     methods: {
         downward(item, index) {
@@ -210,17 +214,10 @@ export default {
         },
         // 获取图片
         async getImage(src) {
-            console.log(src);
-            this.chooseImg = src;
-            this.picUrl = src;
-            let appId = this.$store.state.dashboard.appId
-            let option = {
-                authorizerAppId:appId,
-                imgUrl:src
-            }
-            let data = await uploadImg(option);
-
-            console.log(data);
+            // let {data} = await uploadImg(src);
+            // this.picUrl = data;
+             this.picUrl = src;
+          
         },
         // 关闭弹层
         handleCloseModal() {
@@ -235,12 +232,17 @@ export default {
     },
     watch: {
         newsMsg() {
+           
             this.list = this.newsMsg;
             this.list.forEach((item, index) => {
                 item["isShow"] = true;
             });
-            this.isEditorShow = this.list.length > 0 ? false : true;
-        }
+             console.log( this.newsMsg.length,' this.newsMsg this.newsMsg this.newsMsg')
+            this.isEditorShow = this.newsMsg.length > 0 ? false : true;
+            console.log(this.isEditorShow) 
+         
+        },
+       
     }
 };
 </script>

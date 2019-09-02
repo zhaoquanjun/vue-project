@@ -86,6 +86,7 @@ export default {
     },
     data() {
         return {
+            targetNodeId:this.nodeData.id,
             dialogImageUrl: "",
             dialogVisible: false,
             isFolder: false,
@@ -106,6 +107,7 @@ export default {
     mounted() {
         this.headers.appId = this.$store.state.dashboard.appId;
         if (this.nodeData) {
+            this.targetNodeId=this.nodeData.id;
             this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
         }
     },
@@ -145,6 +147,36 @@ export default {
                 duration: 1500
             });
         },
+    getNodeByParentId(tree,parentId)
+    {
+    if(parentId===null)
+    {
+          return null;
+    }
+     if(tree.id===parentId)
+        {
+            return tree;
+        }
+    for(var i=0;i<tree.children.length;i++)
+    {
+        var result=this.getNodeByParentId(tree.children[i],parentId)
+        if(result!==null)
+        {
+            return result;
+        }
+    }
+    return null;
+    },
+     updateNodeSum(tree,nodeId,count)
+    {
+     var targetNode=this.getNodeByParentId(tree,nodeId);
+    do
+    {
+    targetNode.inUseSum+=count;
+    targetNode=this.getNodeByParentId(tree,targetNode.parentId);
+    }
+    while (targetNode!==null);
+    },
         // 图片上传成功时触发
         handleSucess(response, file, fileList) {
             if (++this.count == fileList.length) {
@@ -152,7 +184,7 @@ export default {
                     this.$emit("switchUploadBoxShowStatus", "uploadImg");
                     this.uploadDisabled = true;
                     this.isUploading = false;
-                    // this.$emit("getTree");
+                    this.updateNodeSum(this.treeResult[0],this.targetNodeId,fileList.length);
                     this.$refs.upload.clearFiles();
                     this.$notify({
                         customClass: "notify-success", //  notify-success ||  notify-error
@@ -172,6 +204,7 @@ export default {
         },
         // 选择分类节点
         chooseNode(data) {
+            this.targetNodeId=data.id;
             this.upload2Category = data;
             this.uploadPicAction = `${this.uploadPicUrl}/${this.upload2Category.id}`;
         },

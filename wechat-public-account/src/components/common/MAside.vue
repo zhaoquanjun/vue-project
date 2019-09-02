@@ -36,6 +36,8 @@
             class="m-asideright"
             :menuList="menuListChild"
         ></LeftNavComponents>
+     
+       
     </div>
 </template>
 <script>
@@ -46,7 +48,8 @@ import { siteDomain } from "@/environment/index";
 export default {
     data() {
         return {
-            width: 70,
+            aa: true,
+            width: 60,
             width1: 0,
             time: "0.8s",
             curIndex: -1,
@@ -55,14 +58,14 @@ export default {
             display: "none",
             curPath: "",
             lastRoute: "",
-            subTitle:""
+            subTitle: ""
         };
     },
     components: {
         LeftNavComponents
     },
-    mounted(){
-        this.menuHasChild(0)
+    mounted() {
+        this.menuHasChild(0);
     },
     methods: {
         changeCurHoverItem(i) {
@@ -78,13 +81,14 @@ export default {
             }
         },
         collapseOpen(width, time) {
+            this.$store.commit("SET_DIALOG",true)
             this.width = width;
             this.width1 = 120;
             this.display = "block";
             this.time = time + "s";
         },
         collapseClose() {
-            this.width = 70;
+            this.width = 60;
             this.width1 = 0;
             this.display = "none";
             this.time = "0s";
@@ -93,32 +97,35 @@ export default {
         iconfonts(code) {
             switch (code) {
                 case "board":
-                    return "iconkongzhitaishouye";
+                    return "iconshouye";
                 case "content":
-                    return "iconneirongguanli";
+                    return "iconneirongguanli1";
                 case "website":
-                    return "iconwangzhanguanli";
+                    return "iconwangzhanguanli1";
                 case "system":
-                    return "iconxitongshezhi";
+                    return "iconxitongshezhi1";
                 case "form":
-                    return "iconbiaodanguanli";
+                    return "iconbiaodanguanli1";
                 case "micro":
                     return "iconweixinxiaochengxu";
                 case "wechataccount":
-                    return "iconweixingongzhonghao";
+                    return "iconweixingongzhonghao1";
                 case "recycle":
-                    return "iconhuishouzhan";
+                    return "iconhuishouzhan1";
                 case "business":
-                    return "icondianshanghuiyuan";
+                    return "icondianshanghuiyuan1";
                 case "template":
-                    return "icondianshanghuiyuan";
+                    return "icondianshanghuiyuan1";
             }
         },
-        menuHasChild(index){
-            if(this.getMenuList[index]&&this.getMenuList[index]["children"]){
-                return true
-            }else{
-                false
+        menuHasChild(index) {
+            if (
+                this.getMenuList[index] &&
+                this.getMenuList[index]["children"]
+            ) {
+                return true;
+            } else {
+                false;
             }
         }
     },
@@ -135,7 +142,7 @@ export default {
             if (!this.$store.getters.getMenuList) return;
             let item = this.$store.getters.getMenuList[this.curIndex];
             if (item && item.children) {
-                this.subTitle=item.name
+                this.subTitle = item.name;
                 return true;
             } else {
                 return false;
@@ -157,7 +164,7 @@ export default {
     position: absolute;
     left: 0;
     top: 0px;
-  
+
     z-index: 10;
 }
 .m-asideleft {
@@ -176,31 +183,34 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+
 // 选中的样式
 .menu-bg {
-    background: #e0faff;
-    color: #0595e6;
+    background: #f8fafc;
+    // color: #0595e6;
+    border-left: 4px solid #0595e6;
 }
 .active-color {
     color: #0595e6 !important;
 }
 .menu-hover {
-    background: #e0fcff;
+    background: #f8fafc;
 }
 .left-menu {
-    border-right: solid 1px #e6e6e6;
+    // border-right: solid 1px #e6e6e6;
     background: #fff;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 60px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
         line-height: 50px;
         white-space: nowrap;
         margin-bottom: 14px;
+        box-sizing: border-box;
         .menu-icon {
             display: inline-block;
             font-size: 22px;
-            width: 70px;
+            width: 60px;
             text-align: center;
             vertical-align: middle;
             color: #0595e6;
@@ -210,7 +220,7 @@ export default {
             right: 16px;
             font-size: 14px;
             vertical-align: middle;
-            color: #B9CBCF;
+            color: #b9cbcf;
         }
     }
 }
