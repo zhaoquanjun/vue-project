@@ -122,9 +122,11 @@ export default {
         cancelhadnleTreeInput(data, node) {
             if (this.isRename) {
                 if (data.label == "") {
-                    this.$message({
-                        message: "分类名称不能为空",
-                        type: "warning"
+                   this.$notify({
+                        customClass: "notify-warning",
+                        message: `分类名称不能为空!`,
+                        showClose: false,
+                        duration: 1500
                     });
                     return;
                 }

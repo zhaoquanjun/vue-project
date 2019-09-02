@@ -600,8 +600,10 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, fileList,disableRefObj) {
-            this.detailData.thumbnailPicUrlList = fileList;
+        editArticle(formName, fileList, disableRefObj) {
+            if (fileList && fileList.length > 0) {
+                this.detailData.thumbnailPicUrlList = fileList;
+            }            
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle(disableRefObj);

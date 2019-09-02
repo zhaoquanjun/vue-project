@@ -77,11 +77,7 @@
                 <slot name="modal-footer"></slot>
             </el-footer>
         </el-main>
-        <el-dialog
-            title="上传"
-            :visible.sync="dialogTableVisible"
-            :modal-append-to-body="false"
-        >
+        <el-dialog title="上传" :visible.sync="dialogTableVisible" :modal-append-to-body="false">
             <span slot="title">
                 <span class="fs14">
                     上传{{displayName}}
@@ -214,11 +210,6 @@ export default {
                                 });
                                 this.getPicList();
                             }
-                        } else {
-                            // this.$message({
-                            //     type: "info",
-                            //     message: "已取消删除"
-                            // });
                         }
                     }
                 }
@@ -279,17 +270,15 @@ export default {
                             );
                             if (status === 200) {
                                 this.getTree();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+
+                                this.$notify({
+                                    customClass: "notify-success",
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1500
                                 });
                             }
-                        } else {
-                            this.$message({
-                                type: "info",
-                                message: "已取消删除"
-                            });
-                        }
+                        } 
                     }
                 }
             );
@@ -369,7 +358,7 @@ export default {
 };
 </script>
 <style scoped>
-.el-dialog__wrapper /deep/ .el-dialog{
+.el-dialog__wrapper /deep/ .el-dialog {
     width: 900px;
 }
 </style>

@@ -8,7 +8,7 @@
                 <el-tab-pane label="关键词回复" name="3"></el-tab-pane>
             </el-tabs>
         </div>
-        <div class="reply-wrap" :style="{height:scrollHeight+'px'}">
+        <div class="reply-wrap" :style="{height:scrollHeight+'px'}" v-scrollBar>
             <reply-content
                 ref="replycontent"
                 v-if="replyType!=='3' || addAnswer===false"
@@ -464,7 +464,8 @@ export default {
     }
     .reply-wrap {
         padding: 32px;
-        overflow-y: auto;
+        position: relative;
+        //  overflow-y: auto;
     }
 }
 </style>
