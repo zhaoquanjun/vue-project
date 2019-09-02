@@ -113,10 +113,11 @@
             <el-table-column prop="siteName" label="缩略图" width="250">
               <template slot-scope="scope">
                 <div class="siteImg">
+                  <div class="recommend" v-show="scope.row.isRecommend">推荐</div>
                   <img
                     :src="scope.row.imageUrl"
                     alt
-                    style="width:100%;height:100%;object-fit: cover;"
+                    style="width:100%;height:100%;object-fit:cover;"
                     :href="`//${scope.row.domain}`"
                   />
                 </div>
@@ -236,7 +237,13 @@
           <div class="tips">为保证设计师可正常登录系统，请填写真实的手机号</div>
           <div class="phoneWrap">
             <div class="phoneTitle">设计师手机号</div>
-            <el-input v-model="phone" placeholder="请输入手机号" class="phoneInput" @blur="blurPhone" :maxlength="11"></el-input>
+            <el-input
+              v-model="phone"
+              placeholder="请输入手机号"
+              class="phoneInput"
+              @blur="blurPhone"
+              :maxlength="11"
+            ></el-input>
             <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
           </div>
           <div class="remarkWrap">
@@ -350,13 +357,13 @@ export default {
       picUrl: "",
       uploadPicAction: `${environment.uploadPicUrl}/-1`,
       headers: {
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        appId: "",
         Authorization: ""
       },
       picUrlMobile: "",
       uploadPicActionMobile: `${environment.uploadPicUrl}/-1`,
       headersMobile: {
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+        appId: "",
         Authorization: ""
       },
       createTemplateShow: false,
@@ -607,6 +614,7 @@ export default {
       console.log(this.firstIndustrySelect);
       let { data, status } = await templateApi.getSecondIndustries(id);
       this.secondIndustryOptions = data;
+      this.secondIndustrySelect = "";
     },
     // 升序
     asc() {
@@ -969,6 +977,7 @@ export default {
   width: 284px;
   height: 176px;
   display: block;
+  object-fit: cover;
 }
 .avatar-mobile-uploader {
   text-align: center;
@@ -991,19 +1000,11 @@ export default {
     margin-left: -45px;
   }
 }
-.avatar-mobile-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 105px;
-  height: 176px;
-  line-height: 176px;
-  text-align: center;
-  border: 1px dashed #ccc;
-}
 .avatar-mobile {
   width: 105px;
   height: 176px;
   display: block;
+  object-fit: cover;
 }
 .templateTitle {
   height: 86px;
@@ -1108,6 +1109,22 @@ export default {
   .siteImg {
     width: 200px;
     height: 133px;
+    position: relative;
+    .recommend {
+      display: inline-block;
+      width: 50px;
+      height: 22px;
+      background: rgba(254, 152, 55, 1);
+      border-radius: 2px 0px 10px 0px;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 1);
+      line-height: 22px;
+      text-align: center;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
   }
   .templateName {
     font-size: 14px;
@@ -1129,6 +1146,7 @@ export default {
     font-weight: 400;
     color: rgba(9, 204, 235, 1);
     line-height: 20px;
+    background-color: #fff;
   }
   .disable {
     opacity: 0.5;
