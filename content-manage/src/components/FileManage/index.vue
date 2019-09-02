@@ -348,7 +348,7 @@ export default {
             if (status == 200) {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `${!!this.editorOrMove?"编辑成功":"移动成功"}`,
+                    message: `${!!this.editorOrMove?"保存成功":"移动成功"}`,
                     duration: 1500,
                     showClose: false
                 });
