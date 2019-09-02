@@ -1,12 +1,10 @@
 <template>
-  <div class="menu-content__section">
+  <div class="message-content__section">
     <section class="menu-content__area">
       <div class="radio-tabs">
-        <el-radio-group v-model="radio">
-          <el-radio :label="'picture'">图片</el-radio>
-          <el-radio :label="'words'">文字</el-radio>
-          <el-radio :label="'pricure_words'">图文</el-radio>
-        </el-radio-group>
+        <el-radio label="picture" v-model="menu_reply_behavior.BehaviorType" @change="_handleChangeBehaviorType">图片</el-radio>
+        <el-radio label="words" v-model="menu_reply_behavior.BehaviorType" @change="_handleChangeBehaviorType">文字</el-radio>
+        <el-radio label="pricure_words" v-model="menu_reply_behavior.BehaviorType" @change="_handleChangeBehaviorType">图文</el-radio>
       </div>
       <div class="slot-content">
         <div class="slot-item">
@@ -17,6 +15,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: {
     menuData: {
@@ -24,15 +23,16 @@ export default {
     }
   },
   data() {
-    return {
-      radio: 'picture'
-    };
+    return {};
+  },
+  computed: {
+    ...mapGetters(["menu_reply_behavior"])
   },
   methods: {
-    changeReplyContent(val) {
-      console.log(val)
+    _handleChangeBehaviorType(val) {
+      this.$store.commit("SET_MENU_BEHAVIOR_TYPE", val);
     }
-  },
+  }
 };
 </script>
 <style scoped>
@@ -44,7 +44,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.menu-content__section {
+.message-content__section {
   .menu-content__area {
     margin-left: -24px;
     width: calc(100% + 48px);

@@ -4,10 +4,10 @@
       <div class="phone-menu__area">
         <div class="phone-menu__keyboard"></div>
         <div class="phone-menu__divider"></div>
-        <div class="no-menu__area" v-if="menuData.length == 0" @click="_handleAddMainMenu">+ 添加菜单</div>
-        <ul class="phone-menu__list">
+        <div class="no-menu__area" v-if="menuTree.length == 0" @click="_handleAddMainMenu">+ 添加菜单</div>
+        <ul class="phone-menu__list" v-show="menuTree.length > 0">
           <li
-            v-for="(item, index) in menuData"
+            v-for="(item, index) in menuTree"
             :key="index"
             :class="{selected: index == curIndex}"
             @click="_handleSelectMenu(index)"
@@ -21,7 +21,7 @@
               <li @click="_handleAddChildMenu" v-show="item.children.length < 5">+</li>
             </ul>
           </li>
-          <li v-if="menuData.length > 0 &&  menuData.length < 3">+</li>
+          <li v-if="menuTree.length > 0 &&  menuTree.length < 3">+</li>
         </ul>
       </div>
       <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">菜单排序</div>
@@ -29,7 +29,7 @@
     <div class="menu-operate__arae">
       <order-menu v-show="isOrder"></order-menu>
       <div v-show="!isOrder" class="menu-operate__none">
-        <div class="empty" v-if="menuData.length == 0">
+        <div class="empty" v-if="menuTree.length > 0">
           <div class="empty-icon"></div>
           <p>您还没有添加菜单</p>
         </div>
@@ -39,34 +39,39 @@
             <div class="menu-operate__delete" @click="_handleDeleteMenu">删除菜单</div>
           </div>
           <div class="menu-operate__content">
-            <el-form :model="form" label-width="80px">
+            <el-form label-width="80px">
               <el-form-item label="菜单名称">
-                <el-input v-model="form.name" placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母"></el-input>
+                <el-input v-model="menu_reply_behavior.name" placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母"></el-input>
               </el-form-item>
               <el-form-item label="菜单内容">
-                <el-radio-group v-model="form.type">
-                  <el-radio label="message">发送消息</el-radio>
-                  <el-radio label="website">跳转网页</el-radio>
-                  <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
-                </el-radio-group>
+                <el-radio label="message" v-model="menu_reply_behavior.ClickBehavior" @change="_handleBehaviorType">发送消息</el-radio>
+                <el-radio label="website" v-model="menu_reply_behavior.ClickBehavior" @change="_handleBehaviorType">跳转网页</el-radio>
+                <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
               </el-form-item>
             </el-form>
-            <message-area :menuData="menuData[curIndex]" v-show="form.type == 'message'">
-              <div class="picture-menu" v-show="menuData[curIndex].type == 'picture'">
-                <div class="choose-picture__area" v-show="chooseImg.length < 0">
+            <message-area
+              :menuTree="menuTree[curIndex]"
+              v-show="menu_reply_behavior.ClickBehavior == 'message'"
+            >
+              <div class="picture-menu" v-show="menu_reply_behavior.BehaviorType == 'picture'">
+                <div class="choose-picture__area" v-show="chooseImg.length == 0">
                   <div class="choose-icon" @click="_handleUploadPicture"></div>
                   <p @click="_handleUploadPicture">点击上传</p>
                 </div>
-                <div class="picture-show" v-show="chooseImg.length > 0" :style="{backgroundImage: `url(${chooseImg}`}">
+                <div
+                  class="picture-show"
+                  v-show="chooseImg.length > 0"
+                >
+                  <img :src="chooseImg" alt />
                   <div class="show-mask__area">
                     <div class="icon-box">
-                      <i class="iconfont iconqiehuan" @click="_handleSwitchImg"></i>
+                      <i class="iconfont iconqiehuan" @click="_handleUploadPicture"></i>
                       <i class="iconfont iconhuishouzhan" @click="_handleDeleteImg"></i>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="words-menu" v-show="menuData[curIndex].type == 'words'">
+              <div class="words-menu" v-show="menu_reply_behavior.BehaviorType == 'words'">
                 <el-input
                   type="textarea"
                   maxlength="600"
@@ -75,16 +80,23 @@
                   v-model="menuWords"
                 ></el-input>
               </div>
-              <div class="picture-words__menu" v-show="menuData[curIndex].type == 'picture_words'"></div>
+              <div class="picture-words__menu" v-show="menu_reply_behavior.BehaviorType == 'picture_words'"></div>
             </message-area>
-            <website-area :menuData="menuData[curIndex]" v-show="form.type == 'website'">
+            <website-area
+              :menuTree="menuTree[curIndex]"
+              v-show="menu_reply_behavior.ClickBehavior == 'website'"
+            >
               <website-link></website-link>
             </website-area>
           </div>
         </div>
       </div>
     </div>
-    <image-manage :imageChooseAreaShowFlag="imageChooseAreaShowFlag" @getImage="getImage" @handleCloseModal="handleCloseModal"></image-manage>
+    <image-manage
+      :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
+      @getImage="getImage"
+      @handleCloseModal="handleCloseModal"
+    ></image-manage>
   </div>
 </template>
 <script>
@@ -94,27 +106,18 @@ import MessageArea from "_c/wechat-account/defineMenu/message-content";
 import WebsiteArea from "_c/wechat-account/defineMenu/website-content";
 import WebsiteLink from "_c/wechat-account/defineMenu/link/link";
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
+import { getMenuTree, getMenuDetail } from "@/api/request/account.js";
 export default {
-  props: {
-    menuData: {
-      type: Array
-    },
-    menuDetail: {
-      type: Object
-    }
-  },
   data() {
     return {
       curIndex: 0,
       isOrder: false,
-      form: {
-        name: '',
-        type: 'message'
-      },
       imageChooseAreaShowFlag: false,
       replyContentType: "picture",
       menuWords: "",
-      chooseImg: ""
+      chooseImg: "",
+      menuTree: [],
+      menuDetail: {}
     };
   },
   components: {
@@ -125,28 +128,48 @@ export default {
     ImageManage
   },
   computed: {
-    // ...mapGetters(['menuReplyMessageBehavior'])
+    ...mapGetters(["menu_reply_behavior"])
   },
   created() {
-    this._handleGetMenuData();
+    this._getMenuTree();
+    console.log(this.menu_reply_behavior);
   },
   methods: {
-    // 获取菜单数据
-    _handleGetMenuData() {
-      if (menuData[this.curIndex].type !== this.replyContentType) {
-        this.$emit("changeReplyContent", menuData[this.curIndex].type);
+    async _getMenuTree() {
+      let {data} = await getMenuTree()
+      this.menuTree= data;
+      if (this.menuTree.length == 0) return;
+      let id = this.menuTree[0].id
+      this._getMenuDetail(id);
+    },
+    async _getMenuDetail(id) {
+      let params = {
+        id: id,
+        authorizerAppId: 'wx4e25803a4fadd328'
       }
+      let {data} = await getMenuDetail()
+      this.menuDetail= data;
     },
     // 菜单排序
     _handleMenuOrder() {
       this.isOrder = !this.isOrder;
+    },
+    _handleBehaviorType(val) {
+      this.$store.commit("SET_MENU_CLICK_BEHAVIOR", val);
     },
     // 切换menu
     _handleSelectMenu(i) {
       this.curIndex = i;
     },
     // 添加主菜单
-    _handleAddMainMenu() {},
+    _handleAddMainMenu() {
+      let newMenuItem = {
+        hasChildren: false,
+        clickBehavior: 0,
+        behaviorType: 0
+      };
+      this.menuTree.push(newMenuItem);
+    },
     // 添加子菜单
     _handleAddChildMenu() {},
     // 删除菜单
@@ -162,16 +185,20 @@ export default {
     // 替换菜单编辑图片部分
     _handleSwitchImg() {},
     // 删除菜单编辑图片部分
-    _handleDeleteImg() {},
+    _handleDeleteImg() {
+      this.chooseImg = "";
+    },
     // 获取图片
     getImage(src) {
-      console.log(src)
+      console.log(src);
       this.chooseImg = src;
     },
     // 关闭弹层
     handleCloseModal() {
       this.imageChooseAreaShowFlag = false;
-    }
+    },
+    // 重置当前菜单右侧数据类型
+    // _handle
   }
 };
 </script>
@@ -205,7 +232,7 @@ export default {
       height: 48px;
       background: rgba(248, 250, 252, 1);
       .phone-menu__keyboard {
-        margin: 8px;
+        margin: 8px 24px;
         width: 26px;
         height: 17px;
         background: url("~img/account/define_menu_keyboard.png") no-repeat
@@ -218,7 +245,7 @@ export default {
         background: #c9d9dc;
       }
       .no-menu__area {
-        width: calc(100% - 94px);
+        width: calc(100% - 74px);
         height: 52px;
         text-align: center;
         line-height: 52px;
@@ -226,6 +253,7 @@ export default {
         font-size: 14px;
         font-family: "PingFangSC";
         font-weight: 400;
+        cursor: pointer;
       }
       .phone-menu__list {
         display: flex;
@@ -387,11 +415,19 @@ export default {
         .picture-show {
           position: relative;
           display: inline-block;
-          max-height: 306px;
-          max-width: 504px;
+          height: 306px;
+          width: 504px;
           background-repeat: no-repeat;
           background-position: center center;
           background-size: cover;
+          overflow: hidden;
+          img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 100%;
+          }
           .show-mask__area {
             position: absolute;
             top: 0;

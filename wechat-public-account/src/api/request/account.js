@@ -4,7 +4,7 @@ import store from "@/store/index";
 
 // 授权区域
 export const isAuth = param => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Platform/SelectPlatformDetailAuth`);
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Platform/SelectPlatformDetailAuth`, param);
   // return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/AuthRequest`);
 }
 
@@ -17,7 +17,7 @@ export const getPageSiteList = () => {
 }
 
 // 链接区域
-export const getPageData = param => {
+export const getPageData = () => {
   return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetPageList`);
 }
 
@@ -81,7 +81,7 @@ export const modifyNode = (id, parentId, idOrderByArr) => {
 
 // 中转页面
 export const transit = param => {
-  return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/oauth/success`, param);
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/oauth/success?${param}`);
 }
 
 export const uploadImg = (imgUrl) => {
