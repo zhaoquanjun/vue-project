@@ -111,6 +111,7 @@ export default {
       curSiteId: "",
       options: {
         target: ``,
+        testChunks: false,
         headers: {
           appId: this.$store.state.dashboard.appId,
           Authorization:
