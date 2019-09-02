@@ -26,6 +26,7 @@
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { uploadImg } from "@/api/request/account.js";
 export default {
+    props:["imageMsg"],
     data() {
         return {
             isUploaded: true,
@@ -55,6 +56,11 @@ export default {
         handleCloseModal() {
             this.imageChooseAreaShowFlag = false;
         },
+    },
+    watch:{
+        imageMsg(){
+            this.picUrl = this.imageMsg
+        }
     }
 };
 </script>
