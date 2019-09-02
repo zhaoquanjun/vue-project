@@ -15,6 +15,7 @@
             </el-aside>
             <el-main class="content-table-wrap">
               <router-view />
+              <MyDialog v-if="$store.state.isAsideDialogShow"></MyDialog>
             </el-main>
           </el-container>
         </el-main>
@@ -26,11 +27,13 @@
 import MHeader from "@/components/common/MHeader";
 import MAside from "@/components/common/MAside";
 import PageSubmenu from "@/components/common/PageSubmenu.vue";
+import MyDialog from "@/components/common/my-dialog.vue";
 export default {
   components: {
     MHeader,
     MAside,
-    PageSubmenu
+    PageSubmenu,
+    MyDialog
   },
   computed: {
     isSub() {
@@ -49,7 +52,6 @@ export default {
   width: 100%;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
   z-index: 100;
-  /* overflow: hidden; */
 }
 .common-container {
   padding-top: 60px;
@@ -57,10 +59,17 @@ export default {
   overflow: hidden;
 }
 .common-aside {
-  width: 70px !important;
+  width: 60px !important;
   min-height: calc(100vh - 60px);
   position: relative;
   overflow: visible !important;
+  z-index: 200;
+  padding-top: 16px;
+   
 }
+.content-table-wrap{
+  position: relative;
+}
+
 </style>
 

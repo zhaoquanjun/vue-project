@@ -22,6 +22,7 @@ export default {
     props: ["menuList", "lastRoute", "subTitle"],
     methods: {
         handlerRoute(item, index) {
+            this.$store.commit("SET_DIALOG",false)
             let domain = item.menuUrl.split("/")[0];
             if (wechataccountDomain == domain) {
                 this.$router.push(item.path);
@@ -33,6 +34,13 @@ export default {
 };
 </script>
 <style scoped>
+.leftNavAside {
+    background: #f8fafc !important;
+}
+.submenu-title,
+.el-menu {
+    background: #f8fafc;
+}
 .el-menu .el-menu-item {
     height: 50px;
     line-height: 50px;
@@ -40,15 +48,16 @@ export default {
     margin-bottom: 10px;
 }
 .el-menu :hover.el-menu-item {
-    background: #e0fcff;
+    background: #fff;
 }
 .active {
     color: #0595e6;
-    background: #e0faff;
+    background: #fff;
+    /* border-left: 4px solid #0595e6; */
 }
 .active:hover {
-    color: #0595e6;
-    background: #e0faff !important;
+    /* color: #0595e6; */
+    background: #ffffff !important;
 }
 .submenu-title {
     height: 40px;

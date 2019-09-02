@@ -10,7 +10,8 @@ const user = {
     account_info: {},
     menu_reply_behavior: {
       name: '111',
-      type: 'picture'
+      ClickBehavior: 'message',
+      BehaviorType: 'picture'
     }
   },
   getters: {
@@ -25,13 +26,16 @@ const user = {
     SET_ACCOUNT_INFO: (state, payload) => { 
       state.account_info = payload;
     },
-    SET_MENU_BEHAVIOR: (state, payload) => {
-      state.menuReplyMessageBehavior = payload;
+    SET_MENU_CLICK_BEHAVIOR: (state, payload) => {
+      state.menu_reply_behavior.ClickBehavior = payload;
+    },
+    SET_MENU_BEHAVIOR_TYPE: (state, payload) => {
+      state.menu_reply_behavior.BehaviorType = payload;
     }
   },
   actions: {
     async _getWxStatus({commit}) {
-      let data = await isAuth({openPlatformType: "WeixinOA"});
+      let data = await isAuth({infoType: "WeixinOA"});
       // debugger;
       let verify = {
         isAuth: data.data.isAuth,
