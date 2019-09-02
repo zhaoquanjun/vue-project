@@ -8,11 +8,16 @@ const user = {
       isCertification: false
     },
     account_info: {},
-    menu_reply_behavior: {}
+    menu_reply_behavior: {
+      name: '111',
+      ClickBehavior: 'message',
+      BehaviorType: 'picture'
+    }
   },
   getters: {
     wx_status: state => state.wx_status,
-    account_info: state => state.account_info
+    account_info: state => state.account_info,
+    menu_reply_behavior: state => state.menu_reply_behavior
   },
   mutations: {
     SET_WX_STATUS: (state, payload) => {
@@ -21,13 +26,16 @@ const user = {
     SET_ACCOUNT_INFO: (state, payload) => { 
       state.account_info = payload;
     },
-    SET_MENU_BEHAVIOR: (state, payload) => {
-      state.menuReplyMessageBehavior = payload
+    SET_MENU_CLICK_BEHAVIOR: (state, payload) => {
+      state.menu_reply_behavior.ClickBehavior = payload;
+    },
+    SET_MENU_BEHAVIOR_TYPE: (state, payload) => {
+      state.menu_reply_behavior.BehaviorType = payload;
     }
   },
   actions: {
     async _getWxStatus({commit}) {
-      let data = await isAuth({openPlatformType: "WeixinOA"});
+      let data = await isAuth({infoType: "WeixinOA"});
       // debugger;
       let verify = {
         isAuth: data.data.isAuth,
