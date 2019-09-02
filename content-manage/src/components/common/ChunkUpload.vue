@@ -81,6 +81,7 @@ export default {
     data() {
         return {
             options: {
+                targetNodeId: this.nodeData.id,
                 uploadType: this.uploadType,
                 target: null,
                 testChunks: true,
@@ -167,7 +168,8 @@ export default {
             upload2Category: 0
         };
     },
-    created() {
+        created() {
+        this.targetNodeId = this.nodeData.id;
         this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
         console.log(this.options.target, "1");
     },
@@ -193,6 +195,29 @@ export default {
             });
             this.errorCount += 1;
         },
+        getNodeByParentId(tree, parentId) {
+            if (parentId === null) {
+                return null;
+            }
+            if (tree.id === parentId) {
+                return tree;
+            }
+            for (var i = 0; i < tree.children.length; i++) {
+                var result = this.getNodeByParentId(tree.children[i], parentId)
+                if (result !== null) {
+                    return result;
+                }
+            }
+            return null;
+        },
+        updateNodeSum(tree, nodeId, count) {
+            var targetNode = this.getNodeByParentId(tree, nodeId);
+            do {
+                targetNode.inUseSum += count;
+                targetNode = this.getNodeByParentId(tree, targetNode.parentId);
+            }
+            while (targetNode !== null);
+        },
         onFileSuccess() {
             console.log(this.fileList);
 
@@ -203,7 +228,8 @@ export default {
                 this.errorCount < 1 
             ) {
                 this.$emit("getList");
-                this.$emit("getTree");
+                console.log(this.treeResult[0], this.targetNodeId, this.successCount,"666666666666")
+                this.updateNodeSum(this.treeResult[0], this.targetNodeId,this.successCount);
                 this.$emit("closeDialog");
                 this.fileList.forEach(file => {
                     file.cancel(file);
@@ -256,14 +282,15 @@ export default {
             ];
             
           let fileNameIndex = file.name.lastIndexOf(".");
-          let fileName=file.name.slice(fileNameIndex);
+            let fileName = file.name.slice(fileNameIndex);
+
             if (forbidUpload.indexOf(fileName) > -1) {
                
                 file.cancel(file);
                 this.errorCount -= 1;
                   this.$notify({
                         customClass: "notify-error",
-                        message: `请添加${this.displayName}格式的文件`,
+                      message: `不允许上传${fileName}格式的文件`,
                         duration: 1500,
                         showClose: false
                     });
@@ -444,6 +471,7 @@ export default {
         // 选择分类节点
         chooseNode(data) {
             this.upload2Category = data;
+            this.targetNodeId = data.id;
             this.$set(
                 this.options,
                 "target",
