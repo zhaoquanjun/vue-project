@@ -277,6 +277,7 @@ export default {
             );
             if (status === 200) {
                 loading.close();
+                 this.getTree();
             }
             this.imgPageResult = data;
         },
@@ -354,6 +355,7 @@ export default {
                 });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
+                 this.getTree();
             }
         },
         // 重命名

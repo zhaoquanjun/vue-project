@@ -106,12 +106,7 @@ export default {
                                 });
                                 this.getPicList();
                             }
-                        } else {
-                            // this.$message({
-                            //     type: "info",
-                            //     message: "已取消删除"
-                            // });
-                        }
+                        } 
                     }
                 }
             );

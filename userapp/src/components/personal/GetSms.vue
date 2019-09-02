@@ -109,7 +109,7 @@ export default {
             rules: {
                 phone: [{ validator: checkPhone, trigger: "blur" }],
                 verification: [
-                    { required: true, message: "请先发送验证码", trigger: "blur" }
+                    { required: true, message: "请输入短信验证码", trigger: "blur" }
                 ]
             },
             checked: false,
