@@ -84,10 +84,12 @@ export const transit = param => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/oauth/success?${param}`);
 }
 
-export const uploadImg = (params) => {
-  // let param = {
-  //   authorizerAppId:this.
-  // }
+export const uploadImg = (imgUrl) => {
+  let params = {
+    authorizerAppId:store.state.wxaccount.account_info.platformAppId,
+    imgUrl
+  }
+  console.log(store)
   return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/UploadImg`, params);
 }
 

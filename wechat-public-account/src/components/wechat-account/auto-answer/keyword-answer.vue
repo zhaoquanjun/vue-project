@@ -3,11 +3,11 @@
         <div v-if="!addAnswer" class="keyword-answer-content">
             <div v-for="(item,index) in keywordList" :key="index" class="keyword-list">
                 <span>
-                    <span>关键词</span>
+                    <span class="title">回复设置</span>
                     <span class="select-item">
                         <el-select
                             size="small"
-                            :value="matchLabel"
+                            :value="item.matchType=='1'?'半匹配':'全匹配'"
                             placeholder="请选择"
                             @change="changeStatus($event,index)"
                             :popper-append-to-body="false"
@@ -119,7 +119,7 @@
 <script>
 import { trim } from "@/utlis/index.js";
 export default {
-    props: ["addAnswer", "keywordData", "searchOption","propKeywordList"],
+    props: ["addAnswer", "keywordData", "searchOption", "propKeywordList"],
     data() {
         return {
             keywordCount: 2,
@@ -142,35 +142,35 @@ export default {
             ],
             matchOption: [
                 {
-                    matchType: "2",
+                    matchType: "1",
                     matchLabel: "半匹配"
                 },
                 {
-                    matchType: "1",
+                    matchType: "2",
                     matchLabel: "全匹配"
                 }
             ],
-            matchLabel: "2",
+            matchLabel: "1",
             keywordList: [
                 {
-                    matchType: "2",
+                    matchType: "1",
                     keyword: ""
                 }
             ]
         };
     },
-    mounted(){
-       
-       if(this.propKeywordList && this.propKeywordList.length>0){
-           this.keywordList = this.propKeywordList;
-            this.error= []
-       }
-       this.propKeywordList && this.propKeywordList.forEach((index)=>{
-             this.error.push({
-                   onerrorTip: false,
+    mounted() {
+        if (this.propKeywordList && this.propKeywordList.length > 0) {
+            this.keywordList = this.propKeywordList;
+            this.error = [];
+        }
+        this.propKeywordList &&
+            this.propKeywordList.forEach(index => {
+                this.error.push({
+                    onerrorTip: false,
                     onerrorText: ""
-             })
-       })
+                });
+            });
     },
     methods: {
         changeStatus(value, index) {
@@ -195,7 +195,7 @@ export default {
         },
         // 添加回复
         handlerAdd(item) {
-            this.$emit("handlerAddAnswer", false,item);
+            this.$emit("handlerAddAnswer", false, item);
         },
         addKeyword() {
             if (this.keywordList.length >= 10) {
@@ -214,7 +214,6 @@ export default {
             this.keywordList.splice(index, 1);
         },
         handlerDelete(id) {
-            
             this.$emit("removeKeywordReply", id);
         },
         magTypeFn(type) {
@@ -228,11 +227,10 @@ export default {
             }
         }
     },
-    watch:{
-        propKeywordList(){
-           
-            this.keywordList = this.propKeywordList
-        },
+    watch: {
+        propKeywordList() {
+            this.keywordList = this.propKeywordList;
+        }
     }
 };
 </script>
@@ -242,9 +240,9 @@ export default {
     line-height: 40px;
     border: 1px solid #b9cbcf;
 }
-.el-input /deep/ .el-input__inner{
-        border: 1px solid #c9d9dc;
-}   
+.el-input /deep/ .el-input__inner {
+    border: 1px solid #c9d9dc;
+}
 .el-select /deep/ .el-input__inner::-webkit-input-placeholder {
     color: #262626;
 }
@@ -266,8 +264,7 @@ export default {
     right: 10px;
     top: 6px;
 }
-.el-input /deep/ input{
-    
+.el-input /deep/ input {
 }
 </style>
 <style lang="scss" scoped>
@@ -277,10 +274,13 @@ button {
 }
 .keyword-answer {
     .keyword-answer-content {
-        padding: 24px 0 0 16px;
-        border-top: 1px solid #e5e5e5;
+        // padding: 24px 0 0 0;
+        // border-top: 1px solid #e5e5e5;
         .keyword-list {
             padding-bottom: 32px;
+            .title{
+                color: #B9CBCF
+            }
         }
         .select-item {
             padding-left: 16px;
@@ -302,6 +302,8 @@ button {
                 display: flex;
                 align-items: center;
                 padding: 24px 32px;
+                border-bottom: 1px solid #e5e5e5;
+
                 p {
                     display: inline-block;
                     font-size: 14px;
@@ -318,8 +320,10 @@ button {
                     cursor: pointer;
                 }
             }
+            li:not(:first-child):hover {
+                background-color: #f0fcfe;
+            }
             li:first-of-type {
-                border-bottom: 1px solid #e5e5e5;
                 p {
                     color: #a1a8b1;
                 }
@@ -329,6 +333,9 @@ button {
                 justify-content: space-between;
                 .iconfont {
                     color: #262626;
+                    &:hover{
+                           color: #09cceb
+                    }
                 }
             }
         }

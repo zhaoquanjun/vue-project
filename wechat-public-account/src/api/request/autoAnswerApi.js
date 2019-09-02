@@ -53,8 +53,8 @@ export const addOrOverrideReply = (option) => {
 /**
  * 编辑关键词回复信息
  */
-export const updateKeywordReply = (id) => {
-    return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/Reply/UpdateKeywordReply/${id}`);
+export const updateKeywordReply = (option,id) => {
+    return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/Reply/UpdateKeywordReply/${id}`,option);
 }
 
 
