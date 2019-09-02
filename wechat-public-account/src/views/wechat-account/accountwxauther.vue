@@ -44,7 +44,7 @@ export default {
   methods: {
     // 微信授权
     async _handleWxAuth() {
-      let data = await wxAuth({infoType: 'WeixinOA'});
+      let data = await wxAuth();
       let oA = document.createElement("a");
       oA.setAttribute("href", data.data);
       oA.setAttribute("id", "authBtn");

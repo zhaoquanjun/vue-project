@@ -198,7 +198,7 @@ export default {
       this.imageChooseAreaShowFlag = false;
     },
     // 重置当前菜单右侧数据类型
-    _handle
+    // _handle
   }
 };
 </script>
