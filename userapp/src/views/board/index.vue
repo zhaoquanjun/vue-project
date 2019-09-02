@@ -65,7 +65,7 @@
           </el-col>
           <el-col class="appTime">
             <span>{{ appInfo.time }}</span>
-            <button class="renewalBtn" v-show="appInfo.isSystem">续费</button>
+            <button class="renewalBtn" v-show="appInfo.isSystem" @click="goToAliMarket">续费</button>
           </el-col>
         </el-row>
 
@@ -209,7 +209,12 @@ export default {
           "MM.dd"
         );
       }
-    },
+      },
+    //跳转阿里云市场续费
+      goToAliMarket() {          
+          console.log('open');
+          window.open('https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0', '_blank');
+      },
     /**
      * 修改appName
      */
@@ -393,7 +398,7 @@ export default {
   border: 1px solid rgba(229, 229, 229, 1);
   .designCheatsTitle {
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     color: rgba(38, 38, 38, 1);
     margin-top: 20px;
     margin-left: 16px;
@@ -471,7 +476,7 @@ export default {
   // opacity: 0.17;
   .versionTitle {
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     color: rgba(38, 38, 38, 1);
     line-height: 25px;
     margin-top: 20px;

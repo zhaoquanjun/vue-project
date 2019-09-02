@@ -124,22 +124,25 @@
                     v-for="(item, index) in templateInfo"
                     :key="index"
                   >
-                    <div class="itemSiteImage">
-                      <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
-                      <div
-                        class="itemSiteImageBackground"
-                        :style="{background: 'url(' + (item.imageUrl ) + ') no-repeat center/cover'}"
-                      ></div>
-                      <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
-                      <div class="modal">
-                        <div>
-                          <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
-                        </div>
+                      <div class="itemSiteImage">
+                          <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
+                          <div class="itemSiteImageBackground"
+                               :style="{background: 'url(' + (item.imageUrl ) + ') no-repeat center/cover'}"
+                               v-if="isAllTab"></div>
+                          <div class="itemSiteImageBackground"
+                               :style="{background: 'url(' + (item.image ) + ') no-repeat center/cover'}"
+                               v-else></div>
+                          <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
+                          <div class="modal">
+                              <div>
+                                  <div class="choseSite" @click="choseSite(item)">选择</div>
+                                  <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
+                              </div>
+                          </div>
                       </div>
-                    </div>
                     <div style="text-align:center">
-                      <div class="itemSiteName">{{item.templateName}}</div>
+                        <div class="itemSiteName" v-if="isAllTab">{{item.templateName && item.templateName.trim().length > 10 ? item.templateName.slice(0, 10) + '...' : item.templateName}}</div>
+                        <div class="itemSiteName" v-else>{{item.siteName && item.siteName.trim().length > 10 ? item.siteName.slice(0, 10) + '...' : item.siteName}}</div>
                     </div>
                   </el-col>
                 </el-row>
@@ -185,6 +188,7 @@
                         placeholder="请输入您想要的行业名称"
                         @blur="blurIndustryName"
                         style="width:470px"
+                        maxlength="20"
                       ></el-input>
                       <div
                         class="ym-form-item__error"
@@ -199,6 +203,7 @@
                         placeholder="请输入您想参考的网站链接"
                         style="width:470px"
                         @blur="blurReferenceSite"
+                        maxlength="200"
                       ></el-input>
                       <div
                         class="ym-form-item__error"
@@ -214,6 +219,7 @@
                         placeholder="请描述您想要的网站效果"
                         style="width:470px;vertical-align: text-top;"
                         v-model="notFindRemark"
+                        maxlength="200"
                       ></el-input>
                     </div>
 
@@ -506,20 +512,29 @@ export default {
       this.templateInfo = data.items;
     },
     // 查询
-    async searchTemplate() {
-      let para = {
-        TemplateName: this.search,
-        FirstIndustry: 0,
-        SecondIndustry: 0,
-        Theme: "",
-        Language: this.languageSelect,
-        IsRecommend: this.isRecommend,
-        PageIndex: this.pageIndex,
-        PageSize: this.pageSize,
-        IsOrderByUpdateTime: this.isOrderByUpdateTime,
-        IsMostPopular: this.isMostPopular
-      };
-      let { data, status } = await templateApi.getSiteTemplates(para);
+      async searchTemplate() {
+          if (this.isAllTab == false) {
+              let para = {
+                  siteName: this.search,
+                  PageIndex: this.pageIndex,
+                  PageSize: this.pageSize
+              };
+              var { data, status } = await templateApi.getTemplateSites(para);
+          } else {
+              let para = {
+                  TemplateName: this.search,
+                  FirstIndustry: 0,
+                  SecondIndustry: 0,
+                  Theme: "",
+                  Language: this.languageSelect,
+                  IsRecommend: this.isRecommend,
+                  PageIndex: this.pageIndex,
+                  PageSize: this.pageSize,
+                  IsOrderByUpdateTime: this.isOrderByUpdateTime,
+                  IsMostPopular: this.isMostPopular
+              };
+              var { data, status } = await templateApi.getSiteTemplates(para);
+          }     
       console.log(data);
       this.templatePage = data;
       this.templateInfo = data.items;
@@ -549,8 +564,13 @@ export default {
       this.getTemplateList();
     },
     async choseMyTab() {
-      this.isAllTab = false;
-      let { data, status } = await templateApi.getTemplateSites();
+        this.isAllTab = false;
+        let para = {
+            siteName: this.search,           
+            PageIndex: this.pageIndex,
+            PageSize: this.pageSize
+        };
+        let { data, status } = await templateApi.getTemplateSites(para);
       console.log(data);
       this.templatePage = data;
       this.templateInfo = data.items;

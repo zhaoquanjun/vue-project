@@ -131,6 +131,7 @@ export default {
     methods: {
         ...mapActions([
             "_getAppPolicies",
+            "_getEditUserAppPolicies",
             "_getUserPolicy",
             "_getBeInvitedUsers",
             "_deleteCurMember",
@@ -270,7 +271,7 @@ export default {
             console.log(data);
             this.rightPanelTitle = "编辑成员";
             this.ISRIGHTPANNELSHOW(true);
-            this._getAppPolicies();
+            this._getEditUserAppPolicies(data.userId);
             this._getUserPolicy(data.userId);
         },
         /**

@@ -15,9 +15,9 @@
       <el-row class="siteContent" style="padding-bottom:0">
         <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>
         <div class="siteWrap">
-          <div class="siteImg">
-            <img :src="siteImage" alt class="siteImgBackground" />
-          </div>
+            <div class="siteImg">
+                <img :src="siteImage" alt class="siteImgBackground" />
+            </div>
           <div class="siteinfoWrap">
             <div class="siteinfoItem siteName">
               <span>网站名称：</span>
@@ -508,7 +508,7 @@ methods: {
     .siteImgBackground {
       width: 100%;
       height: 100%;
-    }
+    }   
   }
   .siteinfoWrap {
     display: inline-block;

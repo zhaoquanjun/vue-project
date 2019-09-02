@@ -6,8 +6,8 @@ export const getSiteTemplates = (para) => {
     return ajaxRequest.get(`${environment.siteManageApi}/api/siteInfo/GetSiteTemplates`, para);
 }
 // 获取已有网站模版列表
-export const getTemplateSites = () => {
-    return ajaxRequest.get(`${environment.siteManageApi}/api/siteInfo/GetTemplateSites`);
+export const getTemplateSites = (para) => {
+    return ajaxRequest.get(`${environment.siteManageApi}/api/siteInfo/GetTemplateSites`,para);
 }
 // 获取行业tree
 export const getIndustryTree = () => {

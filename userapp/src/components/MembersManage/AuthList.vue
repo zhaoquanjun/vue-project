@@ -12,9 +12,9 @@
                     v-for="(item,index) in authList"
                     :key="item.id"
                     @click="curAuth(item,index)"
-                    :class="{'choose-bg':item.show == true && isSelect}"
+                    :class="{'choose-bg':item.isChoosed == true}"
                 >
-                    <el-tooltip :content="item.name" placement="top-start" transition="0">
+                    <el-tooltip :content="item.name" placement="top-start" transition="1">
                         <span class="item-left ellipsis">{{item.name}}</span>
                     </el-tooltip>
                     <span class="item-right ellipsis" v-if="isSelect">{{item.mark}}</span>

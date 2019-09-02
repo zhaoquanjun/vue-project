@@ -75,7 +75,7 @@
                 <span class="expiredText" style="margin-left:46px">{{item.expired}}</span>
                 <div class="isExpired" v-show="isExpired(item)">已过期</div>
                 <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
-                <button class="renewal" v-show="item.isSystem">续费</button>
+                <button class="renewal" v-show="item.isSystem" @click="goToAliMarket">续费</button>
                 <el-button
                   class="choseApp"
                   @click="choseApp(item)"
@@ -131,7 +131,12 @@ export default {
     },
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
-    },
+      },
+      //跳转阿里云市场续费
+      goToAliMarket() {
+          console.log('open');
+          window.open('https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0', '_blank');
+      },
     /**
      * 获取app列表
      */

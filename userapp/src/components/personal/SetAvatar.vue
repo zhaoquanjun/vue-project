@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="auth-tip" v-if="authtipShow">{{authtipText}}</div>
+        <div class="auth-tip" v-if="authtipShow" style="text-align:center">{{authtipText}}</div>
         <el-upload
             class="avatar-uploader"
             :action="uploadPicAction"

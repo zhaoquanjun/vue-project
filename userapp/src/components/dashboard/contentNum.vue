@@ -78,7 +78,7 @@ export default {
     padding-bottom: 20px;
     padding-top: 20px;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     color: rgba(38, 38, 38, 1);
     line-height: 25px;
   }
