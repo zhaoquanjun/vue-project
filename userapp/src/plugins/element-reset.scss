@@ -149,6 +149,9 @@
     .el-pagination__editor.el-input .el-input__inner{
         height: 32px;
     }
+    .el-pagination .el-pagination__sizes .el-select .el-input{
+        width: 80px;
+    }
     .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev{
         background: #fff;
         height: 32px;

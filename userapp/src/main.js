@@ -10,9 +10,11 @@ import "./styles/common.scss";
 import "./styles/wezhan.scss";
 import "./plugins/element-reset.scss"
 import "./styles/pop-up/pup-up.scss"
-import VueClipboard from 'vue-clipboard2'
 import './icons';
+import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
+import uploader from 'vue-simple-uploader'
+Vue.use(uploader)
 // 验证码滑块
 import SliderVerificationCode from 'slider-verification-code';
 import 'slider-verification-code/lib/slider-verification-code.css';

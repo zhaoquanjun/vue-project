@@ -67,7 +67,7 @@
       </div>
 
       <div
-        v-show="isCanCreate"
+        v-show="isCanCreate&&isSystem"
         :class="{createSiteNumOne:siteInfo.length == 1,createSiteNumTwo:siteInfo.length == 2,createSiteNumThree:siteInfo.length > 2}"
         @click="showCreate"
       ></div>
@@ -121,7 +121,7 @@ import { designerUrl, mySiteUrl } from "@/environment/index";
 import { getLanguage } from "@/configure/appCommon";
 
 export default {
-  props: ["siteInfo", "isCanCreate"],
+  props: ["siteInfo", "isCanCreate", "isSystem"],
   data() {
     return {
       isFirst: true,
