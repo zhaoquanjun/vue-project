@@ -104,21 +104,21 @@
                                         this.$confirm(
                                         `${this.displayName} ${
                                         chunk.file.name
-                                        } 已存在<br>路径:${
+                                        } 已存在<br>位于<br>${
                                         data.existingFileInfo.isDelete
-                                            ? "回收站-"
+                                                ? "路径:回收站<br>"
                                             : ""
-                                        } [${
+                                        } 分类: ${
                                         data.existingFileInfo.categoryName
-                                        }]-[${
+                                        }<br>名称: ${
                                         data.existingFileInfo.fileName
-                                        }]`,
+                                        }`,
                                         "提示",
                                         {
                                             dangerouslyUseHTMLString:true ,
                                             customClass: "medium",
                                             iconClass: "icon-warning",
-                                            confirmButtonText: "继续上传",
+                                            confirmButtonText: "一键秒传",
                                             cancelButtonText:"取消上传",
                                             callback: async action => {
                                                 if (action === "confirm") {
@@ -134,14 +134,15 @@
                                                     });
                                                     ++this.successCount;
 
+                                                    var duration = 1500;
                                                     this.$notify({
                                                         customClass: "notify-success", //  notify-success ||  notify-error
                                                         message: `文件秒传成功`,
-                                                        duration: 1500,
+                                                        duration: duration,
                                                         showClose: false
                                                     });
-                                                    this.updatePageData();
-                                                }
+                                                    setTimeout(this.updatePageData, duration);
+                                                    }
                                                 else {
                                                     chunk.file.cancel(chunk.file);
                                                     this.updatePageData();
