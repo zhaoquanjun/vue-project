@@ -5,13 +5,14 @@
             <p> 您关联的账户下的成员列表中的手机号会一同修改</p>
             </div>
         <div class="from-row">
-            <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi"></get-sms>
+            <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi" @refreshIndex="_refreshIndex"></get-sms>
         </div>
         <div class="footer pannel-footer">
             <button class="confirm footer-btn" v-if="!isModifi" @click="nextStep">下一步</button>
             <button class="confirm footer-btn" v-else @click="modify ">确认修改</button>
             <button class="cancel footer-btn" @click="close">取消</button>
-        </div>
+        </div>        
+        
     </div>
 </template> 
 <script>
@@ -96,6 +97,10 @@ export default {
         close() {
             this.isModifi = false;
             this.$store.commit("CLOSERIGHTPANNEL", false);
+        },
+        _refreshIndex() {
+            console.log('father');
+            this.$emit("getUserProfileAsync");
         }
     },
     mounted() {}

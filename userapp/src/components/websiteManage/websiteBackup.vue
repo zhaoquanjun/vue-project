@@ -25,11 +25,18 @@
               class="content-table"
               :default-sort="{prop: 'backupTime', order: 'descending'}"
             >
-              <el-table-column label="站点名称" show-overflow-tooltip ><template slot-scope="scope"><div class="remark-desc">{{scope.row.siteName}}</div>
-                      </template></el-table-column>
+              <el-table-column label="站点名称" show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <div class="overflow">{{scope.row.siteName}}</div>
+                </template>
+              </el-table-column>
               <el-table-column prop="backupTime" label="备份时间"></el-table-column>
               <el-table-column prop="dataSize" label="备份包大小"></el-table-column>
-              <el-table-column prop="userName" label="备份人" show-overflow-tooltip></el-table-column>
+              <el-table-column label="备份人" show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <div class="overflow">{{scope.row.userName}}</div>
+                </template>
+              </el-table-column>
               <el-table-column prop="description" label="备注" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-popover
@@ -41,17 +48,24 @@
                     @show="showRemark(scope.row)"
                   >
                     <span slot="reference">
-                        <div @mouseenter="_handleShowEditorIcon(scope.row.id)"
-                             @mouseleave="_handleHideEditorIcon(scope.row.id)">
-                            <el-tooltip :content="scope.row.description" placement="top">
-                                <div class="remark-desc">{{ !scope.row.description ? ' ':scope.row.description}}</div>
-                            </el-tooltip>
-                            <i v-if="active == scope.row.id"
-                               class="iconfont iconbianji"
-                               style="color:#09CCEB;width:17px;height:17px;"
-                               :data-type="'remarkIcon'+ scope.$index"
-                               :ref="'remarkIcon'+ scope.$index"></i>
-                        </div>
+                      <div
+                        style="height:23px;width:100%"
+                        @mouseenter="_handleShowEditorIcon(scope.row.id)"
+                        @mouseleave="_handleHideEditorIcon(scope.row.id)"
+                      >
+                        <el-tooltip :content="scope.row.description" placement="top">
+                          <div
+                            class="remark-desc"
+                          >{{!scope.row.description?" ":scope.row.description}}</div>
+                        </el-tooltip>
+                        <i
+                          v-if="active == scope.row.id"
+                          class="iconfont iconbianji"
+                          style="color:#09CCEB;font-size:17px;vertical-align:text-bottom;cursor:pointer;margin-left:5px"
+                          :data-type="'remarkIcon'+ scope.$index"
+                          :ref="'remarkIcon'+ scope.$index"
+                        ></i>
+                      </div>
                     </span>
                     <div class="textareaWrap">
                       <el-input
@@ -82,7 +96,10 @@
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <div class="handle-btn-wrap">
-                    <el-tooltip content="还原备份包" placement="top">
+                    <el-tooltip
+                      content="还原备份包"
+                      placement="top"
+                    >
                       <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
                     </el-tooltip>
                     <el-tooltip content="下载备份包" placement="top">
@@ -176,16 +193,27 @@ export default {
       backupType: "manual",
       backupShow: false,
       backuping: false,
-      // recovery: false,
       remarkInfo: "",
-      loadingShow: true
+      loadingShow: true,
+      recoveryShow: [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      visible: false
     };
   },
   methods: {
     // 获取siteId
     getSiteId(siteId) {
       this.siteId = siteId;
-      // this.getSiteInfo(siteId);
       this.getBackupSite(siteId);
     },
     // 获取siteName
@@ -263,12 +291,9 @@ export default {
           },
           message
         ),
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        customClass: "messageBoxClass",
+        iconClass: "icon-warning",
         type: "warning",
         callback: async action => {
-          console.log(action);
           if (action === "confirm") {
             this.backuping = true;
             await siteBackupApi
@@ -299,6 +324,8 @@ export default {
                 }
               });
           }
+          this.recoveryShow[scope.$index] = false;
+          console.log(this.recoveryShow);
         }
       });
     },
@@ -321,6 +348,7 @@ export default {
         }
       } else {
         this.$confirm(`最多保留20个手动备份包，请删除后再备份!`, "提示", {
+          iconClass: "icon-warning",
           confirmButtonText: "确定",
           showCancelButton: false,
           type: "warning"
@@ -356,9 +384,7 @@ export default {
      */
     async downloadBackup(scope) {
       this.$confirm(`确定下载该备份包？`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+        iconClass: "icon-warning",
         callback: async action => {
           console.log(action);
           if (action === "confirm") {
@@ -390,9 +416,7 @@ export default {
      */
     async deleteBackup(scope) {
       this.$confirm(`备份包删除后不可恢复，确定要删除吗？`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+        iconClass: "icon-warning",
         callback: async action => {
           console.log(action);
           if (action === "confirm") {
@@ -432,7 +456,7 @@ export default {
      * 修改备注
      */
     showRemark(row) {
-        this.remarkValue = row.description ? row.description : "";
+      this.remarkValue = row.description ? row.description : "";
     },
     cancelInput(id) {
       this.$refs[`popover-${id}`].doClose();
@@ -459,12 +483,6 @@ export default {
   }
 };
 </script>
-<style>
-.messageBoxClass {
-  width: 500px;
-}
-</style>
-
 <style scoped>
 .el-dialog {
   right: 0;
@@ -472,6 +490,7 @@ export default {
 .el-tabs {
   margin-top: 24px;
 }
+
 .el-tabs /deep/ .el-tabs__item {
   width: 88px;
   height: 38px;
@@ -489,6 +508,9 @@ export default {
   border-top: 2px solid rgb(72, 201, 226);
   border-bottom: 1px solid transparent;
   background: rgb(255, 255, 255);
+}
+.content-table /deep/ .el-table_1_column_5 .el-popover__reference {
+  width: 100%;
 }
 .backupBtn {
   width: 110px;
@@ -512,13 +534,20 @@ export default {
   width: 100%;
   box-sizing: border-box;
 }
+.overflow {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
 .remark-desc {
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 81%;
-  min-width:60px
+  max-width: calc(100% - 22px);
+  vertical-align: text-bottom;
 }
 .backupTip {
   margin-top: 24px;

@@ -34,9 +34,11 @@ const memberManager = {
                 let userPermission =  state.userPermission;
                 userPermission.forEach((item)=>{
                     if(memberPolicy.includes(item.name)){
-                        item.show = true;
+                       // item.show = true;
+                        item.isChoosed = true;
                     }else{
-                        item.show = false;
+                        //item.show = false;
+                        item.isChoosed = false;
                     }
                 })
             },500)
@@ -51,6 +53,7 @@ const memberManager = {
             // state.userPermission = state.userPermission.filter((item) => {
             //     return item !== payload
             // })
+            payload.isChoosed = true;
             state.memberPolicy.push(payload.name);
         },
         /**
@@ -70,7 +73,8 @@ const memberManager = {
             // 取消默认选择背景颜色
             state.userPermission.forEach((item)=>{
                 if(item.name == payload){
-                    item.show = false
+                    //item.show = false
+                    item.isChoosed = false;
                 }
             })
         },
@@ -80,7 +84,7 @@ const memberManager = {
         */
         EMPTYSELECTEDAUTH(state) {
             state.userPermission.forEach((item, index) => {
-                item.show = false
+                item.isChoosed = false;//item.show = false
             });
             state.memberPolicy = [];
         },
@@ -98,7 +102,8 @@ const memberManager = {
         async _getEditUserAppPolicies({ commit }, userId) {
             let { data: allPolicies, status } = await getEditUserAppPolicies(userId);
             allPolicies.forEach((item, index) => {
-                allPolicies[index].show = false
+                //allPolicies[index].show = false;
+                allPolicies[index].isChoosed = false;
             })
             commit("USERPERMISSION", allPolicies)
              commit("CURMEMBVERINFO", [])
