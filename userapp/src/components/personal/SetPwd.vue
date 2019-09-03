@@ -20,7 +20,7 @@
                     ></el-input>
                     <div class="pwd-rule" v-if="pwdRuleShow">
                         <div class="error">
-                            <i class="iconfont iconguanbi"></i>长度为6-16位（字母区分大小写）
+                            <i class="iconfont iconguanbi" ></i>长度为6-16位（字母区分大小写）
                         </div>
                         <div class="error">
                             <i class="iconfont iconguanbi"></i>只能包含数字、字母以及标点符号（除空格）

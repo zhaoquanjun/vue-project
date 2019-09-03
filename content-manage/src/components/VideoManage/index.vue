@@ -31,8 +31,8 @@
                 @batchMove="batchMove"
             ></list-header>
             <el-main>
-                <component
-                    :is="componentId"
+                <List
+                    ref="tableList"
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
@@ -42,7 +42,7 @@
                     @batchRemove="batchRemovePic"
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
-                ></component>
+                ></List>
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -51,29 +51,29 @@
                     :visible.sync="isInvitationPanelShow"
                     :modal-append-to-body="false"
                 >
-                 <right-pannel
-                    :style="{width:isInvitationlWidth+'px'}"
-                    @closeRightPanel="closeRightPanel"
-                    :tree-result="treeResult"
-                >
-                    <span slot="title-text">移动视频</span>
-                    <div class="category-content">
-                        <span name="cur-tip">移动至</span>
-                    </div>
-                    <SelectTree
-                        :categoryName="curImgInfo.categoryName"
-                        :categoryId="curImgInfo.categoryId"
+                    <right-pannel
+                        :style="{width:isInvitationlWidth+'px'}"
+                        @closeRightPanel="closeRightPanel"
                         :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    ></SelectTree>
+                    >
+                        <span slot="title-text">移动视频</span>
+                        <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
+                        <SelectTree
+                            v-if="isInvitationPanelShow"
+                            :categoryName="curImgInfo.categoryName"
+                            :categoryId="curImgInfo.categoryId"
+                            :tree-result="treeResult"
+                            @chooseNode="chooseNode"
+                        ></SelectTree>
 
-                    <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryPic" class="sure">确定</button>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
-                    </div>
-                </right-pannel>
+                        <div slot="footer" class="pannle-footer">
+                            <button @click="updateCategoryPic" class="sure">确定</button>
+                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        </div>
+                    </right-pannel>
                 </el-dialog>
-               
             </el-main>
             <el-footer>
                 <slot name="modal-footer"></slot>
@@ -178,10 +178,7 @@ export default {
                 spinner: "loading-icon",
                 background: "rgba(255, 255, 255, 0.75)"
             });
-            if (node) {
-                this.nodeData = node; // 上传图片所需
-            }
-
+            if (node) this.nodeData = node; // 上传图片所需
             let { data } = await videoManageApi.getPicList(
                 this.picSearchOptions
             );
@@ -203,7 +200,6 @@ export default {
                                 data
                             } = await videoManageApi.batchRemove(true, idlist);
                             if (status === 200) {
-                                this.getTree();
                                 this.$notify({
                                     customClass: "notify-success",
                                     message: `删除成功!`,
@@ -211,6 +207,8 @@ export default {
                                     duration: 1500
                                 });
                                 this.getPicList();
+                                this.getTree();
+                               
                             }
                         }
                     }
@@ -280,7 +278,7 @@ export default {
                                     duration: 1500
                                 });
                             }
-                        } 
+                        }
                     }
                 }
             );

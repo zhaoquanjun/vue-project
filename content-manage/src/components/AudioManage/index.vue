@@ -31,8 +31,8 @@
             ></list-header>
 
             <el-main>
-                <component
-                    :is="componentId"
+                <List
+                    ref="tableList"
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
@@ -43,16 +43,15 @@
                     @batchRemove="batchRemovePic"
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
-                ></component>
+                ></List>
                 <el-dialog
                     width="0"
                     style="z-index:10"
                     :close-on-click-modal="false"
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
-                >
-                </el-dialog>
-                  <right-pannel
+                ></el-dialog>
+                <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="closeRightPanel"
                 >
@@ -61,6 +60,7 @@
                         <span name="cur-tip">移动至</span>
                     </div>
                     <SelectTree
+                        v-if="isInvitationPanelShow"
                         :categoryName="curImgInfo.categoryName"
                         :categoryId="curImgInfo.categoryId"
                         :tree-result="treeResult"
@@ -220,16 +220,17 @@ export default {
                                 data
                             } = await audioManageApi.batchRemove(true, idlist);
                             if (status === 200) {
-                                this.getTree();
                                 this.$notify({
                                     customClass: "notify-success",
                                     message: `删除成功!`,
                                     showClose: false,
                                     duration: 1500
                                 });
+                                this.getTree();
                                 this.getPicList();
+                               
                             }
-                        } 
+                        }
                     }
                 }
             );
