@@ -99,6 +99,7 @@
                 </span>
             </span>
             <chunk-upload
+                v-if="dialogTableVisible"
                 :tree-result="treeResult"
                 :node-data="nodeData"
                 :displayName="displayName"

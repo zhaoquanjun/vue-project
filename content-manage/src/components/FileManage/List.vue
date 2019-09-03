@@ -19,11 +19,13 @@
             <el-table-column label="文件名称" width="250">
                 <template slot-scope="scope">
                     <img :src="scope.row | fileCover" class="cover" />
-                    <!-- <img src="../../../static/images/content-icon/file-cover.png" class="cover" /> -->
-                    <span
-                        class="img-name" :title="scope.row.title"
+                    <div class="img-name">
+                        <span
+                         :title="scope.row.title"
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
                     >{{scope.row.title}}</span>
+                    </div>
+                    
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>

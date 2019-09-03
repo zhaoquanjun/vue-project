@@ -51,11 +51,9 @@ export default {
     ]),
 
     chooseAuth(obj) {
-      console.log(obj);
       this.CHOOSEAUTH(obj);
     },
     removeSelected(item) {
-      console.log(item, "ooooooooo");
       this.REMOVESELECTEDAUTH(item);
     },
     emptySelected() {
@@ -63,10 +61,9 @@ export default {
     },
     searchAuth() {
       this.oldUserPermission = JSON.stringify(this.userPermission);
-      console.log(this.oldUserPermission, "----0000000");
       let ary = [];
       this.userPermission.forEach(item => {
-        if (item.description.includes(this.input)) {
+        if (item.name.includes(this.input)) {
           ary.push(item);
         }
       });

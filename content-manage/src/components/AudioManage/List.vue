@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="音频名称" min-width="150">
+            <el-table-column label="音频名称" width="300">
                 <template slot-scope="scope">
                       <div class="cover">
                         <img width="100%" src="~img/file-icon/audio.png" />
@@ -262,6 +262,16 @@ export default {
             transform: translateY(50%);
         }
     }
+}
+.img-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-wrap: break-word;
+    width: 200px;
+    
 }
 </style>
 

@@ -129,7 +129,7 @@
                                                         FromId: data.existingFileInfo.id,
                                                         Title: chunk.file.name,
                                                         ContentType: chunk.file.fileType,
-                                                        CategoryId: this.nodeData.id //todo
+                                                        CategoryId: this.chooseCategoryId || this.nodeData.id //todo
                                                     });
                                                     ++this.successCount;
 
@@ -164,7 +164,7 @@
                                         FromId: data.existingFileInfo.id,
                                         Title: chunk.file.name,
                                         ContentType: chunk.file.fileType,
-                                        CategoryId: this.nodeData.id//todo
+                                        CategoryId:this.chooseCategoryId || this.nodeData.id//todo
                                     });
 
                                     ++this.successCount;
@@ -192,6 +192,7 @@
                 errorCount: 0,
                 disable: true,
                 formatSize: 0,
+                
                };
         },
         created() {
@@ -472,6 +473,7 @@
                     "target",
                     `${this.apiHost}/api/chunkupload/${this.uploadType}/${data.id}`
                 );
+                this.chooseCategoryId = data.id
                 this.$refs.uploader.resetOption();
             },
             resetOption() { },
@@ -481,7 +483,6 @@
                 });
             },
             fileRemove(file) {
-                console.log(this.fileList.length, "333");
                 if (!!file.error) {
                     this.errorCount -= 1;
                 }
@@ -497,16 +498,7 @@
                 } else {
                     this.disable = true;
                 }
-                // this.$nextTick(() => {
-                //     let eles = document.getElementsByClassName(
-                //         "uploader-file-icon"
-                //     );
-                //     for (let i = 0; i < eles.length; i++) {
-                //         let ele = eles[i];
-                //         ele.style.backgroundImage =
-                //             "url('http://img5.imgtn.bdimg.com/it/u=150565144,593293567&fm=26&gp=0.jpg')";
-                //     }
-                // });
+              
             }
         }
     };

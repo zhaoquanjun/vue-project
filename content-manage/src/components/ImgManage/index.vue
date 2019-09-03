@@ -255,7 +255,6 @@ export default {
             this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
         },
         async newCategory(entity) {
-            console.log(entity);
             await imgCategoryManageApi.create(entity);
             this.getTree();
         },
@@ -331,15 +330,15 @@ export default {
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
-            if (!this.moveToClassiFy) {
-                this.$notify({
-                    customClass: "notify-error", //  notify-success ||  notify-error
-                    message: `请选择移动的分类!`,
-                    showClose: false,
-                    duration: 1500
-                });
-                return;
-            }
+            // if (!this.moveToClassiFy) {
+            //     this.$notify({
+            //         customClass: "notify-error", //  notify-success ||  notify-error
+            //         message: `请选择移动的分类!`,
+            //         showClose: false,
+            //         duration: 1500
+            //     });
+            //     return;
+            // }
             let categoryId = this.moveToClassiFy.id;
             let idList = [];
             if (this.idsList.length > 0) {
@@ -347,7 +346,7 @@ export default {
             } else {
                 idList.push(this.curImgInfo.id);
             }
-            this.changeCategoryPic(categoryId, idList);
+            this.changeCategoryPic(categoryId || 0, idList);
             return false;
         },
         // 取消移动分类 关闭panel
@@ -357,6 +356,10 @@ export default {
         },
         //批量移动
         batchMove() {
+             this.curImgInfo= {
+                categoryName:"全部分类",
+                categoryId:0
+            }        
             this.isInvitationPanelShow = true;
         },
         //批量删除

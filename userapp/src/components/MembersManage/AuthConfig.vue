@@ -157,7 +157,7 @@ export default {
             this.oldUserPermission = JSON.stringify(this.userPermission);
             let ary = [];
             this.userPermission.forEach(item => {
-                if (item.description.includes(this.input)) ary.push(item);
+                if (item.name.includes(this.input)) ary.push(item);
             });
             this.$store.commit("USERPERMISSION", ary);
         },
