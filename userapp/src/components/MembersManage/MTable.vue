@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection" :selectable="handleDisable"></el-table-column>
-            <el-table-column prop="name" label="姓名" width="180" show-overflow-tooltip>
+            <el-table-column prop="name" label="姓名" width="180" show-overflow-tooltip="true">
                 <template slot-scope="scope">
                     <span>{{scope.row.name}}</span>
                 </template>

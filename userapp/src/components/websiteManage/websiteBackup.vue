@@ -25,7 +25,7 @@
               class="content-table"
               :default-sort="{prop: 'backupTime', order: 'descending'}"
             >
-              <el-table-column prop="siteName" label="站点名称"></el-table-column>
+              <el-table-column prop="siteName" label="站点名称" show-overflow-tooltip style="width:80%"></el-table-column>
               <el-table-column prop="backupTime" label="备份时间"></el-table-column>
               <el-table-column prop="dataSize" label="备份包大小"></el-table-column>
               <el-table-column prop="userName" label="备份人" show-overflow-tooltip></el-table-column>
