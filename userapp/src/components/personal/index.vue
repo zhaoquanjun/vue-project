@@ -54,11 +54,11 @@
                     <span class="social-desc">设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码</span>
                 </div>
                 <div class="fright">
-                    <span class="user-value" v-if="!!pwdTitle">******</span>
+                    <span class="user-value" v-if="!pwdTitle">******</span>
                     <span class="pd-left">
                         <button
                             class="bind"
-                            :class="!!pwdTitle?'isbind':'notbind'"
+                            :class="!pwdTitle?'isbind':'notbind'"
                         >{{!!pwdTitle?"已设置":"修改"}}</button>|
                         <button @click="modifiPwd">{{pwdBtn}}</button>
                     </span>

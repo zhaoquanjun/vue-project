@@ -101,7 +101,7 @@ const memberManager = {
                 allPolicies[index].show = false
             })
             commit("USERPERMISSION", allPolicies)
-            isBatch && commit("CURMEMBVERINFO", [])
+            false && commit("CURMEMBVERINFO", [])
         },
         /**
          * 当前成员的 信息 与 权限 

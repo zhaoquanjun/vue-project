@@ -25,7 +25,8 @@
               class="content-table"
               :default-sort="{prop: 'backupTime', order: 'descending'}"
             >
-              <el-table-column prop="siteName" label="站点名称" show-overflow-tooltip style="width:80%"></el-table-column>
+              <el-table-column label="站点名称" show-overflow-tooltip ><template slot-scope="scope"><div class="remark-desc">{{scope.row.siteName}}</div>
+                      </template></el-table-column>
               <el-table-column prop="backupTime" label="备份时间"></el-table-column>
               <el-table-column prop="dataSize" label="备份包大小"></el-table-column>
               <el-table-column prop="userName" label="备份人" show-overflow-tooltip></el-table-column>
@@ -40,26 +41,16 @@
                     @show="showRemark(scope.row)"
                   >
                     <span slot="reference">
-                      <div
-                        @mouseenter="_handleShowEditorIcon(scope.row.id)"
-                        @mouseleave="_handleHideEditorIcon(scope.row.id)"
-                      >
-                        <div class="remark-desc">{{scope.row.description}}</div>
+                      <div @mouseenter="_handleShowEditorIcon(scope.row.id)"
+                        @mouseleave="_handleHideEditorIcon(scope.row.id)">
+                          <div class="remark-desc">{{scope.row.description==""?"  ":scope.row.description}}</div>
                         <i
                           v-if="active == scope.row.id"
                           class="iconfont iconbianji"
                           style="color:#09CCEB;width:17px;height:17px;"
                           :data-type="'remarkIcon'+ scope.$index"
                           :ref="'remarkIcon'+ scope.$index"
-                        ></i>
-                        <!-- <svg-icon
-                          v-if="active == scope.row.id"
-                          icon-class="remark"
-                          class="remark"
-                          style="vertical-align: text-top;"
-                          :data-type="'remarkIcon'+ scope.$index"
-                          :ref="'remarkIcon'+ scope.$index"
-                        ></svg-icon>-->
+                        ></i>                        
                       </div>
                     </span>
                     <div class="textareaWrap">
@@ -441,7 +432,7 @@ export default {
      * 修改备注
      */
     showRemark(row) {
-      this.remarkValue = row.description ? row.description : "";
+        this.remarkValue = row.description ? row.description : "";
     },
     cancelInput(id) {
       this.$refs[`popover-${id}`].doClose();
@@ -527,6 +518,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 81%;
+  min-width:60px
 }
 .backupTip {
   margin-top: 24px;
