@@ -279,7 +279,7 @@ export default {
             );
             if (status === 200) {
                 loading.close();
-                 this.getTree();
+                 //this.getTree();
             }
             this.imgPageResult = data;
         },

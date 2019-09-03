@@ -88,7 +88,6 @@ const TIME_COUNT = 60; //更改倒计时时间
 import {
     updateUserPwd,
     sendSourcePhoneCode,
-    changeUserPwd,
     isInvalidCode
 } from "@/api/index.js";
 import GetSms from "./GetSms";
@@ -193,7 +192,7 @@ export default {
     },
     methods: {
         async send() {
-            let { status } = await sendSourcePhoneCode(this.sourcePhone);
+            let { status } = await sendSourcePhoneCode();
             if (status === 200) {
                 this.$message({
                     type: "success",
@@ -250,21 +249,6 @@ export default {
                 this.$emit("setPwdTitleAndBtn");
             }
         },
-        async modifyPaw() {
-            let option = {
-                phone: this.phone,
-                code: this.code,
-                ...this.ruleForm
-            };
-            let { status } = await changeUserPwd(option);
-            if (status === 200) {
-                this.$message({
-                    type: "success",
-                    message: "修改成功!"
-                });
-                this.$store.commit("CLOSERIGHTPANNEL", false);
-            }
-        },
         // 点击下一步
         async nextStep() {
             if (!this.isSetPassWord) {
@@ -276,7 +260,7 @@ export default {
             if (!this.$refs.getSms.submitForm1()) {
                 return false;
             } else {
-                let { status } = await isInvalidCode(this.sourcePhone, code);
+                let { status } = await isInvalidCode(code);
                 if (status === 200) {
                     this.isModifi = true;
                     this.isSetPassWord = false;

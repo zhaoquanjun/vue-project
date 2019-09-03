@@ -126,7 +126,7 @@
             <el-table-column label="模板名称|语言">
               <template slot-scope="scope">
                 <div>
-                  <p class="templateName">{{scope.row.templateName}}</p>
+                  <p class="templateName" show-overflow-tooltip>{{scope.row.templateName}}</p>
                   <p
                     class="templateName"
                     style="margin-top:8px;"
@@ -158,7 +158,7 @@
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.designerPhone}}</p>
-                  <p class="templateName" style="margin-top:5px;">{{scope.row.remark}}</p>
+                  <p class="templateName" style="margin-top:5px;" show-overflow-tooltip>{{scope.row.remark}}</p>
                 </div>
               </template>
             </el-table-column>
@@ -251,7 +251,7 @@
             <el-input v-model="remark" placeholder="请输入备注信息" class="remarkInput" maxlength="20"></el-input>
           </div>
           <div class="confirm">
-            <button class="confirmBtn" @click="createTemplate">开通</button>
+            <button class="confirmBtn" :disabled="isAble" @click="createTemplate" :class="{disable : isAble}">开通</button>
             <button class="cancelBtn" @click="cancelCreateTemplate">取消</button>
           </div>
         </div>
@@ -354,6 +354,7 @@ import environment from "@/environment/index.js";
 export default {
   data() {
     return {
+      isAble:false,
       picUrl: "",
       uploadPicAction: `${environment.uploadPicUrl}/-1`,
       headers: {
@@ -642,6 +643,7 @@ export default {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
       } else {
+        this.isAble=true;
         let { status } = await templateApi.createTemplate(
           this.phone,
           this.remark
@@ -649,24 +651,26 @@ export default {
         this.createTemplateShow = false;
         const loading = this.$loading({
           lock: true,
-          text: "正在开通模版",
+          text: "正在创建模版",
           spinner: "copy-icon",
           customClass: "createTemplateLoading",
           background: "rgba(38,38,38,0.7)"
         });
         if (status == 200) {
+          this.isAble=false;
           loading.close();
           this.$notify({
             customClass: "notify-success",
-            message: `开通成功`,
+            message: `创建成功`,
             duration: 2000,
             showClose: false
           });
           this.searchTemplate();
         } else {
+          this.isAble=false;
           this.$notify({
             customClass: "notify-error",
-            message: `开通失败`,
+            message: `创建失败`,
             duration: 2000,
             showClose: false
           });

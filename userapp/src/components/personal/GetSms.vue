@@ -154,7 +154,7 @@ export default {
     mounted() {},
     methods: {
         async send() {
-            let { status } = await sendSourcePhoneCode(this.sourcePhone);
+            let { status } = await sendSourcePhoneCode();
             if (status === 200) {
                    this.$notify({
                     customClass: "notify-success",
