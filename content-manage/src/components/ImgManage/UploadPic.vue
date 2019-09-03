@@ -188,7 +188,7 @@ export default {
                     this.$refs.upload.clearFiles();
                     this.$notify({
                         customClass: "notify-success", //  notify-success ||  notify-error
-                        message: `成功上传${fileList.length}图片`,
+                        message: `成功上传${fileList.length}张图片`,
                         showClose: false,
                         duration: 1500
                     });
@@ -272,7 +272,7 @@ export default {
     padding-top: 10px;
 }
 .upload-pic /deep/ .el-upload--picture-card {
-    display: block;
+    display: inline-block;
     border: none;
     line-height: 1;
 }

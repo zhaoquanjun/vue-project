@@ -75,7 +75,6 @@ export default {
             this.operateName = operate;
         },
         submitForm() {
-            this.disableRefObj.inSaveProcess = true;
             let imageUrl = this.$refs.articleRight.imageUrl1;
             if(this.isEdit){
                  this.$refs.articleContent.editArticle(

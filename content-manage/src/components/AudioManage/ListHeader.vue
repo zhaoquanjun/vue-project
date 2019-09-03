@@ -30,21 +30,21 @@
                         ></el-option>
                     </el-select>
                 </span>
-                <span @click="switchIsDesc('asc')">
+                <button @click="switchIsDesc('asc')">
                     <i class="sort-icon asc"  :class="{'asc-icon-on ':ascSort}"></i>
                     <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
-                </span>
-                <span @click="switchIsDesc('dec')">
+                </button>
+                <button @click="switchIsDesc('dec')">
                     <i class="sort-icon dec"  :class="{'dec-icon-on ':descSort}"></i>
                     <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
                     <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
-                </span>
+                </button>
 
-                <span class="list-mode mode-item" @click="showType('list')">
+                <bu class="list-mode mode-item" @click="showType('list')">
                     <!-- <svg-icon icon-class="list-mode "></svg-icon> -->
                     <i class="list-icon mode-icon" :class="{'list-iconOn':modeSelecte}"></i>
-                </span>
+                </bu>
                 <span class="grid-mode mode-item" @click="showType('grid')">
                     <!-- <svg-icon icon-class="grid-mode"></svg-icon> -->
                     <i class="list-icon mode-icon" :class="{'mode-iconOn':!modeSelecte}"></i>

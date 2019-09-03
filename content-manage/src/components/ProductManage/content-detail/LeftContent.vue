@@ -574,6 +574,7 @@ export default {
         },
         //新建产品
         async insertArticle(disableRefObj) {
+            disableRefObj.inSaveProcess = true;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
             );
@@ -590,6 +591,7 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$refs.detailCheckTree.resetChecked();
+                             this.resetDetail();
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -615,6 +617,7 @@ export default {
         },
         //编辑保存产品
         async saveArticle(disableRefObj) {
+            disableRefObj.inSaveProcess = true;
             let { status, data } = await productManageApi.update(
                 this.curProduct,
                 this.detailData
@@ -633,6 +636,7 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$route.query.isEditor = 0;
+                            
                             //this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;

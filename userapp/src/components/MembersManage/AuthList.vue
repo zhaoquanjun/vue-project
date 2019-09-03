@@ -12,7 +12,7 @@
                     v-for="(item,index) in authList"
                     :key="item.id"
                     @click="curAuth(item,index)"
-                    :class="{'choose-bg':item.isChoosed == true}"
+                    :class="{'choose-bg':item.isChoosed == true,'choose-bg1':item.show == true && isSelect}"
                 >
                     <el-tooltip :content="item.name" placement="top-start" transition="1">
                         <span class="item-left ellipsis">{{item.name}}</span>
@@ -76,7 +76,9 @@ export default {
     .choose-bg {
         background: #e8f8fb;
     }
-
+.choose-bg1 {
+        background: #e8f8fb;
+    }
     .auth-name-title {
         height: 40px;
         line-height: 40px;

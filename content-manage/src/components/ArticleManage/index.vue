@@ -75,6 +75,9 @@
                         <button @click="cancelUpdateCategory" class="cancel">取消</button>
                     </div>
                 </right-pannel>
+                
+                   
+               
             </el-main>
         </el-main>
     </el-container>
@@ -453,7 +456,7 @@ export default {
                             );
                             if (status === 200) {
                                 this.getTreeAsync();
-                                 this.getArticleList();
+                                this.getArticleList();
                                 this.$notify({
                                     customClass: "notify-success",
                                     message: `删除成功!`,
