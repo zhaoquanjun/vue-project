@@ -77,7 +77,6 @@
         data() {
             return {
                 options: {
-                    targetNodeId: this.nodeData.id,
                     uploadType: this.uploadType,
                     target: null,
                     testChunks: true,
@@ -130,7 +129,7 @@
                                                         FromId: data.existingFileInfo.id,
                                                         Title: chunk.file.name,
                                                         ContentType: chunk.file.fileType,
-                                                        CategoryId: this.nodeData.id || 0
+                                                        CategoryId: this.nodeData.id //todo
                                                     });
                                                     ++this.successCount;
 
@@ -165,7 +164,7 @@
                                         FromId: data.existingFileInfo.id,
                                         Title: chunk.file.name,
                                         ContentType: chunk.file.fileType,
-                                        CategoryId: this.nodeData.id || 0
+                                        CategoryId: this.nodeData.id//todo
                                     });
 
                                     ++this.successCount;
@@ -193,14 +192,11 @@
                 errorCount: 0,
                 disable: true,
                 formatSize: 0,
-                upload2Category: 0
-            };
+               };
         },
         created() {
-            this.targetNodeId = this.nodeData.id;
             this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
-            console.log(this.options.target, "1");
-        },
+         },
         methods: {
             bytesToSize(bytes, flag) {
                 if (bytes === 0) return "0 B";
@@ -223,34 +219,11 @@
                 });
                 this.errorCount += 1;
             },
-            getNodeByParentId(tree, parentId) {
-                if (parentId === null) {
-                    return null;
-                }
-                if (tree.id === parentId) {
-                    return tree;
-                }
-                for (var i = 0; i < tree.children.length; i++) {
-                    var result = this.getNodeByParentId(tree.children[i], parentId)
-                    if (result !== null) {
-                        return result;
-                    }
-                }
-                return null;
-            },
-            updateNodeSum(tree, nodeId, count) {
-                var targetNode = this.getNodeByParentId(tree, nodeId);
-                do {
-                    targetNode.inUseSum += count;
-                    targetNode = this.getNodeByParentId(tree, targetNode.parentId);
-                }
-                while (targetNode !== null);
-            },
             updatePageData() {
                 if (this.successCount == this.fileList.filter(i => !i.aborted && !i.error).length &&
                     this.successCount >= 1) {
                     this.$emit("getList");
-                    this.updateNodeSum(this.treeResult[0], this.targetNodeId, this.successCount);
+                    this.$emit("getTree");
                     this.$emit("closeDialog");
                     this.fileList.forEach(file => {
                         file.cancel(file);
@@ -273,6 +246,8 @@
                this. updatePageData();
             },
             onFileAdded(file) {
+
+                this.$refs.uploader.resetOption();
                 console.log(file);
                 let [, suffix] = file.fileType.split("/");
                 let forbidUpload = [
@@ -318,7 +293,9 @@
                 }
                 console.log(this.fileList);
             },
-            uploadStart(file) { },
+            uploadStart(file) {
+
+            },
             computeMD5(file) {
                 if (this.displayName !== "File") {
                     let url = URL.createObjectURL(file.file);
@@ -489,12 +466,11 @@
             },
             // 选择分类节点
             chooseNode(data) {
-                this.upload2Category = data;
-                this.targetNodeId = data.id;
+              //  this.nodeData =  data;
                 this.$set(
                     this.options,
                     "target",
-                    `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`
+                    `${this.apiHost}/api/chunkupload/${this.uploadType}/${data.id}`
                 );
                 this.$refs.uploader.resetOption();
             },
