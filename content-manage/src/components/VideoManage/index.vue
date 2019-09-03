@@ -224,8 +224,6 @@
                     this.getPicList();
                     this.getTree();
                 }
-<<<<<<< HEAD
-            );
         },
         async renameCategory(id, newName) {
             await videoCategoryManageApi.rename(id, newName);
@@ -289,7 +287,6 @@
         //批量删除
         batchDelete() {
             this.batchRemovePic(this.idsList);
-=======
             },
             async renamePic(id, newname) {
                 await videoManageApi.rename(id, newname);
@@ -400,7 +397,6 @@
             closeDialog() {
                 this.dialogTableVisible = false;
             }
->>>>>>> 0a2f830955526f080b86dd446c76667ea6043a27
         },
         computed: {
             isInvitationlWidth() {
