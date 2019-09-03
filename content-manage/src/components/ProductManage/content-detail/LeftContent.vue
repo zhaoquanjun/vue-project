@@ -590,6 +590,7 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$refs.detailCheckTree.resetChecked();
+                             this.resetDetail();
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -633,6 +634,7 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$route.query.isEditor = 0;
+                            
                             //this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;
