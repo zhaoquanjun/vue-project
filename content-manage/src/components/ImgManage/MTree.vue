@@ -45,6 +45,7 @@
         </el-scrollbar>
         <div class="category-name-pic" :class="{upload:isProduct}" ref="operateSection">
             <UploadCategoryPic
+                v-if="categoryHandlerModeShow"
                 :isUpload="isProduct?true:false"
                 :modifyCategoryData="modifyCategoryData"
                 @createCategory="createCategory"
@@ -88,7 +89,8 @@ export default {
             createCategoryData: "", // 当前点击的创建分类节点
             isAdd: false, // true 添加 false编辑
             modifyCategoryData: {}, // 编辑分类需要传当前节点的名称和imgurl,
-            curClickNode: { data: { level: "" } }
+            curClickNode: { data: { level: "" } },
+            categoryHandlerModeShow:false,
         };
     },
     mounted() {
@@ -125,9 +127,7 @@ export default {
             }
             this.closeUploadCategoryPic();
         },
-        closeUploadCategoryPic() {
-            this.$refs.operateSection.style.display = "none";
-        },
+      
         //////////////
         handlerOver(data) {
             if (!isNaN(data.id)) this.treeNodeId = data.id;
@@ -302,7 +302,7 @@ export default {
         },
         // 操作按钮出现 || 消失
         handleShow(ev, node, data) {
-            console.log(node);
+         
             if (this.curId === node.data.id) {
                 node.checked = false;
                 this.curId = 1;
@@ -316,14 +316,17 @@ export default {
         },
         // 分类上传图片
         _handleShowMoreOperate(ev, node, data) {
-            console.log(this.curClickNode);
+            this.categoryHandlerModeShow= true
             this.createCategoryData = this.curClickData;
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
             this.$refs.operateSection.style.display = "block";
         },
-
+          closeUploadCategoryPic() {
+               this.categoryHandlerModeShow= false
+            this.$refs.operateSection.style.display = "none";
+        },
         // 新增 0730  关闭分类操作菜单
         closeUploadCategoryPic1() {
             this.$refs.operateSection1.style.display = "none";
@@ -338,6 +341,7 @@ export default {
             this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + "px";
             if (this.$refs.operateSection1.style.display === "block") {
                 this.$refs.operateSection1.style.display = "none";
+                
             } else {
                 this.$refs.operateSection1.style.display = "block";
             }
