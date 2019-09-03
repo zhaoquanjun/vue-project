@@ -399,7 +399,7 @@
                         if (file.size / 1024 / 1024 > 50) {
                             this.$notify({
                                 customClass: "notify-error",
-                                message: `${this.displayName}大小不可超过50M`,
+                                message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
                                 duration: 1500,
                                 showClose: false
                             });
@@ -412,7 +412,7 @@
                     } else {
                         this.$notify({
                             customClass: "notify-error",
-                            message: `一次最多可上传10个${this.displayName}`,
+                            message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
                             duration: 1500,
                             showClose: false
                         });

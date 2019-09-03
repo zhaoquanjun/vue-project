@@ -471,6 +471,10 @@ export default {
                 pass: data.pwd || "",
                 link: `${location.origin}${data.downloadPage}`
             };
+            this.error.errorTip = false;
+            this.error.errorText = "";
+            this.error.pwdTip = false;
+            this.error.pwdErrorText = "";
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
