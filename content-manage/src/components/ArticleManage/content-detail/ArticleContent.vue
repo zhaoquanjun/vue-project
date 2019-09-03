@@ -465,6 +465,7 @@ export default {
         },
         //插入文章
         async insertArticle(disableRefObj) {
+            disableRefObj.inSaveProcess = true;
             let { status, data } = await articleManageApi.createArticle(
                 this.articleDetail
             );
@@ -504,6 +505,7 @@ export default {
         },
         //编辑保存文章
         async saveArticle(disableRefObj) {
+            disableRefObj.inSaveProcess = true;
             let { status, data } = await articleManageApi.editArticle(
                 this.articleDetail
             );

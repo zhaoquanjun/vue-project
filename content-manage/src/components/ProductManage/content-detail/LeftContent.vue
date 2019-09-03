@@ -574,6 +574,7 @@ export default {
         },
         //新建产品
         async insertArticle(disableRefObj) {
+            disableRefObj.inSaveProcess = true;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
             );
@@ -616,6 +617,7 @@ export default {
         },
         //编辑保存产品
         async saveArticle(disableRefObj) {
+            disableRefObj.inSaveProcess = true;
             let { status, data } = await productManageApi.update(
                 this.curProduct,
                 this.detailData
