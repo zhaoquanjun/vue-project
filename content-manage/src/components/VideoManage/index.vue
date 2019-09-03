@@ -87,7 +87,7 @@
                         class="item"
                         effect="dark"
                         placement="right"
-                        content="一次最多可上传10个视频，单个视频大小不超过200M"
+                        content="一次最多可上传10个视频，单个视频大小不超过2G"
                     >
                         <i class="iconfont iconyiwen"></i>
                     </el-tooltip>

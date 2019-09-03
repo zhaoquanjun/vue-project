@@ -8,7 +8,7 @@
                 :treeResult="treeResult"
                 :list-options="articleSearchOptions"
                 :isArticle="true"
-                @chooseCategoryNode="chooseNode"
+                @chooseCategoryNode="chooseCategoryNode"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
@@ -307,6 +307,12 @@ export default {
         // 拖拽移动分类
         async modifyNodeCategory(id, parentId, idOrderByArr) {
             await articleManageApi.modifyNode(id, parentId, idOrderByArr);
+            this.$notify({
+                customClass: "notify-success", //  notify-success ||  notify-error
+                message: `移动成功!`,
+                showClose: false,
+                duration: 1000
+            });
             this.getTreeAsync();
         },
         //选择移动分类时的节点

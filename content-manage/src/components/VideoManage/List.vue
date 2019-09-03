@@ -35,20 +35,20 @@
                             show-word-limit
                             @blur="rename(scope.row.id,scope.row.title)"
                         ></el-input>
-                        <div class="format">格式： {{scope.row.fileExtension}}</div>
+                        <div class="format">格式： {{formatterFile(Extscope.row.fileExtension)}}</div>
                     </div>
                     <div v-else>
                         <div
                             class="img-name"
                             @click="rename(scope.row.id,scope.row.title,scope.$index)"
                         >{{scope.row.title}}</div>
-                        <div class="format">格式： {{scope.row.fileExtension}}</div>
+                        <div class="format">格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
+            <el-table-column prop="categoryName" label="分类"  show-overflow-tooltip></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" label="上传时间" width="150" show-overflow-tooltip></el-table-column>
@@ -115,7 +115,7 @@
                         <span>{{picInfo.title}}</span>
 
                         <span>大小: {{picInfo.sizeStr}}</span>
-                        <span>格式: {{picInfo.fileExtension}}</span>
+                        <span>格式: {{formatterFileExt(picInfo.fileExtension)}}</span>
                     </div>
                 </el-dialog>
             </div>
@@ -274,6 +274,13 @@ export default {
         },
         closeDialog() {
             this.$refs.video.pause();
+        },
+        formatterFileExt(fileExt) {
+            if (fileExt) {
+                if (fileExt.substring(0, 1) == ".")
+                    return fileExt.substring(1);
+                return fileExt;
+            } return "";
         }
     }
 };
