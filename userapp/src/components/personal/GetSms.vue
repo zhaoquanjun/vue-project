@@ -1,7 +1,7 @@
 
 <template>
     <div class="login">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" @submit.native.prevent>
             <div v-if="!isModifi">
                 <el-form-item prop="verification" class="verification-code">
                     <el-input
@@ -12,10 +12,10 @@
                         placeholder="短信验证码"
                         maxlength="6"
                     ></el-input>
-                    <el-button class="verification-text" @click="send" :disabled="disabled=!show">
+                    <button class="verification-text" @click="send" :disabled="disabled=!show">
                         <span v-show="show">发送验证码</span>
                         <span v-show="!show" class="count">{{count}}秒后可重新获取</span>
-                    </el-button>
+                    </button>
                 </el-form-item>
             </div>
             <div v-else>
@@ -53,14 +53,14 @@
                         placeholder="验证码"
                         maxlength="6"
                     ></el-input>
-                    <el-button
+                    <button
                         class="verification-text"
                         @click="sendChangePhoneCode"
                         :disabled="disabled=!show"
                     >
                         <span v-show="show">发送验证码</span>
                         <span v-show="!show" class="count">{{count}}秒后可重新获取</span>
-                    </el-button>
+                    </button>
                 </el-form-item>
             </div>
         </el-form>
@@ -352,8 +352,7 @@ export default {
     border: none;
     color: #00c1de;
     font-weight: 400;
-     padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 10px;
 }
 .count {
     color: #8c8c8c;
