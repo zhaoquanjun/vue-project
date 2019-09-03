@@ -50,8 +50,8 @@
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
                     :modal-append-to-body="false"
-                ></el-dialog>
-                <right-pannel
+                >
+                 <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="closeRightPanel"
                     :tree-result="treeResult"
@@ -72,6 +72,8 @@
                         <button @click="cancelUpdateCategor" class="cancel">取消</button>
                     </div>
                 </right-pannel>
+                </el-dialog>
+               
             </el-main>
             <el-footer>
                 <slot name="modal-footer"></slot>
