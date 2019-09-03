@@ -89,7 +89,7 @@ export default {
     },
     handleSucess(response, file, fileList) {
       if (++this.count == fileList.length) {
-        Message.success(`成功上传${fileList.length}图片`);
+        Message.success(`成功上传${fileList.length}张图片`);
         setTimeout(() => {
           this.$emit("switchUploadBoxShowStatus", "uploadImg");
           this.$refs.upload.clearFiles();
