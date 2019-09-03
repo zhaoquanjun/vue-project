@@ -80,8 +80,6 @@ export default {
             //     ...this.$refs.articleRight.fileList1,
             //     ...this.$refs.articleRight.fileList2
             // ];
-        
-            this.disableRefObj.inSaveProcess = true;
             let flieUrls = this.$refs.articleRight.newFileList;
             console.log(this.$refs.articleRight);
             let fileList = flieUrls.map(item => {

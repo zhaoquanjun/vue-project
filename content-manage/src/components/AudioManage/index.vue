@@ -50,9 +50,9 @@
                     :close-on-click-modal="false"
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
-                    :modal-append-to-body="false"
-                ></el-dialog>
-                <right-pannel
+                >
+                </el-dialog>
+                  <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="closeRightPanel"
                 >

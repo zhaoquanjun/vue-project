@@ -42,7 +42,8 @@ import {
     Popover,
     Notification,
     Scrollbar,
-    Loading
+    Loading,
+  
   
 } from 'element-ui';
 Vue.use(Container)
@@ -84,6 +85,7 @@ Vue.use(Container)
     .use(Image)
     .use(Popover)
     .use(Scrollbar)
+   
     
 ;
 Vue.prototype.$message = Message;

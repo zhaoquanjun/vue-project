@@ -111,35 +111,38 @@ export default {
                 !regex2.test(value) &&
                 !regex3.test(value)
             ) {
-                callback(
-                    new Error("长度为6-16位,数字、字母及标点符号至少包含两种！")
-                );
+                callback( new Error("密码设置不符合要求"));
             }
             if (value.length > 16) {
-                callback(new Error("密码长度不能超过16位！"));
+                 callback(new Error("密码长度不能超过16位！"));
+                 
             } else if (value.length < 6) {
-                callback(new Error("密码长度最低为6位！"));
+                 callback(new Error("密码长度最低为6位！"));
+                 
             } else {
                 callback();
             }
             let reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
         };
         var checBeSurePwd = (rule, value, callback) => {
+            if(value==""){
+                callback(new Error("请输入确认密码"))
+            }
             if (
                 !regex1.test(value) &&
                 !regex2.test(value) &&
                 !regex3.test(value)
             ) {
-                callback(
-                    new Error("长度为6-16位,数字、字母及标点符号至少包含两种！")
-                );
+                callback( new Error("长度为6-16位,数字、字母及标点符号至少包含两种！"));
             }
             if (value.length > 16) {
-                callback(new Error("密码长度不能超过16位！"));
+                 callback(new Error("密码长度不能超过16位！"));
+                 
             } else if (value.length < 6) {
-                callback(new Error("密码长度最低为6位！"));
+                 callback(new Error("密码长度最低为6位！"));
+                 
             } else if (value !== this.ruleForm.passWrod) {
-                callback(new Error("两次输入密码不一致!"));
+                callback(new Error("两次密码输入不一致，请重新输入"));
             } else {
                 callback();
             }
