@@ -48,10 +48,10 @@
             </el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
+            <el-table-column prop="categoryName" label="分类"  show-overflow-tooltip></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" label="上传时间"  width="150"  show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" label="上传时间" width="150" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
@@ -66,7 +66,7 @@
                             <svg-icon icon-class="tab-look"></svg-icon>
                         </button>-->
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
-                             <i class="iconfont iconhuishouzhan "></i>
+                            <i class="iconfont iconhuishouzhan"></i>
                         </button>
                     </div>
                 </template>
@@ -113,7 +113,7 @@
                     <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
                     <div class="dislog-footer" slot="footer">
                         <span>{{picInfo.title}}</span>
-                      
+
                         <span>大小: {{picInfo.sizeStr}}</span>
                         <span>格式: {{formatterFileExt(picInfo.fileExtension)}}</span>
                     </div>
@@ -230,8 +230,7 @@ export default {
                     return;
                 }
                 this.index = index;
-            }
-            else {
+            } else {
                 this.$notify({
                     customClass: "notify-error",
                     message: `视频名称不能为空`,
@@ -271,6 +270,7 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
+            
         },
         closeDialog() {
             this.$refs.video.pause();
@@ -334,7 +334,7 @@ export default {
 }
 .video {
     outline: none;
-        width: 800px;
+    width: 800px;
     height: 700px;
 }
 </style>

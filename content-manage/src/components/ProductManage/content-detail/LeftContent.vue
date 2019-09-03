@@ -53,19 +53,19 @@
                                 <div class="product-category" @click.stop="multipleCatagory">
                                     <ul class="category-list">
                                         <li
-                                            style="display:inline-block"     
+                                            style="display:inline-block"
                                             v-for="(item) in detailData.productCategoryList"
                                             :key="item.id"
                                             @click.stop
                                         >
-                                        <div class="category-item" v-if="item.id!==0">   
-                                              <span>{{item.displayName}}</span>
-                                            <i
-                                                class="el-icon-close"
-                                                @click="removeCategory(item.id)"
-                                            ></i>
-                                        </div>
-                                          
+                                       
+                                            <div class="category-item">
+                                                <span>{{item.displayName}}</span>
+                                                <i
+                                                    class="el-icon-close"
+                                                    @click="removeCategory(item.id)"
+                                                ></i>
+                                            </div>
                                         </li>
                                     </ul>
                                     <span
@@ -396,11 +396,11 @@ export default {
                     }
                 ],
                 productCategoryList: [
-                    {
-                        id: 1,
-                        displayName: "", //
-                        thumbnailPicUrl: "2" //
-                    }
+                    // {
+                    //     id: 1,
+                    //     displayName: "", //
+                    //     thumbnailPicUrl: "2" //
+                    // }
                 ],
                 params: { name: 1 }, //
                 isTop: true,
@@ -451,7 +451,7 @@ export default {
                     [{ font: fonts }],
                     [{ align: [] }],
                     ["clean"],
-                    ["image"],//["image", "video"],
+                    ["image"], //["image", "video"],
                     [{ lineheight: lineheights }],
                     [{ letterspacing: letterspacings }]
                 ],
@@ -490,7 +490,9 @@ export default {
             ];
             this.categoryId = [categoryId];
         } else {
-            this.detailData.productCategoryList = [{ id: 0, displayName: "" }];
+            this.detailData.productCategoryList = [
+                { id: 0, displayName: "全部分类" }
+            ];
         }
         var id = this.$route.query.id;
         this.curProduct = id;
@@ -551,7 +553,7 @@ export default {
             this.categoryIdList(this.detailData.productCategoryList);
         },
         categoryIdList(list) {
-            this.categoryId=[]
+            this.categoryId = [];
             list.forEach(item => {
                 this.categoryId.push(item.id);
             });
@@ -591,7 +593,7 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$refs.detailCheckTree.resetChecked();
-                             this.resetDetail();
+                            this.resetDetail();
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -605,7 +607,7 @@ export default {
         editArticle(formName, fileList, disableRefObj) {
             if (fileList && fileList.length > 0) {
                 this.detailData.thumbnailPicUrlList = fileList;
-            }            
+            }
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle(disableRefObj);
@@ -636,7 +638,7 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$route.query.isEditor = 0;
-                            
+
                             //this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;
@@ -653,44 +655,44 @@ export default {
         async getTree() {
             let { data } = await productCategoryManageApi.get();
             this.treeResult = data.treeArray;
-            // var categoryName = this.$route.query.categoryName;
-            // if (categoryName != null || categoryName != undefined) {
-            //     this.categoryName.push(categoryName);
-            // }
         },
         chooseNode(data, boolean) {
-            if (this.detailData.productCategoryList.length >= 5) {
-                return;
-            }
             if (!!boolean) {
-                // console.log(this.detailData.productCategoryList);
-                // this.detailData.productCategoryList &&
-                //     this.detailData.productCategoryList.forEach(item => {
-                //         if (item.id != data.id) {
-                //             if( !this.categoryId.includes(data.id)){
-                //                  this.detailData.productCategoryList.push({
-                //                 displayName: data.label,
-                //                 id: data.id,
-                //                 thumbnailPicUrl: data.thumbnailPicUrl
-                //             });
-                //             }
-
-                //         }
-                //     });
-
                 if (!this.categoryId.includes(data.id)) {
+                    if (this.detailData.productCategoryList.length >= 5) {
+                        this.$notify({
+                            customClass: "notify-error",
+                            message: `一个产品最多设置五个分类!`,
+                            showClose: false,
+                            duration: 1500
+                        });
+                        return;
+                    }
                     this.detailData.productCategoryList.push({
                         displayName: data.label,
                         id: data.id,
                         thumbnailPicUrl: data.thumbnailPicUrl
                     });
                 }
+                 if(this.detailData.productCategoryList[0].id==0){
+                     this.detailData.productCategoryList.splice(0,1)
+                }
             } else {
+                this.categoryId = [];
                 this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
                     item => {
-                        return item.id != data.id;
+                        if (item.id != data.id) {
+                            this.categoryId.push(item.id);
+                            return true;
+                        }
                     }
                 );
+
+                if (this.detailData.productCategoryList.length == 0) {
+                    this.detailData.productCategoryList = [
+                        { id: 0, displayName: "全部分类" }
+                    ];
+                }
             }
         },
         //  移除已选择的分类
@@ -784,7 +786,7 @@ export default {
                 isNeedShipping: false, //
                 isAllowComment: true
             };
-            console.log(this.detailData.detailContent)
+            console.log(this.detailData);
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
@@ -881,8 +883,8 @@ export default {
 .quill-editor /deep/ .ql-container {
     height: 400px;
 }
-.el-textarea /deep/ .el-input__count{
-     background: transparent;
+.el-textarea /deep/ .el-input__count {
+    background: transparent;
     bottom: 0;
     right: 16px;
 }
@@ -891,20 +893,20 @@ export default {
 }
 </style>
 <style>
-    /* 字体大小 */
-    .ql-snow .ql-picker.ql-size .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item::before {
-        content: '字体大小';
-    }
-    /* 标题 */
-    .ql-snow .ql-picker.ql-header .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item::before {
-        content: '标题';
-    }
-    /* 字体 */
-    .ql-snow .ql-picker.ql-font .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-font .ql-picker-item::before {
-        content: "字体";
-    }
+/* 字体大小 */
+.ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item::before {
+    content: "字体大小";
+}
+/* 标题 */
+.ql-snow .ql-picker.ql-header .ql-picker-label::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item::before {
+    content: "标题";
+}
+/* 字体 */
+.ql-snow .ql-picker.ql-font .ql-picker-label::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item::before {
+    content: "字体";
+}
 </style>
 
