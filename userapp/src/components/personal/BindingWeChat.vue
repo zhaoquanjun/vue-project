@@ -31,7 +31,7 @@ export default {
             state: this.WeChatJsLoginParams.state,
             style: "",
             href:
-                "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9DQouaW1wb3dlckJveCAucXJjb2RlIHt3aWR0aDogMjIwcHg7fQ0KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyMjBweDt9DQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9DQouaW1wb3dlckJveCAuc3RhdHVzIHt0ZXh0LWFsaWduOiBjZW50ZXI7fQ=="
+                "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9Ci5pbXBvd2VyQm94IC5xcmNvZGUge3dpZHRoOiAyMjBweDt9Ci5pbXBvd2VyQm94IC5pbmZvIHt3aWR0aDogMjIwcHg7fQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9Ci5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9Ci5pbXBvd2VyQm94IC5pbmZvICN3eF9kZWZhdWx0X3RpcHtkaXNwbGF5Om5vbmU7fQouaW1wb3dlckJveCAuaW5mbyAuc3RhdHVzX3R4dCBwe2Rpc3BsYXk6bm9uZTt9"
         });
     },
     created() {
@@ -75,7 +75,7 @@ export default {
             state: this.WeChatJsLoginParams.state,
             style: "",
             href:
-                "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9DQouaW1wb3dlckJveCAucXJjb2RlIHt3aWR0aDogMjIwcHg7fQ0KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyMjBweDt9DQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9DQouaW1wb3dlckJveCAuc3RhdHVzIHt0ZXh0LWFsaWduOiBjZW50ZXI7fQ=="
+                "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9Ci5pbXBvd2VyQm94IC5xcmNvZGUge3dpZHRoOiAyMjBweDt9Ci5pbXBvd2VyQm94IC5pbmZvIHt3aWR0aDogMjIwcHg7fQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9Ci5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9Ci5pbXBvd2VyQm94IC5pbmZvICN3eF9kZWZhdWx0X3RpcHtkaXNwbGF5Om5vbmU7fQouaW1wb3dlckJveCAuaW5mbyAuc3RhdHVzX3R4dCBwe2Rpc3BsYXk6bm9uZTt9"
         });
     },
     computed: {
@@ -99,8 +99,9 @@ export default {
     }
     .wechatTip {
         text-align: left;
-        width: 200px;
+        width: 250px;
         line-height: 20px;
+        font-size:14px;
         margin: 0 auto;
         &::before {
             display: inline-block;

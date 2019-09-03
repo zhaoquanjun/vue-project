@@ -5,6 +5,7 @@
                 <span>{{displayName}}分类</span>
             </h4>
             <m-tree
+                    ref="myTree"
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
@@ -199,6 +200,7 @@ export default {
                 this.picSearchOptions
             );
             loading.close();
+            this.getTree();
             this.imgPageResult = data;
         },
         // 批量删除列表
@@ -265,6 +267,7 @@ export default {
             let { data } = await audioCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
         },
         async newCategory(entity) {
             console.log(entity);

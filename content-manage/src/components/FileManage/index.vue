@@ -7,6 +7,7 @@
             <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
             <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree
+                    ref="myTree"
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
@@ -120,7 +121,7 @@
                         </el-form>
                     </template>
                     <template v-else>
-                        <span slot="title-text">编辑文件</span>
+                        <span slot="title-text">移动文件</span>
                         <div class="category-content">
                             <span name="cur-tip">移动至</span>
                         </div>
@@ -192,6 +193,7 @@ import {
 import environment from "@/environment/index.js";
 import { trim } from "@/utlis/index.js";
 import { setTimeout } from "timers";
+import { config } from "@vue/test-utils";
 
 export default {
     components: {
@@ -273,13 +275,13 @@ export default {
             });
             if (node) {
                 this.nodeData = node;
-            }
+                }
             let { data, status } = await fileManageApi.getPicList(
                 this.picSearchOptions
             );
             if (status === 200) {
                 loading.close();
-                 //this.getTree();
+                 this.getTree();
             }
             this.imgPageResult = data;
         },
@@ -370,7 +372,8 @@ export default {
             let { data } = await fileCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
-        },
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
+            },
         // 创建新的分类
         async newCategory(entity) {
             console.log(entity);
@@ -468,6 +471,10 @@ export default {
                 pass: data.pwd || "",
                 link: `${location.origin}${data.downloadPage}`
             };
+            this.error.errorTip = false;
+            this.error.errorText = "";
+            this.error.pwdTip = false;
+            this.error.pwdErrorText = "";
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
@@ -573,7 +580,7 @@ export default {
     },
     computed: {
         isInvitationlWidth() {
-            return this.isInvitationPanelShow === true ? 480 : 0;
+            return this.isInvitationPanelShow === true ? 400 : 0;
         },
         isBatchHeaderShow() {
             console.log(this.idsList.length);
