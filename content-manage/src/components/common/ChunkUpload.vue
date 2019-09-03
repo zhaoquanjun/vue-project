@@ -195,8 +195,6 @@
                };
         },
         created() {
-
-            var nodeDataCopy = { id: this.nodeData.id, label: this.nodeData.label}
             this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
          },
         methods: {

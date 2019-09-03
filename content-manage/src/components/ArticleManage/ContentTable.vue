@@ -164,7 +164,7 @@ export default {
             this.$emit("handleEditArticle", row);
         },
         _handleShowMoreOperate(ev, row) {
-            console.log(row, "00000");
+            
             (this.operateList = [
                 { name: "移动", flag: "move" },
                 { name: "复制", flag: "copy" },

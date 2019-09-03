@@ -45,7 +45,7 @@
                     @getPicList="getPicList"
                     @changeCategory="changeCategory"
                     @rename="rename"
-                    @batchRemove="batchRemovePic"
+                    @batchRemove="batchRemove"
                     @editor="editor"
                     @handleSelectionChange="handleSelectionChange"
                     @switchIsTopStatus="switchIsTopStatus"
@@ -126,6 +126,7 @@
                             <span name="cur-tip">移动至</span>
                         </div>
                         <SelectTree
+                           v-if="isInvitationPanelShow"
                             :categoryName="curRowData.categoryName"
                             :tree-result="treeResult"
                             @chooseNode="chooseNode"
@@ -285,7 +286,7 @@ export default {
             this.imgPageResult = data;
         },
         // 批量删除列表
-        async batchRemovePic(idlist) {
+        async batchRemove(idlist) {
             this.$confirm(
                 `删除后，网站中引用的文件数据将同步删除，同时文件将被移动到回收站，是否确认删除？`,
                 "提示",
@@ -514,12 +515,16 @@ export default {
         },
         //批量移动
         batchMove() {
+            this.curRowData= {
+                categoryName:"全部分类",
+                categoryId:0
+            }                        
             this.isInvitationPanelShow = true;
             this.editorOrMove = false;
         },
         //批量删除
         batchDelete() {
-            this.batchRemovePic(this.idsList);
+            this.batchRemove(this.idsList);
         },
         // 验证编辑面板
         fileNameBlur() {

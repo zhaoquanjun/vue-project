@@ -19,9 +19,10 @@
     min-width: 185px;
 
 }
-.keyword-list /deep/ .el-input .el-input__inner{
+.keyword-list  .el-input .el-input__inner{
        border: none;
        padding: 0;
        height: 23px;
+       line-height: 23px;
    }
 /* 内容管理 操作头部 按钮 */
