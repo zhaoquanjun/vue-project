@@ -93,6 +93,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+                min-width="150"
                 prop="deleteTimePrt"
                 :label="recycleTempData.thirdColumnName"
                 show-overflow-tooltip
@@ -102,7 +103,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="deleteDeadline" :label="recycleTempData.forthColumnName"></el-table-column>
-            <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <el-tooltip class="item" effect="dark" content="恢复" placement="top">

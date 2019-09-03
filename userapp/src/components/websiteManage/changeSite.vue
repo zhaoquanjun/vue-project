@@ -1,13 +1,15 @@
 <template>
   <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
-        <el-tooltip :content="siteName" placement="bottom">
-            <span class="siteName">{{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}</span>
-            </el-tooltip>
-        <a class="secondDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
-        <span class="language">{{_getLanguage(language)}}</span>
-        <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
-</el-col>
+      <el-tooltip :content="siteName" placement="bottom">
+        <span
+          class="siteName"
+        >{{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}</span>
+      </el-tooltip>
+      <a class="secondDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
+      <span class="language">{{_getLanguage(language)}}</span>
+      <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
+    </el-col>
     <el-dialog
       width="0"
       :visible.sync="changeSiteShow"
@@ -206,9 +208,9 @@ export default {
       font-size: 14px;
       font-weight: 400;
       color: rgba(38, 38, 38, 1);
-      line-height: 69px;
       position: absolute;
       left: 44px;
+      margin-top: 28px;
     }
     .secondDomain {
       font-size: 12px;

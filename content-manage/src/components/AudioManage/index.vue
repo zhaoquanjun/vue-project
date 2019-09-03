@@ -5,6 +5,7 @@
                 <span>{{displayName}}分类</span>
             </h4>
             <m-tree
+                    ref="myTree"
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
@@ -31,8 +32,8 @@
             ></list-header>
 
             <el-main>
-                <component
-                    :is="componentId"
+                <List
+                    ref="tableList"
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
@@ -43,16 +44,15 @@
                     @batchRemove="batchRemovePic"
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
-                ></component>
+                ></List>
                 <el-dialog
                     width="0"
                     style="z-index:10"
                     :close-on-click-modal="false"
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
-                >
-                </el-dialog>
-                  <right-pannel
+                ></el-dialog>
+                <right-pannel
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="closeRightPanel"
                 >
@@ -61,6 +61,7 @@
                         <span name="cur-tip">移动至</span>
                     </div>
                     <SelectTree
+                        v-if="isInvitationPanelShow"
                         :categoryName="curImgInfo.categoryName"
                         :categoryId="curImgInfo.categoryId"
                         :tree-result="treeResult"
@@ -98,6 +99,7 @@
                 </span>
             </span>
             <chunk-upload
+                v-if="dialogTableVisible"
                 :tree-result="treeResult"
                 :node-data="nodeData"
                 :displayName="displayName"
@@ -199,6 +201,7 @@ export default {
                 this.picSearchOptions
             );
             loading.close();
+            this.getTree();
             this.imgPageResult = data;
         },
         // 批量删除列表
@@ -220,16 +223,17 @@ export default {
                                 data
                             } = await audioManageApi.batchRemove(true, idlist);
                             if (status === 200) {
-                                this.getTree();
                                 this.$notify({
                                     customClass: "notify-success",
                                     message: `删除成功!`,
                                     showClose: false,
                                     duration: 1500
                                 });
+                                this.getTree();
                                 this.getPicList();
+                               
                             }
-                        } 
+                        }
                     }
                 }
             );
@@ -264,6 +268,7 @@ export default {
             let { data } = await audioCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
         },
         async newCategory(entity) {
             console.log(entity);
@@ -354,7 +359,13 @@ export default {
             this.moveToClassiFy = this.curImgInfo = "";
         },
         //批量移动
-        batchMove() {
+        batchMove(isHeader) {
+            if(isHeader){
+                this.curImgInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
             this.isInvitationPanelShow = true;
         },
         //批量删除

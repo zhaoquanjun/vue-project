@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <el-container id="content-manage">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
@@ -6,6 +6,7 @@
             </h4>
 
             <m-tree
+                ref="myTree"
                 :treeResult="treeResult"
                 :list-options="picSearchOptions"
                 @getList="getPicList"
@@ -31,8 +32,8 @@
                 @batchMove="batchMove"
             ></list-header>
             <el-main>
-                <component
-                    :is="componentId"
+                <List
+                    ref="tableList"
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
@@ -42,7 +43,7 @@
                     @batchRemove="batchRemovePic"
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
-                ></component>
+                ></List>
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -51,29 +52,29 @@
                     :visible.sync="isInvitationPanelShow"
                     :modal-append-to-body="false"
                 >
-                 <right-pannel
-                    :style="{width:isInvitationlWidth+'px'}"
-                    @closeRightPanel="closeRightPanel"
-                    :tree-result="treeResult"
-                >
-                    <span slot="title-text">移动视频</span>
-                    <div class="category-content">
-                        <span name="cur-tip">移动至</span>
-                    </div>
-                    <SelectTree
-                        :categoryName="curImgInfo.categoryName"
-                        :categoryId="curImgInfo.categoryId"
+                    <right-pannel
+                        :style="{width:isInvitationlWidth+'px'}"
+                        @closeRightPanel="closeRightPanel"
                         :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    ></SelectTree>
+                    >
+                        <span slot="title-text">移动视频</span>
+                        <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
+                        <SelectTree
+                            v-if="isInvitationPanelShow"
+                            :categoryName="curImgInfo.categoryName"
+                            :categoryId="curImgInfo.categoryId"
+                            :tree-result="treeResult"
+                            @chooseNode="chooseNode"
+                        ></SelectTree>
 
-                    <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryPic" class="sure">确定</button>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
-                    </div>
-                </right-pannel>
+                        <div slot="footer" class="pannle-footer">
+                            <button @click="updateCategoryPic" class="sure">确定</button>
+                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        </div>
+                    </right-pannel>
                 </el-dialog>
-               
             </el-main>
             <el-footer>
                 <slot name="modal-footer"></slot>
@@ -87,13 +88,14 @@
                         class="item"
                         effect="dark"
                         placement="right"
-                        content="一次最多可上传10个视频，单个视频大小不超过200M"
+                        content="一次最多可上传10个视频，单个视频大小不超过2G"
                     >
                         <i class="iconfont iconyiwen"></i>
                     </el-tooltip>
                 </span>
             </span>
             <chunk-upload
+                v-if="dialogTableVisible"
                 :tree-result="treeResult"
                 :displayName="displayName"
                 :uploadType="contentType"
@@ -181,11 +183,11 @@ export default {
             if (node) {
                 this.nodeData = node; // 上传图片所需
             }
-
             let { data } = await videoManageApi.getPicList(
                 this.picSearchOptions
             );
             loading.close();
+            this.getTree();
             this.imgPageResult = data;
         },
         // 批量删除列表
@@ -203,7 +205,6 @@ export default {
                                 data
                             } = await videoManageApi.batchRemove(true, idlist);
                             if (status === 200) {
-                                this.getTree();
                                 this.$notify({
                                     customClass: "notify-success",
                                     message: `删除成功!`,
@@ -211,16 +212,92 @@ export default {
                                     duration: 1500
                                 });
                                 this.getPicList();
+                                this.getTree();
                             }
                         }
                     }
                 }
+
             );
         },
         resetCategoryId() {
             this.picSearchOptions.categoryIdList = [];
             this.getPicList();
         },
+
+     
+        async renameCategory(id, newName) {
+            await videoCategoryManageApi.rename(id, newName);
+            this.getTree();
+        },
+        async modifyNodeCategory(id, parentId, idOrderByArr) {
+            await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
+            this.getTree();
+        },
+        // 点击上传图片
+        switchUploadBoxShowStatus(uploadImg) {
+            this.dialogTableVisible = !this.dialogTableVisible;
+            if (uploadImg === "uploadImg") this.getPicList();
+        },
+        moveClassify(b, data) {
+            this.isInvitationPanelShow = b;
+            this.curImgInfo = data;
+        },
+        closeRightPanel(b) {
+            this.isInvitationPanelShow = b;
+        },
+        //选择移动分类时的节点
+        chooseNode(node) {
+            this.moveToClassiFy = node;
+        },
+        // 批量更新的选中数量
+        handleSelectionChange(list) {
+            this.idsList = [];
+            this.countPic = list.length;
+            if (list.length < 1) return;
+            list.forEach(item => {
+                this.idsList.push(item.id);
+            });
+            this.selectedImg = list;
+            this.$emit("getImgInfo", list);
+        },
+        // 点击确定按钮 更新图片分类
+        updateCategoryPic() {
+            let categoryId = this.moveToClassiFy
+                ? this.moveToClassiFy.id
+                : this.curImgInfo.categoryId;
+            let idList =
+                this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
+            this.changeCategoryPic(categoryId, idList);
+        },
+        // 取消移动分类 关闭panel
+        cancelUpdateCategor() {
+            this.isInvitationPanelShow = false;
+            this.moveToClassiFy = this.curImgInfo = "";
+        },
+        //批量移动
+        batchMove(isHeader) {
+            if(isHeader){
+                this.curImgInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
+            this.isInvitationPanelShow = true;
+        },
+        //批量删除
+        batchDelete() {
+            this.batchRemovePic(this.idsList);
+            },
+            async renamePic(id, newname) {
+                await videoManageApi.rename(id, newname);
+                this.getPicList();
+            },
+            async getTree() {
+                let { data } = await videoCategoryManageApi.get();
+                this.treeResult = data.treeArray;
+                this.totalSum = data.totalSum;
+            },
 
         async changeCategoryPic(categoryId, idList) {
             let { data, status } = await videoManageApi.changeCategory(
@@ -247,6 +324,8 @@ export default {
             let { data } = await videoCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
+
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id);
         },
         async newCategory(entity) {
             await videoCategoryManageApi.create(entity);
@@ -280,7 +359,7 @@ export default {
                                     duration: 1500
                                 });
                             }
-                        } 
+                        }
                     }
                 }
             );
@@ -356,7 +435,7 @@ export default {
             return this.idsList.length > 0 ? true : false;
         }
     },
-    watch: {}
+   
 };
 </script>
 <style scoped>

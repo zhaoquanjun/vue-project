@@ -131,7 +131,7 @@ export default {
             this.getPicList();
         },
         batchMove() {
-            this.$emit("batchMove");
+            this.$emit("batchMove", true);
         },
         batchDelete() {
             this.$emit("batchDelete");

@@ -244,6 +244,7 @@ export default {
             this.pwdBtn = "修改";
         },
         async _getUserProfileAsync() {
+            console.log('grandfather');
             let { data } = await getUserProfile();
             this.userInfo = data;
             this.input = data.displayName;

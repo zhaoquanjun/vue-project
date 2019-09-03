@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="音频名称">
+            <el-table-column label="音频名称" width="300">
                 <template slot-scope="scope">
                       <div class="cover">
                         <img width="100%" src="~img/file-icon/audio.png" />
@@ -42,7 +42,7 @@
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-            <el-table-column prop="fileExtension" label="格式"></el-table-column>
+            <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
             <el-table-column prop="categoryName" label="分类"></el-table-column>
@@ -215,6 +215,11 @@ export default {
         },
         closeDialog() {
             this.$refs.audio.pause();
+        },
+        formatterFileExt(row, column) {
+            if (row.fileExtension.substring(0, 1) == ".")
+                return row.fileExtension.substring(1);
+            return row.fileExtension;
         }
     },
     watch: {
@@ -257,6 +262,16 @@ export default {
             transform: translateY(50%);
         }
     }
+}
+.img-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-wrap: break-word;
+    width: 200px;
+    
 }
 </style>
 
