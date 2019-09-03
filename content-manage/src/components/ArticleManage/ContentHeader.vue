@@ -219,7 +219,7 @@ export default {
         // 批量分类设置 移动  ok
         batchclassifySet() {
             this.$emit("changeOperateName", "移动");
-            this.$emit("batchMove");
+            this.$emit("batchMove", null, true);
         },
         // 批量设置访问权限
         batchViewAuth() {
@@ -228,7 +228,7 @@ export default {
         // 批量复制
         batchCopy() {
             this.$emit("changeOperateName", "复制");
-            this.$emit("batchCopy");
+            this.$emit("batchCopy", null, null, true);
         },
         handleCommand(command) {
             switch (command) {
