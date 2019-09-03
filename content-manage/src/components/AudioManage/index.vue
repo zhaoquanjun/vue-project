@@ -358,7 +358,13 @@ export default {
             this.moveToClassiFy = this.curImgInfo = "";
         },
         //批量移动
-        batchMove() {
+        batchMove(isHeader) {
+            if(isHeader){
+                this.curImgInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
             this.isInvitationPanelShow = true;
         },
         //批量删除

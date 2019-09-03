@@ -224,6 +224,72 @@
                     this.getPicList();
                     this.getTree();
                 }
+<<<<<<< HEAD
+            );
+        },
+        async renameCategory(id, newName) {
+            await videoCategoryManageApi.rename(id, newName);
+            this.getTree();
+        },
+        async modifyNodeCategory(id, parentId, idOrderByArr) {
+            await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
+            this.getTree();
+        },
+        // 点击上传图片
+        switchUploadBoxShowStatus(uploadImg) {
+            this.dialogTableVisible = !this.dialogTableVisible;
+            if (uploadImg === "uploadImg") this.getPicList();
+        },
+        moveClassify(b, data) {
+            this.isInvitationPanelShow = b;
+            this.curImgInfo = data;
+        },
+        closeRightPanel(b) {
+            this.isInvitationPanelShow = b;
+        },
+        //选择移动分类时的节点
+        chooseNode(node) {
+            this.moveToClassiFy = node;
+        },
+        // 批量更新的选中数量
+        handleSelectionChange(list) {
+            this.idsList = [];
+            this.countPic = list.length;
+            if (list.length < 1) return;
+            list.forEach(item => {
+                this.idsList.push(item.id);
+            });
+            this.selectedImg = list;
+            this.$emit("getImgInfo", list);
+        },
+        // 点击确定按钮 更新图片分类
+        updateCategoryPic() {
+            let categoryId = this.moveToClassiFy
+                ? this.moveToClassiFy.id
+                : this.curImgInfo.categoryId;
+            let idList =
+                this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
+            this.changeCategoryPic(categoryId, idList);
+        },
+        // 取消移动分类 关闭panel
+        cancelUpdateCategor() {
+            this.isInvitationPanelShow = false;
+            this.moveToClassiFy = this.curImgInfo = "";
+        },
+        //批量移动
+        batchMove(isHeader) {
+            if(isHeader){
+                this.curImgInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
+            this.isInvitationPanelShow = true;
+        },
+        //批量删除
+        batchDelete() {
+            this.batchRemovePic(this.idsList);
+=======
             },
             async renamePic(id, newname) {
                 await videoManageApi.rename(id, newname);
@@ -334,6 +400,7 @@
             closeDialog() {
                 this.dialogTableVisible = false;
             }
+>>>>>>> 0a2f830955526f080b86dd446c76667ea6043a27
         },
         computed: {
             isInvitationlWidth() {
