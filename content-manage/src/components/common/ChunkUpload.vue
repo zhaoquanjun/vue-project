@@ -466,7 +466,7 @@
             },
             // 选择分类节点
             chooseNode(data) {
-                this.nodeData =  data;
+              //  this.nodeData =  data;
                 this.$set(
                     this.options,
                     "target",
