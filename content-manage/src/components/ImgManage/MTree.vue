@@ -75,7 +75,7 @@ export default {
     },
     data() {
         return {
-            draggable:true,// 是否允许拖拽
+            draggable: true, // 是否允许拖拽
             flag: false,
             curId: null,
             treeNodeId: null,
@@ -139,9 +139,11 @@ export default {
         cancelhadnleTreeInput(data, node) {
             if (this.isRename) {
                 if (data.label == "") {
-                    this.$message({
-                        message: "分类名称不能为空",
-                        type: "warning"
+                    this.$notify({
+                        customClass: "notify-warning", //  notify-success ||  notify-error
+                        message: `分类名称不能为空!`,
+                        showClose: false,
+                        duration: 1500
                     });
                     return;
                 }
@@ -197,7 +199,7 @@ export default {
             );
         },
         allowDrop(draggingNode, targetNode, dropType) {
-               if (targetNode.data.level == 0) return;
+            if (targetNode.data.level == 0) return;
             draggingNode = draggingNode.data;
             targetNode = targetNode.data;
             //判断是否大于三层
@@ -222,9 +224,8 @@ export default {
                 let ele = eles[i];
                 ele.style.background = "";
             }
-          
-                ev.srcElement.style.background = "rgba(224,250,255,0.5)";
-          
+
+            ev.srcElement.style.background = "rgba(224,250,255,0.5)";
         },
         // 添加分类  0720
         create(ev, node, data) {
@@ -342,9 +343,9 @@ export default {
             }
         }
     },
-    computed:{
-        isContentwrite(){
-            return this.$store.state.dashboard.isContentwrite
+    computed: {
+        isContentwrite() {
+            return this.$store.state.dashboard.isContentwrite;
         }
     }
 };
@@ -369,7 +370,7 @@ export default {
     height: 16px;
     padding-right: 5px;
 }
-.label-weight{
+.label-weight {
     font-weight: 500;
     // line-height: 40px;
     // height: 40px !important;

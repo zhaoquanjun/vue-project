@@ -223,12 +223,22 @@ export default {
         },
         // 重命名图片名称
         rename(id, newName, index) {
-            if (isNaN(index)) {
-                this.index = -1;
-                this.$emit("rename", id, newName);
-                return;
+            if (newName) {
+                if (isNaN(index)) {
+                    this.index = -1;
+                    this.$emit("rename", id, newName);
+                    return;
+                }
+                this.index = index;
             }
-            this.index = index;
+            else {
+                this.$notify({
+                    customClass: "notify-error",
+                    message: `视频名称不能为空`,
+                    showClose: false,
+                    duration: 2000
+                });
+            }
             //this.$emit("rename", id, newName);
         },
         blurRename(id, newName) {},

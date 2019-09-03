@@ -28,9 +28,9 @@
                 </template>
             </el-table-column>
             <el-table-column prop="remark" label="备注" show-overflow-tooltip>
-                <template slot-scope="scope" >
+                <template slot-scope="scope">
                     <el-popover
-                    v-if="!scope.row.isSystem"
+                        v-if="!scope.row.isSystem"
                         :ref="`popover-${scope.$index}`"
                         placement="bottom"
                         width="317"
@@ -38,19 +38,16 @@
                         style="padding:0"
                         @show="showRemark(scope.row)"
                     >
-                      
-                        <span slot="reference" >
+                        <span slot="reference">
                             <el-tooltip class="item" effect="dark" placement="bottom">
                                 <div style="width:150px;" slot="content">{{scope.row.remark}}</div>
                                 <div
-                                   
                                     class="remark-desc"
                                 >{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
-                            
                             </el-tooltip>
-                            <svg-icon icon-class="remark" ></svg-icon>
+                           <i class="iconfont iconbianji"></i>
                         </span>
-                        <div  class="textareaWrap">
+                        <div class="textareaWrap">
                             <el-input
                                 type="textarea"
                                 :autosize="{ minRows: 3, maxRows: 3}"
@@ -75,7 +72,7 @@
                             </div>
                         </div>
                     </el-popover>
-                        <div v-else>超级管理员</div>
+                    <div v-else>超级管理员</div>
                 </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -84,10 +81,10 @@
                         class="handle-btn handle-btn-item"
                         @click="handleEdit(scope.$index, scope.row)"
                     >
-                        <svg-icon icon-class="editor"></svg-icon>
+                        <i class="iconfont iconcaozuo"></i>
                     </button>
                     <button class="handle-btn" @click="handleDelete(scope.$index, scope.row)">
-                        <svg-icon icon-class="l-recyclebin"></svg-icon>
+                        <i class="iconfont iconhuishouzhan"></i>
                     </button>
                 </template>
             </el-table-column>
@@ -121,15 +118,15 @@ export default {
             default: () => []
         }
     },
-   
+
     created() {
-        console.log(this)
+        console.log(this);
     },
     data() {
         return {
             remarkValue: "123",
             tableHeight: 500,
-            loadingShow:true,
+            loadingShow: true
         };
     },
     mounted() {
@@ -148,12 +145,11 @@ export default {
             }
         },
         handleDisable(row, index) {
-           
             // 函数需要一个返回值,true为可选,false为不可选择
             if (index == 0) {
-             return false;
+                return false;
             } else {
-             return true;
+                return true;
             }
         },
         /**
@@ -217,9 +213,9 @@ export default {
         //   })
         // }
     },
-    watch:{
-        memberList(){
-            this.loadingShow =false;
+    watch: {
+        memberList() {
+            this.loadingShow = false;
         }
     }
 };
@@ -325,6 +321,13 @@ export default {
 }
 .handle-btn-item {
     margin-right: 54px;
+}
+.table-list {
+    .iconfont {
+        &:hover {
+            color: #00c1de;
+        }
+    }
 }
 </style>
 

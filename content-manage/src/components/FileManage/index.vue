@@ -106,6 +106,7 @@
                                     autocomplete="off"
                                     @blur="fileNameBlur"
                                     @focus="pwdRule"
+                                    
                                 ></el-input>
                                 <div class="pwd-rule" v-if="pwdRuleShow">
                                     <div class="error"><i class="iconfont iconguanbi"></i>长度为6～16位（字母区分大小写）</div>
@@ -277,6 +278,7 @@ export default {
             );
             if (status === 200) {
                 loading.close();
+                 this.getTree();
             }
             this.imgPageResult = data;
         },
@@ -305,12 +307,7 @@ export default {
                                 });
                                 this.getPicList();
                             }
-                        } else {
-                            // this.$message({
-                            //     type: "info",
-                            //     message: "已取消删除"
-                            // });
-                        }
+                        } 
                     }
                 }
             );
@@ -353,12 +350,13 @@ export default {
             if (status == 200) {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `${!!this.editorOrMove?"编辑成功":"移动成功"}`,
+                    message: `${!!this.editorOrMove?"保存成功":"移动成功"}`,
                     duration: 1500,
                     showClose: false
                 });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
+                 this.getTree();
             }
         },
         // 重命名

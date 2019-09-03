@@ -600,8 +600,10 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, fileList,disableRefObj) {
-            this.detailData.thumbnailPicUrlList = fileList;
+        editArticle(formName, fileList, disableRefObj) {
+            if (fileList && fileList.length > 0) {
+                this.detailData.thumbnailPicUrlList = fileList;
+            }            
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle(disableRefObj);
@@ -874,6 +876,11 @@ export default {
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 400px;
+}
+.el-textarea /deep/ .el-input__count{
+     background: transparent;
+    bottom: 0;
+    right: 16px;
 }
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;

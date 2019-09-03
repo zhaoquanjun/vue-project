@@ -109,7 +109,7 @@ export default {
             rules: {
                 phone: [{ validator: checkPhone, trigger: "blur" }],
                 verification: [
-                    { required: true, message: "请先发送验证码", trigger: "blur" }
+                    { required: true, message: "请输入短信验证码", trigger: "blur" }
                 ]
             },
             checked: false,
@@ -331,6 +331,12 @@ export default {
  
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.el-form /deep/ .el-form-item{
+    margin-bottom: 30px;
+}
+.el-form-item.is-error /deep/ .el-input__inner{
+    border-color: #e5e5e5
+}
 .verification-code {
     position: relative;
 }

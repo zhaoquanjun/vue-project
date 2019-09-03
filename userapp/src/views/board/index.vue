@@ -17,6 +17,7 @@
           v-if="$store.state.dashboard.isSiteInfoShow"
           :siteInfo="siteInfoList"
           :isCanCreate="isCanCreate"
+          :isSystem="isSystem"
           @getDashboardData="getDashboardData"
           v-show="siteInfoList.length"
         />
@@ -153,7 +154,8 @@ export default {
       ],
       remarkValue: "",
       designIsread: false,
-      isCanCreate: true
+      isCanCreate: true,
+      isSystem: false
     };
   },
   components: {
@@ -186,6 +188,7 @@ export default {
         productsCount: data.contentsNumber.productsCount
       };
       this.appInfo = data.appInfo;
+      this.isSystem = data.appInfo.isSystem;
       this.appInfo.time =
         formatDateTime(this.appInfo.createTime, "yyyy年MM月dd日") +
         "-" +

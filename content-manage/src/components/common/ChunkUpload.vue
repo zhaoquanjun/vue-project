@@ -249,18 +249,7 @@
             },
             onFileAdded(file) {
                 console.log(file);
-                if (file.fileType == "") {
-                    this.$notify({
-                        customClass: "notify-error",
-                        message: `请添加${this.displayName}格式文件`,
-                        duration: 1500,
-                        showClose: false
-                    });
-                    file.cancel(file);
-                    this.errorCount -= 1;
-                    return;
-                }
-                let [, suffix] = file.fileType.split("/");
+            let [, suffix] = file.fileType.split("/");
                 let forbidUpload = [
                     ".exe",
                     ".php",

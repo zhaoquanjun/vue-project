@@ -79,7 +79,8 @@
                     <p class="list-columns__2">回复内容</p>
                     <p class="list-columns__3">操作</p>
                 </li>
-                <li v-for="(item, index) in keywordData.list" :key="index">
+               <div>
+                    <li v-for="(item, index) in keywordData.list" :key="index">
                     <p class="list-columns__1 ellipsis">
                         <span v-for="(child,index) in item.keywordList" :key="index">
                             {{child.keyword}}
@@ -98,6 +99,7 @@
                         </button>
                     </div>
                 </li>
+               </div>
                 <div class="empty-table" v-if="keywordData.list && keywordData.list.length===0">
                     <img src="~img/table-empty.png" />
                     <span>无数据</span>
