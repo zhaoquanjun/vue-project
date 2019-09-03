@@ -5,7 +5,7 @@
 /* 编辑器样式 */
 
 .ql-snow .ql-picker.ql-size .ql-picker-label::before, .ql-snow .ql-picker.ql-size .ql-picker-item::before{
-  font-size: 12px;
+  /*font-size: 12px;*/
 }
 
 /* 字体大小样式 */
@@ -16,6 +16,11 @@
 
 .ql-snow .ql-picker.ql-font {
   width: 108px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item::before {
+    content: '字体大小';
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="10px"]::before,
@@ -56,7 +61,10 @@
 
 
 /* 字体样式 */
-
+.ql-snow .ql-picker.ql-font .ql-picker-label::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item::before {
+    content: "字体";
+}
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=SimSun]::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=SimSun]::before {
     content: "宋体";
@@ -132,7 +140,7 @@
 
 .ql-snow .ql-picker.ql-lineheight .ql-picker-label::before,
 .ql-snow .ql-picker.ql-lineheight .ql-picker-item::before {
-  content: 'Normal';
+  content: '行间距';
 }
 
 .ql-snow .ql-picker.ql-lineheight .ql-picker-label[data-value="10px"]::before,
@@ -174,7 +182,7 @@
 
 .ql-snow .ql-picker.ql-letterspacing .ql-picker-label::before,
 .ql-snow .ql-picker.ql-letterspacing .ql-picker-item::before {
-  content: 'Normal';
+  content: '字间距';
 }
 
 .ql-snow .ql-picker.ql-letterspacing .ql-picker-label[data-value="5px"]::before,
@@ -201,3 +209,5 @@
   content: '15px';
   line-height: '15px';
 }
+
+

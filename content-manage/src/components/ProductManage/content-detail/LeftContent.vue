@@ -451,7 +451,7 @@ export default {
                     [{ font: fonts }],
                     [{ align: [] }],
                     ["clean"],
-                    ["image", "video"],
+                    ["image"],//["image", "video"],
                     [{ lineheight: lineheights }],
                     [{ letterspacing: letterspacings }]
                 ],
@@ -890,5 +890,21 @@ export default {
     padding-bottom: 50px;
 }
 </style>
-
+<style>
+    /* 字体大小 */
+    .ql-snow .ql-picker.ql-size .ql-picker-label::before,
+    .ql-snow .ql-picker.ql-size .ql-picker-item::before {
+        content: '字体大小';
+    }
+    /* 标题 */
+    .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+    .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+        content: '标题';
+    }
+    /* 字体 */
+    .ql-snow .ql-picker.ql-font .ql-picker-label::before,
+    .ql-snow .ql-picker.ql-font .ql-picker-item::before {
+        content: "字体";
+    }
+</style>
 
