@@ -58,7 +58,7 @@
         <uploader
           ref="uploader"
           :options="options"
-          :autoStart="true"
+          :autoStart="false"
           @file-added="onFileAdded"
           class="uploader-example"
         >
@@ -111,6 +111,8 @@ export default {
       curSiteId: "",
       options: {
         target: ``,
+        testChunks: false,
+        allowDuplicateUploads: true,
         headers: {
           appId: this.$store.state.dashboard.appId,
           Authorization:
@@ -155,19 +157,24 @@ export default {
       this.hasUploadFile(siteId);
       this.preview(siteId);
       console.log(this.$refs);
-      console.log(this.$refs.uploader)
+      console.log(this.$refs.uploader);
       this.$refs.uploader.resetOption();
     },
     // 选择切换网站
     chooseWebsite(siteId) {
       this.curSiteId = siteId;
+      this.$set(
+        this.options,
+        "target",
+        `${environment.uploadRobotsUrl}${this.curSiteId}`
+      );
+      this.$refs.uploader.resetOption();
       this.hasUploadFile(siteId);
       this.preview(siteId);
       this.file = {};
+      this.progressFlag = false
     },
     onFileAdded(file) {
-
-      this.file = file;
       if (this.fileList.length > 0) {
         this.fileList.splice(0, 1);
       }
@@ -196,11 +203,13 @@ export default {
         file.cancel(file);
         return;
       }
+      this.file = file;
       this.fileList.push(file);
       this.isUpload = true;
       this.progressFlag = true;
       this.progressPercent = 100;
-      console.log(this.fileList)
+      file.resume();
+      console.log(this.fileList);
     },
     fileRemove() {
       this.$confirm(`您确定要删除当前robots文件么？删除后不可恢复。`, "提示", {

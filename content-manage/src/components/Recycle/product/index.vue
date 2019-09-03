@@ -130,12 +130,7 @@ export default {
                                     showClose: false
                                 });
                             }
-                        } else {
-                            // this.$message({
-                            //     type: "info",
-                            //     message: "已取消删除"
-                            // });
-                        }
+                        } 
                     }
                 }
             );

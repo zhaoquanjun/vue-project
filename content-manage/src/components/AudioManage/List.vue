@@ -8,15 +8,15 @@
             :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
+               <template slot="empty">
+                <div class="empty-table">
+                    <img src="~img/table-empty.png" />
+                    <span>无数据</span>
+                </div>
+            </template>
             <el-table-column type="selection"></el-table-column>
             <el-table-column label="音频名称" >
                 <template slot-scope="scope">
-                    <div class="cover">
-                        <img width="100%" src="~img/file-icon/audio.png" />
-                        <span class="play"  @click="viewPic( scope.row,scope.$index)">
-                            <img src="~img/file-icon/play.png" alt />
-                        </span>
-                    </div>
                     <el-input
                         v-if="(index == scope.$index)"
                         type="text"

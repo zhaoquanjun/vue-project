@@ -106,6 +106,7 @@
                                     autocomplete="off"
                                     @blur="fileNameBlur"
                                     @focus="pwdRule"
+                                    
                                 ></el-input>
                                 <div class="pwd-rule" v-if="pwdRuleShow">
                                     <div class="error"><i class="iconfont iconguanbi"></i>长度为6～16位（字母区分大小写）</div>
@@ -277,6 +278,7 @@ export default {
             );
             if (status === 200) {
                 loading.close();
+                 this.getTree();
             }
             this.imgPageResult = data;
         },
@@ -354,6 +356,7 @@ export default {
                 });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
+                 this.getTree();
             }
         },
         // 重命名
