@@ -652,7 +652,7 @@ export default {
 .el-textarea /deep/ .el-input__count{
      background: transparent;
     bottom: 0;
-    right: 16px;
+    right: 22px;
 }
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;

@@ -29,7 +29,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtensionTypeStr" label="文件类型"></el-table-column>
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
+            <el-table-column prop="categoryName" label="分类" show-overflow-tooltip></el-table-column>
 
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="downloadCount" label="置顶">

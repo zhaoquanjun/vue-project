@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="音频名称">
+            <el-table-column label="音频名称" min-width="150">
                 <template slot-scope="scope">
                       <div class="cover">
                         <img width="100%" src="~img/file-icon/audio.png" />
