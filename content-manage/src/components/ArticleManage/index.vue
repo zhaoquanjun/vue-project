@@ -5,6 +5,7 @@
                 <span>文章分类</span>
             </h4>
             <m-tree
+                    ref="myTree"
                 :treeResult="treeResult"
                 :list-options="articleSearchOptions"
                 :isArticle="true"
@@ -432,6 +433,7 @@ export default {
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
+            this.$refs.myTree.selectCategoryByNodeId(this.selectCategory.id)
         },
 
         // 重命名分类名称
