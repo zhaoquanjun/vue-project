@@ -162,6 +162,7 @@
                 </span>
             </span>
             <chunk-upload
+                v-if="dialogTableVisible"
                 :tree-result="treeResult"
                 :displayName="displayName"
                 :node-data="nodeData"
