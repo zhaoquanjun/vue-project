@@ -41,11 +41,11 @@
                     <i class="defult-color">{{formatSize}}</i>
                 </li>
                 <li v-if="successCount>0">
-                    <i class="success-color">，{{successCount}}</i> 个上传成功，
+                    <i class="success-color">，{{successCount}}</i> 个上传成功
                 </li>
                 <li v-if="errorCount>0">
                     &nbsp;&nbsp;
-                    <i class="error-color">{{errorCount}}</i> 个上传失败
+                    <i class="error-color">，{{errorCount}}</i> 个上传失败
                 </li>
             </ul>
             <button class="btn-small"
@@ -100,30 +100,57 @@
                             }
                             case 1: {
                                 if (chunk.offset === 0) {
-                                    let tip;
-                                    if (data.existInCurrentAppInfo.isDelete) {
-                                    }
-                                    this.$notify({
-                                        customClass: "notify-error", //  notify-success ||  notify-error
-                                        message: `${this.displayName}[${
-                                            chunk.file.name
-                                            }]已存在于${
-                                            data.existInCurrentAppInfo.isDelete
-                                                ? "回收站-"
-                                                : ""
-                                            }[${
-                                            data.existInCurrentAppInfo.categoryName
-                                            }]分类下-${
-                                            data.existInCurrentAppInfo.fileName
-                                            }`,
-                                        duration: 3000,
-                                        showClose: false
-                                    });
-                                    console.log(chunk);
-                                    this.successCount -= 1;
-                                    chunk.file.cancel(chunk.file);
+                                    --this.successCount;                 
+                                        this.$confirm(
+                                        `${this.displayName} ${
+                                        chunk.file.name
+                                        } 已存在<br>路径:${
+                                        data.existingFileInfo.isDelete
+                                            ? "回收站-"
+                                            : ""
+                                        } [${
+                                        data.existingFileInfo.categoryName
+                                        }]-[${
+                                        data.existingFileInfo.fileName
+                                        }]`,
+                                        "提示",
+                                        {
+                                            dangerouslyUseHTMLString:true ,
+                                            customClass: "medium",
+                                            iconClass: "icon-warning",
+                                            confirmButtonText: "继续上传",
+                                            cancelButtonText:"取消上传",
+                                            callback: async action => {
+                                                if (action === "confirm") {
+                                                    chunkUploadManageApi.createFileWithoutUpload({
+                                                        UploadFileType: this.uploadType,
+                                                        Size: chunk.file.size,
+                                                        Md5Hash: data.existingFileInfo.md5Hash,
+                                                        FromAppId: data.existingFileInfo.appId,
+                                                        FromId: data.existingFileInfo.id,
+                                                        Title: chunk.file.name,
+                                                        ContentType: chunk.file.fileType,
+                                                        CategoryId: this.nodeData.id || 0
+                                                    });
+                                                    ++this.successCount;
+
+                                                    this.$notify({
+                                                        customClass: "notify-success", //  notify-success ||  notify-error
+                                                        message: `文件秒传成功`,
+                                                        duration: 1500,
+                                                        showClose: false
+                                                    });
+                                                    this.updatePageData();
+                                                }
+                                                else {
+                                                    chunk.file.cancel(chunk.file);
+                                                    this.updatePageData();
+                                                }
+                                            }
+                                        }
+                                    );                                                          
                                 }
-                                return true;
+                                return true;     
                             }
                             case 2: {
                                 if (chunk.offset === 0) {
@@ -131,24 +158,25 @@
                                         UploadFileType: this.uploadType,
 
                                         Size: chunk.file.size,
-                                        Md5Hash: data.existInAnotherAppInfo.md5Hash,
+                                        Md5Hash: data.existingFileInfo.md5Hash,
                                         FromAppId:
-                                            data.existInAnotherAppInfo.fromAppId,
-                                        FromId: data.existInAnotherAppInfo.fromId,
+                                            data.existingFileInfo.appId,
+                                        FromId: data.existingFileInfo.id,
                                         Title: chunk.file.name,
                                         ContentType: chunk.file.fileType,
                                         CategoryId: this.nodeData.id || 0
                                     });
-                                    //todo 更换alert
 
+                                    ++this.successCount;
                                     this.$notify({
                                         customClass: "notify-success", //  notify-success ||  notify-error
                                         message: `文件秒传成功`,
                                         duration: 1500,
                                         showClose: false
                                     });
+                                    chunk.file.cancel(chunk.file);
+                                    this.updatePageData();
                                 }
-
                                 return true;
                             }
                         }
@@ -217,18 +245,10 @@
                 }
                 while (targetNode !== null);
             },
-            onFileSuccess() {
-                console.log(this.fileList);
-
-                this.successCount += 1;
-                console.log(this.successCount);
-                if (
-                    this.successCount == this.fileList.length &&
-                    this.successCount >= 1 &&
-                    this.errorCount < 1
-                ) {
+            updatePageData() {
+                if (this.successCount == this.fileList.filter(i => !i.aborted && !i.error).length &&
+                    this.successCount >= 1) {
                     this.$emit("getList");
-                    console.log(this.treeResult[0], this.targetNodeId, this.successCount, "666666666666")
                     this.updateNodeSum(this.treeResult[0], this.targetNodeId, this.successCount);
                     this.$emit("closeDialog");
                     this.fileList.forEach(file => {
@@ -243,13 +263,17 @@
                     this.successCount = 0;
                     this.errorCount = 0;
                 }
-                // if (this.successCount > 0 && this.errorCount < 1) {
-
-                // }
+            },
+            onFileSuccess() {
+                console.log(this.fileList, 666666666666666);
+                var errorCount = this.fileList.filter(i => i.error).length;
+                var total = this.fileList.length;
+                ++this.successCount;               
+               this. updatePageData();
             },
             onFileAdded(file) {
                 console.log(file);
-            let [, suffix] = file.fileType.split("/");
+                let [, suffix] = file.fileType.split("/");
                 let forbidUpload = [
                     ".exe",
                     ".php",
@@ -271,8 +295,8 @@
                     ".json"
                 ];
 
-            let fileNameIndex = file.name.lastIndexOf(".");
-            let fileName = file.name.slice(fileNameIndex);
+                let fileNameIndex = file.name.lastIndexOf(".");
+                let fileName = file.name.slice(fileNameIndex);
                 if (forbidUpload.indexOf(fileName) > -1) {
                     file.cancel(file);
                     this.errorCount -= 1;
