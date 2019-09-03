@@ -41,17 +41,17 @@
                     @show="showRemark(scope.row)"
                   >
                     <span slot="reference">
-                      <div @mouseenter="_handleShowEditorIcon(scope.row.id)"
-                        @mouseleave="_handleHideEditorIcon(scope.row.id)">
-                          <div class="remark-desc">{{scope.row.description==""?"  ":scope.row.description}}</div>
-                        <i
-                          v-if="active == scope.row.id"
-                          class="iconfont iconbianji"
-                          style="color:#09CCEB;width:17px;height:17px;"
-                          :data-type="'remarkIcon'+ scope.$index"
-                          :ref="'remarkIcon'+ scope.$index"
-                        ></i>                        
-                      </div>
+                        <div @mouseenter="_handleShowEditorIcon(scope.row.id)"
+                             @mouseleave="_handleHideEditorIcon(scope.row.id)">
+                            <el-tooltip :content="scope.row.description" placement="top">
+                                <div class="remark-desc">{{ !scope.row.description ? ' ':scope.row.description}}</div>
+                            </el-tooltip>
+                            <i v-if="active == scope.row.id"
+                               class="iconfont iconbianji"
+                               style="color:#09CCEB;width:17px;height:17px;"
+                               :data-type="'remarkIcon'+ scope.$index"
+                               :ref="'remarkIcon'+ scope.$index"></i>
+                        </div>
                     </span>
                     <div class="textareaWrap">
                       <el-input
