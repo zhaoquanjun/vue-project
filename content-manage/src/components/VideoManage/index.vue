@@ -217,12 +217,87 @@ export default {
                         }
                     }
                 }
+
             );
         },
         resetCategoryId() {
             this.picSearchOptions.categoryIdList = [];
             this.getPicList();
         },
+
+     
+        async renameCategory(id, newName) {
+            await videoCategoryManageApi.rename(id, newName);
+            this.getTree();
+        },
+        async modifyNodeCategory(id, parentId, idOrderByArr) {
+            await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
+            this.getTree();
+        },
+        // 点击上传图片
+        switchUploadBoxShowStatus(uploadImg) {
+            this.dialogTableVisible = !this.dialogTableVisible;
+            if (uploadImg === "uploadImg") this.getPicList();
+        },
+        moveClassify(b, data) {
+            this.isInvitationPanelShow = b;
+            this.curImgInfo = data;
+        },
+        closeRightPanel(b) {
+            this.isInvitationPanelShow = b;
+        },
+        //选择移动分类时的节点
+        chooseNode(node) {
+            this.moveToClassiFy = node;
+        },
+        // 批量更新的选中数量
+        handleSelectionChange(list) {
+            this.idsList = [];
+            this.countPic = list.length;
+            if (list.length < 1) return;
+            list.forEach(item => {
+                this.idsList.push(item.id);
+            });
+            this.selectedImg = list;
+            this.$emit("getImgInfo", list);
+        },
+        // 点击确定按钮 更新图片分类
+        updateCategoryPic() {
+            let categoryId = this.moveToClassiFy
+                ? this.moveToClassiFy.id
+                : this.curImgInfo.categoryId;
+            let idList =
+                this.idsList.length > 0 ? this.idsList : [this.curImgInfo.id];
+            this.changeCategoryPic(categoryId, idList);
+        },
+        // 取消移动分类 关闭panel
+        cancelUpdateCategor() {
+            this.isInvitationPanelShow = false;
+            this.moveToClassiFy = this.curImgInfo = "";
+        },
+        //批量移动
+        batchMove(isHeader) {
+            if(isHeader){
+                this.curImgInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
+            this.isInvitationPanelShow = true;
+        },
+        //批量删除
+        batchDelete() {
+            this.batchRemovePic(this.idsList);
+            },
+            async renamePic(id, newname) {
+                await videoManageApi.rename(id, newname);
+                this.getPicList();
+            },
+            async getTree() {
+                let { data } = await videoCategoryManageApi.get();
+                this.treeResult = data.treeArray;
+                this.totalSum = data.totalSum;
+            },
 
         async changeCategoryPic(categoryId, idList) {
             let { data, status } = await videoManageApi.changeCategory(
@@ -360,7 +435,7 @@ export default {
             return this.idsList.length > 0 ? true : false;
         }
     },
-    watch: {}
+   
 };
 </script>
 <style scoped>

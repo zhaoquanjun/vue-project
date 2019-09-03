@@ -5,6 +5,7 @@
                 <span>文章分类</span>
             </h4>
             <m-tree
+                    ref="myTree"
                 :treeResult="treeResult"
                 :list-options="articleSearchOptions"
                 :isArticle="true"
@@ -276,12 +277,12 @@ export default {
             });
         },
         // 批量移动分类
-        async batchMoveNews(idlist) {
+        async batchMoveNews(idlist, isHeader) {
             idlist = idlist == null ? this.idsList : idlist;
             this.isInvitationPanelShow = true;
             this.rightPanelType = 1;
             this.newsIdList = idlist;
-            if (this.idsList.length>=1 ) {
+            if (isHeader ) {
                 this.curArticleInfo = {
                     categoryName: "全部分类",
                     categoryId: 0
@@ -289,7 +290,7 @@ export default {
             }
         },
         // 批量复制分类
-        async batchCopyNews(idlist, row) {
+        async batchCopyNews(idlist, row, isHeader) {
             if (idlist && idlist.length <= 1) {
                 this.row = row;
             }
@@ -297,7 +298,7 @@ export default {
             this.isInvitationPanelShow = true;
             this.rightPanelType = 2;
             this.newsIdList = idlist;
-               if (this.idsList.length>=1 ) {
+               if (isHeader ) {
                 this.curArticleInfo = {
                     categoryName: "全部分类",
                     categoryId: 0
@@ -432,6 +433,7 @@ export default {
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
+            this.$refs.myTree.selectCategoryByNodeId(this.selectCategory.id)
         },
 
         // 重命名分类名称

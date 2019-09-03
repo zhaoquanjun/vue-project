@@ -121,7 +121,7 @@
                         </el-form>
                     </template>
                     <template v-else>
-                        <span slot="title-text">编辑文件</span>
+                        <span slot="title-text">移动文件</span>
                         <div class="category-content">
                             <span name="cur-tip">移动至</span>
                         </div>
@@ -581,7 +581,7 @@ export default {
     },
     computed: {
         isInvitationlWidth() {
-            return this.isInvitationPanelShow === true ? 480 : 0;
+            return this.isInvitationPanelShow === true ? 400 : 0;
         },
         isBatchHeaderShow() {
             console.log(this.idsList.length);
