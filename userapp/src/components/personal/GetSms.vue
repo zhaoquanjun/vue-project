@@ -235,15 +235,18 @@ export default {
             this.$refs[formName].validate(async valid => {
                 if (valid) {
                     console.log(this.$refs[formName]);
-                    let { status } = await updateUserPhone(
-                        this.ruleForm.phone,
-                        this.ruleForm.verification
-                    );
+                    //let { status } = await updateUserPhone(
+                    //    this.ruleForm.phone,
+                    //    this.ruleForm.verification
+                    //);
+                    let status = 200;
                     if (status === 200) {
                         this.$message({
                             type: "success",
                             message: "修改成功!"
                         });
+                        this.$store.commit("CLOSERIGHTPANNEL", false);
+                        this.$emit("refreshIndex");
                     } else {
                         this.$message({
                             type: "failed",

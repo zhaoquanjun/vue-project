@@ -35,7 +35,6 @@ export const getEditUserAppPolicies = (userId) => {
 export const updateUserPolicy = (options) => {
     let params = {
         userId: options.userId,
-        appId: options.appId,
         remark: options.remark,
         policyNames: options.names
     };
