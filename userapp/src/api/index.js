@@ -145,8 +145,8 @@ export const updateUserName = (userName) => {
  * InterfaceAuthor : xuzhuan
  * 验证用户已绑定的号码
  */
-export const sendSourcePhoneCode = (phone) => {
-    return ajaxRequest.put('/api/phone/SendSourcePhoneCode', JSON.stringify(phone));
+export const sendSourcePhoneCode = () => {
+    return ajaxRequest.put('/api/phone/SendSourcePhoneCode');
 }
 /**
  * InterfaceAuthor : xuzhuan
@@ -163,12 +163,11 @@ export const sendTargetPhoneCode = (oldPhone, newPhone) => {
  * InterfaceAuthor : xuzhuan
  * 验证用户的（原绑定的手机的）验证码是否正确
  */
-export const isInvalidCode = (phone, code) => {
+export const isInvalidCode = (code) => {
     let params = {
-        phone: phone,
         code: code
     }
-    return ajaxRequest.put(`/api/phone/IsInvalidCode/${phone}/${code}`, params);
+    return ajaxRequest.put(`/api/phone/IsInvalidCode/${code}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan
@@ -258,10 +257,7 @@ export const updateUserPicture = (pictureUrl) => {
 export const updateUserPwd = (options) => {
     return ajaxRequest.put(`/api/userInfo/UpdateUserPwd`,options);
 }
-//修改密码
-export const changeUserPwd = (options) => {
-    return ajaxRequest.put(`/api/userInfo/ChangeUserPwd`,options);
-}
+
 
 /**
  * InterfaceAuthor : xuzhuan

@@ -154,7 +154,7 @@ export default {
     mounted() {},
     methods: {
         async send() {
-            let { status } = await sendSourcePhoneCode(this.sourcePhone);
+            let { status } = await sendSourcePhoneCode();
             if (status === 200) {
                    this.$notify({
                     customClass: "notify-success",
@@ -337,10 +337,11 @@ export default {
 .el-form-item.is-error /deep/ .el-input__inner{
     border-color: #e5e5e5
 }
+
 .verification-code {
     position: relative;
 }
-.verification-code .el-button:hover{
+.verification-code .el-button:hover,.verification-code .el-button.is-disabled{
     background: transparent;
 }
 .verification-text {

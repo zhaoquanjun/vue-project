@@ -64,6 +64,7 @@
                         <span name="cur-tip">{{operateName}}至</span>
                     </div>
                     <SelectTree
+                        v-if="isInvitationPanelShow"
                         :categoryName="curArticleInfo.categoryName"
                         :categoryId="curArticleInfo.categoryId"
                         :tree-result="treeResult"
@@ -75,9 +76,6 @@
                         <button @click="cancelUpdateCategory" class="cancel">取消</button>
                     </div>
                 </right-pannel>
-                
-                   
-               
             </el-main>
         </el-main>
     </el-container>
@@ -102,7 +100,7 @@ export default {
         return {
             articlePageResult: null,
             treeResult: null,
-            curArticleInfo: "",
+            curArticleInfo: {},
             moveToClassiFy: "",
             newsIdList: "",
             count: 0,
@@ -132,7 +130,6 @@ export default {
             return this.isInvitationPanelShow === true ? 331 : 0;
         },
         isBatchHeaderShow() {
-            console.log(this.idsList);
             return this.idsList.length > 0 ? true : false;
         }
     },
@@ -141,7 +138,6 @@ export default {
         changeOperateName(operate) {
             this.operateName = operate;
         },
-
         /**
          * 获取多选的列表
          */
@@ -285,6 +281,12 @@ export default {
             this.isInvitationPanelShow = true;
             this.rightPanelType = 1;
             this.newsIdList = idlist;
+            if (this.idsList.length>=1 ) {
+                this.curArticleInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
         },
         // 批量复制分类
         async batchCopyNews(idlist, row) {
@@ -295,6 +297,12 @@ export default {
             this.isInvitationPanelShow = true;
             this.rightPanelType = 2;
             this.newsIdList = idlist;
+               if (this.idsList.length>=1 ) {
+                this.curArticleInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
         },
         // 拖拽移动分类
         async modifyNodeCategory(id, parentId, idOrderByArr) {
@@ -322,12 +330,13 @@ export default {
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
             this.curArticleInfo = data;
+           
         },
         // 判断是 移动还是复制
         handOperateArticle() {
             switch (this.rightPanelType) {
                 case 1:
-                    this.updateCategoryArticle();
+                    this.updateCategory();
                     break;
                 case 2:
                     this.copyArticle();
@@ -336,10 +345,11 @@ export default {
             }
         },
         // 点击确定按钮 更新文章所属分类
-        async updateCategoryArticle() {
+        async updateCategory() {
             let cateId = this.moveToClassiFy
                 ? this.moveToClassiFy.id
                 : this.curArticleInfo.categoryId;
+
             let { data, status } = await articleManageApi.batchMove(
                 cateId,
                 this.newsIdList
