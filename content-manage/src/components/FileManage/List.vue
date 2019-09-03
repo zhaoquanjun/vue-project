@@ -21,7 +21,7 @@
                     <img :src="scope.row | fileCover" class="cover" />
                     <!-- <img src="../../../static/images/content-icon/file-cover.png" class="cover" /> -->
                     <span
-                        class="img-name"
+                        class="img-name" :title="scope.row.title"
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
                     >{{scope.row.title}}</span>
                     <!-- <input v-model="scope.row.title" />

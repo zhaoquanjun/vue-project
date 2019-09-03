@@ -42,7 +42,7 @@
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-            <el-table-column prop="fileExtension" label="格式"></el-table-column>
+            <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
             <el-table-column prop="categoryName" label="分类"></el-table-column>
@@ -215,6 +215,11 @@ export default {
         },
         closeDialog() {
             this.$refs.audio.pause();
+        },
+        formatterFileExt(row, column) {
+            if (row.fileExtension.substring(0, 1) == ".")
+                return row.fileExtension.substring(1);
+            return row.fileExtension;
         }
     },
     watch: {
