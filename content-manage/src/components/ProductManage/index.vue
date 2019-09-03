@@ -132,9 +132,8 @@ export default {
         };
     },
     mounted() {
-        this.contentTableList();
-
         this.getTree();
+        this.contentTableList();
     },
     computed: {
         isInvitationlWidth() {
@@ -148,9 +147,15 @@ export default {
     methods: {
         // zxb 获取table列表
         async contentTableList(options) {
+              const loading = this.$loading({
+                lock: true,
+                spinner: "loading-icon",
+                background: "rgba(255, 255, 255, 0.75)"
+            });
             let { data } = await productManageApi.getProductList(
                 (options = this.productSearchOptions)
             );
+            loading.close();
             this.articlePageResult = data;
             this.articlePageResult.list.forEach((item, index) => {
                 item.createTimeStr = this.articlePageResult.list[
