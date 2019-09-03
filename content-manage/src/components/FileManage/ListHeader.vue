@@ -68,12 +68,12 @@
                         ></el-option>
                     </el-select>
                 </span>
-                <span @click="switchIsDesc('asc')">
+                <button @click="switchIsDesc('asc')">
                     <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
-                </span>
-                <span @click="switchIsDesc('dec')">
+                </button>
+                <button @click="switchIsDesc('dec')">
                     <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
-                </span>
+                </button>
             </div>
             <div class="head-item head-right">
                 <button

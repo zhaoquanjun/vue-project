@@ -20,7 +20,7 @@
                 <template slot-scope="scope">
                     <div class="cover">
                         <img width="100%" :src="scope.row.coverUrl" />
-                        <span class="play" @click="viewPic( scope.row,scope.$index)">
+                        <span class="play" @click="viewPic(scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
                         </span>
                     </div>
@@ -66,7 +66,7 @@
                             <svg-icon icon-class="tab-look"></svg-icon>
                         </button>-->
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
-                            <svg-icon icon-class="l-recyclebin"></svg-icon>
+                             <i class="iconfont iconhuishouzhan "></i>
                         </button>
                     </div>
                 </template>
@@ -308,6 +308,7 @@ export default {
 .cover {
     position: relative;
     .play {
+        cursor: pointer;
         position: absolute;
         width: 100%;
         height: 100%;

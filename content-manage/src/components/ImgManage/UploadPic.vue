@@ -272,7 +272,7 @@ export default {
     padding-top: 10px;
 }
 .upload-pic /deep/ .el-upload--picture-card {
-    display: block;
+    display: inline-block;
     border: none;
     line-height: 1;
 }

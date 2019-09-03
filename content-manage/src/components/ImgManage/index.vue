@@ -48,27 +48,29 @@
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
                     :modal-append-to-body="false"
-                ></el-dialog>
-                <right-pannel
-                    :style="{width:isInvitationlWidth+'px'}"
-                    @closeRightPanel="closeRightPanel"
-                    :tree-result="treeResult"
                 >
-                    <span slot="title-text">移动图片</span>
-                    <div class="category-content">
-                        <span name="cur-tip">移动至</span>
-                    </div>
-                    <SelectTree
-                        :categoryName="curImgInfo.categoryName"
-                        :categoryId="curImgInfo.categoryId"
+                
+                </el-dialog>
+                    <right-pannel
+                        :style="{width:isInvitationlWidth+'px'}"
+                        @closeRightPanel="closeRightPanel"
                         :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    ></SelectTree>
-                    <div slot="footer" class="pannle-footer">
-                        <span @click="updateCategoryPic" class="sure">确定</span>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
-                    </div>
-                </right-pannel>
+                    >
+                        <span slot="title-text">移动图片</span>
+                        <div class="category-content">
+                            <span name="cur-tip">移动至</span>
+                        </div>
+                        <SelectTree
+                            :categoryName="curImgInfo.categoryName"
+                            :categoryId="curImgInfo.categoryId"
+                            :tree-result="treeResult"
+                            @chooseNode="chooseNode"
+                        ></SelectTree>
+                        <div slot="footer" class="pannle-footer">
+                            <span @click="updateCategoryPic" class="sure">确定</span>
+                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        </div>
+                    </right-pannel>
             </el-main>
             <el-footer>
                 <slot name="modal-footer"></slot>
@@ -133,7 +135,7 @@ export default {
     },
     data() {
         return {
-            nodeData: { id: 0, parentId:null},
+            nodeData: { id: 0, parentId: null },
             componentId: "ImgList",
             isImgList: false,
             countPic: 0,

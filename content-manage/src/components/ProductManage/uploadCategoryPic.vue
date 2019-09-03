@@ -317,6 +317,7 @@ export default {
     .pannle-footer {
         text-align: right;
         padding: 5px 8px 0 0;
+        box-sizing: border-box;
         button {
             width: 58px;
         }

@@ -47,44 +47,42 @@
                     width="0"
                     style="z-index:10"
                     :close-on-click-modal="false"
-                    :modal-append-to-body="false"
                     :show-close="false"
-                    :append-to-body="true"
                     :visible.sync="isInvitationPanelShow"
-                ></el-dialog>
-                <right-pannel
-                    :style="{width:isInvitationlWidth+'px'}"
-                    @closeRightPanel="cancelUpdateCategory"
                 >
-                    <!-- 分类设置 -->
-                    <span slot="title-text">分类设置</span>
+                </el-dialog>
+                   <right-pannel
+                        :style="{width:isInvitationlWidth+'px'}"
+                        @closeRightPanel="cancelUpdateCategory"
+                    >
+                        <!-- 分类设置 -->
+                        <span slot="title-text">分类设置</span>
 
-                    <template v-if="clickType === 'permission'">
-                        <div class="category-content">
-                            <span name="cur-tip">{{switchVal?"仅登录用户可访问":"全部用户可访问"}}</span>
+                        <template v-if="clickType === 'permission'">
+                            <div class="category-content">
+                                <span name="cur-tip">{{switchVal?"仅登录用户可访问":"全部用户可访问"}}</span>
+                            </div>
+
+                            <el-switch v-model="switchVal"></el-switch>
+                        </template>
+                        <template v-else>
+                            <div class="category-content">
+                                <span name="cur-tip">{{tipText}}</span>
+                                <!-- 移动至 -->
+                            </div>
+
+                            <CheckTree
+                                ref="checkTree"
+                                :isright-pannel="true"
+                                :tree-result="treeResult"
+                                @chooseNode="chooseNode"
+                            ></CheckTree>
+                        </template>
+                        <div slot="footer" class="pannle-footer">
+                            <button @click="updateCategoryArticle" class="sure">确定</button>
+                            <button @click="cancelUpdateCategory" class="cancel">取消</button>
                         </div>
-
-                        <el-switch v-model="switchVal"></el-switch>
-                    </template>
-                    <template v-else>
-                        <div class="category-content">
-                            <span name="cur-tip">{{tipText}}</span>
-                            <!-- 移动至 -->
-                        </div>
-
-                        <CheckTree
-                            ref="checkTree"
-                            :isright-pannel="true"
-                            :tree-result="treeResult"
-                            @chooseNode="chooseNode"
-                        ></CheckTree>
-                    </template>
-
-                    <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryArticle" class="sure">确定</button>
-                        <button @click="cancelUpdateCategory" class="cancel">取消</button>
-                    </div>
-                </right-pannel>
+                    </right-pannel>
             </el-main>
         </el-main>
     </el-container>
@@ -259,7 +257,7 @@ export default {
             }
             let checkNodes = this.$refs.checkTree.getCheckedNodes();
             if (!checkNodes || checkNodes.length < 1) {
-                  this.$notify({
+                this.$notify({
                     customClass: "notify-error", //  notify-success ||  notify-error
                     message: `请选择移动的分类!`,
                     showClose: false,
@@ -489,8 +487,7 @@ export default {
     }
 };
 </script>
-<style scoped>
-</style>
+
 <style lang="scss" scoped>
 @import "../style/contentDetail.scss";
 </style>
