@@ -15,22 +15,31 @@
       <el-row class="siteContent" style="padding-bottom:0">
         <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>
         <div class="siteWrap">
-            <div class="siteImg">
-                <img :src="siteImage" alt class="siteImgBackground" />
+          <div class="siteImg">
+            <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
+            <div
+              class="siteImgBackground"
+              :style="{background: 'url(' + ( siteImage ) + ') no-repeat center/cover'}"
+            ></div>
+            <div class="modal">
+              <button class="choseSite" @click="changeTemplate()">更换模版</button>
             </div>
+          </div>
           <div class="siteinfoWrap">
             <div class="siteinfoItem siteName">
               <span>网站名称：</span>
-              <span class="siteinfoName">{{siteName && siteName.trim().length > 20 ? siteName.slice(0, 20) + '...' : siteName}}</span>
+              <span
+                class="siteinfoName"
+              >{{siteName && siteName.trim().length > 20 ? siteName.slice(0, 20) + '...' : siteName}}</span>
               <el-popover
                 ref="popover"
                 placement="bottom"
                 width="317"
-                trigger="click"
+                trigger="manual"
+                v-model="editPopover"
                 style="padding:0"
-                @show="showChangeSitename"
               >
-                <span slot="reference" style="margin-left:0px">
+                <span slot="reference" style="margin-left:0px" @click="showChangeSitename">
                   <div class="edit" style="margin-left:0px"></div>
                 </span>
                 <div class="textareaWrap">
@@ -52,7 +61,7 @@
             </div>
             <div class="siteinfoItem">
               <span>网站语言：</span>
-              <span>{{_getLanguage()}}</span>
+              <span class="siteinfoName">{{_getLanguage()}}</span>
               <div class="edit" @click="showChangeLanguage"></div>
             </div>
             <div class="siteinfoItem">
@@ -69,11 +78,13 @@
               <span>{{lastPublishedTime ? lastPublishedTime : "未发布"}}</span>
             </div>
           </div>
-          <div class="siteinfoBackImg"></div>
-          <button class="siteinfoBtn release">发布</button>
-          <button class="siteinfoBtn prev" @click="toPrev">预览</button>
           <button class="siteinfoBtn design" @click="toDesign">设计</button>
+          <a class="siteinfoBtn prev" :href="`//${secondDomain}`" target="_blank">预览</a>
         </div>
+      </el-row>
+      <el-row class="siteContent">
+        <div class="mySiteTitle">流量统计</div>
+        <div style="height:401px"></div>
       </el-row>
       <el-row class="siteContent">
         <div class="mySiteTitle">网站信息</div>
@@ -125,10 +136,6 @@
             :class="{disabled:chosedSiteType == '' || siteFirstIndustryValue == '' || siteSecondIndustryValue == ''}"
           >保存</el-button>
         </div>
-      </el-row>
-      <el-row class="siteContent">
-        <div class="mySiteTitle">流量统计</div>
-        <div style="height:401px"></div>
       </el-row>
       <el-row style="padding:23px">
         <div class="mySiteTitle">网站设置</div>
@@ -182,6 +189,7 @@
           </div>
         </div>
       </el-dialog>
+      <SelectTemplateDialog ref="selectTemplateDialog" :siteId="siteId" :siteName="siteName"></SelectTemplateDialog>
     </el-main>
   </el-container>
 </template>
@@ -189,16 +197,17 @@
 <script>
 import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
+import SelectTemplateDialog from "@/components/websiteManage/selectTemplateDialog.vue";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { getLanguage } from "@/configure/appCommon";
 import { formatDateTime } from "@/api/index";
 import { designerUrl } from "@/environment/index";
-// import SiteDomain from "@/components/websiteManage/siteDomain.vue";
 export default {
   components: {
     PageSubmenu,
-    ChangeSite
+    ChangeSite,
+    SelectTemplateDialog
   },
   data() {
     return {
@@ -232,14 +241,11 @@ export default {
       siteNameValue: "",
       changeSiteLanguageShow: false,
       remarkInfo: "",
-      radio: "zh-CN"
+      radio: "zh-CN",
+      editPopover: false
     };
   },
-methods: {
-    //预览
-    toPrev() {
-        window.location.href = `http://${this.secondDomain}`;
-    },
+  methods: {
     // 跳转至设计器
     toDesign() {
       window.location.href = `${designerUrl}?siteId=${this.siteId}`;
@@ -251,6 +257,10 @@ methods: {
     },
     _getLanguage() {
       return getLanguage(this.language);
+    },
+    // 更换模板
+    changeTemplate() {
+      this.$refs.selectTemplateDialog.showTemplate();
     },
     // 获取站点信息
     async getSiteInfo(siteId) {
@@ -292,10 +302,12 @@ methods: {
     // 切换网站名称
     showChangeSitename() {
       this.siteNameValue = this.siteName ? this.siteName : "";
+      this.editPopover = true;
     },
     cancelInput() {
       this.$refs[`popover`].doClose();
       this.siteNameValue = "";
+      this.editPopover = false;
     },
     async saveInputValue() {
       if (!this.siteNameValue) {
@@ -311,6 +323,7 @@ methods: {
       console.log("siteid:", this.siteId);
       await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
       this.siteName = this.siteNameValue;
+      this.editPopover = false;
     },
     // 关闭选择网站语言弹窗
     closeSiteLanguageDialog() {
@@ -453,14 +466,12 @@ methods: {
 }
 .radio /deep/ .el-radio__label {
   font-size: 12px;
-  font-family: PingFangSC-Regular;
   font-weight: 400;
   color: rgba(140, 140, 140, 1);
   line-height: 20px;
 }
 .radio /deep/ .is-checked .el-radio__label {
   font-size: 12px;
-  font-family: PingFangSC-Regular;
   font-weight: 400;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
@@ -472,7 +483,6 @@ methods: {
 }
 .mySiteTitle {
   font-size: 14px;
-  font-family: PingFangSC-Medium;
   font-weight: 500;
   color: rgba(38, 38, 38, 1);
   margin-bottom: 15px;
@@ -485,30 +495,63 @@ methods: {
   background-size: contain;
   vertical-align: middle;
   margin-left: 20px;
+  cursor: pointer;
 }
 .siteContent {
-  padding: 23px;
+  padding: 24px;
   border-bottom: 10px solid #f6f8fa;
 }
 .siteWrap {
   width: 100%;
   height: 201px;
   position: relative;
-  padding-top: 32px;
+  padding-top: 17px;
   background: url("~img/siteManage/mysiteBackground.png");
   background-repeat: no-repeat;
   background-position: 80% center;
   background-size: contain;
   .siteImg {
+    position: relative;
     display: inline-block;
     width: 260px;
-    height: 170px;
     margin-left: 32px;
     vertical-align: top;
+    .itemSiteImageHeader {
+      width: 100%;
+    }
     .siteImgBackground {
+      margin-top: -2px;
+      width: 100%;
+      padding-bottom: 62%;
+    }
+    .modal {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-    }   
+      opacity: 0;
+      background: rgba(0, 0, 0, 0.7);
+    }
+    &:hover {
+      .modal {
+        opacity: 1;
+      }
+    }
+    .choseSite {
+      width: 90px;
+      height: 40px;
+      background: rgba(9, 204, 235, 1);
+      border-radius: 2px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+      line-height: 40px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
   .siteinfoWrap {
     display: inline-block;
@@ -522,7 +565,6 @@ methods: {
     span {
       margin-left: 24px;
       font-size: 14px;
-      font-family: PingFangSC-Regular;
       font-weight: 400;
       line-height: 20px;
       color: rgba(140, 140, 140, 1);
@@ -533,7 +575,6 @@ methods: {
     .siteinfoDomain {
       margin-left: 24px;
       font-size: 14px;
-      font-family: PingFangSC-Regular;
       font-weight: 400;
       line-height: 20px;
       color: rgba(0, 194, 222, 1);
@@ -544,7 +585,6 @@ methods: {
       border-radius: 2px;
       border: 1px solid rgba(1, 192, 222, 1);
       font-size: 12px;
-      font-family: PingFangSC-Regular;
       font-weight: 400;
       color: rgba(1, 192, 222, 1);
       line-height: 32px;
@@ -560,12 +600,6 @@ methods: {
   .siteinfoItem:last-child {
     margin-top: 10px;
   }
-  .siteinfoBackImg {
-    // display: inline-block;
-    // width: 956px;
-    // background: url("~img/siteManage/mysiteBackground.png") no-repeat center;
-    // background-size: 100%;
-  }
   .siteinfoBtn {
     position: absolute;
     right: 50px;
@@ -574,20 +608,18 @@ methods: {
     border-radius: 2px;
     border: 1px solid rgba(1, 192, 222, 1);
     font-size: 12px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
+    line-height: 32px;
+    text-align: center;
     color: rgba(1, 192, 222, 1);
   }
-  .release {
-    top: 48px;
-  }
   .prev {
-    top: 100px;
+    top: 113px;
   }
   .design {
     background: rgba(1, 192, 222, 1);
     color: rgba(255, 255, 255, 1);
-    top: 153px;
+    top: 57px;
   }
 }
 .siteTypeWrap {
@@ -598,7 +630,6 @@ methods: {
     margin-left: 29px;
     margin-bottom: 37px;
     font-size: 14px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(140, 140, 140, 1);
   }
@@ -607,7 +638,6 @@ methods: {
     margin-top: 37px;
     margin-left: 97px;
     font-size: 14px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(140, 140, 140, 1);
   }
@@ -623,7 +653,6 @@ methods: {
     background: rgba(1, 192, 222, 1);
     border-radius: 2px;
     font-size: 12px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
     line-height: 32px;
@@ -638,7 +667,6 @@ methods: {
   margin-left: 31px;
   .siteSetting {
     font-size: 14px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(140, 140, 140, 1);
   }
@@ -668,7 +696,6 @@ methods: {
     border-bottom: 1px solid #efefef;
     .headTitle {
       font-size: 16px;
-      font-family: PingFangSC-Medium;
       font-weight: 500;
       color: rgba(38, 38, 38, 1);
       line-height: 55px;
@@ -688,7 +715,6 @@ methods: {
     background: rgba(253, 240, 237, 1);
     border: 1px solid rgba(253, 171, 153, 1);
     font-size: 12px;
-    font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(255, 69, 29, 1);
     line-height: 36px;
@@ -698,7 +724,6 @@ methods: {
   }
   .remarkTitle {
     font-size: 14px;
-    font-family: PingFangSC-Medium;
     font-weight: 500;
     color: rgba(38, 38, 38, 1);
     line-height: 22px;
