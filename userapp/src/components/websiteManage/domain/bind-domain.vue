@@ -120,21 +120,8 @@ export default {
                     closeOnClickModal: false,
                     callback: async action => {
                         if (action === "confirm") {
-                            this.$emit("resolveCdnByAliYunToken", {
-                                id: data.id,
-                                isForceUpdate: false
-                            });
                             this.handleCancel();
-                        } else {
-                            this.$notify({
-                                customClass: "notify-error", //  notify-success ||  notify-error
-                                title: "域名未解析！",
-                                message: `您可在域名列表中继续完成解析设置。`,
-                                duration: 1500,
-                                showClose: false
-                            });
-                            this.handleCancel();
-                        }
+                        } 
                     }
                 });
             }
