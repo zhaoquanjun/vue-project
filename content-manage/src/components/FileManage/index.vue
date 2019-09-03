@@ -7,6 +7,7 @@
             <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
             <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree
+                    ref="myTree"
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
@@ -44,7 +45,7 @@
                     @getPicList="getPicList"
                     @changeCategory="changeCategory"
                     @rename="rename"
-                    @batchRemove="batchRemovePic"
+                    @batchRemove="batchRemove"
                     @editor="editor"
                     @handleSelectionChange="handleSelectionChange"
                     @switchIsTopStatus="switchIsTopStatus"
@@ -120,11 +121,12 @@
                         </el-form>
                     </template>
                     <template v-else>
-                        <span slot="title-text">编辑文件</span>
+                        <span slot="title-text">移动文件</span>
                         <div class="category-content">
                             <span name="cur-tip">移动至</span>
                         </div>
                         <SelectTree
+                           v-if="isInvitationPanelShow"
                             :categoryName="curRowData.categoryName"
                             :tree-result="treeResult"
                             @chooseNode="chooseNode"
@@ -191,6 +193,7 @@ import {
 import environment from "@/environment/index.js";
 import { trim } from "@/utlis/index.js";
 import { setTimeout } from "timers";
+import { config } from "@vue/test-utils";
 
 export default {
     components: {
@@ -272,7 +275,7 @@ export default {
             });
             if (node) {
                 this.nodeData = node;
-            }
+                }
             let { data, status } = await fileManageApi.getPicList(
                 this.picSearchOptions
             );
@@ -283,7 +286,7 @@ export default {
             this.imgPageResult = data;
         },
         // 批量删除列表
-        async batchRemovePic(idlist) {
+        async batchRemove(idlist) {
             this.$confirm(
                 `删除后，网站中引用的文件数据将同步删除，同时文件将被移动到回收站，是否确认删除？`,
                 "提示",
@@ -369,7 +372,8 @@ export default {
             let { data } = await fileCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
-        },
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
+            },
         // 创建新的分类
         async newCategory(entity) {
             console.log(entity);
@@ -467,6 +471,10 @@ export default {
                 pass: data.pwd || "",
                 link: `${location.origin}${data.downloadPage}`
             };
+            this.error.errorTip = false;
+            this.error.errorText = "";
+            this.error.pwdTip = false;
+            this.error.pwdErrorText = "";
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
@@ -511,12 +519,16 @@ export default {
         },
         //批量移动
         batchMove() {
+            this.curRowData= {
+                categoryName:"全部分类",
+                categoryId:0
+            }                        
             this.isInvitationPanelShow = true;
             this.editorOrMove = false;
         },
         //批量删除
         batchDelete() {
-            this.batchRemovePic(this.idsList);
+            this.batchRemove(this.idsList);
         },
         // 验证编辑面板
         fileNameBlur() {
@@ -568,7 +580,7 @@ export default {
     },
     computed: {
         isInvitationlWidth() {
-            return this.isInvitationPanelShow === true ? 480 : 0;
+            return this.isInvitationPanelShow === true ? 400 : 0;
         },
         isBatchHeaderShow() {
             console.log(this.idsList.length);

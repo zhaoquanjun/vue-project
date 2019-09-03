@@ -206,8 +206,8 @@ export default {
         cancel() {
             this.$refs.ruleForm.resetFields();
             this.$emit("closeUploadCategoryPic");
-            this.ruleForm.name = "";
-            this.imageUrl1 = "";
+            // this.ruleForm.name = "";
+            // this.imageUrl1 = "";
         }
     }
 };

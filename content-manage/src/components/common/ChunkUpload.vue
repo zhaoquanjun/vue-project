@@ -41,11 +41,11 @@
                     <i class="defult-color">{{formatSize}}</i>
                 </li>
                 <li v-if="successCount>0">
-                    <i class="success-color">，{{successCount}}</i> 个上传成功，
+                    <i class="success-color">，{{successCount}}</i> 个上传成功
                 </li>
                 <li v-if="errorCount>0">
                     &nbsp;&nbsp;
-                    <i class="error-color">{{errorCount}}</i> 个上传失败
+                    <i class="error-color">，{{errorCount}}</i> 个上传失败
                 </li>
             </ul>
             <button class="btn-small"
@@ -77,7 +77,6 @@
         data() {
             return {
                 options: {
-                    targetNodeId: this.nodeData.id,
                     uploadType: this.uploadType,
                     target: null,
                     testChunks: true,
@@ -100,30 +99,58 @@
                             }
                             case 1: {
                                 if (chunk.offset === 0) {
-                                    let tip;
-                                    if (data.existInCurrentAppInfo.isDelete) {
-                                    }
-                                    this.$notify({
-                                        customClass: "notify-error", //  notify-success ||  notify-error
-                                        message: `${this.displayName}[${
-                                            chunk.file.name
-                                            }]已存在于${
-                                            data.existInCurrentAppInfo.isDelete
-                                                ? "回收站-"
-                                                : ""
-                                            }[${
-                                            data.existInCurrentAppInfo.categoryName
-                                            }]分类下-${
-                                            data.existInCurrentAppInfo.fileName
-                                            }`,
-                                        duration: 3000,
-                                        showClose: false
-                                    });
-                                    console.log(chunk);
-                                    this.successCount -= 1;
-                                    chunk.file.cancel(chunk.file);
+                                    --this.successCount;                 
+                                        this.$confirm(
+                                        `${this.displayName} ${
+                                        chunk.file.name
+                                        } 已存在<br>位于<br>${
+                                        data.existingFileInfo.isDelete
+                                                ? "路径:回收站<br>"
+                                            : ""
+                                        } 分类: ${
+                                        data.existingFileInfo.categoryName
+                                        }<br>名称: ${
+                                        data.existingFileInfo.fileName
+                                        }`,
+                                        "提示",
+                                        {
+                                            dangerouslyUseHTMLString:true ,
+                                            customClass: "medium",
+                                            iconClass: "icon-warning",
+                                            confirmButtonText: "一键秒传",
+                                            cancelButtonText:"取消上传",
+                                            callback: async action => {
+                                                if (action === "confirm") {
+                                                    chunkUploadManageApi.createFileWithoutUpload({
+                                                        UploadFileType: this.uploadType,
+                                                        Size: chunk.file.size,
+                                                        Md5Hash: data.existingFileInfo.md5Hash,
+                                                        FromAppId: data.existingFileInfo.appId,
+                                                        FromId: data.existingFileInfo.id,
+                                                        Title: chunk.file.name,
+                                                        ContentType: chunk.file.fileType,
+                                                        CategoryId: this.nodeData.id //todo
+                                                    });
+                                                    ++this.successCount;
+
+                                                    var duration = 1500;
+                                                    this.$notify({
+                                                        customClass: "notify-success", //  notify-success ||  notify-error
+                                                        message: `文件秒传成功`,
+                                                        duration: duration,
+                                                        showClose: false
+                                                    });
+                                                    setTimeout(this.updatePageData, duration);
+                                                    }
+                                                else {
+                                                    chunk.file.cancel(chunk.file);
+                                                    this.updatePageData();
+                                                }
+                                            }
+                                        }
+                                    );                                                          
                                 }
-                                return true;
+                                return true;     
                             }
                             case 2: {
                                 if (chunk.offset === 0) {
@@ -131,24 +158,25 @@
                                         UploadFileType: this.uploadType,
 
                                         Size: chunk.file.size,
-                                        Md5Hash: data.existInAnotherAppInfo.md5Hash,
+                                        Md5Hash: data.existingFileInfo.md5Hash,
                                         FromAppId:
-                                            data.existInAnotherAppInfo.fromAppId,
-                                        FromId: data.existInAnotherAppInfo.fromId,
+                                            data.existingFileInfo.appId,
+                                        FromId: data.existingFileInfo.id,
                                         Title: chunk.file.name,
                                         ContentType: chunk.file.fileType,
-                                        CategoryId: this.nodeData.id || 0
+                                        CategoryId: this.nodeData.id//todo
                                     });
-                                    //todo 更换alert
 
+                                    ++this.successCount;
                                     this.$notify({
                                         customClass: "notify-success", //  notify-success ||  notify-error
                                         message: `文件秒传成功`,
                                         duration: 1500,
                                         showClose: false
                                     });
+                                    chunk.file.cancel(chunk.file);
+                                    this.updatePageData();
                                 }
-
                                 return true;
                             }
                         }
@@ -164,14 +192,11 @@
                 errorCount: 0,
                 disable: true,
                 formatSize: 0,
-                upload2Category: 0
-            };
+               };
         },
         created() {
-            this.targetNodeId = this.nodeData.id;
             this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
-            console.log(this.options.target, "1");
-        },
+         },
         methods: {
             bytesToSize(bytes, flag) {
                 if (bytes === 0) return "0 B";
@@ -194,42 +219,11 @@
                 });
                 this.errorCount += 1;
             },
-            getNodeByParentId(tree, parentId) {
-                if (parentId === null) {
-                    return null;
-                }
-                if (tree.id === parentId) {
-                    return tree;
-                }
-                for (var i = 0; i < tree.children.length; i++) {
-                    var result = this.getNodeByParentId(tree.children[i], parentId)
-                    if (result !== null) {
-                        return result;
-                    }
-                }
-                return null;
-            },
-            updateNodeSum(tree, nodeId, count) {
-                var targetNode = this.getNodeByParentId(tree, nodeId);
-                do {
-                    targetNode.inUseSum += count;
-                    targetNode = this.getNodeByParentId(tree, targetNode.parentId);
-                }
-                while (targetNode !== null);
-            },
-            onFileSuccess() {
-                console.log(this.fileList);
-
-                this.successCount += 1;
-                console.log(this.successCount);
-                if (
-                    this.successCount == this.fileList.length &&
-                    this.successCount >= 1 &&
-                    this.errorCount < 1
-                ) {
+            updatePageData() {
+                if (this.successCount == this.fileList.filter(i => !i.aborted && !i.error).length &&
+                    this.successCount >= 1) {
                     this.$emit("getList");
-                    console.log(this.treeResult[0], this.targetNodeId, this.successCount, "666666666666")
-                    this.updateNodeSum(this.treeResult[0], this.targetNodeId, this.successCount);
+                    this.$emit("getTree");
                     this.$emit("closeDialog");
                     this.fileList.forEach(file => {
                         file.cancel(file);
@@ -243,13 +237,19 @@
                     this.successCount = 0;
                     this.errorCount = 0;
                 }
-                // if (this.successCount > 0 && this.errorCount < 1) {
-
-                // }
+            },
+            onFileSuccess() {
+                console.log(this.fileList, 666666666666666);
+                var errorCount = this.fileList.filter(i => i.error).length;
+                var total = this.fileList.length;
+                ++this.successCount;               
+               this. updatePageData();
             },
             onFileAdded(file) {
+
+                this.$refs.uploader.resetOption();
                 console.log(file);
-            let [, suffix] = file.fileType.split("/");
+                let [, suffix] = file.fileType.split("/");
                 let forbidUpload = [
                     ".exe",
                     ".php",
@@ -271,8 +271,8 @@
                     ".json"
                 ];
 
-            let fileNameIndex = file.name.lastIndexOf(".");
-            let fileName = file.name.slice(fileNameIndex);
+                let fileNameIndex = file.name.lastIndexOf(".");
+                let fileName = file.name.slice(fileNameIndex);
                 if (forbidUpload.indexOf(fileName) > -1) {
                     file.cancel(file);
                     this.errorCount -= 1;
@@ -293,7 +293,9 @@
                 }
                 console.log(this.fileList);
             },
-            uploadStart(file) { },
+            uploadStart(file) {
+
+            },
             computeMD5(file) {
                 if (this.displayName !== "File") {
                     let url = URL.createObjectURL(file.file);
@@ -397,7 +399,7 @@
                         if (file.size / 1024 / 1024 > 50) {
                             this.$notify({
                                 customClass: "notify-error",
-                                message: `${this.displayName}大小不可超过50M`,
+                                message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
                                 duration: 1500,
                                 showClose: false
                             });
@@ -410,7 +412,7 @@
                     } else {
                         this.$notify({
                             customClass: "notify-error",
-                            message: `一次最多可上传10个${this.displayName}`,
+                            message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
                             duration: 1500,
                             showClose: false
                         });
@@ -464,12 +466,11 @@
             },
             // 选择分类节点
             chooseNode(data) {
-                this.upload2Category = data;
-                this.targetNodeId = data.id;
+              //  this.nodeData =  data;
                 this.$set(
                     this.options,
                     "target",
-                    `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.upload2Category.id}`
+                    `${this.apiHost}/api/chunkupload/${this.uploadType}/${data.id}`
                 );
                 this.$refs.uploader.resetOption();
             },

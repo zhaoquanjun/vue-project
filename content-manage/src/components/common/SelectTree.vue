@@ -112,13 +112,15 @@ export default {
         };
     },
     mounted() {
-        this.initHandle()
+        this.initHandle();
         this.valueTitle = this.categoryName;
+        this.setCheckedKeys();
     },
     methods: {
         setCheckedKeys() {
+            this.valueTitle = this.categoryName;
             this.$nextTick(() => {
-                this.$refs.selectTree.setCurrentKey(0); // 设置默认选中
+                this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
                 //   this.$refs.tree.setCheckedKeys(ids);
             });
         },
@@ -149,9 +151,8 @@ export default {
                 scrollWrap.style.cssText =
                     "margin: 0px; max-height: none; overflow: hidden;";
                 scrollBar.forEach(ele => (ele.style.width = 0));
-                scrollBar[0].style.display = "none"
+                scrollBar[0].style.display = "none";
             });
-            
         },
         // 切换选项
         handleNodeClick(node) {
@@ -199,9 +200,9 @@ export default {
                 "#tree-option .el-tree-node"
             );
             allNode.forEach(element => element.classList.remove("is-current"));
-        },
-        
+        }
     },
+
     watch: {
         categoryName() {
             this.valueTitle = this.categoryName;

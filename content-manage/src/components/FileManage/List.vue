@@ -21,7 +21,7 @@
                     <img :src="scope.row | fileCover" class="cover" />
                     <!-- <img src="../../../static/images/content-icon/file-cover.png" class="cover" /> -->
                     <span
-                        class="img-name"
+                        class="img-name" :title="scope.row.title"
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
                     >{{scope.row.title}}</span>
                     <!-- <input v-model="scope.row.title" />
@@ -29,7 +29,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtensionTypeStr" label="文件类型"></el-table-column>
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
+            <el-table-column prop="categoryName" label="分类" show-overflow-tooltip></el-table-column>
 
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="downloadCount" label="置顶">

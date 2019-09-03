@@ -6,6 +6,7 @@
             </h4>
 
             <m-tree
+                    ref="myTree"
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
@@ -178,15 +179,14 @@ export default {
             });
             if (node) {
                 this.nodeData = node; // 上传图片所需
-            }
+                }
 
             let { data } = await imgManageApi.getPicList(this.picSearchOptions);
             loading.close();
+            this.getTree();
             this.imgPageResult = data;
             this.imgPageResult.list.forEach((item, index) => {
-                item.createTimeStr = this.imgPageResult.list[
-                    index
-                ].createTimeStr.split(" ")[0];
+                item.createTimeStr = this.imgPageResult.list[index].createTimeStr.split(" ")[0];
             });
         },
         // 批量删除列表
@@ -252,6 +252,7 @@ export default {
             let { data } = await imgCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
         },
         async newCategory(entity) {
             console.log(entity);
@@ -355,7 +356,13 @@ export default {
             this.moveToClassiFy = this.curImgInfo = "";
         },
         //批量移动
-        batchMove() {
+        batchMove(isHeader) {
+            if(isHeader){
+                this.curImgInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
             this.isInvitationPanelShow = true;
         },
         //批量删除
