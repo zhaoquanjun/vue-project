@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="图片名称" show-overflow-tooltip >
+            <el-table-column label="图片名称" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <img
                         :src="scope.row.zoomOssUrl"
@@ -45,14 +45,18 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
+            <el-table-column prop="categoryName" label="分类">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.categoryName }}</span>
+                </template>
+            </el-table-column>
 
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作" width="250"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn move-btn" @click="handleMove(scope.row)">
@@ -65,7 +69,7 @@
                             <svg-icon icon-class="tab-look"></svg-icon>
                         </button>
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
-                            <i class="iconfont iconhuishouzhan "></i>
+                            <i class="iconfont iconhuishouzhan"></i>
                         </button>
                     </div>
                 </template>
@@ -123,7 +127,6 @@
                 </div>
             </el-dialog>
         </div>
-     
     </div>
 </template>
 
@@ -131,7 +134,7 @@
 import { trim } from "@/utlis/index.js";
 export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
- 
+
     data() {
         return {
             layout: "total, slot, sizes, prev, pager, next,jumper",
@@ -149,7 +152,7 @@ export default {
             fullOssUrl: "",
             changeIndex: -1,
             firstIndex: "",
-            tableHeight: 500,
+            tableHeight: 500
         };
     },
     mounted() {
@@ -255,23 +258,13 @@ export default {
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
         }
-    },
-  
+    }
 };
 </script>
-<style lang="scss" scoped>
-.table-wrap {
-    position: relative;
-     margin-right: 16px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-  
-}
-</style>
+
 
 
 <style scoped>
-
 .left-prev,
 .right-next {
     opacity: 0;

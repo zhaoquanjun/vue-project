@@ -118,9 +118,8 @@
                                     网站使用了搜索控件时，将使该网站的搜索
                                     <br />结果更加准确，一篇文章最多可以设置5个关键词
                                 </div>
-                                <span>
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
+                                 <i class="iconfont iconyiwen"></i>
+                                
                             </el-tooltip>
                             <ul class="keyword-list" ref="keywordList">
                                 <li
@@ -162,9 +161,7 @@
                         <el-form-item label="SEO标题" prop="metaTitle">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">不填写则默认使用文章标题</div>
-                                <span>
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
+                                <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
                             <el-input placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
                         </el-form-item>
@@ -387,33 +384,20 @@ export default {
                     return;
                 }
                 this.articleDetail.metaKeywords.push(value);
-                // let ele = this.$refs.metaKeywordsInput.$el.children[0];
-                // let width = this.$refs.metaKeywordList.clientWidth;
-                // this.textIndent(ele, width);
+              
             } else {
                 if (this.articleDetail.searchKeywords.length >= 5 || !value) {
                     return;
                 }
                 this.articleDetail.searchKeywords.push(value);
-                // let ele = this.$refs.keywordInput.$el.children[0];
-                // let width = this.$refs.keywordList.clientWidth;
-                // this.textIndent(ele, width);
             }
             
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
-            // this.$nextTick(() => {
-            //     this.$refs.keywordInput.$el.children[0].style.textIndent =
-            //         this.$refs.keywordList.clientWidth + "px";
-            // });
         },
         removeCurmetaKeyWord(index) {
             this.articleDetail.metaKeywords.splice(index, 1);
-            // this.$nextTick(() => {
-            //     metaKeywordsInput.$el.children[0].style.textIndent =
-            //         this.$refs.metaKeywordList.clientWidth + "px";
-            // });
         },
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();

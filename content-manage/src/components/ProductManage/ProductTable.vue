@@ -50,7 +50,7 @@
 
             <el-table-column min-width="100" prop="createTimeStr" label="创建时间"></el-table-column>
 
-            <el-table-column width="200" min-width="100" label="操作"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column width="150" min-width="100" label="操作"  v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)">

@@ -14,6 +14,7 @@
                     :expand-on-click-node="true"
                     @chooseNode="chooseNode"
                     :categoryName="nodeData.label"
+                    :categoryId="nodeData.id"
                 />
             </el-col>
             <div></div>
@@ -104,6 +105,7 @@ export default {
         };
     },
     mounted() {
+        console.log(this.nodeData)
         this.headers.appId = this.$store.state.dashboard.appId;
         if (this.nodeData) {
             this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;

@@ -165,9 +165,7 @@
                                     网站使用了搜索控件时，将使该网站的搜索
                                     <br />结果更加准确，一篇产品最多可以设置5个关键词
                                 </div>
-                                <span>
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
+                                <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
                             <ul class="keyword-list" ref="keywordList">
                                 <li v-for="(item,index) in detailData.searchKeyword" :key="index">
@@ -222,9 +220,7 @@
                         <el-form-item label="seo标题" prop="seoTitle">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">不填写则默认使用产品标题</div>
-                                <span>
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
+                                <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
                             <el-input placeholder="seo标题" v-model="detailData.seoTitle"></el-input>
                         </el-form-item>
@@ -590,10 +586,11 @@ export default {
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
+                            this.resetDetail();
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
-                            this.$refs.detailCheckTree.resetChecked();
-                            this.resetDetail();
+                            // this.$refs.detailCheckTree.resetChecked();
+                           
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -638,8 +635,6 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$route.query.isEditor = 0;
-
-                            //this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -738,18 +733,8 @@ export default {
         cancelEditorImg() {
             this.isModalShow = false;
         },
-        handleCheckAllChange(val) {
-            // this.checkedCities = val ? cityOptions : [];
-            // this.isIndeterminate = false;
-        },
-        handleCheckedCitiesChange(value) {
-            // let checkedCount = value.length;
-            // this.checkAll = checkedCount === this.cities.length;
-            // this.isIndeterminate =
-            //     checkedCount > 0 && checkedCount < this.cities.length;
-        },
         resetDetail() {
-            this.detailData = {
+            let detailData = {
                 name: "",
                 description: "",
                 detailContent: "",
@@ -771,13 +756,7 @@ export default {
                         name: "string"
                     }
                 ],
-                productCategoryList: [
-                    {
-                        id: 0,
-                        displayName: "全部分类", //
-                        thumbnailPicUrl: "" //
-                    }
-                ],
+              
                 params: { name: 1 }, //
                 isTop: true,
                 isOnSell: true,
@@ -786,7 +765,7 @@ export default {
                 isNeedShipping: false, //
                 isAllowComment: true
             };
-            console.log(this.detailData);
+            this.detailData = {...this.detailData,...detailData}
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;

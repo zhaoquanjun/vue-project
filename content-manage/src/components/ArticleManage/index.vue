@@ -283,6 +283,7 @@ export default {
             this.rightPanelType = 1;
             this.newsIdList = idlist;
             if (isHeader ) {
+                this.moveToClassiFy ="";    
                 this.curArticleInfo = {
                     categoryName: "全部分类",
                     categoryId: 0
@@ -290,15 +291,13 @@ export default {
             }
         },
         // 批量复制分类
-        async batchCopyNews(idlist, row, isHeader) {
-            if (idlist && idlist.length <= 1) {
-                this.row = row;
-            }
+        async batchCopyNews(idlist, isHeader) {
             idlist = idlist == null ? this.idsList : idlist;
             this.isInvitationPanelShow = true;
             this.rightPanelType = 2;
             this.newsIdList = idlist;
                if (isHeader ) {
+                this.moveToClassiFy ="";    
                 this.curArticleInfo = {
                     categoryName: "全部分类",
                     categoryId: 0
@@ -369,9 +368,9 @@ export default {
         },
         // 点击确定按钮 复制
         async copyArticle() {
-            let cateId =
-                (this.moveToClassiFy && this.moveToClassiFy.id) ||
-                this.row.categoryId;
+           let cateId = this.moveToClassiFy
+                ? this.moveToClassiFy.id
+                : this.curArticleInfo.categoryId;
             let { data, status } = await articleManageApi.batchCopy(
                 cateId,
                 this.newsIdList

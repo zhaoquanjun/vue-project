@@ -98,7 +98,8 @@ export default {
         },
         changeSaveWay(isEdit){
             this.isEdit = isEdit;
-             this.$refs.articleRight.imageUrl1=""
+            if(!isEdit) this.$refs.articleRight.imageUrl1=""
+            
         }
     },
     mounted() {

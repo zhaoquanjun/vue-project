@@ -228,7 +228,7 @@ export default {
         // 批量复制
         batchCopy() {
             this.$emit("changeOperateName", "复制");
-            this.$emit("batchCopy", null, null, true);
+            this.$emit("batchCopy", null, true);
         },
         handleCommand(command) {
             switch (command) {

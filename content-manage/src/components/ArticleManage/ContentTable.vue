@@ -23,7 +23,7 @@
                 min-width="150"
             >
                 <template slot-scope="scope">
-                    <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" class="cover" alt />
+                    <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl"    onerror="onImgError(this)" class="cover" alt />
                     <img v-else :src="defaultImg" class="cover" alt />
                     <span>{{ scope.row.title }}</span>
                 </template>
@@ -51,7 +51,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column width="200" label="操作"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column width="150" label="操作"  v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)"><i class="iconfont iconcaozuo"></i></span>
@@ -129,6 +129,10 @@ export default {
             });
             this.tableHeight = window.innerHeight - 260;
         });
+         window.onImgError = (ele)=> {
+            ele.src = ele.attributes["src"]=this.defaultImg
+        };
+
     },
     methods: {
         changePageNum(page) {
@@ -214,7 +218,7 @@ export default {
          */
         batchCopy(row) {
             this.$emit("changeOperateName", "复制");
-            this.$emit("batchCopy", [row.id],row);
+            this.$emit("batchCopy", [row.id]);
         },
 
         handleMoreOperate(flag) {

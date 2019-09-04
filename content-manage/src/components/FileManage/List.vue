@@ -16,33 +16,46 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="文件名称" width="250">
+            <el-table-column label="文件名称" width="220">
                 <template slot-scope="scope">
                     <img :src="scope.row | fileCover" class="cover" />
-                    <div class="img-name">
+                
                         <span
-                         :title="scope.row.title"
-                        @click="rename(scope.row.id,scope.row.title,scope.$index)"
-                    >{{scope.row.title}}</span>
-                    </div>
-                    
+                            style="width:150px"
+                            :title="scope.row.title"
+                            @click="rename(scope.row.id,scope.row.title,scope.$index)"
+                        >{{scope.row.title}}</span>
+                 
+
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-            <el-table-column prop="fileExtensionTypeStr" label="文件类型"></el-table-column>
-            <el-table-column prop="categoryName" label="分类" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="fileExtensionTypeStr" label="文件类型" width="80"></el-table-column>
+            <el-table-column prop="categoryName"  label="分类" width="120" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <div class="ellipsis">{{ scope.row.categoryName}}</div>
+                </template>
+            </el-table-column>
 
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip width="80"></el-table-column>
             <el-table-column prop="downloadCount" label="置顶">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="downloadCount" label="下载次数"></el-table-column>
-            <el-table-column prop="createTimeStr"  width="150" label="上传时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="downloadCount" width="80" label="下载次数">
+                <template slot-scope="scope" >
+                    <span>{{ scope.row.downloadCount}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="createTimeStr" width="150"  label="上传时间" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <div class="ellipsis" >{{ scope.row.createTimeStr}}</div>
+                </template>
+            </el-table-column>
 
-            <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" width="150"  v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn edit-icon" @click="handleEditor(scope.row)">
@@ -64,25 +77,28 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="storage-wrap">
-            <div class="use-storage">
-                <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
+        <div class="list-footer">
+            <div class="storage-wrap">
+                <div class="use-storage">
+                    <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
+                </div>
+                <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
             </div>
-            <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
+            <div class="pageing" id="pageing">
+                <slot name="paging"></slot>
+                <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next"
+                    :total="imgPageResult.totalRecord"
+                    :page-count="imgPageResult.totalPage"
+                    :page-size="picSearchOptions.pageSize"
+                    :page-sizes="[10,20,50]"
+                    @current-change="changePage"
+                    @size-change="changeSize"
+                ></el-pagination>
+            </div>
         </div>
-        <div class="pageing" id="pageing">
-            <slot name="paging"></slot>
-            <el-pagination
-                background
-                layout="total, sizes, prev, pager, next"
-                :total="imgPageResult.totalRecord"
-                :page-count="imgPageResult.totalPage"
-                :page-size="picSearchOptions.pageSize"
-                :page-sizes="[10,20,50]"
-                @current-change="changePage"
-                @size-change="changeSize"
-            ></el-pagination>
-        </div>
+
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
             <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
@@ -233,12 +249,12 @@ export default {
             let id = row.id;
             let { data } = await adminDownload(type, id);
             var link = document.createElement("a");
-            link.download = row.title;;
+            link.download = row.title;
             link.style.display = "none";
             link.href = data;
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link); 
+            document.body.removeChild(link);
         },
         change(index) {
             this.fullOssUrl = this.imgList[index].fullOssUrl;
