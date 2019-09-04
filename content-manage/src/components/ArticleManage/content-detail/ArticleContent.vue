@@ -406,8 +406,11 @@ export default {
             var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
                 this.categoryName = categoryName;
+                
                 this.categoryId = parseFloat(this.$route.query.categoryId)
+               
             }
+          
         },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
