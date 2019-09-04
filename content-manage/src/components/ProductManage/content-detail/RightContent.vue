@@ -143,7 +143,8 @@ export default {
     padding: 0 10px;
 }
 /* 产品封面 */
-.avatar-uploader {
+.avatar-uploader /deep/ .el-upload-list--picture-card {
+    display: inline-block;
 }
 .avatar-uploader /deep/ .el-upload {
     border: 1px dashed rgba(144, 220, 232, 1);

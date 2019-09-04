@@ -259,15 +259,7 @@ export default {
   
 };
 </script>
-<style lang="scss" scoped>
-.table-wrap {
-    position: relative;
-     margin-right: 16px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-  
-}
-</style>
+
 
 
 <style scoped>

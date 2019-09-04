@@ -16,7 +16,7 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="视频名称" width="500">
+            <el-table-column label="视频名称" width="350">
                 <template slot-scope="scope">
                     <div class="cover">
                         <img width="100%" :src="scope.row.coverUrl" />
@@ -53,18 +53,11 @@
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" label="上传时间" width="150" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作" v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn move-btn" @click="handleMove(scope.row)">
-                            <!-- <svg-icon style="width:27px;height:27px" icon-class="tab-move"></svg-icon> -->
                         </button>
-                        <!-- <button
-                            class="handle-btn look-btn"
-                            @click="viewPic( scope.row,scope.$index)"
-                        >
-                            <svg-icon icon-class="tab-look"></svg-icon>
-                        </button>-->
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
                             <i class="iconfont iconhuishouzhan"></i>
                         </button>
@@ -72,7 +65,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div style="padding-left:16px;overflow: hidden;">
+        <div class="list-footer" >
             <div class="storage-wrap">
                 <span class="title">已用空间</span>
                 <div class="use-storage">
@@ -104,7 +97,8 @@
                     @size-change="changeSize"
                 ></el-pagination>
             </div>
-            <div id="img-list-dialog">
+        </div>
+         <div id="img-list-dialog">
                 <el-dialog
                     :visible.sync="imgVisible"
                     :modal-append-to-body="false"
@@ -119,7 +113,6 @@
                     </div>
                 </el-dialog>
             </div>
-        </div>
     </div>
 </template>
 
@@ -297,8 +290,8 @@ export default {
 <style lang="scss" scoped>
 @import "../../styles/manege-table.scss";
 .cover {
-    width: 190px;
-    height: 130px;
+    width: 150px;
+    height: 100px;
 }
 .img-name {
     overflow: hidden;
@@ -333,10 +326,12 @@ export default {
     }
 }
 .video {
+    cursor: pointer;
     outline: none;
     width: 800px;
     height: 700px;
 }
+
 </style>
 
 

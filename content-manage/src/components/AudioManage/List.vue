@@ -63,7 +63,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div style="padding-left:16px;overflow: hidden;">
+          <div class="list-footer" >
             <div class="storage-wrap">
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
