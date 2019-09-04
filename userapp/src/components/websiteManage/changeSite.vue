@@ -1,7 +1,7 @@
 <template>
   <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
-      <el-tooltip :content="siteName" placement="bottom">
+      <el-tooltip :content="siteName" placement="bottom" :disabled="siteName.trim().length < 30">
         <span
           class="siteName"
         >{{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}</span>
@@ -35,13 +35,13 @@
               <div
                 class="itemSiteImageBackground"
                 :style="{background: 'url(' + (item.siteImage ) + ') no-repeat center/cover'}"
-              ></div>
-              <!-- <img :src="item.siteImage" alt class="itemSiteImageBackground" /> -->
-              <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
-              <div class="modal" v-if="item.siteId != curSiteId">
-                <button class="choseSite" @click="choseSite(item)">选择网站</button>
+              >
+                <div class="modal" v-if="item.siteId != curSiteId">
+                  <button class="choseSite" @click="choseSite(item)">选择网站</button>
+                </div>
+                <div class="curModal" v-show="item.siteId == curSiteId">当前选择</div>
               </div>
-              <div class="curModal" v-show="item.siteId == curSiteId">当前选择</div>
+              <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
             </div>
             <div>
               <div class="itemSiteName">{{item.siteName}}</div>
@@ -61,10 +61,9 @@
 <script>
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
-import { setLocal, getLocal } from "@/libs/local.js";
+import { setLocal } from "@/libs/local.js";
 import { getLanguage } from "@/configure/appCommon";
-import { getApplication } from "@/api/request/dashboardApi";
-import Cookies from "js-cookie";
+
 export default {
   props: ["changeSiteName", "changeSiteLanguage"],
   components: {},
@@ -297,6 +296,7 @@ export default {
         margin-top: -2px;
         width: 100%;
         padding-bottom: 62%;
+        position: relative;
       }
       .choseSite {
         width: 90px;
@@ -319,7 +319,7 @@ export default {
         width: 100%;
         height: 100%;
         opacity: 0;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0.5);
       }
       &:hover {
         transform: translateY(-10px);
@@ -337,7 +337,7 @@ export default {
         width: 100%;
         height: 100%;
         opacity: 1;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0.5);
         font-size: 16px;
         font-weight: 600;
         color: rgba(255, 255, 255, 1);

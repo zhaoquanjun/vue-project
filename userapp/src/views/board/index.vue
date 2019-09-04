@@ -34,23 +34,28 @@
               ref="popover"
               placement="bottom"
               width="317"
-              trigger="click"
-              style="padding:0;cursor: pointer;"
-              @show="showRemark"
+              trigger="manual"
+              v-model="editPopover"
+              style="padding:0;"
             >
-              <span slot="reference">
-                <i class="iconfont iconbianji" style="color:#09CCEB;margin-left:23px"></i>
+              <span slot="reference" @click="showRemark">
+                <i
+                  class="iconfont iconbianji"
+                  style="color:#09CCEB;margin-left:23px;cursor: pointer;"
+                ></i>
               </span>
               <div class="textareaWrap">
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 3, maxRows: 3}"
-                  placeholder="请输入内容"
+                  placeholder="请输入公司名称"
                   v-model="remarkValue"
-                  maxlength="30"
+                  maxlength="15"
                   show-word-limit
                   resize="none"
+                  @blur="textBulr"
                 ></el-input>
+                <div class="ym-form-item__error" v-show="isNullInput">请输入公司名称</div>
                 <div class="btn-wrap">
                   <button class="popover-btn cancel" slot="refenrence" @click="cancelInput">取消</button>
                   <button class="popover-btn save" @click="saveInputValue">保存</button>
@@ -66,7 +71,7 @@
           </el-col>
           <el-col class="appTime">
             <span>{{ appInfo.time }}</span>
-            <button class="renewalBtn" v-show="appInfo.isSystem" @click="goToAliMarket">续费</button>
+            <a class="renewalBtn" v-show="appInfo.isSystem" :href="aliMarketUrl" target="_blank">续费</a>
           </el-col>
         </el-row>
 
@@ -105,7 +110,6 @@
             <div class="versionDate">{{ item.updateTime }}</div>
           </div>
           <div class="versionImg"></div>
-          <!-- <img  src="~img/dashboard/board-versionImg.png" alt /> -->
         </el-row>
       </div>
     </el-row>
@@ -120,9 +124,11 @@ import recommend from "@/components/dashboard/recommend";
 import { getUserDashboard } from "@/api/index";
 import { formatDateTime } from "@/api/index";
 import * as dashboardApi from "@/api/request/dashboardApi";
+import { aliMarketUrl } from "@/environment/index";
 export default {
   data() {
     return {
+      aliMarketUrl: aliMarketUrl,
       siteInfoList: [],
       siteCount: 0,
       appInfo: {},
@@ -155,7 +161,9 @@ export default {
       remarkValue: "",
       designIsread: false,
       isCanCreate: true,
-      isSystem: false
+      isSystem: false,
+      isNullInput: false,
+      editPopover: false
     };
   },
   components: {
@@ -212,34 +220,44 @@ export default {
           "MM.dd"
         );
       }
-      },
-    //跳转阿里云市场续费
-      goToAliMarket() {          
-          console.log('open');
-          window.open('https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0', '_blank');
-      },
+    },
+    // 获取appName
+    async getAppHeadInfo() {
+      this.$store.dispatch("_getAppHeadInfo");
+    },
     /**
      * 修改appName
      */
     showRemark() {
       this.remarkValue = this.appInfo.name ? this.appInfo.name : "";
+      this.editPopover = true;
     },
+    // 取消修改
     cancelInput() {
       this.$refs[`popover`].doClose();
       this.remarkValue = "";
+      this.editPopover = false;
+      this.isNullInput = false;
     },
+    // input失去焦点
+    textBulr() {
+      if (!this.remarkValue) {
+        this.isNullInput = true;
+      } else {
+        this.isNullInput = false;
+      }
+    },
+    // 保存appName
     async saveInputValue() {
       if (!this.remarkValue) {
-        this.$message({
-          type: "failed",
-          message: "请输入公司名称"
-        });
+        this.isNullInput = true;
         return;
       }
       this.$refs[`popover`].doClose();
       await dashboardApi.UpdateAppName(this.remarkValue);
-      this.$store.dispatch("_getAppHeadInfo"); //
+      this.$store.dispatch("_getAppHeadInfo");
       this.appInfo.name = this.remarkValue;
+      this.editPopover = false;
     },
     /**
      * 设计秘籍内容颜色变化
@@ -264,6 +282,7 @@ export default {
     appId() {
       this.getDashboardData();
       this.getAppExpandInfo();
+      this.getAppHeadInfo();
       return this.$store.state.dashboard.appId;
     }
   },
@@ -272,7 +291,11 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+.textareaWrap /deep/ .el-input__count {
+  right: 25px;
+}
+</style>
 <style lang="scss" scoped>
 .leftContent {
   margin-right: 487px;
@@ -375,9 +398,7 @@ export default {
     line-height: 20px;
   }
   .renewalBtn {
-    // position: absolute;
-    // bottom: 33px;
-    // left: 270px;
+    display: inline-block;
     margin-left: 37px;
     width: 92px;
     height: 32px;
@@ -391,7 +412,9 @@ export default {
     font-size: 14px;
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
-    line-height: 20px;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
   }
 }
 .designCheats {
@@ -459,8 +482,6 @@ export default {
       position: absolute;
       right: 23px;
       top: 30px;
-      // width: 36px;
-      // height: 17px;
       font-size: 12px;
       font-weight: 400;
       color: rgba(0, 193, 222, 1);
@@ -476,7 +497,6 @@ export default {
     rgba(188, 245, 253, 0.17) 100%
   );
   border-radius: 3px;
-  // opacity: 0.17;
   .versionTitle {
     font-size: 18px;
     font-weight: 600;
@@ -536,10 +556,10 @@ export default {
   position: relative;
   .btn-wrap {
     text-align: right;
-    padding-top: 10px;
+    padding-top: 16px;
     button {
       width: 63px;
-      height: 25px;
+      height: 32px;
       line-height: 25px;
       font-size: 12px;
       border: none;
@@ -595,11 +615,11 @@ export default {
       .appTime {
         margin-top: 16px;
         margin-left: 21px;
+        width: 287px;
       }
       .renewalBtn {
         margin-top: 16px;
         margin-left: 0px;
-        // margin-bottom: 20px;
       }
     }
     .designCheats {
