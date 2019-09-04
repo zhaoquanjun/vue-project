@@ -36,7 +36,9 @@
             </el-tree>
         </el-scrollbar>
         <div class="category-name-pic" :class="{upload:isProduct}" ref="operateSection">
-            <UploadCategoryPic :isUpload="isProduct?true:false"
+            <UploadCategoryPic 
+                               v-if="isHandlerCategoryMenuShow"
+                               :isUpload="isProduct?true:false"
                                :modifyCategoryData="modifyCategoryData"
                                @createCategory="createCategory"
                                @closeUploadCategoryPic="closeUploadCategoryPic" />
@@ -78,7 +80,8 @@
                 createCategoryData: "", // 当前点击的创建分类节点
                 isAdd: false, // true 添加 false编辑
                 modifyCategoryData: {}, // 编辑分类需要传当前节点的名称和imgurl,
-                curClickNode: { data: { level: "" } }
+                curClickNode: { data: { level: "" } },
+                isHandlerCategoryMenuShow:false,
             };
         },
         mounted() {
@@ -115,9 +118,7 @@
                 }
                 this.closeUploadCategoryPic();
             },
-            closeUploadCategoryPic() {
-                this.$refs.operateSection.style.display = "none";
-            },
+         
             //////////////
             handlerOver(data) {
                 if (!isNaN(data.id)) this.treeNodeId = data.id;
@@ -318,8 +319,13 @@
                     ev.pageX - ev.offsetX + 16 + "px";
                 this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
                 this.$refs.operateSection.style.display = "block";
+                this.isHandlerCategoryMenuShow = true;
             },
-
+            // 关闭 分类操作菜单显示
+             closeUploadCategoryPic() {
+                this.$refs.operateSection.style.display = "none";
+                 this.isHandlerCategoryMenuShow = false;
+            },
             // 新增 0730  关闭分类操作菜单
             closeUploadCategoryPic1() {
                 this.$refs.operateSection1.style.display = "none";

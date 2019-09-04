@@ -24,6 +24,7 @@
                         class="cover"
                     />
                     <img
+                        onerror="onImgError(this)"
                         v-if="['news'].includes(recycleTempData.type)"
                         :src="scope.row.pictureUrl ? scope.row.pictureUrl : newsDefaultImg"
                         class="cover"
@@ -164,6 +165,7 @@ export default {
             videoWidth: "",
             newsDefaultImg: require("img/content-default-pic.png"),
             audioDefaultImg: require("img/content-default-pic.png"),
+            defaultImg: require("img/content-default-pic.png"),
             multipleSelection: [],
             changeCategoryPicId: null,
             tableHeight: 500,
@@ -194,7 +196,6 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            console.log(this.recyclePageResult);
             window.addEventListener("resize", () => {
                 this.tableHeight = window.innerHeight - 350;
             });
@@ -203,8 +204,12 @@ export default {
         if (this.contentType === "video") {
             this.videoWidth = 500;
         }
+        
     },
     methods: {
+         onImgError(ele){
+            ele.src = ele.attributes["src"]=this.defaultImg
+        },
         /**
          * 恢复数据
          */
