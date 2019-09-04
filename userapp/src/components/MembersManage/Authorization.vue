@@ -71,6 +71,8 @@ export default {
       this.$store.commit("USERPERMISSION", ary);
     },
     changeInput() {
+      console.log(this.input)
+      console.log(this.oldUserPermission)
       if (this.input == "" && this.oldUserPermission) {
         this.$store.commit(
           "USERPERMISSION",
