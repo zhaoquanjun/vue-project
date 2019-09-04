@@ -48,7 +48,11 @@
             </el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类"  show-overflow-tooltip></el-table-column>
+            <el-table-column prop="categoryName" label="分类"  show-overflow-tooltip>
+                 <template slot-scope="scope">
+                    <span>{{ scope.row.categoryName }}</span>
+                </template>
+            </el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" label="上传时间" width="150" show-overflow-tooltip></el-table-column>
