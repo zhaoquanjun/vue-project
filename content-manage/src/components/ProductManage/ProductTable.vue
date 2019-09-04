@@ -16,7 +16,7 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column width="300" prop="name" label="产品标题" show-overflow-tooltip>
+            <el-table-column width="300" prop="name" label="产品标题">
                 <template slot-scope="scope">
                     <img
                         v-if="scope.row.thumbnailPicUrlList.length"
@@ -26,11 +26,13 @@
                     />
                     <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
+                    <el-tooltip class="item" effect="dark" :content="scope.row.name" placement="top">
                     <span>{{ scope.row.name }}</span>
+                    </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="productCategoryList" label="分类" show-overflow-tooltip>
+            <el-table-column prop="productCategoryList" label="分类">
                 <template slot-scope="scope">
                     <span v-for="(item,index) in scope.row.productCategoryList" :key="item.id">{{ item.displayName }} <i v-if="scope.row.productCategoryList.length>1 && scope.row.productCategoryList.length-1!=index">,</i> </span>
                 </template>
