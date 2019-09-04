@@ -235,11 +235,10 @@ export default {
             this.$refs[formName].validate(async valid => {
                 if (valid) {
                     console.log(this.$refs[formName]);
-                    //let { status } = await updateUserPhone(
-                    //    this.ruleForm.phone,
-                    //    this.ruleForm.verification
-                    //);
-                    let status = 200;
+                    let { status } = await updateUserPhone(
+                        this.ruleForm.phone,
+                        this.ruleForm.verification
+                    );
                     if (status === 200) {
                         this.$message({
                             type: "success",

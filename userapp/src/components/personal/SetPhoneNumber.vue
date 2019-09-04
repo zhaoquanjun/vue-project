@@ -72,7 +72,7 @@ export default {
             if (!this.$refs.getSms.submitForm1()) {
                 return false
             } else {
-                let { status } = await isInvalidCode(code);
+                let { status } = await isInvalidCode(code);                
                 if (status === 200) {
                       this.$refs.getSms.resetTimer()
                     this.isModifi = true;
@@ -99,7 +99,7 @@ export default {
             this.$store.commit("CLOSERIGHTPANNEL", false);
         },
         _refreshIndex() {
-            console.log('father');
+            this.isModifi = false;
             this.$emit("getUserProfileAsync");
         }
     },

@@ -139,8 +139,9 @@ axios.interceptors.response.use(
  * @param {Object} params [请求时携带的参数] 
  */
 export function get(url, params) {
+    var timestamp = (new Date()).valueOf();
     return new Promise((resolve, reject) => {
-        axios.get(url, {
+        axios.get(url + '?random=' + timestamp, {
             params: params,
             paramsSerializer: params => {
                 return qs.stringify(params, { indices: false })

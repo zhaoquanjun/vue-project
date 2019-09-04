@@ -22,10 +22,10 @@ export const recoverySite = (siteId, siteName, fileName) => {
 /**
  * 获取备份信息
  */
-export const getBackupSite = (id, isSystemBackup) => {
+export const getBackupSite = (id, isSystemBackup) => {   
   return ajaxRequest.get(
     `${enbironmemy.siteManageApi}/api/v1/Backup/GetBackupSites`,
-    { siteId: id, isSystemBackup: isSystemBackup, pageIndex: 1, pageSize: 20 }
+      { siteId: id, isSystemBackup: isSystemBackup, pageIndex: 1, pageSize: 20}
   );
 };
 /**

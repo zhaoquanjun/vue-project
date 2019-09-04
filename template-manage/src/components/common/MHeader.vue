@@ -75,7 +75,7 @@
                 <span class="expiredText" style="margin-left:46px">{{item.expired}}</span>
                 <div class="isExpired" v-show="isExpired(item)">已过期</div>
                 <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
-                <button class="renewal" v-show="item.isSystem">续费</button>
+                <a class="renewal" v-show="item.isSystem" :href="aliMarketUrl" target="_blank">续费</a>
                 <el-button
                   class="choseApp"
                   @click="choseApp(item)"
@@ -99,13 +99,14 @@
 </template>
 <script>
 import securityService from "@/services/authentication/securityService";
-import { personalUrl, dashboardUrl } from "@/environment/index.js";
+import { personalUrl, dashboardUrl, aliMarketUrl } from "@/environment/index.js";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { formatDateTime } from "@/api/index";
 import { setLocal, getLocal } from "@/libs/local.js";
 export default {
   data() {
     return {
+      aliMarketUrl: aliMarketUrl,
       isdropdownAvatarShow: false,
       // appName: "",
       appList: [],
@@ -121,8 +122,10 @@ export default {
       securityService.signOut(location.href);
     },
     pannelShow() {
+      if (this.changeAppShow) {
+        this.changeAppShow = false;
+      }
       location.href = personalUrl;
-      //this.$store.commit("CLOSERIGHTPANNEL",true)
     },
     dropdownAvatarShow() {
       this.isdropdownAvatarShow = true;
@@ -147,14 +150,12 @@ export default {
     async choseApp(item) {
       setLocal("ymId", item.appId);
       this.$store.commit("SETAPPID", item.appId);
-      this.$store.dispatch("_getAppHeadInfo");
       let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(
         item.appId
       );
       if (status === 200) {
         let { data } = await dashboardApi.getCurSiteId();
         this.$store.commit("SETSITEID", data);
-        this.$store.dispatch("_getAppHeadInfo");
         window.location.href = dashboardUrl;
       }
     },
@@ -470,6 +471,7 @@ export default {
       padding: 0px;
     }
     .renewal {
+      display: inline-block;
       width: 90px;
       height: 40px;
       border-radius: 2px;
@@ -477,6 +479,8 @@ export default {
       font-size: 14px;
       font-weight: 400;
       color: rgba(0, 193, 222, 1);
+      line-height: 40px;
+      text-align: center;
       margin-left: 32px;
     }
   }
