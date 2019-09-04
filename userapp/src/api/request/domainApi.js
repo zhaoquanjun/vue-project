@@ -2,15 +2,14 @@ import {designerManageApi} from "@/environment/index"
 import * as ajaxRequest from "../ajaxRequest";
 import store from "@/store/index";
 import Cookies from "js-cookie"
+console.log(store)
 //  当前站点 siteId   const siteId = store.state.dashoboard.siteId
-
-const siteId =Cookies("ymSd")?Cookies("ymSd"):store.state.dashboard.siteId
 
 /**
  * 获取域名列表
  */
-export const getCdnDomainList = (siteId) => {
-  
+export const getCdnDomainList = () => {
+    const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
     return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/GetCdnDomainList/${siteId}`);
 }
 
@@ -18,7 +17,7 @@ export const getCdnDomainList = (siteId) => {
  * 绑定域名并授权cdn
  */
 export const bindDomainAndEnableCdn = (domain) => {
-
+    const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
     return ajaxRequest.post(`${designerManageApi}/api/v1/DomainManage/BindDomainAndEnableCdn/${siteId}`, domain);
 }
 
@@ -33,11 +32,7 @@ export const oneKeyEnableHttps = (siteDomainId) => {
  *  解析阿里云的cdn token
  */
 export const resolveCdnByAliYunToken = (params) => {
-    let option = {
-        "id":0,
-        "siteId": 0,
-        "isForceUpdate": true
-    }
+
     return ajaxRequest.put(`${designerManageApi}/api/v1/DomainManage/ResolveCdnByAliYunToken/`, params);
 }
 
@@ -59,23 +54,27 @@ export const reopenCdn = (siteDomainId) => {
  * 删除阿里云token
  */
 export const removeAliYunToken = () => {
+    const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
     return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/RemoveAliYunToken/${siteId}`);
 }
 /**
  * 禁用https
  */
 export const disableHttps = (siteDomainId) => {
+    const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
     return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DisableHttps/${siteId}/${siteDomainId}`);
 }
 /**
  *  删除绑定域名
  */
 export const deleteCdnDomain = (siteDomainId) => {
+    const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
     return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteId}/${siteDomainId}`);
 }
 
 
 // 轮询阿里云是否授权成功
 export const isAliYunTokenSet = () => {
+    const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
     return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/IsAliYunTokenSet/${siteId}`);
 }

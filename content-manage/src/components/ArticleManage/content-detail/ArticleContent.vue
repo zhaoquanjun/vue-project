@@ -384,33 +384,20 @@ export default {
                     return;
                 }
                 this.articleDetail.metaKeywords.push(value);
-                // let ele = this.$refs.metaKeywordsInput.$el.children[0];
-                // let width = this.$refs.metaKeywordList.clientWidth;
-                // this.textIndent(ele, width);
+              
             } else {
                 if (this.articleDetail.searchKeywords.length >= 5 || !value) {
                     return;
                 }
                 this.articleDetail.searchKeywords.push(value);
-                // let ele = this.$refs.keywordInput.$el.children[0];
-                // let width = this.$refs.keywordList.clientWidth;
-                // this.textIndent(ele, width);
             }
             
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
-            // this.$nextTick(() => {
-            //     this.$refs.keywordInput.$el.children[0].style.textIndent =
-            //         this.$refs.keywordList.clientWidth + "px";
-            // });
         },
         removeCurmetaKeyWord(index) {
             this.articleDetail.metaKeywords.splice(index, 1);
-            // this.$nextTick(() => {
-            //     metaKeywordsInput.$el.children[0].style.textIndent =
-            //         this.$refs.metaKeywordList.clientWidth + "px";
-            // });
         },
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
