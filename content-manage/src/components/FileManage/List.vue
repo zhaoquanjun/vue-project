@@ -32,9 +32,11 @@
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtensionTypeStr" label="文件类型" width="80"></el-table-column>
-            <el-table-column prop="categoryName"  label="分类" width="120" show-overflow-tooltip>
+            <el-table-column prop="categoryName"  label="分类" width="120">
                 <template slot-scope="scope">
-                    <div class="ellipsis">{{ scope.row.categoryName}}</div>
+                    <el-tooltip class="item" effect="dark" :content="scope.row.categoryName" placement="top">
+                        <div class="ellipsis">{{ scope.row.categoryName}}</div>
+                    </el-tooltip>
                 </template>
             </el-table-column>
 
@@ -49,9 +51,11 @@
                     <span>{{ scope.row.downloadCount}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="createTimeStr" width="150"  label="上传时间" show-overflow-tooltip>
+            <el-table-column prop="createTimeStr" width="150"  label="上传时间">
                 <template slot-scope="scope">
-                    <div class="ellipsis" >{{ scope.row.createTimeStr}}</div>
+                    <el-tooltip class="item" effect="dark" :content="scope.row.createTimeStr" placement="top">
+                        <div class="ellipsis" >{{ scope.row.createTimeStr}}</div>
+                    </el-tooltip>
                 </template>
             </el-table-column>
 

@@ -17,7 +17,6 @@
             <el-table-column type="selection"></el-table-column>
 
             <el-table-column
-                :show-overflow-tooltip="true"
                 prop="title"
                 label="文章标题"
                 min-width="150"
@@ -25,13 +24,17 @@
                 <template slot-scope="scope">
                     <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl"    onerror="onImgError(this)" class="cover" alt />
                     <img v-else :src="defaultImg" class="cover" alt />
-                    <span>{{ scope.row.title }}</span>
+                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
+                        <span>{{ scope.row.title }}</span>
+                    </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类" show-overflow-tooltip>
+            <el-table-column prop="categoryName" label="分类">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.categoryName }}</span>
+                    <el-tooltip class="item" effect="dark" :content="scope.row.categoryName" placement="top">
+                        <span>{{ scope.row.categoryName }}</span>
+                    </el-tooltip>
                 </template>
             </el-table-column>
 
@@ -39,15 +42,19 @@
 
             <el-table-column width="100" prop="isTopPrt" label="置顶" show-overflow-tooltip></el-table-column>
 
-            <el-table-column prop="createUser" label="作者" :show-overflow-tooltip="true">
+            <el-table-column prop="createUser" label="作者">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.createUser }}</span>
+                    <el-tooltip class="item" effect="dark" :content="scope.row.createUser" placement="top">
+                        <span>{{ scope.row.createUser }}</span>
+                    </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="createTimePrt" label="创建时间" show-overflow-tooltip>
+            <el-table-column prop="createTimePrt" label="创建时间">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.createTimePrt }}</span>
+                    <el-tooltip class="item" effect="dark" :content="scope.row.createTimePrt" placement="top">
+                        <span>{{ scope.row.createTimePrt }}</span>
+                    </el-tooltip>
                 </template>
             </el-table-column>
 

@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="图片名称" show-overflow-tooltip>
+            <el-table-column label="图片名称">
                 <template slot-scope="scope">
                     <img
                         :src="scope.row.zoomOssUrl"
@@ -24,6 +24,7 @@
                         class="cover"
                     />
 
+                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
                     <el-input
                         v-if="(index == scope.$index)"
                         type="text"
@@ -40,6 +41,7 @@
                         v-else
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
                     >{{scope.row.title}}</span>
+                    </el-tooltip>
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
@@ -54,7 +56,13 @@
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" label="上传时间">
+                <template slot-scope="scope">
+                    <el-tooltip class="item" effect="dark" :content="scope.row.createTimeStr" placement="top">
+                        <span>{{ scope.row.createTimeStr }}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
 
             <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">

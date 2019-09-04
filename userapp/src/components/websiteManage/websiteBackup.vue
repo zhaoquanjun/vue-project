@@ -37,7 +37,7 @@
                   <div class="overflow">{{scope.row.userName}}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="description" label="备注" show-overflow-tooltip>
+              <el-table-column prop="description" label="备注">
                 <template slot-scope="scope">
                   <el-popover
                     :ref="`popover-${scope.$index}`"
@@ -99,6 +99,7 @@
                     <el-tooltip
                       content="还原备份包"
                       placement="top"
+                      :v-model="false"
                     >
                       <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
                     </el-tooltip>
@@ -195,19 +196,6 @@ export default {
       backuping: false,
       remarkInfo: "",
       loadingShow: true,
-      recoveryShow: [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      visible: false
     };
   },
   methods: {
@@ -324,8 +312,6 @@ export default {
                 }
               });
           }
-          this.recoveryShow[scope.$index] = false;
-          console.log(this.recoveryShow);
         }
       });
     },
@@ -546,7 +532,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: calc(100% - 22px);
+  max-width: calc(100% - 32px);
   vertical-align: text-bottom;
 }
 .backupTip {
