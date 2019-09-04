@@ -278,7 +278,7 @@ export default {
             isOutSearch: false,
             treeResult: null,
             categoryName: "全部分类",
-            categoryId:0,
+            categoryId:-1,
             options: [
                 {
                     value: true,
@@ -409,6 +409,8 @@ export default {
                 
                 this.categoryId = parseFloat(this.$route.query.categoryId)
                
+            }else{
+                this.categoryId = 0
             }
           
         },

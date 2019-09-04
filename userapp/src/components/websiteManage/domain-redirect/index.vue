@@ -10,6 +10,7 @@
             :tableData="redirectDomainListData"
             @deleteCurDomain="_deleteCurDomain"
             @editor="editor"
+           
         />
         <el-dialog
             width="0"
@@ -18,6 +19,7 @@
             :close-on-click-modal="false"
         >
             <AddRedirectDomain
+                v-if="dialogShow"
                 title="编辑"
                 :source-domain="sourceDomain"
                 :_targetDomain="targetDomain"
@@ -73,8 +75,9 @@ export default {
                    this.isWarmShow=false;
                 }
             }
-            if(!JSON.parse(sessionStorage.getItem("isWarmShow"))){
+            if(JSON.parse(sessionStorage.getItem("isWarmShow"))){
                  this.isWarmShow=false;
+                
             }
         },
         //// 301 ////
@@ -115,7 +118,7 @@ export default {
         },
         closeTip(){
             this.isWarmShow =false;
-              sessionStorage.setItem("isWarmShow",false)
+              sessionStorage.setItem("isWarmShow",true)
         },
         editor(row) {
             console.log(row);
