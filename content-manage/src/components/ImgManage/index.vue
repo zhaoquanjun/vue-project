@@ -62,6 +62,7 @@
                             <span name="cur-tip">移动至</span>
                         </div>
                         <SelectTree
+
                             :categoryName="curImgInfo.categoryName"
                             :categoryId="curImgInfo.categoryId"
                             :tree-result="treeResult"
@@ -97,6 +98,7 @@
                 </span>
             </span>
             <upload-pic
+                v-if="dialogTableVisible"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 @getTree="getTree"
                 :tree-result="treeResult"

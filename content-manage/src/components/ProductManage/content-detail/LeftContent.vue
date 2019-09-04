@@ -165,9 +165,7 @@
                                     网站使用了搜索控件时，将使该网站的搜索
                                     <br />结果更加准确，一篇产品最多可以设置5个关键词
                                 </div>
-                                <span>
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
+                                <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
                             <ul class="keyword-list" ref="keywordList">
                                 <li v-for="(item,index) in detailData.searchKeyword" :key="index">
@@ -222,9 +220,7 @@
                         <el-form-item label="seo标题" prop="seoTitle">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">不填写则默认使用产品标题</div>
-                                <span>
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
+                                <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
                             <el-input placeholder="seo标题" v-model="detailData.seoTitle"></el-input>
                         </el-form-item>

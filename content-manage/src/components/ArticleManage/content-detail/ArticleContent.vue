@@ -118,9 +118,8 @@
                                     网站使用了搜索控件时，将使该网站的搜索
                                     <br />结果更加准确，一篇文章最多可以设置5个关键词
                                 </div>
-                                <span>
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
+                                 <i class="iconfont iconyiwen"></i>
+                                
                             </el-tooltip>
                             <ul class="keyword-list" ref="keywordList">
                                 <li
@@ -162,9 +161,7 @@
                         <el-form-item label="SEO标题" prop="metaTitle">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">不填写则默认使用文章标题</div>
-                                <span>
-                                    <svg-icon icon-class="tip-icon"></svg-icon>
-                                </span>
+                                <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
                             <el-input placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
                         </el-form-item>

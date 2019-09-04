@@ -23,7 +23,7 @@
                 min-width="150"
             >
                 <template slot-scope="scope">
-                    <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" class="cover" alt />
+                    <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl"    onerror="onImgError(this)" class="cover" alt />
                     <img v-else :src="defaultImg" class="cover" alt />
                     <span>{{ scope.row.title }}</span>
                 </template>
@@ -129,6 +129,10 @@ export default {
             });
             this.tableHeight = window.innerHeight - 260;
         });
+         window.onImgError = (ele)=> {
+            ele.src = ele.attributes["src"]=this.defaultImg
+        };
+
     },
     methods: {
         changePageNum(page) {

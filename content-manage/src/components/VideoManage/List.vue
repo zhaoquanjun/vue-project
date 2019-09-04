@@ -238,6 +238,15 @@ export default {
          * 查看大图
          */
         viewPic(row, index) {
+            if(!row.isLoadFinish){
+                 this.$notify({
+                    customClass: "notify-error",
+                    message: `视频正在加载中,请稍后点击播放`,
+                    showClose: false,
+                    duration: 2000
+                });
+                return
+            }
             this.imgList = this.imgPageResult.list;
             this.picInfo = this.imgList[index];
 
