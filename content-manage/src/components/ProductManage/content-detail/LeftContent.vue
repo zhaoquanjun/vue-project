@@ -160,7 +160,7 @@
                             </el-col>
                         </el-form-item>
                         <el-form-item label="搜索关键词" prop="searchKeyword">
-                            <el-tooltip class="item" effect="dark" placement="right">
+                            <el-tooltip class="item" effect="dark" placement="right" >
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
                                     <br />结果更加准确，一篇产品最多可以设置5个关键词

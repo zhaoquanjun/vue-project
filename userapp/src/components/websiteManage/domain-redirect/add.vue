@@ -2,7 +2,7 @@
     <div class="right-pannel" :style="{width:'470px'}">
         <div class="pannel-head">
             <span>
-                <span>添加</span>
+                <span>{{title}}</span>
             </span>
             <span class="close-pannel" @click="handleCancel">X</span>
         </div>
@@ -49,7 +49,7 @@ import {
     modifyDomainRedirection
 } from "@/api/request/domainRedirectApi";
 export default {
-    props: ["domainList", "sourceDomain", "_targetDomain", "isEditor", "id"],
+    props: ["domainList", "sourceDomain", "_targetDomain", "isEditor", "id",],
     data() {
         return {
             disabled: false,
@@ -62,14 +62,18 @@ export default {
             form: {
                 sourceDomain: "",
                 targetDomain: ""
-            }
+            },
+            title:""
         };
     },
     mounted() {
         if (!!this.isEditor) {
             this.form.sourceDomain = this.sourceDomain;
             this.form.targetDomain = this._targetDomain;
-        }
+             this.title="编辑"
+        }else{
+                this.title="添加"
+            }
     },
     methods: {
         async handleConfirm() {
@@ -81,6 +85,7 @@ export default {
             };
             if (!!this.isEditor) {
                 this.editorDomain(option);
+               
                 return;
             }
             let { data, status } = await addDomainRedirection(option);

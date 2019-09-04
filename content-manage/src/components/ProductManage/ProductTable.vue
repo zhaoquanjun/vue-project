@@ -31,8 +31,21 @@
             </el-table-column>
 
             <el-table-column prop="productCategoryList" label="分类" show-overflow-tooltip>
+                <template slot="header" slot-scope="scope">
+                       <span style="margin-right: 5px;">分类</span> <el-tooltip content="一个产品最多可属于5个分类" effect="dark" placement="right">
+                               <i class="iconfont iconyiwen"></i>
+                            </el-tooltip>
+                   
+                </template>
                 <template slot-scope="scope">
-                   <span> <i v-for="(item,index) in scope.row.productCategoryList" :key="item.id">{{ item.displayName }} <i v-if="scope.row.productCategoryList.length>1 && scope.row.productCategoryList.length-1!=index">,</i> </i></span>
+                    <span>
+                        <i v-for="(item,index) in scope.row.productCategoryList" :key="item.id">
+                            {{ item.displayName }}
+                            <i
+                                v-if="scope.row.productCategoryList.length>1 && scope.row.productCategoryList.length-1!=index"
+                            >,</i>
+                        </i>
+                    </span>
                 </template>
             </el-table-column>
 
@@ -50,7 +63,12 @@
 
             <el-table-column min-width="100" prop="createTimeStr" label="创建时间"></el-table-column>
 
-            <el-table-column width="150" min-width="100" label="操作"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column
+                width="150"
+                min-width="100"
+                label="操作"
+                v-if="$store.state.dashboard.isContentwrite"
+            >
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)">
@@ -59,7 +77,9 @@
                         <span
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
-                        ><i class="iconfont iconsangedian"></i></span>
+                        >
+                            <i class="iconfont iconsangedian"></i>
+                        </span>
                     </div>
                 </template>
             </el-table-column>
@@ -87,15 +107,13 @@
                 @click="handleMoreOperate(it.flag)"
             >{{it.name}}</li>
         </ul>
-
     </div>
 </template>
 
 <script>
-
 export default {
     props: ["articlePageResult", "articleSearchOptions"],
-  
+
     data() {
         return {
             defaultImg: require("../../../static/images/content-default-pic.png"),
@@ -246,8 +264,7 @@ export default {
         clearSelection() {
             this.$refs.multipleTable.clearSelection();
         }
-    },
-   
+    }
 };
 </script>
 
