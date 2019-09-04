@@ -210,6 +210,7 @@ export default {
          onImgError(ele){
             ele.src = ele.attributes["src"]=this.defaultImg
         },
+        
         /**
          * 恢复数据
          */
