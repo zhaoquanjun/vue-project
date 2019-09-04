@@ -23,6 +23,8 @@ export let fileManageUrl = "http://content.console.wezhan.cn/content/file";
 export let designerUrl = "http://designer.console.wezhan.cn";
 export let mySiteUrl = "http://dashboard.console.wezhan.cn/website/mysite";
 export let dashboardUrl = "http://dashboard.console.wezhan.cn/board";
+// 阿里云续费地址
+export let aliMarketUrl = "https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0";
 
 if (process.env.NODE_ENV === 'development') {
     siteManageApi = 'http://api.designer.console.wezhan.cn';

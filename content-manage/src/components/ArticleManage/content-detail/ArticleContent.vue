@@ -278,7 +278,7 @@ export default {
             isOutSearch: false,
             treeResult: null,
             categoryName: "全部分类",
-            categoryId:0,
+            categoryId:-1,
             options: [
                 {
                     value: true,
@@ -406,8 +406,13 @@ export default {
             var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
                 this.categoryName = categoryName;
+                
                 this.categoryId = parseFloat(this.$route.query.categoryId)
+               
+            }else{
+                this.categoryId = 0
             }
+          
         },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);

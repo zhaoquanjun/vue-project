@@ -20,9 +20,10 @@
             <div
               class="siteImgBackground"
               :style="{background: 'url(' + ( siteImage ) + ') no-repeat center/cover'}"
-            ></div>
-            <div class="modal">
-              <button class="choseSite" @click="changeTemplate()">更换模版</button>
+            >
+              <div class="modal">
+                <button class="choseSite" @click="changeTemplate()">更换模版</button>
+              </div>
             </div>
           </div>
           <div class="siteinfoWrap">
@@ -46,12 +47,14 @@
                   <el-input
                     type="textarea"
                     :autosize="{ minRows: 3, maxRows: 3}"
-                    placeholder="请输入内容"
+                    placeholder="请输入站点名称"
                     v-model="siteNameValue"
-                    maxlength="100"
+                    maxlength="50"
                     show-word-limit
                     resize="none"
+                    @blur="textBulr"
                   ></el-input>
+                  <div class="ym-form-item__error" v-show="isNullInput">请输入站点名称</div>
                   <div class="btn-wrap">
                     <button class="cancel" slot="refenrence" @click="cancelInput">取消</button>
                     <button class="save" @click="saveInputValue">保存</button>
@@ -242,7 +245,8 @@ export default {
       changeSiteLanguageShow: false,
       remarkInfo: "",
       radio: "zh-CN",
-      editPopover: false
+      editPopover: false,
+      isNullInput: false
     };
   },
   methods: {
@@ -299,28 +303,33 @@ export default {
     chooseWebsite(siteId) {
       this.getSiteInfo(siteId);
     },
-    // 切换网站名称
+    // 修改网站名称
     showChangeSitename() {
       this.siteNameValue = this.siteName ? this.siteName : "";
       this.editPopover = true;
     },
+    // 取消修改
     cancelInput() {
       this.$refs[`popover`].doClose();
       this.siteNameValue = "";
       this.editPopover = false;
+      this.isNullInput = false;
     },
+    // input失去焦点
+    textBulr() {
+      if (!this.siteNameValue) {
+        this.isNullInput = true;
+      } else {
+        this.isNullInput = false;
+      }
+    },
+    // 保存siteName
     async saveInputValue() {
       if (!this.siteNameValue) {
-        this.$notify({
-          customClass: "notify-error",
-          message: `请输入站点名称`,
-          duration: 2000,
-          showClose: false
-        });
+        this.isNullInput = true;
         return;
       }
       this.$refs[`popover`].doClose();
-      console.log("siteid:", this.siteId);
       await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
       this.siteName = this.siteNameValue;
       this.editPopover = false;
@@ -476,6 +485,9 @@ export default {
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
 }
+.textareaWrap /deep/ .el-input__count {
+  right: 25px;
+}
 </style>
 <style lang="scss" scoped>
 .member-content {
@@ -523,6 +535,7 @@ export default {
       margin-top: -2px;
       width: 100%;
       padding-bottom: 62%;
+      position: relative;
     }
     .modal {
       position: absolute;
@@ -531,7 +544,7 @@ export default {
       width: 100%;
       height: 100%;
       opacity: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.5);
     }
     &:hover {
       .modal {
@@ -769,10 +782,10 @@ export default {
   position: relative;
   .btn-wrap {
     text-align: right;
-    padding-top: 10px;
+    padding-top: 16px;
     button {
       width: 63px;
-      height: 25px;
+      height: 32px;
       line-height: 25px;
       font-size: 12px;
       border: none;

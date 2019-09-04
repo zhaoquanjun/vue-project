@@ -34,7 +34,7 @@
 
             <el-table-column prop="productCategoryList" label="分类">
                 <template slot-scope="scope">
-                    <span v-for="(item,index) in scope.row.productCategoryList" :key="item.id">{{ item.displayName }} <i v-if="scope.row.productCategoryList.length>1 && scope.row.productCategoryList.length-1!=index">,</i> </span>
+                   <span> <i v-for="(item,index) in scope.row.productCategoryList" :key="item.id">{{ item.displayName }} <i v-if="scope.row.productCategoryList.length>1 && scope.row.productCategoryList.length-1!=index">,</i> </i></span>
                 </template>
             </el-table-column>
 

@@ -26,7 +26,6 @@ const memberManager = {
          * 用户权限信息
          */
         USERPERMISSION: (state, info) => {
-            
             state.userPermission = info;
             // 当前成员已有的权限          
             setTimeout(()=>{
@@ -122,7 +121,6 @@ const memberManager = {
          */
         async _getBeInvitedUsers({ commit }, options) {
             let { data: beInvitedUsers, status } = await getBeInvitedUsers(options);
-            console.log(status,'------')
             return beInvitedUsers
         },
         /**

@@ -75,7 +75,7 @@
                 <span class="expiredText" style="margin-left:46px">{{item.expired}}</span>
                 <div class="isExpired" v-show="isExpired(item)">已过期</div>
                 <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
-                <button class="renewal" v-show="item.isSystem" @click="goToAliMarket">续费</button>
+                <a class="renewal" v-show="item.isSystem" :href="aliMarketUrl" target="_blank">续费</a>
                 <el-button
                   class="choseApp"
                   @click="choseApp(item)"
@@ -102,10 +102,11 @@ import securityService from "@/services/authentication/securityService";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { formatDateTime } from "@/api/index";
 import { setLocal, getLocal } from "@/libs/local.js";
-import { dashboardUrl } from "@/environment/index";
+import { dashboardUrl, aliMarketUrl } from "@/environment/index";
 export default {
   data() {
     return {
+      aliMarketUrl: aliMarketUrl,
       isdropdownAvatarShow: false,
       // appName: "",
       appList: [],
@@ -127,21 +128,12 @@ export default {
       this.$router.push({
         name: "personal"
       });
-      //this.$store.commit("CLOSERIGHTPANNEL",true)
     },
     dropdownAvatarShow() {
       this.isdropdownAvatarShow = true;
     },
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
-    },
-    //跳转阿里云市场续费
-    goToAliMarket() {
-      console.log("open");
-      window.open(
-        "https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0",
-        "_blank"
-      );
     },
     /**
      * 获取app列表
@@ -160,14 +152,12 @@ export default {
     async choseApp(item) {
       setLocal("ymId", item.appId);
       this.$store.commit("SETAPPID", item.appId);
-      this.$store.dispatch("_getAppHeadInfo");
       let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(
         item.appId
       );
       if (status === 200) {
         let { data } = await dashboardApi.getCurSiteId();
         this.$store.commit("SETSITEID", data);
-        this.$store.dispatch("_getAppHeadInfo");
         window.location.href = dashboardUrl;
       }
     },
@@ -483,6 +473,7 @@ export default {
       padding: 0px;
     }
     .renewal {
+      display: inline-block;
       width: 90px;
       height: 40px;
       border-radius: 2px;
@@ -490,6 +481,8 @@ export default {
       font-size: 14px;
       font-weight: 400;
       color: rgba(0, 193, 222, 1);
+      line-height: 40px;
+      text-align: center;
       margin-left: 32px;
     }
   }

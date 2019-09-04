@@ -42,6 +42,11 @@ export default {
     AuthList,
     SelectedAuth
   },
+  data(){
+    return {
+      flag:false
+    }
+  },
   methods: {
     ...mapMutations([
       "CHOOSEAUTH",
@@ -60,7 +65,12 @@ export default {
       this.EMPTYSELECTEDAUTH();
     },
     searchAuth() {
-      this.oldUserPermission = JSON.stringify(this.userPermission);
+      if(!this.flag){
+         this.oldUserPermission = JSON.stringify(this.userPermission);
+         this.flag = true
+      }
+     
+      console.log(this.oldUserPermission,'this.oldUserPermission')
       let ary = [];
       this.userPermission.forEach(item => {
         if (item.name.includes(this.input)) {
@@ -72,10 +82,12 @@ export default {
     },
     changeInput() {
       if (this.input == "" && this.oldUserPermission) {
+       console.log(JSON.stringify(this.oldUserPermission),'this.oldUserPermission')
         this.$store.commit(
           "USERPERMISSION",
           JSON.parse(this.oldUserPermission)
         );
+         console.log(this.userPermission)
       }
     }
   },
