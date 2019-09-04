@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="音频名称" width="300">
+            <el-table-column label="音频名称" width="250">
                 <template slot-scope="scope">
                       <div class="cover">
                         <img width="100%" src="~img/file-icon/audio.png" />
@@ -33,11 +33,12 @@
                         show-word-limit
                         @blur="rename(scope.row.id,scope.row.title)"
                     ></el-input>
-                    <span
-                        class="img-name"
+                    <div
+                        style="width:150px"
+                        class="ellipsis"
                         v-else
                         @click="rename(scope.row.id,scope.row.title,scope.$index)"
-                    >{{scope.row.title}}</span>
+                    >{{scope.row.title}}</div>
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
@@ -45,12 +46,16 @@
             <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类"></el-table-column>
+            <el-table-column prop="categoryName" label="分类">
+                 <template slot-scope="scope">
+                    <span>{{ scope.row.categoryName }}</span>
+                </template>
+            </el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" width="150" label="上传时间" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作" v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn move-btn" @click="handleMove(scope.row)">
@@ -263,16 +268,7 @@ export default {
         }
     }
 }
-.img-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box !important;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    word-wrap: break-word;
-    width: 200px;
-    
-}
+
 </style>
 
 

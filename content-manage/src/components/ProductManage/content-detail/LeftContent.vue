@@ -586,10 +586,11 @@ export default {
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("contentForm");
+                            this.resetDetail();
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
-                            this.$refs.detailCheckTree.resetChecked();
-                            this.resetDetail();
+                            // this.$refs.detailCheckTree.resetChecked();
+                           
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -634,8 +635,6 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("handlerClickNewAdd");
                             this.$route.query.isEditor = 0;
-
-                            //this.$refs.detailCheckTree.resetChecked();
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
@@ -734,18 +733,8 @@ export default {
         cancelEditorImg() {
             this.isModalShow = false;
         },
-        handleCheckAllChange(val) {
-            // this.checkedCities = val ? cityOptions : [];
-            // this.isIndeterminate = false;
-        },
-        handleCheckedCitiesChange(value) {
-            // let checkedCount = value.length;
-            // this.checkAll = checkedCount === this.cities.length;
-            // this.isIndeterminate =
-            //     checkedCount > 0 && checkedCount < this.cities.length;
-        },
         resetDetail() {
-            this.detailData = {
+            let detailData = {
                 name: "",
                 description: "",
                 detailContent: "",
@@ -767,13 +756,7 @@ export default {
                         name: "string"
                     }
                 ],
-                productCategoryList: [
-                    {
-                        id: 0,
-                        displayName: "全部分类", //
-                        thumbnailPicUrl: "" //
-                    }
-                ],
+              
                 params: { name: 1 }, //
                 isTop: true,
                 isOnSell: true,
@@ -782,7 +765,7 @@ export default {
                 isNeedShipping: false, //
                 isAllowComment: true
             };
-            console.log(this.detailData);
+            this.detailData = {...this.detailData,...detailData}
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;

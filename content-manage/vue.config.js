@@ -9,7 +9,7 @@ module.exports = {
 
     publicPath: '/',
     // 打包 不再使用sourcemap
-    productionSourceMap: false,
+    // productionSourceMap: false,
     lintOnSave:false,
     chainWebpack: config => {
         config.entry('main').add('babel-polyfill');
