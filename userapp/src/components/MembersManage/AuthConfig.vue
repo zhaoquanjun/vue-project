@@ -70,7 +70,8 @@ export default {
     data() {
         return {
             value: "",
-            authtipShow: false
+            authtipShow: false,
+            flag:false
         };
     },
     methods: {
@@ -163,7 +164,10 @@ export default {
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
         },
         searchAuth() {
-            this.oldUserPermission = JSON.stringify(this.userPermission);
+           if(!this.flag){
+                this.oldUserPermission = JSON.stringify(this.userPermission);
+                this.flag = true;
+           }
             let ary = [];
             this.userPermission.forEach(item => {
                 if (item.name.includes(this.input)) ary.push(item);

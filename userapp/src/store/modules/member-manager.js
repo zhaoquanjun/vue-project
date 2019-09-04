@@ -26,7 +26,6 @@ const memberManager = {
          * 用户权限信息
          */
         USERPERMISSION: (state, info) => {
-            console.log(info,'jajjajajjajja')
             state.userPermission = info;
             // 当前成员已有的权限          
             setTimeout(()=>{
