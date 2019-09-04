@@ -60,7 +60,9 @@ export default {
       this.EMPTYSELECTEDAUTH();
     },
     searchAuth() {
+    
       this.oldUserPermission = JSON.stringify(this.userPermission);
+      console.log(this.oldUserPermission,'this.oldUserPermission')
       let ary = [];
       this.userPermission.forEach(item => {
         if (item.name.includes(this.input)) {
@@ -71,11 +73,15 @@ export default {
       this.$store.commit("USERPERMISSION", ary);
     },
     changeInput() {
+    
       if (this.input == "" && this.oldUserPermission) {
+       console.log(JSON.stringify(this.oldUserPermission),'this.oldUserPermission')
+        debugger
         this.$store.commit(
           "USERPERMISSION",
           JSON.parse(this.oldUserPermission)
         );
+         console.log(this.userPermission)
       }
     }
   },

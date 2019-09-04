@@ -41,7 +41,7 @@
                 ></auth-list>-->
             </div>
         </div>
-        <div class="footer pannel-footer ">
+        <div class="footer pannel-footer">
             <button class="confirm footer-btn" @click="primary">确认</button>
             <button class="cancel footer-btn" @click="cancel">取消</button>
         </div>
@@ -90,16 +90,20 @@ export default {
                     this.userIds
                 );
                 if (status === 200) {
-                    this.$message({
-                        type: "successed",
-                        message: "保存成功"
+                    this.$notify({
+                        customClass: "notify-success",
+                        message: `保存成功`,
+                        duration: 2000,
+                        showClose: false
                     });
                     this.$emit("getMemberList");
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
                 } else {
-                    this.$message({
-                        type: "failed",
-                        message: "保存失败"
+                     this.$notify({
+                        customClass: "notify-error", // error success
+                        message: `保存失败`,
+                        duration: 1500,
+                        showClose: false
                     });
                 }
             } else {
@@ -107,11 +111,13 @@ export default {
                     this.authtipShow = true;
                     return false;
                 }
-                 this.authtipShow = false;
+                this.authtipShow = false;
                 if (this.value != null && this.value.length > 100) {
-                    this.$message({
-                        type: "failed",
-                        message: "备注长度不能超过100个字符!"
+                    this.$notify({
+                        customClass: "notify-error", // error success
+                        message: `备注长度不能超过100个字符!`,
+                        duration: 1500,
+                        showClose: false
                     });
                     return false;
                 }
@@ -119,19 +125,22 @@ export default {
                     remark: this.value,
                     userId: this.memberInfo.id
                 };
-                console.log(this.getSelectedAuthNames, "getSelectedAuthNames");
                 let { status } = await this._updateUserPolicy(params);
                 if (status === 200) {
-                    this.$message({
-                        type: "success",
-                        message: "保存成功"
+                     this.$notify({
+                        customClass: "notify-success", // error success
+                        message: `保存成功`,
+                        duration: 1500,
+                        showClose: false
                     });
                     this.$emit("getMemberList");
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
                 } else {
-                    this.$message({
-                        type: "failed",
-                        message: "保存失败"
+                     this.$notify({
+                        customClass: "notify-error", // error success
+                        message: `保存失败`,
+                        duration: 1500,
+                        showClose: false
                     });
                 }
             }
@@ -262,8 +271,6 @@ export default {
             padding: 0 10px;
         }
     }
-
-    
 }
 </style>
 

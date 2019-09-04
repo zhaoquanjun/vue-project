@@ -45,16 +45,16 @@ export default {
     methods: {
         curAuth(item, index) {
             let cur = this.authList[index];
-            if (cur.show) {
-                this.$set(this.authList[index], "show", false);
+            if (cur.isChoosed) {
+                this.$set(this.authList[index], "isChoosed", false);
                 this.$emit("removeSelected", item);
             } else {
-                this.$set(this.authList[index], "show", true);
+                this.$set(this.authList[index], "isChoosed", true);
                 this.$emit("chooseAuth", item);
             }
         },
         removeAuth(curitem, index) {
-            this.$set(this.authList[index], "show", false);
+            this.$set(this.authList[index], "isChoosed", false);
             this.$emit("removeSelected", curitem);
         },
         empty() {

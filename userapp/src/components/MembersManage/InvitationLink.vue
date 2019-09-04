@@ -69,10 +69,13 @@ export default {
             }, 500);
         },
         onCopy() {
-            this.$message({
-                message: `复制成功！`,
-                type: "success"
-            });
+          
+              this.$notify({
+                        customClass: "notify-success", // error success
+                        message: `复制成功！`,
+                        duration: 1500,
+                        showClose: false
+                    });
             // this.$store.commit("CLOSERIGHTPANNEL", false);
             this.copyTip = "复制成功";
             this.isCopy = true;
