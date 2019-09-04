@@ -30,6 +30,7 @@
                         class="cover"
                     />
                     <img
+                        onerror="onImgError(this)"
                         v-if="['product'].includes(recycleTempData.type)"
                         :src="scope.row.thumbnailPicUrlList[0] ? scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40' : newsDefaultImg"
                         class="cover"
@@ -204,7 +205,9 @@ export default {
         if (this.contentType === "video") {
             this.videoWidth = 500;
         }
-        
+         window.onImgError = (ele)=> {
+            ele.src = ele.attributes["src"]=this.defaultImg
+        };
     },
     methods: {
          onImgError(ele){
