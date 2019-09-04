@@ -112,19 +112,28 @@
                       class="itemSiteImageBackground"
                       :style="{background: 'url(' + (item.imageUrl ) + ') no-repeat center/cover'}"
                       v-if="isAllTab"
-                    ></div>
+                    >
+                      <div class="modal" v-if="item.id != templateId">
+                        <div>
+                          <div class="choseSite" @click="choseSite(item)">选择</div>
+                          <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
+                        </div>
+                      </div>
+                      <div class="curModal" v-show="item.id == templateId">当前选择</div>
+                    </div>
                     <div
                       class="itemSiteImageBackground"
                       :style="{background: 'url(' + (item.image ) + ') no-repeat center/cover'}"
                       v-else
-                    ></div>
-                    <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
-                    <div class="modal">
-                      <div>
-                        <div class="choseSite" @click="choseSite(item)">选择</div>
-                        <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
+                    >
+                      <div class="modal" v-if="item.id != templateId">
+                        <div>
+                          <div class="choseSite" @click="choseSite(item)">选择</div>
+                          <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
+                        </div>
                       </div>
                     </div>
+                    <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
                   </div>
                   <div style="text-align:center">
                     <div
@@ -234,7 +243,7 @@ import { getLanguage } from "@/configure/appCommon";
 import { designerUrl } from "@/environment/index";
 
 export default {
-  props: ["siteId", "siteName"],
+  props: ["siteId", "siteName", "templateId"],
   data() {
     return {
       templateShow: false,
@@ -400,36 +409,38 @@ export default {
     },
     // 选择最新/最热/推荐
     async changeOrder(item) {
-      this.orderType.forEach((item, index) => {
-        item.isOrder = false;
-      });
-      item.isOrder = true;
-      this.isOrderByUpdateTime = false;
-      this.isMostPopular = false;
-      this.isRecommend = false;
-      if (item.type == "updataTime") {
-        this.isOrderByUpdateTime = true;
-      } else if (item.type == "mostPopular") {
-        this.isMostPopular = true;
-      } else if (item.type == "IsRecommend") {
-        this.isRecommend = true;
+      if (this.isAllTab == true) {
+        this.orderType.forEach((item, index) => {
+          item.isOrder = false;
+        });
+        item.isOrder = true;
+        this.isOrderByUpdateTime = false;
+        this.isMostPopular = false;
+        this.isRecommend = false;
+        if (item.type == "updataTime") {
+          this.isOrderByUpdateTime = true;
+        } else if (item.type == "mostPopular") {
+          this.isMostPopular = true;
+        } else if (item.type == "IsRecommend") {
+          this.isRecommend = true;
+        }
+        let para = {
+          TemplateName: "",
+          FirstIndustry: 0,
+          SecondIndustry: 0,
+          Theme: "",
+          Language: this.languageSelect,
+          IsRecommend: this.isRecommend,
+          PageIndex: this.pageIndex,
+          PageSize: this.pageSize,
+          IsOrderByUpdateTime: this.isOrderByUpdateTime,
+          IsMostPopular: this.isMostPopular
+        };
+        let { data, status } = await templateApi.getSiteTemplates(para);
+        console.log(data);
+        this.templatePage = data;
+        this.templateInfo = data.items;
       }
-      let para = {
-        TemplateName: "",
-        FirstIndustry: 0,
-        SecondIndustry: 0,
-        Theme: "",
-        Language: this.languageSelect,
-        IsRecommend: this.isRecommend,
-        PageIndex: this.pageIndex,
-        PageSize: this.pageSize,
-        IsOrderByUpdateTime: this.isOrderByUpdateTime,
-        IsMostPopular: this.isMostPopular
-      };
-      let { data, status } = await templateApi.getSiteTemplates(para);
-      console.log(data);
-      this.templatePage = data;
-      this.templateInfo = data.items;
     },
 
     // 选择模版
@@ -870,6 +881,7 @@ export default {
         margin-top: -2px;
         width: 100%;
         padding-bottom: 62%;
+        position: relative;
       }
       .choseSite {
         width: 90px;
@@ -908,9 +920,9 @@ export default {
         width: 100%;
         height: 100%;
         opacity: 0;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 4px 4px 0px 0px;
-        border: 1px solid rgba(185, 203, 207, 1);
+        background: rgba(38, 38, 38, 0.5);
+        border-radius: 0px 0px 2px 2px;
+        // border: 1px solid rgba(185, 203, 207, 1);
       }
       &:hover {
         transform: translateY(-15px);
@@ -918,6 +930,22 @@ export default {
         .modal {
           opacity: 1;
         }
+      }
+      .curModal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.5);
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 1);
+        line-height: 22px;
       }
     }
     .itemSiteName {

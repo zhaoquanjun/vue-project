@@ -63,7 +63,8 @@ export default {
       background-position: right bottom;
       background-size: 143px 131px;
       &:hover {
-        border: 1px solid #00c1de;
+        border: 1px solid #09cceb;
+        background-color: #f6fdfe;
       }
       .plugin-item {
         display: block;

@@ -196,8 +196,6 @@
                     class="handle-btn"
                     style="margin-left:32px"
                     @click="deleteTemplate( scope )"
-                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
-                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >删除</el-button>
                 </div>
               </template>

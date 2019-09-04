@@ -192,7 +192,7 @@
           </div>
         </div>
       </el-dialog>
-      <SelectTemplateDialog ref="selectTemplateDialog" :siteId="siteId" :siteName="siteName"></SelectTemplateDialog>
+      <SelectTemplateDialog ref="selectTemplateDialog" :siteId="siteId" :siteName="siteName" :templateId="templateId"></SelectTemplateDialog>
     </el-main>
   </el-container>
 </template>
@@ -217,6 +217,7 @@ export default {
       siteName: "",
       siteImage: "",
       siteId: 0,
+      templateId: 0,
       domain: "",
       secondDomain: "",
       lastPublishedTime: "",
@@ -280,6 +281,7 @@ export default {
         this.siteImage = data.siteImage;
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
+        this.templateId = data.templateId;
         this.lastPublishedTime = formatDateTime(
           data.lastPublishedTime,
           "yyyy-MM-dd hh:mm"
