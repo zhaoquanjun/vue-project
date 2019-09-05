@@ -74,6 +74,7 @@ export default {
         }else{
                 this.title="添加"
             }
+          
     },
     methods: {
         async handleConfirm() {
@@ -102,6 +103,7 @@ export default {
                         if (action === "confirm") {
                         } else {
                             this.$emit("get301List");
+                           
                         }
                     }
                 });

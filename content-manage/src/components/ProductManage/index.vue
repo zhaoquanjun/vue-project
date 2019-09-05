@@ -5,6 +5,7 @@
                 <span>产品分类</span>
             </h4>
             <m-tree
+                ref="myTree"
                 :is-product="true"
                 :tree-result="treeResult"
                 :list-options="productSearchOptions"
@@ -115,6 +116,7 @@ export default {
             treeResult: null,
             curArticleInfo: "",
             moveToClassiFy: "",
+            selectCategory:"",
             count: 0,
             idsList: [],
             isInvitationPanelShow: false,
@@ -377,6 +379,7 @@ export default {
             let { data } = await productCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
+             this.$refs.myTree.selectCategoryByNodeId(this.selectCategory.id)
         },
         /**
          * z新增分类

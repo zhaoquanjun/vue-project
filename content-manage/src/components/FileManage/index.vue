@@ -677,12 +677,13 @@ export default {
         // padding: 0;
         margin-left: 8px;
         color: #8c8c8c;
-        border: 1px solid #b9cbcf;
+        border: 1px solid #B9CBCF;
         background: #fff;
         box-sizing: border-box;
     }
     .link-btn-green {
-        color: #35b24b;
+        color: #fff;
+        background: #35b24b
     }
 }
 .el-form-item__error {
