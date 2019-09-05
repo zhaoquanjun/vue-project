@@ -39,10 +39,7 @@
               style="padding:0;"
             >
               <span slot="reference" @click="showRemark">
-                <i
-                  class="iconfont iconbianji"
-                  style="color:#09CCEB;margin-left:23px;cursor: pointer;"
-                ></i>
+                <i class="iconfont iconbianji editIcon"></i>
               </span>
               <div class="textareaWrap">
                 <el-input
@@ -359,12 +356,23 @@ export default {
     font-weight: 400;
     color: rgba(38, 38, 38, 1);
     line-height: 37px;
+    width: 420px;
+    .editIcon {
+      color: #09cceb;
+      margin-left: 20px;
+      padding: 10px;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(9, 204, 235, 0.09);
+        border-radius: 2px;
+      }
+    }
     .appNameInfo {
       display: inline-block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      width: 70%;
+      max-width: calc(100% - 60px);
       vertical-align: middle;
     }
   }
@@ -446,6 +454,9 @@ export default {
     border: 1px solid rgba(238, 238, 238, 1);
     position: relative;
     cursor: pointer;
+    &:hover {
+      background-color: #f6fdfe;
+    }
     .designDiv {
       width: 5px;
       height: 70px;
@@ -470,13 +481,12 @@ export default {
       color: rgba(38, 38, 38, 1);
       line-height: 70px;
       margin-left: 30px;
-      display: -webkit-box;
-      width: 60%;
-      word-break: break-all;
-      text-overflow: ellipsis;
+
+      display: inline-block;
       overflow: hidden;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 60%;
     }
     .designNoread {
       position: absolute;
@@ -525,16 +535,20 @@ export default {
     margin-bottom: 10px;
     margin-right: 25px;
     cursor: pointer;
+    &:hover {
+      .versionInfo {
+        color: rgba(9, 204, 235, 1);
+      }
+    }
     .versionInfo {
-      float: left;
+      // float: left;
       color: #262626;
-      width: 80%;
-      display: -webkit-box;
-      word-break: break-all;
-      text-overflow: ellipsis;
+      display: inline-block;
       overflow: hidden;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: calc(100% - 60px);
+      width: 80%;
     }
     .versionDate {
       float: right;
@@ -603,6 +617,7 @@ export default {
         margin-left: 21px;
         font-size: 18px;
         line-height: 25px;
+        width: 289px;
       }
       .appVersion {
         margin-left: 21px;

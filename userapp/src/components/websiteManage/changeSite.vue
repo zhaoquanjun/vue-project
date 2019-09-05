@@ -265,7 +265,6 @@ export default {
       color: rgba(38, 38, 38, 1);
     }
   }
-
   .close-pannel {
     float: right;
     cursor: pointer;
@@ -352,15 +351,14 @@ export default {
       margin-bottom: 14px;
       margin-top: 14px;
 
-      display: -webkit-box;
-      word-break: break-all;
-      text-overflow: ellipsis;
-      -webkit-text-overflow: ellipsis;
+      display: inline-block;
       overflow: hidden;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
     }
     .itemSiteDomain {
+      display: block;
       font-size: 14px;
       font-weight: 400;
       line-height: 22px;
