@@ -29,7 +29,7 @@
                         @pauseCdn="_pauseCdn"
                         @getCdnDomainList="_getCdnDomainList"
                     ></DomainList>
-                    <RedirectDomainList v-else ref="redirectDomainList" @toSet="toSet"   ></RedirectDomainList>
+                    <RedirectDomainList v-else ref="redirectDomainList" @toSet="toSet"></RedirectDomainList>
                 </el-main>
                 <div class="handle-guide">
                     <template v-if="showType">
@@ -117,7 +117,7 @@ export default {
             curSiteId: "",
             showType: true,
             activeAndNotInUseDomainList: [],
-            domainValue:"",
+            domainValue: ""
         };
     },
     created() {
@@ -134,7 +134,6 @@ export default {
         getSiteId(siteId) {
             this._getCdnDomainList(siteId);
             this.curSiteId = siteId;
-            
         },
         // 选择切换网站
         chooseWebsite(siteId) {
@@ -164,16 +163,16 @@ export default {
          * 获取域名列表
          */
         async _getCdnDomainList(siteId) {
-            console.log(this)
-              const loading = this.$loading({
+            console.log(this);
+            const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",
                 background: "rgba(255, 255, 255, 0.75)"
             });
             siteId = siteId || this.curSiteId;
-            let { data,status } = await domainApi.getCdnDomainList(siteId);
-            if(status ===200){
-                loading.close()
+            let { data, status } = await domainApi.getCdnDomainList(siteId);
+            if (status === 200) {
+                loading.close();
             }
             this.domainListData = data;
 
@@ -184,7 +183,6 @@ export default {
          * 解析域名
          */
         async _resolveCdnByAliYunToken(opt) {
-            
             this.resolveDomainData = opt;
             let params = {
                 id: opt.id,
@@ -206,6 +204,31 @@ export default {
                     });
                 }, 2000);
             }
+            if (data.errorMessage == "账户下域名不存在") {
+                let message = [];
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #262626" },
+                        `${this.resolveDomainData.curDomain}，账户下域名不存在！`
+                    )
+                );
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #8C8C8C" },
+                        "请退出当前浏览器登录的阿里云账号后再重新授权。"
+                    )
+                );
+                this.$confirm("提示", {
+                    title: "提示",
+                    iconClass: "icon-warning",
+                    message: this.$createElement("div", null, message),
+                   showCancelButton:false,
+                    closeOnClickModal: false
+                });
+                return;
+            }
             if (
                 !data.isSuccess &&
                 !data.redirectUrl &&
@@ -217,6 +240,7 @@ export default {
                     duration: 1500,
                     showClose: false
                 });
+                return;
             }
             if (data.isExistResolveCdnRecord) {
                 this.$confirm("提示", {
@@ -235,8 +259,7 @@ export default {
                 //confirm()//ok: this.isForceUpdate() isForceUpdate:true
             }
             // data.is
-            if (data.isSuccess ) {
-               
+            if (data.isSuccess) {
                 // this.$notify({
                 //     customClass: "notify-success",
                 //     message: `大约需要5分钟解析成功`,
@@ -260,10 +283,10 @@ export default {
                 );
                 this.$confirm("提示", {
                     title: "提示",
-                     iconClass: "icon-success",
+                    iconClass: "icon-success",
                     message: this.$createElement("div", null, message),
-                    confirmButtonText: "确定",
-                    closeOnClickModal: false
+                    closeOnClickModal: false,
+                    showCancelButton:false,
                 });
                 this._getCdnDomainList(this.curSiteId);
             }
@@ -354,39 +377,39 @@ export default {
          * 删除当前域名
          */
         async _deleteCdnDomain(domainId, index) {
-              let message = [];
-                message.push(
-                    this.$createElement(
-                        "p",
-                        { style: "color: #262626" },
-                        `确定删除该域名?`
-                    )
-                );
-                message.push(
-                    this.$createElement(
-                        "p",
-                        { style: "color: #8C8C8C" },
-                        "域名删除后, 您将无法访问该网站."
-                    )
-                );
-                  message.push(
-                    this.$createElement(
-                        "p",
-                        { style: "color: #8C8C8C" },
-                        "强烈建议您在删除前修改该域名的cname解析."
-                    )
-                );
-                this.$confirm("提示", {
-                    title: "提示",
-                    iconClass: "icon-warning",
-                    message: this.$createElement("div", null, message),
-                     callback: async action => {
+            let message = [];
+            message.push(
+                this.$createElement(
+                    "p",
+                    { style: "color: #262626" },
+                    `确定删除该域名?`
+                )
+            );
+            message.push(
+                this.$createElement(
+                    "p",
+                    { style: "color: #8C8C8C" },
+                    "域名删除后, 您将无法访问该网站."
+                )
+            );
+            message.push(
+                this.$createElement(
+                    "p",
+                    { style: "color: #8C8C8C" },
+                    "强烈建议您在删除前修改该域名的cname解析."
+                )
+            );
+            this.$confirm("提示", {
+                title: "提示",
+                iconClass: "icon-warning",
+                message: this.$createElement("div", null, message),
+                callback: async action => {
                     if (action === "confirm") {
                         let { data, status } = await domainApi.deleteCdnDomain(
                             domainId
                         );
                         if (status === 200) {
-                             this._getCdnDomainList();    
+                            this._getCdnDomainList();
                             this.$notify({
                                 customClass: "notify-success",
                                 message: `域名删除成功`,
@@ -410,7 +433,8 @@ export default {
         },
         righPanelShow(backupType) {
             this.backupShow = true;
-            if(backupType === "301Redirect") this._getActiveAndNotInUseDomainList()
+            if (backupType === "301Redirect")
+                this._getActiveAndNotInUseDomainList();
         },
 
         closeDialog() {
@@ -426,7 +450,6 @@ export default {
         },
         toSet() {
             this.$refs.domainMenu.handleTabClick("domainList");
-
         }
     }
 };

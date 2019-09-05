@@ -265,7 +265,8 @@ export default {
 
         download(row) {
             //this.userDownload(row)
-            this.adminDownload(row);
+             this.adminDownload(row);
+             ++row.downloadCount
         },
         /**
          * 用户下载
@@ -282,6 +283,7 @@ export default {
             let type = row.fileType;
             let id = row.id;
             let { data } = await adminDownload(type, id);
+            
             var link = document.createElement("a");
             link.download = row.title;
             link.style.display = "none";
@@ -289,6 +291,7 @@ export default {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            
         },
         change(index) {
             this.fullOssUrl = this.imgList[index].fullOssUrl;
