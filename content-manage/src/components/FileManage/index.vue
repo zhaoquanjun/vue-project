@@ -7,7 +7,7 @@
             <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
             <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree
-                    ref="myTree"
+                ref="myTree"
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
@@ -107,11 +107,19 @@
                                     autocomplete="off"
                                     @blur="fileNameBlur"
                                     @focus="pwdRule"
-                                    
+                                    @input="watchPawInput"
                                 ></el-input>
                                 <div class="pwd-rule" v-if="pwdRuleShow">
-                                    <div class="error"><i class="iconfont iconguanbi"></i>长度为6～16位（字母区分大小写）</div>
-                                    <div class="success"> <i class="iconfont iconicon-test"></i>只能包含数字、字母以及英文标点符号</div>
+                                    <div
+                                        :class="[watchPwd.firstRule === false ? 'error':'success']"
+                                    >
+                                        <i class="iconfont " :class="[watchPwd.firstRule === false ? 'iconguanbi':'iconicon-test']"></i>长度为6～16位（字母区分大小写）
+                                    </div>
+                                    <div
+                                        :class="[watchPwd.secondRule === false ? 'error':'success']"
+                                    >
+                                        <i class="iconfont"  :class="[watchPwd.secondRule === false ? 'iconguanbi':'iconicon-test']"></i>只能包含数字、字母以及英文标点符号
+                                    </div>
                                 </div>
                                 <div
                                     class="el-form-item__error"
@@ -126,7 +134,7 @@
                             <span name="cur-tip">移动至</span>
                         </div>
                         <SelectTree
-                           v-if="isInvitationPanelShow"
+                            v-if="isInvitationPanelShow"
                             :categoryName="curRowData.categoryName"
                             :tree-result="treeResult"
                             @chooseNode="chooseNode"
@@ -143,12 +151,7 @@
                 <slot name="modal-footer"></slot>
             </el-footer>
         </el-main>
-        <el-dialog
-            title="上传"
-
-            :visible.sync="dialogTableVisible"
-            :modal-append-to-body="false"
-        >
+        <el-dialog title="上传" :visible.sync="dialogTableVisible" :modal-append-to-body="false">
             <span slot="title">
                 <span class="fs14">
                     上传{{displayName}}
@@ -207,7 +210,7 @@ export default {
     },
     data() {
         return {
-            pwdRuleShow:false,
+            pwdRuleShow: false,
             ruleForm: {
                 name: "",
                 pass: "",
@@ -253,6 +256,10 @@ export default {
                 errorText: "",
                 pwdTip: false,
                 pwdErrorText: ""
+            },
+            watchPwd: {
+                firstRule: false,
+                secondRule: false
             }
         };
     },
@@ -276,13 +283,13 @@ export default {
             });
             if (node) {
                 this.nodeData = node;
-                }
+            }
             let { data, status } = await fileManageApi.getPicList(
                 this.picSearchOptions
             );
             if (status === 200) {
                 loading.close();
-                 this.getTree();
+                this.getTree();
             }
             this.imgPageResult = data;
         },
@@ -311,7 +318,7 @@ export default {
                                 });
                                 this.getPicList();
                             }
-                        } 
+                        }
                     }
                 }
             );
@@ -354,18 +361,18 @@ export default {
             if (status == 200) {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
-                    message: `${!!this.editorOrMove?"保存成功":"移动成功"}`,
+                    message: `${!!this.editorOrMove ? "保存成功" : "移动成功"}`,
                     duration: 1500,
                     showClose: false
                 });
                 this.isInvitationPanelShow = false;
                 this.getPicList();
-                 this.getTree();
+                this.getTree();
             }
         },
         // 重命名
         async rename(id, newname) {
-            let {status,data} = await fileManageApi.rename(id, newname);
+            let { status, data } = await fileManageApi.rename(id, newname);
             this.getPicList();
         },
         // 获取树节点
@@ -373,8 +380,8 @@ export default {
             let { data } = await fileCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
-            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
-            },
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id);
+        },
         // 创建新的分类
         async newCategory(entity) {
             console.log(entity);
@@ -520,10 +527,10 @@ export default {
         },
         //批量移动
         batchMove() {
-            this.curRowData= {
-                categoryName:"全部分类",
-                categoryId:0
-            }                        
+            this.curRowData = {
+                categoryName: "全部分类",
+                categoryId: 0
+            };
             this.isInvitationPanelShow = true;
             this.editorOrMove = false;
         },
@@ -533,7 +540,7 @@ export default {
         },
         // 验证编辑面板
         fileNameBlur() {
-            this.pwdRuleShow=false
+            this.pwdRuleShow = false;
             if (!trim(this.ruleForm.name)) {
                 this.error.errorTip = true;
                 this.error.errorText = "文件名称不能为空";
@@ -547,7 +554,9 @@ export default {
                 this.error.errorText = "";
             }
             // let pwdReg = /^[a-zA-Z0-9\p{P}\p{S}]{6,16}$/;
-            let pwdReg =  new RegExp("^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$");
+            let pwdReg = new RegExp(
+                "^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$"
+            );
             if (trim(this.ruleForm.pass) && !pwdReg.test(this.ruleForm.pass)) {
                 this.error.pwdTip = true;
                 this.error.pwdErrorText = "密码设置不符合要求";
@@ -557,10 +566,35 @@ export default {
                 this.error.pwdErrorText = "";
                 return true;
             }
+        },
+        watchPawInput() {
+            let pwdReg = new RegExp(
+                "^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$"
+            );
+            let pwdLength = trim(this.ruleForm.pass).length;
+            if (pwdLength >= 6 && pwdLength <= 16) {
+                this.watchPwd.firstRule = true;
+            } else {
+                this.watchPwd.firstRule = false;
+            }
+            if (trim(this.ruleForm.pass) && !pwdReg.test(this.ruleForm.pass)) {
+                this.watchPwd.secondRule = false;
+                this.error.pwdTip = true;
+                this.error.pwdErrorText = "密码设置不符合要求";
+                return false;
+            } else {
+                this.watchPwd.secondRule = true;
+                if (!trim(this.ruleForm.pass)){
+                 this.watchPwd.secondRule = false;
+             }
+                this.error.pwdTip = false;
+                this.error.pwdErrorText = "";
+                return true;
+            }
             
         },
-        pwdRule(){
-            this.pwdRuleShow=true
+        pwdRule() {
+            this.pwdRuleShow = true;
         },
         onCopy() {
             this.$notify({
@@ -601,7 +635,7 @@ export default {
 .el-dialog__wrapper /deep/ .el-dialog__body {
     padding: 0;
 }
-.el-dialog__wrapper /deep/ .el-dialog{
+.el-dialog__wrapper /deep/ .el-dialog {
     width: 800px;
 }
 .el-form /deep/ .el-form-item__label {
@@ -632,16 +666,16 @@ export default {
 .file-ruleForm {
     padding: 32px 15px;
 }
-.pwd-rule{
+.pwd-rule {
     position: absolute;
-    box-shadow:0px 2px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
     padding: 16px;
     border-radius: 2px;
     top: 90px;
-    >div{
+    > div {
         line-height: 25px;
     }
-     &::before {
+    &::before {
         content: "";
         position: absolute;
         width: 0;
@@ -651,15 +685,15 @@ export default {
         border-width: 10px;
         border-style: solid;
         border-color: transparent transparent #fff transparent;
-        z-index: 4000
+        z-index: 4000;
     }
-    .error{
-        i{
+    .error {
+        i {
             color: #fb4d68;
         }
     }
-    .success{
-        color: #63DC8C
+    .success {
+        color: #63dc8c;
     }
 }
 .download-link {
@@ -677,13 +711,13 @@ export default {
         // padding: 0;
         margin-left: 8px;
         color: #8c8c8c;
-        border: 1px solid #B9CBCF;
+        border: 1px solid #b9cbcf;
         background: #fff;
         box-sizing: border-box;
     }
     .link-btn-green {
         color: #fff;
-        background: #35b24b
+        background: #35b24b;
     }
 }
 .el-form-item__error {

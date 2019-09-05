@@ -34,12 +34,19 @@
                         show-word-limit
                         @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
-                    <div
-                        style="width:150px"
-                        class="ellipsis"
-                        v-else
-                        @click="rename(scope.row.id,scope.row,scope.$index)"
-                    >{{scope.row.title}}</div>
+                  
+                      <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="scope.row.title"
+                            placement="top"
+                        >
+                            <div
+                                 style="width:150px"
+                                class="ellipsis img-name"
+                                @click="rename(scope.row.id,scope.row,scope.$index)"
+                            >{{scope.row.title}}</div>
+                        </el-tooltip>
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
@@ -98,7 +105,15 @@
                 >
                     <audio ref="audio" class="audio" :src="fullOssUrl" controls="controls" />
                     <div class="dislog-footer" slot="footer">
-                        <span>{{picInfo.title}}</span>
+                         <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="picInfo.title"
+                            placement="top"
+                        >
+                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
+                        </el-tooltip>
+                      
                         <span>分类: {{picInfo.categoryName}}</span>
                         <span>大小: {{picInfo.sizeStr}}</span>
                     </div>
