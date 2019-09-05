@@ -229,7 +229,7 @@ export default {
         overflow: hidden;
         .search-auth {
             display: flex;
-            height: 32px;
+            height: 40px;
             box-sizing: border-box;
             position: relative;
             input,
@@ -260,19 +260,22 @@ export default {
         .auth-name {
             border: 1px solid #efefef;
             border-top: none;
-            padding: 0 10px;
+            height: 524px;
         }
     }
     .pannel-right-item {
         float: left;
-        width: 275px;
+        width: 438px;
+        box-sizing: border-box;
     }
     .pannel-left-item {
-        width: 199px;
+        width: 285px;
+       
         float: right;
         .selected-auth {
             border: 1px solid #efefef;
             padding: 0 10px;
+            min-height: 562px;
         }
     }
 }

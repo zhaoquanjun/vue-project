@@ -310,10 +310,10 @@ export default {
         ...mapState(["isRightPanelShow", "isInvitationPanelShow"]),
 
         pannelWidth() {
-            return this.isRightPanelShow === true ? 543 : 0;
+            return this.isRightPanelShow === true ? 808 : 0;
         },
         isInvitationlWidth() {
-            return this.isInvitationPanelShow === true ? 543 : 0;
+            return this.isInvitationPanelShow === true ? 808 : 0;
         },
         disabled() {
             return this.multipleSelection.length > 0 ? false : true;
