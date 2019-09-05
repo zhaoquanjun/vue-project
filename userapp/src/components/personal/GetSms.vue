@@ -1,8 +1,14 @@
 
 <template>
     <div class="login">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" @submit.native.prevent>
-            <div v-if="!isModifi">
+        <el-form
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleForm"
+            class="demo-ruleForm"
+            @submit.native.prevent
+        >
+            <div v-if="isModifi">
                 <el-form-item prop="verification" class="verification-code">
                     <el-input
                         :key="0"
@@ -68,11 +74,7 @@
 </template>
  
 <script>
-import {
-    updateUserPhone,
-    sendSourcePhoneCode,
-    sendTargetPhoneCode
-} from "@/api/index.js";
+import { updateUserPhone, sendSourcePhoneCode, sendTargetPhoneCode} from "@/api/index.js";
 const TIME_COUNT = 60; //更改倒计时时间
 export default {
     props: ["sourcePhone", "isModifi"],
@@ -109,7 +111,11 @@ export default {
             rules: {
                 phone: [{ validator: checkPhone, trigger: "blur" }],
                 verification: [
-                    { required: true, message: "请输入短信验证码", trigger: "blur" }
+                    {
+                        required: true,
+                        message: "请输入短信验证码",
+                        trigger: "blur"
+                    }
                 ]
             },
             checked: false,
@@ -156,7 +162,7 @@ export default {
         async send() {
             let { status } = await sendSourcePhoneCode();
             if (status === 200) {
-                   this.$notify({
+                this.$notify({
                     customClass: "notify-success",
                     message: "发送成功",
                     duration: 1500,
@@ -177,7 +183,7 @@ export default {
                     }, 1000);
                 }
             } else {
-                  this.$notify({
+                this.$notify({
                     customClass: "notify-error",
                     message: "发送失败",
                     duration: 1500,
@@ -188,19 +194,21 @@ export default {
         async sendChangePhoneCode() {
             let targetPhone = this.ruleForm.phone; //this.value + this.ruleForm.phone;
             if (this.ruleForm.phone == "" || this.ruleForm.phone == null) {
-                this.$message({
-                    type: "failed",
-                    message: "请先填写要绑定的手机号码!"
-                });
+                // this.$message({
+                //     type: "failed",
+                //     message: "请先填写要绑定的手机号码!"
+                // });
             } else {
                 let { status } = await sendTargetPhoneCode(
                     this.sourcePhone,
                     targetPhone
                 );
                 if (status === 200) {
-                    this.$message({
-                        type: "success",
-                        message: "发送成功!"
+                    this.$notify({
+                        customClass: "notify-success",
+                        message: "发送成功",
+                        duration: 1500,
+                        showClose: false
                     });
                     if (!this.timer) {
                         this.count = TIME_COUNT;
@@ -217,9 +225,11 @@ export default {
                         }, 1000);
                     }
                 } else {
-                    this.$message({
-                        type: "failed",
-                        message: "发送失败!"
+                    this.$notify({
+                        customClass: "notify-error",
+                        message: "发送失败",
+                        duration: 1500,
+                        showClose: false
                     });
                 }
             }
@@ -275,7 +285,7 @@ export default {
             clearInterval(this.timer); // 清除定时器
             this.timer = null;
             this.count = "";
-            this.show=true;
+            this.show = true;
             this.ruleForm.verification = "";
         }
     },
@@ -333,17 +343,18 @@ export default {
  
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.el-form /deep/ .el-form-item{
+.el-form /deep/ .el-form-item {
     margin-bottom: 30px;
 }
-.el-form-item.is-error /deep/ .el-input__inner{
-    border-color: #e5e5e5
+.el-form-item.is-error /deep/ .el-input__inner {
+    border-color: #e5e5e5;
 }
 
 .verification-code {
     position: relative;
 }
-.verification-code .el-button:hover,.verification-code .el-button.is-disabled{
+.verification-code .el-button:hover,
+.verification-code .el-button.is-disabled {
     background: transparent;
 }
 .verification-text {
