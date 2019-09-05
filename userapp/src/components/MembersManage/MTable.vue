@@ -17,7 +17,7 @@
             <el-table-column type="selection" :selectable="handleDisable"></el-table-column>
             <el-table-column prop="name" label="姓名" width="180" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <span>{{scope.row.name}}</span>
+                    <div class="ellipsis">{{scope.row.name}}</div>
                 </template>
             </el-table-column>
             <el-table-column prop="phone" label="手机号" width="180"></el-table-column>

@@ -34,12 +34,12 @@
                         v-model="scope.row.title"
                         maxlength="30"
                         show-word-limit
-                        @blur="rename(scope.row.id,scope.row.title)"
+                        @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
                     <span
                         class="img-name"
                         v-else
-                        @click="rename(scope.row.id,scope.row.title,scope.$index)"
+                        @click="rename(scope.row.id,scope.row,scope.$index)"
                     >{{scope.row.title}}</span>
                     </el-tooltip>
                     <!-- <input v-model="scope.row.title" />
@@ -202,7 +202,9 @@ export default {
         },
         // 重命名图片名称
         rename(id, newName, index) {
-            if (!trim(newName)) {
+             if(row.title)this.newName = row.title;
+            if (!trim(row.title)) {
+                 row.title=this.newName
                 this.$notify({
                     customClass: "notify-error",
                     message: `图片名称不能为空`,
@@ -213,7 +215,7 @@ export default {
             }
             if (isNaN(index)) {
                 this.index = -1;
-                this.$emit("rename", id, newName);
+                this.$emit("rename", id, row.title);
                 return;
             }
             this.index = index;

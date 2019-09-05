@@ -27,17 +27,18 @@
                         v-if="(index == scope.$index)"
                         type="text"
                         size="small"
+                         ref="renameInput"
                         placeholder="请输入内容"
                         v-model="scope.row.title"
                         maxlength="30"
                         show-word-limit
-                        @blur="rename(scope.row.id,scope.row.title)"
+                        @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
                     <div
                         style="width:150px"
                         class="ellipsis"
                         v-else
-                        @click="rename(scope.row.id,scope.row.title,scope.$index)"
+                        @click="rename(scope.row.id,scope.row,scope.$index)"
                     >{{scope.row.title}}</div>
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
@@ -109,6 +110,7 @@
 
 <script>
 import { adminDownload } from "@/api/request/contentCommonApi.js";
+import { trim } from "@/utlis/index.js";
 export default {
     props: ["imgPageResult", "picSearchOptions", "useStorage"],
     data() {
@@ -187,15 +189,28 @@ export default {
             this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
             this.categoryVisable = false;
         },
-        // 重命名图片名称
-        rename(id, newName, index) {
+        // 重命名名称
+        rename(id, row, index) {
+             if(row.title)this.newName = row.title;
+             if (!trim(row.title)) {
+                row.title=this.newName
+                this.$notify({
+                    customClass: "notify-error",
+                    message: `音频名称不能为空`,
+                    showClose: false,
+                    duration: 2000
+                });
+                return false;
+            }
             if (isNaN(index)) {
                 this.index = -1;
-                this.$emit("rename", id, newName);
+                this.$emit("rename", id, row.title);
                 return;
             }
             this.index = index;
-            //this.$emit("rename", id, newName);
+            this.$nextTick(() => {
+                this.$refs.renameInput.focus();
+            });
         },
         blurRename(id, newName) {},
         /**

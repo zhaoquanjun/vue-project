@@ -24,25 +24,25 @@
                             <img src="~img/file-icon/play.png" alt />
                         </span>
                     </div>
-                    <!-- <img  @click="viewPic( scope.row,scope.$index)" :src="scope.row.coverUrl" class="cover" /> -->
                     <div v-if="(index == scope.$index)">
                         <el-input
                             type="text"
                             size="small"
+                            ref="renameInput"
                             placeholder="请输入内容"
                             v-model="scope.row.title"
                             maxlength="50"
                             show-word-limit
-                            @blur="rename(scope.row.id,scope.row.title)"
+                            @blur="rename(scope.row.id,scope.row)"
                         ></el-input>
-                        <div class="format">格式： {{formatterFile(Extscope.row.fileExtension)}}</div>
+                        <div class="format">格式： {{(scope.row.fileExtension)}}</div>
                     </div>
                     <div v-else>
                         <div
                             class="img-name"
-                            @click="rename(scope.row.id,scope.row.title,scope.$index)"
+                            @click="rename(scope.row.id,scope.row,scope.$index)"
                         >{{scope.row.title}}</div>
-                        <div class="format">格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
+                        <div class="format">格式： {{(scope.row.fileExtension)}}</div>
                     </div>
                 </template>
             </el-table-column>
@@ -113,7 +113,7 @@
                         <span>{{picInfo.title}}</span>
 
                         <span>大小: {{picInfo.sizeStr}}</span>
-                        <span>格式: {{formatterFileExt(picInfo.fileExtension)}}</span>
+                        <span>格式: {{(picInfo.fileExtension)}}</span>
                     </div>
                 </el-dialog>
             </div>
@@ -126,6 +126,7 @@ import {
     getStorageUsage,
     getCurrentUsageTraffic
 } from "@/api/request/contentCommonApi.js";
+import { trim } from "@/utlis/index.js";
 export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
@@ -219,23 +220,28 @@ export default {
             this.categoryVisable = false;
         },
         // 重命名图片名称
-        rename(id, newName, index) {
-            if (newName) {
-                if (isNaN(index)) {
-                    this.index = -1;
-                    this.$emit("rename", id, newName);
-                    return;
-                }
-                this.index = index;
-            } else {
+        rename(id, row, index) {
+            console.log(row)
+              if(row.title)this.newName = row.title;
+             if (!trim(row.title)) {
+                row.title=this.newName
                 this.$notify({
                     customClass: "notify-error",
                     message: `视频名称不能为空`,
                     showClose: false,
                     duration: 2000
                 });
+                return false;
             }
-            //this.$emit("rename", id, newName);
+            if (isNaN(index)) {
+                this.index = -1;
+                this.$emit("rename", id, row.title);
+                return;
+            }
+            this.index = index;
+            this.$nextTick(() => {
+                this.$refs.renameInput.focus();
+            });
         },
         blurRename(id, newName) {},
         /**
