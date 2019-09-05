@@ -9,10 +9,10 @@
           <div class="item-content-wrap">
             <span class="item-content">{{item.appDescription}}</span>
           </div>
-          <div class="item-btn">
-            <a class="item-link" :href="item.appUrl" target="_blank">查看详情</a>
+          <a class="item-btn" :href="item.appUrl" target="_blank">
+            <span class="item-link" :href="item.appUrl" target="_blank">查看详情</span>
             <div class="item-arrow"></div>
-          </div>
+          </a>
         </div>
       </el-col>
     </el-row>
@@ -97,8 +97,16 @@ export default {
           -webkit-box-orient: vertical;
         }
         .item-btn {
-          margin-top: 27px;
-          margin-bottom: 5px;
+          display: block;
+          padding: 10px;
+          margin: 17px auto 5px;
+          // margin-top: 17px;
+          // margin-bottom: 5px;
+          width: 101px;
+          &:hover {
+            background-color: rgba(9, 204, 235, 0.09);
+            border-radius: 2px;
+          }
           .item-link {
             font-size: 16px;
             font-weight: 400;
