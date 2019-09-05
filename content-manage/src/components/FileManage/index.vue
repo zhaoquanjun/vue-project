@@ -584,14 +584,13 @@ export default {
                 return false;
             } else {
                 this.watchPwd.secondRule = true;
-                if (!trim(this.ruleForm.pass)){
-                 this.watchPwd.secondRule = false;
-             }
                 this.error.pwdTip = false;
                 this.error.pwdErrorText = "";
                 return true;
             }
-            
+            if (!trim(this.ruleForm.pass)){
+                 this.watchPwd.secondRule = false;
+             }
         },
         pwdRule() {
             this.pwdRuleShow = true;

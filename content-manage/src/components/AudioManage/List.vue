@@ -53,10 +53,12 @@
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类">
+            <el-table-column prop="durationStr" label="时长"  min-width="150">
+
+            </el-table-column>
+            <el-table-column prop="categoryName" label="分类" min-width="150">
                  <template slot-scope="scope">
-                    <span>{{ scope.row.categoryName }}</span>
+                    <span  style="width:150px" class="ellipsis">{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
 

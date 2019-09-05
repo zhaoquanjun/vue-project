@@ -27,12 +27,12 @@
                     <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
                     <el-tooltip class="item" effect="dark" :content="scope.row.name" placement="top">
-                    <span>{{ scope.row.name }}</span>
+                    <span style="width:200px" class="ellipsis img-name">{{ scope.row.name }}</span>
                     </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="productCategoryList" label="分类" show-overflow-tooltip>
+            <el-table-column prop="productCategoryList"  min-width="100" label="分类" show-overflow-tooltip>
                 <template slot="header" slot-scope="scope">
                        <span style="margin-right: 5px;">分类</span> <el-tooltip content="一个产品最多可属于5个分类" effect="dark" placement="right">
                                <i class="iconfont iconyiwen"></i>
@@ -51,13 +51,13 @@
                 </template>
             </el-table-column>
 
-            <el-table-column width="100" prop="isOnSell" label="状态">
+            <el-table-column min-width="100" prop="isOnSell" label="状态">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isOnSell?"上架":"下架" }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column width="100" prop="isTop" label="置顶">
+            <el-table-column min-width="100" prop="isTop" label="置顶">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
