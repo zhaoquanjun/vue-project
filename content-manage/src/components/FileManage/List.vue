@@ -16,50 +16,63 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="文件名称" width="220">
+            <el-table-column label="文件名称" min-width="220">
                 <template slot-scope="scope">
                     <img :src="scope.row | fileCover" class="cover" />
-                
-                        <span
-                            style="width:150px"
-                            :title="scope.row.title"
-                            @click="rename(scope.row.id,scope.row.title,scope.$index)"
-                        >{{scope.row.title}}</span>
-                 
+
+                    <span
+                        style="width:150px"
+                        :title="scope.row.title"
+                        @click="rename(scope.row.id,scope.row.title,scope.$index)"
+                    >{{scope.row.title }}</span>
 
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
-            <el-table-column prop="fileExtensionTypeStr" label="文件类型" width="80"></el-table-column>
-            <el-table-column prop="categoryName"  label="分类" width="120">
+            <el-table-column prop="fileExtension" label="文件类型" min-width="80">
+                 <template slot-scope="scope">
+                    <span>{{ scope.row.fileExtension | formatterFileExt}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="categoryName" label="分类" min-width="120">
                 <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" :content="scope.row.categoryName" placement="top">
-                        <div class="ellipsis">{{ scope.row.categoryName}}</div>
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        :content="scope.row.categoryName"
+                        placement="top"
+                    >
+                        <div class="ellipsis">{{ scope.row.categoryName }}</div>
                     </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip width="80"></el-table-column>
-            <el-table-column prop="downloadCount" label="置顶">
+            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip min-width="80"></el-table-column>
+            <el-table-column prop="downloadCount" label="置顶" min-width="80" >
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="downloadCount" width="80" label="下载次数">
-                <template slot-scope="scope" >
+            <el-table-column prop="downloadCount" min-width="80" label="下载次数">
+                <template slot-scope="scope">
                     <span>{{ scope.row.downloadCount}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="createTimeStr" width="150"  label="上传时间">
+            <el-table-column prop="createTimeStr" min-width="150" label="上传时间">
                 <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" :content="scope.row.createTimeStr" placement="top">
-                        <div class="ellipsis" >{{ scope.row.createTimeStr}}</div>
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        :content="scope.row.createTimeStr"
+                        placement="top"
+                    >
+                        <div class="ellipsis">{{ scope.row.createTimeStr}}</div>
                     </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" width="150"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" min-width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn edit-icon" @click="handleEditor(scope.row)">
@@ -186,6 +199,14 @@ export default {
                 default:
                     return require("img/file-icon/other.png");
             }
+        },
+        formatterFileExt(fileExt) {
+            if (fileExt) {
+                console.log(fileExt)
+                if (fileExt.substring(0, 1) == ".") return fileExt.substring(1);
+                return fileExt;
+            }
+            return "";
         }
     },
     mounted() {

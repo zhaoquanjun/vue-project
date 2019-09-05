@@ -7,6 +7,7 @@
         width:20px;height:20px;
         position: absolute;
         left: 5px;
+        top: 10px;
         cursor:grab;
       i{
           color: #A1A8B1;
@@ -21,9 +22,6 @@
         height: 100%;
         display: flex;
         align-items: center;
-        .enter {
-            margin: 0 5px;
-        }
          .node-label-wrap{
              color: #262626;
             display: flex;align-items: center;height: 100%;width: 100%;
@@ -71,6 +69,7 @@
         right: 5px;
         width: 33px;
         height: 28px;
+        top: 5px;
         z-index: 10;
         border-radius: 2px;
         text-align: center;
@@ -79,8 +78,5 @@
     .set-tree-type:hover{
         background: #C5F0F8;
        
-    }
-    .cancel .svg-icon{
-        width: 12px;
     }
 }

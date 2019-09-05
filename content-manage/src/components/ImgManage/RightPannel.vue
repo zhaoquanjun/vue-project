@@ -16,10 +16,7 @@
       <span class="close-pannel" @click="closePanel"><i class="iconfont iconX"></i></span>
     </div>
     <div class="pannel-main" style="padding:0 17px">
-      <slot slot="cur-tip"></slot>
-      <div>
         <slot></slot>
-      </div>
     </div>
     <div class="pannel_footer"><slot name="footer"></slot></div>
   </div>

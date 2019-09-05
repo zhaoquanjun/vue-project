@@ -35,14 +35,14 @@
                             show-word-limit
                             @blur="rename(scope.row.id,scope.row)"
                         ></el-input>
-                        <div class="format">格式： {{(scope.row.fileExtension)}}</div>
+                        <div class="format">格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
                     </div>
                     <div v-else>
                         <div
                             class="img-name"
                             @click="rename(scope.row.id,scope.row,scope.$index)"
                         >{{scope.row.title}}</div>
-                        <div class="format">格式： {{(scope.row.fileExtension)}}</div>
+                        <div class="format">格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
                     </div>
                 </template>
             </el-table-column>

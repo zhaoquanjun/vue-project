@@ -97,7 +97,7 @@ export default {
 .handle-btn-wrap {
     width: 70%;
     .handle-btn {
-        padding-right: 32px;
+        margin-right: 32px;
         .iconhuishouzhan:hover,
         .iconcaozuo:hover {
             color: #09cceb;
