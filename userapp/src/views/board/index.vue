@@ -37,6 +37,7 @@
               trigger="manual"
               v-model="editPopover"
               style="padding:0;"
+              class="popover"
             >
               <span slot="reference" @click="showRemark">
                 <i class="iconfont iconbianji editIcon"></i>
@@ -291,6 +292,9 @@ export default {
 <style scoped>
 .textareaWrap /deep/ .el-input__count {
   right: 25px;
+}
+.popover /deep/ .el-popover__reference{
+  outline: none;
 }
 </style>
 <style lang="scss" scoped>

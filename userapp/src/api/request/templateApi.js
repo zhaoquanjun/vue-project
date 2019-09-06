@@ -13,9 +13,13 @@ export const getTemplateSites = (para) => {
 export const getIndustryTree = () => {
     return ajaxRequest.get(`${environment.siteManageApi}/api/siteInfo/GetIndustryTree`);
 }
-// 选择模版
+// 选择全部模版
 export const updateSiteTemplate = (para) => {
     return ajaxRequest.put(`${environment.siteManageApi}/api/siteInfo/UpdateSiteTemplate`, para);
+}
+// 选择已有网站模版模版
+export const updateSiteWithTemplate = (para) => {
+    return ajaxRequest.put(`${environment.siteManageApi}/api/siteInfo/UpdateSiteWithTemplate`, para);
 }
 // 未找到想要的模版
 export const createReferenceIndustry = (para) => {

@@ -174,27 +174,28 @@
                 <div class="handle-btn-wrap">
                   <el-button
                     class="handle-btn"
+                    style="margin-right:0"
                     @click="settingTemplate( scope )"
                     :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
                     :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >设置</el-button>
                   <el-button
                     class="handle-btn"
-                    style="margin-left:32px"
+                    style="margin-left:32px;margin-right:0"
                     @click="updateTemplate( scope )"
                     :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
                     :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >更新</el-button>
                   <a
                     class="handle-btn"
-                    style="margin-left:32px"
+                    style="margin-left:32px;margin-right:0"
                     :href="`//${scope.row.domain}`"
                     target="_blank"
                     :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                   >预览</a>
                   <el-button
                     class="handle-btn"
-                    style="margin-left:32px"
+                    style="margin-left:32px;margin-right:0"
                     @click="deleteTemplate( scope )"
                   >删除</el-button>
                 </div>
@@ -669,7 +670,7 @@ export default {
       if (this.phone == "") {
         this.errorTip = true;
         this.errorPhone = "请输入设计师手机号";
-      } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
+      } else if (!/^1(3|4|5|7|8)\d{9}$/.test(this.phone)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
       } else {

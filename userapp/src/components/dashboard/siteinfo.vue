@@ -121,7 +121,6 @@ import { designerUrl, mySiteUrl } from "@/environment/index";
 import { getLanguage } from "@/configure/appCommon";
 import { getLocal } from "@/libs/local.js";
 
-
 export default {
   props: ["siteInfo", "isCanCreate", "isSystem"],
   data() {
@@ -779,6 +778,26 @@ export default {
     height: 180px;
     .content {
       height: 180px;
+      .leftArrow {
+        width: 7px;
+        height: 6px;
+        background: url("~img/dashboard/board-arrowLeftMin.png") no-repeat
+          center;
+        background-size: contain;
+        position: absolute;
+        right: 12px;
+        bottom: 4px;
+      }
+      .rightArrow {
+        width: 7px;
+        height: 6px;
+        background: url("~img/dashboard/board-arrowRightMin.png") no-repeat
+          center;
+        background-size: contain;
+        position: absolute;
+        left: 12px;
+        bottom: 4px;
+      }
       .item {
         height: 94px;
         .siteImg {
