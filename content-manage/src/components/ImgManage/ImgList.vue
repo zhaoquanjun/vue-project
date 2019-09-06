@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="图片名称" show-overflow-tooltip>
+            <el-table-column label="图片名称" min-width="300">
                 <template slot-scope="scope">
                     <img
                         :src="scope.row.zoomOssUrl"
@@ -24,6 +24,7 @@
                         class="cover"
                     />
 
+                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
                     <el-input
                         v-if="(index == scope.$index)"
                         type="text"
@@ -33,28 +34,36 @@
                         v-model="scope.row.title"
                         maxlength="30"
                         show-word-limit
-                        @blur="rename(scope.row.id,scope.row.title)"
+                        @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
                     <span
-                        class="img-name"
+                        class="img-name ellipsis"
+                        style="width:200px"
                         v-else
-                        @click="rename(scope.row.id,scope.row.title,scope.$index)"
+                        @click="rename(scope.row.id,scope.row,scope.$index)"
                     >{{scope.row.title}}</span>
+                    </el-tooltip>
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类">
+            <el-table-column prop="categoryName" label="分类" min-width="100">
                 <template slot-scope="scope">
                     <span>{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sizeStr" min-width="100" label="大小" show-overflow-tooltip></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" label="上传时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" min-width="150" label="上传时间">
+                <template slot-scope="scope">
+                    <el-tooltip class="item" effect="dark" :content="scope.row.createTimeStr" placement="top">
+                        <span>{{ scope.row.createTimeStr }}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
 
             <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
@@ -121,7 +130,14 @@
                 </el-carousel>
 
                 <div class="dislog-footer" slot="footer">
-                    <span>{{picInfo.title}}</span>
+                      <el-tooltip
+                            class="item"
+                            effect="light"
+                            :content="picInfo.title"
+                            placement="top"
+                        >
+                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
+                        </el-tooltip>
                     <span>分类: {{picInfo.categoryName}}</span>
                     <span>大小: {{picInfo.sizeStr}}</span>
                 </div>
@@ -193,8 +209,10 @@ export default {
             this.categoryVisable = false;
         },
         // 重命名图片名称
-        rename(id, newName, index) {
-            if (!trim(newName)) {
+        rename(id, row, index) {
+             if(row.title)this.newName = row.title;
+            if (!trim(row.title)) {
+                 row.title=this.newName
                 this.$notify({
                     customClass: "notify-error",
                     message: `图片名称不能为空`,
@@ -205,7 +223,7 @@ export default {
             }
             if (isNaN(index)) {
                 this.index = -1;
-                this.$emit("rename", id, newName);
+                this.$emit("rename", id, row.title);
                 return;
             }
             this.index = index;

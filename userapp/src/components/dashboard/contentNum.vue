@@ -5,11 +5,11 @@
       <el-col class="item" :span="6" v-for="(item, index) in content" :key="index">
         <div class="item-box" @click="jumpToContent(item.url)">
           <div class="item-name">
-            <span>{{ item.name }}</span>
-          </div>
-          <div class="item-content">
-            <span class="item-num">{{ item.num }}</span>
-            <span class="item-type">{{ item.type }}</span>
+            <span class="name">{{ item.name }}</span>
+            <div class="item-content">
+              <span class="item-num">{{ item.num }}</span>
+              <span class="item-type">{{ item.type }}</span>
+            </div>
           </div>
         </div>
       </el-col>
@@ -107,42 +107,50 @@ export default {
         margin-bottom: 32px;
         border-right: 1px solid #eee;
         cursor: pointer;
+        text-align: center;
         span {
           display: block;
         }
-        .item-name {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          span {
-            font-size: 18px;
-            font-weight: 300;
-            color: rgba(38, 38, 38, 1);
-            line-height: 25px;
+        &:hover {
+          .item-name .item-content .item-num {
+            color: #09cceb;
           }
         }
-        .item-content {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          //   vertical-align: top;
-        }
-        .item-num {
-          display: inline;
-          margin-right: 5px;
-          font-size: 36px;
-          font-weight: 500;
-          color: rgba(38, 38, 38, 1);
-          line-height: 50px;
-          //   vertical-align: top;
-        }
-        .item-type {
-          display: inline;
-          font-size: 14px;
-          font-weight: 300;
-          color: rgba(185, 203, 207, 1);
-          line-height: 20px;
-          //   vertical-align: top;
+        .item-name {
+          // display: flex;
+          // justify-content: center;
+          // align-items: center;
+          display: inline-block;
+          .name {
+            font-size: 18px;
+            font-weight: 400;
+            color: rgba(38, 38, 38, 1);
+            line-height: 25px;
+            text-align: left;
+          }
+          .item-content {
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
+            //   vertical-align: top;
+            .item-num {
+              display: inline;
+              margin-right: 5px;
+              font-size: 36px;
+              font-weight: 500;
+              color: rgba(38, 38, 38, 1);
+              line-height: 50px;
+              //   vertical-align: top;
+            }
+            .item-type {
+              display: inline;
+              font-size: 14px;
+              font-weight: 300;
+              color: rgba(185, 203, 207, 1);
+              line-height: 20px;
+              //   vertical-align: top;
+            }
+          }
         }
       }
     }
@@ -171,13 +179,15 @@ export default {
       .item .item-box {
         height: 54px;
         margin-bottom: 17px;
-        .item-name span {
-          font-size: 14px;
-          line-height: 20px;
-        }
-        .item-num {
-          font-size: 28px;
-          line-height: 40px;
+        .item-name {
+          .name {
+            font-size: 14px;
+            line-height: 20px;
+          }
+          .item-content .item-num {
+            font-size: 28px;
+            line-height: 40px;
+          }
         }
       }
     }

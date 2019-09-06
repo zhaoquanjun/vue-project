@@ -2,17 +2,21 @@
     <div class="set-phone-number">
         <div class="modify-title">
             <p>修改手机号后，可以使用新手机登录管理平台</p>
-            <p> 您关联的账户下的成员列表中的手机号会一同修改</p>
-            </div>
+            <p>您关联的账户下的成员列表中的手机号会一同修改</p>
+        </div>
         <div class="from-row">
-            <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi" @refreshIndex="_refreshIndex"></get-sms>
+            <get-sms
+                ref="getSms"
+                :sourcePhone="sourcePhone"
+                :is-modifi="isModifi"
+                @refreshIndex="_refreshIndex"
+            ></get-sms>
         </div>
         <div class="footer pannel-footer">
             <button class="confirm footer-btn" v-if="!isModifi" @click="nextStep">下一步</button>
             <button class="confirm footer-btn" v-else @click="modify ">确认修改</button>
             <button class="cancel footer-btn" @click="close">取消</button>
-        </div>        
-        
+        </div>
     </div>
 </template> 
 <script>
@@ -66,15 +70,14 @@ export default {
     },
     methods: {
         async nextStep() {
-          
             let code = this.$refs.getSms.ruleForm.verification;
-           
+
             if (!this.$refs.getSms.submitForm1()) {
-                return false
+                return false;
             } else {
-                let { status } = await isInvalidCode(code);                
+                let { status } = await isInvalidCode(code);
                 if (status === 200) {
-                      this.$refs.getSms.resetTimer()
+                    this.$refs.getSms.resetTimer();
                     this.isModifi = true;
                     if (!this.isModifi) {
                         this.$store.commit("CLOSERIGHTPANNEL", false);
@@ -83,9 +86,11 @@ export default {
                         }, 500);
                     }
                 } else {
-                    this.$message({
-                        type: "failed",
-                        message: "验证失败!"
+                    this.$notify({
+                        customClass: "notify-error",
+                        message: `验证失败!`,
+                        showClose: false,
+                        duration: 1500
                     });
                 }
             }
@@ -126,15 +131,14 @@ export default {
 .set-phone-number {
     padding: 32px;
     .modify-title {
-        color: #35B24B;
+        color: #35b24b;
         padding: 8px;
         background: rgba(242, 255, 234, 1);
         border: 1px solid rgba(199, 221, 185, 1);
-        p{
-             line-height: 20px;
-             text-align: center;
+        p {
+            line-height: 20px;
+            text-align: center;
         }
-        
     }
 }
 .smsCodeWrap {
@@ -168,7 +172,6 @@ export default {
 .from-row {
     margin-top: 30px;
 }
-
 </style>
 
 

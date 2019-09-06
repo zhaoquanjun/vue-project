@@ -27,28 +27,38 @@
                         v-if="(index == scope.$index)"
                         type="text"
                         size="small"
+                         ref="renameInput"
                         placeholder="请输入内容"
                         v-model="scope.row.title"
                         maxlength="30"
                         show-word-limit
-                        @blur="rename(scope.row.id,scope.row.title)"
+                        @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
-                    <div
-                        style="width:150px"
-                        class="ellipsis"
-                        v-else
-                        @click="rename(scope.row.id,scope.row.title,scope.$index)"
-                    >{{scope.row.title}}</div>
+                  
+                      <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="scope.row.title"
+                            placement="top"
+                        >
+                            <div
+                                 style="width:150px"
+                                class="ellipsis img-name"
+                                @click="rename(scope.row.id,scope.row,scope.$index)"
+                            >{{scope.row.title}}</div>
+                        </el-tooltip>
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类">
+            <el-table-column prop="durationStr" label="时长"  min-width="150">
+
+            </el-table-column>
+            <el-table-column prop="categoryName" label="分类" min-width="150">
                  <template slot-scope="scope">
-                    <span>{{ scope.row.categoryName }}</span>
+                    <span  style="width:150px" class="ellipsis">{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
 
@@ -97,7 +107,15 @@
                 >
                     <audio ref="audio" class="audio" :src="fullOssUrl" controls="controls" />
                     <div class="dislog-footer" slot="footer">
-                        <span>{{picInfo.title}}</span>
+                         <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="picInfo.title"
+                            placement="top"
+                        >
+                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
+                        </el-tooltip>
+                      
                         <span>分类: {{picInfo.categoryName}}</span>
                         <span>大小: {{picInfo.sizeStr}}</span>
                     </div>
@@ -109,6 +127,7 @@
 
 <script>
 import { adminDownload } from "@/api/request/contentCommonApi.js";
+import { trim } from "@/utlis/index.js";
 export default {
     props: ["imgPageResult", "picSearchOptions", "useStorage"],
     data() {
@@ -187,15 +206,28 @@ export default {
             this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
             this.categoryVisable = false;
         },
-        // 重命名图片名称
-        rename(id, newName, index) {
+        // 重命名名称
+        rename(id, row, index) {
+             if(row.title)this.newName = row.title;
+             if (!trim(row.title)) {
+                row.title=this.newName
+                this.$notify({
+                    customClass: "notify-error",
+                    message: `音频名称不能为空`,
+                    showClose: false,
+                    duration: 2000
+                });
+                return false;
+            }
             if (isNaN(index)) {
                 this.index = -1;
-                this.$emit("rename", id, newName);
+                this.$emit("rename", id, row.title);
                 return;
             }
             this.index = index;
-            //this.$emit("rename", id, newName);
+            this.$nextTick(() => {
+                this.$refs.renameInput.focus();
+            });
         },
         blurRename(id, newName) {},
         /**

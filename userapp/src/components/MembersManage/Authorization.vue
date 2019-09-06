@@ -42,6 +42,11 @@ export default {
     AuthList,
     SelectedAuth
   },
+  data(){
+    return {
+      flag:false
+    }
+  },
   methods: {
     ...mapMutations([
       "CHOOSEAUTH",
@@ -60,7 +65,12 @@ export default {
       this.EMPTYSELECTEDAUTH();
     },
     searchAuth() {
-      this.oldUserPermission = JSON.stringify(this.userPermission);
+      if(!this.flag){
+         this.oldUserPermission = JSON.stringify(this.userPermission);
+         this.flag = true
+      }
+     
+      console.log(this.oldUserPermission,'this.oldUserPermission')
       let ary = [];
       this.userPermission.forEach(item => {
         if (item.name.includes(this.input)) {
@@ -72,10 +82,12 @@ export default {
     },
     changeInput() {
       if (this.input == "" && this.oldUserPermission) {
+       console.log(JSON.stringify(this.oldUserPermission),'this.oldUserPermission')
         this.$store.commit(
           "USERPERMISSION",
           JSON.parse(this.oldUserPermission)
         );
+         console.log(this.userPermission)
       }
     }
   },
@@ -85,6 +97,7 @@ export default {
       userPermission: state => state.memberManager.userPermission,
       memberPolicy: state => state.memberManager.memberPolicy
     }),
+   
     input: {
         get: function() {
             return this.invitationValue
@@ -108,7 +121,7 @@ export default {
   padding: 20px 10px;
   overflow: hidden;
   .search-auth {
-    height: 32px;
+    height: 40px;
     border: 1px solid #e5e5e5;
     box-sizing: border-box;
     position: relative;

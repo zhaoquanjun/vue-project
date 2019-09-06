@@ -18,7 +18,6 @@ router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
   if (!to.meta.requiresAuth) {
     if (!getLocal('ymId')) {
-
       await store.dispatch('_updateAppIdAndSiteIdToCookie')
     }
     store.dispatch('_getMenuListData')
@@ -26,42 +25,45 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  if (accessToken) {
-    if (!parseFloat(getLocal('ymId'))) {
-      await store.dispatch('_updateAppIdAndSiteIdToCookie')
-    }
-    let r = await store.dispatch('getCurRouteAuth', to.path);
-    if (r) {
-      if (store.getters.getMenuList.length < 1) {
-        await store.dispatch('_getMenuListData')
-      }
-      if (to.path.includes("/website")) {
-        let haveTemplate = await store.dispatch('_haveTemplate');
-        if (!haveTemplate) {
-          next('/website/selectTemplate')
+  
+    if (to.name !== "callback") {
+      if (accessToken) {
+        if (!parseFloat(getLocal('ymId'))) {
+          await store.dispatch('_updateAppIdAndSiteIdToCookie')
+        }
+        let r = await store.dispatch('getCurRouteAuth', to.path);
+        if (r) {
+          if (store.getters.getMenuList.length < 1) {
+            await store.dispatch('_getMenuListData')
+          }
+          if (to.path.includes("/website")) {
+            let haveTemplate = await store.dispatch('_haveTemplate');
+            if (!haveTemplate) {
+              next('/website/selectTemplate')
+            } else {
+              next()
+            }
+          } else {
+            next();
+          }
         } else {
-          next()
+          next('/404')
         }
       } else {
-        next();
+          securityService.getUser(location.href).then(async (data) => {
+            if (!data) {
+              securityService.signIn();
+              return
+            } else {
+              store.dispatch("_set", data)
+              console.log(data)
+              next()
+            }
+          })
       }
-    } else {
-      next('/404')
-    }
-  } else {
-    if (to.name !== "callback") {
-      securityService.getUser(location.href).then(async (data) => {
-        if (!data) {
-          securityService.signIn();
-          return
-        } else {
-          store.dispatch("_set", data)
-          console.log(data)
-          next()
-        }
-      })
     } else {
       next()
     }
-  }
+  
 });
+

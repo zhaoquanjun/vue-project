@@ -69,10 +69,13 @@ export default {
             }, 500);
         },
         onCopy() {
-            this.$message({
-                message: `复制成功！`,
-                type: "success"
-            });
+          
+              this.$notify({
+                        customClass: "notify-success", // error success
+                        message: `复制成功！`,
+                        duration: 1500,
+                        showClose: false
+                    });
             // this.$store.commit("CLOSERIGHTPANNEL", false);
             this.copyTip = "复制成功";
             this.isCopy = true;
@@ -181,7 +184,7 @@ export default {
     padding: 0 16px;
     overflow: hidden;
     .search-auth {
-        height: 32px;
+        height: 40px;
         border: 1px solid #e5e5e5;
         box-sizing: border-box;
         position: relative;

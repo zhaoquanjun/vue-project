@@ -16,7 +16,7 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column width="300" prop="name" label="产品标题" show-overflow-tooltip>
+            <el-table-column width="300" prop="name" label="产品标题">
                 <template slot-scope="scope">
                     <img
                         v-if="scope.row.thumbnailPicUrlList.length"
@@ -26,23 +26,38 @@
                     />
                     <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
-                    <span>{{ scope.row.name }}</span>
+                    <el-tooltip class="item" effect="dark" :content="scope.row.name" placement="top">
+                    <span style="width:200px" class="ellipsis img-name">{{ scope.row.name }}</span>
+                    </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="productCategoryList" label="分类" show-overflow-tooltip>
+            <el-table-column prop="productCategoryList"  min-width="100" label="分类" show-overflow-tooltip>
+                <template slot="header" slot-scope="scope">
+                       <span style="margin-right: 5px;">分类</span> <el-tooltip content="一个产品最多可属于5个分类" effect="dark" placement="right">
+                               <i class="iconfont iconyiwen"></i>
+                            </el-tooltip>
+                   
+                </template>
                 <template slot-scope="scope">
-                    <span v-for="(item,index) in scope.row.productCategoryList" :key="item.id">{{ item.displayName }} <i v-if="scope.row.productCategoryList.length>1 && scope.row.productCategoryList.length-1!=index">,</i> </span>
+                    <span>
+                        <i v-for="(item,index) in scope.row.productCategoryList" :key="item.id">
+                            {{ item.displayName }}
+                            <i
+                                v-if="scope.row.productCategoryList.length>1 && scope.row.productCategoryList.length-1!=index"
+                            >,</i>
+                        </i>
+                    </span>
                 </template>
             </el-table-column>
 
-            <el-table-column width="100" prop="isOnSell" label="状态">
+            <el-table-column min-width="100" prop="isOnSell" label="状态">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isOnSell?"上架":"下架" }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column width="100" prop="isTop" label="置顶">
+            <el-table-column min-width="100" prop="isTop" label="置顶">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
@@ -50,7 +65,12 @@
 
             <el-table-column min-width="100" prop="createTimeStr" label="创建时间"></el-table-column>
 
-            <el-table-column width="150" min-width="100" label="操作"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column
+                width="150"
+                min-width="100"
+                label="操作"
+                v-if="$store.state.dashboard.isContentwrite"
+            >
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)">
@@ -59,7 +79,9 @@
                         <span
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
-                        ><i class="iconfont iconsangedian"></i></span>
+                        >
+                            <i class="iconfont iconsangedian"></i>
+                        </span>
                     </div>
                 </template>
             </el-table-column>
@@ -87,15 +109,13 @@
                 @click="handleMoreOperate(it.flag)"
             >{{it.name}}</li>
         </ul>
-
     </div>
 </template>
 
 <script>
-
 export default {
     props: ["articlePageResult", "articleSearchOptions"],
-  
+
     data() {
         return {
             defaultImg: require("../../../static/images/content-default-pic.png"),
@@ -246,8 +266,7 @@ export default {
         clearSelection() {
             this.$refs.multipleTable.clearSelection();
         }
-    },
-   
+    }
 };
 </script>
 

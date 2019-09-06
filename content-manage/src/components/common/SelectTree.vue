@@ -118,8 +118,11 @@ export default {
     },
     methods: {
         setCheckedKeys() {
+           
             this.valueTitle = this.categoryName;
             this.$nextTick(() => {
+                console.log(this.categoryId)
+                console.log(this.$refs.selectTree)
                 this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
                 //   this.$refs.tree.setCheckedKeys(ids);
             });
@@ -133,14 +136,9 @@ export default {
         },
         // 初始化值
         initHandle() {
-            console.log(this.categoryId, "0000000");
-
-            // this.valueTitle = this.$refs.selectTree.getNode(
-            //     this.valueId
-            // ).data[this.props.label]; // 初始化显示
-            this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
+         
+            // this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
             // this.defaultExpandedKey = [this.valueId]; // 设置默认展开
-
             this.$nextTick(() => {
                 let scrollWrap = document.querySelectorAll(
                     ".el-scrollbar .el-select-dropdown__wrap"

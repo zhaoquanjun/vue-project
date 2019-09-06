@@ -8,7 +8,7 @@
           </span>
           <span @click="changeApp" class="headAppName">
             <span class="headAppNameInfo">{{headAppName}}</span>
-            <i class="iconfont iconqiehuan" style="font-size:22px;vertical-align:middle"></i>
+            <i class="iconfont iconqiehuan" style="font-size:16px;vertical-align:middle"></i>
           </span>
         </div>
       </el-col>
@@ -17,14 +17,14 @@
           <span style="cursor: pointer">
             <i
               class="iconfont iconbangzhu"
-              style="margin-right:8px;font-size:22px;vertical-align:middle"
+              style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">帮助</b>
           </span>
           <span style="cursor: pointer">
             <i
               class="iconfont icontongzhi"
-              style="margin-right:8px;font-size:22px;vertical-align:middle"
+              style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">通知</b>
           </span>
@@ -47,6 +47,7 @@
           :center="true"
           :close-on-click-modal="false"
           :modal-append-to-body="false"
+          :append-to-body="true"
           style="margin-top:60px"
           :modal="false"
         >
@@ -267,6 +268,7 @@ export default {
         max-width: 150px;
         vertical-align: middle;
         padding-left: 0;
+        padding-right: 6px;
       }
     }
   }

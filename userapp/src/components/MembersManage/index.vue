@@ -1,7 +1,7 @@
 <template>
     <el-container class="member-container">
         <el-aside style="width:120px">
-            <page-submenu >
+            <page-submenu>
                 <template v-slot:title>系统设置</template>
             </page-submenu>
         </el-aside>
@@ -62,9 +62,7 @@
                 :modal-append-to-body="false"
             >
                 <right-pannel :style="{width:pannelWidth+'px'}">
-                    <span style="vertical-align: middle;" slot="title-text" >
-                    {{rightPanelTitle}}
-                    </span>
+                    <span style="vertical-align: middle;" slot="title-text">{{rightPanelTitle}}</span>
                     <i slot="icon-tip" class="icon-size icon-explain"></i>
                     <auth-config
                         ref="authConfig"
@@ -88,7 +86,6 @@ import AuthConfig from "./AuthConfig";
 import InvitationLink from "./InvitationLink";
 import PageSubmenu from "@/components/common/PageSubmenu";
 import { mapMutations, mapState, mapActions } from "vuex";
-import { updateUserLastAppIdAndCookie } from "@/api/index.js";
 export default {
     name: "homeMain",
     components: {
@@ -116,17 +113,18 @@ export default {
             isInvite: 1,
             memberListParams: {
                 phone: "",
-                pageNum: "",
-                pageSize: 9
+                page: 1,
+                size: 9
             }
         };
     },
     mounted() {
-        this._getBeInvitedUsers().then(jsonData => {
-            this.memberInfo = jsonData;
-            this.memberList = jsonData.items;
-        });
+        // this._getBeInvitedUsers(this).then(jsonData => {
+        //     this.memberInfo = jsonData;
+        //     this.memberList = jsonData.items;
+        // });
         // this._getUserDashboard()
+        this.getMemberList()
     },
     methods: {
         ...mapActions([
@@ -144,7 +142,7 @@ export default {
             "ISINVITATIONPANELSHOW",
             "CURMEMBVERINFO"
         ]),
-
+       
         /**
          * 删除成员列表中其中一项
          */
@@ -170,9 +168,11 @@ export default {
                                     item => item !== curItem
                                 );
                                 this.getMemberList();
-                                this.$message({
-                                    type: "success",
-                                    message: "删除成功!"
+                                this.$notify({
+                                    customClass: "notify-success", // error success
+                                    message: `删除成功`,
+                                    duration: 1500,
+                                    showClose: false
                                 });
                             }
                         }
@@ -221,8 +221,7 @@ export default {
             );
         },
         getMemberList() {
-            let options = { phone: this.memberPhone };
-            this._getBeInvitedUsers(options).then(jsonData => {
+            this._getBeInvitedUsers(this.memberListParams).then(jsonData => {
                 this.memberInfo = jsonData;
                 this.memberList = jsonData.items;
             });
@@ -285,20 +284,22 @@ export default {
          * 改变table页码
          */
         changePageNum(page) {
-            this.memberListParams.pageNum = page;
-            let options = { page: page };
-            this._getBeInvitedUsers(options).then(jsonData => {
-                this.memberList = jsonData.items;
-                this.memberInfo = jsonData;
-            });
+            this.memberListParams.page = page;
+            this.getMemberList()
+            // let options = { page: page };
+            // this._getBeInvitedUsers(options).then(jsonData => {
+            //     this.memberList = jsonData.items;
+            //     this.memberInfo = jsonData;
+            // });
         },
-        changePageSize(size){
-           this.memberListParams.pageNum = size;
-            let options = { size: size };
-            this._getBeInvitedUsers(options).then(jsonData => {
-                this.memberList = jsonData.items;
-                this.memberInfo = jsonData;
-            });
+        changePageSize(size) {
+            this.memberListParams.size = size;
+            this.getMemberList()
+            // let options = { size: size };
+            // this._getBeInvitedUsers(options).then(jsonData => {
+            //     this.memberList = jsonData.items;
+            //     this.memberInfo = jsonData;
+            // });
         },
         updateUserRemark(options) {
             console.log(options);
@@ -309,10 +310,10 @@ export default {
         ...mapState(["isRightPanelShow", "isInvitationPanelShow"]),
 
         pannelWidth() {
-            return this.isRightPanelShow === true ? 543 : 0;
+            return this.isRightPanelShow === true ? 808 : 0;
         },
         isInvitationlWidth() {
-            return this.isInvitationPanelShow === true ? 543 : 0;
+            return this.isInvitationPanelShow === true ? 808 : 0;
         },
         disabled() {
             return this.multipleSelection.length > 0 ? false : true;
@@ -364,7 +365,6 @@ export default {
     font-weight: 600;
     color: #333333;
     margin-right: 20px;
-    
 }
 .user-set {
     padding: 15px 0;

@@ -29,7 +29,7 @@
                         @pauseCdn="_pauseCdn"
                         @getCdnDomainList="_getCdnDomainList"
                     ></DomainList>
-                    <RedirectDomainList v-else ref="redirectDomainList" @toSet="toSet"></RedirectDomainList>
+                    <RedirectDomainList v-else ref="redirectDomainList" @toSet="toSet"   ></RedirectDomainList>
                 </el-main>
                 <div class="handle-guide">
                     <template v-if="showType">
@@ -68,9 +68,10 @@
             ></BindDomain>
             <AddRedirectDomain
                 v-else
-                :domain-list="getActiveAndNotInUseDomainList"
+                :domain-list="activeAndNotInUseDomainList"
                 @closeDialog="closeDialog"
                 @get301List="_get301List"
+                @getActiveAndNotInUseDomainList="_getActiveAndNotInUseDomainList"
             />
         </el-dialog>
     </el-container>
@@ -115,7 +116,7 @@ export default {
             resolveDomainData: "",
             curSiteId: "",
             showType: true,
-            getActiveAndNotInUseDomainList: [],
+            activeAndNotInUseDomainList: [],
             domainValue:"",
         };
     },
@@ -402,13 +403,14 @@ export default {
             let {
                 data
             } = await domainRedirectApi.getActiveAndNotInUseDomainList();
-            this.getActiveAndNotInUseDomainList = data;
+            this.activeAndNotInUseDomainList = data;
         },
         _get301List() {
             this.$refs.redirectDomainList._get301List();
         },
-        righPanelShow() {
+        righPanelShow(backupType) {
             this.backupShow = true;
+            if(backupType === "301Redirect") this._getActiveAndNotInUseDomainList()
         },
 
         closeDialog() {
@@ -424,6 +426,7 @@ export default {
         },
         toSet() {
             this.$refs.domainMenu.handleTabClick("domainList");
+
         }
     }
 };

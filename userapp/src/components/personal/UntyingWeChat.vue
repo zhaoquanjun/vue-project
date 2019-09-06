@@ -39,9 +39,11 @@ export default {
                 if (status === 200) {
                     this.$emit("removeExternalUserAsync", this.provider);
                 } else {
-                    this.$message({
-                        type: "warning",
-                        message: "验证失败!"
+                     this.$notify({
+                        customClass: "notify-error", // error success
+                        message: `验证失败`,
+                        duration: 1500,
+                        showClose: false
                     });
                 }
             }

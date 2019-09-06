@@ -17,3 +17,7 @@ const sendEmail = (email) => {
         return true;
     }
 }
+//去左右空格;
+export function trim(s) {
+    return s.replace(/(^\s*)|(\s*$)/g, "");
+}

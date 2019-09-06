@@ -51,10 +51,12 @@ export default {
             if (data.result == "True") {
                 this.bindResultMessage = null;
                 this.$store.commit("CLOSERIGHTPANNEL", false);
-                this.$message({
-                    type: "success",
-                    message: "绑定成功!"
-                });
+                 this.$notify({
+                        customClass: "notify-success", // error success
+                        message: `绑定成功`,
+                        duration: 1500,
+                        showClose: false
+                    });
                 this.$emit("getExternalUserAsync");
             } else if (data.result == "False") {
                 this.bindResultMessage = data.message;

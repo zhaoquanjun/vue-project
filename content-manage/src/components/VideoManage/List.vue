@@ -24,32 +24,40 @@
                             <img src="~img/file-icon/play.png" alt />
                         </span>
                     </div>
-                    <!-- <img  @click="viewPic( scope.row,scope.$index)" :src="scope.row.coverUrl" class="cover" /> -->
                     <div v-if="(index == scope.$index)">
                         <el-input
                             type="text"
                             size="small"
+                            ref="renameInput"
                             placeholder="请输入内容"
                             v-model="scope.row.title"
                             maxlength="50"
                             show-word-limit
-                            @blur="rename(scope.row.id,scope.row.title)"
+                            @blur="rename(scope.row.id,scope.row)"
                         ></el-input>
-                        <div class="format">格式： {{formatterFile(Extscope.row.fileExtension)}}</div>
+                        <div class="format">格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
                     </div>
                     <div v-else>
-                        <div
-                            class="img-name"
-                            @click="rename(scope.row.id,scope.row.title,scope.$index)"
-                        >{{scope.row.title}}</div>
+                        <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="scope.row.title"
+                            placement="top"
+                        >
+                            <div
+                                class="img-name"
+                                @click="rename(scope.row.id,scope.row,scope.$index)"
+                            >{{scope.row.title}}</div>
+                        </el-tooltip>
+
                         <div class="format">格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类"  show-overflow-tooltip>
-                 <template slot-scope="scope">
+            <el-table-column prop="categoryName" label="分类" show-overflow-tooltip>
+                <template slot-scope="scope">
                     <span>{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
@@ -60,8 +68,7 @@
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn move-btn" @click="handleMove(scope.row)">
-                        </button>
+                        <button class="handle-btn move-btn" @click="handleMove(scope.row)"></button>
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
                             <i class="iconfont iconhuishouzhan"></i>
                         </button>
@@ -69,7 +76,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="list-footer" >
+        <div class="list-footer">
             <div class="storage-wrap">
                 <span class="title">已用空间</span>
                 <div class="use-storage">
@@ -102,21 +109,27 @@
                 ></el-pagination>
             </div>
         </div>
-         <div id="img-list-dialog">
-                <el-dialog
-                    :visible.sync="imgVisible"
-                    :modal-append-to-body="false"
-                    @close="closeDialog"
-                >
-                    <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
-                    <div class="dislog-footer" slot="footer">
-                        <span>{{picInfo.title}}</span>
-
-                        <span>大小: {{picInfo.sizeStr}}</span>
-                        <span>格式: {{formatterFileExt(picInfo.fileExtension)}}</span>
-                    </div>
-                </el-dialog>
-            </div>
+        <div id="img-list-dialog">
+            <el-dialog
+                :visible.sync="imgVisible"
+                :modal-append-to-body="false"
+                @close="closeDialog"
+            >
+                <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
+                <div class="dislog-footer" slot="footer">
+                       <el-tooltip
+                            class="item"
+                            effect="light"
+                            :content="picInfo.title"
+                            placement="top"
+                        >
+                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
+                        </el-tooltip>
+                    <span>大小: {{picInfo.sizeStr}}</span>
+                    <span>格式: {{(picInfo.fileExtension)}}</span>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -126,6 +139,7 @@ import {
     getStorageUsage,
     getCurrentUsageTraffic
 } from "@/api/request/contentCommonApi.js";
+import { trim } from "@/utlis/index.js";
 export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
     data() {
@@ -219,37 +233,42 @@ export default {
             this.categoryVisable = false;
         },
         // 重命名图片名称
-        rename(id, newName, index) {
-            if (newName) {
-                if (isNaN(index)) {
-                    this.index = -1;
-                    this.$emit("rename", id, newName);
-                    return;
-                }
-                this.index = index;
-            } else {
+        rename(id, row, index) {
+            console.log(row);
+            if (row.title) this.newName = row.title;
+            if (!trim(row.title)) {
+                row.title = this.newName;
                 this.$notify({
                     customClass: "notify-error",
                     message: `视频名称不能为空`,
                     showClose: false,
                     duration: 2000
                 });
+                return false;
             }
-            //this.$emit("rename", id, newName);
+            if (isNaN(index)) {
+                this.index = -1;
+                this.$emit("rename", id, row.title);
+                return;
+            }
+            this.index = index;
+            this.$nextTick(() => {
+                this.$refs.renameInput.focus();
+            });
         },
         blurRename(id, newName) {},
         /**
          * 查看大图
          */
         viewPic(row, index) {
-            if(!row.isLoadFinish){
-                 this.$notify({
+            if (!row.isLoadFinish) {
+                this.$notify({
                     customClass: "notify-error",
                     message: `视频正在加载中,请稍后点击播放`,
                     showClose: false,
                     duration: 2000
                 });
-                return
+                return;
             }
             this.imgList = this.imgPageResult.list;
             this.picInfo = this.imgList[index];
@@ -276,17 +295,16 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
-            
         },
         closeDialog() {
             this.$refs.video.pause();
         },
         formatterFileExt(fileExt) {
             if (fileExt) {
-                if (fileExt.substring(0, 1) == ".")
-                    return fileExt.substring(1);
+                if (fileExt.substring(0, 1) == ".") return fileExt.substring(1);
                 return fileExt;
-            } return "";
+            }
+            return "";
         }
     }
 };
@@ -344,7 +362,6 @@ export default {
     width: 800px;
     height: 700px;
 }
-
 </style>
 
 

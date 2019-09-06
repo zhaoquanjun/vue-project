@@ -33,7 +33,7 @@ export default {
          */
         handleBtn() {
            
-            this.$emit("handleBtn");
+            this.$emit("handleBtn",this.backupType);
         }
     }
 };

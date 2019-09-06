@@ -2,14 +2,14 @@
     <div class="right-pannel" :style="{width:'470px'}">
         <div class="pannel-head">
             <span>
-                <span>添加域名</span>
+                <span>{{title}}</span>
             </span>
             <span class="close-pannel" @click="handleCancel">X</span>
         </div>
 
         <div class="domain-wrap">
             <el-form ref="ruleForm" @submit.native.prevent label-width="80px" :model="form">
-                <el-form-item style="color:#262626" label="域名:">
+                <el-form-item style="color:#262626" label="源域名:">
                     <el-select
                         v-model="form.sourceDomain"
                         placeholder="请选择"
@@ -28,11 +28,7 @@
                     >{{error.souceOnerrorText}}</div>
                 </el-form-item>
                 <el-form-item style="color:#262626" label="目标域名:">
-                    <el-input
-                        v-model="form.targetDomain"
-                        placeholder="请输入目标域名"
-                        @blur="changeInput"
-                    ></el-input>
+                    <el-input v-model="form.targetDomain" placeholder="请输入目标域名" @blur="changeInput"></el-input>
                     <div class="el-form-item__error" v-if="error.onerrorTip">{{error.onerrorText}}</div>
                 </el-form-item>
             </el-form>
@@ -53,7 +49,7 @@ import {
     modifyDomainRedirection
 } from "@/api/request/domainRedirectApi";
 export default {
-    props: ["domainList", "sourceDomain", "_targetDomain", "isEditor", "id"],
+    props: ["domainList", "sourceDomain", "_targetDomain", "isEditor", "id",],
     data() {
         return {
             disabled: false,
@@ -66,12 +62,19 @@ export default {
             form: {
                 sourceDomain: "",
                 targetDomain: ""
-            }
+            },
+            title:""
         };
     },
     mounted() {
-        this.form.sourceDomain = this.sourceDomain;
-        this.form.targetDomain = this._targetDomain;
+        if (!!this.isEditor) {
+            this.form.sourceDomain = this.sourceDomain;
+            this.form.targetDomain = this._targetDomain;
+             this.title="编辑"
+        }else{
+                this.title="添加"
+            }
+          
     },
     methods: {
         async handleConfirm() {
@@ -83,6 +86,7 @@ export default {
             };
             if (!!this.isEditor) {
                 this.editorDomain(option);
+               
                 return;
             }
             let { data, status } = await addDomainRedirection(option);
@@ -98,6 +102,8 @@ export default {
                     callback: async action => {
                         if (action === "confirm") {
                         } else {
+                            this.$emit("get301List");
+                           
                         }
                     }
                 });
@@ -115,11 +121,11 @@ export default {
                     duration: 1500,
                     showClose: false
                 });
+                this.$emit("get301List");
                 this.handleCancel();
             }
         },
         changeInput() {
-           
             if (!this.form.sourceDomain) {
                 this.error.souceErrorTip = true;
                 this.error.souceOnerrorText = "请选择源域名";
@@ -139,7 +145,7 @@ export default {
                 return false;
             } else if (this.form.sourceDomain == this.form.targetDomain) {
                 this.error.onerrorTip = true;
-                this.error.onerrorText = "目标域名和原域名不可相同";
+                this.error.onerrorText = "目标域名和源域名不可相同";
                 return false;
             } else {
                 this.error.onerrorTip = false;
@@ -198,20 +204,18 @@ export default {
 .el-form /deep/ .el-select /deep/ .el-input__inner::-webkit-input-placeholder {
     color: #262626;
 }
-.el-form /deep/ .el-form-item__content .el-select .selected{
-      background-color: #E0FAFF;
+.el-form /deep/ .el-form-item__content .el-select .selected {
+    background-color: #e0faff;
 }
-.el-form /deep/ .el-form-item__content .el-select .selected span{
-  
+.el-form /deep/ .el-form-item__content .el-select .selected span {
     color: #262626;
     font-weight: 400;
-  
 }
 .el-form /deep/ .el-form-item__content .el-select .selected::after {
-      content: "";
-       width: 22px;
+    content: "";
+    width: 22px;
     height: 22px;
-    background:url("~img/element-icon/dui.png") no-repeat center;
+    background: url("~img/element-icon/dui.png") no-repeat center;
     background-size: contain;
     display: inline-block;
     position: absolute;

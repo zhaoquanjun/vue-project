@@ -14,10 +14,8 @@
                     @click="curAuth(item,index)"
                     :class="{'choose-bg':item.isChoosed == true && isSelect}"
                 >
-                    <el-tooltip :content="item.name" placement="top-start" transition="1">
-                        <span class="item-left ellipsis">{{item.name}}</span>
-                    </el-tooltip>
-                    <span class="item-right ellipsis" v-if="isSelect">{{item.mark}}</span>
+                    <span class="item-left">{{item.name}}</span>
+                    <span class="item-right" v-if="isSelect">{{item.mark}}</span>
                     <span class="item-right auth-icon" v-else @click.stop="removeAuth(item,index)">
                         <i class="iconfont clear-icon"></i>
                     </span>
@@ -45,16 +43,16 @@ export default {
     methods: {
         curAuth(item, index) {
             let cur = this.authList[index];
-            if (cur.show) {
-                this.$set(this.authList[index], "show", false);
+            if (cur.isChoosed) {
+                this.$set(this.authList[index], "isChoosed", false);
                 this.$emit("removeSelected", item);
             } else {
-                this.$set(this.authList[index], "show", true);
+                this.$set(this.authList[index], "isChoosed", true);
                 this.$emit("chooseAuth", item);
             }
         },
         removeAuth(curitem, index) {
-            this.$set(this.authList[index], "show", false);
+            this.$set(this.authList[index], "isChoosed", false);
             this.$emit("removeSelected", curitem);
         },
         empty() {
@@ -75,10 +73,14 @@ export default {
     font-size: 12px;
     .choose-bg {
         background: #e8f8fb;
+        position: relative;
+        &::before{
+            position: absolute;
+            content: "";
+            // background: url("~img/close.png") no-repeat center
+        }
     }
-.choose-bg1 {
-        background: #e8f8fb;
-    }
+   
     .auth-name-title {
         height: 40px;
         line-height: 40px;
@@ -93,32 +95,36 @@ export default {
     }
     .auth-list .list-item {
         cursor: pointer;
-        height: 40px;
-        line-height: 40px;
         width: 100%;
-        padding: 0 5px;
+        height: 58px;
+        padding: 0 18px;
         box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        line-height: 25px;
+        border-bottom: 1px solid #E5E5E5;
+        overflow: hidden;
         span {
             display: inline-block;
         }
         &:hover span {
             color: #00c1de;
-        }
+        }   
     }
     .item-left {
-        width: 40%;
+        display: flex;
+        align-items: center;
+        width: 159px;
         float: left;
         color: #262626;
     }
     .item-right {
-        width: 60%;
-        padding-left: 10px;
-        height: 40px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        box-sizing: border-box;
-        color: #8c8c8c;
+        display: flex;
+        align-items: center;
+        width: 210px;
+        padding-left: 15px;
+
+        color: #a1a8b1;
     }
     .empty {
         cursor: pointer;

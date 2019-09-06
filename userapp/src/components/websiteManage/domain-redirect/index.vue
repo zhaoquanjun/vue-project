@@ -10,6 +10,7 @@
             :tableData="redirectDomainListData"
             @deleteCurDomain="_deleteCurDomain"
             @editor="editor"
+           
         />
         <el-dialog
             width="0"
@@ -18,10 +19,11 @@
             :close-on-click-modal="false"
         >
             <AddRedirectDomain
+                v-if="dialogShow"
                 title="编辑"
                 :source-domain="sourceDomain"
                 :_targetDomain="targetDomain"
-                :domain-list="getActiveAndNotInUseDomainList"
+                :domain-list="activeAndNotInUseDomainList"
                 :isEditor="isEditor"
                 :id="id"
                 @closeDialog="closeDialog"
@@ -48,7 +50,7 @@ export default {
             isEditor: true,
             dialogShow: false,
             redirectDomainListData: [],
-            getActiveAndNotInUseDomainList: [],
+            activeAndNotInUseDomainList: [],
             sourceDomain: "",
             targetDomain: "",
             id: ""
@@ -62,10 +64,10 @@ export default {
             let { data, status } = await domainRedirectApi.get301List();
             this.redirectDomainListData = data;
             if (status === 200) {
-                if (data.handleType ===1 ) {
+                if (data.handleType ===2) {
                   this.warmPromptText = "您解析成功的域名均已添加301，您可对列表301信息进行编辑或再进行域名解析";
                   this.isWarmShow=true;
-                }else if (data.handleType===2){
+                }else if (data.handleType===1){
                       this.warmPromptText =
                         "您还没有解析成功的域名，请进行域名解析";
                         this.isWarmShow=true;
@@ -73,8 +75,9 @@ export default {
                    this.isWarmShow=false;
                 }
             }
-            if(!JSON.parse(sessionStorage.getItem("isWarmShow"))){
+            if(JSON.parse(sessionStorage.getItem("isWarmShow"))){
                  this.isWarmShow=false;
+                
             }
         },
         //// 301 ////
@@ -82,7 +85,7 @@ export default {
             let {
                 data
             } = await domainRedirectApi.getActiveAndNotInUseDomainList();
-            this.getActiveAndNotInUseDomainList = data;
+            this.activeAndNotInUseDomainList = data;
         },
         /**
          * 删除当前域名
@@ -115,10 +118,9 @@ export default {
         },
         closeTip(){
             this.isWarmShow =false;
-              sessionStorage.setItem("isWarmShow",false)
+              sessionStorage.setItem("isWarmShow",true)
         },
         editor(row) {
-            console.log(row);
             this._getActiveAndNotInUseDomainList();
             this.sourceDomain = row.sourceDomain;
             this.targetDomain = row.targetDomain;

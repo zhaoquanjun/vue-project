@@ -4,7 +4,7 @@
         <div class="modify-title">
             <p>{{tipTitle}}</p>
         </div>
-        <template v-if="!isSetPassWord">
+        <template v-if="isSetPassWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
                 <el-form-item prop="passWrod" class="verification-code" style="position:relative">
                     <el-input
@@ -16,17 +16,17 @@
                         maxlength="16"
                         @blur="fileNameBlur"
                         @focus="pwdRule"
-                        
+                         @input="watchPawInput"
                     ></el-input>
                     <div class="pwd-rule" v-if="pwdRuleShow">
-                        <div class="error">
-                            <i class="iconfont iconguanbi" ></i>长度为6-16位（字母区分大小写）
+                        <div :class="[watchPwd.firstRule === false ? 'error':'success']">
+                            <i class="iconfont" :class="[watchPwd.firstRule === false ? 'iconguanbi':'iconicon-test']"></i>长度为6-16位（字母区分大小写）
                         </div>
-                        <div class="error">
-                            <i class="iconfont iconguanbi"></i>只能包含数字、字母以及标点符号（除空格）
+                        <div :class="[watchPwd.secondRule === false ? 'error':'success']">
+                            <i class="iconfont" :class="[watchPwd.secondRule === false ? 'iconguanbi':'iconicon-test']"></i>只能包含数字、字母以及标点符号（除空格）
                         </div>
-                        <div class="error">
-                            <i class="iconfont iconguanbi"></i>数字、字母及标点符号至少包含两种
+                        <div :class="[watchPwd.third === false ? 'error':'success']">
+                            <i class="iconfont" :class="[watchPwd.third === false ? 'iconguanbi':'iconicon-test']"></i>数字、字母及标点符号至少包含两种
                         </div>
                     </div>
                 </el-form-item>
@@ -41,37 +41,12 @@
                         @blur="fileNameBlur"
                         @focus="pwdRule"
                     ></el-input>
-                    <!-- <div class="pwd-rule" >
-                        <div class="error">
-                            <i class="iconfont iconguanbi"></i>长度为6-16位（字母区分大小写）
-                        </div>
-                        <div class="error">
-                            <i class="iconfont iconguanbi"></i>只能包含数字、字母以及标点符号（除空格）
-                        </div>
-                         <div class="error">
-                            <i class="iconfont iconguanbi"></i>数字、字母及标点符号至少包含两种
-                        </div>
-                    </div>-->
+                 
                 </el-form-item>
             </el-form>
         </template>
         <template v-else>
-            <!-- <el-form :model="ruleFormCode" :rules="rules1" class="pwd-form">
-                <el-form-item prop="verification" class="verification-code">
-                    <el-input
-                        type="verification"
-                        v-model="ruleFormCode.code"
-                        autocomplete="on"
-                        placeholder="验证码"
-                        @input="changeInput"
-                        maxlength="6"
-                    ></el-input>
-                    <el-button class="verification-text" @click="send" :disabled="disabled=!show">
-                        <span v-show="show">发送验证码</span>
-                        <span v-show="!show" class="count">{{count}} s</span>
-                    </el-button>
-                </el-form-item>
-            </el-form>-->
+        
             <div class="from-row">
                 <get-sms ref="getSms" :sourcePhone="sourcePhone" :is-modifi="isModifi"></get-sms>
             </div>
@@ -91,6 +66,7 @@ import {
     isInvalidCode
 } from "@/api/index.js";
 import GetSms from "./GetSms";
+import { trim } from "@/utlis/index.js";
 export default {
     props: ["isSetPassWord", "sourcePhone"],
     components: { GetSms },
@@ -182,7 +158,12 @@ export default {
             },
 
             phone: "",
-            code: ""
+            code: "",
+              watchPwd: {
+                firstRule: false,
+                secondRule: false,
+                third:false
+            }
         };
     },
     mounted() {
@@ -283,7 +264,34 @@ export default {
         },
         fileNameBlur() {
             this.pwdRuleShow = false;
-        }
+        },
+       watchPawInput(pwd) {
+         
+            let pwdReg = new RegExp(
+                "^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$"
+            );
+            let pwdLength = trim(pwd).length;
+            console.log(pwd)
+            if (pwdLength >= 6 && pwdLength <= 16) {
+                this.watchPwd.firstRule = true;
+            } else {
+                this.watchPwd.firstRule = false;
+            }
+            if (trim(pwd) && !pwdReg.test(pwd)) {
+                this.watchPwd.secondRule = false;
+               
+              
+                return false;
+            } else {
+                this.watchPwd.secondRule = true;
+                if (!trim(pwd)){
+                 this.watchPwd.secondRule = false;
+             }
+               
+                return true;
+            }
+            
+        },
     },
     computed: {
         pannelShow() {
