@@ -332,15 +332,17 @@ export default {
         /**
          * 下载
          */
-        async adminDownload(row) {
-            let type = row.fileType;
-            let id = row.id;
-            let { data } = await adminDownload(type, id);
-            var link = document.createElement("iframe");
-            link.style.display = "none";
-            link.src = data;
-            document.body.appendChild(link);
-        },
+       async adminDownload(row) {
+                let type = row.fileType;
+                let id = row.id;
+                let { data } = await adminDownload(type, id);
+                //不用a标签而用iframe是因为a标签点击多次相当于做了多次重定向,未加载完成之前会以最后一次为准
+                var link = document.createElement("iframe");
+                link.style.display = "none";
+                //iframe需要和父页面同协议http对应http https对应https
+                link.src = window.location.protocol + data.substr(data.indexOf(":")+1);
+                document.body.appendChild(link);
+            },
         resetCategoryId() {
             this.picSearchOptions.categoryIdList = [];
             this.getPicList();
