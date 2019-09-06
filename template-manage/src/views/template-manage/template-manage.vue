@@ -413,9 +413,41 @@ export default {
         }
       ],
       languageSelect: "zh-CN",
-      themeOptions: [],
+      themeOptions: [
+        { value: "",
+            label: "主题"},
+        {
+            value: "blue_color1",
+            label: "蓝色1"
+        },{
+            value: "blue_color2",
+            label: "蓝色2"
+        },{
+            value: "blue_color3",
+            label: "蓝色3"
+        },{
+            value: "blue_color4",
+            label: "蓝色4"
+        },{
+            value: "pink_color1",
+            label: "粉色1"
+        },{
+            value: "pink_color2",
+            label: "粉色2"
+        },{
+            value: "pink_color3",
+            label: "粉色3"
+        },{
+            value: "pink_color4",
+            label: "粉色4"
+        }
+      ],
       themeSelect: "",
       templateStatusOptions: [
+        {
+          value: -1,
+          label: "模板状态"
+        },
         {
           value: 0,
           label: "开通中"
@@ -433,7 +465,7 @@ export default {
           label: "下架"
         }
       ],
-      templateStatus: "",
+      templateStatus: -1,
       isRecommend: false,
       sortOptions: [
         {
@@ -584,7 +616,7 @@ export default {
         Language: "",
         SiteTheme: "",
         IsOnlyRecommend: false,
-        Status: "All",
+        Status: -1,
         TemplateType: "SiteTemplate",
         PageIndex: this.pageIndex,
         PageSize: this.pageSize,
@@ -734,9 +766,9 @@ export default {
           ? this.secondIndustrySelect
           : 0,
         Language: this.languageSelect,
-        SiteTheme: "",
+        SiteTheme: this.themeSelect,
         IsOnlyRecommend: this.isRecommend,
-        Status: this.templateStatus === "" ? "All" : this.templateStatus,
+        Status: this.templateStatus?this.templateStatus:0,
         TemplateType: "SiteTemplate",
         PageIndex: this.pageIndex,
         PageSize: this.pageSize,
