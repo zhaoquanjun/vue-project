@@ -126,12 +126,13 @@
                       :style="{background: 'url(' + (item.image ) + ') no-repeat center/cover'}"
                       v-else
                     >
-                      <div class="modal" v-if="item.id != templateId">
+                      <div class="modal" v-if="item.id != siteId">
                         <div>
                           <div class="choseSite" @click="choseSite(item)">选择</div>
                           <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
                         </div>
                       </div>
+                      <div class="curModal" v-show="item.id == siteId">当前选择</div>
                     </div>
                     <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
                   </div>
@@ -452,13 +453,25 @@ export default {
         customClass: "copyTemplateLoading",
         background: "rgba(0, 0, 0, 0.5)"
       });
-      let para = {
-        TemplateId: item.id,
-        CurrentSiteId: this.siteId,
-        TemplateSiteId: item.siteId,
-        SiteName: this.siteName
-      };
-      let { status } = await templateApi.updateSiteTemplate(para);
+      console.log(item);
+      if (this.isAllTab == false) {
+        let para = {
+          currentSiteId: this.siteId,
+          templateSiteId: item.id,
+          siteName: item.siteName,
+          imageUrl: item.image
+        };
+        var { status } = await templateApi.updateSiteWithTemplate(para);
+      } else {
+        let para = {
+          TemplateId: item.id,
+          CurrentSiteId: this.siteId,
+          TemplateSiteId: item.siteId,
+          SiteName: this.siteName
+        };
+        var { status } = await templateApi.updateSiteTemplate(para);
+      }
+
       if (status == 200) {
         loading.close();
         this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
@@ -475,6 +488,7 @@ export default {
               this.$router.push({
                 path: "/website/mysite"
               });
+              this.$emit("getSiteInfo", this.siteId)
             }
           });
       }
@@ -546,10 +560,18 @@ export default {
       });
       this.orderType[0].isOrder = true;
     },
+    // 选择全部模版
     choseAllTab() {
       this.isAllTab = true;
+      this.orderType.forEach((item, index) => {
+        item.isOrder = false;
+        if (item.type == "updataTime") {
+          item.isOrder = true;
+        }
+      });
       this.getTemplateList();
     },
+    // 选择已有网站
     async choseMyTab() {
       this.isAllTab = false;
       let para = {
@@ -1083,34 +1105,6 @@ export default {
   100% {
     transform: translate3d(0, 100%, 0);
     opacity: 0;
-  }
-}
-@media screen and (max-width: 1650px) {
-  .wrap .textOne,
-  .wrap .textTwo {
-    font-size: 24px !important;
-  }
-  .wrap .select {
-    width: 180px;
-    height: 40px;
-    line-height: 40px;
-  }
-}
-@media screen and (max-width: 1440px) {
-  .wrap .textOne,
-  .wrap .textTwo {
-    font-size: 20px !important;
-  }
-  .wrap .select {
-    width: 140px;
-    height: 30px;
-    line-height: 30px;
-  }
-}
-@media screen and (max-width: 1260px) {
-  .wrap .textOne,
-  .wrap .textTwo {
-    font-size: 16px !important;
   }
 }
 </style>

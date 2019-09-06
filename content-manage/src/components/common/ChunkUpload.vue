@@ -178,7 +178,8 @@ export default {
                             return true;
                         }
                         case 2: {
-                            if (chunk.offset === 0) {
+                            if (chunk.offset === 0) {                                
+                                --this.successCount;
                                 chunkUploadManageApi.createFileWithoutUpload({
                                     UploadFileType: this.uploadType,
 
