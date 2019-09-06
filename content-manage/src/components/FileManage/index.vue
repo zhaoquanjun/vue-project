@@ -336,17 +336,10 @@ export default {
             let type = row.fileType;
             let id = row.id;
             let { data } = await adminDownload(type, id);
-            var link = document.createElement("a");
-            link.download = row.title;
+            var link = document.createElement("iframe");
             link.style.display = "none";
-            link.id = id;
-            link.href = data;
+            link.src = data;
             document.body.appendChild(link);
-            let child = document.getElementById(id);
-            child.click();
-            document.body.removeChild(child);
-            console.log(link);
-            // },1000)
         },
         resetCategoryId() {
             this.picSearchOptions.categoryIdList = [];
