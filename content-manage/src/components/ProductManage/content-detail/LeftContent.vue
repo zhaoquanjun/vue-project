@@ -52,6 +52,7 @@
                                 </el-select>-->
                                 <div class="product-category" @click.stop="multipleCatagory">
                                     <ul class="category-list">
+                                       
                                         <li
                                             style="display:inline-block"
                                             v-for="(item) in detailData.productCategoryList"
@@ -481,11 +482,13 @@ export default {
         let categoryId = this.$route.query.categoryId;
         let categoryName = this.$route.query.categoryName;
         if (!!categoryId) {
+           
             this.detailData.productCategoryList = [
                 { id: categoryId, displayName: categoryName }
             ];
             this.categoryId = [categoryId];
         } else {
+           
             this.detailData.productCategoryList = [
                 { id: 0, displayName: "全部分类" }
             ];
@@ -541,7 +544,7 @@ export default {
             }
             this.detailData = data;
             this.detailData.NewId = data.id;
-
+           
             //  let categoryList22 = JSON.stringify(this.detailData.productCategoryList);
             //  JSON.parse(categoryList22).forEach(item=>{
             //       this.categoryId.push(item.id);
@@ -652,7 +655,9 @@ export default {
             this.treeResult = data.treeArray;
         },
         chooseNode(data, boolean) {
+          
             if (!!boolean) {
+                
                 if (!this.categoryId.includes(data.id)) {
                     if (this.detailData.productCategoryList.length >= 5) {
                         this.$notify({
@@ -670,7 +675,7 @@ export default {
                     });
                 }
                  if(this.detailData.productCategoryList[0].id==0){
-                     this.detailData.productCategoryList.splice(0,1)
+                     if( this.$route.query.isEditor !=1) this.detailData.productCategoryList.splice(0,1)
                 }
             } else {
                 this.categoryId = [];
@@ -682,7 +687,7 @@ export default {
                         }
                     }
                 );
-
+             
                 if (this.detailData.productCategoryList.length == 0) {
                     this.detailData.productCategoryList = [
                         { id: 0, displayName: "全部分类" }
@@ -770,7 +775,7 @@ export default {
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
         },
-        getCheckedNodes(nodes) {},
+      
         removeCategory(id) {
             this.$refs.detailCheckTree.setChecked(id);
             this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
