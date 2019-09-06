@@ -8,7 +8,7 @@
             class="demo-ruleForm"
             @submit.native.prevent
         >
-            <div v-if="isModifi">
+            <div v-if="!isModifi">
                 <el-form-item prop="verification" class="verification-code">
                     <el-input
                         :key="0"
@@ -26,26 +26,20 @@
             </div>
             <div v-else>
                 <el-form-item prop="phone">
-                    <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号">
-                        <el-select
-                            slot="prefix"
-                            style="z-index:10000"
-                            size="small"
-                            @change="change"
-                            v-model="value"
-                            placeholder="请选择"
-                        >
-                            <el-option
-                                popper-class="dropdown__item"
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            >
+                    <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号"> 
+                        <el-select slot="prefix"
+                                   style="z-index:10000"
+                                   size="small"
+                                   @change="change"
+                                   v-model="value"
+                                   placeholder="请选择">
+                            <el-option popper-class="dropdown__item"
+                                       v-for="item in options"
+                                       :key="item.value"
+                                       :label="item.label"
+                                       :value="item.value">
                                 <span style="float: left">{{ item.label }}</span>
-                                <span
-                                    style="float: right; color: #8492a6; font-size: 13px"
-                                >{{ item.value }}</span>
+                                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
                             </el-option>
                         </el-select>
                     </el-input>
@@ -200,7 +194,6 @@ export default {
                 // });
             } else {
                 let { status } = await sendTargetPhoneCode(
-                    this.sourcePhone,
                     targetPhone
                 );
                 if (status === 200) {
