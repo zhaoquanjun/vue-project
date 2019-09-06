@@ -27,7 +27,7 @@
                     <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
                     <el-tooltip class="item" effect="dark" :content="scope.row.name" placement="top">
-                    <span style="width:200px" class="ellipsis img-name">{{ scope.row.name }}</span>
+                    <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.name }}</span>
                     </el-tooltip>
                 </template>
             </el-table-column>

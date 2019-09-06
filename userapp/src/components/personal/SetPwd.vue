@@ -4,7 +4,7 @@
         <div class="modify-title">
             <p>{{tipTitle}}</p>
         </div>
-        <template v-if="isSetPassWord">
+        <template v-if="!isSetPassWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
                 <el-form-item prop="passWrod" class="verification-code" style="position:relative">
                     <el-input
@@ -15,7 +15,7 @@
                         minlength="6"
                         maxlength="16"
                         @blur="fileNameBlur"
-                        @focus="pwdRule"
+                        @focus="pwdRule(ruleForm.passWrod)"
                          @input="watchPawInput"
                     ></el-input>
                     <div class="pwd-rule" v-if="pwdRuleShow">
@@ -39,7 +39,8 @@
                         minlength="6"
                         maxlength="16"
                         @blur="fileNameBlur"
-                        @focus="pwdRule"
+                        @focus="pwdRule(ruleForm.beSurePwd)"
+                         @input="watchPawInput"
                     ></el-input>
                  
                 </el-form-item>
@@ -259,29 +260,46 @@ export default {
                 }
             }
         },
-        pwdRule() {
+        pwdRule(pwd) {
             this.pwdRuleShow = true;
+            this.watchPawInput(pwd)
+            // console.log(pwd)
+            //  this.watchPwd={
+            //      firstRule:false,
+            //      secondRule:false,
+            //      third:false
+            //  }
+            
         },
         fileNameBlur() {
             this.pwdRuleShow = false;
         },
        watchPawInput(pwd) {
-         
-            let pwdReg =/^[a-zA-Z0-9\x21-\x7e]{6,16}$/
-            let pwdLength = trim(pwd).length;
+            // 数字 与 字母或标点符号
+            let pwdReg = new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$");
+            // 数字加标点
+             var regex2 = new RegExp("^(?=.*\\d)(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$");
+              var regex3 = new RegExp(
+            "^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])[A-Za-z\\d@$,.!%*#?&]{6,16}$"
+        );
+            let pwdLength = pwd.length;
             console.log(pwd)
             if (pwdLength >= 6 && pwdLength <= 16) {
                 this.watchPwd.firstRule = true;
             } else {
                 this.watchPwd.firstRule = false;
             }
-            if (trim(pwd) && !pwdReg.test(pwd)) {
+              if (
+                !pwdReg.test(pwd) &&
+                !regex2.test(pwd) &&
+                !regex3.test(pwd)
+            ) {
                 this.watchPwd.secondRule = false;
-               
-              
+                 this.watchPwd.third = false;
                 return false;
             } else {
                 this.watchPwd.secondRule = true;
+                this.watchPwd.third = true;
                 if (!trim(pwd)){
                  this.watchPwd.secondRule = false;
              }

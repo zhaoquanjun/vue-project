@@ -13,9 +13,9 @@
                     :key="item"
                 >
                     <span class="item-left auth-name ellipsis">{{item}}</span>
-                    <span class="item-right auth-icon" @click.stop="removeAuth(item,index)">
+                    <button class="item-right auth-icon" @click.stop="removeAuth(item,index)">
                         <i class="icon-size clear-icon"></i>
-                    </span>
+                    </button>
                 </li>
             </template>
         </ul>
@@ -75,6 +75,7 @@ export default {
 <style lang="scss" scoped>
 .selected-auth{
     font-size: 12px;
+    position: relative;
 }
 .choose-bg {
     background: #e8f8fb;
@@ -83,7 +84,7 @@ export default {
 .auth-name-title {
     height: 40px;
     line-height: 40px;
-    padding: 0 5px;
+    padding: 0 18px;
     border-bottom: 1px solid #efefef;
 }
 .auth-list {
@@ -97,14 +98,14 @@ export default {
     height: 40px;
     line-height: 40px;
     width: 100%;
-    padding: 0 5px;
+    padding: 0 16px;
     box-sizing: border-box;
     span {
         display: inline-block;
     }
-     &:hover span {
-        color:#00c1de;
-    }
+     &:hover  {
+            background: #F0F3F7;
+        }   
 }
 .item-left {
     width: 40%;

@@ -20,13 +20,10 @@
                     :onExceed="onExceed"
                     accept=".jpg, .jpeg, .png, .gif, .svg, .JPG, .JPEG, .GIF"
                 >
-                    <!-- <div v-for="(item,index) in fileList1" :key="index"><img :src="item.response" alt=""></div> -->
                     <template>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;font-size:12px">添加图片</i>
                     </template>
-
-                    <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
                 </el-upload>
             </div>
         </el-card>
@@ -128,7 +125,15 @@ export default {
             return isPic && isSizeOk;
         }
     },
-    watch: {}
+    watch: {
+        fileList(){
+             if (this.fileList.length >= 9) {
+                document.querySelector(".el-upload").style.display = "none";
+            }else{
+                document.querySelector(".el-upload").style.display =  "inline-block";
+            }
+        }
+    }
 };
 </script>
 <style scoped>

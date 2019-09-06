@@ -5,7 +5,7 @@
             <span v-if="isSelect" class="item-right color-black">说明</span>
             <span v-else class="item-right empty" @click="empty()">清空</span>
         </div>
-        <ul class="auth-list" :class="{'right-authname':!isSelect}">
+        <ul class="auth-list" :class="{'right-authname':!isSelect}" >
             <template v-if="authList.length>0">
                 <li
                     class="list-item"
@@ -82,12 +82,16 @@ export default {
     }
    
     .auth-name-title {
+        display: flex;
         height: 40px;
         line-height: 40px;
         border-bottom: 1px solid #efefef;
-        padding: 0 5px;
+        padding: 0 18px;
+        
+
     }
     .auth-list {
+        position: relative;
         min-height: 242px;
     }
     .right-authname {
@@ -104,11 +108,12 @@ export default {
         line-height: 25px;
         border-bottom: 1px solid #E5E5E5;
         overflow: hidden;
+        &
         span {
             display: inline-block;
         }
-        &:hover span {
-            color: #00c1de;
+        &:hover  {
+            background: #F0F3F7;
         }   
     }
     .item-left {

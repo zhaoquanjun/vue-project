@@ -211,7 +211,7 @@ export default {
         },
         formatterFileExt(fileExt) {
             if (fileExt) {
-                console.log(fileExt);
+              
                 if (fileExt.substring(0, 1) == ".") return fileExt.substring(1);
                 return fileExt;
             }

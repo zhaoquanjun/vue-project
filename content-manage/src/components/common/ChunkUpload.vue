@@ -32,7 +32,7 @@
             <uploader-unsupport></uploader-unsupport>
             <uploader-list :uploadType="uploadType"></uploader-list>
             <uploader-drop>
-                <span style="position:absolute">将{{displayName}}拖拽到此处或</span>
+                <span >将{{displayName}}拖拽到此处或</span>
                 <uploader-btn :attrs="attrs">点击选择{{displayName}}</uploader-btn>
                 <!-- <uploader-btn :directory="true">选择文件夹</uploader-btn> -->
             </uploader-drop>

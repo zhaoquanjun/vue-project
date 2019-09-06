@@ -194,8 +194,8 @@ export default {
                 background: "rgba(255, 255, 255, 0.75)"
             });
             if (node) {
-                console.log(node);
-                this.nodeData = node; // 上传图片所需
+              
+                this.nodeData = node; // 上传弹窗所需
             }
             let { data } = await audioManageApi.getPicList(
                 this.picSearchOptions
@@ -216,7 +216,7 @@ export default {
                     customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
-                        console.log(action);
+                       
                         if (action === "confirm") {
                             let {
                                 status,
@@ -271,7 +271,7 @@ export default {
             this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
         },
         async newCategory(entity) {
-            console.log(entity);
+           
             await audioCategoryManageApi.create(entity);
             this.getTree();
         },
@@ -286,7 +286,7 @@ export default {
                     customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
-                        console.log(action);
+                       
                         if (action === "confirm") {
                             let {
                                 status
@@ -324,7 +324,7 @@ export default {
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
             this.curImgInfo = data;
-            console.log(data, "data");
+           
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
@@ -382,7 +382,6 @@ export default {
             return this.isInvitationPanelShow === true ? 331 : 0;
         },
         isBatchHeaderShow() {
-            console.log(this.idsList.length);
             return this.idsList.length > 0 ? true : false;
         }
     },

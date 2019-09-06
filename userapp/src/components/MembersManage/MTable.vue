@@ -29,6 +29,12 @@
             </el-table-column>
             <el-table-column prop="remark" label="备注" show-overflow-tooltip>
                 <template slot-scope="scope">
+                     <el-tooltip   v-if="!scope.row.isSystem" class="item" effect="dark" placement="bottom">
+                                <div style="width:150px;" slot="content">{{scope.row.remark}}</div>
+                                <div
+                                    class="remark-desc"
+                                >{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
+                            </el-tooltip>
                     <el-popover
                         v-if="!scope.row.isSystem"
                         :ref="`popover-${scope.$index}`"
@@ -38,15 +44,9 @@
                         style="padding:0"
                         @show="showRemark(scope.row)"
                     >
-                        <span slot="reference">
-                            <el-tooltip class="item" effect="dark" placement="bottom">
-                                <div style="width:150px;" slot="content">{{scope.row.remark}}</div>
-                                <div
-                                    class="remark-desc"
-                                >{{scope.row.remark && scope.row.remark.trim().length > 10 ? scope.row.remark.slice(0, 10) + '...' : scope.row.remark}}</div>
-                            </el-tooltip>
+                        <button slot="reference">
                            <i class="iconfont iconbianji"></i>
-                        </span>
+                        </button>
                         <div class="textareaWrap">
                             <el-input
                                 type="textarea"
@@ -124,7 +124,7 @@ export default {
     },
     data() {
         return {
-            remarkValue: "123",
+            remarkValue: "",
             tableHeight: 500,
             loadingShow: true
         };
@@ -279,7 +279,14 @@ export default {
     padding: 0 10px;
 }
 </style>
-
+<style  scoped>
+.textareaWrap /deep/ .el-textarea .el-textarea__inner{
+    padding-bottom: 20px;
+}
+.textareaWrap /deep/ .el-textarea .el-input__count{
+    right: 22px;
+}
+</style>
 <style lang="scss" scoped>
 @import "../../styles/table-list.scss";
 .textareaWrap {

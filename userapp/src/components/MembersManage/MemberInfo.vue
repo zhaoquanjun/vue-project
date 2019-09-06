@@ -1,17 +1,17 @@
 <template>
     <dl class="members—info" id="members—info">
         <dt class="avatar">
-            <img v-if="memberInfo.userHeadUrl" :src="memberInfo.userHeadUrl" >
+            <img v-if="memberInfo && memberInfo.userHeadUrl" :src="memberInfo && memberInfo.userHeadUrl" >
             <img v-else src="../../assets/defualtAvatar.png" alt="">
         </dt>
         <dd class="basic">
             <span>
                 姓名 :
-                <i>{{memberInfo.displayName}}</i>
+                <i>{{memberInfo && memberInfo.displayName}}</i>
             </span>
             <span>
                 手机 :
-                <i>{{memberInfo.phoneNumber}}</i>
+                <i>{{memberInfo && memberInfo.phoneNumber}}</i>
             </span>
             <span class="remark-wrap">
                <i class="remark-title"> 备注 :</i>
@@ -31,25 +31,13 @@
                        ref="remarkInput"
                         type="text"
                         placeholder="暂无备注"
-                        v-model="memberInfo.remark"
+                        v-model=" memberInfo.remark"
                         maxlength="100"
                         show-word-limit
                          @change="change"
                         @blur="handlerblur"
                         @focus="focus"
                     ></el-input>
-                       <!-- <el-input
-                        v-else
-                       class="remark" 
-                        type="text"
-                        placeholder="请输入内容"
-                        v-model="memberInfo.remark"
-                        maxlength="100"
-                        show-word-limit
-                         @change="change"
-                        @blur="handlerblur"
-                        @focus="focus"
-                    ></el-input> -->
                 </template>
             </span>
         </dd>
@@ -59,8 +47,7 @@
 export default {
     props: {
         memberInfo: {
-            type: Object,
-            default: () => ({})
+          
         }
     },
     data() {
@@ -95,7 +82,7 @@ export default {
     },
     computed: {
         remarkValue() {
-            return this.memberInfo.remark ? this.memberInfo.remark : "";
+            return this.memberInfo && this.memberInfo.remark ? this.memberInfo.remark : "";
         }
     }
 };

@@ -2,8 +2,8 @@
     <div class="auth-config">
         <div class="auth-tip" v-if="authtipShow">请至少选择一项权限</div>
         <member-info
+            v-if="!isBatch"
             v-model="value"
-            v-if="memberInfo && Object.keys(memberInfo).length>0"
             :memberInfo="memberInfo"
         ></member-info>
         <div class="panel-main">
@@ -16,9 +16,12 @@
                         placeholder="请输入权限名称"
                         @input="changeInput"
                     />
-                    <button class="auth-btn" @click="searchAuth">搜索</button>
+
+                    <button class="auth-btn" @click="searchAuth">
+                        <i class="el-icon-search el-input__icon"></i>
+                    </button>
                 </div>
-                <div class="auth-name">
+                <div class="auth-name" v-scrollBar>
                     <auth-list
                         @chooseAuth="chooseAuth"
                         :authList="userPermission"
@@ -27,9 +30,11 @@
                     ></auth-list>
                 </div>
             </div>
+            <div class="middle-icon"><i class="iconyou iconfont"></i></div>
             <div class="pannel-left-item">
                 <h5 class="auth-title">已选权限</h5>
                 <selected-auth
+                     v-scrollBar
                     :authList="memberPolicy"
                     @removeSelected="removeSelected"
                     @emptySelected="emptySelected"
@@ -71,7 +76,7 @@ export default {
         return {
             value: "",
             authtipShow: false,
-            flag:false
+            flag: false
         };
     },
     methods: {
@@ -100,7 +105,7 @@ export default {
                     this.$emit("getMemberList");
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
                 } else {
-                     this.$notify({
+                    this.$notify({
                         customClass: "notify-error", // error success
                         message: `保存失败`,
                         duration: 1500,
@@ -128,7 +133,7 @@ export default {
                 };
                 let { status } = await this._updateUserPolicy(params);
                 if (status === 200) {
-                     this.$notify({
+                    this.$notify({
                         customClass: "notify-success", // error success
                         message: `保存成功`,
                         duration: 1500,
@@ -137,7 +142,7 @@ export default {
                     this.$emit("getMemberList");
                     this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
                 } else {
-                     this.$notify({
+                    this.$notify({
                         customClass: "notify-error", // error success
                         message: `保存失败`,
                         duration: 1500,
@@ -164,10 +169,10 @@ export default {
             this.ISRIGHTPANNELSHOW(!this.isRightPanelShow);
         },
         searchAuth() {
-           if(!this.flag){
+            if (!this.flag) {
                 this.oldUserPermission = JSON.stringify(this.userPermission);
                 this.flag = true;
-           }
+            }
             let ary = [];
             this.userPermission.forEach(item => {
                 if (item.name.includes(this.input)) ary.push(item);
@@ -225,6 +230,7 @@ export default {
     }
 
     .panel-main {
+        position: relative;
         padding: 20px 16px;
         overflow: hidden;
         .search-auth {
@@ -249,18 +255,23 @@ export default {
                 }
             }
             .auth-btn {
-                // position: absolute;
-                // right: 0;
-                // top: 0;
                 width: 58px;
-                background: #00c1de;
-                color: #fff;
+                background: transparent;
+                position: absolute;
+                right: 0;
+                font-size: 16px;
+                color: #E5E5E5;
+                i:hover{
+                    color: #00c1de
+                }
             }
         }
         .auth-name {
             border: 1px solid #efefef;
             border-top: none;
-            height: 524px;
+            height: 52vh;
+            overflow-y: auto;
+            position: relative;
         }
     }
     .pannel-right-item {
@@ -270,13 +281,22 @@ export default {
     }
     .pannel-left-item {
         width: 285px;
-       
         float: right;
         .selected-auth {
             border: 1px solid #efefef;
-            padding: 0 10px;
-            min-height: 562px;
+            height: calc(52vh + 40px);
+            overflow-y: auto;
         }
+    }
+}
+.middle-icon{
+     
+    position: absolute;
+    left: 464px;
+    top: 50%;
+    i{
+            font-size: 25px;
+    color: #E5E5E5;
     }
 }
 </style>

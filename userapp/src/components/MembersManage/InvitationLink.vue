@@ -180,49 +180,4 @@ export default {
     }
 }
 
-.panel-main {
-    padding: 0 16px;
-    overflow: hidden;
-    .search-auth {
-        height: 40px;
-        border: 1px solid #e5e5e5;
-        box-sizing: border-box;
-        position: relative;
-        input,
-        button {
-            height: 100%;
-            border: none;
-            background: #fff;
-        }
-        .auth-input {
-            width: 100%;
-            text-indent: 10px;
-        }
-        .auth-btn {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 58px;
-            background: #00c1de;
-            color: #fff;
-        }
-    }
-    .auth-name {
-        border: 1px solid #efefef;
-        border-top: none;
-        padding: 0 10px;
-    }
-}
-.pannel-right-item {
-    float: left;
-    width: 50%;
-}
-.pannel-left-item {
-    width: 40%;
-    float: right;
-    .selected-auth {
-        border: 1px solid #efefef;
-        padding: 0 10px;
-    }
-}
 </style>

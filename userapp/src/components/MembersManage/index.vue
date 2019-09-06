@@ -54,10 +54,9 @@
             ></m-table>
             <el-dialog
                 width="0"
-                style="z-index:10"
                 :close-on-click-modal="false"
                 :show-close="false"
-                :visible.sync="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
+                :visible.sync="$store.state.isRightPanelShow"
                 :before-close="handleClose"
                 :modal-append-to-body="false"
             >
@@ -65,16 +64,27 @@
                     <span style="vertical-align: middle;" slot="title-text">{{rightPanelTitle}}</span>
                     <i slot="icon-tip" class="icon-size icon-explain"></i>
                     <auth-config
+                        v-if="$store.state.isRightPanelShow"
                         ref="authConfig"
                         :userIds="userIds"
                         :is-batch="isBatch"
                         @getMemberList="getMemberList"
                     />
                 </right-pannel>
-                <right-pannel :style="{width:isInvitationlWidth+'px'}">
+               
+            </el-dialog>
+            <el-dialog
+                width="0"
+                :close-on-click-modal="false"
+                :show-close="false"
+                :append-to-body="false"
+                :visible.sync=" $store.state.isInvitationPanelShow"
+            >
+                 <right-pannel :style="{width:isInvitationlWidth+'px'}">
                     <span slot="title-text" id="title-text">邀请成员</span>
                     <invitation-link></invitation-link>
                 </right-pannel>
+            
             </el-dialog>
         </el-main>
     </el-container>
@@ -124,7 +134,7 @@ export default {
         //     this.memberList = jsonData.items;
         // });
         // this._getUserDashboard()
-        this.getMemberList()
+        this.getMemberList();
     },
     methods: {
         ...mapActions([
@@ -142,7 +152,7 @@ export default {
             "ISINVITATIONPANELSHOW",
             "CURMEMBVERINFO"
         ]),
-       
+
         /**
          * 删除成员列表中其中一项
          */
@@ -268,6 +278,7 @@ export default {
          */
         authEdit(data) {
             console.log(data);
+            this.isBatch = false;
             this.rightPanelTitle = "编辑成员";
             this.ISRIGHTPANNELSHOW(true);
             this._getEditUserAppPolicies(data.userId);
@@ -285,7 +296,7 @@ export default {
          */
         changePageNum(page) {
             this.memberListParams.page = page;
-            this.getMemberList()
+            this.getMemberList();
             // let options = { page: page };
             // this._getBeInvitedUsers(options).then(jsonData => {
             //     this.memberList = jsonData.items;
@@ -294,7 +305,7 @@ export default {
         },
         changePageSize(size) {
             this.memberListParams.size = size;
-            this.getMemberList()
+            this.getMemberList();
             // let options = { size: size };
             // this._getBeInvitedUsers(options).then(jsonData => {
             //     this.memberList = jsonData.items;

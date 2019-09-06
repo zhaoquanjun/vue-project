@@ -27,7 +27,7 @@
                         v-if="(index == scope.$index)"
                         type="text"
                         size="small"
-                         ref="renameInput"
+                        ref="renameInput"
                         placeholder="请输入内容"
                         v-model="scope.row.title"
                         maxlength="30"
@@ -36,6 +36,7 @@
                     ></el-input>
                   
                       <el-tooltip
+                            v-else
                             class="item"
                             effect="dark"
                             :content="scope.row.title"
@@ -43,7 +44,7 @@
                         >
                             <div
                                  style="width:150px"
-                                class="ellipsis img-name"
+                                class="ellipsis cursor-p"
                                 @click="rename(scope.row.id,scope.row,scope.$index)"
                             >{{scope.row.title}}</div>
                         </el-tooltip>
@@ -176,7 +177,7 @@ export default {
          * 管理员下载
          */
         async _adminDownload(row) {
-            console.log();
+          
             let type = row.fileType;
             let id = row.id;
             let { data } = await adminDownload(type, id);
@@ -190,7 +191,7 @@ export default {
          * 单选或全选操作
          */
         handleSelectionChange(list) {
-            console.log(list);
+          
             this.multipleSelection = list;
             this.$emit("handleSelectionChange", list);
         },

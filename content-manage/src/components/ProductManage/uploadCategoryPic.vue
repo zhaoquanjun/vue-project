@@ -45,26 +45,12 @@
                             <i @click.stop="handleRemove" class="el-icon-delete"></i>
                         </span>
                     </div>
-
                     <template v-else>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
-                        <!-- <i style=" display: block;">添加图片</i> -->
                     </template>
                 </el-upload>
             </el-form-item>
-            <!-- <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
-            </el-form-item>-->
         </el-form>
-
-        <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-
-          
-          
-        </el-form>
-
-        -->
         <div class="pannle-footer">
             <button class="confrim" @click="submitForm('ruleForm')">确定</button>
             <button class="cancel" @click="cancel">取消</button>
@@ -138,12 +124,6 @@ export default {
             immediate: true,
             deep: true
         }
-        // modifyCategoryData() {
-        //     alert(this.modifyCategoryData.label);
-        //     this.ruleForm.name = this.modifyCategoryData.label;
-        //     this.imageUrl1 = this.modifyCategoryData.thumbnailPicUrl;
-        //     console.log(this.modifyCategoryData);
-        // },
     },
     mounted() {
         this.headers.appId = this.$store.state.dashboard.appId;
@@ -206,8 +186,6 @@ export default {
         cancel() {
             this.$refs.ruleForm.resetFields();
             this.$emit("closeUploadCategoryPic");
-            // this.ruleForm.name = "";
-            // this.imageUrl1 = "";
         }
     }
 };

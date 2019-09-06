@@ -45,7 +45,7 @@
                             placement="top"
                         >
                             <div
-                                class="img-name"
+                                class="file-title cursor-p"
                                 @click="rename(scope.row.id,scope.row,scope.$index)"
                             >{{scope.row.title}}</div>
                         </el-tooltip>
@@ -320,11 +320,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 @import "../../styles/manege-table.scss";
-.cover {
-    width: 150px;
-    height: 100px;
-}
-.img-name {
+.file-title {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box !important;
@@ -338,6 +334,8 @@ export default {
 }
 .cover {
     position: relative;
+     width: 150px;
+    height: 100px;
     .play {
         cursor: pointer;
         position: absolute;

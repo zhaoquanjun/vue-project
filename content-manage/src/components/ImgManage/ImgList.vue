@@ -37,7 +37,7 @@
                         @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
                     <span
-                        class="img-name ellipsis"
+                        class="cursor-p ellipsis"
                         style="width:200px"
                         v-else
                         @click="rename(scope.row.id,scope.row,scope.$index)"
