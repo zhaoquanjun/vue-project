@@ -47,6 +47,7 @@
           :center="true"
           :close-on-click-modal="false"
           :modal-append-to-body="false"
+          :append-to-body="true"
           style="margin-top:60px"
           :modal="false"
         >

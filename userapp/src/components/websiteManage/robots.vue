@@ -13,52 +13,10 @@
         </el-row>
       </div>
       <el-row class="siteContent" style="padding:0 32px">
-        <!-- <el-upload
-          class="upload"
-          drag
-          :show-file-list="false"
-          :action="uploadAction"
-          :headers="headers"
-          :limit="1"
-          :file-list="fileList"
-          :before-upload="beforeUpload"
-          :on-progress="uploadFileProcess"
-          :on-success="uploadSuccess"
-          :before-remove="remove"
-        >
-          <div class="uploadIcon" v-show="!isUpload">
-            <i
-              class="iconfont iconicon-test3"
-              style="color:#09CCEB;line-height:60px;font-size:25px"
-            ></i>
-          </div>
-          <div class="uploadText" v-show="!isUpload">
-            将Robots文件拖拽到此处或
-            <span style="color:#09CCEB">点击上传</span>
-          </div>
-          <div class="uploadText" style="margin-top:260px" v-show="isUpload">
-            拖拽替换文件或
-            <span style="color:#09CCEB">点击上传</span>
-          </div>
-          <div class="uploadTextRemark">只支持Robots文件</div>
-
-          <div v-show="fileList.length" class="file" v-if="isUpload">
-            <div v-for="(item,index) in fileList" :key="index">
-              <div class="fileImg" v-show="isUpload">
-                <i class="iconfont iconshanchu fileRemove" @click="remove"></i>
-              </div>
-              <span>{{item.name}}</span>
-              <div v-if="progressFlag">
-                <el-progress :percentage="progressPercent"></el-progress>
-              </div>
-            </div>
-          </div>
-        </el-upload>-->
-
         <uploader
           ref="uploader"
           :options="options"
-          :autoStart="false"
+          :autoStart="true"
           @file-added="onFileAdded"
           class="uploader-example"
         >
@@ -67,7 +25,8 @@
             <div class="fileImg" v-show="isUpload">
               <i class="iconfont iconshanchu fileRemove" @click="fileRemove"></i>
             </div>
-            <div v-show="isUpload" class="fileName">{{file.name?file.name:"Robots.txt"}}</div>
+            <div v-show="isUpload" class="fileName">robots.txt</div>
+            <div v-show="isUpload" class="fileName" style="margin-top:5px">{{date?date:""}}</div>
             <div v-show="isUpload" v-if="progressFlag" class="progress">
               <el-progress :percentage="progressPercent" status="success"></el-progress>
             </div>
@@ -85,8 +44,7 @@
               拖拽替换文件或
               <uploader-btn style="color:#09CCEB">点击上传</uploader-btn>
             </div>
-            <div class="uploadTextRemark">只支持Robots文件</div>
-            <!-- <uploader-btn :directory="true">选择文件夹</uploader-btn> -->
+            <div class="uploadTextRemark">请上传文件名为“robots”的txt文件</div>
           </uploader-drop>
         </uploader>
         <div class="tip">Robots文件写法？</div>
@@ -100,6 +58,7 @@ import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import environment from "@/environment/index.js";
 import * as robotsApi from "@/api/request/robotsApi";
+import { formatDateTime } from "@/api/index";
 
 export default {
   components: {
@@ -125,39 +84,35 @@ export default {
         Authorization: ""
       },
       attrs: {
-        accept: "*/*" //'video/*'
+        accept: "*/*"
       },
       fileList: [],
       isUpload: false,
       progressFlag: false,
       progressPercent: 0,
-      file: {}
+      file: {},
+      date: ""
     };
   },
   methods: {
     async hasUploadFile(siteId) {
       let { data } = await robotsApi.hasUploadFile(siteId);
       this.isUpload = data.hasUpload;
+      this.date = formatDateTime(data.createTime, "yyyy-MM-dd");
     },
     async preview(siteId) {
       let { data } = await robotsApi.preview(siteId);
-      console.log(data);
     },
-    // resetOption() {},
     // 获取siteId
     getSiteId(siteId) {
       this.curSiteId = siteId;
-      // this.options.target = `${environment.uploadRobotsUrl}${this.curSiteId}`;
-      // this.uploadAction = `${environment.uploadRobotsUrl}${this.curSiteId}`;
+      this.hasUploadFile(siteId);
+      this.preview(siteId);
       this.$set(
         this.options,
         "target",
         `${environment.uploadRobotsUrl}${this.curSiteId}`
       );
-      this.hasUploadFile(siteId);
-      this.preview(siteId);
-      console.log(this.$refs);
-      console.log(this.$refs.uploader);
       this.$refs.uploader.resetOption();
     },
     // 选择切换网站
@@ -172,24 +127,20 @@ export default {
       this.hasUploadFile(siteId);
       this.preview(siteId);
       this.file = {};
-      this.progressFlag = false
+      this.progressFlag = false;
     },
     onFileAdded(file) {
-      if (this.fileList.length > 0) {
-        this.fileList.splice(0, 1);
-      }
       this.options.headers.Authorization =
         "Bearer " + this.$store.state.user.accessToken.Authorization;
       this.options.headers.appId = this.$store.state.dashboard.appId;
-      let fileType = file.name.split(".").pop();
-      console.log(file);
-      if (fileType != "txt") {
+      if (file.name != "robots.txt") {
         this.$notify({
           customClass: "notify-error",
-          message: `上传失败，请上传txt格式文件`,
+          message: `请上传文件名为“robots”的txt文件`,
           duration: 1500,
           showClose: false
         });
+        file.pause(file);
         file.cancel(file);
         return;
       }
@@ -200,62 +151,30 @@ export default {
           duration: 1500,
           showClose: false
         });
+        file.pause();
         file.cancel(file);
         return;
       }
       this.file = file;
-      this.fileList.push(file);
+      // this.fileList.push(file);
       this.isUpload = true;
       this.progressFlag = true;
       this.progressPercent = 100;
-      file.resume();
-      console.log(this.fileList);
+      // file.resume();
+      this.$notify({
+        customClass: "notify-success",
+        message: `上传成功`,
+        duration: 1500,
+        showClose: false
+      });
+      this.date = this.getNowFormatDate();
     },
     fileRemove() {
       this.$confirm(`您确定要删除当前robots文件么？删除后不可恢复。`, "提示", {
         iconClass: "icon-warning",
         callback: action => {
-          console.log(action);
           if (action === "confirm") {
             robotsApi.remove(this.curSiteId).then(res => {
-              console.log(res);
-              if (res.status === 200) {
-                this.$notify({
-                  customClass: "notify-success",
-                  message: `删除成功`,
-                  duration: 2000,
-                  showClose: false
-                });
-                console.log(this.fileList);
-                this.fileList.splice(0, 1);
-                console.log(this.fileList);
-                this.isUpload = false;
-              } else {
-                this.$notify({
-                  customClass: "notify-error",
-                  message: `系统正忙，请稍后再试！`,
-                  duration: 2000,
-                  showClose: false
-                });
-              }
-            });
-          }
-        }
-      });
-    },
-    // 上传成功
-    uploadSuccess(res, file) {
-      console.log(file + "success");
-      console.log(this.fileList + "success");
-    },
-    remove() {
-      this.$confirm(`您确定要删除当前robots文件么？删除后不可恢复。`, "提示", {
-        iconClass: "icon-warning",
-        callback: action => {
-          console.log(action);
-          if (action === "confirm") {
-            robotsApi.remove(this.curSiteId).then(res => {
-              console.log(res);
               if (res.status === 200) {
                 this.$notify({
                   customClass: "notify-success",
@@ -278,29 +197,20 @@ export default {
         }
       });
     },
-    beforeUpload(file) {
-      console.log(file);
-      this.isUpload = true;
-      this.headers.Authorization =
-        "Bearer " + this.$store.state.user.accessToken.Authorization;
-      this.headers.appId = this.$store.state.dashboard.appId;
-      this.$nextTick(() => {
-        let uploadFile = document.getElementsByClassName(
-          "el-upload-list__item-name"
-        )[0];
-
-        // let div = document.createElement("div");
-        // div.setAttribute("class", "uploadText");
-        // div.innerHTML = "拖拽替换文件或";
-        // let span = document.createElement("span");
-        // span.setAttribute("style", "color:#09CCEB");
-        // span.innerHTML = "点击上传";
-        // div.appendChild(span);
-        // uploadFile.appendChild(div);
-        // let uploadFileIcon = document.getElementsByClassName(
-        //   "el-icon-document"
-        // )[0];
-      });
+    // 获取当前时间
+    getNowFormatDate() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let strDate = date.getDate();
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      let currentdate = year + "-" + month + "-" + strDate;
+      return currentdate;
     }
   }
 };
@@ -369,6 +279,9 @@ export default {
 .progress /deep/ .el-progress-bar__inner {
   background-color: #09cceb;
 }
+.progress /deep/ .el-progress {
+  width: 150px;
+}
 </style>
 <style lang="scss" scoped>
 .member-container {
@@ -436,9 +349,9 @@ export default {
       color: rgba(140, 140, 140, 1);
       line-height: 22px;
       margin: auto;
-      margin-top: 270px;
+      margin-top: 275px;
       margin-bottom: 16px;
-      width: 181px;
+      width: 184px;
     }
     .uploadTextRemark {
       font-size: 16px;
@@ -446,14 +359,14 @@ export default {
       color: rgba(185, 203, 207, 1);
       line-height: 22px;
       margin: auto;
-      width: 133px;
+      width: 248px;
     }
   }
   .uploadList {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-top: -20px;
+    margin-top: -25px;
     transform: translate(-50%, -50%);
     z-index: 1;
     text-align: center;
@@ -484,70 +397,6 @@ export default {
           opacity: 0.7;
           cursor: pointer;
         }
-      }
-      .progress {
-        width: 200px;
-        margin: auto;
-      }
-    }
-  }
-}
-.upload {
-  position: relative;
-  padding: 20px;
-  background: rgba(230, 249, 253, 1);
-  border-radius: 2px;
-  border: 1px dashed rgba(9, 204, 235, 1);
-  .uploadIcon {
-    margin: 142px auto 24px;
-    width: 60px;
-    height: 60px;
-    background: rgba(9, 204, 235, 0.1);
-    border-radius: 4px;
-  }
-  .uploadText {
-    font-size: 16px;
-    font-weight: 400;
-    color: rgba(140, 140, 140, 1);
-    line-height: 22px;
-  }
-  .uploadTextRemark {
-    font-size: 16px;
-    font-weight: 400;
-    color: rgba(185, 203, 207, 1);
-    line-height: 22px;
-    margin-top: 16px;
-  }
-  .file {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    .fileImg {
-      margin: auto;
-      width: 92px;
-      height: 109px;
-      background: url("~img/upload/upload.png") no-repeat center;
-      background-size: cover;
-      text-align: center;
-      &:hover {
-        .fileRemove {
-          display: inline-block;
-        }
-      }
-      .fileRemove {
-        color: #63dc8c;
-        line-height: 109px;
-        font-size: 20px;
-        display: none;
-        &:hover {
-          opacity: 0.7;
-          cursor: pointer;
-        }
-      }
-      .progress {
-        width: 200px;
-        margin: auto;
       }
     }
   }
