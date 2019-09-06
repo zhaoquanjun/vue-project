@@ -19,38 +19,38 @@
             <el-table-column
                 prop="title"
                 label="文章标题"
-                min-width="150"
+                min-width="250"
             >
                 <template slot-scope="scope">
                     <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl"    onerror="onImgError(this)" class="cover" alt />
                     <img v-else :src="defaultImg" class="cover" alt />
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
-                        <span>{{ scope.row.title }}</span>
+                        <span style="width:200px" class="ellipsis img-name">{{ scope.row.title }}</span>
                     </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类">
+            <el-table-column prop="categoryName" label="分类" min-width="80">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.categoryName" placement="top">
-                        <span>{{ scope.row.categoryName }}</span>
+                        <span style="width:80px" class="ellipsis">{{ scope.row.categoryName }}</span>
                     </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column width="100" prop="isPublishPrt" label="状态" show-overflow-tooltip></el-table-column>
+            <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
 
-            <el-table-column width="100" prop="isTopPrt" label="置顶" show-overflow-tooltip></el-table-column>
+            <el-table-column  prop="isTopPrt" label="置顶"  min-width="80"></el-table-column>
 
-            <el-table-column prop="createUser" label="作者">
+            <el-table-column prop="createUser" label="作者" min-width="100">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createUser" placement="top">
-                        <span>{{ scope.row.createUser }}</span>
+                        <span style="width:100px" class="ellipsis">{{ scope.row.createUser }}</span>
                     </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="createTimePrt" label="创建时间">
+            <el-table-column prop="createTimePrt" label="创建时间" min-width="80">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createTimePrt" placement="top">
                         <span>{{ scope.row.createTimePrt }}</span>
@@ -58,7 +58,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column width="150" label="操作"  v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="150">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <span class="edit-icon" @click="handleEdit(scope.row)"><i class="iconfont iconcaozuo"></i></span>

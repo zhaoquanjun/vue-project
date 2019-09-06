@@ -34,22 +34,31 @@
                         show-word-limit
                         @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
-                    <div
-                        style="width:150px"
-                        class="ellipsis"
-                        v-else
-                        @click="rename(scope.row.id,scope.row,scope.$index)"
-                    >{{scope.row.title}}</div>
+                  
+                      <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="scope.row.title"
+                            placement="top"
+                        >
+                            <div
+                                 style="width:150px"
+                                class="ellipsis img-name"
+                                @click="rename(scope.row.id,scope.row,scope.$index)"
+                            >{{scope.row.title}}</div>
+                        </el-tooltip>
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类">
+            <el-table-column prop="durationStr" label="时长"  min-width="150">
+
+            </el-table-column>
+            <el-table-column prop="categoryName" label="分类" min-width="150">
                  <template slot-scope="scope">
-                    <span>{{ scope.row.categoryName }}</span>
+                    <span  style="width:150px" class="ellipsis">{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
 
@@ -98,7 +107,15 @@
                 >
                     <audio ref="audio" class="audio" :src="fullOssUrl" controls="controls" />
                     <div class="dislog-footer" slot="footer">
-                        <span>{{picInfo.title}}</span>
+                         <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="picInfo.title"
+                            placement="top"
+                        >
+                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
+                        </el-tooltip>
+                      
                         <span>分类: {{picInfo.categoryName}}</span>
                         <span>大小: {{picInfo.sizeStr}}</span>
                     </div>

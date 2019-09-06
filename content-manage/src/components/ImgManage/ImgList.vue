@@ -15,7 +15,7 @@
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
-            <el-table-column label="图片名称">
+            <el-table-column label="图片名称" min-width="300">
                 <template slot-scope="scope">
                     <img
                         :src="scope.row.zoomOssUrl"
@@ -37,7 +37,8 @@
                         @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
                     <span
-                        class="img-name"
+                        class="img-name ellipsis"
+                        style="width:200px"
                         v-else
                         @click="rename(scope.row.id,scope.row,scope.$index)"
                     >{{scope.row.title}}</span>
@@ -47,16 +48,16 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类">
+            <el-table-column prop="categoryName" label="分类" min-width="100">
                 <template slot-scope="scope">
                     <span>{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sizeStr" min-width="100" label="大小" show-overflow-tooltip></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" label="上传时间">
+            <el-table-column prop="createTimeStr" min-width="150" label="上传时间">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createTimeStr" placement="top">
                         <span>{{ scope.row.createTimeStr }}</span>
@@ -129,7 +130,14 @@
                 </el-carousel>
 
                 <div class="dislog-footer" slot="footer">
-                    <span>{{picInfo.title}}</span>
+                      <el-tooltip
+                            class="item"
+                            effect="light"
+                            :content="picInfo.title"
+                            placement="top"
+                        >
+                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
+                        </el-tooltip>
                     <span>分类: {{picInfo.categoryName}}</span>
                     <span>大小: {{picInfo.sizeStr}}</span>
                 </div>
@@ -201,7 +209,7 @@ export default {
             this.categoryVisable = false;
         },
         // 重命名图片名称
-        rename(id, newName, index) {
+        rename(id, row, index) {
              if(row.title)this.newName = row.title;
             if (!trim(row.title)) {
                  row.title=this.newName

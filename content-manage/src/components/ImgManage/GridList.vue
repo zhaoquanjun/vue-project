@@ -59,7 +59,14 @@
                         ></el-button>
                 </el-carousel>
                 <div class="dislog-footer" slot="footer">
-                    <span>{{picInfo.title}}</span>
+                    <el-tooltip
+                            class="item"
+                            effect="light"
+                            :content="picInfo.title"
+                            placement="top"
+                        >
+                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
+                        </el-tooltip>
                     <span>分类: {{picInfo.categoryName}}</span>
                     <span>大小: {{picInfo.sizeStr}}</span>
                 </div>

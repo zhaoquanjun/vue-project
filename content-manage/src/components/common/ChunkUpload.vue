@@ -32,7 +32,7 @@
             <uploader-unsupport></uploader-unsupport>
             <uploader-list :uploadType="uploadType"></uploader-list>
             <uploader-drop>
-                <span>将{{displayName}}拖拽到此处或</span>
+                <span style="position:absolute">将{{displayName}}拖拽到此处或</span>
                 <uploader-btn :attrs="attrs">点击选择{{displayName}}</uploader-btn>
                 <!-- <uploader-btn :directory="true">选择文件夹</uploader-btn> -->
             </uploader-drop>
@@ -217,7 +217,8 @@ export default {
             successCount: 0,
             errorCount: 0,
             disable: true,
-            formatSize: 0
+            formatSize: 0,
+            allFileSize:0,
         };
     },
     created() {
@@ -296,7 +297,6 @@ export default {
         },
         onFileAdded(file) {
             this.$refs.uploader.resetOption();
-            console.log(file);
             let [, suffix] = file.fileType.split("/");
             let forbidUpload = [
                 ".exe",
@@ -414,6 +414,7 @@ export default {
                     });
                     return false;
                 }
+
             }
             if (this.uploadType === "Audio") {
                 let format = file.fileType.split("/")[1];
@@ -442,6 +443,8 @@ export default {
                         this.errorCount -= 1;
                         return false;
                     } else {
+                        // this.allFileSize +=file.size;
+                      
                         return true;
                     }
                 } else {
@@ -456,12 +459,9 @@ export default {
                     return false;
                 }
             } else {
-                console.log(this.fileList.length, "111");
+               
                 if (this.fileList.length <= 10) {
-                    if (
-                        file.size / 1024 / 1024 > 50 &&
-                        this.uploadType === "Audio"
-                    ) {
+                    if (file.size / 1024 / 1024 > 50 &&this.uploadType === "Audio") {
                         this.$notify({
                             customClass: "notify-error",
                             message: `${this.displayName}大小不可超过50M`,
@@ -579,7 +579,10 @@ export default {
     display: flex;
     align-items: center;
 }
-
+.uploader-list /deep/ .uploader-file-actions {
+     padding-left: 16px;
+     padding-right: 0;
+}
 .uploader-list /deep/ .uploader-file-actions,
 .uploader-list /deep/ .uploader-file-status {
     justify-content: flex-end;
