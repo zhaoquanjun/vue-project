@@ -28,9 +28,9 @@
               <div class="arrowRight"></div>
             </div>
           </div>
+          <div :class="{leftModul:item.prev, rightModul:item.next}"></div>
+          <div :class="{leftArrow:item.prev, rightArrow:item.next}"></div>
         </el-col>
-        <div class="leftModul" @click="leftClick"></div>
-        <div class="rightModul" @click="rightClick"></div>
       </div>
 
       <div style="height:300px;" v-if="siteInfo.length == 2">
@@ -119,6 +119,8 @@ import * as dashboardApi from "@/api/request/dashboardApi";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
 import { designerUrl, mySiteUrl } from "@/environment/index";
 import { getLanguage } from "@/configure/appCommon";
+import { getLocal } from "@/libs/local.js";
+
 
 export default {
   props: ["siteInfo", "isCanCreate", "isSystem"],
@@ -136,7 +138,10 @@ export default {
   mounted() {},
   computed: {
     mySiteId() {
-      return this.$store.state.dashboard.siteId;
+      this.siteId = getLocal("ymSd")
+        ? getLocal("ymSd")
+        : this.$store.state.dashboard.siteId;
+      return this.siteId;
     }
   },
   watch: {
@@ -158,20 +163,6 @@ export default {
       console.log(index);
       this.curIndex = index;
       this.handleClick(index);
-    },
-    leftClick() {
-      if (this.curIndex == 0) {
-        this.handleClick(this.siteInfo.length - 1);
-      } else {
-        this.handleClick(this.curIndex - 1);
-      }
-    },
-    rightClick() {
-      if (this.curIndex == this.siteInfo.length - 1) {
-        this.handleClick(0);
-      } else {
-        this.handleClick(this.curIndex + 1);
-      }
     },
     /**
      * 获取当前siteId
@@ -301,7 +292,7 @@ export default {
       this.radio = "";
       this.createSiteName = "";
       this.createShow = false;
-      },
+    },
     // 创建site
     async createSite() {
       let { status } = await dashboardApi.CreateSite(
@@ -374,9 +365,9 @@ export default {
     .leftModul {
       position: absolute;
       left: 0;
-      bottom: 31px;
-      width: 17%;
-      height: 300px;
+      top: 0;
+      width: 83%;
+      height: 100%;
       cursor: pointer;
       background: linear-gradient(
         90deg,
@@ -387,9 +378,9 @@ export default {
     .rightModul {
       position: absolute;
       right: 0;
-      bottom: 31px;
-      width: 17%;
-      height: 300px;
+      top: 0;
+      width: 83%;
+      height: 100%;
       cursor: pointer;
       background: linear-gradient(
         90deg,
@@ -397,29 +388,35 @@ export default {
         rgba(255, 255, 255, 1) 100%
       );
     }
+    .leftArrow {
+      width: 14px;
+      height: 13px;
+      background: url("~img/dashboard/board-arrowLeftMax.png") no-repeat center;
+      background-size: contain;
+      position: absolute;
+      right: 20px;
+      bottom: 8px;
+    }
+    .rightArrow {
+      width: 14px;
+      height: 13px;
+      background: url("~img/dashboard/board-arrowRightMax.png") no-repeat center;
+      background-size: contain;
+      position: absolute;
+      left: 20px;
+      bottom: 8px;
+    }
     .item:nth-child(3n + 1) {
-      background: linear-gradient(
-        315deg,
-        rgba(8, 204, 235, 1) 0%,
-        rgba(129, 220, 160, 1) 100%
-      );
-      // background: url("~img/dashboard/board-greenbackground.png") no-repeat
-      //   center;
-      // background-size: contain;
+      background: url("~img/dashboard/siteBackground1.png") no-repeat center;
+      background-size: cover;
     }
     .item:nth-child(3n + 2) {
-      background: linear-gradient(
-        315deg,
-        rgba(70, 180, 254, 0.79) 0%,
-        rgba(28, 218, 254, 0.79) 100%
-      );
+      background: url("~img/dashboard/siteBackground2.png") no-repeat center;
+      background-size: cover;
     }
     .item:nth-child(3n + 3) {
-      background: linear-gradient(
-        315deg,
-        rgba(175, 149, 241, 0.79) 0%,
-        rgba(58, 144, 253, 0.79) 100%
-      );
+      background: url("~img/dashboard/siteBackground3.png") no-repeat center;
+      background-size: cover;
     }
     .item {
       position: absolute;
@@ -454,13 +451,11 @@ export default {
         padding-left: 30px;
         padding-right: 20px;
 
-        display: -webkit-box;
-        word-break: break-all;
-        text-overflow: ellipsis;
-        -webkit-text-overflow: ellipsis;
+        display: inline-block;
         overflow: hidden;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: calc(54% - 80px);
       }
       .siteText {
         overflow: hidden;
@@ -633,13 +628,11 @@ export default {
       margin-top: 57px;
       padding-left: 30px;
 
-      display: -webkit-box;
-      word-break: break-all;
-      text-overflow: ellipsis;
-      -webkit-text-overflow: ellipsis;
+      display: inline-block;
       overflow: hidden;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: calc(50% - 60px);
     }
     .siteText {
       overflow: hidden;
@@ -786,12 +779,6 @@ export default {
     height: 180px;
     .content {
       height: 180px;
-      .leftModul {
-        height: 156px;
-      }
-      .rightModul {
-        height: 156px;
-      }
       .item {
         height: 94px;
         .siteImg {
@@ -803,6 +790,7 @@ export default {
           padding-left: 18px;
           font-size: 10px;
           line-height: 14px;
+          max-width: calc(54% - 54px);
         }
         .siteText {
           font-size: 10px;
@@ -919,6 +907,7 @@ export default {
         padding-left: 18px;
         font-size: 16px;
         line-height: 22px;
+        max-width: calc(54% - 54px);
       }
       .siteText {
         font-size: 14px;
