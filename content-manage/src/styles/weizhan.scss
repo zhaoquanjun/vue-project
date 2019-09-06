@@ -1,9 +1,6 @@
 #content-manage {
-    //padding-bottom: 30px;
+  
     margin-top: 24px;
-    .el-aside {
-      //  overflow: visible !important;
-    }
     .tree-aside {
         width: 220px !important;
         background: #fff;
@@ -96,33 +93,7 @@
     height: 100%;
     opacity: 0.5;
 }
-#content {
-    position: fixed;
-    width: 80%;
-    margin: auto;
-    z-index: 112;
-    bottom: 45px;
-    top: 45px;
-}
-#content .el-container {
-    padding-bottom: 25px;
-    background: #fff;
-    // border-radius: 5px;
-    height: 90%;
-}
 
-#content .el-dialog__body {
-    padding-top: 0;
-}
-#content .modal-header {
-    height: 30px;
-    background: rgb(255, 255, 255);
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #e8eaf3;
-}
 // 右侧面板弹窗面板底部按钮
 .modal-footer {
     padding-top: 20px;
@@ -205,4 +176,61 @@
     height: 52px;
     background: url("~img/loading.gif") no-repeat center;
     background-size: contain;
+}
+
+
+#content {
+    position: fixed;
+    width: 1000px;
+    margin: auto;
+    z-index: 112;
+    height: 600px;
+    /* bottom: 45px; */
+    top: 45px;
+    background: #fff;
+    left: 50%;
+    transform: translateX(-50%);
+    .content-table{
+        height: 300px;
+    }
+    .img-list{
+        height: 300px;
+        overflow-y: auto;
+    }
+    .head-middle{
+        padding-right: 16px;
+    }
+    .el-table--scrollable-y .el-table__body-wrapper{
+        height: 300px !important;
+    }
+    .upload-img .upload-btn{
+        top: 90px !important;
+    }
+    #content-manage .tree-aside{
+        overflow: hidden;
+    }
+    .el-tree > :first-child >.el-tree-node__children{
+        height:340px;
+        overflow: auto
+    }
+       
+}
+#content .el-container {
+    padding-bottom: 25px;
+    background: #fff;
+    
+    height: 90%;
+}
+
+#content .el-dialog__body {
+    padding-top: 0;
+}
+#content .modal-header {
+    height: 30px;
+    background: rgb(255, 255, 255);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e8eaf3;
 }

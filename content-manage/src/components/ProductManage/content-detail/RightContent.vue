@@ -16,10 +16,10 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :multiple="true"
-                    :limit="9"
-                    :onExceed="onExceed"
                     accept=".jpg, .jpeg, .png, .gif, .svg, .JPG, .JPEG, .GIF"
                 >
+                <!-- :limit="9"
+                    :onExceed="onExceed" -->
                     <template>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;font-size:12px">添加图片</i>
@@ -63,7 +63,8 @@ export default {
             imageUrl1: "",
             newFileList: [],
             dialogVisible: false,
-            dialogImageUrl: ""
+            dialogImageUrl: "",
+            limit:9,
         };
     },
 
@@ -87,8 +88,11 @@ export default {
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
+               if (this.fileList2.length > this.limit) {
+                this.fileList2 = this.fileList2.splice(this.limit);
+            }
             this.$notify({
-                customClass: "notify-warning", //  notify-success ||  notify-error
+                customClass: "notify-error", //  notify-success ||  notify-error
                 message: `上传图片文件超过数量限制!`,
                 showClose: false,
                 duration: 1500
@@ -106,6 +110,10 @@ export default {
                 url: file.response
             };
             this.fileList2.push(fileList);
+             //
+            if (this.fileList2 && this.fileList2.length > this.limit) {
+                this.onExceed(fileList);
+            }
         },
         beforeAvatarUpload(file, fileList) {
             this.headers.Authorization =
@@ -117,20 +125,31 @@ export default {
             const isSizeOk = file.size / 1024 / 1024 < maxMb;
 
             if (!isPic) {
-                this.$message.error("上传图片只能是 图片 格式!");
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `上传图片只能是 图片 格式!`,
+                    showClose: false,
+                    duration: 1500
+                });
             }
             if (!isSizeOk) {
-                this.$message.error(`上传图片大小不能超过 ${maxMb}MB!`);
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `上传图片大小不能超过 ${maxMb}MB!`,
+                    showClose: false,
+                    duration: 1500
+                });
             }
             return isPic && isSizeOk;
         }
     },
     watch: {
-        fileList(){
-             if (this.fileList.length >= 9) {
+        fileList() {
+            if (this.fileList.length >= 9) {
                 document.querySelector(".el-upload").style.display = "none";
-            }else{
-                document.querySelector(".el-upload").style.display =  "inline-block";
+            } else {
+                document.querySelector(".el-upload").style.display =
+                    "inline-block";
             }
         }
     }

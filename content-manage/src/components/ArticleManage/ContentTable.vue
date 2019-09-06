@@ -106,7 +106,7 @@ export default {
   
     data() {
         return {
-            defaultImg: require("../../../static/images/content-default-pic.png"),
+            defaultImg: require("img/content-default-pic.png"),
             multipleSelection: [],
             operateList: [
                 { name: "移动", flag: "move" },

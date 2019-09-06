@@ -8,7 +8,7 @@
             class="demo-ruleForm"
             @submit.native.prevent
         >
-            <div v-if="isModifi">
+            <div v-if="!isModifi">
                 <el-form-item prop="verification" class="verification-code">
                     <el-input
                         :key="0"

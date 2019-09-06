@@ -64,7 +64,7 @@ export default {
         /** 分类ID */
         categoryId: {
             type: Number,
-            default: 0
+            default: -1
         },
         /* 初始值 */
         value: {

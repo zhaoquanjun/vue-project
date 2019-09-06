@@ -136,6 +136,7 @@
                         <SelectTree
                             v-if="isInvitationPanelShow"
                             :categoryName="curRowData.categoryName"
+                             :categoryId="curRowData.categoryId"
                             :tree-result="treeResult"
                             @chooseNode="chooseNode"
                             :isexpand="true"

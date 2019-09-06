@@ -6,7 +6,7 @@
             </h4>
 
             <m-tree
-                    ref="myTree"
+                ref="myTree"
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
@@ -23,6 +23,7 @@
                 :count-pic="countPic"
                 :pic-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
+                :is-grid="isGrid"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 @getPicList="getPicList"
                 @batchMove="batchMove"
@@ -49,32 +50,35 @@
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
                     :modal-append-to-body="false"
+                ></el-dialog>
+                <right-pannel
+                    :style="{width:isInvitationlWidth+'px'}"
+                    @closeRightPanel="closeRightPanel"
+                    :tree-result="treeResult"
                 >
-                
-                </el-dialog>
-                    <right-pannel
-                        :style="{width:isInvitationlWidth+'px'}"
-                        @closeRightPanel="closeRightPanel"
+                    <span slot="title-text">移动图片</span>
+                    <div class="category-content">
+                        <span name="cur-tip">移动至</span>
+                    </div>
+                    <SelectTree
+                        v-if="closeRightPanel"
+                        :categoryName="curImgInfo.categoryName"
+                        :categoryId="curImgInfo.categoryId"
                         :tree-result="treeResult"
-                    >
-                        <span slot="title-text">移动图片</span>
-                        <div class="category-content">
-                            <span name="cur-tip">移动至</span>
-                        </div>
-                        <SelectTree
-
-                            :categoryName="curImgInfo.categoryName"
-                            :categoryId="curImgInfo.categoryId"
-                            :tree-result="treeResult"
-                            @chooseNode="chooseNode"
-                        ></SelectTree>
-                        <div slot="footer" class="pannle-footer">
-                            <span @click="updateCategoryPic" class="sure">确定</span>
-                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
-                        </div>
-                    </right-pannel>
+                        @chooseNode="chooseNode"
+                    ></SelectTree>
+                    <div slot="footer" class="pannle-footer">
+                        <span @click="updateCategoryPic" class="sure">确定</span>
+                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                    </div>
+                </right-pannel>
             </el-main>
-            <el-footer>
+            <el-footer style="    height: 60px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+   z-index:100">
                 <slot name="modal-footer"></slot>
             </el-footer>
         </el-main>
@@ -138,11 +142,11 @@ export default {
     },
     data() {
         return {
-            nodeData: { id: 0, parentId: null },
+            nodeData: { id: 0, label: "全部分类" },
             componentId: "ImgList",
             isImgList: false,
             countPic: 0,
-            curImgInfo: {},
+            curImgInfo: "",
             moveToClassiFy: "",
             categoryName: "", //当前选中的分类名字
             idsList: [],
@@ -181,14 +185,16 @@ export default {
             });
             if (node) {
                 this.nodeData = node; // 上传图片所需
-                }
+            }
 
             let { data } = await imgManageApi.getPicList(this.picSearchOptions);
             loading.close();
             this.getTree();
             this.imgPageResult = data;
             this.imgPageResult.list.forEach((item, index) => {
-                item.createTimeStr = this.imgPageResult.list[index].createTimeStr.split(" ")[0];
+                item.createTimeStr = this.imgPageResult.list[
+                    index
+                ].createTimeStr.split(" ")[0];
             });
         },
         // 批量删除列表
@@ -254,7 +260,7 @@ export default {
             let { data } = await imgCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
-            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id);
         },
         async newCategory(entity) {
             await imgCategoryManageApi.create(entity);
@@ -359,12 +365,13 @@ export default {
         //批量移动
 
         batchMove(isHeader) {
-            if(isHeader){
+            if (isHeader) {
                 this.curImgInfo = {
                     categoryName: "全部分类",
                     categoryId: 0
                 };
             }
+            console.log(this.curImgInfo)
             this.isInvitationPanelShow = true;
         },
         //批量删除

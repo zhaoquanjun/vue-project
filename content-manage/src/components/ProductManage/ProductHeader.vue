@@ -319,4 +319,28 @@ export default {
         margin-left: 16px;
     }
 }
+.head-item {
+   
+    .sort-icon {
+        display: inline-block;
+        width: 16px;
+        height: 14px;
+    }
+    .asc {
+        background: url("~img/content-icon/asc.png") no-repeat center;
+        background-size: contain;
+    }
+    .asc-icon-on {
+        background: url("~img/content-icon/asc-on.png") no-repeat center;
+        background-size: contain;
+    }
+    .dec {
+        background: url("~img/content-icon/desc.png") no-repeat center;
+        background-size: contain;
+    }
+    .dec-icon-on {
+        background: url("~img/content-icon/desc-on.png") no-repeat center;
+        background-size: contain;
+    }
+}
 </style>

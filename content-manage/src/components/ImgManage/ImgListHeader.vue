@@ -50,7 +50,7 @@
                 </button>
                 <button class="grid-mode mode-item" @click="showType('grid')">
                     <!-- <svg-icon icon-class="grid-mode"></svg-icon> -->
-                    <i class="list-icon mode-icon" :class="{'mode-iconOn':!modeSelecte}"></i>
+                    <i class="list-icon mode-icon"  :class="{'mode-iconOn':!modeSelecte}"></i>
                 </button>
             </div>
             <div class="head-item head-right">

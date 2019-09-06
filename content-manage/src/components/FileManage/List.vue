@@ -73,7 +73,7 @@
 
             <el-table-column
                 label="操作"
-                min-width="150"
+                min-width="230"
                 v-if="$store.state.dashboard.isContentwrite"
             >
                 <template slot-scope="scope">

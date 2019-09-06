@@ -55,7 +55,8 @@
             <button
                 class="btn-small"
                 :class="[disable?'disable-btn':'btn-bglightblue']"
-                :disable="disable"
+                :disabled="disable"
+                
                 @click="upload"
             >{{uploadBtnText}}</button>
         </div>

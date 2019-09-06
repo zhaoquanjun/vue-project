@@ -69,7 +69,6 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn move-btn" @click="handleMove(scope.row)">
-                            <!-- <svg-icon style="width:27px;height:27px" icon-class="tab-move"></svg-icon> -->
                         </button>
                         <button
                             class="handle-btn look-btn"

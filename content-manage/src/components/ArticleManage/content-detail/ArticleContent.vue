@@ -289,7 +289,7 @@ export default {
                     label: "下线"
                 }
             ],
-            value: 1,
+            value: true,
             activeName: "",
             activeName1: "",
             NewId:"",
@@ -648,9 +648,11 @@ export default {
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
+
 </style>
 
 <style >
+
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {

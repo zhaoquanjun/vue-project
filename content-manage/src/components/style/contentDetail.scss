@@ -101,12 +101,15 @@
         padding-bottom: 0;
     }
 }
-.select-sort {
-    display: inline-block;
-    width: 117px;
-    box-sizing: border-box;
-    height: 32px;
-    margin: 0 0 0 7px;
+// .select-sort {
+//     display: inline-block;
+//     width: 117px;
+//     box-sizing: border-box;
+//     height: 32px;
+//     margin: 0 0 0 7px;
+// }
+.select-sort{
+    padding-left: 16px;
 }
 .category{
     width: 300px;

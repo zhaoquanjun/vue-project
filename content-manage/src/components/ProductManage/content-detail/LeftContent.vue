@@ -37,19 +37,7 @@
                         <div style="float:left">
                             <span style="font-size:12px">分类:</span>
                             <span class="select-sort category">
-                                <!-- <el-select 
-                                size="small" 
-                                v-model="value2" 
-                                multiple
-                                placeholder="请选择"
-                                >
-                                    <el-option
-                                        v-for="item in options1"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select>-->
+                          
                                 <div class="product-category" @click.stop="multipleCatagory">
                                     <ul class="category-list">
                                        
@@ -63,6 +51,7 @@
                                             <div class="category-item">
                                                 <span>{{item.displayName}}</span>
                                                 <i
+                                                    v-if="item.id!=0"
                                                     class="el-icon-close"
                                                     @click="removeCategory(item.id)"
                                                 ></i>
@@ -87,16 +76,7 @@
                                         @chooseNode="chooseNode"
                                     />
                                 </div>
-                                <!-- <SelectTree
-                                    size="small"
-                                    placeholder="请选择"
-                                    :categoryName="categoryName"
-                                    :categoryId="categoryId"
-                                    :tree-result="treeResult"
-                                    @chooseNode="chooseNode"
-                                    @removeSeletedCategory="removeSeletedCategory"
-                                    :multiple="true"
-                                />-->
+                               
                             </span>
                         </div>
                         <div style="float:right">
@@ -186,22 +166,8 @@
                                 ></el-input>
                             </ul>
                             <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
-                            <!-- <el-input
-                                placeholder="每个关键词之间用会车键分离"
-                                v-model="detailData.searchKeyword"
-                            ></el-input>-->
                         </el-form-item>
                         <el-form-item>
-                            <!-- <el-checkbox-group
-                                v-model="checkedviewAuth"
-                                @change="handleCheckedCitiesChange"
-                            >
-                                <el-checkbox
-                                    v-for="item in viewAuth"
-                                    :label="item"
-                                    :key="item.id"
-                                >{{item.name}}</el-checkbox>
-                            </el-checkbox-group>-->
                         </el-form-item>
                         <el-form-item label="置頂" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
@@ -247,14 +213,6 @@
                             <!-- <el-input placeholder="seo关键词" v-model="detailData.seoKeyword"></el-input> -->
                         </el-form-item>
 
-                        <!-- <el-form-item label="产品描述" prop="seoDescription">
-                            <el-input
-                                type="textarea"
-                                :rows="5"
-                                placeholder
-                                v-model="detailData.seoDescription"
-                            ></el-input>
-                        </el-form-item>-->
                         <el-form-item label="自定义地址" prop="customUrl">
                             <el-input placeholder="请输入自定义地址" v-model="detailData.customUrl"></el-input>
                         </el-form-item>
@@ -262,17 +220,6 @@
                 </el-collapse>
             </div>
             <div class="content-item seo-key">
-                <!-- <el-form-item label prop="contentDetail">
-                <el-collapse v-model="activeName1" accordion>
-                    <el-collapse-item title="相关产品" name="2">
-                          <el-table >
-                               <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
-                                  <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
-                                     <el-table-column prop="creatorName" label="作者" show-overflow-tooltip></el-table-column>
-                        </el-table >
-                    </el-collapse-item>
-                </el-collapse>
-                </el-form-item >-->
             </div>
         </el-form>
     </div>

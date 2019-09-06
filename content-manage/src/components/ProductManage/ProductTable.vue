@@ -22,7 +22,7 @@
                         v-if="scope.row.thumbnailPicUrlList.length"
                         :src="scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
                         class="cover"
-                        alt
+                        onerror="onImgError(this)"
                     />
                     <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
@@ -118,7 +118,7 @@ export default {
 
     data() {
         return {
-            defaultImg: require("../../../static/images/content-default-pic.png"),
+            defaultImg: require("img/content-default-pic.png"),
             multipleSelection: [],
             operateList: [
                 { name: "移动", flag: "move" },
@@ -141,13 +141,15 @@ export default {
                     this.$refs.operateSection.style.display = "none";
             });
         });
-
         this.$nextTick(() => {
             window.addEventListener("resize", () => {
                 this.tableHeight = window.innerHeight - 260;
             });
             this.tableHeight = window.innerHeight - 260;
         });
+         window.onImgError = (ele)=> {
+            ele.src = ele.attributes["src"]=this.defaultImg
+        };
     },
     methods: {
         changePageNum(page) {
