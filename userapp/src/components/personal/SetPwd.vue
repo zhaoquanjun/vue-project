@@ -267,9 +267,7 @@ export default {
         },
        watchPawInput(pwd) {
          
-            let pwdReg = new RegExp(
-                "^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$"
-            );
+            let pwdReg =/^[a-zA-Z0-9\x21-\x7e]{6,16}$/
             let pwdLength = trim(pwd).length;
             console.log(pwd)
             if (pwdLength >= 6 && pwdLength <= 16) {

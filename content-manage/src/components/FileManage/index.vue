@@ -554,9 +554,7 @@ export default {
                 this.error.errorText = "";
             }
             // let pwdReg = /^[a-zA-Z0-9\p{P}\p{S}]{6,16}$/;
-            let pwdReg = new RegExp(
-                "^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$"
-            );
+            let pwdReg = new RegExp( "^[A-Za-z\\d@$,.!%*#?&]{6,16}$");
             if (trim(this.ruleForm.pass) && !pwdReg.test(this.ruleForm.pass)) {
                 this.error.pwdTip = true;
                 this.error.pwdErrorText = "密码设置不符合要求";
@@ -569,7 +567,7 @@ export default {
         },
         watchPawInput() {
             let pwdReg = new RegExp(
-                "^(?=.*[A-Za-z])(?=.*[@$,.!%*#?&])(?=.*\\d)[A-Za-z\\d@$,.!%*#?&]{6,16}$"
+                "^[A-Za-z\\d@$,.!%*#?&]{6,16}$"
             );
             let pwdLength = trim(this.ruleForm.pass).length;
             if (pwdLength >= 6 && pwdLength <= 16) {
