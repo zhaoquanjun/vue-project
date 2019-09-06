@@ -101,10 +101,10 @@ const dashboard = {
         },
         async _getMenuListData({ commit, state }) {
             let { data } = await getSliderMenuList();
-            let { result1, pathArr } = filterMenuListData(data);
+            let { result1, pathArr } = filterMenuListData(data.menus);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
-            data.forEach(item => {
+            data.menus.forEach(item => {
                 if (item.code === "design") {
                     state.isSiteInfoShow = true
                 }
