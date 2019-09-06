@@ -111,4 +111,32 @@ export default {
     }
   }
 }
+@media screen and (max-width: 1650px) {
+  .wrap .textOne,
+  .wrap .textTwo {
+    font-size: 24px !important;
+  }
+  .wrap .select {
+    width: 180px;
+    height: 40px;
+    line-height: 40px;
+  }
+}
+@media screen and (max-width: 1440px) {
+  .wrap .textOne,
+  .wrap .textTwo {
+    font-size: 20px !important;
+  }
+  .wrap .select {
+    width: 140px;
+    height: 30px;
+    line-height: 30px;
+  }
+}
+@media screen and (max-width: 1260px) {
+  .wrap .textOne,
+  .wrap .textTwo {
+    font-size: 16px !important;
+  }
+}
 </style>
