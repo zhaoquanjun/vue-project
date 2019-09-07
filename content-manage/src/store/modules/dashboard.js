@@ -71,10 +71,10 @@ const dashboard = {
         },
         async _getMenuListData({ commit,state }) {
            let { data } = await getSliderMenuList();
-             let { result1, pathArr } = filterMenuListData(data);
+             let { result1, pathArr } = filterMenuListData(data.menus);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
-            data && data.forEach(item=>{
+            data && data.operations.forEach(item=>{
                 if(item.code === "contentwrite"){
                     state.isContentwrite=true;
                 }

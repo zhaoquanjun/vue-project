@@ -4,7 +4,7 @@
         <div class="modify-title">
             <p>{{tipTitle}}</p>
         </div>
-        <template v-if="isSetPassWord">
+        <template v-if="!isSetPassWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="pwd-form">
                 <el-form-item prop="passWrod" class="verification-code" style="position:relative">
                     <el-input
@@ -63,7 +63,7 @@ const TIME_COUNT = 60; //更改倒计时时间
 import {
     updateUserPwd,
     sendSourcePhoneCode,
-    isInvalidCode
+    isInvalidChangePwdCode
 } from "@/api/index.js";
 import GetSms from "./GetSms";
 import { trim } from "@/utlis/index.js";
@@ -241,7 +241,7 @@ export default {
             if (!this.$refs.getSms.submitForm1()) {
                 return false;
             } else {
-                let { status } = await isInvalidCode(code);
+                let { status } = await isInvalidChangePwdCode(code);
                 if (status === 200) {
                     this.isModifi = true;
                     this.isSetPassWord = false;

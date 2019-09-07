@@ -151,12 +151,11 @@ export const sendSourcePhoneCode = () => {
  * InterfaceAuthor : xuzhuan
  * 验证用户要更改绑定的新的号码
  */
-export const sendTargetPhoneCode = (oldPhone, newPhone) => {
+export const sendTargetPhoneCode = (newPhone) => {
     let params = {
-        oldPhone: oldPhone,
         newPhone: newPhone
     }
-    return ajaxRequest.put(`/api/phone/SendTargetPhoneCode/${oldPhone}/${newPhone}`, params);
+    return ajaxRequest.put(`/api/phone/SendTargetPhoneCode/${newPhone}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan
@@ -167,6 +166,16 @@ export const isInvalidCode = (code) => {
         code: code
     }
     return ajaxRequest.put(`/api/phone/IsInvalidCode/${code}`, params);
+}
+/**
+ * InterfaceAuthor : xuzhuan
+ * 修改密码时验证用户的验证码是否正确
+ */
+export const isInvalidChangePwdCode = (code) => {
+    let params = {
+        code: code
+    }
+    return ajaxRequest.put(`/api/phone/IsInvalidChangePwdCode/${code}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan
