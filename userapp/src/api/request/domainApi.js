@@ -8,8 +8,7 @@ console.log(store)
 /**
  * 获取域名列表
  */
-export const getCdnDomainList = () => {
-    const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
+export const getCdnDomainList = (siteId) => {
     return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/GetCdnDomainList/${siteId}`);
 }
 

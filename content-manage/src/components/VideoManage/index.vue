@@ -101,11 +101,12 @@
                 :uploadType="contentType"
                 :node-data="nodeData"
                 :apiHost="apiHost"
-                :accept="'video/*'"
+                
                 @getList="getPicList"
                 @getTree="getTree"
                 @closeDialog="closeDialog"
             />
+            <!-- :accept="'video/*'" -->
         </el-dialog>
     </el-container>
 </template>

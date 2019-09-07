@@ -88,9 +88,7 @@ export default {
         },
         // 上传图片超出数量限制时触发
         onExceed(fileList) {
-               if (this.fileList2.length > this.limit) {
-                this.fileList2 = this.fileList2.splice(this.limit);
-            }
+            this.newFileList = fileList.splice(this.limit);
             this.$notify({
                 customClass: "notify-error", //  notify-success ||  notify-error
                 message: `上传图片文件超过数量限制!`,
@@ -100,19 +98,18 @@ export default {
         },
         ///////
         handleAvatarSuccess(res, file, argfileList) {
-            this.newFileList = argfileList;
-            if (this.newFileList.length >= 9) {
+            if (argfileList.length >= 9) {
                 document.querySelector(".el-upload").style.display = "none";
             }
-            let fileList = {
-                name: file.name,
-                response: file.response,
-                url: file.response
-            };
-            this.fileList2.push(fileList);
-             //
-            if (this.fileList2 && this.fileList2.length > this.limit) {
-                this.onExceed(fileList);
+            // let fileList = {
+            //     name: file.name,
+            //     response: file.response,
+            //     url: file.response
+            // };
+            if (argfileList.length > this.limit) {
+                this.onExceed(argfileList);
+            }else{
+                 this.newFileList = argfileList;
             }
         },
         beforeAvatarUpload(file, fileList) {

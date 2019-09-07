@@ -189,9 +189,18 @@ export default {
                 siteId: this.$store.state.dashboard.siteId,
                 isForceUpdate: opt.isForceUpdate
             };
+             var newWindow = window.open();
             let { data } = await domainApi.resolveCdnByAliYunToken(params);
             if (!data.isSuccess && data.redirectUrl) {
-                window.open(data.redirectUrl);
+                // window.open(data.redirectUrl);
+                newWindow.location.href = data.redirectUrl;
+                //  var link = document.createElement("a");
+                // link.href = data.redirectUrl;
+                // link.setAttribute('target', '_blank');
+                // document.body.appendChild(link);
+                // link.click();
+                // console.log(link)
+
                 clearInterval(this.timer);
                 this.timer = setInterval(() => {
                     this._isAliYunTokenSet().then(data => {

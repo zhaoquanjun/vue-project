@@ -33,14 +33,12 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <div>
-                        <div style="float:left">
+                    <div class="flexSpace">
+                        <div >
                             <span style="font-size:12px">分类:</span>
                             <span class="select-sort category">
-                          
                                 <div class="product-category" @click.stop="multipleCatagory">
                                     <ul class="category-list">
-                                       
                                         <li
                                             style="display:inline-block"
                                             v-for="(item) in detailData.productCategoryList"
@@ -79,10 +77,10 @@
                                
                             </span>
                         </div>
-                        <div style="float:right">
+                        <div>
                             <span style="font-size:12px">状态</span>
                             <span class="select-sort">
-                                <el-select size="small" v-model="value" placeholder="请选择">
+                                <el-select size="small" v-model="detailData.isOnSell" placeholder="请选择">
                                     <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -292,11 +290,11 @@ export default {
             isIndeterminate: true,
             options: [
                 {
-                    value: "选项1",
+                    value: true,
                     label: "上架"
                 },
                 {
-                    value: "选项2",
+                    value: false,
                     label: "下架"
                 }
             ],
@@ -765,12 +763,12 @@ export default {
     vertical-align: middle;
 }
 .product-category {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: space-between;
     padding: 5px;
     min-height: 20px;
-    width: 317px;
+     width: 250px;
     border: 1px solid #dcdfe6;
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     .category-list {

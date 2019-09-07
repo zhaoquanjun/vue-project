@@ -169,6 +169,11 @@
 .cursor-p{
     cursor: pointer;
 }
+.flexSpace{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}    
 // loading
 .loading-icon {
     display: inline-block;

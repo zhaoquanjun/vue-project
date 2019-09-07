@@ -32,7 +32,7 @@
             <uploader-unsupport></uploader-unsupport>
             <uploader-list :uploadType="uploadType"></uploader-list>
             <uploader-drop>
-                <span >将{{displayName}}拖拽到此处或</span>
+                <span>将{{displayName}}拖拽到此处或</span>
                 <uploader-btn :attrs="attrs">点击选择{{displayName}}</uploader-btn>
                 <!-- <uploader-btn :directory="true">选择文件夹</uploader-btn> -->
             </uploader-drop>
@@ -56,7 +56,6 @@
                 class="btn-small"
                 :class="[disable?'disable-btn':'btn-bglightblue']"
                 :disabled="disable"
-                
                 @click="upload"
             >{{uploadBtnText}}</button>
         </div>
@@ -64,9 +63,62 @@
 </template>
 
 <script>
+const videoFormat = [
+    ".avi",
+    ".rmvb",
+    ".rm",
+    ".asf",
+    ".divx",
+    ".mpg",
+    ".mpeg",
+    ".mpe",
+    ".wmv",
+    ".mp4",
+    ".mkv",
+    ".vob",
+    ".swf",
+    ".flv"
+];
+const audioFormat = [
+    ".mp3",
+    ".cd",
+    ".wav",
+    ".aiff",
+    ".au",
+    ".wma",
+    ".ogg",
+    ".mp3pro",
+    ".real",
+    ".ape",
+    ".module",
+    ".midi",
+    ".vqf",
+    ".flac"
+];
+const forbidUpload = [
+    ".exe",
+    ".php",
+    ".lnk",
+    ".cmd",
+    ".bat",
+    ".reg",
+    ".vb",
+    ".vbs",
+    ".js",
+    ".css",
+    ".aspx",
+    ".sql",
+    ".asp",
+    ".jsp",
+    ".htm",
+    ".html",
+    ".java",
+    ".json"
+];
 import SparkMD5 from "spark-md5";
 import * as chunkUploadManageApi from "@/api/request/chunkUploadManageApi";
 import SelectTree from "@/components/common/SelectTree";
+import { format } from "path";
 export default {
     props: [
         "displayName",
@@ -151,7 +203,10 @@ export default {
                                                             this
                                                                 .chooseCategoryId ||
                                                             this.nodeData.id, //todo,
-                                                        durationOfSecond:data.existingFileInfo.durationOfSecond
+                                                        durationOfSecond:
+                                                            data
+                                                                .existingFileInfo
+                                                                .durationOfSecond
                                                     }
                                                 );
                                                 ++this.successCount;
@@ -219,25 +274,21 @@ export default {
             errorCount: 0,
             disable: true,
             formatSize: 0,
-            allFileSize:0,
+            allFileSize: 0
         };
     },
     created() {
         this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
     },
     methods: {
-        getTime(file){
-                let url = URL.createObjectURL(file.file);
-                var audioElement = new Audio(url);
-                var duration;
-                audioElement.addEventListener("loadedmetadata", function(
-                    _event
-                ) {
-                    duration = audioElement.duration;
-                   
-                });
-            return duration
-
+        getTime(file) {
+            let url = URL.createObjectURL(file.file);
+            var audioElement = new Audio(url);
+            var duration;
+            audioElement.addEventListener("loadedmetadata", function(_event) {
+                duration = audioElement.duration;
+            });
+            return duration;
         },
         bytesToSize(bytes, flag) {
             if (bytes === 0) return "0 B";
@@ -298,53 +349,11 @@ export default {
         },
         onFileAdded(file) {
             this.$refs.uploader.resetOption();
-            let [, suffix] = file.fileType.split("/");
-            let forbidUpload = [
-                ".exe",
-                ".php",
-                ".lnk",
-                ".cmd",
-                ".bat",
-                ".reg",
-                ".vb",
-                ".vbs",
-                ".js",
-                ".css",
-                ".aspx",
-                ".sql",
-                ".asp",
-                ".jsp",
-                ".htm",
-                ".html",
-                ".java",
-                ".json"
-            ];
-
-            let fileNameIndex = file.name.lastIndexOf(".");
-            let fileName = file.name.slice(fileNameIndex);
-            if (forbidUpload.indexOf(fileName) > -1) {
-                file.cancel(file);
-                this.errorCount -= 1;
-                this.$notify({
-                    customClass: "notify-error",
-                    message: `不允许上传${fileName}格式的文件`,
-                    duration: 1500,
-                    showClose: false
-                });
-
-                return;
-            }
-            this.panelShow = true;
-            //   file.resume();
             this.fileList.push(file);
-            if (this.limitCount(file)) {
-                this.computeMD5(file);
-            }
-            console.log(this.fileList);
+            if (this.limitCount(file)) this.computeMD5(file);
         },
         uploadStart(file) {},
         computeMD5(file) {
-          
             let fileReader = new FileReader();
             let time = new Date().getTime();
             let md5 = "";
@@ -370,68 +379,12 @@ export default {
             };
         },
         limitCount(file) {
-            let videoFormat = [
-                ".avi",
-                ".rmvb",
-                ".rm",
-                ".asf",
-                ".divx",
-                ".mpg",
-                ".mpeg",
-                ".mpe",
-                ".wmv",
-                ".mp4",
-                ".mkv",
-                ".vob",
-                ".swf",
-                ".flv"
-            ];
-            let audioFormat = [
-                ".mp3",
-                ".cd",
-                ".wav",
-                ".aiff",
-                ".au",
-                ".wma",
-                ".ogg",
-                ".mp3pro",
-                ".real",
-                ".ape",
-                ".module",
-                ".midi",
-                ".vqf",
-                ".flac"
-            ];
-            if (this.uploadType === "Video") {
-                let format = file.fileType.split("/")[1];
-                if (videoFormat.indexOf("." + format) === -1) {
-                    file.cancel(file);
-                    this.errorCount -= 1;
-                    this.$notify({
-                        customClass: "notify-error",
-                        message: `请添加${this.displayName}格式文件`,
-                        duration: 1500,
-                        showClose: false
-                    });
-                    return false;
-                }
-
-            }
-            if (this.uploadType === "Audio") {
-                let format = file.fileType.split("/")[1];
-                if (audioFormat.indexOf("." + format) === -1) {
-                    file.cancel(file);
-                    this.errorCount -= 1;
-                    this.$notify({
-                        customClass: "notify-error",
-                        message: `请添加${this.displayName}格式文件`,
-                        duration: 1500,
-                        showClose: false
-                    });
-                    return false;
-                }
-            }
+            if (this.uploadType === "Video")
+                return this.checkFormat(file, videoFormat);
+            if (this.uploadType === "Audio")
+                return this.checkFormat(file, audioFormat);
             if (this.uploadType === "File") {
+                return this.checkFormat(file, forbidUpload);
                 if (this.fileList.length < 100) {
                     if (file.size / 1024 / 1024 > 50) {
                         this.$notify({
@@ -445,7 +398,7 @@ export default {
                         return false;
                     } else {
                         // this.allFileSize +=file.size;
-                      
+
                         return true;
                     }
                 } else {
@@ -460,9 +413,11 @@ export default {
                     return false;
                 }
             } else {
-               
                 if (this.fileList.length <= 10) {
-                    if (file.size / 1024 / 1024 > 50 &&this.uploadType === "Audio") {
+                    if (
+                        file.size / 1024 / 1024 > 50 &&
+                        this.uploadType === "Audio"
+                    ) {
                         this.$notify({
                             customClass: "notify-error",
                             message: `${this.displayName}大小不可超过50M`,
@@ -520,12 +475,41 @@ export default {
             });
         },
         fileRemove(file) {
-            if (!!file.error) {
-                this.errorCount -= 1;
+            if (!!file.error) this.errorCount -= 1;
+            this.fileList = this.fileList.filter(item => item != file);
+        },
+        isMac() {
+            return /macintosh|mac os x/i.test(navigator.userAgent);
+        },
+        checkFormat(file, format) {
+            let fileName = this.isMac() ? file.file.name : file.name;
+            let fileNameIndex = fileName.lastIndexOf(".");
+            let fileNameSuffix = fileName.slice(fileNameIndex);
+            if (this.uploadType === "File") {
+                if (format.indexOf(fileNameSuffix) !== -1) {
+                    file.cancel(file);
+                    this.errorCount -= 1;
+                    this.$notify({
+                        customClass: "notify-error",
+                        message: `请添加${this.displayName}格式文件`,
+                        duration: 1500,
+                        showClose: false
+                    });
+                    return false;
+                }
+            } else {
+                if (format.indexOf(fileNameSuffix) === -1) {
+                    file.cancel(file);
+                    this.errorCount -= 1;
+                    this.$notify({
+                        customClass: "notify-error",
+                        message: `请添加${this.displayName}格式文件`,
+                        duration: 1500,
+                        showClose: false
+                    });
+                    return false;
+                }
             }
-            this.fileList = this.fileList.filter(item => {
-                return item != file;
-            });
         }
     },
     watch: {
@@ -581,8 +565,8 @@ export default {
     align-items: center;
 }
 .uploader-list /deep/ .uploader-file-actions {
-     padding-left: 16px;
-     padding-right: 0;
+    padding-left: 16px;
+    padding-right: 0;
 }
 .uploader-list /deep/ .uploader-file-actions,
 .uploader-list /deep/ .uploader-file-status {

@@ -105,11 +105,12 @@
                 :displayName="displayName"
                 :uploadType="contentType"
                 :apiHost="apiHost"
-                :accept="'audio/*'"
+                
                 @getList="getPicList"
                 @getTree="getTree"
                 @closeDialog="closeDialog"
             />
+            <!-- :accept="'audio/*'" -->
         </el-dialog>
     </el-container>
 </template>

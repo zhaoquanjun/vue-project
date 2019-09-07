@@ -118,11 +118,8 @@ export default {
     },
     methods: {
         setCheckedKeys() {
-           
             this.valueTitle = this.categoryName;
             this.$nextTick(() => {
-                console.log(this.categoryId)
-                console.log(this.$refs.selectTree)
                 this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
                 //   this.$refs.tree.setCheckedKeys(ids);
             });
