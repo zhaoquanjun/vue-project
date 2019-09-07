@@ -1,6 +1,12 @@
 <template>
   <el-row class="plugin-section">
-    <el-col class="plugins-box" :span="6" v-for="(item, index) in  plugins" :key="index">
+    <el-col
+      class="plugins-box"
+      :span="6"
+      v-for="(item, index) in  plugins"
+      :key="index"
+      v-show="item.pluginCode =='WeChatAccount'?$store.state.dashboard.isSiteInfoShow:true"
+    >
       <div class="box-inner">
         <span class="plugin-item plugin-img" :class="item.pluginCode"></span>
         <span class="plugin-item plugin-text">
