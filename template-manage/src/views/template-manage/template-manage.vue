@@ -123,7 +123,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="模板名称|语言">
+            <el-table-column label="模板名称|语言" width="150">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName" show-overflow-tooltip>{{scope.row.templateName}}</p>
@@ -142,7 +142,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="开通时间|更新时间">
+            <el-table-column label="开通时间|更新时间" width="140">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{(scope.row.myCreateTime)}}</p>
@@ -153,12 +153,16 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="useCount" label="使用量" width="100"></el-table-column>
-            <el-table-column label="设计师">
+            <el-table-column prop="useCount" label="使用量" width="80"></el-table-column>
+            <el-table-column label="设计师" width="120">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.designerPhone}}</p>
-                  <p class="templateName" style="margin-top:5px;" show-overflow-tooltip>{{scope.row.remark}}</p>
+                  <p
+                    class="templateName"
+                    style="margin-top:5px;"
+                    show-overflow-tooltip
+                  >{{scope.row.remark}}</p>
                 </div>
               </template>
             </el-table-column>
@@ -250,7 +254,12 @@
             <el-input v-model="remark" placeholder="请输入备注信息" class="remarkInput" maxlength="20"></el-input>
           </div>
           <div class="confirm">
-            <button class="confirmBtn" :disabled="isAble" @click="createTemplate" :class="{disable : isAble}">开通</button>
+            <button
+              class="confirmBtn"
+              :disabled="isAble"
+              @click="createTemplate"
+              :class="{disable : isAble}"
+            >开通</button>
             <button class="cancelBtn" @click="cancelCreateTemplate">取消</button>
           </div>
         </div>
@@ -353,7 +362,7 @@ import environment from "@/environment/index.js";
 export default {
   data() {
     return {
-      isAble:false,
+      isAble: false,
       picUrl: "",
       uploadPicAction: `${environment.uploadPicUrl}/-1`,
       headers: {
@@ -415,32 +424,38 @@ export default {
       ],
       languageSelect: "zh-CN",
       themeOptions: [
-        { value: "",
-            label: "主题"},
+        { value: "", label: "主题" },
         {
-            value: "blue_color1",
-            label: "蓝色1"
-        },{
-            value: "blue_color2",
-            label: "蓝色2"
-        },{
-            value: "blue_color3",
-            label: "蓝色3"
-        },{
-            value: "blue_color4",
-            label: "蓝色4"
-        },{
-            value: "pink_color1",
-            label: "粉色1"
-        },{
-            value: "pink_color2",
-            label: "粉色2"
-        },{
-            value: "pink_color3",
-            label: "粉色3"
-        },{
-            value: "pink_color4",
-            label: "粉色4"
+          value: "blue_color1",
+          label: "蓝色1"
+        },
+        {
+          value: "blue_color2",
+          label: "蓝色2"
+        },
+        {
+          value: "blue_color3",
+          label: "蓝色3"
+        },
+        {
+          value: "blue_color4",
+          label: "蓝色4"
+        },
+        {
+          value: "pink_color1",
+          label: "粉色1"
+        },
+        {
+          value: "pink_color2",
+          label: "粉色2"
+        },
+        {
+          value: "pink_color3",
+          label: "粉色3"
+        },
+        {
+          value: "pink_color4",
+          label: "粉色4"
         }
       ],
       themeSelect: "",
@@ -674,7 +689,7 @@ export default {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
       } else {
-        this.isAble=true;
+        this.isAble = true;
         let { status } = await templateApi.createTemplate(
           this.phone,
           this.remark
@@ -688,7 +703,7 @@ export default {
           background: "rgba(38,38,38,0.7)"
         });
         if (status == 200) {
-          this.isAble=false;
+          this.isAble = false;
           loading.close();
           this.$notify({
             customClass: "notify-success",
@@ -698,7 +713,7 @@ export default {
           });
           this.searchTemplate();
         } else {
-          this.isAble=false;
+          this.isAble = false;
           this.$notify({
             customClass: "notify-error",
             message: `创建失败`,
@@ -738,6 +753,11 @@ export default {
     },
     // 查询
     async searchTemplate() {
+      const loading = this.$loading({
+        lock: true,
+        spinner: "loading-icon",
+        background: "rgba(255, 255, 255, 0.75)"
+      });
       let templateNameText = "";
       let domainText = "";
       let designerPhoneText = "";
@@ -769,7 +789,7 @@ export default {
         Language: this.languageSelect,
         SiteTheme: this.themeSelect,
         IsOnlyRecommend: this.isRecommend,
-        Status: this.templateStatus?this.templateStatus:0,
+        Status: this.templateStatus ? this.templateStatus : 0,
         TemplateType: "SiteTemplate",
         PageIndex: this.pageIndex,
         PageSize: this.pageSize,
@@ -779,9 +799,12 @@ export default {
         IsOrderByDesc: this.isDescSort
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
-      this.templatePage = data;
-      this.templateInfo = data.items;
-      this.formatTime();
+      if (status == 200) {
+        loading.close();
+        this.templatePage = data;
+        this.templateInfo = data.items;
+        this.formatTime();
+      }
     },
     changePage(page) {
       this.pageIndex = page;
