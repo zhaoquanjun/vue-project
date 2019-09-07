@@ -19,7 +19,6 @@
             <el-table-column label="文件名称" min-width="220">
                 <template slot-scope="scope">
                     <img :src="scope.row | fileCover" class="cover" />
-
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
                         <span
                             style="width:150px"
@@ -195,19 +194,38 @@ export default {
     filters: {
         fileCover: function(row) {
             let fileExtensionType = row.fileExtensionType;
-            switch (fileExtensionType) {
+            let fileExtension = row.fileExtension
+        
+       
+           let excelAry = [".xlsx",".xlsm","xltx",".xltm",".xlsb",".xlam"]; 
+           let wordAry = [".docx",".docm",".dotx",".dotm"]
+           let pptAry =[".pptx",".pptm",".ppsx",".ppsx",".potx",".potm",".ppam",'.ppt'];
+           let pdfAry = [".pdf"];
+           let txtAry = [".txt"]
+            if(excelAry.includes(fileExtension)){
+                return require("img/file-icon/new/excel.png");
+            }else if(wordAry.includes(fileExtension)){
+                return require("img/file-icon/new/word.png");
+            }else if(pptAry.includes(fileExtension)){
+                return require("img/file-icon/new/ppt.png");
+            }else if(pdfAry.includes("fileExtension")){
+                return require("img/file-icon/new/pdf.png");
+            }else if(txtAry.includes("fileExtension")){
+                return require("img/file-icon/new/txt.png"); 
+            }
+                switch (fileExtensionType) {
                 case 0:
-                    return require("img/file-icon/video.png");
+                    return require("img/file-icon/new/video.png");
                 case 1:
-                    return require("img/file-icon/audio.png");
+                    return require("img/file-icon/new/audio.png");
                 case 2:
-                    return require("img/file-icon/zip.png");
+                    return require("img/file-icon/new/zip.png");
                 case 3:
-                    return require("img/file-icon/img.png");
+                    return require("img/file-icon/new/picture.png");
                 case 4:
                     return require("img/file-icon/document.png");
                 default:
-                    return require("img/file-icon/other.png");
+                    return require("img/file-icon/new/other.png");
             }
         },
         formatterFileExt(fileExt) {
