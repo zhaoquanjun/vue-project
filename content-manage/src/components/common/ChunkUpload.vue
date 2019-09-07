@@ -492,7 +492,7 @@ export default {
                     this.errorCount -= 1;
                     this.$notify({
                         customClass: "notify-error",
-                        message: `请添加${this.displayName}格式文件`,
+                        message: `不允许添加${fileNameSuffix}的文件`,
                         duration: 1500,
                         showClose: false
                     });

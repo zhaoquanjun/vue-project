@@ -62,14 +62,14 @@ export default {
             this.authtipShow = false;
             this.isCopy = false;
             this._getShortUrlByInviation(names);
-            this.$store.commit("CLOSERIGHTPANNEL", false);
+            this.$store.commit("ISINVITATIONPANELSHOW", false);
             this.timer = setTimeout(() => {
-                this.$store.commit("CLOSERIGHTPANNEL", true);
+                // CLOSERIGHTPANNEL
+                this.$store.commit("ISINVITATIONPANELSHOW", true);
                 this.isLinkShow = true;
             }, 500);
         },
         onCopy() {
-          
               this.$notify({
                         customClass: "notify-success", // error success
                         message: `复制成功！`,
