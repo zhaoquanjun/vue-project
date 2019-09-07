@@ -14,6 +14,7 @@
           >以下是您当前的站点</p>
         </div>
         <siteinfo
+          ref="siteInfo"
           v-if="$store.state.dashboard.isSiteInfoShow"
           :siteInfo="siteInfoList"
           :isCanCreate="isCanCreate"
@@ -185,6 +186,7 @@ export default {
       let { data, status } = await getUserDashboard();
       if (status === 200) {
         loading.close();
+
       }
       this.pluginList = data.pluginList;
       this.contentNumber = {
@@ -204,6 +206,7 @@ export default {
       if (this.siteCount == this.siteInfoList.length) {
         this.isCanCreate = false;
       }
+      this.$refs.siteInfo.getSiteInfo(this.siteInfoList)
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表

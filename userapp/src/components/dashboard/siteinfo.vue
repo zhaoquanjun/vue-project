@@ -122,9 +122,10 @@ import { getLanguage } from "@/configure/appCommon";
 import { getLocal } from "@/libs/local.js";
 
 export default {
-  props: ["siteInfo", "isCanCreate", "isSystem"],
+  props: ["isCanCreate", "isSystem"],
   data() {
     return {
+      siteInfo: [],
       isFirst: true,
       siteId: 1,
       curIndex: 0,
@@ -143,21 +144,18 @@ export default {
       return this.siteId;
     }
   },
-  watch: {
-    siteInfo() {
-      if (this.isFirst) {
-        if (this.mySiteId) {
-          this.siteId = this.mySiteId;
-          this.initial();
-        } else {
-          this.getCurSiteId().then(() => {
-            this.initial();
-          });
-        }
-      }
-    }
-  },
   methods: {
+    getSiteInfo(siteInfoList) {
+      this.siteInfo = siteInfoList;
+      if (this.mySiteId) {
+        this.siteId = this.mySiteId;
+        this.initial();
+      } else {
+        this.getCurSiteId().then(() => {
+          this.initial();
+        });
+      }
+    },
     changeSlider(index) {
       console.log(index);
       this.curIndex = index;
@@ -206,8 +204,16 @@ export default {
         for (let i = 0; i < this.siteInfo.length; i++) {
           if (this.siteInfo[i].siteId == this.siteId) {
             this.curIndex = i;
-            this.$set(this.siteInfo[i - 1], "prev", true);
-            this.$set(this.siteInfo[i + 1], "next", true);
+            if (i == 0) {
+              this.$set(this.siteInfo[2], "prev", true);
+              this.$set(this.siteInfo[i + 1], "next", true);
+            } else if (i == 2) {
+              this.$set(this.siteInfo[i - 1], "prev", true);
+              this.$set(this.siteInfo[i + 1], "next", true);
+            } else if (i == 3) {
+              this.$set(this.siteInfo[i - 1], "prev", true);
+              this.$set(this.siteInfo[0], "next", true);
+            }
           }
         }
       }
