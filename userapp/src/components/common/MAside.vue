@@ -103,6 +103,8 @@ export default {
                     return "iconhuishouzhan";
                 case "business":
                     return "icondianshanghuiyuan";
+                case "template":
+                    return "iconicon-dash-NavigationTemplate"    
             }
         },
         menuHasChild(index){

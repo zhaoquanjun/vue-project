@@ -385,7 +385,7 @@ export default {
             if (this.uploadType === "Audio")
                 return this.checkFormat(file, audioFormat);
             if (this.uploadType === "File") {
-                return this.checkFormat(file, forbidUpload);
+                 this.checkFormat(file, forbidUpload);
                 if (this.fileList.length < 100) {
                     if (file.size / 1024 / 1024 > 50) {
                         this.$notify({
