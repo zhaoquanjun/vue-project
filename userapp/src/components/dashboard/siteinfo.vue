@@ -135,7 +135,6 @@ export default {
       lock: true
     };
   },
-  mounted() {},
   computed: {
     mySiteId() {
       this.siteId = getLocal("ymSd")
@@ -144,9 +143,17 @@ export default {
       return this.siteId;
     }
   },
+  watch: {
+    // siteInfo(newValue, oldValue) {
+    //   if (newValue && newValue.length > 0) {
+    //     this.getSiteInfo();
+    //   }
+    //   console.log(oldValue, newValue)
+    // }
+  },
   methods: {
-    getSiteInfo(siteInfoList) {
-      this.siteInfo = siteInfoList;
+    getSiteInfo(option) {
+      this.siteInfo  = option;
       if (this.mySiteId) {
         this.siteId = this.mySiteId;
         this.initial();

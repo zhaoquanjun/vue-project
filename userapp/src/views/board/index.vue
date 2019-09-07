@@ -13,14 +13,14 @@
             v-show="siteInfoList.length"
           >以下是您当前的站点</p>
         </div>
+        <!--   v-show="$store.state.dashboard.isSiteInfoShow" -->
         <siteinfo
           ref="siteInfo"
-          v-if="$store.state.dashboard.isSiteInfoShow"
           :siteInfo="siteInfoList"
           :isCanCreate="isCanCreate"
           :isSystem="isSystem"
           @getDashboardData="getDashboardData"
-          v-show="siteInfoList.length"
+          v-show="siteInfoList.length && $store.state.dashboard.isSiteInfoShow"
         />
         <plugins :plugins="pluginList" />
         <content-num :contentNumber="contentNumber" />
@@ -204,9 +204,8 @@ export default {
       if (this.siteCount == this.siteInfoList.length) {
         this.isCanCreate = false;
       }
-      this.$nextTick(() => {
-        this.$refs.siteInfo.getSiteInfo(this.siteInfoList);
-      });
+      this.$refs.siteInfo.getSiteInfo(this.siteInfoList)
+      
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表
