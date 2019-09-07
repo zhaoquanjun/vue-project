@@ -1,6 +1,6 @@
 <template>
     <div class="invita-link">
-        <div class="invita-wrap" v-if="isLinkShow && $store.state.isRightPanelShow">
+        <div class="invita-wrap" v-if="isLinkShow ">
             <i class="back-icon" @click="backInvite"></i>
             <p class="invita-title invita-item">将链接发送给成员, 成员加入后即可协助您管理站点</p>
             <p class="link-wrap">
@@ -63,10 +63,12 @@ export default {
             this.isCopy = false;
             this._getShortUrlByInviation(names);
             this.$store.commit("ISINVITATIONPANELSHOW", false);
+          
             this.timer = setTimeout(() => {
                 // CLOSERIGHTPANNEL
                 this.$store.commit("ISINVITATIONPANELSHOW", true);
                 this.isLinkShow = true;
+                 document.getElementsByClassName("right-pannel")[0].style.width="513px"
             }, 500);
         },
         onCopy() {
