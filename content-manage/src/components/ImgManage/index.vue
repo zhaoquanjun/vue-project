@@ -61,7 +61,7 @@
                         <span name="cur-tip">移动至</span>
                     </div>
                     <SelectTree
-                        v-if="closeRightPanel"
+                        v-if="isInvitationPanelShow"
                         :categoryName="curImgInfo.categoryName"
                         :categoryId="curImgInfo.categoryId"
                         :tree-result="treeResult"
@@ -73,12 +73,7 @@
                     </div>
                 </right-pannel>
             </el-main>
-            <el-footer style="    height: 60px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-   z-index:100">
+            <el-footer >
                 <slot name="modal-footer"></slot>
             </el-footer>
         </el-main>

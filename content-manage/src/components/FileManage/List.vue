@@ -24,8 +24,9 @@
                         <span
                             style="width:150px"
                             :title="scope.row.title"
-                            @click="rename(scope.row.id,scope.row.title,scope.$index)"
+                           
                         >{{scope.row.title }}</span>
+                        <!--  @click="rename(scope.row.id,scope.row.title,scope.$index)" -->
                     </el-tooltip>
                 </template>
             </el-table-column>

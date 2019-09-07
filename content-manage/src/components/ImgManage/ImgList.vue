@@ -22,6 +22,7 @@
                         :fullsrc="scope.row.fullOssUrl"
                         onerror="onImgError(this)"
                         class="cover"
+                         @click="viewPic( scope.row,scope.$index)"
                     />
 
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">

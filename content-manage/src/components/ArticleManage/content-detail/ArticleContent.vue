@@ -89,7 +89,13 @@
                             <span @click="cancelEditorImg">X</span>
                         </el-header>
                         <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo">
-                            <div slot="modal-footer" class="modal-footer">
+                            <div slot="modal-footer" class="modal-footer" style=" height: 60px;
+    position: absolute;
+    bottom: -23px;
+    right: 16px;
+    width: 100%;
+    z-index: 100;
+    text-align: right;">
                                 <button type="button" @click="getEditorImg" class="sure">确定</button>
                                 <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
                             </div>
