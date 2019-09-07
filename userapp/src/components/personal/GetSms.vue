@@ -26,26 +26,20 @@
             </div>
             <div v-else>
                 <el-form-item prop="phone">
-                    <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号">
-                        <el-select
-                            slot="prefix"
-                            style="z-index:10000"
-                            size="small"
-                            @change="change"
-                            v-model="value"
-                            placeholder="请选择"
-                        >
-                            <el-option
-                                popper-class="dropdown__item"
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            >
+                    <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号"> 
+                        <el-select slot="prefix"
+                                   style="z-index:10000"
+                                   size="small"
+                                   @change="change"
+                                   v-model="value"
+                                   placeholder="请选择">
+                            <el-option popper-class="dropdown__item"
+                                       v-for="item in options"
+                                       :key="item.value"
+                                       :label="item.label"
+                                       :value="item.value">
                                 <span style="float: left">{{ item.label }}</span>
-                                <span
-                                    style="float: right; color: #8492a6; font-size: 13px"
-                                >{{ item.value }}</span>
+                                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
                             </el-option>
                         </el-select>
                     </el-input>
@@ -85,7 +79,7 @@ export default {
             if (!value) {
                 return callback(new Error("手机号不能为空"));
             } else {
-                const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                const reg = /^1[3|4|5|7|8]\d{9}$/;
                 console.log(reg.test(value));
                 if (reg.test(value)) {
                     // if(this.activeName!="first1"){
@@ -200,7 +194,6 @@ export default {
                 // });
             } else {
                 let { status } = await sendTargetPhoneCode(
-                    this.sourcePhone,
                     targetPhone
                 );
                 if (status === 200) {
