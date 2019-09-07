@@ -75,7 +75,7 @@ const dashboard = {
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
             data && data.operations.forEach(item=>{
-                if(item.code === "contentwrite"){
+                if(item === "ContentWrite"){
                     state.isContentwrite=true;
                 }
             })

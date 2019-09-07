@@ -219,7 +219,7 @@ export default {
             this.clickType = type;
             if (type === "permission") {
                 this.panelTitle = "访问权限";
-            } else if (type === "copy") {
+            } else if (type === "batchCopy") {
                 this.tipText = "复制至";
             } else if (type === "batchmove") {
                 this.tipText = "移动至";
@@ -263,20 +263,32 @@ export default {
                 return;
             }
             let checkNodes = this.$refs.checkTree.getCheckedNodes();
+            //
+          
             if (!checkNodes || checkNodes.length < 1) {
+                let tipText =(this.type === "copy" || this.clickType === "batchCopy")? "复制":"移动"
                 this.$notify({
                     customClass: "notify-error", //  notify-success ||  notify-error
-                    message: `请选择移动的分类!`,
+                    message: `请选择${tipText}的分类!`,
                     showClose: false,
                     duration: 1500
                 });
                 return;
             }
+            if(checkNodes.length>5){
+                 this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `一个产品最多设置五个分类!`,
+                    showClose: false,
+                    duration: 1500
+                });
+                return
+            }
             let categoryIdList = checkNodes.map(item => {
                 return item.id;
             });
             let cateIdsAry = [];
-            if (this.idsList.length > 1) {
+            if (this.idsList.length >= 1) {
                 cateIdsAry = this.idsList;
             } else {
                 let cateId = this.curArticleInfo.id;

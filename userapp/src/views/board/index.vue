@@ -14,6 +14,7 @@
           >以下是您当前的站点</p>
         </div>
         <siteinfo
+          ref="siteInfo"
           v-if="$store.state.dashboard.isSiteInfoShow"
           :siteInfo="siteInfoList"
           :isCanCreate="isCanCreate"
@@ -170,7 +171,6 @@ export default {
     ContentNum,
     recommend
   },
-  created() {},
   methods: {
     /**
      * 获取dashboard信息
@@ -204,6 +204,9 @@ export default {
       if (this.siteCount == this.siteInfoList.length) {
         this.isCanCreate = false;
       }
+      this.$nextTick(() => {
+        this.$refs.siteInfo.getSiteInfo(this.siteInfoList);
+      });
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表
@@ -293,7 +296,7 @@ export default {
 .textareaWrap /deep/ .el-input__count {
   right: 25px;
 }
-.popover /deep/ .el-popover__reference{
+.popover /deep/ .el-popover__reference {
   outline: none;
 }
 </style>

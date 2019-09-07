@@ -53,6 +53,7 @@
          background: transparent;
          box-shadow: none;
          height: auto;
+         width: 100vh;
      }
     .el-dialog__body {
          text-align: center;
@@ -81,9 +82,12 @@
     .el-carousel__arrow i {
          font-size: 40px;
      }
+     .el-carousel__container{
+         height: 100vh;
+     }
      .el-carousel__container img{
-         max-width: 658px;
-         max-height: 370px;
+        //  max-width: 658px;
+        //  max-height: 370px;
      }
   .el-carousel__item.is-animating{
         display: flex;
@@ -96,6 +100,7 @@
             width: 100%;
         left: 0;
         bottom: 15px;
+        z-index: 100
        
     }
   .el-dialog__wrapper{

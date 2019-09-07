@@ -197,7 +197,17 @@ export const defaultRoutes = [
     name: "callback",
     component: () => import("@/views/login/signcallback.vue"),
     meta: {
+      title: "微站",
       requiresAuth: true,
+    }
+  },
+  {
+    path: "/init",
+    name: "init",
+    component: () => import("@/views/login/init.vue"),
+    meta: {
+      title: "微站",
+      
     }
   },
   {
