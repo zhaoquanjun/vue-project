@@ -186,7 +186,6 @@ export default {
       let { data, status } = await getUserDashboard();
       if (status === 200) {
         loading.close();
-
       }
       this.pluginList = data.pluginList;
       this.contentNumber = {
@@ -206,7 +205,9 @@ export default {
       if (this.siteCount == this.siteInfoList.length) {
         this.isCanCreate = false;
       }
-      this.$refs.siteInfo.getSiteInfo(this.siteInfoList)
+      this.$nextTick(() => {
+        this.$refs.siteInfo.getSiteInfo(this.siteInfoList);
+      });
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表
@@ -296,7 +297,7 @@ export default {
 .textareaWrap /deep/ .el-input__count {
   right: 25px;
 }
-.popover /deep/ .el-popover__reference{
+.popover /deep/ .el-popover__reference {
   outline: none;
 }
 </style>
