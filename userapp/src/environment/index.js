@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === 'development') {
     uploadRobotsUrl = "http://api.designer.console.wezhan.cn/api/v1/Robots/AddOrOverride/";
     authorityUrl = "http://login.console.wezhan.cn";
     redirectUrl = "http://localhost:8082/callback";
-    logoutRedirectUri = "http://dashboard.console.wezhan.cn/index.html";
+    logoutRedirectUri = "http://dashboard.console.wezhan.cn/init";
     silentRedirectUri = 'http://localhost:8082/static/silent-renew.html';
     clientId = 'dev.dashboard.api';
     scope = "openid profile dashboard.api content.api designer.api produce.api";

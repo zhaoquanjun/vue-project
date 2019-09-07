@@ -81,6 +81,11 @@ const dashboard = {
             state.authList = a;
             state.hasRules = true;
             setLocal("authList", a)
+        },
+        reset_store(state){
+           
+            state.appId = "";
+            state.siteId = "";
         }
     },
     actions: {

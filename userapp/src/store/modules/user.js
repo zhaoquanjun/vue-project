@@ -20,7 +20,8 @@ const user = {
     SET_USERINFO: (state, payload) => {
       state.userInfo = payload;
       setLocal("userInfo",payload)
-    }
+    },
+    
   },
   actions: {
     async _set(context,data){

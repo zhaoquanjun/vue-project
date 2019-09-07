@@ -171,7 +171,6 @@ export default {
     ContentNum,
     recommend
   },
-  created() {},
   methods: {
     /**
      * 获取dashboard信息

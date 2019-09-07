@@ -2,15 +2,12 @@ import Vue from "vue";
 import Vuex from "vuex";
 import state from "./state";
 import mutations from "./mutations";
-import actions from "./actions";
-import * as getters from "./getters";
 import login from "./modules/login";
 import user from "./modules/user";
 import dashboard from "./modules/dashboard";
 import website from "./modules/website"
 import memberManager from "./modules/member-manager";
-import {setLocal,getLocal} from "@/libs/local"
-import Cookies from "js-cookie"
+import { getLocal } from "@/libs/local"
 Vue.use(Vuex);
 const store = new Vuex.Store({
   modules: {
@@ -22,15 +19,14 @@ const store = new Vuex.Store({
   },
   state,
   mutations,
-  actions,
-  getters
+ 
 });
 export default store;
 
 /**
  * 页面刷新再将local中的token 写入store中
  */
-if (Cookies("token")){
+if (getLocal("token")){
   let obj = {
       access_token: getLocal("token"),
     }
@@ -47,8 +43,8 @@ if(getLocal("ymSd")){
 if(getLocal("ymId")){
   store.commit("SETAPPID",getLocal("ymId"))
  }
-if(Cookies("userInfo")){
-  store.commit("SET_USERINFO",JSON.parse(Cookies("userInfo")))
+if(getLocal("userInfo")){
+  store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
 }
 // if(Cookies("navItem")){
 //   store.commit("SETCODE",Cookies("navItem"))
