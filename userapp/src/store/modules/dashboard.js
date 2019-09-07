@@ -47,6 +47,7 @@ const dashboard = {
         buttonAuth: {},
         hasRules: false,
         isSiteInfoShow: false,
+        isWechataccount: false
     },
     mutations: {
         GETUSERDASHBOARD(state, payload) {
@@ -111,6 +112,9 @@ const dashboard = {
             data.menus.forEach(item => {
                 if (item.code === "design") {
                     state.isSiteInfoShow = true
+                }
+                if(item.code == "wechataccount"){
+                    state.isWechataccount = true
                 }
             })
             return data

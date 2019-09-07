@@ -488,7 +488,7 @@ export default {
               this.$router.push({
                 path: "/website/mysite"
               });
-              this.$emit("getSiteInfo", this.siteId)
+              this.$emit("getSiteInfo", this.siteId);
             }
           });
       }
@@ -649,7 +649,15 @@ export default {
           referenceWebSite: this.notFindSite
         };
         let { status } = await templateApi.createReferenceIndustry(para);
-        this.notFindTemplateShow = false;
+        if (status == 200) {
+          this.closeNotFindTemplateDialog();
+          this.$notify({
+            customClass: "notify-success",
+            message: `感谢您的反馈`,
+            duration: 1500,
+            showClose: false
+          });
+        }
       }
     },
     // 显示选择模版弹框

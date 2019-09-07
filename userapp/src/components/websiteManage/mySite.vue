@@ -39,6 +39,7 @@
                 trigger="manual"
                 v-model="editPopover"
                 style="padding:0"
+                class="popover"
               >
                 <span slot="reference" style="margin-left:0px" @click="showChangeSitename">
                   <div class="edit" style="margin-left:0px"></div>
@@ -90,7 +91,10 @@
         <div style="height:401px"></div>
       </el-row>
       <el-row class="siteContent">
-        <div class="mySiteTitle">网站信息</div>
+        <div class="mySiteTitle">
+          网站信息
+          <!-- <div class="edit" style="margin-left:16px" @click="showSiteInfo"></div> -->
+        </div>
         <div class="siteTypeWrap">
           <div class="siteType">网站类型</div>
           <div class="siteTypeSelect">
@@ -168,7 +172,7 @@
         :show-close="false"
         :close-on-click-modal="false"
       >
-        <div class="right-pannel" :style="{width:'470px'}">
+        <div class="siteLanguage-right-pannel" :style="{width:'470px'}">
           <div class="pannel-head">
             <span class="headTitle">网站语言</span>
             <span class="close-pannel" @click="closeSiteLanguageDialog">
@@ -192,7 +196,70 @@
           </div>
         </div>
       </el-dialog>
-      <SelectTemplateDialog ref="selectTemplateDialog" :siteId="siteId" :siteName="siteName" :templateId="templateId"></SelectTemplateDialog>
+      <!-- <el-dialog
+        width="0"
+        :visible.sync="changeSiteInfoShow"
+        :show-close="false"
+        :close-on-click-modal="false"
+      >
+        <div class="siteInfo-right-pannel" :style="{width:'470px'}">
+          <div class="pannel-head">
+            <span class="headTitle">网站信息</span>
+            <span class="close-pannel" @click="closeSiteInfoDialog">
+              <i class="iconfont iconX" style="font-size:12px;color:#ccc"></i>
+            </span>
+          </div>
+          <div class="siteTypeSelect">
+            <span>网站类型：</span>
+            <el-select v-model="chosedSiteType" placeholder="请选择站点类型" @change="choseType">
+              <el-option
+                v-for="item in siteType"
+                :key="item.value"
+                :label="item.label"
+                :value="item.label"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="siteFirstIndustrySelect">
+            <span>所属行业：</span>
+            <el-select
+              v-model="siteFirstIndustryValue"
+              placeholder="一级行业"
+              @change="choseFirstIndustry"
+            >
+              <el-option
+                v-for="item in siteFirstIndustry"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+            <el-select
+              v-model="siteSecondIndustryValue"
+              placeholder="二级行业"
+              @change="choseSecondIndustry"
+            >
+              <el-option
+                v-for="item in siteSecondIndustry"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="confirm">
+            <button class="confirmBtn" @click="changeInfo">确定</button>
+            <button class="cancelBtn" @click="closeSiteInfoDialog">取消</button>
+          </div>
+        </div>
+      </el-dialog> -->
+      <SelectTemplateDialog
+        ref="selectTemplateDialog"
+        :siteId="siteId"
+        :siteName="siteName"
+        :templateId="templateId"
+        @getSiteInfo="getSiteInfo"
+      ></SelectTemplateDialog>
     </el-main>
   </el-container>
 </template>
@@ -246,6 +313,7 @@ export default {
       changeSiteLanguageShow: false,
       remarkInfo: "",
       radio: "zh-CN",
+      changeSiteInfoShow: false,
       editPopover: false,
       isNullInput: false
     };
@@ -356,6 +424,47 @@ export default {
         this.closeSiteLanguageDialog();
       }
     },
+    // 关闭修改网站信息
+    closeSiteInfoDialog() {
+      this.changeSiteInfoShow = false;
+    },
+    showSiteInfo() {
+      this.changeSiteInfoShow = true;
+    },
+    async changeInfo() {
+      if (!this.chosedSiteType) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `请选择网站类型`,
+          duration: 2000,
+          showClose: false
+        });
+        return;
+      }
+      if (this.secondIndustryId == "" || this.secondIndustryId == 0) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `请选择所属行业`,
+          duration: 2000,
+          showClose: false
+        });
+        return;
+      }
+      let { data, status } = await dashboardApi.updateSiteTypeAndIndustry(
+        this.siteId,
+        this.chosedSiteType,
+        this.firstIndustryId,
+        this.secondIndustryId
+      );
+      if (status === 200) {
+        this.$notify({
+          customClass: "notify-success",
+          message: `保存成功`,
+          duration: 2000,
+          showClose: false
+        });
+      }
+    },
     // 选择网站类型
     choseType(value) {
       this.chosedSiteType = value;
@@ -426,6 +535,9 @@ export default {
 };
 </script>
 <style scoped>
+.popover /deep/ .el-popover__reference{
+  outline: none;
+}
 .siteTypeSelect {
   display: inline-block;
   margin-left: 24px;
@@ -436,6 +548,7 @@ export default {
   background: rgba(255, 255, 255, 1);
   border-radius: 2px;
   border: 1px solid rgba(229, 229, 229, 1);
+  line-height: 32px;
 }
 .siteTypeSelect /deep/ .el-input__icon {
   line-height: 32px;
@@ -450,6 +563,7 @@ export default {
   background: rgba(255, 255, 255, 1);
   border-radius: 2px;
   border: 1px solid rgba(229, 229, 229, 1);
+  line-height: 32px;
 }
 .siteFirstIndustrySelect /deep/ .el-input__icon {
   line-height: 32px;
@@ -464,6 +578,7 @@ export default {
   background: rgba(255, 255, 255, 1);
   border-radius: 2px;
   border: 1px solid rgba(229, 229, 229, 1);
+  line-height: 32px;
 }
 .siteSecondIndustrySelect /deep/ .el-input__icon {
   line-height: 32px;
@@ -693,7 +808,7 @@ export default {
   }
 }
 //右侧弹框
-.right-pannel {
+.siteLanguage-right-pannel {
   background: #ffffff;
   position: fixed;
   z-index: 2200;
@@ -749,6 +864,67 @@ export default {
     margin-left: 32px;
     margin-right: 32px;
   }
+  .confirm {
+    position: absolute;
+    width: 470px;
+    height: 80px;
+    bottom: 0px;
+    border-top: 1px solid #efefef;
+    .confirmBtn {
+      margin: 24px;
+      width: 90px;
+      height: 32px;
+      background: rgba(1, 192, 222, 1);
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+      line-height: 32px;
+    }
+    .cancelBtn {
+      margin-top: 24px;
+      width: 90px;
+      height: 32px;
+      border: 1px solid rgba(1, 192, 222, 1);
+      font-size: 12px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(1, 192, 222, 1);
+      line-height: 32px;
+    }
+  }
+}
+.siteInfo-right-pannel {
+  background: #ffffff;
+  position: fixed;
+  z-index: 2200;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow: 0 0 3px #ccc;
+  transition: width 0.2s linear;
+  background-color: "#fff";
+  color: #262626;
+  overflow: hidden;
+  .pannel-head {
+    height: 55px;
+    overflow: hidden;
+    border-bottom: 1px solid #efefef;
+    .headTitle {
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(38, 38, 38, 1);
+      line-height: 55px;
+    }
+    span {
+      padding: 0 16px;
+    }
+    .close-pannel {
+      line-height: 55px;
+      float: right;
+      cursor: pointer;
+    }
+  }
+
   .confirm {
     position: absolute;
     width: 470px;
