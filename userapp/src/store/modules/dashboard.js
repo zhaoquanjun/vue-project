@@ -83,6 +83,7 @@ const dashboard = {
             setLocal("authList", a)
         },
         reset_store(state){
+           
             state.appId = "";
             state.siteId = "";
         }

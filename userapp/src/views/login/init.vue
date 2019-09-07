@@ -5,14 +5,14 @@
 </template>
 <script>
 import { clearAllCookie } from "@/libs/local.js";
-alert(1)
+
 export default {
     created() {
-          alert(1)  
           this.$router.push({
               path:"/board"
           })
-          console.log(this)
+          this.$store.commit("reset_store");
+          this.$store.state.user.accessToken.Authorization = ""
           clearAllCookie();
     }
 }
