@@ -1285,6 +1285,7 @@ export default {
     width: 200px;
     height: 133px;
     position: relative;
+    margin-left: 14px;
     .recommend {
       display: inline-block;
       width: 50px;
