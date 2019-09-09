@@ -381,9 +381,9 @@ export default {
         },
         limitCount(file) {
             if (this.uploadType === "Video")
-                return this.checkFormat(file, videoFormat);
+                this.checkFormat(file, videoFormat);
             if (this.uploadType === "Audio")
-                return this.checkFormat(file, audioFormat);
+                this.checkFormat(file, audioFormat);
             if (this.uploadType === "File") {
                  this.checkFormat(file, forbidUpload);
                 if (this.fileList.length < 100) {
@@ -492,7 +492,7 @@ export default {
                     this.errorCount -= 1;
                     this.$notify({
                         customClass: "notify-error",
-                        message: `请添加${this.displayName}格式文件`,
+                        message: `不允许添加${fileNameSuffix}的文件`,
                         duration: 1500,
                         showClose: false
                     });
