@@ -79,7 +79,7 @@ export default {
             if (!value) {
                 return callback(new Error("手机号不能为空"));
             } else {
-                const reg = /^1[3|4|5|7|8]\d{9}$/;
+                const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
                 console.log(reg.test(value));
                 if (reg.test(value)) {
                     // if(this.activeName!="first1"){
