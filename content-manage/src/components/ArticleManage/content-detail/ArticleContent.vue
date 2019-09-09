@@ -169,7 +169,7 @@
                                 <div slot="content">不填写则默认使用文章标题</div>
                                 <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
-                            <el-input placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
+                            <el-input class="contentDetail-title"  maxlength="100" show-word-limit  placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
                         </el-form-item>
                         <el-form-item style="position:relative" label="SEO关键词" prop="metaKeywords">
                             <ul class="keyword-list" ref="metaKeywordList">

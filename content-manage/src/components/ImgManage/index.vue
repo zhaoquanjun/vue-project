@@ -37,7 +37,6 @@
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
                     @getPicList="getPicList"
-                    @changeCategory="changeCategoryPic"
                     @rename="renamePic"
                     @batchRemove="batchRemovePic"
                     @moveClassify="moveClassify"
@@ -249,7 +248,7 @@ export default {
         },
         async renamePic(id, newname) {
             await imgManageApi.rename(id, newname);
-            this.getPicList();
+            // this.getPicList();
         },
         async getTree() {
             let { data } = await imgCategoryManageApi.get();

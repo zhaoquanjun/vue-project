@@ -101,7 +101,7 @@
                 <button class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
-        <ul class="operate-section" ref="operateSection">
+        <ul v-show="isOperateSectionShow" class="operate-section" ref="operateSection">
             <li
                 class="operate-item"
                 v-for="(it, index) in operateList"
@@ -130,15 +130,17 @@ export default {
             row: "",
             tableHeight: 500,
             loadingShow: true,
-            tableData: ""
+            tableData: "",
+            isOperateSectionShow:false
         };
     },
     mounted() {
         this.tableData = this.articlePageResult;
         document.addEventListener("click", () => {
             this.$nextTick(() => {
-                if (this.$refs.operateSection)
-                    this.$refs.operateSection.style.display = "none";
+                // if (this.$refs.operateSection)
+                //     this.$refs.operateSection.style.display = "none";
+                this.isOperateSectionShow =false
             });
         });
         this.$nextTick(() => {
@@ -202,20 +204,16 @@ export default {
                 { name: row.isTop ? "取消置顶" : "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ];
-            let clientH =
-                document.getElementsByClassName("more-operate")[0]
-                    .clientHeight + 10;
-            let clientW = this.$refs.operateSection.clientWidth;
-
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
-            if (this.$refs.operateSection.style.display == "block") {
-                this.$refs.operateSection.style.display = "none";
-            } else {
-                this.$refs.operateSection.style.display = "block";
-            }
+            // if (this.$refs.operateSection.style.display == "block") {
+            //     this.$refs.operateSection.style.display = "none";
+            // } else {
+            //     this.$refs.operateSection.style.display = "block";
+            // }
+            this.isOperateSectionShow =! this.isOperateSectionShow
         },
 
         /**
@@ -274,6 +272,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../styles/manege-table.scss";
+.operate-section{
+    display: block ;
+}
 </style>
 
 

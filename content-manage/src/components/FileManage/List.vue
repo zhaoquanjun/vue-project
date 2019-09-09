@@ -18,7 +18,7 @@
 
             <el-table-column label="文件名称" min-width="220">
                 <template slot-scope="scope">
-                    <img :src="scope.row | fileCover" class="cover" />
+                    <span  class="file-cover cover"><img width="100%" :src="scope.row | fileCover" /></span>
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
                         <span
                             style="width:150px"
@@ -376,6 +376,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../styles/manege-table.scss";
+.file-cover{
+    width:22px;
+height:28px;
+}
 </style>
 
 

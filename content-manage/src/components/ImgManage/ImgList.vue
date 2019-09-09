@@ -154,21 +154,18 @@ export default {
     data() {
         return {
             layout: "total, slot, sizes, prev, pager, next,jumper",
-            picInfo: {},
+            picInfo: {},// 当前图片的信息
             index: -1, //
-            isRename: true, // 重命名图片名称
-            initial: 0,
-            imgVisible: false,
-            multipleSelection: [],
-            picUrl: null,
-            picTitle: null,
+            imgVisible: false,// 查看图片弹窗 是否显示
+            multipleSelection: [],// 选择的list
             categoryVisable: false,
             changeCategoryPicId: null,
             imgList: "",
             fullOssUrl: "",
             changeIndex: -1,
             firstIndex: "",
-            tableHeight: 500
+            tableHeight: 500,
+           
         };
     },
     mounted() {
@@ -204,10 +201,10 @@ export default {
             this.changeCategoryPicId = row.id;
             this.$emit("moveClassify", true, row);
         },
-        changeCategory(data) {
-            this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
-            this.categoryVisable = false;
-        },
+        // changeCategory(data) {
+        //     this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
+        //     this.categoryVisable = false;
+        // },
         // 重命名图片名称
         rename(id, row, index) {
              if(row.title)this.newName = row.title;
@@ -223,13 +220,11 @@ export default {
             }
             if (isNaN(index)) {
                 this.index = -1;
-                this.$emit("rename", id, row.title);
+                 this.$emit("rename", id, row.title);
                 return;
             }
             this.index = index;
-            this.$nextTick(() => {
-                this.$refs.renameInput.focus();
-            });
+            this.$nextTick(() => this.$refs.renameInput.focus());
         },
         blurRename(id, newName) {},
         /**
