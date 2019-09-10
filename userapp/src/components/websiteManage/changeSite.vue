@@ -20,7 +20,7 @@
         <div class="dialogTitle">
           <span class="dialogTitleText">切换网站</span>
           <span class="close-pannel" @click="closeDialog">
-            <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
+            <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
           </span>
         </div>
         <el-row :gutter="20" style="padding:0 30px; padding-bottom:30px;">

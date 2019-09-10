@@ -695,7 +695,7 @@ export default {
       if (this.phone == "") {
         this.errorTip = true;
         this.errorPhone = "请输入设计师手机号";
-      } else if (!/^1(3|4|5|7|8)\d{9}$/.test(this.phone)) {
+      } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
       } else {

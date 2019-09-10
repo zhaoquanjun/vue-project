@@ -125,7 +125,7 @@ export default {
 }
 .empty {
     cursor: pointer;
-    width: 30%;
+    width: 20%;
     color: #00c1de;
     text-align: right;
     float: right;

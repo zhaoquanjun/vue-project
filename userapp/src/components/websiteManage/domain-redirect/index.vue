@@ -4,7 +4,7 @@
             <h5 class="title">温馨提示:</h5>
             <span class="content" >{{warmPromptText}}</span>
             <button class="handler-btn btn-darkblue-notboard" @click="toSet">立即配置</button>
-            <button class="close-tip" @click="closeTip"><i class="iconfont iconX"></i></button>
+            <button class="close-tip" @click="closeTip"><i class="iconfont iconguanbi"></i></button>
         </div>
         <RedirectDomainList
             :tableData="redirectDomainListData"

@@ -29,7 +29,7 @@
                         <!-- <button class="resolve-set" @click="expandSelect(scope.row,scope.row)">解析设置</button> -->
                         <el-tooltip content="编辑" placement="top">
                             <button class="handle-btn" @click="editor(scope.row)">
-                                <i class="iconfont iconcaozuo"></i>
+                                <i class="iconfont iconbianji"></i>
                             </button>
                         </el-tooltip>
                         <el-tooltip content="删除" placement="top">
@@ -37,7 +37,7 @@
                                 class="handle-btn"
                                 @click="handleDelete(scope.row)"
                             >
-                                <i class="iconfont iconhuishouzhan"></i>
+                                <i class="iconfont iconshanchu"></i>
                             </button>
                         </el-tooltip>
                     </div>

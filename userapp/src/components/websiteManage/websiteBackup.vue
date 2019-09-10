@@ -25,19 +25,19 @@
               class="content-table"
               :default-sort="{prop: 'backupTime', order: 'descending'}"
             >
-              <el-table-column label="站点名称" show-overflow-tooltip>
+              <el-table-column label="站点名称" show-overflow-tooltip min-width="200">
                 <template slot-scope="scope">
                   <div class="overflow">{{scope.row.siteName}}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="backupTime" label="备份时间"></el-table-column>
-              <el-table-column prop="dataSize" label="备份包大小"></el-table-column>
-              <el-table-column label="备份人" show-overflow-tooltip>
+              <el-table-column prop="backupTime" label="备份时间" min-width="200"></el-table-column>
+              <el-table-column prop="dataSize" label="备份包大小" min-width="150"></el-table-column>
+              <el-table-column label="备份人" show-overflow-tooltip min-width="200">
                 <template slot-scope="scope">
                   <div class="overflow">{{scope.row.userName}}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="description" label="备注">
+              <el-table-column prop="description" label="备注" show-overflow-tooltip min-width="220">
                 <template slot-scope="scope">
                   <el-popover
                     :ref="`popover-${scope.$index}`"
@@ -53,15 +53,13 @@
                         @mouseenter="_handleShowEditorIcon(scope.row.id)"
                         @mouseleave="_handleHideEditorIcon(scope.row.id)"
                       >
-                        <el-tooltip :content="scope.row.description" placement="top">
-                          <div
-                            class="remark-desc"
-                          >{{!scope.row.description?" ":scope.row.description}}</div>
-                        </el-tooltip>
+                        <div
+                          class="remark-desc"
+                        >{{!scope.row.description?" ":scope.row.description}}</div>
                         <i
                           v-if="active == scope.row.id"
-                          class="iconfont iconbianji"
-                          style="color:#09CCEB;font-size:17px;vertical-align:text-bottom;cursor:pointer;margin-left:5px"
+                          class="iconfont iconicon-dash-edit"
+                          style="color:#09CCEB;font-size:16px;vertical-align:text-bottom;cursor:pointer;margin-left:5px"
                           :data-type="'remarkIcon'+ scope.$index"
                           :ref="'remarkIcon'+ scope.$index"
                         ></i>
@@ -93,14 +91,10 @@
                 </template>
               </el-table-column>
 
-              <el-table-column label="操作">
+              <el-table-column label="操作" min-width="170">
                 <template slot-scope="scope">
                   <div class="handle-btn-wrap">
-                    <el-tooltip
-                      content="还原备份包"
-                      placement="top"
-                      :v-model="false"
-                    >
+                    <el-tooltip content="还原备份包" placement="top" :v-model="false">
                       <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
                     </el-tooltip>
                     <el-tooltip content="下载备份包" placement="top">
@@ -128,7 +122,7 @@
               <div class="pannel-head">
                 <span>备份当前版本</span>
                 <span class="close-pannel" @click="closeDialog">
-                  <i class="iconfont iconX" style="font-size:12px;color:#ccc"></i>
+                  <i class="iconfont iconguanbi" style="font-size:14px;color:#262626"></i>
                 </span>
               </div>
               <div class="tips">温馨提示：备份当前站点设计页面，包括电脑版、手机版和Pad版</div>
@@ -195,7 +189,7 @@ export default {
       backupShow: false,
       backuping: false,
       remarkInfo: "",
-      loadingShow: true,
+      loadingShow: true
     };
   },
   methods: {
