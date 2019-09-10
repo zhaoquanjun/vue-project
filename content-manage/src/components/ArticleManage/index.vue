@@ -82,13 +82,12 @@
     </el-container>
 </template>
 <script>
-import MTree from "@/components/ImgManage/MTree";
+import MTree from "@/components/common/MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
-import RightPannel from "../ImgManage/RightPannel";
+import RightPannel from "@/components/common/RightPannel";
 import SelectTree from "@/components/common/SelectTree";
 import * as articleManageApi from "@/api/request/articleManageApi";
-import { isArray } from "util";
 export default {
     components: {
         MTree,

@@ -152,12 +152,7 @@ export default {
          */
         async getSiteInfo(siteId) {
             let { data } = await getSiteInfo(siteId);
-            console.log(data, "000000");
             this.siteInfo = data;
-            // this.siteInfoImg = data.siteImage;
-            // this.siteName = data.siteName;
-            // this.secondDomain = data.secondDomain;
-            // this.siteId = data.id;
         },
         /**
          * 获取域名列表

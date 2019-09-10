@@ -8,7 +8,7 @@
                     placeholder="输入视频名称搜索"
                     class="input-with-select"
                 >
-                    <el-button slot="append" @click="getPicList">
+                    <el-button slot="append" @click="getList">
                         <svg-icon icon-class="search-icon"></svg-icon>
                     </el-button>
                 </el-input>
@@ -106,10 +106,10 @@ export default {
     methods: {
         changeSelected(value) {
             this.picSearchOptions.orderByType = value;
-            this.getPicList();
+            this.getList();
         },
-        getPicList() {
-            this.$emit("getPicList");
+        getList() {
+            this.$emit("getList");
         },
         switchUploadBoxShowStatus() {
             this.$emit("switchUploadBoxShowStatus");
@@ -124,7 +124,7 @@ export default {
             }
             this.picSearchOptions.isDescending = !this.picSearchOptions
                 .isDescending;
-            this.getPicList();
+            this.getList();
         },
         batchMove() {
             this.$emit("batchMove");

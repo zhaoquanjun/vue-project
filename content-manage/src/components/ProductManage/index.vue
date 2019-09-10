@@ -50,9 +50,9 @@
                     :close-on-click-modal="false"
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
+                    :destroy-on-close="true"
                 >
-                </el-dialog>
-                   <right-pannel
+                  <right-pannel
                         :style="{width:isInvitationlWidth+'px'}"
                         @closeRightPanel="cancelUpdateCategory"
                     >
@@ -71,11 +71,12 @@
                                 <span name="cur-tip">{{tipText}}</span>
                                 <!-- 移动至 -->
                             </div>
-
                             <CheckTree
+                                v-if="isInvitationPanelShow"
                                 ref="checkTree"
                                 :isright-pannel="true"
                                 :tree-result="treeResult"
+                              
                                 @chooseNode="chooseNode"
                             ></CheckTree>
                         </template>
@@ -84,6 +85,8 @@
                             <button @click="cancelUpdateCategory" class="cancel">取消</button>
                         </div>
                     </right-pannel>
+                </el-dialog>
+                 
             </el-main>
         </el-main>
     </el-container>
@@ -91,10 +94,10 @@
 <script>
 // import CategoryTree from "./CategoryTree";
 import CheckTree from "./CheckTree";
-import MTree from "@/components/ImgManage/MTree";
+import MTree from "@/components/common/MTree";
 import ContentHeader from "./ProductHeader";
 import ContentTable from "./ProductTable";
-import RightPannel from "../ImgManage/RightPannel";
+import RightPannel from "@/components/common/RightPannel";
 import * as productManageApi from "@/api/request/productManageApi";
 import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
 
@@ -227,12 +230,11 @@ export default {
         },
         //选择移动分类时的节点
         chooseNode(node) {
-            console.log(node);
             this.moveToClassiFy = node;
+            
         },
         // 点击左侧分类树菜单时的节点
         chooseCategoryNode(data) {
-            console.log(data, "0000000");
             this.selectCategory = data;
         },
         cancelUpdateCategory() {
@@ -245,10 +247,13 @@ export default {
             } else if (flag === "copy") {
                 this.tipText = "复制至";
             }
-
             this.isInvitationPanelShow = true;
             this.curArticleInfo = data;
             this.type = flag;
+            let ids = data.productCategoryList.map(item=> item.id);
+            this.$nextTick(()=>{
+                 this.$refs.checkTree.setCheckedKeys(ids)
+            })
         },
         // 点击确定按钮 移动 复制 更新文章分类
         async updateCategoryArticle(params) {

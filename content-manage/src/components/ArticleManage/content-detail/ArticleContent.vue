@@ -169,7 +169,7 @@
                                 <div slot="content">不填写则默认使用文章标题</div>
                                 <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
-                            <el-input placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
+                            <el-input class="contentDetail-title"  maxlength="100" show-word-limit  placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
                         </el-form-item>
                         <el-form-item style="position:relative" label="SEO关键词" prop="metaKeywords">
                             <ul class="keyword-list" ref="metaKeywordList">
@@ -481,9 +481,6 @@ export default {
                         }
                     }
                 });
-
-                // this.$router.push(`/news/create?id=${data}&categoryName=${this.categoryName}`);
-                //this.$router.push("/content/news");
             }
         },
         // 编辑提交
@@ -612,11 +609,7 @@ export default {
             } else {
                 this.isOutSearch = false;
             }
-            // this.$nextTick(() => {
-            //     let width = this.$refs.keywordList.clientWidth;
-            //     let ele = this.$refs.keywordInput.$el.children[0];
-            //     this.textIndent(ele, width);
-            // });
+           
         },
         "articleDetail.metaKeywords"() {
             if (this.articleDetail.metaKeywords.length >= 5) {
@@ -624,12 +617,7 @@ export default {
             } else {
                 this.isOutSeo = false;
             }
-            // this.$nextTick(() => {
-            //     let width = this.$refs.metaKeywordList.clientWidth;
-            //     console.log(this.$refs.metaKeywordList.clientWidth);
-            //     let ele = this.$refs.metaKeywordsInput.$el.children[0];
-            //     this.textIndent(ele, width);
-            // });
+          
         },
         deep: true,
         immediate: true

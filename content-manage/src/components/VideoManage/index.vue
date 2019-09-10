@@ -9,7 +9,7 @@
                 ref="myTree"
                 :treeResult="treeResult"
                 :list-options="picSearchOptions"
-                @getList="getPicList"
+                @getList="getList"
                 @chooseCategoryNode="chooseNode"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
@@ -27,7 +27,7 @@
                 :is-batch-header-show="isBatchHeaderShow"
                 :content-type="contentType"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
-                @getPicList="getPicList"
+                @getList="getList"
                 @batchDelete="batchDelete"
                 @batchMove="batchMove"
             ></list-header>
@@ -37,10 +37,10 @@
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
-                    @getPicList="getPicList"
+                    @getList="getList"
                     @changeCategory="changeCategoryPic"
                     @rename="renamePic"
-                    @batchRemove="batchRemovePic"
+                    @batchRemove="batchRemoveItem"
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
                 ></List>
@@ -51,30 +51,29 @@
                     :show-close="false"
                     :visible.sync="isInvitationPanelShow"
                     :modal-append-to-body="false"
+                ></el-dialog>
+                <right-pannel
+                    :style="{width:isInvitationlWidth+'px'}"
+                    @closeRightPanel="closeRightPanel"
+                    :tree-result="treeResult"
                 >
-                </el-dialog>
-                  <right-pannel
-                        :style="{width:isInvitationlWidth+'px'}"
-                        @closeRightPanel="closeRightPanel"
+                    <span slot="title-text">移动视频</span>
+                    <div class="category-content">
+                        <span name="cur-tip">移动至</span>
+                    </div>
+                    <SelectTree
+                        v-if="isInvitationPanelShow"
+                        :categoryName="curImgInfo.categoryName"
+                        :categoryId="curImgInfo.categoryId"
                         :tree-result="treeResult"
-                    >
-                        <span slot="title-text">移动视频</span>
-                        <div class="category-content">
-                            <span name="cur-tip">移动至</span>
-                        </div>
-                        <SelectTree
-                            v-if="isInvitationPanelShow"
-                            :categoryName="curImgInfo.categoryName"
-                            :categoryId="curImgInfo.categoryId"
-                            :tree-result="treeResult"
-                            @chooseNode="chooseNode"
-                        ></SelectTree>
+                        @chooseNode="chooseNode"
+                    ></SelectTree>
 
-                        <div slot="footer" class="pannle-footer">
-                            <button @click="updateCategoryPic" class="sure">确定</button>
-                            <button @click="cancelUpdateCategor" class="cancel">取消</button>
-                        </div>
-                    </right-pannel>
+                    <div slot="footer" class="pannle-footer">
+                        <button @click="updateCategoryPic" class="sure">确定</button>
+                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                    </div>
+                </right-pannel>
             </el-main>
             <el-footer>
                 <slot name="modal-footer"></slot>
@@ -101,8 +100,7 @@
                 :uploadType="contentType"
                 :node-data="nodeData"
                 :apiHost="apiHost"
-                
-                @getList="getPicList"
+                @getList="getList"
                 @getTree="getTree"
                 @closeDialog="closeDialog"
             />
@@ -111,15 +109,16 @@
     </el-container>
 </template>
 <script>
-import ChunkUpload from "@/components/common/ChunkUpload";
-import MTree from "@/components/ImgManage/MTree";
+import MTree from "@/components/common/MTree";
 import ListHeader from "@/components/FileManage/ListHeader";
-import List from "./List";
+import ChunkUpload from "@/components/common/ChunkUpload";
 import SelectTree from "@/components/common/SelectTree";
-import RightPannel from "_c/ImgManage/RightPannel";
+import RightPannel from "@/components/common/RightPannel";
+import List from "./List";
+import environment from "@/environment/index.js";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
-import environment from "@/environment/index.js";
+
 
 export default {
     props: {
@@ -144,7 +143,6 @@ export default {
                 label: "全部分类",
                 id: 0
             },
-            componentId: "List",
             isImgList: false,
             countPic: 0,
             curImgInfo: {},
@@ -170,12 +168,12 @@ export default {
         };
     },
     mounted() {
-        this.getPicList();
+        this.getList();
         this.getTree();
     },
     methods: {
         // 获取列表
-        async getPicList(node) {
+        async getList(node) {
             const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",
@@ -184,15 +182,13 @@ export default {
             if (node) {
                 this.nodeData = node; // 上传图片所需
             }
-            let { data } = await videoManageApi.getPicList(
-                this.picSearchOptions
-            );
+            let { data } = await videoManageApi.getList(this.picSearchOptions);
             loading.close();
             this.getTree();
             this.imgPageResult = data;
         },
         // 批量删除列表
-        async batchRemovePic(idlist) {
+        async batchRemoveItem(idlist) {
             this.$confirm(
                 `删除后，${this.displayName}将被移动到回收站，可在回收站中恢复，是否确定删除？`,
                 "提示",
@@ -212,21 +208,19 @@ export default {
                                     showClose: false,
                                     duration: 1500
                                 });
-                                this.getPicList();
+                                this.getList();
                                 this.getTree();
                             }
                         }
                     }
                 }
-
             );
         },
         resetCategoryId() {
             this.picSearchOptions.categoryIdList = [];
-            this.getPicList();
+            this.getList();
         },
 
-     
         async renameCategory(id, newName) {
             await videoCategoryManageApi.rename(id, newName);
             this.getTree();
@@ -235,10 +229,10 @@ export default {
             await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTree();
         },
-        // 点击上传图片
+      
         switchUploadBoxShowStatus(uploadImg) {
             this.dialogTableVisible = !this.dialogTableVisible;
-            if (uploadImg === "uploadImg") this.getPicList();
+            if (uploadImg === "uploadImg") this.getList();
         },
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
@@ -278,7 +272,7 @@ export default {
         },
         //批量移动
         batchMove(isHeader) {
-            if(isHeader){
+            if (isHeader) {
                 this.curImgInfo = {
                     categoryName: "全部分类",
                     categoryId: 0
@@ -288,17 +282,17 @@ export default {
         },
         //批量删除
         batchDelete() {
-            this.batchRemovePic(this.idsList);
-            },
-            async renamePic(id, newname) {
-                await videoManageApi.rename(id, newname);
-                this.getPicList();
-            },
-            async getTree() {
-                let { data } = await videoCategoryManageApi.get();
-                this.treeResult = data.treeArray;
-                this.totalSum = data.totalSum;
-            },
+            this.batchRemoveItem(this.idsList);
+        },
+        async renamePic(id, newname) {
+            await videoManageApi.rename(id, newname);
+            this.getList();
+        },
+        async getTree() {
+            let { data } = await videoCategoryManageApi.get();
+            this.treeResult = data.treeArray;
+            this.totalSum = data.totalSum;
+        },
 
         async changeCategoryPic(categoryId, idList) {
             let { data, status } = await videoManageApi.changeCategory(
@@ -313,13 +307,13 @@ export default {
                     duration: 1500
                 });
                 this.isInvitationPanelShow = false;
-                this.getPicList();
+                this.getList();
                 this.getTree();
             }
         },
         async renamePic(id, newname) {
             await videoManageApi.rename(id, newname);
-            this.getPicList();
+            this.getList();
         },
         async getTree() {
             let { data } = await videoCategoryManageApi.get();
@@ -373,10 +367,10 @@ export default {
             await videoCategoryManageApi.modifyNode(id, parentId, idOrderByArr);
             this.getTree();
         },
-        // 点击上传图片
+        // 
         switchUploadBoxShowStatus(uploadImg) {
             this.dialogTableVisible = !this.dialogTableVisible;
-            if (uploadImg === "uploadImg") this.getPicList();
+            if (uploadImg === "uploadImg") this.getList();
         },
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
@@ -420,7 +414,7 @@ export default {
         },
         //批量删除
         batchDelete() {
-            this.batchRemovePic(this.idsList);
+            this.batchRemoveItem(this.idsList);
         },
         // 关闭上传文件弹窗
         closeDialog() {
@@ -435,8 +429,7 @@ export default {
             console.log(this.idsList.length);
             return this.idsList.length > 0 ? true : false;
         }
-    },
-   
+    }
 };
 </script>
 <style scoped>

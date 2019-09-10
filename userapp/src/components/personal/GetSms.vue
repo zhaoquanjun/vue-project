@@ -8,7 +8,8 @@
             class="demo-ruleForm"
             @submit.native.prevent
         >
-            <div v-if="!isModifi">
+        <!-- isModifi -->
+            <div v-if="isModifi">
                 <el-form-item prop="verification" class="verification-code">
                     <el-input
                         :key="0"
@@ -26,20 +27,27 @@
             </div>
             <div v-else>
                 <el-form-item prop="phone">
-                    <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号"> 
-                        <el-select slot="prefix"
-                                   style="z-index:10000"
-                                   size="small"
-                                   @change="change"
-                                   v-model="value"
-                                   placeholder="请选择">
-                            <el-option popper-class="dropdown__item"
-                                       v-for="item in options"
-                                       :key="item.value"
-                                       :label="item.label"
-                                       :value="item.value">
+                    <el-input :key="1" v-model="ruleForm.phone" autocomplete="on" placeholder="手机号">
+                        <el-select
+                            slot="prefix"
+                            style="z-index:10000"
+                            size="small"
+                            @change="change"
+                            v-model="value"
+                            placeholder="请选择"
+                            :popper-append-to-="false"
+                        >
+                            <el-option
+                                popper-class="dropdown__item"
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            >
                                 <span style="float: left">{{ item.label }}</span>
-                                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+                                <span
+                                    style="float: right; color: #8492a6; font-size: 13px"
+                                >{{ item.value }}</span>
                             </el-option>
                         </el-select>
                     </el-input>
@@ -68,7 +76,11 @@
 </template>
  
 <script>
-import { updateUserPhone, sendSourcePhoneCode, sendTargetPhoneCode} from "@/api/index.js";
+import {
+    updateUserPhone,
+    sendSourcePhoneCode,
+    sendTargetPhoneCode
+} from "@/api/index.js";
 const TIME_COUNT = 60; //更改倒计时时间
 export default {
     props: ["sourcePhone", "isModifi"],
@@ -148,7 +160,7 @@ export default {
                     label: "+39"
                 }
             ],
-            value: "+86"
+            value: "中国大陆"
         };
     },
     mounted() {},
@@ -193,9 +205,7 @@ export default {
                 //     message: "请先填写要绑定的手机号码!"
                 // });
             } else {
-                let { status } = await sendTargetPhoneCode(
-                    targetPhone
-                );
+                let { status } = await sendTargetPhoneCode(targetPhone);
                 if (status === 200) {
                     this.$notify({
                         customClass: "notify-success",
@@ -243,16 +253,20 @@ export default {
                         this.ruleForm.verification
                     );
                     if (status === 200) {
-                        this.$message({
-                            type: "success",
-                            message: "修改成功!"
+                        this.$notify({
+                            customClass: "notify-success",
+                            message: `修改成功!`,
+                            showClose: false,
+                            duration: 1500
                         });
                         this.$store.commit("CLOSERIGHTPANNEL", false);
                         this.$emit("refreshIndex");
                     } else {
-                        this.$message({
-                            type: "failed",
-                            message: "修改失败!"
+                        this.$notify({
+                            customClass: "notify-error",
+                            message: `修改失败!`,
+                            showClose: false,
+                            duration: 1500
                         });
                     }
                 } else {
@@ -302,9 +316,6 @@ export default {
 </script>
 
 <style>
-.el-select-dropdown {
-    z-index: 10000 !important;
-}
 .el-autocomplete-suggestion {
     width: 150px;
 }
@@ -326,9 +337,6 @@ export default {
 .el-input--prefix .el-input__inner {
     padding-left: 100px;
 }
-/* .el-select-dropdown{
-  left: 262px !important;
-} */
 .el-scrollbar__wrap {
     width: 150px;
 }
@@ -341,6 +349,16 @@ export default {
 }
 .el-form-item.is-error /deep/ .el-input__inner {
     border-color: #e5e5e5;
+}
+.el-form  .el-select-dropdown .el-select-dropdown__item.selected{
+    background: #00c1de;
+}
+.el-form .el-select-dropdown .el-select-dropdown__item.selected span{
+     color: #fff !important;
+}
+.el-form  .el-select-dropdown .el-select-dropdown__item span{
+    color: #262626 !important;
+    font-size: 14px;
 }
 
 .verification-code {
