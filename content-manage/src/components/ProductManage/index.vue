@@ -94,10 +94,10 @@
 <script>
 // import CategoryTree from "./CategoryTree";
 import CheckTree from "./CheckTree";
-import MTree from "@/components/ImgManage/MTree";
+import MTree from "@/components/common/MTree";
 import ContentHeader from "./ProductHeader";
 import ContentTable from "./ProductTable";
-import RightPannel from "../ImgManage/RightPannel";
+import RightPannel from "@/components/common/RightPannel";
 import * as productManageApi from "@/api/request/productManageApi";
 import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
 

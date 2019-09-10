@@ -182,12 +182,12 @@
     </el-container>
 </template>
 <script>
-import ChunkUpload from "_c//common/ChunkUpload";
-import MTree from "_c/ImgManage/MTree";
+import ChunkUpload from "_c/common/ChunkUpload";
+import MTree from "@/components/common/MTree";
 import ListHeader from "./ListHeader";
 import List from "./List";
 import SelectTree from "_c/common/SelectTree";
-import RightPannel from "_c/ImgManage/RightPannel";
+import RightPannel from "@/components/common/RightPannel";
 import * as fileManageApi from "@/api/request/fileManageApi";
 // fileCategoryManageApi fileManageApi
 import * as fileCategoryManageApi from "@/api/request/fileCategoryManageApi";

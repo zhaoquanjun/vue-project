@@ -262,11 +262,11 @@ export default {
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
-            this.$emit("getPicList");
+            this.$emit("getList");
         },
         changeSize(size) {
             this.picSearchOptions.pageSize = size;
-            this.$emit("getPicList");
+            this.$emit("getList");
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
