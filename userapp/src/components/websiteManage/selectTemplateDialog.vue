@@ -445,53 +445,55 @@ export default {
     },
 
     // 选择模版
-    async choseSite(item) {
-      const loading = this.$loading({
-        lock: true,
-        text: "正在复制模版",
-        spinner: "copy-icon",
-        customClass: "copyTemplateLoading",
-        background: "rgba(0, 0, 0, 0.5)"
-      });
-      console.log(item);
-      if (this.isAllTab == false) {
-        let para = {
-          currentSiteId: this.siteId,
-          templateSiteId: item.id,
-          siteName: item.siteName,
-          imageUrl: item.image
-        };
-        var { status } = await templateApi.updateSiteWithTemplate(para);
-      } else {
-        let para = {
-          TemplateId: item.id,
-          CurrentSiteId: this.siteId,
-          TemplateSiteId: item.siteId,
-          SiteName: this.siteName
-        };
-        var { status } = await templateApi.updateSiteTemplate(para);
-      }
-
-      if (status == 200) {
-        loading.close();
-        this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
-          confirmButtonText: "前往设计页面",
-          cancelButtonText: "取消",
-          iconClass: "icon-success"
-        })
-          .then(() => {
-            window.location.href = `${designerUrl}?siteId=${this.siteId}`;
-          })
-          .catch(action => {
-            if (action == "cancel") {
-              this.templateShow = false;
-              this.$router.push({
-                path: "/website/mysite"
-              });
-              this.$emit("getSiteInfo", this.siteId);
-            }
+      async choseSite(item) {
+          const loading = this.$loading({
+              lock: true,
+              text: "正在复制模版",
+              spinner: "copy-icon",
+              customClass: "copyTemplateLoading",
+              background: "rgba(0, 0, 0, 0.5)"
           });
-      }
+          try {
+              if (this.isAllTab == false) {
+                  let para = {
+                      currentSiteId: this.siteId,
+                      templateSiteId: item.id,
+                      siteName: item.siteName,
+                      imageUrl: item.image
+                  };
+                  var { status } = await templateApi.updateSiteWithTemplate(para);
+              } else {
+                  let para = {
+                      TemplateId: item.id,
+                      CurrentSiteId: this.siteId,
+                      TemplateSiteId: item.siteId,
+                      SiteName: this.siteName
+                  };
+                  var { status } = await templateApi.updateSiteTemplate(para);
+              }
+              if (status == 200) {
+                  loading.close();
+                  this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
+                      confirmButtonText: "前往设计页面",
+                      cancelButtonText: "取消",
+                      iconClass: "icon-success"
+                  })
+                      .then(() => {
+                          window.location.href = `${designerUrl}?siteId=${this.siteId}`;
+                      })
+                      .catch(action => {
+                          if (action == "cancel") {
+                              this.templateShow = false;
+                              this.$router.push({
+                                  path: "/website/mysite"
+                              });
+                              this.$emit("getSiteInfo", this.siteId);
+                          }
+                      });
+              }
+          } catch{
+              loading.close();
+          }
     },
     //   获取模版列表
     async getTemplateList() {

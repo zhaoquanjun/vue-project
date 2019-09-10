@@ -1,5 +1,5 @@
 <template>
-  <el-container class="templateManage page-scroll">
+  <el-container class="templateManage">
     <el-header class="templateTitle" style="height:86px">
       <span class="titleText">整站模版</span>
       <button class="createBtn" @click="createTemplatedialogShow">开通整站模版</button>
@@ -74,41 +74,16 @@
           <el-checkbox v-model="isRecommend" class="isRecommend">仅推荐</el-checkbox>
           <button class="inquire" @click="searchTemplate">查询</button>
         </div>
-        <div style="margin-top:24px;margin-bottom:24px;">
-          <span>排序</span>
-          <el-select v-model="sort" placeholder="请选择" class="sort borderColor">
-            <el-option
-              v-for="item in sortOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-          <span>
-            <i
-              class="iconfont iconshang"
-              style="margin-left:32px;cursor: pointer;"
-              :class="{blue:!isDescSort,black:isDescSort}"
-              @click="asc"
-            ></i>
-          </span>
-          <span>
-            <i
-              class="iconfont iconxia"
-              style="margin-left:8px;cursor: pointer;"
-              :class="{blue:isDescSort,black:!isDescSort}"
-              @click="desc"
-            ></i>
-          </span>
-        </div>
       </div>
       <el-main>
         <div class="table-list" id="table-list">
           <el-table
+            :height="tableHeight"
             ref="multipleTable"
             :data="templateInfo"
             tooltip-effect="dark"
             :row-style="{height:'200px'}"
+            :default-sort="{prop: 'myCreateTime', order: 'descending'}"
           >
             <el-table-column prop="siteName" label="缩略图" width="250">
               <template slot-scope="scope">
@@ -123,7 +98,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="模板名称|语言" width="150">
+            <el-table-column label="模板名称|语言" min-width="150">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName" show-overflow-tooltip>{{scope.row.templateName}}</p>
@@ -134,7 +109,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="模版行业">
+            <el-table-column label="模版行业" min-width="150">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.firstIndustry}}</p>
@@ -142,19 +117,10 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="开通时间|更新时间" width="140">
-              <template slot-scope="scope">
-                <div>
-                  <p class="templateName">{{(scope.row.myCreateTime)}}</p>
-                  <p
-                    class="templateName"
-                    style="margin-top:5px;"
-                  >{{scope.row.myUpdateTime ? scope.row.myUpdateTime : ""}}</p>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="useCount" label="使用量" width="80"></el-table-column>
-            <el-table-column label="设计师" width="120">
+            <el-table-column prop="myCreateTime" label="开通时间" sortable min-width="140"></el-table-column>
+            <el-table-column prop="myUpdateTime" label="更新时间" sortable min-width="140"></el-table-column>
+            <el-table-column prop="useCount" label="使用量" sortable min-width="90"></el-table-column>
+            <el-table-column label="设计师" min-width="120">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.designerPhone}}</p>
@@ -173,35 +139,28 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="260">
+            <el-table-column label="操作" min-width="150">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
-                  <el-button
-                    class="handle-btn"
-                    style="margin-right:0"
-                    @click="settingTemplate( scope )"
-                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
-                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
-                  >设置</el-button>
-                  <el-button
-                    class="handle-btn"
-                    style="margin-left:32px;margin-right:0"
-                    @click="updateTemplate( scope )"
-                    :disabled="scope.row.status == 3 || scope.row.status == 1 ? false : true"
-                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
-                  >更新</el-button>
                   <a
-                    class="handle-btn"
-                    style="margin-left:32px;margin-right:0"
-                    :href="`//${scope.row.domain}`"
-                    target="_blank"
+                    style="vertical-align: middle;"
+                    :href="scope.row.status == 3 || scope.row.status == 1 ? `//${scope.row.domain}`:'javascript:;'"
+                    :target="scope.row.status == 3 || scope.row.status == 1 ?'_blank':''"
                     :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
-                  >预览</a>
-                  <el-button
-                    class="handle-btn"
-                    style="margin-left:32px;margin-right:0"
-                    @click="deleteTemplate( scope )"
-                  >删除</el-button>
+                  >
+                    <i class="iconfont iconchakan" style="font-size:16px;color:rgba(38,38,38,1);"></i>
+                  </a>
+                  <span
+                    class="more-operate"
+                    style="display:inline-block;margin-left:24px;vertical-align: middle;"
+                    @click.stop="_handleShowMoreOperate($event,scope.row)"
+                    :class="{disable : scope.row.status == 0 ? true : false}"
+                  >
+                    <i
+                      class="iconfont iconsangedian"
+                      style="font-size:20px;color:rgba(38,38,38,1);"
+                    ></i>
+                  </span>
                 </div>
               </template>
             </el-table-column>
@@ -221,6 +180,14 @@
             @size-change="changeSize"
           ></el-pagination>
         </div>
+        <ul class="operate-section" ref="operateSection" v-show="operateShow">
+          <li
+            class="operate-item"
+            v-for="(it, index) in operateList"
+            :key="index"
+            @click="handleMoreOperate(it.flag)"
+          >{{it.name}}</li>
+        </ul>
       </el-main>
       <el-dialog
         width="0"
@@ -289,6 +256,37 @@
             ></el-input>
             <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
           </div>
+          <div class="templateindustryWrap">
+            <div class="templateindustryTitle">模版行业</div>
+            <el-select
+              v-model="settingFirstIndustrySelect"
+              placeholder="一级行业"
+              class="settingFirstIndustrySelect borderColor"
+              @change="choseSettingFirstIndustry"
+            >
+              <el-option
+                v-for="item in settingFirstIndustryOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+            <span class="settingLine"></span>
+            <el-select
+              v-model="settingSecondIndustrySelect"
+              placeholder="二级行业"
+              class="settingSecondIndustrySelect borderColor"
+              @change="choseSettingSecondIndustry"
+            >
+              <el-option
+                v-for="item in settingSecondIndustryOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+            <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择模版行业</div>
+          </div>
           <div class="settingStatusWrap">
             <div class="settingStatus">模版状态</div>
             <div>
@@ -322,7 +320,7 @@
             >
               <img v-if="picUrl" :src="picUrl" class="avatar" />
               <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
-              <button class="upload-btn">{{ !!picUrl ?'重新上传':'上传图片'}}</button>
+              <button class="upload-btn">上传图片</button>
             </el-upload>
             <el-upload
               class="avatar-mobile-uploader"
@@ -334,7 +332,7 @@
             >
               <img v-if="picUrlMobile" :src="picUrlMobile" class="avatar-mobile" />
               <img v-else src="~img/siteTemplate/defaultMobileImg.png" class="avatar-mobile" />
-              <button class="upload-mobile-btn">{{ !!picUrlMobile ?'重新上传':'上传图片'}}</button>
+              <button class="upload-mobile-btn">上传图片</button>
             </el-upload>
           </div>
           <div style="margin-top:212px">
@@ -363,6 +361,14 @@ export default {
   data() {
     return {
       isAble: false,
+      tableHeight: 500,
+      operateList: [
+        { name: "设置", flag: "setting" },
+        { name: "更新", flag: "update" },
+        { name: "删除", flag: "delete" }
+      ],
+      operateShow: false,
+      row: "",
       picUrl: "",
       uploadPicAction: `${environment.uploadPicUrl}/-1`,
       headers: {
@@ -483,22 +489,6 @@ export default {
       ],
       templateStatus: -1,
       isRecommend: false,
-      sortOptions: [
-        {
-          value: "createTime",
-          label: "按开通时间"
-        },
-        {
-          value: "updateTime",
-          label: "按更新时间"
-        },
-        {
-          value: "useCount",
-          label: "使用量"
-        }
-      ],
-      sort: "createTime",
-      isDescSort: true,
       templatePage: {},
       templateInfo: [],
       settingTemplateShow: false,
@@ -506,6 +496,7 @@ export default {
       settingTemplateName: "",
       errorTemplateNameTips: "",
       errorTemplateName: "",
+      errorTemplateIndustryShow: false,
       settingTemplateStatusOptions: [
         {
           value: 1,
@@ -517,6 +508,10 @@ export default {
         }
       ],
       settingTemplateStatus: "",
+      settingFirstIndustryOptions: [],
+      settingSecondIndustryOptions: [],
+      settingFirstIndustrySelect: 0,
+      settingSecondIndustrySelect: 0,
       curTemplateId: 0,
       curSiteId: 0,
       pageIndex: 1,
@@ -527,6 +522,17 @@ export default {
   mounted() {
     this.getTemplateList();
     this.getFirstIndustry();
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.tableHeight = window.innerHeight - 320;
+      });
+      this.tableHeight = window.innerHeight - 320;
+    });
+    document.addEventListener("click", () => {
+      this.$nextTick(() => {
+        this.operateShow = false;
+      });
+    });
   },
   methods: {
     getTemplateStatus(status) {
@@ -654,24 +660,20 @@ export default {
     async getFirstIndustry() {
       let { data, status } = await templateApi.getFirstIndustries();
       this.firstIndustryOptions = data;
+      this.settingFirstIndustryOptions = this.firstIndustryOptions.filter(
+        item => {
+          if (item.id == 0) {
+            return false;
+          }
+          return true;
+        }
+      );
     },
 
     async choseFirstIndustry(id) {
-      console.log(id);
-      console.log(this.firstIndustrySelect);
       let { data, status } = await templateApi.getSecondIndustries(id);
       this.secondIndustryOptions = data;
       this.secondIndustrySelect = "";
-    },
-    // 升序
-    asc() {
-      this.isDescSort = false;
-      this.searchTemplate();
-    },
-    // 降序
-    desc() {
-      this.isDescSort = true;
-      this.searchTemplate();
     },
     // 开通模版
     createTemplatedialogShow() {
@@ -768,16 +770,6 @@ export default {
       } else if (this.searchValue == "designer") {
         designerPhoneText = this.search;
       }
-      let orderByOpenTime = false;
-      let orderByUseCount = false;
-      let orderByUpdateTime = false;
-      if (this.sort == "createTime") {
-        orderByOpenTime = true;
-      } else if (this.sort == "updateTime") {
-        orderByUpdateTime = true;
-      } else if (this.sort == "useCount") {
-        orderByUseCount = true;
-      }
       let para = {
         TemplateName: templateNameText,
         Domain: domainText,
@@ -793,10 +785,10 @@ export default {
         TemplateType: "SiteTemplate",
         PageIndex: this.pageIndex,
         PageSize: this.pageSize,
-        IsOrderByOpenTime: orderByOpenTime,
-        IsOrderByUseCount: orderByUseCount,
-        IsOrderByUpdateTime: orderByUpdateTime,
-        IsOrderByDesc: this.isDescSort
+        IsOrderByOpenTime: true,
+        IsOrderByUseCount: false,
+        IsOrderByUpdateTime: false,
+        IsOrderByDesc: true
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
       if (status == 200) {
@@ -814,17 +806,102 @@ export default {
       this.pageSize = page;
       this.searchTemplate();
     },
+    handleMoreOperate(flag) {
+      let row = this.row;
+      switch (flag) {
+        case "setting":
+          this.settingTemplate(row);
+          return;
+        case "update":
+          this.updateTemplate(row);
+          return;
+        case "delete":
+          this.deleteTemplate(row);
+          return;
+      }
+    },
+    _handleShowMoreOperate(ev, row) {
+      if (row.status == 0) {
+        return;
+      }
+      this.operateList = [
+        { name: "设置", flag: "setting" },
+        { name: "更新", flag: "update" },
+        { name: "删除", flag: "delete" }
+      ];
+      this.row = row;
+      this.operateShow = !this.operateShow;
+      if (row.status == 2) {
+        this.operateList = [{ name: "删除", flag: "delete" }];
+        this.$refs.operateSection.style.left =
+          ev.pageX - ev.offsetX + 23 + "px";
+        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 5 + "px";
+      } else if (row.status == 3) {
+        this.operateList = [
+          { name: "设置", flag: "setting" },
+          { name: "删除", flag: "delete" }
+        ];
+        this.$refs.operateSection.style.left =
+          ev.pageX - ev.offsetX + 23 + "px";
+        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 20 + "px";
+      } else if (row.staus == 1) {
+        this.operateList = [
+          { name: "设置", flag: "setting" },
+          { name: "更新", flag: "update" },
+          { name: "删除", flag: "delete" }
+        ];
+        this.$refs.operateSection.style.left =
+          ev.pageX - ev.offsetX + 23 + "px";
+        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 38 + "px";
+      }
+    },
+    async choseSettingFirstIndustry(id) {
+      let { data, status } = await templateApi.getSecondIndustries(id);
+      this.settingSecondIndustryOptions = data;
+      this.settingSecondIndustrySelect = "";
+      this.settingSecondIndustryOptions = this.settingSecondIndustryOptions.filter(
+        item => {
+          if (item.id == 0) {
+            return false;
+          }
+          return true;
+        }
+      );
+    },
+    choseSettingSecondIndustry(id) {
+      if (id != 0) {
+        this.errorTemplateIndustryShow = false;
+      }
+    },
     // 设置模版弹窗
-    async settingTemplate(scope) {
-      this.curTemplateId = scope.row.id;
-      this.curSiteId = scope.row.siteId;
-      this.settingTemplateShow = true;
-      let { data } = await templateApi.getSiteTemplate(scope.row.id);
-      this.settingTemplateName = data.templateName;
-      this.settingTemplateStatus = data.status;
-      this.settingChecked = data.isRecommend;
-      this.picUrl = data.imageUrl;
-      this.picUrlMobile = data.mobileImageUrl;
+    async settingTemplate(row) {
+      this.curTemplateId = row.id;
+      this.curSiteId = row.siteId;
+      let { data, status } = await templateApi.getSiteTemplate(row.id);
+      if (status == 200) {
+        this.settingTemplateName = data.templateName;
+        this.settingTemplateStatus = data.status;
+        this.settingChecked = data.isRecommend;
+        this.picUrl = data.imageUrl;
+        this.picUrlMobile = data.mobileImageUrl;
+        this.settingTemplateShow = true;
+        this.settingFirstIndustrySelect = data.firstIndustry;
+        if (this.settingFirstIndustrySelect != 0) {
+          let { data, status } = await templateApi.getSecondIndustries(
+            this.settingFirstIndustrySelect
+          );
+          this.secondIndustryOptions = data;
+        } else {
+          this.settingFirstIndustrySelect = "";
+          this.settingSecondIndustrySelect = "";
+        }
+
+        if (data.secondIndustry == 0) {
+          this.settingSecondIndustrySelect = "";
+        } else {
+          this.settingSecondIndustrySelect = data.secondIndustry;
+        }
+      }
     },
     // 保存设置模版
     async saveSettingTemplate() {
@@ -834,7 +911,10 @@ export default {
       } else if (!/^.{1,100}$/.test(this.settingTemplateName)) {
         this.errorTemplateNameTips = true;
         this.errorTemplateName = "模版名称最大长度为100个字符";
+      } else if (this.settingSecondIndustrySelect == 0) {
+        this.errorTemplateIndustryShow = true;
       } else {
+        this.errorTemplateIndustryShow = false;
         this.errorTemplateNameTips = false;
         this.errorTemplateName = "";
         let para = {
@@ -845,8 +925,9 @@ export default {
           mobileImageUrl: this.picUrlMobile,
           templateType: "SiteTemplate",
           isRecommend: this.settingChecked,
-          status:
-            this.settingTemplateStatus === "" ? "" : this.settingTemplateStatus
+          status: this.settingTemplateStatus,
+          firstIndustryId: this.settingFirstIndustrySelect,
+          secondIndustryId: this.settingSecondIndustrySelect
         };
         let { data, status } = await templateApi.saveSiteTemplate(para);
         this.settingTemplateShow = false;
@@ -865,6 +946,7 @@ export default {
       this.settingTemplateName = "";
       this.errorTemplateNameTips = false;
       this.errorTemplateName = "";
+      this.errorTemplateIndustryShow = false;
       this.picUrl = "";
       this.picUrlMobile = "";
       this.settingChecked = false;
@@ -872,12 +954,12 @@ export default {
       this.settingTemplateShow = false;
     },
     // 更新模版
-    updateTemplate(scope) {
+    updateTemplate(row) {
       this.$confirm(`确定要更新模版吗？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
-            let { status } = await templateApi.uploadSiteTemplate(scope.row.id);
+            let { status } = await templateApi.uploadSiteTemplate(row.id);
             if (status === 200) {
               this.$notify({
                 customClass: "notify-success",
@@ -899,12 +981,12 @@ export default {
       });
     },
     // 删除模版
-    deleteTemplate(scope) {
+    deleteTemplate(row) {
       this.$confirm(`确定删除该模版吗？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
-            let { status } = await templateApi.deleteTemplate(scope.row.id);
+            let { status } = await templateApi.deleteTemplate(row.id);
             if (status === 200) {
               this.$notify({
                 customClass: "notify-success",
@@ -932,12 +1014,10 @@ export default {
           this.templateInfo[i].createTime,
           "yyyy/MM/dd hh:mm"
         );
-        if (this.templateInfo[i].updateTime) {
-          this.templateInfo[i].myUpdateTime = formatDateTime(
-            this.templateInfo[i].updateTime,
-            "yyyy/MM/dd hh:mm"
-          );
-        }
+        this.templateInfo[i].myUpdateTime = formatDateTime(
+          this.templateInfo[i].updateTime,
+          "yyyy/MM/dd hh:mm"
+        );
       }
     },
     // 语言转换
@@ -965,6 +1045,12 @@ export default {
 }
 </style>
 <style scoped>
+.table-list /deep/ .el-table .ascending .sort-caret.ascending {
+  border-bottom-color: rgba(9, 204, 235, 1);
+}
+.table-list /deep/ .el-table .descending .sort-caret.descending {
+  border-top-color: rgba(9, 204, 235, 1);
+}
 .phoneInput /deep/ input {
   border-top-color: transparent;
   border-left-color: transparent;
@@ -1010,6 +1096,37 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.more-operate {
+  position: relative;
+  cursor: pointer;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    bottom: -10px;
+    left: -10px;
+  }
+}
+.operate-section {
+  // display: none;
+  position: absolute;
+  z-index: 19;
+  background: #fff;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.07);
+  li {
+    cursor: pointer;
+    padding: 8px 16px;
+    line-height: 17px;
+    &:hover {
+      color: #00c1de;
+      background: rgba(0, 193, 222, 0.2);
+    }
+  }
+  li:last-of-type {
+    color: rgba(251, 77, 104, 1);
+  }
+}
 .avatar-uploader {
   text-align: center;
   margin-top: 16px;
@@ -1095,7 +1212,7 @@ export default {
   border: 1px solid #e5e5e5;
   border-radius: 2px;
   .contentHeader {
-    padding: 0 22px;
+    padding: 0 22px 24px;
     border-bottom: 1px solid #e5e5e5;
   }
   .selectSearchValue {
@@ -1168,6 +1285,7 @@ export default {
     width: 200px;
     height: 133px;
     position: relative;
+    margin-left: 14px;
     .recommend {
       display: inline-block;
       width: 50px;
@@ -1197,15 +1315,6 @@ export default {
   //   line-height: 20px;
   //   cursor: pointer;
   // }
-  .handle-btn {
-    padding: 0;
-    border: none;
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(9, 204, 235, 1);
-    line-height: 20px;
-    background-color: #fff;
-  }
   .disable {
     opacity: 0.5;
     cursor: not-allowed;
@@ -1291,6 +1400,33 @@ export default {
       //   width: 200px;
       //   height: 45px;
       margin-top: 15px;
+    }
+  }
+  .templateindustryWrap {
+    height: 113px;
+    margin: 0 24px;
+    .templateindustryTitle {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(38, 38, 38, 1);
+      line-height: 20px;
+      margin-bottom: 16px;
+    }
+    .settingFirstIndustrySelect {
+      width: 200px;
+      height: 45px;
+    }
+    .settingLine {
+      margin: 0 7px;
+      vertical-align: middle;
+      display: inline-block;
+      width: 8px;
+      height: 1px;
+      background: rgba(185, 203, 207, 1);
+    }
+    .settingSecondIndustrySelect {
+      width: 200px;
+      height: 45px;
     }
   }
   .settingStatusWrap {
