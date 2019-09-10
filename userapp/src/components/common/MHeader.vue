@@ -4,11 +4,11 @@
       <el-col :span="12">
         <div class="head-left head-item">
           <span class="logo-icon">
-            <i class="iconfont iconlogo1"></i>
+            <i class="iconfont iconicon-logo" style="font-size:24px"></i>
           </span>
           <span @click="changeApp" class="headAppName">
             <span class="headAppNameInfo">{{headAppName}}</span>
-            <i class="iconfont iconqiehuan" style="font-size:16px;vertical-align:middle"></i>
+            <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;vertical-align:middle"></i>
           </span>
         </div>
       </el-col>
@@ -16,14 +16,14 @@
         <div class="head-right head-item">
           <span style="cursor: pointer">
             <i
-              class="iconfont iconbangzhu"
+              class="iconfont iconbianzu1"
               style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">帮助</b>
           </span>
           <span style="cursor: pointer">
             <i
-              class="iconfont icontongzhi"
+              class="iconfont iconbianzu2"
               style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">通知</b>
@@ -41,17 +41,31 @@
       </el-col>
       <div class="my-chose-app">
         <el-dialog
-          title="我的应用"
           :fullscreen="true"
           :visible.sync="changeAppShow"
-          :center="true"
           :close-on-click-modal="false"
           :modal-append-to-body="false"
-          :append-to-body="true"
-          style="margin-top:60px"
+          :append-to-body="false"
+          :show-close="false"
+          style="margin-top:50px"
           :modal="false"
+          class="myApp"
         >
-          <div class="appBackground">
+          <div slot="title">
+            <div class="myAppTitle">
+              我的应用
+              <span
+                style="float:right;margin-right:32px;cursor:pointer;"
+                @click="closeChangeApp"
+              >
+                <i
+                  class="iconfont iconguanbi"
+                  style="color:#262626;font-size:20px;vertical-align:middle"
+                ></i>
+              </span>
+            </div>
+          </div>
+          <div class="appBackground" v-scrollBar>
             <el-col
               :span="24"
               class="appitem"
@@ -165,7 +179,7 @@ export default {
     /**
      * 关闭弹框
      */
-    closeDialog() {
+    closeChangeApp() {
       this.changeAppShow = false;
     },
     //显示切换app弹框
@@ -176,6 +190,14 @@ export default {
         this.getCurApp();
         this.getAppList();
         this.changeAppShow = true;
+        this.$nextTick(() => {
+          window.addEventListener("resize", () => {
+            document.getElementsByClassName("appBackground")[0].style.height =
+              window.innerHeight - 142 + "px";
+          });
+          document.getElementsByClassName("appBackground")[0].style.height =
+            window.innerHeight - 142 + "px";
+        });
       }
     },
     // 判断是否过期
@@ -213,7 +235,14 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+.myApp /deep/ .el-dialog {
+  overflow: hidden;
+}
+.myApp /deep/ .el-dialog__body {
+  padding: 0;
+}
+</style>
 <style lang="scss" scoped>
 .disabled {
   opacity: 0.2;
@@ -236,7 +265,7 @@ export default {
       display: inline-block;
       padding: 0;
       margin-left: -10px;
-      height: 60px;
+      height: 50px;
       vertical-align: top;
     }
     span {
@@ -298,7 +327,7 @@ export default {
     position: absolute;
     z-index: 10000;
     right: 0;
-    top: 60px;
+    top: 50px;
     border-radius: 2px;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
     padding: 9px 0;
@@ -364,9 +393,17 @@ export default {
     }
   }
 }
+.myAppTitle {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 1);
+  line-height: 28px;
+  padding: 12px 0 22px;
+}
 .appBackground {
-  position: absolute;
-  top: 80px;
+position: relative;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
@@ -487,6 +524,9 @@ export default {
       text-align: center;
       margin-left: 32px;
     }
+  }
+  .appitem:last-of-type {
+    margin-bottom: 40px;
   }
 }
 </style>

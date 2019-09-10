@@ -86,21 +86,21 @@ export default {
         iconfonts(code) {
             switch (code) {
                 case "board":
-                    return "iconkongzhitaishouye";
+                    return "iconicon-dash-Navigationhome";
                 case "content":
-                    return "iconneirongguanli";
+                    return "iconicon-dash-NavigationContent";
                 case "website":
-                    return "iconwangzhanguanli";
+                    return "iconicon-dash-Navigationsite";
                 case "system":
-                    return "iconxitongshezhi";
+                    return "iconicon-dash-Navigationsystem";
                 case "form":
-                    return "iconbiaodanguanli";
+                    return "iconicon-dash-Navigationform";
                 case "micro":
                     return "iconweixinxiaochengxu";
                 case "wechataccount":
                     return "iconweixingongzhonghao";
                 case "recycle":
-                    return "iconhuishouzhan";
+                    return "iconicon-dash-Navigationdelete";
                 case "business":
                     return "icondianshanghuiyuan";
                 case "template":

@@ -41,8 +41,12 @@
                 style="padding:0"
                 class="popover"
               >
-                <span slot="reference" style="margin-left:0px" @click="showChangeSitename">
-                  <div class="edit" style="margin-left:0px"></div>
+                <span
+                  slot="reference"
+                  style="margin-left:0px;vertical-align: middle;"
+                  @click="showChangeSitename"
+                >
+                  <i class="iconfont iconbianji edit"></i>
                 </span>
                 <div class="textareaWrap">
                   <el-input
@@ -66,7 +70,9 @@
             <div class="siteinfoItem">
               <span>网站语言：</span>
               <span class="siteinfoName">{{_getLanguage()}}</span>
-              <div class="edit" @click="showChangeLanguage"></div>
+              <span @click="showChangeLanguage" style="vertical-align: middle;">
+                <i class="iconfont iconbianji edit"></i>
+              </span>
             </div>
             <div class="siteinfoItem">
               <span>网站地址：</span>
@@ -176,7 +182,7 @@
           <div class="pannel-head">
             <span class="headTitle">网站语言</span>
             <span class="close-pannel" @click="closeSiteLanguageDialog">
-              <i class="iconfont iconX" style="font-size:12px;color:#ccc"></i>
+              <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
             </span>
           </div>
           <div class="tips">为避免网站内容与网站语言不匹配，更换网站语言后，请及时更新控件内容</div>
@@ -252,10 +258,12 @@
             <button class="cancelBtn" @click="closeSiteInfoDialog">取消</button>
           </div>
         </div>
-      </el-dialog> -->
+      </el-dialog>-->
       <SelectTemplateDialog
         ref="selectTemplateDialog"
         :siteId="siteId"
+        :isChangeTemplate="isChangeTemplate"
+        :isDesigner="isDesigner"
         :siteName="siteName"
         :templateId="templateId"
         @getSiteInfo="getSiteInfo"
@@ -281,6 +289,8 @@ export default {
   },
   data() {
     return {
+      isChangeTemplate: true,
+      isDesigner: false,
       siteName: "",
       siteImage: "",
       siteId: 0,
@@ -535,7 +545,7 @@ export default {
 };
 </script>
 <style scoped>
-.popover /deep/ .el-popover__reference{
+.popover /deep/ .el-popover__reference {
   outline: none;
 }
 .siteTypeSelect {
@@ -617,14 +627,12 @@ export default {
   margin-bottom: 15px;
 }
 .edit {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  background: url("~img/siteManage/mysite-edit.png") no-repeat center;
-  background-size: contain;
-  vertical-align: middle;
-  margin-left: 20px;
+  font-size: 16px;
+  color: #262626;
   cursor: pointer;
+  &:hover {
+    color: #09cceb;
+  }
 }
 .siteContent {
   padding: 24px;

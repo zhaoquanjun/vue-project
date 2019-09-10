@@ -37,11 +37,12 @@
               width="317"
               trigger="manual"
               v-model="editPopover"
+              :popper-append-to-body="false"
               style="padding:0;"
               class="popover"
             >
               <span slot="reference" @click="showRemark">
-                <i class="iconfont iconbianji editIcon"></i>
+                <i class="iconfont iconicon-dash-edit editIcon"></i>
               </span>
               <div class="textareaWrap">
                 <el-input
@@ -339,12 +340,6 @@ export default {
       line-height: 28px;
     }
   }
-}
-.board-right {
-  min-width: 269px;
-  min-height: 680px;
-  background: url("~img/board-right.png") no-repeat center;
-  background-size: cover;
 }
 .appInfo {
   margin-top: 125px;

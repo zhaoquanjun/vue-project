@@ -45,7 +45,7 @@
                         @show="showRemark(scope.row)"
                     >
                         <button slot="reference">
-                           <i class="iconfont iconbianji"></i>
+                           <i class="iconfont iconicon-dash-edit"></i>
                         </button>
                         <div class="textareaWrap">
                             <el-input
@@ -81,10 +81,10 @@
                         class="handle-btn handle-btn-item"
                         @click="handleEdit(scope.$index, scope.row)"
                     >
-                        <i class="iconfont iconcaozuo"></i>
+                        <i class="iconfont iconbianji"></i>
                     </button>
                     <button class="handle-btn" @click="handleDelete(scope.$index, scope.row)">
-                        <i class="iconfont iconhuishouzhan"></i>
+                        <i class="iconfont iconshanchu"></i>
                     </button>
                 </template>
             </el-table-column>
