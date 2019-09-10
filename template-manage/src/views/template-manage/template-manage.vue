@@ -85,7 +85,7 @@
             :row-style="{height:'200px'}"
             :default-sort="{prop: 'myCreateTime', order: 'descending'}"
           >
-            <el-table-column prop="siteName" label="缩略图" width="250">
+            <el-table-column prop="siteName" label="缩略图" width="240">
               <template slot-scope="scope">
                 <div class="siteImg">
                   <div class="recommend" v-show="scope.row.isRecommend">推荐</div>
@@ -98,7 +98,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="模板名称|语言" min-width="150">
+            <el-table-column label="模板名称|语言" min-width="120">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName" show-overflow-tooltip>{{scope.row.templateName}}</p>
@@ -139,7 +139,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" min-width="150">
+            <el-table-column label="操作" min-width="120">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
                   <a
@@ -524,9 +524,17 @@ export default {
     this.getFirstIndustry();
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
-        this.tableHeight = window.innerHeight - 320;
+        if (window.innerWidth < 1845) {
+          this.tableHeight = window.innerHeight - 390;
+        } else {
+          this.tableHeight = window.innerHeight - 325;
+        }
       });
-      this.tableHeight = window.innerHeight - 320;
+      if (window.innerWidth < 1845) {
+        this.tableHeight = window.innerHeight - 390;
+      } else {
+        this.tableHeight = window.innerHeight - 325;
+      }
     });
     document.addEventListener("click", () => {
       this.$nextTick(() => {
@@ -830,7 +838,6 @@ export default {
         { name: "删除", flag: "delete" }
       ];
       this.row = row;
-      this.operateShow = !this.operateShow;
       if (row.status == 2) {
         this.operateList = [{ name: "删除", flag: "delete" }];
         this.$refs.operateSection.style.left =
@@ -844,7 +851,7 @@ export default {
         this.$refs.operateSection.style.left =
           ev.pageX - ev.offsetX + 23 + "px";
         this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 20 + "px";
-      } else if (row.staus == 1) {
+      } else if (row.status == 1) {
         this.operateList = [
           { name: "设置", flag: "setting" },
           { name: "更新", flag: "update" },
@@ -854,6 +861,7 @@ export default {
           ev.pageX - ev.offsetX + 23 + "px";
         this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 38 + "px";
       }
+      this.operateShow = !this.operateShow;
     },
     async choseSettingFirstIndustry(id) {
       let { data, status } = await templateApi.getSecondIndustries(id);
