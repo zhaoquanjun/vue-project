@@ -11,10 +11,15 @@ const mutations = {
      * @param {*} state 
      * @param {*} flag 
      */
-    [types.CLOSERIGHTPANNEL](state, flag) {
+    [types.CLOSERIGHTPANNEL](state, flag,type) {
         state.invitationValue = '';
-        state.isRightPanelShow = flag;
-        state.isInvitationPanelShow = flag;
+       
+             state.isInvitationPanelShow = flag;
+       
+            state.isRightPanelShow = flag;
+      
+       
+       
     },
 
     [types.SETINVITATIONVALUE](state, value) {

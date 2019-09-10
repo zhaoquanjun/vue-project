@@ -10,7 +10,7 @@ import * as ajaxRequest from "../ajaxRequest";
  * 获取列表
  * @param {*} option 
  */
-export const getPicList = options => {
+export const getList = options => {
     return ajaxRequest.get(`/api/Video/GetList`, options);
 }
 export const batchRemove = (isDelete, idList) => {

@@ -107,7 +107,7 @@
                     @close="closeDialog"
                 >
                     <audio ref="audio" class="audio" :src="fullOssUrl" controls="controls" />
-                    <div class="dislog-footer" slot="footer">
+                    <!-- <div class="dislog-footer" slot="footer">
                          <el-tooltip
                             class="item"
                             effect="dark"
@@ -119,7 +119,7 @@
                       
                         <span>分类: {{picInfo.categoryName}}</span>
                         <span>大小: {{picInfo.sizeStr}}</span>
-                    </div>
+                    </div> -->
                 </el-dialog>
             </div>
         </div>
@@ -183,9 +183,9 @@ export default {
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
-            //  this.$nextTick(()=>{
-            //      this.$refs.audio.play()
-            // })
+             this.$nextTick(()=>{
+                 this.$refs.audio.play()
+            })
         },
         /**
          * 单选或全选操作
@@ -242,11 +242,11 @@ export default {
 
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
-            this.$emit("getPicList");
+            this.$emit("getList");
         },
         changeSize(size) {
             this.picSearchOptions.pageSize = size;
-            this.$emit("getPicList");
+            this.$emit("getList");
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);

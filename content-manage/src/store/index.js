@@ -2,11 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import dashboard from "./modules/dashboard";
 import user from "./modules/user";
-import Cookies from "js-cookie"
 Vue.use(Vuex);
-
 import { setLocal, getLocal, removeLocal } from '@/libs/local'
-
 const store = new Vuex.Store({
   modules: {
     dashboard,

@@ -9,7 +9,7 @@
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
-                @getList="getPicList"
+                @getList="getList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
@@ -26,7 +26,7 @@
                 :is-batch-header-show="isBatchHeaderShow"
                 :content-type="contentType"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
-                @getPicList="getPicList"
+                @getList="getList"
                 @batchMove="batchMove"
                 @batchDelete="batchDelete"
             ></list-header>
@@ -38,9 +38,9 @@
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
                     :use-storage="useStorage"
-                    @getPicList="getPicList"
+                    @getList="getList"
                     @changeCategory="changeCategoryPic"
-                    @rename="renamePic"
+                    @rename="renameItemTitle"
                     @batchRemove="batchRemovePic"
                     @moveClassify="moveClassify"
                     @handleSelectionChange="handleSelectionChange"
@@ -106,7 +106,7 @@
                 :uploadType="contentType"
                 :apiHost="apiHost"
                 
-                @getList="getPicList"
+                @getList="getList"
                 @getTree="getTree"
                 @closeDialog="closeDialog"
             />
@@ -116,11 +116,11 @@
 </template>
 <script>
 import ChunkUpload from "@/components/common/ChunkUpload";
-import MTree from "@/components/ImgManage/MTree";
+import MTree from "@/components/common/MTree";
 import ListHeader from "@/components/FileManage/ListHeader";
 import List from "./List";
 import SelectTree from "@/components/common/SelectTree";
-import RightPannel from "@/components/ImgManage/RightPannel";
+import RightPannel from "@/components/common/RightPannel";
 import * as audioManageApi from "@/api/request/audioManageApi";
 import * as audioCategoryManageApi from "@/api/request/audioCategoryManageApi";
 import { getStorageUsage } from "@/api/request/contentCommonApi.js";
@@ -177,7 +177,7 @@ export default {
         };
     },
     mounted() {
-        this.getPicList();
+        this.getList();
         this.getTree();
         this.getStorageUsage();
     },
@@ -188,7 +188,7 @@ export default {
             this.useStorage = data;
         },
         // 获取列表
-        async getPicList(node) {
+        async getList(node) {
             const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",
@@ -198,7 +198,7 @@ export default {
               
                 this.nodeData = node; // 上传弹窗所需
             }
-            let { data } = await audioManageApi.getPicList(
+            let { data } = await audioManageApi.getList(
                 this.picSearchOptions
             );
             loading.close();
@@ -231,7 +231,7 @@ export default {
                                     duration: 1500
                                 });
                                 this.getTree();
-                                this.getPicList();
+                                this.getList();
                                
                             }
                         }
@@ -241,7 +241,7 @@ export default {
         },
         resetCategoryId() {
             this.picSearchOptions.categoryIdList = [];
-            this.getPicList();
+            this.getList();
         },
 
         async changeCategoryPic(categoryId, idList) {
@@ -257,13 +257,13 @@ export default {
                     duration: 1000
                 });
                 this.isInvitationPanelShow = false;
-                this.getPicList();
+                this.getList();
                 this.getTree();
             }
         },
-        async renamePic(id, newname) {
+        async renameItemTitle(id, newname) {
             await audioManageApi.rename(id, newname);
-            this.getPicList();
+            // this.getList();
         },
         async getTree() {
             let { data } = await audioCategoryManageApi.get();
@@ -320,7 +320,7 @@ export default {
         // 点击上传图片
         switchUploadBoxShowStatus(uploadImg) {
             this.dialogTableVisible = !this.dialogTableVisible;
-            if (uploadImg === "uploadImg") this.getPicList();
+            if (uploadImg === "uploadImg") this.getList();
         },
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;

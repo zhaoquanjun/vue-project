@@ -10,7 +10,7 @@
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
-                @getList="getPicList"
+                @getList="getList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
                 @rename="renameCategory"
@@ -25,7 +25,7 @@
                 :is-batch-header-show="isBatchHeaderShow"
                 :is-grid="isGrid"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
-                @getPicList="getPicList"
+                @getList="getList"
                 @batchMove="batchMove"
                 @batchDelete="batchDelete"
                 @showType="showType"
@@ -36,8 +36,7 @@
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
-                    @getPicList="getPicList"
-                    @changeCategory="changeCategoryPic"
+                    @getList="getList"
                     @rename="renamePic"
                     @batchRemove="batchRemovePic"
                     @moveClassify="moveClassify"
@@ -108,12 +107,12 @@
     </el-container>
 </template>
 <script>
-import MTree from "./MTree";
+import MTree from "@/components/common/MTree";
 import UploadPic from "./UploadPic";
 import ImgListHeader from "./ImgListHeader";
 import ImgList from "./ImgList";
 import GridList from "./GridList";
-import RightPannel from "./RightPannel";
+import RightPannel from "@/components/common/RightPannel";
 import SelectTree from "@/components/common/SelectTree";
 import * as imgManageApi from "@/api/request/imgManageApi";
 import * as imgCategoryManageApi from "@/api/request/imgCategoryManageApi";
@@ -167,22 +166,19 @@ export default {
         if (this.isGrid) {
             this.componentId = "GridList";
         }
-        this.getPicList();
+        this.getList();
         this.getTree();
     },
     methods: {
         // 获取列表
-        async getPicList(node) {
+        async getList(node) {
             const loading = this.$loading({
                 lock: true,
                 spinner: "loading-icon",
                 background: "rgba(255, 255, 255, 0.75)"
             });
-            if (node) {
-                this.nodeData = node; // 上传图片所需
-            }
-
-            let { data } = await imgManageApi.getPicList(this.picSearchOptions);
+            if (node) this.nodeData = node; // 上传图片所需
+            let { data } = await imgManageApi.getList(this.picSearchOptions);
             loading.close();
             this.getTree();
             this.imgPageResult = data;
@@ -219,17 +215,17 @@ export default {
                                     showClose: false,
                                     duration: 1500
                                 });
-                                this.getPicList();
+                                this.getList();
                             }
                         }
                     }
                 }
             );
         },
-        resetCategoryId() {
-            this.picSearchOptions.categoryIdList = [];
-            this.getPicList();
-        },
+        // resetCategoryId() {
+        //     this.picSearchOptions.categoryIdList = [];
+        //     this.getList();
+        // },
 
         async changeCategoryPic(categoryId, idList) {
             let { data, status } = await imgManageApi.changeCategory(
@@ -244,12 +240,12 @@ export default {
                     duration: 1500
                 });
                 this.isInvitationPanelShow = false;
-                this.getPicList();
+                this.getList();
             }
         },
         async renamePic(id, newname) {
             await imgManageApi.rename(id, newname);
-            this.getPicList();
+            // this.getList();
         },
         async getTree() {
             let { data } = await imgCategoryManageApi.get();
@@ -304,7 +300,7 @@ export default {
         switchUploadBoxShowStatus(uploadImg) {
             this.dialogTableVisible = !this.dialogTableVisible;
             if (uploadImg === "uploadImg") {
-                this.getPicList();
+                this.getList();
                 this.picSearchOptions.keyword = "";
             }
         },
@@ -329,19 +325,10 @@ export default {
                 this.idsList.push(item.id);
             });
             this.selectedImg = list;
-            this.$emit("getImgInfo", list);
+            this.$emit("getImgInfo", list); // img插件所需
         },
         // 点击确定按钮 更新图片分类
         updateCategoryPic() {
-            // if (!this.moveToClassiFy) {
-            //     this.$notify({
-            //         customClass: "notify-error", //  notify-success ||  notify-error
-            //         message: `请选择移动的分类!`,
-            //         showClose: false,
-            //         duration: 1500
-            //     });
-            //     return;
-            // }
             let categoryId = this.moveToClassiFy.id;
             let idList = [];
             if (this.idsList.length > 0) {
@@ -366,7 +353,6 @@ export default {
                     categoryId: 0
                 };
             }
-            console.log(this.curImgInfo)
             this.isInvitationPanelShow = true;
         },
         //批量删除
@@ -378,11 +364,11 @@ export default {
             if (val === "list") {
                 this.componentId = "ImgList";
                 this.picSearchOptions.pageSize = 10;
-                this.getPicList();
+                this.getList();
             } else {
                 this.componentId = "GridList";
                 this.picSearchOptions.pageSize = 20;
-                this.getPicList();
+                this.getList();
             }
         }
     },
