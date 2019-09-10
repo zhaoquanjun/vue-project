@@ -1,8 +1,4 @@
 <template>
-    <!-- 
-   :clearable="clearable" 
-    @clear="clearHandle"
-    -->
     <el-select
         id="el-select"
         ref="elSelect"
@@ -13,7 +9,6 @@
         @node-expand="nodeExpand"
         size="small"
     >
-        <!-- :label="valueTitle" -->
         <el-option :value="valueTitle">
             <el-tree
                 id="tree-option"
@@ -160,7 +155,6 @@ export default {
                 this.$emit("chooseNode", node);
                 return;
             } else {
-                console.log();
                 this.valueTitle = node[this.props.label];
                 this.$emit("chooseNode", node);
             }

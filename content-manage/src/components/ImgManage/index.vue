@@ -167,7 +167,7 @@ export default {
             this.componentId = "GridList";
         }
         this.getList();
-        this.getTree();
+        
     },
     methods: {
         // 获取列表
