@@ -103,17 +103,17 @@ export default {
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
-            this.$emit("getPicList");
+            this.$emit("getList");
         },
         changeSize(size) {
             this.picSearchOptions.pageSize = size;
-            this.$emit("getPicList");
+            this.$emit("getList");
         },
         /**
          * 查看大图
          */
          viewPic(row, index) {
-              this.fullOssUrl = "";
+            this.fullOssUrl = "";
             this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
             this.imgVisible = true;

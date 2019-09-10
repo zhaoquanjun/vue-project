@@ -96,7 +96,7 @@ export default {
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${this.uploadPicUrl}/0`,
             headers: {
-                appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+                appId: "",
                 Authorization: ""
             },
             uploadSucess: false,

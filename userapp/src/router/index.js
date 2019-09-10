@@ -16,9 +16,7 @@ let accessToken = store.state.user.accessToken.Authorization;
 router.beforeEach(async (to, from, next) => {
 
   document.title = to.meta.title;
- 
 
-  
     if (to.name !== "callback") {
       if (accessToken) {
         if (!to.meta.requiresAuth) {

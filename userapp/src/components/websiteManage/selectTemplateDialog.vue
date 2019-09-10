@@ -1,10 +1,11 @@
 <template>
   <div class="my-chose-template">
     <el-dialog
-      style="margin-top:60px"
+      style="margin-top:50px"
       width="0"
       :show-close="false"
       :close-on-click-modal="false"
+      :append-to-body="false"
       :modal="false"
       :visible.sync="templateShow"
     >
@@ -45,7 +46,7 @@
               @node-click="changeIndustry"
             ></el-tree>
           </el-aside>
-          <el-main>
+          <el-main style="overflow:hidden">
             <el-header
               class="templateHeader"
               style="height:136px;padding:48px 81px;border-bottom:1px solid #E5E5E5"
@@ -93,12 +94,16 @@
               </div>
               <span class="close-pannel" @click="closeDialog">
                 <i
-                  class="iconfont iconX"
-                  style="line-height:40px;font-size:14px;color:rgba(140,140,140,1);"
+                  class="iconfont iconguanbi"
+                  style="line-height:40px;font-size:16px;color:#262626;"
                 ></i>
               </span>
             </el-header>
-            <el-main style="padding:60px 81px;">
+            <el-main
+              class="templateContent"
+              style="padding:60px 81px;position:relative"
+              v-scrollBar
+            >
               <el-row :gutter="80">
                 <el-col
                   class="templateItem"
@@ -148,89 +153,89 @@
                   </div>
                 </el-col>
               </el-row>
-              <div>
-                <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
-                <div class="pageing" id="pageing" style="margin-bottom:20px">
-                  <el-pagination
-                    v-show="templatePage.totalCount > 9"
-                    background
-                    layout="total, slot, sizes, prev, pager, next"
-                    :current-page="templatePage.pageIndex"
-                    :total="templatePage.totalCount"
-                    :page-count="templatePage.totalPages"
-                    :page-size="templatePage.pageSize"
-                    :page-sizes="[9,18,45]"
-                    @current-change="changePage"
-                    @size-change="changeSize"
-                  ></el-pagination>
+            </el-main>
+            <div>
+              <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
+              <div class="pageing" id="pageing" style="margin-bottom:20px">
+                <el-pagination
+                  v-show="templatePage.totalCount > 9"
+                  background
+                  layout="total, slot, sizes, prev, pager, next"
+                  :current-page="templatePage.pageIndex"
+                  :total="templatePage.totalCount"
+                  :page-count="templatePage.totalPages"
+                  :page-size="templatePage.pageSize"
+                  :page-sizes="[9,18,45]"
+                  @current-change="changePage"
+                  @size-change="changeSize"
+                ></el-pagination>
+              </div>
+            </div>
+            <el-dialog
+              width="0"
+              :visible.sync="notFindTemplateShow"
+              :show-close="false"
+              :close-on-click-modal="false"
+              :modal-append-to-body="false"
+            >
+              <div class="notFindTemplate-pannel" :style="{width:'600px'}">
+                <div class="pannel-head">
+                  <span class="headTitle">未找到想要的模版</span>
+                  <span class="close-pannel" @click="closeNotFindTemplateDialog">
+                    <i
+                      class="iconfont iconguanbi"
+                      style="line-height:70px;font-size:16px;color:#262626;"
+                    ></i>
+                  </span>
+                </div>
+                <div class="tips">请填写您的网站需求，帮助我们改进模版库</div>
+                <div class="industry">
+                  网站行业：
+                  <el-input
+                    v-model="notFindName"
+                    placeholder="请输入您想要的行业名称"
+                    @blur="blurIndustryName"
+                    style="width:470px"
+                    maxlength="20"
+                  ></el-input>
+                  <div
+                    class="ym-form-item__error"
+                    style="margin-left:68px"
+                    v-show="errorIndustry"
+                  >{{errorIndustryName}}</div>
+                </div>
+                <div class="reference">
+                  参考网站：
+                  <el-input
+                    v-model="notFindSite"
+                    placeholder="请输入您想参考的网站链接"
+                    style="width:470px"
+                    @blur="blurReferenceSite"
+                    maxlength="200"
+                  ></el-input>
+                  <div
+                    class="ym-form-item__error"
+                    style="margin-left:68px"
+                    v-show="errorReference"
+                  >{{errorSite}}</div>
+                </div>
+                <div class="description">
+                  网站描述：
+                  <el-input
+                    type="textarea"
+                    :rows="4"
+                    placeholder="请描述您想要的网站效果"
+                    style="width:470px;vertical-align: text-top;"
+                    v-model="notFindRemark"
+                    maxlength="200"
+                  ></el-input>
+                </div>
+
+                <div class="confirm">
+                  <button class="confirmBtn" @click="submit">提交</button>
                 </div>
               </div>
-              <el-dialog
-                width="0"
-                :visible.sync="notFindTemplateShow"
-                :show-close="false"
-                :close-on-click-modal="false"
-                :modal-append-to-body="false"
-              >
-                <div class="notFindTemplate-pannel" :style="{width:'600px'}">
-                  <div class="pannel-head">
-                    <span class="headTitle">未找到想要的模版</span>
-                    <span class="close-pannel" @click="closeNotFindTemplateDialog">
-                      <i
-                        class="iconfont iconX"
-                        style="line-height:70px;font-size:14px;color:rgba(140,140,140,1);"
-                      ></i>
-                    </span>
-                  </div>
-                  <div class="tips">请填写您的网站需求，帮助我们改进模版库</div>
-                  <div class="industry">
-                    网站行业：
-                    <el-input
-                      v-model="notFindName"
-                      placeholder="请输入您想要的行业名称"
-                      @blur="blurIndustryName"
-                      style="width:470px"
-                      maxlength="20"
-                    ></el-input>
-                    <div
-                      class="ym-form-item__error"
-                      style="margin-left:68px"
-                      v-show="errorIndustry"
-                    >{{errorIndustryName}}</div>
-                  </div>
-                  <div class="reference">
-                    参考网站：
-                    <el-input
-                      v-model="notFindSite"
-                      placeholder="请输入您想参考的网站链接"
-                      style="width:470px"
-                      @blur="blurReferenceSite"
-                      maxlength="200"
-                    ></el-input>
-                    <div
-                      class="ym-form-item__error"
-                      style="margin-left:68px"
-                      v-show="errorReference"
-                    >{{errorSite}}</div>
-                  </div>
-                  <div class="description">
-                    网站描述：
-                    <el-input
-                      type="textarea"
-                      :rows="4"
-                      placeholder="请描述您想要的网站效果"
-                      style="width:470px;vertical-align: text-top;"
-                      v-model="notFindRemark"
-                      maxlength="200"
-                    ></el-input>
-                  </div>
-
-                  <div class="confirm">
-                    <button class="confirmBtn" @click="submit">提交</button>
-                  </div>
-                </div>
-              </el-dialog>
-            </el-main>
+            </el-dialog>
           </el-main>
         </el-container>
       </div>
@@ -244,7 +249,7 @@ import { getLanguage } from "@/configure/appCommon";
 import { designerUrl } from "@/environment/index";
 
 export default {
-  props: ["siteId", "siteName", "templateId"],
+  props: ["siteId", "siteName", "templateId", "isDesigner", "isChangeTemplate"],
   data() {
     return {
       templateShow: false,
@@ -446,6 +451,26 @@ export default {
 
     // 选择模版
     async choseSite(item) {
+      if (this.isChangeTemplate) {
+        this.$confirm(
+          `更换模版会替换现有的设计界面，您确认要切换吗？`,
+          "提示",
+          {
+            iconClass: "icon-warning",
+            callback: async action => {
+              if (action === "confirm") {
+                this.choseTemplate(item);
+              } else {
+                return;
+              }
+            }
+          }
+        );
+      } else {
+        this.choseTemplate(item);
+      }
+    },
+    async choseTemplate(item) {
       const loading = this.$loading({
         lock: true,
         text: "正在复制模版",
@@ -453,44 +478,56 @@ export default {
         customClass: "copyTemplateLoading",
         background: "rgba(0, 0, 0, 0.5)"
       });
-      console.log(item);
-      if (this.isAllTab == false) {
-        let para = {
-          currentSiteId: this.siteId,
-          templateSiteId: item.id,
-          siteName: item.siteName,
-          imageUrl: item.image
-        };
-        var { status } = await templateApi.updateSiteWithTemplate(para);
-      } else {
-        let para = {
-          TemplateId: item.id,
-          CurrentSiteId: this.siteId,
-          TemplateSiteId: item.siteId,
-          SiteName: this.siteName
-        };
-        var { status } = await templateApi.updateSiteTemplate(para);
-      }
-
-      if (status == 200) {
-        loading.close();
-        this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
-          confirmButtonText: "前往设计页面",
-          cancelButtonText: "取消",
-          iconClass: "icon-success"
-        })
-          .then(() => {
+      try {
+        if (this.isAllTab == false) {
+          let para = {
+            currentSiteId: this.siteId,
+            templateSiteId: item.id,
+            siteName: item.siteName,
+            imageUrl: item.image
+          };
+          var { status } = await templateApi.updateSiteWithTemplate(para);
+        } else {
+          let para = {
+            TemplateId: item.id,
+            CurrentSiteId: this.siteId,
+            TemplateSiteId: item.siteId,
+            SiteName: this.siteName
+          };
+          var { status } = await templateApi.updateSiteTemplate(para);
+        }
+        if (status == 200) {
+          loading.close();
+          if (this.isDesigner) {
             window.location.href = `${designerUrl}?siteId=${this.siteId}`;
-          })
-          .catch(action => {
-            if (action == "cancel") {
-              this.templateShow = false;
-              this.$router.push({
-                path: "/website/mysite"
+          } else {
+            this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
+              confirmButtonText: "前往设计页面",
+              cancelButtonText: "取消",
+              iconClass: "icon-success"
+            })
+              .then(() => {
+                window.location.href = `${designerUrl}?siteId=${this.siteId}`;
+              })
+              .catch(action => {
+                if (action == "cancel") {
+                  this.templateShow = false;
+                  this.$router.push({
+                    path: "/website/mysite"
+                  });
+                  this.$emit("getSiteInfo", this.siteId);
+                }
               });
-              this.$emit("getSiteInfo", this.siteId);
-            }
-          });
+          }
+        }
+      } catch {
+        loading.close();
+        this.$notify({
+          customClass: "notify-error",
+          message: `模版复制失败，请稍后重试`,
+          duration: 1500,
+          showClose: false
+        });
       }
     },
     //   获取模版列表
@@ -664,6 +701,14 @@ export default {
     showTemplate() {
       this.templateShow = true;
       this.getTemplateList();
+      this.$nextTick(() => {
+        window.addEventListener("resize", () => {
+          document.getElementsByClassName("templateContent")[0].style.height =
+            window.innerHeight - 280 + "px";
+        });
+        document.getElementsByClassName("templateContent")[0].style.height =
+          window.innerHeight - 280 + "px";
+      });
     },
     // 转换语言
     _getLanguage(language) {
@@ -751,7 +796,7 @@ export default {
   z-index: 100;
   left: 0;
   right: 0;
-  top: 60px;
+  top: 50px;
   bottom: 0;
   box-shadow: 0 0 3px #ccc;
   transition: width 0.2s linear;
@@ -1003,6 +1048,7 @@ export default {
     font-weight: 400;
     color: rgba(0, 112, 204, 1);
     line-height: 20px;
+    margin-left: 80px;
   }
   //右侧弹框
   .notFindTemplate-pannel {

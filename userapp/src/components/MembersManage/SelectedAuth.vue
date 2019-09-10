@@ -108,15 +108,13 @@ export default {
         }   
 }
 .item-left {
-    width: 40%;
+   width: 80%;
     float: left;
     color: #262626;
 }
-.auth-name{
-    width: 60%;
-}
+
 .item-right {
-    width: 40%;
+    width: 20%;
     padding-left: 10px;
     height: 40px;
     overflow: hidden;
@@ -127,7 +125,7 @@ export default {
 }
 .empty {
     cursor: pointer;
-    width: 30%;
+    width: 20%;
     color: #00c1de;
     text-align: right;
     float: right;

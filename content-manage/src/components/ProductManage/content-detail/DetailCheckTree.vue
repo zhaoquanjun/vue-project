@@ -33,11 +33,7 @@ export default {
         },
 
         checkChange(data, boolen) {
-            if (data.level == 0) {
-                data.disabled = true;
-            }
-
-            console.log(arguments);
+            if (data.level == 0) data.disabled = true;
             this.$emit("chooseNode", data, boolen);
         },
         // 清空选中

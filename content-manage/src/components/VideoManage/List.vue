@@ -19,7 +19,7 @@
             <el-table-column label="视频名称" width="350">
                 <template slot-scope="scope">
                     <div class="cover">
-                        <img width="100%" :src="scope.row.coverUrl" />
+                        <img width="100%" height="100%" :src="scope.row.coverUrl" />
                         <span class="play" @click="viewPic(scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
                         </span>
@@ -116,7 +116,7 @@
                 @close="closeDialog"
             >
                 <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
-                <div class="dislog-footer" slot="footer">
+                <!-- <div class="dislog-footer" slot="footer">
                        <el-tooltip
                             class="item"
                             effect="light"
@@ -127,7 +127,7 @@
                         </el-tooltip>
                     <span>大小: {{picInfo.sizeStr}}</span>
                     <span>格式: {{(picInfo.fileExtension)}}</span>
-                </div>
+                </div> -->
             </el-dialog>
         </div>
     </div>
@@ -258,7 +258,7 @@ export default {
         },
         blurRename(id, newName) {},
         /**
-         * 查看大图
+         *   
          */
         viewPic(row, index) {
             if (!row.isLoadFinish) {
@@ -272,8 +272,8 @@ export default {
             }
             this.imgList = this.imgPageResult.list;
             this.picInfo = this.imgList[index];
-
-            this._adminDownload(row);
+            this._adminDownload(row)
+          
         },
         async _adminDownload(row) {
             let type = row.fileType;
@@ -281,17 +281,17 @@ export default {
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
-            // this.$nextTick(() => {
-            //     this.$refs.video.play();
-            // });
+            this.$nextTick(() => {
+                this.$refs.video.play();
+            });
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
-            this.$emit("getPicList");
+            this.$emit("getList");
         },
         changeSize(size) {
             this.picSearchOptions.pageSize = size;
-            this.$emit("getPicList");
+            this.$emit("getList");
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);

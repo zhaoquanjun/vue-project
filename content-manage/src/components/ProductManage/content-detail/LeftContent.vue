@@ -161,6 +161,7 @@
                                     ></i>
                                 </li>
                                 <el-input
+                               
                                     maxlength="10"
                                     ref="keywordInput"
                                     placeholder="每个关键词之间用回车键分离"
@@ -193,7 +194,7 @@
                                 <div slot="content">不填写则默认使用产品标题</div>
                                 <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
-                            <el-input placeholder="seo标题" v-model="detailData.seoTitle"></el-input>
+                            <el-input  class="contentDetail-title" maxlength="100" show-word-limit placeholder="seo标题" v-model="detailData.seoTitle"></el-input>
                         </el-form-item>
                         <el-form-item style="position:relative" label="seo关键词" prop="seoKeyword">
                             <ul class="keyword-list" ref="metaKeywordList">
