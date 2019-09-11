@@ -230,10 +230,10 @@ export default {
             if (i == 0) {
               this.$set(this.siteInfo[2], "prev", true);
               this.$set(this.siteInfo[i + 1], "next", true);
-            } else if (i == 2) {
+            } else if (i == 1) {
               this.$set(this.siteInfo[i - 1], "prev", true);
               this.$set(this.siteInfo[i + 1], "next", true);
-            } else if (i == 3) {
+            } else if (i == 2) {
               this.$set(this.siteInfo[i - 1], "prev", true);
               this.$set(this.siteInfo[0], "next", true);
             }
