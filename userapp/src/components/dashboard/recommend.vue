@@ -126,6 +126,33 @@ export default {
     }
   }
 }
+@media screen and (max-width: 1920px) {
+  .content-num-section {
+    margin-top: 37px;
+    .content .item {
+      margin-bottom: 71px;
+    }
+    .content .item .item-box {
+      height: 197px;
+    }
+    .content .item .item-box .item-content-wrap {
+      height: 67px;
+    }
+    .content .item .item-box .item-content {
+      display: -webkit-box;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      -webkit-text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+    .content .item .item-box .item-btn {
+      margin-top: 7px;
+      margin-bottom: 44px;
+    }
+  }
+}
 @media screen and (max-width: 1500px) {
   .content-num-section {
     margin-top: 32px;
@@ -134,6 +161,9 @@ export default {
       padding-left: 13px;
       font-size: 16px;
       line-height: 22px;
+    }
+    .content .item{
+      margin-bottom: 16px;
     }
     .content .item .item-box .item-title {
       font-size: 16px;

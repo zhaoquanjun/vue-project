@@ -29,7 +29,7 @@
       <div class="rightContent">
         <el-row class="appInfo">
           <el-col class="appName">
-            <span class="appNameInfo">{{ appInfo.name }}</span>
+            <span class="appNameInfo">{{ appInfo.name?appInfo.name:"公司名称" }}</span>
             <el-popover
               v-show="appInfo.isSystem"
               ref="popover"
@@ -37,7 +37,7 @@
               width="317"
               trigger="manual"
               v-model="editPopover"
-              :popper-append-to-body="false"
+              :append-to-body="true"
               style="padding:0;"
               class="popover"
             >
@@ -143,19 +143,19 @@ export default {
       recommend: [],
       designCheats: [
         {
-          versionDescription: "域名支持一键解析"
+          versionDescription: "助力您搭线上线下建微信互动营销方式"
         },
         {
           versionDescription: "域名支持一键解析"
         },
         {
-          versionDescription: "域名支持一键解析"
+          versionDescription: "助力您搭线上线下建微信互式"
         },
         {
           versionDescription: "域名支持一键解析"
         },
         {
-          versionDescription: "域名支持一键解析域名支持一键解析域名支持一键解析"
+          versionDescription: "助力您搭线上线下建微信互动销方式"
         }
       ],
       remarkValue: "",
@@ -205,8 +205,7 @@ export default {
       if (this.siteCount == this.siteInfoList.length) {
         this.isCanCreate = false;
       }
-      this.$refs.siteInfo.getSiteInfo(this.siteInfoList)
-      
+      this.$refs.siteInfo.getSiteInfo(this.siteInfoList);
     },
     /**
      * 获取 设计秘籍列表，版本更新列表，应用推荐列表
@@ -427,8 +426,8 @@ export default {
   }
 }
 .designCheats {
-  margin: 24px 10px 24px 28px;
-  padding-bottom: 10px;
+  margin: 40px 10px 40px 28px;
+  height: 527px;
   border-radius: 3px;
   border: 1px solid rgba(229, 229, 229, 1);
   .designCheatsTitle {
@@ -502,6 +501,7 @@ export default {
 .versionUpdate {
   margin-right: 10px;
   margin-left: 28px;
+  height: 393px;
   background: linear-gradient(
     360deg,
     rgba(0, 193, 222, 0.17) 0%,
@@ -589,6 +589,60 @@ export default {
     }
   }
 }
+@media screen and (max-width: 1920px) {
+  .leftContent {
+    margin-right: 450px;
+  }
+  .rightContent {
+    margin-left: 48px;
+    width: 400px;
+    .appInfo {
+      height: 231px;
+      margin-top: 125px;
+      margin-left: 0px;
+      margin-right: 0px;
+      .appName {
+        margin-top: 37px;
+        margin-left: 28px;
+        line-height: 33px;
+        font-size: 24px;
+        width: 352px;
+      }
+      .appVersion {
+        margin-left: 28px;
+      }
+      .appLine {
+        margin-top: 23px;
+        margin-left: 20px;
+        width: 357px;
+      }
+      .appTime {
+        margin-top: 34px;
+        margin-left: 28px;
+      }
+      .renewalBtn {
+        margin-left: 37px;
+      }
+    }
+    .designCheats {
+      margin: 32px 0px;
+      .designItem {
+        margin: 0px 22px 16px 16px;
+      }
+    }
+    .versionUpdate {
+      height: 327px;
+      margin: 0px;
+      .versionImg {
+        width: 219px;
+        height: 123px;
+        background: url("~img/dashboard/board-versionImgMiddle.png") no-repeat
+          center;
+        background-size: cover;
+      }
+    }
+  }
+}
 @media screen and (max-width: 1500px) {
   .home-page .welcome-wrap {
     margin-top: 34px;
@@ -640,10 +694,11 @@ export default {
     }
     .designCheats {
       margin: 21px 0px 20px;
+      height: 390px;
       .designCheatsTitle {
         margin-top: 14px;
         margin-left: 14px;
-        margin-bottom: 22px;
+        margin-bottom: 14px;
         font-size: 15px;
         line-height: 21px;
       }
@@ -663,6 +718,7 @@ export default {
     }
     .versionUpdate {
       margin: 0px;
+      height: 250px;
       .versionTitle {
         margin-top: 12px;
         margin-left: 13px;
