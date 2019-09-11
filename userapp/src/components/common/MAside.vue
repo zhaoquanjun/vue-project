@@ -22,7 +22,7 @@
                     <i
                         v-if="menuHasChild(i) && isLeftNavComponentsShow"
                         :class="{'active-color':curPath==it.code,}"
-                        class="iconfont iconxiangyoufangxiang"
+                        class="iconfont iconicon-des-Arrow"
                     ></i>
                 </li>
             </ul>
@@ -202,7 +202,7 @@ export default {
             vertical-align: middle;
             color: #0595e6;
         }
-         .iconxiangyoufangxiang {
+         .iconicon-des-Arrow {
             position: absolute;
             right: 16px;
             font-size: 14px;

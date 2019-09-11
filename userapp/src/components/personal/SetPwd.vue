@@ -20,13 +20,13 @@
                     ></el-input>
                     <div class="pwd-rule" v-if="pwdRuleShow">
                         <div :class="[watchPwd.firstRule === false ? 'error':'success']">
-                            <i class="iconfont" :class="[watchPwd.firstRule === false ? 'iconguanbi':'iconicon-test']"></i>长度为6-16位（字母区分大小写）
+                            <i class="iconfont" :class="[watchPwd.firstRule === false ? 'iconicon-des-Wrongnumber':'iconxingzhuangjiehe']"></i>长度为6-16位（字母区分大小写）
                         </div>
                         <div :class="[watchPwd.secondRule === false ? 'error':'success']">
-                            <i class="iconfont" :class="[watchPwd.secondRule === false ? 'iconguanbi':'iconicon-test']"></i>只能包含数字、字母以及标点符号（除空格）
+                            <i class="iconfont" :class="[watchPwd.secondRule === false ? 'iconicon-des-Wrongnumber':'iconxingzhuangjiehe']"></i>只能包含数字、字母以及标点符号（除空格）
                         </div>
                         <div :class="[watchPwd.third === false ? 'error':'success']">
-                            <i class="iconfont" :class="[watchPwd.third === false ? 'iconguanbi':'iconicon-test']"></i>数字、字母及标点符号至少包含两种
+                            <i class="iconfont" :class="[watchPwd.third === false ? 'iconicon-des-Wrongnumber':'iconxingzhuangjiehe']"></i>数字、字母及标点符号至少包含两种
                         </div>
                     </div>
                 </el-form-item>

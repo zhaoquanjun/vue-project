@@ -134,7 +134,7 @@
                       <div class="modal" v-if="item.id != siteId">
                         <div>
                           <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
+                          <a :href="`//${item.secondDomain}`" class="previewSite" target="_blank">预览</a>
                         </div>
                       </div>
                       <div class="curModal" v-show="item.id == siteId">当前选择</div>

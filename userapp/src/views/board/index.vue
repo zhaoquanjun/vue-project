@@ -81,7 +81,7 @@
             <div class="more">
               更多
               <i
-                class="iconfont iconjiantou"
+                class="iconfont iconicon-des-Arrow1"
                 style="font-size:12px;color:#09CCEB;margin-left:3px"
               ></i>
             </div>
@@ -100,7 +100,7 @@
             <div class="more">
               更多
               <i
-                class="iconfont iconjiantou"
+                class="iconfont iconicon-des-Arrow1"
                 style="font-size:12px;color:#09CCEB;margin-left:3px"
               ></i>
             </div>
