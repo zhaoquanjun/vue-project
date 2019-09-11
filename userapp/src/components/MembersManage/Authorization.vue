@@ -166,7 +166,7 @@ export default {
     width: 55%;
 }
 .pannel-left-item {
-    width: 35%;
+    width: 37%;
     float: right;
     .selected-auth {
       position: relative;
