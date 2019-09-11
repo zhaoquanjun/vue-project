@@ -163,7 +163,7 @@ export default {
 }
 .pannel-right-item {
     float: left;
-    width: 50%;
+    width: 55%;
 }
 .pannel-left-item {
     width: 40%;

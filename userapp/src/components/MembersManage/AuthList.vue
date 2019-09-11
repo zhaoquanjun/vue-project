@@ -119,7 +119,7 @@ export default {
     .item-left {
         display: flex;
         align-items: center;
-        width: 159px;
+        width: 240px;
         float: left;
         color: #262626;
     }
