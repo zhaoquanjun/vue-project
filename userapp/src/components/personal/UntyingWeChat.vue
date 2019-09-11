@@ -35,7 +35,7 @@ export default {
                 this.$refs.getSms.submitForm1()
                 return
             } else {
-                let { status } = await isInvalidCode(this.sourcePhone, code);
+                let { status } = await isInvalidCode(code);
                 if (status === 200) {
                     this.$emit("removeExternalUserAsync", this.provider);
                 } else {
