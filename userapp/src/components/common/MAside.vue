@@ -22,7 +22,7 @@
                     <i
                         v-if="menuHasChild(i) && isLeftNavComponentsShow"
                         :class="{'active-color':curPath==it.code,}"
-                        class="iconfont iconxiangyoufangxiang"
+                        class="iconfont iconicon-des-Arrow"
                     ></i>
                 </li>
             </ul>
@@ -86,21 +86,21 @@ export default {
         iconfonts(code) {
             switch (code) {
                 case "board":
-                    return "iconkongzhitaishouye";
+                    return "iconicon-dash-Navigationhome";
                 case "content":
-                    return "iconneirongguanli";
+                    return "iconicon-dash-NavigationContent";
                 case "website":
-                    return "iconwangzhanguanli";
+                    return "iconicon-dash-Navigationsite";
                 case "system":
-                    return "iconxitongshezhi";
+                    return "iconicon-dash-Navigationsystem";
                 case "form":
-                    return "iconbiaodanguanli";
+                    return "iconicon-dash-Navigationform";
                 case "micro":
                     return "iconweixinxiaochengxu";
                 case "wechataccount":
                     return "iconweixingongzhonghao";
                 case "recycle":
-                    return "iconhuishouzhan";
+                    return "iconicon-dash-Navigationdelete";
                 case "business":
                     return "icondianshanghuiyuan";
                 case "template":
@@ -202,7 +202,7 @@ export default {
             vertical-align: middle;
             color: #0595e6;
         }
-         .iconxiangyoufangxiang {
+         .iconicon-des-Arrow {
             position: absolute;
             right: 16px;
             font-size: 14px;

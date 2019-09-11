@@ -207,7 +207,7 @@ export default {
         // },
         // 重命名图片名称
         rename(id, row, index) {
-             if(row.title)this.newName = row.title;
+           if(row.title)this.newName = row.title;
             if (!trim(row.title)) {
                  row.title=this.newName
                 this.$notify({

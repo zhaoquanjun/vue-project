@@ -30,7 +30,7 @@
                     ></auth-list>
                 </div>
             </div>
-            <div class="middle-icon"><i class="iconyou iconfont"></i></div>
+            <div class="middle-icon"><i class="iconfont iconicon-des-right1"></i></div>
             <div class="pannel-left-item">
                 <h5 class="auth-title">已选权限</h5>
                 <selected-auth

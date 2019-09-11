@@ -23,7 +23,7 @@
             <div class="siteManage siteManageLeft" @click="toSiteManage(item.siteId)">
               <div class="arrowLeft"></div>网站管理
             </div>
-            <div class="siteManage" @click="toDesign(item.siteId)">
+            <div class="siteManage" @click="toDesign(item)">
               进入设计
               <div class="arrowRight"></div>
             </div>
@@ -48,7 +48,7 @@
             <div class="siteManage siteManageLeft" @click="toSiteManage(item.siteId)">
               <div class="arrowLeft"></div>网站管理
             </div>
-            <div class="siteManage" @click="toDesign(item.siteId)">
+            <div class="siteManage" @click="toDesign(item)">
               进入设计
               <div class="arrowRight"></div>
             </div>
@@ -82,7 +82,7 @@
         <div class="pannel-head">
           <span class="headTitle">创建网站</span>
           <span class="close-pannel" @click="closeDialog">
-            <i class="iconfont iconX" style="font-size:12px;color:#ccc"></i>
+            <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
           </span>
         </div>
         <div>
@@ -111,18 +111,31 @@
         </div>
       </div>
     </el-dialog>
+    <SelectTemplateDialog
+      ref="selectTemplateDialog"
+      :siteId="item.siteId"
+      :siteName="item.siteName"
+      :templateId="item.templateId"
+      :isChangeTemplate="isChangeTemplate"
+      :isDesigner="isDesigner"
+      @getSiteInfo="getSiteInfo"
+    ></SelectTemplateDialog>
   </div>
 </template>
 
 <script>
 import * as dashboardApi from "@/api/request/dashboardApi";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
+import SelectTemplateDialog from "@/components/websiteManage/selectTemplateDialog.vue";
 import { designerUrl, mySiteUrl } from "@/environment/index";
 import { getLanguage } from "@/configure/appCommon";
 import { getLocal } from "@/libs/local.js";
 
 export default {
   props: ["isCanCreate", "isSystem"],
+  components: {
+    SelectTemplateDialog
+  },
   data() {
     return {
       siteInfo: [],
@@ -132,6 +145,9 @@ export default {
       createShow: false,
       createSiteName: "",
       radio: "",
+      item: {},
+      isDesigner: true,
+      isChangeTemplate: false,
       lock: true
     };
   },
@@ -153,7 +169,7 @@ export default {
   },
   methods: {
     getSiteInfo(option) {
-      this.siteInfo  = option;
+      this.siteInfo = option;
       if (this.mySiteId) {
         this.siteId = this.mySiteId;
         this.initial();
@@ -214,10 +230,10 @@ export default {
             if (i == 0) {
               this.$set(this.siteInfo[2], "prev", true);
               this.$set(this.siteInfo[i + 1], "next", true);
-            } else if (i == 2) {
+            } else if (i == 1) {
               this.$set(this.siteInfo[i - 1], "prev", true);
               this.$set(this.siteInfo[i + 1], "next", true);
-            } else if (i == 3) {
+            } else if (i == 2) {
               this.$set(this.siteInfo[i - 1], "prev", true);
               this.$set(this.siteInfo[0], "next", true);
             }
@@ -285,8 +301,13 @@ export default {
       }
     },
     // 跳转至设计器
-    toDesign(siteId, themeColor, themeFont) {
-      window.location.href = `${designerUrl}?siteId=${siteId}`;
+    toDesign(item) {
+      this.item = item;
+      if (item.templateId != 0) {
+        window.location.href = `${designerUrl}?siteId=${item.siteId}`;
+      } else {
+        this.$refs.selectTemplateDialog.showTemplate();
+      }
     },
     // 跳转至我的网站
     toSiteManage(siteId) {
@@ -487,8 +508,8 @@ export default {
     .active {
       width: 43%;
       height: 300px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 28.3%;
+      transform: translateX(0);
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
       opacity: 1;
       .siteImg {

@@ -45,8 +45,8 @@ export default {
 <style >
 
 .common-header {
-    height: 60px;
-    line-height: 60px;
+    height: 50px!important;
+    line-height: 50px;
     position: fixed;
     top: 0;
     left: 0;
@@ -55,10 +55,9 @@ export default {
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 }
 .common-container{
-  padding-top: 60px;width: 100%;overflow: hidden;
+  padding-top: 50px;width: 100%;overflow: hidden;
 }
 .common-aside{
-  min-height: calc(100vh - 60px);
   width:70px !important;
    position: relative;
    overflow: visible !important;

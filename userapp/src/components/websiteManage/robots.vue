@@ -23,7 +23,7 @@
           <uploader-unsupport></uploader-unsupport>
           <uploader-list uploadType="File" class="uploadList">
             <div class="fileImg" v-show="isUpload">
-              <i class="iconfont iconshanchu fileRemove" @click="fileRemove"></i>
+              <i class="iconfont iconshanchu1 fileRemove" @click="fileRemove"></i>
             </div>
             <div v-show="isUpload" class="fileName">robots.txt</div>
             <div v-show="isUpload" class="fileName" style="margin-top:5px">{{date?date:""}}</div>
@@ -34,7 +34,7 @@
           <uploader-drop>
             <uploader-btn :attrs="attrs" class="uploadIcon" v-show="!isUpload">
               <i
-                class="iconfont iconicon-test3"
+                class="iconfont iconicon-add"
                 style="color:#09CCEB;line-height:60px;font-size:25px"
               ></i>
             </uploader-btn>

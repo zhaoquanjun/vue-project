@@ -113,7 +113,7 @@ export default {
          * 查看大图
          */
          viewPic(row, index) {
-              this.fullOssUrl = "";
+            this.fullOssUrl = "";
             this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
             this.imgVisible = true;
