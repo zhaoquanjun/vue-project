@@ -351,7 +351,7 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getIndustryTree();
+    
   },
   methods: {
     async changeIndustry(item) {
@@ -484,7 +484,8 @@ export default {
             currentSiteId: this.siteId,
             templateSiteId: item.id,
             siteName: item.siteName,
-            imageUrl: item.image
+            imageUrl: item.image,
+            templateId: item.templateId
           };
           var { status } = await templateApi.updateSiteWithTemplate(para);
         } else {
@@ -699,7 +700,8 @@ export default {
     },
     // 显示选择模版弹框
     showTemplate() {
-      this.templateShow = true;
+        this.templateShow = true;
+        this.getIndustryTree();
       this.getTemplateList();
       this.$nextTick(() => {
         window.addEventListener("resize", () => {
