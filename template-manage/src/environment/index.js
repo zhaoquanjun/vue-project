@@ -15,7 +15,7 @@ let logoutRedirectUri = "http://template.console.wezhan.cn/index.html";
 let silentRedirectUri = 'http://template.console.wezhan.cn/static/silent-renew.html';
 let clientId = 'produce.api';
 let scope = "openid profile dashboard.api content.api designer.api produce.api";
-export let siteDomain = "content.console.wezhan.cn";
+export let siteDomain = "template.console.wezhan.cn";
 // 个人中心
 export let personalUrl = "//dashboard.console.wezhan.cn/personal";
 export let dashboardUrl = "http://dashboard.console.wezhan.cn/board";
