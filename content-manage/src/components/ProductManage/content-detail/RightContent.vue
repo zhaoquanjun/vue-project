@@ -39,19 +39,27 @@
                             >
                                 <img width="100%" :src="item" alt />
                                 <span class="el-upload-list__item-actions">
-                                    <span class="el-upload-list__item-preview" @click="handlePreview(item)">
+                                    <span
+                                        class="el-upload-list__item-preview"
+                                        @click="handlePreview(item)"
+                                    >
                                         <i class="el-icon-zoom-in"></i>
                                     </span>
-                                    <span class="el-upload-list__item-delete"  @click="handleRemove(index)">
+                                    <span
+                                        class="el-upload-list__item-delete"
+                                        @click="handleRemove(index)"
+                                    >
                                         <i class="el-icon-delete"></i>
-                                   
                                     </span>
                                 </span>
                             </li>
                         </ul>
                     </div>
                     <template>
-                        <div class="el-upload el-upload el-upload--picture-card">
+                        <div
+                            class="el-upload el-upload el-upload--picture-card"
+                            v-if="newFileList.length<9"
+                        >
                             <button @click="handlerAddPicture">
                                 <i class="el-icon-plus avatar-uploader-icon"></i>
                                 <i
@@ -133,7 +141,15 @@ export default {
         },
         getImgInfo(info) {
             console.log(info, "0000000");
-            this.imgData = info;
+             let result = [];
+                let obj = {};
+                for (let i = 0; i < info.length; i++) {
+                    if (!obj[info[i].id]) {
+                        result.push(info[i]);
+                        obj[info[i].id] = true;
+                    }
+                }
+            this.imgData = result;
         },
         getEditorImg() {
             // 获取选中的图片信息 有两种方式
@@ -141,17 +157,22 @@ export default {
             //console.log(this.$refs.imgList.selectedImg, "selectedImg");
             // this.imageUrl1 = this.imgData[0].fullOssUrl;
             // this.isModalShow = false;
-            this.imgData.forEach(item => {
-                this.newFileList.push(item.fullOssUrl);
+
+            this.imgData.forEach((item, index) => {
+                if(index<9){
+                     this.newFileList.push(item.fullOssUrl);
+                }
+               
             });
             this.isModalShow = false;
+           this.newFileList =  Array.from(new Set(this.newFileList))
             console.log(this.newFileList, "11111");
         },
         handlerAddPicture() {
             this.isModalShow = true;
         },
         handleRemove(index) {
-            this.newFileList.splice(index,1)
+            this.newFileList.splice(index, 1);
             // this.newFileList = fileList;
             // if (this.newFileList.length >= 9) {
             //     document.querySelector(".el-upload").style.display = "none";
@@ -162,7 +183,7 @@ export default {
         },
         handlePreview(url) {
             console.log(url);
-            this.dialogImageUrl =url;
+            this.dialogImageUrl = url;
             this.dialogVisible = true;
         },
         // 上传图片超出数量限制时触发
@@ -221,12 +242,21 @@ export default {
     },
     watch: {
         fileList() {
-            if (this.fileList.length >= 9) {
-                document.querySelector(".el-upload").style.display = "none";
-            } else {
-                document.querySelector(".el-upload").style.display =
-                    "inline-block";
-            }
+            this.newFileList = this.fileList;
+            // if (this.fileList.length >= 9) {
+            //     document.querySelector(".el-upload").style.display = "none";
+            // } else {
+            //     document.querySelector(".el-upload").style.display =
+            //         "inline-block";
+            // }
+        },
+        newFileList() {
+            // if (this.fileList.length >= 9) {
+            //     document.querySelector(".el-upload").style.display = "none";
+            // } else {
+            //     document.querySelector(".el-upload").style.display =
+            //         "inline-block";
+            // }
         }
     }
 };

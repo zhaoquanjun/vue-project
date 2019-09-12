@@ -103,25 +103,20 @@ export default {
         GridListItem
     },
     methods: {
-        handleSelected(item, isSelected) {
-            if (!this.multiple) {
-                this.seletedList[0] = item;
+        handleSelected(item, index) {
+            if (this.multiple) {
+                if (index == this.selectedIndex) return;
+                this.seletedList.push(item);
             } else {
-                if (isSelected) {
-                    this.seletedList.push(item);
-                } else {
-                    this.seletedList = this.seletedList.filter(
-                        cur => cur !== item
-                    );
-                }
+                this.seletedList[0] = item;
             }
 
             this.$emit("handleSelectionChange", this.seletedList);
-            if (this.selectedIndex === isSelected) {
+            if (this.selectedIndex === index) {
                 this.selectedIndex = -1;
                 return;
             }
-            this.selectedIndex = isSelected;
+            this.selectedIndex = index;
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;

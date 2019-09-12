@@ -102,12 +102,9 @@ export default {
             let { data } = await productManageApi.getProductDetail(id);
             let thumbnailPicUrlList = data.thumbnailPicUrlList;
             thumbnailPicUrlList.forEach(item => {
-                this.fileList.push({
-                    name: "123",
-                    response: item,
-                    url: item
-                });
+                this.fileList.push(item);
             });
+            console.log(this.fileList,'==]]]]')
           
         },
         changeSaveWay(isEdit) {
