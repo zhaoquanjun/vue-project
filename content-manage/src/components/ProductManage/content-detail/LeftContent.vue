@@ -112,9 +112,9 @@
                     <div id="content" v-show="isModalShow">
                         <el-header class="modal-header">
                             <span style="font-size: 16px;">我的图片</span>
-                            <span @click="cancelEditorImg">X</span>
+                            <button @click="cancelEditorImg">X</button>
                         </el-header>
-                        <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo">
+                        <modal-content ref="imgList" :isGrid="true" :multiple="true"  @getImgInfo="getImgInfo">
                             <div slot="modal-footer" class="modal-footer" style=" height: 60px;
     position: absolute;
     bottom: -23px;

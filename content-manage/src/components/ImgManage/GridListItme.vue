@@ -85,6 +85,9 @@ export default {
             isSelectedShow: false
         };
     },
+    mounted(){
+      
+    },
     methods: {
         handleClick() {
             console.log(this.curItem, "-----");

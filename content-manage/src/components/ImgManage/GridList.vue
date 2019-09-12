@@ -102,6 +102,7 @@ export default {
     components: {
         GridListItem
     },
+   
     methods: {
         handleSelected(item, index) {
             if (this.multiple) {
