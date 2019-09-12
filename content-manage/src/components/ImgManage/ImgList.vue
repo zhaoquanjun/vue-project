@@ -22,6 +22,7 @@
                         :fullsrc="scope.row.fullOssUrl"
                         onerror="onImgError(this)"
                         class="cover"
+                        style="cursor: pointer;"
                          @click="viewPic( scope.row,scope.$index)"
                     />
 
