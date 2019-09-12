@@ -86,7 +86,7 @@
                     <div id="content" v-show="isModalShow">
                         <el-header class="modal-header">
                             <span style="font-size: 16px;">我的图片</span>
-                            <span @click="cancelEditorImg">X</span>
+                            <button @click="cancelEditorImg">X</button>
                         </el-header>
                         <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo">
                             <div slot="modal-footer" class="modal-footer" style=" height: 60px;
@@ -642,7 +642,9 @@ export default {
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
-
+.modal-footer{
+    
+}
 </style>
 
 <style >
