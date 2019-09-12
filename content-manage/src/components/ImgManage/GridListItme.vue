@@ -13,26 +13,26 @@
                 <!-- <img :src="curItem.zoomOssUrl" alt /> -->
             </span>
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
-                <span @click.stop="handleMove">
+                <button @click.stop="handleMove">
                     <el-tooltip class="item" effect="dark" content="移动" placement="bottom">
                         <svg-icon icon-class="img-move"></svg-icon>
                     </el-tooltip>
-                </span>
-                <span @click.stop="handleLook">
+                </button>
+                <button @click.stop="handleLook">
                     <el-tooltip class="item" effect="dark" content="预览" placement="bottom">
                         <svg-icon icon-class="img-look"></svg-icon>
                     </el-tooltip>
-                </span>
-                <span @click.stop="handleDelete">
+                </button>
+                <button @click.stop="handleDelete">
                     <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
                         <svg-icon icon-class="img-delete"></svg-icon>
                     </el-tooltip>
-                </span>
+                </button>
             </div>
             <div class="img-handle-btn" :class="[isSelectedShow?'show':'hide']">
-                <span class="item-selected" style="float:right">
+                <button class="item-selected" style="float:right">
                     <svg-icon icon-class="img-selected"></svg-icon>
-                </span>
+                </button>
             </div>
         </div>
         <p v-if="isRename" @click="rename()" class="img-desc">{{curItem.title}}</p>
@@ -197,7 +197,7 @@ export default {
                 height: 16px;
             }
         }
-        span {
+        button {
             display: inline-block;
             text-align: center;
             width: 33%;

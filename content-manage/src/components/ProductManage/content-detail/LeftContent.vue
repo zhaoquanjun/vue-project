@@ -664,6 +664,7 @@ export default {
         },
         getImgInfo(info) {
             this.imgData = info;
+            console.log(info)
         },
         getEditorImg() {
             // 获取选中的图片信息 有两种方式
