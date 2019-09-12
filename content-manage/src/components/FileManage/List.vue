@@ -208,9 +208,9 @@ export default {
                 return require("img/file-icon/new/word.png");
             }else if(pptAry.includes(fileExtension)){
                 return require("img/file-icon/new/ppt.png");
-            }else if(pdfAry.includes("fileExtension")){
+            }else if(pdfAry.includes(fileExtension)){
                 return require("img/file-icon/new/pdf.png");
-            }else if(txtAry.includes("fileExtension")){
+            }else if(txtAry.includes(fileExtension)){
                 return require("img/file-icon/new/txt.png"); 
             }
                 switch (fileExtensionType) {

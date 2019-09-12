@@ -134,7 +134,7 @@
                       <div class="modal" v-if="item.id != siteId">
                         <div>
                           <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
+                          <a :href="`//${item.secondDomain}`" class="previewSite" target="_blank">预览</a>
                         </div>
                       </div>
                       <div class="curModal" v-show="item.id == siteId">当前选择</div>
@@ -351,7 +351,7 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getIndustryTree();
+    
   },
   methods: {
     async changeIndustry(item) {
@@ -484,7 +484,8 @@ export default {
             currentSiteId: this.siteId,
             templateSiteId: item.id,
             siteName: item.siteName,
-            imageUrl: item.image
+            imageUrl: item.image,
+            templateId: item.templateId
           };
           var { status } = await templateApi.updateSiteWithTemplate(para);
         } else {
@@ -699,7 +700,8 @@ export default {
     },
     // 显示选择模版弹框
     showTemplate() {
-      this.templateShow = true;
+        this.templateShow = true;
+        this.getIndustryTree();
       this.getTemplateList();
       this.$nextTick(() => {
         window.addEventListener("resize", () => {

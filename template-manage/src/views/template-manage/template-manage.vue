@@ -201,7 +201,7 @@
               <span>开通整站模版</span>
             </span>
             <span class="close-pannel" @click="cancelCreateTemplate">
-              <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
+              <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
             </span>
           </div>
           <div class="tips">为保证设计师可正常登录系统，请填写真实的手机号</div>
@@ -243,7 +243,7 @@
               <span>整站模版设置</span>
             </span>
             <span class="close-pannel" @click="cancelSettingTemplate">
-              <i class="iconfont iconX" style="font-size:14px;color:#ccc"></i>
+              <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
             </span>
           </div>
           <div class="settingTemplateWrap">
