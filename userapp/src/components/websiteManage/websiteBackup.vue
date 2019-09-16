@@ -489,7 +489,7 @@ export default {
   border-bottom: 1px solid transparent;
   background: rgb(255, 255, 255);
 }
-.content-table /deep/ .el-table_1_column_5 .el-popover__reference {
+.content-table /deep/ .el-tooltip .el-popover__reference {
   width: 100%;
 }
 .backupBtn {
