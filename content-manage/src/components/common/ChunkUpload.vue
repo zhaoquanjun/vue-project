@@ -381,12 +381,12 @@ export default {
         },
         limitCount(file) {
             if (this.uploadType === "Video")
-                this.checkFormat(file, videoFormat);
+                return this.checkFormat(file, videoFormat);
             if (this.uploadType === "Audio")
-                this.checkFormat(file, audioFormat);
+                return this.checkFormat(file, audioFormat);
             if (this.uploadType === "File") {
                  this.checkFormat(file, forbidUpload);
-                if (this.fileList.length < 100) {
+                if (this.fileList.length <= 100) {
                     if (file.size / 1024 / 1024 > 50) {
                         this.$notify({
                             customClass: "notify-error",
@@ -487,7 +487,7 @@ export default {
             let fileNameIndex = fileName.lastIndexOf(".");
             let fileNameSuffix = fileName.slice(fileNameIndex);
             if (this.uploadType === "File") {
-                if (format.indexOf(fileNameSuffix) !== -1) {
+                if (format.indexOf(fileNameSuffix.toLowerCase()) !== -1) {
                     file.cancel(file);
                     this.errorCount -= 1;
                     this.$notify({
@@ -499,7 +499,7 @@ export default {
                     return false;
                 }
             } else {
-                if (format.indexOf(fileNameSuffix) === -1) {
+                if (format.indexOf(fileNameSuffix.toLowerCase()) === -1) {
                     file.cancel(file);
                     this.errorCount -= 1;
                     this.$notify({

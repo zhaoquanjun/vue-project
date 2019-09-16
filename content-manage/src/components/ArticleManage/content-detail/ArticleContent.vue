@@ -89,13 +89,7 @@
                             <button @click="cancelEditorImg">X</button>
                         </el-header>
                         <modal-content ref="imgList" :isGrid="true" :multiple="true" @getImgInfo="getImgInfo">
-                            <div slot="modal-footer" class="modal-footer" style=" height: 60px;
-    position: absolute;
-    bottom: -23px;
-    right: 16px;
-    width: 100%;
-    z-index: 100;
-    text-align: right;">
+                            <div slot="modal-footer" class="modal-footer" style=" ">
                                 <button type="button" @click="getEditorImg" class="sure">确定</button>
                                 <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
                             </div>
@@ -473,6 +467,7 @@ export default {
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("articleDetail");
+                            this.resetDetail();
                             this.$emit("changeSaveWay", false);
                         } else {
                             this.NewId = data
@@ -635,15 +630,21 @@ export default {
     height: 420px;
 }
 .el-textarea /deep/ .el-input__count{
-     background: transparent;
-    bottom: 0;
+     background: #fff;
+    bottom: 1px;
     right: 22px;
 }
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
 .modal-footer{
-    
+    height: 60px;
+    position: absolute;
+    bottom: -23px;
+    right: 16px;
+    width: 100%;
+    z-index: 100;
+    text-align: right;
 }
 </style>
 
