@@ -92,7 +92,7 @@ axios.interceptors.response.use(
                 case 401:
                     // router.push({ path: '/401' })
                     clearAllCookie()
-                    securityService.signIn();
+                    securityService.signOut(location.href);
 
                     break;
                 // 403 token过期                

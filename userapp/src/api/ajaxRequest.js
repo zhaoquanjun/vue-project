@@ -76,7 +76,7 @@ axios.interceptors.response.use(
                     // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                     case 401:
                         clearAllCookie();
-                        securityService.signIn();
+                        securityService.signOut();
                         break;
                     // 403 token过期                
                     // 登录过期对用户进行提示                

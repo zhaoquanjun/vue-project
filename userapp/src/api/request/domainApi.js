@@ -66,9 +66,9 @@ export const disableHttps = (siteDomainId) => {
 /**
  *  删除绑定域名
  */
-export const deleteCdnDomain = (siteDomainId) => {
+export const deleteCdnDomain = (siteDomainId,forceDelete) => {
     const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
-    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteId}/${siteDomainId}`);
+    return ajaxRequest._delete(`${designerManageApi}/api/v1/DomainManage/DeleteCdnDomain/${siteId}/${siteDomainId}/${forceDelete}`);
 }
 
 

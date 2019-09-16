@@ -7,6 +7,11 @@ export const formatDateTime = (date, fmt) => {
         return "";
     }
     if (typeof date === 'string') {
+        date = date.replace(/T/g,' ');
+        date = date.replace(/-/g,'/');
+        let dateDay = date.substr(0,10);
+        let dateTime = date.substr(11,8)
+        date = dateDay + " " + dateTime;
         date = new Date(date);
     }
     if (/(y+)/.test(fmt)) {
