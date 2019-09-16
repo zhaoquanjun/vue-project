@@ -58,8 +58,8 @@
                     <span class="pd-left">
                         <button
                             class="bind"
-                            :class="!!pwdTitle?'isbind':'notbind'"
-                        >{{!!pwdTitle?"已设置":"修改"}}</button>|
+                            :class="pwdTitle=='1'?'isbind':'notbind'"
+                        >{{pwdTitle=="0"?"未设置":"已设置"}}</button>|
                         <button @click="modifiPwd">{{pwdBtn}}</button>
                     </span>
                 </div>
@@ -243,6 +243,8 @@ export default {
         _setPwdTitleAndBtn() {
             this.pwdTitle = "1";
             this.pwdBtn = "修改";
+            this.userInfo.isSetPassWord = true;
+            this.is
         },
         async _getUserProfileAsync() {
             console.log('grandfather');
