@@ -1,10 +1,13 @@
 <template>
     <div class="table-wrap" id="img-list" style="overflow: auto;
     height: calc(100vh - 200px);">
-        <ul class="img-list" >
+        <ul class="img-list">
             <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
                 <grid-list-item
+                    :itemIndex="index"
+                    :selectedIndex="selectedIndex"
                     :curItem="item"
+                    :multiple="multiple"
                     @handleSelected="handleSelected"
                     @viewPic="viewPic(item,index)"
                     @handleMove="handleMove"
@@ -14,12 +17,15 @@
             </li>
         </ul>
         <div v-if="imgPageResult && imgPageResult.list && imgPageResult.list.length<1">
-              <div class="empty-table" >
-                    <img src="~img/table-empty.png" />
-                    <span>无数据</span>
-                </div>
+            <div class="empty-table">
+                <img src="~img/table-empty.png" />
+                <span>无数据</span>
+            </div>
         </div>
-        <div class="pageing" v-if="imgPageResult&& imgPageResult.list && imgPageResult.list.length>0">
+        <div
+            class="pageing"
+            v-if="imgPageResult&& imgPageResult.list && imgPageResult.list.length>0"
+        >
             <el-pagination
                 background
                 layout="total, sizes, prev, pager, next"
@@ -33,7 +39,11 @@
         </div>
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
-            <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false" @close="closeDialog">
+            <el-dialog
+                :visible.sync="imgVisible"
+                :modal-append-to-body="false"
+                @close="closeDialog"
+            >
                 <!-- //<img :src="picUrl"> -->
                 <el-carousel
                     :autoplay="false"
@@ -42,31 +52,30 @@
                     indicator-position="none"
                     :loop="true"
                     ref="carousel"
-                   
                 >
-                       <el-button
-                            @click="prev"
-                            class="el-carousel__arrow el-carousel__arrow--left left-prev"
-                        >左</el-button>
+                    <el-button
+                        @click="prev"
+                        class="el-carousel__arrow el-carousel__arrow--left left-prev"
+                    >左</el-button>
                     <el-carousel-item v-for="item in imgList" :key="item.id">
                         <h3>
-                            <img :src="fullOssUrl" />
+                            <img width="100%" :src="fullOssUrl" />
                         </h3>
                     </el-carousel-item>
-                     <el-button
-                            @click="next"
-                            class="el-carousel__arrow el-carousel__arrow--right right-next"
-                        ></el-button>
+                    <el-button
+                        @click="next"
+                        class="el-carousel__arrow el-carousel__arrow--right right-next"
+                    ></el-button>
                 </el-carousel>
                 <div class="dislog-footer" slot="footer">
                     <el-tooltip
-                            class="item"
-                            effect="light"
-                            :content="picInfo.title"
-                            placement="top"
-                        >
-                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
-                        </el-tooltip>
+                        class="item"
+                        effect="light"
+                        :content="picInfo.title"
+                        placement="top"
+                    >
+                        <span class="ellipsis" style="width:150px">{{picInfo.title}}</span>
+                    </el-tooltip>
                     <span>分类: {{picInfo.categoryName}}</span>
                     <span>大小: {{picInfo.sizeStr}}</span>
                 </div>
@@ -77,7 +86,7 @@
 <script>
 import GridListItem from "./GridListItme";
 export default {
-    props: ["imgPageResult", "picSearchOptions"],
+    props: ["imgPageResult", "picSearchOptions", "multiple"],
     data() {
         return {
             imgVisible: false,
@@ -87,19 +96,28 @@ export default {
             picInfo: {},
             initial: -1,
             changeIndex: -1,
+            selectedIndex: -1
         };
     },
     components: {
         GridListItem
     },
+   
     methods: {
-        handleSelected(item, isSelected) {
-            if (isSelected) {
+        handleSelected(item, index) {
+            if (this.multiple) {
+                if (index == this.selectedIndex) return;
                 this.seletedList.push(item);
             } else {
-                this.seletedList = this.seletedList.filter(cur => cur !== item);
+                this.seletedList[0] = item;
             }
+
             this.$emit("handleSelectionChange", this.seletedList);
+            if (this.selectedIndex === index) {
+                this.selectedIndex = -1;
+                return;
+            }
+            this.selectedIndex = index;
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
@@ -112,7 +130,7 @@ export default {
         /**
          * 查看大图
          */
-         viewPic(row, index) {
+        viewPic(row, index) {
             this.fullOssUrl = "";
             this.fullOssUrl = row.fullOssUrl;
             this.imgList = this.imgPageResult.list;
@@ -120,27 +138,27 @@ export default {
             this.changeIndex = index;
             this.picInfo = this.imgList[this.changeIndex];
         },
-          prev() {
+        prev() {
             this.$refs.carousel.prev();
-             if(this.changeIndex>0){
-                  this.changeIndex = this.changeIndex - 1;
-             }else{
-                  this.changeIndex=this.picSearchOptions.pageSize-1
-             }
+            if (this.changeIndex > 0) {
+                this.changeIndex = this.changeIndex - 1;
+            } else {
+                this.changeIndex = this.picSearchOptions.pageSize - 1;
+            }
             this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
             this.picInfo = this.imgList[this.changeIndex];
         },
         next() {
             this.$refs.carousel.next();
             this.changeIndex = this.changeIndex + 1;
-             if(this.changeIndex>=this.picSearchOptions.pageSize){
-                 this.changeIndex=0
-             }
+            if (this.changeIndex >= this.picSearchOptions.pageSize) {
+                this.changeIndex = 0;
+            }
             this.fullOssUrl = this.imgList[this.changeIndex].fullOssUrl;
             this.picInfo = this.imgList[this.changeIndex];
         },
-         closeDialog(){
-             this.fullOssUrl = "";
+        closeDialog() {
+            this.fullOssUrl = "";
         },
         /**
          * 移动分类
@@ -162,7 +180,6 @@ export default {
 .left-prev,
 .right-next {
     opacity: 0;
-   
 }
 .img-list {
     width: 100%;

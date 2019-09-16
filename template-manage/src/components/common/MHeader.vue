@@ -7,7 +7,7 @@
             <i class="iconfont iconicon-logo" style="font-size:24px"></i>
           </span>
           <span @click="changeApp" class="headAppName">
-            <span class="headAppNameInfo">{{headAppName}}</span>
+            <span class="headAppNameInfo">{{headAppName?headAppName:"公司名称"}}</span>
             <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;vertical-align:middle"></i>
           </span>
         </div>

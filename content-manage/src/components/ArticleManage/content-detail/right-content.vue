@@ -5,7 +5,7 @@
                 <span class="article-cover">文章封面</span>
             </div>
             <div>
-                <el-upload
+                <!-- <el-upload
                     class="avatar-uploader"
                     :class="{'border-line':!imageUrl1}"
                     :action="uploadPicAction"
@@ -28,7 +28,24 @@
                         <i class="el-icon-plus avatar-uploader-icon"></i>
                         <i class="avatar-text" style=" display: block;">添加图片</i>
                     </template>
-                </el-upload>
+                </el-upload>-->
+                <div class="avatar-uploader" :class="{'border-line':!imageUrl1}">
+                    <div v-if="imageUrl1" class="imgWrap">
+                        <img :src="imageUrl1" class="avatar" />
+                         <span class="el-upload-list__item-actions">
+                            <i @click="handlerAddPicture" class="icon-change"></i>
+                            <i @click.stop="handleRemove" class="el-icon-delete"></i>
+                        </span>
+                    </div>
+                    <template v-else>
+                        <button @click="handlerAddPicture">
+                            <div class="el-upload">
+                                <i class="el-icon-plus avatar-uploader-icon"></i>
+                                <i class="avatar-text" style=" display: block;">添加图片</i>
+                            </div>
+                        </button>
+                    </template>
+                </div>
                 <el-dialog :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt />
                 </el-dialog>
@@ -42,18 +59,31 @@
                 </el-collapse-item>
             </el-collapse>
         </el-col>
-       
+        <div class="mask" v-show="isModalShow"></div>
+        <div id="content" v-show="isModalShow">
+            <el-header class="modal-header">
+                <span style="font-size: 16px;">我的图片</span>
+                <button @click="cancelEditorImg">X</button>
+            </el-header>
+            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false">
+                <div slot="modal-footer" class="modal-footer">
+                    <button type="button" @click="getEditorImg" class="sure">确定</button>
+                    <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                </div>
+            </modal-content>
+        </div>
     </div>
 </template>
 <script>
 import environment from "@/environment/index.js";
-
+import ModalContent from "@/components/ImgManage/index.vue";
 export default {
     props: ["imageUrl"],
+    components: {
+        ModalContent
+    },
     data() {
         return {
-            
-
             activeName: "",
             uploadDisabled: true,
             fileList: [],
@@ -67,6 +97,7 @@ export default {
             imageUrl1: "",
             dialogVisible: false,
             dialogImageUrl: "",
+            isModalShow: false
         };
     },
     watch: {
@@ -78,13 +109,28 @@ export default {
         this.headers.appId = this.$store.state.dashboard.appId;
     },
     methods: {
+        // 关闭图片选择弹窗
+        cancelEditorImg() {
+            this.isModalShow = false;
+        },
+        getImgInfo(info) {
+            //console.log(info, "0000000");
+            this.imgData = info;
+        },
+        getEditorImg() {
+            // 获取选中的图片信息 有两种方式
+            //console.log(this.imgData, "imgData");
+            //console.log(this.$refs.imgList.selectedImg, "selectedImg");
+            this.imageUrl1 = this.imgData[0].fullOssUrl;
+            this.isModalShow = false;
+        },
         handleSucess(response, file, fileList) {
             this.imageUrl1 = file.response;
             if (!this.uploadSucess) {
                 this.$notify({
                     customClass: "notify-success", //  notify-success ||  notify-error
                     message: `上传成功!`,
-                     showClose: false,
+                    showClose: false,
                     duration: 1000
                 });
                 setTimeout(() => {
@@ -122,20 +168,22 @@ export default {
                 this.$notify({
                     customClass: "notify-error", //  notify-success ||  notify-error
                     message: `上传头像图片只能是 图片 格式!`,
-                     showClose: false,
+                    showClose: false,
                     duration: 1000
                 });
             }
             if (!isSizeOk) {
-                 this.$notify({
+                this.$notify({
                     customClass: "notify-error", //  notify-success ||  notify-error
                     message: `上传图片大小不能超过 ${maxMb}MB!`,
-                     showClose: false,
+                    showClose: false,
                     duration: 1000
                 });
-              
             }
             return isPic && isSizeOk;
+        },
+        handlerAddPicture() {
+            this.isModalShow = true;
         }
     }
 };
@@ -214,15 +262,21 @@ export default {
     color: #fff;
     font-size: 21px;
     margin-bottom: 15px;
+    cursor: pointer;
 }
 .imgWrap:hover .el-upload-list__item-actions {
     opacity: 1;
 }
-
+.imgWrap img:hover{
+     opacity: 1;
+}
 .el-collapse /deep/ .el-collapse-item__header {
     font-weight: 600;
 }
-.avatar-uploader /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
+.avatar-uploader
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-preview {
     /* left: 17px;
     bottom: 20px;
     border: none;
@@ -232,7 +286,7 @@ export default {
     background-size: contain; */
 }
 
-.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete{
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete {
     /* right: 17px;
     bottom: 20px;
     border: none;
@@ -241,10 +295,9 @@ export default {
     background: url("~img/pic-icon/delete-1.png") no-repeat center;
       background-size: 50%; */
 }
-.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete:before{
-    content: ""
+.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete:before {
+    content: "";
 }
- 
 </style>
 <style lang="scss" scoped>
 .article-cover {
@@ -261,15 +314,31 @@ export default {
     background: url("~img/pic-icon/switch.png") no-repeat center;
     background-size: 50%;
 }
-.el-icon-delete{
+.el-icon-delete {
     right: 17px;
     bottom: 20px;
-     display: inline-block;
+    display: inline-block;
     width: 27px;
     height: 27px;
     border: 1px solid #fff;
     border-radius: 50%;
     background: url("~img/pic-icon/delete-1.png") no-repeat center;
-      background-size: 50%;
+    background-size: 50%;
+}
+.modal-footer {
+    height: 60px;
+    position: absolute;
+    bottom: -23px;
+    right: 16px;
+    width: 100%;
+    z-index: 100;
+    text-align: right;
+}
+.imgWrap {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative
 }
 </style>

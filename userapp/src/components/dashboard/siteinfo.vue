@@ -139,7 +139,6 @@ export default {
   data() {
     return {
       siteInfo: [],
-      isFirst: true,
       siteId: 1,
       curIndex: 0,
       createShow: false,
@@ -158,14 +157,6 @@ export default {
         : this.$store.state.dashboard.siteId;
       return this.siteId;
     }
-  },
-  watch: {
-    // siteInfo(newValue, oldValue) {
-    //   if (newValue && newValue.length > 0) {
-    //     this.getSiteInfo();
-    //   }
-    //   console.log(oldValue, newValue)
-    // }
   },
   methods: {
     getSiteInfo(option) {
@@ -193,7 +184,6 @@ export default {
       this.$store.commit("SETSITEID", this.siteId);
     },
     initial() {
-      this.isFirst = false;
       if (this.siteInfo.length > 3) {
         for (let i = 0; i < this.siteInfo.length; i++) {
           if (this.siteInfo[i].siteId == this.siteId) {
@@ -573,7 +563,7 @@ export default {
     }
     .createSiteNumTwo {
       position: absolute;
-      right: 5%;
+      right: 0;
       top: 5px;
       width: 6%;
       padding-bottom: 6%;
@@ -617,33 +607,27 @@ export default {
       }
     }
     .siteInfoTwo {
-      width: 33%;
+      width: 42%;
       height: 300px;
       position: absolute;
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.14);
       opacity: 1;
     }
     .siteInfoTwo:nth-child(1) {
-      left: 15.5%;
-      background: linear-gradient(
-        315deg,
-        rgba(70, 180, 254, 0.79) 0%,
-        rgba(28, 218, 254, 0.79) 100%
-      );
+      left: 6.5%;
+      background: url("~img/dashboard/siteBackground1.png") no-repeat center;
+      background-size: cover;
     }
     .siteInfoTwo:nth-child(2) {
       left: 51.5%;
-      background: linear-gradient(
-        315deg,
-        rgba(8, 204, 235, 1) 0%,
-        rgba(129, 220, 160, 1) 100%
-      );
+      background: url("~img/dashboard/siteBackground2.png") no-repeat center;
+      background-size: cover;
     }
     .siteImg {
       width: 46%;
       height: 72%;
       float: left;
-      margin-top: 24px;
+      margin-top: 43px;
       margin-left: 21px;
       cursor: pointer;
       .siteImgBackground {
@@ -665,7 +649,7 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: calc(50% - 60px);
+      max-width: calc(54% - 80px);
     }
     .siteText {
       overflow: hidden;
@@ -797,12 +781,200 @@ export default {
     }
   }
 }
-@media screen and (max-width: 1912px) {
-  .site-section .content .item .siteManageWrap {
-    margin-top: 25px;
+// @media screen and (max-width: 1912px) {
+//   .site-section .content .item .siteManageWrap {
+//     margin-top: 25px;
+//   }
+//   .site-section .content .siteManageWrap {
+//     margin-top: 25px;
+//   }
+// }
+@media screen and (max-width: 1920px) {
+  .site-section {
+    margin-top: 32px;
+    margin-bottom: 37px;
+    height: 233px;
+    .content {
+      height: 233px;
+      .leftArrow {
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        right: 15px;
+        bottom: 4px;
+      }
+      .rightArrow {
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        left: 15px;
+        bottom: 4px;
+      }
+      .item {
+        height: 128px;
+        .siteImg {
+          margin-top: 20px;
+          margin-left: 15px;
+        }
+        .siteName {
+          margin-top: 24px;
+          padding-left: 20px;
+          font-size: 12px;
+          line-height: 17px;
+          max-width: calc(54% - 71px);
+        }
+        .siteText {
+          font-size: 10px;
+          line-height: 14px;
+          padding-left: 20px;
+        }
+        .siteLanguage {
+          margin-top: 2px;
+        }
+        .isPublished {
+          margin-top: 6px;
+        }
+      }
+      .active {
+        height: 211px;
+        .siteImg {
+          margin-top: 30px;
+          margin-left: 21px;
+        }
+        .siteName {
+          margin-top: 38px;
+          padding-left: 30px;
+          font-size: 20px;
+          line-height: 28px;
+        }
+        .siteText {
+          font-size: 14px;
+          line-height: 20px;
+          padding-left: 30px;
+        }
+        .siteLanguage {
+          margin-top: 5px;
+        }
+        .isPublished {
+          margin-top: 16px;
+        }
+        .siteManageWrap {
+          margin-top: 28px;
+          padding-left: 10px;
+          .siteManage {
+            width: 89px;
+            height: 20px;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 6px;
+            .arrowLeft {
+              width: 10px;
+              height: 9px;
+              margin-right: 8px;
+              vertical-align: baseline;
+            }
+            .arrowRight {
+              width: 10px;
+              height: 9px;
+              margin-left: 8px;
+              vertical-align: baseline;
+            }
+          }
+        }
+      }
+      .prevActive {
+        height: 128px;
+      }
+      .nextActive {
+        height: 128px;
+      }
+      .sliderWrap {
+        .slider {
+          width: 5px;
+          height: 5px;
+          margin-left: 7px;
+          transition: all 0.3s linear;
+        }
+        .sliderActive {
+          width: 14px;
+          height: 5px;
+        }
+      }
+      .createSiteNumOne {
+        right: 20%;
+        top: 5px;
+        width: 3.5%;
+        padding-bottom: 3.5%;
+      }
+      .createSiteNumTwo {
+        top: 5px;
+        width: 3.5%;
+        padding-bottom: 3.5%;
+      }
+      .createSiteNumThree {
+        top: 9px;
+        width: 3.5%;
+        padding-bottom: 3.5%;
+      }
+      .siteInfoTwo {
+        height: 211px;
+      }
+      .siteImg {
+        margin-top: 30px;
+        margin-left: 21px;
+      }
+      .siteName {
+        margin-top: 38px;
+        padding-left: 30px;
+        font-size: 20px;
+        line-height: 28px;
+        max-width: calc(54% - 71px);
+      }
+      .siteText {
+        font-size: 14px;
+        line-height: 20px;
+        padding-left: 30px;
+      }
+      .siteLanguage {
+        margin-top: 5px;
+      }
+      .isPublished {
+        margin-top: 16px;
+      }
+      .siteManageWrap {
+        margin-top: 28px;
+        padding-left: 10px;
+        .siteManage {
+          width: 89px;
+          height: 20px;
+          font-size: 14px;
+          line-height: 20px;
+          padding: 8px;
+          .arrowLeft {
+            width: 10px;
+            height: 9px;
+            margin-right: 8px;
+            vertical-align: middle;
+          }
+          .arrowRight {
+            width: 10px;
+            height: 9px;
+            margin-left: 8px;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
   }
+}
+@media screen and (max-width: 1700px) {
   .site-section .content .siteManageWrap {
-    margin-top: 25px;
+    margin-top: 10px;
+  }
+}
+@media screen and (max-width: 1640px) {
+  .site-section .content .active .siteManageWrap {
+    margin-top: 15px;
   }
 }
 @media screen and (max-width: 1500px) {
@@ -855,9 +1027,6 @@ export default {
         }
         .isPublished {
           margin-top: 6px;
-        }
-        .details {
-          margin-top: 21px;
         }
       }
       .active {
@@ -938,7 +1107,6 @@ export default {
         padding-bottom: 3.5%;
       }
       .createSiteNumTwo {
-        right: 5%;
         top: 5px;
         width: 3.5%;
         padding-bottom: 3.5%;
@@ -973,11 +1141,8 @@ export default {
       .isPublished {
         margin-top: 6px;
       }
-      .details {
-        margin-top: 21px;
-      }
       .siteManageWrap {
-        margin-top: 5px;
+        margin-top: 15px;
         padding-left: 10px;
         .siteManage {
           width: 82px;
@@ -1008,7 +1173,12 @@ export default {
     }
   }
 }
-@media screen and (max-width: 1420px) {
+@media screen and (max-width: 1441px) {
+  .site-section .content .siteManageWrap {
+    margin-top: 5px;
+  }
+}
+@media screen and (max-width: 1419px) {
   .site-section .content .active .siteManageWrap {
     margin-top: 5px;
   }

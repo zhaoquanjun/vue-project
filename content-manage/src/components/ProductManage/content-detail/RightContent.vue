@@ -5,7 +5,7 @@
                 <span class="article-cover">产品封面</span>
             </div>
             <div>
-                <el-upload
+                <!-- <el-upload
                     class="avatar-uploader"
                     :action="uploadPicAction"
                     :headers="headers"
@@ -18,13 +18,58 @@
                     :multiple="true"
                     accept=".jpg, .jpeg, .png, .gif, .svg, .JPG, .JPEG, .GIF"
                 >
-                <!-- :limit="9"
-                    :onExceed="onExceed" -->
+              
                     <template>
                         <i style class="el-icon-plus avatar-uploader-icon"></i>
                         <i style=" display: block;font-size:12px">添加图片</i>
                     </template>
-                </el-upload>
+                </el-upload>-->
+                <div class="avatar-uploader avatar-uploader">
+                    <div class="imgWrap">
+                        <!-- <img :src="imageUrl1" class="avatar" />
+                         <span class="el-upload-list__item-actions">
+                            <i @click="handlerAddPicture" class="icon-change"></i>
+                            <i @click.stop="handleRemove" class="el-icon-delete"></i>
+                        </span>-->
+                        <ul class="el-upload-list el-upload-list--picture-card">
+                            <li
+                                class="el-upload-list__item is-success"
+                                v-for="(item,index) in newFileList"
+                                :key="index"
+                            >
+                                <img width="100%" :src="item" alt />
+                                <span class="el-upload-list__item-actions">
+                                    <span
+                                        class="el-upload-list__item-preview"
+                                        @click="handlePreview(item)"
+                                    >
+                                        <i class="el-icon-zoom-in"></i>
+                                    </span>
+                                    <span
+                                        class="el-upload-list__item-delete"
+                                        @click="handleRemove(index)"
+                                    >
+                                        <i class="el-icon-delete"></i>
+                                    </span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <template>
+                        <div
+                            class="el-upload el-upload el-upload--picture-card"
+                            v-if="newFileList.length<9"
+                        >
+                            <button @click="handlerAddPicture">
+                                <i class="el-icon-plus avatar-uploader-icon"></i>
+                                <i
+                                    class="avatar-text"
+                                    style=" display: block; font-size: 12px;"
+                                >添加图片</i>
+                            </button>
+                        </div>
+                    </template>
+                </div>
             </div>
         </el-card>
         <el-col style="margin-top:20px">
@@ -40,13 +85,30 @@
             <img width="100%" :src="dialogImageUrl" alt />
         </el-dialog>
         <!-- 图片预览 end -->
+        <div class="mask" v-show="isModalShow"></div>
+        <div id="content" v-show="isModalShow">
+            <el-header class="modal-header">
+                <span style="font-size: 16px;">我的图片</span>
+                <button @click="cancelEditorImg">X</button>
+            </el-header>
+            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="true">
+                <div slot="modal-footer" class="modal-footer">
+                    <button type="button" @click="getEditorImg" class="sure">确定</button>
+                    <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                </div>
+            </modal-content>
+        </div>
     </div>
 </template>
 <script>
 import environment from "@/environment/index.js";
+import ModalContent from "@/components/ImgManage/index.vue";
 
 export default {
     props: ["fileList"],
+    components: {
+        ModalContent
+    },
     data() {
         return {
             activeName: "",
@@ -64,7 +126,8 @@ export default {
             newFileList: [],
             dialogVisible: false,
             dialogImageUrl: "",
-            limit:9,
+            limit: 9,
+            isModalShow: false
         };
     },
 
@@ -72,18 +135,55 @@ export default {
         this.headers.appId = this.$store.state.dashboard.appId;
     },
     methods: {
-        handleRemove(file, fileList) {
-            this.newFileList = fileList;
-            if (this.newFileList.length >= 9) {
-                document.querySelector(".el-upload").style.display = "none";
-            } else {
-                document.querySelector(".el-upload").style.display =
-                    "inline-block";
-            }
+        // 关闭图片选择弹窗
+        cancelEditorImg() {
+            this.isModalShow = false;
         },
-        handlePreview(file) {
-            console.log(file);
-            this.dialogImageUrl = file.url;
+        getImgInfo(info) {
+            console.log(info, "0000000");
+             let result = [];
+                let obj = {};
+                for (let i = 0; i < info.length; i++) {
+                    if (!obj[info[i].id]) {
+                        result.push(info[i]);
+                        obj[info[i].id] = true;
+                    }
+                }
+            this.imgData = result;
+        },
+        getEditorImg() {
+            // 获取选中的图片信息 有两种方式
+            //console.log(this.imgData, "imgData");
+            //console.log(this.$refs.imgList.selectedImg, "selectedImg");
+            // this.imageUrl1 = this.imgData[0].fullOssUrl;
+            // this.isModalShow = false;
+
+            this.imgData.forEach((item, index) => {
+                if(index<9){
+                     this.newFileList.push(item.fullOssUrl);
+                }
+               
+            });
+            this.isModalShow = false;
+           this.newFileList =  Array.from(new Set(this.newFileList))
+            console.log(this.newFileList, "11111");
+        },
+        handlerAddPicture() {
+            this.isModalShow = true;
+        },
+        handleRemove(index) {
+            this.newFileList.splice(index, 1);
+            // this.newFileList = fileList;
+            // if (this.newFileList.length >= 9) {
+            //     document.querySelector(".el-upload").style.display = "none";
+            // } else {
+            //     document.querySelector(".el-upload").style.display =
+            //         "inline-block";
+            // }
+        },
+        handlePreview(url) {
+            console.log(url);
+            this.dialogImageUrl = url;
             this.dialogVisible = true;
         },
         // 上传图片超出数量限制时触发
@@ -108,8 +208,8 @@ export default {
             // };
             if (argfileList.length > this.limit) {
                 this.onExceed(argfileList);
-            }else{
-                 this.newFileList = argfileList;
+            } else {
+                this.newFileList = argfileList;
             }
         },
         beforeAvatarUpload(file, fileList) {
@@ -142,12 +242,21 @@ export default {
     },
     watch: {
         fileList() {
-            if (this.fileList.length >= 9) {
-                document.querySelector(".el-upload").style.display = "none";
-            } else {
-                document.querySelector(".el-upload").style.display =
-                    "inline-block";
-            }
+            this.newFileList = this.fileList;
+            // if (this.fileList.length >= 9) {
+            //     document.querySelector(".el-upload").style.display = "none";
+            // } else {
+            //     document.querySelector(".el-upload").style.display =
+            //         "inline-block";
+            // }
+        },
+        newFileList() {
+            // if (this.fileList.length >= 9) {
+            //     document.querySelector(".el-upload").style.display = "none";
+            // } else {
+            //     document.querySelector(".el-upload").style.display =
+            //         "inline-block";
+            // }
         }
     }
 };
@@ -257,5 +366,14 @@ export default {
     color: #262626;
     font-weight: 500;
     font-size: 14px;
+}
+.modal-footer {
+    height: 60px;
+    position: absolute;
+    bottom: -23px;
+    right: 16px;
+    width: 100%;
+    z-index: 100;
+    text-align: right;
 }
 </style>

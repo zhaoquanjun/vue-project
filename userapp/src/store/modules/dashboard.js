@@ -47,7 +47,9 @@ const dashboard = {
         buttonAuth: {},
         hasRules: false,
         isSiteInfoShow: false,
-        isWechataccount: false
+        isWechataccountShow: false,
+        isMicroShow: false,
+        isFormShow: false
     },
     mutations: {
         GETUSERDASHBOARD(state, payload) {
@@ -82,8 +84,7 @@ const dashboard = {
             state.hasRules = true;
             setLocal("authList", a)
         },
-        reset_store(state){
-           
+        reset_store(state) {
             state.appId = "";
             state.siteId = "";
         }
@@ -114,8 +115,14 @@ const dashboard = {
                 if (item.code === "design") {
                     state.isSiteInfoShow = true
                 }
-                if(item.code == "wechataccount"){
-                    state.isWechataccount = true
+                if (item.code == "wechataccount") {
+                    state.isWechataccountShow = true
+                }
+                if (item.code == "micro") {
+                    state.isMicroShow = true
+                }
+                if (item.code == "form") {
+                    state.isFormShow = true
                 }
             })
             return data

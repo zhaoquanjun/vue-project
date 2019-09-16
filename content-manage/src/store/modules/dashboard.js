@@ -3,9 +3,9 @@ import {
     updateAppIdToCookie,
     getSliderMenuList
 } from "@/api/request/user"
-import {
-    authRoutes
-} from "@/router/routes.js";
+// import {
+//     authRoutes
+// } from "@/router/routes.js";
 import {
     setLocal,
     getLocal,

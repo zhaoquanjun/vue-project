@@ -5,7 +5,7 @@
       :span="6"
       v-for="(item, index) in  plugins"
       :key="index"
-      v-show="item.pluginCode =='WeChatAccount'?$store.state.dashboard.isSiteInfoShow:true"
+      v-show="isShow(item.pluginCode)"
     >
       <div class="box-inner">
         <span class="plugin-item plugin-img" :class="item.pluginCode"></span>
@@ -23,6 +23,18 @@
 export default {
   props: ["plugins"],
   methods: {
+    isShow(pluginCode) {
+      switch (pluginCode) {
+        // case "MicroProgram":
+        //   return $store.state.dashboard.isMicroShow;
+        case "WeChatAccount":
+          return this.$store.state.dashboard.isWechataccountShow;
+        // case "Form":
+        //   return $store.state.dashboard.isFormShow;
+        default:
+          return true;
+      }
+    },
     isActive(pluginCode, isActive) {
       switch (pluginCode) {
         case "MicroProgram":
@@ -121,6 +133,15 @@ export default {
           margin-bottom: 36px;
         }
       }
+    }
+  }
+}
+@media screen and (max-width: 1920px) {
+  .plugin-section {
+    margin-top: 37px;
+    .plugins-box {
+      margin-right: 24px;
+      margin-bottom: 37px;
     }
   }
 }
