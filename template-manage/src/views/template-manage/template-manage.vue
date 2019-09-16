@@ -898,7 +898,7 @@ export default {
           let { data, status } = await templateApi.getSecondIndustries(
             this.settingFirstIndustrySelect
           );
-          this.secondIndustryOptions = data;
+          this.settingSecondIndustryOptions = data;
         } else {
           this.settingFirstIndustrySelect = "";
           this.settingSecondIndustrySelect = "";
