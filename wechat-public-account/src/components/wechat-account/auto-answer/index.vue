@@ -1,6 +1,10 @@
 <template>
     <div class="auto-answer">
-        <WechatTitle title="自动回复" />
+        <!-- <WechatTitle title="自动回复" /> -->
+        <ChangeSite
+            @chooseWebsite="chooseWebsite"
+            @getSiteId="getSiteId"
+        />
         <div class="answer-tabs">
             <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
                 <el-tab-pane label="被关注时回复" name="1"></el-tab-pane>
@@ -66,6 +70,7 @@
 </template>
 <script>
 import WechatTitle from "@/components/common/WechatTitle.vue";
+import ChangeSite from "@/components/common/changeSite";
 import ReplyContent from "@/components/wechat-account/auto-answer/reply-content.vue";
 import Picture from "@/components/wechat-account/auto-answer/picture.vue";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
@@ -111,6 +116,7 @@ export default {
     },
     components: {
         WechatTitle,
+        ChangeSite,
         ReplyContent,
         Picture,
         AnserText,
@@ -127,6 +133,15 @@ export default {
         });
     },
     methods: {
+        getSiteId(siteId) {
+            console.log('siteId',siteId)
+            // this.getSiteInfo(siteId);
+        },
+        // 切换站点刷新信息
+        chooseWebsite(siteId) {
+            console.log('siteId2',siteId,this.$store.state.dashboard.siteId)
+            // this.getSiteInfo(siteId);
+        },
         //获取回复详情
         async _getReplyDetail(replyType) {
             let data = await autoAnswerApi.getReplyDetail(replyType);
