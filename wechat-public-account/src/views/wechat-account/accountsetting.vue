@@ -1,6 +1,10 @@
 <template>
   <div class="account-setting__section">
-    <div class="account-setting__manage" :style="{height:scrollHeight+'px'}" v-scrollBar>
+    <div class="account-setting__manage">
+      <ChangeSite
+        @chooseWebsite="chooseWebsite"
+        @getSiteId="getSiteId"
+      />
       <h4>公众号管理</h4>
       <div class="account-info__area">
         <div class="info-desc__area">
@@ -35,10 +39,14 @@
 
 <script>
 import PageSubNav from "_c/common/WechatTitle";
+import ChangeSite from "@/components/common/changeSite";
 import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      siteName: "",
+      siteId: 0,
+      language: "",
       scrollHeight: 500,
       accountAvator: require("img/account/account_type_icon.png"),
       accountInfo: {
@@ -49,6 +57,7 @@ export default {
     };
   },
   components: {
+    ChangeSite,
     PageSubNav
   },
   created() {
@@ -61,12 +70,21 @@ export default {
     ...mapGetters(["account_info"])
   },
   methods: {
+    getSiteId(siteId) {
+      this.siteId = siteId;
+      // this.getSiteInfo(siteId);
+    },
+    // 切换站点刷新信息
+    chooseWebsite(siteId) {
+      console.log('888')
+      // this.getSiteInfo(siteId);
+    },
+    
     // 校验是否已经授权认证
     async _getWxIsAuth() {}
   }
 };
 </script>
-
 <style lang="scss" scoped>
 .account-setting__section {
   box-sizing: border-box;

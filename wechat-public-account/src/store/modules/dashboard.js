@@ -22,6 +22,7 @@ let filterMenuListData = (source) => {
 const dashboard = {
     state: {
         appId:"",
+        siteId: "",
         menuList:[],
         authList:[], 
     },
@@ -30,16 +31,19 @@ const dashboard = {
             state.appId = payload;
             setLocal('ymId', payload);
         },
-         set_menuList(state,m){
+        SETSITEID(state, siteId) {
+            state.siteId = siteId;
+            setLocal('ymSd', siteId);
+        },
+        set_menuList(state,m){
             state.menuList = m;
             setLocal("menulist", m)
-
-           },
-           set_authList(state, a){
-             state.authList = a;
-             state.hasRules = true;
-             setLocal("authList", a)
-           },
+        },
+        set_authList(state, a){
+            state.authList = a;
+            state.hasRules = true;
+            setLocal("authList", a)
+        },
     },
     actions: {
         async _updateAppIdToCookie({ commit }){
