@@ -16,7 +16,6 @@ let accessToken = store.state.accessToken.Authorization;
 let appId =  store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
-  NProgress.start()
   if (!to.meta.requiresAuth) {
     if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
