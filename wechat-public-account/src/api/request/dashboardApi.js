@@ -12,7 +12,6 @@ export const UpdateAppName = (appName) => {
  * 获取当前siteId
  */
 export const getCurSiteId = () => {
-    console.log("5555",environment.dashboardApi)
     return ajaxRequest.get(`${environment.dashboardApi}/api/userInfo/GetCurrentSiteId`);
 };
 /**

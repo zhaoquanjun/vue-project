@@ -14,11 +14,15 @@ let router = new VueRouter({
 export default router;
 let accessToken = store.state.accessToken.Authorization;
 let appId =  store.state.dashboard.appId;
+let siteId =  store.state.dashboard.siteId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
   if (!to.meta.requiresAuth) {
     if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
+    }
+    if (!siteId) {
+      await store.dispatch('_setSiteId')
     }
     store.dispatch('_getMenuListData')
     next()
@@ -53,7 +57,6 @@ router.beforeEach(async (to, from, next) => {
         next('/404')
       }
     } else {
-     
         securityService.getUser().then(async (data) => {
           if (!data) {
             securityService.signIn();

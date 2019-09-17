@@ -1,10 +1,11 @@
 import {
   isAuth
 } from "@/api/request/account.js";
+import store from "@/store/index";
 const user = {
   state: {
     wx_status: {
-      isAuth: true,
+      isAuth: false,
       isCertification: true
     },
     account_info: {},
@@ -34,8 +35,9 @@ const user = {
     }
   },
   actions: {
-    async _getWxStatus({commit}) {
-      let data = await isAuth({infoType: "WeixinOA"});
+    async _getWxStatus({commit, state}) {
+      console.log('222:',store.state.dashboard.siteId)
+      let data = await isAuth({infoType: "WeixinOA",siteId: store.state.dashboard.siteId});
       // debugger;
       let verify = {
         isAuth: data.data.isAuth,

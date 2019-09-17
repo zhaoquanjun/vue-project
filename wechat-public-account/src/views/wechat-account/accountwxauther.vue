@@ -1,6 +1,9 @@
 <template>
   <div class="account-setting__section">
-    <page-sub-nav :title="title"></page-sub-nav>
+    <ChangeSite
+        @chooseWebsite="chooseWebsite"
+        @getSiteId="getSiteId"
+    />
     <div class="account-setting__content">
       <div class="account-setting__bind--box">
         <div class="account-setting__bind">
@@ -25,6 +28,7 @@
 
 <script>
 import PageSubNav from "_c/common/WechatTitle";
+import ChangeSite from "@/components/common/changeSite";
 import { wxAuth } from "@/api/request/account.js";
 export default {
   data() {
@@ -39,9 +43,19 @@ export default {
     };
   },
   components: {
+    ChangeSite,
     PageSubNav
   },
   methods: {
+    getSiteId(siteId) {
+      this.siteId = siteId;
+      // this.getSiteInfo(siteId);
+    },
+    // 切换站点刷新信息
+    chooseWebsite(siteId) {
+      console.log('888')
+      // this.getSiteInfo(siteId);
+    },
     // 微信授权
     async _handleWxAuth() {
       let data = await wxAuth();

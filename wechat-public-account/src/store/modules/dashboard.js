@@ -1,4 +1,5 @@
 import { updateAppIdToCookie, getSliderMenuList} from "@/api/request/common.js"
+import { getCurSiteId } from "@/api/request/dashboardApi.js"
 import {setLocal} from '@/libs/local'
 
 // 序列化菜单
@@ -46,6 +47,10 @@ const dashboard = {
         },
     },
     actions: {
+        async _setSiteId({ commit }) {
+            let { data } = await getCurSiteId();
+            commit("SETSITEID", data)
+        },
         async _updateAppIdToCookie({ commit }){
             let { data } = await updateAppIdToCookie();
             commit("SETAPPID", data)
