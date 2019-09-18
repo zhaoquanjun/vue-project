@@ -7,22 +7,15 @@
     <div class="account-setting__content">
       <div class="account-setting__bind--box">
         <SpeedProgress />
-        
-        <!-- <div class="account-setting__bind">
-          <div class="bind-icon__area">
-            <img :src="wechanIcon" alt />
-          </div>
-          <div
-            class="bind-button--normal primary-button__nomal--shadow"
-            @click="_handleWxAuth"
-          >微信公众号授权绑定</div>
-        </div> -->
-      </div>
-      <div class="account-bind__tips border">
-        <h4>授权须知</h4>
-        <ul>
-          <li v-for="(item, index) in bindPrompt" :key="index">{{index + 1 + '、' + item}}</li>
-        </ul>
+        <div class="account-setting__bind">
+          <img :src="wechanIcon" alt />
+          <p>请先绑定微信公众号</p>
+          <div @click="_handleWxAuth">授权绑定微信公众号</div>
+        </div>
+        <div class="account-bind__tips">
+          <p>1、请确定您有一个正常使用的微信公众号，且您是公众号管理员；</p>
+          <p>2、请确定您授权的微信公众号是认证的服务号或订阅号。</p>
+        </div>
       </div>
     </div>
   </div>
@@ -37,12 +30,7 @@ export default {
   data() {
     return {
       title: "账号设置",
-      wechanIcon: require("img/account/wechat_icon.png"),
-      bindPrompt: [
-        "只有微信公众号管理员才可以进行授权",
-        "只有认证的服务号才能进行微信支付，订阅号、未认证服务号无法开通微信支付功能",
-        "只有认证的服务号或订阅号才能使用顶级域名进行微信推广"
-      ]
+      wechanIcon: require("img/account/wechat_icon.png")
     };
   },
   components: {
@@ -57,7 +45,6 @@ export default {
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
-      console.log('888')
       // this.getSiteInfo(siteId);
     },
     // 微信授权
@@ -96,45 +83,48 @@ export default {
     height: calc(100% - 103px);
     min-height: 600px;
     .account-setting__bind--box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 100%;
       height: calc(100% - 266px);
       .account-setting__bind {
+        width:290px;
+        height:225px;
+        margin: 0 auto;
         text-align: center;
-        .bind-icon__area {
-          margin: 0 auto 21px;
-          width: 140px;
-          height: 140px;
-          img {
-            width: 100%;
-            height: 100%;
-          }
+        background:rgba(255,255,255,1);
+        box-shadow:0px 2px 12px 0px rgba(243,243,243,1);
+        border-radius:3px;
+        border:1px solid rgba(99,220,140,1);
+        img {
+          width: 85px;
+          height: 61px;
+          margin: 48px 0 12px;
+        }
+        p {
+          font-size:14px;
+          font-family:"PingFangSC";
+          font-weight:400;
+          color:rgba(161,168,177,1);
+          line-height:20px;
+        }
+        div {
+          cursor: pointer;
+          font-size:14px;
+          font-family:"PingFangSC";
+          font-weight:400;
+          margin-top: 20px;
+          color:rgba(99,220,140,1);
+          line-height:20px;
         }
       }
-    }
-    .account-bind__tips {
-      position: absolute;
-      left: 0;
-      bottom: 48px;
-      width: 100%;
-      text-align: left;
-      h4 {
-        font-size: 16px;
-        font-family: "PingFangSC";
-        font-weight: 500;
-        height: 70px;
-        line-height: 70px;
-        padding-left: 32px;
-        border-bottom: 1px solid #c9d9dc;
-      }
-      ul {
-        padding: 24px 32px 32px;
-        li {
-          padding-bottom: 16px;
-          font-size: 14px;
-          font-family: "PingFangSC";
-          font-weight: 400;
+      .account-bind__tips {
+        width: 418px;
+        margin: 40px auto 0;
+        p {
+          font-size:14px;
+          font-family:"PingFangSC";
+          font-weight:400;
+          color:rgba(161,168,177,1);
+          line-height:30px;
         }
       }
     }
