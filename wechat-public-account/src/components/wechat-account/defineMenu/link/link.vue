@@ -2,9 +2,13 @@
   <div>
     <ul class="link-section__show">
       <li
+        v-for="(it, i) in linkList"
+        v-if="it.type == type"
+        :key="i"
         @click.stop="_handleShowPopup"
       >
         <p class="single-line__overflow--hide">
+          <i class="iconfont" :class="it.icon"></i>
           <span class="title single-line__overflow--hide">{{title}}</span>
         </p>
         <i class="iconfont iconlianjietiao"></i>
@@ -12,8 +16,8 @@
     </ul>
     <popup
       :model="model"
-      :popupShow="popupShow"
       @handleClosePopup="handleClosePopup"
+      v-if="popupShow"
     />
   </div>
 </template>
@@ -23,19 +27,60 @@ import Popup from "./popup";
 export default {
   props: {
     model: {
-      type: Object,
-      default: () => {
-        return {
-          Title: '123',
-          Type: 'none',
-        }
-      }
+      type: Object
     }
   },
   data() {
     return {
+      linkList: [
+        {
+          icon: 'iconshezhilianjie',
+          name: "设置链接",
+          type: "none"
+        },
+        {
+          icon: 'iconyemian',
+          name: "页面名称",
+          type: "page"
+        },
+        {
+          icon: 'iconwenzhang',
+          name: "文章名称",
+          type: "news"
+        },
+        {
+          icon: 'iconchanpin',
+          name: "产品名称",
+          type: "product"
+        },
+        {
+          icon: 'iconlianjiedizhi',
+          name: "链接地址",
+          type: "link"
+        },
+        {
+          icon: 'iconyouxiang',
+          name: "邮箱地址",
+          type: "email"
+        },
+        {
+          icon: 'iconwenjian',
+          name: "文件名称",
+          type: "file"
+        },
+        {
+          icon: 'icondianhua',
+          name: "电话",
+          type: "tel"
+        },
+        {
+          icon: 'icondanchuang',
+          name: "弹窗名称",
+          type: "popup"
+        }
+      ],
       popupShow: false
-    }
+    };
   },
   components: {
     Popup
@@ -69,10 +114,10 @@ export default {
 <style lang="scss" scoped>
 .link-section__show {
   padding: 0 8px;
-  width: 264px;
+  width: 219px;
   height: 40px;
   background: rgba(255, 255, 255, 1);
-  border-radius: 2px;
+  border-radius: 4px;
   border: 1px solid rgba(201, 217, 220, 1);
   cursor: pointer;
   li {

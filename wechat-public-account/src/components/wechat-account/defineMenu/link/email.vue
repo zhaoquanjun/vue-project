@@ -1,16 +1,16 @@
 <template>
   <div class="popup-content__area">
-    <p class="popup-content__title">请填写链接地址</p>
+    <p class="popup-content__title">请填写邮件地址</p>
     <el-input
-      type="url"
+      type="email"
       size="small"
-      v-model="url"
-      placeholder="如：www.clouddream.net"
+      v-model="email"
+      placeholder="如：xxx@clouddream.net"
       @input="_handleInputChange"
       @blur="_handleInputBlur"
     ></el-input>
-    <p class="error-tips" :style="{visibility: !isLinkUrl ? 'visible' : 'hidden'}">
-      <span></span>请输入正确的链接地址
+    <p class="error-tips" :style="{visibility: !isLinkEmail ? 'visible' : 'hidden'}">
+      <span></span>请输入正确的邮箱地址
     </p>
     <div class="popup-content__open">
       <p>页面打开方式</p>
@@ -43,35 +43,34 @@ export default {
   },
   data() {
     return {
-      url: "",
-      isLinkUrl: true
+      email: "",
+      isLinkEmail: true
     };
   },
   created() {
-    this.url = this.curType == 'link' ? this.selectedUrl : '';
+    this.email = this.curType == 'email' ? this.selectedUrl.split(':')[1] : '';
   },
   methods: {
     _handleInputChange(val) {
-      this.url = val;
-      let reg = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-      if (reg.test(this.url)) {
-        this.$emit("handleChangeUrl", {url: this.url, title: this.url, cType: 'link'});
+      this.email = val;
+      let reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+      if (reg.test(this.email)) {
+        this.$emit("handleChangeUrl", {url: 'mailto:' + this.email, title: this.email, cType: 'email'});
       }
     },
     _handleInputBlur() {
-      let reg = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-      if (reg.test(this.url)) {
-        this.isLinkUrl = true;
-        this.$emit("handleChangeUrl", {url: this.url, title: this.url, cType: 'link'});
+      let reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+      if (reg.test(this.email)) {
+        this.isLinkEmail = true;
+        this.$emit("handleChangeUrl", {url: 'mailto:' + this.email, title: this.email, cType: 'email'});
       } else {
-        this.isLinkUrl = false;
+        this.isLinkEmail = false;
       }
-      console.log(this.isLinkUrl);
     }
   },
   watch: {
     selectedUrl() {
-      this.url = this.curType == 'link' ? this.selectedUrl : '';
+      this.email = this.curType == 'email' ? this.selectedUrl.split(':')[1] : '';
     }
   }
 };
@@ -80,7 +79,7 @@ export default {
 <style lang="scss" scoped>
 .popup-content__area {
   .popup-content__title {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 17px;
     color: #00c1de;
     padding: 20px 12px 16px;
@@ -93,7 +92,7 @@ export default {
     padding-left: 12px;
     padding-top: 8px;
     padding-bottom: 10px;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 17px;
     visibility: hidden;
     span {
@@ -113,25 +112,15 @@ export default {
     height: 78px;
     border-top: 1px solid #eee;
     p {
-      padding: 0 0 12px;
-      font-size: 12px;
-      line-height: 17px;
       color: #00C1DE;
+      padding: 0 0 12px;
+      font-size: 14px;
+      line-height: 17px;
     }
     .way-list__box {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-    }
-    .way-list__box /deep/ .el-radio__label {
-      font-size: 12px;
-      color: #262626;
-    }
-    .way-list__box /deep/ .is-checked {
-      .el-radio__inner {
-        border-color: #00c1de;
-        background: #00c1de;
-      }
     }
   }
 }

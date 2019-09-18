@@ -1,68 +1,71 @@
 <template>
   <div class="popup-content__area">
     <div class="popup-content__add">
-      <p>请选择所需链接的文章</p>
+      <p>请选择所需链接的文件</p>
       <a :href="redirectUrl" target="_blank">
-        <el-button type="primary" icon="el-icon-plus" size="small">添加文章</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="small">添加文件</el-button>
       </a>
     </div>
     <div class="popup-content__main">
       <div class="content-main__slider">
         <el-tree
           :data="treeArray"
-          ref="tree"
           node-key="id"
           :default-expanded-keys="defaultExpandedKeys"
           @node-click="_handleNodeClick"
         ></el-tree>
       </div>
       <div class="content-main__list">
-        <div class="content-main__search">
-          <el-input
-            placeholder="搜索文章标题"
-            prefix-icon="el-icon-search"
-            size="small"
-            v-model="newsTitle"
-            @input="_handleSearch"
-          ></el-input>
+        <div class="content_main__inner">
+          <div class="content-main__search">
+            <el-input
+              placeholder="搜索文件标题"
+              prefix-icon="el-icon-search"
+              size="small"
+              v-model="fileTitle"
+              @input="_handleSearch"
+            ></el-input>
+          </div>
+          <div class="content-main__list">
+            <div v-show="fileList.length > 0">
+              <ul class="content-main__list--item">
+                <li
+                  v-for="(item, i) in fileList"
+                  :key="i"
+                  :class="{active: item.downloadPage == selectedUrl && curType == 'file'}"
+                  @click.stop="_handleSelectPage(i)"
+                >
+                  <p class="single-line__overflow--hide">{{item.title}}</p>
+                  <p class="date single-line__overflow--hide">
+                    <span>{{item.createTimeStr && item.createTimeStr.slice(0, 10)}}</span>
+                    <span
+                      :style="{visibility: item.downloadPage == selectedUrl && curType == 'file' ? 'visible' : 'hidden'}"
+                    ></span>
+                  </p>
+                </li>
+              </ul>
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                :current-page="pageIndex"
+                @current-change="_handleChangeCurrent"
+                style="margin-top: 12px"
+              ></el-pagination>
+            </div>
+            <none-area v-show="fileList.length <= 0" :target="target">
+              <span v-if="!search">
+                暂无文件，请先
+                <span style="color: #00C1DE;cursor: pointer;">
+                  <a :href="redirectUrl" target="_blank">添加文件</a>
+                </span>
+              </span>
+              <span v-else>暂无搜索数据，请重新输入</span>
+            </none-area>
+            <loading v-show="loading" />
+          </div>
         </div>
-        <div class="content-main__list--outer" v-show="newsList.length">
-          <ul class="content-main__list--item">
-            <li
-              v-for="(it, i) in newsList"
-              :key="i"
-              :class="{active: (it.url == selectedUrl && curType == 'news')}"
-              @click.stop="_handleSelectPage(i)"
-            >
-              <p class="single-line__overflow--hide">{{it.title}}</p>
-              <p class="date single-line__overflow--hide">
-                <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span>
-                <span
-                  :style="{visibility: it.url == selectedUrl && curType == 'news' ? 'visible' : 'hidden'}"
-                ></span>
-              </p>
-            </li>
-          </ul>
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :page-size="pageSize"
-            :total="total"
-            :current-page="pageIndex"
-            @current-change="_handleChangeCurrent"
-            style="margin-top: 12px"
-          ></el-pagination>
-        </div>
-        <none-area v-show="!newsList.length" :target="target">
-          <span v-if="!search">
-            暂无文章，请先
-            <span style="color: #00C1DE;cursor: pointer;">
-              <a :href="redirectUrl" target="_blank" style="color: #00C1DE;">添加文章</a>
-            </span>
-          </span>
-          <span v-else>暂无搜索数据，请重新输入</span>
-        </none-area>
-        <loading v-show="loading" />
       </div>
     </div>
     <div class="popup-content__open">
@@ -83,7 +86,7 @@
 <script>
 import * as linkApi from "@api/linkApi";
 import environment from "@environment/index";
-import NoneArea from "./none";
+import noneArea from "./none";
 import Loading from "@comp/loading/loading";
 export default {
   props: {
@@ -101,30 +104,28 @@ export default {
     },
     curType: {
       type: String
+    },
+    index: {
+      type: String
     }
   },
   data() {
     return {
       timer: null,
+      fileTitle: "",
       pageSize: 6,
       total: 6,
-      newsTitle: "",
+      loading: false,
       defaultExpandedKeys: [],
       treeArray: [],
-      newsList: [],
-      nodeId: 0,
-      loading: false,
-      target: "createArticle",
-      search: false,
-      slotWords: {
-        prev: "暂无文章，请先",
-        last: "添加文章"
-      },
-      redirectUrl: environment.redirectUrl.createArticle
+      fileList: [],
+      nodeIdArr: [],
+      target: "createFile",
+      redirectUrl: environment.redirectUrl.createFile
     };
   },
   components: {
-    NoneArea,
+    noneArea,
     Loading
   },
   computed: {
@@ -136,35 +137,13 @@ export default {
     }
   },
   created() {
-    this.getNewsList(this.nodeId);
-    this.getCategorytree();
+    this.getFileList(this.nodeIdArr);
+    this.getFileTree();
   },
   methods: {
     _handleNodeClick(data) {
-      this.nodeId = data.id;
-      this.getNewsList(this.nodeId);
-    },
-    async getNewsList(id) {
-      let options = {
-        title: this.newsTitle,
-        categoryId: id,
-        newsOrderColumns: "createtime",
-        topStatus: null,
-        publishStatus: null,
-        pageSize: this.pageSize, //11
-        pageIndex: this.pageIndex, //1
-        isDescending: true
-      };
-      this.loading = true;
-      let { data } = await linkApi.getArticleList(options);
-      this.total = data.totalRecord;
-      this.newsList = data.list;
-      this.loading = false;
-    },
-    async getCategorytree() {
-      let { data } = await linkApi.getArticleCategory();
-      this.defaultExpandedKeys = this._handleRecursive(data, []);
-      this.treeArray = data;
+      this.nodeIdArr = this._handleRecursive(data.children, [data.id]);
+      this.getFileList(this.nodeIdArr);
     },
     _handleRecursive(data, arr) {
       if (
@@ -178,34 +157,58 @@ export default {
       }
       return arr;
     },
+    async getFileList(idArray) {
+      let options = {
+        pageSize: this.pageSize, //11
+        pageIndex: this.pageIndex, //1
+        orderByType: 1, //1 创建时间 2:名字
+        isDescending: true, // 倒叙 或 正序
+        keyword: this.fileTitle, //1
+        isDelete: false, //1
+        isOnSell: null, //is 上架
+        categoryIdList: idArray //1,
+      };
+      this.loading = true;
+      let { data } = await linkApi.getFileList(options);
+      this.total = data.totalRecord;
+      this.fileList = data.list;
+      this.loading = false;
+    },
+    async getFileTree() {
+      let { data } = await linkApi.getFileCategory();
+      this.defaultExpandedKeys = this._handleRecursive(data.treeArray, []);
+      this.treeArray = data.treeArray;
+    },
     _handleSelectPage(i) {
       this.$emit("handleChangeUrl", {
-        url: this.newsList[i].url,
-        title: this.newsList[i].title,
-        cType: "news"
+        url: this.fileList[i].downloadPage,
+        title: this.fileList[i].title,
+        cType: "file",
+        pageIndex: this.pageIndex
       });
     },
     _handleChageLinkTarget(val) {
       this.$emit("handleChangeTarget", val);
     },
     _handleSearch(val) {
+      if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        this.newsList = [];
-        this.newsTitle = val;
-        this.getNewsList(this.nodeId);
+        this.fileList = [];
+        this.fileTitle = val;
+        this.getFileList(this.nodeIdArr);
       }, 500);
     },
     _handleChangeCurrent(val) {
       this.model["PageIndex"] = val;
-      this.getNewsList(this.nodeId);
+      this.getFileList(this.nodeIdArr);
     }
   },
   watch: {
-    newsList() {
-      if (!this.newsList.length && this.newsTitle !== "") {
+    fileList() {
+      if (!this.fileList.length && this.fileTitle !== "") {
         this.search = true;
       }
-      if (!this.newsList.length && this.newsTitle == "") {
+      if (!this.fileList.length && this.fileTitle == "") {
         this.search = false;
       }
     }
@@ -257,9 +260,11 @@ export default {
       border-right: 1px solid #eee;
     }
     .content-main__list {
-      position: relative;
       width: 434px;
       height: 297px;
+      .content_main__inner {
+        height: 100%;
+      }
       .content-main__search {
         display: flex;
         align-items: flex-end;
@@ -277,8 +282,10 @@ export default {
         line-height: 28px;
         text-align: left;
       }
-      .content-main__list--outer {
+      .content-main__list {
+        position: relative;
         overflow: hidden;
+        height: calc(100% - 36px);
         .content-main__list--item {
           padding: 10px 6px 0;
           width: 434px;
