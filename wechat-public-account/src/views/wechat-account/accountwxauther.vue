@@ -6,7 +6,9 @@
     />
     <div class="account-setting__content">
       <div class="account-setting__bind--box">
-        <div class="account-setting__bind">
+        <SpeedProgress />
+        
+        <!-- <div class="account-setting__bind">
           <div class="bind-icon__area">
             <img :src="wechanIcon" alt />
           </div>
@@ -14,7 +16,7 @@
             class="bind-button--normal primary-button__nomal--shadow"
             @click="_handleWxAuth"
           >微信公众号授权绑定</div>
-        </div>
+        </div> -->
       </div>
       <div class="account-bind__tips border">
         <h4>授权须知</h4>
@@ -28,6 +30,7 @@
 
 <script>
 import PageSubNav from "_c/common/WechatTitle";
+import SpeedProgress from "@/components/common/speedProgress";
 import ChangeSite from "@/components/common/changeSite";
 import { wxAuth } from "@/api/request/account.js";
 export default {
@@ -44,6 +47,7 @@ export default {
   },
   components: {
     ChangeSite,
+    SpeedProgress,
     PageSubNav
   },
   methods: {
@@ -85,7 +89,7 @@ export default {
 <style lang="scss" scoped>
 .account-setting__section {
   box-sizing: border-box;
-  padding: 32px 32px 0;
+  padding: 0 32px;
   height: 100%;
   .account-setting__content {
     position: relative;

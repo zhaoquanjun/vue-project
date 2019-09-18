@@ -240,6 +240,7 @@ export default {
         // 保存
         handlerSave() {
             let option = {
+                siteId: '30001',
                 replyType: this.replyType,
                 msgType: this.msgType,
                 content: {}
@@ -258,6 +259,7 @@ export default {
                     };
                 } else if (this.msgType == 2) {
                     let text = this.replycontentData.textMsg.text;
+                    console.log('333',text)
                     if (!trim(text)) {
                         notify(this, "无法保存，请完善页面信息!", "error");
                         return;
@@ -333,7 +335,7 @@ export default {
 
                 return;
             }
-
+            console.log('444',option)
             this._addOrOverrideReply(option);
         },
         handlerSaveImgText(list) {

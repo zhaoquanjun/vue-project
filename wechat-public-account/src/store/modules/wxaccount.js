@@ -2,6 +2,7 @@ import {
   isAuth
 } from "@/api/request/account.js";
 import store from "@/store/index";
+import { getCurSiteId } from "@/api/request/dashboardApi.js"
 const user = {
   state: {
     wx_status: {
@@ -36,8 +37,13 @@ const user = {
   },
   actions: {
     async _getWxStatus({commit, state}) {
-      console.log('222:',store.state.dashboard.siteId)
-      let data = await isAuth({infoType: "WeixinOA",siteId: store.state.dashboard.siteId});
+      let siteId =  store.state.dashboard.siteId
+      if(!siteId) {
+        await store.dispatch('_setSiteId')
+      }
+      siteId =  store.state.dashboard.siteId
+      console.log('222:',siteId)
+      let data = await isAuth({infoType: "WeixinOA",siteId: siteId});
       // debugger;
       let verify = {
         isAuth: data.data.isAuth,
