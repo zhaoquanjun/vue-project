@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import * as linkApi from "@api/linkApi";
+import * as linkApi from "@/api/linkApi";
 import noneArea from "./none";
 export default {
   props: {
@@ -134,7 +134,7 @@ export default {
           margin-left: 14px;
           width: 18px;
           height: 18px;
-          background: url("~@static/images/link/selected.png") no-repeat center
+          background: url("~img/link/selected.png") no-repeat center
             center;
           background-size: 100% 100%;
         }

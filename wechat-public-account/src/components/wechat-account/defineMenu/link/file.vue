@@ -84,10 +84,10 @@
 </template>
 
 <script>
-import * as linkApi from "@api/linkApi";
-import environment from "@environment/index";
+import * as linkApi from "@/api/linkApi";
+import environment from "@/environment/index";
 import noneArea from "./none";
-import Loading from "@comp/loading/loading";
+import Loading from "@/components/common/loading.vue";
 export default {
   props: {
     model: {
@@ -233,15 +233,17 @@ export default {
       cursor: auto;
     }
   }
-  .popup-content__add /deep/ .el-button--small {
-    width: 120px;
-    height: 32px;
-    background: rgba(0, 193, 222, 1);
-    border-radius: 2px;
-    border-color: rgba(0, 193, 222, 1);
-    span,
-    i {
-      color: #fff;
+  .popup-content__add {
+    .el-button--small {
+      width: 120px;
+      height: 32px;
+      background: rgba(0, 193, 222, 1);
+      border-radius: 2px;
+      border-color: rgba(0, 193, 222, 1);
+      span,
+      i {
+        color: #fff;
+      }
     }
   }
   .popup-content__main {
@@ -273,15 +275,19 @@ export default {
         height: 36px;
         border-bottom: 1px solid #e5e5e5;
       }
-      .content-main__search /deep/ .el-icon-search {
-        color: #b5b5b5;
-      }
-      .content-main__search /deep/ .el-input__inner {
-        border: none !important;
-        height: 28px;
-        line-height: 28px;
-        text-align: left;
-      }
+      .content-main__search {
+        .el-icon-search {
+          color: #b5b5b5;
+        }
+      } 
+      .content-main__search {
+        .el-input__inner {
+          border: none !important;
+          height: 28px;
+          line-height: 28px;
+          text-align: left;
+        }
+      } 
       .content-main__list {
         position: relative;
         overflow: hidden;
@@ -319,7 +325,7 @@ export default {
                 margin-left: 14px;
                 width: 18px;
                 height: 18px;
-                background: url("~@static/images/link/selected.png") no-repeat
+                background: url("~img/link/selected.png") no-repeat
                   center center;
                 background-size: 100% 100%;
               }
@@ -353,15 +359,17 @@ export default {
       }
     }
   }
-  .popup-content__main /deep/ .btn-prev,
-  .popup-content__main /deep/ .btn-next,
-  .popup-content__main /deep/ .el-pager li {
-    background: #fff;
-    border: 1px solid rgba(229, 229, 229, 1);
-  }
-  .popup-content__main /deep/ .el-pager li:not(.disabled).active {
-    background: #01c0de;
-  }
+  .popup-content__main {
+    .btn-prev, .btn-next, .el-pager li {
+      background: #fff;
+      border: 1px solid rgba(229, 229, 229, 1);
+    }
+  } 
+  .popup-content__main {
+    .el-pager li:not(.disabled).active {
+      background: #01c0de;
+    }
+  } 
   .popup-content__open {
     margin-top: 16px;
     padding: 16px 16px 0;

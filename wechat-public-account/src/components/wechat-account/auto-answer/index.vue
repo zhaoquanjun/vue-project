@@ -5,6 +5,11 @@
             @chooseWebsite="chooseWebsite"
             @getSiteId="getSiteId"
         />
+        <PopUp
+            :model="model"
+            @handleClosePopup="handleClosePopup"
+           
+        />
         <div class="answer-tabs">
             <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
                 <el-tab-pane label="被关注时回复" name="1"></el-tab-pane>
@@ -71,6 +76,7 @@
 <script>
 import WechatTitle from "@/components/common/WechatTitle.vue";
 import ChangeSite from "@/components/common/changeSite";
+import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import ReplyContent from "@/components/wechat-account/auto-answer/reply-content.vue";
 import Picture from "@/components/wechat-account/auto-answer/picture.vue";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
@@ -81,9 +87,15 @@ import { trim, notify } from "@/utlis/index.js";
 export default {
     data() {
         return {
+            model: {
+                PageIndex: null,
+                Type: null,
+                Href: null
+            },
             replyType: "1", //replyType 回复类型
             msgType: 1, //msgType 消息类型
             addAnswer: true,
+            SiteId: this.$store.state.dashboard.siteId,
             replycontentData: {
                 imageMsg: {
                     picUrl: ""
@@ -101,7 +113,8 @@ export default {
             searchOption: {
                 pageSize: 10,
                 pageIndex: 1,
-                Keyword: ""
+                Keyword: "",
+                SiteId: this.$store.state.dashboard.siteId
             },
             keywordContentData: {
                 msgType: "",
@@ -117,6 +130,7 @@ export default {
     components: {
         WechatTitle,
         ChangeSite,
+        PopUp,
         ReplyContent,
         Picture,
         AnserText,
@@ -133,6 +147,9 @@ export default {
         });
     },
     methods: {
+        handleClosePopup (val){
+            console.log('2222',val)
+        },
         getSiteId(siteId) {
             console.log('siteId',siteId)
             // this.getSiteInfo(siteId);
@@ -144,19 +161,19 @@ export default {
         },
         //获取回复详情
         async _getReplyDetail(replyType) {
-            let data = await autoAnswerApi.getReplyDetail(replyType);
-            let jsonData = data.data;
-            this.replyDetail = jsonData;
-            this.msgType = jsonData.msgType;
-            if (jsonData.isSet) {
-                this.isSet = jsonData.isSet;
-                if (jsonData.msgType === 1) {
-                    this.replycontentData.imageMsg = jsonData.data;
-                } else if (jsonData.msgType === 2) {
-                    this.replycontentData.textMsg = jsonData.data;
-                } else if (jsonData.msgType === 3) {
-                    this.replycontentData.newsMsg = jsonData.data;
-                }
+            let data = await autoAnswerApi.getReplyDetail(this.SiteId,replyType);
+            let jsonData = JSON.parse(data.data.msgBody);
+            this.replyDetail = data.data;
+            this.msgType = data.data.msgType;
+            this.isSet = data.data.isSet;
+            if (jsonData.ImageMsg) {
+                this.replycontentData.imageMsg.picUrl = jsonData.ImageMsg.PicUrl;
+            }
+            if (jsonData.TextMsg) {
+                this.replycontentData.textMsg.text = jsonData.TextMsg.Text;
+            }
+            if (jsonData.NewsMsg) {
+                this.replycontentData.newsMsg = jsonData.NewsMsg;
             }
         },
         //获取关键词回复列表
@@ -167,8 +184,8 @@ export default {
             this.keywordData = data;
         },
         //删除回复信息
-        async _removeReply(id) {
-            let { data, status } = await autoAnswerApi.removeReply(id);
+        async _removeReply(SiteId,id) {
+            let { data, status } = await autoAnswerApi.removeReply(SiteId,id);
             if (status === 200) {
                 if (this.replyType != 3) {
                     this._getReplyDetail(this.replyType);
@@ -240,45 +257,46 @@ export default {
         // 保存
         handlerSave() {
             let option = {
-                siteId: '30001',
+                siteId: this.$store.state.dashboard.siteId,
                 replyType: this.replyType,
                 msgType: this.msgType,
-                content: {}
+                publicPlatformReplyInput: {
+                    imageMsg: '',
+                    textMsg: '',
+                    newsMsg: ''
+                }
             };
             if (this.replyType != 3) {
+                //图片
+                let picUrl = this.replycontentData.imageMsg.picUrl;
+                    option.publicPlatformReplyInput.imageMsg = {
+                        picUrl: picUrl
+                    };
+                //文字
+                let text = this.replycontentData.textMsg.text;
+                    option.publicPlatformReplyInput.textMsg = {
+                        text: text
+                    };
+                //图文
+                let curEditorItem = this.$refs.newMsg.curEditorItem;
+                let newsMsg = this.replycontentData.newsMsg;
+                option.publicPlatformReplyInput.newsMsg = newsMsg;
+                //校验
                 if (this.msgType == 1) {
-                    let picUrl = this.replycontentData.imageMsg.picUrl;
                     if (!trim(picUrl)) {
                         notify(this, "无法保存，请完善页面信息!", "error");
                         return;
                     }
-                    option.content = {
-                        imageMsg: {
-                            picUrl: picUrl
-                        }
-                    };
                 } else if (this.msgType == 2) {
-                    let text = this.replycontentData.textMsg.text;
-                    console.log('333',text)
                     if (!trim(text)) {
                         notify(this, "无法保存，请完善页面信息!", "error");
                         return;
                     }
-                    option.content = {
-                        textMsg: {
-                            text: text
-                        }
-                    };
                 } else if (this.msgType == 3) {
-                    let curEditorItem = this.$refs.newMsg.curEditorItem;
-                    let newsMsg = this.replycontentData.newsMsg;
                     if (newsMsg.length === 0) {
                         notify(this, "无法保存，请完善页面信息!", "error");
                         return;
                     }
-                    option.content = {
-                        newsMsg: newsMsg
-                    };
                 }
             } else if (this.replyType == 3) {
                 let keywordList = this.$refs.keywordAnswer.keywordList;
@@ -378,8 +396,7 @@ export default {
                 message: this.$createElement("div", null, message),
                 callback: async action => {
                     if (action === "confirm") {
-                        this._removeReply(this.replyDetail.id);
-                        //this._getKeywordReplyList();
+                        this._removeReply(this.SiteId,this.replyDetail.id);
                     }
                 }
             });

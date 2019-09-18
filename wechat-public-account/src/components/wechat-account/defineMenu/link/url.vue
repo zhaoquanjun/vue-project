@@ -101,7 +101,7 @@ export default {
       display: block;
       width: 12px;
       height: 12px;
-      background: url("~@static/images/link/error_tips.png") no-repeat center
+      background: url("~img/link/error_tips.png") no-repeat center
         center;
       background-size: 100% 100%;
     }
@@ -123,27 +123,33 @@ export default {
       justify-content: flex-start;
       align-items: center;
     }
-    .way-list__box /deep/ .el-radio__label {
-      font-size: 12px;
-      color: #262626;
-    }
-    .way-list__box /deep/ .is-checked {
-      .el-radio__inner {
-        border-color: #00c1de;
-        background: #00c1de;
+    .way-list__box {
+      .el-radio__label {
+        font-size: 12px;
+        color: #262626;
       }
-    }
+    } 
+    .way-list__box {
+      .is-checked {
+        .el-radio__inner {
+          border-color: #00c1de;
+          background: #00c1de;
+        }
+      }
+    } 
   }
 }
-.popup-content__area /deep/ .el-input__inner {
-  margin-left: 12px;
-  width: 560px;
-  height: 32px;
-  line-height: 32px;
-  padding-left: 8px;
-  border-radius: 0;
-  text-align: left;
-  background: rgba(255, 255, 255, 1);
-  border: 1px solid rgba(229, 229, 229, 1);
-}
+.popup-content__area {
+  .el-input__inner {
+    margin-left: 12px;
+    width: 560px;
+    height: 32px;
+    line-height: 32px;
+    padding-left: 8px;
+    border-radius: 0;
+    text-align: left;
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(229, 229, 229, 1);
+  }
+} 
 </style>

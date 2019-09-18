@@ -4,7 +4,7 @@ const config = {
     authority: enbironmemy.authorityUrl,
     client_id: enbironmemy.clientId,
     //client_id: "content.api",
-    redirect_uri: enbironmemy.redirectUrl,
+    redirect_uri: enbironmemy.redirectUrls,
     response_type: 'code',
     // content.api
     //scope: 'openid profile content.api',

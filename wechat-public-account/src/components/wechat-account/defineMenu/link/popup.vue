@@ -124,11 +124,11 @@ export default {
         { name: "页面", label: "page" },
         { name: "文章", label: "news" },
         { name: "产品", label: "product" },
-        { name: "链接", label: "link" },
-        { name: "邮件", label: "email" },
-        { name: "文件", label: "file" },
-        { name: "电话", label: "tel" },
-        { name: "弹窗", label: "popup" }
+        // { name: "链接", label: "link" },
+        // { name: "邮件", label: "email" },
+        // { name: "文件", label: "file" },
+        // { name: "电话", label: "tel" },
+        // { name: "弹窗", label: "popup" }
       ],
       noneWords: {
         words: '暂无链接',
@@ -271,7 +271,7 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
-  z-index: 19;
+  z-index: 19999999999;
   .link-popup__section {
     position: absolute;
     top: 50%;
@@ -296,7 +296,7 @@ export default {
       span:last-of-type {
         width: 12px;
         height: 12px;
-        background: url("~@static/images/link/close.png") no-repeat center
+        background: url("~img/link/close.png") no-repeat center
           center;
         background-size: 100% 100%;
         cursor: pointer;
@@ -326,22 +326,7 @@ export default {
       display: flex;
       justify-content: flex-end;
     }
-    .popup-footer__area /deep/ .el-button--small {
-      width: 58px;
-      height: 32px;
-      border-radius: 0;
-      border-color: #00c1de;
-      background: #fff;
-      span {
-        color: #00c1de;
-      }
-    }
-    .popup-footer__area /deep/ .el-button--primary {
-      background: #00c1de;
-      span {
-        color: #fff;
-      }
-    }
+    
   }
 }
 </style>
@@ -349,6 +334,26 @@ export default {
 .popup-content__area .content-main__slider .el-tree__empty-text {
   min-width: 60px;
 }
+</style>
+<style lang="css" scoped>
+.popup-footer__area .el-button--small {
+      width: 58px;
+      height: 32px;
+      border-radius: 0;
+      border-color: #00c1de;
+      background: #fff;
+      
+    }
+    .popup-footer__area .el-button--small span {
+        color: #00c1de;
+      }
+    .popup-footer__area .el-button--primary {
+      background: #00c1de;
+      
+    }
+    .popup-footer__area .el-button--primary span {
+        color: #fff;
+      }
 </style>
 
 

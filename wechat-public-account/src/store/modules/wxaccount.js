@@ -42,8 +42,7 @@ const user = {
         await store.dispatch('_setSiteId')
       }
       siteId =  store.state.dashboard.siteId
-      console.log('222:',siteId)
-      let data = await isAuth({infoType: "WeixinOA",siteId: siteId});
+      let data = await isAuth({infoType: "WeixinOA",siteId: '30001'});
       // debugger;
       let verify = {
         isAuth: data.data.isAuth,

@@ -3,11 +3,6 @@
         <div>
             <slot name="keyword"></slot>
         </div>
-          <header class="reply-title">
-            <span>回复内容</span>
-            <span>（内容三选一）</span>
-        </header>
-      
             <section class="reply-content">
             <div class="radio-tabs">
                 <el-radio-group v-model="radio" @change="changeHandler">
@@ -71,18 +66,6 @@ export default {
 </style>
 <style lang="scss" scoped>
 .reply {
-    .reply-title {
-        // font-size: 16px;
-        // font-weight: 500;
-        line-height: 22px;
-        padding-bottom: 24px;
-        :last-child{
-            font-size: 14px;
-            color: #B9CBCF;
-            font-weight: 400;
-            padding-left: 12px;
-        }
-    }
     .reply-content {
         min-height: 444px;
      
