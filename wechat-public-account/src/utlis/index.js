@@ -10,6 +10,9 @@ export function isImgFile(type) {
     let result = type.startsWith("image/");
     return result;
 }
+
+// 校验邮件
+export const reg = new RegExp(/((http|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/)
 /**
  * 图片大小是否超出限制
  * @param {*} size 图片大小

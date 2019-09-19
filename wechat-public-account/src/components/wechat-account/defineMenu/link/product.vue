@@ -80,6 +80,7 @@
           <li 
             v-for="(item,index) in productPageList" 
             :key="index"
+            :class="{active: pageActiveIndex == index}"
              @click="selectPage(index)"
           >
             {{item.title}}
@@ -132,6 +133,7 @@ export default {
       pageUrl: '',
       pageTitle: '',
       productTips: '全部分类',
+      pageActiveIndex: null,
       productPageList: [],
       productId: null,
       nodeIdArr: [],
@@ -165,6 +167,8 @@ export default {
       console.log('33333',data)
     },
     selectPage(ind){
+      this.pageActiveIndex = ind
+      this.productTips = this.productPageList[ind].title;
       if (this.productId) {
           this.$emit("handleChangeUrl", {
             url: this.productList[this.productId].id,
@@ -174,7 +178,7 @@ export default {
             pageIndex: this.pageIndex
         });
       } else {
-        console.log('请先选择产品')
+        notify(this, "请先选择产品", "error");
       }
     },
     _handleNodeClick(data) {
@@ -456,9 +460,15 @@ export default {
         color:#262626;
         line-height:40px;
         padding-left: 10px;
+        cursor: pointer;
       }
       li:hover {
-        background:rgb(223, 229, 235);
+        background:#F0F3F7;
+        color: #09CCEB;
+      }
+      .active {
+        background: #00c1de !important;
+        color: white !important;
       }
     }
   }

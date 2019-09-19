@@ -79,6 +79,7 @@
           <li 
             v-for="(item,index) in productPageList" 
             :key="index"
+            :class="{active: pageActiveIndex == index}"
              @click="selectPage(index)"
           >
             {{item.title}}
@@ -94,6 +95,7 @@ import * as linkApi from "@/api/linkApi";
 import environment from "@/environment/index";
 import NoneArea from "./none";
 import Loading from "@/components/common/loading.vue";
+import { notify } from "@/utlis/index.js";
 export default {
   props: {
     model: {
@@ -117,6 +119,7 @@ export default {
       timer: null,
       pageSize: 6,
       total: 6,
+      pageActiveIndex: null,
       siteId: this.$store.state.dashboard.siteId,
       newsTitle: "",
       defaultExpandedKeys: [],
@@ -160,6 +163,8 @@ export default {
       this.productPageList = data
     },
     selectPage(ind){
+      this.pageActiveIndex = ind;
+      this.productTips = this.productPageList[ind].title;
       if (this.newId) {
           this.$emit("handleChangeUrl", {
             url: this.newsList[this.newId].id,
@@ -169,7 +174,7 @@ export default {
             pageIndex: this.pageIndex
         });
       } else {
-        console.log('请先选择文章')
+        notify(this, "请先选择文章", "error");
       }
     },
     _handleNodeClick(data) {
@@ -450,9 +455,15 @@ export default {
         color:#262626;
         line-height:40px;
         padding-left: 10px;
+        cursor: pointer;
       }
       li:hover {
-        background:rgb(223, 229, 235);
+        background:#F0F3F7;
+        color: #09CCEB;
+      }
+      .active {
+        background: #00c1de !important;
+        color: white !important;
       }
     }
   }

@@ -23,35 +23,35 @@
                 @handlerSave="handlerSave"
                 @handlerDelete="handlerDelete"
             >
-                <!-- 添加关键词回复 addAnswer===false" 下方出现 -->
-                <keyword-answer
-                    v-if="addAnswer===false"
-                    slot="keyword"
-                    ref="keywordAnswer"
-                    :addAnswer="addAnswer"
-                    :keyword-data="keywordData"
-                    :propKeywordList="propKeywordList"
-                ></keyword-answer>
-                <!-- 图片 -->
-                <Picture
-                    ref="pictureComponent"
-                    :image-msg="replycontentData.imageMsg.picUrl"
-                    v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)"
-                    @handlerPic="handlerPic"
-                ></Picture>
-                <!-- 文字 -->
-                <anser-text
-                    :serve-text="replycontentData.textMsg.text"
-                    v-show="msgType===2"
-                    @handlerText="handlerText"
-                ></anser-text>
-                <!-- 图文 -->
-                <image-text
-                    ref="newMsg"
-                    v-show="msgType===3"
-                    :news-msg="replycontentData.newsMsg"
-                    @handlerSaveImgText="handlerSaveImgText"
-                ></image-text>
+            <!-- 添加关键词回复 addAnswer===false" 下方出现 -->
+            <keyword-answer
+                v-if="addAnswer===false"
+                slot="keyword"
+                ref="keywordAnswer"
+                :addAnswer="addAnswer"
+                :keyword-data="keywordData"
+                :propKeywordList="propKeywordList"
+            ></keyword-answer>
+            <!-- 图片 -->
+            <Picture
+                ref="pictureComponent"
+                :image-msg="replycontentData.imageMsg.picUrl"
+                v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)"
+                @handlerPic="handlerPic"
+            ></Picture>
+            <!-- 文字 -->
+            <anser-text
+                :serve-text="replycontentData.textMsg.text"
+                v-show="msgType===2"
+                @handlerText="handlerText"
+            ></anser-text>
+            <!-- 图文 -->
+            <image-text
+                ref="newMsg"
+                v-show="msgType===3"
+                :news-msg="replycontentData.newsMsg"
+                @handlerSaveImgText="handlerSaveImgText"
+            ></image-text>
             </reply-content>
             <!-- 初始关键词回复 begin -->
             <keyword-answer
@@ -185,7 +185,6 @@ export default {
                 notify(this, "删除成功", "success");
                 this.isSet = false;
             }
-            console.log(data, "删除回复信息");
         },
         //删除关键词回复信息
         async _removeKeywordReply(id) {
@@ -198,7 +197,7 @@ export default {
                         let {
                             data,
                             status
-                        } = await autoAnswerApi.removeKeywordReply(id);
+                        } = await autoAnswerApi.removeKeywordReply(id,this.SiteId);
                         this.$notify({
                             customClass: "notify-success",
                             message: `删除成功`,
@@ -212,7 +211,7 @@ export default {
         },
         //新增关键词回复信息
         async _addKeywordReply(option) {
-            let { data, status } = await autoAnswerApi.addKeywordReply(option);
+            let { data, status } = await autoAnswerApi.addKeywordReply(option,this.SiteId);
             if (status === 200) {
                 this.$notify({
                     customClass: "notify-success",
@@ -242,13 +241,13 @@ export default {
         },
         //编辑关键词回复信息
         async _updateKeywordReply(option, editorId) {
-            let data = await autoAnswerApi.updateKeywordReply(option, editorId);
+            let data = await autoAnswerApi.updateKeywordReply(option, editorId, this.SiteId);
             console.log(data, "编辑关键词回复信息");
         },
         // 保存
         handlerSave() {
             let option = {
-                siteId: this.$store.state.dashboard.siteId,
+                siteId: this.SiteId,
                 replyType: this.replyType,
                 msgType: this.msgType,
                 publicPlatformReplyInput: {
@@ -488,7 +487,7 @@ export default {
         padding-top: 32px;
     }
     .reply-wrap {
-        padding: 32px;
+        padding: 32px 0;
         position: relative;
         //  overflow-y: auto;
     }

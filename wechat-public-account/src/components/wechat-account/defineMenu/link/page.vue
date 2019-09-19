@@ -6,14 +6,14 @@
         <li
           v-for="(it, i) in pageList"
           :key="i"
-          :class="{active: it.url == selectedUrl && curType == 'page'}"
+          :class="{active: pageId == i }"
           @click.stop="_handleSelectPage(i)"
         >
           <p class="single-line__overflow--hide">{{it.title}}</p>
           <p class="date single-line__overflow--hide">
             <span>{{it.createdTime.slice(0, 10)}}</span>
             <span
-              :style="{visibility: it.url == selectedUrl && curType == 'page' ? 'visible' : 'hidden'}"
+              :style="{visibility: pageId == i ? 'visible' : 'hidden'}"
             ></span>
           </p>
         </li>
@@ -50,6 +50,7 @@ export default {
         { title: "网站首页", createdTime: "2019-07-19", url: "/123" },
         { title: "网站首页", createdTime: "2019-07-19", url: "/345" }
       ],
+      pageId: null,
       tips:
         '暂无页面，请先<span style="color: #00C1DE;cursor: pointer;">添加页面</span>'
     };
@@ -66,6 +67,7 @@ export default {
       this.pageList = data;
     },
     _handleSelectPage(i) {
+      this.pageId = i;
       this.$emit("handleChangeUrl", {
         url: this.pageList[i].pageId,
         title: this.pageList[i].title,
@@ -83,18 +85,17 @@ export default {
 <style lang="scss" scoped>
 .popup-content__area {
   width: 590px;
-  height: 454px;
+  height: 90%;
   p {
     padding: 20px 12px 13px;
     font-size: 14px;
     line-height: 17px;
     color: #00c1de;
-    cursor: auto;
   }
   .content-list__area {
     padding: 0 6px;
     width: 590px;
-    height: 324px;
+    height: 100%;
     overflow-y: auto;
     li {
       display: flex;

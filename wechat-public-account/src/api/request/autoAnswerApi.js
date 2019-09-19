@@ -29,16 +29,16 @@ export const removeReply = (SiteId,id) => {
  * 删除关键词回复信息
  * @param {*} id 
  */
-export const removeKeywordReply = id => {
+export const removeKeywordReply = (id,SiteId) => {
     let param = [id]
-    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/BatchRemoveKeywordReply`,{data:param});
+    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/BatchRemoveKeywordReply/${SiteId}`,{data:param});
 }
 
 /**
  * 新增关键词回复信息
  */
-export const addKeywordReply = (option) => {
-    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddKeywordReply`,option);
+export const addKeywordReply = (option,siteid) => {
+    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddKeywordReply/${siteid}`,option);
 }
 
 /**
@@ -52,8 +52,8 @@ export const addOrOverrideReply = (option) => {
 /**
  * 编辑关键词回复信息
  */
-export const updateKeywordReply = (option,id) => {
-    return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/Reply/UpdateKeywordReply/${id}`,option);
+export const updateKeywordReply = (option,id,SiteId) => {
+    return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/Reply/UpdateKeywordReply/${SiteId}/${id}`,option);
 }
 
 

@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import NoneArea from "./none";
+import NoneArea from "./self";
 import PageArea from "./page";
 import NewsArea from "./news";
 import ProductArea from "./product";
@@ -229,7 +229,7 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
-  z-index: 19999999999;
+  z-index: 100;
   .link-popup__section {
     position: absolute;
     top: 0;
@@ -268,7 +268,7 @@ export default {
       border-bottom: 1px solid #eee;
       .popup-content__slider {
         width: 90px;
-        height: 454px;
+        height: 100%;
         padding: 21px 12px;
         border-right: 1px solid #eee;
         cursor: auto;
@@ -281,7 +281,6 @@ export default {
     .popup-footer__area {
       padding: 15px 20px 20px;
       display: flex;
-      justify-content: flex-end;
     }
     
   }
