@@ -1,6 +1,9 @@
 <template>
   <div class="define-menu__section">
-    <page-sub-nav :title="title"></page-sub-nav>
+    <ChangeSite
+      @chooseWebsite="chooseWebsite"
+      @getSiteId="getSiteId"
+    />
     <div class="define-menu__content" v-if="isVerify">
       <warm-pronpt :desc="tips" style="margin-top: 16px;"></warm-pronpt>
       <div class="menu-setting__area">
@@ -14,6 +17,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import PageSubNav from "_c/common/WechatTitle";
+import ChangeSite from "@/components/common/changeSite";
 import WarmPronpt from "_c/wechat-account/menu/warm-prompt";
 import DefineMenu from "_c/wechat-account/menu/define-menu";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
@@ -27,6 +31,7 @@ export default {
   },
   components: {
     PageSubNav,
+    ChangeSite,
     WarmPronpt,
     DefineMenu,
     AccountCertification
@@ -40,6 +45,17 @@ export default {
       },
       set: function() {}
     }
+  },
+  methods: {
+    getSiteId(siteId) {
+      console.log('siteId',siteId)
+      // this.getSiteInfo(siteId);
+    },
+    // 切换站点刷新信息
+    chooseWebsite(siteId) {
+      console.log('siteId',siteId)
+      // this.getSiteInfo(siteId);
+    },
   }
 };
 </script>

@@ -10,7 +10,7 @@ import environment from "@/environment/index";
  * Available values : Follow, Receive
  */
 export const getReplyDetail = replyType => {
-    return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Reply/GetReplyDetail/${replyType}`);
+    return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Reply/GetReplyDetail/30001/${replyType}`);
 }
 /**
  * 获取关键词回复列表
@@ -47,8 +47,7 @@ export const addKeywordReply = (option) => {
  * 回复类型 1 被关注时回复 2 收到消息时回复
  */
 export const addOrOverrideReply = (option) => {
-    console.log(option)
-    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddOrOverrideReply/${option.replyType}/${option.msgType}`,option.content);
+    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddOrOverrideReply/${option.siteId}/${option.replyType}/${option.msgType}`,option.content);
 }
 /**
  * 编辑关键词回复信息

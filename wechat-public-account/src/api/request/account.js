@@ -9,7 +9,7 @@ export const isAuth = param => {
 }
 
 export const wxAuth = () => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/getweixinauthurl`);
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/getweixinauthurl`, {siteId: store.state.dashboard.siteId});
 }
 
 export const getPageSiteList = () => {
