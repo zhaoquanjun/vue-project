@@ -5,11 +5,6 @@
             @chooseWebsite="chooseWebsite"
             @getSiteId="getSiteId"
         />
-        <PopUp
-            :model="model"
-            @handleClosePopup="handleClosePopup"
-           
-        />
         <div class="answer-tabs">
             <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
                 <el-tab-pane label="被关注时回复" name="1"></el-tab-pane>
@@ -76,7 +71,6 @@
 <script>
 import WechatTitle from "@/components/common/WechatTitle.vue";
 import ChangeSite from "@/components/common/changeSite";
-import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import ReplyContent from "@/components/wechat-account/auto-answer/reply-content.vue";
 import Picture from "@/components/wechat-account/auto-answer/picture.vue";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
@@ -123,6 +117,7 @@ export default {
                 textMsg: { text: "" },
                 newsMsg: []
             },
+            isShowPopup: false,
             scrollHeight: 500,
             propKeywordList: ""
         };
@@ -130,7 +125,6 @@ export default {
     components: {
         WechatTitle,
         ChangeSite,
-        PopUp,
         ReplyContent,
         Picture,
         AnserText,
@@ -147,9 +141,6 @@ export default {
         });
     },
     methods: {
-        handleClosePopup (val){
-            console.log('2222',val)
-        },
         getSiteId(siteId) {
             console.log('siteId',siteId)
             // this.getSiteInfo(siteId);

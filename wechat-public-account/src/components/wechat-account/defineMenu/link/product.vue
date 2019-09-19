@@ -31,14 +31,14 @@
               <li
                 v-for="(it, i) in productList"
                 :key="i"
-                :class="{active: it.url == selectedUrl && curType == 'product'}"
+                :class="{active: productId == i }"
                 @click.stop="_handleSelectPage(i)"
               >
                 <p class="single-line__overflow--hide">{{it.name}}</p>
                 <p class="date single-line__overflow--hide">
                   <span>{{it.createTime && it.createTime.slice(0, 10)}}</span>
                   <span
-                    :style="{visibility: it.url == selectedUrl && curType == 'product' ? 'visible' : 'hidden'}"
+                    :style="{visibility: productId == i ? 'visible' : 'hidden'}"
                   ></span>
                 </p>
               </li>
@@ -67,15 +67,24 @@
       </div>
     </div>
     <div class="popup-content__open">
-      <p>页面打开方式</p>
+      <p>选择文章详情页</p>
       <div class="way-list__box">
-        <el-radio v-model="way" label="_self" @change="_handleChageLinkTarget">当前窗口打开</el-radio>
-        <el-radio
-          v-model="way"
-          label="_blank"
-          style="margin-left: 24px;"
-          @change="_handleChageLinkTarget"
-        >新窗口打开</el-radio>
+        <div>
+          <span class="tips">{{productTips}}<i>></i></span>
+          <a 
+            :href="productHref"
+            target="_blank"
+          >预览详情页</a>
+        </div>
+        <ul class="product-page-list">
+          <li 
+            v-for="(item,index) in productPageList" 
+            :key="index"
+             @click="selectPage(index)"
+          >
+            {{item.title}}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -86,6 +95,7 @@ import * as linkApi from "@/api/linkApi";
 import environment from "@/environment/index";
 import noneArea from "./none";
 import Loading from "@/components/common/loading.vue";
+import { trim, notify } from "@/utlis/index.js";
 export default {
   props: {
     model: {
@@ -110,12 +120,20 @@ export default {
   data() {
     return {
       timer: null,
+      siteId: this.$store.state.dashboard.siteId,
       pageSize: 6,
       total: 6,
+      productHref: 'https://www.baidu.com/',
       productTitle: "",
       defaultExpandedKeys: [],
       treeArray: [],
       productList: [],
+      pageId: '',
+      pageUrl: '',
+      pageTitle: '',
+      productTips: '全部分类',
+      productPageList: [],
+      productId: null,
       nodeIdArr: [],
       loading: false,
       search: false,
@@ -138,8 +156,27 @@ export default {
   created() {
     this.getProductList(this.nodeIdArr);
     this.getProductTree();
+    this.getPageList();
   },
   methods: {
+    async getPageList(){
+      let { data } = await linkApi.getPagesList({ siteId: this.siteId,PageType: 'ProductPage' });
+      this.productPageList = data
+      console.log('33333',data)
+    },
+    selectPage(ind){
+      if (this.productId) {
+          this.$emit("handleChangeUrl", {
+            url: this.productList[this.productId].id,
+            title: this.productList[this.productId].name,
+            cType: "Product",
+            id: this.productPageList[ind].pageId,
+            pageIndex: this.pageIndex
+        });
+      } else {
+        console.log('请先选择产品')
+      }
+    },
     _handleNodeClick(data) {
       this.nodeIdArr = this._handleRecursive(data.children, [data.id]);
       this.getProductList(this.nodeIdArr);
@@ -179,12 +216,13 @@ export default {
       this.treeArray = data.treeArray;
     },
     _handleSelectPage(i) {
-      this.$emit("handleChangeUrl", {
-        url: this.productList[i].url,
-        title: this.productList[i].name,
-        cType: "product",
-        pageIndex: this.pageIndex
-      });
+      this.productId = i
+      // this.$emit("handleChangeUrl", {
+      //   url: this.productList[i].url,
+      //   title: this.productList[i].name,
+      //   cType: "product",
+      //   pageIndex: this.pageIndex
+      // });
     },
     _handleSearch(val) {
       this.timer = setTimeout(() => {
@@ -218,7 +256,7 @@ export default {
 <style lang="scss" scoped>
 .popup-content__area {
   width: 590px;
-  height: 454px;
+  height: 100%;
   .popup-content__add {
     display: flex;
     justify-content: space-between;
@@ -249,19 +287,19 @@ export default {
     display: flex;
     justify-content: flex-start;
     width: 563px;
-    height: 297px;
+    height: 60%;
     text-align: right;
     border: 1px solid rgba(238, 238, 238, 1);
     .content-main__slider {
       padding: 16px 8px;
       width: 128px;
-      height: 294px;
+      height: 100%;
       overflow-y: auto;
       border-right: 1px solid #eee;
     }
     .content-main__list {
       width: 434px;
-      height: 297px;
+      height: 100%;
       .content-main__search {
         display: flex;
         align-items: flex-end;
@@ -286,11 +324,10 @@ export default {
       .content-main__list--outer {
         position: relative;
         overflow: hidden;
-        height: calc(100% - 36px);
+        height: 100%;
         .content-main__list--item {
           padding: 10px 6px 0;
           width: 434px;
-          height: 200px;
           overflow-y: auto;
           li {
             display: flex;
@@ -366,21 +403,63 @@ export default {
     }
   }
   .popup-content__open {
+    position: relative;
     margin-top: 16px;
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
     border-top: 1px solid #eee;
     p {
-      padding: 0 0 12px;
-      font-size: 14px;
-      line-height: 17px;
-      color: #00c1de;
+      font-size:14px;
+      font-family:"PingFangSC";
+      font-weight:400;
+      color:rgba(38,38,38,1);
+      line-height:20px;
+      margin-bottom: 10px;
     }
-    .way-list__box {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+    .tips {
+      display: inline-block;
+      width:250px;
+      height:32px;
+      border-radius:2px;
+      border:1px solid rgba(229,229,229,1);
+      font-size:14px;
+      font-family:"PingFangSC";
+      font-weight:400;
+      color:rgba(211,211,211,1);
+      line-height:32px;
+      padding: 0 10px;
+      i {
+        float: right;
+      }
+    }
+    a {
+      font-size:14px;
+      font-family:"PingFangSC";
+      font-weight:400;
+      color:rgba(9,204,235,1);
+      margin-left: 10px;
+    }
+    .product-page-list {
+      position: absolute;
+      top: 100px;
+      left: 20px;
+      width:472px;
+      height: 200px;
+      overflow: hidden;
+      overflow-y: auto;
+      li {
+        height:40px;
+        font-size:14px;
+        font-family:"PingFangSC";
+        font-weight:400;
+        color:#262626;
+        line-height:40px;
+        padding-left: 10px;
+      }
+      li:hover {
+        background:rgb(223, 229, 235);
+      }
     }
   }
 }

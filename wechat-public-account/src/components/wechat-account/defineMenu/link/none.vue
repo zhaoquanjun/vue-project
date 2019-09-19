@@ -1,21 +1,32 @@
 <template>
   <div class="popup-content__none">
-    <div class="content-none__area">
-      <div class="none-area__icon">
-        <span></span>
-      </div>
-      <p>
-        <slot></slot>  
-      </p>
-    </div>
+    <h5>请输入网址</h5>
+    <input @keyup="_handleChangeUrl" placeholder="请输入网站" v-model="url">
+    <div class="tips">请输入正确网址</div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    target: {
+    noneUrl: {
       type: String
+    }
+  },
+  data(){
+    return {
+      url: ''
+    }
+  },
+  methods: {
+    _handleChangeUrl(){
+      let data = {
+        url: this.url,
+        cType: 'Url',
+        title: null,
+        id: null
+      }
+      this.$emit('handleChangeUrl',data)
     }
   }
 }
@@ -25,30 +36,31 @@ export default {
   .popup-content__none {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: auto;
-    .content-none__area {
-      .none-area__icon {
-        margin: 0 auto;
-        width: 61px;
-        height: 47px;
-        border-radius: 50%;
-        span {
-          display: block;
-          width: 100%;
-          height: 100%;
-          background: url('~img/link/none_tips.png') no-repeat center center;
-          background-size: 100% 100%;
-        }
-      }
-      p {
-        margin-top: 24px;
-        font-size: 14px;
-        line-height: 17px;
-        text-align: center;
-      }
+    padding-left: 24px;
+    h5 {
+      height:20px;
+      font-size:14px;
+      font-family:"PingFangSC";
+      font-weight:400;
+      color:rgba(38,38,38,1);
+      line-height:20px;
+      margin: 20px 0 10px;
+    }
+    input {
+      width:470px;
+      height:40px;
+      padding-left: 10px;
+      background:rgba(255,255,255,1);
+      border-radius:2px;
+      border:1px solid rgba(5,149,230,1);
+    }
+    .tips {
+      margin-top: 10px;
+      font-size:14px;
+      font-family:"PingFangSC";
+      font-weight:400;
+      color:rgba(38,38,38,1);
+      line-height:20px;
     }
   }
 </style>

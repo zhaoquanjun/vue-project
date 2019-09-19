@@ -18,18 +18,6 @@
           </p>
         </li>
       </ul>
-      <div class="popup-content__open">
-        <p>页面打开方式</p>
-        <div class="way-list__box">
-          <el-radio v-model="way" label="_self" @change="_handleChageLinkTarget">当前窗口打开</el-radio>
-          <el-radio
-            v-model="way"
-            label="_blank"
-            style="margin-left: 24px;"
-            @change="_handleChageLinkTarget"
-          >新窗口打开</el-radio>
-        </div>
-      </div>
     </template>
     <none-area :tips="tips" v-else />
   </div>
@@ -79,9 +67,10 @@ export default {
     },
     _handleSelectPage(i) {
       this.$emit("handleChangeUrl", {
-        url: this.pageList[i].url,
+        url: this.pageList[i].pageId,
         title: this.pageList[i].title,
-        cType: "page"
+        id: this.pageList[i].pageId,
+        cType: "Page"
       });
     },
     _handleChageLinkTarget(val) {

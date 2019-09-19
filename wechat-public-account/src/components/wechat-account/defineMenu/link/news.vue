@@ -31,14 +31,14 @@
             <li
               v-for="(it, i) in newsList"
               :key="i"
-              :class="{active: (it.url == selectedUrl && curType == 'news')}"
+              :class="{active: newId==i}"
               @click.stop="_handleSelectPage(i)"
             >
               <p class="single-line__overflow--hide">{{it.title}}</p>
               <p class="date single-line__overflow--hide">
                 <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span>
                 <span
-                  :style="{visibility: it.url == selectedUrl && curType == 'news' ? 'visible' : 'hidden'}"
+                  :style="{visibility: newId==i ? 'visible' : 'hidden'}"
                 ></span>
               </p>
             </li>
@@ -66,15 +66,24 @@
       </div>
     </div>
     <div class="popup-content__open">
-      <p>页面打开方式</p>
+      <p>选择文章详情页</p>
       <div class="way-list__box">
-        <el-radio v-model="way" label="_self" @change="_handleChageLinkTarget">当前窗口打开</el-radio>
-        <el-radio
-          v-model="way"
-          label="_blank"
-          style="margin-left: 24px;"
-          @change="_handleChageLinkTarget"
-        >新窗口打开</el-radio>
+        <div>
+          <span class="tips">{{productTips}}<i>></i></span>
+          <a 
+            :href="productHref"
+            target="_blank"
+          >预览详情页</a>
+        </div>
+        <ul class="product-page-list">
+          <li 
+            v-for="(item,index) in productPageList" 
+            :key="index"
+             @click="selectPage(index)"
+          >
+            {{item.title}}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -108,10 +117,15 @@ export default {
       timer: null,
       pageSize: 6,
       total: 6,
+      siteId: this.$store.state.dashboard.siteId,
       newsTitle: "",
       defaultExpandedKeys: [],
       treeArray: [],
       newsList: [],
+      productPageList:[],
+      productTips: '全部分类',
+      newId: null,
+      productHref: 'https://www.baidu.com/',
       nodeId: 0,
       loading: false,
       target: "createArticle",
@@ -138,8 +152,26 @@ export default {
   created() {
     this.getNewsList(this.nodeId);
     this.getCategorytree();
+    this.getPageList();
   },
   methods: {
+    async getPageList(){
+      let { data } = await linkApi.getPagesList({ siteId: this.siteId,PageType: 'ProductPage' });
+      this.productPageList = data
+    },
+    selectPage(ind){
+      if (this.newId) {
+          this.$emit("handleChangeUrl", {
+            url: this.newsList[this.newId].id,
+            title: this.newsList[this.newId].title,
+            cType: "News",
+            id: this.productPageList[ind].pageId,
+            pageIndex: this.pageIndex
+        });
+      } else {
+        console.log('请先选择文章')
+      }
+    },
     _handleNodeClick(data) {
       this.nodeId = data.id;
       this.getNewsList(this.nodeId);
@@ -147,7 +179,7 @@ export default {
     async getNewsList(id) {
       let options = {
         title: this.newsTitle,
-        categoryId: id,
+        categoryIdList: id,
         newsOrderColumns: "createtime",
         topStatus: null,
         publishStatus: null,
@@ -179,11 +211,12 @@ export default {
       return arr;
     },
     _handleSelectPage(i) {
-      this.$emit("handleChangeUrl", {
-        url: this.newsList[i].url,
-        title: this.newsList[i].title,
-        cType: "news"
-      });
+      this.newId = i
+      // this.$emit("handleChangeUrl", {
+      //   url: this.newsList[i].url,
+      //   title: this.newsList[i].title,
+      //   cType: "news"
+      // });
     },
     _handleChageLinkTarget(val) {
       this.$emit("handleChangeTarget", val);
@@ -216,7 +249,7 @@ export default {
 <style lang="scss" scoped>
 .popup-content__area {
   width: 590px;
-  height: 454px;
+  height: 92%;
   .popup-content__add {
     display: flex;
     justify-content: space-between;
@@ -248,20 +281,20 @@ export default {
     display: flex;
     justify-content: flex-start;
     width: 563px;
-    height: 297px;
+    height: 60%;
     text-align: right;
     border: 1px solid rgba(238, 238, 238, 1);
     .content-main__slider {
       padding: 16px 8px;
       width: 128px;
-      height: 294px;
+      height: 100%;
       overflow-y: auto;
       border-right: 1px solid #eee;
     }
     .content-main__list {
       position: relative;
       width: 434px;
-      height: 297px;
+      height: 100%;
       .content-main__search {
         display: flex;
         align-items: flex-end;
@@ -363,22 +396,64 @@ export default {
       background: #01c0de;
     }
   } 
-  .popup-content__open {
+   .popup-content__open {
+    position: relative;
     margin-top: 16px;
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
     border-top: 1px solid #eee;
     p {
-      padding: 0 0 12px;
-      font-size: 14px;
-      line-height: 17px;
-      color: #00c1de;
+      font-size:14px;
+      font-family:"PingFangSC";
+      font-weight:400;
+      color:rgba(38,38,38,1);
+      line-height:20px;
+      margin-bottom: 10px;
     }
-    .way-list__box {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+    .tips {
+      display: inline-block;
+      width:250px;
+      height:32px;
+      border-radius:2px;
+      border:1px solid rgba(229,229,229,1);
+      font-size:14px;
+      font-family:"PingFangSC";
+      font-weight:400;
+      color:rgba(211,211,211,1);
+      line-height:32px;
+      padding: 0 10px;
+      i {
+        float: right;
+      }
+    }
+    a {
+      font-size:14px;
+      font-family:"PingFangSC";
+      font-weight:400;
+      color:rgba(9,204,235,1);
+      margin-left: 10px;
+    }
+    .product-page-list {
+      position: absolute;
+      top: 100px;
+      left: 20px;
+      width:560px;
+      height: 240px;
+      overflow: hidden;
+      overflow-y: auto;
+      li {
+        height:40px;
+        font-size:14px;
+        font-family:"PingFangSC";
+        font-weight:400;
+        color:#262626;
+        line-height:40px;
+        padding-left: 10px;
+      }
+      li:hover {
+        background:rgb(223, 229, 235);
+      }
     }
   }
 }

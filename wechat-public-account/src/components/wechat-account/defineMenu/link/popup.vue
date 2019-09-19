@@ -11,7 +11,7 @@
             <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
           </li>
         </ul>
-        <none-area :tips="tips" v-show="slider == 'none'" :noneWords="noneWords" />
+        <none-area @handleChangeUrl="handleChangeUrl" v-show="slider == 'none'" :noneUrl="noneUrl" />
         <page-area
           :model="model"
           :selectedUrl="selectedUrl"
@@ -41,46 +41,6 @@
           @handleChangeUrl="handleChangeUrl"
           @handleChangeTarget="handleChangeTarget"
           v-if="slider == 'product'"
-        />
-        <url-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
-          v-if="slider == 'link'"
-        />
-        <email-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
-          v-if="slider == 'email'"
-        />
-        <tel-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
-          v-if="slider == 'tel'"
-        />
-        <file-area
-          :model="model"
-          :selectedUrl="selectedUrl"
-          :way="way"
-          :type="type"
-          :curType="curType"
-          @handleChangeUrl="handleChangeUrl"
-          @handleChangeTarget="handleChangeTarget"
-          v-if="slider == 'file'"
         />
         <mask-area
           :model="model"
@@ -120,7 +80,7 @@ export default {
   data() {
     return {
       sliderList: [
-        { name: "无链接", label: "none" },
+        { name: "纯链接", label: "none" },
         { name: "页面", label: "page" },
         { name: "文章", label: "news" },
         { name: "产品", label: "product" },
@@ -130,16 +90,13 @@ export default {
         // { name: "电话", label: "tel" },
         // { name: "弹窗", label: "popup" }
       ],
-      noneWords: {
-        words: '暂无链接',
-        target: []
-      },
+      noneUrl: '',
       pageIndex: this.model['PageIndex'],
       slider: this.model["Type"],
       curType: this.model["Type"],
       selectedUrl: this.model["Href"],
+      id: this.model["Href"],
       way: this.model["Target"],
-      tips: "无链接",
       title: ""
     };
   },
@@ -185,6 +142,7 @@ export default {
       let oldTarget = this.model["Target"];
       let oldTitle = this.model["Title"];
       let oldType = this.model["Type"];
+      let oldId = this.model["id"];
       let oldPageIndex = this.pageIndex;
       if (oldUrl !== this.selectedUrl || oldTarget !== this.way) {
         this.model["Href"] = this.selectedUrl;
@@ -199,12 +157,16 @@ export default {
         oldData["Target"] = oldTarget;
         oldData["Title"] = oldTitle;
         oldData['PageIndex'] = oldPageIndex;
+        oldData['Id'] = oldId;
         data["Type"] = this.slider;
         data["Href"] = this.selectedUrl;
         data["Target"] = this.way;
         data["Title"] = this.title;
+        data["Type"] = this.curType;
+        data['Id'] = this.id;
         data['PageIndex'] = this.model['PageIndex'];
-        this.onDataChange(null, oldData, data);
+        console.log('popup',data)
+        this.$emit("handleClosePopup", false, data, oldData);
       }
       this.$emit("handleClosePopup", false);
     },
@@ -248,17 +210,13 @@ export default {
       this.selectedUrl = val.url;
       this.curType = val.cType;
       this.title = val.title;
+      this.id = val.id;
       return false;
     },
     handleChangeTarget(val) {
       console.log(val);
       this.way = val;
     },
-    onDataChange(action, oldData, data) {
-      if (window.smSite) {
-        window.smSite.onDataChange(action, oldData, data);
-      }
-    }
   }
 };
 </script>
@@ -274,11 +232,10 @@ export default {
   z-index: 19999999999;
   .link-popup__section {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    right: 0;
     width: 680px;
-    height: 560px;
+    height: 100%;
     background: rgba(255, 255, 255, 1);
     // box-shadow: 0px 0px 8px 2px rgba(228, 234, 239, 1);
     border-radius: 2px;
@@ -306,7 +263,7 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
-      height: 454px;
+      height: 90%;
       overflow: hidden;
       border-bottom: 1px solid #eee;
       .popup-content__slider {
