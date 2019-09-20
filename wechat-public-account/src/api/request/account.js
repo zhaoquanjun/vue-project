@@ -12,6 +12,9 @@ export const wxAuth = () => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/getweixinauthurl`, {siteId: store.state.dashboard.siteId});
 }
 
+export const unBind = () => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/unbind`, {siteId: '2',infoType:'WeixinOA'});
+}
 export const getPageSiteList = () => {
   return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetSiteList`);
 }
