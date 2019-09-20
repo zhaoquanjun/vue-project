@@ -5,7 +5,7 @@
         @getSiteId="getSiteId"
     />
     <div class="account-setting__content" > 
-      <account-certification v-if="isAuth&&!isCertification"></account-certification>
+      <account-certification v-if="isAuth && !isCertification"></account-certification>
       <div v-else class="account-setting__bind--box">
         <SpeedProgress />
         <div class="account-setting__bind">
@@ -46,7 +46,7 @@ export default {
   },
   created() {
     this._getWxIsAuth();
-    console.log(this.isVerify, '333')
+    console.log(this.isAuth, this.isCertification, '333')
   },
   methods: {
     getSiteId(siteId) {

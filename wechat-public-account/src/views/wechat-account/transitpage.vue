@@ -3,6 +3,7 @@
 </template>
 <script>
 import { transit } from "@/api/request/account.js";
+import { notify } from "@/utlis/index.js";
 export default {
   created() {
     this._appendSpace();
@@ -18,7 +19,10 @@ export default {
   methods: {
     async _transitPage(str) {
       let { data } = await transit(str);
-      window.close();
+      notify(this, data, "error");
+      setTimeout(function (){
+        window.close();
+      }, 3000)
     },
     _appendSpace() {
       var oDiv = document.createElement("div");

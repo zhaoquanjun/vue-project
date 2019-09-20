@@ -44,7 +44,7 @@ router.beforeEach(async (to, from, next) => {
         }
         if (!store.getters.wx_status.isAuth) {
           await store.dispatch('_getWxStatus')
-          let wx_status = store.getters.wx_status;
+          let wx_status = this.$store.state.wxaccount.wx_status;
           if (!wx_status.isAuth || !wx_status.isCertification) {
             next('/wechataccount/wxauther');
             return;
