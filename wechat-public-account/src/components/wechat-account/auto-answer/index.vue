@@ -50,6 +50,7 @@
                 ref="newMsg"
                 v-show="msgType===3"
                 :news-msg="replycontentData.newsMsg"
+                :replyType= 'replyType'
                 @handlerSaveImgText="handlerSaveImgText"
             ></image-text>
             </reply-content>

@@ -12,10 +12,9 @@
                 v-for="(item,index) in list"
                 :key="index"
             >
-                <div class="headline">{{item.title}}</div>
+                <div class="headline">{{item.Title}}</div>
                 <div class="imgwrap">
-                    <img
-                        src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
+                    <img :src="item.PicUrl"
                     />
                 </div>
                 <div class="mask">
@@ -37,7 +36,7 @@
                 <div class="example">
                     <div
                         class="headline ellipsis"
-                    >{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
+                    >{{curEditorItem.title?curEditorItem.Title:defualtTitle}}</div>
                     <div class="imgwrap">
                         <img
                             src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
@@ -50,8 +49,9 @@
                         <el-input
                             size="small"
                             placeholder="请选择链接"
-                            v-model="curEditorItem.url"
+                            v-model="curEditorTitle"
                             class="input-with-select"
+                            readonly
                         >
                             <i
                                 class="el-icon-link el-input__icon"
@@ -80,7 +80,7 @@
                     <div class="seting-item">
                         <div class="seting-title">图文标题</div>
                         <el-input
-                            v-model="curEditorItem.title"
+                            v-model="curEditorItem.Title"
                             size="small"
                             placeholder="不超过64个字符"
                             maxlength="64"
@@ -92,7 +92,7 @@
                         <el-input
                             class="textarea"
                             type="textarea"
-                            v-model="curEditorItem.description"
+                            v-model="curEditorItem.Description"
                             rows="5"
                             placeholder="非必填，不超过120个字符，该摘要只在发送图文消息为单条时显示"
                             maxlength="120"
@@ -106,10 +106,10 @@
                 </div>
             </li>
         </ul>
-        <!-- <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8">
+        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes != 3">
             <span class="el-icon-plus avatar-uploader-icon"></span>
             <span>最多添加8个图文消息</span>
-        </div> -->
+        </div>
         <image-manage
             :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
             @getImage="getImage"
@@ -123,7 +123,7 @@ import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { uploadImg } from "@/api/request/account.js";
 export default {
-    props: ["newsMsg"],
+    props: ["newsMsg","replyType"],
     components: {
         PopUp,
         ImageManage
@@ -139,17 +139,19 @@ export default {
             },
             defualtTitle: "这里是标题",
             curEditorItem: {
-                title: "",
-                description: "",
-                picUrl:"",
-                urlType: "",
-                urlData: "",
-                contentPageId: ''
+                Title: "",
+                Description: "",
+                PicUrl:"",
+                UrlType: "",
+                UrlData: "",
+                ContentPageId: ''
             },
+            curEditorTitle: '',
             isUploaded: false,
             isEditorShow: false,
             isEditor: true,
             index: 0,
+            replyTypes: 0,
             imageChooseAreaShowFlag: false,
             isShowPopup: false,
             picUrl: ""
@@ -157,6 +159,7 @@ export default {
     },
     mounted() {
         this.list = this.newsMsg;
+        this.replyTypes = this.replyType;
          this.list.forEach((item, index) => {
                 item["isShow"] = true;
             });
@@ -169,10 +172,10 @@ export default {
         handleClosePopup (val,data){
             this.isShowPopup = val
             if (data) {
-                console.log('888',data)
-                this.curEditorItem.urlType = data.Type;
-                this.curEditorItem.urlData = data.Href;
-                this.curEditorItem.contentPageId = data.Id;
+                this.curEditorItem.UrlType = data.Type;
+                this.curEditorItem.UrlData = data.Href;
+                this.curEditorItem.ContentPageId = data.Id;
+                this.curEditorTitle = data.Title;
             }
         },
         downward(item, index) {
@@ -215,6 +218,7 @@ export default {
             if (!this.isEditor) {
                 this.list.push(this.curEditorItem);
                 this.isEditorShow = false;
+                console.log('7777',this.list)
             } else {
                 // 编辑
 
@@ -225,9 +229,9 @@ export default {
             this.isEditorShow = this.isEditor = false;
             // 添加完成后重置一下
             this.curEditorItem = {
-                title: "",
-                description: "",
-                picUrl:
+                Title: "",
+                Description: "",
+                PicUrl:
                     "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
             };
         },
@@ -242,7 +246,7 @@ export default {
             // this.picUrl = data;
             console.log('333',src)
              this.picUrl = src;
-             this.curEditorItem.picUrl = src;
+             this.curEditorItem.PicUrl = src;
           
         },
         // 关闭弹层
@@ -259,6 +263,7 @@ export default {
     watch: {
         newsMsg() {
             this.list = this.newsMsg;
+            this.replyTypes = this.replyType;
             this.list.forEach((item, index) => {
                 item["isShow"] = true;
             });
