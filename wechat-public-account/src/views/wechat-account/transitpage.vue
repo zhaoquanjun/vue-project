@@ -19,6 +19,7 @@ export default {
   methods: {
     async _transitPage(str) {
       let { data } = await transit(str);
+      console.log(data)
       notify(this, data, "error");
       setTimeout(function (){
         window.close();
