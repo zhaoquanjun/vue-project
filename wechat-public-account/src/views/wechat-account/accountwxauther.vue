@@ -5,7 +5,7 @@
         @getSiteId="getSiteId"
     />
     <div class="account-setting__content" > 
-      <account-certification v-if="isAuth"></account-certification>
+      <account-certification v-if="isAuth&&!isCertification"></account-certification>
       <div v-else class="account-setting__bind--box">
         <SpeedProgress />
         <div class="account-setting__bind">
@@ -34,6 +34,7 @@ export default {
     return {
       title: "账号设置",
       isAuth: this.$store.state.wxaccount.wx_status.isAuth,
+      isCertification: this.$store.state.wxaccount.wx_status.isCertification,
       wechanIcon: require("img/account/wechat_icon.png")
     };
   },
