@@ -4,7 +4,7 @@
         @chooseWebsite="chooseWebsite"
         @getSiteId="getSiteId"
     />
-    <div class="account-setting__content">
+    <div class="account-setting__content" v-if="isVerify"> 
       <div class="account-setting__bind--box">
         <SpeedProgress />
         <div class="account-setting__bind">
@@ -18,6 +18,7 @@
         </div>
       </div>
     </div>
+    <account-certification v-else></account-certification>
   </div>
 </template>
 
@@ -26,6 +27,8 @@ import PageSubNav from "_c/common/WechatTitle";
 import SpeedProgress from "@/components/common/speedProgress";
 import ChangeSite from "@/components/common/changeSite";
 import { wxAuth } from "@/api/request/account.js";
+import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
+
 export default {
   data() {
     return {
@@ -36,7 +39,8 @@ export default {
   components: {
     ChangeSite,
     SpeedProgress,
-    PageSubNav
+    PageSubNav,
+    AccountCertification
   },
   methods: {
     getSiteId(siteId) {

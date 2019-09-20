@@ -64,25 +64,26 @@ export default {
   },
   created() {
     this._getWxIsAuth();
-    setTimeout(() => {
-      console.log('ppp666',this.account_info);
-    }, 1000);
   },
   computed: {
     ...mapGetters(["account_info"])
   },
   methods: {
     getSiteId(siteId) {
-      this.siteId = siteId;
-      // this.getSiteInfo(siteId);
+      console.log('000')
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
-      // this.getSiteInfo(siteId);
+      this._getWxIsAuth()
     },
     // 校验是否已经授权认证
     async _getWxIsAuth() {
       await this.$store.dispatch('_getWxStatus')
+      let wx_status = this.$store.state.wxaccount.wx_status
+      console.log(this.$store.state)
+      if (!wx_status.isAuth || !wx_status.isCertification) {
+        this.$router.replace({path:'/wechataccount/wxauther' });
+      }
     },
     //解除绑定
     unBind(){

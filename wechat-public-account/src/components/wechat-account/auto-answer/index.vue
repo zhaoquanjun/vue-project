@@ -132,6 +132,9 @@ export default {
         KeywordAnswer,
         ImageText
     },
+    created() {
+        this._getWxIsAuth();
+    },
     mounted() {
         this._getReplyDetail(1);
         this.$nextTick(() => {
@@ -148,8 +151,15 @@ export default {
         },
         // 切换站点刷新信息
         chooseWebsite(siteId) {
-            console.log('siteId2',siteId,this.$store.state.dashboard.siteId)
-            // this.getSiteInfo(siteId);
+            this._getWxIsAuth()
+        },
+        async _getWxIsAuth() {
+            await this.$store.dispatch('_getWxStatus')
+            let wx_status = this.$store.state.wxaccount.wx_status
+            console.log(this.$store.state)
+            if (!wx_status.isAuth || !wx_status.isCertification) {
+                this.$router.replace({path:'/wechataccount/wxauther' });
+            }
         },
         //获取回复详情
         async _getReplyDetail(replyType) {

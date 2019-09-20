@@ -44,13 +44,11 @@ router.beforeEach(async (to, from, next) => {
         }
         if (!store.getters.wx_status.isAuth) {
           await store.dispatch('_getWxStatus')
-          next('/wechataccount/wxauther');
-          return;
-        }
-        let wx_status = store.getters.wx_status;
-        if (!wx_status.isAuth) {
-          next('/wechataccount/wxauther');
-          return;
+          let wx_status = store.getters.wx_status;
+          if (!wx_status.isAuth || !wx_status.isCertification) {
+            next('/wechataccount/wxauther');
+            return;
+          }
         }
         next()
       } else {
