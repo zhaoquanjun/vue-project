@@ -4,8 +4,9 @@
         @chooseWebsite="chooseWebsite"
         @getSiteId="getSiteId"
     />
-    <div class="account-setting__content" v-if="isVerify"> 
-      <div class="account-setting__bind--box">
+    <div class="account-setting__content" > 
+      <account-certification v-if="isAuth"></account-certification>
+      <div v-else class="account-setting__bind--box">
         <SpeedProgress />
         <div class="account-setting__bind">
           <img :src="wechanIcon" alt />
@@ -18,7 +19,6 @@
         </div>
       </div>
     </div>
-    <account-certification v-else></account-certification>
   </div>
 </template>
 
@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       title: "账号设置",
+      isAuth: this.$store.state.wxaccount.wx_status.isAuth,
       wechanIcon: require("img/account/wechat_icon.png")
     };
   },
@@ -42,6 +43,10 @@ export default {
     PageSubNav,
     AccountCertification
   },
+  created() {
+    this._getWxIsAuth();
+    console.log(this.isVerify, '333')
+  },
   methods: {
     getSiteId(siteId) {
       this.siteId = siteId;
@@ -49,7 +54,16 @@ export default {
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
-      // this.getSiteInfo(siteId);
+      this._getWxIsAuth()
+    },
+    // 校验是否已经授权认证
+    async _getWxIsAuth() {
+      await this.$store.dispatch('_getWxStatus')
+      let wx_status = this.$store.state.wxaccount.wx_status
+      console.log(this.$store.state)
+      if (wx_status.isAuth && wx_status.isCertification) {
+        this.$router.replace({path:'/wechataccount/accountsetting' });
+      }
     },
     // 微信授权
     async _handleWxAuth() {
