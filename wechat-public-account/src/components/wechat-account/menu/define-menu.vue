@@ -44,8 +44,16 @@
                 <el-input v-model="menu_reply_behavior.name" placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母"></el-input>
               </el-form-item>
               <el-form-item label="菜单内容">
-                <el-radio label="message" v-model="menu_reply_behavior.ClickBehavior" @change="_handleBehaviorType">发送消息</el-radio>
-                <el-radio label="website" v-model="menu_reply_behavior.ClickBehavior" @change="_handleBehaviorType">跳转网页</el-radio>
+                <el-radio
+                  label="message"
+                  v-model="menu_reply_behavior.ClickBehavior"
+                  @change="_handleBehaviorType"
+                >发送消息</el-radio>
+                <el-radio
+                  label="website"
+                  v-model="menu_reply_behavior.ClickBehavior"
+                  @change="_handleBehaviorType"
+                >跳转网页</el-radio>
                 <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
               </el-form-item>
             </el-form>
@@ -58,10 +66,7 @@
                   <div class="choose-icon" @click="_handleUploadPicture"></div>
                   <p @click="_handleUploadPicture">点击上传</p>
                 </div>
-                <div
-                  class="picture-show"
-                  v-show="chooseImg.length > 0"
-                >
+                <div class="picture-show" v-show="chooseImg.length > 0">
                   <img :src="chooseImg" alt />
                   <div class="show-mask__area">
                     <div class="icon-box">
@@ -80,7 +85,10 @@
                   v-model="menuWords"
                 ></el-input>
               </div>
-              <div class="picture-words__menu" v-show="menu_reply_behavior.BehaviorType == 'picture_words'"></div>
+              <div
+                class="picture-words__menu"
+                v-show="menu_reply_behavior.BehaviorType == 'picture_words'"
+              ></div>
             </message-area>
             <website-area
               :menuTree="menuTree[curIndex]"
@@ -117,7 +125,8 @@ export default {
       menuWords: "",
       chooseImg: "",
       menuTree: [],
-      menuDetail: {}
+      menuDetail: {},
+      siteId: 0
     };
   },
   components: {
@@ -130,25 +139,26 @@ export default {
   computed: {
     ...mapGetters(["menu_reply_behavior"])
   },
-  created() {
-    this._getMenuTree();
+  mounted() {
+    console.log(this.siteId);
+    // this._getMenuTree();
     console.log(this.menu_reply_behavior);
   },
   methods: {
+    getCurSiteId(siteId) {
+      this.siteId = siteId;
+      this._getMenuTree();
+    },
     async _getMenuTree() {
-      let {data} = await getMenuTree()
-      this.menuTree= data;
-      if (this.menuTree.length == 0) return;
-      let id = this.menuTree[0].id
-      this._getMenuDetail(id);
+      // let { data } = await getMenuTree(this.siteId);
+      // this.menuTree = data;
+      // if (this.menuTree.length == 0) return;
+      // let id = this.menuTree[0].id;
+      // this._getMenuDetail(id);
     },
     async _getMenuDetail(id) {
-      let params = {
-        id: id,
-        authorizerAppId: 'wx4e25803a4fadd328'
-      }
-      let {data} = await getMenuDetail()
-      this.menuDetail= data;
+      let { data } = await getMenuDetail(this.siteId, id);
+      this.menuDetail = data;
     },
     // 菜单排序
     _handleMenuOrder() {
@@ -196,7 +206,7 @@ export default {
     // 关闭弹层
     handleCloseModal() {
       this.imageChooseAreaShowFlag = false;
-    },
+    }
     // 重置当前菜单右侧数据类型
     // _handle
   }

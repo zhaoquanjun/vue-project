@@ -9,7 +9,7 @@ export const isAuth = param => {
 }
 
 export const wxAuth = () => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/getweixinauthurl`, {siteId: store.state.dashboard.siteId});
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/getweixinauthurl`, { siteId: store.state.dashboard.siteId });
 }
 
 export const getPageSiteList = () => {
@@ -22,7 +22,7 @@ export const getPageData = () => {
 }
 
 export const getArticleList = (options) => {
-  return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetNewsList/${options.pageIndex}/${options.pageSize}`,options);
+  return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetNewsList/${options.pageIndex}/${options.pageSize}`, options);
 }
 
 export const getArticleCategory = () => {
@@ -38,12 +38,12 @@ export const getProductCategory = () => {
 }
 
 // 获取菜单树结构
-export const getMenuTree = () => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuTree`);
+export const getMenuTree = (SiteId) => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuTree/${SiteId}`);
 }
 // 获取菜单单个详情
-export const getMenuDetail = options => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuDetail/${options.authorizerAppId}/${options.id}`);
+export const getMenuDetail = (siteId, id) => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuDetail/${siteId}/${id}`);
 }
 
 // 图片区域
@@ -86,7 +86,7 @@ export const transit = param => {
 
 export const uploadImg = (imgUrl) => {
   let params = {
-    authorizerAppId:store.state.wxaccount.account_info.platformAppId,
+    authorizerAppId: store.state.wxaccount.account_info.platformAppId,
     imgUrl
   }
   console.log(store)
