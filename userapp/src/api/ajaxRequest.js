@@ -3,12 +3,10 @@
  */
 
 import axios from 'axios';
-import { MessageBox, Message, Notification } from 'element-ui';
-import { getLocal,setLocal } from "@/libs/local.js";
+import { Notification } from 'element-ui';
+import { getLocal, clearAllCookie } from "@/libs/local.js";
 import environment from "@/environment/index.js";
 import store from "@/store/index";
-import router from '@/router/index'
-import Cookies from "js-cookie"
 import securityService from "@/services/authentication/securityService";
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
@@ -77,10 +75,8 @@ axios.interceptors.response.use(
                     // 未登录则跳转登录页面，并携带当前页面的路径                
                     // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                     case 401:
-                        // alert('404')
-                        // store.commit("SET_USER")
-                        // window.sessionStorage.clear()
-                        // securityService.signIn();
+                        clearAllCookie();
+                        securityService.signOut();
                         break;
                     // 403 token过期                
                     // 登录过期对用户进行提示                
@@ -88,6 +84,8 @@ axios.interceptors.response.use(
                     // 跳转登录页面                
                     case 403:
                         alert('403')
+                        clearAllCookie();
+                        securityService.signIn();
                         break;
                     // 404请求不存在                
                     case 404:

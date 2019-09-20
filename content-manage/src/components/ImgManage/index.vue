@@ -36,6 +36,7 @@
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
+                    :multiple="multiple"
                     @getList="getList"
                     @rename="renamePic"
                     @batchRemove="batchRemovePic"
@@ -123,7 +124,13 @@ export default {
         isGrid: {
             type: Boolean,
             default: false
-        }
+        },
+        multiple: {
+            type: Boolean,
+            default: () => {
+                return true;
+            }
+        },
     },
     components: {
         MTree,

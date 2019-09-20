@@ -3,13 +3,11 @@
  */
 import axios from 'axios';
 import qs from 'qs';
-import { getLocal } from "@/libs/local.js"
+import { getLocal, clearAllCookie } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 import store from "@/store/index"
-import router from '@/router/index'
 import { MessageBox, Message, Loading, Notification } from 'element-ui';
 import securityService from "@/services/authentication/securityService";
-import Cookies from "js-cookie";
 let loading;        //定义loading变量
 function startLoading() {    //使用Element loading-start 方法
     loading = Loading.service({
@@ -93,9 +91,8 @@ axios.interceptors.response.use(
                 // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                 case 401:
                     // router.push({ path: '/401' })
-                    store.commit("SET_USER")
-                    window.sessionStorage.clear()
-                    securityService.signIn();
+                    clearAllCookie()
+                    securityService.signOut(location.href);
 
                     break;
                 // 403 token过期                
@@ -104,6 +101,8 @@ axios.interceptors.response.use(
                 // 跳转登录页面                
                 case 403:
                     alert('403')
+                    clearAllCookie();
+                    securityService.signIn();
                     break;
                 // 404请求不存在                
                 case 404:

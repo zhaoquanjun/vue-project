@@ -121,7 +121,7 @@
                     ></el-button>
                     <el-carousel-item v-for="item in picSearchOptions.pageSize" :key="item">
                         <h3>
-                            <img :src="fullOssUrl" />
+                            <img width="100%" :src="fullOssUrl" />
                         </h3>
                     </el-carousel-item>
                     <el-button

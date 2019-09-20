@@ -82,9 +82,10 @@ export default {
             // ];
             let flieUrls = this.$refs.articleRight.newFileList;
             console.log(this.$refs.articleRight);
-            let fileList = flieUrls.map(item => {
-                return item.response;
-            });
+            // let fileList = flieUrls.map(item => {
+            //     return item.response;
+            // });
+            let fileList = this.$refs.articleRight.newFileList;
             if (this.isEdit) {
                 this.$refs.articleContent.editArticle("contentForm", fileList, this.disableRefObj);
                 return;
@@ -101,12 +102,9 @@ export default {
             let { data } = await productManageApi.getProductDetail(id);
             let thumbnailPicUrlList = data.thumbnailPicUrlList;
             thumbnailPicUrlList.forEach(item => {
-                this.fileList.push({
-                    name: "123",
-                    response: item,
-                    url: item
-                });
+                this.fileList.push(item);
             });
+            console.log(this.fileList,'==]]]]')
           
         },
         changeSaveWay(isEdit) {

@@ -111,6 +111,7 @@ export default {
             isInvitationPanelShow: false,
             articleSearchOptions: {
                 title: "",
+                categoryIdList: [0],
                 categoryId: 0,
                 newsOrderColumns: "createtime",
                 topStatus: null,
