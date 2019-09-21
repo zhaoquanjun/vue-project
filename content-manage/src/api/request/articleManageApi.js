@@ -1,4 +1,5 @@
 import * as ajaxRequest from "../ajaxRequest";
+import environment from "@/environment/index";
 
 // case
 //GET   ajaxRequest.get(`url`,params);
@@ -85,3 +86,9 @@ export const deleteNewsCategory = (idList) => {
 export const modifyNode = (id, parentId, idOrderByArr) => {
     return ajaxRequest.put(`/api/NewsCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);
 }
+/**
+ * 获取文章产品预览地址
+ */
+export const GetContentPrevAddress = (pageType) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Page/GetContentPrevAddress/${pageType}`);
+};

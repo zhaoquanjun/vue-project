@@ -335,6 +335,7 @@ export default {
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
             this.$emit("changeOperateName", "编辑");
+            this.$emit("changePreviewId", id);
         }
         this.getTreeAsync();
         this.editorOption = {
@@ -460,6 +461,7 @@ export default {
             );
             disableRefObj.inSaveProcess = false;
             if (status === 200) {
+                this.$emit("changePreviewId", data);
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     iconClass: "icon-success",

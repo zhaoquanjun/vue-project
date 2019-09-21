@@ -22,7 +22,7 @@
                     <el-col :span="9" :offset="3">
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
-                            <button>预览</button>
+                            <button @click="preview">预览</button>
                             <button :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
                         </div>
                     </el-col>
@@ -36,6 +36,7 @@
                                 ref="articleContent"
                                 @changeSaveWay="changeSaveWay"
                                 @handlerClickNewAdd="handlerClickNewAdd"
+                                @changePreviewId="changePreviewId"
                             />
                         </el-col>
                         <el-col :span="6" style="margin-left: 16px;max-width:345px;min-width:345px">
@@ -65,7 +66,8 @@ export default {
             disableRefObj: { inSaveProcess: false},
             fileList: [],
             detailData: {},
-            isEdit: false
+            isEdit: false,
+            previewId: ""
         };
     },
 
@@ -112,6 +114,22 @@ export default {
         },
         handlerClickNewAdd() {
             this.fileList = [];
+        },
+        changePreviewId(id){
+            this.previewId = id;
+        },
+        /**
+         * 预览
+         */
+        async preview() {
+            if(this.previewId){
+                let { data } = await productManageApi.GetContentPrevAddress('ProductDetail');
+                var prevAddress = data;
+                var a = document.createElement('a');
+                a.setAttribute('href', prevAddress + this.previewId + '.html');
+                a.setAttribute('target', '_blank');
+                a.click();
+            }
         }
     },
     mounted() {
