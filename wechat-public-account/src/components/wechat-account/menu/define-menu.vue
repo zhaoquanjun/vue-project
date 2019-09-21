@@ -15,7 +15,7 @@
             {{item.name || '主菜单'}}
             <ul class="menu-child__area">
               <li v-for="(child, idx) in item.subMenuList" :key="idx">
-                <i class="iconfont icontuodongdian menu-move__icon" v-show="isOrder"></i>
+                <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
                 {{child.name || '子菜单'}}
               </li>
               <li @click="_handleAddChildMenu" v-show="item.children.length < 5">+</li>
@@ -70,8 +70,8 @@
                   <img :src="chooseImg" alt />
                   <div class="show-mask__area">
                     <div class="icon-box">
-                      <i class="iconfont iconqiehuan" @click="_handleUploadPicture"></i>
-                      <i class="iconfont iconhuishouzhan" @click="_handleDeleteImg"></i>
+                      <i class="iconfont iconqiehuanxingshiyi" @click="_handleUploadPicture"></i>
+                      <i class="iconfont iconshanchu" @click="_handleDeleteImg"></i>
                     </div>
                   </div>
                 </div>

@@ -4,10 +4,10 @@
             <img :src="picUrl" alt />
             <span class="mask">
                 <button>
-                    <i class="iconfont iconqiehuan"></i>
+                    <i class="iconfont iconqiehuanxingshiyi"></i>
                 </button>
                 <button @click="handlerDelete">
-                    <i class="iconfont iconhuishouzhan"></i>
+                    <i class="iconfont iconshanchu"></i>
                 </button>
             </span>
         </div>

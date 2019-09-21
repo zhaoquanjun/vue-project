@@ -11,7 +11,7 @@
           <i class="iconfont" :class="it.icon"></i>
           <span class="title single-line__overflow--hide">{{title}}</span>
         </p>
-        <i class="iconfont iconlianjietiao"></i>
+        <i class="iconfont iconicon-des-lj"></i>
       </li>
     </ul>
     <popup

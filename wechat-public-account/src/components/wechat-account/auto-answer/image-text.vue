@@ -19,16 +19,16 @@
                 </div>
                 <div class="mask">
                     <button @click="upward(item,index)" v-if="index!==0">
-                        <i class="iconfont iconshang"></i>
+                        <i class="iconfont iconjiantoushang"></i>
                     </button>
                     <button @click="downward(item,index)" v-if="index!==list.length-1">
-                        <i class="iconfont iconxia"></i>
+                        <i class="iconfont iconjiantouxia"></i>
                     </button>
                     <button @click="editor(item,index)">
-                        <i class="iconfont iconcaozuo"></i>
+                        <i class="iconfont iconbianji"></i>
                     </button>
                     <button @click="remove(item,index)">
-                        <i class="iconfont iconhuishouzhan"></i>
+                        <i class="iconfont iconshanchu"></i>
                     </button>
                 </div>
             </li>
@@ -71,7 +71,7 @@
                                 <img :src="picUrl" />
                                 <div class="mask1">
                                     <button @click="removePic">
-                                        <i class="iconfont iconhuishouzhan"></i>
+                                        <i class="iconfont iconshanchu"></i>
                                     </button>
                                 </div>
                             </div>
