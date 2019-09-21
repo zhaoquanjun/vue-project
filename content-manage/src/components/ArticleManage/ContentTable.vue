@@ -25,7 +25,11 @@
                     <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" onerror="onImgError(this)" class="cover" />
                     <img v-else :src="defaultImg" class="cover" alt />
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
-                        <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.title }}</span>
+                        <a class="title-color" :href="prevAddress + scope.row.id + '.html'"
+                            target="_blank"
+                          >
+                                <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.title }}</span>
+                            </a>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -102,7 +106,7 @@
 <script>
 
 export default {
-    props: ["articlePageResult", "articleSearchOptions", "treeResult"],
+    props: ["articlePageResult", "articleSearchOptions", "treeResult", "prevAddress"],
   
     data() {
         return {
@@ -118,7 +122,7 @@ export default {
             row: "",
             tableHeight: 500,
             loadingShow: true,
-            tableData: ""
+            tableData: "",
         };
     },
     mounted() {
@@ -251,11 +255,15 @@ export default {
             }
         }
     },
+   
 };
 </script>
 
 <style lang="scss" scoped>
 @import "../../styles/manege-table.scss";
+.title-color{
+    color: #262626;
+}
 </style>
 
 

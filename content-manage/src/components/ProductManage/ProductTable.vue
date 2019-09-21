@@ -27,7 +27,11 @@
                     <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
                     <el-tooltip class="item" effect="dark" :content="scope.row.name" placement="top">
-                    <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.name }}</span>
+                        <a class="title-color" :href="prevAddress + scope.row.id + '.html'"
+                            target="_blank"
+                          >
+                                <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.name }}</span>
+                            </a>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -114,7 +118,7 @@
 
 <script>
 export default {
-    props: ["articlePageResult", "articleSearchOptions"],
+    props: ["articlePageResult", "articleSearchOptions", "prevAddress"],
 
     data() {
         return {
@@ -274,6 +278,9 @@ export default {
 @import "../../styles/manege-table.scss";
 .operate-section{
     display: block ;
+}
+.title-color{
+    color: #262626;
 }
 </style>
 
