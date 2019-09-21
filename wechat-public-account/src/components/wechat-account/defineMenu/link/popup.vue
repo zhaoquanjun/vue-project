@@ -138,37 +138,39 @@ export default {
     _handleConfirm() {
       var flag = this._handleNext(this.slider);
       if (!flag) return;
+      let oldData = {},
+          data = {};
       let oldUrl = this.model["Href"];
       let oldTarget = this.model["Target"];
       let oldTitle = this.model["Title"];
       let oldType = this.model["Type"];
       let oldId = this.model["id"];
       let oldPageIndex = this.pageIndex;
+
+      data["Type"] = this.slider;
+      data["Href"] = this.selectedUrl;
+      data["Target"] = this.way;
+      data["Title"] = this.title;
+      data["Type"] = this.curType;
+      data['Id'] = this.id;
+      data['PageIndex'] = this.model['PageIndex'];
+
       if (oldUrl !== this.selectedUrl || oldTarget !== this.way) {
         this.model["Href"] = this.selectedUrl;
         this.model["Target"] = this.way;
         this.model["Type"] = this.slider;
         this.model["Title"] = this.title;
         this.pageIndex = this.model['PageIndex'];
-        let oldData = {},
-          data = {};
         oldData["Type"] = oldType;
         oldData["Href"] = oldUrl;
         oldData["Target"] = oldTarget;
         oldData["Title"] = oldTitle;
         oldData['PageIndex'] = oldPageIndex;
         oldData['Id'] = oldId;
-        data["Type"] = this.slider;
-        data["Href"] = this.selectedUrl;
-        data["Target"] = this.way;
-        data["Title"] = this.title;
-        data["Type"] = this.curType;
-        data['Id'] = this.id;
-        data['PageIndex'] = this.model['PageIndex'];
-        console.log('popup',data)
         this.$emit("handleClosePopup", false, data, oldData);
+      } else {
+        this.$emit("handleClosePopup", false, data);
       }
-      this.$emit("handleClosePopup", false);
     },
     _handleCancle() {
       this.selectedUrl = this.model["Href"];
