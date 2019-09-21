@@ -25,8 +25,8 @@
                     <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" onerror="onImgError(this)" class="cover" />
                     <img v-else :src="defaultImg" class="cover" alt />
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
-                        <a class="title-color" :href="prevAddress + scope.row.id + '.html'"
-                            target="_blank"
+                        <a class="title-color" :href="prevAddress == '' ? 'javascript:;' : prevAddress + scope.row.id + '.html'"
+                            :target="prevAddress == '' ? '_self' : '_blank'"
                           >
                                 <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.title }}</span>
                             </a>

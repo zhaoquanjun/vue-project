@@ -27,8 +27,8 @@
                     <img v-else :src="defaultImg" class="cover" alt />
                     <!-- 未传图片 取不到 -->
                     <el-tooltip class="item" effect="dark" :content="scope.row.name" placement="top">
-                        <a class="title-color" :href="prevAddress + scope.row.id + '.html'"
-                            target="_blank"
+                        <a class="title-color" :href="prevAddress == '' ? 'javascript:;' : prevAddress + scope.row.id + '.html'"
+                            :target="prevAddress == '' ? '_self' : '_blank'"
                           >
                                 <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.name }}</span>
                             </a>
