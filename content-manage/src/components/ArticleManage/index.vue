@@ -38,6 +38,7 @@
                     :article-page-result="articlePageResult"
                     :article-search-options="articleSearchOptions"
                     :tree-result="treeResult"
+                    :prev-address="prevAddress"
                     @getArticleList="getArticleList"
                     @batchMove="batchMoveNews"
                     @batchCopy="batchCopyNews"
@@ -109,6 +110,7 @@ export default {
             selectCategory: "",
             operateName: "移动",
             isInvitationPanelShow: false,
+            prevAddress:"",
             articleSearchOptions: {
                 title: "",
                 categoryIdList: [0],
@@ -123,6 +125,7 @@ export default {
         };
     },
     mounted() {
+        this.getContentPrevAddress();
         this.getArticleList();
         this.getTreeAsync();
     },
@@ -135,6 +138,13 @@ export default {
         }
     },
     methods: {
+        /**
+         * 获取预览地址
+         */
+        async getContentPrevAddress() {
+        let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail');
+                this.prevAddress = data;
+        },
         // 移动分类 或是 复制到分类
         changeOperateName(operate) {
             this.operateName = operate;
