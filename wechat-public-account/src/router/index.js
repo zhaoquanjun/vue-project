@@ -46,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
           await store.dispatch('_getWxStatus')
           let wx_status = store.state.wxaccount.wx_status;
           if (!wx_status.isAuth || !wx_status.isCertification) {
-            //next('/wechataccount/wxauther');
+            next('/wechataccount/wxauther');
             return;
           }
         }
