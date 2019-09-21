@@ -52,17 +52,17 @@ export const getMenuDetail = (siteId, id) => {
 export const addMenu = options => {
   return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/CreateMenu`,options);
 }
-// 编辑保存菜单
+// 保存并更新
 export const updateMenu = options => {
-  return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/UpdateMenu`,options);
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/CustomDefineMenu/UpdateMenu`,options);
 }
-// 发布菜单
+// 保存并发布
 export const publishMenu = options => {
-  return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/PublishMenu`,options);
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/CustomDefineMenu/PublishMenu`,options);
 }
 // 删除菜单
 export const removeMenu = (siteId, id) => {
-  return ajaxRequest.delete(`${environment.wechataccountApi}/api/CustomDefineMenu/RemoveMenu/${siteId}/${id}`);
+  return ajaxRequest._delete(`${environment.wechataccountApi}/api/CustomDefineMenu/RemoveMenu/${siteId}/${id}`);
 }
 // 调整菜单排序
 export const modifyMenuOrder = (siteId, options) => {

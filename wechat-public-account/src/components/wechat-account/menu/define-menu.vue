@@ -9,14 +9,18 @@
           <li
             v-for="(item, index) in menuTree"
             :key="index"
-            :class="{selected: index == curIndex}"
-            @click="_handleSelectMenu(index)"
+            :class="{selected: index == curIndex && item.subMenuList.length <= 0}"
+            @click="_handleSelectMenu(1,index)"
           >
             {{item.name || '主菜单'}}
-            <ul class="menu-child__area">
+            <ul 
+              class="menu-child__area"
+              v-show="item.subMenuList.length > 0 && index == curIndex"
+            >
               <li 
-                v-show="item.subMenuList.length > 0" 
-                v-for="(child, idx) in item.subMenuList" 
+                v-for="(child, idx) in item.subMenuList"
+                :class="{selected: idx == curSubIndex}"
+                @click="_handleSelectMenu(2,idx)"
                 :key="idx">
                 <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
                 {{child.name || '子菜单'}}
@@ -60,45 +64,49 @@
                 <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
               </el-form-item>
             </el-form>
-            <message-area
-              :menuTree="menuTree[curIndex]"
-              v-show="menuDetail.clickBehavior == 'Reply'"
-            >
-              <div class="picture-menu" v-show="menuDetail.behaviorType == 'picture'">
-                <div class="choose-picture__area" v-show="chooseImg.length == 0">
-                  <div class="choose-icon" @click="_handleUploadPicture"></div>
-                  <p @click="_handleUploadPicture">点击上传</p>
+            <div v-show="menuDetail.clickBehavior == 'Reply'" class="message-content__section">
+              <section class="menu-content__area">
+                <div class="radio-tabs">
+                  <el-radio label="Image" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('Image')">图片</el-radio>
+                  <el-radio label="Text" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('Text')">文字</el-radio>
+                  <el-radio label="News" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('News')">图文</el-radio>
                 </div>
-                <div class="picture-show" v-show="chooseImg.length > 0">
-                  <img :src="chooseImg" alt />
-                  <div class="show-mask__area">
-                    <div class="icon-box">
-                      <i class="iconfont iconqiehuanxingshiyi" @click="_handleUploadPicture"></i>
-                      <i class="iconfont iconshanchu" @click="_handleDeleteImg"></i>
-                    </div>
-                  </div>
+                <div class="slot-content">
+                  <!-- 图片 -->
+                  <Picture
+                      ref="pictureComponent"
+                      v-if="menuDetail.behaviorType === 'Image'"
+                      :image-msg="menuDetail.behaviorBody.ImageMsg.PicUrl"
+                      @handlerPic="handlerPic"
+                  ></Picture>
+                  <!-- 文字 -->
+                  <anser-text
+                      :serve-text="menuDetail.behaviorBody.TextMsg.Text"
+                      v-if="menuDetail.behaviorType === 'Text'"
+                      @handlerText="handlerText"
+                  ></anser-text>
+                  <!-- 图文 -->
+                  <image-text
+                      ref="newMsg"
+                      v-if="menuDetail.behaviorType === 'News'"
+                      :news-msg="menuDetail.behaviorBody.NewsMsg"
+                      :replyType= 'replyType'
+                      @handlerSaveImgText="handlerSaveImgText"
+                  ></image-text>
                 </div>
-              </div>
-              <div class="words-menu" v-show="menuDetail.behaviorType == 'words'">
-                <el-input
-                  type="textarea"
-                  maxlength="600"
-                  show-word-limit
-                  placeholder="请输入菜单回复内容"
-                  v-model="menuWords"
-                ></el-input>
-              </div>
-              <div
-                class="picture-words__menu"
-                v-show="menuDetail.behaviorType == 'picture_words'"
-              ></div>
-            </message-area>
+              </section>
+            </div>
             <!-- 跳转链接 -->
             <div v-show="menuDetail.clickBehavior == 'RedirectUrl'" class="website-area">
-              <div @click="selectUrl">选择链接</div>
+              <div class="selectUrl">
+                <span>设置跳转链接</span>
+                <div>
+                  <p>{{menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData}}<p/>
+                  <i class="iconfont iconicon-des-lj" @click="selectUrl"></i>
+                </div>
+              </div>
               <p></p>
             </div>
-            
             <PopUp
               :model="model"
               @handleClosePopup="handleClosePopup"
@@ -108,21 +116,21 @@
         </div>
       </div>
     </div>
-    <image-manage
-      :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
-      @getImage="getImage"
-      @handleCloseModal="handleCloseModal"
-    ></image-manage>
+    <div class="btn">
+      <span @click="_handleSaveAndPublish">保存并发布</span>
+    </div>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
+import Picture from "@/components/wechat-account/auto-answer/picture.vue";
 import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue"
 import OrderMenu from "_c/wechat-account/defineMenu/order-menu";
-import MessageArea from "_c/wechat-account/defineMenu/message-content";
+import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
 import WebsiteLink from "_c/wechat-account/defineMenu/link/link";
-import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
-import { getMenuTree, getMenuDetail,addMenu } from "@/api/request/account.js";
+import { notify } from "@/utlis/index.js";
+import ImageText from "@/components/wechat-account/auto-answer/image-text.vue";
+import { getMenuTree, getMenuDetail,addMenu,publishMenu,removeMenu,updateMenu } from "@/api/request/account.js";
 export default {
   data() {
     return {
@@ -132,43 +140,44 @@ export default {
           Id: null,
           Href: null
       },
+      replyType: "1", //replyType 回复类型
       isShowPopup: false,
       curIndex: 0,
+      curSubIndex: 0,
       isOrder: false,
-      imageChooseAreaShowFlag: false,
       replyContentType: "picture",
       menuWords: "",
       chooseImg: "",
       menuTree: [],
       menuDetail: {
-        id: 0,
-        siteId: 0,
+        id: null,
+        siteId: '30001',
         name: "",
         clickBehavior: "None", // None 无, Reply消息, RedirectUrl 链接, RedirectSmallProgram 小程序
         behaviorType: "None",//None无,Image图片,Text文字,News图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
         behaviorBody: {
-          imageMsg: {
-            picUrl: "string",
-            weChatMediaId: "string"
+          ImageMsg: {
+            PicUrl: "string",
+            WeChatMediaId: "string"
           },
-          textMsg: {
-            text: "string"
+          TextMsg: {
+            Text: "string"
           },
-          newsMsg: [
+          NewsMsg: [
             {
-              title: "string",
-              description: "string",
-              picUrl: "string",
-              urlType: "string",
-              urlData: "string",
-              contentPageId: "string"
+              Title: "string",
+              Description: "string",
+              PicUrl: "string",
+              UrlType: "string",
+              UrlData: "string",
+              ContentPageId: "string"
             }
           ],
-          customMenuRedirectMsg: {
-            urlType: "string",
-            title: "string",
-            urlData: "string",
-            contentPageId: "string"
+          CustomMenuRedirectMsg: {
+            UrlType: "string",
+            Title: "string",
+            UrlData: "请选择跳转链接",
+            ContentPageId: "string"
           }
         }
       },
@@ -177,36 +186,41 @@ export default {
   },
   components: {
     OrderMenu,
-    MessageArea,
     WebsiteLink,
-    PopUp,
-    ImageManage
+    Picture,
+    AnserText,
+    ImageText,
+    PopUp
   },
   mounted() {
     this._getMenuTree();
   },
   methods: {
-    getCurSiteId(siteId) {
-      this.siteId = siteId;
-      this._getMenuTree();
-    },
     async _getMenuTree() {
       let { data } = await getMenuTree(this.siteId);
       this.menuTree = data;
-      console.log('菜单树',this.menuTree)
+      if(this.menuTree.length >0 && !this.menuDetail.id) {
+        let id = this.menuTree[0].id
+        this._getMenuDetail(id)
+      }
     },
     handleClosePopup (val,data){
       this.isShowPopup = val
       if (data) {
-            this.menuDetail.behaviorBody.customMenuRedirectMsg.title= data.Title;
-            this.menuDetail.behaviorBody.customMenuRedirectMsg.urlType= data.Type;
-            this.menuDetail.behaviorBody.customMenuRedirectMsg.urlData= data.Href;
-            this.menuDetail.behaviorBody.customMenuRedirectMsg.contentPageId= data.Id;
-          // this.curEditorItem.UrlType = data.Type;
-          // this.curEditorItem.UrlData = data.Href;
-          // this.curEditorItem.ContentPageId = data.Id;
-          // this.curEditorTitle = data.Title;
-      }
+        this.menuDetail.behaviorBody.CustomMenuRedirectMsg.Title= data.Title;
+        this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlType= data.Type;
+        this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData= data.Href;
+        this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId= data.Id;
+        if (data.Type === 'Page') {
+          this.menuDetail.behaviorType = 'WZPage'
+        } else if (data.Type === 'Url') {
+          this.menuDetail.behaviorType = 'Url'
+        } else if (data.Type === 'News') {
+          this.menuDetail.behaviorType = 'WZNews'
+        } else if (data.Type === 'Product') {
+          this.menuDetail.behaviorType = 'WZProduct'
+        } 
+      } 
     },
     //弹出选择链接弹窗
     selectUrl(){
@@ -217,6 +231,17 @@ export default {
       let { data } = await getMenuDetail(this.siteId, id);
       this.menuDetail.name = data.name;
       this.menuDetail.id = data.id;
+      this.menuDetail.clickBehavior = data.clickBehavior;
+      this.menuDetail. behaviorType = data.behaviorType;
+      let behaviorBody = JSON.parse(data.behaviorBody);
+      console.log('8888',behaviorBody)
+      this.menuDetail.behaviorBody.ImageMsg = behaviorBody.ImageMsg || '';
+      this.menuDetail.behaviorBody.TextMsg = behaviorBody.TextMsg || '';
+      this.menuDetail.behaviorBody.NewsMsg = behaviorBody.NewsMsg || [];
+      this.menuDetail.behaviorBody.CustomMenuRedirectMsg = behaviorBody.CustomMenuRedirectMsg || {};
+    },
+    _handleChangeBehaviorType(val) {
+      this.menuDetail.behaviorType = val
     },
     // 菜单排序
     _handleMenuOrder() {
@@ -226,11 +251,26 @@ export default {
       this.menuDetail.clickBehavior =val 
     },
     // 切换menu
-    _handleSelectMenu(i) {
-      this.curIndex = i;
-      this._getMenuDetail(this.menuTree[i].id)
+    async _handleSelectMenu(type,i) {
+      let data = await updateMenu(this.menuDetail)
+      if (data.status && data.status == 200) {
+        if (type == 1) {
+          this.curIndex = i;
+          this.curSubIndex = 0;
+          if (this.menuTree[i].subMenuList.length > 0) {
+            this._getMenuDetail(this.menuTree[i].subMenuList[0].id)
+          } else {
+            this._getMenuDetail(this.menuTree[i].id)
+          }
+        } else if(type == 2) {
+          this.curSubIndex = i;
+          this._getMenuDetail(this.menuTree[this.curIndex].subMenuList[i].id)
+        }
+      } else {
+        notify(this, data.statusText, "error");
+      }
     },
-    // 添加主菜单
+    // 添加菜单
     _handleAddMainMenu(name,order,id,level) {
       let newMenuItem = {
         name: name,  //菜单名称
@@ -240,37 +280,33 @@ export default {
         menuLevel: level //父菜单为0，子菜单为1
       };
       let data = addMenu(newMenuItem);
-      console.log('222',data)
+      if(data.status && data.status ==200 ) {
+        this._getMenuTree()
+      }
     },
-    // 添加子菜单
-    _handleAddChildMenu() {},
     // 删除菜单
-    _handleDeleteMenu() {},
-    // 打开选择图片弹层
-    _handleUploadPicture() {
-      this.imageChooseAreaShowFlag = true;
+    _handleDeleteMenu() {
+      let data = removeMenu(this.siteId, this.menuDetail.id);
+      if(data.status && data.status == 200 ) {
+        this._getMenuTree()
+      }
     },
     // 保存并发布
     _handleSaveAndPublish() {
-      console.log(this.form);
-    },
-    // 替换菜单编辑图片部分
-    _handleSwitchImg() {},
-    // 删除菜单编辑图片部分
-    _handleDeleteImg() {
-      this.chooseImg = "";
+      let data = publishMenu(this.menuDetail);
     },
     // 获取图片
-    getImage(src) {
-      console.log(src);
-      this.chooseImg = src;
+    handlerPic(picUrl) {
+      this.menuDetail.behaviorBody.ImageMsg.PicUrl = picUrl;
     },
-    // 关闭弹层
-    handleCloseModal() {
-      this.imageChooseAreaShowFlag = false;
-    }
-    // 重置当前菜单右侧数据类型
-    // _handle
+    // 文字回复输入
+    handlerText(text) {
+      this.menuDetail.behaviorBody.text = text;
+    },
+    //获取图文详情
+    handlerSaveImgText(list) {
+      this.replycontentData.NewsMsg = list;
+    },
   }
 };
 </script>
@@ -280,7 +316,6 @@ export default {
   margin: 0 auto;
   max-width: 1200px;
   min-width: 990px;
-  height: 753px;
   border-radius: 20px;
   .phone-box__area {
     position: relative;
@@ -347,7 +382,6 @@ export default {
             left: 50%;
             transform: translateX(-50%);
             bottom: 54px;
-            display: none;
             width: 146x;
             border: 1px solid #c9d9dc; // 需换底图
             border-radius: 2px;
@@ -585,5 +619,56 @@ export default {
 }
 .el-form-item /deep/ .el-form-item__label {
   color: #a1a8b1;
+}
+.selectUrl span{
+    float: left;
+    font-size: 14px;
+    line-height: 40px;
+    margin-right: 16px;
+    font-family:"PingFangSC-Regular,PingFangSC";
+    font-weight:400;
+    color:rgba(38,38,38,1);
+}
+.selectUrl div {
+  display: flex;
+  justify-content: space-between;
+  width:400px;
+  height:40px;
+  float: left;
+  background:rgba(255,255,255,1);
+  border-radius:2px;
+  border:1px solid rgba(229,229,229,1);
+  font-size:14px;
+  font-family:'PingFangSC-Regular,PingFangSC';
+  font-weight:400;
+  color:rgba(211,211,211,1);
+  line-height:36px;
+  padding: 0 10px;
+}
+.selectUrl div i {
+  color: #0595E6;
+}
+.btn {
+  display: inline-block;
+  width: 100%;
+  height: 32px;
+  margin-top:56px;
+  text-align: right;
+  padding: 6px 0;
+  border-top: 1px solid #E5E5E5;
+}
+.btn span {
+  display: inline-block;
+  width:110px;
+  height:40px;
+  background:rgba(99,220,140,1);
+  border-radius:2px;
+  opacity:0.5;
+  font-size:14px;
+  font-family:'PingFangSC-Regular,PingFangSC';
+  font-weight:400;
+  text-align: center;
+  color:rgba(255,255,255,1);
+  line-height:40px;
 }
 </style>
