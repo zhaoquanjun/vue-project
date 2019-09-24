@@ -8,7 +8,7 @@
             :style="{background: 'url(' + (curItem.fullOssUrl +'?x-oss-process=image/resize,m_lfit,h_400,w_400' ) + ') no-repeat center',backgroundSize:'cover'}"
         >
             <span class="img-wrap">
-                <div class="mask" :class="isMaskShow"></div>
+                <div :class="{ mask:isMaskShow }"></div>
             </span>
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
                 <button @click.stop="handleMove">
@@ -27,7 +27,7 @@
                     </el-tooltip>
                 </button>
             </div>
-            <div v-if="multiple" class="img-handle-btn" :class="[isSelectedShow?'show':'hide']">
+            <div v-if="multiple" class="img-handle-btn" :class="[isSelected?'show':'hide']">
                 <button class="item-selected" style="float:right">
                     <svg-icon icon-class="img-selected"></svg-icon>
                 </button>
@@ -35,10 +35,10 @@
             <div
                 v-else
                 class="img-handle-btn"
-                :class="itemIndex == selectedIndex ? 'show' : 'hide'"
+                :class="isSelected ? 'show' : 'hide'"
             >
                 <span class="item-selected" style="float:right">
-                    <i class="iconfont iconxingzhuangjiehe"></i>
+                    <svg-icon icon-class="img-selected"></svg-icon>
                 </span>
             </div>
         </div>
@@ -63,11 +63,8 @@ export default {
         curItem: {
             type: Object
         },
-        itemIndex: {
-            type: Number
-        },
-        selectedIndex: {
-            type: Number
+        isSelected: {
+            type: Boolean
         },
         multiple: {
             type: Boolean,
@@ -80,18 +77,17 @@ export default {
         return {
             isRename: true,
             isHandleBtnShow: false,
-            isSelectedShow: false
+            seletedList: []
         };
     },
     mounted() {},
     methods: {
         handleClick() {
             this.isHandleBtnShow = false;
-            this.isSelectedShow = !this.isSelectedShow;
-            this.$emit("handleSelected", this.curItem, this.itemIndex);
+            this.$emit("handleSelected", this.curItem);
         },
         handleMouseMove() {
-            if (this.isSelectedShow || this.isHandleBtnShow) return;
+            if (this.isSelected || this.isHandleBtnShow) return;
             this.isHandleBtnShow = true;
         },
         handleMouseLeave() {
@@ -141,11 +137,7 @@ export default {
     },
     computed: {
         isMaskShow() {
-            if (this.multiple) {
-                return this.isHandleBtnShow || this.isSelectedShow? "show" : false;
-            } else {
-                return this.itemIndex == this.selectedIndex ? "show" : "hide";
-            }
+                return this.isHandleBtnShow || this.isSelected ? true : false;
         }
     },
     watch: {

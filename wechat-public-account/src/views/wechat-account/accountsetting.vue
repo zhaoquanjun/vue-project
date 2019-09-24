@@ -9,14 +9,14 @@
       <div class="account-info__area">
         <div class="info-desc__area">
           <div class="account-icon">
-            <img :src="accountAvator" alt />
+            <img :src="account_info.platformAvator" alt />
           </div>
           <div class="account-name-certification">
-            <h6>{{accountInfo.platformName}}</h6>
-            <p>{{accountInfo.type == 0 ? '服务号' : '订阅号'}}</p>
+            <h6>{{account_info.platformName}}</h6>
+            <p>{{account_info.serviceTypeInfo == 0 ? '服务号' : '订阅号'}}</p>
           </div>
         </div>
-        <div class="primary-button__nomal">解除绑定</div>
+        <div class="primary-button__nomal" @click="unBind">解除绑定</div>
       </div>
       <div class="account-domain__area">
         <div class="domain-title__area">
@@ -40,7 +40,9 @@
 <script>
 import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
+import { unBind } from "@/api/request/account.js";
 import { mapGetters } from "vuex";
+import { notify } from "@/utlis/index.js";
 export default {
   data() {
     return {
@@ -62,26 +64,51 @@ export default {
   },
   created() {
     this._getWxIsAuth();
-    setTimeout(() => {
-      console.log('ppp',this.account_info);
-    }, 5000);
   },
   computed: {
     ...mapGetters(["account_info"])
   },
   methods: {
     getSiteId(siteId) {
-      this.siteId = siteId;
-      // this.getSiteInfo(siteId);
+      console.log('000')
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
-      console.log('888')
-      // this.getSiteInfo(siteId);
+      this._getWxIsAuth()
     },
-    
     // 校验是否已经授权认证
-    async _getWxIsAuth() {}
+    async _getWxIsAuth() {
+      await this.$store.dispatch('_getWxStatus')
+      let wx_status = this.$store.state.wxaccount.wx_status
+      console.log(this.$store.state)
+      if (!wx_status.isAuth || !wx_status.isCertification) {
+        this.$router.replace({path:'/wechataccount/wxauther' });
+      }
+    },
+    //解除绑定
+    unBind(){
+      this.$confirm("提示", {
+          title: "提示",
+          iconClass: "icon-warning",
+          message: '解除绑定后，将不可再使用微信推广，自定义菜单和自动回复功能，同时历史数据将被清除，确定要删除吗？',
+          callback: async action => {
+              if (action === "confirm") {
+                  this._unBind()
+              }
+          }
+      });
+    },
+    async _unBind(){
+      let {status,data} = await unBind()
+      if(status==200 && data.isSuccess) {
+        notify(this, "解绑成功", "success");
+        setTimeout(() => {
+          this.$router.replace({path:'/wechataccount/wxauther' });
+        }, 1000);
+      } else {
+        notify(this, "解绑失败", "error");
+      }
+    }
   }
 };
 </script>

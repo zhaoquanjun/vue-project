@@ -41,14 +41,14 @@
                         @click="removeKeyword(index)"
                         v-if="keywordList &&keywordList.length>1"
                     >
-                        <i class="iconfont iconjian"></i>
+                        <i class="iconfont iconjianhao"></i>
                     </button>
                     <button
                         class="keyword-btn addKeyword"
                         @click="addKeyword"
                         v-if="keywordList.length-1==index&&keywordList.length!=10"
                     >
-                        <i class="iconfont iconjia"></i>
+                        <i class="iconfont iconjiahao"></i>
                     </button>
                 </div>
             </div>
@@ -92,10 +92,10 @@
                     <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
                         <button>
-                            <i class="iconfont iconcaozuo" @click="handlerAdd(item)"></i>
+                            <i class="iconfont iconbianji" @click="handlerAdd(item)"></i>
                         </button>
                         <button @click="handlerDelete(item.id)">
-                            <i class="iconfont iconhuishouzhan"></i>
+                            <i class="iconfont iconshanchu"></i>
                         </button>
                     </div>
                 </li>

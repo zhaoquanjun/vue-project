@@ -15,7 +15,7 @@
             </el-aside>
             <el-main class="content-table-wrap">
               <router-view />
-              <MyDialog v-if="$store.state.isAsideDialogShow"></MyDialog>
+              <!-- <MyDialog v-if="$store.state.isAsideDialogShow"></MyDialog> -->
             </el-main>
           </el-container>
         </el-main>
@@ -44,8 +44,8 @@ export default {
 </script>
 <style >
 .common-header {
-  height: 60px;
-  line-height: 60px;
+  height: 50px !important;
+  line-height: 50px;
   position: fixed;
   top: 0;
   left: 0;
@@ -54,7 +54,7 @@ export default {
   z-index: 100;
 }
 .common-container {
-  padding-top: 60px;
+  padding-top: 50px;
   width: 100%;
   overflow: hidden;
 }
@@ -63,13 +63,11 @@ export default {
   min-height: calc(100vh - 60px);
   position: relative;
   overflow: visible !important;
-  z-index: 200;
+  /* z-index: 200; */
   padding-top: 16px;
-   
 }
-.content-table-wrap{
+.content-table-wrap {
   position: relative;
 }
-
 </style>
 

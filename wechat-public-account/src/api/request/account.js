@@ -9,9 +9,12 @@ export const isAuth = param => {
 }
 
 export const wxAuth = () => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/getweixinauthurl`, {siteId: store.state.dashboard.siteId});
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/getweixinauthurl`, { siteId: store.state.dashboard.siteId });
 }
 
+export const unBind = () => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/unbind`, {siteId: store.state.dashboard.siteId,infoType:'WeixinOA'});
+}
 export const getPageSiteList = () => {
   return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetSiteList`);
 }
@@ -22,7 +25,7 @@ export const getPageData = () => {
 }
 
 export const getArticleList = (options) => {
-  return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetNewsList/${options.pageIndex}/${options.pageSize}`,options);
+  return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetNewsList/${options.pageIndex}/${options.pageSize}`, options);
 }
 
 export const getArticleCategory = () => {
@@ -38,12 +41,32 @@ export const getProductCategory = () => {
 }
 
 // 获取菜单树结构
-export const getMenuTree = () => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuTree`);
+export const getMenuTree = (SiteId) => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuTree/${SiteId}`);
 }
 // 获取菜单单个详情
-export const getMenuDetail = options => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuDetail/${options.authorizerAppId}/${options.id}`);
+export const getMenuDetail = (siteId, id) => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuDetail/${siteId}/${id}`);
+}
+// 新增菜单
+export const addMenu = options => {
+  return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/CreateMenu`,options);
+}
+// 保存并更新
+export const updateMenu = options => {
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/CustomDefineMenu/UpdateMenu`,options);
+}
+// 保存并发布
+export const publishMenu = options => {
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/CustomDefineMenu/PublishMenu`,options);
+}
+// 删除菜单
+export const removeMenu = (siteId, id) => {
+  return ajaxRequest._delete(`${environment.wechataccountApi}/api/CustomDefineMenu/RemoveMenu/${siteId}/${id}`);
+}
+// 调整菜单排序
+export const modifyMenuOrder = (siteId, options) => {
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/CustomDefineMenu/ModifyMenuOrder/${siteId}`,options);
 }
 
 // 图片区域
@@ -86,7 +109,7 @@ export const transit = param => {
 
 export const uploadImg = (imgUrl) => {
   let params = {
-    authorizerAppId:store.state.wxaccount.account_info.platformAppId,
+    authorizerAppId: store.state.wxaccount.account_info.platformAppId,
     imgUrl
   }
   console.log(store)

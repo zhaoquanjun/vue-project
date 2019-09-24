@@ -1,6 +1,6 @@
 import * as ajaxRequest from "../ajaxRequest";
 import environment from "@/environment/index";
-
+import store from "@/store/index";
 
 /**
  * 
@@ -9,8 +9,8 @@ import environment from "@/environment/index";
  * 回复类型 1 被关注时回复 2 收到消息时回复
  * Available values : Follow, Receive
  */
-export const getReplyDetail = replyType => {
-    return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Reply/GetReplyDetail/30001/${replyType}`);
+export const getReplyDetail = (SiteId, replyType) => {
+    return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/Reply/GetReplyDetail/${SiteId}/${replyType}`);
 }
 /**
  * 获取关键词回复列表
@@ -22,23 +22,23 @@ export const getKeywordReplyList = (option) => {
  * 删除回复信息
  * @param {Int} id 
  */
-export const removeReply = id => {
-    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/RemoveReply/${id}`);
+export const removeReply = (SiteId,id) => {
+    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/RemoveReply/${SiteId}/${id}`);
 }
 /**
  * 删除关键词回复信息
  * @param {*} id 
  */
-export const removeKeywordReply = id => {
+export const removeKeywordReply = (id,SiteId) => {
     let param = [id]
-    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/BatchRemoveKeywordReply`,{data:param});
+    return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/Reply/BatchRemoveKeywordReply/${SiteId}`,{data:param});
 }
 
 /**
  * 新增关键词回复信息
  */
-export const addKeywordReply = (option) => {
-    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddKeywordReply`,option);
+export const addKeywordReply = (option,siteid) => {
+    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddKeywordReply/${siteid}`,option);
 }
 
 /**
@@ -47,13 +47,13 @@ export const addKeywordReply = (option) => {
  * 回复类型 1 被关注时回复 2 收到消息时回复
  */
 export const addOrOverrideReply = (option) => {
-    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddOrOverrideReply/${option.siteId}/${option.replyType}/${option.msgType}`,option.content);
+    return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/Reply/AddOrOverrideReply/${option.siteId}/${option.replyType}/${option.msgType}`,option.publicPlatformReplyInput);
 }
 /**
  * 编辑关键词回复信息
  */
-export const updateKeywordReply = (option,id) => {
-    return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/Reply/UpdateKeywordReply/${id}`,option);
+export const updateKeywordReply = (option,id,SiteId) => {
+    return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/Reply/UpdateKeywordReply/${SiteId}/${id}`,option);
 }
 
 

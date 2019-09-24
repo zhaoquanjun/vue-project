@@ -7,7 +7,7 @@ const user = {
   state: {
     wx_status: {
       isAuth: false,
-      isCertification: true
+      isCertification: false
     },
     account_info: {},
     menu_reply_behavior: {
@@ -37,23 +37,20 @@ const user = {
   },
   actions: {
     async _getWxStatus({commit, state}) {
+      await store.dispatch('_setSiteId')
       let siteId =  store.state.dashboard.siteId
-      if(!siteId) {
-        await store.dispatch('_setSiteId')
-      }
-      siteId =  store.state.dashboard.siteId
-      console.log('222:',siteId)
       let data = await isAuth({infoType: "WeixinOA",siteId: siteId});
-      // debugger;
       let verify = {
         isAuth: data.data.isAuth,
-        isCertification: data.data.isVerify
+        //isCertification: data.data.isVerify
+        //isAuth: true,
+        isCertification: true
       }
       let accountInfo = {
-        platformName: data.platformNiceName,
-        platformAvator: data.platformHeadImg,
-        serviceTypeInfo: data.serviceTypeInfo,
-        platformAppId: data.platformAppId
+        platformName: data.data.platformNiceName,
+        platformAvator: data.data.platformHeadImg,
+        serviceTypeInfo: data.data.serviceTypeInfo,
+        platformAppId: data.data.platformAppId
       }
       commit("SET_WX_STATUS", verify);
       commit("SET_ACCOUNT_INFO", accountInfo)

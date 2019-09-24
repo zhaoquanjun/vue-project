@@ -21,9 +21,6 @@ router.beforeEach(async (to, from, next) => {
     if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
     }
-    if (!siteId) {
-      await store.dispatch('_setSiteId')
-    }
     store.dispatch('_getMenuListData')
     next()
     return
@@ -34,6 +31,10 @@ router.beforeEach(async (to, from, next) => {
         await store.dispatch('_updateAppIdToCookie')
         next()
       }
+      if (!siteId) {
+        await store.dispatch('_setSiteId')
+        next()
+      }
       if (!getLocal("authList")) {
         await store.dispatch('_getMenuListData')
       }
@@ -42,15 +43,13 @@ router.beforeEach(async (to, from, next) => {
         if (store.getters.getMenuList.length < 1) {
           await store.dispatch('_getMenuListData')
         }
-        if (!store.getters.wx_status.isAuth) {
+        if (!store.getters.wx_status.isAuth || !store.getters.wx_status.isCertification) {
           await store.dispatch('_getWxStatus')
-          next('/wechataccount/wxauther');
-          return;
-        }
-        let wx_status = store.getters.wx_status;
-        if (!wx_status.isAuth) {
-          next('/wechataccount/wxauther');
-          return;
+          let wx_status = store.state.wxaccount.wx_status;
+          if (!wx_status.isAuth || !wx_status.isCertification) {
+            next('/wechataccount/wxauther');
+            return;
+          }
         }
         next()
       } else {

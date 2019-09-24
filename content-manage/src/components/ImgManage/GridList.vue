@@ -4,8 +4,7 @@
         <ul class="img-list">
             <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
                 <grid-list-item
-                    :itemIndex="index"
-                    :selectedIndex="selectedIndex"
+                    :isSelected="isSelected(item)"
                     :curItem="item"
                     :multiple="multiple"
                     @handleSelected="handleSelected"
@@ -109,7 +108,6 @@ export default {
             picInfo: {},
             initial: -1,
             changeIndex: -1,
-            selectedIndex: -1
         };
     },
     components: {
@@ -117,20 +115,39 @@ export default {
     },
    
     methods: {
-        handleSelected(item, index) {
+        handleSelected(item) {
             if (this.multiple) {
-                if (index == this.selectedIndex) return;
-                this.seletedList.push(item);
+                let flag = true;
+                for(let i = 0; i< this.seletedList.length; i++){
+                    if(item.id == this.seletedList[i].id){
+                        this.seletedList.splice(i, 1)
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    this.seletedList.push(item);
+                }
             } else {
-                this.seletedList[0] = item;
+                if (this.seletedList.length) {
+                    if(item.id == this.seletedList[0].id){
+                        this.seletedList.splice(0, 1)
+                    }else{
+                        this.$set(this.seletedList, 0, item)
+                    }
+                } else {
+                    this.$set(this.seletedList, 0, item)
+                }
             }
-
             this.$emit("handleSelectionChange", this.seletedList);
-            if (this.selectedIndex === index) {
-                this.selectedIndex = -1;
-                return;
+        },
+        // 判断是否被选中
+        isSelected(item) {
+            for(let i = 0; i < this.seletedList.length; i++){
+                if(item.id == this.seletedList[i].id){
+                    return true
+                }
             }
-            this.selectedIndex = index;
+            return false
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;

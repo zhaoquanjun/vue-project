@@ -2,7 +2,7 @@
     <el-select
         id="el-select"
         ref="elSelect"
-        :popper-append-to-body="false"
+        :popper-append-to-body="true"
         :value="valueTitle"
         :multiple="multiple"
         @remove-tag="remove"

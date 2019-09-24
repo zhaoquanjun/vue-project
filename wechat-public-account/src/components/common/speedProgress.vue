@@ -5,8 +5,8 @@
                 <span>{{item.title}}</span>
                 <p>{{item.text}}</p>
             </li>
-            <div class="line"></div>
         </ul>
+        <div class="line"></div>
     </div>
 </template>
 <script>
@@ -38,8 +38,13 @@ export default {
 
 <style lang="scss" scoped>
 .speed-progress {
+    position: relative;
+    height: 72px;
     width: 100%;
+    margin: 60px 0 50px;
     ul {
+        position: relative;
+        z-index: 2;
         display: flex;
         margin: 0 10%;
         justify-content: space-between;
@@ -72,6 +77,16 @@ export default {
               color:rgba(38,38,38,1);  
             }
         }
+    }
+    .line {
+        box-shadow: border-box;
+        border: 1px dashed #E5E5E5;
+        width: 74%;
+        position: absolute;
+        top: 16px;
+        left: 0;
+        margin: 0 13%;
+        z-index: 1;
     }
 }
 </style>

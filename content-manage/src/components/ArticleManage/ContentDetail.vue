@@ -19,7 +19,7 @@
                     <el-col :span="10">
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
-                            <button>预览</button>
+                            <button @click="preview">预览</button>
                             <button :disabled="disableRefObj.inSaveProcess"  @click="submitForm">保存</button>
                         </div>
                     </el-col>
@@ -32,6 +32,7 @@
                             <ArticleContent
                                 @changeOperateName="changeOperateName"
                                 @changeSaveWay="changeSaveWay"
+                                @changePreviewId="changePreviewId"
                                 ref="articleContent"
                             />
                         </el-col>
@@ -63,7 +64,8 @@ export default {
             imageUrl: "",
             detailData: {},
             operateName: "新增",
-            isEdit:false
+            isEdit:false,
+            previewId: ""
         };
     },
     components: {
@@ -100,7 +102,25 @@ export default {
             this.isEdit = isEdit;
             if(!isEdit) this.$refs.articleRight.imageUrl1=""
             
-        }
+        },
+        changePreviewId(id){
+            this.previewId = id;
+        },
+        /**
+         * 预览
+         */
+        async preview() {
+            if(this.previewId){
+                let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail');
+                var prevAddress = data;
+                if (prevAddress != '') {
+                    var a = document.createElement('a');
+                    a.setAttribute('href', prevAddress + this.previewId + '.html');
+                    a.setAttribute('target', '_blank');
+                    a.click();
+                }
+            }
+        },
     },
     mounted() {
         var id = this.$route.query.id;

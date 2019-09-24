@@ -4,13 +4,12 @@
       @chooseWebsite="chooseWebsite"
       @getSiteId="getSiteId"
     />
-    <div class="define-menu__content" v-if="isVerify">
+    <div class="define-menu__content">
       <warm-pronpt :desc="tips" style="margin-top: 16px;"></warm-pronpt>
       <div class="menu-setting__area">
         <define-menu ></define-menu>
       </div>
     </div>
-    <account-certification v-else></account-certification>
   </div>
 </template>
 

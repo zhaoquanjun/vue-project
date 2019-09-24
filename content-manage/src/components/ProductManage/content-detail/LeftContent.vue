@@ -443,6 +443,7 @@ export default {
         this.curProduct = id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
+            this.$emit("changePreviewId", id);
         }
     },
     methods: {
@@ -527,6 +528,7 @@ export default {
             );
             disableRefObj.inSaveProcess = false;
             if (status === 200) {
+                this.$emit("changePreviewId", data);
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     cancelButtonText: "关闭",
