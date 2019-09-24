@@ -44,6 +44,7 @@ export default {
         handlerDelete() {
             this.isUploaded = false;
             this.picUrl = "";
+            this.$emit("handlerPic",this.picUrl)
         },
         handlerUpload(){
             this.imageChooseAreaShowFlag=true
@@ -53,7 +54,7 @@ export default {
             // let {data} = await uploadImg(src);
             //this.picUrl = data;
             this.picUrl = src;
-            this.$emit("handlerPic",src)
+            this.$emit("handlerPic",this.picUrl)
         },
         // 关闭弹层
         handleCloseModal() {

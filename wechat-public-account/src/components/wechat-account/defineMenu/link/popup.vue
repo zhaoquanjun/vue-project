@@ -11,7 +11,6 @@
             <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
           </li>
         </ul>
-        <none-area @handleChangeUrl="handleChangeUrl" v-show="slider == 'none'" :noneUrl="noneUrl" />
         <page-area
           :model="model"
           :selectedUrl="selectedUrl"
@@ -80,7 +79,7 @@ export default {
   data() {
     return {
       sliderList: [
-        { name: "纯链接", label: "none" },
+        { name: "纯链接", label: "url" },
         { name: "页面", label: "page" },
         { name: "文章", label: "news" },
         { name: "产品", label: "product" },
@@ -92,7 +91,7 @@ export default {
       ],
       noneUrl: '',
       pageIndex: this.model['PageIndex'],
-      slider: this.model["Type"],
+      slider: "url",
       curType: this.model["Type"],
       selectedUrl: this.model["Href"],
       id: this.model["Href"],
@@ -128,16 +127,14 @@ export default {
   methods: {
     _handleSliderChange(val) {
       this.slider = val;
-      if (val == 'none') {
-        this.selectedUrl = 'javascript:;'
-        this.title = '请设置链接';
-        this.target = '_self';
-      }
       return false;
     },
     _handleConfirm() {
-      var flag = this._handleNext(this.slider);
-      if (!flag) return;
+      if (!this.slider || !this.title){
+        notify(this, '请选择所需链接', "error");
+      } else if ((this.slider == 'news' || this.slider == 'product') && !this.id ){
+        notify(this, '请选择所需的页面', "error");
+      }
       let oldData = {},
           data = {};
       let oldUrl = this.model["Href"];
@@ -147,18 +144,17 @@ export default {
       let oldId = this.model["id"];
       let oldPageIndex = this.pageIndex;
 
-      data["Type"] = this.slider;
       data["Href"] = this.selectedUrl;
       data["Target"] = this.way;
       data["Title"] = this.title;
-      data["Type"] = this.curType;
+      data["Type"] = this.slider;
       data['Id'] = this.id;
+      console.log('pop',data)
       data['PageIndex'] = this.model['PageIndex'];
-
       if (oldUrl !== this.selectedUrl || oldTarget !== this.way) {
         this.model["Href"] = this.selectedUrl;
         this.model["Target"] = this.way;
-        this.model["Type"] = this.slider;
+        this.model["Type"] = this.curType;
         this.model["Title"] = this.title;
         this.pageIndex = this.model['PageIndex'];
         oldData["Type"] = oldType;
@@ -184,36 +180,6 @@ export default {
       if (e.target.id == "popup") {
         this._handleCancle();
       }
-    },
-    _handleNext(type) {
-      var flag = null;
-      switch(type) {
-        case 'email': 
-          var reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
-          let email = this.selectedUrl ? this.selectedUrl.slice(7) : this.selectedUrl;
-          flag = reg.test(email) ? true : false;
-          break;
-        case 'link': 
-          var reg = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-          flag = reg.test(this.selectedUrl) ? true : false;
-          break;
-        case 'tel': 
-          var reg = /^1[3456789]\d{9}$/;
-          var tel = this.selectedUrl ? this.selectedUrl.slice(4) : this.selectedUrl;
-          flag = reg.test(tel) ? true : false;
-          break;
-        default:
-          flag = true;
-          break;
-      }
-      return flag;
-    },
-    handleChangeUrl(val) {
-      this.selectedUrl = val.url;
-      this.curType = val.cType;
-      this.title = val.title;
-      this.id = val.id;
-      return false;
     },
     handleChangeTarget(val) {
       console.log(val);
