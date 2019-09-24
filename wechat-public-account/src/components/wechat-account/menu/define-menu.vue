@@ -272,7 +272,7 @@ export default {
         notify(this, '请完善子菜单信息', "error");
         return
       }
-      if (this.menuDetail.clickBehavior == )
+      //if (this.menuDetail.clickBehavior == )
       updateMenu(this.menuDetail)
       if (type == 1) {
         // type 1 点击父菜单 2 点击子菜单
