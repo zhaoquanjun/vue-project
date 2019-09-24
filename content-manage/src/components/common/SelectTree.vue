@@ -2,7 +2,7 @@
     <el-select
         id="el-select"
         ref="elSelect"
-        :popper-append-to-body="true"
+        :popper-append-to-body="popper"
         :value="valueTitle"
         :multiple="multiple"
         @remove-tag="remove"
@@ -32,6 +32,11 @@
 <script>
 export default {
     name: "el-tree-select",
+    inject: {
+        popper: {
+            default: false
+        }
+    },
     props: {
         /* 配置项 */
         props: {

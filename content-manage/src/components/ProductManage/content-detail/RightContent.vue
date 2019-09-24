@@ -109,6 +109,9 @@ export default {
     components: {
         ModalContent
     },
+    provide: {
+      popper:true
+    },
     data() {
         return {
             activeName: "",

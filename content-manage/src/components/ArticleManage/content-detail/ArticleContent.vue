@@ -265,6 +265,9 @@ export default {
         SelectTree,
         ModalContent
     },
+    provide: {
+      popper:true
+    },
     data() {
         var checkWord = (rule, value, callback) => {
             if (value.length > 4) {
