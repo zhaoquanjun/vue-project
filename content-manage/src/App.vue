@@ -61,7 +61,7 @@ export default {
   overflow: hidden;
 }
 .common-aside {
-  width: 70px !important;
+  width: 60px !important;
   position: relative;
   overflow: visible !important;
 }

@@ -4,11 +4,11 @@
       <el-col :span="12">
         <div class="head-left head-item">
           <span class="logo-icon">
-            <i class="iconfont iconlogo1"></i>
+            <i class="iconfont iconicon-logo" style="font-size: 24px;"></i>
           </span>
           <span @click="changeApp" class="headAppName">
             <span class="headAppNameInfo">{{headAppName?headAppName:"公司名称"}}</span>
-            <i class="iconfont iconqiehuan" style="font-size:16px;vertical-align:middle"></i>
+            <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;vertical-align:middle"></i>
           </span>
         </div>
       </el-col>
@@ -16,14 +16,14 @@
         <div class="head-right head-item">
           <span style="cursor: pointer">
             <i
-              class="iconfont iconbangzhu"
+              class="iconfont iconbianzu1"
               style="margin-right:8px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">帮助</b>
           </span>
           <span style="cursor: pointer">
             <i
-              class="iconfont icontongzhi"
+              class="iconfont iconbianzu2"
               style="margin-right:8px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">通知</b>
@@ -59,7 +59,7 @@
                 @click="closeChangeApp"
               >
                 <i
-                  class="iconfont iconX"
+                  class="iconfont iconguanbi"
                   style="color:#262626;font-size:16px;vertical-align:middle"
                 ></i>
               </span>
@@ -261,7 +261,7 @@ export default {
   .head-item {
     .logo-icon {
       border-right: 1px solid hsla(0, 0%, 100%, 0.3);
-      width: 70px;
+      width: 60px;
       box-sizing: border-box;
       text-align: center;
       display: inline-block;

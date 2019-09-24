@@ -237,7 +237,7 @@ export default {
                 ele.style.background = "";
             }
 
-            ev.srcElement.style.background = "rgba(224,250,255,0.5)";
+            ev.srcElement.style.background = "#F8FAFC";
         },
         // 添加分类  0720
         create(ev, node, data) {
@@ -283,7 +283,7 @@ export default {
                 .childNodes[0].childNodes[0];
             if (data.level === 0) {
                 this.setCss(allCategoryEle, {
-                    background: "#e0faff",
+                    background: "#F8FAFC",
                     color: "#262626",
                     borderLeft: "2px solid #0595E6"
                 });
@@ -366,7 +366,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/manageAsideTree";
 
 .category-name-pic {
     width: 282px;
@@ -392,5 +391,87 @@ export default {
     font-weight: 500;
     // line-height: 40px;
     // height: 40px !important;
+}
+
+.aside-tree{
+    // height: calc(100% - 60px);
+    padding-top: 25px;
+    .drop-btn{
+        display: none;
+        width:20px;height:20px;
+        position: absolute;
+        left: 5px;
+        top: 10px;
+        cursor:grab;
+      i{
+          color: #A1A8B1;
+      }
+    }
+    .custom-tree-node {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+         .node-label-wrap{
+             color: #262626;
+            display: flex;align-items: center;height: 100%;width: 100%;
+        }
+          .node-label {
+            display: block;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .category-name {
+            width: 86px;
+            height: 30px;
+            border: none;
+            border: 1px solid rgba(229, 229, 229, 1);
+        }
+    }
+    .tree-handle {
+        display: none;
+        position: absolute;
+        right: -88px;
+        top: 0;
+        z-index: 1000;
+        background: #ffffff;
+        width: 120px;
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.07);
+        padding: 5px 0;
+        border-radius: 2px;
+        button {
+            width: 100%;
+            display: block;
+            padding: 8px 14px;
+            text-align: left;
+            font-size: 14px;
+            &:hover {
+                background: #e0fcff;
+            }
+        }
+    }
+    .set-tree-type {
+        cursor: pointer;
+        position: absolute;
+        right: 5px;
+        width: 33px;
+        height: 28px;
+        top: 5px;
+        z-index: 10;
+        border-radius: 2px;
+        text-align: center;
+        // background: #e0faff;
+    }
+    .set-tree-type:hover{
+        // background: #C5F0F8;
+       
+    }
 }
 </style>

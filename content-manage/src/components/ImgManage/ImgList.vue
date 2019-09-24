@@ -70,16 +70,17 @@
             <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn move-btn" @click="handleMove(scope.row)">
+                        <button class="handle-btn " @click="handleMove(scope.row)">
+                            <i class="iconfont iconyidong"></i>
                         </button>
                         <button
                             class="handle-btn look-btn"
                             @click="viewPic( scope.row,scope.$index)"
                         >
-                            <svg-icon icon-class="tab-look"></svg-icon>
+                            <i class="iconfont iconchakan"></i>
                         </button>
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
-                            <i class="iconfont iconhuishouzhan"></i>
+                            <i class="iconfont iconshanchu"></i>
                         </button>
                     </div>
                 </template>
@@ -149,6 +150,7 @@
 
 <script>
 import { trim } from "@/utlis/index.js";
+
 export default {
     props: ["imgPageResult", "picSearchOptions", "treeResult"],
 

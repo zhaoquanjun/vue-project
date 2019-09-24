@@ -13,23 +13,24 @@
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
                 <button @click.stop="handleMove">
                     <el-tooltip class="item" effect="dark" content="移动" placement="bottom">
-                        <svg-icon icon-class="img-move"></svg-icon>
+                        <i class="iconfont iconyidong"></i>
                     </el-tooltip>
                 </button>
                 <button @click.stop="handleLook">
                     <el-tooltip class="item" effect="dark" content="预览" placement="bottom">
-                        <svg-icon icon-class="img-look"></svg-icon>
+                        
+                         <i class="iconfont iconchakan"></i>
                     </el-tooltip>
                 </button>
                 <button @click.stop="handleDelete">
                     <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-                        <svg-icon icon-class="img-delete"></svg-icon>
+                        <i class="iconfont iconshanchu"></i>
                     </el-tooltip>
                 </button>
             </div>
             <div v-if="multiple" class="img-handle-btn" :class="[isSelected?'show':'hide']">
                 <button class="item-selected" style="float:right">
-                    <svg-icon icon-class="img-selected"></svg-icon>
+                    <i class="iconfont iconduihao"></i>
                 </button>
             </div>
             <div
@@ -38,7 +39,7 @@
                 :class="isSelected ? 'show' : 'hide'"
             >
                 <span class="item-selected" style="float:right">
-                    <svg-icon icon-class="img-selected"></svg-icon>
+                     <i class="iconfont iconduihao"></i>
                 </span>
             </div>
         </div>
