@@ -1,5 +1,5 @@
 <template>
-    <div class="my-dialog" v-if="isShow" @click.stop="handlerClick"></div>
+    <div class="my-dialog" v-if="isShow" @click.stop="handlerClick" @mouseenter="handlerClick"></div>
 </template>
 <script>
 export default {
@@ -11,7 +11,7 @@ export default {
     methods: {
         handlerClick() {
             this.$store.commit("SET_DIALOG",false)
-        }
+        },
     },
     computed:{
         isShow(){
