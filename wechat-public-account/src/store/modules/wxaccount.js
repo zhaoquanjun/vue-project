@@ -42,9 +42,9 @@ const user = {
       let data = await isAuth({infoType: "WeixinOA",siteId: siteId});
       let verify = {
         isAuth: data.data.isAuth,
-        isCertification: data.data.isVerify
-        // isAuth: true,
-        // isCertification: true
+        //isCertification: data.data.isVerify
+        //isAuth: true,
+        isCertification: true
       }
       let accountInfo = {
         platformName: data.data.platformNiceName,

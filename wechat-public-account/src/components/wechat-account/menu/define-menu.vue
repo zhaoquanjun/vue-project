@@ -9,8 +9,8 @@
           <li
             v-for="(item, index) in menuTree"
             :key="index"
-            :class="{selected: index == curIndex && item.subMenuList.length <= 0}"
-            @click="_handleSelectMenu(1,index)"
+            :class="{selected: index == curIndex}"
+            @click="_handleSelectMenu(1,index,item.id)"
           >
             {{item.name || '主菜单'}}
             <ul 
@@ -20,7 +20,7 @@
               <li 
                 v-for="(child, idx) in item.subMenuList"
                 :class="{selected: idx == curSubIndex}"
-                @click="_handleSelectMenu(2,idx)"
+                @click="_handleSelectMenu(2,idx,child.id)"
                 :key="idx">
                 <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
                 {{child.name || '子菜单'}}
@@ -151,8 +151,8 @@ export default {
       hasTrueName: false,
       replyType: "1", //replyType 回复类型
       isShowPopup: false,
-      curIndex: 0,
-      curSubIndex: 0,
+      curIndex: -1,
+      curSubIndex: -1,
       isOrder: false,
       replyContentType: "picture",
       menuWords: "",
@@ -163,8 +163,8 @@ export default {
         id: null,
         siteId: '30001',
         name: "",
-        clickBehavior: '0', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
-        behaviorType: '0',//None0无,Image图片,Text文字,News图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
+        clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
+        behaviorType: '1',//None0无,Image图片,Text文字,News图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
         behaviorBody: {
           ImageMsg: {
             PicUrl: "string",
@@ -265,26 +265,24 @@ export default {
       this.menuDetail.clickBehavior =val 
     },
     // 切换menu
-    async _handleSelectMenu(type,i) {
+    async _handleSelectMenu(type,i,id) {
       this.menuDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
       this.menuDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
-      let data = await updateMenu(this.menuDetail)
       if (!hasTrueName) {
         notify(this, '请完善子菜单信息', "error");
         return
       }
+      if (this.menuDetail.clickBehavior == )
+      updateMenu(this.menuDetail)
       if (type == 1) {
+        // type 1 点击父菜单 2 点击子菜单
         this.curIndex = i;
-        this.curSubIndex = 0;
-        if (this.menuTree[i].subMenuList.length > 0) {
-          this._getMenuDetail(this.menuTree[i].subMenuList[0].id)
-        } else {
-          this._getMenuDetail(this.menuTree[i].id)
-        }
+        this.curSubIndex = -1;
       } else if(type == 2) {
+        this.curIndex = -1;
         this.curSubIndex = i;
-        this._getMenuDetail(this.menuTree[this.curIndex].subMenuList[i].id)
       }
+      this._getMenuDetail(id)
     },
     // 添加菜单
     _handleAddMainMenu(name,order,id,level) {
