@@ -99,8 +99,8 @@ export default {
       });
     },
     async _unBind(){
-      let {status} = await unBind()
-      if(status==200) {
+      let {status,data} = await unBind()
+      if(status==200 && data.isSuccess) {
         notify(this, "解绑成功", "success");
         setTimeout(() => {
           this.$router.replace({path:'/wechataccount/wxauther' });
