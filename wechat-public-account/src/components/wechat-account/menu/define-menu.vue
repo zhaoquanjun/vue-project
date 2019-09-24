@@ -48,47 +48,55 @@
           <div class="menu-operate__content">
             <el-form label-width="80px">
               <el-form-item label="菜单名称">
-                <el-input v-model="menuDetail.name" placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母"></el-input>
+                <el-input 
+                  v-model="menuDetail.name" 
+                  @blur="testMenu(16,menuDetail.name)"
+                  placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母">
+                </el-input>
               </el-form-item>
+              <div v-if='!hasTrueName' class="tipsName">
+                <span class="ym-form-item__error">名称仅包含中英文、数字、特殊符号。</span>
+                <a href="https://kf.qq.com/faq/181228f2iMV7181228RbMfAr.html" target="_blank">查看详情</a>
+              </div>
               <el-form-item label="菜单内容">
                 <el-radio
-                  label="Reply"
+                  label='0'
                   v-model="menuDetail.clickBehavior"
-                  @change="_handleBehaviorType('Reply')"
+                  @change="_handleBehaviorType('0')"
                 >发送消息</el-radio>
                 <el-radio
-                  label="RedirectUrl"
+                  label='1'
                   v-model="menuDetail.clickBehavior"
-                  @change="_handleBehaviorType('RedirectUrl')"
+                  @change="_handleBehaviorType('1')"
                 >跳转网页</el-radio>
                 <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
               </el-form-item>
             </el-form>
-            <div v-show="menuDetail.clickBehavior == 'Reply'" class="message-content__section">
+            <div v-show="menuDetail.clickBehavior == '0'" class="message-content__section">
               <section class="menu-content__area">
                 <div class="radio-tabs">
-                  <el-radio label="Image" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('Image')">图片</el-radio>
-                  <el-radio label="Text" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('Text')">文字</el-radio>
-                  <el-radio label="News" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('News')">图文</el-radio>
+                  <el-radio label="1" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('1')">图片</el-radio>
+                  <el-radio label="2" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('2')">文字</el-radio>
+                  <el-radio label="3" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('3')">图文</el-radio>
                 </div>
                 <div class="slot-content">
                   <!-- 图片 -->
                   <Picture
                       ref="pictureComponent"
-                      v-if="menuDetail.behaviorType === 'Image'"
+                      v-if="menuDetail.behaviorType === '1'"
                       :image-msg="menuDetail.behaviorBody.ImageMsg.PicUrl"
                       @handlerPic="handlerPic"
                   ></Picture>
                   <!-- 文字 -->
                   <anser-text
                       :serve-text="menuDetail.behaviorBody.TextMsg.Text"
-                      v-if="menuDetail.behaviorType === 'Text'"
+                      v-if="menuDetail.behaviorType === '2'"
                       @handlerText="handlerText"
                   ></anser-text>
                   <!-- 图文 -->
                   <image-text
                       ref="newMsg"
-                      v-if="menuDetail.behaviorType === 'News'"
+                      v-if="menuDetail.behaviorType === '3'"
                       :news-msg="menuDetail.behaviorBody.NewsMsg"
                       :replyType= 'replyType'
                       @handlerSaveImgText="handlerSaveImgText"
@@ -97,7 +105,7 @@
               </section>
             </div>
             <!-- 跳转链接 -->
-            <div v-show="menuDetail.clickBehavior == 'RedirectUrl'" class="website-area">
+            <div v-show="menuDetail.clickBehavior == '1'" class="website-area">
               <div class="selectUrl">
                 <span>设置跳转链接</span>
                 <div>
@@ -140,6 +148,7 @@ export default {
           Id: null,
           Href: null
       },
+      hasTrueName: false,
       replyType: "1", //replyType 回复类型
       isShowPopup: false,
       curIndex: 0,
@@ -149,12 +158,13 @@ export default {
       menuWords: "",
       chooseImg: "",
       menuTree: [],
+      text: '2',
       menuDetail: {
         id: null,
         siteId: '30001',
         name: "",
-        clickBehavior: "None", // None 无, Reply消息, RedirectUrl 链接, RedirectSmallProgram 小程序
-        behaviorType: "None",//None无,Image图片,Text文字,News图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
+        clickBehavior: '0', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
+        behaviorType: '0',//None0无,Image图片,Text文字,News图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
         behaviorBody: {
           ImageMsg: {
             PicUrl: "string",
@@ -200,8 +210,11 @@ export default {
       let { data } = await getMenuTree(this.siteId);
       this.menuTree = data;
       if(this.menuTree.length >0 && !this.menuDetail.id) {
-        let id = this.menuTree[0].id
-        this._getMenuDetail(id)
+        if (this.menuTree[0].subMenuList.length > 0) {
+          this._getMenuDetail(this.menuTree[0].subMenuList[0].id)
+        } else {
+          this._getMenuDetail(this.menuTree[0].id)
+        }
       }
     },
     handleClosePopup (val,data){
@@ -212,13 +225,13 @@ export default {
         this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData= data.Href;
         this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId= data.Id;
         if (data.Type === 'Page') {
-          this.menuDetail.behaviorType = 'WZPage'
+          this.menuDetail.behaviorType = '5'
         } else if (data.Type === 'Url') {
-          this.menuDetail.behaviorType = 'Url'
+          this.menuDetail.behaviorType = '4'
         } else if (data.Type === 'News') {
-          this.menuDetail.behaviorType = 'WZNews'
+          this.menuDetail.behaviorType = '7'
         } else if (data.Type === 'Product') {
-          this.menuDetail.behaviorType = 'WZProduct'
+          this.menuDetail.behaviorType = '6'
         } 
       } 
     },
@@ -231,14 +244,15 @@ export default {
       let { data } = await getMenuDetail(this.siteId, id);
       this.menuDetail.name = data.name;
       this.menuDetail.id = data.id;
-      this.menuDetail.clickBehavior = data.clickBehavior;
-      this.menuDetail. behaviorType = data.behaviorType;
+      this.menuDetail.clickBehavior = JSON.stringify(data.clickBehavior);
+      this.menuDetail.behaviorType = JSON.stringify(data.behaviorType);
       let behaviorBody = JSON.parse(data.behaviorBody);
       console.log('8888',behaviorBody)
       this.menuDetail.behaviorBody.ImageMsg = behaviorBody.ImageMsg || '';
       this.menuDetail.behaviorBody.TextMsg = behaviorBody.TextMsg || '';
       this.menuDetail.behaviorBody.NewsMsg = behaviorBody.NewsMsg || [];
       this.menuDetail.behaviorBody.CustomMenuRedirectMsg = behaviorBody.CustomMenuRedirectMsg || {};
+      console.log('0000',this.menuDetail)
     },
     _handleChangeBehaviorType(val) {
       this.menuDetail.behaviorType = val
@@ -252,22 +266,24 @@ export default {
     },
     // 切换menu
     async _handleSelectMenu(type,i) {
+      this.menuDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
+      this.menuDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
       let data = await updateMenu(this.menuDetail)
-      if (data.status && data.status == 200) {
-        if (type == 1) {
-          this.curIndex = i;
-          this.curSubIndex = 0;
-          if (this.menuTree[i].subMenuList.length > 0) {
-            this._getMenuDetail(this.menuTree[i].subMenuList[0].id)
-          } else {
-            this._getMenuDetail(this.menuTree[i].id)
-          }
-        } else if(type == 2) {
-          this.curSubIndex = i;
-          this._getMenuDetail(this.menuTree[this.curIndex].subMenuList[i].id)
+      if (!hasTrueName) {
+        notify(this, '请完善子菜单信息', "error");
+        return
+      }
+      if (type == 1) {
+        this.curIndex = i;
+        this.curSubIndex = 0;
+        if (this.menuTree[i].subMenuList.length > 0) {
+          this._getMenuDetail(this.menuTree[i].subMenuList[0].id)
+        } else {
+          this._getMenuDetail(this.menuTree[i].id)
         }
-      } else {
-        notify(this, data.statusText, "error");
+      } else if(type == 2) {
+        this.curSubIndex = i;
+        this._getMenuDetail(this.menuTree[this.curIndex].subMenuList[i].id)
       }
     },
     // 添加菜单
@@ -293,6 +309,8 @@ export default {
     },
     // 保存并发布
     _handleSaveAndPublish() {
+      this.menuDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
+      this.menuDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
       let data = publishMenu(this.menuDetail);
     },
     // 获取图片
@@ -307,6 +325,46 @@ export default {
     handlerSaveImgText(list) {
       this.replycontentData.NewsMsg = list;
     },
+    //校验菜单名称
+    testMenu(typeNum,str){
+      //汉字19968至40869
+      //数字 48-57
+      //A-Z:65-90,a-z:97-122
+      //-+&. :45 43 38 46 32
+      let isRule = true;
+      let BlankNum = 1;
+      let strLength = 0
+      let firstBlankIndex = false;
+      for (var i=0; i<str.length; i++) {  
+        var c = str.charCodeAt(i);
+        if (c == 45 || c == 43 || c == 38 || c == 46 || c == 32){
+          strLength = strLength + 1;
+          if (c==32 && !firstBlankIndex) {
+            firstBlankIndex = i
+          } else if (c==32) {
+            BlankNum = BlankNum + 1;
+            if (BlankNum == 2 && isRule) {
+               isRule = i-firstBlankIndex==1?false:true
+            } else {
+              isRule = false
+            }
+          }
+        } else if ((c >=65 && c <=90) || (c >=97 && c <=122)) {
+          strLength = strLength + 1
+        } else if (c >=48 && c <=57) {
+          strLength = strLength + 1
+        }else if (c >=19968 && c <=40869) {
+          strLength = strLength + 2
+        } else {
+          isRule= false
+        }
+      }
+      if (strLength == 0 || strLength >typeNum) {
+        isRule = false
+      }
+      console.log('444',isRule)
+      this.hasTrueName = isRule
+    }
   }
 };
 </script>
@@ -670,5 +728,23 @@ export default {
   text-align: center;
   color:rgba(255,255,255,1);
   line-height:40px;
+}
+.tipsName {
+  padding-left: 80px;
+  margin-top: -20px;
+  height: 40px;
+	color: rgba(56, 56, 56, 1);
+	font-size: 14px;
+	line-height: 40px;
+	text-align: left;
+}
+.tipsName span{
+  padding: 0;
+  position: relative;
+  float: left;
+}
+.tipsName a {
+  float: left;
+  color: rgba(0, 193, 222, 1);
 }
 </style>

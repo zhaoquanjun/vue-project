@@ -37,6 +37,9 @@ export default {
      components: {
         ImageManage
     },
+    created(){
+        this.picUrl = this.imageMsg
+    },
     methods: {
         handlerDelete() {
             this.isUploaded = false;

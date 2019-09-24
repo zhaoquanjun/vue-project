@@ -43,6 +43,8 @@ const user = {
       let verify = {
         isAuth: data.data.isAuth,
         isCertification: data.data.isVerify
+        // isAuth: true,
+        // isCertification: true
       }
       let accountInfo = {
         platformName: data.data.platformNiceName,
