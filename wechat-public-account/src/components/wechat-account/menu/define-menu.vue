@@ -60,19 +60,19 @@
               </div>
               <el-form-item label="菜单内容">
                 <el-radio
-                  label='0'
-                  v-model="menuDetail.clickBehavior"
-                  @change="_handleBehaviorType('0')"
-                >发送消息</el-radio>
-                <el-radio
                   label='1'
                   v-model="menuDetail.clickBehavior"
                   @change="_handleBehaviorType('1')"
+                >发送消息</el-radio>
+                <el-radio
+                  label='2'
+                  v-model="menuDetail.clickBehavior"
+                  @change="_handleBehaviorType('2')"
                 >跳转网页</el-radio>
                 <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
               </el-form-item>
             </el-form>
-            <div v-show="menuDetail.clickBehavior == '0'" class="message-content__section">
+            <div v-show="menuDetail.clickBehavior == '1'" class="message-content__section">
               <section class="menu-content__area">
                 <div class="radio-tabs">
                   <el-radio label="1" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('1')">图片</el-radio>
@@ -105,11 +105,11 @@
               </section>
             </div>
             <!-- 跳转链接 -->
-            <div v-show="menuDetail.clickBehavior == '1'" class="website-area">
+            <div v-show="menuDetail.clickBehavior == '2'" class="website-area">
               <div class="selectUrl">
                 <span>设置跳转链接</span>
                 <div>
-                  <p>{{menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData}}<p/>
+                  <p>{{menuDetail.behaviorBody.CustomMenuRedirectMsg.Title}}<p/>
                   <i class="iconfont iconicon-des-lj" @click="selectUrl"></i>
                 </div>
               </div>
@@ -148,7 +148,7 @@ export default {
           Id: null,
           Href: null
       },
-      hasTrueName: false,
+      hasTrueName: true,
       replyType: "1", //replyType 回复类型
       isShowPopup: false,
       curIndex: -1,
@@ -164,14 +164,14 @@ export default {
         siteId: '30001',
         name: "",
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
-        behaviorType: '1',//None0无,Image图片,Text文字,News图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
+        behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
         behaviorBody: {
           ImageMsg: {
-            PicUrl: "string",
-            WeChatMediaId: "string"
+            PicUrl: '',
+            WeChatMediaId: ''
           },
           TextMsg: {
-            Text: "string"
+            Text: ''
           },
           NewsMsg: [
             {
@@ -184,10 +184,10 @@ export default {
             }
           ],
           CustomMenuRedirectMsg: {
-            UrlType: "string",
-            Title: "string",
+            UrlType: "",
+            Title: "",
             UrlData: "请选择跳转链接",
-            ContentPageId: "string"
+            ContentPageId: ""
           }
         }
       },
@@ -232,7 +232,9 @@ export default {
           this.menuDetail.behaviorType = '7'
         } else if (data.Type === 'Product') {
           this.menuDetail.behaviorType = '6'
-        } 
+        }
+
+        console.log('333',data,this.menuDetail.behaviorType)
       } 
     },
     //弹出选择链接弹窗
@@ -268,12 +270,38 @@ export default {
     async _handleSelectMenu(type,i,id) {
       this.menuDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
       this.menuDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
-      if (!hasTrueName) {
+      if (!this.hasTrueName || !this.menuDetail.name) {
         notify(this, '请完善子菜单信息', "error");
         return
       }
-      //if (this.menuDetail.clickBehavior == )
+      // 发送消息
+      if (this.menuDetail.clickBehavior == 1) {
+        // 1 图片 2 文字 3 图文
+        if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.ImageMsg.PicUrl) {
+          notify(this, '请完善子菜单信息', "error");
+          return
+        } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.TextMsg.Text) {
+          notify(this, '请完善子菜单信息', "error");
+          return
+        } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.NewsMsg.length == 0) {
+          notify(this, '请完善子菜单信息', "error");
+          return
+        }
+      } else if(this.menuDetail.clickBehavior == 2) {
+        console.log('444',this.menuDetail)
+        // 4 纯URL 5 页面 6 文章 7 产品
+        if (!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData) {
+          notify(this, '请完善子菜单信息', "error");
+          return
+        } else if ((this.menuDetail.behaviorType == 6 || this.menuDetail.behaviorType == 7) &&!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId){
+          notify(this, '请完善子菜单信息', "error");
+          return
+        }
+      }
+      console.log('切换',this.menuDetail)
       updateMenu(this.menuDetail)
+      //this._getMenuDetail(id)
+      return
       if (type == 1) {
         // type 1 点击父菜单 2 点击子菜单
         this.curIndex = i;
@@ -282,7 +310,6 @@ export default {
         this.curIndex = -1;
         this.curSubIndex = i;
       }
-      this._getMenuDetail(id)
     },
     // 添加菜单
     _handleAddMainMenu(name,order,id,level) {
@@ -313,11 +340,13 @@ export default {
     },
     // 获取图片
     handlerPic(picUrl) {
+      console.log('picUrl',picUrl)
       this.menuDetail.behaviorBody.ImageMsg.PicUrl = picUrl;
+      console.log(this.menuDetail.behaviorBody.ImageMsg.PicUrl)
     },
     // 文字回复输入
     handlerText(text) {
-      this.menuDetail.behaviorBody.text = text;
+      this.menuDetail.behaviorBody.TextMsg.Text = text;
     },
     //获取图文详情
     handlerSaveImgText(list) {
