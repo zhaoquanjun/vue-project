@@ -12,8 +12,22 @@ export const wxAuth = () => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/getweixinauthurl`, { siteId: store.state.dashboard.siteId });
 }
 
+
+//解除绑定
 export const unBind = () => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/unbind`, {siteId: store.state.dashboard.siteId,infoType:'WeixinOA'});
+}
+//获取域名列表
+export const getCdnDomainList = () => {
+  return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetCdnDomainList/${store.state.dashboard.siteId}`);
+}
+//设置绑定域名SetPromotionUrl
+export const setPromotionUrl = (options) => {
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/Platform/SetPromotionUrl`,options);
+}
+//添加域名bindDomain
+export const bindDomain = (options) => {
+  return ajaxRequest.post(`${environment.pageApi}/api/v1/WeiXin/BindDomainAndEnableCdn/${store.state.dashboard.siteId}`,options);
 }
 export const getPageSiteList = () => {
   return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetSiteList`);
