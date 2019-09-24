@@ -69,11 +69,11 @@
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn move-btn" @click="handleMove(scope.row)">
-                            <!-- <svg-icon style="width:27px;height:27px" icon-class="tab-move"></svg-icon> -->
+                        <button class="handle-btn " @click="handleMove(scope.row)">
+                           <i class="iconfont iconyidong"></i>
                         </button>
                         <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
-                             <i class="iconfont iconhuishouzhan "></i>
+                             <i class="iconfont iconshanchu "></i>
                         </button>
                     </div>
                 </template>

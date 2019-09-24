@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div >
       <!-- <div class="loading-section">
     <div class="loading-content__area">
       <div class="loading-icon__area"></div>
       <p>加载中...</p>
     </div>
   </div> -->
+  <div class="loading-wrap"></div>
    <div class="arc"></div>
   </div>
 </template>
@@ -44,9 +45,28 @@ export default {
 //   }
 // }
 body {
-  background: #0b0b14;
-  font-family: 'Inconsolata', monospace;
-  overflow: hidden;
+  // background: #0b0b14;
+  // font-family: 'Inconsolata', monospace;
+  // overflow: hidden;
+}
+.loading-wrap{
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+      // -webkit-filter: blur(5px) contrast(.5) brightness(.5);
+      //       -moz-filter: blur(5px);
+      //       -o-filter: blur(5px);
+      //       -ms-filter: blur(5px);
+      //       filter: blur(5px) contrast(.5) brightness(.5);
+      //       transition: 1.0s filter;
+
+
 }
 .arc {
   position: absolute;
@@ -58,7 +78,8 @@ body {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border-top: 2px solid #ffea29;
+   z-index: 100000;
+  border-top: 2px solid #09CCEB;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 2s infinite linear;
@@ -73,7 +94,7 @@ body {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  border-top: 2px solid #8d29ff;
+  border-top: 2px solid #63DC8C;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 4s infinite linear reverse;
@@ -94,7 +115,7 @@ body {
   border-right: initial;
   animation: cw 1s infinite;
   content: "";
-  background: snow;
+  background: #BFF6FF;
 }
 
 h1 {

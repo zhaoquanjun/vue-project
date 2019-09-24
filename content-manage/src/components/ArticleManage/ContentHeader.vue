@@ -93,7 +93,7 @@
                     <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard">
-                                <svg-icon icon-class="across-dot"></svg-icon>
+                                <i class="iconfont iconsangedian"></i>
                             </button>
                         </span>
                         <el-dropdown-menu slot="dropdown">

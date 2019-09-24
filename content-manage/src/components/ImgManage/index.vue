@@ -105,10 +105,12 @@
                 :node-data="nodeData"
             />
         </el-dialog>
+        <loading></loading>
     </el-container>
 </template>
 <script>
 import MTree from "@/components/common/MTree";
+// import loading from "@/components/common/loading";
 import UploadPic from "./UploadPic";
 import ImgListHeader from "./ImgListHeader";
 import ImgList from "./ImgList";
@@ -139,7 +141,8 @@ export default {
         GridList,
         UploadPic,
         RightPannel,
-        SelectTree
+        SelectTree,
+        loading
     },
     data() {
         return {

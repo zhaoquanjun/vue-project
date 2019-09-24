@@ -33,6 +33,13 @@ export default {
 };
 </script>
 <style scoped>
+.leftNavAside {
+    background: #f8fafc !important;
+}
+.submenu-title,
+.el-menu {
+    background: #f8fafc;
+}
 .el-menu .el-menu-item {
     height: 50px;
     line-height: 50px;
@@ -40,15 +47,22 @@ export default {
     margin-bottom: 10px;
 }
 .el-menu :hover.el-menu-item {
-    background: #e0fcff;
+    background: #fff;
+}
+.el-menu :active.el-menu-item span{
+    color: #0595e6;
 }
 .active {
     color: #0595e6;
-    background: #e0faff;
+    background: #fff;
+    /* border-left: 4px solid #0595e6; */
 }
 .active:hover {
-    color: #0595e6;
-    background: #e0faff !important;
+    /* color: #0595e6; */
+    background: #ffffff !important;
+}
+.active:active{
+     color: #0595e6;
 }
 .submenu-title {
     height: 40px;

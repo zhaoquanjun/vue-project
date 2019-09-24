@@ -113,12 +113,12 @@
                                     <div
                                         :class="[watchPwd.firstRule === false ? 'error':'success']"
                                     >
-                                        <i class="iconfont " :class="[watchPwd.firstRule === false ? 'iconguanbi':'iconicon-test']"></i>长度为6～16位（字母区分大小写）
+                                        <i class="iconfont " :class="[watchPwd.firstRule === false ? 'iconicon-des-Wrongnumber':'iconxingzhuangjiehe']"></i>长度为6～16位（字母区分大小写）
                                     </div>
                                     <div
                                         :class="[watchPwd.secondRule === false ? 'error':'success']"
                                     >
-                                        <i class="iconfont"  :class="[watchPwd.secondRule === false ? 'iconguanbi':'iconicon-test']"></i>只能包含数字、字母以及英文标点符号
+                                        <i class="iconfont"  :class="[watchPwd.secondRule === false ? 'iconicon-des-Wrongnumber':'iconxingzhuangjiehe']"></i>只能包含数字、字母以及英文标点符号
                                     </div>
                                 </div>
                                 <div

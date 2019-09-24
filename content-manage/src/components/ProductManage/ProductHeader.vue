@@ -65,10 +65,7 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <!-- <span @click="switchIsDesc">
-                        <svg-icon v-if="articleSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                        <svg-icon v-else icon-class="top-arrow"></svg-icon>
-                    </span>-->
+                   
                     <span @click="switchIsDesc('asc')">
                         <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
                     </span>
@@ -97,7 +94,7 @@
                     <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard">
-                                <svg-icon icon-class="across-dot"></svg-icon>
+                                <i class="iconfont iconsangedian"></i>
                             </button>
                         </span>
                         <el-dropdown-menu slot="dropdown">

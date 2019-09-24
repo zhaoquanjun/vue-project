@@ -1,5 +1,6 @@
 <template>
     <div class="my-dialog" v-if="isShow" @click.stop="handlerClick" @mouseenter="handlerClick"></div>
+    
 </template>
 <script>
 export default {
