@@ -2,7 +2,7 @@
     <div
         class="m-aside"
         :style="{width:width+'px',backgroundColor:'#fff'}"
-        @mouseenter="collapseOpen(180,0.8)"
+        @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
         <el-aside class="m-asideleft" :style="{width:width+'px'}">
@@ -16,10 +16,7 @@
                     @mouseenter="changeCurHoverItem(i)"
                     @click="skipPages(it,i)"
                 >
-                    <i
-                        class="menu-icon iconfont"
-                        :class="[iconfonts(it.code)]"
-                    ></i>
+                    <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                     <i
                         v-if="menuHasChild(i) && isLeftNavComponentsShow"
@@ -32,6 +29,7 @@
         <!--  :menuList="menuList[curIndex]" -->
         <!--  -->
         <LeftNavComponents
+            :subTitle="subTitle"
             :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
             :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
@@ -48,7 +46,7 @@ import { siteDomain } from "@/environment/index";
 export default {
     data() {
         return {
-            width: 70,
+            width: 60,
             width1: 0,
             time: "0.8s",
             curIndex: -1,
@@ -56,11 +54,15 @@ export default {
             serversData: [],
             display: "none",
             curPath: "",
-            lastRoute: ""
+            lastRoute: "",
+            subTitle:""
         };
     },
     components: {
         LeftNavComponents
+    },
+    mounted(){
+        this.menuHasChild(0)
     },
     methods: {
         changeCurHoverItem(i) {
@@ -77,12 +79,12 @@ export default {
         },
         collapseOpen(width, time) {
             this.width = width;
-            this.width1 = 100;
+            this.width1 = 120;
             this.display = "block";
             this.time = time + "s";
         },
         collapseClose() {
-            this.width = 70;
+            this.width = 60;
             this.width1 = 0;
             this.display = "none";
             this.time = "0s";
@@ -109,7 +111,7 @@ export default {
                 case "business":
                     return "icondianshanghuiyuan";
                 case "template":
-                    return "iconicon-dash-NavigationTemplate";   
+                    return "iconicon-dash-NavigationTemplate";
             }
         },
         menuHasChild(index){
@@ -133,6 +135,7 @@ export default {
             if (!this.$store.getters.getMenuList) return;
             let item = this.$store.getters.getMenuList[this.curIndex];
             if (item && item.children) {
+                this.subTitle=item.name
                 return true;
             } else {
                 return false;
@@ -150,7 +153,6 @@ export default {
 </script>
 
 <style scoped>
-@import "../../assets/fonts/aside/iconfont.css";
 .m-aside {
     position: absolute;
     left: 0;
@@ -165,10 +167,11 @@ export default {
 .m-asideright {
     width: 0px !important;
     position: absolute;
-    left: 180px;
+    left: 150px;
     z-index: 10;
     top: 0;
     text-align: center;
+    border-right: none !important;
     /* border-right: 1px solid #E5E5E5; */
 }
 .el-aside /deep/ .el-menu {
@@ -178,15 +181,20 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 选中的样式
-.menu-bg{
-    background: #e0faff;
-    color: #0595e6;
+
+.active-color {
+    color: #0595e6 !important;
 }
-.menu-hover{
-     background: #e0fcff;
+.menu-hover {
+    background:rgba(248,250,252,1);
+}
+.menu-bg {
+    background:rgba(240, 243, 247, 1);
+    color: #0595e6;
+    border-left: 4px solid #0595e6;
 }
 .left-menu {
-    border-right: solid 1px #e6e6e6;
+    // border-right: solid 1px #e6e6e6;
     background: #fff;
     height: calc(100vh - 80px);
     padding-top: 16px;
@@ -198,20 +206,22 @@ export default {
         .menu-icon {
             display: inline-block;
             font-size: 22px;
-            width: 70px;
+            width: 60px;
             text-align: center;
             vertical-align: middle;
             color: #0595e6;
         }
-        .iconicon-des-Arrow {
+        .iconicon-des-Arrow{
             position: absolute;
-            right: 16px;
+            right: 5px;
             font-size: 14px;
             vertical-align: middle;
             color: #B9CBCF;
         }
+        .iconweixingongzhonghao{
+            font-size: 19px;
+        }
     }
-   
 }
 </style>
 

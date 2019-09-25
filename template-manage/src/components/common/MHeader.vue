@@ -261,7 +261,7 @@ export default {
   .head-item {
     .logo-icon {
       border-right: 1px solid hsla(0, 0%, 100%, 0.3);
-      width: 70px;
+      width: 60px;
       box-sizing: border-box;
       text-align: center;
       display: inline-block;
