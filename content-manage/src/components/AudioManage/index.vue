@@ -189,11 +189,7 @@ export default {
         },
         // 获取列表
         async getList(node) {
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+            this.$Loading.show();
             if (node) {
               
                 this.nodeData = node; // 上传弹窗所需
@@ -201,7 +197,7 @@ export default {
             let { data } = await audioManageApi.getList(
                 this.picSearchOptions
             );
-            loading.close();
+             this.$Loading.hide();
             this.getTree();
             this.imgPageResult = data;
         },

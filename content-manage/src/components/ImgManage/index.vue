@@ -105,12 +105,11 @@
                 :node-data="nodeData"
             />
         </el-dialog>
-        <loading></loading>
     </el-container>
 </template>
 <script>
 import MTree from "@/components/common/MTree";
-// import loading from "@/components/common/loading";
+
 import UploadPic from "./UploadPic";
 import ImgListHeader from "./ImgListHeader";
 import ImgList from "./ImgList";
@@ -142,7 +141,7 @@ export default {
         UploadPic,
         RightPannel,
         SelectTree,
-        loading
+        
     },
     data() {
         return {
@@ -182,14 +181,11 @@ export default {
     methods: {
         // 获取列表
         async getList(node) {
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+          
+            this.$Loading.show()
             if (node) this.nodeData = node; // 上传图片所需
             let { data } = await imgManageApi.getList(this.picSearchOptions);
-            loading.close();
+             this.$Loading.hide()
             this.getTree();
             this.imgPageResult = data;
             this.imgPageResult.list.forEach((item, index) => {

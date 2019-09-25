@@ -1,13 +1,7 @@
 <template>
-  <div >
-      <!-- <div class="loading-section">
-    <div class="loading-content__area">
-      <div class="loading-icon__area"></div>
-      <p>加载中...</p>
-    </div>
-  </div> -->
-  <div class="loading-wrap"></div>
-   <div class="arc"></div>
+  <div id="custom-loading">
+      <div class="loading-wrap"></div>
+      <div class="arc"></div>
   </div>
 </template>
 
