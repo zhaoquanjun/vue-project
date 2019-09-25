@@ -9,11 +9,11 @@
       <div class="account-info__area">
         <div class="info-desc__area">
           <div class="account-icon">
-            <img :src="account_info.platformAvator" alt />
+            <img :src="accountInfo.platformAvator" alt />
           </div>
           <div class="account-name-certification">
-            <h6>{{account_info.platformName}}</h6>
-            <p>{{account_info.serviceTypeInfo == 0 ? '服务号' : '订阅号'}}</p>
+            <h6>{{accountInfo.platformName}}</h6>
+            <p>{{accountInfo.serviceTypeInfo == 0 ? '服务号' : '订阅号'}}</p>
           </div>
         </div>
         <div class="primary-button__nomal" @click="unBind">解除绑定</div>
@@ -21,9 +21,14 @@
       <div class="account-domain__area">
         <div class="domain-title__area">
           <span>推广域名</span>
-          <p>www.yunmengclouddream.com</p>
+          <p>{{accountInfo.promotionUrl}}</p>
+          <ul v-if="isShow">
+            <li v-for="(item,ind) in domainList" :key='ind' @click="_setPromotionUrl(item.domain)">
+              {{item.domain}}
+            </li>
+          </ul>
         </div>
-        <div class="primary-button__nomal domain-button__area">&nbsp;&nbsp;修改&nbsp;&nbsp;</div>
+        <div class="primary-button__nomal domain-button__area" @click="changeShow">&nbsp;&nbsp;修改&nbsp;&nbsp;</div>
       </div>
       <div class="account-explain__area">
         <h5>推广域名说明</h5>
@@ -34,27 +39,49 @@
         </p>
       </div>
     </div>
+    <div class="add-promotion">
+      <div class="content">
+        <div class="title">
+          <span>推广域名</span>
+          <i>x</i>
+        </div>
+        <ul>
+          <p>请选择推广域名</p>
+          <li v-for="(item,ind) in domainList" :key='ind' @click="_setPromotionUrl(item.domain)">
+            {{item.domain}}
+          </li>
+        </ul>
+        <div>
+          <span>确定</span>
+          <span>取消</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
-import { unBind } from "@/api/request/account.js";
+import { unBind, getCdnDomainList,bindDomain,setPromotionUrl } from "@/api/request/account.js";
 import { mapGetters } from "vuex";
 import { notify } from "@/utlis/index.js";
 export default {
   data() {
     return {
       siteName: "",
-      siteId: 0,
+      siteId: this.$store.state.dashboard.siteId,
       language: "",
+      isShow: false,
+      domainList: [],
       scrollHeight: 500,
       accountAvator: require("img/account/account_type_icon.png"),
       accountInfo: {
         platformName: "公众号名称",
+        platformAppId:'',
         platformAvator: "",
-        platformType: 0
+        promotionUrl: '',
+        serviceTypeInfo: ''
       }
     };
   },
@@ -64,9 +91,7 @@ export default {
   },
   created() {
     this._getWxIsAuth();
-  },
-  computed: {
-    ...mapGetters(["account_info"])
+    this._getCdnDomainList();
   },
   methods: {
     getSiteId(siteId) {
@@ -80,10 +105,29 @@ export default {
     async _getWxIsAuth() {
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
-      console.log(this.$store.state)
+      console.log(this.$store.state.wxaccount)
       if (!wx_status.isAuth || !wx_status.isCertification) {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
+      this.accountInfo = this.$store.state.wxaccount.account_info
+    },
+    // 获取当前可选域名列表
+    async _getCdnDomainList() {
+      let {data} = await getCdnDomainList()
+      this.domainList = data
+      console.log('eee',data)
+    },
+    //changeShow
+    changeShow() {
+      this.isShow = !this.isShow
+    },
+    //设置推广域名
+    async _setPromotionUrl(domain){
+      let data = await setPromotionUrl({siteId: this.siteId,domain:domain})
+      if(true) {
+        this.accountInfo.promotionUrl = domain
+      }
+      console.log('999',data)
     },
     //解除绑定
     unBind(){
@@ -200,6 +244,7 @@ export default {
       padding: 30px;
       line-height: 14px;
       .domain-title__area {
+        position: relative;
         width: 80%;
         line-height: 40px;
         display: flex;
@@ -209,10 +254,32 @@ export default {
         font-weight:400;
         color:rgba(38,38,38,1); 
         p {
+          display: inline-block;
+          min-width: 240px;
           margin-left: 20px;
           border-radius:2px;
           border:1px solid rgba(229,229,229,1);
           padding: 0 10px;
+        }
+        ul {
+          position: absolute;
+          top: 40px;
+          left: 76px;
+          width: 240px;
+          font-size:14px;
+          line-height: 40px;
+          background: #FFFFFF;
+          border: 1px solid rgba(229,229,229,1);
+          border-bottom: none;
+          color: #a1a8b1;
+          li {
+            border-bottom: 1px solid rgba(229,229,229,1);
+            padding-left: 10px;
+            cursor: pointer;
+            &:hover {
+              color: rgba(38,38,38,1); 
+            }
+          }
         }
       }
       .domain-button__area {
@@ -236,6 +303,30 @@ export default {
         font-weight:400;
         color:rgba(161,168,177,1);
         line-height:26px;
+      }
+    }
+  }
+  .add-promotion {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 100;
+    .content {
+      float: right;
+      width: 500px;
+      height: 100%;
+      padding: 24px;
+      background: #FFFFFF;
+      .title {
+        font-size:14px;
+        font-family:"PingFangSC-Regular,PingFangSC";
+        font-weight:400;
+        color:rgba(38,38,38,1);
+        line-height:20px;
       }
     }
   }

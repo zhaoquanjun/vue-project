@@ -41,15 +41,16 @@ const user = {
       let siteId =  store.state.dashboard.siteId
       let data = await isAuth({infoType: "WeixinOA",siteId: siteId});
       let verify = {
-        isAuth: data.data.isAuth,
+        //isAuth: data.data.isAuth,
         //isCertification: data.data.isVerify
-        //isAuth: true,
+        isAuth: true,
         isCertification: true
       }
       let accountInfo = {
         platformName: data.data.platformNiceName,
         platformAvator: data.data.platformHeadImg,
         serviceTypeInfo: data.data.serviceTypeInfo,
+        promotionUrl: data.data.serviceTypeInfo,
         platformAppId: data.data.platformAppId
       }
       commit("SET_WX_STATUS", verify);
