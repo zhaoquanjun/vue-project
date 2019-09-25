@@ -78,15 +78,11 @@ export default {
      
         // 获取列表
         async getAudioList(node) {
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+            this.$Loading.show();
             let { data, status } = await recycleManageApi.getAudioList(
                 this.audioSearchOptions
             );
-           loading.close();
+            this.$Loading.hide();
             this.recyclePageResult = data;
         },
         // 批量恢复音频

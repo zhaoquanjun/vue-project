@@ -76,15 +76,11 @@ export default {
             if (!this.changeInput()) return;
             this.disabled = true;
             this.btnText = "添加中";
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+            this.$Loading.show();
             let { data, status } = await bindDomainAndEnableCdn({
                 domain: this.domainValue
             });
-            loading.close()
+            this.$Loading.hide();
             if (status === 200 && !data.isSuccess) {
                 this.onerrorTip = true;
                 this.onerrorText = data.msg;

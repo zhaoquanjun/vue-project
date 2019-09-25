@@ -8,6 +8,8 @@ import "./assets/reset.css";
 import "./styles/common.scss";
 import "./styles/pop-up/pup-up.scss"
 import "./styles/weizhan.scss";
+import Loading from './globalComponents/loading.js' 
+Vue.use(Loading)
 Vue.config.productionTip = false;
 //插件的包
 import PerfectScrollbar from 'perfect-scrollbar';

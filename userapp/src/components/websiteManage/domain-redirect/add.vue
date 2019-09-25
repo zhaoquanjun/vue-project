@@ -188,13 +188,6 @@ export default {
 };
 </script>
 <style scoped>
-.loading-icon {
-    display: inline-block;
-    width: 50px;
-    height: 52px;
-    background: url("~img/loading.gif") no-repeat center;
-    background-size: contain;
-}
 .el-form /deep/ .el-select {
     width: 100%;
 }
