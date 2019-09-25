@@ -540,6 +540,11 @@ export default {
         justify-content: flex-start;
         align-items: center;
         width: calc(100% - 42px);
+        li:nth-child(3) {
+          .menu-child__area {
+            left: 13%;
+          }
+        }
         li {
           position: relative;
           margin: 8px 0;
