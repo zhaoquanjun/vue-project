@@ -136,10 +136,12 @@ export default {
       return false;
     },
     _handleConfirm() {
-      if (!this.slider || !this.title){
+      if (!this.selectedUrl || !this.title){
         notify(this, '请选择所需链接', "error");
+        return
       } else if ((this.slider == 'news' || this.slider == 'product') && !this.id ){
         notify(this, '请选择所需的页面', "error");
+        return
       }
       let oldData = {},
           data = {};

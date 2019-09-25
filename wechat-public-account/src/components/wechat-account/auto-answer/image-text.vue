@@ -267,9 +267,7 @@ export default {
             this.list.forEach((item, index) => {
                 item["isShow"] = true;
             });
-             console.log( this.newsMsg.length,' this.newsMsg this.newsMsg this.newsMsg')
             this.isEditorShow = this.newsMsg.length > 0 ? false : true;
-            console.log(this.isEditorShow) 
          
         },
        

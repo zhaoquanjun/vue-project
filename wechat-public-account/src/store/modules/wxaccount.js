@@ -41,9 +41,9 @@ const user = {
       let siteId =  store.state.dashboard.siteId
       let data = await isAuth({infoType: "WeixinOA",siteId: siteId});
       let verify = {
-        //isAuth: data.data.isAuth,
+        isAuth: data.data.isAuth,
         //isCertification: data.data.isVerify
-        isAuth: true,
+        //isAuth: true,
         isCertification: true
       }
       let accountInfo = {

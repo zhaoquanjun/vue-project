@@ -399,28 +399,32 @@ export default {
       }
     },
     // 保存并发布
-    _handleSaveAndPublish() {
+     async _handleSaveAndPublish() {
       this.menuDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
       this.menuDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
-      //同步菜单name
-      for(let i =0; i<this.menuTree.length; i++) {
-        if(this.menuTree[i].id == this.menuDetail.id) {
-          this.menuTree[i].name = this.menuDetail.name
-          return
-        } else if(this.menuTree[i].subMenuList.length > 0) {
-          for(let j =0; i<this.menuTree[i].subMenuList.length; j++) {
-            if(this.menuTree[i].subMenuList[j].id == this.menuDetail.id) {
-              this.menuTree[i].menuTree[j].name = this.menuDetail.name
-              return
+      let data = await publishMenu(this.menuDetail);
+      console.log(data)
+      if (data.status == 200) {
+        //同步菜单name
+        for(let i =0; i<this.menuTree.length; i++) {
+          if(this.menuTree[i].id == this.menuDetail.id) {
+            this.menuTree[i].name = this.menuDetail.name
+            return
+          } else if(this.menuTree[i].subMenuList.length > 0) {
+            for(let j =0; i<this.menuTree[i].subMenuList.length; j++) {
+              if(this.menuTree[i].subMenuList[j].id == this.menuDetail.id) {
+                this.menuTree[i].menuTree[j].name = this.menuDetail.name
+                return
+              }
             }
           }
         }
+      } else {
+        notify(this, '保存失败', "error");
       }
-      let data = publishMenu(this.menuDetail);
     },
     // 获取图片
     handlerPic(picUrl) {
-      console.log('picUrl',picUrl,this.menuDetail.behaviorBody)
       this.menuDetail.behaviorBody.ImageMsg.PicUrl = picUrl;
       console.log(this.menuDetail.behaviorBody.ImageMsg.PicUrl)
     },
@@ -430,7 +434,8 @@ export default {
     },
     //获取图文详情
     handlerSaveImgText(list) {
-      this.replycontentData.NewsMsg = list;
+      console.log('list',list)
+      this.menuDetail.behaviorBody.NewsMsg = list;
     },
     //校验菜单名称
     testMenu(typeNum,str){
