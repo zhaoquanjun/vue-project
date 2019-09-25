@@ -17,14 +17,14 @@
           <span style="cursor: pointer">
             <i
               class="iconfont iconbianzu1"
-              style="margin-right:8px;font-size:16px;vertical-align:middle"
+              style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">帮助</b>
           </span>
           <span style="cursor: pointer">
             <i
               class="iconfont iconbianzu2"
-              style="margin-right:8px;font-size:16px;vertical-align:middle"
+              style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">通知</b>
           </span>
