@@ -15,17 +15,17 @@
             {{item.name || '主菜单'}}
             <ul 
               class="menu-child__area"
-              v-show="item.subMenuList.length > 0 && index == curIndex"
+              v-show="index == curIndex"
             >
               <li 
                 v-for="(child, idx) in item.subMenuList"
-                :class="{selected: idx == curSubIndex}"
+                :class="{selected: idx == curSubIndex && index == curIndex}"
                 @click="_handleSelectMenu(2,idx,child.id)"
                 :key="idx">
                 <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
                 {{child.name || '子菜单'}}
               </li>
-              <li @click="_handleAddMainMenu('子菜单',0,item.id,1)">+</li>
+              <li v-if="item.subMenuList.length<5" @click="_handleAddMainMenu('子菜单',0,item.id,1)">+</li>
             </ul>
           </li>
           <li v-if="menuTree.length > 0 &&  menuTree.length < 3" @click="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
@@ -151,7 +151,7 @@ export default {
       hasTrueName: true,
       replyType: "1", //replyType 回复类型
       isShowPopup: false,
-      curIndex: -1,
+      curIndex: 0,
       curSubIndex: -1,
       isOrder: false,
       replyContentType: "picture",
@@ -246,14 +246,33 @@ export default {
       let { data } = await getMenuDetail(this.siteId, id);
       this.menuDetail.name = data.name;
       this.menuDetail.id = data.id;
-      this.menuDetail.clickBehavior = JSON.stringify(data.clickBehavior);
-      this.menuDetail.behaviorType = JSON.stringify(data.behaviorType);
+      this.menuDetail.clickBehavior = data.clickBehavior == 0? '1' : JSON.stringify(data.clickBehavior);
+      this.menuDetail.behaviorType = data.behaviorType == 0 ?  '1' : JSON.stringify(data.behaviorType);
       let behaviorBody = JSON.parse(data.behaviorBody);
       console.log('8888',behaviorBody)
-      this.menuDetail.behaviorBody.ImageMsg = behaviorBody.ImageMsg || '';
-      this.menuDetail.behaviorBody.TextMsg = behaviorBody.TextMsg || '';
-      this.menuDetail.behaviorBody.NewsMsg = behaviorBody.NewsMsg || [];
-      this.menuDetail.behaviorBody.CustomMenuRedirectMsg = behaviorBody.CustomMenuRedirectMsg || {};
+      if (behaviorBody) {
+        if(behaviorBody.ImageMsg && behaviorBody.ImageMsg.PicUrl) {
+          this.menuDetail.behaviorBody.ImageMsg = behaviorBody.ImageMsg
+        } else {
+          this.menuDetail.behaviorBody.ImageMsg.PicUrl = '';
+        }
+        if(behaviorBody.TextMsg && behaviorBody.TextMsg.Text) {
+          this.menuDetail.behaviorBody.TextMsg = behaviorBody.TextMsg
+        } else {
+          this.menuDetail.behaviorBody.TextMsg.Text = '';
+        }
+        if(behaviorBody.NewsMsg) {
+          this.menuDetail.behaviorBody.NewsMsg = behaviorBody.TextMsg
+        }
+        if(behaviorBody.CustomMenuRedirectMsg) {
+          this.menuDetail.behaviorBody.CustomMenuRedirectMsg = behaviorBody.CustomMenuRedirectMsg
+        }
+      } else {
+        this.menuDetail.behaviorBody.ImageMsg.PicUrl = '';
+        this.menuDetail.behaviorBody.TextMsg.Text = '';
+        this.menuDetail.behaviorBody.NewsMsg = [];
+        this.menuDetail.behaviorBody.CustomMenuRedirectMsg = {};
+      }
       console.log('0000',this.menuDetail)
     },
     _handleChangeBehaviorType(val) {
@@ -268,51 +287,54 @@ export default {
     },
     // 切换menu
     async _handleSelectMenu(type,i,id) {
-      this.menuDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
-      this.menuDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
+      console.log(this.menuDetail.behaviorType , this.menuDetail.clickBehavior)
       if (!this.hasTrueName || !this.menuDetail.name) {
-        notify(this, '请完善子菜单信息', "error");
+        notify(this, '1请完当前善菜单信息', "error");
         return
       }
+      if(this.menuDetail.behaviorType == '0' || this.menuDetail.clickBehavior == '0') {
+        notify(this, '2请完善当前菜单信息', "error");
+        return
+      }
+      console.log(this.menuDetail)
       // 发送消息
       if (this.menuDetail.clickBehavior == 1) {
         // 1 图片 2 文字 3 图文
         if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.ImageMsg.PicUrl) {
-          notify(this, '请完善子菜单信息', "error");
+          notify(this, '3请完善当前菜单信息', "error");
           return
         } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.TextMsg.Text) {
-          notify(this, '请完善子菜单信息', "error");
+          notify(this, '4请完善当前菜单信息', "error");
           return
         } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.NewsMsg.length == 0) {
-          notify(this, '请完善子菜单信息', "error");
+          notify(this, '5请完善当前菜单信息', "error");
           return
         }
       } else if(this.menuDetail.clickBehavior == 2) {
-        console.log('444',this.menuDetail)
         // 4 纯URL 5 页面 6 文章 7 产品
         if (!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData) {
-          notify(this, '请完善子菜单信息', "error");
+          notify(this, '6请完善菜单信息', "error");
           return
         } else if ((this.menuDetail.behaviorType == 6 || this.menuDetail.behaviorType == 7) &&!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId){
-          notify(this, '请完善子菜单信息', "error");
+          notify(this, '7请完善菜单信息', "error");
           return
         }
       }
-      console.log('切换',this.menuDetail)
-      updateMenu(this.menuDetail)
-      //this._getMenuDetail(id)
-      return
+      let dataDetail = this.menuDetail
+      dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
+      dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
       if (type == 1) {
         // type 1 点击父菜单 2 点击子菜单
         this.curIndex = i;
         this.curSubIndex = -1;
       } else if(type == 2) {
-        this.curIndex = -1;
         this.curSubIndex = i;
       }
+      this._getMenuDetail(id)
+      let data = await updateMenu(dataDetail)
     },
     // 添加菜单
-    _handleAddMainMenu(name,order,id,level) {
+    async _handleAddMainMenu(name,order,id,level) {
       let newMenuItem = {
         name: name,  //菜单名称
         displayOrder: order, //菜单排序
@@ -320,8 +342,8 @@ export default {
         siteId: this.siteId, //站点id
         menuLevel: level //父菜单为0，子菜单为1
       };
-      let data = addMenu(newMenuItem);
-      if(data.status && data.status ==200 ) {
+      let data =  await addMenu(newMenuItem);
+      if(data.status && data.status == 200 ) {
         this._getMenuTree()
       }
     },
@@ -336,11 +358,25 @@ export default {
     _handleSaveAndPublish() {
       this.menuDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
       this.menuDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
+      //同步菜单name
+      for(let i =0; i<this.menuTree.length; i++) {
+        if(this.menuTree[i].id == this.menuDetail.id) {
+          this.menuTree[i].name = this.menuDetail.name
+          return
+        } else if(this.menuTree[i].subMenuList.length > 0) {
+          for(let j =0; i<this.menuTree[i].subMenuList.length; j++) {
+            if(this.menuTree[i].subMenuList[j].id == this.menuDetail.id) {
+              this.menuTree[i].menuTree[j].name = this.menuDetail.name
+              return
+            }
+          }
+        }
+      }
       let data = publishMenu(this.menuDetail);
     },
     // 获取图片
     handlerPic(picUrl) {
-      console.log('picUrl',picUrl)
+      console.log('picUrl',picUrl,this.menuDetail.behaviorBody)
       this.menuDetail.behaviorBody.ImageMsg.PicUrl = picUrl;
       console.log(this.menuDetail.behaviorBody.ImageMsg.PicUrl)
     },
