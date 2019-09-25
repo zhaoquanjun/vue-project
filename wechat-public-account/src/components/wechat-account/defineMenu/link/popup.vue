@@ -11,6 +11,11 @@
             <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
           </li>
         </ul>
+        <none-area 
+          @handleChangeUrl="handleChangeUrl"
+          v-show="slider == 'url'" 
+          :noneUrl="noneUrl">
+        </none-area>
         <page-area
           :model="model"
           :selectedUrl="selectedUrl"
@@ -70,6 +75,7 @@ import EmailArea from "./email";
 import TelArea from "./tel";
 import FileArea from "./file";
 import MaskArea from "./mask";
+import { notify } from "@/utlis/index.js";
 export default {
   props: {
     model: {
@@ -180,6 +186,13 @@ export default {
       if (e.target.id == "popup") {
         this._handleCancle();
       }
+    },
+    handleChangeUrl(val) {
+      this.selectedUrl = val.url;
+      this.curType = val.cType;
+      this.title = val.title;
+      this.id = val.id;
+      return false;
     },
     handleChangeTarget(val) {
       console.log(val);
