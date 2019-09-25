@@ -103,7 +103,6 @@
                 <button class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
-        <Loading v-if="loadingShow" />
     </div>
 </template>
 <script>
@@ -125,8 +124,7 @@ export default {
     data() {
         return {
             remarkValue: "",
-            tableHeight: 500,
-            loadingShow: true
+            tableHeight: 500
         };
     },
     mounted() {
@@ -212,11 +210,6 @@ export default {
         //     return
         //   })
         // }
-    },
-    watch: {
-        memberList() {
-            this.loadingShow = false;
-        }
     }
 };
 </script>

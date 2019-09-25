@@ -347,14 +347,10 @@ export default {
     },
     // 获取站点信息
     async getSiteInfo(siteId) {
-      const loading = this.$loading({
-        lock: true,
-        spinner: "loading-icon",
-        background: "rgba(255, 255, 255, 0.75)"
-      });
+      this.$Loading.show();
       let { data, status } = await siteBackupApi.getSiteInfo(siteId);
+      this.$Loading.hide();
       if (status === 200) {
-        loading.close();
         this.siteName = data.siteName;
         this.siteImage = data.siteImage;
         this.domain = data.domain;
