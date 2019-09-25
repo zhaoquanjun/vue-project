@@ -277,19 +277,15 @@ export default {
         },
         // 获取列表
         async getPicList(node) {
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+             this.$Loading.show();
             if (node) {
                 this.nodeData = node;
             }
             let { data, status } = await fileManageApi.getPicList(
                 this.picSearchOptions
             );
+             this.$Loading.hide();
             if (status === 200) {
-                loading.close();
                 this.getTree();
             }
             this.imgPageResult = data;

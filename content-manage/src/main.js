@@ -12,6 +12,8 @@ import "@/directive/index.js"
 import VueQuillEditor from 'vue-quill-editor'
 import uploader from 'vue-simple-uploader'
 import VueClipboard from 'vue-clipboard2'
+import Loading from './components/globalComponents/loading.js' 
+Vue.use(Loading)
 Vue.use(VueClipboard)
 Vue.use(uploader)
 //插件的包
