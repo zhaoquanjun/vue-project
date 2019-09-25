@@ -632,11 +632,7 @@ export default {
     },
     //   获取模版列表
     async getTemplateList() {
-      const loading = this.$loading({
-        lock: true,
-        spinner: "loading-icon",
-        background: "rgba(255, 255, 255, 0.75)"
-      });
+      this.$Loading.show();
       let para = {
         TemplateName: "",
         Domain: "",
@@ -656,12 +652,12 @@ export default {
         IsOrderByDesc: true
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
+      this.$Loading.hide();
       if (status == 200) {
         console.log(data);
         this.templatePage = data;
         this.templateInfo = data.items;
         this.formatTime();
-        loading.close();
       }
     },
     // 获取一级行业
@@ -763,11 +759,7 @@ export default {
     },
     // 查询
     async searchTemplate() {
-      const loading = this.$loading({
-        lock: true,
-        spinner: "loading-icon",
-        background: "rgba(255, 255, 255, 0.75)"
-      });
+      this.$Loading.show();
       let templateNameText = "";
       let domainText = "";
       let designerPhoneText = "";
@@ -799,8 +791,8 @@ export default {
         IsOrderByDesc: true
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
+      this.$Loading.hide();
       if (status == 200) {
-        loading.close();
         this.templatePage = data;
         this.templateInfo = data.items;
         this.formatTime();
