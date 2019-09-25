@@ -145,7 +145,6 @@ export default {
 };
 </script>
 <style scoped>
-@import "../../assets/fonts/aside/iconfont.css";
 .m-aside {
     position: absolute;
     left: 0;
