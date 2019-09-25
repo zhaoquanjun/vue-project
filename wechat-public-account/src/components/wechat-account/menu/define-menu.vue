@@ -5,31 +5,38 @@
         <div class="phone-menu__keyboard"></div>
         <div class="phone-menu__divider"></div>
         <div class="no-menu__area" v-if="menuTree.length == 0" @click="_handleAddMainMenu('主菜单',0,0,0)">+ 添加菜单</div>
-        <ul class="phone-menu__list" v-show="menuTree.length > 0">
-          <li
-            v-for="(item, index) in menuTree"
-            :key="index"
-            :class="{selected: index == curIndex}"
-            @click="_handleSelectMenu(1,index,item.id)"
-          >
-            {{item.name || '主菜单'}}
-            <ul 
-              class="menu-child__area"
-              v-show="index == curIndex"
+          <draggable 
+            class="phone-menu__list"
+            draggable = ".singlePerson"
+            v-model="menuTree"
+            @end="end(menuTree)"
+            v-show="menuTree.length > 0">
+            <li
+              v-for="(item, index) in menuTree"
+              :key="index"
+              :class="{selected: (curSubIndex == -1 && index == curIndex && !isOrder) || (index == orderIndex && isOrder),singlePerson:isOrder}"
+              @click="_handleSelectMenu(1,index,item.id)"
             >
-              <li 
-                v-for="(child, idx) in item.subMenuList"
-                :class="{selected: idx == curSubIndex && index == curIndex}"
-                @click="_handleSelectMenu(2,idx,child.id)"
-                :key="idx">
-                <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
-                {{child.name || '子菜单'}}
-              </li>
-              <li v-if="item.subMenuList.length<5" @click="_handleAddMainMenu('子菜单',0,item.id,1)">+</li>
-            </ul>
-          </li>
-          <li v-if="menuTree.length > 0 &&  menuTree.length < 3" @click="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
-        </ul>
+              {{item.name || '主菜单'}}
+              <draggable
+                v-model="item.subMenuList" 
+                @end="end(item.subMenuList)"
+                draggable = ".singleSub"
+                class="menu-child__area"
+                v-show="(index == curIndex && !isOrder) || (index == orderIndex && isOrder)">
+                  <li 
+                    v-for="(child, idx) in item.subMenuList"
+                    :class="{selected: idx == curSubIndex,singleSub:isOrder}"
+                    @click.stop="_handleSelectMenu(2,idx,child.id)"
+                    :key="idx">
+                    <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
+                    {{child.name || '子菜单'}}
+                  </li>
+                  <li v-if="item.subMenuList.length<5 && !isOrder" @click="_handleAddMainMenu('子菜单',0,item.id,1)">+</li>
+              </draggable>
+            </li>
+            <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
+          </draggable>
       </div>
       <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">菜单排序</div>
     </div>
@@ -58,7 +65,7 @@
                 <span class="ym-form-item__error">名称仅包含中英文、数字、特殊符号。</span>
                 <a href="https://kf.qq.com/faq/181228f2iMV7181228RbMfAr.html" target="_blank">查看详情</a>
               </div>
-              <el-form-item label="菜单内容">
+              <el-form-item v-if="hasSubList" label="菜单内容">
                 <el-radio
                   label='1'
                   v-model="menuDetail.clickBehavior"
@@ -72,7 +79,7 @@
                 <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
               </el-form-item>
             </el-form>
-            <div v-show="menuDetail.clickBehavior == '1'" class="message-content__section">
+            <div v-show="menuDetail.clickBehavior == '1' && hasSubList" class="message-content__section">
               <section class="menu-content__area">
                 <div class="radio-tabs">
                   <el-radio label="1" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('1')">图片</el-radio>
@@ -105,7 +112,7 @@
               </section>
             </div>
             <!-- 跳转链接 -->
-            <div v-show="menuDetail.clickBehavior == '2'" class="website-area">
+            <div v-show="menuDetail.clickBehavior == '2' && hasSubList" class="website-area">
               <div class="selectUrl">
                 <span>设置跳转链接</span>
                 <div>
@@ -137,8 +144,9 @@ import OrderMenu from "_c/wechat-account/defineMenu/order-menu";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
 import WebsiteLink from "_c/wechat-account/defineMenu/link/link";
 import { notify } from "@/utlis/index.js";
+import draggable from 'vuedraggable'
 import ImageText from "@/components/wechat-account/auto-answer/image-text.vue";
-import { getMenuTree, getMenuDetail,addMenu,publishMenu,removeMenu,updateMenu } from "@/api/request/account.js";
+import { getMenuTree, getMenuDetail,addMenu,publishMenu,removeMenu,updateMenu,modifyMenuOrder } from "@/api/request/account.js";
 export default {
   data() {
     return {
@@ -152,7 +160,9 @@ export default {
       replyType: "1", //replyType 回复类型
       isShowPopup: false,
       curIndex: 0,
+      hasSubList: false,
       curSubIndex: -1,
+      orderIndex: false,
       isOrder: false,
       replyContentType: "picture",
       menuWords: "",
@@ -160,7 +170,7 @@ export default {
       menuTree: [],
       text: '2',
       menuDetail: {
-        id: null,
+        id: false,
         siteId: '30001',
         name: "",
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
@@ -200,22 +210,38 @@ export default {
     Picture,
     AnserText,
     ImageText,
+    draggable,
     PopUp
   },
   mounted() {
     this._getMenuTree();
   },
   methods: {
+    //拖拽排序
+    async end (list) {
+      let newlist = []
+      list.map(item=> {
+        newlist.push(item.id)
+      })
+      let {status} = await modifyMenuOrder(this.siteId,newlist);
+      if (status == 200) {
+        this._getMenuTree()
+      }
+    },
     async _getMenuTree() {
       let { data } = await getMenuTree(this.siteId);
       this.menuTree = data;
-      if(this.menuTree.length >0 && !this.menuDetail.id) {
+      if(!this.menuDetail.id && this.menuTree.length >0) {
+        //页面初始化数据回填
         if (this.menuTree[0].subMenuList.length > 0) {
           this._getMenuDetail(this.menuTree[0].subMenuList[0].id)
+          this.curSubIndex = 0
+          this.hasSubList = true
         } else {
+          this.curSubIndex = -1
           this._getMenuDetail(this.menuTree[0].id)
         }
-      }
+      } 
     },
     handleClosePopup (val,data){
       this.isShowPopup = val
@@ -252,7 +278,7 @@ export default {
       console.log('8888',behaviorBody)
       if (behaviorBody) {
         if(behaviorBody.ImageMsg && behaviorBody.ImageMsg.PicUrl) {
-          this.menuDetail.behaviorBody.ImageMsg = behaviorBody.ImageMsg
+          this.menuDetail.behaviorBody.ImageMsg.PicUrl = behaviorBody.ImageMsg.PicUrl
         } else {
           this.menuDetail.behaviorBody.ImageMsg.PicUrl = '';
         }
@@ -262,7 +288,7 @@ export default {
           this.menuDetail.behaviorBody.TextMsg.Text = '';
         }
         if(behaviorBody.NewsMsg) {
-          this.menuDetail.behaviorBody.NewsMsg = behaviorBody.TextMsg
+          this.menuDetail.behaviorBody.NewsMsg = behaviorBody.NewsMsg
         }
         if(behaviorBody.CustomMenuRedirectMsg) {
           this.menuDetail.behaviorBody.CustomMenuRedirectMsg = behaviorBody.CustomMenuRedirectMsg
@@ -281,48 +307,63 @@ export default {
     // 菜单排序
     _handleMenuOrder() {
       this.isOrder = !this.isOrder;
+      if (!this.isOrder) {
+        this.orderIndex = false
+      }
     },
     _handleBehaviorType(val) {
       this.menuDetail.clickBehavior =val 
     },
     // 切换menu
     async _handleSelectMenu(type,i,id) {
-      console.log(this.menuDetail.behaviorType , this.menuDetail.clickBehavior)
+      if (this.isOrder) {
+        this.orderIndex = i
+        return
+      }
       if (!this.hasTrueName || !this.menuDetail.name) {
         notify(this, '1请完当前善菜单信息', "error");
         return
       }
-      if(this.menuDetail.behaviorType == '0' || this.menuDetail.clickBehavior == '0') {
-        notify(this, '2请完善当前菜单信息', "error");
-        return
+      if (type == 1) {
+        // type 1 点击父菜单 2 点击子菜单
+        if(this.menuTree[i].subMenuList.length <= 0) {
+          this.hasSubList = true
+        } else {
+          this.hasSubList = false
+        }
+      } else if(type == 2) {
+        this.hasSubList = true
       }
-      console.log(this.menuDetail)
-      // 发送消息
-      if (this.menuDetail.clickBehavior == 1) {
-        // 1 图片 2 文字 3 图文
-        if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.ImageMsg.PicUrl) {
-          notify(this, '3请完善当前菜单信息', "error");
-          return
-        } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.TextMsg.Text) {
-          notify(this, '4请完善当前菜单信息', "error");
-          return
-        } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.NewsMsg.length == 0) {
-          notify(this, '5请完善当前菜单信息', "error");
+
+      if(this.hasSubList) {
+        if(this.menuDetail.behaviorType == '0' || this.menuDetail.clickBehavior == '0') {
+          notify(this, '2请完善当前菜单信息', "error");
           return
         }
-      } else if(this.menuDetail.clickBehavior == 2) {
-        // 4 纯URL 5 页面 6 文章 7 产品
-        if (!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData) {
-          notify(this, '6请完善菜单信息', "error");
-          return
-        } else if ((this.menuDetail.behaviorType == 6 || this.menuDetail.behaviorType == 7) &&!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId){
-          notify(this, '7请完善菜单信息', "error");
-          return
+        // 发送消息
+        if (this.menuDetail.clickBehavior == 1) {
+          // 1 图片 2 文字 3 图文
+          if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.ImageMsg.PicUrl) {
+            notify(this, '3请完善当前菜单信息', "error");
+            return
+          } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.TextMsg.Text) {
+            notify(this, '4请完善当前菜单信息', "error");
+            return
+          } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.NewsMsg.length == 0) {
+            notify(this, '5请完善当前菜单信息', "error");
+            return
+          }
+        } else if(this.menuDetail.clickBehavior == 2) {
+          // 4 纯URL 5 页面 6 文章 7 产品
+          if (!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData) {
+            notify(this, '6请完善菜单信息', "error");
+            return
+          } else if ((this.menuDetail.behaviorType == 6 || this.menuDetail.behaviorType == 7) &&!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId){
+            notify(this, '7请完善菜单信息', "error");
+            return
+          }
         }
       }
-      let dataDetail = this.menuDetail
-      dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
-      dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
       if (type == 1) {
         // type 1 点击父菜单 2 点击子菜单
         this.curIndex = i;
@@ -330,6 +371,9 @@ export default {
       } else if(type == 2) {
         this.curSubIndex = i;
       }
+      let dataDetail = this.menuDetail
+      dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
+      dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
       this._getMenuDetail(id)
       let data = await updateMenu(dataDetail)
     },
@@ -433,6 +477,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.holder h3 {
+  text-align: center
+}
 .define-menu__area {
   margin: 0 auto;
   max-width: 1200px;
@@ -493,6 +540,7 @@ export default {
           margin: 8px 0;
           width: 106px;
           height: 32px;
+          list-style: none;
           line-height: 32px;
           text-align: center;
           color: #262626;
