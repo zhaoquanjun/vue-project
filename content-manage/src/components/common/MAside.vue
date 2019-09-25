@@ -191,6 +191,7 @@ export default {
 .menu-bg {
     background:rgba(240, 243, 247, 1);
     color: #0595e6;
+    border-left: 4px solid #0595e6;
 }
 .left-menu {
     // border-right: solid 1px #e6e6e6;
