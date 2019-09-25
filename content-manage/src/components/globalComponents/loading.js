@@ -1,4 +1,4 @@
-import LoadingComponent from '@/components/common/loading'
+import LoadingComponent from '@/base/loading'
 
 const Loading = {}
 // 注册Loading
