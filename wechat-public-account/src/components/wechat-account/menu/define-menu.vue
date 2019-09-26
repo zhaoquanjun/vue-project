@@ -171,7 +171,7 @@ export default {
       text: '2',
       menuDetail: {
         id: false,
-        siteId: '30001',
+        siteId: this.$store.state.dashboard.siteId,
         name: "",
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
         behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
@@ -201,7 +201,7 @@ export default {
           }
         }
       },
-      siteId: '30001'
+      siteId: this.$store.state.dashboard.siteId
     };
   },
   components: {
