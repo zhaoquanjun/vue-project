@@ -50,7 +50,7 @@ const user = {
         platformName: data.data.platformNiceName,
         platformAvator: data.data.platformHeadImg,
         serviceTypeInfo: data.data.serviceTypeInfo,
-        promotionUrl: data.data.serviceTypeInfo,
+        promotionUrl: data.data.promotionUrl,
         platformAppId: data.data.platformAppId
       }
       commit("SET_WX_STATUS", verify);

@@ -91,11 +91,11 @@ export default {
   },
   created() {
     this._getWxIsAuth();
-    this._getCdnDomainList();
   },
   methods: {
+    //页面初始化获取ID
     getSiteId(siteId) {
-      console.log('000')
+      console.log('siteId',siteId)
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
@@ -103,6 +103,7 @@ export default {
     },
     // 校验是否已经授权认证
     async _getWxIsAuth() {
+      await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
       console.log(this.$store.state.wxaccount)
@@ -110,6 +111,7 @@ export default {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
       this.accountInfo = this.$store.state.wxaccount.account_info
+      console.log('this.accountInfo',this.accountInfo)
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
@@ -117,8 +119,9 @@ export default {
       this.domainList = data
       console.log('eee',data)
     },
-    //changeShow
+    //修改域名
     changeShow() {
+      this._getCdnDomainList();
       this.isShow = !this.isShow
     },
     //设置推广域名
