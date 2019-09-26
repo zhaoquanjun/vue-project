@@ -1,6 +1,5 @@
 <template>
     <div class="auto-answer">
-        <!-- <WechatTitle title="自动回复" /> -->
         <ChangeSite
             @chooseWebsite="chooseWebsite"
             @getSiteId="getSiteId"
@@ -70,7 +69,6 @@
     </div>
 </template>
 <script>
-import WechatTitle from "@/components/common/WechatTitle.vue";
 import ChangeSite from "@/components/common/changeSite";
 import ReplyContent from "@/components/wechat-account/auto-answer/reply-content.vue";
 import Picture from "@/components/wechat-account/auto-answer/picture.vue";
@@ -124,7 +122,6 @@ export default {
         };
     },
     components: {
-        WechatTitle,
         ChangeSite,
         ReplyContent,
         Picture,
@@ -411,6 +408,7 @@ export default {
         },
         // 切换菜单
         handleClick(tab, event) {
+            console.log(tab,event,'9999')
             this.resetReplycontentData();
             this.msgType = 1;
             this.addAnswer = true;
