@@ -66,12 +66,12 @@
                         </el-select>
                     </span>
                    
-                    <span @click="switchIsDesc('asc')">
-                        <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
-                    </span>
-                    <span @click="switchIsDesc('dec')">
-                        <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
-                    </span>
+                    <button @click="switchIsDesc('dec')" class="desBtn">
+                        <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                    </button>
+                    <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
+                        <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
+                    </button>
                 </div>
                 <div class="head-item head-handle-btn">
                     <button class="btn-lightblue btn-small" @click="importArticle">导入产品</button>
@@ -316,28 +316,10 @@ export default {
         margin-left: 16px;
     }
 }
-.head-item {
-   
-    .sort-icon {
-        display: inline-block;
-        width: 16px;
-        height: 14px;
-    }
-    .asc {
-        background: url("~img/content-icon/asc.png") no-repeat center;
-        background-size: contain;
-    }
-    .asc-icon-on {
-        background: url("~img/content-icon/asc-on.png") no-repeat center;
-        background-size: contain;
-    }
-    .dec {
-        background: url("~img/content-icon/desc.png") no-repeat center;
-        background-size: contain;
-    }
-    .dec-icon-on {
-        background: url("~img/content-icon/desc-on.png") no-repeat center;
-        background-size: contain;
-    }
+.desBtn{
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
 }
 </style>
