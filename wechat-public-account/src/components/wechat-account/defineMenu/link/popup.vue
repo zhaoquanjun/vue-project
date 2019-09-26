@@ -155,7 +155,7 @@ export default {
       data["Href"] = this.selectedUrl;
       data["Target"] = this.way;
       data["Title"] = this.title;
-      data["Type"] = this.slider;
+      data["Type"] = this.curType;
       data['Id'] = this.id;
       console.log('pop',data)
       data['PageIndex'] = this.model['PageIndex'];
