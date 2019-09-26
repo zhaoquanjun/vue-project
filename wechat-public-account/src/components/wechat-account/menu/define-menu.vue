@@ -91,12 +91,12 @@
                   <Picture
                       ref="pictureComponent"
                       v-if="menuDetail.behaviorType === '1'"
-                      :image-msg="menuDetail.behaviorBody.ImageMsg.PicUrl"
+                      :image-msg="menuDetail.behaviorBody.imageMsg.picUrl"
                       @handlerPic="handlerPic"
                   ></Picture>
                   <!-- 文字 -->
                   <anser-text
-                      :serve-text="menuDetail.behaviorBody.TextMsg.Text"
+                      :serve-text="menuDetail.behaviorBody.textMsg.text"
                       v-if="menuDetail.behaviorType === '2'"
                       @handlerText="handlerText"
                   ></anser-text>
@@ -104,7 +104,7 @@
                   <image-text
                       ref="newMsg"
                       v-if="menuDetail.behaviorType === '3'"
-                      :news-msg="menuDetail.behaviorBody.NewsMsg"
+                      :news-msg="menuDetail.behaviorBody.newsMsg"
                       :replyType= 'replyType'
                       @handlerSaveImgText="handlerSaveImgText"
                   ></image-text>
@@ -116,7 +116,7 @@
               <div class="selectUrl">
                 <span>设置跳转链接</span>
                 <div>
-                  <p>{{menuDetail.behaviorBody.CustomMenuRedirectMsg.Title}}<p/>
+                  <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}<p/>
                   <i class="iconfont iconicon-des-lj" @click="selectUrl"></i>
                 </div>
               </div>
@@ -176,28 +176,28 @@ export default {
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
         behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
         behaviorBody: {
-          ImageMsg: {
-            PicUrl: '',
-            WeChatMediaId: ''
+          imageMsg: {
+            picUrl: '',
+            weChatMediaId: ''
           },
-          TextMsg: {
-            Text: ''
+          textMsg: {
+            text: ''
           },
-          NewsMsg: [
+          newsMsg: [
             {
-              Title: "string",
-              Description: "string",
-              PicUrl: "string",
-              UrlType: "string",
-              UrlData: "string",
-              ContentPageId: "string"
+              title: "string",
+              description: "string",
+              picUrl: "string",
+              urlType: "string",
+              urlData: "string",
+              contentPageId: "string"
             }
           ],
-          CustomMenuRedirectMsg: {
-            UrlType: "",
-            Title: "",
-            UrlData: "请选择跳转链接",
-            ContentPageId: ""
+          customMenuRedirectMsg: {
+            urlType: "",
+            title: "",
+            urlData: "请选择跳转链接",
+            contentPageId: ""
           }
         }
       },
@@ -251,10 +251,10 @@ export default {
       this.isShowPopup = val
       console.log('eee',data)
       if (data) {
-        this.menuDetail.behaviorBody.CustomMenuRedirectMsg.Title= data.Title;
-        this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlType= data.Type;
-        this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData= data.Href;
-        this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId= data.Id;
+        this.menuDetail.behaviorBody.customMenuRedirectMsg.title= data.Title;
+        this.menuDetail.behaviorBody.customMenuRedirectMsg.urlType= data.Type;
+        this.menuDetail.behaviorBody.customMenuRedirectMsg.urlData= data.Href;
+        this.menuDetail.behaviorBody.customMenuRedirectMsg.contentPageId= data.Id;
         if (data.Type === 'Page') {
           this.menuDetail.behaviorType = '5'
         } else if (data.Type === 'Url') {
@@ -277,30 +277,31 @@ export default {
       this.menuDetail.id = data.id;
       this.menuDetail.clickBehavior = data.clickBehavior == 0? '1' : JSON.stringify(data.clickBehavior);
       this.menuDetail.behaviorType = data.behaviorType == 0 ?  '1' : JSON.stringify(data.behaviorType);
-      let behaviorBody = JSON.parse(data.behaviorBody);
+      //let behaviorBody = JSON.parse(data.behaviorBody);
+      let behaviorBody = data.behaviorBody;
       console.log('8888',behaviorBody)
       if (behaviorBody) {
-        if(behaviorBody.ImageMsg && behaviorBody.ImageMsg.PicUrl) {
-          this.menuDetail.behaviorBody.ImageMsg.PicUrl = behaviorBody.ImageMsg.PicUrl
+        if(behaviorBody.imageMsg && behaviorBody.imageMsg.picUrl) {
+          this.menuDetail.behaviorBody.imageMsg.picUrl = behaviorBody.imageMsg.picUrl
         } else {
-          this.menuDetail.behaviorBody.ImageMsg.PicUrl = '';
+          this.menuDetail.behaviorBody.imageMsg.picUrl = '';
         }
-        if(behaviorBody.TextMsg && behaviorBody.TextMsg.Text) {
-          this.menuDetail.behaviorBody.TextMsg = behaviorBody.TextMsg
+        if(behaviorBody.textMsg && behaviorBody.textMsg.text) {
+          this.menuDetail.behaviorBody.textMsg = behaviorBody.textMsg
         } else {
-          this.menuDetail.behaviorBody.TextMsg.Text = '';
+          this.menuDetail.behaviorBody.textMsg.text = '';
         }
-        if(behaviorBody.NewsMsg) {
-          this.menuDetail.behaviorBody.NewsMsg = behaviorBody.NewsMsg
+        if(behaviorBody.newsMsg) {
+          this.menuDetail.behaviorBody.newsMsg = behaviorBody.newsMsg
         }
-        if(behaviorBody.CustomMenuRedirectMsg) {
-          this.menuDetail.behaviorBody.CustomMenuRedirectMsg = behaviorBody.CustomMenuRedirectMsg
+        if(behaviorBody.customMenuRedirectMsg) {
+          this.menuDetail.behaviorBody.customMenuRedirectMsg = behaviorBody.customMenuRedirectMsg
         }
       } else {
-        this.menuDetail.behaviorBody.ImageMsg.PicUrl = '';
-        this.menuDetail.behaviorBody.TextMsg.Text = '';
-        this.menuDetail.behaviorBody.NewsMsg = [];
-        this.menuDetail.behaviorBody.CustomMenuRedirectMsg = {};
+        this.menuDetail.behaviorBody.imageMsg.picUrl = '';
+        this.menuDetail.behaviorBody.textMsg.text = '';
+        this.menuDetail.behaviorBody.newsMsg = [];
+        this.menuDetail.behaviorBody.customMenuRedirectMsg = {};
       }
       console.log('0000',this.menuDetail)
     },
@@ -368,22 +369,22 @@ export default {
         // 发送消息
         if (this.menuDetail.clickBehavior == 1) {
           // 1 图片 2 文字 3 图文
-          if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.ImageMsg.PicUrl) {
+          if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.imageMsg.picUrl) {
             flag = false
             console.log('flag',3)
-          } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.TextMsg.Text) {
+          } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.textMsg.text) {
             flag = false
             console.log('flag',4)
-          } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.NewsMsg.length == 0) {
+          } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.newsMsg.length == 0) {
             flag = false
             console.log('flag',5)
           }
         } else if(this.menuDetail.clickBehavior == 2) {
           // 4 纯URL 5 页面 6 文章 7 产品
-          if (!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData) {
+          if (!this.menuDetail.behaviorBody.customMenuRedirectMsg.urlData) {
             flag = false
             console.log('flag',6)
-          } else if ((this.menuDetail.behaviorType == 6 || this.menuDetail.behaviorType == 7) &&!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId){
+          } else if ((this.menuDetail.behaviorType == 6 || this.menuDetail.behaviorType == 7) &&!this.menuDetail.behaviorBody.customMenuRedirectMsg.contentPageId){
             flag = false
             console.log('flag',7)
           }
@@ -476,17 +477,15 @@ export default {
     },
     // 获取图片
     handlerPic(picUrl) {
-      this.menuDetail.behaviorBody.ImageMsg.PicUrl = picUrl;
-      console.log(this.menuDetail.behaviorBody.ImageMsg.PicUrl)
+      this.menuDetail.behaviorBody.imageMsg.picUrl = picUrl;
     },
     // 文字回复输入
     handlerText(text) {
-      this.menuDetail.behaviorBody.TextMsg.Text = text;
+      this.menuDetail.behaviorBody.textMsg.text = text;
     },
     //获取图文详情
     handlerSaveImgText(list) {
-      console.log('list',list)
-      this.menuDetail.behaviorBody.NewsMsg = list;
+      this.menuDetail.behaviorBody.newsMsg = list;
     },
     //校验菜单名称
     testMenu(typeNum,str){

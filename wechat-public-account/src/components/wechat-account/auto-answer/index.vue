@@ -33,6 +33,7 @@
             ></keyword-answer>
             <!-- 图片 -->
             <Picture
+                :keyword-data="keywordData"
                 ref="pictureComponent"
                 :image-msg="replycontentData.imageMsg.picUrl"
                 v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)"
@@ -40,12 +41,14 @@
             ></Picture>
             <!-- 文字 -->
             <anser-text
+                :keyword-data="keywordData"
                 :serve-text="replycontentData.textMsg.text"
                 v-show="msgType===2"
                 @handlerText="handlerText"
             ></anser-text>
             <!-- 图文 -->
             <image-text
+                :keyword-data="keywordData"
                 ref="newMsg"
                 v-show="msgType===3"
                 :news-msg="replycontentData.newsMsg"
@@ -161,19 +164,11 @@ export default {
         //获取回复详情
         async _getReplyDetail(replyType) {
             let data = await autoAnswerApi.getReplyDetail(this.SiteId,replyType);
-            let jsonData = JSON.parse(data.data.msgBody);
-            this.replyDetail = data.data;
+            this.replyDetail = data.data.data;
             this.msgType = data.data.msgType;
             this.isSet = data.data.isSet;
-            if (jsonData.ImageMsg) {
-                this.replycontentData.imageMsg.picUrl = jsonData.ImageMsg.PicUrl;
-            }
-            if (jsonData.TextMsg) {
-                this.replycontentData.textMsg.text = jsonData.TextMsg.Text;
-            }
-            if (jsonData.NewsMsg) {
-                this.replycontentData.newsMsg = jsonData.NewsMsg;
-            }
+            this.replycontentData = data.data.data;
+            console.log()
         },
         //获取关键词回复列表
         async _getKeywordReplyList(option) {
@@ -181,7 +176,10 @@ export default {
                 this.searchOption
             );
             this.keywordData = data;
-            console.log('this.keywordData',this.keywordData)
+            console.log('pppp',data)
+            //this.replycontentData = data
+            
+
         },
         //删除回复信息
         async _removeReply(SiteId,id) {

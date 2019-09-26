@@ -265,7 +265,6 @@ export default {
       padding: 15px 20px 20px;
       display: flex;
     }
-    
   }
 }
 </style>
