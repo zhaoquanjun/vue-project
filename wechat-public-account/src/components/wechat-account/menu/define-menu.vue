@@ -32,10 +32,10 @@
                     <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
                     {{child.name || '子菜单'}}
                   </li>
-                  <li v-if="item.subMenuList.length<5 && !isOrder" @click="_handleAddMainMenu('子菜单',0,item.id,1)">+</li>
+                  <li v-if="item.subMenuList.length<5 && !isOrder" @click.stop="_handleAddMainMenu('子菜单',item.subMenuList.length,item.id,1)">+</li>
               </draggable>
             </li>
-            <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
+            <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
           </draggable>
       </div>
       <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">菜单排序</div>
@@ -228,7 +228,7 @@ export default {
         this._getMenuTree()
       }
     },
-    async _getMenuTree() {
+    async _getMenuTree(val) {
       let { data } = await getMenuTree(this.siteId);
       this.menuTree = data;
       if(!this.menuDetail.id && this.menuTree.length >0) {
@@ -241,10 +241,15 @@ export default {
           this.curSubIndex = -1
           this._getMenuDetail(this.menuTree[0].id)
         }
-      } 
+      } else if (val == 'add') {
+        //点击添加按钮时选择刚添加的按钮并且回填按钮详情
+        let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
+        this._getMenuDetail(id)
+      }
     },
     handleClosePopup (val,data){
       this.isShowPopup = val
+      console.log('eee',data)
       if (data) {
         this.menuDetail.behaviorBody.CustomMenuRedirectMsg.Title= data.Title;
         this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlType= data.Type;
@@ -259,8 +264,6 @@ export default {
         } else if (data.Type === 'Product') {
           this.menuDetail.behaviorType = '6'
         }
-
-        console.log('333',data,this.menuDetail.behaviorType)
       } 
     },
     //弹出选择链接弹窗
@@ -320,75 +323,118 @@ export default {
         this.orderIndex = i
         return
       }
-      if (!this.hasTrueName || !this.menuDetail.name) {
-        notify(this, '1请完当前善菜单信息', "error");
+      let flag = this.testParameters();
+      if (!flag) {
+        notify(this, '请完善菜单信息', "error");
         return
       }
-      if (type == 1) {
+      let dataDetail = this.menuDetail
+      dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
+      dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
+      let  data = await updateMenu(dataDetail)
+      
+      if (data.status == 200) {
+        //同步菜单name
+        this.hasChangeMeunName()
+        if (type == 1) {
         // type 1 点击父菜单 2 点击子菜单
-        if(this.menuTree[i].subMenuList.length <= 0) {
+          this.curIndex = i;
+          this.curSubIndex = -1;
+          if(this.menuTree[i].subMenuList.length <= 0) {
+            this.hasSubList = true
+          } else {
+            this.hasSubList = false
+          }
+        } else if(type == 2) {
+          this.curSubIndex = i;
           this.hasSubList = true
-        } else {
-          this.hasSubList = false
         }
-      } else if(type == 2) {
-        this.hasSubList = true
+        this._getMenuDetail(id)
+      } else {
+        notify(this, '请完善菜单信息', "error");
       }
-
-      if(this.hasSubList) {
+    },
+    //校验参数 
+    testParameters(){
+      let flag = true;
+      if (!this.hasTrueName || !this.menuDetail.name) {
+        flag = false
+        console.log('flag',1)
+      } else if(this.hasSubList) {
         if(this.menuDetail.behaviorType == '0' || this.menuDetail.clickBehavior == '0') {
-          notify(this, '2请完善当前菜单信息', "error");
-          return
+          flag = false
+          console.log('flag',2)
         }
         // 发送消息
         if (this.menuDetail.clickBehavior == 1) {
           // 1 图片 2 文字 3 图文
           if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.ImageMsg.PicUrl) {
-            notify(this, '3请完善当前菜单信息', "error");
-            return
+            flag = false
+            console.log('flag',3)
           } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.TextMsg.Text) {
-            notify(this, '4请完善当前菜单信息', "error");
-            return
+            flag = false
+            console.log('flag',4)
           } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.NewsMsg.length == 0) {
-            notify(this, '5请完善当前菜单信息', "error");
-            return
+            flag = false
+            console.log('flag',5)
           }
         } else if(this.menuDetail.clickBehavior == 2) {
           // 4 纯URL 5 页面 6 文章 7 产品
           if (!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.UrlData) {
-            notify(this, '6请完善菜单信息', "error");
-            return
+            flag = false
+            console.log('flag',6)
           } else if ((this.menuDetail.behaviorType == 6 || this.menuDetail.behaviorType == 7) &&!this.menuDetail.behaviorBody.CustomMenuRedirectMsg.ContentPageId){
-            notify(this, '7请完善菜单信息', "error");
-            return
+            flag = false
+            console.log('flag',7)
           }
         }
       }
-      if (type == 1) {
-        // type 1 点击父菜单 2 点击子菜单
-        this.curIndex = i;
-        this.curSubIndex = -1;
-      } else if(type == 2) {
-        this.curSubIndex = i;
-      }
-      let dataDetail = this.menuDetail
-      dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
-      dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
-      this._getMenuDetail(id)
-      let data = await updateMenu(dataDetail)
+      return flag
     },
     // 添加菜单
     async _handleAddMainMenu(name,order,id,level) {
-      let newMenuItem = {
-        name: name,  //菜单名称
-        displayOrder: order, //菜单排序
-        parentId: id, //父菜单id，当为父菜单时为0
-        siteId: this.siteId, //站点id
-        menuLevel: level //父菜单为0，子菜单为1
-      };
-      let data =  await addMenu(newMenuItem);
-      if(data.status && data.status == 200 ) {
-        this._getMenuTree()
+      console.log('name,order,id,level',name,order,id,level)
+      let flag = this.testParameters();
+      let  dataObj = {};
+      //前端校验
+      if (order > 0 && flag) {
+        console.log('flag1',order > 0 && flag)
+        let dataDetail = this.menuDetail
+        dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
+        dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
+        dataObj = await updateMenu(dataDetail)
+      }else if (!flag) {
+        
+      }
+      //接口校验
+      if (order == 0 || dataObj.status) {
+        console.log('flag2',order == 0, dataObj.status)
+          let newMenuItem = {
+          name: name,  //菜单名称
+          displayOrder: order, //菜单排序
+          parentId: id, //父菜单id，当为父菜单时为0
+          siteId: this.siteId, //站点id
+          menuLevel: level //父菜单为0，子菜单为1
+        };
+        let data =  await addMenu(newMenuItem);
+        if(data.status && data.status == 200 ) {
+          //添加成功，改变按钮状态
+          //校验信息
+          if (level == 0) {
+          // level 0 点击添加父菜单 1 点击添加子菜单 
+            this.curIndex = order;
+            this.curSubIndex = -1;
+            if(this.menuTree[order-1].subMenuList.length <= 0) {
+              this.hasSubList = true
+            } else {
+              this.hasSubList = false
+            }
+          } else if(level == 1) {
+            this.curSubIndex = order;
+            this.hasSubList = true
+          }
+          this._getMenuTree('add')
+        }
       }
     },
     // 删除菜单
@@ -400,27 +446,32 @@ export default {
     },
     // 保存并发布
      async _handleSaveAndPublish() {
-      this.menuDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
-      this.menuDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
-      let data = await publishMenu(this.menuDetail);
-      console.log(data)
+      let dataDetail = this.menuDetail;
+          dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType);
+          dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
+      let data = await publishMenu(dataDetail);
       if (data.status == 200) {
         //同步菜单name
-        for(let i =0; i<this.menuTree.length; i++) {
-          if(this.menuTree[i].id == this.menuDetail.id) {
-            this.menuTree[i].name = this.menuDetail.name
-            return
-          } else if(this.menuTree[i].subMenuList.length > 0) {
-            for(let j =0; i<this.menuTree[i].subMenuList.length; j++) {
-              if(this.menuTree[i].subMenuList[j].id == this.menuDetail.id) {
-                this.menuTree[i].menuTree[j].name = this.menuDetail.name
-                return
-              }
-            }
-          }
-        }
+        this.hasChangeMeunName()
       } else {
         notify(this, '保存失败', "error");
+      }
+    },
+    //同步本地菜单列表name
+    hasChangeMeunName () {
+      for(let i =0; i<this.menuTree.length; i++) {
+        if(this.menuTree[i].id == this.menuDetail.id) {
+          this.menuTree[i].name = this.menuDetail.name
+          return
+        }
+        if(this.menuTree[i].subMenuList.length > 0) {
+           for(let j =0; j<this.menuTree[i].subMenuList.length; j++) {
+            if(this.menuTree[i].subMenuList[j].id == this.menuDetail.id) {
+              this.menuTree[i].subMenuList[j].name = this.menuDetail.name
+              return
+            }
+           }
+        }
       }
     },
     // 获取图片
