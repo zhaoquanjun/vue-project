@@ -1,12 +1,18 @@
 <template>
-  <div class="account-setting__section">
-    <div class="account-setting__manage">
+  <div class="spread-setting__section">
+    <div class="spread-setting__manage">
       <ChangeSite
         @chooseWebsite="chooseWebsite"
         @getSiteId="getSiteId"
       />
-     </div>
-     <div>微信推广</div>
+    </div>
+    <div class="answer-tabs">
+      <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
+        <el-tab-pane label="页面推广" name="1"></el-tab-pane>
+        <el-tab-pane label="文章推广" name="2"></el-tab-pane>
+        <el-tab-pane label="产品推广" name="3"></el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
@@ -17,7 +23,8 @@ import { notify } from "@/utlis/index.js";
 export default {
   data() {
     return {
-      siteId: this.$store.state.dashboard.siteId
+      siteId: this.$store.state.dashboard.siteId,
+      replyType: '1'
     };
   },
   components: {
@@ -27,6 +34,9 @@ export default {
     this._getWxIsAuth();
   },
   methods: {
+    handleClick() {
+      console.log('www')
+    },
     getSiteId(siteId) {
       console.log('000')
     },
@@ -47,5 +57,36 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-tabs /deep/ .el-tabs__item {
+    background: rgba(245, 245, 245, 1);
+    font-size: 14px;
+    padding: 0 32px;
+    font-weight: 400;
+    color: #262626;
+    height: 60px;
+    line-height: 57px;
+    border-top: 3px solid transparent;
+    box-sizing: border-box;
+}
+.el-tabs /deep/ .el-tabs__header {
+    margin: 0;
+}
+.el-tabs /deep/ .is-active {
+    background: #fff;
+    border-top: 3px solid #09cceb;
+}
+</style>
 <style lang="scss" scoped>
+.spread-setting__section {
+    padding: 32px;
+    .answer-tabs {
+        padding-top: 32px;
+    }
+    .reply-wrap {
+        padding: 32px 0;
+        position: relative;
+        //  overflow-y: auto;
+    }
+}
 </style>

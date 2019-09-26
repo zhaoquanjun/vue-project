@@ -181,6 +181,7 @@ export default {
                 this.searchOption
             );
             this.keywordData = data;
+            console.log('this.keywordData',this.keywordData)
         },
         //删除回复信息
         async _removeReply(SiteId,id) {
