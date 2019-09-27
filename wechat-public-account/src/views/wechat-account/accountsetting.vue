@@ -13,7 +13,7 @@
           </div>
           <div class="account-name-certification">
             <h6>{{accountInfo.platformName}}</h6>
-            <p>{{accountInfo.serviceTypeInfo == 0 ? '服务号' : '订阅号'}}</p>
+            <p>{{accountInfo.serviceTypeInfo == 2 ? '服务号' : '订阅号'}}</p>
           </div>
         </div>
         <div class="primary-button__nomal" @click="unBind">解除绑定</div>
