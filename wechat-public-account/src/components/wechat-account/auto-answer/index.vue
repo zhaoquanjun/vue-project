@@ -167,18 +167,23 @@ export default {
             this.replyDetail = data.data.data;
             this.msgType = data.data.msgType;
             this.isSet = data.data.isSet;
-            this.jsonData = data.data.data;
-             if (jsonData.imageMsg) {
+            let jsonData = data.data.data;
+            if (data.data.msgType) {
+                this.msgType = data.data.msgType;
+            } else {
+                this.msgType = 1;
+            }
+            if (jsonData && jsonData.imageMsg) {
                 this.replycontentData.imageMsg.picUrl = jsonData.imageMsg.picUrl;
             } else {
                 this.replycontentData.imageMsg.picUrl = '';
             }
-            if (jsonData.textMsg) {
+            if (jsonData && jsonData.textMsg) {
                 this.replycontentData.textMsg.text = jsonData.textMsg.text;
             } else {
                 this.replycontentData.textMsg.text = '';
             }
-            if (jsonData.newsMsg) {
+            if (jsonData && jsonData.newsMsg) {
                 this.replycontentData.newsMsg = jsonData.newsMsg;
             } else {
                 this.replycontentData.newsMsg = [];
