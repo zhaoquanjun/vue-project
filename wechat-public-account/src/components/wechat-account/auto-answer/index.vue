@@ -167,8 +167,22 @@ export default {
             this.replyDetail = data.data.data;
             this.msgType = data.data.msgType;
             this.isSet = data.data.isSet;
-            this.replycontentData = data.data.data;
-            console.log()
+            this.jsonData = data.data.data;
+             if (jsonData.imageMsg) {
+                this.replycontentData.imageMsg.picUrl = jsonData.imageMsg.picUrl;
+            } else {
+                this.replycontentData.imageMsg.picUrl = '';
+            }
+            if (jsonData.textMsg) {
+                this.replycontentData.textMsg.text = jsonData.textMsg.text;
+            } else {
+                this.replycontentData.textMsg.text = '';
+            }
+            if (jsonData.newsMsg) {
+                this.replycontentData.newsMsg = jsonData.newsMsg;
+            } else {
+                this.replycontentData.newsMsg = [];
+            }
         },
         //获取关键词回复列表
         async _getKeywordReplyList(option) {

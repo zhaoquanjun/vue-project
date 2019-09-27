@@ -46,11 +46,9 @@ export default {
   },
   data() {
     return {
-      pageList: [
-        { title: "网站首页", createdTime: "2019-07-19", url: "/123" },
-        { title: "网站首页", createdTime: "2019-07-19", url: "/345" }
-      ],
+      pageList: [],
       pageId: null,
+      SiteId: this.$store.state.dashboard.siteId,
       tips:
         '暂无页面，请先<span style="color: #00C1DE;cursor: pointer;">添加页面</span>'
     };
@@ -63,7 +61,7 @@ export default {
   },
   methods: {
     async getPagesList() {
-      let { data } = await linkApi.getPagesList({ siteId: 1 });
+      let { data } = await linkApi.getPagesList({ siteId: this.SiteId });
       this.pageList = data;
     },
     _handleSelectPage(i) {
