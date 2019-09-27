@@ -32,7 +32,7 @@
                     <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
                     {{child.name || '子菜单'}}
                   </li>
-                  <li v-if="item.subMenuList.length<5 && !isOrder" @click.stop="_handleAddMainMenu('子菜单',item.subMenuList.length,item.id,1)">+</li>
+                  <li v-if="item.subMenuList.length<5 && !isOrder" @click.stop="_handleAddMainMenu('子菜单',item.subMenuList.length+1,item.id,1)">+</li>
               </draggable>
             </li>
             <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
@@ -236,14 +236,15 @@ export default {
         if (this.menuTree[0].subMenuList.length > 0) {
           this._getMenuDetail(this.menuTree[0].subMenuList[0].id)
           this.curSubIndex = 0
-          this.hasSubList = true
         } else {
           this.curSubIndex = -1
           this._getMenuDetail(this.menuTree[0].id)
         }
+        console.log('this.hasSubList',this.hasSubList)
       } else if (val == 'add') {
         //点击添加按钮时选择刚添加的按钮并且回填按钮详情
-        let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
+        console.log('000',this.curSubIndex,this.curIndex,this.menuTree)
+        let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex-1].id
         this._getMenuDetail(id)
       }
     },
@@ -275,11 +276,23 @@ export default {
       let { data } = await getMenuDetail(this.siteId, id);
       this.menuDetail.name = data.name;
       this.menuDetail.id = data.id;
-      this.menuDetail.clickBehavior = data.clickBehavior == 0? '1' : JSON.stringify(data.clickBehavior);
-      this.menuDetail.behaviorType = data.behaviorType == 0 ?  '1' : JSON.stringify(data.behaviorType);
+      if (data.hasChildren) {
+        this.menuDetail.clickBehavior = 0;
+        this.menuDetail.behaviorType = 0;
+      } else {
+        this.menuDetail.clickBehavior = data.clickBehavior == 0? '1' : JSON.stringify(data.clickBehavior);
+        this.menuDetail.behaviorType = data.behaviorType == 0 ?  '1' : JSON.stringify(data.behaviorType);
+      }
+      
       //let behaviorBody = JSON.parse(data.behaviorBody);
+
       let behaviorBody = data.behaviorBody;
-      console.log('8888',behaviorBody)
+      if (data.hasChildren) {
+        this.hasSubList = false
+      } else {
+        this.hasSubList = true
+      }
+      console.log('8888',this.hasSubList)
       if (behaviorBody) {
         if(behaviorBody.imageMsg && behaviorBody.imageMsg.picUrl) {
           this.menuDetail.behaviorBody.imageMsg.picUrl = behaviorBody.imageMsg.picUrl
@@ -320,6 +333,12 @@ export default {
     },
     // 切换menu
     async _handleSelectMenu(type,i,id) {
+      //点击自身
+      if (id == this.menuDetail.id ) {
+        console.log(id,this.menuDetail.id,'333')
+        return
+      }
+      //在排序时
       if (this.isOrder) {
         this.orderIndex = i
         return
@@ -408,7 +427,8 @@ export default {
         
       }
       //接口校验
-      if (order == 0 || dataObj.status) {
+      if (order == 0 || dataObj.status == 200) {
+        console.log('888',order,dataObj.status)
         console.log('flag2',order == 0, dataObj.status)
           let newMenuItem = {
           name: name,  //菜单名称
@@ -439,9 +459,9 @@ export default {
       }
     },
     // 删除菜单
-    _handleDeleteMenu() {
-      let data = removeMenu(this.siteId, this.menuDetail.id);
-      if(data.status && data.status == 200 ) {
+    async _handleDeleteMenu() {
+      let data = await removeMenu(this.siteId, this.menuDetail.id);
+      if(data && data.status == 200 ) {
         this._getMenuTree()
       }
     },
@@ -488,11 +508,13 @@ export default {
       this.menuDetail.behaviorBody.newsMsg = list;
     },
     //校验菜单名称
-    testMenu(typeNum,str){
+    testMenu(typeNum,str,id){
       //汉字19968至40869
       //数字 48-57
       //A-Z:65-90,a-z:97-122
       //-+&. :45 43 38 46 32
+      // 同步才单名
+      this.hasChangeMeunName()
       let isRule = true;
       let BlankNum = 1;
       let strLength = 0
@@ -656,6 +678,7 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       bottom: -42px;
+      cursor: pointer;
     }
   }
   .menu-operate__arae {
@@ -716,6 +739,7 @@ export default {
           font-weight: 400;
           color: rgba(251, 77, 104, 1);
           line-height: 20px;
+          cursor: pointer;
         }
       }
       .picture-menu {
@@ -883,20 +907,20 @@ export default {
   margin-bottom: 40px;
   text-align: right;
   padding: 6px 0;
+  cursor: pointer;
   border-top: 1px solid #E5E5E5;
 }
 .btn span {
   display: inline-block;
   width:110px;
   height:40px;
-  background:rgba(99,220,140,1);
+  background:#09cceb; 
   border-radius:2px;
-  opacity:0.5;
   font-size:14px;
   font-family:'PingFangSC-Regular,PingFangSC';
   font-weight:400;
   text-align: center;
-  color:rgba(255,255,255,1);
+  color: rgba(255, 255, 255, 1);
   line-height:40px;
 }
 .tipsName {

@@ -11,7 +11,7 @@
         >
           <p class="single-line__overflow--hide">{{it.title}}</p>
           <p class="date single-line__overflow--hide">
-            <span>{{it.createdTime.slice(0, 10)}}</span>
+            <span>{{it.createTime.slice(0, 10)}}</span>
             <span
               :style="{visibility: pageId == i ? 'visible' : 'hidden'}"
             ></span>
@@ -50,26 +50,37 @@ export default {
       pageId: null,
       SiteId: this.$store.state.dashboard.siteId,
       tips:
-        '暂无页面，请先<span style="color: #00C1DE;cursor: pointer;">添加页面</span>'
+        '暂无页面，请先<span style="color: #00C1DE;cursor: pointer;">添加页面</span>',
+      pageListOption: {
+        IsDescending: true,
+        OrderColumns: 'createtime',
+        PageType: 'Content', // 内容页Content 模板页Template 文章详情页NewsDetail 产品详情页 ProductDetail
+        PageSize: 50,
+        PageIndex: 1,
+        Title: null,
+        SiteId: this.$store.state.dashboard.siteId
+      }
     };
   },
   components: {
     noneArea
   },
   created() {
-    this.getPagesList();
+    this.getContentList();
   },
   methods: {
-    async getPagesList() {
-      let { data } = await linkApi.getPagesList({ siteId: this.SiteId });
-      this.pageList = data;
+    async getContentList() {
+      let { data } = await linkApi.getContentList(this.pageListOption);
+      if(data && data.list.length > 0) {
+        this.pageList = data.list;
+      }
     },
     _handleSelectPage(i) {
       this.pageId = i;
       this.$emit("handleChangeUrl", {
-        url: this.pageList[i].pageId,
+        url: this.pageList[i].url,
         title: this.pageList[i].title,
-        id: this.pageList[i].pageId,
+        id: this.pageList[i].id,
         cType: "Page"
       });
     },
