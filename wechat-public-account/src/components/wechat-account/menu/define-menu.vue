@@ -692,7 +692,7 @@ export default {
     border-radius: 2px;
     .menu-operate__none {
       width: 100%;
-      height: 100%;
+      height: 668px;
       display: flex;
       justify-content: center;
       align-items: center;
