@@ -880,6 +880,7 @@ export default {
   width: 100%;
   height: 32px;
   margin-top:56px;
+  margin-bottom: 40px;
   text-align: right;
   padding: 6px 0;
   border-top: 1px solid #E5E5E5;

@@ -105,15 +105,21 @@ export default {
     }
 }
 .upload-wrap {
+    min-height: 320px;
+    text-align: center;
     cursor: pointer;
     .upload-icon {
+        display: inline-block;
+        margin-top: 30px;
         width: 60px;
         height: 60px;
         background: url("~img/upload-icon.png") no-repeat center;
         background-size: contain;
     }
     .handler-upload {
+        display: block;
         width: 60px;
+        margin: 0 auto;
         padding-top: 16px;
         color: #09cceb;
     }

@@ -67,11 +67,8 @@ export default {
     width: 100%;
     height: calc(100% - 73px);
     .menu-setting__area {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc(100% - 100px);
-      min-height: 800px;
+      max-height: 600px;
+      overflow-y: auto;
     }
   }
 }
