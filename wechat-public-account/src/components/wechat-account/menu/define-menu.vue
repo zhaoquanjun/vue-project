@@ -524,7 +524,6 @@ export default {
       if (strLength == 0 || strLength >typeNum) {
         isRule = false
       }
-      console.log('444',isRule)
       this.hasTrueName = isRule
     }
   }
