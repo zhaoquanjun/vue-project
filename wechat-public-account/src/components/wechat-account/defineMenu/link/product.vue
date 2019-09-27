@@ -169,7 +169,6 @@ export default {
     selectPage(ind){
       this.pageActiveIndex = ind
       this.productTips = this.productPageList[ind].title;
-      console.log('this.productId',this.productId)
       if (this.productId != -1 ) {
           this.$emit("handleChangeUrl", {
             url: this.productList[this.productId].id,

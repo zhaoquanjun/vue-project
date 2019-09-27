@@ -127,7 +127,7 @@ export default {
       newsList: [],
       productPageList:[],
       productTips: '全部分类',
-      newId: null,
+      newId: -1,
       productHref: 'https://www.baidu.com/',
       nodeId: 0,
       loading: false,
@@ -165,7 +165,7 @@ export default {
     selectPage(ind){
       this.pageActiveIndex = ind;
       this.productTips = this.productPageList[ind].title;
-      if (this.newId) {
+      if (this.newId  != -1 ) {
           this.$emit("handleChangeUrl", {
             url: this.newsList[this.newId].id,
             title: this.newsList[this.newId].title,
