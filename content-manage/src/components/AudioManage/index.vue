@@ -26,7 +26,7 @@
                 :is-batch-header-show="isBatchHeaderShow"
                 :content-type="contentType"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
-                @getList="getList"
+                @getPicList="getList"
                 @batchMove="batchMove"
                 @batchDelete="batchDelete"
             ></list-header>
