@@ -70,14 +70,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .picture-wrap {
-    width: 180px;
-    height: 180px;
+    width: 100%;
+    height: 100%;
     position: relative;
     overflow: hidden;
+    text-align: center;
     flex: none;
     img {
         border-radius: 2px;
-        width: 100%;
+        width: 180px;
+        margin: 30px auto;
     }
     &:hover .mask {
         opacity: 1;

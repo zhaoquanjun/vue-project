@@ -536,7 +536,7 @@ export default {
   text-align: center
 }
 .define-menu__area {
-  margin: 0 auto;
+  margin: 30px auto;
   max-width: 1200px;
   min-width: 990px;
   border-radius: 20px;
@@ -666,7 +666,6 @@ export default {
     float: left;
     margin-top: 20px;
     width: calc(100% - 355px);
-    height: 671px;
     background: #f8fafc;
     border-radius: 2px;
     .menu-operate__none {
@@ -675,6 +674,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: auto;
       .empty {
         width: 160px;
         height: 130px;
@@ -700,7 +700,6 @@ export default {
       margin: 24px auto;
       padding: 24px;
       width: 90%;
-      height: 618px;
       border-radius: 2px;
       background: #fff;
       border: 1px solid rgba(229, 229, 229, 1);

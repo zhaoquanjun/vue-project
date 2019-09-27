@@ -135,7 +135,7 @@ export default {
       productTips: '全部分类',
       pageActiveIndex: null,
       productPageList: [],
-      productId: null,
+      productId: -1,
       nodeIdArr: [],
       loading: false,
       search: false,
@@ -169,7 +169,8 @@ export default {
     selectPage(ind){
       this.pageActiveIndex = ind
       this.productTips = this.productPageList[ind].title;
-      if (this.productId) {
+      console.log('this.productId',this.productId)
+      if (this.productId != -1 ) {
           this.$emit("handleChangeUrl", {
             url: this.productList[this.productId].id,
             title: this.productList[this.productId].name,

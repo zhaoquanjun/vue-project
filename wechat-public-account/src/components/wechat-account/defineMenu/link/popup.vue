@@ -190,6 +190,7 @@ export default {
       }
     },
     handleChangeUrl(val) {
+      console.log(val,'99999')
       this.selectedUrl = val.url;
       this.curType = val.cType;
       this.title = val.title;
