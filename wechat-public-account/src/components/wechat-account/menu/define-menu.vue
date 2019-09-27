@@ -240,7 +240,6 @@ export default {
           this.curSubIndex = -1
           this._getMenuDetail(this.menuTree[0].id)
         }
-        console.log('this.hasSubList',this.hasSubList)
       } else if (val == 'add') {
         //点击添加按钮时选择刚添加的按钮并且回填按钮详情
         console.log('000',this.curSubIndex,this.curIndex,this.menuTree)
@@ -276,6 +275,7 @@ export default {
       let { data } = await getMenuDetail(this.siteId, id);
       this.menuDetail.name = data.name;
       this.menuDetail.id = data.id;
+      console.log(id,'9999')
       if (data.hasChildren) {
         this.menuDetail.clickBehavior = 0;
         this.menuDetail.behaviorType = 0;
@@ -283,9 +283,6 @@ export default {
         this.menuDetail.clickBehavior = data.clickBehavior == 0? '1' : JSON.stringify(data.clickBehavior);
         this.menuDetail.behaviorType = data.behaviorType == 0 ?  '1' : JSON.stringify(data.behaviorType);
       }
-      
-      //let behaviorBody = JSON.parse(data.behaviorBody);
-
       let behaviorBody = data.behaviorBody;
       if (data.hasChildren) {
         this.hasSubList = false
@@ -692,11 +689,8 @@ export default {
     border-radius: 2px;
     .menu-operate__none {
       width: 100%;
-      height: 668px;
       display: flex;
       justify-content: center;
-      align-items: center;
-      overflow: auto;
       .empty {
         width: 160px;
         height: 130px;

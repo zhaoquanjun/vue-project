@@ -8,7 +8,7 @@
         <el-aside class="common-aside">
           <m-aside></m-aside>
         </el-aside>
-        <el-main style=" overflow: hidden;">
+        <el-main>
           <el-container>
             <el-aside class="page-sub-aside" width="100px" v-show="isSub">
               <page-submenu></page-submenu>

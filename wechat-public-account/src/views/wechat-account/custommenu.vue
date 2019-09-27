@@ -66,10 +66,6 @@ export default {
   .define-menu__content {
     width: 100%;
     height: calc(100% - 73px);
-    .menu-setting__area {
-      max-height: 600px;
-      overflow-y: auto;
-    }
   }
 }
 </style>
