@@ -130,3 +130,8 @@ export const uploadImg = (imgUrl) => {
   return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/UploadImg`, params);
 }
 
+//微信推广
+//获取推广列表
+export const getList = params => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetList`, params);
+}
