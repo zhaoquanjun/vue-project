@@ -135,3 +135,8 @@ export const uploadImg = (imgUrl) => {
 export const getList = params => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetList`, params);
 }
+//获取详情页下拉列表
+export const getPageInfoList = (siteId, type) => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetPageInfoList/${siteId}/${type}`);
+}
+

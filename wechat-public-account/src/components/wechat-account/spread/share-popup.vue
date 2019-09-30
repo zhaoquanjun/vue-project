@@ -46,11 +46,15 @@
         <div class="code">
           <div class="page">
             <span class="title">文章详情页</span>
-            <input type="text" value="文章详情">
-            <ul>
-              <li>--请选择--<li>
-              <li v-for="(item,index) in pageList" :key='index'></li>
-            </ul>
+            <div class="select">
+              <span>{{pageInfoTitle}}</span>
+              <i class="icon iconfont iconguanbi" @click="changePageList"></i>
+              <ul v-if="isPageList">
+                <li v-for="(item,index) in pageList" :key='index' @click="changePageList(item)">
+                  {{item.title}}
+                </li>
+              </ul>
+            </div>
           </div>
           <h6>分享地址 <span v-if="!hasCode">保存后生成二维码</span></h6>
           <div v-if="hasCode">
@@ -78,6 +82,8 @@
 <script>
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { stringify } from 'querystring';
+import { notify } from "@/utlis/index.js";
+import { getPageInfoList } from "@/api/request/account.js";
 import Clipboard from 'clipboard'
 export default {
   props: {
@@ -94,7 +100,8 @@ export default {
           coverUrl: require('img/cover.jpg'), //封面图片
           shareTitle: "分享title", //分享id
           pageTitle: "页面", //页面，文章，产品标题
-          description: "描述" //描述
+          description: "描述", //描述
+          pageInfoId: "详情页id" // 详情页id，页面推广时不选
         }
       }
     }
@@ -103,7 +110,11 @@ export default {
     return {
       hasCopy: false, //是否已经复制成功
       hasCode: false, //是否需要生成二维码
+      siteId: this.$store.state.dashboard.siteId,
+      promotionUrl: this.$store.state.wxaccount.account_info.promotionUrl,
       pageList: [], //page列表
+      isPageList: false,
+      pageInfoTitle: '', //详情页title
       imageChooseAreaShowFlag: false, //图片控件
       initData: this.infoData
     }
@@ -111,7 +122,19 @@ export default {
   components: {
     ImageManage
   },
+  created(){
+    this.getPageInfoList()
+  },
   methods: {
+    //初始化获取列表数据
+    async getPageInfoList(){
+      let {data} = await getPageInfoList(this.siteId,'Content')
+      if(data.length>0) {
+        this.pageList = data
+        console.log(this.pageList,'000000')
+      }
+      console.log('list22',data)
+    },
     //复制
     oCopy(){
       var clipboard = new Clipboard('.tag-read')  
@@ -131,14 +154,18 @@ export default {
         clipboard.destroy()  
       })  
     },
-    // 生成链接及二维码
-    // http://+推广域名+product/news/page+详情页ID+推广实体ID+.html
-    // 获取图片
-
     //切换图片
     async getImage(src) {
       this.initData.coverUrl = src;
       //this.$emit("handlerPic",this.picUrl)
+    },
+    //选则文章详情页
+    changePageList(val){
+      this.isPageList = !this.isPageList
+      if(val) {
+        this.pageInfoTitle = val.title;
+        this.initData.pageInfoId = val.id;
+      }
     },
     handleCloseModal() {
       this.imageChooseAreaShowFlag = false;
@@ -146,7 +173,44 @@ export default {
     handlerUpload(){
       this.imageChooseAreaShowFlag=true
     },
+    testData(){
+      let flag = true
+      if(this.infoData.entityType) {
+        console.log('00000分享类型')
+        flag = false
+      }
+      if(this.infoData.entityId) {
+        console.log('00000id')
+        flag = false
+      }
+      if(this.infoData.coverUrl) {
+        console.log('00000封面图片')
+        flag = false
+      }
+      if(this.infoData.shareTitle) {
+        console.log('00分享title')
+        flag = false
+      }
+      if(this.infoData.description) {
+        console.log('00描述')
+        flag = false
+      }
+      if(this.infoData.pageInfoId) {
+        console.log('详情页id')
+        flag = false
+      }
+      return flag 
+    },
     closeShare(val){
+        //1校验
+        let flag = this.testData()
+        if (!flag) {
+          notify(this, '请完善信息', 'error')
+        }
+        //生成二维码和分享URL
+        // http://+推广域名+product/news/page+详情页ID+推广实体ID+.html
+        //let url = `http://${this.promotionUrl}page${}`
+
       this.$emit('closeShare',val)
     }
   }
@@ -184,7 +248,8 @@ export default {
         line-height:24px;
       }
       i {
-        font-size: 14px;
+        font-size: 16px;
+        line-height: 40px;
         cursor: pointer;
       }
     }
@@ -323,7 +388,7 @@ export default {
           }
         }
         .right {
-          width: 380px;
+          width: 350px;
           h6 {
             font-size:16px;
             font-family:'PingFangSC-Medium,PingFangSC';
@@ -337,7 +402,70 @@ export default {
       .code {
         .page {
           position: relative;
-          display: none;
+          display: flex;
+          justify-content: space-between;
+          margin-top: 24px;
+          .title{
+            font-size: 16px;
+            font-family:'PingFangSC-Medium,PingFangSC';
+            font-weight: 500;
+            color:rgba(38,38,38,1);
+            line-height: 40px;
+            background: none;
+            margin: 0;
+          }
+          .select {
+            position: relative;
+            width:400px;
+            height:40px;
+            border-radius:2px;
+            border:1px solid rgba(229,229,229,1);
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            background: none;
+            span {
+              font-size:14px;
+              font-family:'PingFangSC-Regular,PingFangSC';
+              font-weight:400;
+              color:rgba(38,38,38,1);
+              line-height:40px;
+              width: 350px;
+              text-align: left;
+              background: none;
+            }
+            i {
+              width: 40px;
+              height: 40px;
+              font-size: 16px;
+              line-height: 40px;
+              text-align: center;
+              color: red;
+            }
+            ul {
+              position: absolute;
+              top:44px;
+              right: -1px;
+              padding: 6px 0;
+              width: 400px;
+              background: #ffffff;
+              box-shadow:0px 2px 16px 0px rgba(0,0,0,0.2);
+              li {
+                width: 100%;
+                text-align: left;
+                height: 32px;
+                font-size:14px;
+                padding-left: 14px;
+                font-weight:400;
+                color:rgba(38,38,38,1);
+                line-height:32px;
+                cursor: pointer;
+              }
+              li:hover {
+                background:rgba(240,243,247,1);
+              }
+            }
+          }
         }
         h6 {
           margin: 16px 0;
