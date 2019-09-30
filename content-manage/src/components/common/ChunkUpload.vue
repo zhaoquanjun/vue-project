@@ -350,7 +350,7 @@ export default {
         },
         onFileAdded(file) {
             this.$refs.uploader.resetOption();
-            this.fileList.push(file);
+            
             if (this.limitCount(file)) this.computeMD5(file);
         },
         uploadStart(file) {},
@@ -370,7 +370,7 @@ export default {
                     fileSize += item.size;
                 });
                 this.formatSize = this.bytesToSize(fileSize, 1);
-                //file.resume();
+                this.fileList.push(file);
             };
 
             fileReader.onerror = function() {
@@ -381,9 +381,9 @@ export default {
         },
         limitCount(file) {
             if (this.uploadType === "Video")
-                return this.checkFormat(file, videoFormat);
+                this.checkFormat(file, videoFormat);
             if (this.uploadType === "Audio")
-                return this.checkFormat(file, audioFormat);
+                this.checkFormat(file, audioFormat);
             if (this.uploadType === "File") {
                  this.checkFormat(file, forbidUpload);
                 if (this.fileList.length <= 100) {
