@@ -31,13 +31,11 @@
                         ></el-option>
                     </el-select>
                 </span>
-                <button @click="switchIsDesc('asc')">
-                    <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
-                  
+                <button @click="switchIsDesc('dec')" class="desBtn">
+                    <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
                 </button>
-                <button @click="switchIsDesc('dec')">
-                    <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
-                   
+                <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
+                    <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
                 </button>
 
                 <button class="list-mode mode-item" @click="showType('list')">
@@ -148,4 +146,10 @@ export default {
 
 <style  lang="scss" scoped>
 @import "@/styles/manage-head.scss";
+.desBtn{
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+}
 </style>

@@ -1,6 +1,5 @@
 <template>
     <div class="auto-answer">
-        <!-- <WechatTitle title="自动回复" /> -->
         <ChangeSite
             @chooseWebsite="chooseWebsite"
             @getSiteId="getSiteId"
@@ -34,6 +33,7 @@
             ></keyword-answer>
             <!-- 图片 -->
             <Picture
+                :keyword-data="keywordData"
                 ref="pictureComponent"
                 :image-msg="replycontentData.imageMsg.picUrl"
                 v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)"
@@ -41,12 +41,14 @@
             ></Picture>
             <!-- 文字 -->
             <anser-text
+                :keyword-data="keywordData"
                 :serve-text="replycontentData.textMsg.text"
                 v-show="msgType===2"
                 @handlerText="handlerText"
             ></anser-text>
             <!-- 图文 -->
             <image-text
+                :keyword-data="keywordData"
                 ref="newMsg"
                 v-show="msgType===3"
                 :news-msg="replycontentData.newsMsg"
@@ -70,7 +72,6 @@
     </div>
 </template>
 <script>
-import WechatTitle from "@/components/common/WechatTitle.vue";
 import ChangeSite from "@/components/common/changeSite";
 import ReplyContent from "@/components/wechat-account/auto-answer/reply-content.vue";
 import Picture from "@/components/wechat-account/auto-answer/picture.vue";
@@ -124,7 +125,6 @@ export default {
         };
     },
     components: {
-        WechatTitle,
         ChangeSite,
         ReplyContent,
         Picture,
@@ -164,18 +164,29 @@ export default {
         //获取回复详情
         async _getReplyDetail(replyType) {
             let data = await autoAnswerApi.getReplyDetail(this.SiteId,replyType);
-            let jsonData = JSON.parse(data.data.msgBody);
-            this.replyDetail = data.data;
+            this.replyDetail = data.data.data;
             this.msgType = data.data.msgType;
             this.isSet = data.data.isSet;
-            if (jsonData.ImageMsg) {
-                this.replycontentData.imageMsg.picUrl = jsonData.ImageMsg.PicUrl;
+            let jsonData = data.data.data;
+            if (data.data.msgType) {
+                this.msgType = data.data.msgType;
+            } else {
+                this.msgType = 1;
             }
-            if (jsonData.TextMsg) {
-                this.replycontentData.textMsg.text = jsonData.TextMsg.Text;
+            if (jsonData && jsonData.imageMsg) {
+                this.replycontentData.imageMsg.picUrl = jsonData.imageMsg.picUrl;
+            } else {
+                this.replycontentData.imageMsg.picUrl = '';
             }
-            if (jsonData.NewsMsg) {
-                this.replycontentData.newsMsg = jsonData.NewsMsg;
+            if (jsonData && jsonData.textMsg) {
+                this.replycontentData.textMsg.text = jsonData.textMsg.text;
+            } else {
+                this.replycontentData.textMsg.text = '';
+            }
+            if (jsonData && jsonData.newsMsg) {
+                this.replycontentData.newsMsg = jsonData.newsMsg;
+            } else {
+                this.replycontentData.newsMsg = [];
             }
         },
         //获取关键词回复列表
@@ -184,6 +195,10 @@ export default {
                 this.searchOption
             );
             this.keywordData = data;
+            console.log('pppp',data)
+            //this.replycontentData = data
+            
+
         },
         //删除回复信息
         async _removeReply(SiteId,id) {
@@ -411,6 +426,7 @@ export default {
         },
         // 切换菜单
         handleClick(tab, event) {
+            console.log(tab,event,'9999')
             this.resetReplycontentData();
             this.msgType = 1;
             this.addAnswer = true;

@@ -11,6 +11,11 @@
             <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
           </li>
         </ul>
+        <none-area 
+          @handleChangeUrl="handleChangeUrl"
+          v-show="slider == 'url'" 
+          :noneUrl="noneUrl">
+        </none-area>
         <page-area
           :model="model"
           :selectedUrl="selectedUrl"
@@ -70,6 +75,7 @@ import EmailArea from "./email";
 import TelArea from "./tel";
 import FileArea from "./file";
 import MaskArea from "./mask";
+import { notify } from "@/utlis/index.js";
 export default {
   props: {
     model: {
@@ -130,10 +136,12 @@ export default {
       return false;
     },
     _handleConfirm() {
-      if (!this.slider || !this.title){
+      if (!this.selectedUrl || !this.title){
         notify(this, '请选择所需链接', "error");
+        return
       } else if ((this.slider == 'news' || this.slider == 'product') && !this.id ){
         notify(this, '请选择所需的页面', "error");
+        return
       }
       let oldData = {},
           data = {};
@@ -147,7 +155,7 @@ export default {
       data["Href"] = this.selectedUrl;
       data["Target"] = this.way;
       data["Title"] = this.title;
-      data["Type"] = this.slider;
+      data["Type"] = this.curType;
       data['Id'] = this.id;
       console.log('pop',data)
       data['PageIndex'] = this.model['PageIndex'];
@@ -180,6 +188,14 @@ export default {
       if (e.target.id == "popup") {
         this._handleCancle();
       }
+    },
+    handleChangeUrl(val) {
+      console.log(val,'99999')
+      this.selectedUrl = val.url;
+      this.curType = val.cType;
+      this.title = val.title;
+      this.id = val.id;
+      return false;
     },
     handleChangeTarget(val) {
       console.log(val);
@@ -250,7 +266,6 @@ export default {
       padding: 15px 20px 20px;
       display: flex;
     }
-    
   }
 }
 </style>

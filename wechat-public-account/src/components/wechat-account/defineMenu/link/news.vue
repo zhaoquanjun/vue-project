@@ -69,13 +69,18 @@
       <p>选择文章详情页</p>
       <div class="way-list__box">
         <div>
-          <span class="tips">{{productTips}}<i>></i></span>
+          <span class="tips">{{productTips}}
+            <i 
+              class="icon iconfont iconicon-des-Arrow"
+              :class="{iconactive: isShow}"
+              @click="isChangeShow"></i>
+          </span>
           <a 
             :href="productHref"
             target="_blank"
           >预览详情页</a>
         </div>
-        <ul class="product-page-list">
+        <ul v-if="isShow" class="product-page-list">
           <li 
             v-for="(item,index) in productPageList" 
             :key="index"
@@ -83,6 +88,7 @@
              @click="selectPage(index)"
           >
             {{item.title}}
+            <i class="icon iconfont iconduihao"></i>
           </li>
         </ul>
       </div>
@@ -122,12 +128,13 @@ export default {
       pageActiveIndex: null,
       siteId: this.$store.state.dashboard.siteId,
       newsTitle: "",
+      isShow: false,
       defaultExpandedKeys: [],
       treeArray: [],
       newsList: [],
       productPageList:[],
       productTips: '全部分类',
-      newId: null,
+      newId: -1,
       productHref: 'https://www.baidu.com/',
       nodeId: 0,
       loading: false,
@@ -137,7 +144,16 @@ export default {
         prev: "暂无文章，请先",
         last: "添加文章"
       },
-      redirectUrl: environment.redirectUrl.createArticle
+      redirectUrl: environment.redirectUrl.createArticle,
+      pageListOption: {
+        IsDescending: true,
+        OrderColumns: 'createtime',
+        PageType: 'NewsDetail', // 内容页Content 模板页Template 文章详情页NewsDetail 产品详情页 ProductDetail
+        PageSize: 50,
+        PageIndex: 1,
+        Title: null,
+        SiteId: this.$store.state.dashboard.siteId
+      }
     };
   },
   components: {
@@ -158,24 +174,32 @@ export default {
     this.getPageList();
   },
   methods: {
-    async getPageList(){
-      let { data } = await linkApi.getPagesList({ siteId: this.siteId,PageType: 'ProductPage' });
-      this.productPageList = data
+    async getContentList() {
+      let { data } = await linkApi.getContentList(this.pageListOption);
+      if(data && data.list.length > 0) {
+        this.productPageList = data.list;
+      }
     },
     selectPage(ind){
-      this.pageActiveIndex = ind;
-      this.productTips = this.productPageList[ind].title;
-      if (this.newId) {
-          this.$emit("handleChangeUrl", {
-            url: this.newsList[this.newId].id,
-            title: this.newsList[this.newId].title,
-            cType: "News",
-            id: this.productPageList[ind].pageId,
-            pageIndex: this.pageIndex
+      
+      if (this.newId  != -1 ) {
+        this.pageActiveIndex = ind;
+        this.isShow = false
+        this.productTips = this.productPageList[ind].title;
+        this.$emit("handleChangeUrl", {
+          url: this.newsList[this.newId].url,
+          title: this.newsList[this.newId].title,
+          cType: "News",
+          id: this.productPageList[ind].id,
+          pageIndex: this.pageIndex
         });
       } else {
         notify(this, "请先选择文章", "error");
       }
+    },
+    //改变下啦状态
+    isChangeShow(){
+      this.isShow = !this.isShow
     },
     _handleNodeClick(data) {
       this.nodeId = data.id;
@@ -430,6 +454,13 @@ export default {
       padding: 0 10px;
       i {
         float: right;
+        font-size: 12px;
+        font-weight:700;
+        transform:rotate(90deg);
+        cursor: pointer;
+      }
+      .iconactive {
+        transform:rotate(270deg);
       }
     }
     a {
@@ -441,29 +472,33 @@ export default {
     }
     .product-page-list {
       position: absolute;
-      top: 100px;
+      top: 86px;
       left: 20px;
       width:560px;
       height: 240px;
       overflow: hidden;
       overflow-y: auto;
       li {
-        height:40px;
+        color:rgba(38,38,38,1);
+        height:32px;
         font-size:14px;
         font-family:"PingFangSC";
         font-weight:400;
-        color:#262626;
-        line-height:40px;
+        line-height:32px;
         padding-left: 10px;
+        width: 246px;
         cursor: pointer;
+        i {
+          display: none;
+          float: right;
+          color: #09CCEB;
+        }
       }
       li:hover {
         background:#F0F3F7;
-        color: #09CCEB;
-      }
-      .active {
-        background: #00c1de !important;
-        color: white !important;
+        i {
+          display: inline-block;
+        }
       }
     }
   }

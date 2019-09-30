@@ -13,7 +13,7 @@
           </div>
           <div class="account-name-certification">
             <h6>{{accountInfo.platformName}}</h6>
-            <p>{{accountInfo.serviceTypeInfo == 0 ? '服务号' : '订阅号'}}</p>
+            <p>{{accountInfo.serviceTypeInfo == 2 ? '服务号' : '订阅号'}}</p>
           </div>
         </div>
         <div class="primary-button__nomal" @click="unBind">解除绑定</div>
@@ -22,11 +22,6 @@
         <div class="domain-title__area">
           <span>推广域名</span>
           <p>{{accountInfo.promotionUrl}}</p>
-          <ul v-if="isShow">
-            <li v-for="(item,ind) in domainList" :key='ind' @click="_setPromotionUrl(item.domain)">
-              {{item.domain}}
-            </li>
-          </ul>
         </div>
         <div class="primary-button__nomal domain-button__area" @click="changeShow">&nbsp;&nbsp;修改&nbsp;&nbsp;</div>
       </div>
@@ -39,21 +34,31 @@
         </p>
       </div>
     </div>
-    <div class="add-promotion">
+    <div v-if="isShow" class="add-promotion">
       <div class="content">
         <div class="title">
           <span>推广域名</span>
-          <i>x</i>
+          <i @click="closeDomain">x</i>
         </div>
         <ul>
           <p>请选择推广域名</p>
-          <li v-for="(item,ind) in domainList" :key='ind' @click="_setPromotionUrl(item.domain)">
+          <li 
+            v-for="(item,ind) in domainList" 
+            :key='ind'
+            @click="_setPromotionUrl(ind)"
+            :class="{active: ind == curInder}"
+          >
             {{item.domain}}
           </li>
+          <div class="tips">
+            <p>说明:</p>
+            <p>1、请确保选择的推广域名已完成解析且可正常访问；</p>
+            <p>2、请在微信公众平台的JS接口安全域名中添加推广域名；</p>
+          </div>
         </ul>
-        <div>
-          <span>确定</span>
-          <span>取消</span>
+        <div class="btn">
+          <span @click="_hasPromotionUrl">确定</span>
+          <span @click="closeDomain">取消</span>
         </div>
       </div>
     </div>
@@ -72,8 +77,9 @@ export default {
       siteName: "",
       siteId: this.$store.state.dashboard.siteId,
       language: "",
-      isShow: false,
       domainList: [],
+      isShow: false,
+      curInder: -1,
       scrollHeight: 500,
       accountAvator: require("img/account/account_type_icon.png"),
       accountInfo: {
@@ -91,11 +97,11 @@ export default {
   },
   created() {
     this._getWxIsAuth();
-    this._getCdnDomainList();
   },
   methods: {
+    //页面初始化获取ID
     getSiteId(siteId) {
-      console.log('000')
+      console.log('siteId',siteId)
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
@@ -103,6 +109,7 @@ export default {
     },
     // 校验是否已经授权认证
     async _getWxIsAuth() {
+      await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
       console.log(this.$store.state.wxaccount)
@@ -110,6 +117,7 @@ export default {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
       this.accountInfo = this.$store.state.wxaccount.account_info
+      console.log('this.accountInfo',this.accountInfo)
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
@@ -117,17 +125,32 @@ export default {
       this.domainList = data
       console.log('eee',data)
     },
-    //changeShow
+    //修改域名
     changeShow() {
-      this.isShow = !this.isShow
+      this._getCdnDomainList();
+      this.isShow = true
+    },
+    //关闭弹窗
+    closeDomain(){
+      this.isShow = false 
+    },
+    //选中推广域名
+    async _setPromotionUrl(ind){
+      this.curInder = ind
     },
     //设置推广域名
-    async _setPromotionUrl(domain){
-      let data = await setPromotionUrl({siteId: this.siteId,domain:domain})
-      if(true) {
-        this.accountInfo.promotionUrl = domain
+    async _hasPromotionUrl(){
+      if(this.curInder == -1) {
+        notify(this,'请先选则要设置的域名', 'error')
       }
-      console.log('999',data)
+      let domain = this.domainList[this.curInder].domain
+      let data = await setPromotionUrl({siteId: this.siteId,domain:domain})
+      if(data && data.status == 200) {
+        this.accountInfo.promotionUrl = domain
+        this.isShow = false
+      } else {
+        notify(this,'推广域名设置失败', 'error')
+      }
     },
     //解除绑定
     unBind(){
@@ -307,7 +330,6 @@ export default {
     }
   }
   .add-promotion {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -316,6 +338,7 @@ export default {
     background: rgba(0, 0, 0, 0.75);
     z-index: 100;
     .content {
+      position: relative;
       float: right;
       width: 500px;
       height: 100%;
@@ -327,6 +350,82 @@ export default {
         font-weight:400;
         color:rgba(38,38,38,1);
         line-height:20px;
+        padding: 20px 0 12px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #E5E5E5;
+        i {
+          color: #A1A8B1;
+          font-size: 26px;
+          margin-top: -3px;
+          cursor: pointer;
+        }
+      }
+      ul {
+        p {
+          font-size:14px;
+          font-family:"PingFangSC-Regular,PingFangSC";
+          font-weight:400;
+          color:rgba(38,38,38,1);
+          line-height:20px;
+          margin: 20px 0 14px;
+        }
+        li {
+          height: 60px;
+          padding-left: 15px;
+          font-size:14px;
+          font-family:'PingFangSC-Regular,PingFangSC';
+          font-weight:400;
+          color:rgba(38,38,38,1);
+          line-height:60px;
+          border-bottom: 1px solid #E5E5E5;
+          cursor: pointer;
+        }
+        li:nth-child(1) {
+          border-top: 1px solid #E5E5E5;
+        }
+        li:hover {
+          background: #F8FAFC;
+        }
+        .active {
+          background: #F0F3F7 !important;
+          color: #09CCEB;
+        }
+        .tips {
+          margin-top: 30px;
+          p {
+            margin: 0;
+            font-size:14px;
+            font-family:"PingFangSC-Regular,PingFangSC";
+            font-weight:400;
+            color:rgba(161,168,177,1);
+            line-height:20px;
+          }
+        }
+      }
+      .btn {
+        position:absolute;
+        left: 0px;
+        bottom: 0;
+        span {
+          display: inline-block;
+          width:76px;
+          height:40px;
+          line-height: 40px;
+          text-align: center;
+          margin: 0 16px 24px 24px;
+          background:rgba(9,204,235,1);
+          color: #FFFFFF;
+          border-radius:2px;
+          cursor: pointer;
+        }
+        span:nth-child(2) {
+          color: rgba(9,204,235,1);
+          background: white;
+          border: 1px solid rgba(9,204,235,1);
+          margin: 0;
+
+        }
       }
     }
   }

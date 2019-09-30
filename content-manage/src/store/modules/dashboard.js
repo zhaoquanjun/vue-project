@@ -15,7 +15,6 @@ import {
 let getNeedRoutes = auth => {
     function r(authRoutes) {
         return authRoutes.filter(route => {
-            console.log(auth)
             if (auth.includes(route.name)) {
                 if (route.children) {
                     route.children = r(route.children);
@@ -78,7 +77,6 @@ const dashboard = {
     actions: {
         async _updateAppIdToCookie({commit}) {
             let {data} = await updateAppIdToCookie();
-            console.log(data)
             commit("SETAPPID", data)
         },
         async _getMenuListData({
@@ -125,7 +123,6 @@ const dashboard = {
     },
     getters: {
         getMenuList(state) {
-            console.log(state.menuList)
             if (!state.menuList) return
             // return JSON.parse(state.menuList)
             return state.menuList

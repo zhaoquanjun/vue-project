@@ -94,7 +94,7 @@ import RightPannel from "./RightPannel";
 import SelectTree from "./SelectTree";
 import Loading from "_c/wechat-account/defineMenu/loading/loading";
 
-import { getPicList, imgBatchRemove, changeCategory, imgRname, get, create, batchRemove, rename, modifyNode } from "@/api/request/account.js";
+import { getPicList, imgBatchRemove, changeCategory, imgRename, get, create, batchRemove, rename, modifyNode } from "@/api/request/account.js";
 import environment from '@/environment/index.js';
 
 export default {
@@ -191,7 +191,7 @@ export default {
       }
     },
     async renamePic(id, newname) {
-      await imgRname(id, newname);
+      await imgRename(id, newname);
       this.getPicList();
     },
     async getTree() {

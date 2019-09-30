@@ -36,12 +36,12 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span @click="switchIsDesc('asc')">
-                        <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
-                    </span>
-                    <span @click="switchIsDesc('dec')">
-                        <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
-                    </span>
+                    <button @click="switchIsDesc('dec')" class="desBtn">
+                        <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                    </button>
+                    <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
+                        <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
+                    </button>
                 </div>
             </template>
             <template v-else>
@@ -136,5 +136,11 @@ export default {
     font-size: 14px;
     font-weight:600;
     padding-bottom: 24px;
+}
+.desBtn{
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
 }
 </style>

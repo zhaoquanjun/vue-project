@@ -70,14 +70,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .picture-wrap {
-    width: 180px;
-    height: 180px;
+    width: 100%;
+    height: 100%;
     position: relative;
     overflow: hidden;
+    text-align: center;
     flex: none;
     img {
         border-radius: 2px;
-        width: 100%;
+        width: 180px;
+        margin: 30px auto;
     }
     &:hover .mask {
         opacity: 1;
@@ -103,15 +105,21 @@ export default {
     }
 }
 .upload-wrap {
+    min-height: 320px;
+    text-align: center;
     cursor: pointer;
     .upload-icon {
+        display: inline-block;
+        margin-top: 30px;
         width: 60px;
         height: 60px;
         background: url("~img/upload-icon.png") no-repeat center;
         background-size: contain;
     }
     .handler-upload {
+        display: block;
         width: 60px;
+        margin: 0 auto;
         padding-top: 16px;
         color: #09cceb;
     }

@@ -158,7 +158,6 @@
         </el-main>
       </el-row>
     </el-main>
-    <Loading v-if="loadingShow" />
   </el-container>
 </template>
 
@@ -188,8 +187,7 @@ export default {
       backupType: "manual",
       backupShow: false,
       backuping: false,
-      remarkInfo: "",
-      loadingShow: true
+      remarkInfo: ""
     };
   },
   methods: {
@@ -222,10 +220,12 @@ export default {
      * 获取备份信息
      */
     async getBackupSite(siteId) {
+      this.$Loading.show();
       let manualData = await siteBackupApi.getBackupSite(siteId, false);
       this.manualSite = manualData.data.items;
       let autoData = await siteBackupApi.getBackupSite(siteId, true);
       this.autoSite = autoData.data.items;
+      this.$Loading.hide();
       if (this.backupType === "manual") {
         this.siteInfo = this.manualSite;
       } else if (this.backupType === "auto") {
@@ -454,11 +454,6 @@ export default {
     },
     _handleHideEditorIcon(id) {
       this.active = -1;
-    }
-  },
-  watch: {
-    siteInfo() {
-      this.loadingShow = false;
     }
   }
 };

@@ -15,6 +15,8 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 import uploader from 'vue-simple-uploader'
 Vue.use(uploader)
+import Loading from './components/globalComponents/loading.js' 
+Vue.use(Loading)
 //插件的包
 import PerfectScrollbar from 'perfect-scrollbar';
 //对应的css

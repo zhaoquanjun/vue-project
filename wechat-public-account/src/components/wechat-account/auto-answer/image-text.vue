@@ -12,9 +12,9 @@
                 v-for="(item,index) in list"
                 :key="index"
             >
-                <div class="headline">{{item.Title}}</div>
+                <div class="headline">{{item.title}}</div>
                 <div class="imgwrap">
-                    <img :src="item.PicUrl"
+                    <img :src="item.picUrl"
                     />
                 </div>
                 <div class="mask">
@@ -36,7 +36,7 @@
                 <div class="example">
                     <div
                         class="headline ellipsis"
-                    >{{curEditorItem.title?curEditorItem.Title:defualtTitle}}</div>
+                    >{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
                     <div class="imgwrap">
                         <img
                             src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
@@ -80,7 +80,7 @@
                     <div class="seting-item">
                         <div class="seting-title">图文标题</div>
                         <el-input
-                            v-model="curEditorItem.Title"
+                            v-model="curEditorItem.title"
                             size="small"
                             placeholder="不超过64个字符"
                             maxlength="64"
@@ -92,7 +92,7 @@
                         <el-input
                             class="textarea"
                             type="textarea"
-                            v-model="curEditorItem.Description"
+                            v-model="curEditorItem.description"
                             rows="5"
                             placeholder="非必填，不超过120个字符，该摘要只在发送图文消息为单条时显示"
                             maxlength="120"
@@ -139,12 +139,12 @@ export default {
             },
             defualtTitle: "这里是标题",
             curEditorItem: {
-                Title: "",
-                Description: "",
-                PicUrl:"",
-                UrlType: "",
-                UrlData: "",
-                ContentPageId: ''
+                title: "",
+                description: "",
+                picUrl:"",
+                urlType: "",
+                urlData: "",
+                contentPageId: ''
             },
             curEditorTitle: '',
             isUploaded: false,
@@ -159,6 +159,7 @@ export default {
     },
     mounted() {
         this.list = this.newsMsg;
+        console.log('this.list',this.list)
         this.replyTypes = this.replyType;
          this.list.forEach((item, index) => {
                 item["isShow"] = true;
@@ -172,9 +173,9 @@ export default {
         handleClosePopup (val,data){
             this.isShowPopup = val
             if (data) {
-                this.curEditorItem.UrlType = data.Type;
-                this.curEditorItem.UrlData = data.Href;
-                this.curEditorItem.ContentPageId = data.Id;
+                this.curEditorItem.urlType = data.Type;
+                this.curEditorItem.urlData = data.Href;
+                this.curEditorItem.contentPageId = data.Id;
                 this.curEditorTitle = data.Title;
             }
         },
@@ -229,9 +230,9 @@ export default {
             this.isEditorShow = this.isEditor = false;
             // 添加完成后重置一下
             this.curEditorItem = {
-                Title: "",
-                Description: "",
-                PicUrl:
+                title: "",
+                description: "",
+                picUrl:
                     "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
             };
         },
@@ -246,7 +247,7 @@ export default {
             // this.picUrl = data;
             console.log('333',src)
              this.picUrl = src;
-             this.curEditorItem.PicUrl = src;
+             this.curEditorItem.picUrl = src;
           
         },
         // 关闭弹层
@@ -267,9 +268,7 @@ export default {
             this.list.forEach((item, index) => {
                 item["isShow"] = true;
             });
-             console.log( this.newsMsg.length,' this.newsMsg this.newsMsg this.newsMsg')
             this.isEditorShow = this.newsMsg.length > 0 ? false : true;
-            console.log(this.isEditorShow) 
          
         },
        

@@ -14,6 +14,9 @@ import environment from '../environment';
 export const getPagesList = options => {
   return ajaxRequest.get(`${environment.pageApiUri}/api/v1/Page/GetContentPageList`, options);
 }
+export const getContentList = options => {
+  return ajaxRequest.get(`${environment.pageApiUri}/api/v1/WeiXin/GetPageList`, options);
+}
 
 export const getArticleList = (options) => {
   return ajaxRequest.get(`${environment.contentApiUri}/api/News/GetNewsList/${options.pageIndex}/${options.pageSize}`,options);

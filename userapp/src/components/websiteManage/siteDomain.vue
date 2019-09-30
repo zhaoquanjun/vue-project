@@ -151,18 +151,11 @@
              */
             async _getCdnDomainList(siteId) {
                 console.log(this);
-                const loading = this.$loading({
-                    lock: true,
-                    spinner: "loading-icon",
-                    background: "rgba(255, 255, 255, 0.75)"
-                });
+                this.$Loading.show();
                 siteId = siteId || this.curSiteId;
                 let { data, status } = await domainApi.getCdnDomainList(siteId);
-                if (status === 200) {
-                    loading.close();
-                }
+                this.$Loading.hide();
                 this.domainListData = data;
-
                 this.domainAmount = data.length;
             },
 
