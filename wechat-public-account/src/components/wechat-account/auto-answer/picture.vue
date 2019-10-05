@@ -4,7 +4,7 @@
             <img :src="picUrl" alt />
             <span class="mask">
                 <button>
-                    <i class="iconfont iconqiehuanxingshiyi"></i>
+                    <i class="iconfont iconqiehuanxingshiyi" @click="handlerUpload"></i>
                 </button>
                 <button @click="handlerDelete">
                     <i class="iconfont iconshanchu"></i>
