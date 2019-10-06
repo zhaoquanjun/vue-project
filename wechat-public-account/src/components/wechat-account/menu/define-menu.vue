@@ -231,7 +231,7 @@ export default {
     async _getMenuTree(val) {
       let { data } = await getMenuTree(this.siteId);
       this.menuTree = data;
-      if(!this.menuDetail.id && this.menuTree.length >0) {
+      if(val != 'add' && this.menuTree.length >0) {
         //页面初始化数据回填
         if (this.menuTree[0].subMenuList.length > 0) {
           this._getMenuDetail(this.menuTree[0].subMenuList[0].id)
@@ -243,7 +243,7 @@ export default {
       } else if (val == 'add') {
         //点击添加按钮时选择刚添加的按钮并且回填按钮详情
         console.log('000',this.curSubIndex,this.curIndex,this.menuTree)
-        let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex-1].id
+        let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
         this._getMenuDetail(id)
       }
     },
@@ -420,8 +420,8 @@ export default {
         dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
         dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
         dataObj = await updateMenu(dataDetail)
-      }else if (!flag) {
-        
+      }else if (order > 0 && !flag) {
+        notify(this, '请完善菜单信息', "error");
       }
       //接口校验
       if (order == 0 || dataObj.status == 200) {
@@ -436,22 +436,18 @@ export default {
         };
         let data =  await addMenu(newMenuItem);
         if(data.status && data.status == 200 ) {
+          this._getMenuTree('add')
           //添加成功，改变按钮状态
           //校验信息
           if (level == 0) {
           // level 0 点击添加父菜单 1 点击添加子菜单 
             this.curIndex = order;
             this.curSubIndex = -1;
-            if(this.menuTree[order-1].subMenuList.length <= 0) {
-              this.hasSubList = true
-            } else {
-              this.hasSubList = false
-            }
           } else if(level == 1) {
-            this.curSubIndex = order;
+            this.curSubIndex = order-1;
             this.hasSubList = true
           }
-          this._getMenuTree('add')
+          
         }
       }
     },
@@ -468,8 +464,9 @@ export default {
           dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType);
           dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
       let data = await publishMenu(dataDetail);
-      if (data.status == 200) {
+      if (data && data.status == 200) {
         //同步菜单name
+        notify(this, '保存成功', "error");
         this.hasChangeMeunName()
       } else {
         notify(this, '保存失败', "error");
