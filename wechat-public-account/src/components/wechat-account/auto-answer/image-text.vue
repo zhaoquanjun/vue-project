@@ -236,6 +236,7 @@ export default {
                 contentPageId: ''
             };
             this.picUrl = ''
+            this.curEditorTitle = ''
         },
         handlerAddNewsImg() {
             this.index = this.list.length + 1;
