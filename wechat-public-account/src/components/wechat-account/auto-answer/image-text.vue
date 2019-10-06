@@ -38,9 +38,7 @@
                         class="headline ellipsis"
                     >{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
                     <div class="imgwrap">
-                        <img
-                            src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
-                        />
+                        <img :src="curEditorItem.picUrl"/>
                     </div>
                 </div>
                 <div class="seting-info">
@@ -68,7 +66,7 @@
                                 <span class="el-icon-plus"></span>
                             </div>
                             <div  v-else>
-                                <img :src="picUrl" />
+                                <img :src="curEditorItem.picUrl" />
                                 <div class="mask1">
                                     <button @click="removePic">
                                         <i class="iconfont iconshanchu"></i>
@@ -141,7 +139,7 @@ export default {
             curEditorItem: {
                 title: "",
                 description: "",
-                picUrl:"",
+                picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
                 urlType: "",
                 urlData: "",
                 contentPageId: ''
@@ -232,9 +230,12 @@ export default {
             this.curEditorItem = {
                 title: "",
                 description: "",
-                picUrl:
-                    "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                urlType: "",
+                urlData: "",
+                contentPageId: ''
             };
+            this.picUrl = ''
         },
         handlerAddNewsImg() {
             this.index = this.list.length + 1;
