@@ -643,7 +643,7 @@ export default {
               color: #262626;
               border-right: none;
               border-top: 1px solid #c9d9dc;
-              cursor: auto;
+              cursor: pointer;
               .menu-move__icon {
                 margin-right: 4px;
                 font-size: 16px;
