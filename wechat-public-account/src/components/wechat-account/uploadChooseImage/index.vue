@@ -5,6 +5,7 @@
 
       <m-tree
         :tree-result="treeResult"
+        :img-page-result="imgPageResult"
         :pic-search-options="picSearchOptions"
         :isexpand="true"
         @getPicList="getPicList"
