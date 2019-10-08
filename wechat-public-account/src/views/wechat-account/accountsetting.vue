@@ -9,7 +9,8 @@
       <div class="account-info__area">
         <div class="info-desc__area">
           <div class="account-icon">
-            <img :src="accountInfo.platformAvator" alt />
+            <img v-if="accountInfo.platformAvator" :src="accountInfo.platformAvator" alt />
+            <img v-else :src="accountAvator"/>
           </div>
           <div class="account-name-certification">
             <h6>{{accountInfo.platformName}}</h6>
@@ -90,7 +91,6 @@ export default {
     PageSubNav
   },
   created() {
-    //this._getWxIsAuth();
   },
   methods: {
     //页面初始化获取ID
