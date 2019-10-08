@@ -38,7 +38,7 @@
       <div class="content">
         <div class="title">
           <span>推广域名</span>
-          <i @click="closeDomain">x</i>
+          <i class='icon iconfont iconguanbi' @click="closeDomain"></i>
         </div>
         <ul>
           <p>请选择推广域名</p>
@@ -82,13 +82,7 @@ export default {
       curInder: -1,
       scrollHeight: 500,
       accountAvator: require("img/account/account_type_icon.png"),
-      accountInfo: {
-        platformName: "公众号名称",
-        platformAppId:'',
-        platformAvator: "",
-        promotionUrl: '',
-        serviceTypeInfo: ''
-      }
+      accountInfo: this.$store.state.wxaccount.account_info
     };
   },
   components: {
@@ -115,7 +109,6 @@ export default {
       if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
-      this.accountInfo = this.$store.state.wxaccount.account_info
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
@@ -353,8 +346,7 @@ export default {
         border-bottom: 1px solid #E5E5E5;
         i {
           color: #A1A8B1;
-          font-size: 26px;
-          margin-top: -3px;
+          font-size: 18px;
           cursor: pointer;
         }
       }

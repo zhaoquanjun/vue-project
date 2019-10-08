@@ -41,23 +41,25 @@ const user = {
       await store.dispatch('_setSiteId')
       let siteId =  store.state.dashboard.siteId
       let data = await isAuth({infoType: "WeixinOA",siteId: siteId});
-      let verify = {
-        isAuth: data.data.isAuth,
-        isCertification: data.data.isVerify,
-        isResolveSuccess: data.data.isResolveSuccess
-        // isAuth: true,
-        // isResolveSuccess: true,
-        // isCertification: false
+      if (data && data.status == 200) {
+        let verify = {
+          isAuth: data.data.isAuth,
+          isCertification: data.data.isVerify,
+          isResolveSuccess: data.data.isResolveSuccess
+          // isAuth: true,
+          // isResolveSuccess: true,
+          // isCertification: false
+        }
+        let accountInfo = {
+          platformName: data.data.platformNiceName,
+          platformAvator: data.data.platformHeadImg,
+          serviceTypeInfo: data.data.serviceTypeInfo,
+          promotionUrl: data.data.promotionUrl,
+          platformAppId: data.data.platformAppId
+        }
+        commit("SET_WX_STATUS", verify);
+        commit("SET_ACCOUNT_INFO", accountInfo)
       }
-      let accountInfo = {
-        platformName: data.data.platformNiceName,
-        platformAvator: data.data.platformHeadImg,
-        serviceTypeInfo: data.data.serviceTypeInfo,
-        promotionUrl: data.data.promotionUrl,
-        platformAppId: data.data.platformAppId
-      }
-      commit("SET_WX_STATUS", verify);
-      commit("SET_ACCOUNT_INFO", accountInfo)
     },
   }
 }
