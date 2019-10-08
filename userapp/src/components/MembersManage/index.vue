@@ -1,11 +1,11 @@
 <template>
     <el-container class="member-container">
-        <el-aside style="width:120px">
+        <el-aside style="width:100px">
             <page-submenu>
                 <template v-slot:title>系统设置</template>
             </page-submenu>
         </el-aside>
-        <el-main class="member-content">
+        <el-main class="member-content" style="padding:32px">
             <el-row class="user-list">
                 <span class="member-list-title fs14">成员列表</span>
             </el-row>
@@ -358,19 +358,18 @@ export default {
 
 <style lang="scss" scoped>
 .member-container {
-    .member-content {
-        padding: 21px 14px;
+  position: relative;
+  .user-list {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 24px;
+    .member-list-title {
+      border-left: 4px solid #01c0de;
+      padding-left: 8px;
+      font-size: 16px;
+      font-weight: 500;
     }
-    .user-list {
-        border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
-        .member-list-title {
-            border-left: 2px solid #01c0de;
-            padding-left: 10px;
-        }
-    }
+  }
 }
-
 .user-count {
     font-family: PingFangSC-Medium;
     font-weight: 600;
