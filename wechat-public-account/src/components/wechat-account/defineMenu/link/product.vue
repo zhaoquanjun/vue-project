@@ -189,7 +189,7 @@ export default {
         this.pageActiveIndex = ind
         this.isShow = false
         this.productTips = this.productPageList[ind].title;
-        this.productHref = `http://${this.promotionUrl}/product/${this.productPageList[ind].id}/${this.urlId}`
+        this.productHref = `http://${this.promotionUrl}/product/${this.productPageList[ind].id}/${this.urlId}.html`
           this.$emit("handleChangeUrl", {
             url: this.productList[this.productId].url,
             title: this.productList[this.productId].name,
