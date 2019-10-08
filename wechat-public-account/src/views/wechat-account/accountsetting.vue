@@ -96,7 +96,7 @@ export default {
     PageSubNav
   },
   created() {
-    this._getWxIsAuth();
+    //this._getWxIsAuth();
   },
   methods: {
     //页面初始化获取ID
@@ -112,18 +112,15 @@ export default {
       await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
-      console.log(this.$store.state.wxaccount)
-      if (!wx_status.isAuth || !wx_status.isCertification) {
+      if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
       this.accountInfo = this.$store.state.wxaccount.account_info
-      console.log('this.accountInfo',this.accountInfo)
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
       let {data} = await getCdnDomainList()
       this.domainList = data
-      console.log('eee',data)
     },
     //修改域名
     changeShow() {

@@ -52,8 +52,17 @@ export default {
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
-      console.log('siteId',siteId)
-      // this.getSiteInfo(siteId);
+      this._getWxIsAuth()
+    },
+    // 校验是否已经授权认证
+    async _getWxIsAuth() {
+      await this.$store.dispatch('_setSiteId')
+      await this.$store.dispatch('_getWxStatus')
+      let wx_status = this.$store.state.wxaccount.wx_status
+      if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
+        this.$router.replace({path:'/wechataccount/wxauther' });
+      }
+      this.accountInfo = this.$store.state.wxaccount.account_info
     },
   }
 };

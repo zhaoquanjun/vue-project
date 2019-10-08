@@ -133,7 +133,7 @@ export default {
         ImageText
     },
     created() {
-        this._getWxIsAuth();
+        //this._getWxIsAuth();
     },
     mounted() {
         this._getReplyDetail(1);
@@ -147,7 +147,6 @@ export default {
     methods: {
         getSiteId(siteId) {
             console.log('siteId',siteId)
-            // this.getSiteInfo(siteId);
         },
         // 切换站点刷新信息
         chooseWebsite(siteId) {
@@ -156,8 +155,7 @@ export default {
         async _getWxIsAuth() {
             await this.$store.dispatch('_getWxStatus')
             let wx_status = this.$store.state.wxaccount.wx_status
-            console.log(this.$store.state)
-            if (!wx_status.isAuth || !wx_status.isCertification) {
+            if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
                 this.$router.replace({path:'/wechataccount/wxauther' });
             }
         },
