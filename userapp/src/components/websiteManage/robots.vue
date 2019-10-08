@@ -6,11 +6,11 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
-      <div style="padding: 24px 32px;">
+      <div style="padding: 32px 32px 24px;">
         <el-row class="user-list">
           <span class="member-list-title fs14">Robots.txt</span>
         </el-row>
+        <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
       </div>
       <el-row class="siteContent" style="padding:0 32px">
         <uploader
@@ -286,15 +286,14 @@ export default {
 <style lang="scss" scoped>
 .member-container {
   position: relative;
-  .member-content {
-    padding: 0px 0px 21px;
-  }
   .user-list {
     border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    padding-bottom: 24px;
     .member-list-title {
-      border-left: 2px solid #01c0de;
-      padding-left: 10px;
+      border-left: 4px solid #01c0de;
+      padding-left: 8px;
+      font-size:16px;
+      font-weight: 500;
     }
   }
 }

@@ -74,5 +74,8 @@ export default {
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
 }
+.backupBtn:hover{
+    opacity: 0.8;
+}
 </style>
 

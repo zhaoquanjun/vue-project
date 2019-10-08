@@ -6,14 +6,16 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <ChangeSite
-        @chooseWebsite="chooseWebsite"
-        @getSiteId="getSiteId"
-        :changeSiteName="siteName"
-        :changeSiteLanguage="language"
-      />
-      <el-row class="siteContent" style="padding-bottom:0">
-        <div class="mySiteTitle" style="margin-top: 9px">我的网站</div>
+      <el-row class="siteContent" style="padding-bottom:0;padding-top:32px">
+        <el-row class="user-list">
+          <span class="member-list-title fs14">我的网站</span>
+        </el-row>
+        <ChangeSite
+          @chooseWebsite="chooseWebsite"
+          @getSiteId="getSiteId"
+          :changeSiteName="siteName"
+          :changeSiteLanguage="language"
+        />
         <div class="siteWrap">
           <div class="siteImg">
             <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
@@ -44,6 +46,7 @@
                 <span
                   slot="reference"
                   style="margin-left:0px;vertical-align: middle;"
+                  class="hoverBtn"
                   @click="showChangeSitename"
                 >
                   <i class="iconfont iconbianji edit"></i>
@@ -70,7 +73,7 @@
             <div class="siteinfoItem">
               <span>网站语言：</span>
               <span class="siteinfoName">{{_getLanguage()}}</span>
-              <span @click="showChangeLanguage" style="vertical-align: middle;">
+              <span @click="showChangeLanguage" class="hoverBtn" style="vertical-align: middle;">
                 <i class="iconfont iconbianji edit"></i>
               </span>
             </div>
@@ -150,7 +153,7 @@
           >保存</el-button>
         </div>
       </el-row>
-      <el-row style="padding:23px">
+      <el-row class="siteContent">
         <div class="mySiteTitle">网站设置</div>
         <div class="siteSettingWrap" style="margin-top:32px">
           <span class="siteSetting">网站icon</span>
@@ -611,10 +614,29 @@ export default {
 .textareaWrap /deep/ .el-input__count {
   right: 25px;
 }
+.hoverBtn {
+  padding: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+.hoverBtn:hover {
+  background: rgba(248, 250, 252, 1);
+}
 </style>
 <style lang="scss" scoped>
-.member-content {
+.member-container {
   background: #fff;
+  position: relative;
+  .user-list {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 24px;
+    .member-list-title {
+      border-left: 4px solid #01c0de;
+      padding-left: 8px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
 }
 .mySiteTitle {
   font-size: 14px;
@@ -625,13 +647,9 @@ export default {
 .edit {
   font-size: 16px;
   color: #262626;
-  cursor: pointer;
-  &:hover {
-    color: #09cceb;
-  }
 }
 .siteContent {
-  padding: 24px;
+  padding: 24px 32px;
   border-bottom: 10px solid #f6f8fa;
 }
 .siteWrap {
@@ -685,6 +703,9 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
   .siteinfoWrap {
@@ -712,6 +733,9 @@ export default {
       font-weight: 400;
       line-height: 20px;
       color: rgba(0, 194, 222, 1);
+      &:hover {
+        opacity: 0.8;
+      }
     }
     .bindDomain {
       width: 90px;
@@ -723,6 +747,9 @@ export default {
       color: rgba(1, 192, 222, 1);
       line-height: 32px;
       margin-left: 32px;
+      &:hover {
+        opacity: 0.8;
+      }
     }
     .isBind {
       color: #00c2de;
@@ -749,11 +776,17 @@ export default {
   }
   .prev {
     top: 113px;
+    &:hover {
+      opacity: 0.8;
+    }
   }
   .design {
     background: rgba(1, 192, 222, 1);
     color: rgba(255, 255, 255, 1);
     top: 57px;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 .siteTypeWrap {
@@ -790,6 +823,9 @@ export default {
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
     line-height: 32px;
+    &:hover {
+      opacity: 0.8;
+    }
   }
   .disabled {
     opacity: 0.4;

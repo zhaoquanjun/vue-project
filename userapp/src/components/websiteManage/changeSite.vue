@@ -205,38 +205,44 @@ export default {
     position: relative;
     .siteName {
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 500;
       color: rgba(38, 38, 38, 1);
       position: absolute;
-      left: 44px;
+      left: 0px;
       margin-top: 28px;
     }
     .secondDomain {
       font-size: 12px;
       font-weight: 400;
-      color: rgba(1, 192, 222, 1);
-      line-height: 69px;
+      color: rgba(5, 149, 230, 1);
       position: absolute;
-      right: 226px;
+      right: 144px;
+      top: 29px;
+      &:hover {
+        opacity: 0.8;
+      }
     }
     .language {
       font-size: 12px;
       font-weight: 400;
-      color: rgba(38, 38, 38, 1);
-      line-height: 69px;
+      color: rgba(211, 211, 211, 1);
       position: absolute;
-      right: 154px;
+      right: 112px;
+      top: 29px;
     }
     .changeSite {
-      width: 90px;
-      height: 32px;
-      border: 1px solid rgba(1, 192, 222, 1);
-
+      font-size: 14px;
       font-weight: 400;
-      color: rgba(1, 192, 222, 1);
+      color: rgba(5, 149, 230, 1);
       position: absolute;
-      top: 19px;
-      right: 32px;
+      right: 16px;
+      top: 28px;
+      &:hover {
+        top: 18px;
+        right: 6px;
+        padding: 10px;
+        background: rgba(5, 149, 230, 0.09);
+      }
     }
   }
 }
@@ -310,6 +316,9 @@ export default {
         left: 50%;
         top: 68%;
         transform: translateX(-50%);
+        &:hover {
+          opacity: 0.8;
+        }
       }
       .modal {
         position: absolute;
