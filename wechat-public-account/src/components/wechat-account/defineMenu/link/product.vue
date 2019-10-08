@@ -79,7 +79,7 @@
           <a 
             :href="productHref"
             target="_blank"
-          >预览详情页</a>
+          >预览</a>
         </div>
         <ul v-if="isShow" class="product-page-list">
           <li 
@@ -127,6 +127,7 @@ export default {
     return {
       timer: null,
       siteId: this.$store.state.dashboard.siteId,
+      promotionUrl: this.$store.getters.account_info.promotionUrl,
       pageSize: 6,
       total: 6,
       productHref: 'https://www.baidu.com/',
@@ -135,6 +136,7 @@ export default {
       treeArray: [],
       productList: [],
       pageId: '',
+      urlId: '',
       isShow: false,
       pageUrl: '',
       pageTitle: '',
@@ -187,9 +189,10 @@ export default {
         this.pageActiveIndex = ind
         this.isShow = false
         this.productTips = this.productPageList[ind].title;
+        this.productHref = `http://${this.promotionUrl}/product/${this.productPageList[ind].id}/${this.urlId}`
           this.$emit("handleChangeUrl", {
             url: this.productList[this.productId].url,
-            title: this.productList[this.productId].title,
+            title: this.productList[this.productId].name,
             cType: "Product",
             id: this.productPageList[ind].id,
             pageIndex: this.pageIndex
@@ -242,6 +245,8 @@ export default {
     },
     _handleSelectPage(i) {
       this.productId = i
+      this.productTitle = this.productList[i].name
+      this.urlId = this.productList[i].id
       // this.$emit("handleChangeUrl", {
       //   url: this.productList[i].url,
       //   title: this.productList[i].name,
@@ -362,10 +367,12 @@ export default {
             padding: 0 8px;
             height: 26px;
             cursor: pointer;
+            overflow:hidden;
             p {
               width: 300px;
               padding: 0;
               font-size: 14px;
+              line-height: 26px;
               color: #262626;
               text-align: left;
             }

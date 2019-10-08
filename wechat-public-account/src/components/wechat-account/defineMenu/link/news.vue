@@ -78,7 +78,7 @@
           <a 
             :href="productHref"
             target="_blank"
-          >预览详情页</a>
+          >预览</a>
         </div>
         <ul v-if="isShow" class="product-page-list">
           <li 
@@ -127,6 +127,7 @@ export default {
       total: 6,
       pageActiveIndex: null,
       siteId: this.$store.state.dashboard.siteId,
+      promotionUrl: this.$store.getters.account_info.promotionUrl,
       newsTitle: "",
       isShow: false,
       defaultExpandedKeys: [],
@@ -135,6 +136,7 @@ export default {
       productPageList:[],
       productTips: '全部分类',
       newId: -1,
+      urlId: '',
       productHref: 'https://www.baidu.com/',
       nodeId: 0,
       loading: false,
@@ -171,7 +173,7 @@ export default {
   created() {
     this.getNewsList(this.nodeId);
     this.getCategorytree();
-    this.getPageList();
+    this.getContentList();
   },
   methods: {
     async getContentList() {
@@ -181,11 +183,11 @@ export default {
       }
     },
     selectPage(ind){
-      
       if (this.newId  != -1 ) {
         this.pageActiveIndex = ind;
         this.isShow = false
         this.productTips = this.productPageList[ind].title;
+        this.productHref = `http://${this.promotionUrl}/news/${this.productPageList[ind].id}/${this.urlId}`
         this.$emit("handleChangeUrl", {
           url: this.newsList[this.newId].url,
           title: this.newsList[this.newId].title,
@@ -241,6 +243,8 @@ export default {
     },
     _handleSelectPage(i) {
       this.newId = i
+      this.newsTitle = this.newsList[i].title
+      this.urlId = this.newsList[i].id
       // this.$emit("handleChangeUrl", {
       //   url: this.newsList[i].url,
       //   title: this.newsList[i].title,
@@ -360,10 +364,13 @@ export default {
             padding: 0 8px;
             height: 26px;
             cursor: pointer;
+            overflow:hidden;
             p {
               width: 300px;
               padding: 0;
               font-size: 14px;
+              line-height: 26px;
+              overflow: hidden;
               color: #262626;
               text-align: left;
             }
