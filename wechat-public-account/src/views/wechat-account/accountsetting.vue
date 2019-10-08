@@ -68,7 +68,7 @@
 <script>
 import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
-import { unBind, getCdnDomainList,bindDomain,setPromotionUrl } from "@/api/request/account.js";
+import { unBind, getCdnDomainList,setPromotionUrl } from "@/api/request/account.js";
 import { mapGetters } from "vuex";
 import { notify } from "@/utlis/index.js";
 export default {

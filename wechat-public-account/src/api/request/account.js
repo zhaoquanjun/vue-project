@@ -26,8 +26,8 @@ export const setPromotionUrl = (options) => {
   return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/Platform/SetPromotionUrl`,options);
 }
 //添加域名bindDomain
-export const bindDomain = (options) => {
-  return ajaxRequest.post(`${environment.pageApi}/api/v1/WeiXin/BindDomainAndEnableCdn/${store.state.dashboard.siteId}`,options);
+export const bindDomain = (siteId,options) => {
+  return ajaxRequest.post(`${environment.pageApi}/api/v1/WeiXin/BindDomainAndEnableCdn/${siteId}`,options);
 }
 export const getPageSiteList = () => {
   return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetSiteList`);

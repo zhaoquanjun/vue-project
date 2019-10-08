@@ -11,6 +11,9 @@ export function isImgFile(type) {
     return result;
 }
 
+//校验域名
+export const regDomain = new RegExp(/^([a-z0-9\-\u4E00-\u9FA5]*[\.])+([a-z\u4E00-\u9FA5]{2,10})$/)
+
 // 校验邮件
 export const reg = new RegExp(/((http|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/)
 /**
