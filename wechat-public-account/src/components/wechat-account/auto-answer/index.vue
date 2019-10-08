@@ -464,7 +464,7 @@ export default {
         // 添加关键词回复
         handlerAddAnswer(value, item) {
             this.addAnswer = value;
-            console.log(item);
+            console.log(item,'ooo');
             if (item && item.keywordList) {
                 this.replyDetail = item;
                 this.propKeywordList = item.keywordList;
@@ -472,11 +472,11 @@ export default {
                 this.isSet = true;
                 this.editorId = item.id;
                 if (item.msgType === 1) {
-                    this.replycontentData.imageMsg = item.data;
+                    this.replycontentData.imageMsg = item.data.imageMsg;
                 } else if (item.msgType === 2) {
-                    this.replycontentData.textMsg = item.data;
+                    this.replycontentData.textMsg = item.data.textMsg;
                 } else if (item.msgType === 3) {
-                    this.replycontentData.newsMsg = item.data;
+                    this.replycontentData.newsMsg = item.data.newsMsg;
                 }
             } else {
                 this.propKeywordList = "";
