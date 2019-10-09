@@ -147,12 +147,13 @@
                     :href="scope.row.status == 3 || scope.row.status == 1 ? `//${scope.row.domain}`:'javascript:;'"
                     :target="scope.row.status == 3 || scope.row.status == 1 ?'_blank':''"
                     :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
+                    class="more-operate"
                   >
                     <i class="iconfont iconchakan" style="font-size:16px;color:rgba(38,38,38,1);"></i>
                   </a>
                   <span
                     class="more-operate"
-                    style="display:inline-block;margin-left:24px;vertical-align: middle;"
+                    style="display:inline-block;margin-left:16px;vertical-align: middle;"
                     @click.stop="_handleShowMoreOperate($event,scope.row)"
                     :class="{disable : scope.row.status == 0 ? true : false}"
                   >
@@ -833,16 +834,16 @@ export default {
       if (row.status == 2) {
         this.operateList = [{ name: "删除", flag: "delete" }];
         this.$refs.operateSection.style.left =
-          ev.pageX - ev.offsetX + 23 + "px";
-        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 5 + "px";
+          ev.pageX - ev.offsetX + 32 + "px";
+        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + 4 + "px";
       } else if (row.status == 3) {
         this.operateList = [
           { name: "设置", flag: "setting" },
           { name: "删除", flag: "delete" }
         ];
         this.$refs.operateSection.style.left =
-          ev.pageX - ev.offsetX + 23 + "px";
-        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 20 + "px";
+          ev.pageX - ev.offsetX + 32 + "px";
+        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 11 + "px";
       } else if (row.status == 1) {
         this.operateList = [
           { name: "设置", flag: "setting" },
@@ -850,8 +851,8 @@ export default {
           { name: "删除", flag: "delete" }
         ];
         this.$refs.operateSection.style.left =
-          ev.pageX - ev.offsetX + 23 + "px";
-        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 38 + "px";
+          ev.pageX - ev.offsetX + 32 + "px";
+        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 29 + "px";
       }
       this.operateShow = !this.operateShow;
     },
@@ -1099,13 +1100,10 @@ export default {
 .more-operate {
   position: relative;
   cursor: pointer;
-  &::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    bottom: -10px;
-    left: -10px;
+  padding: 8px;
+  background: transparent;
+  &:hover {
+    background: rgba(240, 243, 247, 1);
   }
 }
 .operate-section {
@@ -1203,6 +1201,9 @@ export default {
     float: right;
     margin-top: 24px;
     margin-right: 32px;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 .contentWrap {
@@ -1275,6 +1276,9 @@ export default {
     font-weight: 400;
     color: rgba(9, 204, 235, 1);
     line-height: 40px;
+    &:hover {
+      opacity: 0.8;
+    }
   }
   .sort {
     width: 130px;
