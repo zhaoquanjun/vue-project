@@ -80,12 +80,12 @@
                         <button class="edit-icon" @click="handleEdit(scope.row)">
                             <i class="iconfont iconbianji"></i>
                         </button>
-                        <span
+                        <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
                         >
                             <i class="iconfont iconsangedian"></i>
-                        </span>
+                        </button>
                     </div>
                 </template>
             </el-table-column>

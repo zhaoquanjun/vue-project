@@ -1,7 +1,7 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',backgroundColor:'#fff'}"
+        :style="{width:width+'px',backgroundColor:'#fff',borderRight:border}"
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
@@ -53,6 +53,7 @@ export default {
             menuList: [],
             serversData: [],
             display: "none",
+            border:"1px solid #e5e5e5",
             curPath: "",
             lastRoute: "",
             subTitle:""
@@ -82,6 +83,7 @@ export default {
             this.width1 = 120;
             this.display = "block";
             this.time = time + "s";
+            this.border = "none";
         },
         collapseClose() {
             this.width = 60;
@@ -89,6 +91,7 @@ export default {
             this.display = "none";
             this.time = "0s";
             this.curIndex = -1;
+            this.border = "1px solid #e5e5e5";
         },
         iconfonts(code) {
             switch (code) {

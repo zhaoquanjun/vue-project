@@ -5,7 +5,7 @@
             ref="multipleTable"
             :data="imgPageResult.list"
             tooltip-effect="dark"
-            class="content-table"
+            class="content-table table-content"
             @selection-change="handleSelectionChange"
         >
             <template slot="empty">
@@ -70,16 +70,17 @@
             <el-table-column label="操作" width="250" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn " @click="handleMove(scope.row)">
+                        <button class="more-operate " @click="handleMove(scope.row)" style="margin-right:16px">
                             <i class="iconfont iconyidong"></i>
                         </button>
                         <button
-                            class="handle-btn look-btn"
+                            class="more-operate look-btn"
                             @click="viewPic( scope.row,scope.$index)"
+                            style="margin-right:16px"
                         >
                             <i class="iconfont iconchakan"></i>
                         </button>
-                        <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
+                        <button class="more-operate delete-btn" @click="batchRemove( scope.row)">
                             <i class="iconfont iconshanchu"></i>
                         </button>
                     </div>
@@ -312,5 +313,8 @@ export default {
     opacity: 0.7;
     height: auto;
 }
+</style>
+<style lang="scss" scoped>
+@import "../../styles/manege-table.scss";
 </style>
 

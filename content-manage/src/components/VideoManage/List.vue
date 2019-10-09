@@ -4,7 +4,7 @@
             ref="multipleTable"
             :data="imgPageResult.list"
             tooltip-effect="dark"
-            class="content-table"
+            class="content-table table-content"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
         >
@@ -68,10 +68,10 @@
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn" @click="handleMove(scope.row)">
+                        <button class="more-operate" @click="handleMove(scope.row)" style="margin-right:16px">
                             <i class="iconfont  iconyidong"></i>
                         </button>
-                        <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
+                        <button class="more-operate delete-btn" @click="batchRemove( scope.row)">
                             <i class="iconfont iconshanchu"></i>
                         </button>
                     </div>

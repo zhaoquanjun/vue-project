@@ -113,7 +113,7 @@
                                 class="handle-btn edit-icon"
                                 @click="handleRecoveryData(scope.row)"
                             >
-                                <i class="iconfont iconqiehuan"></i>
+                                <i class="iconfont iconhuifu"></i>
                             </button>
                         </el-tooltip>
                     </div>
