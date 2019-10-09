@@ -457,7 +457,6 @@ export default {
       font-size:14px;
       font-family:"PingFangSC";
       font-weight:400;
-      color:rgba(211,211,211,1);
       line-height:32px;
       padding: 0 10px;
       i {
