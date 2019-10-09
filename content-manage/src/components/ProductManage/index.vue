@@ -36,7 +36,6 @@
                     :article-page-result="articlePageResult"
                     :article-search-options="productSearchOptions"
                     :tree-result="treeResult"
-                    :prev-address="prevAddress"
                     @contentTableList="contentTableList"
                     @batchMove="batchMoveNews"
                     @batchSwitchStatus="batchSwitchStatus"
@@ -124,7 +123,6 @@ export default {
             count: 0,
             idsList: [],
             isInvitationPanelShow: false,
-            prevAddress:"",
             productSearchOptions: {
                 pageSize: 10, //11
                 pageIndex: 1, //1
@@ -139,7 +137,6 @@ export default {
         };
     },
     mounted() {
-        this.getContentPrevAddress();
         this.getTree();
         this.contentTableList();
     },
@@ -153,13 +150,6 @@ export default {
         }
     },
     methods: {
-        /**
-         * 获取预览地址
-         */
-        async getContentPrevAddress() {
-        let { data } = await productManageApi.GetContentPrevAddress('ProductDetail');
-                this.prevAddress = data;
-        },
         // zxb 获取table列表
         async contentTableList(options) {
               const loading = this.$loading({

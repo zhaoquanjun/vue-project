@@ -18,21 +18,17 @@
 
             <el-table-column width="300" prop="name" label="产品标题">
                 <template slot-scope="scope">
-                    <img
-                        v-if="scope.row.thumbnailPicUrlList.length"
-                        :src="scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
-                        class="cover"
-                        onerror="onImgError(this)"
-                    />
-                    <img v-else :src="defaultImg" class="cover" alt />
-                    <!-- 未传图片 取不到 -->
-                    <el-tooltip class="item" effect="dark" :content="scope.row.name" placement="top">
-                        <a class="title-color" :href="prevAddress + scope.row.id + '.html'"
-                            target="_blank"
-                          >
-                                <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.name }}</span>
-                            </a>
-                    </el-tooltip>
+                    <div style="display: flex; align-items: center;" @click="preview(scope.row.id, scope.row.defaultSiteId)">
+                        <img v-if="scope.row.thumbnailPicUrlList.length"
+                             :src="scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
+                             class="cover"
+                             onerror="onImgError(this)" />
+                        <img v-else :src="defaultImg" class="cover" alt />
+                        <!-- 未传图片 取不到 -->
+                        <el-tooltip class="item" effect="dark" :content="scope.row.name" placement="top">
+                            <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.name }}</span>
+                        </el-tooltip>
+                    </div>
                 </template>
             </el-table-column>
 
@@ -117,8 +113,9 @@
 </template>
 
 <script>
+import * as productManageApi from "@/api/request/productManageApi";
 export default {
-    props: ["articlePageResult", "articleSearchOptions", "prevAddress"],
+    props: ["articlePageResult", "articleSearchOptions"],
 
     data() {
         return {
@@ -269,6 +266,21 @@ export default {
         },
         clearSelection() {
             this.$refs.multipleTable.clearSelection();
+        },
+        /**
+         * 预览
+         */
+        async preview(previewId, siteId) {
+            let { data } = await productManageApi.GetContentPrevAddress('ProductDetail', siteId);
+            var prevAddress = data;
+            if(prevAddress){
+                //var a = document.createElement('a');
+                //a.setAttribute('href', prevAddress + previewId + '.html');
+                //a.setAttribute('target', '_blank');
+                //a.click();
+                let newWindow = window.open();
+                newWindow.location.href = prevAddress + previewId + '.html';
+            }
         }
     }
 };

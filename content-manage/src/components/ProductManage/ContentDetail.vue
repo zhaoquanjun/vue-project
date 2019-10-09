@@ -22,7 +22,7 @@
                     <el-col :span="9" :offset="3">
                         <div class="article-btn">
                             <button @click="()=>$router.go(-1)">返回</button>
-                            <button @click="preview">预览</button>
+                            <button v-if="isEdit" @click="preview">预览</button>
                             <button :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
                         </div>
                     </el-col>
@@ -67,7 +67,8 @@ export default {
             fileList: [],
             detailData: {},
             isEdit: false,
-            previewId: ""
+            previewId: "",
+            siteId: 0
         };
     },
 
@@ -115,20 +116,25 @@ export default {
         handlerClickNewAdd() {
             this.fileList = [];
         },
-        changePreviewId(id){
+        changePreviewId(id, siteId){
             this.previewId = id;
+            this.siteId = siteId;
         },
         /**
          * 预览
          */
         async preview() {
-            if(this.previewId){
-                let { data } = await productManageApi.GetContentPrevAddress('ProductDetail');
+            if (this.previewId) {
+                let { data } = await productManageApi.GetContentPrevAddress('ProductDetail', this.siteId == null ? 0 : this.siteId);
                 var prevAddress = data;
-                var a = document.createElement('a');
-                a.setAttribute('href', prevAddress + this.previewId + '.html');
-                a.setAttribute('target', '_blank');
-                a.click();
+                //var a = document.createElement('a');
+                //a.setAttribute('href', prevAddress + this.previewId + '.html');
+                //a.setAttribute('target', '_blank');
+                //a.click();
+                if (prevAddress) {
+                    let newWindow = window.open();
+                    newWindow.location.href = prevAddress + this.previewId + '.html';
+                }
             }
         }
     },

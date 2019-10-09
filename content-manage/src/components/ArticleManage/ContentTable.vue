@@ -22,15 +22,13 @@
                 min-width="250"
             >
                 <template slot-scope="scope">
-                    <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" onerror="onImgError(this)" class="cover" />
-                    <img v-else :src="defaultImg" class="cover" alt />
-                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
-                        <a class="title-color" :href="prevAddress + scope.row.id + '.html'"
-                            target="_blank"
-                          >
-                                <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.title }}</span>
-                            </a>
-                    </el-tooltip>
+                    <div style="display: flex; align-items: center;" @click="preview(scope.row.id, scope.row.defaultSiteId)">
+                        <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" onerror="onImgError(this)" class="cover" />
+                        <img v-else :src="defaultImg" class="cover" alt />
+                        <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
+                            <span style="width:200px" class="ellipsis cursor-p">{{ scope.row.title }}</span>
+                        </el-tooltip>
+                    </div>
                 </template>
             </el-table-column>
 
@@ -105,9 +103,10 @@
 
 <script>
 
+import * as articleManageApi from "@/api/request/articleManageApi";
 export default {
-    props: ["articlePageResult", "articleSearchOptions", "treeResult", "prevAddress"],
-  
+    props: ["articlePageResult", "articleSearchOptions", "treeResult"],
+
     data() {
         return {
             defaultImg: require("img/content-default-pic.png"),
@@ -179,7 +178,7 @@ export default {
             this.$emit("handleEditArticle", row);
         },
         _handleShowMoreOperate(ev, row) {
-            
+
             (this.operateList = [
                 { name: "移动", flag: "move" },
                 { name: "复制", flag: "copy" },
@@ -253,9 +252,24 @@ export default {
                     this.batchRemove(row);
                     break;
             }
+        },
+        /**
+         * 预览
+         */
+        async preview(previewId, siteId) {
+            let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail', siteId);
+            var prevAddress = data;
+            if(prevAddress){
+                //var a = document.createElement('a');
+                //a.setAttribute('href', prevAddress + previewId + '.html');
+                //a.setAttribute('target', '_blank');
+                //a.click();
+                let newWindow = window.open();
+                newWindow.location.href = prevAddress + previewId + '.html';
+            }
         }
     },
-   
+
 };
 </script>
 
