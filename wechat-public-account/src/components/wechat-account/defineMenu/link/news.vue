@@ -192,6 +192,7 @@ export default {
           url: this.newsList[this.newId].url,
           title: this.newsList[this.newId].title,
           cType: "News",
+          picUrl:this.newsList[this.newId].pictureUrl,
           id: this.productPageList[ind].id,
           pageIndex: this.pageIndex
         });

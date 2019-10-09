@@ -8,10 +8,11 @@
     </div>
     <div class="answer-tabs">
       <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
-        <el-tab-pane label="页面推广" name="1"></el-tab-pane>
-        <el-tab-pane label="文章推广" name="2"></el-tab-pane>
-        <el-tab-pane label="产品推广" name="3"></el-tab-pane>
+        <el-tab-pane label="页面推广" name="page"></el-tab-pane>
+        <el-tab-pane label="文章推广" name="news"></el-tab-pane>
+        <el-tab-pane label="产品推广" name="product"></el-tab-pane>
       </el-tabs>
+      <div class="add" @click="addSpread">新增推广</div>
     </div>
     <div class="spread-continer">
       <template>
@@ -64,25 +65,60 @@
     </div>
     <sharePopup 
       v-if="isShow"
+      :infoData='infoData'
       @closeShare='closeShare'
     >
     </sharePopup>
+    <shareCode
+      v-show="isShowCode"
+      :shareId = "shareId"
+      :type = 'type'
+      @closeShareCode='closeShareCode'
+    >
+    </shareCode>
+    <PopUp
+      :model="model"
+      :AddType="replyType"
+      @handleClosePopup="handleClosePopup"
+      v-show="isShowPopup"
+    />
   </div>
 </template>
 
 <script>
 import ChangeSite from "@/components/common/changeSite";
 import SharePopup from "@/components/wechat-account/spread/share-popup.vue";
+import ShareCode from "@/components/wechat-account/spread/share-code.vue";
 import { unBind, getList } from "@/api/request/account.js";
+import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import { notify } from "@/utlis/index.js";
 export default {
   data() {
     return {
       siteId: this.$store.state.dashboard.siteId,
-      replyType: '1',
+      replyType: 'page',
       PageSize: 10,
       PageIndex: 1,
+      shareId: -1,
       isShow: false,
+      type: '',
+      isShowPopup: false,
+      isShowCode: false,
+      infoData: {},
+      model: {
+          PageIndex: null,
+          Type: null,
+          Id: null,
+          Href: null
+        },
+      curEditorItem: {
+        title: "",
+        description: "",
+        picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+        urlType: "",
+        urlData: "",
+        contentPageId: ''
+      },
       list: [
         {
           shareUrl: "string",
@@ -103,7 +139,9 @@ export default {
   },
   components: {
     ChangeSite,
-    SharePopup
+    PopUp,
+    SharePopup,
+    ShareCode
   },
   created() {
     //this._getWxIsAuth();
@@ -131,18 +169,45 @@ export default {
       console.log('list',data)
     },
     //关闭弹窗
-    closeShare(val,data) {
+    closeShare(val,shareId,type) {
       this.isShow = val
-      if(data) {
-        console.log('share',data)
+      if(shareId) {
+        this.shareId = shareId
+        this.type = type
+        this.isShowCode = true
       }
+    },
+    // 关闭二维码
+    closeShareCode(){
+      this.isShowCode = false
     },
     //查看
     handlelook(val) {
       this.isShow = true
       console.log(val)
     },
-
+    //新增推广
+    addSpread(){
+      this.isShowPopup = true
+    },
+    handleClosePopup (val,data){
+      this.isShowPopup = val
+      if (data) {
+        console.log(data,'0000004')
+        this.infoData = data
+        this.isShow = true
+        let entityId = ''
+        this.infoData = {
+          entityType: data.Type, //分享类型 文章 产品 页面
+          entityId: data.Type == 'Page' ? data.Id : data.Href.split("/")[2], //id
+          coverUrl: data.PicUrl, //封面图片
+          shareTitle: data.Title, //分享id
+          pageTitle: data.Title, //页面，文章，产品标题
+          description: "", //描述
+          pageInfoId: data.Type == 'Page' ? '': data.Id // 详情页id，页面推广时不选
+        }
+      }
+    },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
       this._getWxIsAuth()
@@ -187,6 +252,21 @@ export default {
     padding: 32px;
     .answer-tabs {
         padding-top: 32px;
+        position: relative;
+        .add {
+          position: absolute;
+          top: 42px;
+          right: 0px;
+          width:90px;
+          height:40px;
+          background:rgba(9,204,235,1);
+          border-radius:2px;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:40px;
+          text-align: center;
+          cursor: pointer;
+        }
     }
     .reply-wrap {
         padding: 32px 0;

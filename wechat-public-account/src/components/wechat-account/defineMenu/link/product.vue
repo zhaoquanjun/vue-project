@@ -194,6 +194,7 @@ export default {
             url: this.productList[this.productId].url,
             title: this.productList[this.productId].name,
             cType: "Product",
+            picUrl: this.productList[this.productId].thumbnailPicUrlList.length>0?this.productList[this.productId].thumbnailPicUrlList[0]:'',
             id: this.productPageList[ind].id,
             pageIndex: this.pageIndex
         });

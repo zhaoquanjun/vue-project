@@ -132,6 +132,10 @@ export const uploadImg = (imgUrl) => {
 }
 
 //微信推广
+//新增微信推广
+export const addShare = (siteId,options) => {
+  return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/WeChatShare/Add/${siteId}`, options);
+}
 //获取推广列表
 export const getList = params => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetList`, params);

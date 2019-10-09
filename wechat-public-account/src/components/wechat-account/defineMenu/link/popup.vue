@@ -80,7 +80,11 @@ export default {
   props: {
     model: {
       type: Object
-    }
+    },
+    AddType: {
+      type: String,
+      default:''
+    },
   },
   data() {
     return {
@@ -100,11 +104,35 @@ export default {
       slider: "url",
       curType: this.model["Type"],
       selectedUrl: this.model["Href"],
+      picUrl: '',
       id: this.model["Href"],
       way: this.model["Target"],
       title: ""
     };
   },
+  created(){
+    if(this.AddType) {
+      this.slider = this.AddType
+      this.sliderList= [
+          { name: "页面", label: "page" },
+          { name: "文章", label: "news" },
+          { name: "产品", label: "product" },
+        ]
+    }
+  },
+  watch: {
+    AddType() {
+      if(this.AddType) {
+        this.slider = this.AddType
+        this.sliderList= [
+          { name: "页面", label: "page" },
+          { name: "文章", label: "news" },
+          { name: "产品", label: "product" },
+        ]
+      }
+    },
+  },
+        
   components: {
     NoneArea,
     PageArea,
@@ -157,7 +185,8 @@ export default {
       data["Title"] = this.title;
       data["Type"] = this.curType;
       data['Id'] = this.id;
-      console.log('pop',data)
+      data['PicUrl'] = this.picUrl
+      console.log('popup',data,this.picUrl)
       data['PageIndex'] = this.model['PageIndex'];
       if (oldUrl !== this.selectedUrl || oldTarget !== this.way) {
         this.model["Href"] = this.selectedUrl;
@@ -190,18 +219,22 @@ export default {
       }
     },
     handleChangeUrl(val) {
-      console.log(val,'99999')
       this.selectedUrl = val.url;
       this.curType = val.cType;
       this.title = val.title;
       this.id = val.id;
+      if (val.picUrl) {
+        this.picUrl = val.picUrl
+      } else {
+        this.picUrl = ''
+      }
       return false;
     },
     handleChangeTarget(val) {
       console.log(val);
       this.way = val;
     },
-  }
+  },
 };
 </script>
 
