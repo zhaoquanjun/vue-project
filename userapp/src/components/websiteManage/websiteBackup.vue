@@ -106,7 +106,7 @@
                   <div class="handle-btn-wrap">
                     <el-tooltip content="还原备份包" placement="top" :v-model="false">
                       <button class="handle-btn" @click="recovery( scope )">
-                        <i class="iconfont iconicon-des-up" style="font-size:14px;color:#262626"></i>
+                        <i class="iconfont iconhuifu" style="color:#262626"></i>
                       </button>
                     </el-tooltip>
                     <el-tooltip content="下载备份包" placement="top">

@@ -14,29 +14,36 @@
             margin-right: 32px;
             cursor: pointer;
             position: relative;
-            &::before {
-                content: "";
-                position: absolute;
-                top: -10px;
-                right: -10px;
-                bottom: -10px;
-                left: -10px;
-            }
+            // &::before {
+            //     content: "";
+            //     position: absolute;
+            //     top: -10px;
+            //     right: -10px;
+            //     bottom: -10px;
+            //     left: -10px;
+            // }
+            padding: 8px;
+            background: transparent;
         }
-        .edit-icon:hover i,.more-operate:hover i {
-            color: #09CCEB;
+        .edit-icon:hover, .more-operate:hover {
+            background:rgba(240,243,247,1);
         }
+        // .edit-icon:hover i,.more-operate:hover i {
+             // color: #09CCEB;
+        // }
         .more-operate {
             position: relative;
             cursor: pointer;
-            &::before {
-                content: "";
-                position: absolute;
-                top: -10px;
-                right: -10px;
-                bottom: -10px;
-                left: -10px;
-            }
+            padding: 8px;
+            background: transparent;
+            // &::before {
+            //     content: "";
+            //     position: absolute;
+            //     top: -10px;
+            //     right: -10px;
+            //     bottom: -10px;
+            //     left: -10px;
+            // }
         }
     }
    
