@@ -136,6 +136,10 @@ export const uploadImg = (imgUrl) => {
 export const addShare = (siteId,options) => {
   return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/WeChatShare/Add/${siteId}`, options);
 }
+//修改
+export const updataShare = (siteId,id,options) => {
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/WeChatShare/Update/${siteId}/${id}`, options);
+}
 //获取推广列表
 export const getList = params => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetList`, params);
@@ -143,5 +147,9 @@ export const getList = params => {
 //获取详情页下拉列表
 export const getPageInfoList = (siteId, type) => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetPageInfoList/${siteId}/${type}`);
+}
+//获取详情页下拉列表
+export const remove = (siteId, id) => {
+  return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/WeChatShare/Remove/${siteId}/${id}`);
 }
 

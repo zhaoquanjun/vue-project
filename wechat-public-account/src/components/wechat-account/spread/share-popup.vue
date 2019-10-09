@@ -43,6 +43,18 @@
             </div>
           </div>
         </div>
+        <div v-if="shareUrl" class="share-url">
+          <div class="left">
+            <h6>设置成功</h6>
+            <vue-qr  :margin='0' :text="shareUrl" :size="100"></vue-qr>
+            <p>微信扫一扫分享</p>
+          </div>
+          <div class="copy">
+            <div>{{shareUrl}}</div>
+            <span v-if="!hasCopy" class="tag-read" :data-clipboard-text="shareUrl" @click="oCopy">复制链接</span>
+            <span v-else class="hasCopy">复制成功</span>
+          </div>
+        </div>
       </div>
       <div class="btn">
         <span @click="closeShare(true)">保存</span>
@@ -62,7 +74,7 @@ import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { stringify } from 'querystring';
 import VueQr from 'vue-qr';
 import { notify } from "@/utlis/index.js";
-import { getPageInfoList, addShare } from "@/api/request/account.js";
+import { getPageInfoList, addShare, updataShare } from "@/api/request/account.js";
 import Clipboard from 'clipboard'
 export default {
   props: {
@@ -87,12 +99,15 @@ export default {
   },
   data() {
     return {
+      hasCopy: false, //是否已经复制成功
+      hasCode: false, //是否需要生成二维码
       siteId: this.$store.state.dashboard.siteId,
       promotionUrl: this.$store.state.wxaccount.account_info.promotionUrl,
       pageList: [], //page列表
       isPageList: false,
       pageInfoTitle: '', //详情页title
       imageChooseAreaShowFlag: false, //图片控件
+      shareUrl: this.infoData.shareUrl,
       initData: this.infoData
     }
   },
@@ -131,6 +146,25 @@ export default {
     handlerUpload(){
       this.imageChooseAreaShowFlag=true
     },
+    //复制
+    oCopy(){
+      var clipboard = new Clipboard('.tag-read')  
+      clipboard.on('success', e => {  
+        console.log("复制成功");//这里你如果引入了elementui的提示就可以用，没有就注释即可
+          // 释放内存 
+          this.hasCopy = true
+          setTimeout(() =>{
+            this.hasCopy = false
+          }, 1500);
+          clipboard.destroy()  
+        })  
+      clipboard.on('error', e => {  
+        // 不支持复制  
+        console.log('该浏览器不支持自动复制')  
+        // 释放内存  
+        clipboard.destroy()  
+      })  
+    },
     testData(){
       let flag = true
       if(!this.infoData.entityType) {
@@ -153,13 +187,10 @@ export default {
         console.log('00描述')
         flag = false
       }
-      if(this.infoData.entityType != 'Page' && !this.infoData.pageInfoId) {
-        console.log('详情页id')
-        flag = false
-      }
       return flag 
     },
     async closeShare(val){
+      console.log(this.infoData,'.entityType')
         //1校验
         if (!val) {
           this.$emit('closeShare',false)
@@ -170,9 +201,33 @@ export default {
           notify(this, '请完善信息', 'error')
           return
         }
-        let data = await addShare(this.siteId,this.initData)
-        if (data && data.status == 200) {
-          this.$emit('closeShare',false,data.data,this.infoData.entityType)
+        if (this.infoData.id) {
+          console.log('2213',this.infoData.id)
+          //修改 
+          let options = {
+            entityType: this.infoData.entityType, //分享类型 文章 产品 页面
+            entityId: this.infoData.entityId, //id
+            coverUrl: this.infoData.coverUrl, //封面图片
+            shareTitle: this.infoData.shareTitle, //分享id
+            pageTitle: this.infoData.pageTitle, //页面，文章，产品标题
+            description: this.infoData.description, //描述
+            pageInfoId: this.infoData.pageInfoId // 详情页id，页面推广时不选
+          }
+          let data = await updataShare(this.siteId,this.initData.id,options)
+          if (data && data.status == 200) {
+            this.$emit('closeShare',false)
+          } else {
+             notify(this, '新增失败', 'error')
+          }
+        } else {
+          console.log('2256',this.infoData.id)
+          //新增
+          let data = await addShare(this.siteId,this.initData)
+          if (data && data.status == 200) {
+            this.$emit('closeShare',false,data.data,this.infoData.entityType)
+          } else {
+             notify(this, '新增失败', 'error')
+          }
         }
     }
   }
@@ -305,8 +360,8 @@ export default {
           }
           .mask {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 160px;
+            height: 160px;
             img {
               width: 160px;
               height: 160px;
@@ -317,7 +372,7 @@ export default {
               left: 0;
               display: inline-block;
               padding: 0;
-              width:100px;
+              width:160px;
               height:34px;
               background:rgba(38,38,38,1);
               opacity:0.7;
@@ -326,6 +381,7 @@ export default {
               font-weight:400;
               color:rgba(255,255,255,1);
               line-height:34px;
+              cursor: pointer;
             }
           }
         }
@@ -518,6 +574,67 @@ export default {
         border: 1px solid rgba(9,204,235,1);
         margin-left: 0px;
       }
+    }
+  }
+  .share-url {
+    margin-top: 30px;
+    .left {
+      float: left;
+      width: 100px;
+      text-align: center;
+      h6 {
+        font-size:14px;
+        font-family:'PingFangSC-Regular,PingFangSC';
+        color:rgba(38,38,38,1);
+        line-height:20px;
+        margin-bottom: 24px;
+      }
+      p {
+        font-size:14px;
+        font-family:'PingFangSC-Regular,PingFangSC';
+        font-weight:400;
+        color:rgba(38,38,38,1);
+        line-height:20px;
+        margin: 16px 0;
+      }
+    }
+    .copy {
+      width: 535px;
+      padding-top: 70px;
+      float: right;
+      div {
+          display: inline-block;
+          width:433px;
+          height:40px;
+          padding: 0 10px;
+          background:rgba(240,243,248,1);
+          border-radius:4px;
+          border:1px solid rgba(229,229,229,1);
+          font-size:14px;
+          font-weight:400;
+          color:rgba(38,38,38,1);
+          line-height:40px;
+          overflow: hidden;
+        }
+        span {
+          float: right;
+          width:90px;
+          height:40px;
+          background:rgba(9,204,235,1);
+          font-size:12px;
+          font-family:'PingFangSC-Regular,PingFangSC';
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:40px;
+          margin-left: 8px;
+          text-align: center;
+          cursor: pointer;
+        }
+        .hasCopy {
+          background:rgba(255,255,255,1);
+          color:rgba(9,204,235,1);
+          border: 1px solid rgba(9,204,235,1);
+        }
     }
   }
 }

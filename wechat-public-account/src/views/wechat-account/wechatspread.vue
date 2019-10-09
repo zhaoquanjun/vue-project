@@ -7,7 +7,7 @@
       />
     </div>
     <div class="answer-tabs">
-      <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
+      <el-tabs v-model="replyType" type="card" @tab-click="getInfo">
         <el-tab-pane label="页面推广" name="page"></el-tab-pane>
         <el-tab-pane label="文章推广" name="news"></el-tab-pane>
         <el-tab-pane label="产品推广" name="product"></el-tab-pane>
@@ -24,32 +24,38 @@
           <el-table-column
             prop="pageTitle"
             label="页面标题"
-            width="180">
+            width="120">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享标题"
-            width="180">
+            width="120">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享封面"
-            width="180">
+            width="120">
             <template slot-scope="scope">
               <img class="img" :src="scope.row.coverUrl">
             </template>
           </el-table-column> 
           <el-table-column
             prop="description"
-            label="分享描述">
+            label="分享描述"
+            width="180">
           </el-table-column>
           <el-table-column
             prop="shareCount"
-            label="阅读数">
+            label="阅读数"
+            width="110">
           </el-table-column>
           <el-table-column
-            prop="阅读数"
-            label="地址">
+            prop="createTime"
+            label="创建时间"
+            width="140">
+            <template slot-scope="scope">
+              <span>{{scope.row.createTime.slice(0,10)}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             fixed="right"
@@ -57,7 +63,7 @@
             width="180">
             <template slot-scope="scope">
               <i class="icon iconfont iconqiehuanxingshier" @click="handlelook(scope.row)"></i>
-              <i class="icon iconfont iconbianji"></i>
+              <i class="icon iconfont iconshanchu" @click="remove(scope.row)"></i>
             </template>
           </el-table-column>
         </el-table>
@@ -89,7 +95,7 @@
 import ChangeSite from "@/components/common/changeSite";
 import SharePopup from "@/components/wechat-account/spread/share-popup.vue";
 import ShareCode from "@/components/wechat-account/spread/share-code.vue";
-import { unBind, getList } from "@/api/request/account.js";
+import { unBind, getList,remove } from "@/api/request/account.js";
 import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import { notify } from "@/utlis/index.js";
 export default {
@@ -99,7 +105,7 @@ export default {
       replyType: 'page',
       PageSize: 10,
       PageIndex: 1,
-      shareId: -1,
+      shareId: '',
       isShow: false,
       type: '',
       isShowPopup: false,
@@ -119,22 +125,7 @@ export default {
         urlData: "",
         contentPageId: ''
       },
-      list: [
-        {
-          shareUrl: "string",
-          id: 0,
-          siteId: 0,
-          entityType: "Page",
-          entityId: "string",
-          createTime: "2019-09-29T03:20:19.583Z",
-          coverUrl: "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/nELZAKssX063m0lC_qj_rw.png",
-          shareTitle: "string",
-          pageTitle: "string",
-          description: "string",
-          authorizerAppId: "string",
-          shareCount: 0
-        }
-      ]
+      list: []
     };
   },
   components: {
@@ -148,9 +139,6 @@ export default {
     this.getInfo();
   },
   methods: {
-    handleClick() {
-      console.log('www')
-    },
     headerClassName() {
       return 'header-row-class-name'
     },
@@ -158,15 +146,22 @@ export default {
       console.log('000')
     },
     async getInfo(){
+      let EntityTyp = 'Page';
+      if (this.replyType == 'news') {
+        EntityTyp = 'News';
+      } else if (this.replyType == 'product') {
+        EntityTyp = 'Product';
+      }
       let option= {
         PageSize: 10,
         PageIndex: 1, //
-        EntityType: 'Page', //Page, News, Product
-        //Keyword: '',
+        EntityType: EntityTyp, //Page, News, Product
         SiteId: this.siteId
       }
       let {data} = await getList(option)
-      console.log('list',data)
+      if(data&&data.list) {
+        this.list = data.list
+      }
     },
     //关闭弹窗
     closeShare(val,shareId,type) {
@@ -175,16 +170,28 @@ export default {
         this.shareId = shareId
         this.type = type
         this.isShowCode = true
+      } else {
+        this.isShowCode = false
+        this.getInfo()
       }
     },
     // 关闭二维码
     closeShareCode(){
       this.isShowCode = false
+      this.getInfo()
     },
     //查看
     handlelook(val) {
       this.isShow = true
-      console.log(val)
+      this.infoData = val
+    },
+    //删除handledelet
+    async remove(val){
+      let data = await remove(this.siteId,val.id)
+      console.log('999',data)
+      if (data && data.status== 200) {
+        this.getInfo();
+      }
     },
     //新增推广
     addSpread(){

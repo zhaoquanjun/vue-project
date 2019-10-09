@@ -29,7 +29,7 @@ import Clipboard from 'clipboard'
 export default {
   props: {
     shareId: {
-      type:Number
+      type:String
     },
     type: {
       type:String
@@ -64,7 +64,7 @@ export default {
       // bgSrc：加入二维码背景图片
       // logoSrc 在二维码中间插入图片
       // size：二维码尺寸 
-      this.shareUrl = `http://${this.promotionUrl}/WeChatShare?shareId=${this.shareId}&entityType=${this.type}`
+      this.shareUrl = this.shareId
     },
     //复制
     oCopy(){
