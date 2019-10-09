@@ -213,6 +213,11 @@ export default {
     draggable,
     PopUp
   },
+  created() {
+    if (!this.$store.state.wxaccount.wx_status.isCertification) {
+      this._getWxIsAuth()
+    }
+  },
   mounted() {
     this._getMenuTree();
   },
@@ -227,6 +232,12 @@ export default {
       if (status == 200) {
         this._getMenuTree()
       }
+    },
+    // 校验是否已经授权认证
+    async _getWxIsAuth() {
+      await this.$store.dispatch('_setSiteId')
+      await this.$store.dispatch('_getWxStatus')
+      this.siteId = this.$store.state.dashboard.siteId
     },
     async _getMenuTree(val) {
       let { data } = await getMenuTree(this.siteId);
