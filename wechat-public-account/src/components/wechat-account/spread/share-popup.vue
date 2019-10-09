@@ -362,6 +362,8 @@ export default {
             position: relative;
             width: 160px;
             height: 160px;
+            background: url("~img/cover.jpg") no-repeat center;
+            background-size: contain;
             img {
               width: 160px;
               height: 160px;

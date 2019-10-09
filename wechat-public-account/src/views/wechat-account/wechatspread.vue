@@ -24,25 +24,24 @@
           <el-table-column
             prop="pageTitle"
             label="页面标题"
-            width="120">
+            width="150">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享标题"
-            width="120">
+            width="150">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享封面"
-            width="120">
+            width="150">
             <template slot-scope="scope">
               <img class="img" :src="scope.row.coverUrl">
             </template>
           </el-table-column> 
           <el-table-column
             prop="description"
-            label="分享描述"
-            width="180">
+            label="分享描述">
           </el-table-column>
           <el-table-column
             prop="shareCount"
@@ -257,6 +256,11 @@ export default {
 <style lang="scss" scoped>
 .spread-setting__section {
     padding: 32px;
+    min-width: 1100px;
+    overflow-y: auto;
+    .iconfont {
+      cursor: pointer;
+    }
     .answer-tabs {
         padding-top: 32px;
         position: relative;

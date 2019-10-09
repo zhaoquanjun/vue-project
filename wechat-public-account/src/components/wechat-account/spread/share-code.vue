@@ -164,6 +164,7 @@ export default {
           font-weight:400;
           color:rgba(38,38,38,1);
           line-height:40px;
+          border-right: 10px solid rgba(240,243,248,1);
           overflow: hidden;
         }
         span {
