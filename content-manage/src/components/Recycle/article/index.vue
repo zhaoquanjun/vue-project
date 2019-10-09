@@ -62,7 +62,7 @@ export default {
             totalSum: 0,
             articleSearchOptions: {
                 title: "",
-                categoryId: 0,
+                categoryIdList: [0],
                 newsOrderColumns: "deletetime",
                 topStatus: null,
                 publishStatus: null,

@@ -9,8 +9,6 @@
         >
             <span class="img-wrap">
                 <div class="mask" :class="isMaskShow"></div>
-                <!-- <el-image :src="curItem.zoomOssUrl"></el-image> -->
-                <!-- <img :src="curItem.zoomOssUrl" alt /> -->
             </span>
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
                 <button @click.stop="handleMove">
@@ -74,7 +72,7 @@ export default {
         multiple: {
             type: Boolean,
             default: () => {
-                return false;
+                return true;
             }
         }
     },
@@ -85,12 +83,9 @@ export default {
             isSelectedShow: false
         };
     },
-    mounted(){
-      
-    },
+    mounted() {},
     methods: {
         handleClick() {
-            console.log(this.curItem, "-----");
             this.isHandleBtnShow = false;
             this.isSelectedShow = !this.isSelectedShow;
             this.$emit("handleSelected", this.curItem, this.itemIndex);
@@ -146,10 +141,10 @@ export default {
     },
     computed: {
         isMaskShow() {
-            if (this.isHandleBtnShow || this.isSelectedShow) {
-                return "show";
+            if (this.multiple) {
+                return this.isHandleBtnShow || this.isSelectedShow? "show" : false;
             } else {
-                return "hide";
+                return this.itemIndex == this.selectedIndex ? "show" : "hide";
             }
         }
     },

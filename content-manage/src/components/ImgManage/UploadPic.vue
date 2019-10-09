@@ -125,6 +125,12 @@ export default {
                 }
                 if (!isImgFile(item.raw.type)) {
                     fileList.splice(index, 1);
+                    this.$notify({
+                        customClass: "notify-error", //  notify-success ||  notify-error
+                        message: `请上传图片格式文件`,
+                        showClose: false,
+                        duration: 1500
+                    });
                 }
                 if (imgSize(item.size, 10) && isImgFile(item.raw.type)) {
                     this.uploadDisabled = false;

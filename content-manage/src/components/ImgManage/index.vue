@@ -128,7 +128,7 @@ export default {
         multiple: {
             type: Boolean,
             default: () => {
-                return false;
+                return true;
             }
         },
     },

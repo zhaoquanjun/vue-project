@@ -1,4 +1,5 @@
 import * as ajaxRequest from "../ajaxRequest";
+import environment from "@/environment/index";
 
 // case
 //GET   ajaxRequest.get(`url`,params);
@@ -63,3 +64,9 @@ export const getProductDetail = id => {
 export const copyBatchProduct = options => {
     return ajaxRequest.post(`/api/Product/BatchCopy`, options);
 }
+/**
+ * 获取文章产品预览地址
+ */
+export const GetContentPrevAddress = (pageType) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Page/GetContentPrevAddress/${pageType}`);
+};

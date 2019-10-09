@@ -1,104 +1,121 @@
 // confirm 修改弹窗组件样式 
 /*  confirm begin */
-.el-message-box{
+.el-message-box {
     padding: 34px 24px 29px;
     width: 520px;
     box-sizing: border-box;
-    .el-message-box__header{
-        padding:0;
-        .el-message-box__title{
+
+    .el-message-box__header {
+        padding: 0;
+
+        .el-message-box__title {
             font-size: 16px;
             line-height: 1;
             color: #262626;
             font-weight: 500;
         }
-        .el-message-box__headerbtn{
+
+        .el-message-box__headerbtn {
             top: 0;
-            .el-icon-close{
+
+            .el-icon-close {
                 font-size: 20px;
             }
         }
     }
-    .el-message-box__content{
+
+    .el-message-box__content {
         padding: 40px;
         color: #A1A8B1;
-        font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-       
-.icon-warning{
-    width: 24px;
-    height: 24px;
-    background:url("./images/warning.png") no-repeat center;
-    background-size: contain;
-}
-//success success
-.icon-success{
-    width: 24px;
-    height: 24px;
-    background:url("./images/sucess.png") no-repeat center;
-    background-size: contain;
-}
-.icon-error{
-    width: 24px;
-    height: 24px;
-    background:url("./images/error.png") no-repeat center;
-    background-size: contain;
-}
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+        .icon-warning {
+            width: 24px;
+            height: 24px;
+            background: url("./images/warning.png") no-repeat center;
+            background-size: contain;
+        }
+
+        //success success
+        .icon-success {
+            width: 24px;
+            height: 24px;
+            background: url("./images/sucess.png") no-repeat center;
+            background-size: contain;
+        }
+
+        .icon-error {
+            width: 24px;
+            height: 24px;
+            background: url("./images/error.png") no-repeat center;
+            background-size: contain;
+        }
     }
-    .el-message-box__btns{
-        .el-button{
+
+    .el-message-box__btns {
+        .el-button {
             min-width: 76px;
             height: 40px;
             font-size: 14px;
-            border-radius:2px; 
+            border-radius: 2px;
             font-weight: 400;
             color: #09CCEB;
             border-color: #09CCEB;
         }
-        .el-button:hover{
+
+        .el-button:hover {
             color: #09CCEB;
             border-color: #09CCEB;
             background-color: #fff;
         }
-        .el-button--primary{
+
+        .el-button--primary {
             color: #fff;
             background: #09CCEB;
             border: 1px solid #09CCEB;
         }
-        .el-button--primary:hover{
+
+        .el-button--primary:hover {
             color: #fff;
             background: #09CCEB;
             border: 1px solid #09CCEB;
         }
-         button:nth-child(2){
-             margin-left: 16px;
-         }
-        
-        
+
+        button:nth-child(2) {
+            margin-left: 16px;
+        }
+
+
     }
-   
+
 }
-.large{
+
+.large {
     width: 700px;
-    .el-message-box__btns{
-        .el-button{
+
+    .el-message-box__btns {
+        .el-button {
             min-width: 90px;
-        } 
+        }
     }
-   
- }
- .small{
-     width: 360px;
-     height: 220px;
-     .el-message-box__btns{
-        .el-button{
+
+}
+
+.small {
+    width: 360px;
+    height: 220px;
+
+    .el-message-box__btns {
+        .el-button {
             min-width: 90px;
-        } 
+        }
     }
- }
+}
+
 /*  confirm end */
 
 /* notify-success */
-.el-notification{
+.el-notification {
     border: none;
     color: #fff;
     border-radius: 2px;
@@ -108,26 +125,26 @@
     max-width: 330px;
     width: auto;
     min-width: 100px;
-    .el-notification__title{
-        
-    }
-    .el-notification__content{
+    .el-notification__content,
+    .el-notification__title,
+    .el-notification__closeBtn {
         color: #fff;
+    }
+    .el-notification__content {
         margin: 0;
+        line-height: 22px;
     }
-    .el-notification__closeBtn{
-        color: #fff;
-        
-    }
-    
 }
-.el-notification.right{
+
+.el-notification.right {
     right: 0;
-    
+
 }
-.notify-success{
+
+.notify-success {
     background: #63DC8C;
 }
-.notify-error{
+
+.notify-error {
     background: #FB4D68;
 }

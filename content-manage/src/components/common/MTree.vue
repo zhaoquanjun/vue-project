@@ -297,11 +297,8 @@ export default {
             this.closeUploadCategoryPic();
             this.closeUploadCategoryPic1();
 
-            if (this.isArticle) {
-                this.listOptions.categoryId = data.id; // 与产品分类不一致的地方// 与产品分类不一致的地方
-            } else {
-                this.listOptions.categoryIdList = this.getAllNodeIds(data); // 与产品分类不一致的地方
-            }
+            
+            this.listOptions.categoryIdList = this.getAllNodeIds(data);
             this.listOptions.pageIndex = 1; // 与产品分类不一致的地方
             this.$emit("chooseCategoryNode", data); // 与产品分类不一致的地方
             this.$emit("getList", data);

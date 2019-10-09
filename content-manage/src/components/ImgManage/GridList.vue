@@ -86,7 +86,20 @@
 <script>
 import GridListItem from "./GridListItme";
 export default {
-    props: ["imgPageResult", "picSearchOptions", "multiple"],
+    props:{
+        imgPageResult:{
+            type:Object,
+            default:()=> ({})
+        },
+        picSearchOptions:{
+              type:Object,
+            default:()=> ({})
+        },
+        multiple:{
+            type:Boolean,
+            default:true
+        }
+    },
     data() {
         return {
             imgVisible: false,
