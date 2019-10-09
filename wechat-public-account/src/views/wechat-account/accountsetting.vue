@@ -112,7 +112,7 @@ export default {
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
-      let {data} = await getCdnDomainList()
+      let {data} = await getCdnDomainList(this.siteId)
       this.domainList = data
     },
     //修改域名

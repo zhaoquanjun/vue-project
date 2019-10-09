@@ -18,8 +18,9 @@ export const unBind = () => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/unbind`, {siteId: store.state.dashboard.siteId,infoType:'WeixinOA'});
 }
 //获取域名列表
-export const getCdnDomainList = () => {
-  return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetCdnDomainList/${store.state.dashboard.siteId}`);
+export const getCdnDomainList = (siteId) => {
+  console.log('555',siteId)
+  return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetCdnDomainList/${siteId}`);
 }
 //设置绑定域名SetPromotionUrl
 export const setPromotionUrl = (options) => {
