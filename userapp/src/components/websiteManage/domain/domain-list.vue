@@ -216,7 +216,9 @@
                         <button
                             class="handle-btn delete-btn"
                             @click="handleDelete(scope.row,scope.$index)"
-                        ></button>
+                        >
+                            <i class="iconfont iconshanchu" style="color:#262626"></i>
+                        </button>
                     </div>
                 </template>
             </el-table-column>
@@ -464,7 +466,7 @@ export default {
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
                     ele.innerHTML =
-                        "<span style='color: #00c1de;font-size:14px' >域名解析</span>";
+                        "<span class='hoverBtn' style='color: #00c1de;font-size:14px' >域名解析</span>";
                 }
             });
         }
@@ -476,6 +478,15 @@ export default {
     }
 };
 </script>
+<style>
+.hoverBtn{
+    padding: 8px;
+    background: transparent;
+}
+.hoverBtn:hover{
+    background:rgba(9,204,235,0.09);
+}
+</style>
 <style scoped>
 .el-table /deep/ thead :first-child > .cell {
     padding-left: 40px;
@@ -508,6 +519,7 @@ export default {
     } */
 
 .el-table /deep/ .el-table__expand-icon {
+    height: 40px;
     transform: rotate(0deg);
 }
 
@@ -616,17 +628,11 @@ export default {
     width: 70%;
     display: flex;
     justify-content: flex-end;
-    .handle-btn {
-        width: 17px;
-        height: 16px;
-    }
-
     .delete-btn {
-        background: url("~img/siteManage/delete.png") no-repeat center;
-        background-size: 100%;
+        padding: 8px;
+        background: transparent;
         &:hover {
-            background: url("~img/siteManage/delete-on.png") no-repeat center;
-            background-size: 100%;
+            background: rgba(240, 243, 247, 1);
         }
     }
 }

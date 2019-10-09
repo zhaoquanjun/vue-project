@@ -1,11 +1,11 @@
 <template>
   <el-container class="member-container">
-    <el-aside style="width:120px">
+    <el-aside style="width:100px">
       <page-submenu :submenu-list="submenuList">
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>
-    <el-main class="member-content">
+    <el-main class="member-content" style="padding:32px">
       <el-row class="user-list">
         <span class="member-list-title fs14">邮件服务器</span>
       </el-row>
@@ -168,15 +168,14 @@ export default {
 <style lang="scss" scoped>
 .member-container {
   position: relative;
-  .member-content {
-    padding: 21px 14px;
-  }
   .user-list {
     border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    padding-bottom: 24px;
     .member-list-title {
-      border-left: 2px solid #01c0de;
-      padding-left: 10px;
+      border-left: 4px solid #01c0de;
+      padding-left: 8px;
+      font-size: 16px;
+      font-weight: 500;
     }
   }
 }

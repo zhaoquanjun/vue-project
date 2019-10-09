@@ -14,13 +14,9 @@ let router = new VueRouter({
 export default router;
 let accessToken = store.state.accessToken.Authorization;
 let appId =  store.state.dashboard.appId;
+let siteId =  store.state.dashboard.siteId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
-<<<<<<< HEAD
-
-=======
-  //NProgress.start()
->>>>>>> 105bb4e6611466057bee5fcf2339c8579c452ce1
   if (!to.meta.requiresAuth) {
     if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
@@ -35,6 +31,10 @@ router.beforeEach(async (to, from, next) => {
         await store.dispatch('_updateAppIdToCookie')
         next()
       }
+      if (!siteId) {
+        await store.dispatch('_setSiteId')
+        next()
+      }
       if (!getLocal("authList")) {
         await store.dispatch('_getMenuListData')
       }
@@ -43,22 +43,19 @@ router.beforeEach(async (to, from, next) => {
         if (store.getters.getMenuList.length < 1) {
           await store.dispatch('_getMenuListData')
         }
-        if (!store.getters.wx_status.isAuth) {
+        if (!store.getters.wx_status.isAuth || !store.getters.wx_status.isCertification || !store.getters.wx_status.isResolveSuccess) {
           await store.dispatch('_getWxStatus')
-          next('/wechataccount/wxauther');
-          return;
-        }
-        let wx_status = store.getters.wx_status;
-        if (!wx_status.isAuth) {
-          next('/wechataccount/wxauther');
-          return;
+          let wx_status = store.state.wxaccount.wx_status;
+          if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
+            next('/wechataccount/wxauther');
+            return;
+          }
         }
         next()
       } else {
         next('/404')
       }
     } else {
-     
         securityService.getUser().then(async (data) => {
           if (!data) {
             securityService.signIn();

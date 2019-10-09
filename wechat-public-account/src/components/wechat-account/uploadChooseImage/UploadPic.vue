@@ -1,6 +1,10 @@
 <template>
   <div id="upload-img">
     <!-- 一次可上传60张图片，单张图片大小不超过10MB -->
+    <!-- <div class="select-btn">
+      <el-button class="choose-img upload-btn" size="small" type="default">选择图片</el-button>
+      <el-button class="upload-btn" size="small" type="default">选择文件夹</el-button>
+    </div> -->
     <el-row class="upload-head" type="flex" justify="space-between">
       <!-- [{{upload2Category.label}}] -->
       <el-col :span="12">
@@ -16,12 +20,7 @@
           @node-click="chooseNode"
         ></el-tree>
       </el-col>
-      <div>
-        <el-button class="choose-img upload-btn" size="small" type="default">选择图片</el-button>
-        <el-button class="upload-btn" size="small" type="default">选择文件夹</el-button>
-      </div>
     </el-row>
-
     <el-upload
       class="upload-pic"
       :action="uploadPicAction"
@@ -65,9 +64,10 @@ export default {
       upload2Category: { label: "全部分类", id: 0 },
       uploadPicAction: `${this.uploadPicUrl}/0`,
       headers: {
-        appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
-        Authorization: ""
+        appId: this.$store.state.dashboard.appId,
+        Authorization: this.$store.getters.token
       },
+      
       uploadSucess: false,
       count: 0
     };
@@ -151,10 +151,12 @@ export default {
   padding-top: 12px;
   border-top: 1px solid #eee;
 }
-
+.select-btn {
+  margin-top: 20px; 
+}
 #upload-img {
   .upload-tree {
-    width: 240px;
+    width: 140px;
     display: inline-block;
     vertical-align: top;
     position: absolute;

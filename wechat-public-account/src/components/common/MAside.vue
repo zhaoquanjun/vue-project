@@ -21,7 +21,7 @@
                     <i
                         v-if="menuHasChild(i) && isLeftNavComponentsShow"
                         :class="{'active-color':curPath==it.code,}"
-                        class="iconfont iconxiangyoufangxiang"
+                        class="iconfont iconicon-des-Arrow"
                     ></i>
                 </li>
             </ul>
@@ -96,26 +96,26 @@ export default {
         },
         iconfonts(code) {
             switch (code) {
-                case "board":
-                    return "iconshouye";
+               case "board":
+                    return "iconicon-dash-Navigationhome";
                 case "content":
-                    return "iconneirongguanli1";
+                    return "iconicon-dash-NavigationContent";
                 case "website":
-                    return "iconwangzhanguanli1";
+                    return "iconicon-dash-Navigationsite";
                 case "system":
-                    return "iconxitongshezhi1";
+                    return "iconicon-dash-Navigationsystem";
                 case "form":
-                    return "iconbiaodanguanli1";
+                    return "iconicon-dash-Navigationform";
                 case "micro":
                     return "iconweixinxiaochengxu";
                 case "wechataccount":
-                    return "iconweixingongzhonghao1";
+                    return "iconweixingongzhonghao";
                 case "recycle":
-                    return "iconhuishouzhan1";
+                    return "iconicon-dash-Navigationdelete";
                 case "business":
-                    return "icondianshanghuiyuan1";
+                    return "icondianshanghuiyuan";
                 case "template":
-                    return "icondianshanghuiyuan1";
+                    return "iconicon-dash-NavigationTemplate"    
             }
         },
         menuHasChild(index) {
@@ -215,7 +215,7 @@ export default {
             vertical-align: middle;
             color: #0595e6;
         }
-        .iconxiangyoufangxiang {
+        .iconicon-des-Arrow {
             position: absolute;
             right: 16px;
             font-size: 14px;

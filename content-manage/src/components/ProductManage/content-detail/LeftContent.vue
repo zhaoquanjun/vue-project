@@ -280,6 +280,9 @@ export default {
         ModalContent,
         DetailCheckTree
     },
+    provide: {
+      popper:true
+    },
     data() {
         return {
             isCheckTreeShow: false,

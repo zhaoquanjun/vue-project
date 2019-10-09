@@ -79,27 +79,7 @@
 .head-middle {
     margin-left: auto;
     padding-right: 82px;
-    .sort-icon {
-        display: inline-block;
-        width: 16px;
-        height: 14px;
-    }
-    .asc {
-        background: url("~img/content-icon/asc.png") no-repeat center;
-        background-size: contain;
-    }
-    .asc-icon-on {
-        background: url("~img/content-icon/asc-on.png") no-repeat center;
-        background-size: contain;
-    }
-    .dec {
-        background: url("~img/content-icon/desc.png") no-repeat center;
-        background-size: contain;
-    }
-    .dec-icon-on {
-        background: url("~img/content-icon/desc-on.png") no-repeat center;
-        background-size: contain;
-    }
+  
 }
 .upload-wrap {
     background: #00c1de;

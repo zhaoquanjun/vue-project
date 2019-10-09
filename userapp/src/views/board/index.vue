@@ -178,15 +178,9 @@ export default {
      * app信息 site列表 内容管理数量 plugin列表
      */
     async getDashboardData() {
-      const loading = this.$loading({
-        lock: true,
-        spinner: "loading-icon",
-        background: "rgba(255, 255, 255, 0.75)"
-      });
+      this.$Loading.show();
       let { data, status } = await getUserDashboard();
-      if (status === 200) {
-        loading.close();
-      }
+      this.$Loading.hide();
       this.pluginList = data.pluginList;
       this.contentNumber = {
         newsCount: data.contentsNumber.newsCount,

@@ -216,7 +216,7 @@
 // 侧边分类树节点
 .aside-tree{
     .el-tree .el-tree__drop-indicator{
-        background-color: #0595E6 !important;
+        background: #0595E6 !important;
         height: 2px !important;
         left: 0 !important;
     }
@@ -230,7 +230,7 @@
         cursor: auto
     }
     .el-tree-node .el-tree-node__content:hover{
-        background: #e0fcff;
+        background: #F8FAFC;
     }
     .el-tree-node .el-tree-node__content:hover .drop-btn{
         display: block
@@ -254,11 +254,11 @@
     }
     .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
        
-        background: #e0faff;
-        border-left: 2px solid #0595E6;
+        background: #F8FAFC;
+        border-left: 3px solid #0595E6;
     }
     .el-tree > :first-child > .el-tree-node__content .set-tree-type ,.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .set-tree-type{
-        background: #e0faff;
+        background: #F8FAFC
     }
     .el-tree > :first-child >.el-tree-node__children{
         height: calc(100vh - 250px);

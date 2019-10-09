@@ -13,6 +13,11 @@
 
 <script>
 export default {
+  props: {
+    target: {
+      type: String
+    }
+  }
 }
 </script>
 
@@ -34,7 +39,7 @@ export default {
           display: block;
           width: 100%;
           height: 100%;
-          background: url('~img/account/none_tips.png') no-repeat center center;
+          background: url('~img/link/none_tips.png') no-repeat center center;
           background-size: 100% 100%;
         }
       }

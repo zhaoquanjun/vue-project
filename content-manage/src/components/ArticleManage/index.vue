@@ -162,15 +162,11 @@ export default {
             });
         },
         async getArticleList(options) {
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+           this.$Loading.show();
             let { data } = await articleManageApi.getArticleList(
                 (options = this.articleSearchOptions)
             );
-            loading.close();
+            this.$Loading.hide();
             this.articlePageResult = data;
             this.articlePageResult.list.forEach((item, index) => {
                 item.createTimePrt = this.articlePageResult.list[
@@ -442,8 +438,6 @@ export default {
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
-            console.log(this.selectCategory,'this.selectCategorythis.selectCategorythis.selectCategory')
-            console.log(this.selectCategory.id)
             this.$refs.myTree.selectCategoryByNodeId(this.selectCategory.id)
         },
 

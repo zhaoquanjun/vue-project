@@ -1,31 +1,34 @@
 <template>
     <div class="image-text">
+         <PopUp
+            :model="model"
+            @handleClosePopup="handleClosePopup"
+           v-show="isShowPopup"
+        />
         <ul class="list" ref="list">
             <li
                 ref="listItem"
                 :class="index===0?'fist-item':'list-item'"
                 v-for="(item,index) in list"
                 :key="index"
-                v-show="item.isShow"
             >
                 <div class="headline">{{item.title}}</div>
                 <div class="imgwrap">
-                    <img
-                        src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
+                    <img :src="item.picUrl"
                     />
                 </div>
                 <div class="mask">
                     <button @click="upward(item,index)" v-if="index!==0">
-                        <i class="iconfont iconshang"></i>
+                        <i class="iconfont iconjiantoushang"></i>
                     </button>
                     <button @click="downward(item,index)" v-if="index!==list.length-1">
-                        <i class="iconfont iconxia"></i>
+                        <i class="iconfont iconjiantouxia"></i>
                     </button>
                     <button @click="editor(item,index)">
-                        <i class="iconfont iconcaozuo"></i>
+                        <i class="iconfont iconbianji"></i>
                     </button>
                     <button @click="remove(item,index)">
-                        <i class="iconfont iconhuishouzhan"></i>
+                        <i class="iconfont iconshanchu"></i>
                     </button>
                 </div>
             </li>
@@ -35,9 +38,7 @@
                         class="headline ellipsis"
                     >{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
                     <div class="imgwrap">
-                        <img
-                            src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4"
-                        />
+                        <img :src="curEditorItem.picUrl"/>
                     </div>
                 </div>
                 <div class="seting-info">
@@ -46,12 +47,14 @@
                         <el-input
                             size="small"
                             placeholder="请选择链接"
-                            v-model="curEditorItem.url"
+                            v-model="curEditorTitle"
                             class="input-with-select"
+                            readonly
                         >
                             <i
                                 class="el-icon-link el-input__icon"
                                 style="cursor: pointer;"
+                                @click="showPopup"
                                 slot="suffix"
                             ></i>
                         </el-input>
@@ -63,10 +66,10 @@
                                 <span class="el-icon-plus"></span>
                             </div>
                             <div  v-else>
-                                <img :src="picUrl" />
+                                <img :src="curEditorItem.picUrl" />
                                 <div class="mask1">
                                     <button @click="removePic">
-                                        <i class="iconfont iconhuishouzhan"></i>
+                                        <i class="iconfont iconshanchu"></i>
                                     </button>
                                 </div>
                             </div>
@@ -101,10 +104,10 @@
                 </div>
             </li>
         </ul>
-        <!-- <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8">
+        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes != 3">
             <span class="el-icon-plus avatar-uploader-icon"></span>
             <span>最多添加8个图文消息</span>
-        </div> -->
+        </div>
         <image-manage
             :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
             @getImage="getImage"
@@ -114,43 +117,66 @@
 </template>
 <script>
 import { trim, notify } from "@/utlis/index.js";
+import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { uploadImg } from "@/api/request/account.js";
 export default {
-    props: ["newsMsg"],
+    props: ["newsMsg","replyType"],
     components: {
+        PopUp,
         ImageManage
     },
     data() {
         return {
             list: [],
+            model: {
+                PageIndex: null,
+                Type: null,
+                Id: null,
+                Href: null
+            },
             defualtTitle: "这里是标题",
             curEditorItem: {
                 title: "",
                 description: "",
-                picUrl:
-                    "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
-                url: "",
-                isShow: false
+                picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                urlType: "",
+                urlData: "",
+                contentPageId: ''
             },
+            curEditorTitle: '',
             isUploaded: false,
             isEditorShow: false,
             isEditor: true,
             index: 0,
+            replyTypes: 0,
             imageChooseAreaShowFlag: false,
+            isShowPopup: false,
             picUrl: ""
         };
     },
     mounted() {
         this.list = this.newsMsg;
+        console.log('this.list',this.list)
+        this.replyTypes = this.replyType;
          this.list.forEach((item, index) => {
                 item["isShow"] = true;
             });
-        console.log(this.newsMsg)
         this.isEditorShow = this.list.length > 0 ? false : true;
-        console.log(this.list,'2222');
     },
     methods: {
+        showPopup(){
+            this.isShowPopup = true
+        },
+        handleClosePopup (val,data){
+            this.isShowPopup = val
+            if (data) {
+                this.curEditorItem.urlType = data.Type;
+                this.curEditorItem.urlData = data.Href;
+                this.curEditorItem.contentPageId = data.Id;
+                this.curEditorTitle = data.Title;
+            }
+        },
         downward(item, index) {
             var tempOption = this.list[index + 1];
             this.$set(this.list, index + 1, this.list[index]);
@@ -177,6 +203,7 @@ export default {
             this.list = this.list.splice(index, 1);
         },
         handlerConfirm() {
+            console.log('tuwen',this.curEditorItem)
             for (let key in this.curEditorItem) {
                 if (
                     typeof this.curEditorItem[key] == "string" &&
@@ -190,6 +217,7 @@ export default {
             if (!this.isEditor) {
                 this.list.push(this.curEditorItem);
                 this.isEditorShow = false;
+                console.log('7777',this.list)
             } else {
                 // 编辑
 
@@ -202,10 +230,13 @@ export default {
             this.curEditorItem = {
                 title: "",
                 description: "",
-                picUrl:
-                    "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
-                url: ""
+                picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                urlType: "",
+                urlData: "",
+                contentPageId: ''
             };
+            this.picUrl = ''
+            this.curEditorTitle = ''
         },
         handlerAddNewsImg() {
             this.index = this.list.length + 1;
@@ -216,7 +247,9 @@ export default {
         async getImage(src) {
             // let {data} = await uploadImg(src);
             // this.picUrl = data;
+            console.log('333',src)
              this.picUrl = src;
+             this.curEditorItem.picUrl = src;
           
         },
         // 关闭弹层
@@ -232,14 +265,12 @@ export default {
     },
     watch: {
         newsMsg() {
-           
             this.list = this.newsMsg;
+            this.replyTypes = this.replyType;
             this.list.forEach((item, index) => {
                 item["isShow"] = true;
             });
-             console.log( this.newsMsg.length,' this.newsMsg this.newsMsg this.newsMsg')
             this.isEditorShow = this.newsMsg.length > 0 ? false : true;
-            console.log(this.isEditorShow) 
          
         },
        

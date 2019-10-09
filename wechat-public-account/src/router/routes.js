@@ -54,7 +54,7 @@ export const defaultRoutes = [{
                 name: 'wxauther',
                 component: () => import('@/views/wechat-account/accountwxauther.vue'),
                 meta: {
-                    title: "账号设置",
+                    title: "账号授权",
                     isSub: true
                 }
             },

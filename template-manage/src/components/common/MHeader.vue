@@ -17,14 +17,14 @@
           <span style="cursor: pointer">
             <i
               class="iconfont iconbianzu1"
-              style="margin-right:8px;font-size:16px;vertical-align:middle"
+              style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">帮助</b>
           </span>
           <span style="cursor: pointer">
             <i
               class="iconfont iconbianzu2"
-              style="margin-right:8px;font-size:16px;vertical-align:middle"
+              style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">通知</b>
           </span>
@@ -261,7 +261,7 @@ export default {
   .head-item {
     .logo-icon {
       border-right: 1px solid hsla(0, 0%, 100%, 0.3);
-      width: 70px;
+      width: 60px;
       box-sizing: border-box;
       text-align: center;
       display: inline-block;

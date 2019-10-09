@@ -1,4 +1,15 @@
-export function formatDateTime(date, fmt) {
+export const formatDateTime = (date, fmt) => {
+    if (!date) {
+        return "";
+    }
+    if (typeof date === 'string') {
+        date = date.replace(/T/g,' ');
+        date = date.replace(/-/g,'/');
+        let dateDay = date.substr(0,10);
+        let dateTime = date.substr(11,8)
+        date = dateDay + " " + dateTime;
+        date = new Date(date);
+    }
     if (/(y+)/.test(fmt)) {
         fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
     }
@@ -8,16 +19,15 @@ export function formatDateTime(date, fmt) {
         'h+': date.getHours(),
         'm+': date.getMinutes(),
         's+': date.getSeconds()
-    };
+    }
     for (let k in o) {
+        let str = o[k] + '';
         if (new RegExp(`(${k})`).test(fmt)) {
-            let str = o[k] + '';
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str));
         }
     }
     return fmt;
-};
-
+}
 function padLeftZero(str) {
-    return ('00' + str).substr(str.length);
+    return ('00' + str).substr(str.length);   
 }

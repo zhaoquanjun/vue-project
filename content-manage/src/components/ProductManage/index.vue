@@ -162,15 +162,11 @@ export default {
         },
         // zxb 获取table列表
         async contentTableList(options) {
-              const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+            this.$Loading.show();
             let { data } = await productManageApi.getProductList(
                 (options = this.productSearchOptions)
             );
-            loading.close();
+            this.$Loading.hide();
             this.articlePageResult = data;
             this.articlePageResult.list.forEach((item, index) => {
                 item.createTimeStr = this.articlePageResult.list[
@@ -381,15 +377,11 @@ export default {
         },
 
         async getArticleListAsync(options) {
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+           this.$Loading.show();
             let { data } = await articleManageApi.getArticleList(
                 (options = this.productSearchOptions)
             );
-            loading.close();
+            this.$Loading.hide();
             this.articlePageResult = data;
         },
         /**

@@ -80,15 +80,11 @@ export default {
      
         // 获取列表
         async getProductList(node) {
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+            this.$Loading.show();
             let { data, status } = await recycleManageApi.getProductList(
                 this.productSearchOptions
             );
-           loading.close();
+            this.$Loading.hide();
         this.recyclePageResult = data;
         },
         // 批量恢复产品

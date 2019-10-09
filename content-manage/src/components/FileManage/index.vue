@@ -113,12 +113,12 @@
                                     <div
                                         :class="[watchPwd.firstRule === false ? 'error':'success']"
                                     >
-                                        <i class="iconfont " :class="[watchPwd.firstRule === false ? 'iconguanbi':'iconicon-test']"></i>长度为6～16位（字母区分大小写）
+                                        <i class="iconfont " :class="[watchPwd.firstRule === false ? 'iconicon-des-Wrongnumber':'iconxingzhuangjiehe']"></i>长度为6～16位（字母区分大小写）
                                     </div>
                                     <div
                                         :class="[watchPwd.secondRule === false ? 'error':'success']"
                                     >
-                                        <i class="iconfont"  :class="[watchPwd.secondRule === false ? 'iconguanbi':'iconicon-test']"></i>只能包含数字、字母以及英文标点符号
+                                        <i class="iconfont"  :class="[watchPwd.secondRule === false ? 'iconicon-des-Wrongnumber':'iconxingzhuangjiehe']"></i>只能包含数字、字母以及英文标点符号
                                     </div>
                                 </div>
                                 <div
@@ -277,19 +277,15 @@ export default {
         },
         // 获取列表
         async getPicList(node) {
-            const loading = this.$loading({
-                lock: true,
-                spinner: "loading-icon",
-                background: "rgba(255, 255, 255, 0.75)"
-            });
+             this.$Loading.show();
             if (node) {
                 this.nodeData = node;
             }
             let { data, status } = await fileManageApi.getPicList(
                 this.picSearchOptions
             );
+             this.$Loading.hide();
             if (status === 200) {
-                loading.close();
                 this.getTree();
             }
             this.imgPageResult = data;

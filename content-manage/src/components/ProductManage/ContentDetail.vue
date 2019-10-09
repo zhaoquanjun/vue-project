@@ -125,10 +125,12 @@ export default {
             if(this.previewId){
                 let { data } = await productManageApi.GetContentPrevAddress('ProductDetail');
                 var prevAddress = data;
-                var a = document.createElement('a');
-                a.setAttribute('href', prevAddress + this.previewId + '.html');
-                a.setAttribute('target', '_blank');
-                a.click();
+                if (prevAddress != '') {
+                    var a = document.createElement('a');
+                    a.setAttribute('href', prevAddress + this.previewId + '.html');
+                    a.setAttribute('target', '_blank');
+                    a.click();
+                }
             }
         }
     },

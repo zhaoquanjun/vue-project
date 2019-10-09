@@ -41,7 +41,7 @@
                 </div>
                 <template v-else>
                     <span>{{data.label}}</span>
-                    <span v-if="data.level<=1">({{data.leafSum }})</span>
+                    <span v-if="data.level<=1">({{imgPageResult.totalRecord }})</span>
                 </template>
                 <!-- 三个点 分类操作 -->
                 <span
@@ -79,7 +79,7 @@
 let id = 1000;
 import { Message } from 'element-ui';
 export default {
-    props: ["treeResult", "picSearchOptions", "isrightPannel","isexpand"],
+    props: ["treeResult", "picSearchOptions", "isrightPannel","isexpand","imgPageResult"],
     data() {
         return {
             flag: false,
@@ -187,7 +187,7 @@ export default {
             }
             return true;
         },
-
+       
         create(data, node) {
             if (!this.isNewAdd) {
                 this.isNewAdd = true;

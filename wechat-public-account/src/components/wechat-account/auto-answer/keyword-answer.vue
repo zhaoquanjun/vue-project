@@ -41,14 +41,14 @@
                         @click="removeKeyword(index)"
                         v-if="keywordList &&keywordList.length>1"
                     >
-                        <i class="iconfont iconjian"></i>
+                        <i class="iconfont iconjianhao"></i>
                     </button>
                     <button
                         class="keyword-btn addKeyword"
                         @click="addKeyword"
                         v-if="keywordList.length-1==index&&keywordList.length!=10"
                     >
-                        <i class="iconfont iconjia"></i>
+                        <i class="iconfont iconjiahao"></i>
                     </button>
                 </div>
             </div>
@@ -74,7 +74,7 @@
             </div>
 
             <ul class="advance-list__area">
-                <li>
+                <li class="title">
                     <p class="list-columns__1">关键词</p>
                     <p class="list-columns__2">回复内容</p>
                     <p class="list-columns__3">操作</p>
@@ -92,14 +92,14 @@
                     <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
                         <button>
-                            <i class="iconfont iconcaozuo" @click="handlerAdd(item)"></i>
+                            <i class="iconfont iconbianji" @click="handlerAdd(item)"></i>
                         </button>
                         <button @click="handlerDelete(item.id)">
-                            <i class="iconfont iconhuishouzhan"></i>
+                            <i class="iconfont iconshanchu"></i>
                         </button>
                     </div>
                 </li>
-               </div>
+            </div>
                 <div class="empty-table" v-if="keywordData.list && keywordData.list.length===0">
                     <img src="~img/table-empty.png" />
                     <span>无数据</span>
@@ -322,14 +322,17 @@ button {
                     cursor: pointer;
                 }
             }
-            li:not(:first-child):hover {
-                background-color: #f0fcfe;
+            div {
+                li:hover {
+                    background-color: #f0fcfe;
+                }
             }
-            li:first-of-type {
+            .title {
                 p {
                     color: #a1a8b1;
                 }
             }
+            
             .handler-btn {
                 display: flex;
                 justify-content: space-between;

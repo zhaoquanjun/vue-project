@@ -1,101 +1,120 @@
 <template>
-  <el-drawer :visible.sync="popupShow" :size="'470px'" :title="'设置链接'" :before-close="_handleClose">
-    <ul class="popup-content__slider">
-      <li v-for="(it ,i) in sliderList" :key="i">
-        <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
-      </li>
-    </ul>
-    <div class="popup-content__box">
-      <none-area :tips="tips" v-show="slider == 'none'" :noneWords="noneWords" />
-      <url-area
-        :model="model"
-        :selectedUrl="selectedUrl"
-        
-        :type="type"
-        :curType="curType"
-        @handleChangeUrl="handleChangeUrl"
-        v-if="slider == 'link'"
-      />
-      <page-area
-        :model="model"
-        :selectedUrl="selectedUrl"
-        
-        :type="type"
-        :curType="curType"
-        @handleChangeUrl="handleChangeUrl"
-        v-if="slider == 'page'"
-      />
-      <news-area
-        :model="model"
-        :selectedUrl="selectedUrl"
-        
-        :type="type"
-        :curType="curType"
-        @handleChangeUrl="handleChangeUrl"
-        v-if="slider == 'news'"
-      />
-      <product-area
-        :model="model"
-        :selectedUrl="selectedUrl"
-        
-        :type="type"
-        :curType="curType"
-        @handleChangeUrl="handleChangeUrl"
-        v-if="slider == 'product'"
-      />
+  <div class="link-popup__container" id="popup" @click="_handleClosePopup($event)">
+    <div class="link-popup__section">
+      <div class="popup-header__area">
+        <span>设置链接</span>
+        <span @click.stop="_handleCancle"></span>
+      </div>
+      <div class="popup-content__box">
+        <ul class="popup-content__slider">
+          <li v-for="(it ,i) in sliderList" :key="i">
+            <el-radio v-model="slider" :label="it.label" @change="_handleSliderChange">{{it.name}}</el-radio>
+          </li>
+        </ul>
+        <none-area 
+          @handleChangeUrl="handleChangeUrl"
+          v-show="slider == 'url'" 
+          :noneUrl="noneUrl">
+        </none-area>
+        <page-area
+          :model="model"
+          :selectedUrl="selectedUrl"
+          :way="way"
+          :type="type"
+          :curType="curType"
+          @handleChangeUrl="handleChangeUrl"
+          @handleChangeTarget="handleChangeTarget"
+          v-if="slider == 'page'"
+        />
+        <news-area
+          :model="model"
+          :selectedUrl="selectedUrl"
+          :way="way"
+          :type="type"
+          :curType="curType"
+          @handleChangeUrl="handleChangeUrl"
+          @handleChangeTarget="handleChangeTarget"
+          v-if="slider == 'news'"
+        />
+        <product-area
+          :model="model"
+          :selectedUrl="selectedUrl"
+          :way="way"
+          :type="type"
+          :curType="curType"
+          @handleChangeUrl="handleChangeUrl"
+          @handleChangeTarget="handleChangeTarget"
+          v-if="slider == 'product'"
+        />
+        <mask-area
+          :model="model"
+          :selectedUrl="selectedUrl"
+          :way="way"
+          :type="type"
+          :curType="curType"
+          @handleChangeUrl="handleChangeUrl"
+          @handleChangeTarget="handleChangeTarget"
+          v-if="slider == 'popup'"
+        />
+      </div>
+      <div class="popup-footer__area">
+        <el-button type="primary" size="small" @click.stop="_handleConfirm">确定</el-button>
+        <el-button size="small" @click.stop="_handleCancle">取消</el-button>
+      </div>
     </div>
-    <div class="popup-footer__area">
-      <el-button type="primary" size="small" @click.stop="_handleConfirm">确定</el-button>
-      <el-button size="small" @click.stop="_handleClose">取消</el-button>
-    </div>
-  </el-drawer>
+  </div>
 </template>
 
 <script>
-import NoneArea from "./none";
+import NoneArea from "./self";
 import PageArea from "./page";
 import NewsArea from "./news";
 import ProductArea from "./product";
 import UrlArea from "./url";
+import EmailArea from "./email";
+import TelArea from "./tel";
+import FileArea from "./file";
+import MaskArea from "./mask";
+import { notify } from "@/utlis/index.js";
 export default {
   props: {
     model: {
       type: Object
-    },
-    popupShow: {
-      type: Boolean
     }
   },
   data() {
     return {
       sliderList: [
-        { name: "无链接", label: "none" },
-        { name: "网址", label: "link" },
+        { name: "纯链接", label: "url" },
         { name: "页面", label: "page" },
         { name: "文章", label: "news" },
-        { name: "产品", label: "product" }
+        { name: "产品", label: "product" },
+        // { name: "链接", label: "link" },
+        // { name: "邮件", label: "email" },
+        // { name: "文件", label: "file" },
+        // { name: "电话", label: "tel" },
+        // { name: "弹窗", label: "popup" }
       ],
-      noneWords: {
-        words: "暂无链接",
-        target: []
-      },
-      // pageIndex: this.model["PageIndex"],
-      slider: this.model["Type"],
+      noneUrl: '',
+      pageIndex: this.model['PageIndex'],
+      slider: "url",
       curType: this.model["Type"],
       selectedUrl: this.model["Href"],
-      tips: "无链接",
+      id: this.model["Href"],
+      way: this.model["Target"],
       title: ""
     };
-  },
-  created() {
-    console.log(this.model, this.slider);
   },
   components: {
     NoneArea,
     PageArea,
     NewsArea,
     ProductArea,
-    UrlArea
+    UrlArea,
+    EmailArea,
+    TelArea,
+    FileArea,
+    MaskArea
   },
   computed: {
     type: {
@@ -112,40 +131,57 @@ export default {
     }
   },
   methods: {
-    _handleClose() {
+    _handleSliderChange(val) {
+      this.slider = val;
+      return false;
+    },
+    _handleConfirm() {
+      if (!this.selectedUrl || !this.title){
+        notify(this, '请选择所需链接', "error");
+        return
+      } else if ((this.slider == 'news' || this.slider == 'product') && !this.id ){
+        notify(this, '请选择所需的页面', "error");
+        return
+      }
+      let oldData = {},
+          data = {};
+      let oldUrl = this.model["Href"];
+      let oldTarget = this.model["Target"];
+      let oldTitle = this.model["Title"];
+      let oldType = this.model["Type"];
+      let oldId = this.model["id"];
+      let oldPageIndex = this.pageIndex;
+
+      data["Href"] = this.selectedUrl;
+      data["Target"] = this.way;
+      data["Title"] = this.title;
+      data["Type"] = this.curType;
+      data['Id'] = this.id;
+      console.log('pop',data)
+      data['PageIndex'] = this.model['PageIndex'];
+      if (oldUrl !== this.selectedUrl || oldTarget !== this.way) {
+        this.model["Href"] = this.selectedUrl;
+        this.model["Target"] = this.way;
+        this.model["Type"] = this.curType;
+        this.model["Title"] = this.title;
+        this.pageIndex = this.model['PageIndex'];
+        oldData["Type"] = oldType;
+        oldData["Href"] = oldUrl;
+        oldData["Target"] = oldTarget;
+        oldData["Title"] = oldTitle;
+        oldData['PageIndex'] = oldPageIndex;
+        oldData['Id'] = oldId;
+        this.$emit("handleClosePopup", false, data, oldData);
+      } else {
+        this.$emit("handleClosePopup", false, data);
+      }
+    },
+    _handleCancle() {
       this.selectedUrl = this.model["Href"];
       this.curType = this.model["Type"];
       this.way = this.model["Target"];
       this.slider = this.model["Type"];
-      this.model["PageIndex"] = this.pageIndex;
-      this.$emit("handleClosePopup", false);
-    },
-    _handleSliderChange(val) {
-      this.slider = val;
-      if (val == "none") {
-        this.selectedUrl = "javascript:;";
-        this.title = "请设置链接";
-        this.target = "_self";
-      }
-      return false;
-    },
-    _handleConfirm() {
-      var flag = this._handleNext(this.slider);
-      if (!flag) return;
-      let oldUrl = this.model["Href"];
-      if (oldUrl !== this.selectedUrl) {
-        this.model["Href"] = this.selectedUrl;
-        this.model["Target"] = this.way;
-        this.model["Type"] = this.slider;
-        this.model["Title"] = this.title;
-        let data = {};
-        data["Type"] = this.slider;
-        data["Href"] = this.selectedUrl;
-        data["Target"] = this.way;
-        data["Title"] = this.title;
-        data["PageIndex"] = this.model["PageIndex"];
-        this.handleChangeMenuContent(null, oldData, data);
-      }
+      this.model['PageIndex'] = this.pageIndex;
       this.$emit("handleClosePopup", false);
     },
     _handleClosePopup(e) {
@@ -153,120 +189,110 @@ export default {
         this._handleCancle();
       }
     },
-    _handleNext(type) {
-      var flag = null;
-      switch (type) {
-        case "email":
-          var reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
-          let email = this.selectedUrl
-            ? this.selectedUrl.slice(7)
-            : this.selectedUrl;
-          flag = reg.test(email) ? true : false;
-          break;
-        case "link":
-          var reg = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-          flag = reg.test(this.selectedUrl) ? true : false;
-          break;
-        case "tel":
-          var reg = /^1[3456789]\d{9}$/;
-          var tel = this.selectedUrl
-            ? this.selectedUrl.slice(4)
-            : this.selectedUrl;
-          flag = reg.test(tel) ? true : false;
-          break;
-        default:
-          flag = true;
-          break;
-      }
-      return flag;
-    },
     handleChangeUrl(val) {
+      console.log(val,'99999')
       this.selectedUrl = val.url;
       this.curType = val.cType;
       this.title = val.title;
+      this.id = val.id;
       return false;
     },
-    handleChangeMenuContent(action, oldData, data) {}
+    handleChangeTarget(val) {
+      console.log(val);
+      this.way = val;
+    },
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.popup-header__area {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 24px;
-  height: 70px;
-  border-bottom: 1px solid #c9d9dc;
-  cursor: auto;
-  span:first-of-type {
-    font-size: 16px;
-    font-family: "PingFangSC";
-    font-weight: 500;
-    color: rgba(38, 38, 38, 1);
-    line-height: 24px;
-  }
-  span:last-of-type {
-    width: 14px;
-    height: 14px;
-    background: url("~img/account/close.png") no-repeat center center;
-    background-size: 100% 100%;
-    cursor: pointer;
-  }
-}
-.popup-content__slider {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+.link-popup__container {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 66px;
-  padding: 24px;
-  border-bottom: 1px solid #c9d9dc;
-  cursor: auto;
-  li {
-    margin-right: 32px;
-    font-size: 14px;
-    padding-bottom: 16px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 100;
+  .link-popup__section {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 680px;
+    height: 100%;
+    background: rgba(255, 255, 255, 1);
+    // box-shadow: 0px 0px 8px 2px rgba(228, 234, 239, 1);
+    border-radius: 2px;
+    .popup-header__area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8px;
+      height: 39px;
+      border-bottom: 1px solid #eee;
+      cursor: auto;
+      span:first-of-type {
+        font-size: 14px;
+      }
+      span:last-of-type {
+        width: 12px;
+        height: 12px;
+        background: url("~img/link/close.png") no-repeat center
+          center;
+        background-size: 100% 100%;
+        cursor: pointer;
+      }
+    }
+    .popup-content__box {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      height: 90%;
+      overflow: hidden;
+      border-bottom: 1px solid #eee;
+      .popup-content__slider {
+        width: 90px;
+        height: 100%;
+        padding: 21px 12px;
+        border-right: 1px solid #eee;
+        cursor: auto;
+        li {
+          font-size: 14px;
+          padding-bottom: 16px;
+        }
+      }
+    }
+    .popup-footer__area {
+      padding: 15px 20px 20px;
+      display: flex;
+    }
   }
-}
-.popup-content__box {
-  overflow: hidden;
-  height: 420px;
-}
-.popup-footer__area {
-  position: absolute;
-  left: 24px;
-  bottom: 24px;
-  display: flex;
-  justify-content: flex-end;
 }
 </style>
-<style scoped>
+<style>
 .popup-content__area .content-main__slider .el-tree__empty-text {
   min-width: 60px;
 }
-.popup-footer__area /deep/ .el-button--small {
-  width: 58px;
-  height: 32px;
-  border-radius: 0;
-  border-color: #00c1de;
-  background: #fff;
-}
-.popup-footer__area /deep/ .el-button--small span {
-  color: #00c1de;
-}
-.popup-footer__area /deep/ .el-button--primary {
-  background: #00c1de;
-}
-.popup-footer__area /deep/ .el-button--primary span {
-  color: #fff;
-}
-.el-dialog__wrapper /deep/ .el-drawer__header {
-  padding: 24px;
-  margin-bottom: 0;
-  border-bottom: 1px solid #c9d9dc;
-}
+</style>
+<style lang="css" scoped>
+.popup-footer__area .el-button--small {
+      width: 58px;
+      height: 32px;
+      border-radius: 0;
+      border-color: #00c1de;
+      background: #fff;
+      
+    }
+    .popup-footer__area .el-button--small span {
+        color: #00c1de;
+      }
+    .popup-footer__area .el-button--primary {
+      background: #00c1de;
+      
+    }
+    .popup-footer__area .el-button--primary span {
+        color: #fff;
+      }
 </style>
 
 

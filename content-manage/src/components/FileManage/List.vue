@@ -79,14 +79,11 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="handle-btn edit-icon" @click="handleEditor(scope.row)">
-                            <i class="iconfont iconcaozuo"></i>
+                            <i class="iconfont iconbianji"></i>
                         </button>
                         <button class="handle-btn look-btn edit-icon" @click="download(scope.row)">
-                            <i class="iconfont iconCell-Download"></i>
+                            <i class="iconfont iconxiazai"></i>
                         </button>
-                        <!-- <button class="handle-btn delete-btn" @click="batchRemove( scope.row)">
-                            <svg-icon icon-class="l-recyclebin"></svg-icon>
-                        </button>-->
                         <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"

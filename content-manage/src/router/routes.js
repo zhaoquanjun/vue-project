@@ -212,12 +212,7 @@ export const defaultRoutes = [
         path: '*',
         component: () => import('@/views/error-page/404.vue')
     },
-    {
-        path: "/banner",
-        name: "banner",
-        component: () => () => import('@/views/banner/index.vue'),
-      
-    },
+   
 ];
 
 

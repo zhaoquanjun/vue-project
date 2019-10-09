@@ -6,11 +6,15 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" @getSiteName="getSiteName" />
-      <el-row style="padding:24px 17px">
+      <el-row style="padding: 32px">
         <el-row class="user-list">
           <span class="member-list-title fs14">网站备份</span>
         </el-row>
+        <ChangeSite
+          @chooseWebsite="chooseWebsite"
+          @getSiteId="getSiteId"
+          @getSiteName="getSiteName"
+        />
         <el-tabs v-model="backupType" type="card" @tab-click="handleClick">
           <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
           <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
@@ -25,6 +29,12 @@
               class="content-table"
               :default-sort="{prop: 'backupTime', order: 'descending'}"
             >
+              <template slot="empty">
+                <div class="empty-table">
+                  <img src="~img/memberManage/table-empty.png" />
+                  <span>暂无数据</span>
+                </div>
+              </template>
               <el-table-column label="站点名称" show-overflow-tooltip min-width="200">
                 <template slot-scope="scope">
                   <div class="overflow">{{scope.row.siteName}}</div>
@@ -49,7 +59,7 @@
                   >
                     <span slot="reference">
                       <div
-                        style="height:23px;width:100%"
+                        style="height:32px;line-height:32px;width:100%"
                         @mouseenter="_handleShowEditorIcon(scope.row.id)"
                         @mouseleave="_handleHideEditorIcon(scope.row.id)"
                       >
@@ -58,7 +68,7 @@
                         >{{!scope.row.description?" ":scope.row.description}}</div>
                         <i
                           v-if="active == scope.row.id"
-                          class="iconfont iconicon-dash-edit"
+                          class="iconfont iconicon-dash-edit editIcon"
                           style="color:#09CCEB;font-size:16px;vertical-align:text-bottom;cursor:pointer;margin-left:5px"
                           :data-type="'remarkIcon'+ scope.$index"
                           :ref="'remarkIcon'+ scope.$index"
@@ -95,13 +105,19 @@
                 <template slot-scope="scope">
                   <div class="handle-btn-wrap">
                     <el-tooltip content="还原备份包" placement="top" :v-model="false">
-                      <button class="handle-btn backup-btn" @click="recovery( scope )"></button>
+                      <button class="handle-btn" @click="recovery( scope )">
+                        <i class="iconfont iconicon-des-up" style="font-size:14px;color:#262626"></i>
+                      </button>
                     </el-tooltip>
                     <el-tooltip content="下载备份包" placement="top">
-                      <button class="handle-btn download-btn" @click="downloadBackup( scope )"></button>
+                      <button class="handle-btn" @click="downloadBackup( scope )">
+                        <i class="iconfont iconxiazai" style="color:#262626"></i>
+                      </button>
                     </el-tooltip>
                     <el-tooltip content="删除备份包" placement="top" visible-arrow="false">
-                      <button class="handle-btn delete-btn" @click="deleteBackup( scope )"></button>
+                      <button class="handle-btn" @click="deleteBackup( scope )">
+                        <i class="iconfont iconshanchu" style="color:#262626"></i>
+                      </button>
                     </el-tooltip>
                   </div>
                 </template>
@@ -158,7 +174,6 @@
         </el-main>
       </el-row>
     </el-main>
-    <Loading v-if="loadingShow" />
   </el-container>
 </template>
 
@@ -188,8 +203,7 @@ export default {
       backupType: "manual",
       backupShow: false,
       backuping: false,
-      remarkInfo: "",
-      loadingShow: true
+      remarkInfo: ""
     };
   },
   methods: {
@@ -222,10 +236,12 @@ export default {
      * 获取备份信息
      */
     async getBackupSite(siteId) {
+      this.$Loading.show();
       let manualData = await siteBackupApi.getBackupSite(siteId, false);
       this.manualSite = manualData.data.items;
       let autoData = await siteBackupApi.getBackupSite(siteId, true);
       this.autoSite = autoData.data.items;
+      this.$Loading.hide();
       if (this.backupType === "manual") {
         this.siteInfo = this.manualSite;
       } else if (this.backupType === "auto") {
@@ -455,11 +471,6 @@ export default {
     _handleHideEditorIcon(id) {
       this.active = -1;
     }
-  },
-  watch: {
-    siteInfo() {
-      this.loadingShow = false;
-    }
   }
 };
 </script>
@@ -492,16 +503,26 @@ export default {
 .content-table /deep/ .el-tooltip .el-popover__reference {
   width: 100%;
 }
+.editIcon {
+  padding: 8px;
+  background: transparent;
+}
+.editIcon:hover {
+  background: rgba(240, 243, 247, 1);
+}
 .backupBtn {
   width: 110px;
   height: 32px;
   background: rgba(0, 193, 222, 1);
   position: absolute;
-  right: 16px;
-  top: 70px;
+  right: 40px;
+  top: 165px;
 
   font-weight: 400;
   color: rgba(255, 255, 255, 1);
+}
+.backupBtn:hover {
+  opacity: 0.8;
 }
 .el-table /deep/ thead th {
   padding: 0;
@@ -509,6 +530,9 @@ export default {
   background: #00c1de !important;
   color: #fff;
   font-weight: 400;
+}
+.table-wrap {
+  border: 1px solid #e5e5e5;
 }
 .content-table {
   width: 100%;
@@ -541,15 +565,14 @@ export default {
 <style lang="scss" scoped>
 .member-container {
   position: relative;
-  .member-content {
-    padding: 0px 0px 21px;
-  }
   .user-list {
     border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    padding-bottom: 24px;
     .member-list-title {
-      border-left: 2px solid #01c0de;
-      padding-left: 10px;
+      border-left: 4px solid #01c0de;
+      padding-left: 8px;
+      font-size: 16px;
+      font-weight: 500;
     }
   }
 }
@@ -559,31 +582,10 @@ export default {
   display: flex;
   justify-content: space-between;
   .handle-btn {
-    width: 17px;
-    height: 16px;
-  }
-  .backup-btn {
-    background: url("~img/siteManage/backup.png") no-repeat center;
-    background-size: 100%;
+    padding: 8px;
+    background: transparent;
     &:hover {
-      background: url("~img/siteManage/backup-on.png") no-repeat center;
-      background-size: 100%;
-    }
-  }
-  .download-btn {
-    background: url("~img/siteManage/download.png") no-repeat center;
-    background-size: 100%;
-    &:hover {
-      background: url("~img/siteManage/download-on.png") no-repeat center;
-      background-size: 100%;
-    }
-  }
-  .delete-btn {
-    background: url("~img/siteManage/delete.png") no-repeat center;
-    background-size: 100%;
-    &:hover {
-      background: url("~img/siteManage/delete-on.png") no-repeat center;
-      background-size: 100%;
+      background: rgba(240, 243, 247, 1);
     }
   }
 }

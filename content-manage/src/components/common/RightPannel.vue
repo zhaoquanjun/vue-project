@@ -13,7 +13,7 @@
           <slot name="icon-tip"></slot>
         </el-tooltip>
       </span>
-      <span class="close-pannel" @click="closePanel"><i class="iconfont iconX"></i></span>
+      <span class="close-pannel" @click="closePanel"><i class="iconfont iconguanbi"></i></span>
     </div>
     <div class="pannel-main" style="padding:0 17px">
         <slot></slot>

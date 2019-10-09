@@ -11,9 +11,7 @@
                     
                 >
                     <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getList"></i>
-                    <!-- <el-button slot="append" @click="getList">
-                        <svg-icon icon-class="search-icon"></svg-icon>
-                    </el-button>-->
+               
                 </el-input>
             </div>
             <div class="head-item head-middle">
@@ -33,23 +31,19 @@
                         ></el-option>
                     </el-select>
                 </span>
-                <button @click="switchIsDesc('asc')">
-                    <i class="sort-icon asc" :class="{'asc-icon-on ':ascSort}"></i>
-                    <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                    <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
+                <button @click="switchIsDesc('dec')" class="desBtn">
+                    <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
                 </button>
-                <button @click="switchIsDesc('dec')">
-                    <i class="sort-icon dec" :class="{'dec-icon-on ':descSort}"></i>
-                    <!-- <svg-icon v-if="picSearchOptions.isDescending" icon-class="off-arrow"></svg-icon>
-                    <svg-icon v-else icon-class="top-arrow"></svg-icon>-->
+                <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
+                    <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
                 </button>
 
                 <button class="list-mode mode-item" @click="showType('list')">
-                    <!-- <svg-icon icon-class="list-mode "></svg-icon> -->
+                   
                     <i class="list-icon mode-icon" :class="{'list-iconOn':modeSelecte}"></i>
                 </button>
                 <button class="grid-mode mode-item" @click="showType('grid')">
-                    <!-- <svg-icon icon-class="grid-mode"></svg-icon> -->
+                    
                     <i class="list-icon mode-icon"  :class="{'mode-iconOn':!modeSelecte}"></i>
                 </button>
             </div>
@@ -58,7 +52,7 @@
                     class="btn-lightblue btn-small upload-wrap"
                     @click="switchUploadBoxShowStatus"
                 >
-                    <!-- <svg-icon icon-class="upload-img"></svg-icon> -->
+                   
                     上传图片
                 </button>
             </div>
@@ -152,4 +146,10 @@ export default {
 
 <style  lang="scss" scoped>
 @import "@/styles/manage-head.scss";
+.desBtn{
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+}
 </style>
