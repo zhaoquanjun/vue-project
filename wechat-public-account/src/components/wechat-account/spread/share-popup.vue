@@ -66,6 +66,7 @@
           </div>
         </div>
       </div>
+      <vue-qr  :margin='30' text="Hello JacksonYEE" :size="200"></vue-qr>
       <div class="btn">
         <span @click="closeShare(true)">确定</span>
         <span @click="closeShare(false)">取消</span>
@@ -82,6 +83,7 @@
 <script>
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { stringify } from 'querystring';
+import VueQr from 'vue-qr';
 import { notify } from "@/utlis/index.js";
 import { getPageInfoList } from "@/api/request/account.js";
 import Clipboard from 'clipboard'
@@ -120,7 +122,8 @@ export default {
     }
   },
   components: {
-    ImageManage
+    ImageManage,
+    VueQr
   },
   created(){
     this.getPageInfoList()
@@ -134,6 +137,14 @@ export default {
         console.log(this.pageList,'000000')
       }
       console.log('list22',data)
+    },
+    //生成二维码
+    initCode(){
+      // text：扫描二维码后展示的文字，可以添加跳转的路径
+      // margin：二维码周围的边距。默认20 ，可以自行设置
+      // bgSrc：加入二维码背景图片
+      // logoSrc 在二维码中间插入图片
+      // size：二维码尺寸
     },
     //复制
     oCopy(){

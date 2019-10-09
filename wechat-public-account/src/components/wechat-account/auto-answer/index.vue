@@ -133,7 +133,7 @@ export default {
         ImageText
     },
     created() {
-        this._getWxIsAuth();
+        //this._getWxIsAuth();
     },
     mounted() {
         this._getReplyDetail(1);
@@ -147,7 +147,6 @@ export default {
     methods: {
         getSiteId(siteId) {
             console.log('siteId',siteId)
-            // this.getSiteInfo(siteId);
         },
         // 切换站点刷新信息
         chooseWebsite(siteId) {
@@ -156,8 +155,7 @@ export default {
         async _getWxIsAuth() {
             await this.$store.dispatch('_getWxStatus')
             let wx_status = this.$store.state.wxaccount.wx_status
-            console.log(this.$store.state)
-            if (!wx_status.isAuth || !wx_status.isCertification) {
+            if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
                 this.$router.replace({path:'/wechataccount/wxauther' });
             }
         },
@@ -466,7 +464,7 @@ export default {
         // 添加关键词回复
         handlerAddAnswer(value, item) {
             this.addAnswer = value;
-            console.log(item);
+            console.log(item,'ooo');
             if (item && item.keywordList) {
                 this.replyDetail = item;
                 this.propKeywordList = item.keywordList;
@@ -474,11 +472,11 @@ export default {
                 this.isSet = true;
                 this.editorId = item.id;
                 if (item.msgType === 1) {
-                    this.replycontentData.imageMsg = item.data;
+                    this.replycontentData.imageMsg = item.data.imageMsg;
                 } else if (item.msgType === 2) {
-                    this.replycontentData.textMsg = item.data;
+                    this.replycontentData.textMsg = item.data.textMsg;
                 } else if (item.msgType === 3) {
-                    this.replycontentData.newsMsg = item.data;
+                    this.replycontentData.newsMsg = item.data.newsMsg;
                 }
             } else {
                 this.propKeywordList = "";

@@ -1,7 +1,7 @@
 <template>
     <div class="speed-progress">
         <ul>
-            <li v-for="(item,index) in list" :key="index" :class="{ active: index <1 }">
+            <li v-for="(item,index) in list" :key="index" :class="{ active: index <step }">
                 <span>{{item.title}}</span>
                 <p>{{item.text}}</p>
             </li>
@@ -11,8 +11,15 @@
 </template>
 <script>
 export default {
+    props: {
+        steps: {
+            type: Number,
+            default: 1
+        }
+    },
     data() {
         return {
+            step: this.steps,
             list:[
                 {
                     title: '1',
@@ -29,9 +36,10 @@ export default {
             ]
         };
     },
-    created() {
-    },
-    methods: {
+    watch: {
+        steps() {
+          this.step= this.steps
+        }
     }
 };
 </script>
@@ -45,8 +53,9 @@ export default {
     ul {
         position: relative;
         z-index: 2;
+        width: 700px;
         display: flex;
-        margin: 0 10%;
+        margin: 0 auto;
         justify-content: space-between;
         li {
             text-align: center;
@@ -81,11 +90,11 @@ export default {
     .line {
         box-shadow: border-box;
         border: 1px dashed #E5E5E5;
-        width: 74%;
+        width: 600px;
         position: absolute;
         top: 16px;
-        left: 0;
-        margin: 0 13%;
+        left: 50%;
+        margin-left: -300px;
         z-index: 1;
     }
 }

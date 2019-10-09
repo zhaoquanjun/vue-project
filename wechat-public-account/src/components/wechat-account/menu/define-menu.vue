@@ -465,11 +465,15 @@ export default {
           dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
       let data = await publishMenu(dataDetail);
       if (data && data.status == 200) {
+        this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
+        this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
         //同步菜单name
-        notify(this, '保存成功', "error");
-        this.hasChangeMeunName()
+        notify(this, '保存成功', "success");
+        //this.hasChangeMeunName()
       } else {
         notify(this, '保存失败', "error");
+        this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
+        this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
       }
     },
     //同步本地菜单列表name
@@ -577,7 +581,7 @@ export default {
       height: 48px;
       background: rgba(248, 250, 252, 1);
       .phone-menu__keyboard {
-        margin: 8px 24px;
+        margin: 8px auto;
         width: 26px;
         height: 17px;
         background: url("~img/account/define_menu_keyboard.png") no-repeat

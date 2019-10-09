@@ -9,7 +9,8 @@
       <div class="account-info__area">
         <div class="info-desc__area">
           <div class="account-icon">
-            <img :src="accountInfo.platformAvator" alt />
+            <img v-if="accountInfo.platformAvator" :src="accountInfo.platformAvator" alt />
+            <img v-else :src="accountAvator"/>
           </div>
           <div class="account-name-certification">
             <h6>{{accountInfo.platformName}}</h6>
@@ -38,7 +39,7 @@
       <div class="content">
         <div class="title">
           <span>推广域名</span>
-          <i @click="closeDomain">x</i>
+          <i class='icon iconfont iconguanbi' @click="closeDomain"></i>
         </div>
         <ul>
           <p>请选择推广域名</p>
@@ -68,7 +69,7 @@
 <script>
 import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
-import { unBind, getCdnDomainList,bindDomain,setPromotionUrl } from "@/api/request/account.js";
+import { unBind, getCdnDomainList,setPromotionUrl } from "@/api/request/account.js";
 import { mapGetters } from "vuex";
 import { notify } from "@/utlis/index.js";
 export default {
@@ -82,13 +83,7 @@ export default {
       curInder: -1,
       scrollHeight: 500,
       accountAvator: require("img/account/account_type_icon.png"),
-      accountInfo: {
-        platformName: "公众号名称",
-        platformAppId:'',
-        platformAvator: "",
-        promotionUrl: '',
-        serviceTypeInfo: ''
-      }
+      accountInfo: this.$store.state.wxaccount.account_info
     };
   },
   components: {
@@ -96,7 +91,6 @@ export default {
     PageSubNav
   },
   created() {
-    this._getWxIsAuth();
   },
   methods: {
     //页面初始化获取ID
@@ -112,18 +106,14 @@ export default {
       await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
-      console.log(this.$store.state.wxaccount)
-      if (!wx_status.isAuth || !wx_status.isCertification) {
+      if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
-      this.accountInfo = this.$store.state.wxaccount.account_info
-      console.log('this.accountInfo',this.accountInfo)
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
       let {data} = await getCdnDomainList()
       this.domainList = data
-      console.log('eee',data)
     },
     //修改域名
     changeShow() {
@@ -356,8 +346,7 @@ export default {
         border-bottom: 1px solid #E5E5E5;
         i {
           color: #A1A8B1;
-          font-size: 26px;
-          margin-top: -3px;
+          font-size: 18px;
           cursor: pointer;
         }
       }

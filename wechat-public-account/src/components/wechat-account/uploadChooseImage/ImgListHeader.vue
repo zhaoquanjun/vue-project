@@ -97,7 +97,8 @@ export default {
       this.$emit("getPicList");
     },
     switchUploadBoxShowStatus() {
-      this.$emit("switchUploadBoxShowStatus");
+      //this.$emit("switchUploadBoxShowStatus");
+      window.open("http://content.console.wezhan.cn/content/picture");
     },
     switchIsDesc() {
       this.picSearchOptions.isDescending = !this.picSearchOptions.isDescending;
