@@ -682,10 +682,10 @@ export default {
   .menu-operate__arae {
     display: flex;
     justify-content: center;
-    align-items: center;
     float: left;
     margin-top: 20px;
     width: calc(100% - 355px);
+    min-height: 660px;
     background: #f8fafc;
     border-radius: 2px;
     .menu-operate__none {
@@ -693,6 +693,7 @@ export default {
       display: flex;
       justify-content: center;
       .empty {
+        margin-top: 240px;
         width: 160px;
         height: 130px;
         .empty-icon {
