@@ -47,7 +47,7 @@
             v-for="(item,ind) in domainList" 
             :key='ind'
             @click="_setPromotionUrl(ind)"
-            :class="{active: ind == curInder}"
+            :class="{active: (ind == curInder)}"
           >
             {{item.domain}}
           </li>
@@ -124,6 +124,13 @@ export default {
           if(data[i].cdnDomainResolveStatus == 2) {
             console.log(i,data[i].cdnDomainResolveStatus)
             this.domainList.push(data[i])
+          }
+        }
+      }
+      if (this.domainList.length>0) {
+        for(let i = 0;i<this.domainList.length; i++) {
+          if(this.domainList[i].domain == this.accountInfo.promotionUrl) {
+            this.curInder = i
           }
         }
       }

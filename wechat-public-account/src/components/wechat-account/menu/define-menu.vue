@@ -421,12 +421,10 @@ export default {
     },
     // 添加菜单
     async _handleAddMainMenu(name,order,id,level) {
-      console.log('name,order,id,level',name,order,id,level)
       let flag = this.testParameters();
       let  dataObj = {};
       //前端校验
-      if (order > 0 && flag) {
-        console.log('flag1',order > 0 && flag)
+      if (order > 0 && flag && !(order== 1 && level == 1)) {
         let dataDetail = this.menuDetail
         dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
         dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
@@ -435,7 +433,7 @@ export default {
         notify(this, '请完善菜单信息', "error");
       }
       //接口校验
-      if (order == 0 || dataObj.status == 200) {
+      if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
         console.log('888',order,dataObj.status)
         console.log('flag2',order == 0, dataObj.status)
           let newMenuItem = {
