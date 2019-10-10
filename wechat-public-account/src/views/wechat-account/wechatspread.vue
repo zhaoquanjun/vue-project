@@ -67,6 +67,16 @@
           </el-table-column>
         </el-table>
       </template>
+      <div class="paging">
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          layout="total, sizes, prev, pager, next"
+          :total="TotalRecord"
+          :page-sizes="[10,20,50]"
+        ></el-pagination>
+      </div>
     </div>
     <sharePopup 
       v-if="isShow"
@@ -102,8 +112,10 @@ export default {
     return {
       siteId: this.$store.state.dashboard.siteId,
       replyType: 'page',
-      PageSize: 10,
-      PageIndex: 1,
+      PageSize: 10, //每页数
+      PageIndex: 1, //当前页面
+      TotalPage: 0, //总页数
+      TotalRecord: 0, //总数量
       shareId: '',
       isShow: false,
       type: '',
@@ -154,14 +166,16 @@ export default {
         EntityTyp = 'Product';
       }
       let option= {
-        PageSize: 10,
-        PageIndex: 1, //
+        PageSize: this.PageSize,
+        PageIndex: this.PageIndex, //
         EntityType: EntityTyp, //Page, News, Product
         SiteId: this.siteId
       }
       let {data} = await getList(option)
       if(data&&data.list) {
         this.list = data.list
+        this.TotalPage = data.totalPage
+        this.TotalRecord = data.totalRecord
       }
     },
     //关闭弹窗
@@ -230,6 +244,16 @@ export default {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
       this.accountInfo = this.$store.state.wxaccount.account_info
+    },
+    //分页 每页条数
+    handleSizeChange(val) {
+      this.PageSize = val
+      this.getInfo()
+    },
+    //分页 当前页数
+    handleCurrentChange(val){
+      this.PageIndex = val
+      this.getInfo()
     }
   }
 };
@@ -299,6 +323,10 @@ export default {
       .iconqiehuanxingshier {
         margin-right: 40px;
       }
+    }
+    .paging {
+      margin-top: 40px;
+      text-align: right;
     }
 }
 </style>
