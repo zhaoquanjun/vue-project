@@ -6,6 +6,7 @@ let siteManageApi = 'http://api.designer.console.wezhan.cn';
 let memberManageApi = 'http://api.dashboard.console.wezhan.cn';
 let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
 let uploadRobotsUrl = "http://api.designer.console.wezhan.cn/api/v1/Robots/AddOrOverride/";
+let uploadSitemapUrl = "http://api.designer.console.wezhan.cn/api/v1/SiteMapFile/AddOrOverride/";
 let authorityUrl = "http://login.console.wezhan.cn";
 let redirectUrl = "http://dashboard.console.wezhan.cn/callback"
 let logoutRedirectUri = "http://dashboard.console.wezhan.cn/index.html";
@@ -51,6 +52,7 @@ const enbironmemy = {
     redirectUrl,
     uploadPicUrl,
     uploadRobotsUrl,
+    uploadSitemapUrl,
     logoutRedirectUri,
     memberManageApi,
     siteManageApi,
