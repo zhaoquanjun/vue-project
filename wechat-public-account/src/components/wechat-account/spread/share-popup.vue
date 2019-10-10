@@ -48,7 +48,7 @@
             <h6>设置成功</h6>
             <vue-qr  
               :margin='0' 
-              :text="shareUrl" 
+              :text="shareUrl"
               colorDark="black"
               colorLight="#fff"
               :dotScale='0.8'

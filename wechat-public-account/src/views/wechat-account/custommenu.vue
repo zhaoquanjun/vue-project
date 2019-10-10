@@ -5,7 +5,6 @@
       @getSiteId="getSiteId"
     />
     <div class="define-menu__content">
-      <warm-pronpt :desc="tips" style="margin-top: 16px;"></warm-pronpt>
       <div class="menu-setting__area">
         <define-menu ></define-menu>
       </div>
@@ -23,9 +22,7 @@ import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertifi
 export default {
   data() {
     return {
-      title: "自定义菜单",
-      tips:
-        "温馨提示：自定义菜单发布后因为微信缓存不会立即更新，但对新关注用户立即生效，若需查看，请取消关注并重新关注后查看。"
+      title: "自定义菜单"
     };
   },
   components: {
@@ -45,10 +42,13 @@ export default {
       set: function() {}
     }
   },
+  created() {
+    if (!this.$store.state.wxaccount.wx_status.isCertification) {
+      this._getWxIsAuth()
+    }
+  },
   methods: {
     getSiteId(siteId) {
-      console.log('siteId',siteId)
-      // this.getSiteInfo(siteId);
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {

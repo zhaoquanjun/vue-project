@@ -17,7 +17,6 @@
                 </div>
             </div>
         </section>
-      
         <footer class="footer-btn">
             <button class="handler-item" @click="handlerSave">保存</button>
             <button class="handler-item handler-delete" :class="{'disabled-btn':!isSet}" @click="handlerDelete" :disabled="!isSet">删除回复</button>

@@ -447,6 +447,7 @@ export default {
         changeAnswerMode(value) {
             this.msgType = value;
             if (
+                this.replyDetail &&
                 this.replyType == this.replyDetail.replyType &&
                 this.msgType == this.replyDetail.msgType
             ) {

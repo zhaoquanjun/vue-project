@@ -1,5 +1,8 @@
 <template>
   <div class="define-menu__area clearfix">
+    <div class="btn">
+      <span @click="_handleSaveAndPublish">保存并发布</span>
+    </div>
     <div class="phone-box__area">
       <div class="phone-menu__area">
         <div class="phone-menu__keyboard"></div>
@@ -131,9 +134,6 @@
         </div>
       </div>
     </div>
-    <div class="btn">
-      <span @click="_handleSaveAndPublish">保存并发布</span>
-    </div>
   </div>
 </template>
 <script>
@@ -253,7 +253,6 @@ export default {
         }
       } else if (val == 'add') {
         //点击添加按钮时选择刚添加的按钮并且回填按钮详情
-        console.log('000',this.curSubIndex,this.curIndex,this.menuTree)
         let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
         this._getMenuDetail(id)
       }
@@ -286,7 +285,6 @@ export default {
       let { data } = await getMenuDetail(this.siteId, id);
       this.menuDetail.name = data.name;
       this.menuDetail.id = data.id;
-      console.log(id,'9999')
       if (data.hasChildren) {
         this.menuDetail.clickBehavior = 0;
         this.menuDetail.behaviorType = 0;
@@ -300,7 +298,6 @@ export default {
       } else {
         this.hasSubList = true
       }
-      console.log('8888',this.hasSubList)
       if (behaviorBody) {
         if(behaviorBody.imageMsg && behaviorBody.imageMsg.picUrl) {
           this.menuDetail.behaviorBody.imageMsg.picUrl = behaviorBody.imageMsg.picUrl
@@ -564,7 +561,7 @@ export default {
   text-align: center
 }
 .define-menu__area {
-  margin: 30px auto;
+  margin: 0 auto;
   max-width: 1200px;
   min-width: 990px;
   border-radius: 20px;
@@ -574,7 +571,6 @@ export default {
     margin: 0 auto 2px;
     width: 355px;
     height: 711px;
-    border: 1px dashed #c9d9dc;
     background: url("~img/account/account_menu_phone.png") no-repeat center
       center;
     background-size: 100% 100%;
@@ -907,13 +903,10 @@ export default {
 .btn {
   display: inline-block;
   width: 100%;
-  height: 32px;
-  margin-top:56px;
-  margin-bottom: 40px;
+  height: 40px;
   text-align: right;
-  padding: 6px 0;
-  cursor: pointer;
-  border-top: 1px solid #E5E5E5;
+  margin: 16px 0 -10px;
+  padding-right: 20px;
 }
 .btn span {
   display: inline-block;
@@ -927,6 +920,7 @@ export default {
   text-align: center;
   color: rgba(255, 255, 255, 1);
   line-height:40px;
+  cursor: pointer;
 }
 .tipsName {
   padding-left: 80px;
