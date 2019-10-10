@@ -124,6 +124,15 @@ export const defaultRoutes = [
           isSub:true
         }
       },
+      {
+        path: "sitemap",
+        name: "sitemap",
+        component: () => import("@/views/website-manage/sitemap.vue"),
+        meta: {
+          title: "站点地图",
+          isSub:true
+        }
+      }
     ]
   },
   {
