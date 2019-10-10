@@ -69,11 +69,11 @@
       <p>选择文章详情页</p>
       <div class="way-list__box">
         <div>
-          <span class="tips">{{productTips}}
+          <span class="tips" @click="isChangeShow">{{productTips}}
             <i 
               class="icon iconfont iconicon-des-Arrow"
               :class="{iconactive: isShow}"
-              @click="isChangeShow"></i>
+            ></i>
           </span>
           <a 
             :href="productHref"
@@ -137,7 +137,7 @@ export default {
       productTips: '全部分类',
       newId: -1,
       urlId: '',
-      productHref: 'https://www.baidu.com/',
+      productHref: '',
       nodeId: 0,
       loading: false,
       target: "createArticle",
@@ -180,24 +180,14 @@ export default {
       let { data } = await linkApi.getContentList(this.pageListOption);
       if(data && data.list.length > 0) {
         this.productPageList = data.list;
+        this.productTips = data.list[0].title;
+        this.pageActiveIndex = 0
       }
     },
     selectPage(ind){
-      if (this.newId  != -1 ) {
-        this.pageActiveIndex = ind;
-        this.isShow = false
-        this.productTips = this.productPageList[ind].title;
-        this.productHref = `http://${this.promotionUrl}/news/${this.productPageList[ind].id}/${this.urlId}.html`
-        this.$emit("handleChangeUrl", {
-          url: this.newsList[this.newId].url,
-          title: this.newsList[this.newId].title,
-          cType: "News",
-          id: this.productPageList[ind].id,
-          pageIndex: this.pageIndex
-        });
-      } else {
-        notify(this, "请先选择文章", "error");
-      }
+      this.pageActiveIndex = ind;
+      this.isShow = false
+      this.productTips = this.productPageList[ind].title;
     },
     //改变下啦状态
     isChangeShow(){
@@ -245,11 +235,15 @@ export default {
       this.newId = i
       this.newsTitle = this.newsList[i].title
       this.urlId = this.newsList[i].id
-      // this.$emit("handleChangeUrl", {
-      //   url: this.newsList[i].url,
-      //   title: this.newsList[i].title,
-      //   cType: "news"
-      // });
+      this.productHref = `http://${this.promotionUrl}/news/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
+      this.$emit("handleChangeUrl", {
+        url: this.newsList[i].url,
+        title: this.newsList[i].title,
+        cType: "News",
+        picUrl:this.newsList[i].pictureUrl,
+        id: this.productPageList[this.pageActiveIndex].id,
+        pageIndex: this.pageIndex
+      });
     },
     _handleChageLinkTarget(val) {
       this.$emit("handleChangeTarget", val);
@@ -456,9 +450,9 @@ export default {
       font-size:14px;
       font-family:"PingFangSC";
       font-weight:400;
-      color:rgba(211,211,211,1);
       line-height:32px;
       padding: 0 10px;
+      cursor: pointer;
       i {
         float: right;
         font-size: 12px;

@@ -48,7 +48,7 @@ const user = {
           isResolveSuccess: data.data.isResolveSuccess
           // isAuth: true,
           // isResolveSuccess: true,
-          // isCertification: false
+          // isCertification: true
         }
         let accountInfo = {
           platformName: data.data.platformNiceName,

@@ -47,7 +47,7 @@
             v-for="(item,ind) in domainList" 
             :key='ind'
             @click="_setPromotionUrl(ind)"
-            :class="{active: ind == curInder}"
+            :class="{active: (ind == curInder)}"
           >
             {{item.domain}}
           </li>
@@ -91,6 +91,9 @@ export default {
     PageSubNav
   },
   created() {
+    if (!this.$store.state.wxaccount.wx_status.isCertification) {
+      this._getWxIsAuth()
+    }
   },
   methods: {
     //页面初始化获取ID
@@ -106,14 +109,31 @@ export default {
       await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
+      this.siteId= this.$store.state.dashboard.siteId
+      this.accountInfo = this.$store.state.wxaccount.account_info
       if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
-      let {data} = await getCdnDomainList()
-      this.domainList = data
+      this.domainList = [];
+      let {data} = await getCdnDomainList(this.siteId)
+      if (data && data.length>0) {
+        for(let i = 0;i<data.length; i++) {
+          if(data[i].cdnDomainResolveStatus == 2) {
+            console.log(i,data[i].cdnDomainResolveStatus)
+            this.domainList.push(data[i])
+          }
+        }
+      }
+      if (this.domainList.length>0) {
+        for(let i = 0;i<this.domainList.length; i++) {
+          if(this.domainList[i].domain == this.accountInfo.promotionUrl) {
+            this.curInder = i
+          }
+        }
+      }
     },
     //修改域名
     changeShow() {

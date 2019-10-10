@@ -17,24 +17,17 @@
         </div>
       </div>
       <div class="body">
-        <div class="body-title">
-          <span>标题</span>
-        </div>
-        <input type="text" placeholder="产品资讯" v-model="initData.shareTitle">
         <div class="body-conter">
-          <div class="left">
-            <div><span>封面</span><i class="icon iconfont iconicon-exclamationmark"></i></div>
-            <div class="mask">
-              <img :src="initData.coverUrl" alt="">
-              <span @click="handlerUpload">设置封面</span>
-            </div>
-          </div>
           <div class="right">
+            <div class="body-title">
+              <span>标题</span>
+            </div>
+            <input type="text" placeholder="产品资讯" v-model="initData.shareTitle">
             <h6>描述</h6>
             <el-input
               class="textarea"
               type="textarea"
-              rows="5"
+              rows="3"
               v-model="initData.description"
               placeholder="非必填，不超过120个字符，该摘要只在发送图文消息为单条时显示"
               maxlength="120"
@@ -42,33 +35,36 @@
               resize="none"
             ></el-input>
           </div>
-        </div>
-        <div class="code">
-          <div class="page">
-            <span class="title">文章详情页</span>
-            <div class="select">
-              <span>{{pageInfoTitle}}</span>
-              <i class="icon iconfont iconguanbi" @click="changePageList"></i>
-              <ul v-if="isPageList">
-                <li v-for="(item,index) in pageList" :key='index' @click="changePageList(item)">
-                  {{item.title}}
-                </li>
-              </ul>
+          <div class="left">
+            <div><span>封面</span><i class="icon iconfont iconicon-exclamationmark"></i></div>
+            <div class="mask">
+              <img :src="initData.coverUrl" alt="">
+              <span @click="handlerUpload">设置封面</span>
             </div>
           </div>
-          <h6>分享地址 <span v-if="!hasCode">保存后生成二维码</span></h6>
-          <div v-if="hasCode">
-            <img src="http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/nELZAKssX063m0lC_qj_rw.png" alt="">
-            <span v-if="!hasCopy" class="tag-read" :data-clipboard-text="'tableData11'" @click="oCopy">复制链接</span>
-            <span v-else class="hasCopy">复制成功</span>
-            <div>http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6</div>
+        </div>
+        <div v-if="shareUrl" class="share-url">
+          <div class="left">
+            <h6>设置成功</h6>
+            <vue-qr  
+              :margin='0' 
+              :text="shareUrl" 
+              colorDark="black"
+              colorLight="#fff"
+              :dotScale='0.8'
+              :size="100">
+            </vue-qr>
             <p>微信扫一扫分享</p>
+          </div>
+          <div class="copy">
+            <div>{{shareUrl}}</div>
+            <span v-if="!hasCopy" class="tag-read" :data-clipboard-text="shareUrl" @click="oCopy">复制链接</span>
+            <span v-else class="hasCopy">复制成功</span>
           </div>
         </div>
       </div>
-      <vue-qr  :margin='30' text="Hello JacksonYEE" :size="200"></vue-qr>
       <div class="btn">
-        <span @click="closeShare(true)">确定</span>
+        <span @click="closeShare(true)">保存</span>
         <span @click="closeShare(false)">取消</span>
       </div>
     </div>
@@ -85,7 +81,7 @@ import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { stringify } from 'querystring';
 import VueQr from 'vue-qr';
 import { notify } from "@/utlis/index.js";
-import { getPageInfoList } from "@/api/request/account.js";
+import { getPageInfoList, addShare, updataShare } from "@/api/request/account.js";
 import Clipboard from 'clipboard'
 export default {
   props: {
@@ -118,6 +114,7 @@ export default {
       isPageList: false,
       pageInfoTitle: '', //详情页title
       imageChooseAreaShowFlag: false, //图片控件
+      shareUrl: this.infoData.shareUrl,
       initData: this.infoData
     }
   },
@@ -136,15 +133,24 @@ export default {
         this.pageList = data
         console.log(this.pageList,'000000')
       }
-      console.log('list22',data)
     },
-    //生成二维码
-    initCode(){
-      // text：扫描二维码后展示的文字，可以添加跳转的路径
-      // margin：二维码周围的边距。默认20 ，可以自行设置
-      // bgSrc：加入二维码背景图片
-      // logoSrc 在二维码中间插入图片
-      // size：二维码尺寸
+    //切换图片
+    async getImage(src) {
+      this.initData.coverUrl = src;
+    },
+    //选则文章详情页
+    changePageList(val){
+      this.isPageList = !this.isPageList
+      if(val) {
+        this.pageInfoTitle = val.title;
+        this.initData.pageInfoId = val.id;
+      }
+    },
+    handleCloseModal() {
+      this.imageChooseAreaShowFlag = false;
+    },
+    handlerUpload(){
+      this.imageChooseAreaShowFlag=true
     },
     //复制
     oCopy(){
@@ -165,64 +171,70 @@ export default {
         clipboard.destroy()  
       })  
     },
-    //切换图片
-    async getImage(src) {
-      this.initData.coverUrl = src;
-      //this.$emit("handlerPic",this.picUrl)
-    },
-    //选则文章详情页
-    changePageList(val){
-      this.isPageList = !this.isPageList
-      if(val) {
-        this.pageInfoTitle = val.title;
-        this.initData.pageInfoId = val.id;
-      }
-    },
-    handleCloseModal() {
-      this.imageChooseAreaShowFlag = false;
-    },
-    handlerUpload(){
-      this.imageChooseAreaShowFlag=true
-    },
     testData(){
       let flag = true
-      if(this.infoData.entityType) {
+      if(!this.infoData.entityType) {
         console.log('00000分享类型')
         flag = false
       }
-      if(this.infoData.entityId) {
+      if(!this.infoData.entityId) {
         console.log('00000id')
         flag = false
       }
-      if(this.infoData.coverUrl) {
+      if(!this.infoData.coverUrl) {
         console.log('00000封面图片')
         flag = false
       }
-      if(this.infoData.shareTitle) {
+      if(!this.infoData.shareTitle) {
         console.log('00分享title')
         flag = false
       }
-      if(this.infoData.description) {
+      if(!this.infoData.description) {
         console.log('00描述')
-        flag = false
-      }
-      if(this.infoData.pageInfoId) {
-        console.log('详情页id')
         flag = false
       }
       return flag 
     },
-    closeShare(val){
+    async closeShare(val){
+      console.log(this.infoData,'.entityType')
         //1校验
+        if (!val) {
+          this.$emit('closeShare',false)
+          return
+        }
         let flag = this.testData()
         if (!flag) {
           notify(this, '请完善信息', 'error')
+          return
         }
-        //生成二维码和分享URL
-        // http://+推广域名+product/news/page+详情页ID+推广实体ID+.html
-        //let url = `http://${this.promotionUrl}page${}`
-
-      this.$emit('closeShare',val)
+        if (this.infoData.id) {
+          console.log('2213',this.infoData.id)
+          //修改 
+          let options = {
+            entityType: this.infoData.entityType, //分享类型 文章 产品 页面
+            entityId: this.infoData.entityId, //id
+            coverUrl: this.infoData.coverUrl, //封面图片
+            shareTitle: this.infoData.shareTitle, //分享id
+            pageTitle: this.infoData.pageTitle, //页面，文章，产品标题
+            description: this.infoData.description, //描述
+            pageInfoId: this.infoData.pageInfoId // 详情页id，页面推广时不选
+          }
+          let data = await updataShare(this.siteId,this.initData.id,options)
+          if (data && data.status == 200) {
+            this.$emit('closeShare',false)
+          } else {
+             notify(this, '新增失败', 'error')
+          }
+        } else {
+          console.log('2256',this.infoData.id)
+          //新增
+          let data = await addShare(this.siteId,this.initData)
+          if (data && data.status == 200) {
+            this.$emit('closeShare',false,data.data,this.infoData.entityType)
+          } else {
+             notify(this, '新增失败', 'error')
+          }
+        }
     }
   }
 };
@@ -242,9 +254,8 @@ export default {
   .conteiner {
     position: relative;
     display: inline-block;
-    width: 540px;
+    width: 700px;
     height: 100%;
-    min-height: 1000px;
     padding: 24px;
     background: white;
     .share-title {
@@ -268,7 +279,7 @@ export default {
       .shaper-content {
         width:100%;
         height: 180px;
-        padding: 24px 0 0 100px;
+        padding: 24px 0 0 160px;
         background:rgba(248,250,252,1);
         .left {
           position: relative;
@@ -294,6 +305,7 @@ export default {
             height:60px;
             margin: 0;
             font-size:14px;
+            overflow: hidden;
             font-family:'AlibabaPuHuiTiR';
             color:rgba(136,136,136,1);
             line-height:20px;
@@ -325,32 +337,11 @@ export default {
     }
     .body {
       text-align: left;
-      .body-title {
-        padding: 14px;
-        span {
-          font-size:16px;
-          font-family:'PingFangSC-Medium,PingFangSC';
-          font-weight:500;
-          color:rgba(38,38,38,1);
-          line-height:22px;
-        }
-      }
-      input {
-        width:493px;
-        height:40px;
-        padding-left: 16px;
-        border-radius:2px;
-        border:1px solid rgba(229,229,229,1);
-        font-size:14px;
-        font-family: "PingFangSC-Regular,PingFangSC";
-        font-weight:400;
-        color:rgba(38,38,38,1);
-        line-height:40px;
-      }
       .body-conter {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         .left {
+          width: 160px;
           span {
             display: inline-block;
             font-size:16px;
@@ -374,11 +365,13 @@ export default {
           }
           .mask {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 160px;
+            height: 160px;
+            background: url("~img/cover.jpg") no-repeat center;
+            background-size: contain;
             img {
-              width: 100px;
-              height: 100px;
+              width: 160px;
+              height: 160px;
             }
             span {
               position: absolute;
@@ -386,7 +379,7 @@ export default {
               left: 0;
               display: inline-block;
               padding: 0;
-              width:100px;
+              width:160px;
               height:34px;
               background:rgba(38,38,38,1);
               opacity:0.7;
@@ -395,11 +388,35 @@ export default {
               font-weight:400;
               color:rgba(255,255,255,1);
               line-height:34px;
+              cursor: pointer;
             }
           }
         }
         .right {
-          width: 350px;
+          width: 450px;
+          height: 220px;
+          .body-title {
+            padding: 14px 0;
+            span {
+              font-size:16px;
+              font-family:'PingFangSC-Medium,PingFangSC';
+              font-weight:500;
+              color:rgba(38,38,38,1);
+              line-height:22px;
+            }
+          }
+          input {
+            width:450px;
+            height:40px;
+            padding-left: 10px;
+            border-radius:2px;
+            border:1px solid rgba(229,229,229,1);
+            font-size:14px;
+            font-family: "PingFangSC-Regular,PingFangSC";
+            font-weight:400;
+            color:rgba(38,38,38,1);
+            line-height:40px;
+          }
           h6 {
             font-size:16px;
             font-family:'PingFangSC-Medium,PingFangSC';
@@ -564,6 +581,67 @@ export default {
         border: 1px solid rgba(9,204,235,1);
         margin-left: 0px;
       }
+    }
+  }
+  .share-url {
+    margin-top: 30px;
+    .left {
+      float: left;
+      width: 100px;
+      text-align: center;
+      h6 {
+        font-size:14px;
+        font-family:'PingFangSC-Regular,PingFangSC';
+        color:rgba(38,38,38,1);
+        line-height:20px;
+        margin-bottom: 24px;
+      }
+      p {
+        font-size:14px;
+        font-family:'PingFangSC-Regular,PingFangSC';
+        font-weight:400;
+        color:rgba(38,38,38,1);
+        line-height:20px;
+        margin: 16px 0;
+      }
+    }
+    .copy {
+      width: 535px;
+      padding-top: 70px;
+      float: right;
+      div {
+          display: inline-block;
+          width:433px;
+          height:40px;
+          padding: 0 10px;
+          background:rgba(240,243,248,1);
+          border-radius:4px;
+          border:1px solid rgba(229,229,229,1);
+          font-size:14px;
+          font-weight:400;
+          color:rgba(38,38,38,1);
+          line-height:40px;
+          overflow: hidden;
+        }
+        span {
+          float: right;
+          width:90px;
+          height:40px;
+          background:rgba(9,204,235,1);
+          font-size:12px;
+          font-family:'PingFangSC-Regular,PingFangSC';
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:40px;
+          margin-left: 8px;
+          text-align: center;
+          cursor: pointer;
+        }
+        .hasCopy {
+          background:rgba(255,255,255,1);
+          color:rgba(9,204,235,1);
+          border: 1px solid rgba(9,204,235,1);
+        }
     }
   }
 }

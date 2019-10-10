@@ -91,7 +91,7 @@ export default {
             replyType: "1", //replyType 回复类型
             msgType: 1, //msgType 消息类型
             addAnswer: true,
-            SiteId: this.$store.state.dashboard.siteId,
+            siteId: this.$store.state.dashboard.siteId,
             replycontentData: {
                 imageMsg: {
                     picUrl: ""
@@ -133,7 +133,9 @@ export default {
         ImageText
     },
     created() {
-        //this._getWxIsAuth();
+        if (!this.$store.state.wxaccount.wx_status.isCertification) {
+            this._getWxIsAuth()
+        }
     },
     mounted() {
         this._getReplyDetail(1);
@@ -146,7 +148,6 @@ export default {
     },
     methods: {
         getSiteId(siteId) {
-            console.log('siteId',siteId)
         },
         // 切换站点刷新信息
         chooseWebsite(siteId) {
@@ -155,13 +156,15 @@ export default {
         async _getWxIsAuth() {
             await this.$store.dispatch('_getWxStatus')
             let wx_status = this.$store.state.wxaccount.wx_status
+            this.siteId = this.$store.state.dashboard.siteId
+            this.searchOption.SiteId = this.$store.state.dashboard.siteId
             if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
                 this.$router.replace({path:'/wechataccount/wxauther' });
             }
         },
         //获取回复详情
         async _getReplyDetail(replyType) {
-            let data = await autoAnswerApi.getReplyDetail(this.SiteId,replyType);
+            let data = await autoAnswerApi.getReplyDetail(this.siteId,replyType);
             this.replyDetail = data.data.data;
             this.msgType = data.data.msgType;
             this.isSet = data.data.isSet;
@@ -193,14 +196,10 @@ export default {
                 this.searchOption
             );
             this.keywordData = data;
-            console.log('pppp',data)
-            //this.replycontentData = data
-            
-
         },
         //删除回复信息
-        async _removeReply(SiteId,id) {
-            let { data, status } = await autoAnswerApi.removeReply(SiteId,id);
+        async _removeReply(siteId,id) {
+            let { data, status } = await autoAnswerApi.removeReply(siteId,id);
             if (status === 200) {
                 if (this.replyType != 3) {
                     this._getReplyDetail(this.replyType);
@@ -221,7 +220,7 @@ export default {
                         let {
                             data,
                             status
-                        } = await autoAnswerApi.removeKeywordReply(id,this.SiteId);
+                        } = await autoAnswerApi.removeKeywordReply(id,this.siteId);
                         this.$notify({
                             customClass: "notify-success",
                             message: `删除成功`,
@@ -235,7 +234,7 @@ export default {
         },
         //新增关键词回复信息
         async _addKeywordReply(option) {
-            let { data, status } = await autoAnswerApi.addKeywordReply(option,this.SiteId);
+            let { data, status } = await autoAnswerApi.addKeywordReply(option,this.siteId);
             if (status === 200) {
                 this.$notify({
                     customClass: "notify-success",
@@ -265,13 +264,12 @@ export default {
         },
         //编辑关键词回复信息
         async _updateKeywordReply(option, editorId) {
-            let data = await autoAnswerApi.updateKeywordReply(option, editorId, this.SiteId);
-            console.log(data, "编辑关键词回复信息");
+            let data = await autoAnswerApi.updateKeywordReply(option, editorId, this.siteId);
         },
         // 保存
         handlerSave() {
             let option = {
-                siteId: this.SiteId,
+                siteId: this.siteId,
                 replyType: this.replyType,
                 msgType: this.msgType,
                 publicPlatformReplyInput: {
@@ -364,14 +362,11 @@ export default {
                 } else {
                     this._addKeywordReply(newOption);
                 }
-
                 return;
             }
-            console.log('444',option)
             this._addOrOverrideReply(option);
         },
         handlerSaveImgText(list) {
-            console.log(list);
             this.replycontentData.newsMsg = list;
         },
         // 删除回复
@@ -410,7 +405,7 @@ export default {
                 message: this.$createElement("div", null, message),
                 callback: async action => {
                     if (action === "confirm") {
-                        this._removeReply(this.SiteId,this.replyDetail.id);
+                        this._removeReply(this.siteId,this.replyDetail.id);
                     }
                 }
             });
@@ -424,7 +419,6 @@ export default {
         },
         // 切换菜单
         handleClick(tab, event) {
-            console.log(tab,event,'9999')
             this.resetReplycontentData();
             this.msgType = 1;
             this.addAnswer = true;
@@ -464,7 +458,6 @@ export default {
         // 添加关键词回复
         handlerAddAnswer(value, item) {
             this.addAnswer = value;
-            console.log(item,'ooo');
             if (item && item.keywordList) {
                 this.replyDetail = item;
                 this.propKeywordList = item.keywordList;

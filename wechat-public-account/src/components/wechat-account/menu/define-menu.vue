@@ -213,6 +213,11 @@ export default {
     draggable,
     PopUp
   },
+  created() {
+    if (!this.$store.state.wxaccount.wx_status.isCertification) {
+      this._getWxIsAuth()
+    }
+  },
   mounted() {
     this._getMenuTree();
   },
@@ -227,6 +232,12 @@ export default {
       if (status == 200) {
         this._getMenuTree()
       }
+    },
+    // 校验是否已经授权认证
+    async _getWxIsAuth() {
+      await this.$store.dispatch('_setSiteId')
+      await this.$store.dispatch('_getWxStatus')
+      this.siteId = this.$store.state.dashboard.siteId
     },
     async _getMenuTree(val) {
       let { data } = await getMenuTree(this.siteId);
@@ -410,12 +421,10 @@ export default {
     },
     // 添加菜单
     async _handleAddMainMenu(name,order,id,level) {
-      console.log('name,order,id,level',name,order,id,level)
       let flag = this.testParameters();
       let  dataObj = {};
       //前端校验
-      if (order > 0 && flag) {
-        console.log('flag1',order > 0 && flag)
+      if (order > 0 && flag && !(order== 1 && level == 1)) {
         let dataDetail = this.menuDetail
         dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
         dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
@@ -424,7 +433,7 @@ export default {
         notify(this, '请完善菜单信息', "error");
       }
       //接口校验
-      if (order == 0 || dataObj.status == 200) {
+      if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
         console.log('888',order,dataObj.status)
         console.log('flag2',order == 0, dataObj.status)
           let newMenuItem = {
@@ -682,10 +691,10 @@ export default {
   .menu-operate__arae {
     display: flex;
     justify-content: center;
-    align-items: center;
     float: left;
     margin-top: 20px;
     width: calc(100% - 355px);
+    min-height: 660px;
     background: #f8fafc;
     border-radius: 2px;
     .menu-operate__none {
@@ -693,6 +702,7 @@ export default {
       display: flex;
       justify-content: center;
       .empty {
+        margin-top: 240px;
         width: 160px;
         height: 130px;
         .empty-icon {
