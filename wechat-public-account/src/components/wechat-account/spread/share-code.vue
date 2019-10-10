@@ -7,7 +7,14 @@
       </div>
       <div class="share-body">
         <h6>设置成功</h6>
-        <vue-qr  :margin='0' :text="shareUrl" :size="100"></vue-qr>
+        <vue-qr 
+          :margin='0' 
+          :text="shareUrl" 
+          colorDark="black"
+          colorLight="#fff"
+          :dotScale='0.8'
+          :size="100"> 
+        </vue-qr>
         <p>微信扫一扫分享</p>
         <div class="copy">
           <div>{{shareUrl}}</div>
