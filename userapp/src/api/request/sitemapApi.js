@@ -40,5 +40,5 @@ export const update = (siteId) => {
 }
 // 删除
 export const batchRemove = (siteId, para) => {
-    return ajaxRequest._delete(`${enbironmemy.siteManageApi}/api/v1/SiteMap/BatchRemove/${siteId}`, para);
+    return ajaxRequest._delete(`${enbironmemy.siteManageApi}/api/v1/SiteMap/BatchRemove/${siteId}`, { data: para});
 }
