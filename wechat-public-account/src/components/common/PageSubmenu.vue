@@ -27,10 +27,17 @@ export default {
     },
 
     methods: {
-        handlerRoute(item, index) {
+        async handlerRoute(item, index) {
             let domain = item.menuUrl.split("/")[0];
             if (wechataccountDomain == domain) {
-                this.$router.push(item.path);
+                await this.$store.dispatch('_setSiteId')
+                await this.$store.dispatch('_getWxStatus')
+                let wx_status = this.$store.state.wxaccount.wx_status
+                if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
+                    this.$router.replace({path:'/wechataccount/wxauther' });
+                } else {
+                    this.$router.push(item.path);
+                }
                 return
             } else {
                 window.location.href = "//" + item.menuUrl;

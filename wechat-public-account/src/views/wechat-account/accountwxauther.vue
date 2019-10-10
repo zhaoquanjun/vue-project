@@ -110,7 +110,13 @@ export default {
         await this.$store.dispatch('_getWxStatus')
       }
       let wx_status = this.$store.getters.wx_status;
-      this.step = wx_status.isResolveSuccess ? 3 : wx_status.isCertification ? 2:1;
+      if (wx_status.isAuth && wx_status.isCertification && wx_status.isResolveSuccess) {
+        this.step = 3
+      } else if (wx_status.isAuth && wx_status.isCertification && !wx_status.isResolveSuccess) {
+        this.step = 2
+      } else {
+        this.step = 1
+      }
       let {data} = await getCdnDomainList(this.siteId)
       if (data) {
         this.domainList = data
