@@ -50,6 +50,6 @@ export default {
     min-height: 373px;
     max-height: 373px;
     border: none;
-    padding: 24px 45px;
+    padding: 24px 16px;
 }
 </style>
