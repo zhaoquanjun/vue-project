@@ -280,7 +280,7 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
-      height: 90%;
+      height:calc(100% - 100px);
       overflow: hidden;
       border-bottom: 1px solid #eee;
       .popup-content__slider {

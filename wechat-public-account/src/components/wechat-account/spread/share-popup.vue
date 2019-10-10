@@ -116,7 +116,6 @@ export default {
     VueQr
   },
   created(){
-    console.log('infoData',this.infoData)
     this.getPageInfoList()
   },
   methods: {
@@ -250,7 +249,6 @@ export default {
     display: inline-block;
     width: 700px;
     height: 100%;
-    min-height: 1000px;
     padding: 24px;
     background: white;
     .share-title {

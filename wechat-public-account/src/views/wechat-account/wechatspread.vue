@@ -61,7 +61,7 @@
             label="操作"
             width="180">
             <template slot-scope="scope">
-              <i class="icon iconfont iconqiehuanxingshier" @click="handlelook(scope.row)"></i>
+              <i class="icon iconfont iconbianji" @click="handlelook(scope.row)"></i>
               <i class="icon iconfont iconshanchu" @click="remove(scope.row)"></i>
             </template>
           </el-table-column>
@@ -320,7 +320,7 @@ export default {
         width: 37px;
         height: 32px;
       }
-      .iconqiehuanxingshier {
+      .iconbianji {
         margin-right: 40px;
       }
     }
