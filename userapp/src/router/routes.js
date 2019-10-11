@@ -202,6 +202,14 @@ export const defaultRoutes = [
     }
   },
   {
+    path: "/signout-callback-oidc",
+    name: "signout-callback-oidc",
+    component: () => import("@/views/login/signout-callback-oidc.vue"),
+    // meta: {
+    //     requiresAuth: true,
+    // }
+},
+  {
     path: "/init",
     name: "init",
     component: () => import("@/views/login/init.vue"),

@@ -28,9 +28,9 @@ class SecurityService {
       : oidcMgr.signinRedirect()
   }
   signOut(returnPath) {
-   
+    clearAllLocal();
     oidcMgr.signoutRedirect({ state: returnPath }).then(function(resp) {
-      clearAllCookie();
+      
       
     }).catch(function(err) {
       console.log(err)

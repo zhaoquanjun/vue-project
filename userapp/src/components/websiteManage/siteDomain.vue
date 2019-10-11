@@ -173,7 +173,7 @@
                 let { data } = await domainApi.resolveCdnByAliYunToken(params);
                 if (!data.isSuccess && data.redirectUrl) {
                     // window.open(data.redirectUrl);
-                     let newWindow = window.open();
+                    let newWindow = window.open();
                     newWindow.location.href = data.redirectUrl;
                     //  var link = document.createElement("a");
                     // link.href = data.redirectUrl;
