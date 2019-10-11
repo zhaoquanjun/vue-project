@@ -79,7 +79,7 @@ axios.interceptors.response.use(
                     // 未登录则跳转登录页面，并携带当前页面的路径                
                     // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                     case 401:
-                        securityService.signOut();
+                        securityService.signIn();
                         break;
                     // 403 token过期                
                     // 登录过期对用户进行提示                
