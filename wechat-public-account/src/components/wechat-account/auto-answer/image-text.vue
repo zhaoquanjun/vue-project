@@ -180,6 +180,10 @@ export default {
                 this.curEditorItem.urlData = data.Href;
                 this.curEditorItem.contentPageId = data.Id;
                 this.curEditorTitle = transformationUrl(data.Type,this.promotionUrl,data.Href,data.Id)
+                console.log('99559',data)
+                if (data.PicUrl) {
+                    this.curEditorItem.picUrl = data.PicUrl
+                }
             }
         },
         downward(item, index) {
