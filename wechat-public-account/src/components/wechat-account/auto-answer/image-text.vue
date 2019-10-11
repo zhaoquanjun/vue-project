@@ -142,7 +142,7 @@ export default {
             curEditorItem: {
                 title: "",
                 description: "",
-                picUrl: require('img/cover.jpg'),
+                picUrl: require('img/picCover.png'),
                 urlType: "",
                 urlData: "",
                 contentPageId: ''
@@ -235,7 +235,7 @@ export default {
             this.curEditorItem = {
                 title: "",
                 description: "",
-                picUrl: require('img/cover.jpg'),
+                picUrl: require('img/picCover.png'),
                 urlType: "",
                 urlData: "",
                 contentPageId: ''
