@@ -1,5 +1,5 @@
 import oidcMgr from '@/services/authentication/oidcService';
-import {clearAllCookie } from "@/libs/local.js";
+import {clearAllLocal } from "@/libs/local.js";
 const globalAuthData = {
   isAuthenticated: false,
   token: ''

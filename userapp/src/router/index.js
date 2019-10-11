@@ -15,23 +15,25 @@ export default router;
 
 
 router.beforeEach(async (to, from, next) => {
+  document.title = to.meta.title;
   let user = await securityService.getUser();
   let accessToken;
   if(user){
     accessToken =user.access_token
   }
-  document.title = to.meta.title;
+
 
     if (to.name !== "callback") {
+      if (!to.meta.requiresAuth) {
+        // if (!getLocal('ymId')) {
+        //   await store.dispatch('_updateAppIdAndSiteIdToCookie')
+        // }
+        // store.dispatch('_getMenuListData')
+        // next()
+        return
+      }
       if (accessToken) {
-        if (!to.meta.requiresAuth) {
-          if (!getLocal('ymId')) {
-            await store.dispatch('_updateAppIdAndSiteIdToCookie')
-          }
-          store.dispatch('_getMenuListData')
-          next()
-          return
-        }
+       
         if (!parseFloat(getLocal('ymId'))) {
           await store.dispatch('_updateAppIdAndSiteIdToCookie')
         }
