@@ -5,7 +5,7 @@
 </template>
 <script>
 import mgr from "@/services/authentication/oidcService";
-import { clearAllCookie } from "@/libs/local.js";
+import store from "@/store/index";
 export default {
     async created() {
         try {
@@ -14,10 +14,15 @@ export default {
             if (result.state !== undefined) {
                 returnToUrl = result.state;
             }
-            window.location = returnToUrl;
-            clearAllCookie();
+            await store.dispatch("_set", result)
+
+            // this.$router.push({
+            //     path:returnToUrl
+            // })
+            window.location =window.location.origin+ returnToUrl;
         } catch (e) {
-            window.location = "/401";
+            console.log(e,'errrrrr')
+            // window.location = "/401";
         }
     }
 };

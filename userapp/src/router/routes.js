@@ -212,7 +212,7 @@ export const defaultRoutes = [
     component: () => import("@/views/login/signcallback.vue"),
     meta: {
       title: "微站",
-      requiresAuth: true,
+      // requiresAuth: true,
     }
   },
   {

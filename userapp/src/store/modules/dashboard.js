@@ -79,7 +79,6 @@ const dashboard = {
 
         },
         set_authList(state, a) {
-            state.authList = JSON.stringify(a);
             state.authList = a;
             state.hasRules = true;
             setLocal("authList", a)
@@ -103,7 +102,9 @@ const dashboard = {
             }
         },
         async _updateAppIdAndSiteIdToCookie({ commit }) {
+           
             let { data } = await updateAppIdAndSiteIdToCookie();
+            console.log(data,'9975678')
             commit("SETAPPID", data)
         },
         async _getMenuListData({ commit, state }) {
@@ -138,6 +139,7 @@ const dashboard = {
             if (!state.authList) return;
             // let authList = JSON.parse(state.authList)
             return state.authList.some((item, index, array) => {
+               
                 return item === path;
             });
         },
