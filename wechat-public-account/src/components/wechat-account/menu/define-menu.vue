@@ -41,7 +41,7 @@
             <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
           </draggable>
       </div>
-      <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">菜单排序</div>
+      <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
     </div>
     <div class="menu-operate__arae">
       <order-menu v-show="isOrder"></order-menu>
