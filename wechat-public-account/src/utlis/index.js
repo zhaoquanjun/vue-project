@@ -49,15 +49,12 @@ export const transformationUrl = (type, domian, id, detailId) => {
     // id：页面，文章，产品id 纯链接url；
     // detailId：详情页id
     let url = '无效链接'
-    switch (type) {
-        case 'Url':
-            url = id;
-        case 'Page':
-            url = `http://${domian}/${id}`;
-        case 'News':
-            url = `http://${domian}/${detailId}/${id}.html`;
-        case 'Product':
-            url = `http://${domian}/${detailId}/${id}.html`;
+    if (type == 'Url'){
+        url = id;
+    } else if(type == 'Page') {
+        url = `http://${domian}/${id}`;
+    } else if(type == 'Product' || type == 'News') {
+        url = `http://${domian}/${detailId}/${id}.html`;
     }
     return url
 }
