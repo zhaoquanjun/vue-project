@@ -49,7 +49,9 @@ const dashboard = {
     actions: {
         async _setSiteId({ commit }) {
             let { data } = await getCurSiteId();
-            commit("SETSITEID", data)
+            if(data) {
+                commit("SETSITEID", data)
+            }
         },
         async _updateAppIdToCookie({ commit }){
             let { data } = await updateAppIdToCookie();

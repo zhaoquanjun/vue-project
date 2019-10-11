@@ -8,6 +8,7 @@
         <ul class="list" ref="list">
             <li
                 ref="listItem"
+                v-show="!isEditorShow"
                 :class="index===0?'fist-item':'list-item'"
                 v-for="(item,index) in list"
                 :key="index"
@@ -42,7 +43,10 @@
                     </div>
                 </div>
                 <div class="seting-info">
-                    <div class="seting-item">
+                    <div class="seting-item"
+                        style="cursor: pointer;"
+                        @click="showPopup"
+                    >
                         <div class="seting-title">设置链接</div>
                         <el-input
                             size="small"
@@ -53,8 +57,6 @@
                         >
                             <i
                                 class="el-icon-link el-input__icon"
-                                style="cursor: pointer;"
-                                @click="showPopup"
                                 slot="suffix"
                             ></i>
                         </el-input>
@@ -62,7 +64,7 @@
                     <div class="seting-item">
                         <div class="seting-title">设置封面</div>
                         <div class="cover">
-                            <div class="upload-icon" @click="setCover" v-if="!picUrl">
+                            <div class="upload-icon" @click="setCover" v-if="!curEditorItem.picUrl">
                                 <span class="el-icon-plus"></span>
                             </div>
                             <div  v-else>
@@ -116,7 +118,7 @@
     </div>
 </template>
 <script>
-import { trim, notify } from "@/utlis/index.js";
+import { trim, notify, transformationUrl } from "@/utlis/index.js";
 import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { uploadImg } from "@/api/request/account.js";
@@ -144,6 +146,7 @@ export default {
                 urlData: "",
                 contentPageId: ''
             },
+            promotionUrl: this.$store.state.wxaccount.account_info.promotionUrl,
             curEditorTitle: '',
             isUploaded: false,
             isEditorShow: false,
@@ -157,11 +160,7 @@ export default {
     },
     mounted() {
         this.list = this.newsMsg;
-        console.log('this.list',this.list)
         this.replyTypes = this.replyType;
-         this.list.forEach((item, index) => {
-                item["isShow"] = true;
-            });
         this.isEditorShow = this.list.length > 0 ? false : true;
     },
     methods: {
@@ -170,11 +169,16 @@ export default {
         },
         handleClosePopup (val,data){
             this.isShowPopup = val
+            //Type: Url; Page; Product; News
+            //Href: 输入的url; page.id; product.id; news.id
+            //Id: null; page.id; productPage.id; productNews.id
+            //Title: 输入的url; page.title; product.title; news.title
+            //PicUrl: ''; ''; product.picUrl; news.picUrl
             if (data) {
                 this.curEditorItem.urlType = data.Type;
                 this.curEditorItem.urlData = data.Href;
                 this.curEditorItem.contentPageId = data.Id;
-                this.curEditorTitle = data.Title;
+                this.curEditorTitle = transformationUrl(data.Type,this.promotionUrl,data.Href,data.Id)
             }
         },
         downward(item, index) {
@@ -188,6 +192,7 @@ export default {
             this.$set(this.list, index, tempOption);
         },
         editor(item, index) {
+            console.log('item',item)
             this.curEditorItem = item;
             let list = this.$refs.list;
             let editor = this.$refs.editor;
@@ -195,7 +200,7 @@ export default {
             this.listItems = listItems;
             this.index = index;
             this.isEditor = true;
-            this.$set(this.list[index], "isShow", false);
+            this.curEditorTitle = transformationUrl(item.urlType,this.promotionUrl,item.urlData,item.contentPageId)
             this.isEditorShow = true;
             list.insertBefore(editor, listItems[index]);
         },
@@ -220,10 +225,8 @@ export default {
                 console.log('7777',this.list)
             } else {
                 // 编辑
-
                 this.$set(this.list, this.index, this.curEditorItem);
             }
-            this.$set(this.list[this.index], "isShow", true);
             this.$emit("handlerSaveImgText", this.list);
             this.isEditorShow = this.isEditor = false;
             // 添加完成后重置一下
@@ -267,9 +270,6 @@ export default {
         newsMsg() {
             this.list = this.newsMsg;
             this.replyTypes = this.replyType;
-            this.list.forEach((item, index) => {
-                item["isShow"] = true;
-            });
             this.isEditorShow = this.newsMsg.length > 0 ? false : true;
          
         },

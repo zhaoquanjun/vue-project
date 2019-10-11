@@ -78,7 +78,7 @@ export default {
     _handleSelectPage(i) {
       this.pageId = i;
       this.$emit("handleChangeUrl", {
-        url: this.pageList[i].url,
+        url: this.pageList[i].id,
         title: this.pageList[i].title,
         id: this.pageList[i].id,
         cType: "Page"

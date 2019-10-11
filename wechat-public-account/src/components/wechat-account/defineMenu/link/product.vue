@@ -240,7 +240,7 @@ export default {
       this.urlId = this.productList[i].id
       this.productHref = `http://${this.promotionUrl}/product/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
         this.$emit("handleChangeUrl", {
-          url: this.productList[i].url,
+          url: this.productList[i].id,
           title: this.productList[i].name,
           cType: "Product",
           picUrl: this.productList[i].thumbnailPicUrlList.length>0?this.productList[i].thumbnailPicUrlList[0]:'',

@@ -27,6 +27,7 @@ export function imgSize(size, maxMb) {
     return isSizeOk;
 }
 
+//消息提示
 export const notify = (that,mag, type) => {
     that.$notify({
         customClass: `notify-${type}`,
@@ -34,4 +35,29 @@ export const notify = (that,mag, type) => {
         showClose: false,
         duration: 1500
     });
+}
+
+//转换链接
+//转换规则
+// 纯链接：url
+// 页面:http://域名/页面id
+// 文章:http://域名/news/文章详情页id/文章id.html
+// 产品:http://域名/product/产品详情页id/产品id.html
+export const transformationUrl = (type, domian, id, detailId) => {
+    // type: Url; Page; Product; News
+    // domian: 域名
+    // id：页面，文章，产品id 纯链接url；
+    // detailId：详情页id
+    let url = '无效链接'
+    switch (type) {
+        case 'Url':
+            url = id;
+        case 'Page':
+            url = `http://${domian}/${id}`;
+        case 'News':
+            url = `http://${domian}/${detailId}/${id}.html`;
+        case 'Product':
+            url = `http://${domian}/${detailId}/${id}.html`;
+    }
+    return url
 }

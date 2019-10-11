@@ -237,7 +237,7 @@ export default {
       this.urlId = this.newsList[i].id
       this.productHref = `http://${this.promotionUrl}/news/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
       this.$emit("handleChangeUrl", {
-        url: this.newsList[i].url,
+        url: this.newsList[i].id,
         title: this.newsList[i].title,
         cType: "News",
         picUrl:this.newsList[i].pictureUrl,
