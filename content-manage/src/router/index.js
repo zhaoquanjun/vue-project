@@ -29,6 +29,7 @@ router.beforeEach(async (to, from, next) => {
   if(user){
     accessToken = user.access_token
   }
+
   if (!to.meta.requiresAuth) {
     if (!appId) {
       await store.dispatch('_updateAppIdToCookie')
