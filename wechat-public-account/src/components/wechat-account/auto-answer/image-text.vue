@@ -100,8 +100,9 @@
                             resize="none"
                         ></el-input>
                     </div>
-                    <div class="seting-item">
+                    <div class="seting-item seting-btn">
                         <button class="editor-comfirm" @click="handlerConfirm">确定</button>
+                        <button class="editor-cancel" @click="handlerCancel">取消</button>
                     </div>
                 </div>
             </li>
@@ -207,6 +208,7 @@ export default {
         remove(item, index) {
             this.list = this.list.splice(index, 1);
         },
+        //确定
         handlerConfirm() {
             console.log('tuwen',this.curEditorItem)
             for (let key in this.curEditorItem) {
@@ -240,6 +242,10 @@ export default {
             };
             this.picUrl = ''
             this.curEditorTitle = ''
+        },
+        //取消
+        handlerCancel(){
+            this.isEditorShow = false
         },
         handlerAddNewsImg() {
             this.index = this.list.length + 1;
@@ -368,18 +374,31 @@ export default {
             box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
             .seting-item {
                 padding-bottom: 16px;
+                
             }
             .seting-title {
                 padding-bottom: 8px;
             }
+            .seting-btn {
+                display: flex;
+                justify-content: space-around;
+            }
             .editor-comfirm {
-                display: block;
+                display: inline-block;
                 width: 70px;
                 height: 32px;
                 background: rgba(9, 204, 235, 1);
                 border-radius: 2px;
                 color: #fff;
-                margin: 0 auto;
+            }
+            .editor-cancel {
+                display: inline-block;
+                width: 70px;
+                height: 32px;
+                background: #fff;
+                border-radius: 2px;
+                color: rgba(9, 204, 235, 1);
+                border: 1px solid rgba(9, 204, 235, 1);
             }
             .cover {
                 width: 140px;
