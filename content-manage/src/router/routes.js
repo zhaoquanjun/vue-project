@@ -5,6 +5,11 @@ export const defaultRoutes = [
     {
         path: "/",
         redirect: { path: '/content/news' },
+        meta: {
+            title: "内容管理",
+            requiresAuth: true,
+            requiresRole: {},
+          }
     },
     
     {

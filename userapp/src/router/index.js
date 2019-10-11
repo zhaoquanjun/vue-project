@@ -22,14 +22,9 @@ router.beforeEach(async (to, from, next) => {
     accessToken =user.access_token
   }
 
-
     if (to.name !== "callback") {
       if (!to.meta.requiresAuth) {
-        // if (!getLocal('ymId')) {
-        //   await store.dispatch('_updateAppIdAndSiteIdToCookie')
-        // }
-        // store.dispatch('_getMenuListData')
-        // next()
+        next()
         return
       }
       if (accessToken) {
@@ -67,6 +62,7 @@ router.beforeEach(async (to, from, next) => {
           })
       }
     } else {
+      alert(2)
       next()
     }
   

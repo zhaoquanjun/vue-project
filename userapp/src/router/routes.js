@@ -15,6 +15,11 @@ export const defaultRoutes = [
   {
     path: "/",
     redirect: { path: '/board' },
+    meta: {
+      title: "控制台首页",
+      requiresAuth: true,
+      requiresRole: {},
+    }
   },
   {
     path: "/board",
