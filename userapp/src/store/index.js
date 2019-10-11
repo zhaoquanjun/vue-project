@@ -26,26 +26,17 @@ export default store;
 /**
  * 页面刷新再将local中的token 写入store中
  */
-if (getLocal("token")){
-  let obj = {
-      access_token: getLocal("token"),
-    }
-    //let appid = getLocal("appid")
-    //store.commit("SETAPPID", appid)
-    store.commit("SET_USER", obj)
-  
-    // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
-     getLocal("authList")&& store.commit("set_authList",JSON.parse(getLocal("authList")))
-}
+
+getLocal("authList")&& store.commit("set_authList",getLocal("authList"))
 if(getLocal("ymSd")){
- store.commit("SETSITEID",getLocal("ymSd"))
+  store.commit("SETSITEID",getLocal("ymSd"))
 }
-if(getLocal("ymId")){
-  store.commit("SETAPPID",getLocal("ymId"))
- }
+if (process.env.NODE_ENV === 'development') {
+  if(getLocal("ymId")){
+    store.commit("SETAPPID",getLocal("ymId"))
+   }
+}
+
 if(getLocal("userInfo")){
-  store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
+  // store.commit("SET_USERINFO",getLocal("userInfo"))
 }
-// if(Cookies("navItem")){
-//   store.commit("SETCODE",Cookies("navItem"))
-// }

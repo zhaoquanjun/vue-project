@@ -43,20 +43,22 @@ export default store;
 /**
  * 页面刷新再将local中的token 写入store中
  */
-if (getLocal("token")) {
-  let obj = {
-    access_token: getLocal("token"),
-  }
-  store.commit("SET_USER", obj)
-  // // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
-  getLocal("authList") && store.commit("set_authList", JSON.parse(getLocal("authList")))
-}
-if(getLocal("ymId")){
-    store.commit("SETAPPID", getLocal("ymId"))
-}
+console.log(getLocal("token"))
+// if (getLocal("token")) {
+//   let obj = {
+//     access_token: getLocal("token"),
+//   }
+//   console.log(obj,'2345675432')
+//   store.commit("SET_USER", obj)
+//   // // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
+//   getLocal("authList") && store.commit("set_authList", JSON.parse(getLocal("authList")))
+// }
+// if(getLocal("ymId")){
+//     store.commit("SETAPPID", getLocal("ymId"))
+// }
 
-if(getLocal("userInfo")){
-  store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
-}
+// if(getLocal("userInfo")){
+//   store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
+// }
 
 

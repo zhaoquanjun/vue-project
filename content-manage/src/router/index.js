@@ -19,17 +19,23 @@ let router = new VueRouter({
   routes: defaultRoutes
 });
 export default router;
-let accessToken = store.state.accessToken.Authorization;
 let appId = store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
   NProgress.start()
+
+  let user = await securityService.getUser();
+  let accessToken;
+  if(user){
+    accessToken = user.access_token
+  }
+
   if (!to.meta.requiresAuth) {
-    if (!appId) {
-      await store.dispatch('_updateAppIdToCookie')
-    }
-    store.dispatch('_getMenuListData')
-    next()
+    // if (!appId) {
+    //   await store.dispatch('_updateAppIdToCookie')
+    // }
+    // store.dispatch('_getMenuListData')
+    // next()
     return
   }
   if (to.name !== "callback") {
@@ -49,6 +55,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
 
       securityService.getUser().then(async (data) => {
+        console.log(data,'----')
         if (!data) {
           securityService.signIn();
           next()

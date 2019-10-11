@@ -12,21 +12,28 @@ const router = new VueRouter({
   routes: defaultRoutes
 });
 export default router;
-let accessToken = store.state.user.accessToken.Authorization;
-router.beforeEach(async (to, from, next) => {
 
+
+router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
+  let user = await securityService.getUser();
+  let accessToken;
+  if(user){
+    accessToken =user.access_token
+  }
+
 
     if (to.name !== "callback") {
+      if (!to.meta.requiresAuth) {
+        // if (!getLocal('ymId')) {
+        //   await store.dispatch('_updateAppIdAndSiteIdToCookie')
+        // }
+        // store.dispatch('_getMenuListData')
+        // next()
+        return
+      }
       if (accessToken) {
-        if (!to.meta.requiresAuth) {
-          if (!getLocal('ymId')) {
-            await store.dispatch('_updateAppIdAndSiteIdToCookie')
-          }
-          store.dispatch('_getMenuListData')
-          next()
-          return
-        }
+       
         if (!parseFloat(getLocal('ymId'))) {
           await store.dispatch('_updateAppIdAndSiteIdToCookie')
         }
@@ -49,13 +56,12 @@ router.beforeEach(async (to, from, next) => {
           next('/404')
         }
       } else {
-          securityService.getUser(location.href).then(async (data) => {
+          securityService.getUser().then(async (data) => {
             if (!data) {
               securityService.signIn();
               return
             } else {
               store.dispatch("_set", data)
-              console.log(data)
               next()
             }
           })

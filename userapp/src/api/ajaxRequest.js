@@ -4,7 +4,7 @@
 
 import axios from 'axios';
 import { Notification } from 'element-ui';
-import { getLocal, clearAllCookie } from "@/libs/local.js";
+import { getLocal, clearAllLocal } from "@/libs/local.js";
 import environment from "@/environment/index.js";
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
@@ -27,12 +27,15 @@ axios.defaults.headers.put['Content-Type'] = 'application/json-patch+json;charse
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.withCredentials = true;
 // 请求拦截器
-axios.interceptors.request.use(
-    config => {
-
+axios.interceptors.request.use( async config => {
+        let data = await securityService.getUser()
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-        const token = getLocal('token');
+        let token ="";
+        if(data){
+            token = data.access_token
+        }
+       
         token && (config.headers.Authorization = "Bearer " + token);
         if (process.env.NODE_ENV === 'development') {
             config.headers.AppId = getLocal('ymId') ? getLocal('ymId') : store.state.dashboard.appId;
@@ -75,7 +78,6 @@ axios.interceptors.response.use(
                     // 未登录则跳转登录页面，并携带当前页面的路径                
                     // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                     case 401:
-                        clearAllCookie();
                         securityService.signOut();
                         break;
                     // 403 token过期                
@@ -83,8 +85,8 @@ axios.interceptors.response.use(
                     // 清除本地token和清空vuex中token对象                
                     // 跳转登录页面                
                     case 403:
-                        alert('403')
-                        clearAllCookie();
+                       
+                        clearAllLocal();
                         securityService.signIn();
                         break;
                     // 404请求不存在                
