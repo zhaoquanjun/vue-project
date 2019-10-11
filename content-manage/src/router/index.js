@@ -31,11 +31,11 @@ router.beforeEach(async (to, from, next) => {
   }
   if (to.name !== "callback") {
     if (!to.meta.requiresAuth) {
-      // if (!appId) {
-      //   await store.dispatch('_updateAppIdToCookie')
-      // }
-      // store.dispatch('_getMenuListData')
-      // next()
+      if (!appId) {
+        await store.dispatch('_updateAppIdToCookie')
+      }
+      store.dispatch('_getMenuListData')
+      next()
       return
     }
     if (accessToken) {

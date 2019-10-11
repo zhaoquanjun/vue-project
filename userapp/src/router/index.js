@@ -13,7 +13,7 @@ const router = new VueRouter({
 });
 export default router;
 
-
+let appId = store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
   let user = await securityService.getUser();
@@ -24,7 +24,11 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.name !== "callback") {
       if (!to.meta.requiresAuth) {
-        next()
+        if (!appId) {
+            await store.dispatch('_updateAppIdToCookie')
+          }
+          store.dispatch('_getMenuListData')
+          next()
         return
       }
       if (accessToken) {
@@ -62,7 +66,7 @@ router.beforeEach(async (to, from, next) => {
           })
       }
     } else {
-      alert(2)
+     
       next()
     }
   
