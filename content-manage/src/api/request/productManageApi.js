@@ -67,6 +67,13 @@ export const copyBatchProduct = options => {
 /**
  * 获取文章产品预览地址
  */
-export const GetContentPrevAddress = (pageType) => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Page/GetContentPrevAddress/${pageType}`);
+export const GetContentPrevAddress = (pageType, siteId) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Page/GetContentPrevAddress/${pageType}`, { siteId: siteId});
 };
+
+/**
+ * 获取站点下拉列表
+ */
+export const getSiteList = () => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/siteInfo/GetSites`);
+}
