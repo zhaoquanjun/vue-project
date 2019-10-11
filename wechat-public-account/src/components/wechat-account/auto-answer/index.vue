@@ -24,7 +24,7 @@
             >
             <!-- 添加关键词回复 addAnswer===false" 下方出现 -->
             <keyword-answer
-                v-if="addAnswer===false"
+                v-if="replyType==='3' && addAnswer===false"
                 slot="keyword"
                 ref="keywordAnswer"
                 :addAnswer="addAnswer"
@@ -242,15 +242,17 @@ export default {
                     showClose: false,
                     duration: 1500
                 });
+                if (this.replyType == 3) {
+                    this.addAnswer = true;
+                    this._getReplyDetail(3);
+                }
                 this.isSet = true;
                 this.replyDetail.id = data;
             }
         },
         //新增或者覆盖回复信息
         async _addOrOverrideReply(option) {
-            let { data, status } = await autoAnswerApi.addOrOverrideReply(
-                option
-            );
+            let { data, status } = await autoAnswerApi.addOrOverrideReply(option);
             if (status === 200) {
                 this.$notify({
                     customClass: "notify-success",
@@ -258,6 +260,10 @@ export default {
                     showClose: false,
                     duration: 1500
                 });
+                if (this.replyType == 3) {
+                    this.addAnswer = true;
+                    this._getReplyDetail(3);
+                }
                 this.isSet = true;
                 this.replyDetail.id = data;
             }
@@ -265,9 +271,23 @@ export default {
         //编辑关键词回复信息
         async _updateKeywordReply(option, editorId) {
             let data = await autoAnswerApi.updateKeywordReply(option, editorId, this.siteId);
+            if(data.status && data.status === 200) {
+                this.$notify({
+                    customClass: "notify-success",
+                    message: `保存成功`,
+                    showClose: false,
+                    duration: 1500
+                });
+                if (this.replyType == 3) {
+                    this.addAnswer = true;
+                    this._getReplyDetail(3);
+                }
+                this.isSet = true;
+                this.replyDetail.id = data;
+            }
         },
         // 保存
-        handlerSave() {
+        async handlerSave() {
             let option = {
                 siteId: this.siteId,
                 replyType: this.replyType,
