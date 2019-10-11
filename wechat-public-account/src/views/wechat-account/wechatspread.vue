@@ -215,13 +215,11 @@ export default {
     handleClosePopup (val,data){
       this.isShowPopup = val
       if (data) {
-        console.log(data,'0000004')
-        this.infoData = data
         this.isShow = true
         let entityId = ''
         this.infoData = {
           entityType: data.Type, //分享类型 文章 产品 页面
-          entityId: data.Type == 'Page' ? data.Id : data.Href.split("/")[2], //id
+          entityId: data.Href, //id
           coverUrl: data.PicUrl, //封面图片
           shareTitle: data.Title, //分享id
           pageTitle: data.Title, //页面，文章，产品标题

@@ -70,8 +70,8 @@
                             <div  v-else>
                                 <img :src="curEditorItem.picUrl" />
                                 <div class="mask1">
-                                    <button @click="removePic">
-                                        <i class="iconfont iconshanchu"></i>
+                                    <button @click="setCover">
+                                        <i class="iconfont iconqiehuanxingshiyi"></i>
                                     </button>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                 </div>
             </li>
         </ul>
-        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes != 3">
+        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes == 1">
             <span class="el-icon-plus avatar-uploader-icon"></span>
             <span>最多添加8个图文消息</span>
         </div>
@@ -141,7 +141,7 @@ export default {
             curEditorItem: {
                 title: "",
                 description: "",
-                picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                picUrl: require('img/cover.jpg'),
                 urlType: "",
                 urlData: "",
                 contentPageId: ''
@@ -233,7 +233,7 @@ export default {
             this.curEditorItem = {
                 title: "",
                 description: "",
-                picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                picUrl: require('img/cover.jpg'),
                 urlType: "",
                 urlData: "",
                 contentPageId: ''
@@ -382,7 +382,7 @@ export default {
                 margin: 0 auto;
             }
             .cover {
-                width: 70px;
+                width: 140px;
                 height: 70px;
                 border-radius: 2px;
                 overflow: hidden;

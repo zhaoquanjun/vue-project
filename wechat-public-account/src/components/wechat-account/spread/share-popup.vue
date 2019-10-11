@@ -208,7 +208,6 @@ export default {
           return
         }
         if (this.infoData.id) {
-          console.log('2213',this.infoData.id)
           //修改 
           let options = {
             entityType: this.infoData.entityType, //分享类型 文章 产品 页面
@@ -226,7 +225,6 @@ export default {
              notify(this, '新增失败', 'error')
           }
         } else {
-          console.log('2256',this.infoData.id)
           //新增
           let data = await addShare(this.siteId,this.initData)
           if (data && data.status == 200) {
