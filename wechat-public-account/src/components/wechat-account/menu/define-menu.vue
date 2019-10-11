@@ -119,11 +119,10 @@
               <div class="selectUrl">
                 <span>设置跳转链接</span>
                 <div>
-                  <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}<p/>
+                  <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}</p>
                   <i class="iconfont iconicon-des-lj" @click="selectUrl"></i>
                 </div>
               </div>
-              <p></p>
             </div>
             <PopUp
               :model="model"
@@ -893,9 +892,10 @@ export default {
   font-size:14px;
   font-family:'PingFangSC-Regular,PingFangSC';
   font-weight:400;
-  color:rgba(211,211,211,1);
+  color: #606266;
   line-height:36px;
   padding: 0 10px;
+  overflow: hidden;
 }
 .selectUrl div i {
   color: #0595E6;
