@@ -77,7 +77,6 @@ export default {
         .slot-content {
             min-height: 373px;
             overflow: auto;
-            height: 373px;
         }
         .picture {
             display: flex;
