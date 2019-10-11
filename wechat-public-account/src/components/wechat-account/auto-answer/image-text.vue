@@ -180,7 +180,6 @@ export default {
                 this.curEditorItem.urlData = data.Href;
                 this.curEditorItem.contentPageId = data.Id;
                 this.curEditorTitle = transformationUrl(data.Type,this.promotionUrl,data.Href,data.Id)
-                console.log('99559',data)
                 if (data.PicUrl) {
                     this.curEditorItem.picUrl = data.PicUrl
                 }
@@ -197,7 +196,6 @@ export default {
             this.$set(this.list, index, tempOption);
         },
         editor(item, index) {
-            console.log('item',item)
             this.curEditorItem = item;
             let list = this.$refs.list;
             let editor = this.$refs.editor;
@@ -214,7 +212,6 @@ export default {
         },
         //确定
         handlerConfirm() {
-            console.log('tuwen',this.curEditorItem)
             for (let key in this.curEditorItem) {
                 if (
                     typeof this.curEditorItem[key] == "string" &&
@@ -228,7 +225,6 @@ export default {
             if (!this.isEditor) {
                 this.list.push(this.curEditorItem);
                 this.isEditorShow = false;
-                console.log('7777',this.list)
             } else {
                 // 编辑
                 this.$set(this.list, this.index, this.curEditorItem);
@@ -260,7 +256,6 @@ export default {
         async getImage(src) {
             // let {data} = await uploadImg(src);
             // this.picUrl = data;
-            console.log('333',src)
              this.picUrl = src;
              this.curEditorItem.picUrl = src;
           

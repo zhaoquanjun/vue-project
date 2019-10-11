@@ -156,7 +156,7 @@ export default {
       return 'header-row-class-name'
     },
     getSiteId(siteId) {
-      console.log('000')
+    
     },
     async getInfo(){
       let EntityTyp = 'Page';
@@ -203,7 +203,6 @@ export default {
     //删除handledelet
     async remove(val){
       let data = await remove(this.siteId,val.id)
-      console.log('999',data)
       if (data && data.status== 200) {
         this.getInfo();
       }
