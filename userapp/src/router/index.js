@@ -27,16 +27,16 @@ router.beforeEach(async (to, from, next) => {
       return
     }
 
-    if (to.name !== "callback") {
-      if (!to.meta.requiresAuth) {
-        if (!appId) {
-            await store.dispatch('_updateAppIdToCookie')
-          }
-          store.dispatch('_getMenuListData')
-        return
-      }
+   
       if (accessToken) {
-       
+        if (to.name !== "callback") {
+          if (!to.meta.requiresAuth) {
+            if (!appId) {
+                await store.dispatch('_updateAppIdToCookie')
+              }
+              store.dispatch('_getMenuListData')
+            return
+          }
         if (!parseFloat(getLocal('ymId'))) {
           await store.dispatch('_updateAppIdAndSiteIdToCookie')
         }
