@@ -24,9 +24,7 @@ router.beforeEach(async (to, from, next) => {
   if (user) {
     accessToken = user.access_token
   }
-  if (to.path == "/signout-callback-oidc") {
-    return
-  }
+
   if (accessToken) {
     if (to.path !== "/callback") {
    

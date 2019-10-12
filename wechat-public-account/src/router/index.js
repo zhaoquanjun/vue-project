@@ -27,10 +27,6 @@ router.beforeEach(async (to, from, next) => {
     accessToken = user.access_token
   }
 
-  if (to.path == "/signout-callback-oidc") {
-    return
-  }
-
   if (accessToken) {
   if (to.name !== "callback") {
     if (!to.meta.requiresAuth) {
