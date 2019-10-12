@@ -86,7 +86,7 @@ export default {
             this.pvTotal = this.pvTotal + item.count;
             this.pvList.push(item.count);
             this.yList.push(item.flag.slice(5,10))
-            if(index < 7) {
+            if(index > 23) {
               this.yLast.push(item.flag.slice(5,10))
             }
           })
