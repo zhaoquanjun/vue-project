@@ -23,10 +23,11 @@
           <span>230</span>
         </div>
       </div>
-      <div class="btn">
+      <div class="btns">
+        <span class="active">近7日</span>
+        <span>近30天</span>
       </div>
       <div id="myChart" :style="{width: '100%', height: '300px'}">
-
       </div>
     </div>
   </div>
@@ -49,7 +50,8 @@ export default {
   },
   data() {
     return {
-      msg: '000'
+      msg: '000',
+      interval: 0 //设置X轴数据间隔几个显示一个，为0表示都显示
     }
   },
   components: {
@@ -69,52 +71,60 @@ export default {
         let myChart = echarts.init(document.getElementById('myChart'))
         // 绘制图表
         myChart.setOption({
-            
-          tooltip: {
-              trigger: 'axis'
-          },
+          backgroundColor: '#fff',
           legend: {
-              data:['视频广告','直接访问','搜索引擎']
+            // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+            x: 'right',
+            // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+            y: 'top',
+            data:['阅读数','访问数']
           },
           grid: {
-              left: '3%',
-              right: '4%',
-              bottom: '3%',
+              left: '0%',
+              right: '1%',
+              bottom: '0%',
               containLabel: true
-          },
-          toolbox: {
-              feature: {
-                  saveAsImage: {}
-              }
           },
           xAxis: {
               type: 'category',
               boundaryGap: false,
-              data: ['周一','周二','周三','周四','周五','周六']
+              data: ['周一','周二','周三','周四','周五','周六'],
+              axisLabel: {
+                interval: this.interval  //设置X轴数据间隔几个显示一个，为0表示都显示
+              },
+              axisLine: {
+                lineStyle: {
+                  color: '#A1A8B1'
+                }
+              }
           },
           yAxis: {
-              type: 'value'
-          },
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  color: '#A1A8B1'
+                }
+              }
+            },
           series: [
               {
-                  name:'视频广告',
+                  name:'阅读数',
                   type:'line',
                   stack: '总量',
+                  symbolSize:10,
+                  symbol:'circle',  
                   data:[150, 232, 201, 154, 190, 330, 410]
               },
               {
-                  name:'直接访问',
+                  name:'访问数',
                   type:'line',
                   stack: '总量',
+                  symbolSize:10,
+                  symbol:'circle', 
                   data:[320, 332, 301, 334, 390, 330, 320]
-              },
-              {
-                  name:'搜索引擎',
-                  type:'line',
-                  stack: '总量',
-                  data:[820, 932, 901, 934, 1290, 1330, 1320]
               }
-          ]
+          ],
+          color: ['#09CCEB', '#0595E6']
         });
     }
   }
@@ -163,7 +173,7 @@ export default {
         border-radius:4px;
         border:1px solid rgba(229,229,229,1);
         margin-right: 24px;
-        &.div:last-child {
+        &:last-child {
           margin-right: 0;
         }
         img {
@@ -185,6 +195,28 @@ export default {
           line-height:24px;
         }
       }
+    }
+    .btns {
+      margin: 16px 0 0;
+      width:184px;
+      height:36px;
+      border-radius:18px;
+      border:1px solid rgba(185,203,207,1);
+      span {
+        display: inline-block;
+        width:90px;
+        height:36px;
+        text-align: center;
+        line-height: 36px;
+        width:45px;
+        font-family:'PingFangSC-Regular,PingFangSC';
+        font-weight:400;
+        color:rgba(38,38,38,1);
+      }
+      // .active {
+      //   background: #0595E6;
+      //   color: white;
+      // }
     }
   }
 }
