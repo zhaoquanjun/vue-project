@@ -53,7 +53,7 @@ const dashboard = {
                 commit("SETSITEID", data)
             }
         },
-        async _updateAppIdToCookie({ commit }){
+        async _updateAppIdAndSiteIdToCookie({ commit }){
             let { data } = await updateAppIdToCookie();
             commit("SETAPPID", data)
         },

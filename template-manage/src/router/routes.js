@@ -38,6 +38,7 @@ export const defaultRoutes = [
         name: "callback",
         component: () => import("@/views/login/signcallback.vue"),
         meta: {
+            title: "微站",
             requiresAuth: true,
         }
     },
@@ -45,9 +46,9 @@ export const defaultRoutes = [
         path: "/signout-callback-oidc",
         name: "signout-callback-oidc",
         component: () => import("@/views/login/signout-callback-oidc.vue"),
-        // meta: {
-        //     requiresAuth: true,
-        // }
+        meta: {
+            title: "微站",
+        }
     },
     {
         path: '/401',

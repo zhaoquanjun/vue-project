@@ -1,23 +1,9 @@
 import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index";
 import { getSiteInfo } from "@/api/request/siteBackupApi";
 import { getCurSiteId } from "@/api/request/dashboardApi";
-import { authRoutes } from "@/router/routes.js";
 import { setLocal } from "@/libs/local"
 
-// 更具后台菜单路由 匹配出 所需要显示的路由
-let getNeedRoutes = auth => {
-    function r(authRoutes) {
-        return authRoutes.filter(route => {
-            if (auth.includes(route.name)) {
-                if (route.children) {
-                    route.children = r(route.children);
-                }
-                return true; // 有权限就返回
-            }
-        });
-    }
-    return r(authRoutes);
-};
+
 // 序列化菜单
 let filterMenuListData = (source) => {
 
@@ -52,28 +38,16 @@ const dashboard = {
         isFormShow: false
     },
     mutations: {
-        GETUSERDASHBOARD(state, payload) {
-            state.appId = payload;
-            //setLocal('appid', payload);
-        },
+       
         SETSITEID(state, siteId) {
             state.siteId = siteId;
             setLocal('ymSd', siteId);
         },
         SETAPPID(state, appId) {
             state.appId = appId;
-            console.log(appId, 'appIdappIdappIdappIdappIdappId')
             setLocal('ymId', appId);
         },
-        GETVALIDATEMENU(state, payload) {
-            // Base64.encode()
-            setLocal('validateMenu', payload);
-            state.validateMenu = payload;
-
-            // setLocal('validateMenu', payload);
-        },
         set_menuList(state, m) {
-            // state.menuList = JSON.stringify(m);
             state.menuList = m;
             setLocal("menulist", m)
 
@@ -102,9 +76,7 @@ const dashboard = {
             }
         },
         async _updateAppIdAndSiteIdToCookie({ commit }) {
-           
             let { data } = await updateAppIdAndSiteIdToCookie();
-            console.log(data,'9975678')
             commit("SETAPPID", data)
         },
         async _getMenuListData({ commit, state }) {
@@ -128,18 +100,10 @@ const dashboard = {
             })
             return data
         },
-        async getAuthRoute({ commit, state }) {
-            // 要拿到所有权限的路由  权限列表了
-            let r = getNeedRoutes(state.authList);
-            // 当前需要动态添加的路由
-            return r;
-        },
+      
         async getCurRouteAuth({ state, getters }, path) {
-
             if (!state.authList) return;
-            // let authList = JSON.parse(state.authList)
             return state.authList.some((item, index, array) => {
-               
                 return item === path;
             });
         },
@@ -158,7 +122,6 @@ const dashboard = {
     getters: {
         getMenuList(state) {
             if (!state.menuList) return
-            // return JSON.parse(state.menuList)
             return state.menuList
         },
 

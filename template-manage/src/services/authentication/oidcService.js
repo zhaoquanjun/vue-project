@@ -8,6 +8,7 @@ const config = {
     response_type: 'code',
     // content.api
     //scope: 'openid profile content.api',
+    userStore: new Oidc.WebStorageStateStore({ store: window.localStorage }),
     scope: enbironmemy.scope,
     post_logout_redirect_uri: enbironmemy.logoutRedirectUri,
     automaticSilentRenew: true,

@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 import qs from 'qs';
-import { getLocal, clearAllCookie } from "@/libs/local.js"
+import { getLocal } from "@/libs/local.js"
 import environment from "@/environment/index.js"
 import store from "@/store/index"
 import { MessageBox, Message, Loading, Notification } from 'element-ui';
@@ -55,7 +55,6 @@ axios.interceptors.request.use(
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
 
         let data = await securityService.getUser();
-        console.log(data,'----')
         let token ="";
         if(data){
             token = data.access_token
@@ -94,19 +93,12 @@ axios.interceptors.response.use(
         let status = error.response.status;
         if (error.response.status) {
             switch (error.response.status) {
-                // 401: 未登录                
-                // 未登录则跳转登录页面，并携带当前页面的路径                
-                // 在登录成功后返回当前页面，这一步需要在登录页操作。                
                 case 401:
                    
                     // router.push({ path: '/401' })
                     securityService.signIn();
 
                     break;
-                // 403 token过期                
-                // 登录过期对用户进行提示                
-                // 清除本地token和清空vuex中token对象                
-                // 跳转登录页面                
                 case 403:
                     securityService.signIn();
                     break;

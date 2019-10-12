@@ -8,42 +8,25 @@ import { getLocal, clearAllLocal } from "@/libs/local.js";
 import environment from "@/environment/index.js";
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
-// 环境的切换
-// if (process.env.NODE_ENV == 'development') {    
-//     axios.defaults.baseURL = environment.memberManageApi;
-// }  else if (process.env.NODE_ENV == 'production') {    
-//     axios.defaults.baseURL = '/';
-// }
+
 axios.defaults.baseURL = environment.memberManageApi;
-// if (process.env.NODE_ENV === "production") {
-//     axios.defaults.withCredentials = true; //允许携带cookie
-// }
 
 // 请求超时时间
-axios.defaults.timeout = 15000;
+axios.defaults.timeout = 5000;
 //设置put请求传输内容的格式
 axios.defaults.headers.put['Content-Type'] = 'application/json-patch+json;charset=UTF-8';
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true; //允许携带cookie
 // 请求拦截器
 axios.interceptors.request.use( async config => {
         let data = await securityService.getUser();
-        console.log(data,'99999876545678')
-        // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
-        // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
         let token ="";
-        if(data){
-            token = data.access_token
-        }
-       
+        if (data){  token = data.access_token }
         token && (config.headers.Authorization = "Bearer " + token);
         if (process.env.NODE_ENV === 'development') {
             config.headers.AppId = getLocal('ymId') ? getLocal('ymId') : store.state.dashboard.appId;
         }
-       
-        //config.headers.SiteId = Cookies.get('SiteId') ? Cookies.get('SiteId') : store.state.dashboard.siteId;
-        // config.headers.AppId = "823EB3BD-93F4-4655-B833-D604A6EF2032";//store.state.dashboard.appid;
         return config;
     },
     error => {

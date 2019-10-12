@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import dashboard from "./modules/dashboard";
 import user from "./modules/user";
 Vue.use(Vuex);
-import { setLocal, getLocal, removeLocal } from '@/libs/local'
+import { getLocal } from '@/libs/local'
 const store = new Vuex.Store({
   modules: {
     dashboard,
@@ -13,24 +13,10 @@ const store = new Vuex.Store({
     accessToken: { Authorization: '' },
   },
   mutations: {
-    SET_USER: (state, user) => {
-      if (user) {
-        state.accessToken.Authorization = user.access_token;
-        setLocal('token', user.access_token);
-      } else {
-        state.accessToken.Authorization = '';
-        removeLocal('token');
-      }
-    },
+   
   },
   actions: {
-    // 前端 登出
-    FedLogOut({ commit }) {
-      return new Promise(resolve => {
-        commit('SET_USER', null)
-        resolve()
-      })
-    }
+   
   },
   getters: {
     token: state => state.accessToken.Authorization,
@@ -43,22 +29,11 @@ export default store;
 /**
  * 页面刷新再将local中的token 写入store中
  */
-console.log(getLocal("token"))
-// if (getLocal("token")) {
-//   let obj = {
-//     access_token: getLocal("token"),
-//   }
-//   console.log(obj,'2345675432')
-//   store.commit("SET_USER", obj)
-//   // // getLocal("menulist") && store.commit("set_menuList",JSON.parse(getLocal("menulist")))
-//   getLocal("authList") && store.commit("set_authList", JSON.parse(getLocal("authList")))
-// }
-// if(getLocal("ymId")){
-//     store.commit("SETAPPID", getLocal("ymId"))
-// }
 
-// if(getLocal("userInfo")){
-//   store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
-// }
+getLocal("authList")&& store.commit("set_authList",getLocal("authList"))
 
-
+if (process.env.NODE_ENV === 'development') {
+  if(getLocal("ymId")){
+    store.commit("SETAPPID",getLocal("ymId"))
+   }
+}

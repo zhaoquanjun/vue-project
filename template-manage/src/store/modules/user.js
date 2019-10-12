@@ -1,26 +1,23 @@
-import { setLocal } from '@/libs/local'
 import { getAppHeadInfo } from "@/api/request/user.js"
+import { setLocal } from '@/libs/local'
 const user = {
   state: {
-    accessToken: { Authorization: '' },
-    userInfo: ""
+    userInfo:""
   },
   mutations: {
-    SET_USER: (state, user) => {
-      if (user) {
-        state.accessToken.Authorization = user.access_token;
-        setLocal('token', user.access_token);
-      } else {
-        state.accessToken.Authorization = '';
-        removeLocal('token');
-      }
-    },
     SET_USERINFO: (state, payload) => {
       state.userInfo = payload;
-      setLocal("userInfo", payload)
+      setLocal("userInfo",payload)
     }
   },
   actions: {
+    async _set(context,data){
+      if (process.env.NODE_ENV === 'development') {
+        await context.dispatch('_updateAppIdAndSiteIdToCookie')
+      }
+      await context.dispatch('_getMenuListData')
+      await context.dispatch('_getAppHeadInfo')
+    },
     async _getAppHeadInfo({ commit }) {
       let { data } = await getAppHeadInfo();
       commit("SET_USERINFO", data)
@@ -29,4 +26,3 @@ const user = {
 }
 
 export default user;
-

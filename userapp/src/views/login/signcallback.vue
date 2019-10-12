@@ -15,14 +15,9 @@ export default {
                 returnToUrl = result.state;
             }
             await store.dispatch("_set", result)
-
-            // this.$router.push({
-            //     path:returnToUrl
-            // })
-            window.location =window.location.origin+ returnToUrl;
+            window.location =window.location.origin + returnToUrl;
         } catch (e) {
             console.log(e,'errrrrr')
-            // window.location = "/401";
         }
     }
 };
