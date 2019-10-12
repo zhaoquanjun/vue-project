@@ -143,7 +143,8 @@ import OrderMenu from "_c/wechat-account/defineMenu/order-menu";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
 import WebsiteLink from "_c/wechat-account/defineMenu/link/link";
 import { notify } from "@/utlis/index.js";
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
+import { getLocal } from '@/libs/local';
 import ImageText from "@/components/wechat-account/auto-answer/image-text.vue";
 import { getMenuTree, getMenuDetail,addMenu,publishMenu,removeMenu,updateMenu,modifyMenuOrder } from "@/api/request/account.js";
 export default {
