@@ -2,30 +2,30 @@
   <div class="statistics">
     <div class="title">
       <span>这里是页面标题</span>
-      <span class="btn">返回</span>
+      <span class="btn" @click="closeStatistics">返回</span>
     </div>
     <div class="body">
-      <h4>{{'风向标题'}}</h4>
+      <h4>{{shareInfo.shareTitle}}</h4>
       <div class="total">
         <div>
           <img src="~img/share01.png"/>
           <p>近30日阅读数</p>
-          <span>30</span>
+          <span>{{pvTotal}}</span>
         </div>
         <div>
           <img src="~img/share02.png"/>
           <p>近30日访客数</p>
-          <span>230</span>
+          <span>{{uvTotal}}</span>
         </div>
         <div>
           <img src="~img/share03.png"/>
           <p>总分享数</p>
-          <span>230</span>
+          <span>{{shareInfo.shareCount}}</span>
         </div>
       </div>
       <div class="btns">
-        <span class="active">近7日</span>
-        <span>近30天</span>
+        <span @click="changeDay(0)" :class="{active: interval==0}">近7日</span>
+        <span @click="changeDay(1)" :class="{active: interval==1}">近30天</span>
       </div>
       <div id="myChart" :style="{width: '100%', height: '300px'}">
       </div>
@@ -35,6 +35,7 @@
 
 
 <script>
+import { getStatistics } from "@/api/request/account.js";
 // 引入基本模板
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
@@ -51,6 +52,13 @@ export default {
   data() {
     return {
       msg: '000',
+      siteId: this.$store.state.dashboard.siteId || getLocal("ymSd"),
+      pvTotal: 0,
+      pvList:[],
+      uvTotal: 0,
+      uvList:[],
+      yList:[],
+      yLast:[],
       interval: 0 //设置X轴数据间隔几个显示一个，为0表示都显示
     }
   },
@@ -58,16 +66,51 @@ export default {
     
   },
   mounted(){
-    this.initCode()
+    this.getInfo()
   },
   watch: {
     
   },
   methods: {
-    
+    async getInfo(){
+      let data = await getStatistics(this.siteId, this.shareInfo.id)
+      if (data && data.status == 200) {
+        this.pvTotal = 0;
+        this.pvList = [];
+        this.uvTotal = 0;
+        this.uvList = [];
+        this.yList=[];
+        this.yLast= [];
+        if(data.data.pv.length > 0) {
+          data.data.pv.map((item, index)=>{
+            this.pvTotal = this.pvTotal + item.count;
+            this.pvList.push(item.count);
+            this.yList.push(item.flag.slice(5,10))
+            if(index < 7) {
+              this.yLast.push(item.flag.slice(5,10))
+            }
+          })
+          data.data.uv.map((item, index)=>{
+            this.uvTotal = this.uvTotal + item.count;
+            this.uvList.push(item.count)
+          })
+        }
+        this.initCode()
+      }
+    },
+    //closeStatistics
+    closeStatistics(){
+      this.$emit('closeStatistics')
+    },
+    //改变天数
+    changeDay(val){
+      this.interval = val
+      this.initCode()
+    },
     //生成图表
     initCode(){
       // 基于准备好的dom，初始化echarts实例
+
         let myChart = echarts.init(document.getElementById('myChart'))
         // 绘制图表
         myChart.setOption({
@@ -81,14 +124,14 @@ export default {
           },
           grid: {
               left: '0%',
-              right: '1%',
+              right: '2%',
               bottom: '0%',
               containLabel: true
           },
           xAxis: {
               type: 'category',
               boundaryGap: false,
-              data: ['周一','周二','周三','周四','周五','周六'],
+              data: this.interval == 1 ? this.yList:this.yLast,
               axisLabel: {
                 interval: this.interval  //设置X轴数据间隔几个显示一个，为0表示都显示
               },
@@ -113,7 +156,7 @@ export default {
                   stack: '总量',
                   symbolSize:10,
                   symbol:'circle',  
-                  data:[150, 232, 201, 154, 190, 330, 410]
+                  data:this.pvList
               },
               {
                   name:'访问数',
@@ -121,7 +164,7 @@ export default {
                   stack: '总量',
                   symbolSize:10,
                   symbol:'circle', 
-                  data:[320, 332, 301, 334, 390, 330, 320]
+                  data:this.uvList
               }
           ],
           color: ['#09CCEB', '#0595E6']
@@ -148,6 +191,7 @@ export default {
       border:1px solid rgba(9,204,235,1);
       color: rgba(9,204,235,1);
       text-align: center;
+      cursor: pointer;
     }
   }
   .body {
@@ -197,9 +241,11 @@ export default {
       }
     }
     .btns {
-      margin: 16px 0 0;
+      margin: 32px 0 0;
       width:184px;
       height:36px;
+      display: flex;
+      justify-content: space-between;
       border-radius:18px;
       border:1px solid rgba(185,203,207,1);
       span {
@@ -208,15 +254,16 @@ export default {
         height:36px;
         text-align: center;
         line-height: 36px;
-        width:45px;
+        border-radius:18px;
         font-family:'PingFangSC-Regular,PingFangSC';
         font-weight:400;
         color:rgba(38,38,38,1);
+        cursor: pointer;
       }
-      // .active {
-      //   background: #0595E6;
-      //   color: white;
-      // }
+      .active {
+        background: #0595E6;
+        color: white;
+      }
     }
   }
 }

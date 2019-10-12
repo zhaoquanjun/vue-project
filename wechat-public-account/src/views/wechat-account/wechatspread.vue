@@ -79,7 +79,12 @@
         ></el-pagination>
       </div>
     </div>
-    <statistics v-if="isShowStatistics"></statistics>
+    <statistics 
+      v-if="isShowStatistics"
+      @closeStatistics="closeStatistics"
+      :shareInfo= "shareInfo"
+    >
+    </statistics>
     <sharePopup 
       v-if="isShow"
       :infoData='infoData'
@@ -125,6 +130,7 @@ export default {
       type: '',
       isShowPopup: false,
       isShowCode: false,
+      shareInfo: '',
       infoData: {},
       isShowStatistics: false,
       model: {
@@ -237,8 +243,11 @@ export default {
     //获取阅读分享数据
     async getStatistics(item){
       console.log('999',item)
+      this.shareInfo = item
       this.isShowStatistics = true
-      let data = await getStatistics(this.siteId, item.id)
+    },
+    closeStatistics(){
+      this.isShowStatistics = false
     },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
