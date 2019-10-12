@@ -170,7 +170,7 @@ export default {
       text: '2',
       menuDetail: {
         id: false,
-        siteId: this.$store.state.dashboard.siteId,
+        siteId: this.$store.state.dashboard.siteId || getLocal("ymSd"),
         name: "",
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
         behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
@@ -200,7 +200,7 @@ export default {
           }
         }
       },
-      siteId: this.$store.state.dashboard.siteId
+      siteId: this.$store.state.dashboard.siteId || getLocal("ymSd")
     };
   },
   components: {
@@ -213,9 +213,10 @@ export default {
     PopUp
   },
   created() {
-    if (!this.$store.state.wxaccount.wx_status.isCertification) {
-      this._getWxIsAuth()
-    }
+    let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+      if (!wx_status.isCertification) {
+        this._getWxIsAuth()
+      }
   },
   mounted() {
     this._getMenuTree();

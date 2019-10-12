@@ -6,7 +6,7 @@
         @getSiteId="getSiteId"
       />
     </div>
-    <div class="answer-tabs">
+    <div v-if="!isShowStatistics" class="answer-tabs">
       <el-tabs v-model="replyType" type="card" @tab-click="getInfo">
         <el-tab-pane label="页面推广" name="page"></el-tab-pane>
         <el-tab-pane label="文章推广" name="news"></el-tab-pane>
@@ -14,7 +14,7 @@
       </el-tabs>
       <div class="add" @click="addSpread">新增推广</div>
     </div>
-    <div class="spread-continer">
+    <div v-if="!isShowStatistics" class="spread-continer">
       <template>
         <el-table
           :data="list"
@@ -59,10 +59,11 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="180">
+            width="220">
             <template slot-scope="scope">
               <i class="icon iconfont iconbianji" @click="handlelook(scope.row)"></i>
               <i class="icon iconfont iconshanchu" @click="remove(scope.row)"></i>
+              <i class="icon iconfont iconshuju" @click="getStatistics(scope.row)"></i>
             </template>
           </el-table-column>
         </el-table>
@@ -78,6 +79,7 @@
         ></el-pagination>
       </div>
     </div>
+    <statistics v-if="isShowStatistics"></statistics>
     <sharePopup 
       v-if="isShow"
       :infoData='infoData'
@@ -104,9 +106,11 @@
 import ChangeSite from "@/components/common/changeSite";
 import SharePopup from "@/components/wechat-account/spread/share-popup.vue";
 import ShareCode from "@/components/wechat-account/spread/share-code.vue";
-import { unBind, getList,remove } from "@/api/request/account.js";
+import Statistics from "@/components/wechat-account/spread/statistics.vue";
+import { unBind, getList, remove, getStatistics } from "@/api/request/account.js";
 import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import { notify } from "@/utlis/index.js";
+import {getLocal} from '@/libs/local'
 export default {
   data() {
     return {
@@ -122,6 +126,7 @@ export default {
       isShowPopup: false,
       isShowCode: false,
       infoData: {},
+      isShowStatistics: false,
       model: {
           PageIndex: null,
           Type: null,
@@ -143,11 +148,13 @@ export default {
     ChangeSite,
     PopUp,
     SharePopup,
+    Statistics,
     ShareCode
   },
   created() {
-    if (!this.$store.state.wxaccount.wx_status.isCertification) {
-      this._getWxIsAuth()
+    let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+    if (!wx_status.isCertification) {
+        this._getWxIsAuth()
     }
     this.getInfo();
   },
@@ -227,6 +234,12 @@ export default {
         }
       }
     },
+    //获取阅读分享数据
+    async getStatistics(item){
+      console.log('999',item)
+      this.isShowStatistics = true
+      let data = await getStatistics(this.siteId, item.id)
+    },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
       this._getWxIsAuth()
@@ -284,6 +297,7 @@ export default {
     min-width: 1100px;
     overflow-y: auto;
     .iconfont {
+      margin-right: 20px !important;
       cursor: pointer;
     }
     .answer-tabs {

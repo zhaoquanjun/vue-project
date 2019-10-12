@@ -50,6 +50,7 @@
               placeholder="输入名称搜索"
               @keyup.enter.native="search"
               class="input-with-select"
+              v-show="!batchDeleteShow"
             >
               <i
                 class="el-icon-search el-input__icon"
@@ -58,9 +59,73 @@
                 @click="search"
               ></i>
             </el-input>
+            <div class="right" v-show="!batchDeleteShow">
+              <div class="rightText">批量设置</div>
+              <div class="changeBtn" v-show="batchSetting == 'all'">
+                <button @click="choseBatchSetting('priority')">
+                  <span>权重</span>
+                </button>
+                <span style="margin:0px 16px">|</span>
+                <button @click="choseBatchSetting('frequency')">
+                  <span>更新频率</span>
+                </button>
+              </div>
+              <div style="display:inline-block" v-show="batchSetting == 'priority'">
+                <el-select v-model="priority" placeholder="权重">
+                  <el-option
+                    v-for="item in priorityList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+                <div class="changeBtn" style="margin-left:24px">
+                  <button style="margin-right:8px" @click="determine('priority')">
+                    <span>确定</span>
+                  </button>
+                  <button @click="cancelSetting">
+                    <span>取消</span>
+                  </button>
+                </div>
+              </div>
+              <div style="display:inline-block" v-show="batchSetting == 'frequency'">
+                <el-select v-model="frequency" placeholder="更新频率">
+                  <el-option
+                    v-for="item in frequencyList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+                <div class="changeBtn" style="margin-left:24px">
+                  <button style="margin-right:8px" @click="determine('frequency')">
+                    <span>确定</span>
+                  </button>
+                  <button @click="cancelSetting">
+                    <span>取消</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div v-show="batchDeleteShow" class="batchDelete">
+              <span class="batchDeleteText">
+                已选择
+                <span>{{selectedList.length}}</span>
+                个{{type}}
+              </span>
+              <button @click="batchDelete">删除</button>
+            </div>
           </div>
           <div>
-            <List :listData="listData" :listType="listType" @remove="remove"></List>
+            <List
+              :listData="listData"
+              :listType="listType"
+              @remove="remove"
+              @handleSelectionChange="handleSelectionChange"
+              @update="update"
+              @chagePage="chagePage"
+              @changeSize="changeSize"
+            ></List>
           </div>
         </div>
         <div v-show="uploadType == 'manual'">
@@ -99,6 +164,7 @@
                 ref="multipleTable"
                 :data="addListData.list"
                 tooltip-effect="dark"
+                :height="300"
                 class="content-table"
                 @selection-change="handleAddSelectionChange"
               >
@@ -120,6 +186,21 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <div class="list-footer">
+                <div class="pageing" id="pageing" style="margin-right:0">
+                  <slot name="paging"></slot>
+                  <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next"
+                    :total="addListData.totalRecord"
+                    :page-count="addListData.totalPage"
+                    :page-size="addListData.pageSize"
+                    :page-sizes="[10,20,50]"
+                    @current-change="changeAddPage"
+                    @size-change="changeAddSize"
+                  ></el-pagination>
+                </div>
+              </div>
             </div>
           </div>
           <div class="confirm">
@@ -158,7 +239,78 @@ export default {
       addShow: false,
       addKeyword: "",
       addListData: {},
-      addSelectedList: {},
+      addPageSize: 10,
+      addPageIndex: 1,
+      addSelectedList: [],
+      batchSetting: "all",
+      priority: "",
+      priorityList: [
+        {
+          value: 1.0,
+          label: 1.0
+        },
+        {
+          value: 0.9,
+          label: 0.9
+        },
+        {
+          value: 0.8,
+          label: 0.8
+        },
+        {
+          value: 0.7,
+          label: 0.7
+        },
+        {
+          value: 0.6,
+          label: 0.6
+        },
+        {
+          value: 0.5,
+          label: 0.5
+        },
+        {
+          value: 0.4,
+          label: 0.4
+        },
+        {
+          value: 0.3,
+          label: 0.3
+        }
+      ],
+      frequency: "",
+      frequencyList: [
+        {
+          value: "always",
+          label: "经常"
+        },
+        {
+          value: "hourly",
+          label: "每小时"
+        },
+        {
+          value: "daily",
+          label: "每天"
+        },
+        {
+          value: "weekly",
+          label: "每周"
+        },
+        {
+          value: "monthly",
+          label: "每月"
+        },
+        {
+          value: "yearly",
+          label: "每年"
+        },
+        {
+          value: "never",
+          label: "从不"
+        }
+      ],
+      batchDeleteShow: false,
+      selectedList: [],
       keyword: "",
       pageSize: 10,
       pageIndex: 1,
@@ -174,6 +326,8 @@ export default {
     // 选择切换网站
     chooseWebsite(siteId) {
       this.curSiteId = siteId;
+      this.getList();
+      this.$refs.manualUpload.init(siteId);
     },
     async getList() {
       this.$Loading.show();
@@ -189,10 +343,20 @@ export default {
       this.$Loading.hide();
       this.listData = data;
     },
+    chagePage(page) {
+      this.pageIndex = page;
+      this.getList();
+    },
+    changeSize(size) {
+      this.pageSize = size;
+      this.getList();
+    },
+    // 切换手动上传和自动上传
     handleClick() {
       if (this.uploadType == "auto") {
+        this.getList();
       } else {
-        this.$refs.manualUpload.init();
+        this.$refs.manualUpload.init(this.curSiteId);
       }
     },
     search() {
@@ -224,7 +388,18 @@ export default {
       };
       console.log(para);
       let { data, status } = await sitemapApi.add(para);
+      if (status == 200) {
+        this.$notify({
+          customClass: "notify-success",
+          message: `添加成功`,
+          duration: 2000,
+          showClose: false
+        });
+        this.addShow = false;
+        this.getList();
+      }
     },
+    // 删除
     async remove(idList) {
       this.$confirm(
         `您确定要删除当前${this.type}吗？删除后，文章无法再次同步列表，若要添加需要您手动添加该${this.type}`,
@@ -233,12 +408,10 @@ export default {
           iconClass: "icon-warning",
           callback: async action => {
             if (action === "confirm") {
-              let para = {
-                siteId: this.curSiteId,
-                idList: idList
-              };
-              console.log(idList)
-              let { status } = await sitemapApi.batchRemove(this.curSiteId, idList);
+              let { status } = await sitemapApi.batchRemove(
+                this.curSiteId,
+                idList
+              );
               if (status === 200) {
                 this.$notify({
                   customClass: "notify-success",
@@ -246,6 +419,7 @@ export default {
                   duration: 2000,
                   showClose: false
                 });
+                this.getList();
               } else {
                 this.$notify({
                   customClass: "notify-error",
@@ -259,15 +433,96 @@ export default {
         }
       );
     },
+    // 修改
+    async update(para) {
+      let { status } = await sitemapApi.update(this.curSiteId, para);
+      this.getList();
+      this.$notify({
+        customClass: "notify-success",
+        message: `设置成功`,
+        duration: 2000,
+        showClose: false
+      });
+    },
+    // 添加弹框内的列表选中
     handleAddSelectionChange(list) {
       this.addSelectedList = list;
     },
-    async showAddDialog() {
+    // 列表选中
+    handleSelectionChange(list) {
+      this.selectedList = list;
+      if (list.length > 0) {
+        this.batchDeleteShow = true;
+      } else {
+        this.batchDeleteShow = false;
+      }
+    },
+    // 批量删除
+    batchDelete() {
+      let idList = [];
+      this.selectedList.forEach(item => {
+        idList.push(item.id);
+      });
+      this.remove(idList);
+    },
+    // 批量修改
+    choseBatchSetting(type) {
+      this.frequency = "";
+      this.priority = "";
+      this.batchSetting = type;
+    },
+    determine(type) {
+      let idList = [];
+      this.listData.list.forEach(item => {
+        idList.push(item.id);
+      });
+
+      let para = {};
+      if (type == "frequency") {
+        if (this.frequency == "") {
+          this.$notify({
+            customClass: "notify-error",
+            message: `请选择更新频率`,
+            duration: 2000,
+            showClose: false
+          });
+          return;
+        }
+        para = {
+          idList: idList,
+          frequency: this.frequency
+        };
+      } else if (type == "priority") {
+        if (this.priority == "") {
+          this.$notify({
+            customClass: "notify-error",
+            message: `请选择权重`,
+            duration: 2000,
+            showClose: false
+          });
+          return;
+        }
+        para = {
+          idList: idList,
+          priority: this.priority
+        };
+      }
+      this.update(para);
+      this.batchSetting = "all";
+    },
+    cancelSetting() {
+      this.batchSetting = "all";
+    },
+    showAddDialog() {
       this.addShow = true;
+      this.getAddList();
+    },
+    async getAddList() {
       let para = {
-        pageSize: 10,
-        pageIndex: 1,
+        pageSize: this.addPageSize,
+        pageIndex: this.addPageIndex,
         keyword: this.addKeyword,
+        appId: this.$store.state.dashboard.appId,
         EntityType: this.listType,
         siteId: this.curSiteId
       };
@@ -281,7 +536,15 @@ export default {
     closeAddDialog() {
       this.addShow = false;
     },
-    addSearch() {}
+    addSearch() {},
+    changeAddPage(page) {
+      this.addPageIndex = page;
+      this.getAddList();
+    },
+    changeAddSize(size) {
+      this.addPageSize = size;
+      this.getAddList();
+    }
   },
   watch: {
     listType() {
@@ -335,6 +598,9 @@ export default {
 .smallTable /deep/ .el-table-column--selection .el-checkbox__inner {
   width: 15px !important;
   height: 15px !important;
+}
+.right /deep/ .el-select .el-input__inner {
+  height: 36px;
 }
 </style>
 <style lang="scss" scoped>
@@ -430,6 +696,49 @@ export default {
     justify-content: space-between;
     .input-with-select {
       width: 400px;
+    }
+    .right {
+      float: right;
+      .rightText {
+        display: inline-block;
+        font-size: 14px;
+        color: rgba(38, 38, 38, 1);
+        line-height: 36px;
+        margin-right: 32px;
+      }
+      .changeBtn {
+        display: inline-block;
+        button {
+          padding: 8px;
+          background: transparent;
+          &:hover {
+            background: rgba(9, 204, 235, 0.09);
+          }
+        }
+        span {
+          font-size: 14px;
+          color: rgba(9, 204, 235, 1);
+          line-height: 20px;
+        }
+      }
+    }
+    .batchDelete {
+      .batchDeleteText {
+        color: rgba(38, 38, 38, 1);
+        line-height: 36px;
+        span {
+          color: #09cceb;
+        }
+      }
+      button {
+        margin-left: 24px;
+        color: rgba(251, 77, 104, 1);
+        padding: 8px;
+        background: transparent;
+        &:hover {
+          background: rgba(251, 77, 104, 0.09);
+        }
+      }
     }
   }
 }
