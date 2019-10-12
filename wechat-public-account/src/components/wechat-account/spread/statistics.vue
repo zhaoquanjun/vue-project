@@ -1,7 +1,7 @@
 <template>
   <div class="statistics">
     <div class="title">
-      <span>这里是页面标题</span>
+      <span>页面推广数据</span>
       <span class="btn" @click="closeStatistics">返回</span>
     </div>
     <div class="body">
