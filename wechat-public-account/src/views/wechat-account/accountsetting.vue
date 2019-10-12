@@ -71,6 +71,7 @@ import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
 import { unBind, getCdnDomainList,setPromotionUrl } from "@/api/request/account.js";
 import { mapGetters } from "vuex";
+import {getLocal} from '@/libs/local'
 import { notify } from "@/utlis/index.js";
 export default {
   data() {
@@ -91,8 +92,9 @@ export default {
     PageSubNav
   },
   created() {
-    if (!this.$store.state.wxaccount.wx_status.isCertification) {
-      this._getWxIsAuth()
+    let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+    if (!wx_status.isCertification) {
+        this._getWxIsAuth()
     }
   },
   methods: {

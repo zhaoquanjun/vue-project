@@ -15,6 +15,7 @@
 </template>
 <script>
 import { wechataccountDomain } from "@/environment/index";
+import { getLocal } from '@/libs/local'
 export default {
     data() {
         return {
@@ -30,9 +31,7 @@ export default {
         async handlerRoute(item, index) {
             let domain = item.menuUrl.split("/")[0];
             if (wechataccountDomain == domain) {
-                await this.$store.dispatch('_setSiteId')
-                await this.$store.dispatch('_getWxStatus')
-                let wx_status = this.$store.state.wxaccount.wx_status
+                let wx_status = getLocal('wx_status') || this.$store.state.wxaccount.wx_status
                 if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
                     this.$router.replace({path:'/wechataccount/wxauther' });
                 } else {
