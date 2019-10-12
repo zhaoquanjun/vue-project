@@ -389,7 +389,7 @@ export default {
       }
       .fileRemove {
         color: #63dc8c;
-        line-height: 109px;
+        margin-top: 45px;
         font-size: 20px;
         display: none;
         &:hover {

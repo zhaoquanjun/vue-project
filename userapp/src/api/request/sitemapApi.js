@@ -15,7 +15,7 @@ export const preview = (siteId) => {
 export const addOrOverride = (siteId) => {
     return ajaxRequest.post(`${enbironmemy.siteManageApi}/api/v1/SiteMapFile/AddOrOverride/${siteId}`);
 }
-// 
+// 删除sitemap文件
 export const remove = (siteId) => {
     return ajaxRequest._delete(`${enbironmemy.siteManageApi}/api/v1/SiteMapFile/Remove/${siteId}`);
 }
@@ -35,10 +35,10 @@ export const add = (para) => {
     return ajaxRequest.post(`${enbironmemy.siteManageApi}/api/v1/SiteMap/Add`, para);
 }
 // 修改,传空时不会改变原有值
-export const update = (siteId) => {
-    return ajaxRequest.put(`${enbironmemy.siteManageApi}/api/v1/SiteMap/Update/${siteId}`);
+export const update = (siteId, para) => {
+    return ajaxRequest.put(`${enbironmemy.siteManageApi}/api/v1/SiteMap/Update/${siteId}`, para);
 }
 // 删除
 export const batchRemove = (siteId, para) => {
-    return ajaxRequest._delete(`${enbironmemy.siteManageApi}/api/v1/SiteMap/BatchRemove/${siteId}`, { data: para});
+    return ajaxRequest._delete(`${enbironmemy.siteManageApi}/api/v1/SiteMap/BatchRemove/${siteId}`, { data: para });
 }

@@ -19,7 +19,7 @@
           <div class="overflow">{{scope.row.title}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="pagePath" label="页面地址" show-overflow-tooltip min-width="150">
+      <el-table-column prop="pagePath" :label="type + '地址'" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
           <div class="overflow">{{scope.row.pagePath}}</div>
         </template>
@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column label="权重" min-width="200">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.priority" @change="chosePriority">
+          <el-select v-model="scope.row.priority" @change="chosePriority(scope.row)">
             <el-option
               v-for="item in priorityList"
               :key="item.value"
@@ -43,7 +43,7 @@
       </el-table-column>
       <el-table-column label="更新频率" min-width="200">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.frequencyStr" @change="chosefrequency">
+          <el-select v-model="scope.row.frequencyStr" @change="chosefrequency(scope.row)">
             <el-option
               v-for="item in frequencyList"
               :key="item.value"
@@ -83,71 +83,78 @@
 
 <script>
 export default {
-  props: ["listData", "listType"],
+  props: {
+    listData: {
+      type: Object
+    },
+    listType: {
+      type: String
+    }
+  },
   data() {
     return {
       type: "页面",
       priorityList: [
         {
-          value: "1.0",
-          label: "1.0"
+          value: 1.0,
+          label: 1.0
         },
         {
-          value: "0.9",
-          label: "0.9"
+          value: 0.9,
+          label: 0.9
         },
         {
-          value: "0.8",
-          label: "0.8"
+          value: 0.8,
+          label: 0.8
         },
         {
-          value: "0.7",
-          label: "0.7"
+          value: 0.7,
+          label: 0.7
         },
         {
-          value: "0.6",
-          label: "0.6"
+          value: 0.6,
+          label: 0.6
         },
         {
-          value: "0.5",
-          label: "0.5"
+          value: 0.5,
+          label: 0.5
         },
         {
-          value: "0.4",
-          label: "0.4"
+          value: 0.4,
+          label: 0.4
         },
         {
-          value: "0.3",
-          label: "0.3"
+          value: 0.3,
+          label: 0.3
         }
       ],
       frequencyList: [
         {
-          value: "Always",
+          value: "always",
           label: "经常"
         },
         {
-          value: "Hourly",
+          value: "hourly",
           label: "每小时"
         },
         {
-          value: "Daily",
+          value: "daily",
           label: "每天"
         },
         {
-          value: "Weekly",
+          value: "weekly",
           label: "每周"
         },
         {
-          value: "Monthly",
+          value: "monthly",
           label: "每月"
         },
         {
-          value: "Yearly",
+          value: "yearly",
           label: "每年"
         },
         {
-          value: "Never",
+          value: "never",
           label: "从不"
         }
       ]
@@ -157,21 +164,30 @@ export default {
     // 单选或全选操作
     handleSelectionChange(list) {
       console.log(list);
-
       this.$emit("handleSelectionChange", list);
     },
-    chosePriority() {},
-    chosefrequency() {},
+    chosePriority(row) {
+      let para = {
+        idList: [row.id],
+        priority: row.priority
+      };
+      this.$emit("update", para);
+    },
+    chosefrequency(row) {
+      let para = {
+        idList: [row.id],
+        frequency: row.frequencyStr
+      };
+      this.$emit("update", para);
+    },
     remove(row) {
       this.$emit("remove", [row.id]);
     },
     changePage(page) {
-      this.picSearchOptions.pageIndex = page;
-      this.$emit("getPicList");
+      this.$emit("chagePage", page);
     },
     changeSize(size) {
-      this.picSearchOptions.pageSize = size;
-      this.$emit("getPicList");
+      this.$emit("changeSize", size);
     }
   },
   watch: {
