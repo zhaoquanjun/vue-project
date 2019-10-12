@@ -59,11 +59,11 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="180">
+            width="220">
             <template slot-scope="scope">
               <i class="icon iconfont iconbianji" @click="handlelook(scope.row)"></i>
               <i class="icon iconfont iconshanchu" @click="remove(scope.row)"></i>
-              <i class="icon iconfont iconshanchu" @click="getStatistics(scope.row)"></i>
+              <i class="icon iconfont iconshuju" @click="getStatistics(scope.row)"></i>
             </template>
           </el-table-column>
         </el-table>
@@ -110,6 +110,7 @@ import Statistics from "@/components/wechat-account/spread/statistics.vue";
 import { unBind, getList, remove, getStatistics } from "@/api/request/account.js";
 import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import { notify } from "@/utlis/index.js";
+import {getLocal} from '@/libs/local'
 export default {
   data() {
     return {
@@ -125,7 +126,7 @@ export default {
       isShowPopup: false,
       isShowCode: false,
       infoData: {},
-      isShowStatistics: true,
+      isShowStatistics: false,
       model: {
           PageIndex: null,
           Type: null,
@@ -151,8 +152,9 @@ export default {
     ShareCode
   },
   created() {
-    if (!this.$store.state.wxaccount.wx_status.isCertification) {
-      this._getWxIsAuth()
+    let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+    if (!wx_status.isCertification) {
+        this._getWxIsAuth()
     }
     this.getInfo();
   },
@@ -295,6 +297,7 @@ export default {
     min-width: 1100px;
     overflow-y: auto;
     .iconfont {
+      margin-right: 20px !important;
       cursor: pointer;
     }
     .answer-tabs {

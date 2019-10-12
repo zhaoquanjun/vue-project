@@ -15,12 +15,10 @@ let router = new VueRouter({
 export default router;
 
 
-let appId =  store.state.dashboard.appId;
-let siteId =  store.state.dashboard.siteId;
+let appId = store.state.dashboard.appId || getLocal("ymId");
+let siteId = store.state.dashboard.siteId || getLocal("ymSd");
 router.beforeEach(async (to, from, next) => {
-
   document.title = to.meta.title;
-
   let user = await securityService.getUser();
   let accessToken;
   if (user) {
@@ -55,7 +53,7 @@ router.beforeEach(async (to, from, next) => {
         }
         if (!store.getters.wx_status.isAuth || !store.getters.wx_status.isCertification || !store.getters.wx_status.isResolveSuccess) {
           await store.dispatch('_getWxStatus')
-          let wx_status = store.state.wxaccount.wx_status;
+          let wx_status = store.state.wxaccount.wx_status || getLocal("wx_status");
           if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
             next('/wechataccount/wxauther');
             return;

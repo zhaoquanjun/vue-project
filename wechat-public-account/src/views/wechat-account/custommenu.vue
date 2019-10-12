@@ -18,6 +18,7 @@ import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
 import WarmPronpt from "_c/wechat-account/menu/warm-prompt";
 import DefineMenu from "_c/wechat-account/menu/define-menu";
+import {getLocal} from '@/libs/local'
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
 export default {
   data() {
@@ -43,8 +44,9 @@ export default {
     }
   },
   created() {
-    if (!this.$store.state.wxaccount.wx_status.isCertification) {
-      this._getWxIsAuth()
+    let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+    if (!wx_status.isCertification) {
+        this._getWxIsAuth()
     }
   },
   methods: {

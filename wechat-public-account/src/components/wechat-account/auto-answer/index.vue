@@ -80,6 +80,7 @@ import ImageText from "@/components/wechat-account/auto-answer/image-text.vue";
 import KeywordAnswer from "@/components/wechat-account/auto-answer/keyword-answer.vue";
 import * as autoAnswerApi from "@/api/request/autoAnswerApi.js";
 import { trim, notify } from "@/utlis/index.js";
+import {getLocal} from '@/libs/local'
 export default {
     data() {
         return {
@@ -91,7 +92,7 @@ export default {
             replyType: "1", //replyType 回复类型
             msgType: 1, //msgType 消息类型
             addAnswer: true,
-            siteId: this.$store.state.dashboard.siteId,
+            siteId: this.$store.state.dashboard.siteId || getLocal("ymSd"),
             replycontentData: {
                 imageMsg: {
                     picUrl: ""
@@ -110,7 +111,7 @@ export default {
                 pageSize: 10,
                 pageIndex: 1,
                 Keyword: "",
-                SiteId: this.$store.state.dashboard.siteId
+                SiteId: this.$store.state.dashboard.siteId || getLocal("ymSd")
             },
             keywordContentData: {
                 msgType: "",
@@ -133,7 +134,8 @@ export default {
         ImageText
     },
     created() {
-        if (!this.$store.state.wxaccount.wx_status.isCertification) {
+        let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+        if (!wx_status.isCertification) {
             this._getWxIsAuth()
         }
     },
