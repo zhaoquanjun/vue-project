@@ -39,7 +39,7 @@ if (process.env.NODE_ENV === 'development') {
    }
 }
 if(getLocal("userInfo")){
-  store.commit("SET_USERINFO",JSON.parse(getLocal("userInfo")))
+  store.commit("SET_USERINFO",getLocal("userInfo"))
 }
 
 

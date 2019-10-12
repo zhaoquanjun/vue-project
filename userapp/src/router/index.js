@@ -22,7 +22,10 @@ router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
   let user = await securityService.getUser();
   let accessToken;
-  if (user) accessToken = user.access_token;
+  if (user){
+    accessToken = user.access_token;
+    store.commit("SET_USER",accessToken)
+  } 
 
 
   if (accessToken) {
@@ -35,7 +38,9 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
-      if (!appId) {  await store.dispatch('_updateAppIdAndSiteIdToCookie') }
+      if (process.env.NODE_ENV === 'development') {
+        if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
+      }
       let r = await store.dispatch('getCurRouteAuth', to.path);
       if (r) {
         if (store.getters.getMenuList.length < 1) {

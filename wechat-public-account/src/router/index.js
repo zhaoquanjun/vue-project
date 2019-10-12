@@ -24,7 +24,8 @@ router.beforeEach(async (to, from, next) => {
   let user = await securityService.getUser();
   let accessToken;
   if (user) {
-    accessToken = user.access_token
+    accessToken = user.access_token;
+    store.commit("SET_USER",accessToken)
   }
 
   if (accessToken) {

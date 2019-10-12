@@ -21,9 +21,11 @@ router.beforeEach(async (to, from, next) => {
 
   let user = await securityService.getUser();
   let accessToken;
-  if (user) {
-    accessToken = user.access_token
-  }
+  if (user){
+    accessToken = user.access_token;
+    store.commit("SET_USER",accessToken)
+  } 
+
 
   if (accessToken) {
     if (to.path !== "/callback") {

@@ -1,7 +1,4 @@
-import {
-    updateAppIdToCookie,
-    getSliderMenuList
-} from "@/api/request/user"
+import {  updateAppIdToCookie, getSliderMenuList } from "@/api/request/user"
 
 import { setLocal } from '@/libs/local'
 
@@ -78,8 +75,6 @@ const dashboard = {
                 return item === path;
             });
         },
-
-
     },
     getters: {
         getMenuList(state) {
