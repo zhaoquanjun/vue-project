@@ -10,6 +10,7 @@
   "dependencies": {
     "clipboard": "^2.0.4",
     "core-js": "^2.6.5",
+    "echarts": "^4.3.0",
     "element-ui": "^2.11.1",
     "perfect-scrollbar": "^1.4.0",
     "qrcodejs2": "0.0.2",

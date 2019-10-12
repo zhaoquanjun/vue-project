@@ -150,5 +150,8 @@ export const getPageInfoList = (siteId, type) => {
 //获取详情页下拉列表
 export const remove = (siteId, id) => {
   return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/WeChatShare/Remove/${siteId}/${id}`);
+} 
+//获取微信分享数据
+export const getStatistics = (siteId, shareId) => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetStatistics/${siteId}/${shareId}`);
 }
-
