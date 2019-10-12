@@ -34,6 +34,10 @@ export const getRefEntityList = (siteId, para) => {
 export const add = (para) => {
     return ajaxRequest.post(`${enbironmemy.siteManageApi}/api/v1/SiteMap/Add`, para);
 }
+// 预览
+export const previewFile = (siteId) => {
+    return ajaxRequest.get(`${enbironmemy.siteManageApi}/api/v1/SiteMap/Preview/${siteId}`);
+}
 // 修改,传空时不会改变原有值
 export const update = (siteId, para) => {
     return ajaxRequest.put(`${enbironmemy.siteManageApi}/api/v1/SiteMap/Update/${siteId}`, para);

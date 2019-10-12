@@ -40,7 +40,7 @@
             </div>
             <div class="operateBtn">
               <button class="addBtn" @click="showAddDialog">{{addType}}</button>
-              <button class="previewBtn">预览</button>
+              <button class="previewBtn" @click="preview">预览</button>
             </div>
           </div>
           <div class="searchWrap">
@@ -444,6 +444,11 @@ export default {
         showClose: false
       });
     },
+    // 预览
+    async preview() {
+      let { data, status } = await sitemapApi.previewFile(this.curSiteId);
+      console.log(data);
+    },
     // 添加弹框内的列表选中
     handleAddSelectionChange(list) {
       this.addSelectedList = list;
@@ -536,7 +541,9 @@ export default {
     closeAddDialog() {
       this.addShow = false;
     },
-    addSearch() {},
+    addSearch() {
+      this.getAddList();
+    },
     changeAddPage(page) {
       this.addPageIndex = page;
       this.getAddList();
