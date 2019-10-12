@@ -49,6 +49,7 @@
                     @handleSelectionChange="handleSelectionChange"
                     @changeOperateName="changeOperateName"
                 ></content-table>
+                
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -94,7 +95,7 @@ export default {
         ContentHeader,
         ContentTable,
         RightPannel,
-        SelectTree
+        SelectTree,
     },
     data() {
         return {

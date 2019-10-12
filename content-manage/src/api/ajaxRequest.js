@@ -63,9 +63,9 @@ axios.interceptors.request.use(
         // const token = store.getters.token;
         token && (config.headers.Authorization = 'Bearer ' + token);
         //todo 测试阶段写死
-
-        let appId = store.state.dashboard.appId;
+        
         if (process.env.NODE_ENV === 'development') {
+            let appId = store.state.dashboard.appId;
             config.headers.AppId = appId?appId: getLocal('ymId');
         }
         //showFullScreenLoading()

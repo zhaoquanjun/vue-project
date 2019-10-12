@@ -12,7 +12,7 @@
         <div class="fileImg" v-show="isUpload">
           <i class="iconfont iconshanchu1 fileRemove" @click="fileRemove"></i>
         </div>
-        <div v-show="isUpload" class="fileName">robots.txt</div>
+        <div v-show="isUpload" class="fileName">sitemap.xml</div>
         <div v-show="isUpload" class="fileName" style="margin-top:5px">{{date?date:""}}</div>
         <div v-show="isUpload" v-if="progressFlag" class="progress">
           <el-progress :percentage="progressPercent" status="success"></el-progress>
@@ -39,9 +39,9 @@ import * as sitemapApi from "@/api/request/sitemapApi";
 import environment from "@/environment/index.js";
 import { formatDateTime } from "@/api/index";
 export default {
-  props: ["siteId"],
   data() {
     return {
+      siteId: 0,
       options: {
         target: ``,
         testChunks: false,
@@ -65,14 +65,16 @@ export default {
     };
   },
   methods: {
-    init() {
+    init(siteId) {
+      this.siteId = siteId;
       this.hasUploadFile(this.siteId);
-      this.preview(this.siteId);
+      // this.preview(this.siteId);
       this.$set(
         this.options,
         "target",
         `${environment.uploadSitemapUrl}${this.siteId}`
       );
+      this.$refs.uploader.resetOption();
       console.log(this.options);
     },
     async hasUploadFile(siteId) {
@@ -92,26 +94,24 @@ export default {
         "target",
         `${environment.uploadSitemapUrl}${this.siteId}`
       );
-      //   if (file.name != "robots.txt") {
-      //     this.$notify({
-      //       customClass: "notify-error",
-      //       message: `请上传文件名为“robots”的txt文件`,
-      //       duration: 1500,
-      //       showClose: false
-      //     });
-      //     file.pause(file);
-      //     file.cancel(file);
-      //     return;
-      //   }
-      if (file.size > 4 * 1024) {
+      if (file.name != "sitemap.xml") {
         this.$notify({
           customClass: "notify-error",
-          message: `文件大小不可超过4K`,
+          message: `请上传文件名为“sitemap”的xml文件`,
+          duration: 1500,
+          showClose: false
+        });
+        file.pause(file);
+        return;
+      }
+      if (file.size > 100 * 1024) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `文件大小不可超过100K`,
           duration: 1500,
           showClose: false
         });
         file.pause();
-        file.cancel(file);
         return;
       }
       this.file = file;
@@ -129,7 +129,7 @@ export default {
       this.date = this.getNowFormatDate();
     },
     fileRemove() {
-      this.$confirm(`您确定要删除当前robots文件么？删除后不可恢复。`, "提示", {
+      this.$confirm(`您确定要删除当前sitemap文件么？删除后不可恢复。`, "提示", {
         iconClass: "icon-warning",
         callback: action => {
           if (action === "confirm") {
@@ -335,7 +335,7 @@ export default {
       }
       .fileRemove {
         color: #63dc8c;
-        line-height: 109px;
+        margin-top: 45px;
         font-size: 20px;
         display: none;
         &:hover {

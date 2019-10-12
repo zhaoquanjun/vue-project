@@ -105,7 +105,6 @@ export default {
         };
     },
     mounted() {
-        console.log(this.nodeData)
         this.headers.appId = this.$store.state.dashboard.appId;
         if (this.nodeData) {
             this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
@@ -185,6 +184,7 @@ export default {
         },
         // 点击上传按钮
         submitUpload() {
+        
             this.hideImgName();
             this.isUploading = true;
             this.uploadDisabled = true;
@@ -192,6 +192,7 @@ export default {
             if (this.nodeData) {
                 this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
             }
+           
             this.headers.Authorization =
                 "Bearer " + this.$store.state.accessToken.Authorization;
             this.$refs.upload.submit();

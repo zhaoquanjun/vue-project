@@ -9,6 +9,7 @@ import "./plugins/element-reset.scss"
 import "./styles/pop-up/pup-up.scss"
 import "./styles/weizhan.scss";
 import "@/directive/index.js"
+
 import VueQuillEditor from 'vue-quill-editor'
 import uploader from 'vue-simple-uploader'
 import VueClipboard from 'vue-clipboard2'

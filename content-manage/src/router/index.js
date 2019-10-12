@@ -14,15 +14,16 @@ let router = new VueRouter({
 export default router;
 
 
-let appId = store.state.dashboard.appId;
 
+let appId = store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
 
   let user = await securityService.getUser();
   let accessToken;
   if (user) {
-    accessToken = user.access_token
+    accessToken = user.access_token;
+    store.commit("SET_USER",accessToken)
   }
   if (accessToken) {
     if (to.path !== "/callback") {
@@ -35,10 +36,11 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
-      if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
+      if (process.env.NODE_ENV === 'development') {
+        if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
+      }
       if (!getLocal("authList")) await store.dispatch('_getMenuListData');
       let r = await store.dispatch('getCurRouteAuth', to.path);
-      console.log(r)
       if (r) {
         if (store.getters.getMenuList.length < 1) await store.dispatch('_getMenuListData')
         next()
@@ -47,7 +49,6 @@ router.beforeEach(async (to, from, next) => {
       }
     } else {
       next()
-    
     }
   } else {
     if(to.path == "/callback" || to.path == "/401"){

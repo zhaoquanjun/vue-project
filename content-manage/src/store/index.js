@@ -11,15 +11,20 @@ const store = new Vuex.Store({
   },
   state: {
     accessToken: { Authorization: '' },
+    
   },
   mutations: {
-   
+    SET_USER: (state, data) => {
+      if (data) {
+        state.accessToken.Authorization = data;
+      } 
+    },
   },
   actions: {
    
   },
   getters: {
-    token: state => state.accessToken.Authorization,
+    
   }
 });
 export default store;
@@ -36,4 +41,7 @@ if (process.env.NODE_ENV === 'development') {
   if(getLocal("ymId")){
     store.commit("SETAPPID",getLocal("ymId"))
    }
+}
+if(getLocal("userInfo")){
+  store.commit("SET_USERINFO",getLocal("userInfo"))
 }
