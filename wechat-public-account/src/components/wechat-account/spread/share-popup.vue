@@ -9,8 +9,8 @@
         <div class="shaper-content">
           <div class="left">
             <div class="arr"></div>
-            <h5>{{initData.shareTitle}}</h5>
-            <p>{{initData.description}}</p>
+            <h5 class="ellipsis">{{initData.shareTitle}}</h5>
+            <p class="ow-h3">{{initData.description}}</p>
             <img :src="initData.coverUrl" alt="">
             <img class="img-arr" src="~img/head-icon.png" alt="">
           </div>
@@ -22,7 +22,7 @@
             <div class="body-title">
               <span>标题</span>
             </div>
-            <input type="text" placeholder="产品资讯" v-model="initData.shareTitle">
+            <input class="ellipsis" type="text" placeholder="产品资讯" v-model="initData.shareTitle">
             <h6>描述</h6>
             <el-input
               class="textarea"
@@ -289,7 +289,7 @@ export default {
           text-align: left;
           padding: 16px;
           h5 {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             height:22px;
             font-size:16px;
             text-align: left;
@@ -302,11 +302,12 @@ export default {
             width:196px;
             height:60px;
             margin: 0;
+            padding-right: 8px;
             font-size:14px;
             overflow: hidden;
             font-family:'AlibabaPuHuiTiR';
             color:rgba(136,136,136,1);
-            line-height:20px;
+            line-height:18px;
           }
           img {
             float: right;
