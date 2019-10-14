@@ -84,11 +84,25 @@
             </el-form>
             <div v-show="menuDetail.clickBehavior == '1' && hasSubList" class="message-content__section">
               <section class="menu-content__area">
-                <div class="radio-tabs">
+                <!-- <div class="radio-tabs">
                   <el-radio label="1" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('1')">图片</el-radio>
                   <el-radio label="2" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('2')">文字</el-radio>
                   <el-radio label="3" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('3')">图文</el-radio>
-                </div>
+                </div> -->
+                <ul class="radio-tabs">
+                  <li @click="_handleChangeBehaviorType('1')" :class="{active: menuDetail.behaviorType == '1'}">
+                    <i class="icon iconfont iconicon-des-picture"></i>
+                    <span>图片</span>
+                  </li>
+                  <li @click="_handleChangeBehaviorType('2')" :class="{active: menuDetail.behaviorType == '2'}">
+                    <i class="icon iconfont iconicon-editext"></i>
+                    <span>文字</span>
+                  </li>
+                  <li @click="_handleChangeBehaviorType('3')" :class="{active: menuDetail.behaviorType == '3'}">
+                    <i class="icon iconfont iconicon-picword"></i>
+                    <span>图文</span>
+                  </li>
+                </ul>
                 <div class="slot-content">
                   <!-- 图片 -->
                   <Picture
@@ -587,11 +601,39 @@ export default {
 .holder h3 {
   text-align: center
 }
+.message-content__section {
+  background-color: #fff;
+  min-height: 400px;
+  border-radius:2px;
+  border:1px solid rgba(211,211,211,1);
+  .radio-tabs {
+    height: 40px;
+    background:rgba(240,243,247,1);
+    border-radius:1px 1px 0px 0px;
+    li {
+      float: left;
+      font-size:14px;
+      font-weight:400;
+      color:rgba(38,38,38,1);
+      line-height:40px;
+      padding: 0 15px 0 30px;
+      cursor: pointer;
+      i {
+        font-size: 12px;
+        margin-right: 8px;
+      }
+      &.active {
+        color: #09CCEB;
+      }
+    }
+  }
+}
 .define-menu__area {
   margin: 0 auto;
   max-width: 1200px;
   min-width: 990px;
   border-radius: 20px;
+  font-family: "PingFangSC-Medium,PingFangSC";
   .phone-box__area {
     position: relative;
     float: left;
@@ -751,21 +793,25 @@ export default {
       padding: 24px;
       width: 90%;
       border-radius: 2px;
-      background: #fff;
       border: 1px solid rgba(229, 229, 229, 1);
       .menu-operate__header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
+        border-bottom: 2px solid #D3D3D3;
+        padding-bottom: 10px;
         p {
-          font-size: 16px;
+          font-size:14px;
+          font-weight:500;
+          color:rgba(38,38,38,1);
+          line-height:20px;
         }
         .menu-operate__delete {
           font-size: 14px;
           font-family: "PingFangSC";
           font-weight: 400;
-          color: rgba(251, 77, 104, 1);
+          color: #09CCEB;
           line-height: 20px;
           cursor: pointer;
         }

@@ -528,7 +528,7 @@ export default {
         padding-top: 32px;
     }
     .reply-wrap {
-        padding: 32px 0;
+        padding: 24px 0;
         position: relative;
         //  overflow-y: auto;
     }

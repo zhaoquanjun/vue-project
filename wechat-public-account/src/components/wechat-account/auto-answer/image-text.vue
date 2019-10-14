@@ -284,7 +284,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .image-text {
-    padding-top: 24px;
+    padding-top: 16px;
 }
 .list {
     width: 280px;
