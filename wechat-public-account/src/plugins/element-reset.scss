@@ -155,6 +155,13 @@
     background: #09CCEB;
 }
 
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: #09CCEB;
+    background: #09CCEB;
+}
+.el-radio__input.is-checked+.el-radio__label {
+    color: #09CCEB;
+}
 // label
 .el-form-item__label {
     text-align: left;
