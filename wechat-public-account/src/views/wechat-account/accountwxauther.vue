@@ -205,6 +205,7 @@ export default {
         callback: async action => {
           if (action === "confirm") {
             this.$router.push('/wechataccount/accountsetting')
+            this._getCdnDomainList()
           }
         }
       });

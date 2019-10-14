@@ -13,7 +13,7 @@
                 v-for="(item,index) in list"
                 :key="index"
             >
-                <div class="headline">{{item.title}}</div>
+                <div class="headline ellipsis">{{item.title}}</div>
                 <div class="imgwrap">
                     <img :src="item.picUrl"
                     />
@@ -52,7 +52,7 @@
                             size="small"
                             placeholder="请选择链接"
                             v-model="curEditorTitle"
-                            class="input-with-select"
+                            class="input-with-select ellipsis"
                             readonly
                         >
                             <i
@@ -101,15 +101,15 @@
                         ></el-input>
                     </div>
                     <div class="seting-item seting-btn">
+                        <button v-show="list.length> 0" class="editor-cancel" @click="handlerCancel">取消</button>
                         <button class="editor-comfirm" @click="handlerConfirm">确定</button>
-                        <button class="editor-cancel" @click="handlerCancel">取消</button>
                     </div>
                 </div>
             </li>
         </ul>
         <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes == 1">
             <span class="el-icon-plus avatar-uploader-icon"></span>
-            <span>最多添加8个图文消息</span>
+            <span>还可添加 {{(8-list.length)}} 个图文消息</span>
         </div>
         <image-manage
             :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
@@ -284,10 +284,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .image-text {
-    padding-top: 24px;
+    padding-top: 16px;
 }
 .list {
-    width: 279px;
+    width: 280px;
     margin: 0 auto;
     > li {
         position: relative;
@@ -318,7 +318,7 @@ export default {
     }
     li.list-item {
         height: 60px;
-        padding: 0 10px 0 32px;
+        padding: 0 16px;
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
         border-radius: 4px;
@@ -380,7 +380,7 @@ export default {
             }
             .seting-btn {
                 display: flex;
-                justify-content: space-around;
+                justify-content: flex-end;
             }
             .editor-comfirm {
                 display: inline-block;
@@ -388,12 +388,15 @@ export default {
                 height: 32px;
                 background: rgba(9, 204, 235, 1);
                 border-radius: 2px;
+                margin-left: 16px;
+                cursor: pointer;
                 color: #fff;
             }
             .editor-cancel {
                 display: inline-block;
                 width: 70px;
                 height: 32px;
+                cursor: pointer;
                 background: #fff;
                 border-radius: 2px;
                 color: rgba(9, 204, 235, 1);
