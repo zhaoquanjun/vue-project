@@ -224,15 +224,6 @@ export const defaultRoutes = [
     // }
 },
   {
-    path: "/init",
-    name: "init",
-    component: () => import("@/views/login/init.vue"),
-    meta: {
-      title: "微站",
-      
-    }
-  },
-  {
     path: '/403',
     name: '403',
     component: () => import('@/views/error-page/403.vue'),

@@ -149,6 +149,11 @@ export default {
             }
             return false
         },
+        // 清空被选中的列表
+        clearSelectedList() {
+            this.seletedList = [];
+            this.$emit("handleSelectionChange", this.seletedList);
+        },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;
             this.$emit("getList");

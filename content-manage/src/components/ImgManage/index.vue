@@ -32,6 +32,7 @@
             ></img-list-header>
             <el-main>
                 <component
+                    ref="imgList"
                     :is="componentId"
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
@@ -232,7 +233,10 @@ export default {
         //     this.picSearchOptions.categoryIdList = [];
         //     this.getList();
         // },
-
+        // 清空选中的列表
+        clearSelectedList() {
+            this.$refs.imgList.clearSelectedList()
+        },
         async changeCategoryPic(categoryId, idList) {
             let { data, status } = await imgManageApi.changeCategory(
                 categoryId,
