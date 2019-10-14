@@ -322,7 +322,6 @@ export default {
         this.menuDetail.behaviorBody.newsMsg = [];
         this.menuDetail.behaviorBody.customMenuRedirectMsg = {};
       }
-      console.log('0000',this.menuDetail)
     },
     _handleChangeBehaviorType(val) {
       this.menuDetail.behaviorType = val
@@ -432,8 +431,6 @@ export default {
       }
       //接口校验
       if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
-        console.log('888',order,dataObj.status)
-        console.log('flag2',order == 0, dataObj.status)
           let newMenuItem = {
           name: name,  //菜单名称
           displayOrder: order, //菜单排序
@@ -460,28 +457,54 @@ export default {
     },
     // 删除菜单
     async _handleDeleteMenu() {
-      let data = await removeMenu(this.siteId, this.menuDetail.id);
-      if(data && data.status == 200 ) {
-        this._getMenuTree()
-      }
+      this.$confirm("提示", {
+        title: "提示",
+        iconClass: "icon-warning",
+          message:  `删除后，"${this.menuDetail.name}"菜单下的设置的内容将被删除，是否确定删除？`,
+          callback: async action => {
+              if (action === "confirm") {
+                  let data = await removeMenu(this.siteId, this.menuDetail.id);
+                  if(data && data.status == 200 ) {
+                    notify(this, '菜单删除成功', "success");
+                    this._getMenuTree()
+                  } else {
+                    notify(this, '菜单删除失败', "error");
+                  }
+              }
+          }
+      });
     },
     // 保存并发布
      async _handleSaveAndPublish() {
-      let dataDetail = this.menuDetail;
-          dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType);
-          dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
-      let data = await publishMenu(dataDetail);
-      if (data && data.status == 200) {
-        this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
-        this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
-        //同步菜单name
-        notify(this, '保存成功', "success");
-        //this.hasChangeMeunName()
-      } else {
-        notify(this, '保存失败', "error");
-        this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
-        this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+      let flag = this.testParameters();
+      if (!flag) {
+        notify(this, '请完善菜单信息', "error");
+        return
       }
+      this.$confirm("提示", {
+        title: "提示",
+        iconClass: "icon-warning",
+          message:  `发布成功后会覆盖原版本，且将在24小时内对所有用户生效，是否确认发布？`,
+          callback: async action => {
+            if (action === "confirm") {
+              let dataDetail = this.menuDetail;
+                  dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType);
+                  dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
+              let data = await publishMenu(dataDetail);
+              if (data && data.status == 200) {
+                this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
+                this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+                //同步菜单name
+                notify(this, '保存并发布成功', "success");
+                //this.hasChangeMeunName()
+              } else {
+                notify(this, '保存并发布失败', "error");
+                this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
+                this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+              }
+            }
+          }
+      });
     },
     //同步本地菜单列表name
     hasChangeMeunName () {

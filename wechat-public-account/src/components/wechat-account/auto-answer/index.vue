@@ -198,7 +198,6 @@ export default {
                 this.searchOption
             );
             this.keywordData = data;
-            console.log('8888',data)
         },
         //删除回复信息
         async _removeReply(siteId,id) {
