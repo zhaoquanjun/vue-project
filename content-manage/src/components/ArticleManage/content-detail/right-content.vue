@@ -187,6 +187,7 @@ export default {
         },
         handlerAddPicture() {
             this.isModalShow = true;
+            this.$refs.imgList.clearSelectedList()
         }
     }
 };

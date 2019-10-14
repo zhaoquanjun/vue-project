@@ -173,6 +173,7 @@ export default {
         },
         handlerAddPicture() {
             this.isModalShow = true;
+            this.$refs.imgList.clearSelectedList()
         },
         handleRemove(index) {
             this.newFileList.splice(index, 1);
