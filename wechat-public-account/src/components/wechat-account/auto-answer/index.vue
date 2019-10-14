@@ -198,6 +198,7 @@ export default {
                 this.searchOption
             );
             this.keywordData = data;
+            console.log('8888',data)
         },
         //删除回复信息
         async _removeReply(siteId,id) {
@@ -246,7 +247,7 @@ export default {
                 });
                 if (this.replyType == 3) {
                     this.addAnswer = true;
-                    this._getReplyDetail(3);
+                    this._getKeywordReplyList(this.searchOption);
                 }
                 this.isSet = true;
                 this.replyDetail.id = data;
@@ -264,7 +265,7 @@ export default {
                 });
                 if (this.replyType == 3) {
                     this.addAnswer = true;
-                    this._getReplyDetail(3);
+                    this._getKeywordReplyList(this.searchOption);
                 }
                 this.isSet = true;
                 this.replyDetail.id = data;
