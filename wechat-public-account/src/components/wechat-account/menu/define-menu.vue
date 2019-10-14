@@ -60,7 +60,7 @@
               <el-form-item label="菜单名称">
                 <el-input 
                   v-model="menuDetail.name" 
-                  @blur="testMenu(16,menuDetail.name)"
+                  @blur="testMenu()"
                   placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母">
                 </el-input>
               </el-form-item>
@@ -260,7 +260,6 @@ export default {
     },
     handleClosePopup (val,data){
       this.isShowPopup = val
-      console.log('eee',data)
       if (data) {
         this.menuDetail.behaviorBody.customMenuRedirectMsg.title= data.Title;
         this.menuDetail.behaviorBody.customMenuRedirectMsg.urlType= data.Type;
@@ -536,19 +535,20 @@ export default {
       this.menuDetail.behaviorBody.newsMsg = list;
     },
     //校验菜单名称
-    testMenu(typeNum,str,id){
+    testMenu(){
       //汉字19968至40869
       //数字 48-57
       //A-Z:65-90,a-z:97-122
       //-+&. :45 43 38 46 32
-      // 同步才单名
-      this.hasChangeMeunName()
+      // 校验菜单名
+      let typeNum = this.curSubIndex == -1? 8:16;
+      let str = this.menuDetail.name;
       let isRule = true;
       let BlankNum = 1;
       let strLength = 0
       let firstBlankIndex = false;
-      for (var i=0; i<str.length; i++) {  
-        var c = str.charCodeAt(i);
+      for (let i=0; i<str.length; i++) {  
+        let c = str.charCodeAt(i);
         if (c == 45 || c == 43 || c == 38 || c == 46 || c == 32){
           strLength = strLength + 1;
           if (c==32 && !firstBlankIndex) {
@@ -573,6 +573,9 @@ export default {
       }
       if (strLength == 0 || strLength >typeNum) {
         isRule = false
+      }
+      if(isRule){
+        this.hasChangeMeunName()
       }
       this.hasTrueName = isRule
     }
