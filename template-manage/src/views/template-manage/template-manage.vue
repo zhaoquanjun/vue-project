@@ -153,7 +153,7 @@
                   </a>
                   <span
                     class="more-operate"
-                    style="display:inline-block;margin-left:16px;vertical-align: middle;"
+                    style="display:inline-block;margin-left:10px;vertical-align: middle;"
                     @click.stop="_handleShowMoreOperate($event,scope.row)"
                     :class="{disable : scope.row.status == 0 ? true : false}"
                   >
