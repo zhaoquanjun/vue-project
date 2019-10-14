@@ -95,7 +95,7 @@
                   class="choseApp"
                   @click="choseApp(item)"
                   :disabled="isExpired(item)||(item.releaseTime&&isreleased(item))"
-                  :class="{'disabled':isExpired(item)}||(item.releaseTime&&isreleased(item))"
+                  :class="{'disabled':isExpired(item)||(item.releaseTime&&isreleased(item))}"
                   v-if="curAppId != item.appId"
                 >进入应用</el-button>
                 <el-button
@@ -127,7 +127,6 @@ export default {
     return {
       aliMarketUrl: aliMarketUrl,
       isdropdownAvatarShow: false,
-      // appName: "",
       appList: [],
       changeAppShow: false,
       curAppId: ""
@@ -232,7 +231,9 @@ export default {
       }
     },
     headAppName() {
-      let appName = this.$store.state.user.userInfo.appName;
+      let appName = getLocal("userInfo")
+        ? getLocal("userInfo").appName
+        : this.$store.state.user.userInfo.appName;
       return appName;
     }
   }
