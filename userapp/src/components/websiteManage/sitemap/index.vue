@@ -364,6 +364,7 @@ export default {
       this.getList();
     },
     choseListType(type) {
+      this.keyword = "";
       this.listType = type;
       this.getList();
       if (type == "page") {
@@ -521,6 +522,7 @@ export default {
     },
     showAddDialog() {
       this.addShow = true;
+      this.addKeyword = "";
       this.getAddList();
     },
     async getAddList() {
