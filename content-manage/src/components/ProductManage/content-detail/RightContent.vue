@@ -162,13 +162,13 @@ export default {
             // this.isModalShow = false;
 
             this.imgData.forEach((item, index) => {
-                if(index<9){
+                if(this.newFileList.length<9){
                      this.newFileList.push(item.fullOssUrl);
                 }
                
             });
             this.isModalShow = false;
-           this.newFileList =  Array.from(new Set(this.newFileList))
+            this.newFileList =  Array.from(new Set(this.newFileList))
             console.log(this.newFileList, "11111");
         },
         handlerAddPicture() {
