@@ -176,8 +176,9 @@ export default {
     }
 }
 .article-container {
-    width: 80%;
+    width: 100%;
     margin-top: -100px;
+    margin-left: -40px;
 }
 .article-head {
     .article-btn {
