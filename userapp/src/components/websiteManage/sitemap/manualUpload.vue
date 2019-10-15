@@ -28,7 +28,7 @@
           拖拽替换文件或
           <uploader-btn style="color:#09CCEB">点击上传</uploader-btn>
         </div>
-        <div class="uploadTextRemark">只支持XML文件</div>
+        <div class="uploadTextRemark">请上传文件名为“sitemap”的xml文件</div>
       </uploader-drop>
     </uploader>
     <div class="tip">如何选择手动上传</div>
@@ -304,7 +304,7 @@ export default {
       color: rgba(185, 203, 207, 1);
       line-height: 22px;
       margin: auto;
-      width: 248px;
+      width: 265px;
     }
   }
   .uploadList {
