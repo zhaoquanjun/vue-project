@@ -404,7 +404,7 @@ export default {
     // 删除
     async remove(idList) {
       this.$confirm(
-        `您确定要删除当前${this.type}吗？删除后，文章无法再次同步列表，若要添加需要您手动添加该${this.type}`,
+        `您确定要删除当前${this.type}吗？删除后，${this.type}无法再次同步列表，若要添加需要您手动添加该${this.type}`,
         "提示",
         {
           iconClass: "icon-warning",
