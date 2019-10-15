@@ -40,7 +40,7 @@
             </div>
             <div class="operateBtn">
               <button class="addBtn" @click="showAddDialog">{{addType}}</button>
-              <button class="previewBtn" @click="preview">预览</button>
+              <a class="previewBtn" :href="`${previewSitemapUrl}${curSiteId}`" target="_blank">预览</a>
             </div>
           </div>
           <div class="searchWrap">
@@ -218,7 +218,7 @@ import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import ManualUpload from "./manualUpload";
 import List from "./list";
-import environment from "@/environment/index.js";
+import { previewSitemapUrl } from "@/environment/index.js";
 import * as sitemapApi from "@/api/request/sitemapApi";
 import { formatDateTime } from "@/api/index";
 
@@ -235,6 +235,7 @@ export default {
       uploadType: "auto",
       listType: "page",
       type: "页面",
+      previewSitemapUrl: previewSitemapUrl,
       addType: "添加页面",
       addShow: false,
       addKeyword: "",
@@ -444,11 +445,11 @@ export default {
         showClose: false
       });
     },
-    // 预览
-    async preview() {
-      let { data, status } = await sitemapApi.previewFile(this.curSiteId);
-      console.log(data);
-    },
+    // // 预览
+    // async preview() {
+    //   let { data, status } = await sitemapApi.previewFile(this.curSiteId);
+    //   console.log(data);
+    // },
     // 添加弹框内的列表选中
     handleAddSelectionChange(list) {
       this.addSelectedList = list;
@@ -684,6 +685,7 @@ export default {
         vertical-align: middle;
       }
       .previewBtn {
+        display: inline-block;
         width: 90px;
         height: 40px;
         border-radius: 2px;
