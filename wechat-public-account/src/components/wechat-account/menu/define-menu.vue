@@ -789,9 +789,8 @@ export default {
       }
     }
     .menu-operate__box {
-      margin: 24px auto;
       padding: 24px;
-      width: 90%;
+      width: 100%;
       border-radius: 2px;
       border: 1px solid rgba(229, 229, 229, 1);
       .menu-operate__header {
@@ -799,7 +798,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
-        border-bottom: 2px solid #D3D3D3;
+        border-bottom: 1px solid #D3D3D3;
         padding-bottom: 10px;
         p {
           font-size:14px;
@@ -941,6 +940,9 @@ export default {
   border: none;
   width: 100%;
   height: 364px;
+}
+.el-form /deep/ .el-form-item {
+  margin-bottom: 6px;
 }
 .el-form-item /deep/ .el-form-item__label {
   color: #a1a8b1;

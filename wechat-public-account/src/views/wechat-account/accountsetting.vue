@@ -265,7 +265,7 @@ export default {
               content: "";
               width: 16px;
               height: 16px;
-              background: url("~img/account/account_type_icon.png") no-repeat
+              background: url("~img/account/v.png") no-repeat
                 center center;
               background-size: 100% 100%;
             }
