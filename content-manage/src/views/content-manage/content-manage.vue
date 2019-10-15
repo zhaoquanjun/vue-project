@@ -26,7 +26,7 @@
                 <span style="font-size: 16px;">我的图片</span>
                 <span @click="cancelgetImg">X</span>
             </el-header>
-            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo">
+            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">
                     <button @click="getImg" class="sure">确定</button>
                     <button @click="cancelgetImg" class="cancel">取消</button>

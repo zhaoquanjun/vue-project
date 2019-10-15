@@ -24,6 +24,7 @@
                 :pic-search-options="picSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
                 :is-grid="isGrid"
+                :isPopup="isPopup"
                 @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                 @getList="getList"
                 @batchMove="batchMove"
@@ -133,6 +134,10 @@ export default {
                 return true;
             }
         },
+        isPopup: {
+            type: Boolean,
+            default: false
+        }
     },
     components: {
         MTree,
