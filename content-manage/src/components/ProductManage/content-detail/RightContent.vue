@@ -145,29 +145,16 @@ export default {
             //console.log(this.$refs.imgList.selectedImg, "selectedImg");
             // this.imageUrl1 = this.imgData[0].fullOssUrl;
             // this.isModalShow = false;
-<<<<<<< HEAD
             if(this.isReplace=="singular"){
                 this.$set(this.newFileList,this.curRepalceIndex,this.imgData[0].fullOssUrl)
                 
             }else{
                 this.imgData.forEach((item, index) => {
-                    if(index<9) this.newFileList.push(item.fullOssUrl);
+                    if(this.newFileList.length<9) this.newFileList.push(item.fullOssUrl);
                  });
                 this.newFileList =  Array.from(new Set(this.newFileList))
             }
             this.isModalShow = false;
-=======
-
-            this.imgData.forEach((item, index) => {
-                if(this.newFileList.length<9){
-                     this.newFileList.push(item.fullOssUrl);
-                }
-               
-            });
-            this.isModalShow = false;
-            this.newFileList =  Array.from(new Set(this.newFileList))
-            console.log(this.newFileList, "11111");
->>>>>>> 5f67ad55b46662d9ba6d96f8e1a54d20c061a47d
         },
         handlerAddPicture(flag,index) {
             this.isModalShow = true;
