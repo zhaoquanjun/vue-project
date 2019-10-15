@@ -60,7 +60,7 @@
               <el-form-item label="菜单名称">
                 <el-input 
                   v-model="menuDetail.name" 
-                  @blur="testMenu(16,menuDetail.name)"
+                  @blur="testMenu()"
                   placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母">
                 </el-input>
               </el-form-item>
@@ -84,11 +84,25 @@
             </el-form>
             <div v-show="menuDetail.clickBehavior == '1' && hasSubList" class="message-content__section">
               <section class="menu-content__area">
-                <div class="radio-tabs">
+                <!-- <div class="radio-tabs">
                   <el-radio label="1" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('1')">图片</el-radio>
                   <el-radio label="2" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('2')">文字</el-radio>
                   <el-radio label="3" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('3')">图文</el-radio>
-                </div>
+                </div> -->
+                <ul class="radio-tabs">
+                  <li @click="_handleChangeBehaviorType('1')" :class="{active: menuDetail.behaviorType == '1'}">
+                    <i class="icon iconfont iconicon-des-picture"></i>
+                    <span>图片</span>
+                  </li>
+                  <li @click="_handleChangeBehaviorType('2')" :class="{active: menuDetail.behaviorType == '2'}">
+                    <i class="icon iconfont iconicon-editext"></i>
+                    <span>文字</span>
+                  </li>
+                  <li @click="_handleChangeBehaviorType('3')" :class="{active: menuDetail.behaviorType == '3'}">
+                    <i class="icon iconfont iconicon-picword"></i>
+                    <span>图文</span>
+                  </li>
+                </ul>
                 <div class="slot-content">
                   <!-- 图片 -->
                   <Picture
@@ -143,7 +157,8 @@ import OrderMenu from "_c/wechat-account/defineMenu/order-menu";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
 import WebsiteLink from "_c/wechat-account/defineMenu/link/link";
 import { notify } from "@/utlis/index.js";
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
+import { getLocal } from '@/libs/local';
 import ImageText from "@/components/wechat-account/auto-answer/image-text.vue";
 import { getMenuTree, getMenuDetail,addMenu,publishMenu,removeMenu,updateMenu,modifyMenuOrder } from "@/api/request/account.js";
 export default {
@@ -259,7 +274,6 @@ export default {
     },
     handleClosePopup (val,data){
       this.isShowPopup = val
-      console.log('eee',data)
       if (data) {
         this.menuDetail.behaviorBody.customMenuRedirectMsg.title= data.Title;
         this.menuDetail.behaviorBody.customMenuRedirectMsg.urlType= data.Type;
@@ -321,7 +335,6 @@ export default {
         this.menuDetail.behaviorBody.newsMsg = [];
         this.menuDetail.behaviorBody.customMenuRedirectMsg = {};
       }
-      console.log('0000',this.menuDetail)
     },
     _handleChangeBehaviorType(val) {
       this.menuDetail.behaviorType = val
@@ -431,8 +444,6 @@ export default {
       }
       //接口校验
       if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
-        console.log('888',order,dataObj.status)
-        console.log('flag2',order == 0, dataObj.status)
           let newMenuItem = {
           name: name,  //菜单名称
           displayOrder: order, //菜单排序
@@ -459,28 +470,54 @@ export default {
     },
     // 删除菜单
     async _handleDeleteMenu() {
-      let data = await removeMenu(this.siteId, this.menuDetail.id);
-      if(data && data.status == 200 ) {
-        this._getMenuTree()
-      }
+      this.$confirm("提示", {
+        title: "提示",
+        iconClass: "icon-warning",
+          message:  `删除后，"${this.menuDetail.name}"菜单下的设置的内容将被删除，是否确定删除？`,
+          callback: async action => {
+              if (action === "confirm") {
+                  let data = await removeMenu(this.siteId, this.menuDetail.id);
+                  if(data && data.status == 200 ) {
+                    notify(this, '菜单删除成功', "success");
+                    this._getMenuTree()
+                  } else {
+                    notify(this, '菜单删除失败', "error");
+                  }
+              }
+          }
+      });
     },
     // 保存并发布
      async _handleSaveAndPublish() {
-      let dataDetail = this.menuDetail;
-          dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType);
-          dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
-      let data = await publishMenu(dataDetail);
-      if (data && data.status == 200) {
-        this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
-        this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
-        //同步菜单name
-        notify(this, '保存成功', "success");
-        //this.hasChangeMeunName()
-      } else {
-        notify(this, '保存失败', "error");
-        this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
-        this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+      let flag = this.testParameters();
+      if (!flag) {
+        notify(this, '请完善菜单信息', "error");
+        return
       }
+      this.$confirm("提示", {
+        title: "提示",
+        iconClass: "icon-warning",
+          message:  `发布成功后会覆盖原版本，且将在24小时内对所有用户生效，是否确认发布？`,
+          callback: async action => {
+            if (action === "confirm") {
+              let dataDetail = this.menuDetail;
+                  dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType);
+                  dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
+              let data = await publishMenu(dataDetail);
+              if (data && data.status == 200) {
+                this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
+                this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+                //同步菜单name
+                notify(this, '保存并发布成功', "success");
+                //this.hasChangeMeunName()
+              } else {
+                notify(this, '保存并发布失败', "error");
+                this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
+                this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+              }
+            }
+          }
+      });
     },
     //同步本地菜单列表name
     hasChangeMeunName () {
@@ -512,19 +549,20 @@ export default {
       this.menuDetail.behaviorBody.newsMsg = list;
     },
     //校验菜单名称
-    testMenu(typeNum,str,id){
+    testMenu(){
       //汉字19968至40869
       //数字 48-57
       //A-Z:65-90,a-z:97-122
       //-+&. :45 43 38 46 32
-      // 同步才单名
-      this.hasChangeMeunName()
+      // 校验菜单名
+      let typeNum = this.curSubIndex == -1? 8:16;
+      let str = this.menuDetail.name;
       let isRule = true;
       let BlankNum = 1;
       let strLength = 0
       let firstBlankIndex = false;
-      for (var i=0; i<str.length; i++) {  
-        var c = str.charCodeAt(i);
+      for (let i=0; i<str.length; i++) {  
+        let c = str.charCodeAt(i);
         if (c == 45 || c == 43 || c == 38 || c == 46 || c == 32){
           strLength = strLength + 1;
           if (c==32 && !firstBlankIndex) {
@@ -550,6 +588,9 @@ export default {
       if (strLength == 0 || strLength >typeNum) {
         isRule = false
       }
+      if(isRule){
+        this.hasChangeMeunName()
+      }
       this.hasTrueName = isRule
     }
   }
@@ -560,11 +601,39 @@ export default {
 .holder h3 {
   text-align: center
 }
+.message-content__section {
+  background-color: #fff;
+  min-height: 400px;
+  border-radius:2px;
+  border:1px solid rgba(211,211,211,1);
+  .radio-tabs {
+    height: 40px;
+    background:rgba(240,243,247,1);
+    border-radius:1px 1px 0px 0px;
+    li {
+      float: left;
+      font-size:14px;
+      font-weight:400;
+      color:rgba(38,38,38,1);
+      line-height:40px;
+      padding: 0 15px 0 30px;
+      cursor: pointer;
+      i {
+        font-size: 12px;
+        margin-right: 8px;
+      }
+      &.active {
+        color: #09CCEB;
+      }
+    }
+  }
+}
 .define-menu__area {
   margin: 0 auto;
   max-width: 1200px;
   min-width: 990px;
   border-radius: 20px;
+  font-family: "PingFangSC-Medium,PingFangSC";
   .phone-box__area {
     position: relative;
     float: left;
@@ -720,25 +789,28 @@ export default {
       }
     }
     .menu-operate__box {
-      margin: 24px auto;
       padding: 24px;
-      width: 90%;
+      width: 100%;
       border-radius: 2px;
-      background: #fff;
       border: 1px solid rgba(229, 229, 229, 1);
       .menu-operate__header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid #D3D3D3;
+        padding-bottom: 10px;
         p {
-          font-size: 16px;
+          font-size:14px;
+          font-weight:500;
+          color:rgba(38,38,38,1);
+          line-height:20px;
         }
         .menu-operate__delete {
           font-size: 14px;
           font-family: "PingFangSC";
           font-weight: 400;
-          color: rgba(251, 77, 104, 1);
+          color: #09CCEB;
           line-height: 20px;
           cursor: pointer;
         }
@@ -868,6 +940,9 @@ export default {
   border: none;
   width: 100%;
   height: 364px;
+}
+.el-form /deep/ .el-form-item {
+  margin-bottom: 6px;
 }
 .el-form-item /deep/ .el-form-item__label {
   color: #a1a8b1;

@@ -123,7 +123,6 @@ export default {
     return {
       aliMarketUrl: aliMarketUrl,
       isdropdownAvatarShow: false,
-      // appName: "",
       appList: [],
       changeAppShow: false,
       curAppId: ""
@@ -229,7 +228,9 @@ export default {
       }
     },
     headAppName() {
-      let appName = this.$store.state.user.userInfo.appName;
+      let appName = getLocal("userInfo")
+        ? getLocal("userInfo").appName
+        : this.$store.state.user.userInfo.appName;
       return appName;
     }
   }
@@ -402,7 +403,7 @@ export default {
   padding: 12px 0 22px;
 }
 .appBackground {
-position: relative;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;

@@ -105,10 +105,8 @@ export default {
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
-      if (!this.siteId) {
-        await this.$store.dispatch('_setSiteId')
-        await this.$store.dispatch('_getWxStatus')
-      }
+      await this.$store.dispatch('_setSiteId')
+      await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.getters.wx_status;
       if (wx_status.isAuth && wx_status.isCertification && wx_status.isResolveSuccess) {
         this.step = 3
@@ -207,6 +205,7 @@ export default {
         callback: async action => {
           if (action === "confirm") {
             this.$router.push('/wechataccount/accountsetting')
+            this._getCdnDomainList()
           }
         }
       });

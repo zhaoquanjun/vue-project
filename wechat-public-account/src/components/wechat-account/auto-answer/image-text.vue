@@ -13,7 +13,7 @@
                 v-for="(item,index) in list"
                 :key="index"
             >
-                <div class="headline">{{item.title}}</div>
+                <div class="headline ellipsis">{{item.title}}</div>
                 <div class="imgwrap">
                     <img :src="item.picUrl"
                     />
@@ -43,23 +43,11 @@
                     </div>
                 </div>
                 <div class="seting-info">
-                    <div class="seting-item"
-                        style="cursor: pointer;"
-                        @click="showPopup"
-                    >
+                    <div class="seting-item">
                         <div class="seting-title">设置链接</div>
-                        <el-input
-                            size="small"
-                            placeholder="请选择链接"
-                            v-model="curEditorTitle"
-                            class="input-with-select"
-                            readonly
-                        >
-                            <i
-                                class="el-icon-link el-input__icon"
-                                slot="suffix"
-                            ></i>
-                        </el-input>
+                        <div class="seting-line ellipsis pointer" :class="{select:curEditorTitle}" @click="showPopup">
+                            {{curEditorTitle?curEditorTitle:'请选择链接'}}
+                        </div>
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">设置封面</div>
@@ -101,15 +89,15 @@
                         ></el-input>
                     </div>
                     <div class="seting-item seting-btn">
+                        <button v-show="list.length> 0" class="editor-cancel" @click="handlerCancel">取消</button>
                         <button class="editor-comfirm" @click="handlerConfirm">确定</button>
-                        <button class="editor-cancel" @click="handlerCancel">取消</button>
                     </div>
                 </div>
             </li>
         </ul>
         <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes == 1">
             <span class="el-icon-plus avatar-uploader-icon"></span>
-            <span>最多添加8个图文消息</span>
+            <span>还可添加 {{(8-list.length)}} 个图文消息</span>
         </div>
         <image-manage
             :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
@@ -282,12 +270,32 @@ export default {
     }
 };
 </script>
+<style scoped>
+.el-input /deep/ input {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-input /deep/ input:hover {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-input /deep/ input:focus {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-textarea /deep/ textarea {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-textarea /deep/ textarea:hover {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-textarea /deep/ textarea:focus {
+    border: 1px solid rgba(211,211,211,1);
+}
+</style>
 <style lang="scss" scoped>
 .image-text {
-    padding-top: 24px;
+    padding-top: 16px;
 }
 .list {
-    width: 279px;
+    width: 280px;
     margin: 0 auto;
     > li {
         position: relative;
@@ -318,7 +326,7 @@ export default {
     }
     li.list-item {
         height: 60px;
-        padding: 0 10px 0 32px;
+        padding: 0 16px;
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
         border-radius: 4px;
@@ -369,7 +377,10 @@ export default {
             box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
         }
         .seting-info {
-            padding-top: 8px;
+            padding: 12px 8px 8px;
+            margin-top: 8px;
+            border: 1px solid rgba(211,211,211,1);
+            border-radius: 2px;
             box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
             .seting-item {
                 padding-bottom: 16px;
@@ -378,9 +389,25 @@ export default {
             .seting-title {
                 padding-bottom: 8px;
             }
+            .seting-line {
+                height:40px;
+                background:rgba(255,255,255,1);
+                border-radius:2px;
+                border:1px solid rgba(229,229,229,1);
+                font-size:14px;
+                font-family:'PingFangSC-Regular,PingFangSC';
+                font-weight:400;
+                color:rgba(211,211,211,1);
+                line-height:40px;
+                padding: 0 14px;
+                cursor: pointer;
+            }
+            .select {
+                color: #606266;
+            }
             .seting-btn {
                 display: flex;
-                justify-content: space-around;
+                justify-content: flex-end;
             }
             .editor-comfirm {
                 display: inline-block;
@@ -388,12 +415,15 @@ export default {
                 height: 32px;
                 background: rgba(9, 204, 235, 1);
                 border-radius: 2px;
+                margin-left: 16px;
+                cursor: pointer;
                 color: #fff;
             }
             .editor-cancel {
                 display: inline-block;
                 width: 70px;
                 height: 32px;
+                cursor: pointer;
                 background: #fff;
                 border-radius: 2px;
                 color: rgba(9, 204, 235, 1);

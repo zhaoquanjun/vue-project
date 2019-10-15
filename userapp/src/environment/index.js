@@ -30,7 +30,9 @@ export let designerUrl = `${httpSchema}designer.console.wezhan.cn`;
 export let mySiteUrl = `${httpSchema}dashboard.console.wezhan.cn/website/mysite`;
 export let dashboardUrl = `${httpSchema}dashboard.console.wezhan.cn/board`;
 // 阿里云续费地址
-export let aliMarketUrl = `https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0`;
+export let aliMarketUrl = "https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0";
+// 预览网站地图文件地址
+export let previewSitemapUrl = "http://api.designer.console.wezhan.cn/api/v1/SiteMap/Preview/";
 
 if (process.env.NODE_ENV === `development`) {
     siteManageApi = `${httpSchema}api.designer.console.wezhan.cn`;

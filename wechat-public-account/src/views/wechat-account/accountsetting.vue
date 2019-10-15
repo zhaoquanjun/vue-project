@@ -17,14 +17,14 @@
             <p>{{accountInfo.serviceTypeInfo == 2 ? '服务号' : '订阅号'}}</p>
           </div>
         </div>
-        <div class="primary-button__nomal" @click="unBind">解除绑定</div>
+        <div class="domain-button__area" @click="unBind">解除绑定</div>
       </div>
       <div class="account-domain__area">
         <div class="domain-title__area">
           <span>推广域名</span>
           <p>{{accountInfo.promotionUrl}}</p>
         </div>
-        <div class="primary-button__nomal domain-button__area" @click="changeShow">&nbsp;&nbsp;修改&nbsp;&nbsp;</div>
+        <div class="domain-button__area" @click="changeShow">修改</div>
       </div>
       <div class="account-explain__area">
         <h5>推广域名说明</h5>
@@ -156,6 +156,10 @@ export default {
         notify(this,'请先选则要设置的域名', 'error')
       }
       let domain = this.domainList[this.curInder].domain
+      if(domain == this.accountInfo.promotionUrl) {
+        this.isShow = false
+        return
+      }
       let data = await setPromotionUrl({siteId: this.siteId,domain:domain})
       if(data && data.status == 200) {
         this.accountInfo.promotionUrl = domain
@@ -210,7 +214,7 @@ export default {
       margin-bottom: 26px;
       height: 100px;
       background: #F8FAFC;
-      padding: 0 20px;
+      padding: 0 32px 0 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -261,7 +265,7 @@ export default {
               content: "";
               width: 16px;
               height: 16px;
-              background: url("~img/account/account_type_icon.png") no-repeat
+              background: url("~img/account/v.png") no-repeat
                 center center;
               background-size: 100% 100%;
             }
@@ -316,9 +320,6 @@ export default {
             }
           }
         }
-      }
-      .domain-button__area {
-        height: 34px;
       }
     }
     .account-explain__area {
@@ -439,6 +440,19 @@ export default {
         }
       }
     }
+    
   }
+  .domain-button__area {
+      width:96px;
+      height:40px;
+      background:rgba(9,204,235,1);
+      border-radius:2px;
+      line-height: 40px;
+      font-size:14px;
+      font-weight:400;
+      text-align: center;
+      color:rgba(255,255,255,1);
+      cursor: pointer;
+    }
 }
 </style>

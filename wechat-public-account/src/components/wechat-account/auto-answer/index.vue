@@ -246,7 +246,7 @@ export default {
                 });
                 if (this.replyType == 3) {
                     this.addAnswer = true;
-                    this._getReplyDetail(3);
+                    this._getKeywordReplyList(this.searchOption);
                 }
                 this.isSet = true;
                 this.replyDetail.id = data;
@@ -264,7 +264,7 @@ export default {
                 });
                 if (this.replyType == 3) {
                     this.addAnswer = true;
-                    this._getReplyDetail(3);
+                    this._getKeywordReplyList(this.searchOption);
                 }
                 this.isSet = true;
                 this.replyDetail.id = data;
@@ -528,7 +528,7 @@ export default {
         padding-top: 32px;
     }
     .reply-wrap {
-        padding: 32px 0;
+        padding: 24px 0;
         position: relative;
         //  overflow-y: auto;
     }

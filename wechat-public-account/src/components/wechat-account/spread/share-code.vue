@@ -17,7 +17,7 @@
         </vue-qr>
         <p>微信扫一扫分享</p>
         <div class="copy">
-          <div>{{shareUrl}}</div>
+          <div class="ellipsis">{{shareUrl}}</div>
           <span v-if="!hasCopy" class="tag-read" :data-clipboard-text="shareUrl" @click="oCopy">复制链接</span>
           <span v-else class="hasCopy">复制成功</span>
         </div>
@@ -171,7 +171,6 @@ export default {
           font-weight:400;
           color:rgba(38,38,38,1);
           line-height:40px;
-          border-right: 10px solid rgba(240,243,248,1);
           overflow: hidden;
         }
         span {
