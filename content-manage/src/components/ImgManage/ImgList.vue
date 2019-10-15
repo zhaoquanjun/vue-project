@@ -121,7 +121,7 @@
                         @click="prev"
                         class="el-carousel__arrow el-carousel__arrow--left left-prev"
                     ></el-button>
-                    <el-carousel-item v-for="item in picSearchOptions.pageSize" :key="item">
+                    <el-carousel-item>
                         <h3>
                             <img width="100%" :src="fullOssUrl" />
                         </h3>

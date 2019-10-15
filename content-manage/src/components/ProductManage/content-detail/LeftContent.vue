@@ -850,11 +850,24 @@ export default {
 .modal-footer{
      height: 60px;
     position: absolute;
-    bottom: -23px;
+    bottom: -11px;
     right: 16px;
     width: 100%;
     z-index: 100;
     text-align: right;
+}
+.el-form-item__error {
+    color: #262626;
+    &::before {
+        display: inline-block;
+        content: "";
+        width: 13px;
+        height: 13px;
+        vertical-align: -2px;
+        padding-right: 8px;
+        background: url("~img/jian-icon.png") no-repeat center;
+        background-size: contain;
+    }
 }
 </style>
 <style scoped>

@@ -24,6 +24,7 @@
             class="upload-pic"
             :action="uploadPicAction"
             :headers="headers"
+            :with-credentials="true"
             :on-remove="handleRemove"
             :on-success="handleSucess"
             :on-change="handleChange"
@@ -96,7 +97,6 @@ export default {
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${this.uploadPicUrl}/0`,
             headers: {
-                appId: "",
                 Authorization: ""
             },
             uploadSucess: false,
@@ -105,7 +105,7 @@ export default {
         };
     },
     mounted() {
-        this.headers.appId = this.$store.state.dashboard.appId;
+       
         if (this.nodeData) {
             this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
         }

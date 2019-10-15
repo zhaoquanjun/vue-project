@@ -208,18 +208,14 @@ export default {
             line-height: 27px;
             border-radius: 50%;
             background: #00c1de;
-            .svg-icon {
-                width: 16px;
-                height: 16px;
-            }
+            
         }
         button {
             display: inline-block;
             text-align: center;
             width: 33%;
-            .svg-icon {
-                width: 27px;
-                height: 27px;
+            i{
+                color: #fff;
             }
         }
     }

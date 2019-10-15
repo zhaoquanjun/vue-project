@@ -52,15 +52,21 @@
     .el-dialog {
          background: transparent;
          box-shadow: none;
-         height: auto;
+         height: 100%;
          width: 100vh;
+         margin-top: 0 !important;
      }
     .el-dialog__body {
          text-align: center;
+         height: 100%;
+     }
+     .el-carousel--horizontal{
+         height: 100%;
      }
      .el-dialog__headerbtn{
          position: fixed;
          right: 57px;
+         z-index: 10000;
      }
     .el-dialog__headerbtn .el-dialog__close {
          color: #fff;
@@ -83,7 +89,7 @@
          font-size: 40px;
      }
      .el-carousel__container{
-         height: 100vh;
+        height: 100%;
      }
      .el-carousel__container img{
         //  max-width: 658px;
@@ -94,6 +100,11 @@
         align-items: center;
         justify-content: center;
     } 
+    .el-carousel__item.is-animating h3{
+       height: 100%;
+       display: flex;
+       align-items: center;
+    }
     .dislog-footer{
         text-align: center;
         position: fixed;
@@ -106,12 +117,15 @@
   .el-dialog__wrapper{
         display: flex;
         align-items: center;
-       
-        
+    }
+    .el-dialog__wrapper::-webkit-scrollbar{
+        width: 0;
+        height: 0;
     }
    .dislog-footer span{
         padding: 0 20px;
         color: #fff;
+        vertical-align: top;
     }
     .v-modal{
         opacity: 0.8;

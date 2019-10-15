@@ -26,9 +26,9 @@
                     <el-input
                         type="textarea"
                         placeholder="请输入文章简介"
-                         :autosize="{ minRows:3, maxRows: 3}"
+                        :autosize="{ minRows:3, maxRows: 3}"
                         v-model="articleDetail.summary"
-                         maxlength="500"
+                        maxlength="500"
                         show-word-limit
                     ></el-input>
                 </el-form-item>
@@ -111,78 +111,84 @@
                             </el-col>
                         </el-form-item>-->
 
-
                         <el-form-item label="时间">
                             <div>
                                 <div style="float:left">
                                     <el-col>
                                         <el-form-item prop="createTime">
-                                            <el-date-picker type="datetime"
-                                                            v-model="articleDetail.createTime"
-                                                            placeholder="选择日期时间"
-                                                            style="width: 100%;"></el-date-picker>
+                                            <el-date-picker
+                                                type="datetime"
+                                                v-model="articleDetail.createTime"
+                                                placeholder="选择日期时间"
+                                                style="width: 100%;"
+                                            ></el-date-picker>
                                         </el-form-item>
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="font-size:12px">
-                                        预览网站
-                                    </span>
+                                    <span style="font-size:12px">预览网站</span>
                                     <el-tooltip class="item" effect="dark" placement="top">
-                                        <div slot="content">
-                                            将在所选网站的二级域名下打开预览页面
-                                        </div>
+                                        <div slot="content">将在所选网站的二级域名下打开预览页面</div>
                                         <i class="iconfont iconyiwen"></i>
                                     </el-tooltip>
                                     <span class="select-sort">
-                                        <el-select size="small"
-                                                   :value="articleDetail.defaultSiteId == 0 ? null : articleDetail.defaultSiteId"
-                                                   placeholder="请选择"
-                                                   @change="changeSiteId"
-                                                   >
-                                            <el-option v-for="item in siteOptions"
-                                                       :key="item.siteId"
-                                                       :label="item.siteName"
-                                                       :value="item.siteId"></el-option>
+                                        <el-select
+                                            size="small"
+                                            :value="articleDetail.defaultSiteId == 0 ? null : articleDetail.defaultSiteId"
+                                            placeholder="请选择"
+                                            @change="changeSiteId"
+                                        >
+                                            <el-option
+                                                v-for="item in siteOptions"
+                                                :key="item.siteId"
+                                                :label="item.siteName"
+                                                :value="item.siteId"
+                                            ></el-option>
                                         </el-select>
                                     </span>
                                 </div>
                             </div>
                         </el-form-item>
 
-
-                            <el-form-item style="position:relative" label="搜索关键词" prop="searchKeywords">
-                                <el-tooltip class="item" effect="dark" placement="right">
-                                    <div slot="content">
-                                        网站使用了搜索控件时，将使该网站的搜索
-                                        <br />结果更加准确，一篇文章最多可以设置5个关键词
-                                    </div>
-                                    <i class="iconfont iconyiwen"></i>
-
-                                </el-tooltip>
-                                <ul class="keyword-list" ref="keywordList">
-                                    <li v-for="(item,index) in articleDetail.searchKeywords"
-                                        :key="index">
-                                        {{item}}
-                                        <i class="el-icon-close"
-                                           @click.stop="removeCurKeyWord(index)"></i>
-                                    </li>
-                                    <el-input maxlength="10"
-                                              ref="keywordInput"
-                                              placeholder="每个关键词之间用回车键分离"
-                                              v-model="keywordValue"
-                                              @keyup.enter.native="keywords(keywordValue)"
-                                              @blur="keywords(keywordValue)"></el-input>
-                                </ul>
-                                <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
-                            </el-form-item>
-                            <el-form-item label="置顶" prop="delivery">
-                                <el-switch v-model="articleDetail.isTop"></el-switch>
-                                <span style=" font-size: 14px; color: #606266;
+                        <el-form-item style="position:relative" label="搜索关键词" prop="searchKeywords">
+                            <el-tooltip class="item" effect="dark" placement="right">
+                                <div slot="content">
+                                    网站使用了搜索控件时，将使该网站的搜索
+                                    <br />结果更加准确，一篇文章最多可以设置5个关键词
+                                </div>
+                                <i class="iconfont iconyiwen"></i>
+                            </el-tooltip>
+                            <ul class="keyword-list" ref="keywordList">
+                                <li
+                                    v-for="(item,index) in articleDetail.searchKeywords"
+                                    :key="index"
+                                >
+                                    {{item}}
+                                    <i
+                                        class="el-icon-close"
+                                        @click.stop="removeCurKeyWord(index)"
+                                    ></i>
+                                </li>
+                                <el-input
+                                    maxlength="10"
+                                    ref="keywordInput"
+                                    placeholder="每个关键词之间用回车键分离"
+                                    v-model="keywordValue"
+                                    @keyup.enter.native="keywords(keywordValue)"
+                                    @blur="keywords(keywordValue)"
+                                ></el-input>
+                            </ul>
+                            <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
+                        </el-form-item>
+                        <el-form-item label="置顶" prop="delivery">
+                            <el-switch v-model="articleDetail.isTop"></el-switch>
+                            <span
+                                style=" font-size: 14px; color: #606266;
     vertical-align: middle;
-    padding:0  16px 0 32px ;">仅登录用户可访问</span>
-                                <el-switch v-model="articleDetail.isLoggedInCanView"></el-switch>
-                            </el-form-item>
+    padding:0  16px 0 32px ;"
+                            >仅登录用户可访问</span>
+                            <el-switch v-model="articleDetail.isLoggedInCanView"></el-switch>
+                        </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
             </div>
@@ -194,7 +200,13 @@
                                 <div slot="content">不填写则默认使用文章标题</div>
                                 <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
-                            <el-input class="contentDetail-title"  maxlength="100" show-word-limit  placeholder="SEO标题" v-model="articleDetail.metaTitle"></el-input>
+                            <el-input
+                                class="contentDetail-title"
+                                maxlength="100"
+                                show-word-limit
+                                placeholder="SEO标题"
+                                v-model="articleDetail.metaTitle"
+                            ></el-input>
                         </el-form-item>
                         <el-form-item style="position:relative" label="SEO关键词" prop="metaKeywords">
                             <ul class="keyword-list" ref="metaKeywordList">
@@ -297,7 +309,7 @@ export default {
         ModalContent
     },
     provide: {
-      popper:true
+        popper: true
     },
     data() {
         var checkWord = (rule, value, callback) => {
@@ -312,7 +324,7 @@ export default {
             isOutSearch: false,
             treeResult: null,
             categoryName: "全部分类",
-            categoryId:-1,
+            categoryId: -1,
             options: [
                 {
                     value: true,
@@ -327,7 +339,7 @@ export default {
             value: true,
             activeName: "",
             activeName1: "",
-            NewId:"",
+            NewId: "",
             articleDetail: {
                 NewId: "",
                 title: "",
@@ -344,7 +356,6 @@ export default {
                 metaDescription: "",
                 pictureUrl: "",
                 defaultSiteId: 0
-
             },
             rules: {
                 title: [
@@ -392,7 +403,7 @@ export default {
                     [{ font: fonts }],
                     [{ align: [] }],
                     ["clean"],
-                    ["image"],//["image", "video"],
+                    ["image"], //["image", "video"],
                     [{ lineheight: lineheights }],
                     [{ letterspacing: letterspacings }]
                 ],
@@ -416,21 +427,18 @@ export default {
             });
         },
         keywords(value, name) {
-           
-           this.metaKeyword =this.keywordValue = "";
+            this.metaKeyword = this.keywordValue = "";
             if (name === "metaKeywords") {
                 if (this.articleDetail.metaKeywords.length >= 5 || !value) {
                     return;
                 }
                 this.articleDetail.metaKeywords.push(value);
-              
             } else {
                 if (this.articleDetail.searchKeywords.length >= 5 || !value) {
                     return;
                 }
                 this.articleDetail.searchKeywords.push(value);
             }
-            
         },
         removeCurKeyWord(index) {
             this.articleDetail.searchKeywords.splice(index, 1);
@@ -445,13 +453,11 @@ export default {
             var categoryName = this.$route.query.categoryName;
             if (categoryName != null || categoryName != undefined) {
                 this.categoryName = categoryName;
-                
-                this.categoryId = parseFloat(this.$route.query.categoryId)
-               
-            }else{
-                this.categoryId = 0
+
+                this.categoryId = parseFloat(this.$route.query.categoryId);
+            } else {
+                this.categoryId = 0;
             }
-          
         },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
@@ -503,7 +509,7 @@ export default {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     iconClass: "icon-success",
-                    cancelButtonText:"关闭",
+                    cancelButtonText: "关闭",
                     callback: async action => {
                         if (action === "confirm") {
                             this.resetForm("articleDetail");
@@ -511,10 +517,14 @@ export default {
                             this.$emit("changeSaveWay", false);
                             this.$emit("changePreviewId", "", 0);
                         } else {
-                            this.NewId = data
+                            this.NewId = data;
                             this.articleDetail.NewId = data;
                             this.$emit("changeSaveWay", true);
-                            this.$emit("changePreviewId", data, this.articleDetail.defaultSiteId);
+                            this.$emit(
+                                "changePreviewId",
+                                data,
+                                this.articleDetail.defaultSiteId
+                            );
                         }
                     }
                 });
@@ -543,7 +553,7 @@ export default {
                 confirmButtonText: "新增下一篇",
                 customClass: "medium",
                 iconClass: "icon-success",
-                cancelButtonText:"关闭",
+                cancelButtonText: "关闭",
                 callback: async action => {
                     if (action === "confirm") {
                         this.resetForm("articleDetail");
@@ -552,9 +562,14 @@ export default {
                         this.$emit("changePreviewId", "", 0);
                         this.$route.query.id = false;
                     } else {
-                        this.articleDetail.NewId = this.$route.query.id || this.NewId;
+                        this.articleDetail.NewId =
+                            this.$route.query.id || this.NewId;
                         this.$emit("changeSaveWay", true);
-                        this.$emit("changePreviewId", this.articleDetail.NewId, this.articleDetail.defaultSiteId);
+                        this.$emit(
+                            "changePreviewId",
+                            this.articleDetail.NewId,
+                            this.articleDetail.defaultSiteId
+                        );
                     }
                 }
             });
@@ -613,10 +628,11 @@ export default {
             this.isModalShow = false;
         },
         resetDetail() {
+       
             this.articleDetail = {
                 NewId: "",
                 title: "",
-                categoryId: 0,
+                categoryId: this.articleDetail.categoryId,
                 summary: "",
                 contentDetail: "",
                 searchKeywords: [],
@@ -633,12 +649,11 @@ export default {
         //获取app下所有站点
         async getSiteList() {
             let { data } = await articleManageApi.getSiteList();
-                this.siteOptions = data;
+            this.siteOptions = data;
         },
         changeSiteId(siteId) {
             this.articleDetail.defaultSiteId = siteId;
         }
-
     },
     mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
@@ -658,7 +673,6 @@ export default {
             } else {
                 this.isOutSearch = false;
             }
-           
         },
         "articleDetail.metaKeywords"() {
             if (this.articleDetail.metaKeywords.length >= 5) {
@@ -666,7 +680,6 @@ export default {
             } else {
                 this.isOutSeo = false;
             }
-          
         },
         deep: true,
         immediate: true
@@ -677,24 +690,40 @@ export default {
 
 <style scoped lang="scss">
 @import "../../style/contentDetail";
+.el-form-item__error {
+    color: #262626;
+    &::before {
+        display: inline-block;
+        content: "";
+        width: 13px;
+        height: 13px;
+        vertical-align: -2px;
+        padding-right: 8px;
+        background: url("~img/jian-icon.png") no-repeat center;
+        background-size: contain;
+    }
+}
+#content{
+    overflow: hidden;
+}
 </style>
 <style scoped>
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 420px;
 }
-.el-textarea /deep/ .el-input__count{
-     background: #fff;
+.el-textarea /deep/ .el-input__count {
+    background: #fff;
     bottom: 1px;
     right: 22px;
 }
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
-.modal-footer{
+.modal-footer {
     height: 60px;
     position: absolute;
-    bottom: -23px;
+    bottom: -11px;
     right: 16px;
     width: 100%;
     z-index: 100;
@@ -703,16 +732,15 @@ export default {
 </style>
 
 <style >
-
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
-    content: '字体大小';
+    content: "字体大小";
 }
 /* 标题 */
 .ql-snow .ql-picker.ql-header .ql-picker-label::before,
 .ql-snow .ql-picker.ql-header .ql-picker-item::before {
-    content: '标题';
+    content: "标题";
 }
 /* 字体 */
 .ql-snow .ql-picker.ql-font .ql-picker-label::before,

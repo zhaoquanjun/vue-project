@@ -5,55 +5,38 @@
                 <span class="article-cover">产品封面</span>
             </div>
             <div>
-                <!-- <el-upload
-                    class="avatar-uploader"
-                    :action="uploadPicAction"
-                    :headers="headers"
-                    list-type="picture-card"
-                    :file-list="fileList"
-                    :on-success="handleAvatarSuccess"
-                    :before-upload="beforeAvatarUpload"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :multiple="true"
-                    accept=".jpg, .jpeg, .png, .gif, .svg, .JPG, .JPEG, .GIF"
-                >
-              
-                    <template>
-                        <i style class="el-icon-plus avatar-uploader-icon"></i>
-                        <i style=" display: block;font-size:12px">添加图片</i>
-                    </template>
-                </el-upload>-->
+
                 <div class="avatar-uploader avatar-uploader">
                     <div class="imgWrap">
-                        <!-- <img :src="imageUrl1" class="avatar" />
-                         <span class="el-upload-list__item-actions">
-                            <i @click="handlerAddPicture" class="icon-change"></i>
-                            <i @click.stop="handleRemove" class="el-icon-delete"></i>
-                        </span>-->
-                        <ul class="el-upload-list el-upload-list--picture-card">
+                        <draggable
+                         tag="ul"
+                          :options="{ animation: 150, ghostClass:'', dragClass: '111', scroll:true,scrollSensitivity: 200, handle: '.handler-move' }" 
+                           v-model="newFileList"
+                           @end="_handleSortEnd"  
+                         class="el-upload-list el-upload-list--picture-card">
                             <li
-                                class="el-upload-list__item is-success"
+                                class="el-upload-list__item is-success handler-move"
                                 v-for="(item,index) in newFileList"
                                 :key="index"
                             >
                                 <img width="100%" :src="item" alt />
                                 <span class="el-upload-list__item-actions">
+                                    <!--  @click="handlePreview(item)" -->
                                     <span
                                         class="el-upload-list__item-preview"
-                                        @click="handlePreview(item)"
+                                       @click="handlerAddPicture('singular',index)"
                                     >
-                                        <i class="el-icon-zoom-in"></i>
+                                        <i class="iconfont iconqiehuanxingshier"></i>
                                     </span>
                                     <span
                                         class="el-upload-list__item-delete"
                                         @click="handleRemove(index)"
                                     >
-                                        <i class="el-icon-delete"></i>
+                                        <i class="iconfont iconshanchu"></i>
                                     </span>
                                 </span>
                             </li>
-                        </ul>
+                        </draggable>
                     </div>
                     <template>
                         <div
@@ -103,11 +86,13 @@
 <script>
 import environment from "@/environment/index.js";
 import ModalContent from "@/components/ImgManage/index.vue";
-
+import draggable from "vuedraggable";
+console.log(draggable,'23456')
 export default {
     props: ["fileList"],
     components: {
-        ModalContent
+        ModalContent,
+        draggable
     },
     provide: {
       popper:true
@@ -160,20 +145,22 @@ export default {
             //console.log(this.$refs.imgList.selectedImg, "selectedImg");
             // this.imageUrl1 = this.imgData[0].fullOssUrl;
             // this.isModalShow = false;
-
-            this.imgData.forEach((item, index) => {
-                if(index<9){
-                     this.newFileList.push(item.fullOssUrl);
-                }
-               
-            });
+            if(this.isReplace=="singular"){
+                this.$set(this.newFileList,this.curRepalceIndex,this.imgData[0].fullOssUrl)
+                
+            }else{
+                this.imgData.forEach((item, index) => {
+                    if(this.newFileList.length<9) this.newFileList.push(item.fullOssUrl);
+                 });
+                this.newFileList =  Array.from(new Set(this.newFileList))
+            }
             this.isModalShow = false;
-           this.newFileList =  Array.from(new Set(this.newFileList))
-            console.log(this.newFileList, "11111");
         },
-        handlerAddPicture() {
+        handlerAddPicture(flag,index) {
             this.isModalShow = true;
             this.$refs.imgList.clearSelectedList()
+            this.isReplace = flag;
+            this.curRepalceIndex = index
         },
         handleRemove(index) {
             this.newFileList.splice(index, 1);
@@ -242,7 +229,10 @@ export default {
                 });
             }
             return isPic && isSizeOk;
-        }
+        },
+         // 排序
+        _handleSortEnd() {
+        },
     },
     watch: {
         fileList() {
@@ -310,6 +300,7 @@ export default {
 .avatar-uploader /deep/ .el-upload-list > li {
     float: left;
     border-radius: 0;
+    cursor: move
 }
 .avatar-uploader /deep/ .el-upload-list > li:first-child {
     width: 200px;
@@ -343,10 +334,12 @@ export default {
     border: none;
     width: 27px;
     height: 27px;
-    background: url("~img/pic-icon/look.png") no-repeat center;
+    /* background: url("~img/pic-icon/look.png") no-repeat center; */
     background-size: contain;
 }
-
+.el-upload-list--picture-card .el-upload-list__item-actions:hover{
+    cursor: move
+}
 .avatar-uploader
     /deep/
     .el-upload-list__item-actions
@@ -356,7 +349,7 @@ export default {
     border: none;
     width: 27px;
     height: 27px;
-    background: url("~img/pic-icon/delete-icon.png") no-repeat center;
+    /* background: url("~img/pic-icon/delete-icon.png") no-repeat center; */
     background-size: contain;
 }
 
@@ -374,7 +367,7 @@ export default {
 .modal-footer {
     height: 60px;
     position: absolute;
-    bottom: -23px;
+    bottom: -11px;
     right: 16px;
     width: 100%;
     z-index: 100;

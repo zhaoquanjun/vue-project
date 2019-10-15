@@ -10,6 +10,7 @@ export default {
     async created() {
         try {
             var result = await mgr.signinRedirectCallback();
+
             var returnToUrl = "/";
             if (result.state !== undefined) {
                 returnToUrl = result.state;

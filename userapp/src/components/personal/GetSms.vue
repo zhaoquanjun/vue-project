@@ -200,10 +200,7 @@ export default {
         async sendChangePhoneCode() {
             let targetPhone = this.ruleForm.phone; //this.value + this.ruleForm.phone;
             if (this.ruleForm.phone == "" || this.ruleForm.phone == null) {
-                // this.$message({
-                //     type: "failed",
-                //     message: "请先填写要绑定的手机号码!"
-                // });
+              
             } else {
                 let { status } = await sendTargetPhoneCode(targetPhone);
                 if (status === 200) {
