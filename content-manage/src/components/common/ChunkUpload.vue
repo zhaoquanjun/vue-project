@@ -159,17 +159,17 @@ export default {
                             if (chunk.offset === 0) {
                                 --this.successCount;
                                 this.$confirm(
-                                    `${this.displayName} ${
+                                    `<span class="ellipsis" style="float:left;max-width:296px;" class="ellipsis">${this.displayName}${
                                         chunk.file.name
-                                    } 已存在<br>位于<br>${
+                                    }</span> 已存在<br>位于<br>${
                                         data.existingFileInfo.isDelete
                                             ? "路径:回收站<br>"
                                             : ""
                                     } 分类: ${
                                         data.existingFileInfo.categoryName
-                                    }<br>名称: ${
+                                    }<br><span class="ellipsis" style="float:left;max-width:296px;">名称: ${
                                         data.existingFileInfo.fileName
-                                    }`,
+                                    }</span>`,
                                     "提示",
                                     {
                                         dangerouslyUseHTMLString: true,
