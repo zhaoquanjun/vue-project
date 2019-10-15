@@ -41,7 +41,7 @@ export function tryHideFullScreenLoading() {
 }
 axios.defaults.baseURL = environment.contentApi;
 // 请求超时时间
-axios.defaults.timeout = 15000;
+axios.defaults.timeout = 5000;
 //axios.defaults.withCredentials = true; //允许携带cookie
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';

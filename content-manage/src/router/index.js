@@ -13,7 +13,7 @@ let router = new VueRouter({
 });
 export default router;
 
-
+console.log(process.env.NODE_ENV ,'process.env.NODE_ENV')
 
 let appId = store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {

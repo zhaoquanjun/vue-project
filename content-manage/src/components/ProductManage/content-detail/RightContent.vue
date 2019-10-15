@@ -373,7 +373,7 @@ export default {
 .modal-footer {
     height: 60px;
     position: absolute;
-    bottom: -23px;
+    bottom: -11px;
     right: 16px;
     width: 100%;
     z-index: 100;

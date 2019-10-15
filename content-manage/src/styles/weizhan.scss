@@ -178,15 +178,19 @@
 
 #content {
     position: fixed;
-    width: 1000px;
+    width: 80%;
+    min-width: 800px;
+    max-width: 1200px;
+    height: 710px;
     margin: auto;
-    z-index: 112;
-    height: 600px;
-    /* bottom: 45px; */
-    top: 45px;
-    background: #fff;
+    z-index: 100;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    overflow: hidden;
+    border-radius: 5px;
+    background: #fff;
     .content-table{
         height: 300px;
     }
@@ -197,11 +201,14 @@
     .head-middle{
         padding-right: 16px;
     }
+    .el-dialog{
+        margin-top: 10px !important;
+    }
     .el-table--scrollable-y .el-table__body-wrapper{
         height: 300px !important;
     }
     .upload-img .upload-btn{
-        top: 90px !important;
+        // top: 90px !important;
     }
     #content-manage .tree-aside{
         overflow: hidden;
