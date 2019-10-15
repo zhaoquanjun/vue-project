@@ -62,11 +62,17 @@
             <div class="right" v-show="!batchDeleteShow">
               <div class="rightText">批量设置</div>
               <div class="changeBtn" v-show="batchSetting == 'all'">
-                <button @click="choseBatchSetting('priority')">
+                <button
+                  :class="{disabled:listData.list.length == 0}"
+                  @click="choseBatchSetting('priority')"
+                >
                   <span>权重</span>
                 </button>
                 <span style="margin:0px 16px">|</span>
-                <button @click="choseBatchSetting('frequency')">
+                <button
+                  :class="{disabled:listData.list.length == 0}"
+                  @click="choseBatchSetting('frequency')"
+                >
                   <span>更新频率</span>
                 </button>
               </div>
@@ -186,7 +192,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-              <div class="list-footer">
+              <div class="list-footer" v-show="addListData.totalRecord > 0">
                 <div class="pageing" id="pageing" style="margin-right:0">
                   <slot name="paging"></slot>
                   <el-pagination
@@ -315,7 +321,9 @@ export default {
       keyword: "",
       pageSize: 10,
       pageIndex: 1,
-      listData: {}
+      listData: {
+        list: []
+      }
     };
   },
   methods: {
@@ -474,9 +482,11 @@ export default {
     },
     // 批量修改
     choseBatchSetting(type) {
-      this.frequency = "";
-      this.priority = "";
-      this.batchSetting = type;
+      if (this.listData.list.length > 0) {
+        this.frequency = "";
+        this.priority = "";
+        this.batchSetting = type;
+      }
     },
     determine(type) {
       let idList = [];
@@ -614,6 +624,11 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.disabled {
+  &:hover {
+    cursor: not-allowed;
+  }
+}
 .member-container {
   position: relative;
   .user-list {
