@@ -150,7 +150,7 @@ export default {
                 
             }else{
                 this.imgData.forEach((item, index) => {
-                    if(index<9) this.newFileList.push(item.fullOssUrl);
+                    if(this.newFileList.length<9) this.newFileList.push(item.fullOssUrl);
                  });
                 this.newFileList =  Array.from(new Set(this.newFileList))
             }
