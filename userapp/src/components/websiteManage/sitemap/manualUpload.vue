@@ -304,7 +304,7 @@ export default {
       color: rgba(185, 203, 207, 1);
       line-height: 22px;
       margin: auto;
-      width: 248px;
+      width: 265px;
     }
   }
   .uploadList {
