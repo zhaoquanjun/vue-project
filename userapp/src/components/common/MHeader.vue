@@ -254,7 +254,7 @@ export default {
 .header {
   padding: 0 10px;
   font-size: 14px;
-  background: linear-gradient(to right, #08cceb 50%, #81dca0);
+  background: #08cceb;
   color: #fff;
   position: relative;
   .head-item {

@@ -184,6 +184,30 @@ export const defaultRoutes = [
       },
     ]
   },
+  {
+    path: "/sitevip",
+    name: 'sitevip',
+    component: () => import("@/views/sitevip/sitevip.vue"),
+    meta: {
+      title: "网站会员",
+      requiresAuth: true,
+      requiresRole: {},
+
+    },
+    children: [
+      {
+        path: "viplist",
+        name: "viplist",
+        component: () => import("@/views/sitevip/sitelist.vue"),
+        meta: {
+          title: "会员列表",
+          requiresAuth: true,
+          requiresRole: {},
+          isSub:true
+        }
+      },
+    ]
+  },
 
   {
     path: "/recycle",
@@ -195,7 +219,7 @@ export const defaultRoutes = [
       requiresRole: {},
     }
   },
-
+ 
   {
     path: "/personal",
     name: "personal",
