@@ -365,8 +365,9 @@ export default {
             fileReader.onload = e => {
                 md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
                 file.uniqueIdentifier = md5;
-
-                this.fileList.push(file);
+                if(this.fileList.length < 100) {
+                    this.fileList.push(file);
+                }
                 let fileSize = 0;
                 this.fileList.forEach(item => {
                     fileSize += item.size;
