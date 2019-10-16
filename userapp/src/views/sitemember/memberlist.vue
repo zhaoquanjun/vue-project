@@ -7,25 +7,34 @@
         </el-aside>
         <el-main class="member-content" style="padding:32px">
             <el-row class="user-list">
-                <h4 class="member-title">成员列表</h4>
+                <h4 class="member-title">
+                    会员列表
+                    <a>导出</a>
+                </h4>
                 <div class="member-body">
                     <div class="b-header">
                         <span class="times" >注册时间</span>
-                         <el-date-picker
-                            v-model="timeState"
-                            type="date"
-                            placeholder="请选择时间">
-                        </el-date-picker>
-                        <div class="one"></div>
-                        <el-date-picker
-                            v-model="timeEnd"
-                            type="date"
-                            placeholder="请选择时间">
-                        </el-date-picker>
+                        <div class="el-input-content">
+                            <el-date-picker
+                                v-model="timeState"
+                                type="date"
+                                placeholder="请选择时间">
+                            </el-date-picker>
+                        </div>
+                        <div class="line">
+                        </div>
+                        <div class="el-input-content">
+                            <el-date-picker
+                                v-model="timeEnd"
+                                @change="timeChange"
+                                type="date"
+                                placeholder="请选择时间">
+                            </el-date-picker>
+                        </div>
                         <div class="search">
                             <el-input placeholder="请输入内容" v-model="search">
-                                <template slot="append">
-                                    <i class="icon iconfont iconbianzu"></i>
+                                <template slot="append" @click="timeChange">
+                                    <i class="icon iconfont iconbianzu" @click="timeChange"></i>
                                 </template>
                             </el-input>
                         </div>
@@ -84,8 +93,9 @@
 <script>
 import PageSubmenu from "@/components/common/PageSubmenu";
 import Edit from "@/components/sitevip/edit.vue";
+import { removeMember,getMemberList } from "@/api/request/siteMemberApi";
 export default {
-    name: "members-manage",
+    name: "members-site",
     components: {
         PageSubmenu,
         Edit
@@ -107,8 +117,23 @@ export default {
     },
     methods: {
         //删除会员
-        remove(){
-
+        async remove(){
+            this.$confirm("提示", {
+                title: "提示",
+                iconClass: "icon-warning",
+                message:  `您确认要删除该会员吗？删除后不可恢复。`,
+                callback: async action => {
+                    if (action === "confirm") {
+                        //let data = await removeMember(this.siteId, this.menuDetail.id);
+                        if(data && data.status == 200 ) {
+                            notify(this, '菜单删除成功', "success");
+                            this._getMenuTree()
+                        } else {
+                            notify(this, '菜单删除失败', "error");
+                        }
+                    }
+                }
+            });
         },
         //编辑会员
         edit(){
@@ -117,6 +142,9 @@ export default {
         //关闭编辑
         closeEdit(){
             this.isEdit = false
+        },
+        timeChange(){
+            console.log('00')
         },
         //分页 每页条数
         handleSizeChange(val) {
@@ -133,7 +161,7 @@ export default {
 </script>
 <style scoped>
  .el-input /deep/ .el-input-group__append {
-     padding: 0 8px;
+     padding: 0;
  }
 </style>
 <style lang="scss" scoped>
@@ -143,25 +171,49 @@ export default {
         font-size:14px;
         font-weight:400;
         color:rgba(38,38,38,1);
-        margin: 3px 0 17px;
+        margin: 5px 0 17px;
         padding-left: 10px;
         border-left: 2px solid #09CCEB;
+        a {
+            float: right;
+            width:76px;
+            height:32px;
+            margin-top: -14px;
+            border-radius:2px;
+            border:1px solid rgba(9,204,235,1);
+            font-size:14px;
+            font-weight:400;
+            color:rgba(9,204,235,1);
+            line-height:32px;
+            text-align: center;
+            cursor: pointer;
+        }
     }
     .member-body {
         border-top: 1px solid #e5e5e5;
         .b-header {
+            position: relative;
             padding: 24px 0 22px;
             height: 40px;
             line-height: 40px;
+            .iconbianzu {
+                padding: 10px 8px;
+                cursor: pointer;
+            }
             .times {
                 margin-right: 16px;
             }
-            .one {
+            .el-input-content {
                 display: inline-block;
+                margin-right: 50px;
+            }
+            .line {
+                position: absolute;
+                top: 44px;
+                left: 310px;
                 width: 16px;
                 height: 1px;
                 background: #e5e5e5;
-                margin: 1px 16px 0;
             }
             .search {
                 float: right;

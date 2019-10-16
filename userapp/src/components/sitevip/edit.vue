@@ -19,7 +19,7 @@
           type="textarea"
           rows="5"
           v-model="description"
-          placeholder="非必填，不超过120个字符，该摘要只在发送图文消息为单条时显示"
+          placeholder="请输入内容"
           maxlength="100"
           show-word-limit
           resize="none"
