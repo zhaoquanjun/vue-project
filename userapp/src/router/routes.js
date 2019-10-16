@@ -185,9 +185,9 @@ export const defaultRoutes = [
     ]
   },
   {
-    path: "/sitevip",
-    name: 'sitevip',
-    component: () => import("@/views/sitevip/sitevip.vue"),
+    path: "/sitemember",
+    name: 'sitemember',
+    component: () => import("@/views/sitemember/sitemember.vue"),
     meta: {
       title: "网站会员",
       requiresAuth: true,
@@ -196,9 +196,9 @@ export const defaultRoutes = [
     },
     children: [
       {
-        path: "viplist",
-        name: "viplist",
-        component: () => import("@/views/sitevip/sitelist.vue"),
+        path: "memberlist",
+        name: "memberlist",
+        component: () => import("@/views/sitemember/memberlist.vue"),
         meta: {
           title: "会员列表",
           requiresAuth: true,
