@@ -16,10 +16,10 @@
             </li>
         </ul>
         <div v-if="imgPageResult && imgPageResult.list && imgPageResult.list.length<1">
-            <div class="empty-table">
-                <img src="~img/table-empty.png" />
-                <span>无数据</span>
-            </div>
+                <div class="empty-table" style="margin-top: 400px">
+                    <img src="~img/table-empty.png" />
+                    <p>无数据</p>
+                </div>
         </div>
         <div
             class="pageing"
@@ -211,6 +211,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "../../styles/manege-table.scss";
 .left-prev,
 .right-next {
     opacity: 0;
