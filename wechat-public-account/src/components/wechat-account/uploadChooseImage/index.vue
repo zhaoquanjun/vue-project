@@ -28,7 +28,7 @@
         @showType="showType"
       ></img-list-header>
 
-      <el-main style="height: 540px; position: relative;">
+      <el-main>
         <component
           v-show="!loading"
           :is="componentId"
@@ -315,8 +315,8 @@ export default {
 </script>
 <style>
 #content-manage {
-  height: 90% !important;
-  max-height: 700px !important;
+  height: 700px;
+  background: #ffffff;
 }
 #content-manage .el-main {
   padding: 0;

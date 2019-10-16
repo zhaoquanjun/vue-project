@@ -83,10 +83,6 @@ export default {
     transform: translate(-50%, -50%);
     overflow: hidden;
   }
-  #content .el-container {
-    background: #fff;
-    height: 740px;
-  }
   #content-manage .tree-aside {
     height: auto;
   }
