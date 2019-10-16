@@ -134,6 +134,7 @@ export default {
     data() {
         return {
             uploadBtnText: "开始上传",
+            isfromat: true,
             options: {
                 uploadType: this.uploadType,
                 target: null,
@@ -420,8 +421,7 @@ export default {
                     this.errorCount -= 1;
                     return false;
                 }
-            } else {
-                console.log(456)
+            } else if(this.isfromat) {
                 if (this.fileList.length <= 10) {
                     if (
                         file.size / 1024 / 1024 > 50 &&
@@ -491,11 +491,13 @@ export default {
             return /macintosh|mac os x/i.test(navigator.userAgent);
         },
         checkFormat(file, format) {
+            this.isfromat = true
             let fileName = this.isMac() ? file.file.name : file.name;
             let fileNameIndex = fileName.lastIndexOf(".");
             let fileNameSuffix = fileName.slice(fileNameIndex);
             if (this.uploadType === "File") {
                 if (format.indexOf(fileNameSuffix.toLowerCase()) !== -1) {
+                    this.isfromat = false
                     file.cancel(file);
                     this.errorCount -= 1;
                     this.$notify({
@@ -511,6 +513,7 @@ export default {
                 if (format.indexOf(fileNameSuffix.toLowerCase()) === -1) {
                     file.cancel(file);
                     this.errorCount -= 1;
+                    this.isfromat = false
                     this.$notify({
                         customClass: "notify-error",
                         message: `请添加${this.displayName}格式文件`,
