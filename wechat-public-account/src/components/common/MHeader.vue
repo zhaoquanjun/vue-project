@@ -231,9 +231,9 @@ export default {
       }
     },
     headAppName() {
-      let appName = getLocal("userInfo")
-        ? getLocal("userInfo").appName
-        : this.$store.state.user.userInfo.appName;
+      let appName = this.$store.state.user.userInfo.appName
+        ? this.$store.state.user.userInfo.appName
+        : getLocal("userInfo").appName;
       return appName;
     }
   }
