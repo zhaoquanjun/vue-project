@@ -299,14 +299,14 @@ export default {
     flex: none;
 }
 .head-handle-btn {
-    padding-left: 40px;
+    padding-left: 30px;
 }
 
 .head-right {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding-left: 42px;
+    padding-left: 30px;
     button {
       
     }
