@@ -116,7 +116,7 @@ export default {
             timeState: '',
             timeEnd: '',
             search:'',
-            value: '',
+            value: '全部来源',
             list: [{
                pageTitle: 'pageTitle' 
             }],
@@ -235,20 +235,17 @@ export default {
                 cursor: pointer;
             }
             .times {
-                margin: 0 16px;
-            }
-            .el-input-content {
-
+                margin: 0 8px 0 16px;
             }
 
             .el-input-content {
                 display: inline-block;
-                margin-right: 50px;
+                margin-right: 32px;
             }
             .line {
                 position: absolute;
                 top: 44px;
-                left: 519px;
+                left: 502px;
                 width: 16px;
                 height: 1px;
                 background: #e5e5e5;
