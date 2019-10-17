@@ -132,7 +132,7 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("_getAppHeadInfo");
+    // this.$store.dispatch("_getAppHeadInfo");
   },
   methods: {
     signOut() {
