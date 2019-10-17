@@ -25,11 +25,9 @@ export default store;
  */
 getLocal("authList")&& store.commit("set_authList",getLocal("authList"))
 
-// if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   if(getLocal("ymId")){
     store.commit("SETAPPID",getLocal("ymId"))
    }
-// }
-if(getLocal("userInfo")){
-  store.commit("SET_USERINFO",getLocal("userInfo"))
 }
+this.$store.dispatch("_getAppHeadInfo");

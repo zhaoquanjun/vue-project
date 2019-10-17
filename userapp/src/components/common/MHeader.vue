@@ -165,15 +165,15 @@ export default {
     },
     //切换app 选择新的app
     async choseApp(item) {
-      setLocal("ymId", item.appId);
+      // setLocal("ymId", item.appId);
       this.$store.commit("SETAPPID", item.appId);
       let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(
         item.appId
       );
       if (status === 200) {
+        this.$store.dispatch("_getAppHeadInfo")
         let { data } = await dashboardApi.getCurSiteId();
         this.$store.commit("SETSITEID", data);
-        this.$store.dispatch("_getAppHeadInfo");
         window.location.href = dashboardUrl;
       }
     },
