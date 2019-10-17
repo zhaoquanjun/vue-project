@@ -347,6 +347,7 @@ export default {
         height: 100%;
         top: 0;
         border-radius: 2px;
+        background: rgba(0, 0, 0, 0.5);
         text-align: center;
         .play-btn {
             width: 34px;
@@ -356,16 +357,16 @@ export default {
             left: 50%;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.5);
-            span {
-                width: 0;
-                height: 0;
-                margin: 9px 0 0 14px;
-                border-top: 8px solid transparent;
-                border-right: 10px solid transparent;
-                border-bottom: 8px solid transparent;
-                border-left: 10px solid #fff;
-            }
+            background: url("~img/cover.png") no-repeat center;
+            // span {
+            //     width: 0;
+            //     height: 0;
+            //     margin: 9px 0 0 14px;
+            //     border-top: 8px solid transparent;
+            //     border-right: 10px solid transparent;
+            //     border-bottom: 8px solid transparent;
+            //     border-left: 10px solid #fff;
+            // }
         }
     }
 }
