@@ -13,6 +13,17 @@
                 </h4>
                 <div class="member-body">
                     <div class="b-header">
+                        <template style="margin-right: 16px;">
+                            <el-select v-model="value" placeholder="请选择">
+                                <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </template>
+
                         <span class="times" >注册时间</span>
                         <div class="el-input-content">
                             <el-date-picker
@@ -52,7 +63,7 @@
                             </el-table-column>
                             <el-table-column
                                 prop="shareTitle"
-                                label="归属站点">
+                                label="来源">
                             </el-table-column>
                             <el-table-column
                                 prop="shareTitle"
@@ -105,8 +116,25 @@ export default {
             timeState: '',
             timeEnd: '',
             search:'',
+            value: '',
             list: [{
                pageTitle: 'pageTitle' 
+            }],
+            options: [{
+                value: '选项1',
+                label: '黄金糕'
+                }, {
+                value: '选项2',
+                label: '双皮奶'
+                }, {
+                value: '选项3',
+                label: '蚵仔煎'
+                }, {
+                value: '选项4',
+                label: '龙须面'
+                }, {
+                value: '选项5',
+                label: '北京烤鸭'
             }],
             PageSize: 10, //每页数
             PageIndex: 1, //当前页面
@@ -163,6 +191,12 @@ export default {
  .el-input /deep/ .el-input-group__append {
      padding: 0;
  }
+.el-input--suffix /deep/ .el-input__inner {
+    padding-right: 10px;
+ }
+ .el-input /deep/ .el-input--suffix .el-input__inner {
+    padding-right: 10px;
+ }
 </style>
 <style lang="scss" scoped>
 .member-content {
@@ -201,8 +235,12 @@ export default {
                 cursor: pointer;
             }
             .times {
-                margin-right: 16px;
+                margin: 0 16px;
             }
+            .el-input-content {
+
+            }
+
             .el-input-content {
                 display: inline-block;
                 margin-right: 50px;
@@ -210,14 +248,14 @@ export default {
             .line {
                 position: absolute;
                 top: 44px;
-                left: 310px;
+                left: 519px;
                 width: 16px;
                 height: 1px;
                 background: #e5e5e5;
             }
             .search {
                 float: right;
-                width: 420px;
+                width: 320px;
             }
         }
         .b-content {

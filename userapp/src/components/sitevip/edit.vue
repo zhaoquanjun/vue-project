@@ -81,7 +81,7 @@ export default {
   .code {
     position: relative;
     display: inline-block;
-    width: 700px;
+    width: 400px;
     height: 100%;
     background: white;
     .title {
@@ -99,16 +99,16 @@ export default {
       }
     }
     .header {
-      margin: 30px 24px 20px;
-      height: 100px;
+      margin: 24px;
+      height: 270px;
       background:rgba(248,250,252,1);
       border-radius:2px;
       padding: 28px 18px;
       img {
-        float: left;
-        width: 100px;
-        height: 100px;
-        margin-left: 18px;
+        display: block;
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 24px;
         border-radius: 50%;
         background: url('~img/defualtAvater.png') no-repeat center center;
         background-size: 100% 100%;
@@ -118,16 +118,13 @@ export default {
         font-weight:400;
         color:rgba(161,168,177,1);
         line-height:20px;
-        margin-left: 144px;
+        margin-left: 70px;
         text-align: left;
-        margin-bottom: 6px;
+        margin-bottom: 12px;
         b {
           font-weight:400;
           color: #262626;
         }
-      }
-      p:last-child(){
-        margin-bottom: 0px;
       }
     }
     .content {
@@ -147,7 +144,7 @@ export default {
       bottom: 0;
       height: 40px;
       box-sizing: content-box;
-      width: 652px;
+      width: 352px;
       padding: 20px 0;
       margin: 0 24px;
       border-top: 1px solid #e5e5e5;
