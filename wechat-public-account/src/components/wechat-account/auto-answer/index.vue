@@ -18,6 +18,8 @@
                 :isPicture="msgType==1?true:false"
                 :is-set="isSet"
                 :msg-type="msgType"
+                :replyType="replyType"
+                @handlerCancel="handlerCancel"
                 @changeAnswerMode="changeAnswerMode"
                 @handlerSave="handlerSave"
                 @handlerDelete="handlerDelete"
@@ -233,6 +235,12 @@ export default {
                     }
                 }
             });
+        },
+        //
+        handlerCancel(){
+            console.log('iuh')
+            this.replyType = '3',
+            this.addAnswer = true
         },
         //新增关键词回复信息
         async _addKeywordReply(option) {
