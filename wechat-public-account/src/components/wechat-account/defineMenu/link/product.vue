@@ -78,6 +78,7 @@
             </i>
           </span>
           <a
+            v-if="productHref"
             :href="productHref"
             target="_blank"
           >预览</a>
