@@ -1,7 +1,7 @@
 <template>
   <div class="define-menu__area clearfix">
     <div class="btn">
-      <span @click="_handleSaveAndPublish">保存并发布</span>
+      <span @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</span>
     </div>
     <div class="phone-box__area">
       <div class="phone-menu__area">
@@ -41,7 +41,7 @@
             <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
           </draggable>
       </div>
-      <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
+      <div class="primary-button__nomal order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
     </div>
     <div class="menu-operate__arae">
       <order-menu v-show="isOrder"></order-menu>
@@ -182,6 +182,8 @@ export default {
       menuWords: "",
       chooseImg: "",
       menuTree: [],
+      canOrder: false,
+      isCanAdd: true,
       text: '2',
       menuDetail: {
         id: false,
@@ -262,14 +264,21 @@ export default {
         if (this.menuTree[0].subMenuList.length > 0) {
           this._getMenuDetail(this.menuTree[0].subMenuList[0].id)
           this.curSubIndex = 0
+          this.curIndex = 0
         } else {
           this.curSubIndex = -1
+          this.curIndex = 0
           this._getMenuDetail(this.menuTree[0].id)
         }
       } else if (val == 'add') {
         //点击添加按钮时选择刚添加的按钮并且回填按钮详情
         let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
         this._getMenuDetail(id)
+      }
+      if(this.menuTree.length >=2 || this.menuTree[0].subMenuList.length >=2 ) {
+        this.canOrder = true
+      } else {
+        this.canOrder = false
       }
     },
     handleClosePopup (val,data){
@@ -341,6 +350,9 @@ export default {
     },
     // 菜单排序
     _handleMenuOrder() {
+      if(!this.canOrder) {
+        return
+      }
       this.isOrder = !this.isOrder;
       if (!this.isOrder) {
         this.orderIndex = false
@@ -431,6 +443,10 @@ export default {
     },
     // 添加菜单
     async _handleAddMainMenu(name,order,id,level) {
+      if(!this.isCanAdd) {
+        return
+      }
+      this.isCanAdd = false
       let flag = this.testParameters();
       let  dataObj = {};
       //前端校验
@@ -441,6 +457,7 @@ export default {
         dataObj = await updateMenu(dataDetail)
       }else if (order > 0 && !flag) {
         notify(this, '请完善菜单信息', "error");
+        this.isCanAdd = true
       }
       //接口校验
       if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
@@ -453,6 +470,8 @@ export default {
         };
         let data =  await addMenu(newMenuItem);
         if(data.status && data.status == 200 ) {
+          this.isCanAdd = true
+          notify(this, '添加菜单成功', "success");
           this._getMenuTree('add')
           //添加成功，改变按钮状态
           //校验信息
@@ -464,7 +483,9 @@ export default {
             this.curSubIndex = order-1;
             this.hasSubList = true
           }
-          
+        } else {
+          notify(this, '添加菜单失败', "error");
+          this.isCanAdd = true
         }
       }
     },
@@ -489,6 +510,9 @@ export default {
     },
     // 保存并发布
      async _handleSaveAndPublish() {
+       if (this.menuTree.length == 0) {
+        return
+      }
       let flag = this.testParameters();
       if (!flag) {
         notify(this, '请完善菜单信息', "error");
