@@ -31,7 +31,6 @@ class SecurityService {
     clearAllLocal();
     oidcMgr.signoutRedirect({ state: returnPath }).then(function(resp) {
       
-      
     }).catch(function(err) {
       console.log(err)
     })
