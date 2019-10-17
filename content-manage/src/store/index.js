@@ -42,4 +42,3 @@ if (process.env.NODE_ENV === 'development') {
     store.commit("SETAPPID",getLocal("ymId"))
    }
 }
-this.$store.dispatch("_getAppHeadInfo");

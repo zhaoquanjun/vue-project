@@ -132,9 +132,7 @@ export default {
     };
   },
   created() {
-    if (getLocal("userInfo").appName == "") {
-      this.$store.dispatch("_getAppHeadInfo");
-    }
+    this.$store.dispatch("_getAppHeadInfo");
   },
   methods: {
     signOut() {

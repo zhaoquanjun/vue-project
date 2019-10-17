@@ -128,9 +128,7 @@ export default {
     };
   },
   created() {
-    if (getLocal("userInfo").appName == "") {
-      this.$store.dispatch("_getAppHeadInfo");
-    }
+    this.$store.dispatch("_getAppHeadInfo");
   },
   methods: {
     signOut() {
@@ -171,7 +169,7 @@ export default {
         item.appId
       );
       if (status === 200) {
-        this.$store.dispatch("_getAppHeadInfo")
+        this.$store.dispatch("_getAppHeadInfo");
         let { data } = await dashboardApi.getCurSiteId();
         this.$store.commit("SETSITEID", data);
         window.location.href = dashboardUrl;
