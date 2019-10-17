@@ -326,7 +326,7 @@ button {
                     width: 45%;
                 }
                 .list-columns__3 {
-                    width: 10%;
+                    width: 7%;
                     color: #0595e6;
                     cursor: pointer;
                 }
