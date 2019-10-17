@@ -225,12 +225,16 @@ export default {
                             data,
                             status
                         } = await autoAnswerApi.removeKeywordReply(id,this.siteId);
-                        this.$notify({
-                            customClass: "notify-success",
-                            message: `删除成功`,
-                            showClose: false,
-                            duration: 1500
-                        });
+                        if (status == 200 ) {
+                            this.$notify({
+                                customClass: "notify-success",
+                                message: `删除成功`,
+                                showClose: false,
+                                duration: 1500
+                            });
+                        } else {
+                            notify(this, "删除失败", "error");
+                        }
                         this._getKeywordReplyList(this.searchOption);
                     }
                 }
