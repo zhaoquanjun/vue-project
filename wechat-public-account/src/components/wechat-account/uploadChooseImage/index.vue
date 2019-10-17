@@ -139,6 +139,7 @@ export default {
         isDescending: true,
         categoryIdList: [],
         keyword: "",
+        FileMaxSize: 2*1024*1024,
         isDelete: false
       }
     };
