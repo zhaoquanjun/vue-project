@@ -173,7 +173,7 @@ export default {
       this.$confirm("提示", {
           title: "提示",
           iconClass: "icon-warning",
-          message: '解除绑定后，将不可再使用微信推广，自定义菜单和自动回复功能，同时历史数据将被清除，确定要删除吗？',
+          message: '解除绑定后，将不可再使用微信推广，自定义菜单与自动回复功能，同时历史数据将被清除，确定要解绑吗？',
           callback: async action => {
               if (action === "confirm") {
                   this._unBind()

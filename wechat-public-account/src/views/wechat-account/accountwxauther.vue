@@ -170,7 +170,7 @@ export default {
         this.domainName = val.domain
         this.isResolve = val.cdnDomainResolveStatus
         if (val.cdnDomainResolveStatus != 2) {
-          this.tipsText = '域名未解析，请先在完成域名解析'
+          this.tipsText = '域名未解析，请先完成域名解析'
           this.isShowTips = true
         }
       }
