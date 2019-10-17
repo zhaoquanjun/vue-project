@@ -337,6 +337,9 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        .headline {
+            width: 200px;
+        }
         .imgwrap {
             width: 50px;
             height: 50px;
