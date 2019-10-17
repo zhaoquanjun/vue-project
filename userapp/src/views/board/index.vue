@@ -215,10 +215,6 @@ export default {
         );
       }
     },
-    // 获取appName
-    async getAppHeadInfo() {
-      this.$store.dispatch("_getAppHeadInfo");
-    },
     /**
      * 修改appName
      */
@@ -276,7 +272,6 @@ export default {
     appId() {
       this.getDashboardData();
       this.getAppExpandInfo();
-      this.getAppHeadInfo();
       return this.$store.state.dashboard.appId;
     }
   },
