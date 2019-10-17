@@ -540,7 +540,6 @@ export default {
         pageSize: this.addPageSize,
         pageIndex: this.addPageIndex,
         keyword: this.addKeyword,
-        appId: this.$store.state.dashboard.appId,
         EntityType: this.listType,
         siteId: this.curSiteId
       };
