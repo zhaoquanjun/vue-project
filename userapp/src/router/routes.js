@@ -117,6 +117,7 @@ export const defaultRoutes = [
         component: () => import("@/views/siteVerify.vue"),
         meta: {
           title: "站点验证",
+          requiresAuth: true,
           isSub:true
         }
       },
@@ -126,6 +127,7 @@ export const defaultRoutes = [
         component: () => import("@/views/website-manage/robots.vue"),
         meta: {
           title: "Robots.txt",
+          requiresAuth: true,
           isSub:true
         }
       },
@@ -135,6 +137,7 @@ export const defaultRoutes = [
         component: () => import("@/views/website-manage/sitemap.vue"),
         meta: {
           title: "站点地图",
+          requiresAuth: true,
           isSub:true
         }
       }
