@@ -1,7 +1,7 @@
 <template>
   <el-container class="member-container">
     <el-main class="member-content">
-      <el-row>
+      <el-row style="padding:0 32px">
         <ChangeSite @getSiteId="getSiteId" @getSiteName="getSiteName"></ChangeSite>
       </el-row>
       <el-row class="wrap">
