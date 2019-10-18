@@ -65,7 +65,7 @@
                 </el-input>
               </el-form-item>
               <div v-if='!hasTrueName' class="tipsName">
-                <span class="ym-form-item__error">名称仅包含中英文、数字、特殊符号。</span>
+                <span class="ym-form-item__error">{{textTips}}</span>
                 <a href="https://kf.qq.com/faq/181228f2iMV7181228RbMfAr.html" target="_blank">查看详情</a>
               </div>
               <el-form-item v-if="hasSubList" label="菜单内容">
@@ -184,6 +184,7 @@ export default {
       menuTree: [],
       canOrder: false,
       isCanAdd: true,
+      textTips: '名称仅包含中英文、数字、特殊符号。',
       text: '2',
       menuDetail: {
         id: false,
@@ -579,13 +580,28 @@ export default {
       //A-Z:65-90,a-z:97-122
       //-+&. :45 43 38 46 32
       // 校验菜单名
+      this.hasTrueName = true
       let typeNum = this.curSubIndex == -1? 8:16;
       let str = this.menuDetail.name;
-      let isRule = true;
       let BlankNum = 1;
       let strLength = 0
+      for(let i = 0; i<this.menuTree.length;i++) {
+        if(str == this.menuTree[i].name) {
+          this.hasTrueName = false
+          this.textTips = '菜单名已存在,请重新输入'
+          return
+        } else if (this.menuTree[i].subMenuList.length>0) {
+          for(let j = 0; j<this.menuTree[i].subMenuList.length;j++) {
+            if(str == this.menuTree[i].subMenuList[j].name) {
+              this.hasTrueName = false
+              this.textTips = '菜单名已存在,请重新输入'
+              return
+            }
+          }
+        }
+      }
       let firstBlankIndex = false;
-      for (let i=0; i<str.length; i++) {  
+      for (let i=0; i<str.length; i++) { 
         let c = str.charCodeAt(i);
         if (c == 45 || c == 43 || c == 38 || c == 46 || c == 32){
           strLength = strLength + 1;
@@ -594,9 +610,13 @@ export default {
           } else if (c==32) {
             BlankNum = BlankNum + 1;
             if (BlankNum == 2 && isRule) {
-               isRule = i-firstBlankIndex==1?false:true
+              this.hasTrueName = i-firstBlankIndex==1?false:true
+              this.textTips = '菜单名不能包含3个以上空格'
+              return
             } else {
-              isRule = false
+              this.hasTrueName = false
+              this.textTips = '菜单名不能包含3个以上空格'
+              return
             }
           }
         } else if ((c >=65 && c <=90) || (c >=97 && c <=122)) {
@@ -606,16 +626,19 @@ export default {
         }else if (c >=19968 && c <=40869) {
           strLength = strLength + 2
         } else {
-          isRule= false
+          this.hasTrueName = false
+          this.textTips = '仅支持包含中英文,数字,特殊字符("-" "+" "." 空格)'
+          return
         }
       }
       if (strLength == 0 || strLength >typeNum) {
-        isRule = false
+        this.hasTrueName = false
+        this.textTips = `菜单名称字数不可超过${typeNum/2}个汉字或者${typeNum}个字母`
+        return
       }
-      if(isRule){
+      if(this.hasTrueName){
         this.hasChangeMeunName()
       }
-      this.hasTrueName = isRule
     }
   }
 };
@@ -1024,11 +1047,10 @@ export default {
 }
 .tipsName {
   padding-left: 80px;
-  margin-top: -20px;
-  height: 40px;
+  height: 20px;
 	color: rgba(56, 56, 56, 1);
 	font-size: 14px;
-	line-height: 40px;
+	line-height: 20px;
 	text-align: left;
 }
 .tipsName span{

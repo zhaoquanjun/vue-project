@@ -129,7 +129,7 @@ export default {
             defualtTitle: "这里是标题",
             curEditorItem: {
                 title: "",
-                description: [],
+                description: '',
                 picUrl: require('img/picCover.png'),
                 urlType: "",
                 urlData: "",
