@@ -219,10 +219,22 @@ export default {
     },
     //删除handledelet
     async remove(val){
-      let data = await remove(this.siteId,val.id)
-      if (data && data.status== 200) {
-        this.getInfo();
-      }
+      this.$confirm("提示", {
+        title: "提示",
+        iconClass: "icon-warning",
+          message:  `删除后，分享地址将不可访问，是否确定删除？`,
+          callback: async action => {
+              if (action === "confirm") {
+                  let data = await remove(this.siteId,val.id)
+                  if(data && data.status == 200 ) {
+                    notify(this, '删除成功', "success");
+                    this.getInfo();
+                  } else {
+                    notify(this, '删除失败', "error");
+                  }
+              }
+          }
+      });
     },
     //新增推广
     addSpread(){
