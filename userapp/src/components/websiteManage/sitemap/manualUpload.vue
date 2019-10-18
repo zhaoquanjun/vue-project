@@ -86,6 +86,7 @@ export default {
       let { data } = await sitemapApi.preview(siteId);
     },
     onFileAdded(file) {
+      console.log(this.$store)
       this.options.headers.Authorization =
         "Bearer " + this.$store.state.user.accessToken.Authorization;
       this.options.headers.appId = this.$store.state.dashboard.appId;
@@ -129,7 +130,7 @@ export default {
       this.date = this.getNowFormatDate();
     },
     fileRemove() {
-      this.$confirm(`您确定要删除当前sitemap文件么？删除后不可恢复。`, "提示", {
+      this.$confirm(`您确定要删除当前sitemap文件吗？删除后不可恢复。`, "提示", {
         iconClass: "icon-warning",
         callback: action => {
           if (action === "confirm") {

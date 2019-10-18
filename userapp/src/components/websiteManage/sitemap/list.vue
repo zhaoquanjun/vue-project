@@ -126,6 +126,14 @@ export default {
         {
           value: 0.3,
           label: 0.3
+        },
+        {
+          value: 0.2,
+          label: 0.2
+        },
+        {
+          value: 0.1,
+          label: 0.1
         }
       ],
       frequencyList: [
@@ -163,7 +171,6 @@ export default {
   methods: {
     // 单选或全选操作
     handleSelectionChange(list) {
-      console.log(list);
       this.$emit("handleSelectionChange", list);
     },
     chosePriority(row) {

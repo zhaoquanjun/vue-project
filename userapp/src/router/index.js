@@ -18,11 +18,15 @@ router.beforeEach(async (to, from, next) => {
   let user = await securityService.getUser();
   let accessToken;
   if (user){
+    await store.dispatch("_getAppHeadInfo");//临时
     accessToken = user.access_token;
   };
-
   if (accessToken) {
     if (to.path !== "/callback") {
+      if (!to.meta.requiresAuth) {
+        next()
+        return
+      }
       if(to.path==="/404"){
           next()
           return
@@ -41,9 +45,10 @@ router.beforeEach(async (to, from, next) => {
         if (to.path.includes("/website")) {
           let haveTemplate = await store.dispatch('_haveTemplate');
           if (!haveTemplate) {
-            next('/website/selectTemplate')
-          } 
-        } 
+            next("/website/selectTemplate")
+            return
+          }
+        }
       } else {
         next("/404")
         return

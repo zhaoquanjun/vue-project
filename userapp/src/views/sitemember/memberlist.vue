@@ -66,6 +66,10 @@
                                 label="来源">
                             </el-table-column>
                             <el-table-column
+                                prop="type"
+                                label="会员类型">
+                            </el-table-column>
+                            <el-table-column
                                 prop="shareTitle"
                                 label="注册时间">
                             </el-table-column> 

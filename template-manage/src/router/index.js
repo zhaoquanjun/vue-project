@@ -24,6 +24,7 @@ router.beforeEach(async (to, from, next) => {
   if (user){
     accessToken = user.access_token;
     store.commit("SET_USER",accessToken)
+    await store.dispatch("_getAppHeadInfo");//临时
   } 
 
 
