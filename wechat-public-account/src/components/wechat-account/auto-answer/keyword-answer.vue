@@ -243,7 +243,7 @@ export default {
 }
 .el-input /deep/ .el-input__inner {
     border: 1px solid #E5E5E5;
-    width: 600px;
+    width: 526px;
 }
 .el-input /deep/ .el-input__inner:hover {
     border: 1px solid #E5E5E5;
@@ -274,8 +274,6 @@ export default {
     position: absolute;
     right: 10px;
     top: 6px;
-}
-.el-input /deep/ input {
 }
 </style>
 <style lang="scss" scoped>
