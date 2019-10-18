@@ -171,7 +171,6 @@ export default {
   methods: {
     // 单选或全选操作
     handleSelectionChange(list) {
-      console.log(list);
       this.$emit("handleSelectionChange", list);
     },
     chosePriority(row) {
