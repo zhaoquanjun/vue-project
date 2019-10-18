@@ -354,6 +354,11 @@ export default {
       if(!this.canOrder) {
         return
       }
+      let flag = this.testParameters();
+      if (!flag) {
+        notify(this, '请完善菜单信息', "error");
+        return
+      }
       this.isOrder = !this.isOrder;
       if (!this.isOrder) {
         this.orderIndex = false
@@ -408,6 +413,7 @@ export default {
     //校验参数 
     testParameters(){
       let flag = true;
+      this.testMenu()
       if (!this.hasTrueName || !this.menuDetail.name) {
         flag = false
         console.log('flag',1)
@@ -448,6 +454,32 @@ export default {
         return
       }
       this.isCanAdd = false
+      //确认是否添加第一个子菜单
+      let flag = this.testParameters();
+      if (!flag || !this.hasTrueName) {
+        notify(this, '请完善菜单信息', "error");
+        this.isCanAdd = true
+        return
+      }
+      if (level == 1 && order == 1) {
+          this.$confirm("提示", {
+          title: "提示",
+          iconClass: "icon-warning",
+            message:  `发布成功后会覆盖原版本，且将在24小时内对所有用户生效，是否确认发布？`,
+            callback: async action => {
+                if (action === "confirm") {
+                  this.addMenu(name,order,id,level)
+                } else {
+                  this.isCanAdd = true
+                }
+            }
+        });
+      } else {
+        this.addMenu(name,order,id,level)
+      }
+    },
+    //添加
+    async addMenu (name,order,id,level) {
       let flag = this.testParameters();
       let  dataObj = {};
       //前端校验
@@ -584,15 +616,15 @@ export default {
       let typeNum = this.curSubIndex == -1? 8:16;
       let str = this.menuDetail.name;
       let BlankNum = 1;
-      let strLength = 0
+      let strLength = 0;
       for(let i = 0; i<this.menuTree.length;i++) {
-        if(str == this.menuTree[i].name) {
+        if(str == this.menuTree[i].name && i != this.curIndex) {
           this.hasTrueName = false
           this.textTips = '菜单名已存在,请重新输入'
           return
         } else if (this.menuTree[i].subMenuList.length>0) {
           for(let j = 0; j<this.menuTree[i].subMenuList.length;j++) {
-            if(str == this.menuTree[i].subMenuList[j].name) {
+            if(str == this.menuTree[i].subMenuList[j].name && (i != this.curIndexj && j !=  this.curSubIndex)) {
               this.hasTrueName = false
               this.textTips = '菜单名已存在,请重新输入'
               return
