@@ -33,13 +33,14 @@
         </section>
         <footer class="footer-btn">
             <button class="handler-item" @click="handlerSave">保存</button>
-            <button class="handler-item handler-delete" :class="{'disabled-btn':!isSet}" @click="handlerDelete" :disabled="!isSet">删除回复</button>
+            <button v-if="replyType == '3'" class="handler-item handler-delete" @click="handlerCancel">取消</button>
+            <button v-else class="handler-item handler-delete" :class="{'disabled-btn':!isSet}" @click="handlerDelete" :disabled="!isSet">删除回复</button>
         </footer>
     </div>
 </template>
 <script>
 export default {
-    props: ["isPicture","isSet","msgType"],
+    props: ["isPicture","isSet","msgType","replyType"],
     data() {
         return {
             radio: 1
@@ -54,6 +55,10 @@ export default {
         },
         handlerSave(){
             this.$emit("handlerSave")
+        },
+        handlerCancel(){
+            console.log('quxiao')
+            this.$emit("handlerCancel")
         },
         handlerDelete(){
             this.$emit("handlerDelete")

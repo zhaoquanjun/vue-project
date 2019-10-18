@@ -22,14 +22,14 @@
             <div class="body-title">
               <span>标题</span>
             </div>
-            <input class="ellipsis" type="text" placeholder="产品资讯" v-model="initData.shareTitle">
+            <input class="ellipsis" type="text" placeholder="未填写则默认为文章标题" v-model="initData.shareTitle">
             <h6>描述</h6>
             <el-input
               class="textarea"
               type="textarea"
               rows="3"
               v-model="initData.description"
-              placeholder="非必填，不超过120个字符，该摘要只在发送图文消息为单条时显示"
+              placeholder="未填写则默认为分享地址"
               maxlength="120"
               show-word-limit
               resize="none"
@@ -189,10 +189,10 @@ export default {
         console.log('00分享title')
         flag = false
       }
-      if(!this.infoData.description) {
-        console.log('00描述')
-        flag = false
-      }
+      // if(!this.infoData.description) {
+      //   console.log('00描述')
+      //   flag = false
+      // }
       return flag 
     },
     async closeShare(val){

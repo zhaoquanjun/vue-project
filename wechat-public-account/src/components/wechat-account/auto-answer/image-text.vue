@@ -129,7 +129,7 @@ export default {
             defualtTitle: "这里是标题",
             curEditorItem: {
                 title: "",
-                description: "",
+                description: '',
                 picUrl: require('img/picCover.png'),
                 urlType: "",
                 urlData: "",
@@ -201,9 +201,10 @@ export default {
         //确定
         handlerConfirm() {
             for (let key in this.curEditorItem) {
+                console.log('999',key, this.curEditorItem[key])
                 if (
                     typeof this.curEditorItem[key] == "string" &&
-                    !trim(this.curEditorItem[key])
+                    !trim(this.curEditorItem[key]) && key != 'description'
                 ) {
                     notify(this, "请完善图文信息!", "error");
                     return false;
@@ -289,6 +290,9 @@ export default {
 .el-textarea /deep/ textarea:focus {
     border: 1px solid rgba(211,211,211,1);
 }
+.el-textarea /deep/ .el-input__count {
+    right: 18px;
+}
 </style>
 <style lang="scss" scoped>
 .image-text {
@@ -333,6 +337,9 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        .headline {
+            width: 200px;
+        }
         .imgwrap {
             width: 50px;
             height: 50px;

@@ -13,6 +13,10 @@
         <p><span>最近登录时间：</span><b>2019-12-12 12:12</b></p>
       </div>
       <div class="content">
+        <h6>会员类型</h6>
+        <span class="type">注册会员</span>
+      </div>
+      <div class="content">
         <h6>描述</h6>
         <el-input
           class="textarea"
@@ -137,6 +141,22 @@ export default {
         margin-bottom: 8px;
         text-align: left;
       } 
+      .type {
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        height:32px;
+        background:rgba(255,255,255,1);
+        border: 1px solid rgba(229, 229, 229, 1);
+        border-radius:2px;
+        font-size:14px;
+        font-weight:400;
+        color:rgba(38,38,38,1);
+        line-height:32px;
+        padding: 0 16px;
+        text-align: left;
+        background: #e5e5e5;
+      }
     }
     .btn {
       position: absolute;
