@@ -24,17 +24,17 @@
           <el-table-column
             prop="pageTitle"
             :label="listTitle"
-            width="150">
+            width="160">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享标题"
-            width="150">
+            width="160">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享封面"
-            width="150">
+            width="140">
             <template slot-scope="scope">
               <img class="img" :src="scope.row.coverUrl">
             </template>
@@ -311,6 +311,13 @@ export default {
 .el-tabs /deep/ .is-active {
     background: #fff;
     border-top: 3px solid #09cceb;
+}
+.el-table /deep/ .cell {
+  height: 23px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .el-table .cell, .el-table th div {
   padding-right: 30px !important;
