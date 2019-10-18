@@ -18,9 +18,9 @@ router.beforeEach(async (to, from, next) => {
   let user = await securityService.getUser();
   let accessToken;
   if (user){
+    await store.dispatch("_getAppHeadInfo");//临时
     accessToken = user.access_token;
   };
-
   if (accessToken) {
     if (to.path !== "/callback") {
       if (!to.meta.requiresAuth) {

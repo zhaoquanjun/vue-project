@@ -132,6 +132,7 @@
               @chagePage="chagePage"
               @changeSize="changeSize"
             ></List>
+            <div class="tip">如何在百度站长工具内提交sitemap？</div>
           </div>
         </div>
         <div v-show="uploadType == 'manual'">
@@ -211,7 +212,11 @@
             </div>
           </div>
           <div class="confirm">
-            <button class="confirmBtn" @click="add">确定</button>
+            <button
+              class="confirmBtn"
+              :class="{addDisabled:addSelectedList.length == 0}"
+              @click="add"
+            >确定</button>
             <button class="cancelBtn" @click="closeAddDialog">取消</button>
           </div>
         </div>
@@ -357,7 +362,6 @@ export default {
         siteId: this.curSiteId
       };
       let { data, status } = await sitemapApi.getList(this.curSiteId, para);
-      console.log(data);
       this.$Loading.hide();
       this.listData = data;
     },
@@ -393,9 +397,11 @@ export default {
       }
     },
     async add() {
+      if (this.addSelectedList.length == 0) {
+        return;
+      }
       let entityIdList = [];
       this.addSelectedList.forEach(item => {
-        console.log(item);
         entityIdList.push(item.entityId);
       });
       let para = {
@@ -405,7 +411,6 @@ export default {
         priority: 0.8,
         frequency: "Monthly"
       };
-      console.log(para);
       let { data, status } = await sitemapApi.add(para);
       if (status == 200) {
         this.$notify({
@@ -556,7 +561,6 @@ export default {
         this.curSiteId,
         para
       );
-      console.log(data);
       this.addListData = data;
     },
     closeAddDialog() {
@@ -634,6 +638,15 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.tip {
+  display: inline-block;
+  margin-top: 32px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(9, 204, 235, 1);
+  line-height: 22px;
+  cursor: pointer;
+}
 .disabled {
   &:hover {
     cursor: not-allowed;
@@ -693,6 +706,7 @@ export default {
     display: flex;
     justify-content: space-between;
     .infoText {
+      padding-top: 6px;
       span {
         font-size: 16px;
         color: rgba(161, 168, 177, 1);
@@ -832,6 +846,10 @@ export default {
       font-size: 12px;
       color: rgba(255, 255, 255, 1);
       line-height: 32px;
+    }
+    .addDisabled {
+      opacity: 0.2;
+      cursor: not-allowed;
     }
     .cancelBtn {
       margin-top: 24px;
