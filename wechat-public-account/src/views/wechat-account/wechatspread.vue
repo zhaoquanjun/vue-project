@@ -23,7 +23,7 @@
           style="width: 100%">
           <el-table-column
             prop="pageTitle"
-            label="页面标题"
+            :label="listTitle"
             width="150">
           </el-table-column>
           <el-table-column
@@ -127,6 +127,7 @@ export default {
       TotalRecord: 0, //总数量
       shareId: '',
       isShow: false,
+      listTitle: '页面标题',
       type: '',
       isShowPopup: false,
       isShowCode: false,
@@ -173,10 +174,13 @@ export default {
     },
     async getInfo(){
       let EntityTyp = 'Page';
+      this.listTitle = '页面标题'
       if (this.replyType == 'news') {
         EntityTyp = 'News';
+        this.listTitle = '文章标题'
       } else if (this.replyType == 'product') {
         EntityTyp = 'Product';
+        this.listTitle = '产品标题'
       }
       let option= {
         PageSize: this.PageSize,
