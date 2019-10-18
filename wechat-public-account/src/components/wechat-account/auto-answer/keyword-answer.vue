@@ -196,7 +196,7 @@ export default {
         },
         // 添加回复
         handlerAdd(item) {
-            this.$emit("handlerAddAnswer", false, item);
+            this.$emit("handlerAddAnswer", false, JSON.stringify(item));
         },
         addKeyword() {
             if (this.keywordList.length >= 10) {
