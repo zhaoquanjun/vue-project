@@ -80,14 +80,20 @@
                 </li>
                <div>
                     <li v-for="(item, index) in keywordData.list" :key="index">
-                    <p class="list-columns__1 ellipsis">
-                        <span v-for="(child,index) in item.keywordList" :key="index">
-                            {{child.keyword}}
-                            <i
-                                v-if="item.keywordList.length-1 !=index && index ==0"
-                            >，</i>
-                        </span>
-                    </p>
+                    <el-tooltip placement="top">
+                        <div slot="content" style="max-width:400px;">
+                            <span v-for="(child,index) in item.keywordList" :key="index">
+                                {{child.keyword}} 
+                                {{item.keywordList.length-1 !=index ? ',':''}}
+                            </span>
+                        </div>
+                        <p class="list-columns__1 ellipsis pointer">
+                            <span v-for="(child,index) in item.keywordList" :key="index">
+                                {{child.keyword}} 
+                                {{item.keywordList.length-1 !=index ? ',':''}}
+                            </span>
+                        </p>
+                    </el-tooltip>
                     <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
                         <button>

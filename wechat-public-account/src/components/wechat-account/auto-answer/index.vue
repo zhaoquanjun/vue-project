@@ -201,7 +201,10 @@ export default {
             let { data } = await autoAnswerApi.getKeywordReplyList(
                 this.searchOption
             );
-            this.keywordData = data;
+            if(data) {
+                this.keywordData = data;
+                this.searchOption.Keyword = ''
+            }
         },
         //删除回复信息
         async _removeReply(siteId,id) {
@@ -220,7 +223,7 @@ export default {
             this.$confirm("提示", {
                 title: "提示",
                 iconClass: "icon-warning",
-                message: "是否删除关键词",
+                message: "确定要删除本条回复内容吗？",
                 callback: async action => {
                     if (action === "confirm") {
                         let {
