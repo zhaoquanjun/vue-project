@@ -85,6 +85,12 @@
             :row-style="{height:'200px'}"
             :default-sort="{prop: 'myCreateTime', order: 'descending'}"
           >
+            <template slot="empty">
+              <div class="empty-table">
+                <img src="~img/table-empty.png" />
+                <p>无数据</p>
+              </div>
+            </template>
             <el-table-column prop="siteName" label="缩略图" width="240">
               <template slot-scope="scope">
                 <div class="siteImg">

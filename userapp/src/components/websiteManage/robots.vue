@@ -170,7 +170,7 @@ export default {
       this.date = this.getNowFormatDate();
     },
     fileRemove() {
-      this.$confirm(`您确定要删除当前robots文件么？删除后不可恢复。`, "提示", {
+      this.$confirm(`您确定要删除当前robots文件吗？删除后不可恢复。`, "提示", {
         iconClass: "icon-warning",
         callback: action => {
           if (action === "confirm") {

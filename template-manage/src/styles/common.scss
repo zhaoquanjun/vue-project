@@ -81,3 +81,18 @@ button {
     bottom: -10px;
     left: -10px;
 }
+// 暂无数据
+.empty-table {
+    height: 230px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 54px;
+        vertical-align: middle;
+        padding: 18px 28px;
+    }
+    span {
+        color: #8c8c8c;
+    }
+}

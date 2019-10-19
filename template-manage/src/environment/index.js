@@ -16,7 +16,7 @@ let redirectUrl = `${httpSchema}template.console.wezhan.cn/callback`;
 let logoutRedirectUri = `${httpSchema}template.console.wezhan.cn/index.html`;
 let silentRedirectUri = `${httpSchema}template.console.wezhan.cn/static/silent-renew.html`;
 let clientId = `produce.api`;
-let scope = `openid profile dashboard.api content.api designer.api produce.api`;
+let scope = `openid profile dashboard.api content.api designer.api produce.api weixinopen.api`;
 export let siteDomain = `template.console.wezhan.cn`;
 // 个人中心
 export let personalUrl = '//dashboard.console.wezhan.cn/personal';

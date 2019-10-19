@@ -47,7 +47,7 @@
             <el-input
               size="medium"
               v-model="keyword"
-              placeholder="输入名称搜索"
+              :placeholder="`搜索${this.type}标题`"
               @keyup.enter.native="search"
               class="input-with-select"
               v-show="!batchDeleteShow"
@@ -132,6 +132,7 @@
               @chagePage="chagePage"
               @changeSize="changeSize"
             ></List>
+            <div class="tip">如何在百度站长工具内提交sitemap？</div>
           </div>
         </div>
         <div v-show="uploadType == 'manual'">
@@ -147,14 +148,15 @@
         <div class="right-pannel" :style="{width:'470px'}">
           <div class="pannel-head">
             <span class="title">{{addType}}</span>
-            <span class="tips"></span>
+            <span class="tips" v-show="type == '文章'">仅显示已上线文章</span>
+            <span class="tips" v-show="type == '产品'">仅显示已上架产品</span>
             <i class="iconfont iconguanbi close-pannel" @click="closeAddDialog"></i>
           </div>
           <div style="padding:24px">
             <el-input
               size="medium"
               v-model="addKeyword"
-              placeholder="输入名称搜索"
+              :placeholder="`搜索${this.type}标题`"
               @keyup.enter.native="addSearch"
               class="input-with-select"
             >
@@ -210,7 +212,11 @@
             </div>
           </div>
           <div class="confirm">
-            <button class="confirmBtn" @click="add">确定</button>
+            <button
+              class="confirmBtn"
+              :class="{addDisabled:addSelectedList.length == 0}"
+              @click="add"
+            >确定</button>
             <button class="cancelBtn" @click="closeAddDialog">取消</button>
           </div>
         </div>
@@ -283,6 +289,14 @@ export default {
         {
           value: 0.3,
           label: 0.3
+        },
+        {
+          value: 0.2,
+          label: 0.2
+        },
+        {
+          value: 0.1,
+          label: 0.1
         }
       ],
       frequency: "",
@@ -348,7 +362,6 @@ export default {
         siteId: this.curSiteId
       };
       let { data, status } = await sitemapApi.getList(this.curSiteId, para);
-      console.log(data);
       this.$Loading.hide();
       this.listData = data;
     },
@@ -384,9 +397,11 @@ export default {
       }
     },
     async add() {
+      if (this.addSelectedList.length == 0) {
+        return;
+      }
       let entityIdList = [];
       this.addSelectedList.forEach(item => {
-        console.log(item);
         entityIdList.push(item.entityId);
       });
       let para = {
@@ -396,7 +411,6 @@ export default {
         priority: 0.8,
         frequency: "Monthly"
       };
-      console.log(para);
       let { data, status } = await sitemapApi.add(para);
       if (status == 200) {
         this.$notify({
@@ -547,7 +561,6 @@ export default {
         this.curSiteId,
         para
       );
-      console.log(data);
       this.addListData = data;
     },
     closeAddDialog() {
@@ -580,16 +593,17 @@ export default {
 </script>
 <style scoped>
 .tab /deep/ .el-tabs__item {
-  width: 120px;
-  height: 70px;
-  box-sizing: border-box;
-  font-size: 16px;
-  font-weight: 500;
-  color: rgba(38, 38, 38, 1);
-  line-height: 70px;
-  border-top: 1px solid #e4e7ed;
+  height: 38px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+  line-height: 36px;
   border-bottom: 1px solid #e4e7ed;
   background: rgba(245, 245, 245, 1);
+  vertical-align: top;
+  border-top: 2px solid transparent;
+  width: 120px;
+  box-sizing: border-box;
   padding: 0;
   vertical-align: top;
   text-align: center;
@@ -604,7 +618,8 @@ export default {
   border-top: none;
 }
 .tab /deep/ .is-active {
-  border-top: 3px solid rgb(72, 201, 226);
+  color: rgba(1, 192, 222, 1);
+  border-top: 2px solid rgb(72, 201, 226);
   border-bottom: 1px solid transparent;
   background: rgb(255, 255, 255);
 }
@@ -623,6 +638,15 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.tip {
+  display: inline-block;
+  margin-top: 32px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(9, 204, 235, 1);
+  line-height: 22px;
+  cursor: pointer;
+}
 .disabled {
   &:hover {
     cursor: not-allowed;
@@ -656,10 +680,10 @@ export default {
     justify-content: center;
     .typeItem {
       width: 90px;
-      height: 40px;
+      height: 32px;
       border: 1px solid rgba(9, 204, 235, 1);
       color: rgba(9, 204, 235, 1);
-      line-height: 40px;
+      line-height: 32px;
       text-align: center;
       cursor: pointer;
       &:nth-child(1) {
@@ -674,7 +698,6 @@ export default {
     .typeItemActive {
       background: rgba(9, 204, 235, 1);
       color: rgba(255, 255, 255, 1);
-      line-height: 40px;
     }
   }
   .addWrap {
@@ -683,6 +706,7 @@ export default {
     display: flex;
     justify-content: space-between;
     .infoText {
+      padding-top: 6px;
       span {
         font-size: 16px;
         color: rgba(161, 168, 177, 1);
@@ -692,22 +716,22 @@ export default {
     .operateBtn {
       .addBtn {
         width: 90px;
-        height: 40px;
+        height: 32px;
         background: rgba(9, 204, 235, 1);
         border-radius: 2px;
         color: rgba(255, 255, 255, 1);
-        line-height: 40px;
+        line-height: 32px;
         text-align: center;
         vertical-align: middle;
       }
       .previewBtn {
         display: inline-block;
         width: 90px;
-        height: 40px;
+        height: 32px;
         border-radius: 2px;
         border: 1px solid rgba(9, 204, 235, 1);
         color: rgba(9, 204, 235, 1);
-        line-height: 40px;
+        line-height: 32px;
         text-align: center;
         vertical-align: middle;
         margin-left: 24px;
@@ -799,6 +823,13 @@ export default {
       font-size: 14px;
       color: #262626;
     }
+    .tips {
+      margin-left: 16px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(161, 168, 177, 1);
+      line-height: 70px;
+    }
   }
   .confirm {
     position: absolute;
@@ -815,6 +846,10 @@ export default {
       font-size: 12px;
       color: rgba(255, 255, 255, 1);
       line-height: 32px;
+    }
+    .addDisabled {
+      opacity: 0.2;
+      cursor: not-allowed;
     }
     .cancelBtn {
       margin-top: 24px;

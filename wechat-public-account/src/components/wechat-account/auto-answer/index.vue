@@ -329,17 +329,17 @@ export default {
                 //校验
                 if (this.msgType == 1) {
                     if (!trim(picUrl)) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        notify(this, "请添加图片", "error");
                         return;
                     }
                 } else if (this.msgType == 2) {
                     if (!trim(text)) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        notify(this, "请输入内容", "error");
                         return;
                     }
                 } else if (this.msgType == 3) {
                     if (newsMsg.length === 0) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        notify(this, "请添加图文", "error");
                         return;
                     }
                 }

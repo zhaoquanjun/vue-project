@@ -23,18 +23,18 @@
           style="width: 100%">
           <el-table-column
             prop="pageTitle"
-            label="页面标题"
-            width="150">
+            :label="listTitle"
+            width="160">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享标题"
-            width="150">
+            width="160">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享封面"
-            width="150">
+            width="140">
             <template slot-scope="scope">
               <img class="img" :src="scope.row.coverUrl">
             </template>
@@ -127,6 +127,7 @@ export default {
       TotalRecord: 0, //总数量
       shareId: '',
       isShow: false,
+      listTitle: '页面标题',
       type: '',
       isShowPopup: false,
       isShowCode: false,
@@ -173,10 +174,13 @@ export default {
     },
     async getInfo(){
       let EntityTyp = 'Page';
+      this.listTitle = '页面标题'
       if (this.replyType == 'news') {
         EntityTyp = 'News';
+        this.listTitle = '文章标题'
       } else if (this.replyType == 'product') {
         EntityTyp = 'Product';
+        this.listTitle = '产品标题'
       }
       let option= {
         PageSize: this.PageSize,
@@ -215,10 +219,22 @@ export default {
     },
     //删除handledelet
     async remove(val){
-      let data = await remove(this.siteId,val.id)
-      if (data && data.status== 200) {
-        this.getInfo();
-      }
+      this.$confirm("提示", {
+        title: "提示",
+        iconClass: "icon-warning",
+          message:  `删除后，分享地址将不可访问，是否确定删除？`,
+          callback: async action => {
+              if (action === "confirm") {
+                  let data = await remove(this.siteId,val.id)
+                  if(data && data.status == 200 ) {
+                    notify(this, '删除成功', "success");
+                    this.getInfo();
+                  } else {
+                    notify(this, '删除失败', "error");
+                  }
+              }
+          }
+      });
     },
     //新增推广
     addSpread(){
@@ -295,6 +311,13 @@ export default {
 .el-tabs /deep/ .is-active {
     background: #fff;
     border-top: 3px solid #09cceb;
+}
+.el-table /deep/ .cell {
+  height: 23px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .el-table .cell, .el-table th div {
   padding-right: 30px !important;

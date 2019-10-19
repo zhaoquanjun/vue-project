@@ -67,7 +67,7 @@
       </div>
     </div>
     <div class="popup-content__open">
-      <p>选择文章详情页</p>
+      <p>选择产品详情页</p>
       <div class="way-list__box">
         <div>
           <span class="tips" @click="isChangeShow">{{productTips}}
