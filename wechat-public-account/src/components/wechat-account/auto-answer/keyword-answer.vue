@@ -249,7 +249,7 @@ export default {
 }
 .el-input /deep/ .el-input__inner {
     border: 1px solid #E5E5E5;
-    width: 360px;
+    width: 100%;
 }
 .handler-menu .el-input /deep/ .el-input__inner {
     border: 1px solid #E5E5E5;

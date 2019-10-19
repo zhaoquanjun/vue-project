@@ -495,6 +495,17 @@ export default {
         // 添加关键词回复
         handlerAddAnswer(value, item) {
             this.addAnswer = value;
+            //清空缓存
+            this.msgType = 1;
+            this.replycontentData={
+                imageMsg: {
+                    picUrl: ""
+                },
+                textMsg: {
+                    text: ""
+                },
+                newsMsg: []
+            };
             if (item && JSON.parse(item).keywordList) {
                 let items = JSON.parse(item)
                 this.replyDetail = items;
@@ -508,7 +519,7 @@ export default {
                     this.replycontentData.textMsg = items.data.textMsg;
                 } else if (items.msgType === 3) {
                     this.replycontentData.newsMsg = items.data.newsMsg;
-                }
+                } 
             } else {
                 this.propKeywordList = "";
             }
