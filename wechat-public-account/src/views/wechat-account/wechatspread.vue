@@ -21,6 +21,12 @@
           :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '36px',paddingLeft: '40px'}"
           :cell-style="{color:'#262626',lineHeight: '36px',paddingLeft: '40px'}"
           style="width: 100%">
+          <template slot="empty">
+              <div class="empty-table">
+                  <img src="~img/table-empty.png" />
+                  <p>无数据</p>
+              </div>
+          </template>
           <el-table-column
             prop="pageTitle"
             :label="listTitle"
@@ -358,7 +364,7 @@ export default {
     .spread-continer {
       margin-top: 28px;
       border: 1px solid rgba(229,229,229,1);
-      border-bottom: none;
+      padding-bottom: 16px;
       .img {
         width: 37px;
         height: 32px;
