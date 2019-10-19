@@ -300,6 +300,8 @@ export default {
                 this._getKeywordReplyList(this.searchOption);
                 this.isSet = true;
                 this.replyDetail.id = data;
+            } else {
+                notify(this, "保存失败", "error");
             }
         },
         // 保存
