@@ -36,7 +36,7 @@
               >
                 <p class="single-line__overflow--hide">{{it.name}}</p>
                 <p class="date single-line__overflow--hide">
-                  <span>{{it.createTime && it.createTime.slice(0, 10)}}</span>
+                  <!-- <span>{{it.createTime && it.createTime.slice(0, 10)}}</span> -->
                   <span
                     :style="{visibility: productId == i ? 'visible' : 'hidden'}"
                   ></span>

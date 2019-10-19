@@ -41,7 +41,13 @@
             ></el-input>
           </div>
           <div class="left">
-            <div><span>封面</span><i class="icon iconfont iconicon-exclamationmark"></i></div>
+            <div>
+              <span>封面</span>
+              <el-tooltip class="item" effect="dark" placement="bottom">
+                <div slot="content">为保证分享效果，建议您上传尺寸为<br/>300*300像素，或者比例为1:1的图片</div>
+                <i class="icon iconfont iconicon-exclamationmark"></i>
+              </el-tooltip>
+            </div>
             <div class="mask">
               <img :src="initData.coverUrl" alt="">
               <span @click="handlerUpload">{{shareUrl ? '更换封面':'设置封面'}}</span>
