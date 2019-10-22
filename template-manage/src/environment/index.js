@@ -2,7 +2,7 @@
  *系统配置管理
  *
  */
-const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'wezhan';
+const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'wezhan.cn';
 
 /**生产环境-- */
 
