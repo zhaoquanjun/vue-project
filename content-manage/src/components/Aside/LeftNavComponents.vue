@@ -3,7 +3,7 @@
         <h4 class="submenu-title">
             <i>{{subTitle}}</i>
         </h4>
-        <ul class="el-menu-vertical-demo el-menu" v-if="menuList">
+        <ul class="el-menu-vertical-demo el-menu">
             <li
                 class="el-menu-item-left"
                 v-for="(item,index) in menuList.children"
@@ -100,6 +100,6 @@ export default {
     line-height: 40px;
     padding-top: 5px;
     text-align: left;
-    padding-left: 24px;
+    padding-left: 16px;
 }
 </style>
