@@ -33,8 +33,6 @@ const el_scrollBar = (el) => {
     });
   }
 };
-console.log('process.env.NODE_ENV==》',process.env.NODE_ENV)
-
 //接着，自定义Vue指令,指令名你自己随便编一个，我们假定它叫scrollBar
 Vue.directive("scrollBar", {
   //使用inserted钩子函数（初次创建dom）获取使用自定义指令处的dom
