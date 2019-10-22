@@ -122,7 +122,7 @@ export default {
     },
     //去解析
     goResolve(){
-      window.open("http://dashboard.console.wezhan.cn/website/sitedomain");
+      window.open("http://dashboard.console.clouddream.net/website/sitedomain");
     },
     //完成设置
     async changeResolve(){
