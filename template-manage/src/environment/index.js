@@ -6,7 +6,7 @@ const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net
 
 /**生产环境-- */
 
-const httpSchema = `http://`;
+const httpSchema = window.location.hostname=='clouddream.net'?'https://':'http://';
 let memberManageApi = `${httpSchema}api.content.console.${baseServerUrl}`;
 let dashboardApi = `${httpSchema}api.dashboard.console.${baseServerUrl}`;
 let templateApi = `${httpSchema}api.wezhanproduce.console.${baseServerUrl}`;
