@@ -37,7 +37,7 @@ export default store;
 
 getLocal("authList")&& store.commit("set_authList",getLocal("authList"))
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'location') {
   if(getLocal("ymId")){
     store.commit("SETAPPID",getLocal("ymId"))
    }

@@ -27,7 +27,9 @@ export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.
  * 开发环境的URL
  */
 
-if (process.env.NODE_ENV === 'development') {
+console.log(process.env.NODE_ENV,'----')
+
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'location') {
     contentApi = `${httpSchema}api.content.console.wezhan.cn`;
     dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
     uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/picture`;

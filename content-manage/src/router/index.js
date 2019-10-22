@@ -13,6 +13,7 @@ let router = new VueRouter({
 });
 export default router;
 
+console.log(process.env)
 console.log(process.env.NODE_ENV ,'process.env.NODE_ENV')
 
 let appId = store.state.dashboard.appId;
@@ -37,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'location') {
         if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
       }
       if (!getLocal("authList")) await store.dispatch('_getMenuListData');
