@@ -201,7 +201,10 @@ export default {
             let { data } = await autoAnswerApi.getKeywordReplyList(
                 this.searchOption
             );
-            this.keywordData = data;
+            if(data) {
+                this.keywordData = data;
+                this.searchOption.Keyword = ''
+            }
         },
         //删除回复信息
         async _removeReply(siteId,id) {
@@ -220,7 +223,7 @@ export default {
             this.$confirm("提示", {
                 title: "提示",
                 iconClass: "icon-warning",
-                message: "是否删除关键词",
+                message: "确定要删除本条回复内容吗？",
                 callback: async action => {
                     if (action === "confirm") {
                         let {
@@ -297,6 +300,8 @@ export default {
                 this._getKeywordReplyList(this.searchOption);
                 this.isSet = true;
                 this.replyDetail.id = data;
+            } else {
+                notify(this, "保存失败", "error");
             }
         },
         // 保存
@@ -329,17 +334,17 @@ export default {
                 //校验
                 if (this.msgType == 1) {
                     if (!trim(picUrl)) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        notify(this, "请添加图片", "error");
                         return;
                     }
                 } else if (this.msgType == 2) {
                     if (!trim(text)) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        notify(this, "请输入内容", "error");
                         return;
                     }
                 } else if (this.msgType == 3) {
                     if (newsMsg.length === 0) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        notify(this, "请添加图文", "error");
                         return;
                     }
                 }
@@ -492,6 +497,17 @@ export default {
         // 添加关键词回复
         handlerAddAnswer(value, item) {
             this.addAnswer = value;
+            //清空缓存
+            this.msgType = 1;
+            this.replycontentData={
+                imageMsg: {
+                    picUrl: ""
+                },
+                textMsg: {
+                    text: ""
+                },
+                newsMsg: []
+            };
             if (item && JSON.parse(item).keywordList) {
                 let items = JSON.parse(item)
                 this.replyDetail = items;
@@ -505,7 +521,7 @@ export default {
                     this.replycontentData.textMsg = items.data.textMsg;
                 } else if (items.msgType === 3) {
                     this.replycontentData.newsMsg = items.data.newsMsg;
-                }
+                } 
             } else {
                 this.propKeywordList = "";
             }

@@ -11,7 +11,7 @@
         >
           <p class="single-line__overflow--hide">{{it.title}}</p>
           <p class="date single-line__overflow--hide">
-            <span>{{it.createTime.slice(0, 10)}}</span>
+            <!-- <span>{{it.createTime.slice(0, 10)}}</span> -->
             <span
               :style="{visibility: pageId == i ? 'visible' : 'hidden'}"
             ></span>

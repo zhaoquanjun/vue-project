@@ -1,11 +1,11 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',backgroundColor:'#fff'}"
+        :style="{width:width+'px',backgroundColor:'#F8FAFC',borderRight: '1px solid rgb(229, 229, 229)'}"
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <el-aside class="m-asideleft" :style="{width:width+'px'}">
+        <el-aside class="m-asideleft" :style="{width:150+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
@@ -16,6 +16,7 @@
                     @mouseenter="changeCurHoverItem(i)"
                     @click="skipPages(it,i)"
                 >
+                    <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
                     <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                     <i
@@ -26,23 +27,19 @@
                 </li>
             </ul>
         </el-aside>
-        <!--  :menuList="menuList[curIndex]" -->
-        <!--  -->
         <LeftNavComponents
             :subTitle="subTitle"
             :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
-            :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
+            :style="{width: 150 + 'px !important',backgroundColor:'#fff',height: '100%',borderRight:'1px solid #e6e6e6' }"
             class="m-asideright"
             :menuList="menuListChild"
         ></LeftNavComponents>
     </div>
 </template>
 <script>
-import { getSliderMenuList } from "@/api/request/user.js";
+import { getSliderMenuList } from "@/api/index";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
-import { siteDomain } from "@/environment/index";
-
 export default {
     data() {
         return {
@@ -53,6 +50,7 @@ export default {
             menuList: [],
             serversData: [],
             display: "none",
+            border:"1px solid #e5e5e5",
             curPath: "",
             lastRoute: "",
             subTitle:""
@@ -61,27 +59,23 @@ export default {
     components: {
         LeftNavComponents
     },
-    mounted(){
-        this.menuHasChild(0)
-    },
     methods: {
         changeCurHoverItem(i) {
             this.curIndex = i;
         },
         skipPages(item, i) {
-            let [path, url] = item.menuUrl.split("/");
-            if (!item.path) return;
-            if (siteDomain == path) {
-                this.$router.push(item.path);
-            } else {
-                window.location.href = "//" + item.menuUrl;
+            let path = item.menuUrl.split("/")[1];
+            if (!item.path) {
+                return;
             }
+            this.$router.push(item.path);
         },
         collapseOpen(width, time) {
-            this.width = width;
-            this.width1 = 120;
+            this.width = 300;
+            this.width1 = 150;
             this.display = "block";
             this.time = time + "s";
+            this.border = "none";
         },
         collapseClose() {
             this.width = 60;
@@ -89,29 +83,32 @@ export default {
             this.display = "none";
             this.time = "0s";
             this.curIndex = -1;
+            this.border = "1px solid #e5e5e5";
         },
         iconfonts(code) {
             switch (code) {
                 case "board":
-                    return "iconicon-dash-Navigationhome";
+                    return "iconicon-kongzhitai";
                 case "content":
-                    return "iconicon-dash-NavigationContent";
+                    return "iconicon-neirong1";
                 case "website":
-                    return "iconicon-dash-Navigationsite";
+                    return "iconicon-wangzhan";
                 case "system":
-                    return "iconicon-dash-Navigationsystem";
+                    return "iconicon-huiyuan";
+                case "sitemember":
+                    return "iconicon-huiyuan";
                 case "form":
-                    return "iconicon-dash-Navigationform";
+                    return "iconicon-chengyuan";   
                 case "micro":
                     return "iconweixinxiaochengxu";
                 case "wechataccount":
-                    return "iconweixingongzhonghao";
+                    return "iconicon-huishouzhna";
                 case "recycle":
-                    return "iconicon-dash-Navigationdelete";
-                case "business":
-                    return "icondianshanghuiyuan";
+                    return "iconicon-huishouzhna";
+                case "role":
+                    return "iconicon-chengyuan";
                 case "template":
-                    return "iconicon-dash-NavigationTemplate";
+                    return "iconicon-mobanguanli"    
             }
         },
         menuHasChild(index){
@@ -135,7 +132,7 @@ export default {
             if (!this.$store.getters.getMenuList) return;
             let item = this.$store.getters.getMenuList[this.curIndex];
             if (item && item.children) {
-                this.subTitle=item.name
+                 this.subTitle=item.name
                 return true;
             } else {
                 return false;
@@ -144,14 +141,14 @@ export default {
     },
     watch: {
         $route(to, from) {
+            let routerList = this.$route.path.split("/");
             let [, firstRoute, lastRoute] = this.$route.path.split("/");
+            this.lastRoute = routerList[routerList.length-1];
             this.curPath = firstRoute;
-            this.lastRoute = lastRoute;
         }
     }
 };
 </script>
-
 <style scoped>
 .m-aside {
     position: absolute;
@@ -159,11 +156,16 @@ export default {
     top: 0px;
     /* bottom: 0; */
     z-index: 10;
+    overflow: hidden;
+    transition: 0.3s ease-in;
+    /* transition:  0.3s linear;  */
 }
 .m-asideleft {
     overflow: hidden;
+    /* transition:  0.3s linear;  */
     /* height: 100%; */
 }
+
 .m-asideright {
     width: 0px !important;
     position: absolute;
@@ -181,7 +183,6 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 选中的样式
-
 .active-color {
     color: #0595e6 !important;
 }
@@ -191,21 +192,22 @@ export default {
 .menu-bg {
     background:rgba(240, 243, 247, 1);
     color: #0595e6;
-    border-left: 4px solid #0595e6;
+    border-left: 4px solid #0595e6 !important;
 }
 .left-menu {
     // border-right: solid 1px #e6e6e6;
     background: #fff;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
         line-height: 50px;
         white-space: nowrap;
         margin-bottom: 14px;
+        border-left: 4px solid #fff;
         .menu-icon {
             display: inline-block;
-            font-size: 22px;
+            font-size: 20px;
             width: 60px;
             text-align: center;
             vertical-align: middle;

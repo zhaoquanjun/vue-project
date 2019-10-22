@@ -11,7 +11,7 @@
                 </el-aside>
                 <el-main style=" overflow: hidden;">
                     <el-container>
-                        <el-aside class="page-sub-aside" width="100px" v-show="isSub">
+                        <el-aside class="page-sub-aside" width="150px" v-show="isSub">
                             <page-submenu>
                                 <i slot="title">模版管理</i>
                             </page-submenu>

@@ -22,7 +22,12 @@
             <div class="body-title">
               <span>标题</span>
             </div>
-            <input class="ellipsis" type="text" placeholder="未填写则默认为文章标题" v-model="initData.shareTitle">
+            <input 
+              class="ellipsis" 
+              type="text"
+              maxlength="64"
+              :placeholder="placeholderText" 
+              v-model="initData.shareTitle">
             <h6>描述</h6>
             <el-input
               class="textarea"
@@ -36,10 +41,16 @@
             ></el-input>
           </div>
           <div class="left">
-            <div><span>封面</span><i class="icon iconfont iconicon-exclamationmark"></i></div>
+            <div>
+              <span>封面</span>
+              <el-tooltip class="item" effect="dark" placement="bottom">
+                <div slot="content">为保证分享效果，建议您上传尺寸为<br/>300*300像素，或者比例为1:1的图片</div>
+                <i class="icon iconfont iconicon-exclamationmark"></i>
+              </el-tooltip>
+            </div>
             <div class="mask">
               <img :src="initData.coverUrl" alt="">
-              <span @click="handlerUpload">设置封面</span>
+              <span @click="handlerUpload">{{shareUrl ? '更换封面':'设置封面'}}</span>
             </div>
           </div>
         </div>
@@ -113,6 +124,7 @@ export default {
       pageList: [], //page列表
       isPageList: false,
       pageInfoTitle: '', //详情页title
+      placeholderText: '未填写则默认为文章标题',
       imageChooseAreaShowFlag: false, //图片控件
       shareUrl: this.infoData.shareUrl,
       initData: this.infoData
@@ -128,6 +140,17 @@ export default {
   methods: {
     //初始化获取列表数据
     async getPageInfoList(){
+      switch (this.infoData.entityType) {
+        case 1:
+          this.placeholderText = '未填写则默认为页面标题'
+          break;
+        case 2:
+          this.placeholderText = '未填写则默认为文章标题'
+          break;
+        case 3:
+          this.placeholderText = '未填写则默认为产品标题'
+          break;
+      }
       let {data} = await getPageInfoList(this.siteId,'Content')
       if(data.length>0) {
         this.pageList = data
@@ -174,20 +197,24 @@ export default {
     testData(){
       let flag = true
       if(!this.infoData.entityType) {
-        console.log('00000分享类型')
+        notify(this, '请完善信息', 'error')
         flag = false
+        return
       }
       if(!this.infoData.entityId) {
-        console.log('00000id')
+        notify(this, '请完善信息', 'error')
         flag = false
+        return
       }
       if(!this.infoData.coverUrl) {
-        console.log('00000封面图片')
+        notify(this, '请完设置分享封面', 'error')
         flag = false
+        return
       }
       if(!this.infoData.shareTitle) {
-        console.log('00分享title')
+        notify(this, '请完设置分享标题', 'error')
         flag = false
+        return
       }
       // if(!this.infoData.description) {
       //   console.log('00描述')
@@ -204,7 +231,6 @@ export default {
         }
         let flag = this.testData()
         if (!flag) {
-          notify(this, '请完善信息', 'error')
           return
         }
         if (this.infoData.id) {
@@ -245,6 +271,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  min-height: 800px;
   overflow-y: auto;
   background:rgba(38,38,38,0.8);
   text-align: right;
@@ -263,7 +290,7 @@ export default {
       span {
         font-size:16px;
         font-family:'PingFangSC-Medium,PingFangSC';
-        font-weight:500;
+        font-weight:600;
         color:rgba(38,38,38,1);
         line-height:24px;
       }
@@ -345,7 +372,7 @@ export default {
             display: inline-block;
             font-size:16px;
             font-family:'PingFangSC-Medium,PingFangSC';
-            font-weight:500;
+            font-weight:600;
             color:rgba(38,38,38,1);
             line-height:22px;
             padding: 12px 0;
@@ -399,7 +426,7 @@ export default {
             span {
               font-size:16px;
               font-family:'PingFangSC-Medium,PingFangSC';
-              font-weight:500;
+              font-weight:600;
               color:rgba(38,38,38,1);
               line-height:22px;
             }
@@ -419,7 +446,7 @@ export default {
           h6 {
             font-size:16px;
             font-family:'PingFangSC-Medium,PingFangSC';
-            font-weight:500;
+            font-weight:600;
             color:rgba(38,38,38,1);
             line-height:16px;
             padding: 15px 0;
@@ -435,7 +462,7 @@ export default {
           .title{
             font-size: 16px;
             font-family:'PingFangSC-Medium,PingFangSC';
-            font-weight: 500;
+            font-weight: 600;
             color:rgba(38,38,38,1);
             line-height: 40px;
             background: none;
@@ -497,7 +524,7 @@ export default {
         h6 {
           margin: 16px 0;
           font-size:16px;
-          font-weight:500;
+          font-weight:600;
           color:rgba(38,38,38,1);
           line-height:22px;
           span {
