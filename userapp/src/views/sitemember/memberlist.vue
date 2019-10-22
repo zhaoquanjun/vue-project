@@ -1,6 +1,6 @@
 <template>
     <el-container class="member-container">
-        <el-aside style="width:100px">
+        <el-aside style="width:150px">
             <page-submenu>
                 <template v-slot:title>
                     网站会员

@@ -62,7 +62,7 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "backup",
+        path: "mysite/backup",
         name: "backup",
         component: () => import("@/views/website-manage/websiteBackup.vue"),
         meta: {
@@ -72,11 +72,11 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "mySite",
+        path: "mysite/siteinfo",
         name: "mySite",
         component: () => import("@/views/website-manage/mySite.vue"),
         meta: {
-          title: "我的网站",
+          title: "网站信息",
           requiresAuth: true,
           isSub:true
         }
@@ -92,7 +92,7 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "siteDomain",
+        path: "mysite/siteDomain",
         name: "siteDomain",
         component: () => import("@/views/website-manage/siteDomain.vue"),
         meta: {
@@ -112,7 +112,7 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "sitevalidation",
+        path: "seo/sitevalidation",
         name: "sitevalidation",
         component: () => import("@/views/siteVerify.vue"),
         meta: {
@@ -122,7 +122,7 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "robots",
+        path: "seo/robots",
         name: "robots",
         component: () => import("@/views/website-manage/robots.vue"),
         meta: {
@@ -132,7 +132,7 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "sitemap",
+        path: "seo/sitemap",
         name: "sitemap",
         component: () => import("@/views/website-manage/sitemap.vue"),
         meta: {
