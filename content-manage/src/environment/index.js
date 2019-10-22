@@ -2,25 +2,24 @@
  *系统配置管理
  *
  */
-
+const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'wezhan.cn';
+const httpSchema = window.location.hostname=='clouddream.net'?'https://':'http://';
 
 /**生产环境-- */
-
-const httpSchema = `https://`;
-let contentApi = `${httpSchema}api.content.console.clouddream.net`;
-let dashboardApi = `${httpSchema}api.dashboard.console.clouddream.net`;
-let uploadPicUrl = `${httpSchema}api.content.console.clouddream.net/api/picture`;
-let authorityUrl = `${httpSchema}login.console.clouddream.net`;
-let redirectUrl = `${httpSchema}content.console.clouddream.net/callback`;
-let logoutRedirectUri = `${httpSchema}content.console.clouddream.net/index.html`;
-let silentRedirectUri = `${httpSchema}content.console.clouddream.net/static/silent-renew.html`;
-let designerManageApi = `${httpSchema}api.designer.console.clouddream.net`;
+let contentApi = `${httpSchema}api.content.console.${baseServerUrl}`;
+let dashboardApi = `${httpSchema}api.dashboard.console.${baseServerUrl}`;
+let uploadPicUrl = `${httpSchema}api.content.console.${baseServerUrl}/api/picture`;
+let authorityUrl = `${httpSchema}login.console.${baseServerUrl}`;
+let redirectUrl = `${httpSchema}content.console.${baseServerUrl}/callback`;
+let logoutRedirectUri = `${httpSchema}content.console.${baseServerUrl}/index.html`;
+let silentRedirectUri = `${httpSchema}content.console.${baseServerUrl}/static/silent-renew.html`;
+let designerManageApi = `${httpSchema}api.designer.console.${baseServerUrl}`;
 let clientId = 'content.api';
 let scope = 'openid profile dashboard.api content.api designer.api produce.api weixinopen.api';
-export let siteDomain = 'content.console.clouddream.net';
+export let siteDomain = `content.console.${baseServerUrl}`;
 // 个人中心
-export let personalUrl = '//dashboard.console.clouddream.net/personal';
-export let dashboardUrl = `${httpSchema}dashboard.console.clouddream.net/board`;
+export let personalUrl = `${httpSchema}dashboard.console.${baseServerUrl}/personal`;
+export let dashboardUrl = `${httpSchema}dashboard.console.${baseServerUrl}/board`;
 // 阿里云续费地址
 export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0';
 /**
