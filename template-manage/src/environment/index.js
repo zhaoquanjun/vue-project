@@ -52,5 +52,4 @@ const enbironmemy = {
     clientId,
     scope
 };
-console.log('logoutRedirectUri123456',logoutRedirectUri)
 export default enbironmemy;

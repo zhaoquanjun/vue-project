@@ -1,5 +1,4 @@
 import enbironmemy from "../../environment/index" 
-console.log(enbironmemy.dashboardApi)
 import * as ajaxRequest from "../ajaxRequest";
 
 /**

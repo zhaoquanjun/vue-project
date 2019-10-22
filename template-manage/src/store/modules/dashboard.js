@@ -52,7 +52,6 @@ const dashboard = {
     actions: {
         async _updateAppIdAndSiteIdToCookie({ commit }){
             let { data } = await updateAppIdToCookie();
-            console.log(data)
             commit("SETAPPID", data)
         },
         async _getMenuListData({ commit }) {
