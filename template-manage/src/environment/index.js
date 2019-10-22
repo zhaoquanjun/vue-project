@@ -6,21 +6,21 @@
 
 /**生产环境-- */
 
-const httpSchema = `http://`;
-let memberManageApi = `${httpSchema}api.content.console.wezhan.cn`;
-let dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
-let templateApi = `${httpSchema}api.wezhanproduce.console.wezhan.cn`;
-let uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/picture`;
-let authorityUrl = `${httpSchema}login.console.wezhan.cn`;
-let redirectUrl = `${httpSchema}template.console.wezhan.cn/callback`;
-let logoutRedirectUri = `${httpSchema}template.console.wezhan.cn/index.html`;
-let silentRedirectUri = `${httpSchema}template.console.wezhan.cn/static/silent-renew.html`;
+const httpSchema = `https://`;
+let memberManageApi = `${httpSchema}api.content.console.clouddream.net`;
+let dashboardApi = `${httpSchema}api.dashboard.console.clouddream.net`;
+let templateApi = `${httpSchema}api.wezhanproduce.console.clouddream.net`;
+let uploadPicUrl = `${httpSchema}api.content.console.clouddream.net/api/picture`;
+let authorityUrl = `${httpSchema}login.console.clouddream.net`;
+let redirectUrl = `${httpSchema}template.console.clouddream.net/callback`;
+let logoutRedirectUri = `${httpSchema}template.console.clouddream.net/index.html`;
+let silentRedirectUri = `${httpSchema}template.console.clouddream.net/static/silent-renew.html`;
 let clientId = `produce.api`;
 let scope = `openid profile dashboard.api content.api designer.api produce.api weixinopen.api`;
-export let siteDomain = `template.console.wezhan.cn`;
+export let siteDomain = `template.console.clouddream.net`;
 // 个人中心
-export let personalUrl = '//dashboard.console.wezhan.cn/personal';
-export let dashboardUrl = `${httpSchema}dashboard.console.wezhan.cn/board`;
+export let personalUrl = '//dashboard.console.clouddream.net/personal';
+export let dashboardUrl = `${httpSchema}dashboard.console.clouddream.net/board`;
 // 阿里云续费地址
 export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0';
 
