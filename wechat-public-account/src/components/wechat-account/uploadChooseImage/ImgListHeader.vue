@@ -98,7 +98,7 @@ export default {
     },
     switchUploadBoxShowStatus() {
       //this.$emit("switchUploadBoxShowStatus");
-      window.open("http://content.console.wezhan.cn/content/picture");
+      window.open("https://content.console.clouddream.net/content/picture");
     },
     switchIsDesc() {
       this.picSearchOptions.isDescending = !this.picSearchOptions.isDescending;
