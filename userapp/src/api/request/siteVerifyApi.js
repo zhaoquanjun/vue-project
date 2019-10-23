@@ -12,13 +12,13 @@ import enbironmemy from "@/environment/index.js";
  * @param {*} option 
  */
 export const getSiteValidationTags = (options) => {
-    return ajaxRequest.get(`${enbironmemy.siteManageApi}/api/SiteValidation/GetSiteValidationTags/${options}`);
+    return ajaxRequest.get(`${enbironmemy.siteManageApi}/api/v1/SiteValidation/GetSiteValidationTags/${options}`);
 }
 // 创建标签配置
 export const createSiteValidationTags = (options) => {
-    return ajaxRequest.post(`${enbironmemy.siteManageApi}/api/SiteValidation/CreateSiteValidationTags`, options);
+    return ajaxRequest.post(`${enbironmemy.siteManageApi}/api/v1/SiteValidation/CreateSiteValidationTags`, options);
 }
 // 编辑标签配置
 export const editSiteValidationTags = (options) => {
-    return ajaxRequest.put(`${enbironmemy.siteManageApi}/api/SiteValidation/EditSiteValidationTags`, options);
+    return ajaxRequest.put(`${enbironmemy.siteManageApi}/api/v1/SiteValidation/EditSiteValidationTags`, options);
 }
