@@ -65,22 +65,13 @@ export default {
     },
     methods: {
         changeCurHoverItem(i) {
-            if(i==-1) {
-                this.curIndex = i;
-            } else {
-                setTimeout(()=>{
-                    this.curIndex = i;
-                },500)
-            }
+            this.curIndex = i;
         },
         skipPages(item, i) {
-            let [path, url] = item.menuUrl.split("/");
-            if (!item.path) return;
-            if (siteDomain == path) {
-                this.$router.push(item.path);
-            } else {
-                window.location.href = "//" + item.menuUrl;
+            if (item.children && item.children.length> 0) {
+                return;
             }
+            window.location.href = "//" + item.menuUrl;
         },
         collapseOpen(width, time) {
             this.$store.commit("SET_DIALOG",true)
