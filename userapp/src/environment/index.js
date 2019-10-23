@@ -1,6 +1,6 @@
 
-const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'console.wezhan.cn';
-const httpSchema = window.location.hostname=='clouddream.net'?'https://':'http://';
+const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
+const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
 
 let siteManageApi =`${httpSchema}api.designer.${baseServerUrl}`;
 let memberManageApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
