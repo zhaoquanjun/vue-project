@@ -2,7 +2,7 @@
  *系统配置管理
  *
  */
-const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'wezhan.cn';
+const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'console.wezhan.cn';
 const httpSchema = window.location.hostname=='clouddream.net'?'https://':'http://';
 
 /**生产环境-- */
@@ -27,14 +27,14 @@ export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.
  */
 
 if (process.env.NODE_ENV === 'development') {
-    contentApi = `${httpSchema}api.content.wezhan.cn`;
-    dashboardApi = `${httpSchema}api.dashboard.wezhan.cn`;
-    uploadPicUrl = `${httpSchema}api.content.wezhan.cn/api/v1/picture`;
-    authorityUrl = `${httpSchema}login.wezhan.cn`;
+    contentApi = `${httpSchema}api.content.console.wezhan.cn`;
+    dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
+    uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture`;
+    authorityUrl = `${httpSchema}login.console.wezhan.cn`;
     redirectUrl = `${httpSchema}localhost:8081/callback`;
-    logoutRedirectUri = `${httpSchema}content.wezhan.cn/index.html`;
+    logoutRedirectUri = `${httpSchema}content.console.wezhan.cn/index.html`;
     silentRedirectUri = `${httpSchema}localhost:8081/static/silent-renew.html`;
-    designerManageApi = `${httpSchema}api.designer.wezhan.cn`;
+    designerManageApi = `${httpSchema}api.designer.console.wezhan.cn`;
     clientId = 'dev.content.api';
     scope = 'openid profile dashboard.api content.api designer.api produce.api';
 } 

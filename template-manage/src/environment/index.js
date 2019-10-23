@@ -2,7 +2,7 @@
  *系统配置管理
  *
  */
-const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'wezhan.cn';
+const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'console.wezhan.cn';
 
 /**生产环境-- */
 
@@ -29,11 +29,11 @@ export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.
  */
 
 if (process.env.NODE_ENV === `development`) {
-    memberManageApi = `${httpSchema}api.content.wezhan.cn`;
-    dashboardApi = `${httpSchema}api.dashboard.wezhan.cn`;
-    templateApi = `${httpSchema}api.wezhanproduce.wezhan.cn`
-    uploadPicUrl = `${httpSchema}api.content.wezhan.cn/api/v1/picture`;
-    authorityUrl = `${httpSchema}login.wezhan.cn`;
+    memberManageApi = `${httpSchema}api.content.console.wezhan.cn`;
+    dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
+    templateApi = `${httpSchema}api.wezhanproduce.console.wezhan.cn`
+    uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture`;
+    authorityUrl = `${httpSchema}login.console.wezhan.cn`;
     redirectUrl = `${httpSchema}localhost:8083/callback`;
     logoutRedirectUri = `${httpSchema}localhost:8083/index.html`;
     silentRedirectUri = `${httpSchema}localhost:8083/static/silent-renew.html`;

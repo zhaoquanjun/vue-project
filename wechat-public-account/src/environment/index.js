@@ -2,7 +2,7 @@
  *系统配置管理
  *
  */
-const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'wezhan.cn';
+const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'console.wezhan.cn';
 const httpSchema = window.location.hostname=='clouddream.net'?'https://':'http://';
 
 /**生产环境-- */
@@ -41,24 +41,24 @@ let redirectUrl = {
  */
 
 if (process.env.NODE_ENV === 'development') {
-    contentApi = 'http://api.content.wezhan.cn';
-    contentApiUri = 'http://api.content.wezhan.cn';
-    dashboardApi = 'http://api.dashboard.wezhan.cn';
-    uploadPicUrl = 'http://api.content.wezhan.cn/api/v1/picture';
-    authorityUrl = "http://login.wezhan.cn";
+    contentApi = 'http://api.content.console.wezhan.cn';
+    contentApiUri = 'http://api.content.console.wezhan.cn';
+    dashboardApi = 'http://api.dashboard.console.wezhan.cn';
+    uploadPicUrl = 'http://api.content.console.wezhan.cn/api/v1/picture';
+    authorityUrl = "http://login.console.wezhan.cn";
     redirectUrls = "http://localhost:8084/callback";
     logoutRedirectUri = "http://localhost:8084/index.html";
     silentRedirectUri = 'http://localhost:8084/static/silent-renew.html';
     clientId = 'dev.weixinopen.api';
     scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
-    wechataccountApi = "http://open.weixin.wezhan.cn"
-    pageApi = 'http://api.designer.wezhan.cn';
-    pageApiUri = 'http://api.designer.wezhan.cn';
-    newsApi = 'http://api.content.wezhan.cn';
-    imageApi = 'http://api.content.wezhan.cn';
-    redirectUrl['createArticle'] = 'http://content.wezhan.cn/content/createarticle';
-    redirectUrl['createProduct'] = 'http://content.wezhan.cn/content/createproduct';
-    redirectUrl['uploadFile'] = 'http://content.wezhan.cn/content/file';
+    wechataccountApi = "http://open.weixin.console.wezhan.cn"
+    pageApi = 'http://api.designer.console.wezhan.cn';
+    pageApiUri = 'http://api.designer.console.wezhan.cn';
+    newsApi = 'http://api.content.console.wezhan.cn';
+    imageApi = 'http://api.content.console.wezhan.cn';
+    redirectUrl['createArticle'] = 'http://content.console.wezhan.cn/content/createarticle';
+    redirectUrl['createProduct'] = 'http://content.console.wezhan.cn/content/createproduct';
+    redirectUrl['uploadFile'] = 'http://content.console.wezhan.cn/content/file';
 }
 
 const enbironmemy = {

@@ -1,5 +1,5 @@
 
-const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'wezhan.cn';
+const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'console.wezhan.cn';
 const httpSchema = window.location.hostname=='clouddream.net'?'https://':'http://';
 
 let siteManageApi =`${httpSchema}api.designer.${baseServerUrl}`;
@@ -37,14 +37,14 @@ export let previewSitemapUrl = `${httpSchema}api.designer.${baseServerUrl}/api/v
 export let picUrlHangZhou = 'https://wezhan.oss-cn-hangzhou.aliyuncs.com/'
 
 if (process.env.NODE_ENV === `development`) {
-    siteManageApi = `${httpSchema}api.designer.wezhan.cn`;
-    memberManageApi = `${httpSchema}api.dashboard.wezhan.cn`;
-    designerManageApi = `${httpSchema}api.designer.wezhan.cn`;
-    uploadPicUrl = `${httpSchema}api.content.wezhan.cn/api/v1/picture`;
-    uploadRobotsUrl = `${httpSchema}api.designer.wezhan.cn/api/v1/Robots/AddOrOverride/`;
-    authorityUrl = `${httpSchema}login.wezhan.cn`;
+    siteManageApi = `${httpSchema}api.designer.console.wezhan.cn`;
+    memberManageApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
+    designerManageApi = `${httpSchema}api.designer.console.wezhan.cn`;
+    uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture`;
+    uploadRobotsUrl = `${httpSchema}api.designer.console.wezhan.cn/api/v1/Robots/AddOrOverride/`;
+    authorityUrl = `${httpSchema}login.console.wezhan.cn`;
     redirectUrl = `${httpSchema}localhost:8082/callback`;
-    logoutRedirectUri = `${httpSchema}dashboard.wezhan.cn/index.html`;
+    logoutRedirectUri = `${httpSchema}dashboard.console.wezhan.cn/index.html`;
     silentRedirectUri = `${httpSchema}localhost:8082/static/silent-renew.html`;
     clientId = "dev.dashboard.api";
     scope = "openid profile dashboard.api content.api designer.api produce.api";
