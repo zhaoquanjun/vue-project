@@ -20,7 +20,7 @@
                     <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                     <i
-                        v-if="menuHasChild(i) && isLeftNavComponentsShow"
+                        v-if="menuHasChild(i)"
                         :class="{'active-color':curPath==it.code,}"
                         class="iconfont iconicon-des-Arrow"
                     ></i>
