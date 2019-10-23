@@ -160,7 +160,7 @@ export default {
     /* bottom: 0; */
     z-index: 10;
     overflow: hidden;
-    transition: 0.3s ease-in;
+    transition: 0.2s ease-in-out;
     /* transition:  0.3s linear;  */
 }
 .m-asideleft {
