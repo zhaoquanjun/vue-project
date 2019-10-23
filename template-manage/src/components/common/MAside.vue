@@ -77,7 +77,7 @@ export default {
             window.location.href = "//" + item.menuUrl;
         },
         collapseOpen(width, time) {
-            this.width = 300;
+            this.width = 150;
         },
         collapseClose() {
             this.width = 60;
