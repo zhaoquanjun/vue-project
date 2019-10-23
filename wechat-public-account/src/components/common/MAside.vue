@@ -225,7 +225,7 @@ export default {
         }
         .iconicon-des-Arrow{
             position: absolute;
-            right: 5px;
+            left: 130px;
             font-size: 14px;
             vertical-align: middle;
             color: #B9CBCF;
