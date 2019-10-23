@@ -65,7 +65,13 @@ export default {
     },
     methods: {
         changeCurHoverItem(i) {
-            this.curIndex = i;
+            if(i==-1) {
+                this.curIndex = i;
+            } else {
+                setTimeout(()=>{
+                    this.curIndex = i;
+                },500)
+            }
         },
         skipPages(item, i) {
             let [path, url] = item.menuUrl.split("/");
