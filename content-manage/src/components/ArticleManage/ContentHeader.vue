@@ -33,22 +33,6 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span>排序</span>
-                    <span class="select-sort select-item">
-                        <el-select
-                            size="small"
-                            v-model="orderValue"
-                            placeholder="请选择"
-                            @change="changeOrderCondition"
-                        >
-                            <el-option
-                                v-for="item in orderOptions"
-                                :key="item.orderValue"
-                                :label="item.orderLabel"
-                                :value="item.orderValue"
-                            ></el-option>
-                        </el-select>
-                    </span>
                     <span>置顶</span>
                     <span class="select-item">
                         <el-select
@@ -62,6 +46,22 @@
                                 :key="item.topValue"
                                 :label="item.topLabel"
                                 :value="item.topValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
+                    <span>排序</span>
+                    <span class="select-sort select-item">
+                        <el-select
+                            size="small"
+                            v-model="orderValue"
+                            placeholder="请选择"
+                            @change="changeOrderCondition"
+                        >
+                            <el-option
+                                v-for="item in orderOptions"
+                                :key="item.orderValue"
+                                :label="item.orderLabel"
+                                :value="item.orderValue"
                             ></el-option>
                         </el-select>
                     </span>
@@ -274,7 +274,7 @@ export default {
     flex: none;
 }
 .head-handle-btn {
-    padding-left: 40px;
+    padding-left: 30px;
 }
 
 .head-right {
