@@ -85,6 +85,12 @@
             :row-style="{height:'200px'}"
             :default-sort="{prop: 'myCreateTime', order: 'descending'}"
           >
+            <template slot="empty">
+              <div class="empty-table">
+                <img src="~img/table-empty.png" />
+                <p>无数据</p>
+              </div>
+            </template>
             <el-table-column prop="siteName" label="缩略图" width="240">
               <template slot-scope="scope">
                 <div class="siteImg">
@@ -101,7 +107,7 @@
             <el-table-column label="模板名称|语言" min-width="120">
               <template slot-scope="scope">
                 <div>
-                  <p class="templateName" show-overflow-tooltip>{{scope.row.templateName}}</p>
+                  <p class="templateName overflow">{{scope.row.templateName}}</p>
                   <p
                     class="templateName"
                     style="margin-top:8px;"
@@ -247,102 +253,104 @@
               <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
             </span>
           </div>
-          <div class="settingTemplateWrap">
-            <div class="templateName">模版名称</div>
-            <el-input
-              v-model="settingTemplateName"
-              placeholder="请输入模版名称"
-              class="templateNameInput"
-              @blur="blurTemplateName"
-            ></el-input>
-            <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
-          </div>
-          <div class="templateindustryWrap">
-            <div class="templateindustryTitle">模版行业</div>
-            <el-select
-              v-model="settingFirstIndustrySelect"
-              placeholder="一级行业"
-              class="settingFirstIndustrySelect borderColor"
-              @change="choseSettingFirstIndustry"
-            >
-              <el-option
-                v-for="item in settingFirstIndustryOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-            <span class="settingLine"></span>
-            <el-select
-              v-model="settingSecondIndustrySelect"
-              placeholder="二级行业"
-              class="settingSecondIndustrySelect borderColor"
-              @change="choseSettingSecondIndustry"
-            >
-              <el-option
-                v-for="item in settingSecondIndustryOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-            <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择模版行业</div>
-          </div>
-          <div class="settingStatusWrap">
-            <div class="settingStatus">模版状态</div>
-            <div>
+          <div class="dialogContent" :style="{height:dialogHeight+'px'}">
+            <div class="settingTemplateWrap">
+              <div class="templateName">模版名称</div>
+              <el-input
+                v-model="settingTemplateName"
+                placeholder="请输入模版名称"
+                class="templateNameInput"
+                @blur="blurTemplateName"
+              ></el-input>
+              <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
+            </div>
+            <div class="templateindustryWrap">
+              <div class="templateindustryTitle">模版行业</div>
               <el-select
-                v-model="settingTemplateStatus"
-                placeholder="模版状态"
-                class="settingStatusSelect"
+                v-model="settingFirstIndustrySelect"
+                placeholder="一级行业"
+                class="settingFirstIndustrySelect borderColor"
+                @change="choseSettingFirstIndustry"
               >
                 <el-option
-                  v-for="item in settingTemplateStatusOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in settingFirstIndustryOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
-              <span>
-                <span style="margin-left:24px;color:rgba(140,140,140,1);">设为推荐</span>
-                <el-checkbox v-model="settingChecked" style="margin-left:16px"></el-checkbox>
-              </span>
+              <span class="settingLine"></span>
+              <el-select
+                v-model="settingSecondIndustrySelect"
+                placeholder="二级行业"
+                class="settingSecondIndustrySelect borderColor"
+                @change="choseSettingSecondIndustry"
+              >
+                <el-option
+                  v-for="item in settingSecondIndustryOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+              <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择模版行业</div>
             </div>
-          </div>
-          <div class="imgWrap">
-            <div class="imgTitle">缩略图</div>
-            <el-upload
-              class="avatar-uploader"
-              :action="uploadPicAction"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              :headers="headers"
-            >
-              <img v-if="picUrl" :src="picUrl" class="avatar" />
-              <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
-              <button class="upload-btn">上传图片</button>
-            </el-upload>
-            <el-upload
-              class="avatar-mobile-uploader"
-              :action="uploadPicActionMobile"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccessMobile"
-              :before-upload="beforeAvatarUploadMobile"
-              :headers="headersMobile"
-            >
-              <img v-if="picUrlMobile" :src="picUrlMobile" class="avatar-mobile" />
-              <img v-else src="~img/siteTemplate/defaultMobileImg.png" class="avatar-mobile" />
-              <button class="upload-mobile-btn">上传图片</button>
-            </el-upload>
-          </div>
-          <div style="margin-top:212px">
-            <span class="tipTypeText" style="margin-left:149px">PC端</span>
-            <span class="tipTypeText" style="margin-left:164px">Mobile端</span>
-          </div>
-          <div style="margin-top:8px">
-            <span class="tipInfoText" style="margin-left:102px">推荐尺寸655×380px</span>
-            <span class="tipInfoText" style="margin-left:79px">推荐尺寸148×236px</span>
+            <div class="settingStatusWrap">
+              <div class="settingStatus">模版状态</div>
+              <div>
+                <el-select
+                  v-model="settingTemplateStatus"
+                  placeholder="模版状态"
+                  class="settingStatusSelect"
+                >
+                  <el-option
+                    v-for="item in settingTemplateStatusOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+                <span>
+                  <span style="margin-left:24px;color:rgba(140,140,140,1);">设为推荐</span>
+                  <el-checkbox v-model="settingChecked" style="margin-left:16px"></el-checkbox>
+                </span>
+              </div>
+            </div>
+            <div class="imgWrap">
+              <div class="imgTitle">缩略图</div>
+              <el-upload
+                class="avatar-uploader"
+                :action="uploadPicAction"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+                :headers="headers"
+              >
+                <img v-if="picUrl" :src="picUrl" class="avatar" />
+                <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
+                <button class="upload-btn">上传图片</button>
+              </el-upload>
+              <el-upload
+                class="avatar-mobile-uploader"
+                :action="uploadPicActionMobile"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccessMobile"
+                :before-upload="beforeAvatarUploadMobile"
+                :headers="headersMobile"
+              >
+                <img v-if="picUrlMobile" :src="picUrlMobile" class="avatar-mobile" />
+                <img v-else src="~img/siteTemplate/defaultMobileImg.png" class="avatar-mobile" />
+                <button class="upload-mobile-btn">上传图片</button>
+              </el-upload>
+            </div>
+            <div style="margin-top:212px">
+              <span class="tipTypeText" style="margin-left:149px">PC端</span>
+              <span class="tipTypeText" style="margin-left:164px">Mobile端</span>
+            </div>
+            <div style="margin-top:8px">
+              <span class="tipInfoText" style="margin-left:102px">推荐尺寸655×380px</span>
+              <span class="tipInfoText" style="margin-left:79px">推荐尺寸148×236px</span>
+            </div>
           </div>
           <div class="confirm">
             <button class="confirmBtn" @click="saveSettingTemplate">确定</button>
@@ -363,6 +371,7 @@ export default {
     return {
       isAble: false,
       tableHeight: 500,
+      dialogHeight: 500,
       operateList: [
         { name: "设置", flag: "setting" },
         { name: "更新", flag: "update" },
@@ -530,7 +539,9 @@ export default {
         } else {
           this.tableHeight = window.innerHeight - 325;
         }
+        this.dialogHeight = window.innerHeight - 152;
       });
+      this.dialogHeight = window.innerHeight - 152;
       if (window.innerWidth < 1845) {
         this.tableHeight = window.innerHeight - 390;
       } else {
@@ -562,7 +573,6 @@ export default {
     beforeAvatarUpload(file) {
       this.headers.Authorization =
         "Bearer " + this.$store.state.user.accessToken.Authorization;
-      console.log(this.$store.state.dashboard);
       this.headers.appId = this.$store.state.dashboard.appId;
 
       const isPic =
@@ -596,7 +606,6 @@ export default {
     beforeAvatarUploadMobile(file) {
       this.headersMobile.Authorization =
         "Bearer " + this.$store.state.user.accessToken.Authorization;
-      console.log(this.$store.state.dashboard);
       this.headersMobile.appId = this.$store.state.dashboard.appId;
 
       const isPic =
@@ -655,7 +664,6 @@ export default {
       let { data, status } = await templateApi.getSiteTemplates(para);
       this.$Loading.hide();
       if (status == 200) {
-        console.log(data);
         this.templatePage = data;
         this.templateInfo = data.items;
         this.formatTime();
@@ -1146,6 +1154,20 @@ export default {
     margin-left: -40px;
   }
 }
+.overflow {
+  display: -webkit-box;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  // display: inline-block;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+  // white-space: nowrap;
+  // width: 100%;
+}
 .avatar {
   width: 284px;
   height: 176px;
@@ -1390,6 +1412,9 @@ export default {
     .remarkInput {
       margin-top: 15px;
     }
+  }
+  .dialogContent {
+    overflow-y: auto;
   }
   .settingTemplateWrap {
     margin: 32px 24px 10px;

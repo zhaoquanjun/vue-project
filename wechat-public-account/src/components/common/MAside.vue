@@ -1,50 +1,45 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',backgroundColor:'#fff'}"
-        @mouseenter="collapseOpen(180,0.8)"
+        :style="{width:width+'px',backgroundColor:'#F8FAFC',borderRight: '1px solid rgb(229, 229, 229)'}"
+        @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <el-aside class="m-asideleft" :style="{width:width+'px'}">
+        <el-aside class="m-asideleft" :style="{width:150+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
                     class="left-menu-item"
-                    :class="{'menu-bg':curPath==it.code,'menu-hover':curIndex==i}"
+                    :class="{'menu-bg':i==2,'menu-hover':curIndex==i}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(i)"
                     @click="skipPages(it,i)"
                 >
+                    <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
                     <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                     <i
-                        v-if="menuHasChild(i) && isLeftNavComponentsShow"
+                        v-if="menuHasChild(i)"
                         :class="{'active-color':curPath==it.code,}"
                         class="iconfont iconicon-des-Arrow"
                     ></i>
                 </li>
             </ul>
         </el-aside>
-        <!--  :menuList="menuList[curIndex]" -->
-        <!--  -->
         <LeftNavComponents
             :subTitle="subTitle"
             :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
-            :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
+            :style="{width: 150 + 'px !important',backgroundColor:'#fff',height: '100%',borderRight:'1px solid #e6e6e6' }"
             class="m-asideright"
             :menuList="menuListChild"
         ></LeftNavComponents>
-     
-       
     </div>
 </template>
 <script>
-import { getSliderMenuList } from "@/api/request/common.js";
-import LeftNavComponents from "_c/Aside/LeftNavComponents";
 import { siteDomain } from "@/environment/index";
-
+import LeftNavComponents from "_c/Aside/LeftNavComponents";
 export default {
     data() {
         return {
@@ -56,20 +51,27 @@ export default {
             menuList: [],
             serversData: [],
             display: "none",
+            border:"1px solid #e5e5e5",
             curPath: "",
             lastRoute: "",
-            subTitle: ""
+            subTitle:""
         };
-    },
-    components: {
-        LeftNavComponents
     },
     mounted() {
         this.menuHasChild(0);
     },
+    components: {
+        LeftNavComponents
+    },
     methods: {
         changeCurHoverItem(i) {
-            this.curIndex = i;
+            if(i==-1) {
+                this.curIndex = i;
+            } else {
+                setTimeout(()=>{
+                    this.curIndex = i;
+                },500)
+            }
         },
         skipPages(item, i) {
             let [path, url] = item.menuUrl.split("/");
@@ -82,10 +84,11 @@ export default {
         },
         collapseOpen(width, time) {
             this.$store.commit("SET_DIALOG",true)
-            this.width = width;
-            this.width1 = 120;
+            this.width = 300;
+            this.width1 = 150;
             this.display = "block";
             this.time = time + "s";
+            this.border = "none";
         },
         collapseClose() {
             this.width = 60;
@@ -93,29 +96,32 @@ export default {
             this.display = "none";
             this.time = "0s";
             this.curIndex = -1;
+            this.border = "1px solid #e5e5e5";
         },
         iconfonts(code) {
             switch (code) {
-               case "board":
-                    return "iconicon-dash-Navigationhome";
+                case "board":
+                    return "iconicon-kongzhitai";
                 case "content":
-                    return "iconicon-dash-NavigationContent";
+                    return "iconicon-neirong1";
                 case "website":
-                    return "iconicon-dash-Navigationsite";
+                    return "iconicon-wangzhan";
                 case "system":
-                    return "iconicon-dash-Navigationsystem";
+                    return "iconicon-huiyuan";
+                case "sitemember":
+                    return "iconicon-huiyuan";
                 case "form":
-                    return "iconicon-dash-Navigationform";
+                    return "iconicon-chengyuan";   
                 case "micro":
                     return "iconweixinxiaochengxu";
                 case "wechataccount":
-                    return "iconweixingongzhonghao";
+                    return "iconicon-huishouzhna";
                 case "recycle":
-                    return "iconicon-dash-Navigationdelete";
-                case "business":
-                    return "icondianshanghuiyuan";
+                    return "iconicon-huishouzhna";
+                case "role":
+                    return "iconicon-chengyuan";
                 case "template":
-                    return "iconicon-dash-NavigationTemplate"    
+                    return "iconicon-mobanguanli"    
             }
         },
         menuHasChild(index) {
@@ -142,7 +148,7 @@ export default {
             if (!this.$store.getters.getMenuList) return;
             let item = this.$store.getters.getMenuList[this.curIndex];
             if (item && item.children) {
-                this.subTitle = item.name;
+                 this.subTitle=item.name
                 return true;
             } else {
                 return false;
@@ -151,76 +157,87 @@ export default {
     },
     watch: {
         $route(to, from) {
+            let routerList = this.$route.path.split("/");
             let [, firstRoute, lastRoute] = this.$route.path.split("/");
+            this.lastRoute = routerList[routerList.length-1];
             this.curPath = firstRoute;
-            this.lastRoute = lastRoute;
         }
     }
 };
 </script>
-
 <style scoped>
 .m-aside {
     position: absolute;
     left: 0;
     top: 0px;
-
+    /* bottom: 0; */
     z-index: 10;
+    overflow: hidden;
+    transition: 0.3s ease-in;
+    /* transition:  0.3s linear;  */
 }
 .m-asideleft {
     overflow: hidden;
+    /* transition:  0.3s linear;  */
+    /* height: 100%; */
 }
+
 .m-asideright {
     width: 0px !important;
     position: absolute;
-    left: 180px;
+    left: 150px;
     z-index: 10;
     top: 0;
     text-align: center;
+    border-right: none !important;
+    /* border-right: 1px solid #E5E5E5; */
 }
 .el-aside /deep/ .el-menu {
+    /* height: 100%; */
     border: none;
 }
 </style>
 <style lang="scss" scoped>
-
 // 选中的样式
-.menu-bg {
-    background: #f8fafc;
-    // color: #0595e6;
-    border-left: 4px solid #0595e6;
-}
 .active-color {
     color: #0595e6 !important;
 }
 .menu-hover {
-    background: #f8fafc;
+    background:rgba(248,250,252,1);
+}
+.menu-bg {
+    background:rgba(240, 243, 247, 1);
+    color: #0595e6;
+    border-left: 4px solid #0595e6 !important;
 }
 .left-menu {
     // border-right: solid 1px #e6e6e6;
     background: #fff;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
         line-height: 50px;
         white-space: nowrap;
         margin-bottom: 14px;
-        box-sizing: border-box;
+        border-left: 4px solid #fff;
         .menu-icon {
             display: inline-block;
-            font-size: 22px;
+            font-size: 20px;
             width: 60px;
             text-align: center;
             vertical-align: middle;
             color: #0595e6;
         }
-        .iconicon-des-Arrow {
+        .iconicon-des-Arrow{
             position: absolute;
-            right: 16px;
+            left: 130px;
             font-size: 14px;
             vertical-align: middle;
-            color: #b9cbcf;
+            color: #B9CBCF;
+        }
+        .iconweixingongzhonghao{
+            font-size: 19px;
         }
     }
 }

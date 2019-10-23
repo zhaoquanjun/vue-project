@@ -80,14 +80,20 @@
                 </li>
                <div>
                     <li v-for="(item, index) in keywordData.list" :key="index">
-                    <p class="list-columns__1 ellipsis">
-                        <span v-for="(child,index) in item.keywordList" :key="index">
-                            {{child.keyword}}
-                            <i
-                                v-if="item.keywordList.length-1 !=index && index ==0"
-                            >，</i>
-                        </span>
-                    </p>
+                    <el-tooltip placement="top">
+                        <div slot="content" style="max-width:400px;">
+                            <span v-for="(child,index) in item.keywordList" :key="index">
+                                {{child.keyword}} 
+                                {{item.keywordList.length-1 !=index ? ',':''}}
+                            </span>
+                        </div>
+                        <p class="list-columns__1 ellipsis pointer">
+                            <span v-for="(child,index) in item.keywordList" :key="index">
+                                {{child.keyword}} 
+                                {{item.keywordList.length-1 !=index ? ',':''}}
+                            </span>
+                        </p>
+                    </el-tooltip>
                     <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
                         <button>
@@ -196,7 +202,7 @@ export default {
         },
         // 添加回复
         handlerAdd(item) {
-            this.$emit("handlerAddAnswer", false, item);
+            this.$emit("handlerAddAnswer", false, JSON.stringify(item));
         },
         addKeyword() {
             if (this.keywordList.length >= 10) {
@@ -243,6 +249,10 @@ export default {
 }
 .el-input /deep/ .el-input__inner {
     border: 1px solid #E5E5E5;
+    width: 100%;
+}
+.handler-menu .el-input /deep/ .el-input__inner {
+    border: 1px solid #E5E5E5;
     width: 600px;
 }
 .el-input /deep/ .el-input__inner:hover {
@@ -274,8 +284,6 @@ export default {
     position: absolute;
     right: 10px;
     top: 6px;
-}
-.el-input /deep/ input {
 }
 </style>
 <style lang="scss" scoped>
@@ -326,7 +334,7 @@ button {
                     width: 45%;
                 }
                 .list-columns__3 {
-                    width: 10%;
+                    width: 7%;
                     color: #0595e6;
                     cursor: pointer;
                 }

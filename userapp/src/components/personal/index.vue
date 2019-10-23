@@ -74,7 +74,7 @@
                         <img v-if="WeChatUser.headImgUrl" :src="WeChatUser.headImgUrl" />
                         <img
                             v-else
-                            src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"
+                            :src='defaultAvatar'
                         />
                         <b>{{WeChatUser.externalName}}</b>
                     </span>
@@ -98,7 +98,7 @@
                         <img v-if="DingDingUser.headImgUrl" :src="DingDingUser.headImgUrl" />
                         <img
                             v-else
-                            src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"
+                            :src='defaultAvatar'
                         />
                         <b>{{DingDingUser.externalName}}</b>
                     </span>
@@ -122,7 +122,7 @@
                         <img v-if="AlipayUser.headImgUrl" :src="AlipayUser.headImgUrl" />
                         <img
                             v-else
-                            src="https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png"
+                            :src='defaultAvatar'
                         />
                         <b>{{AlipayUser.externalName}}</b>
                     </span>
@@ -195,6 +195,7 @@ import {
     getAlipayBindUrl
 } from "@/api/index.js";
 import { updateUserName } from "@/api/index.js";
+import { picUrlHangZhou } from "@/environment/index";
 export default {
     data() {
         return {
@@ -278,8 +279,7 @@ export default {
                         (element.headImgUrl == null ||
                             element.headImgUrl.length < 1)
                     ) {
-                        element.headImgUrl =
-                            "https://wezhan.oss-cn-hangzhou.aliyuncs.com/default_avatar.png";
+                        element.headImgUrl = this.defaultAvatar;
                     }
                     if (element.provider == "Weixin") {
                         this.WeChatUser = element;

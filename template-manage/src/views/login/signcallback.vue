@@ -13,10 +13,8 @@ export default {
       var returnToUrl = '/'
       if (result.state !== undefined) { returnToUrl = result.state }
       await store.dispatch("_set", result)
-      console.log(window.location.origin + returnToUrl,'window.location.origin + returnToUrl')
       window.location = window.location.origin + returnToUrl;
     } catch (e) {
-      console.log(e)
     }
   }
 }

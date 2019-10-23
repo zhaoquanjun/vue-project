@@ -24,6 +24,7 @@ router.beforeEach(async (to, from, next) => {
   if (user){
     accessToken = user.access_token;
     store.commit("SET_USER",accessToken)
+    await store.dispatch("_getAppHeadInfo");//临时
   } 
 
 
@@ -41,7 +42,6 @@ router.beforeEach(async (to, from, next) => {
       if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
       if (!getLocal("authList")) await store.dispatch('_getMenuListData');
       let r = await store.dispatch('getCurRouteAuth', to.path);
-      console.log(r)
       if (r) {
         if (store.getters.getMenuList.length < 1) await store.dispatch('_getMenuListData')
         next()

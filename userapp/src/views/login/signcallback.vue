@@ -16,7 +16,8 @@ export default {
                 returnToUrl = result.state;
             }
             await store.dispatch("_set", result)
-            window.location =window.location.origin + returnToUrl;
+             store.commit("SET_USER",result.access_token)
+            window.location = window.location.origin + returnToUrl;
         } catch (e) {
             console.log(e,'errrrrr')
         }

@@ -128,7 +128,7 @@ export default {
       span {
         font-size:16px;
         font-family:'PingFangSC-Medium,PingFangSC';
-        font-weight:500;
+        font-weight:600;
         color:rgba(38,38,38,1);
         line-height:24px;
       }

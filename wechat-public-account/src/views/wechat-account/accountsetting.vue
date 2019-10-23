@@ -33,6 +33,7 @@
         <p>3、微信推广可自定义页面、文章、产品分享到微信时显示的封面、标题及描述；使用该功能，请在JS接口安全域名中添加推广域名；
           <a>如何设置？</a>
         </p>
+        <p>4、由于微信接口原因，可能存在解除绑定后，公众号实际并未取消授权，可请前往微信公众平台【公众号设置-授权管理】中取消授权。</p>
       </div>
     </div>
     <div v-if="isShow" class="add-promotion">
@@ -40,6 +41,9 @@
         <div class="title">
           <span>推广域名</span>
           <i class='icon iconfont iconguanbi' @click="closeDomain"></i>
+        </div>
+        <div class="tips-top">
+          提示：修改推广域名，历史推广数据将被清除
         </div>
         <ul>
           <p>请选择推广域名</p>
@@ -50,6 +54,7 @@
             :class="{active: (ind == curInder)}"
           >
             {{item.domain}}
+            <i v-if="ind == curInder" class="icon iconfont iconduihao"></i>
           </li>
           <div class="tips">
             <p>说明:</p>
@@ -96,6 +101,7 @@ export default {
     if (!wx_status.isCertification) {
         this._getWxIsAuth()
     }
+    this._getCdnDomainList();
   },
   methods: {
     //页面初始化获取ID
@@ -139,7 +145,6 @@ export default {
     },
     //修改域名
     changeShow() {
-      this._getCdnDomainList();
       this.isShow = true
     },
     //关闭弹窗
@@ -164,8 +169,9 @@ export default {
       if(data && data.status == 200) {
         this.accountInfo.promotionUrl = domain
         this.isShow = false
+        notify(this,'修改推广域名成功', 'success')
       } else {
-        notify(this,'推广域名设置失败', 'error')
+        notify(this,'修改推广域名失败', 'error')
       }
     },
     //解除绑定
@@ -173,7 +179,7 @@ export default {
       this.$confirm("提示", {
           title: "提示",
           iconClass: "icon-warning",
-          message: '解除绑定后，将不可再使用微信推广，自定义菜单和自动回复功能，同时历史数据将被清除，确定要删除吗？',
+          message: '解除绑定后，将不可再使用微信推广，自定义菜单与自动回复功能，同时历史数据将被清除，确定要解绑吗？',
           callback: async action => {
               if (action === "confirm") {
                   this._unBind()
@@ -220,6 +226,7 @@ export default {
       align-items: center;
       .info-desc__area {
         display: flex;
+        width: 100%;
         justify-content: flex-start;
         align-items: center;
         .account-icon {
@@ -235,12 +242,15 @@ export default {
         }
         .account-name-certification {
           margin-left: 32px;
+          width: 100%;
           h6 {
+            display: inline-block;
+            width: 300px;
             margin-bottom: 16px;
             font-size: 16px;
             font-family: "PingFangSC";
             font-weight: 500;
-            line-height: 22px;width:134px;
+            line-height: 22px;
             color:rgba(38,38,38,1);
           }
           p {
@@ -339,6 +349,10 @@ export default {
         font-weight:400;
         color:rgba(161,168,177,1);
         line-height:26px;
+        a {
+          cursor: pointer;
+          color: rgba(0, 193, 222, 1);
+        }
       }
     }
   }
@@ -373,6 +387,18 @@ export default {
           cursor: pointer;
         }
       }
+      .tips-top {
+        height:32px;
+        background:rgba(252,242,244,1);
+        border-radius:2px;
+        border:1px solid rgba(255,143,160,1);
+        font-size:12px;
+        font-weight:400;
+        color:rgba(251,77,104,1);
+        line-height:32px;
+        text-align: center;
+        margin-top: 16px;
+      }
       ul {
         p {
           font-size:14px;
@@ -384,7 +410,7 @@ export default {
         }
         li {
           height: 60px;
-          padding-left: 15px;
+          padding: 0 16px;
           font-size:14px;
           font-family:'PingFangSC-Regular,PingFangSC';
           font-weight:400;
@@ -392,6 +418,9 @@ export default {
           line-height:60px;
           border-bottom: 1px solid #E5E5E5;
           cursor: pointer;
+          i {
+            float: right;
+          }
         }
         li:nth-child(1) {
           border-top: 1px solid #E5E5E5;

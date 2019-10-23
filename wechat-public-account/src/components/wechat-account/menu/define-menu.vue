@@ -1,7 +1,7 @@
 <template>
   <div class="define-menu__area clearfix">
     <div class="btn">
-      <span @click="_handleSaveAndPublish">保存并发布</span>
+      <span @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</span>
     </div>
     <div class="phone-box__area">
       <div class="phone-menu__area">
@@ -41,7 +41,7 @@
             <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
           </draggable>
       </div>
-      <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
+      <div class="primary-button__nomal order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
     </div>
     <div class="menu-operate__arae">
       <order-menu v-show="isOrder"></order-menu>
@@ -65,7 +65,7 @@
                 </el-input>
               </el-form-item>
               <div v-if='!hasTrueName' class="tipsName">
-                <span class="ym-form-item__error">名称仅包含中英文、数字、特殊符号。</span>
+                <span class="ym-form-item__error">{{textTips}}</span>
                 <a href="https://kf.qq.com/faq/181228f2iMV7181228RbMfAr.html" target="_blank">查看详情</a>
               </div>
               <el-form-item v-if="hasSubList" label="菜单内容">
@@ -182,6 +182,9 @@ export default {
       menuWords: "",
       chooseImg: "",
       menuTree: [],
+      canOrder: false,
+      isCanAdd: true,
+      textTips: '名称仅包含中英文、数字、特殊符号。',
       text: '2',
       menuDetail: {
         id: false,
@@ -262,14 +265,21 @@ export default {
         if (this.menuTree[0].subMenuList.length > 0) {
           this._getMenuDetail(this.menuTree[0].subMenuList[0].id)
           this.curSubIndex = 0
+          this.curIndex = 0
         } else {
           this.curSubIndex = -1
+          this.curIndex = 0
           this._getMenuDetail(this.menuTree[0].id)
         }
       } else if (val == 'add') {
         //点击添加按钮时选择刚添加的按钮并且回填按钮详情
         let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
         this._getMenuDetail(id)
+      }
+      if(this.menuTree.length >=2 || this.menuTree[0].subMenuList.length >=2 ) {
+        this.canOrder = true
+      } else {
+        this.canOrder = false
       }
     },
     handleClosePopup (val,data){
@@ -341,6 +351,14 @@ export default {
     },
     // 菜单排序
     _handleMenuOrder() {
+      if(!this.canOrder) {
+        return
+      }
+      let flag = this.testParameters();
+      if (!flag) {
+        notify(this, '请完善菜单信息', "error");
+        return
+      }
       this.isOrder = !this.isOrder;
       if (!this.isOrder) {
         this.orderIndex = false
@@ -395,6 +413,7 @@ export default {
     //校验参数 
     testParameters(){
       let flag = true;
+      this.testMenu()
       if (!this.hasTrueName || !this.menuDetail.name) {
         flag = false
         console.log('flag',1)
@@ -431,6 +450,36 @@ export default {
     },
     // 添加菜单
     async _handleAddMainMenu(name,order,id,level) {
+      if(!this.isCanAdd) {
+        return
+      }
+      this.isCanAdd = false
+      //确认是否添加第一个子菜单
+      let flag = this.testParameters();
+      if (!flag || !this.hasTrueName) {
+        notify(this, '请完善菜单信息', "error");
+        this.isCanAdd = true
+        return
+      }
+      if (level == 1 && order == 1) {
+          this.$confirm("提示", {
+          title: "提示",
+          iconClass: "icon-warning",
+            message:  `发布成功后会覆盖原版本，且将在24小时内对所有用户生效，是否确认发布？`,
+            callback: async action => {
+                if (action === "confirm") {
+                  this.addMenu(name,order,id,level)
+                } else {
+                  this.isCanAdd = true
+                }
+            }
+        });
+      } else {
+        this.addMenu(name,order,id,level)
+      }
+    },
+    //添加
+    async addMenu (name,order,id,level) {
       let flag = this.testParameters();
       let  dataObj = {};
       //前端校验
@@ -441,6 +490,7 @@ export default {
         dataObj = await updateMenu(dataDetail)
       }else if (order > 0 && !flag) {
         notify(this, '请完善菜单信息', "error");
+        this.isCanAdd = true
       }
       //接口校验
       if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
@@ -453,6 +503,8 @@ export default {
         };
         let data =  await addMenu(newMenuItem);
         if(data.status && data.status == 200 ) {
+          this.isCanAdd = true
+          notify(this, '添加菜单成功', "success");
           this._getMenuTree('add')
           //添加成功，改变按钮状态
           //校验信息
@@ -464,7 +516,9 @@ export default {
             this.curSubIndex = order-1;
             this.hasSubList = true
           }
-          
+        } else {
+          notify(this, '添加菜单失败', "error");
+          this.isCanAdd = true
         }
       }
     },
@@ -489,6 +543,9 @@ export default {
     },
     // 保存并发布
      async _handleSaveAndPublish() {
+       if (this.menuTree.length == 0) {
+        return
+      }
       let flag = this.testParameters();
       if (!flag) {
         notify(this, '请完善菜单信息', "error");
@@ -555,13 +612,28 @@ export default {
       //A-Z:65-90,a-z:97-122
       //-+&. :45 43 38 46 32
       // 校验菜单名
+      this.hasTrueName = true
       let typeNum = this.curSubIndex == -1? 8:16;
       let str = this.menuDetail.name;
-      let isRule = true;
       let BlankNum = 1;
-      let strLength = 0
+      let strLength = 0;
+      for(let i = 0; i<this.menuTree.length;i++) {
+        if(str == this.menuTree[i].name && i != this.curIndex) {
+          this.hasTrueName = false
+          this.textTips = '菜单名已存在,请重新输入'
+          return
+        } else if (this.menuTree[i].subMenuList.length>0) {
+          for(let j = 0; j<this.menuTree[i].subMenuList.length;j++) {
+            if(str == this.menuTree[i].subMenuList[j].name && (i != this.curIndexj && j !=  this.curSubIndex)) {
+              this.hasTrueName = false
+              this.textTips = '菜单名已存在,请重新输入'
+              return
+            }
+          }
+        }
+      }
       let firstBlankIndex = false;
-      for (let i=0; i<str.length; i++) {  
+      for (let i=0; i<str.length; i++) { 
         let c = str.charCodeAt(i);
         if (c == 45 || c == 43 || c == 38 || c == 46 || c == 32){
           strLength = strLength + 1;
@@ -570,9 +642,13 @@ export default {
           } else if (c==32) {
             BlankNum = BlankNum + 1;
             if (BlankNum == 2 && isRule) {
-               isRule = i-firstBlankIndex==1?false:true
+              this.hasTrueName = i-firstBlankIndex==1?false:true
+              this.textTips = '菜单名不能包含3个以上空格'
+              return
             } else {
-              isRule = false
+              this.hasTrueName = false
+              this.textTips = '菜单名不能包含3个以上空格'
+              return
             }
           }
         } else if ((c >=65 && c <=90) || (c >=97 && c <=122)) {
@@ -582,16 +658,19 @@ export default {
         }else if (c >=19968 && c <=40869) {
           strLength = strLength + 2
         } else {
-          isRule= false
+          this.hasTrueName = false
+          this.textTips = '仅支持包含中英文,数字,特殊字符("-" "+" "." 空格)'
+          return
         }
       }
       if (strLength == 0 || strLength >typeNum) {
-        isRule = false
+        this.hasTrueName = false
+        this.textTips = `菜单名称字数不可超过${typeNum/2}个汉字或者${typeNum}个字母`
+        return
       }
-      if(isRule){
+      if(this.hasTrueName){
         this.hasChangeMeunName()
       }
-      this.hasTrueName = isRule
     }
   }
 };
@@ -1000,11 +1079,10 @@ export default {
 }
 .tipsName {
   padding-left: 80px;
-  margin-top: -20px;
-  height: 40px;
+  height: 20px;
 	color: rgba(56, 56, 56, 1);
 	font-size: 14px;
-	line-height: 40px;
+	line-height: 20px;
 	text-align: left;
 }
 .tipsName span{

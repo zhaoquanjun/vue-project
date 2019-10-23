@@ -96,13 +96,13 @@
                   @click="choseApp(item)"
                   :disabled="isExpired(item)||(item.releaseTime&&isreleased(item))"
                   :class="{'disabled':isExpired(item)||(item.releaseTime&&isreleased(item))}"
-                  v-if="curAppId != item.appId"
+                  v-if="!item.isCurrentApp"
                 >进入应用</el-button>
                 <el-button
                   class="choseApp disabled"
                   @click="choseApp(item)"
                   disabled
-                  v-if="curAppId == item.appId"
+                  v-if="item.isCurrentApp"
                 >当前应用</el-button>
               </div>
             </el-col>
@@ -128,12 +128,11 @@ export default {
       aliMarketUrl: aliMarketUrl,
       isdropdownAvatarShow: false,
       appList: [],
-      changeAppShow: false,
-      curAppId: ""
+      changeAppShow: false
     };
   },
   created() {
-    this.getCurApp();
+    // this.$store.dispatch("_getAppHeadInfo");
   },
   methods: {
     signOut() {
@@ -166,12 +165,13 @@ export default {
     },
     //切换app 选择新的app
     async choseApp(item) {
-      setLocal("ymId", item.appId);
+      // setLocal("ymId", item.appId);
       this.$store.commit("SETAPPID", item.appId);
       let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(
         item.appId
       );
       if (status === 200) {
+        this.$store.dispatch("_getAppHeadInfo");
         let { data } = await dashboardApi.getCurSiteId();
         this.$store.commit("SETSITEID", data);
         window.location.href = dashboardUrl;
@@ -188,7 +188,6 @@ export default {
       if (this.changeAppShow) {
         this.changeAppShow = false;
       } else {
-        this.getCurApp();
         this.getAppList();
         this.changeAppShow = true;
         this.$nextTick(() => {
@@ -212,13 +211,6 @@ export default {
       if (new Date(item.releaseTime) < new Date()) {
         return true;
       }
-    },
-
-    // 获取当前appId
-    getCurApp() {
-      this.curAppId = getLocal("ymId")
-        ? getLocal("ymId")
-        : this.$store.state.dashboard.appId;
     }
   },
   computed: {
@@ -231,7 +223,7 @@ export default {
       }
     },
     headAppName() {
-      let appName = getLocal("userInfo")
+      let appName = getLocal("userInfo").appName
         ? getLocal("userInfo").appName
         : this.$store.state.user.userInfo.appName;
       return appName;
@@ -257,7 +249,7 @@ export default {
 .header {
   padding: 0 10px;
   font-size: 14px;
-  background: linear-gradient(to right, #08cceb 50%, #81dca0);
+  background: #08cceb;
   color: #fff;
   position: relative;
   .head-item {

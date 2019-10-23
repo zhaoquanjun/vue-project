@@ -1,11 +1,11 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',backgroundColor:'#fff',borderRight:border}"
+        :style="{width:width+'px',backgroundColor:'#F8FAFC',borderRight: '1px solid rgb(229, 229, 229)'}"
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <el-aside class="m-asideleft" :style="{width:width+'px'}">
+        <el-aside class="m-asideleft" :style="{width:150+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
@@ -20,19 +20,18 @@
                     <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                     <i
-                        v-if="menuHasChild(i) && isLeftNavComponentsShow"
+                        v-if="menuHasChild(i)"
                         :class="{'active-color':curPath==it.code,}"
                         class="iconfont iconicon-des-Arrow"
                     ></i>
                 </li>
             </ul>
         </el-aside>
-        <!--  :menuList="menuList[curIndex]" -->
         <LeftNavComponents
             :subTitle="subTitle"
             :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
-            :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
+            :style="{width: 150 + 'px !important',backgroundColor:'#fff',height: '100%',borderRight:'1px solid #e6e6e6' }"
             class="m-asideright"
             :menuList="menuListChild"
         ></LeftNavComponents>
@@ -62,7 +61,13 @@ export default {
     },
     methods: {
         changeCurHoverItem(i) {
-            this.curIndex = i;
+            if(i==-1) {
+                this.curIndex = i;
+            } else {
+                setTimeout(()=>{
+                    this.curIndex = i;
+                },500)
+            }
         },
         skipPages(item, i) {
             let path = item.menuUrl.split("/")[1];
@@ -72,8 +77,8 @@ export default {
             this.$router.push(item.path);
         },
         collapseOpen(width, time) {
-            this.width = width;
-            this.width1 = 120;
+            this.width = 300;
+            this.width1 = 150;
             this.display = "block";
             this.time = time + "s";
             this.border = "none";
@@ -89,25 +94,27 @@ export default {
         iconfonts(code) {
             switch (code) {
                 case "board":
-                    return "iconicon-dash-Navigationhome";
+                    return "iconicon-kongzhitai";
                 case "content":
-                    return "iconicon-dash-NavigationContent";
+                    return "iconicon-neirong1";
                 case "website":
-                    return "iconicon-dash-Navigationsite";
+                    return "iconicon-wangzhan";
                 case "system":
-                    return "iconicon-dash-Navigationsystem";
+                    return "iconicon-huiyuan";
+                case "sitemember":
+                    return "iconicon-huiyuan";
                 case "form":
-                    return "iconicon-dash-Navigationform";
+                    return "iconicon-chengyuan";   
                 case "micro":
                     return "iconweixinxiaochengxu";
                 case "wechataccount":
-                    return "iconweixingongzhonghao";
+                    return "iconicon-huishouzhna";
                 case "recycle":
-                    return "iconicon-dash-Navigationdelete";
-                case "business":
-                    return "icondianshanghuiyuan";
+                    return "iconicon-huishouzhna";
+                case "role":
+                    return "iconicon-chengyuan";
                 case "template":
-                    return "iconicon-dash-NavigationTemplate"    
+                    return "iconicon-mobanguanli"    
             }
         },
         menuHasChild(index){
@@ -140,9 +147,10 @@ export default {
     },
     watch: {
         $route(to, from) {
+            let routerList = this.$route.path.split("/");
             let [, firstRoute, lastRoute] = this.$route.path.split("/");
+            this.lastRoute = routerList[routerList.length-1];
             this.curPath = firstRoute;
-            this.lastRoute = lastRoute;
         }
     }
 };
@@ -154,12 +162,16 @@ export default {
     top: 0px;
     /* bottom: 0; */
     z-index: 10;
+    overflow: hidden;
+    transition: 0.3s ease-in;
+    /* transition:  0.3s linear;  */
 }
 .m-asideleft {
     overflow: hidden;
-
+    /* transition:  0.3s linear;  */
     /* height: 100%; */
 }
+
 .m-asideright {
     width: 0px !important;
     position: absolute;
@@ -186,7 +198,7 @@ export default {
 .menu-bg {
     background:rgba(240, 243, 247, 1);
     color: #0595e6;
-    border-left: 4px solid #0595e6;
+    border-left: 4px solid #0595e6 !important;
 }
 .left-menu {
     // border-right: solid 1px #e6e6e6;
@@ -198,9 +210,10 @@ export default {
         line-height: 50px;
         white-space: nowrap;
         margin-bottom: 14px;
+        border-left: 4px solid #fff;
         .menu-icon {
             display: inline-block;
-            font-size: 22px;
+            font-size: 20px;
             width: 60px;
             text-align: center;
             vertical-align: middle;
@@ -208,7 +221,7 @@ export default {
         }
         .iconicon-des-Arrow{
             position: absolute;
-            right: 5px;
+            left: 130px;
             font-size: 14px;
             vertical-align: middle;
             color: #B9CBCF;

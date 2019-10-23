@@ -36,7 +36,7 @@
               >
                 <p class="single-line__overflow--hide">{{it.name}}</p>
                 <p class="date single-line__overflow--hide">
-                  <span>{{it.createTime && it.createTime.slice(0, 10)}}</span>
+                  <!-- <span>{{it.createTime && it.createTime.slice(0, 10)}}</span> -->
                   <span
                     :style="{visibility: productId == i ? 'visible' : 'hidden'}"
                   ></span>
@@ -67,7 +67,7 @@
       </div>
     </div>
     <div class="popup-content__open">
-      <p>选择文章详情页</p>
+      <p>选择产品详情页</p>
       <div class="way-list__box">
         <div>
           <span class="tips" @click="isChangeShow">{{productTips}}
@@ -78,6 +78,7 @@
             </i>
           </span>
           <a
+            v-if="productHref"
             :href="productHref"
             target="_blank"
           >预览</a>

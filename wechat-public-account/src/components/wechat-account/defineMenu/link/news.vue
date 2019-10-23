@@ -36,7 +36,7 @@
             >
               <p class="single-line__overflow--hide">{{it.title}}</p>
               <p class="date single-line__overflow--hide">
-                <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span>
+                <!-- <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span> -->
                 <span
                   :style="{visibility: newId==i ? 'visible' : 'hidden'}"
                 ></span>
@@ -76,6 +76,7 @@
             ></i>
           </span>
           <a 
+            v-if="productHref"
             :href="productHref"
             target="_blank"
           >预览</a>

@@ -13,9 +13,9 @@ const user = {
   },
   actions: {
     async _set(context,data){
-      if (process.env.NODE_ENV === 'development') {
+      // if (process.env.NODE_ENV === 'development') {
         await context.dispatch('_updateAppIdAndSiteIdToCookie')
-      }
+      // }
       await context.dispatch('_getMenuListData')
       await context.dispatch('_getAppHeadInfo')
     },

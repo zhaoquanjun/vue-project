@@ -42,6 +42,3 @@ if (process.env.NODE_ENV === 'development') {
     store.commit("SETAPPID",getLocal("ymId"))
    }
 }
-if(getLocal("userInfo")){
-  store.commit("SET_USERINFO",getLocal("userInfo"))
-}

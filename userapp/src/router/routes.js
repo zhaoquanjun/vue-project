@@ -62,7 +62,7 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "backup",
+        path: "mysite/backup",
         name: "backup",
         component: () => import("@/views/website-manage/websiteBackup.vue"),
         meta: {
@@ -72,11 +72,11 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "mySite",
+        path: "mysite/siteinfo",
         name: "mySite",
         component: () => import("@/views/website-manage/mySite.vue"),
         meta: {
-          title: "我的网站",
+          title: "网站信息",
           requiresAuth: true,
           isSub:true
         }
@@ -92,7 +92,7 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "siteDomain",
+        path: "mysite/siteDomain",
         name: "siteDomain",
         component: () => import("@/views/website-manage/siteDomain.vue"),
         meta: {
@@ -112,29 +112,32 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "sitevalidation",
+        path: "seo/sitevalidation",
         name: "sitevalidation",
         component: () => import("@/views/siteVerify.vue"),
         meta: {
           title: "站点验证",
+          requiresAuth: true,
           isSub:true
         }
       },
       {
-        path: "robots",
+        path: "seo/robots",
         name: "robots",
         component: () => import("@/views/website-manage/robots.vue"),
         meta: {
           title: "Robots.txt",
+          requiresAuth: true,
           isSub:true
         }
       },
       {
-        path: "sitemap",
+        path: "seo/sitemap",
         name: "sitemap",
         component: () => import("@/views/website-manage/sitemap.vue"),
         meta: {
           title: "站点地图",
+          requiresAuth: true,
           isSub:true
         }
       }
@@ -184,6 +187,30 @@ export const defaultRoutes = [
       },
     ]
   },
+  {
+    path: "/sitemember",
+    name: 'sitemember',
+    component: () => import("@/views/sitemember/sitemember.vue"),
+    meta: {
+      title: "网站会员",
+      requiresAuth: true,
+      requiresRole: {},
+
+    },
+    children: [
+      {
+        path: "memberlist",
+        name: "memberlist",
+        component: () => import("@/views/sitemember/memberlist.vue"),
+        meta: {
+          title: "会员列表",
+          requiresAuth: true,
+          requiresRole: {},
+          isSub:true
+        }
+      },
+    ]
+  },
 
   {
     path: "/recycle",
@@ -195,7 +222,7 @@ export const defaultRoutes = [
       requiresRole: {},
     }
   },
-
+ 
   {
     path: "/personal",
     name: "personal",

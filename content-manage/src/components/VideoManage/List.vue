@@ -11,7 +11,7 @@
             <template slot="empty">
                 <div class="empty-table">
                     <img src="~img/table-empty.png" />
-                    <span>无数据</span>
+                    <p>无数据</p>
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
@@ -21,7 +21,9 @@
                     <div class="cover">
                         <img width="100%" height="100%" :src="scope.row.coverUrl" />
                         <span class="play" @click="viewPic(scope.row,scope.$index)">
-                            <img src="~img/file-icon/play.png" alt />
+                            <div class="play-btn">
+                                <span></span>
+                            </div>
                         </span>
                     </div>
                     <div v-if="(index == scope.$index)">
@@ -343,16 +345,28 @@ export default {
         position: absolute;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
         top: 0;
         border-radius: 2px;
+        background: rgba(0, 0, 0, 0.5);
         text-align: center;
-        img {
-            width: 30px;
+        .play-btn {
+            width: 34px;
+            height: 34px;
             position: absolute;
             top: 50%;
             left: 50%;
+            border-radius: 50%;
             transform: translate(-50%, -50%);
+            background: url("~img/cover.png") no-repeat center;
+            // span {
+            //     width: 0;
+            //     height: 0;
+            //     margin: 9px 0 0 14px;
+            //     border-top: 8px solid transparent;
+            //     border-right: 10px solid transparent;
+            //     border-bottom: 8px solid transparent;
+            //     border-left: 10px solid #fff;
+            // }
         }
     }
 }

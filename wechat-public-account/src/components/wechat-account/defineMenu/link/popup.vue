@@ -164,6 +164,9 @@ export default {
       return false;
     },
     _handleConfirm() {
+      if(this.slider == 'url' && !this.title){
+        return
+      }
       if (!this.selectedUrl || !this.title){
         notify(this, '请选择所需链接', "error");
         return

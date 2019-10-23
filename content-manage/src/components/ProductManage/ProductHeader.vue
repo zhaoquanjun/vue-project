@@ -33,22 +33,6 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span>排序</span>
-                    <span class="select-sort select-item">
-                        <el-select
-                            size="small"
-                            v-model="orderValue"
-                            placeholder="请选择"
-                            @change="changeOrderCondition"
-                        >
-                            <el-option
-                                v-for="item in orderOptions"
-                                :key="item.orderValue"
-                                :label="item.orderLabel"
-                                :value="item.orderValue"
-                            ></el-option>
-                        </el-select>
-                    </span>
                     <span>置顶</span>
                     <span class="select-item">
                         <el-select
@@ -65,7 +49,22 @@
                             ></el-option>
                         </el-select>
                     </span>
-                   
+                    <span>排序</span>
+                    <span class="select-sort select-item">
+                        <el-select
+                            size="small"
+                            v-model="orderValue"
+                            placeholder="请选择"
+                            @change="changeOrderCondition"
+                        >
+                            <el-option
+                                v-for="item in orderOptions"
+                                :key="item.orderValue"
+                                :label="item.orderLabel"
+                                :value="item.orderValue"
+                            ></el-option>
+                        </el-select>
+                    </span>
                     <button @click="switchIsDesc('dec')" class="desBtn">
                         <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
                     </button>
@@ -74,7 +73,7 @@
                     </button>
                 </div>
                 <div class="head-item head-handle-btn">
-                    <button class="btn-lightblue btn-small" @click="importArticle">导入产品</button>
+                    <!-- <button class="btn-lightblue btn-small" @click="importArticle">导入产品</button> -->
                     <button class="add-article btn-lightblue btn-small" @click="addArticle">新增产品</button>
                 </div>
             </div>
@@ -299,21 +298,20 @@ export default {
     flex: none;
 }
 .head-handle-btn {
-    padding-left: 40px;
+    padding-left: 30px;
 }
 
 .head-right {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding-left: 42px;
+    padding-left: 30px;
     button {
       
     }
     .add-article {
         background: rgba(9, 204, 235, 1 );
         color: #fff;
-        margin-left: 16px;
         &:hover{
             opacity: 0.8;
         }

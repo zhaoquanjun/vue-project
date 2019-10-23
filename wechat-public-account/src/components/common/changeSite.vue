@@ -130,17 +130,6 @@ export default {
       this.language = data.language;
       this.$emit("getSiteName", this.siteName);
 
-      if (data.templateId == 0) {
-        this.$router.push({
-          path: "/website/selectTemplate"
-        });
-      } else {
-        if (this.$route.path == "/website/selectTemplate") {
-          this.$router.push({
-            path: "/website/mysite"
-          });
-        }
-      }
     },
     /**
      * 获取站点列表

@@ -63,6 +63,7 @@ import SpeedProgress from "@/components/common/speedProgress";
 import ChangeSite from "@/components/common/changeSite";
 import { regDomain } from "@/utlis/index.js";
 import { notify } from "@/utlis/index.js";
+import environment from "@/environment/index";
 import { wxAuth, getCdnDomainList, bindDomain, setPromotionUrl} from "@/api/request/account.js";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
 
@@ -122,7 +123,7 @@ export default {
     },
     //去解析
     goResolve(){
-      window.open("http://dashboard.console.wezhan.cn/website/sitedomain");
+      window.open(environment.redirectUrl.siteDomain);
     },
     //完成设置
     async changeResolve(){
@@ -170,7 +171,7 @@ export default {
         this.domainName = val.domain
         this.isResolve = val.cdnDomainResolveStatus
         if (val.cdnDomainResolveStatus != 2) {
-          this.tipsText = '域名未解析，请先在完成域名解析'
+          this.tipsText = '域名未解析，请先完成域名解析'
           this.isShowTips = true
         }
       }
