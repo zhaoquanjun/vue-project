@@ -80,7 +80,7 @@ export default {
         },
         collapseOpen(width, time) {
             this.$store.commit("SET_DIALOG",true)
-            this.width = 300;
+            this.width = 150;
         },
         collapseClose() {
             this.width = 60;

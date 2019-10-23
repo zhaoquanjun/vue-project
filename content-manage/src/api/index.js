@@ -43,5 +43,5 @@ export const getShortUrlByInviation = (names) => {
     let params = {
         permissionIds: names
     }
-    return ajaxRequest.post('/api/ShortUrl/GetShortUrlByInviation',  params );
+    return ajaxRequest.post('/api/v1/ShortUrl/GetShortUrlByInviation',  params );
 }

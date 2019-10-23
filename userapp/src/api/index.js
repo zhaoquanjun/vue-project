@@ -10,14 +10,14 @@ export const getUserPolicy = (userId) => {
         userId: userId
     };
     console.log(userId,'获取用户的policy');
-    return ajaxRequest.get('/api/userInfo/GetUserPolicy', params);
+    return ajaxRequest.get('/api/v1/userInfo/GetUserPolicy', params);
 }
 /**
  * InterfaceAuthor : 福全
  * 获取当前用户应用可配置的权限
  */
 export const getAppPolicies = () => {
-    return ajaxRequest.get('/api/appInfo/GetAppPolicies');
+    return ajaxRequest.get('/api/v1/appInfo/GetAppPolicies');
 }
 /**
  * InterfaceAuthor : 徐专
@@ -26,7 +26,7 @@ export const getAppPolicies = () => {
  */
 export const getEditUserAppPolicies = (userId) => {
     let para = { editUserId: userId };
-    return ajaxRequest.get('/api/appInfo/GetEditUserAppPolicies', para);
+    return ajaxRequest.get('/api/v1/appInfo/GetEditUserAppPolicies', para);
 }
 /**
  * 更新当前成员权限
@@ -38,7 +38,7 @@ export const updateUserPolicy = (options) => {
         remark: options.remark,
         policyNames: options.names
     };
-    return ajaxRequest.put('/api/userInfo/UpdateUserPolicy', params);
+    return ajaxRequest.put('/api/v1/userInfo/UpdateUserPolicy', params);
 
 };
 
@@ -53,7 +53,7 @@ export const batchUpdateUserPolicy = (options) => {
         appId: '',
         policyNames: options.names
     };
-    return ajaxRequest.put("/api/userInfo/BatchUpdateUserPolicy", params)
+    return ajaxRequest.put("/api/v1/userInfo/BatchUpdateUserPolicy", params)
 
 };
 
@@ -74,7 +74,7 @@ export const batchUpdateUserPolicy = (options) => {
  */
 export const batchDeletMember = (options) => {
     let params = options;
-    return ajaxRequest._delete("/api/userInfo/BatchDeleteUserPolicyAppMap", {data:params})
+    return ajaxRequest._delete("/api/v1/userInfo/BatchDeleteUserPolicyAppMap", {data:params})
 }
 /**
  * InterfaceAuthor : 徐专
@@ -86,7 +86,7 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "",size:10 }) => {
         phone:options.phone,
         pageSize: options.size,
     };
-    return ajaxRequest.get('/api/userInfo/GetBeInvitedUsers', params);
+    return ajaxRequest.get('/api/v1/userInfo/GetBeInvitedUsers', params);
 }
 /**
  * 修改备注
@@ -101,7 +101,7 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "",size:10 }) => {
 //         params: {
 //             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
 //         },
-//         url: '/api/appInfo/GetUserCurrentAppPolicy',
+//         url: '/api/v1/appInfo/GetUserCurrentAppPolicy',
 //         method: 'get'
 //     });
 // }
@@ -117,7 +117,7 @@ export const updateUserRemark = (targetUserId, remark) => {
         targetUserId: targetUserId,
         remark: remark
     };
-    return ajaxRequest.put(`/api/userInfo/UpdateUserRemark/${targetUserId}/${remark}`, );
+    return ajaxRequest.put(`/api/v1/userInfo/UpdateUserRemark/${targetUserId}/${remark}`, );
 
 }
 
@@ -129,7 +129,7 @@ export const getShortUrlByInviation = (names) => {
     let params = {
         permissionIds: names
     }
-    return ajaxRequest.post('/api/ShortUrl/GetShortUrlByInviation',  params );
+    return ajaxRequest.post('/api/v1/ShortUrl/GetShortUrlByInviation',  params );
 }
 
 /**
@@ -138,14 +138,14 @@ export const getShortUrlByInviation = (names) => {
  */
 export const updateUserName = (userName) => {
     
-    return ajaxRequest.put('/api/userInfo/UpdateUserName', JSON.stringify(userName));
+    return ajaxRequest.put('/api/v1/userInfo/UpdateUserName', JSON.stringify(userName));
 }
 /**
  * InterfaceAuthor : xuzhuan
  * 验证用户已绑定的号码
  */
 export const sendSourcePhoneCode = () => {
-    return ajaxRequest.put('/api/phone/SendSourcePhoneCode');
+    return ajaxRequest.put('/api/v1/phone/SendSourcePhoneCode');
 }
 /**
  * InterfaceAuthor : xuzhuan
@@ -155,7 +155,7 @@ export const sendTargetPhoneCode = (newPhone) => {
     let params = {
         newPhone: newPhone
     }
-    return ajaxRequest.put(`/api/phone/SendTargetPhoneCode/${newPhone}`, params);
+    return ajaxRequest.put(`/api/v1/phone/SendTargetPhoneCode/${newPhone}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan
@@ -165,7 +165,7 @@ export const isInvalidCode = (code) => {
     let params = {
         code: code
     }
-    return ajaxRequest.put(`/api/phone/IsInvalidCode/${code}`, params);
+    return ajaxRequest.put(`/api/v1/phone/IsInvalidCode/${code}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan
@@ -175,14 +175,14 @@ export const isInvalidChangePwdCode = (code) => {
     let params = {
         code: code
     }
-    return ajaxRequest.put(`/api/phone/IsInvalidChangePwdCode/${code}`, params);
+    return ajaxRequest.put(`/api/v1/phone/IsInvalidChangePwdCode/${code}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan
  * 获取用户的账户信息
  */
 export const getUserProfile = () => {
-    return ajaxRequest.get('/api/userInfo/GetUserProfile');
+    return ajaxRequest.get('/api/v1/userInfo/GetUserProfile');
 }
 
 /**
@@ -194,14 +194,14 @@ export const updateUserPhone = (phone,code) => {
         phone: phone,
         code: code
     }
-    return ajaxRequest.put(`api/userInfo/UpdateUserPhone/${phone}/${code}`, params);
+    return ajaxRequest.put(`api/v1/userInfo/UpdateUserPhone/${phone}/${code}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan
  * 获取dashbord
  */
 export const getUserDashboard = () => {  
-    return ajaxRequest.get('api/userInfo/GetUserDashboard');
+    return ajaxRequest.get('api/v1/userInfo/GetUserDashboard');
 }
 
 /**
@@ -209,7 +209,7 @@ export const getUserDashboard = () => {
  * @method GET
  */
 export const getSliderMenuList = () => {
-    return ajaxRequest.get('/api/appinfo/GetAppMenusByUserId')
+    return ajaxRequest.get('/api/v1/appinfo/GetAppMenusByUserId')
 }
 
 
@@ -218,7 +218,7 @@ export const getSliderMenuList = () => {
  * 获取用户的第三方绑定信息
  */
 export const getExternalUserInfo = () => {
-    return ajaxRequest.get('/api/userInfo/GetUserLoginProviders');
+    return ajaxRequest.get('/api/v1/userInfo/GetUserLoginProviders');
 }
 
 /**
@@ -229,7 +229,7 @@ export const removeExternalUser = (provider) => {
     let params = {
         provider: provider
     }
-    return ajaxRequest._delete(`/api/userInfo/RemoveLoginProvider/${provider}`, params);
+    return ajaxRequest._delete(`/api/v1/userInfo/RemoveLoginProvider/${provider}`, params);
 }
 
 /**
@@ -237,14 +237,14 @@ export const removeExternalUser = (provider) => {
  * 获取微信JsLogin参数
  */
 export const getWeChatJsLoginParams = (provider) => {
-    return ajaxRequest.get('/api/userInfo/GetWeChatJsLoginParams');
+    return ajaxRequest.get('/api/v1/userInfo/GetWeChatJsLoginParams');
 }
 /**
  * InterfaceAuthor : xuzhuan
  * 更新cookie中的appid
  */
 export const updateAppIdAndSiteIdToCookie = () => {
-    return ajaxRequest.get(`${environment.memberManageApi}/api/userInfo/GetAppIdAndUpdateToCookie`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/userInfo/GetAppIdAndUpdateToCookie`);
 }
 
 /**
@@ -252,18 +252,18 @@ export const updateAppIdAndSiteIdToCookie = () => {
  * 更新用户当前使用的appid
  */
 export const updateUserLastAppIdAndCookie = (appId) => {
-    return ajaxRequest.post(`/api/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
+    return ajaxRequest.post(`/api/v1/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
 }
 //更新头像
 export const updateUserPicture = (pictureUrl) => {
     let params ={
         pictureUrl:pictureUrl
     }
-    return ajaxRequest.put(`/api/userInfo/UpdateUserPicture`,JSON.stringify(pictureUrl));
+    return ajaxRequest.put(`/api/v1/userInfo/UpdateUserPicture`,JSON.stringify(pictureUrl));
 }
 //设置密码
 export const updateUserPwd = (options) => {
-    return ajaxRequest.put(`/api/userInfo/UpdateUserPwd`,options);
+    return ajaxRequest.put(`/api/v1/userInfo/UpdateUserPwd`,options);
 }
 
 
@@ -311,5 +311,5 @@ function padLeftZero(str) {
  * 生成绑定支付宝Url
  */
 export const getAlipayBindUrl = () => {
-    return ajaxRequest.get('/api/userInfo/getAlipayBindUrl');
+    return ajaxRequest.get('/api/v1/userInfo/getAlipayBindUrl');
 }

@@ -11,16 +11,16 @@ import * as ajaxRequest from "../ajaxRequest";
  * @param {*} option 
  */
 export const getList = options => {
-    return ajaxRequest.get(`/api/Audio/GetList`, options);
+    return ajaxRequest.get(`/api/v1/Audio/GetList`, options);
 }
 export const batchRemove = (isDelete, idList) => {
-    return ajaxRequest.put(`/api/Audio/ChangeDeleteStatus/${isDelete}`, idList);
+    return ajaxRequest.put(`/api/v1/Audio/ChangeDeleteStatus/${isDelete}`, idList);
 }
 
 export const changeCategory = (categoryId, idList) => {
-    return ajaxRequest.put(`/api/Audio/ChangeCategory/${categoryId}`, idList);
+    return ajaxRequest.put(`/api/v1/Audio/ChangeCategory/${categoryId}`, idList);
 }
 
 export const rename = (id, newName) => {
-    return ajaxRequest.put(`/api/Audio/${id}`, JSON.stringify(newName));
+    return ajaxRequest.put(`/api/v1/Audio/${id}`, JSON.stringify(newName));
 }

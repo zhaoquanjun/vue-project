@@ -7,7 +7,7 @@ import enbironmemy from "@/environment/index.js";
  */
 export const getSiteInfo = siteId => {
   return ajaxRequest.get(
-      `${enbironmemy.pageApi}/api/SiteInfo/GetSiteInfo`,
+      `${enbironmemy.pageApi}/api/v1/SiteInfo/GetSiteInfo`,
     { siteId: siteId }
   );
 };

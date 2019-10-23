@@ -12,7 +12,7 @@ import environment from "@/environment/index";
  * @param {*} option 
  */
 export const getProductList = options => {
-    return ajaxRequest.get(`/api/product/GetList`, options);
+    return ajaxRequest.get(`/api/v1/product/GetList`, options);
 }
 
 /**
@@ -21,21 +21,21 @@ export const getProductList = options => {
  */
 
 export const batchSwitchStatus = options => {
-    return ajaxRequest.put(`/api/product/BatchSwitchStatus/${options.switchType}/${options.flag}`, options.idList);
+    return ajaxRequest.put(`/api/v1/product/BatchSwitchStatus/${options.switchType}/${options.flag}`, options.idList);
 }
 /**
  * 修改分类
  * @param {*} options 
  */
 export const batchChangeCategory = options => {
-    return ajaxRequest.put(`/api/product/BatchChangeCategory`, options);
+    return ajaxRequest.put(`/api/v1/product/BatchChangeCategory`, options);
 }
 /**
  * 新建产品
  * @param {*} options 
  */
 export const createProduct = options => {
-    return ajaxRequest.post(`/api/Product`, options);
+    return ajaxRequest.post(`/api/v1/Product`, options);
 }
 
 /**
@@ -44,7 +44,7 @@ export const createProduct = options => {
  */
 
 export const update = (id, options) => {
-    return ajaxRequest.put(`/api/Product/Update/${id}`, options);
+    return ajaxRequest.put(`/api/v1/Product/Update/${id}`, options);
 }
 
 /**
@@ -52,7 +52,7 @@ export const update = (id, options) => {
  * @param {*} options 
  */
 export const getProductDetail = id => {
-    return ajaxRequest.get(`/api/Product/${id}`);
+    return ajaxRequest.get(`/api/v1/Product/${id}`);
 }
 
 
@@ -62,7 +62,7 @@ export const getProductDetail = id => {
  * @param {*} options 
  */
 export const copyBatchProduct = options => {
-    return ajaxRequest.post(`/api/Product/BatchCopy`, options);
+    return ajaxRequest.post(`/api/v1/Product/BatchCopy`, options);
 }
 /**
  * 获取文章产品预览地址
@@ -75,5 +75,5 @@ export const GetContentPrevAddress = (pageType, siteId) => {
  * 获取站点下拉列表
  */
 export const getSiteList = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/siteInfo/GetSites`);
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/siteInfo/GetSites`);
 }

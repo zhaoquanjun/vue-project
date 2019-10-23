@@ -2,8 +2,8 @@
  *系统配置管理
  *
  */
-const baseServerUrl = window.location.hostname=='clouddream.net'?'clouddream.net':'console.wezhan.cn';
-const httpSchema = window.location.hostname=='clouddream.net'?'https://':'http://';
+const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
+const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
 
 /**生产环境-- */
 let contentApi = `${httpSchema}api.content.${baseServerUrl}`;

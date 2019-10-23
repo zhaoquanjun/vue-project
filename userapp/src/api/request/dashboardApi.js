@@ -2,17 +2,29 @@ import environment from "@/environment/index";
 
 import * as ajaxRequest from "../ajaxRequest";
 
+// 获取dashboard站点信息
+export const getTodoInfo = (siteId) => {
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Dashboard/GetTodoInfo/${siteId}`);
+};
+// 获取dashboard内容数量
+export const getContentInfo = () => {
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Dashboard/GetContentInfo`);
+};
+// 判断是否是管理员
+export const amIAdmin = () => {
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Dashboard/AmIAdmin`);
+};
 /**
  * 更改appName
  */
 export const UpdateAppName = (appName) => {
-    return ajaxRequest.put(`${environment.memberManageApi}/api/appInfo/UpdateAppName`, JSON.stringify(appName));
+    return ajaxRequest.put(`${environment.memberManageApi}/api/v1/appInfo/UpdateAppName`, JSON.stringify(appName));
 };
 /**
  * 获取当前siteId
  */
 export const getCurSiteId = () => {
-    return ajaxRequest.get(`${environment.memberManageApi}/api/userInfo/GetCurrentSiteId`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/userInfo/GetCurrentSiteId`);
 };
 /**
  * 更改siteName
@@ -20,33 +32,33 @@ export const getCurSiteId = () => {
 export const updateSiteName = (siteId, siteName) => {
     let para = { siteId: siteId, siteName: siteName }
     console.log(siteId, para);
-    return ajaxRequest.put(`${environment.designerManageApi}/api/siteInfo/UpdateSiteName`, para);
+    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/siteInfo/UpdateSiteName`, para);
 };
 /**
 * 更改站点语言
 */
 export const updateSiteLanguage = (siteId, language) => {
     let para = { siteId: siteId, language: language }
-    return ajaxRequest.put(`${environment.designerManageApi}/api/siteInfo/UpdateSiteLanguage`, para);
+    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/siteInfo/UpdateSiteLanguage`, para);
 };
 /**
  * 获取site列表
  */
 export const getSites = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/siteInfo/GetSites`);
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/siteInfo/GetSites`);
 }
 /**
  * 获取app信息
  */
 export const getApplication = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/appInfo/GetApplication`);
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/appInfo/GetApplication`);
 }
 
 /**
  * 获取设计秘籍列表，版本更新列表，应用推荐列表
  */
 export const getAppExpandInfo = () => {
-    return ajaxRequest.get(`${environment.memberManageApi}/api/appInfo/GetAppExpandInfo`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/appInfo/GetAppExpandInfo`);
 }
 
 /**
@@ -58,21 +70,21 @@ export const getApplicationsByUserId = () => {
 /**
  * 切换app记录appId
  */
-export const updateUserLastAppIdAndCookie = (appId) => {    
-    return ajaxRequest.post(`${environment.memberManageApi}/api/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
+export const updateUserLastAppIdAndCookie = (appId) => {
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
 }
 /**
  * 切换site记录siteId
  */
 export const updateUserLastSiteId = (siteId) => {
-    return ajaxRequest.put(`${environment.memberManageApi}/api/userInfo/UpdateUserLastSiteId`, siteId);
+    return ajaxRequest.put(`${environment.memberManageApi}/api/v1/userInfo/UpdateUserLastSiteId`, siteId);
 }
 
 /**
  * 获取用户头像 
  */
 export const getAppHeadInfo = () => {
-    return ajaxRequest.get(`${environment.memberManageApi}/api/appInfo/GetAppHeadInfo`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/appInfo/GetAppHeadInfo`);
 }
 
 /**
@@ -81,7 +93,7 @@ export const getAppHeadInfo = () => {
  * time:2019.08.05
  **/
 export const GetFirstIndustries = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/siteInfo/GetFirstIndustries`);
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/siteInfo/GetFirstIndustries`);
 }
 
 /**
@@ -91,14 +103,14 @@ export const GetFirstIndustries = () => {
  **/
 export const GetSecondIndustries = (parentId) => {
     let para = { firstIndustryId: parentId };
-    return ajaxRequest.get(`${environment.designerManageApi}/api/siteInfo/GetSecondIndustries`, para);
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/siteInfo/GetSecondIndustries`, para);
 }
 /**
  * 保存网站类型和所属行业
  */
 export const updateSiteTypeAndIndustry = (siteId, siteType, firstIndustryId, secondIndustryId) => {
     let para = { siteId: siteId, siteType: siteType, firstIndustryId: firstIndustryId, secondIndustryId: secondIndustryId };
-    return ajaxRequest.put(`${environment.designerManageApi}/api/siteInfo/UpdateSiteTypeAndIndustry`, para);
+    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/siteInfo/UpdateSiteTypeAndIndustry`, para);
 }
 
 /**
@@ -107,6 +119,6 @@ export const updateSiteTypeAndIndustry = (siteId, siteType, firstIndustryId, sec
  * time:2019.08.08
  **/
 export const CreateSite = (language, siteName) => {
-    let para = { language: language, siteName: siteName};
-    return ajaxRequest.post(`${environment.memberManageApi}/api/siteInfo/CreateSite`, para);
+    let para = { language: language, siteName: siteName };
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/siteInfo/CreateSite`, para);
 }
