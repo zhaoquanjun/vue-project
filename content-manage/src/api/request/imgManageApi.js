@@ -11,16 +11,16 @@ import * as ajaxRequest from "../ajaxRequest";
  * @param {*} option 
  */
 export const getList = options => {
-    return ajaxRequest.get(`/api/Picture/GetList`, options);
+    return ajaxRequest.get(`/api/v1/Picture/GetList`, options);
 }
 export const batchRemove = (isDelete, idList) => {
-    return ajaxRequest.put(`/api/Picture/ChangeDeleteStatus/${isDelete}`, idList);
+    return ajaxRequest.put(`/api/v1/Picture/ChangeDeleteStatus/${isDelete}`, idList);
 }
 
 export const changeCategory = (categoryId, idList) => {
-    return ajaxRequest.put(`/api/Picture/ChangeCategory/${categoryId}`, idList);
+    return ajaxRequest.put(`/api/v1/Picture/ChangeCategory/${categoryId}`, idList);
 }
 
 export const rename = (id, newName) => {
-    return ajaxRequest.put(`/api/Picture/${id}`, JSON.stringify(newName));
+    return ajaxRequest.put(`/api/v1/Picture/${id}`, JSON.stringify(newName));
 }

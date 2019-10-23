@@ -3,12 +3,12 @@ import * as ajaxRequest from "../ajaxRequest";
 
 // 获取文章列表
 export const getArticleList = (options) => {
-    return ajaxRequest.get(`/api/News/GetRecycleNewsList/${options.pageIndex}/${options.pageSize}`,options);
+    return ajaxRequest.get(`/api/v1/News/GetRecycleNewsList/${options.pageIndex}/${options.pageSize}`,options);
 }
 
 // 批量恢复文章
 export const newsBatchRecovery = (isDelete, idList) => {
-    return ajaxRequest.put(`/api/News/ChangeNewsDeleteStatus/${isDelete}`, idList);
+    return ajaxRequest.put(`/api/v1/News/ChangeNewsDeleteStatus/${isDelete}`, idList);
 }
 
 /**
@@ -16,7 +16,7 @@ export const newsBatchRecovery = (isDelete, idList) => {
  * @param {*} option 
  */
 export const getProductList = options => {
-    return ajaxRequest.get(`/api/product/GetList`, options);
+    return ajaxRequest.get(`/api/v1/product/GetList`, options);
 }
 
 /**
@@ -25,7 +25,7 @@ export const getProductList = options => {
  */
 
 export const batchSwitchStatus = options => {
-    return ajaxRequest.put(`/api/product/BatchSwitchStatus/${options.switchType}/${options.flag}`, options.idList);
+    return ajaxRequest.put(`/api/v1/product/BatchSwitchStatus/${options.switchType}/${options.flag}`, options.idList);
 }
 
 /**
@@ -33,20 +33,20 @@ export const batchSwitchStatus = options => {
  * @param {*} option 
  */
 export const getFileList = options => {
-    return ajaxRequest.get(`/api/File/GetList`, options);
+    return ajaxRequest.get(`/api/v1/File/GetList`, options);
 }
 export const fileBatchRecovery = (isDelete, idList) => {
-    return ajaxRequest.put(`/api/File/ChangeDeleteStatus/${isDelete}`, idList);
+    return ajaxRequest.put(`/api/v1/File/ChangeDeleteStatus/${isDelete}`, idList);
 }
 /**
  * 获取视频列表
  * @param {*} option 
  */
 export const getVideoList = options => {
-    return ajaxRequest.get(`/api/Video/GetList`, options);
+    return ajaxRequest.get(`/api/v1/Video/GetList`, options);
 }
 export const videoBatchRecovery = (isDelete, idList) => {
-    return ajaxRequest.put(`/api/Video/ChangeDeleteStatus/${isDelete}`, idList);
+    return ajaxRequest.put(`/api/v1/Video/ChangeDeleteStatus/${isDelete}`, idList);
 }
 
 /**
@@ -54,10 +54,10 @@ export const videoBatchRecovery = (isDelete, idList) => {
  * @param {*} option 
  */
 export const getAudioList = options => {
-    return ajaxRequest.get(`/api/Audio/GetList`, options);
+    return ajaxRequest.get(`/api/v1/Audio/GetList`, options);
 }
 export const audioBatchRecovery = (isDelete, idList) => {
-    return ajaxRequest.put(`/api/Audio/ChangeDeleteStatus/${isDelete}`, idList);
+    return ajaxRequest.put(`/api/v1/Audio/ChangeDeleteStatus/${isDelete}`, idList);
 }
 
 /**
@@ -65,8 +65,8 @@ export const audioBatchRecovery = (isDelete, idList) => {
  * @param {*} option 
  */
 export const getPicList = options => {
-    return ajaxRequest.get(`/api/Picture/GetList`, options);
+    return ajaxRequest.get(`/api/v1/Picture/GetList`, options);
 }
 export const picBatchRecovery = (isDelete, idList) => {
-    return ajaxRequest.put(`/api/Picture/ChangeDeleteStatus/${isDelete}`, idList);
+    return ajaxRequest.put(`/api/v1/Picture/ChangeDeleteStatus/${isDelete}`, idList);
 }

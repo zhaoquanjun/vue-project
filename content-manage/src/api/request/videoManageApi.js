@@ -11,18 +11,18 @@ import * as ajaxRequest from "../ajaxRequest";
  * @param {*} option 
  */
 export const getList = options => {
-    return ajaxRequest.get(`/api/Video/GetList`, options);
+    return ajaxRequest.get(`/api/v1/Video/GetList`, options);
 }
 export const batchRemove = (isDelete, idList) => {
-    return ajaxRequest.put(`/api/Video/ChangeDeleteStatus/${isDelete}`, idList);
+    return ajaxRequest.put(`/api/v1/Video/ChangeDeleteStatus/${isDelete}`, idList);
 }
 
 export const changeCategory = (categoryId, idList) => {
-    return ajaxRequest.put(`/api/Video/ChangeCategory/${categoryId}`, idList);
+    return ajaxRequest.put(`/api/v1/Video/ChangeCategory/${categoryId}`, idList);
 }
 
 export const rename = (id, newName) => {
-    return ajaxRequest.put(`/api/Video/${id}`, JSON.stringify(newName));
+    return ajaxRequest.put(`/api/v1/Video/${id}`, JSON.stringify(newName));
 }
 
 
