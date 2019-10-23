@@ -50,5 +50,4 @@ const enbironmemy = {
     scope,
     designerManageApi
 };
-console.log('0000324')
 export default enbironmemy;
