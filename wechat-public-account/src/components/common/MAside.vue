@@ -20,7 +20,7 @@
                     <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                     <i
-                        v-if="menuHasChild(i) && isLeftNavComponentsShow"
+                        v-if="menuHasChild(i)"
                         :class="{'active-color':curPath==it.code,}"
                         class="iconfont iconicon-des-Arrow"
                     ></i>
@@ -65,7 +65,13 @@ export default {
     },
     methods: {
         changeCurHoverItem(i) {
-            this.curIndex = i;
+            if(i==-1) {
+                this.curIndex = i;
+            } else {
+                setTimeout(()=>{
+                    this.curIndex = i;
+                },500)
+            }
         },
         skipPages(item, i) {
             let [path, url] = item.menuUrl.split("/");
@@ -225,7 +231,7 @@ export default {
         }
         .iconicon-des-Arrow{
             position: absolute;
-            right: 5px;
+            left: 130px;
             font-size: 14px;
             vertical-align: middle;
             color: #B9CBCF;

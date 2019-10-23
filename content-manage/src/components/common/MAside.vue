@@ -1,11 +1,11 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',backgroundColor:'#fff',borderRight:border}"
+        :style="{width:width+'px',backgroundColor:'#F8FAFC',borderRight: '1px solid rgb(229, 229, 229)'}"
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <el-aside class="m-asideleft" :style="{width:width+'px'}">
+        <el-aside class="m-asideleft" :style="{width:150+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
@@ -16,33 +16,30 @@
                     @mouseenter="changeCurHoverItem(i)"
                     @click="skipPages(it,i)"
                 >
+                    <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
                     <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                     <i
-                        v-if="menuHasChild(i) && isLeftNavComponentsShow"
+                        v-if="menuHasChild(i)"
                         :class="{'active-color':curPath==it.code,}"
                         class="iconfont iconicon-des-Arrow"
                     ></i>
                 </li>
             </ul>
         </el-aside>
-        <!--  :menuList="menuList[curIndex]" -->
-        <!--  -->
         <LeftNavComponents
             :subTitle="subTitle"
             :lastRoute="lastRoute"
             v-if="isLeftNavComponentsShow"
-            :style="{width:width1+'px !important',backgroundColor:'#fff',height: '100%',display:display,borderRight:'1px solid #e6e6e6'}"
+            :style="{width: 150 + 'px !important',backgroundColor:'#fff',height: '100%',borderRight:'1px solid #e6e6e6' }"
             class="m-asideright"
             :menuList="menuListChild"
         ></LeftNavComponents>
     </div>
 </template>
 <script>
-import { getSliderMenuList } from "@/api/request/user.js";
+import { getSliderMenuList } from "@/api/index";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
-import { siteDomain } from "@/environment/index";
-
 export default {
     data() {
         return {
@@ -62,25 +59,26 @@ export default {
     components: {
         LeftNavComponents
     },
-    mounted(){
-        this.menuHasChild(0)
-    },
     methods: {
         changeCurHoverItem(i) {
-            this.curIndex = i;
-        },
-        skipPages(item, i) {
-            let [path, url] = item.menuUrl.split("/");
-            if (!item.path) return;
-            if (siteDomain == path) {
-                this.$router.push(item.path);
+            if(i==-1) {
+                this.curIndex = i;
             } else {
-                window.location.href = "//" + item.menuUrl;
+                setTimeout(()=>{
+                    this.curIndex = i;
+                },500)
             }
         },
+        skipPages(item, i) {
+            let path = item.menuUrl.split("/")[1];
+            if (!item.path) {
+                return;
+            }
+            this.$router.push(item.path);
+        },
         collapseOpen(width, time) {
-            this.width = width;
-            this.width1 = 150
+            this.width = 300;
+            this.width1 = 150;
             this.display = "block";
             this.time = time + "s";
             this.border = "none";
@@ -116,7 +114,7 @@ export default {
                 case "role":
                     return "iconicon-chengyuan";
                 case "template":
-                    return "iconicon-mobanguanli"       
+                    return "iconicon-mobanguanli"    
             }
         },
         menuHasChild(index){
@@ -140,7 +138,7 @@ export default {
             if (!this.$store.getters.getMenuList) return;
             let item = this.$store.getters.getMenuList[this.curIndex];
             if (item && item.children) {
-                this.subTitle=item.name
+                 this.subTitle=item.name
                 return true;
             } else {
                 return false;
@@ -149,14 +147,14 @@ export default {
     },
     watch: {
         $route(to, from) {
+            let routerList = this.$route.path.split("/");
             let [, firstRoute, lastRoute] = this.$route.path.split("/");
+            this.lastRoute = routerList[routerList.length-1];
             this.curPath = firstRoute;
-            this.lastRoute = lastRoute;
         }
     }
 };
 </script>
-
 <style scoped>
 .m-aside {
     position: absolute;
@@ -164,11 +162,16 @@ export default {
     top: 0px;
     /* bottom: 0; */
     z-index: 10;
+    overflow: hidden;
+    transition: 0.3s ease-in;
+    /* transition:  0.3s linear;  */
 }
 .m-asideleft {
     overflow: hidden;
+    /* transition:  0.3s linear;  */
     /* height: 100%; */
 }
+
 .m-asideright {
     width: 0px !important;
     position: absolute;
@@ -186,7 +189,6 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 选中的样式
-
 .active-color {
     color: #0595e6 !important;
 }
@@ -201,7 +203,7 @@ export default {
 .left-menu {
     // border-right: solid 1px #e6e6e6;
     background: #fff;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
@@ -211,7 +213,6 @@ export default {
         border-left: 4px solid #fff;
         .menu-icon {
             display: inline-block;
-            font-size: 22px;
             font-size: 20px;
             width: 60px;
             text-align: center;
@@ -220,7 +221,7 @@ export default {
         }
         .iconicon-des-Arrow{
             position: absolute;
-            right: 5px;
+            left: 130px;
             font-size: 14px;
             vertical-align: middle;
             color: #B9CBCF;
