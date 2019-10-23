@@ -5,7 +5,9 @@
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <el-aside class="m-asideleft" :style="{width:150+'px'}">
+        <el-aside 
+            class="m-asideleft"
+            :style="{width:150+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
@@ -20,7 +22,7 @@
                     <i class="menu-icon iconfont" :class="[iconfonts(it.code)]"></i>
                     <span class="menu-item-content">{{it.name}}</span>
                     <i
-                        v-if="menuHasChild(i) && isLeftNavComponentsShow"
+                        v-if="menuHasChild(i)"
                         :class="{'active-color':curPath==it.code,}"
                         class="iconfont iconicon-des-Arrow"
                     ></i>
@@ -64,11 +66,10 @@ export default {
             this.curIndex = i;
         },
         skipPages(item, i) {
-            let path = item.menuUrl.split("/")[1];
-            if (!item.path) {
+            if (item.children && item.children.length> 0) {
                 return;
             }
-            this.$router.push(item.path);
+            window.location.href = "//" + item.menuUrl;
         },
         collapseOpen(width, time) {
             this.width = 300;
