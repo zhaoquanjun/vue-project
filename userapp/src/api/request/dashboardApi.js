@@ -2,6 +2,18 @@ import environment from "@/environment/index";
 
 import * as ajaxRequest from "../ajaxRequest";
 
+// 获取dashboard站点信息
+export const getTodoInfo = (siteId) => {
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Dashboard/GetTodoInfo/${siteId}`);
+};
+// 获取dashboard内容数量
+export const getContentInfo = () => {
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Dashboard/GetContentInfo`);
+};
+// 判断是否是管理员
+export const amIAdmin = () => {
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Dashboard/AmIAdmin`);
+};
 /**
  * 更改appName
  */
@@ -58,7 +70,7 @@ export const getApplicationsByUserId = () => {
 /**
  * 切换app记录appId
  */
-export const updateUserLastAppIdAndCookie = (appId) => {    
+export const updateUserLastAppIdAndCookie = (appId) => {
     return ajaxRequest.post(`${environment.memberManageApi}/api/v1/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
 }
 /**
@@ -107,6 +119,6 @@ export const updateSiteTypeAndIndustry = (siteId, siteType, firstIndustryId, sec
  * time:2019.08.08
  **/
 export const CreateSite = (language, siteName) => {
-    let para = { language: language, siteName: siteName};
+    let para = { language: language, siteName: siteName };
     return ajaxRequest.post(`${environment.memberManageApi}/api/v1/siteInfo/CreateSite`, para);
 }
