@@ -39,80 +39,80 @@ export const getPageData = () => {
 }
 
 export const getArticleList = (options) => {
-  return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetNewsList/${options.pageIndex}/${options.pageSize}`, options);
+  return ajaxRequest.get(`${environment.newsApi}/api/v1/WeiXin/GetNewsList/${options.pageIndex}/${options.pageSize}`, options);
 }
 
 export const getArticleCategory = () => {
-  return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetNewsCategoryTree`);
+  return ajaxRequest.get(`${environment.newsApi}/api/v1/WeiXin/GetNewsCategoryTree`);
 }
 
 export const getProductList = options => {
-  return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetProductList`, options);
+  return ajaxRequest.get(`${environment.newsApi}/api/v1/WeiXin/GetProductList`, options);
 }
 
 export const getProductCategory = () => {
-  return ajaxRequest.get(`${environment.newsApi}/api/WeiXin/GetProductCategoryTree`);
+  return ajaxRequest.get(`${environment.newsApi}/api/v1/WeiXin/GetProductCategoryTree`);
 }
 
 // 获取菜单树结构
 export const getMenuTree = (SiteId) => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuTree/${SiteId}`);
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/CustomDefineMenu/GetMenuTree/${SiteId}`);
 }
 // 获取菜单单个详情
 export const getMenuDetail = (siteId, id) => {
-  return ajaxRequest.get(`${environment.wechataccountApi}/api/CustomDefineMenu/GetMenuDetail/${siteId}/${id}`);
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/CustomDefineMenu/GetMenuDetail/${siteId}/${id}`);
 }
 // 新增菜单
 export const addMenu = options => {
-  return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/CreateMenu`,options);
+  return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/CustomDefineMenu/CreateMenu`,options);
 }
 // 保存并更新
 export const updateMenu = options => {
-  return ajaxRequest.put(`${environment.wechataccountApi}/api/CustomDefineMenu/UpdateMenu`,options);
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/CustomDefineMenu/UpdateMenu`,options);
 }
 // 保存并发布
 export const publishMenu = options => {
-  return ajaxRequest.put(`${environment.wechataccountApi}/api/CustomDefineMenu/PublishMenu`,options);
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/CustomDefineMenu/PublishMenu`,options);
 }
 // 删除菜单
 export const removeMenu = (siteId, id) => {
-  return ajaxRequest._delete(`${environment.wechataccountApi}/api/CustomDefineMenu/RemoveMenu/${siteId}/${id}`);
+  return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/CustomDefineMenu/RemoveMenu/${siteId}/${id}`);
 }
 // 调整菜单排序
 export const modifyMenuOrder = (siteId, options) => {
-  return ajaxRequest.put(`${environment.wechataccountApi}/api/CustomDefineMenu/ModifyMenuOrder/${siteId}`,options);
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/CustomDefineMenu/ModifyMenuOrder/${siteId}`,options);
 }
 
 // 图片区域
 export const getPicList = options => {
-  return ajaxRequest.get(`${environment.imageApi}/api/Picture/GetList`, options);
+  return ajaxRequest.get(`${environment.imageApi}/api/v1/Picture/GetList`, options);
 }
 export const imgBatchRemove = (isDelete, idList) => {
-  return ajaxRequest.put(`${environment.imageApi}/api/Picture/ChangeDeleteStatus/${isDelete}`, idList);
+  return ajaxRequest.put(`${environment.imageApi}/api/v1/Picture/ChangeDeleteStatus/${isDelete}`, idList);
 }
 
 export const changeCategory = (categoryId, idList) => {
-  return ajaxRequest.put(`${environment.imageApi}/api/Picture/ChangeCategory/${categoryId}`, idList);
+  return ajaxRequest.put(`${environment.imageApi}/api/v1/Picture/ChangeCategory/${categoryId}`, idList);
 }
 
 export const imgRename = (id, newName) => {
-  return ajaxRequest.put(`${environment.imageApi}/api/Picture/${id}`, JSON.stringify(newName));
+  return ajaxRequest.put(`${environment.imageApi}/api/v1/Picture/${id}`, JSON.stringify(newName));
 }
 
 export const get = () => {
-  return ajaxRequest.get(`${environment.imageApi}/api/PictureCategory`);
+  return ajaxRequest.get(`${environment.imageApi}/api/v1/PictureCategory`);
 }
 export const create = entity => {
-  return ajaxRequest.post(`${environment.imageApi}/api/PictureCategory`, entity);
+  return ajaxRequest.post(`${environment.imageApi}/api/v1/PictureCategory`, entity);
 }
 export const batchRemove = idList => {
-  return ajaxRequest._delete(`${environment.imageApi}/api/PictureCategory`, { data: idList });
+  return ajaxRequest._delete(`${environment.imageApi}/api/v1/PictureCategory`, { data: idList });
 }
 export const rename = (id, newName) => {
-  return ajaxRequest.put(`${environment.imageApi}/api/PictureCategory/${id}`, JSON.stringify(newName));
+  return ajaxRequest.put(`${environment.imageApi}/api/v1/PictureCategory/${id}`, JSON.stringify(newName));
 }
 export const modifyNode = (id, parentId, idOrderByArr) => {
-  return ajaxRequest.put(`${environment.imageApi}/api/PictureCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);
+  return ajaxRequest.put(`${environment.imageApi}/api/v1/PictureCategory/ModifyNode/${id}/${parentId}`, idOrderByArr);
 }
 
 
@@ -127,7 +127,7 @@ export const uploadImg = (imgUrl) => {
     imgUrl
   }
   console.log(store)
-  return ajaxRequest.post(`${environment.wechataccountApi}/api/CustomDefineMenu/UploadImg`, params);
+  return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/CustomDefineMenu/UploadImg`, params);
 }
 
 //微信推广

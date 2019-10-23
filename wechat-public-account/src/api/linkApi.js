@@ -19,25 +19,25 @@ export const getContentList = options => {
 }
 
 export const getArticleList = (options) => {
-  return ajaxRequest.get(`${environment.contentApiUri}/api/News/GetNewsList/${options.pageIndex}/${options.pageSize}`,options);
+  return ajaxRequest.get(`${environment.contentApiUri}/api/v1/News/GetNewsList/${options.pageIndex}/${options.pageSize}`,options);
 }
 
 export const getArticleCategory = () => {
-  return ajaxRequest.get(`${environment.contentApiUri}/api/NewsCategory/GetTree`);
+  return ajaxRequest.get(`${environment.contentApiUri}/api/v1/NewsCategory/GetTree`);
 }
 
 export const getProductList = options => {
-  return ajaxRequest.get(`${environment.contentApiUri}/api/product/GetList`, options);
+  return ajaxRequest.get(`${environment.contentApiUri}/api/v1/product/GetList`, options);
 }
 
 export const getProductCategory = () => {
-  return ajaxRequest.get(`${environment.contentApiUri}/api/ProductCategory`);
+  return ajaxRequest.get(`${environment.contentApiUri}/api/v1/ProductCategory`);
 }
 
 export const getFileCategory  = () => {
-  return ajaxRequest.get(`${environment.contentApiUri}/api/FileCategory`);
+  return ajaxRequest.get(`${environment.contentApiUri}/api/v1/FileCategory`);
 }
 
 export const getFileList = options => {
-  return ajaxRequest.get(`${environment.contentApiUri}/api/file/GetList`, options);
+  return ajaxRequest.get(`${environment.contentApiUri}/api/v1/file/GetList`, options);
 }
