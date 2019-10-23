@@ -89,7 +89,6 @@ axios.interceptors.response.use(
     // 服务器状态码不是200的情况    
     error => {
         // tryHideFullScreenLoading()
-        console.log(error, "error");
         let status = error.response.status;
         if (error.response.status) {
             switch (error.response.status) {
@@ -190,11 +189,9 @@ export function _delete(url, params) {
     return new Promise((resolve, reject) => {
         axios.delete(url, params)
             .then(res => {
-                console.log(res)
                 resolve(res);
             })
             .catch(err => {
-                console.log(err)
                 reject(err)
             })
     });

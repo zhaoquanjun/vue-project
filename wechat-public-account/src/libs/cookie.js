@@ -4,7 +4,7 @@ let domain;
 if (process.env.NODE_ENV === 'development') {
     domain = ""
 }else{
-    domain = { domain: '.clouddream.net' }
+    domain = { domain: '.wezhan.net' }
 }
 
 

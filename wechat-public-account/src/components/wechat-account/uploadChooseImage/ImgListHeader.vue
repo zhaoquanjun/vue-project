@@ -66,6 +66,7 @@
   </el-header>
 </template>
 <script>
+import environment from "@/environment/index";
 export default {
   props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
   data() {
@@ -98,7 +99,7 @@ export default {
     },
     switchUploadBoxShowStatus() {
       //this.$emit("switchUploadBoxShowStatus");
-      window.open("https://content.console.clouddream.net/content/picture");
+      window.open(environment.redirectUrl.addPicture);
     },
     switchIsDesc() {
       this.picSearchOptions.isDescending = !this.picSearchOptions.isDescending;

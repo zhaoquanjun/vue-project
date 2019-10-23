@@ -573,7 +573,6 @@ export default {
     beforeAvatarUpload(file) {
       this.headers.Authorization =
         "Bearer " + this.$store.state.user.accessToken.Authorization;
-      console.log(this.$store.state.dashboard);
       this.headers.appId = this.$store.state.dashboard.appId;
 
       const isPic =
@@ -607,7 +606,6 @@ export default {
     beforeAvatarUploadMobile(file) {
       this.headersMobile.Authorization =
         "Bearer " + this.$store.state.user.accessToken.Authorization;
-      console.log(this.$store.state.dashboard);
       this.headersMobile.appId = this.$store.state.dashboard.appId;
 
       const isPic =
@@ -666,7 +664,6 @@ export default {
       let { data, status } = await templateApi.getSiteTemplates(para);
       this.$Loading.hide();
       if (status == 200) {
-        console.log(data);
         this.templatePage = data;
         this.templateInfo = data.items;
         this.formatTime();
