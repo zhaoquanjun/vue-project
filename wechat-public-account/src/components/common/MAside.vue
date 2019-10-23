@@ -13,7 +13,7 @@
                     :class="{'menu-bg':i==2,'menu-hover':curIndex==i}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
-                    @mouseenter="changeCurHoverItem(i)"
+                    @mouseenter="changeCurHoverItem(it,i)"
                     @click="skipPages(it,i)"
                 >
                     <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
@@ -64,39 +64,26 @@ export default {
         LeftNavComponents
     },
     methods: {
-        changeCurHoverItem(i) {
-            if(i==-1) {
-                this.curIndex = i;
+        changeCurHoverItem(it,i) {
+            this.curIndex = i;
+            if(it.children && it.children.length > 0) {
+                this.width = 300;
             } else {
-                setTimeout(()=>{
-                    this.curIndex = i;
-                },500)
+                this.width = 150;
             }
         },
         skipPages(item, i) {
-            let [path, url] = item.menuUrl.split("/");
-            if (!item.path) return;
-            if (siteDomain == path) {
-                this.$router.push(item.path);
-            } else {
-                window.location.href = "//" + item.menuUrl;
+            if (item.children && item.children.length> 0) {
+                return;
             }
+            window.location.href = "//" + item.menuUrl;
         },
         collapseOpen(width, time) {
             this.$store.commit("SET_DIALOG",true)
             this.width = 300;
-            this.width1 = 150;
-            this.display = "block";
-            this.time = time + "s";
-            this.border = "none";
         },
         collapseClose() {
             this.width = 60;
-            this.width1 = 0;
-            this.display = "none";
-            this.time = "0s";
-            this.curIndex = -1;
-            this.border = "1px solid #e5e5e5";
         },
         iconfonts(code) {
             switch (code) {
@@ -173,7 +160,7 @@ export default {
     /* bottom: 0; */
     z-index: 10;
     overflow: hidden;
-    transition: 0.3s ease-in;
+    transition: 0.2s ease-in-out;
     /* transition:  0.3s linear;  */
 }
 .m-asideleft {

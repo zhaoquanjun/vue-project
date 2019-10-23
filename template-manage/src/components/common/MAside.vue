@@ -5,7 +5,9 @@
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
-        <el-aside class="m-asideleft" :style="{width:150+'px'}">
+        <el-aside 
+            class="m-asideleft"
+            :style="{width:150+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
@@ -13,7 +15,7 @@
                     :class="{'menu-bg':curPath==it.code,'menu-hover':curIndex==i}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
-                    @mouseenter="changeCurHoverItem(i)"
+                    @mouseenter="changeCurHoverItem(it,i)"
                     @click="skipPages(it,i)"
                 >
                     <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
@@ -60,36 +62,25 @@ export default {
         LeftNavComponents
     },
     methods: {
-        changeCurHoverItem(i) {
-            if(i==-1) {
-                this.curIndex = i;
+        changeCurHoverItem(it,i) {
+            this.curIndex = i;
+            if(it.children && it.children.length > 0) {
+                this.width = 300;
             } else {
-                setTimeout(()=>{
-                    this.curIndex = i;
-                },500)
+                this.width = 150;
             }
         },
         skipPages(item, i) {
-            let path = item.menuUrl.split("/")[1];
-            if (!item.path) {
+            if (item.children && item.children.length> 0) {
                 return;
             }
-            this.$router.push(item.path);
+            window.location.href = "//" + item.menuUrl;
         },
         collapseOpen(width, time) {
             this.width = 300;
-            this.width1 = 150;
-            this.display = "block";
-            this.time = time + "s";
-            this.border = "none";
         },
         collapseClose() {
             this.width = 60;
-            this.width1 = 0;
-            this.display = "none";
-            this.time = "0s";
-            this.curIndex = -1;
-            this.border = "1px solid #e5e5e5";
         },
         iconfonts(code) {
             switch (code) {
@@ -163,7 +154,7 @@ export default {
     /* bottom: 0; */
     z-index: 10;
     overflow: hidden;
-    transition: 0.3s ease-in;
+    transition: 0.2s ease-in-out;
     /* transition:  0.3s linear;  */
 }
 .m-asideleft {

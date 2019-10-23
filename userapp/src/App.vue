@@ -39,7 +39,6 @@ export default {
 .common-container {
     padding-top: 50px;
     width: 100%;
-    overflow: hidden;
 }
 .common-aside {
     width: 60px !important;
