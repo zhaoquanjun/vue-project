@@ -1,17 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import {
-  defaultRoutes
-} from "./routes"
+import {  defaultRoutes } from "./routes"
+import { getLocal } from "@/libs/local"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
-import {
-  setLocal,
-  getLocal,
-  removeLocal
-} from '@/libs/local'
+
 Vue.use(VueRouter);
 let router = new VueRouter({
   mode: "history",
@@ -19,24 +12,32 @@ let router = new VueRouter({
   routes: defaultRoutes
 });
 export default router;
-let accessToken = store.state.accessToken.Authorization;
+
+console.log(process.env.NODE_ENV ,'process.env.NODE_ENV')
+
 let appId = store.state.dashboard.appId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
-  NProgress.start()
-  if (!to.meta.requiresAuth) {
-    if (!appId) {
-      await store.dispatch('_updateAppIdToCookie')
-    }
-    store.dispatch('_getMenuListData')
-    next()
-    return
+
+  let user = await securityService.getUser();
+  let accessToken;
+  if (user) {
+    accessToken = user.access_token;
+    store.commit("SET_USER",accessToken)
   }
-  if (to.name !== "callback") {
-    if (accessToken) {
-      if (!appId) {
-        await store.dispatch('_updateAppIdToCookie')
+  if (accessToken) {
+    if (to.path !== "/callback") {
+   
+      if (!to.meta.requiresAuth) {
+        if (!appId) {
+          await store.dispatch('_updateAppIdAndSiteIdToCookie')
+        }
+        store.dispatch('_getMenuListData')
         next()
+        return
+      }
+      if (process.env.NODE_ENV === 'development') {
+        if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
       }
       if (!getLocal("authList")) await store.dispatch('_getMenuListData');
       let r = await store.dispatch('getCurRouteAuth', to.path);
@@ -47,26 +48,15 @@ router.beforeEach(async (to, from, next) => {
         next('/404')
       }
     } else {
-
-      securityService.getUser().then(async (data) => {
-        if (!data) {
-          securityService.signIn();
-          next()
-        } else {
-          store.commit("SET_USER", data);
-          await store.dispatch('_updateAppIdToCookie')
-          await store.dispatch('_getMenuListData')
-          await store.dispatch('_getAppHeadInfo')
-          next()
-        }
-      })
+      next()
     }
   } else {
-    next()
+    if(to.path == "/callback" || to.path == "/401"){
+      next()
+    }else{
+      securityService.signIn(to.path)
+    }
   }
 
 });
 
-router.afterEach(() => {
-  NProgress.done()
-})

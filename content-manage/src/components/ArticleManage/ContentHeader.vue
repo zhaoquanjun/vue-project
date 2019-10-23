@@ -286,7 +286,9 @@ export default {
     .add-article {
         background: rgba(1, 192, 222, 1);
         color: #fff;
-
+        &:hover{
+            opacity: 0.8;
+        }
 
     }
 }
@@ -295,5 +297,8 @@ export default {
     height: 32px;
     border: 1px solid #e5e5e5;
     border-radius: 2px;
+    &:hover{
+        opacity: 0.8;
+    }
 }
 </style>

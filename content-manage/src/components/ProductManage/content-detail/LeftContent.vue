@@ -114,7 +114,7 @@
                             <span style="font-size: 16px;">我的图片</span>
                             <button @click="cancelEditorImg">X</button>
                         </el-header>
-                        <modal-content ref="imgList" :isGrid="true" :multiple="true"  @getImgInfo="getImgInfo">
+                        <modal-content ref="imgList" :isGrid="true" :multiple="true"  @getImgInfo="getImgInfo" :isPopup="true">
                             <div slot="modal-footer" class="modal-footer" style="">
                                 <button type="button" @click="getEditorImg" class="sure">确定</button>
                                 <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
@@ -127,19 +127,44 @@
                 <el-collapse v-model="activeName" accordion>
                     <el-collapse-item title="产品设置" name="1">
                         <el-form-item label="时间">
-                            <el-col :span="11">
-                                <el-form-item prop="createTime">
-                                    <el-date-picker
-                                        type="datetime"
-                                        v-model="detailData.publishTime"
-                                        placeholder="选择日期时间"
-                                        style="width: 100%;"
-                                    ></el-date-picker>
-                                </el-form-item>
-                            </el-col>
+                            <div>
+                                <div style="float:left">
+                                    <el-col>
+                                        <el-form-item prop="createTime">
+                                            <el-date-picker type="datetime"
+                                                            v-model="detailData.publishTime"
+                                                            placeholder="选择日期时间"
+                                                            style="width: 100%;"></el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+                                </div>
+                                <div style="float:left;margin-left: 35px;">
+                                    <span style="font-size:12px">
+                                        预览网站
+                                    </span>
+                                    <el-tooltip class="item" effect="dark" placement="top">
+                                        <div slot="content">
+                                            将在所选网站的二级域名下打开预览页面
+                                        </div>
+                                        <i class="iconfont iconyiwen"></i>
+                                    </el-tooltip>
+                                    <span class="select-sort">
+                                        <el-select size="small"
+                                                   :value="detailData.defaultSiteId == 0 ? null : detailData.defaultSiteId"
+                                                   placeholder="请选择"
+                                                   @change="changeSiteId">
+                                            <el-option v-for="item in siteOptions"
+                                                       :key="item.siteId"
+                                                       :label="item.siteName"
+                                                       :value="item.siteId"></el-option>
+                                        </el-select>
+                                    </span>
+                                </div>
+                            </div>
                         </el-form-item>
+
                         <el-form-item label="搜索关键词" prop="searchKeyword">
-                            <el-tooltip class="item" effect="dark" placement="right" >
+                            <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
                                     <br />结果更加准确，一篇产品最多可以设置5个关键词
@@ -149,20 +174,15 @@
                             <ul class="keyword-list" ref="keywordList">
                                 <li v-for="(item,index) in detailData.searchKeyword" :key="index">
                                     {{item}}
-                                    <i
-                                        class="el-icon-close"
-                                        @click.stop="removeCurKeyWord(index)"
-                                    ></i>
+                                    <i class="el-icon-close"
+                                       @click.stop="removeCurKeyWord(index)"></i>
                                 </li>
-                                <el-input
-                               
-                                    maxlength="10"
-                                    ref="keywordInput"
-                                    placeholder="每个关键词之间用回车键分离"
-                                    v-model="keywordValue"
-                                    @keyup.enter.native="keywords(keywordValue)"
-                                    @blur="keywords(keywordValue)"
-                                ></el-input>
+                                <el-input maxlength="10"
+                                          ref="keywordInput"
+                                          placeholder="每个关键词之间用回车键分离"
+                                          v-model="keywordValue"
+                                          @keyup.enter.native="keywords(keywordValue)"
+                                          @blur="keywords(keywordValue)"></el-input>
                             </ul>
                             <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
                         </el-form-item>
@@ -170,11 +190,9 @@
                         </el-form-item>
                         <el-form-item label="置頂" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
-                            <span
-                                style=" font-size: 14px; color: #606266;
+                            <span style=" font-size: 14px; color: #606266;
     vertical-align: middle;
-    padding:0  16px 0 32px ;"
-                            >仅登录用户可访问</span>
+    padding:0  16px 0 32px ;">仅登录用户可访问</span>
                             <el-switch v-model="detailData.isLoggedInCanView"></el-switch>
                         </el-form-item>
                     </el-collapse-item>
@@ -315,6 +333,7 @@ export default {
             ],
             value2: ["全部分类1", "全部分类2"],
 
+            siteOptions: null,
             activeName: "",
             activeName1: "",
             categoryName: [],
@@ -355,7 +374,8 @@ export default {
                 isTemplate: false, //
                 isSkuSwitchOn: false, //
                 isNeedShipping: false, //
-                isAllowComment: true
+                isAllowComment: true,
+                defaultSiteId: 0
             },
             rules: {
                 name: [
@@ -446,8 +466,9 @@ export default {
         this.curProduct = id;
         if (id != null || id != undefined) {
             this.getArticleDetail(id);
-            this.$emit("changePreviewId", id);
+            this.$emit("changeSaveWay", true);
         }
+        this.getSiteList();
     },
     methods: {
         textIndent(ele, width) {
@@ -500,6 +521,7 @@ export default {
             //       this.categoryId.push(item.id);
             //  })
             this.categoryIdList(this.detailData.productCategoryList);
+            this.$emit("changePreviewId", id, this.detailData.defaultSiteId);
         },
         categoryIdList(list) {
             this.categoryId = [];
@@ -531,7 +553,6 @@ export default {
             );
             disableRefObj.inSaveProcess = false;
             if (status === 200) {
-                this.$emit("changePreviewId", data);
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
                     cancelButtonText: "关闭",
@@ -542,6 +563,7 @@ export default {
                             this.resetForm("contentForm");
                             this.resetDetail();
                             this.$emit("changeSaveWay", false);
+                            this.$emit("changePreviewId", "", 0);
                             this.$emit("handlerClickNewAdd");
                             // this.$refs.detailCheckTree.resetChecked();
                            
@@ -549,6 +571,7 @@ export default {
                             this.curProduct = data;
                             this.detailData.id = data;
                             this.$emit("changeSaveWay", true);
+                            this.$emit("changePreviewId", data, this.detailData.defaultSiteId);
                         }
                     }
                 });
@@ -587,12 +610,14 @@ export default {
                             this.resetForm("contentForm");
                             this.resetDetail();
                             this.$emit("changeSaveWay", false);
+                            this.$emit("changePreviewId", "", 0);
                             this.$emit("handlerClickNewAdd");
                             this.$route.query.isEditor = 0;
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
                             this.$emit("changeSaveWay", true);
+                            this.$emit("changePreviewId", data, this.detailData.defaultSiteId);
                         }
                     }
                 });
@@ -720,7 +745,8 @@ export default {
                 isTemplate: false, //
                 isSkuSwitchOn: false, //
                 isNeedShipping: false, //
-                isAllowComment: true
+                isAllowComment: true,
+                defaultSiteId: 0
             };
             this.detailData = {...this.detailData,...detailData}
         },
@@ -735,6 +761,14 @@ export default {
                     return item.id != id;
                 }
             );
+        },
+        //获取app下所有站点
+        async getSiteList() {
+            let { data } = await productManageApi.getSiteList();
+            this.siteOptions = data;
+        },
+        changeSiteId(siteId) {
+            this.detailData.defaultSiteId = siteId;
         }
     },
 
@@ -816,11 +850,24 @@ export default {
 .modal-footer{
      height: 60px;
     position: absolute;
-    bottom: -23px;
+    bottom: -11px;
     right: 16px;
     width: 100%;
     z-index: 100;
     text-align: right;
+}
+.el-form-item__error {
+    color: #262626;
+    &::before {
+        display: inline-block;
+        content: "";
+        width: 13px;
+        height: 13px;
+        vertical-align: -2px;
+        padding-right: 8px;
+        background: url("~img/jian-icon.png") no-repeat center;
+        background-size: contain;
+    }
 }
 </style>
 <style scoped>

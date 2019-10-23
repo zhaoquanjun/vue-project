@@ -63,7 +63,6 @@ export default {
   },
   watch: {
     $route(to, from) {
-      // alert(1)
       console.log(this.$route);
       let [, firstRoute, lastRoute] = this.$route.path.split("/");
       this.lastRoute = lastRoute;

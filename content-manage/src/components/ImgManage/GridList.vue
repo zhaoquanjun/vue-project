@@ -43,7 +43,6 @@
                 :modal-append-to-body="false"
                 @close="closeDialog"
             >
-                <!-- //<img :src="picUrl"> -->
                 <el-carousel
                     :autoplay="false"
                     :initial-index="initial"
@@ -56,9 +55,9 @@
                         @click="prev"
                         class="el-carousel__arrow el-carousel__arrow--left left-prev"
                     >左</el-button>
-                    <el-carousel-item v-for="item in imgList" :key="item.id">
+                    <el-carousel-item >
                         <h3>
-                            <img width="100%" :src="fullOssUrl" />
+                            <img onload="if (this.naturalWidth > this.parentNode.clientWidth && this.naturalHeight > this.parentNode.clientHeight){if (this.naturalWidth / this.naturalHeight > this.parentNode.clientWidth / this.parentNode.clientHeight){this.style.maxHeight = '100%'; this.style.maxWidth = 'none';} else {this.style.maxWidth = '100%'; this.style.maxHeight = 'none';}}console.log(this.naturalWidth, this.naturalHeight, this.parentNode.clientWidth)" :src="fullOssUrl" />
                         </h3>
                     </el-carousel-item>
                     <el-button
@@ -148,6 +147,11 @@ export default {
                 }
             }
             return false
+        },
+        // 清空被选中的列表
+        clearSelectedList() {
+            this.seletedList = [];
+            this.$emit("handleSelectionChange", this.seletedList);
         },
         changePage(page) {
             this.picSearchOptions.pageIndex = page;

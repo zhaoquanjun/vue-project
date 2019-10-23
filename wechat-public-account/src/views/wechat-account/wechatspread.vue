@@ -6,14 +6,15 @@
         @getSiteId="getSiteId"
       />
     </div>
-    <div class="answer-tabs">
-      <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
-        <el-tab-pane label="页面推广" name="1"></el-tab-pane>
-        <el-tab-pane label="文章推广" name="2"></el-tab-pane>
-        <el-tab-pane label="产品推广" name="3"></el-tab-pane>
+    <div v-if="!isShowStatistics" class="answer-tabs">
+      <el-tabs v-model="replyType" type="card" @tab-click="getInfo">
+        <el-tab-pane label="页面推广" name="page"></el-tab-pane>
+        <el-tab-pane label="文章推广" name="news"></el-tab-pane>
+        <el-tab-pane label="产品推广" name="product"></el-tab-pane>
       </el-tabs>
+      <div class="add" @click="addSpread">新增推广</div>
     </div>
-    <div class="spread-continer">
+    <div v-if="!isShowStatistics" class="spread-continer">
       <template>
         <el-table
           :data="list"
@@ -23,17 +24,17 @@
           <el-table-column
             prop="pageTitle"
             label="页面标题"
-            width="180">
+            width="150">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享标题"
-            width="180">
+            width="150">
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享封面"
-            width="180">
+            width="150">
             <template slot-scope="scope">
               <img class="img" :src="scope.row.coverUrl">
             </template>
@@ -44,117 +45,234 @@
           </el-table-column>
           <el-table-column
             prop="shareCount"
-            label="阅读数">
+            label="阅读数"
+            width="110">
           </el-table-column>
           <el-table-column
-            prop="阅读数"
-            label="地址">
+            prop="createTime"
+            label="创建时间"
+            width="140">
+            <template slot-scope="scope">
+              <span>{{scope.row.createTime.slice(0,10)}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
-            width="180">
+            width="220">
             <template slot-scope="scope">
-              <i class="icon iconfont iconqiehuanxingshier" @click="handlelook(scope.row)"></i>
-              <i class="icon iconfont iconbianji"></i>
+              <i class="icon iconfont iconbianji" @click="handlelook(scope.row)"></i>
+              <i class="icon iconfont iconshanchu" @click="remove(scope.row)"></i>
+              <i class="icon iconfont iconshuju" @click="getStatistics(scope.row)"></i>
             </template>
           </el-table-column>
         </el-table>
       </template>
+      <div class="paging">
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          layout="total, sizes, prev, pager, next"
+          :total="TotalRecord"
+          :page-sizes="[10,20,50]"
+        ></el-pagination>
+      </div>
     </div>
+    <statistics 
+      v-if="isShowStatistics"
+      @closeStatistics="closeStatistics"
+      :shareInfo= "shareInfo"
+    >
+    </statistics>
     <sharePopup 
       v-if="isShow"
+      :infoData='infoData'
       @closeShare='closeShare'
     >
     </sharePopup>
+    <shareCode
+      v-show="isShowCode"
+      :shareId = "shareId"
+      :type = 'type'
+      @closeShareCode='closeShareCode'
+    >
+    </shareCode>
+    <PopUp
+      :model="model"
+      :AddType="replyType"
+      @handleClosePopup="handleClosePopup"
+      v-show="isShowPopup"
+    />
   </div>
 </template>
 
 <script>
 import ChangeSite from "@/components/common/changeSite";
 import SharePopup from "@/components/wechat-account/spread/share-popup.vue";
-import { unBind, getList } from "@/api/request/account.js";
+import ShareCode from "@/components/wechat-account/spread/share-code.vue";
+import Statistics from "@/components/wechat-account/spread/statistics.vue";
+import { unBind, getList, remove, getStatistics } from "@/api/request/account.js";
+import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import { notify } from "@/utlis/index.js";
+import {getLocal} from '@/libs/local'
 export default {
   data() {
     return {
       siteId: this.$store.state.dashboard.siteId,
-      replyType: '1',
-      PageSize: 10,
-      PageIndex: 1,
+      replyType: 'page',
+      PageSize: 10, //每页数
+      PageIndex: 1, //当前页面
+      TotalPage: 0, //总页数
+      TotalRecord: 0, //总数量
+      shareId: '',
       isShow: false,
-      list: [
-        {
-          shareUrl: "string",
-          id: 0,
-          siteId: 0,
-          entityType: "Page",
-          entityId: "string",
-          createTime: "2019-09-29T03:20:19.583Z",
-          coverUrl: "http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/nELZAKssX063m0lC_qj_rw.png",
-          shareTitle: "string",
-          pageTitle: "string",
-          description: "string",
-          authorizerAppId: "string",
-          shareCount: 0
-        }
-      ]
+      type: '',
+      isShowPopup: false,
+      isShowCode: false,
+      shareInfo: '',
+      infoData: {},
+      isShowStatistics: false,
+      model: {
+          PageIndex: null,
+          Type: null,
+          Id: null,
+          Href: null
+        },
+      curEditorItem: {
+        title: "",
+        description: "",
+        picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+        urlType: "",
+        urlData: "",
+        contentPageId: ''
+      },
+      list: []
     };
   },
   components: {
     ChangeSite,
-    SharePopup
+    PopUp,
+    SharePopup,
+    Statistics,
+    ShareCode
   },
   created() {
-    //this._getWxIsAuth();
+    let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+    if (!wx_status.isCertification) {
+        this._getWxIsAuth()
+    }
     this.getInfo();
   },
   methods: {
-    handleClick() {
-      console.log('www')
-    },
     headerClassName() {
       return 'header-row-class-name'
     },
     getSiteId(siteId) {
-      console.log('000')
+    
     },
     async getInfo(){
+      let EntityTyp = 'Page';
+      if (this.replyType == 'news') {
+        EntityTyp = 'News';
+      } else if (this.replyType == 'product') {
+        EntityTyp = 'Product';
+      }
       let option= {
-        PageSize: 10,
-        PageIndex: 1, //
-        EntityType: 'Page', //Page, News, Product
-        //Keyword: '',
+        PageSize: this.PageSize,
+        PageIndex: this.PageIndex, //
+        EntityType: EntityTyp, //Page, News, Product
         SiteId: this.siteId
       }
       let {data} = await getList(option)
-      console.log('list',data)
+      if(data&&data.list) {
+        this.list = data.list
+        this.TotalPage = data.totalPage
+        this.TotalRecord = data.totalRecord
+      }
     },
     //关闭弹窗
-    closeShare(val,data) {
+    closeShare(val,shareId,type) {
       this.isShow = val
-      if(data) {
-        console.log('share',data)
+      if(shareId) {
+        this.shareId = shareId
+        this.type = type
+        this.isShowCode = true
+      } else {
+        this.isShowCode = false
+        this.getInfo()
       }
+    },
+    // 关闭二维码
+    closeShareCode(){
+      this.isShowCode = false
+      this.getInfo()
     },
     //查看
     handlelook(val) {
       this.isShow = true
-      console.log(val)
+      this.infoData = val
     },
-
+    //删除handledelet
+    async remove(val){
+      let data = await remove(this.siteId,val.id)
+      if (data && data.status== 200) {
+        this.getInfo();
+      }
+    },
+    //新增推广
+    addSpread(){
+      this.isShowPopup = true
+    },
+    handleClosePopup (val,data){
+      this.isShowPopup = val
+      if (data) {
+        this.isShow = true
+        let entityId = ''
+        this.infoData = {
+          entityType: data.Type, //分享类型 文章 产品 页面
+          entityId: data.Href, //id
+          coverUrl: data.PicUrl, //封面图片
+          shareTitle: data.Title, //分享id
+          pageTitle: data.Title, //页面，文章，产品标题
+          description: "", //描述
+          pageInfoId: data.Type == 'Page' ? '': data.Id // 详情页id，页面推广时不选
+        }
+      }
+    },
+    //获取阅读分享数据
+    async getStatistics(item){
+      console.log('999',item)
+      this.shareInfo = item
+      this.isShowStatistics = true
+    },
+    closeStatistics(){
+      this.isShowStatistics = false
+    },
     // 切换站点刷新信息
     chooseWebsite(siteId) {
       this._getWxIsAuth()
     },
     // 校验是否已经授权认证
     async _getWxIsAuth() {
+      await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
+      this.siteId = this.$store.state.dashboard.siteId
       if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
         this.$router.replace({path:'/wechataccount/wxauther' });
       }
       this.accountInfo = this.$store.state.wxaccount.account_info
+    },
+    //分页 每页条数
+    handleSizeChange(val) {
+      this.PageSize = val
+      this.getInfo()
+    },
+    //分页 当前页数
+    handleCurrentChange(val){
+      this.PageIndex = val
+      this.getInfo()
     }
   }
 };
@@ -185,8 +303,29 @@ export default {
 <style lang="scss" scoped>
 .spread-setting__section {
     padding: 32px;
+    min-width: 1100px;
+    overflow-y: auto;
+    .iconfont {
+      margin-right: 20px !important;
+      cursor: pointer;
+    }
     .answer-tabs {
         padding-top: 32px;
+        position: relative;
+        .add {
+          position: absolute;
+          top: 42px;
+          right: 0px;
+          width:90px;
+          height:40px;
+          background:rgba(9,204,235,1);
+          border-radius:2px;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:40px;
+          text-align: center;
+          cursor: pointer;
+        }
     }
     .reply-wrap {
         padding: 32px 0;
@@ -201,9 +340,13 @@ export default {
         width: 37px;
         height: 32px;
       }
-      .iconqiehuanxingshier {
+      .iconbianji {
         margin-right: 40px;
       }
+    }
+    .paging {
+      margin-top: 40px;
+      text-align: right;
     }
 }
 </style>

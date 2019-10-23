@@ -89,7 +89,7 @@ export default {
             upload2Category: { label: "全部分类", id: 0 },
             uploadPicAction: `${environment.uploadPicUrl}/0`,
             headers: {
-                appId: "823EB3BD-93F4-4655-B833-D604A6EF2032",
+                appId: "",
                 Authorization: ""
             },
             uploadSucess: false,
@@ -158,10 +158,21 @@ export default {
             const isSizeOk = file.size / 1024 / 1024 < maxMb;
 
             if (!isPic) {
-                this.$message.error("上传头像图片只能是 图片 格式!");
+                 this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `上传头像图片只能是 图片 格式!`,
+                    showClose: false,
+                    duration: 1500
+                });
             }
             if (!isSizeOk) {
-                this.$message.error(`上传图片大小不能超过 ${maxMb}MB!`);
+                   this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `上传图片大小不能超过 ${maxMb}MB!`,
+                    showClose: false,
+                    duration: 1500
+                });
+               
             }
             return isPic && isSizeOk;
         },

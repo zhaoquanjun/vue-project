@@ -18,8 +18,8 @@ export const unBind = () => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/OAuth/unbind`, {siteId: store.state.dashboard.siteId,infoType:'WeixinOA'});
 }
 //获取域名列表
-export const getCdnDomainList = () => {
-  return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetCdnDomainList/${store.state.dashboard.siteId}`);
+export const getCdnDomainList = (siteId) => {
+  return ajaxRequest.get(`${environment.pageApi}/api/v1/WeiXin/GetCdnDomainList/${siteId}`);
 }
 //设置绑定域名SetPromotionUrl
 export const setPromotionUrl = (options) => {
@@ -131,6 +131,14 @@ export const uploadImg = (imgUrl) => {
 }
 
 //微信推广
+//新增微信推广
+export const addShare = (siteId,options) => {
+  return ajaxRequest.post(`${environment.wechataccountApi}/api/v1/WeChatShare/Add/${siteId}`, options);
+}
+//修改
+export const updataShare = (siteId,id,options) => {
+  return ajaxRequest.put(`${environment.wechataccountApi}/api/v1/WeChatShare/Update/${siteId}/${id}`, options);
+}
 //获取推广列表
 export const getList = params => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetList`, params);
@@ -139,4 +147,11 @@ export const getList = params => {
 export const getPageInfoList = (siteId, type) => {
   return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetPageInfoList/${siteId}/${type}`);
 }
-
+//获取详情页下拉列表
+export const remove = (siteId, id) => {
+  return ajaxRequest._delete(`${environment.wechataccountApi}/api/v1/WeChatShare/Remove/${siteId}/${id}`);
+} 
+//获取微信分享数据
+export const getStatistics = (siteId, shareId) => {
+  return ajaxRequest.get(`${environment.wechataccountApi}/api/v1/WeChatShare/GetStatistics/${siteId}/${shareId}`);
+}

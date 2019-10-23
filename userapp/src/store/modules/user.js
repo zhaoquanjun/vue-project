@@ -1,33 +1,26 @@
-import { setLocal, removeLocal } from '@/libs/local'
 import { getAppHeadInfo } from "@/api/request/dashboardApi.js"
+import { setLocal } from '@/libs/local'
 const user = {
   state: {
+    userInfo:"",
     accessToken: { Authorization: '' },
-    avatar: "",
-    userInfo:""
   },
-
   mutations: {
-    SET_USER: (state, user) => {
-      if (user) {
-        state.accessToken.Authorization = user.access_token;
-        setLocal('token', user.access_token);
-      } else {
-        state.accessToken.Authorization = '';
-        removeLocal('token');
-      }
-    },
     SET_USERINFO: (state, payload) => {
       state.userInfo = payload;
       setLocal("userInfo",payload)
     },
-    
+    SET_USER: (state, data) => {
+      if (data) {
+        state.accessToken.Authorization = data;
+      } 
+    },
   },
   actions: {
     async _set(context,data){
-     
-      await context.commit("SET_USER",data)
-      await context.dispatch('_updateAppIdAndSiteIdToCookie')
+      if (process.env.NODE_ENV === 'development') {
+        await context.dispatch('_updateAppIdAndSiteIdToCookie')
+      }
       await context.dispatch('_getMenuListData')
       await context.dispatch('_getAppHeadInfo')
     },

@@ -5,19 +5,22 @@
 </template>
 <script>
 import mgr from '@/services/authentication/oidcService'
-import {clearAllCookie} from "@/libs/local.js"
+import store from "@/store/index";
 export default {
   async created() {   
     try {
-      clearAllCookie()
+    
       var result = await mgr.signinRedirectCallback();
       var returnToUrl = '/'
       if (result.state !== undefined) { returnToUrl = result.state }
-      window.location = returnToUrl
+      await store.dispatch("_set", result)
+      window.location = window.location.origin + returnToUrl;
     } catch (e) {
-      window.location = '/401'
+      console.log(e)
     }
   }
 }
 </script>
+
+
 

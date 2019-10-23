@@ -5,37 +5,39 @@
 
 
 /**生产环境-- */
-let memberManageApi = 'http://api.content.console.wezhan.cn';
-let dashboardApi = 'http://api.dashboard.console.wezhan.cn';
-let templateApi = "http://api.wezhanproduce.console.wezhan.cn";
-let uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
-let authorityUrl = "http://login.console.wezhan.cn";
-let redirectUrl = "http://template.console.wezhan.cn/callback";
-let logoutRedirectUri = "http://template.console.wezhan.cn/index.html";
-let silentRedirectUri = 'http://template.console.wezhan.cn/static/silent-renew.html';
-let clientId = 'produce.api';
-let scope = "openid profile dashboard.api content.api designer.api produce.api";
-export let siteDomain = "template.console.wezhan.cn";
+
+const httpSchema = `http://`;
+let memberManageApi = `${httpSchema}api.content.console.wezhan.cn`;
+let dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
+let templateApi = `${httpSchema}api.wezhanproduce.console.wezhan.cn`;
+let uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/picture`;
+let authorityUrl = `${httpSchema}login.console.wezhan.cn`;
+let redirectUrl = `${httpSchema}template.console.wezhan.cn/callback`;
+let logoutRedirectUri = `${httpSchema}template.console.wezhan.cn/index.html`;
+let silentRedirectUri = `${httpSchema}template.console.wezhan.cn/static/silent-renew.html`;
+let clientId = `produce.api`;
+let scope = `openid profile dashboard.api content.api designer.api produce.api`;
+export let siteDomain = `template.console.wezhan.cn`;
 // 个人中心
-export let personalUrl = "//dashboard.console.wezhan.cn/personal";
-export let dashboardUrl = "http://dashboard.console.wezhan.cn/board";
+export let personalUrl = '//dashboard.console.wezhan.cn/personal';
+export let dashboardUrl = `${httpSchema}dashboard.console.wezhan.cn/board`;
 // 阿里云续费地址
-export let aliMarketUrl = "https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0";
+export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0';
 
 /**
  * 开发环境的URL
  */
 
-if (process.env.NODE_ENV === 'development') {
-    memberManageApi = 'http://api.content.console.wezhan.cn';
-    dashboardApi = 'http://api.dashboard.console.wezhan.cn';
-    templateApi = "http://api.wezhanproduce.console.wezhan.cn"
-    uploadPicUrl = 'http://api.content.console.wezhan.cn/api/picture';
-    authorityUrl = "http://login.console.wezhan.cn";
-    redirectUrl = "http://localhost:8083/callback";
-    logoutRedirectUri = "http://localhost:8083/index.html";
-    silentRedirectUri = 'http://localhost:8083/static/silent-renew.html';
-    clientId = 'dev.produce.api';
+if (process.env.NODE_ENV === `development`) {
+    memberManageApi = `${httpSchema}api.content.console.wezhan.cn`;
+    dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
+    templateApi = `${httpSchema}api.wezhanproduce.console.wezhan.cn`
+    uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/picture`;
+    authorityUrl = `${httpSchema}login.console.wezhan.cn`;
+    redirectUrl = `${httpSchema}localhost:8083/callback`;
+    logoutRedirectUri = `${httpSchema}localhost:8083/index.html`;
+    silentRedirectUri = `${httpSchema}localhost:8083/static/silent-renew.html`;
+    clientId = "dev.produce.api";
     scope = "openid profile dashboard.api content.api designer.api produce.api";
 };
 const enbironmemy = {

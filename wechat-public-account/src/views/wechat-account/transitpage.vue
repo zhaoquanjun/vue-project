@@ -9,7 +9,6 @@ export default {
     this._appendSpace();
     let param = this.$route.query;
     let str = '';
-    console.log(param)
     for (var k in param) {
       str += `${k}=${param[k]}&`;
     }
@@ -19,7 +18,6 @@ export default {
   methods: {
     async _transitPage(str) {
       let { data } = await transit(str);
-      console.log(data)
       notify(this, data, "error");
       setTimeout(function (){
         window.close();

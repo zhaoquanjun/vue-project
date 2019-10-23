@@ -12,8 +12,10 @@
             </span>
         </div>
         <div @click="handlerUpload"  class="upload-wrap" v-else>
-            <div class="upload-icon"></div>
-            <button class="handler-upload">点击上传</button>
+            <div>
+                <div class="upload-icon"></div>
+                <button class="handler-upload">点击上传</button>
+            </div>
         </div>
          <image-manage
             :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
@@ -70,16 +72,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .picture-wrap {
-    width: 100%;
-    height: 100%;
+    width: 180px;
     position: relative;
     overflow: hidden;
     text-align: center;
+    margin: 30px auto;
     flex: none;
     img {
         border-radius: 2px;
         width: 180px;
-        margin: 30px auto;
     }
     &:hover .mask {
         opacity: 1;
@@ -87,7 +88,7 @@ export default {
     .mask {
         opacity: 0;
         position: absolute;
-        width: 100%;
+        width: 180px;
         height: 100%;
         left: 0;
         top: 0;
@@ -105,12 +106,16 @@ export default {
     }
 }
 .upload-wrap {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
     min-height: 320px;
     text-align: center;
     cursor: pointer;
     .upload-icon {
         display: inline-block;
-        margin-top: 30px;
         width: 60px;
         height: 60px;
         background: url("~img/upload-icon.png") no-repeat center;
@@ -119,7 +124,6 @@ export default {
     .handler-upload {
         display: block;
         width: 60px;
-        margin: 0 auto;
         padding-top: 16px;
         color: #09cceb;
     }

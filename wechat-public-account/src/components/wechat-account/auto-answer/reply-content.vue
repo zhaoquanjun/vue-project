@@ -3,21 +3,34 @@
         <div>
             <slot name="keyword"></slot>
         </div>
-            <section class="reply-content">
-            <div class="radio-tabs">
+            <section class="reply-content clear">
+            <!-- <div class="radio-tabs">
                 <el-radio-group v-model="radio" @change="changeHandler">
                     <el-radio :label="1">图片</el-radio>
                     <el-radio :label="2">文字</el-radio>
                     <el-radio :label="3">图文</el-radio>
                 </el-radio-group>
-            </div>
+            </div> -->
+            <ul class="radio-tabs">
+                <li @click="changeHandler(1)" :class="{active: radio == 1}">
+                <i class="icon iconfont iconicon-des-picture"></i>
+                <span>图片</span>
+                </li>
+                <li @click="changeHandler(2)" :class="{active: radio == 2}">
+                <i class="icon iconfont iconicon-editext"></i>
+                <span>文字</span>
+                </li>
+                <li @click="changeHandler(3)" :class="{active: radio == 3}">
+                <i class="icon iconfont iconicon-picword"></i>
+                <span>图文</span>
+                </li>
+            </ul>
             <div class="slot-content" :class="picture">
                 <div class="slot-item">
                     <slot></slot>
                 </div>
             </div>
         </section>
-      
         <footer class="footer-btn">
             <button class="handler-item" @click="handlerSave">保存</button>
             <button class="handler-item handler-delete" :class="{'disabled-btn':!isSet}" @click="handlerDelete" :disabled="!isSet">删除回复</button>
@@ -68,17 +81,34 @@ export default {
 .reply {
     .reply-content {
         min-height: 444px;
-     
         border: 1px solid #e5e5e5;
         border-radius: 2px;
         .radio-tabs {
-            padding: 26px 50px;
-            border-bottom: 1px solid #e5e5e5;
+            height: 40px;
+            background:rgba(240,243,247,1);
+            border-radius:1px 1px 0px 0px;
+            li {
+                float: left;
+                font-size:14px;
+                font-weight:400;
+                color:rgba(38,38,38,1);
+                line-height:40px;
+                padding: 0 15px 0 30px;
+                cursor: pointer;
+                i {
+                    font-size: 12px;
+                    margin-right: 8px;
+                }
+                &.active {
+                    color: #09CCEB;
+                }
+            }
         }
         .slot-content {
+            float: left;
             min-height: 373px;
+            width: 100%;
             overflow: auto;
-            height: 373px;
         }
         .picture {
             display: flex;

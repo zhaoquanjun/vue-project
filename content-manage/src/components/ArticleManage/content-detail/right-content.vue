@@ -5,30 +5,7 @@
                 <span class="article-cover">文章封面</span>
             </div>
             <div>
-                <!-- <el-upload
-                    class="avatar-uploader"
-                    :class="{'border-line':!imageUrl1}"
-                    :action="uploadPicAction"
-                    :headers="headers"
-                    :show-file-list="false"
-                    :on-success="handleAvatarSuccess"
-                    :before-upload="beforeAvatarUpload"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                >
-                    <div v-if="imageUrl1" class="imgWrap">
-                        <img :src="imageUrl1" class="avatar" />
-                        <span class="el-upload-list__item-actions">
-                            <i class="icon-change"></i>
-                            <i @click.stop="handleRemove" class="el-icon-delete"></i>
-                        </span>
-                    </div>
-
-                    <template v-else>
-                        <i class="el-icon-plus avatar-uploader-icon"></i>
-                        <i class="avatar-text" style=" display: block;">添加图片</i>
-                    </template>
-                </el-upload>-->
+              
                 <div class="avatar-uploader" :class="{'border-line':!imageUrl1}">
                     <div v-if="imageUrl1" class="imgWrap">
                         <img :src="imageUrl1" class="avatar" />
@@ -65,7 +42,7 @@
                 <span style="font-size: 16px;">我的图片</span>
                 <button @click="cancelEditorImg">X</button>
             </el-header>
-            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false">
+            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">
                     <button type="button" @click="getEditorImg" class="sure">确定</button>
                     <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
@@ -187,6 +164,7 @@ export default {
         },
         handlerAddPicture() {
             this.isModalShow = true;
+            this.$refs.imgList.clearSelectedList()
         }
     }
 };
@@ -331,7 +309,7 @@ export default {
 .modal-footer {
     height: 60px;
     position: absolute;
-    bottom: -23px;
+    bottom: -11px;
     right: 16px;
     width: 100%;
     z-index: 100;

@@ -38,6 +38,16 @@ module.exports = {
             .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
 
     },
+    css: {
+        loaderOptions: {
+            sass: {
+              //  @import "@/styles/wezhan.var.scss";  配置全局变量 
+              data: `
+                   
+              `
+          }
+        }
+    },
     devServer: {
         disableHostCheck: true,
         port: 8081,

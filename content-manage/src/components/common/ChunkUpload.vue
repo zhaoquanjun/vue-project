@@ -159,17 +159,17 @@ export default {
                             if (chunk.offset === 0) {
                                 --this.successCount;
                                 this.$confirm(
-                                    `${this.displayName} ${
+                                    `<span class="ellipsis" style="float:left;max-width:296px;" class="ellipsis">${this.displayName}${
                                         chunk.file.name
-                                    } 已存在<br>位于<br>${
+                                    }</span> 已存在<br>位于<br>${
                                         data.existingFileInfo.isDelete
                                             ? "路径:回收站<br>"
                                             : ""
                                     } 分类: ${
                                         data.existingFileInfo.categoryName
-                                    }<br>名称: ${
+                                    }<br><span class="ellipsis" style="float:left;max-width:296px;">名称: ${
                                         data.existingFileInfo.fileName
-                                    }`,
+                                    }</span>`,
                                     "提示",
                                     {
                                         dangerouslyUseHTMLString: true,
@@ -342,7 +342,6 @@ export default {
             });
         },
         onFileSuccess() {
-            console.log(this.fileList, 666666666666666);
             var errorCount = this.fileList.filter(i => i.error).length;
             var total = this.fileList.length;
             ++this.successCount;
@@ -350,10 +349,12 @@ export default {
         },
         onFileAdded(file) {
             this.$refs.uploader.resetOption();
-            
+          
             if (this.limitCount(file)) this.computeMD5(file);
         },
-        uploadStart(file) {},
+        uploadStart(file) {
+            console.log(file,"start")
+        },
         computeMD5(file) {
             let fileReader = new FileReader();
             let time = new Date().getTime();
@@ -365,12 +366,13 @@ export default {
                 md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
                 file.uniqueIdentifier = md5;
 
+                this.fileList.push(file);
                 let fileSize = 0;
                 this.fileList.forEach(item => {
                     fileSize += item.size;
                 });
                 this.formatSize = this.bytesToSize(fileSize, 1);
-                this.fileList.push(file);
+               
             };
 
             fileReader.onerror = function() {
@@ -380,10 +382,14 @@ export default {
             };
         },
         limitCount(file) {
-            if (this.uploadType === "Video")
-                this.checkFormat(file, videoFormat);
-            if (this.uploadType === "Audio")
-                this.checkFormat(file, audioFormat);
+           
+            if (this.uploadType === "Video"){
+                 this.checkFormat(file, videoFormat);
+            }
+            if (this.uploadType === "Audio"){
+                 this.checkFormat(file, audioFormat);
+            }
+               
             if (this.uploadType === "File") {
                  this.checkFormat(file, forbidUpload);
                 if (this.fileList.length <= 100) {
@@ -414,6 +420,7 @@ export default {
                     return false;
                 }
             } else {
+                console.log(456)
                 if (this.fileList.length <= 10) {
                     if (
                         file.size / 1024 / 1024 > 50 &&
@@ -498,6 +505,7 @@ export default {
                     });
                     return false;
                 }
+                return true
             } else {
                 if (format.indexOf(fileNameSuffix.toLowerCase()) === -1) {
                     file.cancel(file);
@@ -510,6 +518,7 @@ export default {
                     });
                     return false;
                 }
+                 return true
             }
         }
     },

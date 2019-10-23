@@ -23,7 +23,12 @@
           
           <ul v-else>
             <span>{{domainName}}<i @click="showDomainList(false)" class="icon iconfont iconicon-des-lower"></i></span>
-            <li v-if="isShowDomainList" v-for="(item,index) in domainList" @click="showDomainList(item)" :key="index">
+            <li 
+              v-show="isShowDomainList" 
+              v-for="(item,index) in domainList" 
+              @click="showDomainList(item)" 
+              :key="index"
+            >
               {{item.domain}}
             </li>
           </ul>
@@ -89,17 +94,31 @@ export default {
   },
   created() {
     this._getCdnDomainList();
-    this.step = this.isResolveSuccess ? 3 : this.isCertification ? 2:1;
   },
   methods: {
     getSiteId(siteId) {
       this.siteId = siteId;
       // this.getSiteInfo(siteId);
     },
+    async _getInfo(){
+      await this.$store.dispatch('_getWxStatus')
+    },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
-      let {data} = await getCdnDomainList()
-      this.domainList = data
+      await this.$store.dispatch('_setSiteId')
+      await this.$store.dispatch('_getWxStatus')
+      let wx_status = this.$store.getters.wx_status;
+      if (wx_status.isAuth && wx_status.isCertification && wx_status.isResolveSuccess) {
+        this.step = 3
+      } else if (wx_status.isAuth && wx_status.isCertification && !wx_status.isResolveSuccess) {
+        this.step = 2
+      } else {
+        this.step = 1
+      }
+      let {data} = await getCdnDomainList(this.siteId)
+      if (data) {
+        this.domainList = data
+      }
     },
     //去解析
     goResolve(){
@@ -186,6 +205,7 @@ export default {
         callback: async action => {
           if (action === "confirm") {
             this.$router.push('/wechataccount/accountsetting')
+            this._getCdnDomainList()
           }
         }
       });

@@ -191,3 +191,42 @@ button:-moz-focusring, [type="button"]:-moz-focusring, [type="reset"]:-moz-focus
   clear: both
 }
 
+.ow-h1{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-line-clamp: 1;
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+}
+.ow-h2{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-line-clamp: 2;
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+}
+.ow-h3{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-line-clamp: 3;
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+}
+.ow-h4{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-line-clamp: 4;
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+}
+.pointer {
+  cursor: pointer;
+}

@@ -3,8 +3,9 @@ import VueRouter from 'vue-router';
 import { defaultRoutes } from "./routes"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
+import {getLocal} from '@/libs/local'
 
-import {setLocal,getLocal,removeLocal} from '@/libs/local'
+
 Vue.use(VueRouter);
 let router = new VueRouter({
   mode: "history",
@@ -12,23 +13,31 @@ let router = new VueRouter({
   routes: defaultRoutes
 });
 export default router;
-let accessToken = store.state.accessToken.Authorization;
-let appId =  store.state.dashboard.appId;
-let siteId =  store.state.dashboard.siteId;
+
+
+let appId = store.state.dashboard.appId || getLocal("ymId");
+let siteId = store.state.dashboard.siteId || getLocal("ymSd");
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
-  if (!to.meta.requiresAuth) {
-    if (!appId) {
-      await store.dispatch('_updateAppIdToCookie')
-    }
-    store.dispatch('_getMenuListData')
-    next()
-    return
+  let user = await securityService.getUser();
+  let accessToken;
+  if (user) {
+    accessToken = user.access_token;
+    store.commit("SET_USER",accessToken)
   }
+
+  if (accessToken) {
   if (to.name !== "callback") {
-    if (accessToken) {
+    if (!to.meta.requiresAuth) {
       if (!appId) {
-        await store.dispatch('_updateAppIdToCookie')
+        await store.dispatch('_updateAppIdAndSiteIdToCookie')
+      }
+      store.dispatch('_getMenuListData')
+      next()
+      return
+    }
+      if (!appId) {
+        await store.dispatch('_updateAppIdAndSiteIdToCookie')
         next()
       }
       if (!siteId) {
@@ -45,7 +54,7 @@ router.beforeEach(async (to, from, next) => {
         }
         if (!store.getters.wx_status.isAuth || !store.getters.wx_status.isCertification || !store.getters.wx_status.isResolveSuccess) {
           await store.dispatch('_getWxStatus')
-          let wx_status = store.state.wxaccount.wx_status;
+          let wx_status = store.state.wxaccount.wx_status || getLocal("wx_status");
           if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
             next('/wechataccount/wxauther');
             return;
@@ -55,24 +64,14 @@ router.beforeEach(async (to, from, next) => {
       } else {
         next('/404')
       }
-    } else {
-        securityService.getUser().then(async (data) => {
-          if (!data) {
-            securityService.signIn();
-            next()
-          } else {
-            store.commit("SET_USER", data);
-            await store.dispatch('_updateAppIdToCookie')
-            await store.dispatch('_getMenuListData')
-            await store.dispatch('_getAppHeadInfo')
-            next()
-          }
-        })
-      } 
-  } else {
-    next()
-  }
-
+    } 
+  }else {
+    if(to.path == "/callback" || to.path == "/401"){
+      next()
+    }else{
+      securityService.signIn(to.path)
+    }
+  } 
 });
 
      

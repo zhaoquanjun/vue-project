@@ -77,9 +77,7 @@ export default {
     }
   },
   watch: {
-    //    curItem(){
-    //        alert(1)
-    //    }
+ 
   }
 };
 </script>

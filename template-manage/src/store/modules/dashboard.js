@@ -1,21 +1,6 @@
-import { getUserDashboard,updateAppIdToCookie, getSliderMenuList} from "@/api/request/user"
-import { authRoutes } from "@/router/routes.js";
-import {setLocal,getLocal,removeLocal} from '@/libs/local'
-// 更具后台菜单路由 匹配出 所需要显示的路由
-let getNeedRoutes = auth => {
-    function r(authRoutes) {
-        return authRoutes.filter(route => {
-            console.log(auth)
-            if (auth.includes(route.name)) {
-                if (route.children) {
-                    route.children = r(route.children);
-                }
-                return true; // 有权限就返回
-            }
-        });
-    }
-    return r(authRoutes);
-};
+import { updateAppIdToCookie, getSliderMenuList} from "@/api/request/user"
+import { setLocal } from '@/libs/local'
+
 // 序列化菜单
 let filterMenuListData = (source) => {
    
@@ -54,7 +39,6 @@ const dashboard = {
             setLocal('ymId', payload);
         },
          set_menuList(state,m){
-            // state.menuList = JSON.stringify(m);
             state.menuList = m;
             setLocal("menulist", m)
 
@@ -66,7 +50,7 @@ const dashboard = {
            },
     },
     actions: {
-        async _updateAppIdToCookie({ commit }){
+        async _updateAppIdAndSiteIdToCookie({ commit }){
             let { data } = await updateAppIdToCookie();
             console.log(data)
             commit("SETAPPID", data)
@@ -78,15 +62,9 @@ const dashboard = {
             commit('set_authList', pathArr);
             return data
         },
-        async getAuthRoute({ commit, state }) {
-            // 要拿到所有权限的路由  权限列表了
-            let r = getNeedRoutes(state.authList);
-            // 当前需要动态添加的路由
-            return r;
-        },
+     
         async getCurRouteAuth({state,getters}, path) {
             if(!state.authList) return;
-            // let authList = JSON.parse(state.authList)
             return state.authList.some((item, index, array) => {
                 return item === path;
             });

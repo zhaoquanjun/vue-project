@@ -70,13 +70,14 @@
       <p>选择文章详情页</p>
       <div class="way-list__box">
         <div>
-          <span class="tips">{{productTips}}
+          <span class="tips" @click="isChangeShow">{{productTips}}
             <i 
               class="icon iconfont iconicon-des-Arrow"
               :class="{iconactive: isShow}"
-              @click="isChangeShow"></i>
+            >
+            </i>
           </span>
-          <a 
+          <a
             :href="productHref"
             target="_blank"
           >预览</a>
@@ -130,7 +131,7 @@ export default {
       promotionUrl: this.$store.getters.account_info.promotionUrl,
       pageSize: 6,
       total: 6,
-      productHref: 'https://www.baidu.com/',
+      productHref: '',
       productTitle: "",
       defaultExpandedKeys: [],
       treeArray: [],
@@ -182,24 +183,14 @@ export default {
       let { data } = await linkApi.getContentList(this.pageListOption);
       if(data && data.list.length > 0) {
         this.productPageList = data.list;
+        this.productTips = data.list[0].title;
+        this.pageActiveIndex = 0;
       }
     },
     selectPage(ind){
-      if (this.productId != -1 ) {
-        this.pageActiveIndex = ind
-        this.isShow = false
-        this.productTips = this.productPageList[ind].title;
-        this.productHref = `http://${this.promotionUrl}/product/${this.productPageList[ind].id}/${this.urlId}.html`
-          this.$emit("handleChangeUrl", {
-            url: this.productList[this.productId].url,
-            title: this.productList[this.productId].name,
-            cType: "Product",
-            id: this.productPageList[ind].id,
-            pageIndex: this.pageIndex
-        });
-      } else {
-        notify(this, "请先选择产品", "error");
-      }
+      this.pageActiveIndex = ind
+      this.isShow = false
+      this.productTips = this.productPageList[ind].title;
     },
      //改变下啦状态
     isChangeShow(){
@@ -247,12 +238,15 @@ export default {
       this.productId = i
       this.productTitle = this.productList[i].name
       this.urlId = this.productList[i].id
-      // this.$emit("handleChangeUrl", {
-      //   url: this.productList[i].url,
-      //   title: this.productList[i].name,
-      //   cType: "product",
-      //   pageIndex: this.pageIndex
-      // });
+      this.productHref = `http://${this.promotionUrl}/product/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
+        this.$emit("handleChangeUrl", {
+          url: this.productList[i].id,
+          title: this.productList[i].name,
+          cType: "Product",
+          picUrl: this.productList[i].thumbnailPicUrlList.length>0?this.productList[i].thumbnailPicUrlList[0]:'',
+          id: this.productPageList[this.pageActiveIndex].id,
+          pageIndex: this.pageIndex
+      });
     },
     _handleSearch(val) {
       this.timer = setTimeout(() => {
@@ -458,9 +452,9 @@ export default {
       font-size:14px;
       font-family:"PingFangSC";
       font-weight:400;
-      color:rgba(211,211,211,1);
       line-height:32px;
       padding: 0 10px;
+      cursor: pointer;
       i {
         float: right;
         font-size: 12px;

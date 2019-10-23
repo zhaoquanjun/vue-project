@@ -1,7 +1,7 @@
 <template>
   <div class="popup-content__none">
     <h5>请输入网址</h5>
-    <input @keyup="_handleChangeUrl" placeholder="请输入网站" v-model="url">
+    <input @blur="_handleChangeUrl" placeholder="请输入网站" v-model="url">
     <div v-if="isUrl" class="tips ym-form-item__error">请输入正确网址</div>
   </div>
 </template>
@@ -22,11 +22,16 @@ export default {
   },
   methods: {
     _handleChangeUrl(){
+      console.log('999',this.url)
       if(!reg.test(this.url)){
         this.isUrl = true
         return
       } else {
         this.isUrl = false
+      }
+      let regs =  new RegExp(/^(http|https)/)
+      if(!regs.test(this.url)) {
+        this.url = 'http://' + this.url
       }
       let data = {
         url: this.url,

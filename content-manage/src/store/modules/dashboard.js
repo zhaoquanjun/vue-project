@@ -1,30 +1,7 @@
-import {
-    getUserDashboard,
-    updateAppIdToCookie,
-    getSliderMenuList
-} from "@/api/request/user"
-// import {
-//     authRoutes
-// } from "@/router/routes.js";
-import {
-    setLocal,
-    getLocal,
-    removeLocal
-} from '@/libs/local'
-// 更具后台菜单路由 匹配出 所需要显示的路由
-let getNeedRoutes = auth => {
-    function r(authRoutes) {
-        return authRoutes.filter(route => {
-            if (auth.includes(route.name)) {
-                if (route.children) {
-                    route.children = r(route.children);
-                }
-                return true; // 有权限就返回
-            }
-        });
-    }
-    return r(authRoutes);
-};
+import {  updateAppIdToCookie, getSliderMenuList } from "@/api/request/user"
+
+import { setLocal } from '@/libs/local'
+
 // 序列化菜单
 let filterMenuListData = (source) => {
 
@@ -75,21 +52,13 @@ const dashboard = {
         },
     },
     actions: {
-        async _updateAppIdToCookie({commit}) {
+        async _updateAppIdAndSiteIdToCookie({commit}) {
             let {data} = await updateAppIdToCookie();
             commit("SETAPPID", data)
         },
-        async _getMenuListData({
-            commit,
-            state
-        }) {
-            let {
-                data
-            } = await getSliderMenuList();
-            let {
-                result1,
-                pathArr
-            } = filterMenuListData(data.menus);
+        async _getMenuListData({commit,state }) {
+            let { data } = await getSliderMenuList();
+            let { result1, pathArr } = filterMenuListData(data.menus);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
             data && data.operations.forEach(item => {
@@ -99,32 +68,17 @@ const dashboard = {
             })
             return data
         },
-        async getAuthRoute({
-            commit,
-            state
-        }) {
-            // 要拿到所有权限的路由  权限列表了
-            let r = getNeedRoutes(state.authList);
-            // 当前需要动态添加的路由
-            return r;
-        },
-        async getCurRouteAuth({
-            state,
-            getters
-        }, path) {
+    
+        async getCurRouteAuth({ state }, path) {
             if (!state.authList) return;
-            // let authList = JSON.parse(state.authList)
             return state.authList.some((item, index, array) => {
                 return item === path;
             });
         },
-
-
     },
     getters: {
         getMenuList(state) {
             if (!state.menuList) return
-            // return JSON.parse(state.menuList)
             return state.menuList
         },
 

@@ -1,5 +1,8 @@
 <template>
   <div class="define-menu__area clearfix">
+    <div class="btn">
+      <span @click="_handleSaveAndPublish">保存并发布</span>
+    </div>
     <div class="phone-box__area">
       <div class="phone-menu__area">
         <div class="phone-menu__keyboard"></div>
@@ -38,7 +41,7 @@
             <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
           </draggable>
       </div>
-      <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">菜单排序</div>
+      <div class="primary-button__nomal order-menu__btn" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
     </div>
     <div class="menu-operate__arae">
       <order-menu v-show="isOrder"></order-menu>
@@ -57,7 +60,7 @@
               <el-form-item label="菜单名称">
                 <el-input 
                   v-model="menuDetail.name" 
-                  @blur="testMenu(16,menuDetail.name)"
+                  @blur="testMenu()"
                   placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母">
                 </el-input>
               </el-form-item>
@@ -81,11 +84,25 @@
             </el-form>
             <div v-show="menuDetail.clickBehavior == '1' && hasSubList" class="message-content__section">
               <section class="menu-content__area">
-                <div class="radio-tabs">
+                <!-- <div class="radio-tabs">
                   <el-radio label="1" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('1')">图片</el-radio>
                   <el-radio label="2" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('2')">文字</el-radio>
                   <el-radio label="3" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('3')">图文</el-radio>
-                </div>
+                </div> -->
+                <ul class="radio-tabs">
+                  <li @click="_handleChangeBehaviorType('1')" :class="{active: menuDetail.behaviorType == '1'}">
+                    <i class="icon iconfont iconicon-des-picture"></i>
+                    <span>图片</span>
+                  </li>
+                  <li @click="_handleChangeBehaviorType('2')" :class="{active: menuDetail.behaviorType == '2'}">
+                    <i class="icon iconfont iconicon-editext"></i>
+                    <span>文字</span>
+                  </li>
+                  <li @click="_handleChangeBehaviorType('3')" :class="{active: menuDetail.behaviorType == '3'}">
+                    <i class="icon iconfont iconicon-picword"></i>
+                    <span>图文</span>
+                  </li>
+                </ul>
                 <div class="slot-content">
                   <!-- 图片 -->
                   <Picture
@@ -116,11 +133,10 @@
               <div class="selectUrl">
                 <span>设置跳转链接</span>
                 <div>
-                  <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}<p/>
+                  <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}</p>
                   <i class="iconfont iconicon-des-lj" @click="selectUrl"></i>
                 </div>
               </div>
-              <p></p>
             </div>
             <PopUp
               :model="model"
@@ -130,9 +146,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="btn">
-      <span @click="_handleSaveAndPublish">保存并发布</span>
     </div>
   </div>
 </template>
@@ -144,7 +157,8 @@ import OrderMenu from "_c/wechat-account/defineMenu/order-menu";
 import AnserText from "@/components/wechat-account/auto-answer/anser-text.vue";
 import WebsiteLink from "_c/wechat-account/defineMenu/link/link";
 import { notify } from "@/utlis/index.js";
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
+import { getLocal } from '@/libs/local';
 import ImageText from "@/components/wechat-account/auto-answer/image-text.vue";
 import { getMenuTree, getMenuDetail,addMenu,publishMenu,removeMenu,updateMenu,modifyMenuOrder } from "@/api/request/account.js";
 export default {
@@ -171,7 +185,7 @@ export default {
       text: '2',
       menuDetail: {
         id: false,
-        siteId: this.$store.state.dashboard.siteId,
+        siteId: this.$store.state.dashboard.siteId || getLocal("ymSd"),
         name: "",
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
         behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
@@ -201,7 +215,7 @@ export default {
           }
         }
       },
-      siteId: this.$store.state.dashboard.siteId
+      siteId: this.$store.state.dashboard.siteId || getLocal("ymSd")
     };
   },
   components: {
@@ -212,6 +226,12 @@ export default {
     ImageText,
     draggable,
     PopUp
+  },
+  created() {
+    let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+      if (!wx_status.isCertification) {
+        this._getWxIsAuth()
+      }
   },
   mounted() {
     this._getMenuTree();
@@ -228,6 +248,12 @@ export default {
         this._getMenuTree()
       }
     },
+    // 校验是否已经授权认证
+    async _getWxIsAuth() {
+      await this.$store.dispatch('_setSiteId')
+      await this.$store.dispatch('_getWxStatus')
+      this.siteId = this.$store.state.dashboard.siteId
+    },
     async _getMenuTree(val) {
       let { data } = await getMenuTree(this.siteId);
       this.menuTree = data;
@@ -242,14 +268,12 @@ export default {
         }
       } else if (val == 'add') {
         //点击添加按钮时选择刚添加的按钮并且回填按钮详情
-        console.log('000',this.curSubIndex,this.curIndex,this.menuTree)
         let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
         this._getMenuDetail(id)
       }
     },
     handleClosePopup (val,data){
       this.isShowPopup = val
-      console.log('eee',data)
       if (data) {
         this.menuDetail.behaviorBody.customMenuRedirectMsg.title= data.Title;
         this.menuDetail.behaviorBody.customMenuRedirectMsg.urlType= data.Type;
@@ -275,7 +299,6 @@ export default {
       let { data } = await getMenuDetail(this.siteId, id);
       this.menuDetail.name = data.name;
       this.menuDetail.id = data.id;
-      console.log(id,'9999')
       if (data.hasChildren) {
         this.menuDetail.clickBehavior = 0;
         this.menuDetail.behaviorType = 0;
@@ -289,7 +312,6 @@ export default {
       } else {
         this.hasSubList = true
       }
-      console.log('8888',this.hasSubList)
       if (behaviorBody) {
         if(behaviorBody.imageMsg && behaviorBody.imageMsg.picUrl) {
           this.menuDetail.behaviorBody.imageMsg.picUrl = behaviorBody.imageMsg.picUrl
@@ -313,7 +335,6 @@ export default {
         this.menuDetail.behaviorBody.newsMsg = [];
         this.menuDetail.behaviorBody.customMenuRedirectMsg = {};
       }
-      console.log('0000',this.menuDetail)
     },
     _handleChangeBehaviorType(val) {
       this.menuDetail.behaviorType = val
@@ -410,12 +431,10 @@ export default {
     },
     // 添加菜单
     async _handleAddMainMenu(name,order,id,level) {
-      console.log('name,order,id,level',name,order,id,level)
       let flag = this.testParameters();
       let  dataObj = {};
       //前端校验
-      if (order > 0 && flag) {
-        console.log('flag1',order > 0 && flag)
+      if (order > 0 && flag && !(order== 1 && level == 1)) {
         let dataDetail = this.menuDetail
         dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
         dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
@@ -424,9 +443,7 @@ export default {
         notify(this, '请完善菜单信息', "error");
       }
       //接口校验
-      if (order == 0 || dataObj.status == 200) {
-        console.log('888',order,dataObj.status)
-        console.log('flag2',order == 0, dataObj.status)
+      if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
           let newMenuItem = {
           name: name,  //菜单名称
           displayOrder: order, //菜单排序
@@ -453,28 +470,54 @@ export default {
     },
     // 删除菜单
     async _handleDeleteMenu() {
-      let data = await removeMenu(this.siteId, this.menuDetail.id);
-      if(data && data.status == 200 ) {
-        this._getMenuTree()
-      }
+      this.$confirm("提示", {
+        title: "提示",
+        iconClass: "icon-warning",
+          message:  `删除后，"${this.menuDetail.name}"菜单下的设置的内容将被删除，是否确定删除？`,
+          callback: async action => {
+              if (action === "confirm") {
+                  let data = await removeMenu(this.siteId, this.menuDetail.id);
+                  if(data && data.status == 200 ) {
+                    notify(this, '菜单删除成功', "success");
+                    this._getMenuTree()
+                  } else {
+                    notify(this, '菜单删除失败', "error");
+                  }
+              }
+          }
+      });
     },
     // 保存并发布
      async _handleSaveAndPublish() {
-      let dataDetail = this.menuDetail;
-          dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType);
-          dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
-      let data = await publishMenu(dataDetail);
-      if (data && data.status == 200) {
-        this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
-        this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
-        //同步菜单name
-        notify(this, '保存成功', "success");
-        //this.hasChangeMeunName()
-      } else {
-        notify(this, '保存失败', "error");
-        this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
-        this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+      let flag = this.testParameters();
+      if (!flag) {
+        notify(this, '请完善菜单信息', "error");
+        return
       }
+      this.$confirm("提示", {
+        title: "提示",
+        iconClass: "icon-warning",
+          message:  `发布成功后会覆盖原版本，且将在24小时内对所有用户生效，是否确认发布？`,
+          callback: async action => {
+            if (action === "confirm") {
+              let dataDetail = this.menuDetail;
+                  dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType);
+                  dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior);
+              let data = await publishMenu(dataDetail);
+              if (data && data.status == 200) {
+                this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
+                this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+                //同步菜单name
+                notify(this, '保存并发布成功', "success");
+                //this.hasChangeMeunName()
+              } else {
+                notify(this, '保存并发布失败', "error");
+                this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
+                this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
+              }
+            }
+          }
+      });
     },
     //同步本地菜单列表name
     hasChangeMeunName () {
@@ -506,19 +549,20 @@ export default {
       this.menuDetail.behaviorBody.newsMsg = list;
     },
     //校验菜单名称
-    testMenu(typeNum,str,id){
+    testMenu(){
       //汉字19968至40869
       //数字 48-57
       //A-Z:65-90,a-z:97-122
       //-+&. :45 43 38 46 32
-      // 同步才单名
-      this.hasChangeMeunName()
+      // 校验菜单名
+      let typeNum = this.curSubIndex == -1? 8:16;
+      let str = this.menuDetail.name;
       let isRule = true;
       let BlankNum = 1;
       let strLength = 0
       let firstBlankIndex = false;
-      for (var i=0; i<str.length; i++) {  
-        var c = str.charCodeAt(i);
+      for (let i=0; i<str.length; i++) {  
+        let c = str.charCodeAt(i);
         if (c == 45 || c == 43 || c == 38 || c == 46 || c == 32){
           strLength = strLength + 1;
           if (c==32 && !firstBlankIndex) {
@@ -544,6 +588,9 @@ export default {
       if (strLength == 0 || strLength >typeNum) {
         isRule = false
       }
+      if(isRule){
+        this.hasChangeMeunName()
+      }
       this.hasTrueName = isRule
     }
   }
@@ -554,18 +601,45 @@ export default {
 .holder h3 {
   text-align: center
 }
+.message-content__section {
+  background-color: #fff;
+  min-height: 400px;
+  border-radius:2px;
+  border:1px solid rgba(211,211,211,1);
+  .radio-tabs {
+    height: 40px;
+    background:rgba(240,243,247,1);
+    border-radius:1px 1px 0px 0px;
+    li {
+      float: left;
+      font-size:14px;
+      font-weight:400;
+      color:rgba(38,38,38,1);
+      line-height:40px;
+      padding: 0 15px 0 30px;
+      cursor: pointer;
+      i {
+        font-size: 12px;
+        margin-right: 8px;
+      }
+      &.active {
+        color: #09CCEB;
+      }
+    }
+  }
+}
 .define-menu__area {
-  margin: 30px auto;
+  margin: 0 auto;
   max-width: 1200px;
   min-width: 990px;
   border-radius: 20px;
+  font-family: "PingFangSC-Medium,PingFangSC";
   .phone-box__area {
     position: relative;
     float: left;
     margin: 0 auto 2px;
     width: 355px;
     height: 711px;
-    border: 1px dashed #c9d9dc;
     background: url("~img/account/account_menu_phone.png") no-repeat center
       center;
     background-size: 100% 100%;
@@ -682,10 +756,10 @@ export default {
   .menu-operate__arae {
     display: flex;
     justify-content: center;
-    align-items: center;
     float: left;
     margin-top: 20px;
     width: calc(100% - 355px);
+    min-height: 660px;
     background: #f8fafc;
     border-radius: 2px;
     .menu-operate__none {
@@ -693,6 +767,7 @@ export default {
       display: flex;
       justify-content: center;
       .empty {
+        margin-top: 240px;
         width: 160px;
         height: 130px;
         .empty-icon {
@@ -714,25 +789,28 @@ export default {
       }
     }
     .menu-operate__box {
-      margin: 24px auto;
       padding: 24px;
-      width: 90%;
+      width: 100%;
       border-radius: 2px;
-      background: #fff;
       border: 1px solid rgba(229, 229, 229, 1);
       .menu-operate__header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid #D3D3D3;
+        padding-bottom: 10px;
         p {
-          font-size: 16px;
+          font-size:14px;
+          font-weight:500;
+          color:rgba(38,38,38,1);
+          line-height:20px;
         }
         .menu-operate__delete {
           font-size: 14px;
           font-family: "PingFangSC";
           font-weight: 400;
-          color: rgba(251, 77, 104, 1);
+          color: #09CCEB;
           line-height: 20px;
           cursor: pointer;
         }
@@ -863,6 +941,9 @@ export default {
   width: 100%;
   height: 364px;
 }
+.el-form /deep/ .el-form-item {
+  margin-bottom: 6px;
+}
 .el-form-item /deep/ .el-form-item__label {
   color: #a1a8b1;
 }
@@ -887,9 +968,10 @@ export default {
   font-size:14px;
   font-family:'PingFangSC-Regular,PingFangSC';
   font-weight:400;
-  color:rgba(211,211,211,1);
+  color: #606266;
   line-height:36px;
   padding: 0 10px;
+  overflow: hidden;
 }
 .selectUrl div i {
   color: #0595E6;
@@ -897,13 +979,10 @@ export default {
 .btn {
   display: inline-block;
   width: 100%;
-  height: 32px;
-  margin-top:56px;
-  margin-bottom: 40px;
+  height: 40px;
   text-align: right;
-  padding: 6px 0;
-  cursor: pointer;
-  border-top: 1px solid #E5E5E5;
+  margin: 16px 0 -10px;
+  padding-right: 20px;
 }
 .btn span {
   display: inline-block;
@@ -917,6 +996,7 @@ export default {
   text-align: center;
   color: rgba(255, 255, 255, 1);
   line-height:40px;
+  cursor: pointer;
 }
 .tipsName {
   padding-left: 80px;

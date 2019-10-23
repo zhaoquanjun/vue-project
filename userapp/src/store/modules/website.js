@@ -14,9 +14,7 @@ const website = {
   }
   },
   actions: {
-    xx({commit}){
-        commit("SETMODUL",1)
-    }
+   
   }
 }
 

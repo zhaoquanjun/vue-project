@@ -15,6 +15,11 @@ export const defaultRoutes = [
   {
     path: "/",
     redirect: { path: '/board' },
+    meta: {
+      title: "控制台首页",
+      requiresAuth: true,
+      requiresRole: {},
+    }
   },
   {
     path: "/board",
@@ -124,6 +129,15 @@ export const defaultRoutes = [
           isSub:true
         }
       },
+      {
+        path: "sitemap",
+        name: "sitemap",
+        component: () => import("@/views/website-manage/sitemap.vue"),
+        meta: {
+          title: "站点地图",
+          isSub:true
+        }
+      }
     ]
   },
   {
@@ -198,18 +212,17 @@ export const defaultRoutes = [
     component: () => import("@/views/login/signcallback.vue"),
     meta: {
       title: "微站",
-      requiresAuth: true,
+      // requiresAuth: true,
     }
   },
   {
-    path: "/init",
-    name: "init",
-    component: () => import("@/views/login/init.vue"),
-    meta: {
-      title: "微站",
-      
-    }
-  },
+    path: "/signout-callback-oidc",
+    name: "signout-callback-oidc",
+    component: () => import("@/views/login/signout-callback-oidc.vue"),
+    // meta: {
+    //     requiresAuth: true,
+    // }
+},
   {
     path: '/403',
     name: '403',

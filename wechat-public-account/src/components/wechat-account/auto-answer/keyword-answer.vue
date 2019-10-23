@@ -54,12 +54,11 @@
             </div>
         </div>
         <div v-else class="table-list">
-            <header class="reply-title">回复内容</header>
             <div class="handler-menu">
                 <el-input
                     size="medium"
                     v-model="serchTitle"
-                    placeholder="输入名称搜索"
+                    placeholder="请输入内容"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
                 >
@@ -243,7 +242,17 @@ export default {
     border: 1px solid #b9cbcf;
 }
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #c9d9dc;
+    border: 1px solid #E5E5E5;
+    width: 600px;
+}
+.el-input /deep/ .el-input__inner:hover {
+    border: 1px solid #E5E5E5;
+}
+.el-input /deep/ .el-input__inner:focus {
+    border: 1px solid #E5E5E5;
+}
+.el-input /deep/ .el-input__inner {
+    border: 1px solid #E5E5E5;
 }
 .el-select /deep/ .el-input__inner::-webkit-input-placeholder {
     color: #262626;
@@ -349,17 +358,16 @@ button {
             padding-top: 33px;
         }
         .handler-menu {
-            padding: 32px 0;
+            padding: 8px 0 24px;
             .answer-btn {
                 float: right;
                 width: 90px;
                 height: 40px;
-                background: rgba(9, 204, 235, 1);
                 border-radius: 2px;
-                color: #fff;
+                color: rgba(9, 204, 235, 1);
             }
             .input-with-select {
-                width: 260px;
+                width: 600px;
             }
         }
     }

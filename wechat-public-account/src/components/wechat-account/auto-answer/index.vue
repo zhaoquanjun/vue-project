@@ -24,7 +24,7 @@
             >
             <!-- 添加关键词回复 addAnswer===false" 下方出现 -->
             <keyword-answer
-                v-if="addAnswer===false"
+                v-if="replyType==='3' && addAnswer===false"
                 slot="keyword"
                 ref="keywordAnswer"
                 :addAnswer="addAnswer"
@@ -80,6 +80,7 @@ import ImageText from "@/components/wechat-account/auto-answer/image-text.vue";
 import KeywordAnswer from "@/components/wechat-account/auto-answer/keyword-answer.vue";
 import * as autoAnswerApi from "@/api/request/autoAnswerApi.js";
 import { trim, notify } from "@/utlis/index.js";
+import {getLocal} from '@/libs/local'
 export default {
     data() {
         return {
@@ -91,7 +92,7 @@ export default {
             replyType: "1", //replyType 回复类型
             msgType: 1, //msgType 消息类型
             addAnswer: true,
-            SiteId: this.$store.state.dashboard.siteId,
+            siteId: this.$store.state.dashboard.siteId || getLocal("ymSd"),
             replycontentData: {
                 imageMsg: {
                     picUrl: ""
@@ -110,7 +111,7 @@ export default {
                 pageSize: 10,
                 pageIndex: 1,
                 Keyword: "",
-                SiteId: this.$store.state.dashboard.siteId
+                SiteId: this.$store.state.dashboard.siteId || getLocal("ymSd")
             },
             keywordContentData: {
                 msgType: "",
@@ -133,7 +134,10 @@ export default {
         ImageText
     },
     created() {
-        //this._getWxIsAuth();
+        let wx_status = this.$store.state.wxaccount.wx_status || getLocal("wx_status")
+        if (!wx_status.isCertification) {
+            this._getWxIsAuth()
+        }
     },
     mounted() {
         this._getReplyDetail(1);
@@ -146,7 +150,6 @@ export default {
     },
     methods: {
         getSiteId(siteId) {
-            console.log('siteId',siteId)
         },
         // 切换站点刷新信息
         chooseWebsite(siteId) {
@@ -155,13 +158,15 @@ export default {
         async _getWxIsAuth() {
             await this.$store.dispatch('_getWxStatus')
             let wx_status = this.$store.state.wxaccount.wx_status
+            this.siteId = this.$store.state.dashboard.siteId
+            this.searchOption.SiteId = this.$store.state.dashboard.siteId
             if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
                 this.$router.replace({path:'/wechataccount/wxauther' });
             }
         },
         //获取回复详情
         async _getReplyDetail(replyType) {
-            let data = await autoAnswerApi.getReplyDetail(this.SiteId,replyType);
+            let data = await autoAnswerApi.getReplyDetail(this.siteId,replyType);
             this.replyDetail = data.data.data;
             this.msgType = data.data.msgType;
             this.isSet = data.data.isSet;
@@ -193,14 +198,10 @@ export default {
                 this.searchOption
             );
             this.keywordData = data;
-            console.log('pppp',data)
-            //this.replycontentData = data
-            
-
         },
         //删除回复信息
-        async _removeReply(SiteId,id) {
-            let { data, status } = await autoAnswerApi.removeReply(SiteId,id);
+        async _removeReply(siteId,id) {
+            let { data, status } = await autoAnswerApi.removeReply(siteId,id);
             if (status === 200) {
                 if (this.replyType != 3) {
                     this._getReplyDetail(this.replyType);
@@ -221,7 +222,7 @@ export default {
                         let {
                             data,
                             status
-                        } = await autoAnswerApi.removeKeywordReply(id,this.SiteId);
+                        } = await autoAnswerApi.removeKeywordReply(id,this.siteId);
                         this.$notify({
                             customClass: "notify-success",
                             message: `删除成功`,
@@ -235,7 +236,7 @@ export default {
         },
         //新增关键词回复信息
         async _addKeywordReply(option) {
-            let { data, status } = await autoAnswerApi.addKeywordReply(option,this.SiteId);
+            let { data, status } = await autoAnswerApi.addKeywordReply(option,this.siteId);
             if (status === 200) {
                 this.$notify({
                     customClass: "notify-success",
@@ -243,15 +244,17 @@ export default {
                     showClose: false,
                     duration: 1500
                 });
+                if (this.replyType == 3) {
+                    this.addAnswer = true;
+                    this._getKeywordReplyList(this.searchOption);
+                }
                 this.isSet = true;
                 this.replyDetail.id = data;
             }
         },
         //新增或者覆盖回复信息
         async _addOrOverrideReply(option) {
-            let { data, status } = await autoAnswerApi.addOrOverrideReply(
-                option
-            );
+            let { data, status } = await autoAnswerApi.addOrOverrideReply(option);
             if (status === 200) {
                 this.$notify({
                     customClass: "notify-success",
@@ -259,19 +262,36 @@ export default {
                     showClose: false,
                     duration: 1500
                 });
+                if (this.replyType == 3) {
+                    this.addAnswer = true;
+                    this._getKeywordReplyList(this.searchOption);
+                }
                 this.isSet = true;
                 this.replyDetail.id = data;
             }
         },
         //编辑关键词回复信息
         async _updateKeywordReply(option, editorId) {
-            let data = await autoAnswerApi.updateKeywordReply(option, editorId, this.SiteId);
-            console.log(data, "编辑关键词回复信息");
+            let data = await autoAnswerApi.updateKeywordReply(option, editorId, this.siteId);
+            if(data.status && data.status === 200) {
+                this.$notify({
+                    customClass: "notify-success",
+                    message: `保存成功`,
+                    showClose: false,
+                    duration: 1500
+                });
+                if (this.replyType == 3) {
+                    this.addAnswer = true;
+                    this._getReplyDetail(3);
+                }
+                this.isSet = true;
+                this.replyDetail.id = data;
+            }
         },
         // 保存
-        handlerSave() {
+        async handlerSave() {
             let option = {
-                siteId: this.SiteId,
+                siteId: this.siteId,
                 replyType: this.replyType,
                 msgType: this.msgType,
                 publicPlatformReplyInput: {
@@ -364,14 +384,11 @@ export default {
                 } else {
                     this._addKeywordReply(newOption);
                 }
-
                 return;
             }
-            console.log('444',option)
             this._addOrOverrideReply(option);
         },
         handlerSaveImgText(list) {
-            console.log(list);
             this.replycontentData.newsMsg = list;
         },
         // 删除回复
@@ -410,7 +427,7 @@ export default {
                 message: this.$createElement("div", null, message),
                 callback: async action => {
                     if (action === "confirm") {
-                        this._removeReply(this.SiteId,this.replyDetail.id);
+                        this._removeReply(this.siteId,this.replyDetail.id);
                     }
                 }
             });
@@ -424,7 +441,6 @@ export default {
         },
         // 切换菜单
         handleClick(tab, event) {
-            console.log(tab,event,'9999')
             this.resetReplycontentData();
             this.msgType = 1;
             this.addAnswer = true;
@@ -453,6 +469,7 @@ export default {
         changeAnswerMode(value) {
             this.msgType = value;
             if (
+                this.replyDetail &&
                 this.replyType == this.replyDetail.replyType &&
                 this.msgType == this.replyDetail.msgType
             ) {
@@ -464,7 +481,6 @@ export default {
         // 添加关键词回复
         handlerAddAnswer(value, item) {
             this.addAnswer = value;
-            console.log(item,'ooo');
             if (item && item.keywordList) {
                 this.replyDetail = item;
                 this.propKeywordList = item.keywordList;
@@ -512,7 +528,7 @@ export default {
         padding-top: 32px;
     }
     .reply-wrap {
-        padding: 32px 0;
+        padding: 24px 0;
         position: relative;
         //  overflow-y: auto;
     }

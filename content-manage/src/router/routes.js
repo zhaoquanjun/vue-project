@@ -5,6 +5,11 @@ export const defaultRoutes = [
     {
         path: "/",
         redirect: { path: '/content/news' },
+        meta: {
+            title: "内容管理",
+            requiresAuth: true,
+            requiresRole: {},
+          }
     },
     
     {
@@ -186,6 +191,15 @@ export const defaultRoutes = [
         meta: {
             requiresAuth: true,
         }
+    },
+   
+    {
+        path: "/signout-callback-oidc",
+        name: "signout-callback-oidc",
+        component: () => import("@/views/login/signout-callback-oidc.vue"),
+        // meta: {
+        //     requiresAuth: true,
+        // }
     },
     {
         path: '/401',

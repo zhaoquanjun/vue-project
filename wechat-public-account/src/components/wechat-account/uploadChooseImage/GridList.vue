@@ -146,8 +146,8 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 967px;
-    height: 540px;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -159,6 +159,7 @@ export default {
       right: 18px;
       color: #fff;
       font-size: 20px;
+      z-index: 1000;
       cursor: pointer;
     }
     .image-preview__area {
@@ -167,9 +168,7 @@ export default {
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 80%;
-      max-width: 800px;
-      max-height: 450px;
+      height: 100%;
       li {
         display: flex;
         justify-content: center;

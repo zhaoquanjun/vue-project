@@ -8,11 +8,12 @@
         <ul class="list" ref="list">
             <li
                 ref="listItem"
+                v-show="!isEditorShow"
                 :class="index===0?'fist-item':'list-item'"
                 v-for="(item,index) in list"
                 :key="index"
             >
-                <div class="headline">{{item.title}}</div>
+                <div class="headline ellipsis">{{item.title}}</div>
                 <div class="imgwrap">
                     <img :src="item.picUrl"
                     />
@@ -44,32 +45,21 @@
                 <div class="seting-info">
                     <div class="seting-item">
                         <div class="seting-title">设置链接</div>
-                        <el-input
-                            size="small"
-                            placeholder="请选择链接"
-                            v-model="curEditorTitle"
-                            class="input-with-select"
-                            readonly
-                        >
-                            <i
-                                class="el-icon-link el-input__icon"
-                                style="cursor: pointer;"
-                                @click="showPopup"
-                                slot="suffix"
-                            ></i>
-                        </el-input>
+                        <div class="seting-line ellipsis pointer" :class="{select:curEditorTitle}" @click="showPopup">
+                            {{curEditorTitle?curEditorTitle:'请选择链接'}}
+                        </div>
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">设置封面</div>
                         <div class="cover">
-                            <div class="upload-icon" @click="setCover" v-if="!picUrl">
+                            <div class="upload-icon" @click="setCover" v-if="!curEditorItem.picUrl">
                                 <span class="el-icon-plus"></span>
                             </div>
                             <div  v-else>
                                 <img :src="curEditorItem.picUrl" />
                                 <div class="mask1">
-                                    <button @click="removePic">
-                                        <i class="iconfont iconshanchu"></i>
+                                    <button @click="setCover">
+                                        <i class="iconfont iconqiehuanxingshiyi"></i>
                                     </button>
                                 </div>
                             </div>
@@ -98,15 +88,16 @@
                             resize="none"
                         ></el-input>
                     </div>
-                    <div class="seting-item">
+                    <div class="seting-item seting-btn">
+                        <button v-show="list.length> 0" class="editor-cancel" @click="handlerCancel">取消</button>
                         <button class="editor-comfirm" @click="handlerConfirm">确定</button>
                     </div>
                 </div>
             </li>
         </ul>
-        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes != 3">
+        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes == 1">
             <span class="el-icon-plus avatar-uploader-icon"></span>
-            <span>最多添加8个图文消息</span>
+            <span>还可添加 {{(8-list.length)}} 个图文消息</span>
         </div>
         <image-manage
             :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
@@ -116,7 +107,7 @@
     </div>
 </template>
 <script>
-import { trim, notify } from "@/utlis/index.js";
+import { trim, notify, transformationUrl } from "@/utlis/index.js";
 import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { uploadImg } from "@/api/request/account.js";
@@ -139,11 +130,12 @@ export default {
             curEditorItem: {
                 title: "",
                 description: "",
-                picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                picUrl: require('img/picCover.png'),
                 urlType: "",
                 urlData: "",
                 contentPageId: ''
             },
+            promotionUrl: this.$store.state.wxaccount.account_info.promotionUrl,
             curEditorTitle: '',
             isUploaded: false,
             isEditorShow: false,
@@ -157,11 +149,7 @@ export default {
     },
     mounted() {
         this.list = this.newsMsg;
-        console.log('this.list',this.list)
         this.replyTypes = this.replyType;
-         this.list.forEach((item, index) => {
-                item["isShow"] = true;
-            });
         this.isEditorShow = this.list.length > 0 ? false : true;
     },
     methods: {
@@ -170,11 +158,19 @@ export default {
         },
         handleClosePopup (val,data){
             this.isShowPopup = val
+            //Type: Url; Page; Product; News
+            //Href: 输入的url; page.id; product.id; news.id
+            //Id: null; page.id; productPage.id; productNews.id
+            //Title: 输入的url; page.title; product.title; news.title
+            //PicUrl: ''; ''; product.picUrl; news.picUrl
             if (data) {
                 this.curEditorItem.urlType = data.Type;
                 this.curEditorItem.urlData = data.Href;
                 this.curEditorItem.contentPageId = data.Id;
-                this.curEditorTitle = data.Title;
+                this.curEditorTitle = transformationUrl(data.Type,this.promotionUrl,data.Href,data.Id)
+                if (data.PicUrl) {
+                    this.curEditorItem.picUrl = data.PicUrl
+                }
             }
         },
         downward(item, index) {
@@ -195,15 +191,15 @@ export default {
             this.listItems = listItems;
             this.index = index;
             this.isEditor = true;
-            this.$set(this.list[index], "isShow", false);
+            this.curEditorTitle = transformationUrl(item.urlType,this.promotionUrl,item.urlData,item.contentPageId)
             this.isEditorShow = true;
             list.insertBefore(editor, listItems[index]);
         },
         remove(item, index) {
             this.list = this.list.splice(index, 1);
         },
+        //确定
         handlerConfirm() {
-            console.log('tuwen',this.curEditorItem)
             for (let key in this.curEditorItem) {
                 if (
                     typeof this.curEditorItem[key] == "string" &&
@@ -217,26 +213,27 @@ export default {
             if (!this.isEditor) {
                 this.list.push(this.curEditorItem);
                 this.isEditorShow = false;
-                console.log('7777',this.list)
             } else {
                 // 编辑
-
                 this.$set(this.list, this.index, this.curEditorItem);
             }
-            this.$set(this.list[this.index], "isShow", true);
             this.$emit("handlerSaveImgText", this.list);
             this.isEditorShow = this.isEditor = false;
             // 添加完成后重置一下
             this.curEditorItem = {
                 title: "",
                 description: "",
-                picUrl:"http://img.andni.cn/Picture/823EB3BD-93F4-4655-B833-D604A6EF2032/0dd7cc4ae2084997859e8691623716d4",
+                picUrl: require('img/picCover.png'),
                 urlType: "",
                 urlData: "",
                 contentPageId: ''
             };
             this.picUrl = ''
             this.curEditorTitle = ''
+        },
+        //取消
+        handlerCancel(){
+            this.isEditorShow = false
         },
         handlerAddNewsImg() {
             this.index = this.list.length + 1;
@@ -247,7 +244,6 @@ export default {
         async getImage(src) {
             // let {data} = await uploadImg(src);
             // this.picUrl = data;
-            console.log('333',src)
              this.picUrl = src;
              this.curEditorItem.picUrl = src;
           
@@ -267,9 +263,6 @@ export default {
         newsMsg() {
             this.list = this.newsMsg;
             this.replyTypes = this.replyType;
-            this.list.forEach((item, index) => {
-                item["isShow"] = true;
-            });
             this.isEditorShow = this.newsMsg.length > 0 ? false : true;
          
         },
@@ -277,12 +270,32 @@ export default {
     }
 };
 </script>
+<style scoped>
+.el-input /deep/ input {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-input /deep/ input:hover {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-input /deep/ input:focus {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-textarea /deep/ textarea {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-textarea /deep/ textarea:hover {
+    border: 1px solid rgba(211,211,211,1);
+}
+.el-textarea /deep/ textarea:focus {
+    border: 1px solid rgba(211,211,211,1);
+}
+</style>
 <style lang="scss" scoped>
 .image-text {
-    padding-top: 24px;
+    padding-top: 16px;
 }
 .list {
-    width: 279px;
+    width: 280px;
     margin: 0 auto;
     > li {
         position: relative;
@@ -313,7 +326,7 @@ export default {
     }
     li.list-item {
         height: 60px;
-        padding: 0 10px 0 32px;
+        padding: 0 16px;
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
         border-radius: 4px;
@@ -364,25 +377,60 @@ export default {
             box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
         }
         .seting-info {
-            padding-top: 8px;
+            padding: 12px 8px 8px;
+            margin-top: 8px;
+            border: 1px solid rgba(211,211,211,1);
+            border-radius: 2px;
             box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
             .seting-item {
                 padding-bottom: 16px;
+                
             }
             .seting-title {
                 padding-bottom: 8px;
             }
+            .seting-line {
+                height:40px;
+                background:rgba(255,255,255,1);
+                border-radius:2px;
+                border:1px solid rgba(229,229,229,1);
+                font-size:14px;
+                font-family:'PingFangSC-Regular,PingFangSC';
+                font-weight:400;
+                color:rgba(211,211,211,1);
+                line-height:40px;
+                padding: 0 14px;
+                cursor: pointer;
+            }
+            .select {
+                color: #606266;
+            }
+            .seting-btn {
+                display: flex;
+                justify-content: flex-end;
+            }
             .editor-comfirm {
-                display: block;
+                display: inline-block;
                 width: 70px;
                 height: 32px;
                 background: rgba(9, 204, 235, 1);
                 border-radius: 2px;
+                margin-left: 16px;
+                cursor: pointer;
                 color: #fff;
-                margin: 0 auto;
+            }
+            .editor-cancel {
+                display: inline-block;
+                width: 70px;
+                height: 32px;
+                cursor: pointer;
+                background: #fff;
+                border-radius: 2px;
+                color: rgba(9, 204, 235, 1);
+                border: 1px solid rgba(9, 204, 235, 1);
             }
             .cover {
-                width: 70px;
+                width: 140px;
                 height: 70px;
                 border-radius: 2px;
                 overflow: hidden;

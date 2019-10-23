@@ -38,7 +38,6 @@
                     :article-page-result="articlePageResult"
                     :article-search-options="articleSearchOptions"
                     :tree-result="treeResult"
-                    :prev-address="prevAddress"
                     @getArticleList="getArticleList"
                     @batchMove="batchMoveNews"
                     @batchCopy="batchCopyNews"
@@ -50,6 +49,7 @@
                     @handleSelectionChange="handleSelectionChange"
                     @changeOperateName="changeOperateName"
                 ></content-table>
+                
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -95,7 +95,7 @@ export default {
         ContentHeader,
         ContentTable,
         RightPannel,
-        SelectTree
+        SelectTree,
     },
     data() {
         return {
@@ -110,7 +110,6 @@ export default {
             selectCategory: "",
             operateName: "移动",
             isInvitationPanelShow: false,
-            prevAddress:"",
             articleSearchOptions: {
                 title: "",
                 categoryIdList: [0],
@@ -125,7 +124,6 @@ export default {
         };
     },
     mounted() {
-        this.getContentPrevAddress();
         this.getArticleList();
         this.getTreeAsync();
     },
@@ -138,13 +136,6 @@ export default {
         }
     },
     methods: {
-        /**
-         * 获取预览地址
-         */
-        async getContentPrevAddress() {
-        let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail');
-                this.prevAddress = data;
-        },
         // 移动分类 或是 复制到分类
         changeOperateName(operate) {
             this.operateName = operate;

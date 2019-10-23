@@ -78,15 +78,16 @@
             >
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn edit-icon" @click="handleEditor(scope.row)">
+                        <button class="handle-btn edit-icon" @click="handleEditor(scope.row)" style="margin-right:16px">
                             <i class="iconfont iconbianji"></i>
                         </button>
-                        <button class="handle-btn look-btn edit-icon" @click="download(scope.row)">
+                        <button class="handle-btn look-btn edit-icon" @click="download(scope.row)" style="margin-right:16px">
                             <i class="iconfont iconxiazai"></i>
                         </button>
                         <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
+                            style="margin-right:16px"
                         >
                             <i class="iconfont iconsangedian"></i>
                         </button>

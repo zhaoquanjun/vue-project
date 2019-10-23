@@ -2,6 +2,7 @@ import {
   isAuth
 } from "@/api/request/account.js";
 import store from "@/store/index";
+import {setLocal} from '@/libs/local';
 import { getCurSiteId } from "@/api/request/dashboardApi.js"
 const user = {
   state: {
@@ -10,30 +11,20 @@ const user = {
       isResolveSuccess: false,
       isCertification: false
     },
-    account_info: {},
-    menu_reply_behavior: {
-      name: '111',
-      ClickBehavior: 'message',
-      BehaviorType: 'picture'
-    }
+    account_info: {}
   },
   getters: {
     wx_status: state => state.wx_status,
-    account_info: state => state.account_info,
-    menu_reply_behavior: state => state.menu_reply_behavior
+    account_info: state => state.account_info
   },
   mutations: {
     SET_WX_STATUS: (state, payload) => {
       state.wx_status = payload;
+      setLocal("wx_status", payload)
     },
     SET_ACCOUNT_INFO: (state, payload) => { 
       state.account_info = payload;
-    },
-    SET_MENU_CLICK_BEHAVIOR: (state, payload) => {
-      state.menu_reply_behavior.ClickBehavior = payload;
-    },
-    SET_MENU_BEHAVIOR_TYPE: (state, payload) => {
-      state.menu_reply_behavior.BehaviorType = payload;
+      setLocal("account_info", payload)
     }
   },
   actions: {
@@ -48,7 +39,7 @@ const user = {
           isResolveSuccess: data.data.isResolveSuccess
           // isAuth: true,
           // isResolveSuccess: true,
-          // isCertification: false
+          // isCertification: true
         }
         let accountInfo = {
           platformName: data.data.platformNiceName,

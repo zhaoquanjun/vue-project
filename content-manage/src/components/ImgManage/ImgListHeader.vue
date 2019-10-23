@@ -38,11 +38,11 @@
                     <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
                 </button>
 
-                <button class="list-mode mode-item" @click="showType('list')">
+                <button class="list-mode mode-item" @click="showType('list')" v-show="!isPopup">
                    
                     <i class="list-icon mode-icon" :class="{'list-iconOn':modeSelecte}"></i>
                 </button>
-                <button class="grid-mode mode-item" @click="showType('grid')">
+                <button class="grid-mode mode-item" @click="showType('grid')" v-show="!isPopup">
                     
                     <i class="list-icon mode-icon"  :class="{'mode-iconOn':!modeSelecte}"></i>
                 </button>
@@ -73,7 +73,7 @@
 </template>
 <script>
 export default {
-    props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
+    props: ["picSearchOptions", "isBatchHeaderShow", "countPic", "isPopup"],
     data() {
         return {
             ascSort: false,
@@ -151,5 +151,13 @@ export default {
     height: 32px;
     border: 1px solid #e5e5e5;
     border-radius: 2px;
+    &:hover{
+        opacity: 0.8;
+    }
+}
+.upload-wrap{
+    &:hover{
+        opacity: 0.8;
+    }
 }
 </style>
