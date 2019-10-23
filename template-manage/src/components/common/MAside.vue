@@ -15,7 +15,7 @@
                     :class="{'menu-bg':curPath==it.code,'menu-hover':curIndex==i}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
-                    @mouseenter="changeCurHoverItem(i)"
+                    @mouseenter="changeCurHoverItem(it,i)"
                     @click="skipPages(it,i)"
                 >
                     <!--  :class="[curPath==it.code? it.code+'-on' : it.code,curIndex==i ? it.code+'-on' : it.code]" -->
@@ -62,8 +62,13 @@ export default {
         LeftNavComponents
     },
     methods: {
-        changeCurHoverItem(i) {
+        changeCurHoverItem(it,i) {
             this.curIndex = i;
+            if(it.children && it.children.length > 0) {
+                this.width = 300;
+            } else {
+                this.width = 150;
+            }
         },
         skipPages(item, i) {
             if (item.children && item.children.length> 0) {
@@ -73,18 +78,9 @@ export default {
         },
         collapseOpen(width, time) {
             this.width = 300;
-            this.width1 = 150;
-            this.display = "block";
-            this.time = time + "s";
-            this.border = "none";
         },
         collapseClose() {
             this.width = 60;
-            this.width1 = 0;
-            this.display = "none";
-            this.time = "0s";
-            this.curIndex = -1;
-            this.border = "1px solid #e5e5e5";
         },
         iconfonts(code) {
             switch (code) {
