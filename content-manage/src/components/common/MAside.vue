@@ -61,20 +61,13 @@ export default {
     },
     methods: {
         changeCurHoverItem(i) {
-            if(i==-1) {
-                this.curIndex = i;
-            } else {
-                setTimeout(()=>{
-                    this.curIndex = i;
-                },500)
-            }
+            this.curIndex = i;
         },
         skipPages(item, i) {
-            let path = item.menuUrl.split("/")[1];
-            if (!item.path) {
+            if (item.children && item.children.length> 0) {
                 return;
             }
-            this.$router.push(item.path);
+            window.location.href = "//" + item.menuUrl;
         },
         collapseOpen(width, time) {
             this.width = 300;
