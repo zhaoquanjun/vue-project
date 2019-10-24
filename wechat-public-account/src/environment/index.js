@@ -22,7 +22,6 @@ let newsApi = `${httpSchema}api.content.${baseServerUrl}`;
 let imageApi = `${httpSchema}api.content.${baseServerUrl}`;
 let wechatApi = `${httpSchema}open.weixin.${baseServerUrl}`;
 export let siteDomain = `wechat.${baseServerUrl}`;
-export let wechatDomain = `wechat.${baseServerUrl}`
 // 个人中心
 export let personalUrl = `${httpSchema}dashboard.${baseServerUrl}/personal`;
 export let dashboardUrl = `${httpSchema}dashboard.${baseServerUrl}/board`;
