@@ -92,6 +92,7 @@ export default {
         height: 40px;
         line-height: 40px;
         padding-left: 24px;
+        font-size: 16px;
         padding-top: 5px;
         text-align: left;
     }
