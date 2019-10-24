@@ -27,7 +27,7 @@ export let imgManageUrl = `${httpSchema}content.${baseServerUrl}/content/picture
 export let fileManageUrl = `${httpSchema}content.${baseServerUrl}/content/file`;
 export let designerUrl = `${httpSchema}designer.${baseServerUrl}`;
 export let mySiteUrl = `${httpSchema}dashboard.${baseServerUrl}/website/mysite`;
-export let wechatSpreadUrl = `${httpSchema}wechataccount.${baseServerUrl}/wechataccount/wechatspread`;
+export let wechatSpreadUrl = `${httpSchema}wechat.${baseServerUrl}/wechat/wechatspread`;
 export let dashboardUrl = `${httpSchema}dashboard.${baseServerUrl}/board`;
 
 // 阿里云续费地址

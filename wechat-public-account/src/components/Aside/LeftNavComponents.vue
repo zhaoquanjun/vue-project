@@ -37,8 +37,6 @@ export default {
                 return
             }
             let domain = item.menuUrl.split("/")[0];
-            console.log('domain',domain)
-            return
             if (siteDomain == domain) {
                 this.$router.push(item.path);
                 return;

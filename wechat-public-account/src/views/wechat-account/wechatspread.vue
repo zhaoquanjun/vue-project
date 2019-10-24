@@ -87,6 +87,7 @@
     </div>
     <statistics 
       v-if="isShowStatistics"
+      :AddType="replyType"
       @closeStatistics="closeStatistics"
       :shareInfo= "shareInfo"
     >
@@ -282,7 +283,7 @@ export default {
       let wx_status = this.$store.state.wxaccount.wx_status
       this.siteId = this.$store.state.dashboard.siteId
       if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
-        this.$router.replace({path:'/wechataccount/wxauther' });
+        this.$router.replace({path:'/wechat/wxauther' });
       }
       this.accountInfo = this.$store.state.wxaccount.account_info
     },

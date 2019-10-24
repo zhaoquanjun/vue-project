@@ -2,12 +2,12 @@
 export const defaultRoutes = [{
         path: "/",
         redirect: {
-            path: '/wechataccount/custommenu'
+            path: '/wechat/custommenu'
         },
     },
     
     {
-        path: "/wechataccount",
+        path: "/wechat",
         component: () => import('@/views/wechat-account/index.vue'),
         children: [{
                 path: "custommenu",
