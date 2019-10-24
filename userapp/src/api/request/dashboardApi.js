@@ -65,7 +65,7 @@ export const getAppExpandInfo = () => {
  * 获取app列表
  */
 export const getApplicationsByUserId = () => {
-    return ajaxRequest.get(`${environment.memberManageApi}/api/appInfo/GetApplicationsByUserId`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/appInfo/GetApplicationsByUserId`);
 }
 /**
  * 切换app记录appId
