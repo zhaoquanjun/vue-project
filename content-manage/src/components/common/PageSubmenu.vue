@@ -84,7 +84,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .submenu {
-    width: 150px;
+    width: 149px;
     height: calc(100vh - 50px);
     background: #FFFFFF;
     border-right: 1px solid #e5e5e5;
