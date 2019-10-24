@@ -164,6 +164,38 @@ export default {
     }
 };
 </script>
+<style scoped>
+.m-aside {
+    position: absolute;
+    left: 0;
+    top: 0px;
+    /* bottom: 0; */
+    z-index: 10;
+    overflow: hidden;
+    transition: 0.2s ease-in-out;
+    /* transition:  0.3s linear;  */
+}
+.m-asideleft {
+    overflow: hidden;
+    /* transition:  0.3s linear;  */
+    /* height: 100%; */
+}
+
+.m-asideright {
+    width: 0px !important;
+    position: absolute;
+    left: 150px;
+    z-index: 10;
+    top: 0;
+    text-align: center;
+    border-right: none !important;
+    /* border-right: 1px solid #E5E5E5; */
+}
+.el-aside /deep/ .el-menu {
+    /* height: 100%; */
+    border: none;
+}
+</style>
 <style lang="scss" scoped>
 // 选中的样式
 .active-color {
