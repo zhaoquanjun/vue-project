@@ -210,11 +210,15 @@ export default {
 }
 .menu-hover {
     background:rgba(248,250,252,1);
+    border-left: 4px solid rgba(248,250,252,1) !important;
 }
 .menu-bg {
     background:rgba(240, 243, 247, 1);
     color: #0595e6;
     border-left: 4px solid #0595e6 !important;
+    .menu-icon {
+        color: #0595e6 !important;
+    }
 }
 .left-menu {
     // border-right: solid 1px #e6e6e6;
@@ -227,18 +231,23 @@ export default {
         white-space: nowrap;
         margin-bottom: 14px;
         border-left: 4px solid #fff;
+        .menu-item-content {
+            display: inline-block;
+            line-height: 50px;
+        }
         .menu-icon {
             display: inline-block;
-            font-size: 20px;
+            font-size: 16px;
             width: 60px;
             text-align: center;
             vertical-align: middle;
-            color: #0595e6;
+            color: #262626;
+            margin-left: -4px;
         }
         .iconicon-des-Arrow{
             position: absolute;
-            left: 130px;
-            font-size: 14px;
+            left: 126px;
+            font-size: 12px;
             vertical-align: middle;
             color: #B9CBCF;
         }
