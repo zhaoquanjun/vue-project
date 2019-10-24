@@ -28,6 +28,7 @@ export default store;
  */
 
 getLocal("authList")&& store.commit("set_authList",getLocal("authList"))
+getLocal("menulist")&& store.commit("set_menuList",getLocal("menulist"))
 if(getLocal("ymSd")){
   store.commit("SETSITEID",getLocal("ymSd"))
 }

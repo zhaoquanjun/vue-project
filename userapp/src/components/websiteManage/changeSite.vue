@@ -137,7 +137,7 @@ export default {
       } else {
         if (this.$route.path == "/website/selectTemplate") {
           this.$router.push({
-            path: "/website/mysite"
+            path: "/website/mysite/siteinfo"
           });
         }
       }
