@@ -120,7 +120,7 @@ export default {
       this.siteId= this.$store.state.dashboard.siteId
       this.accountInfo = this.$store.state.wxaccount.account_info
       if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
-        this.$router.replace({path:'/wechataccount/wxauther' });
+        this.$router.replace({path:'/wechat/wxauther' });
       }
     },
     // 获取当前可选域名列表
@@ -192,7 +192,7 @@ export default {
       if(status==200 && data.isSuccess) {
         notify(this, "解绑成功", "success");
         setTimeout(() => {
-          this.$router.replace({path:'/wechataccount/wxauther' });
+          this.$router.replace({path:'/wechat/wxauther' });
         }, 1000);
       } else {
         notify(this, "解绑失败", "error");

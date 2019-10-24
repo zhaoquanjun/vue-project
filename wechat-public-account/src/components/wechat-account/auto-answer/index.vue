@@ -165,7 +165,7 @@ export default {
             this.siteId = this.$store.state.dashboard.siteId
             this.searchOption.SiteId = this.$store.state.dashboard.siteId
             if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
-                this.$router.replace({path:'/wechataccount/wxauther' });
+                this.$router.replace({path:'/wechat/wxauther' });
             }
         },
         //获取回复详情

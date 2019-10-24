@@ -20,9 +20,8 @@ let pageApi = `${httpSchema}api.designer.${baseServerUrl}`;
 let pageApiUri = `${httpSchema}api.designer.${baseServerUrl}`;
 let newsApi = `${httpSchema}api.content.${baseServerUrl}`;
 let imageApi = `${httpSchema}api.content.${baseServerUrl}`;
-let wechataccountApi = `${httpSchema}open.weixin.${baseServerUrl}`;
-export let siteDomain = `wechataccount.${baseServerUrl}`;
-export let wechataccountDomain = `wechat.${baseServerUrl}`
+let wechatApi = `${httpSchema}open.weixin.${baseServerUrl}`;
+export let siteDomain = `wechat.${baseServerUrl}`;
 // 个人中心
 export let personalUrl = `${httpSchema}dashboard.${baseServerUrl}/personal`;
 export let dashboardUrl = `${httpSchema}dashboard.${baseServerUrl}/board`;
@@ -51,7 +50,7 @@ if (process.env.NODE_ENV === 'development') {
     silentRedirectUri = 'http://localhost:8084/static/silent-renew.html';
     clientId = 'dev.weixinopen.api';
     scope = "openid profile dashboard.api content.api designer.api produce.api weixinopen.api";
-    wechataccountApi = "http://open.weixin.console.wezhan.cn"
+    wechatApi = "http://open.weixin.console.wezhan.cn"
     pageApi = 'http://api.designer.console.wezhan.cn';
     pageApiUri = 'http://api.designer.console.wezhan.cn';
     newsApi = 'http://api.content.console.wezhan.cn';
@@ -72,7 +71,7 @@ const enbironmemy = {
     silentRedirectUri,
     clientId,
     scope,
-    wechataccountApi,
+    wechatApi,
     pageApi,
     newsApi,
     pageApiUri,

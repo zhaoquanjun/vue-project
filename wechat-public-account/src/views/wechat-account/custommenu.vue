@@ -62,7 +62,7 @@ export default {
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
       if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
-        this.$router.replace({path:'/wechataccount/wxauther' });
+        this.$router.replace({path:'/wechat/wxauther' });
       }
       this.accountInfo = this.$store.state.wxaccount.account_info
     },
