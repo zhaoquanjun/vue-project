@@ -207,12 +207,12 @@ export default {
         return
       }
       if(!this.infoData.coverUrl) {
-        notify(this, '请完设置分享封面', 'error')
+        notify(this, '请设置分享封面', 'error')
         flag = false
         return
       }
       if(!this.infoData.shareTitle) {
-        notify(this, '请完设置分享标题', 'error')
+        notify(this, '请设置分享标题', 'error')
         flag = false
         return
       }
