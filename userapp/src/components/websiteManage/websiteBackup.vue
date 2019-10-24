@@ -15,11 +15,13 @@
           @getSiteId="getSiteId"
           @getSiteName="getSiteName"
         />
-        <el-tabs v-model="backupType" type="card" @tab-click="handleClick">
-          <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
-          <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
-        </el-tabs>
-        <button class="backupBtn" @click="backup" v-show="showBackup">备份当前版本</button>
+        <div style="position:relative">
+          <el-tabs v-model="backupType" type="card" @tab-click="handleClick">
+            <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
+            <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
+          </el-tabs>
+          <button class="backupBtn" @click="backup" v-show="showBackup">备份当前版本</button>
+        </div>
         <el-main>
           <div class="table-wrap table-list" id="table-list">
             <el-table
@@ -515,8 +517,8 @@ export default {
   height: 32px;
   background: rgba(0, 193, 222, 1);
   position: absolute;
-  right: 40px;
-  top: 165px;
+  right: 16px;
+  top: 0px;
 
   font-weight: 400;
   color: rgba(255, 255, 255, 1);
