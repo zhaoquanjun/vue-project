@@ -1,7 +1,7 @@
 <template>
   <div class="statistics">
     <div class="title">
-      <span>页面推广数据</span>
+      <span>{{sticsTitle}}</span>
       <span class="btn" @click="closeStatistics">返回</span>
     </div>
     <div class="body">
@@ -47,6 +47,9 @@ export default {
   props: {
     shareInfo: {
       type:Object
+    },
+    AddType: {
+      type: String
     }
   },
   data() {
@@ -59,8 +62,17 @@ export default {
       uvList:[],
       yList:[],
       yLast:[],
+      sticsTitle: '',
       interval: 0 //设置X轴数据间隔几个显示一个，为0表示都显示
     }
+  },
+  created (){
+      this.sticsTitle = '页面推广数据'
+      if (this.AddType == 'news') {
+        this.sticsTitle = '文章推广数据'
+      } else if (this.AddType == 'product') {
+        this.sticsTitle = '产品推广数据'
+      }
   },
   components: {
     
