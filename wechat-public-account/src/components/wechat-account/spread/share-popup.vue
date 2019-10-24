@@ -141,20 +141,19 @@ export default {
     //初始化获取列表数据
     async getPageInfoList(){
       switch (this.infoData.entityType) {
-        case 1:
+        case 'Page':
           this.placeholderText = '未填写则默认为页面标题'
           break;
-        case 2:
+        case 'News':
           this.placeholderText = '未填写则默认为文章标题'
           break;
-        case 3:
+        case 'Product':
           this.placeholderText = '未填写则默认为产品标题'
           break;
       }
       let {data} = await getPageInfoList(this.siteId,'Content')
       if(data.length>0) {
         this.pageList = data
-        console.log(this.pageList,'000000')
       }
     },
     //切换图片
@@ -263,7 +262,11 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+.el-textarea /deep/ .el-input__count {
+  right: 20px;
+}
+</style>
 <style lang="scss" scoped>
 .share {
   position: fixed;
@@ -334,7 +337,7 @@ export default {
             overflow: hidden;
             font-family:'AlibabaPuHuiTiR';
             color:rgba(136,136,136,1);
-            line-height:18px;
+            line-height: 20px;
           }
           img {
             float: right;
