@@ -29,14 +29,18 @@
                 </li>
             </ul>
         </el-aside>
-        <LeftNavComponents
-            :subTitle="subTitle"
-            :lastRoute="lastRoute"
-            v-if="isLeftNavComponentsShow"
-            :style="{width: 150 + 'px !important',backgroundColor:'#fff',height: '100%',borderRight:'1px solid #e6e6e6' }"
-            class="m-asideright"
-            :menuList="menuListChild"
-        ></LeftNavComponents>
+        <div 
+            @mouseleave="leaveChange"
+            @mouseenter="enterChange">
+            <LeftNavComponents
+                :subTitle="subTitle"
+                :lastRoute="lastRoute"
+                v-if="isLeftNavComponentsShow"
+                :style="{width: 150 + 'px !important',height: '100%',borderRight:'1px solid #e6e6e6' }"
+                class="m-asideright"
+                :menuList="menuListChild"
+            ></LeftNavComponents>
+        </div>
     </div>
 </template>
 <script>
@@ -54,6 +58,7 @@ export default {
             display: "none",
             border:"1px solid #e5e5e5",
             curPath: "",
+            enterTime: null,
             lastRoute: "",
             subTitle:""
         };
@@ -62,12 +67,35 @@ export default {
         LeftNavComponents
     },
     methods: {
+        enterChange(){
+            let times = (new Date()).getTime();
+            this.enterTime = times
+        },
+        leaveChange(){
+            this.enterTime = null
+        },
         changeCurHoverItem(it,i) {
-            this.curIndex = i;
-            if(it.children && it.children.length > 0) {
-                this.width = 300;
+            if (this.curIndex == -1) {
+                this.curIndex = i;
+                if(it.children && it.children.length > 0) {
+                    this.width = 300;
+                } else {
+                    this.width = 150;
+                }
             } else {
-                this.width = 150;
+                this.temer = setTimeout(()=>{
+                    let levtimes = (new Date()).getTime();
+                    if(!this.enterTime || (levtimes - this.enterTime >=200)) {
+                        this.curIndex = i;
+                        if(it.children && it.children.length > 0) {
+                            this.width = 300;
+                        } else {
+                            this.width = 150;
+                        }
+                    } else {
+                        return
+                    }
+                },200)
             }
         },
         skipPages(item, i) {
@@ -85,27 +113,19 @@ export default {
         iconfonts(code) {
             switch (code) {
                 case "board":
-                    return "iconicon-kongzhitai";
+                    return "iconicon-kongzhitai1";
                 case "content":
-                    return "iconicon-neirong1";
+                    return "iconicon-neirong";
                 case "website":
-                    return "iconicon-wangzhan";
-                case "system":
-                    return "iconicon-huiyuan";
+                    return "iconicon-moban1";
                 case "sitemember":
-                    return "iconicon-huiyuan";
-                case "form":
-                    return "iconicon-chengyuan";   
-                case "micro":
-                    return "iconweixinxiaochengxu";
-                case "wechataccount":
-                    return "iconicon-huishouzhna";
-                case "recycle":
-                    return "iconicon-huishouzhna";
+                    return "iconicon-huiyuan1";
                 case "role":
                     return "iconicon-chengyuan";
+                case "recycle":
+                    return "iconicon-huishou";
                 case "template":
-                    return "iconicon-mobanguanli"    
+                    return "iconicon-mobanguanli1"    
             }
         },
         menuHasChild(index){
@@ -185,11 +205,15 @@ export default {
 }
 .menu-hover {
     background:rgba(248,250,252,1);
+    border-left: 4px solid rgba(248,250,252,1) !important;
 }
 .menu-bg {
     background:rgba(240, 243, 247, 1);
     color: #0595e6;
     border-left: 4px solid #0595e6 !important;
+    .menu-icon {
+        color: #0595e6 !important;
+    }
 }
 .left-menu {
     // border-right: solid 1px #e6e6e6;
@@ -202,18 +226,23 @@ export default {
         white-space: nowrap;
         margin-bottom: 14px;
         border-left: 4px solid #fff;
+        .menu-item-content {
+            display: inline-block;
+            line-height: 50px;
+        }
         .menu-icon {
             display: inline-block;
-            font-size: 20px;
+            font-size: 16px;
             width: 60px;
             text-align: center;
             vertical-align: middle;
-            color: #0595e6;
+            color: #262626;
+            margin-right: -4px;
         }
         .iconicon-des-Arrow{
             position: absolute;
-            left: 130px;
-            font-size: 14px;
+            left: 126px;
+            font-size: 12px;
             vertical-align: middle;
             color: #B9CBCF;
         }
