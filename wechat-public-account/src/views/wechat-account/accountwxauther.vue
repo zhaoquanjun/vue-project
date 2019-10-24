@@ -185,7 +185,7 @@ export default {
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
       if (wx_status.isAuth && wx_status.isCertification && wx_status.isResolveSuccess) {
-        this.$router.replace({path:'/wechataccount/accountsetting' });
+        this.$router.replace({path:'/wechat/accountsetting' });
       }
     },
     // 微信授权
@@ -205,7 +205,7 @@ export default {
         message: this.$createElement("div", null, '是否授权成功'),
         callback: async action => {
           if (action === "confirm") {
-            this.$router.push('/wechataccount/accountsetting')
+            this.$router.push('/wechat/accountsetting')
             this._getCdnDomainList()
           }
         }
