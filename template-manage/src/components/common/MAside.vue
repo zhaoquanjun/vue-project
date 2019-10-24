@@ -235,7 +235,7 @@ export default {
             font-size: 16px;
             width: 60px;
             text-align: center;
-            vertical-align: middle;
+            line-height: 50px;
             color: #262626;
             margin-right: -4px;
         }

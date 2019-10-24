@@ -94,6 +94,7 @@ export default {
         padding-left: 24px;
         padding-top: 5px;
         text-align: left;
+        font-size: 16px;
     }
     .submenu-list {
         padding-top: 7px;
