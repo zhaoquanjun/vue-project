@@ -17,7 +17,11 @@
             <div class="site-num">{{siteInfo.length}}</div>
             <div class="site-total">/ {{siteCount}}</div>
           </div>
-          <div class="sitelist-addSite" v-show="isSystem&&siteInfo.length < siteCount"></div>
+          <div
+            class="sitelist-addSite"
+            v-show="isSystem&&siteInfo.length < siteCount"
+            @click="addSite"
+          ></div>
         </div>
       </div>
       <div class="site-operating">
@@ -163,6 +167,45 @@
         </el-col>
       </el-row>
     </el-row>
+    <el-dialog
+      width="0"
+      :visible.sync="createShow"
+      :show-close="false"
+      :close-on-click-modal="false"
+    >
+      <div class="right-pannel" :style="{width:'600px'}">
+        <div class="pannel-head">
+          <span class="headTitle">创建网站</span>
+          <span class="close-pannel" @click="closeDialog">
+            <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+          </span>
+        </div>
+        <div>
+          <div class="createSiteName">
+            <span class="createSiteNameTitle">请设置您的网站名称：</span>
+            <el-input v-model="createSiteName" placeholder="请输入内容" class="createSiteNameInput"></el-input>
+          </div>
+          <div style="margin-top:24px;margin-left:32px;">
+            <div class="createSiteLanguageTitle">请选择您的网站语言：</div>
+            <el-radio-group v-model="radio" class="radio">
+              <el-radio label="zh-CN">中文</el-radio>
+              <el-radio label="en-US">英文</el-radio>
+              <el-radio label="ja-JP">日语</el-radio>
+              <el-radio label="es-ES">西班牙语</el-radio>
+              <el-radio label="ko-KR">韩语</el-radio>
+            </el-radio-group>
+          </div>
+          <div class="create">
+            <el-button
+              class="createBtn"
+              :disabled="radio == '' || createSiteName == ''"
+              :class="{disabled: radio == '' || createSiteName == ''}"
+              @click="createSite"
+            >立即创建</el-button>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
     <SelectTemplateDialog
       ref="selectTemplateDialog"
       :siteId="curSiteinfo.siteId"
@@ -189,7 +232,10 @@ export default {
       siteId: 0,
       siteInfo: [],
       curSiteinfo: {},
-      curSiteTodoinfo: {}
+      curSiteTodoinfo: {},
+      createShow: false,
+      createSiteName: "",
+      radio: ""
     };
   },
   components: {
@@ -246,6 +292,33 @@ export default {
       let { data } = await dashboardApi.getTodoInfo(siteId);
       this.curSiteTodoinfo = data;
     },
+    closeDialog() {
+      this.radio = "";
+      this.createSiteName = "";
+      this.createShow = false;
+    },
+    addSite() {
+      this.createShow = true;
+    },
+    // 创建site
+    async createSite() {
+      let { status } = await dashboardApi.CreateSite(
+        this.radio,
+        this.createSiteName
+      );
+      if (status == 200) {
+        this.radio = "";
+        this.createSiteName = "";
+        this.$emit("getSites");
+        this.createShow = false;
+        this.$notify({
+          customClass: "notify-success",
+          message: `创建成功`,
+          duration: 2000,
+          showClose: false
+        });
+      }
+    },
     // 转换语言
     _getLanguage(language) {
       return getLanguage(language);
@@ -273,7 +346,34 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+.createSiteNameInput /deep/ .el-input__inner {
+  margin-top: 16px;
+  width: 536px;
+  height: 32px;
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(229, 229, 229, 1);
+}
+.radio /deep/ .is-checked .el-radio__inner {
+  background: #00c1de;
+  border-color: #00c1de;
+}
+.radio /deep/ .el-radio {
+  margin-right: 17px;
+}
+.radio /deep/ .el-radio__label {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(140, 140, 140, 1);
+  line-height: 20px;
+}
+.radio /deep/ .is-checked .el-radio__label {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(38, 38, 38, 1);
+  line-height: 20px;
+}
+</style>
 <style lang="scss" scoped>
 .content-section {
   width: 100%;
@@ -566,6 +666,79 @@ export default {
             }
           }
         }
+      }
+    }
+  }
+  .right-pannel {
+    width: 600px;
+    height: 356px;
+    background: #ffffff;
+    position: fixed;
+    z-index: 2200;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 3px #ccc;
+    transition: width 0.2s linear;
+    background-color: "#fff";
+    color: #262626;
+    overflow: hidden;
+    .pannel-head {
+      height: 70px;
+      overflow: hidden;
+      border-bottom: 2px solid #efefef;
+      .headTitle {
+        font-size: 16px;
+        font-weight: 500;
+        color: rgba(38, 38, 38, 1);
+        line-height: 70px;
+        margin-left: 32px;
+        margin-top: 24px;
+      }
+      .close-pannel {
+        line-height: 70px;
+        float: right;
+        cursor: pointer;
+        margin-right: 32px;
+      }
+    }
+    .disabled {
+      opacity: 0.4;
+    }
+    .createSiteName {
+      margin-top: 24px;
+      padding-left: 32px;
+      .createSiteNameTitle {
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(38, 38, 38, 1);
+        line-height: 20px;
+      }
+    }
+    .createSiteLanguageTitle {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(38, 38, 38, 1);
+      line-height: 20px;
+      margin-bottom: 16px;
+    }
+    .create {
+      margin-top: 30px;
+      width: 100%;
+      height: 80px;
+      border-top: 2px solid #eee;
+      text-align: center;
+      .createBtn {
+        width: 116px;
+        height: 32px;
+        background: rgba(1, 192, 222, 1);
+        border-radius: 2px;
+        padding: 0px;
+        margin-top: 24px;
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 1);
+        line-height: 32px;
       }
     }
   }

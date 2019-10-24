@@ -19,6 +19,7 @@
       ref="siteInfo"
       :siteCount="siteCount"
       :isSystem="isSystem"
+      @getSites="getSites"
       v-show="siteInfoList.length"
     />
     <content-num :contentNumber="contentNumber" />
