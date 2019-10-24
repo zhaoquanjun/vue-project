@@ -280,7 +280,7 @@ export default {
         };
     },
     created() {
-        this.options.target = `${this.apiHost}/api/chunkupload/${this.uploadType}/${this.nodeData.id}`;
+        this.options.target = `${this.apiHost}/api/v1/chunkupload/${this.uploadType}/${this.nodeData.id}`;
     },
     methods: {
         getTime(file) {
@@ -470,7 +470,7 @@ export default {
             this.$set(
                 this.options,
                 "target",
-                `${this.apiHost}/api/chunkupload/${this.uploadType}/${data.id}`
+                `${this.apiHost}/api/v1/chunkupload/${this.uploadType}/${data.id}`
             );
             this.chooseCategoryId = data.id;
             this.$refs.uploader.resetOption();
