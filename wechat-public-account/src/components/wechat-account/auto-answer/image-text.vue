@@ -51,14 +51,14 @@
                     </div>
                     <div class="seting-item">
                         <div class="seting-title">设置封面</div>
-                        <div class="cover">
+                        <div class="cover pointer"  @click="setCover">
                             <div class="upload-icon" @click="setCover" v-if="!curEditorItem.picUrl">
                                 <span class="el-icon-plus"></span>
                             </div>
                             <div  v-else>
                                 <img :src="curEditorItem.picUrl" />
                                 <div class="mask1">
-                                    <button @click="setCover">
+                                    <button>
                                         <i class="iconfont iconqiehuanxingshiyi"></i>
                                     </button>
                                 </div>
