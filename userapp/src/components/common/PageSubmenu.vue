@@ -107,10 +107,10 @@ export default {
             padding-left: 24px;
             cursor: pointer;
           }
-          &:hover {
-            color: #262626;
-            background:#f0f3f7;
-          }
+          // &:hover {
+          //   color: #262626;
+          //   background:#f0f3f7;
+          // }
           p {
             cursor: pointer;
             padding-left: 40px;
