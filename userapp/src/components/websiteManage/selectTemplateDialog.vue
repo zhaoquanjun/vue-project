@@ -249,7 +249,7 @@ import { getLanguage } from "@/configure/appCommon";
 import { designerUrl } from "@/environment/index";
 
 export default {
-  props: ["siteId", "siteName", "templateId", "isDesigner", "isChangeTemplate"],
+  props: ["siteId", "siteName", "templateId", "isChangeTemplate"],
   data() {
     return {
       templateShow: false,
@@ -350,9 +350,7 @@ export default {
     };
   },
   computed: {},
-  mounted() {
-    
-  },
+  mounted() {},
   methods: {
     async changeIndustry(item) {
       console.log(item);
@@ -499,27 +497,23 @@ export default {
         }
         if (status == 200) {
           loading.close();
-          if (this.isDesigner) {
-            window.location.href = `${designerUrl}?siteId=${this.siteId}`;
-          } else {
-            this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
-              confirmButtonText: "前往设计页面",
-              cancelButtonText: "取消",
-              iconClass: "icon-success"
+          this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
+            confirmButtonText: "前往设计页面",
+            cancelButtonText: "取消",
+            iconClass: "icon-success"
+          })
+            .then(() => {
+              window.location.href = `${designerUrl}?siteId=${this.siteId}`;
             })
-              .then(() => {
-                window.location.href = `${designerUrl}?siteId=${this.siteId}`;
-              })
-              .catch(action => {
-                if (action == "cancel") {
-                  this.templateShow = false;
-                  this.$router.push({
-                    path: "/website/mysite"
-                  });
-                  this.$emit("getSiteInfo", this.siteId);
-                }
-              });
-          }
+            .catch(action => {
+              if (action == "cancel") {
+                this.templateShow = false;
+                this.$router.push({
+                  path: "/website/mysite/siteinfo"
+                });
+                this.$emit("getSiteInfo", this.siteId);
+              }
+            });
         }
       } catch {
         loading.close();
@@ -700,8 +694,8 @@ export default {
     },
     // 显示选择模版弹框
     showTemplate() {
-        this.templateShow = true;
-        this.getIndustryTree();
+      this.templateShow = true;
+      this.getIndustryTree();
       this.getTemplateList();
       this.$nextTick(() => {
         window.addEventListener("resize", () => {

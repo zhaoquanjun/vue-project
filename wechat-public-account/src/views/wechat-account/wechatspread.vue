@@ -87,6 +87,7 @@
     </div>
     <statistics 
       v-if="isShowStatistics"
+      :AddType="replyType"
       @closeStatistics="closeStatistics"
       :shareInfo= "shareInfo"
     >

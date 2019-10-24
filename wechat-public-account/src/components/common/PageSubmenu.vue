@@ -26,7 +26,6 @@
   </div>
 </template>
 <script>
-import { siteDomain } from "@/environment/index";
 import { wechataccountDomain } from "@/environment/index";
 import { getLocal } from '@/libs/local'
 export default {
@@ -100,13 +99,14 @@ created(){
 .submenu {
     width: 150px;
     height: calc(100vh - 50px);
-    // border-right: 1px solid #e5e5e5;
-     background: #F8FAFC;
+    background: #FFFFFF;
+    border-right: 1px solid #e5e5e5;
     .submenu-title {
         height: 40px;
         line-height: 40px;
         padding-left: 24px;
         padding-top: 5px;
+        font-size: 16px;
         text-align: left;
     }
     .submenu-list {
@@ -116,11 +116,15 @@ created(){
           line-height: 50px;
           font-size: 14px;
           font-weight:400;
-          color:rgba(38,38,38,1);
+          color:#262626;
           span {
             padding-left: 24px;
             cursor: pointer;
           }
+          // &:hover {
+          //   color: #262626;
+          //   background:#f0f3f7;
+          // }
           p {
             cursor: pointer;
             padding-left: 40px;
@@ -130,10 +134,9 @@ created(){
             color:rgba(38,38,38,1);
             &:hover {
               color: #262626;
-              background: #fff;
+              background: #f0f3f7;
             }
             .active {
-              background: #fff !important;
               color: #0595e6 !important;
             }
           }
@@ -141,7 +144,6 @@ created(){
     }
 }
 .active {
-    background: #fff !important;
     color: #0595e6 !important;
 }
 .active:hover {

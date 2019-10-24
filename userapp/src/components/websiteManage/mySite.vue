@@ -57,7 +57,7 @@
                     :autosize="{ minRows: 3, maxRows: 3}"
                     placeholder="请输入站点名称"
                     v-model="siteNameValue"
-                    maxlength="50"
+                    maxlength="20"
                     show-word-limit
                     resize="none"
                     @blur="textBulr"
@@ -266,7 +266,6 @@
         ref="selectTemplateDialog"
         :siteId="siteId"
         :isChangeTemplate="isChangeTemplate"
-        :isDesigner="isDesigner"
         :siteName="siteName"
         :templateId="templateId"
         @getSiteInfo="getSiteInfo"
@@ -293,7 +292,6 @@ export default {
   data() {
     return {
       isChangeTemplate: true,
-      isDesigner: false,
       siteName: "",
       siteImage: "",
       siteId: 0,
@@ -538,7 +536,7 @@ export default {
       }
     },
     bindDomain() {
-      this.$router.push("/website/sitedomain");
+      this.$router.push("/website/mysite/siteDomain");
     }
   }
 };

@@ -1,14 +1,17 @@
 <template>
-  <div class="content-num-section">
+  <div class="content-section">
     <p class="section-title">内容管理</p>
     <el-row class="content">
       <el-col class="item" :span="6" v-for="(item, index) in content" :key="index">
-        <div class="item-box" @click="jumpToContent(item.url)">
-          <div class="item-name">
-            <span class="name">{{ item.name }}</span>
+        <div class="item-box">
+          <div class="item-wrap" @click="jumpToContent(item.url)">
+            <div class="item-name">
+              <span class="item-img" :class="backgroundImg(item.name)"></span>
+              <span class="name">{{ item.name }}</span>
+            </div>
             <div class="item-content">
               <span class="item-num">{{ item.num }}</span>
-              <span class="item-type">{{ item.type }}</span>
+              <span class="item-type">/ {{ item.maxNum }}</span>
             </div>
           </div>
         </div>
@@ -34,6 +37,18 @@ export default {
   methods: {
     jumpToContent(url) {
       window.location.href = url;
+    },
+    backgroundImg(name) {
+      switch (name) {
+        case "文章":
+          return "article";
+        case "产品":
+          return "product";
+        case "图片":
+          return "pic";
+        case "文件":
+          return "file";
+      }
     }
   },
   watch: {
@@ -41,26 +56,26 @@ export default {
       this.content = [
         {
           name: "文章",
-          num: this.contentNumber.newsCount,
-          type: "/ 篇",
+          num: this.contentNumber.newsCountInfo.currentVal,
+          maxNum: this.contentNumber.newsCountInfo.maxVal,
           url: articleManageUrl
         },
         {
           name: "产品",
-          num: this.contentNumber.productsCount,
-          type: "/ 个",
+          num: this.contentNumber.productCountInfo.currentVal,
+          maxNum: this.contentNumber.productCountInfo.maxVal,
           url: productManageUrl
         },
         {
           name: "图片",
-          num: this.contentNumber.picturesCount,
-          type: "/ 张",
+          num: this.contentNumber.pictureCountInfo.currentVal,
+          maxNum: this.contentNumber.pictureCountInfo.maxVal,
           url: imgManageUrl
         },
         {
           name: "文件",
-          num: this.contentNumber.filesCount,
-          type: "/ 个",
+          num: (this.contentNumber.fileStorageInfo.currentVal/1024/1024/1024).toFixed(1),
+          maxNum: this.contentNumber.fileStorageInfo.maxVal/1024/1024/1024 + "G",
           url: fileManageUrl
         }
       ];
@@ -70,29 +85,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content-num-section {
+.content-section {
+  margin-top: 32px;
+  width: 100%;
+  background: rgba(255, 255, 255, 1);
   border-radius: 3px;
   border: 1px solid rgba(229, 229, 229, 1);
   .section-title {
+    height: 64px;
     padding-left: 25px;
-    padding-bottom: 20px;
-    padding-top: 20px;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
     color: rgba(38, 38, 38, 1);
-    line-height: 25px;
+    line-height: 64px;
+    border-bottom: 1px solid #e5e5e5;
   }
   .content {
-    .item:first-of-type {
-      background: url("~img/dashboard/board-contentLeftImgMax.png") no-repeat;
-      background-position: left bottom;
-      background-size: contain;
-    }
-    .item:last-of-type {
-      background: url("~img/dashboard/board-contentRightImgMax.png") no-repeat;
-      background-position: right bottom;
-      background-size: contain;
-    }
     .item:last-of-type .item-box {
       border-right: 1px solid transparent;
     }
@@ -103,90 +111,77 @@ export default {
 
       .item-box {
         width: 100%;
-        height: 75px;
-        margin-bottom: 32px;
+        height: 100px;
         border-right: 1px solid #eee;
-        cursor: pointer;
-        text-align: center;
-        span {
-          display: block;
-        }
-        &:hover {
-          .item-name .item-content .item-num {
-            color: #09cceb;
+
+        .item-wrap {
+          margin-top: 27px;
+          margin-left: 12px;
+          margin-right: 12px;
+          padding-left: 14px;
+          padding-right: 8px;
+          height: 50px;
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+
+          &:hover {
+            background: rgba(240, 243, 247, 1);
+            border-radius: 2px;
           }
-        }
-        .item-name {
-          // display: flex;
-          // justify-content: center;
-          // align-items: center;
-          display: inline-block;
-          .name {
-            font-size: 18px;
-            font-weight: 400;
-            color: rgba(38, 38, 38, 1);
-            line-height: 25px;
-            text-align: left;
+          .item-name {
+            .item-img {
+              margin-top: 10px;
+              margin-right: 8px;
+              display: inline-block;
+              width: 32px;
+              height: 32px;
+              vertical-align: top;
+            }
+            .article {
+              background: url("~img/dashboard/board-article.png") no-repeat
+                center;
+              background-size: contain;
+            }
+            .product {
+              background: url("~img/dashboard/board-product.png") no-repeat
+                center;
+              background-size: contain;
+            }
+            .pic {
+              background: url("~img/dashboard/board-pic.png") no-repeat center;
+              background-size: contain;
+            }
+            .file {
+              background: url("~img/dashboard/board-file.png") no-repeat center;
+              background-size: contain;
+            }
+            .name {
+              display: inline-block;
+              font-size: 18px;
+              font-weight: 400;
+              color: rgba(38, 38, 38, 1);
+              line-height: 25px;
+              margin-top: 14px;
+            }
           }
           .item-content {
-            // display: flex;
-            // justify-content: center;
-            // align-items: center;
-            //   vertical-align: top;
             .item-num {
-              display: inline;
-              margin-right: 5px;
-              font-size: 36px;
+              display: inline-block;
+              font-size: 32px;
               font-weight: 500;
               color: rgba(38, 38, 38, 1);
               line-height: 50px;
-              //   vertical-align: top;
+              margin-right: 4px;
             }
             .item-type {
-              display: inline;
+              display: inline-block;
               font-size: 14px;
-              font-weight: 300;
+              font-weight: 400;
               color: rgba(185, 203, 207, 1);
               line-height: 20px;
-              //   vertical-align: top;
+              margin-top: 18px;
             }
-          }
-        }
-      }
-    }
-  }
-}
-@media screen and (max-width: 1500px) {
-  .content-num-section {
-    .section-title {
-      padding-top: 12px;
-      padding-left: 13px;
-      padding-bottom: 7px;
-      font-size: 16px;
-      line-height: 22px;
-    }
-    .content {
-      .item:first-of-type {
-        background: url("~img/dashboard/board-contentLeftImgMin.png") no-repeat;
-        background-position: left bottom;
-        background-size: contain;
-      }
-      .item:last-of-type {
-        background: url("~img/dashboard/board-contentRightImgMax.png") no-repeat;
-        background-position: right bottom;
-        background-size: contain;
-      }
-      .item .item-box {
-        height: 54px;
-        margin-bottom: 17px;
-        .item-name {
-          .name {
-            font-size: 14px;
-            line-height: 20px;
-          }
-          .item-content .item-num {
-            font-size: 28px;
-            line-height: 40px;
           }
         }
       }
