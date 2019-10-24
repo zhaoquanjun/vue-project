@@ -42,7 +42,6 @@
     </div>
 </template>
 <script>
-import { siteDomain } from "@/environment/index";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
 export default {
     data() {

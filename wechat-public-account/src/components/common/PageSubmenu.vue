@@ -26,7 +26,6 @@
   </div>
 </template>
 <script>
-import { siteDomain } from "@/environment/index";
 import { wechataccountDomain } from "@/environment/index";
 import { getLocal } from '@/libs/local'
 export default {

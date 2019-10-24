@@ -21,7 +21,7 @@ let pageApiUri = `${httpSchema}api.designer.${baseServerUrl}`;
 let newsApi = `${httpSchema}api.content.${baseServerUrl}`;
 let imageApi = `${httpSchema}api.content.${baseServerUrl}`;
 let wechataccountApi = `${httpSchema}open.weixin.${baseServerUrl}`;
-export let siteDomain = `content.${baseServerUrl}`;
+export let siteDomain = `wechataccount.${baseServerUrl}`;
 export let wechataccountDomain = `wechataccount.${baseServerUrl}`
 // 个人中心
 export let personalUrl = `${httpSchema}dashboard.${baseServerUrl}/personal`;
