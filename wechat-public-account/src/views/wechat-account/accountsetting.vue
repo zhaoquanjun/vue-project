@@ -226,17 +226,18 @@ export default {
       align-items: center;
       .info-desc__area {
         display: flex;
-        width: 100%;
+        width: 80%;
         justify-content: flex-start;
         align-items: center;
         .account-icon {
+          display: inline-block;
           width: 80px;
           height: 80px;
           box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.06);
           border-radius: 4px;
           img {
-            width: 100%;
-            height: 100%;
+            width: 80px;
+            height: 80px;
             border-radius: 4px;
           }
         }
@@ -472,7 +473,7 @@ export default {
     
   }
   .domain-button__area {
-      width:96px;
+      width:90px;
       height:40px;
       background:rgba(9,204,235,1);
       border-radius:2px;
