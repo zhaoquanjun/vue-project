@@ -93,6 +93,7 @@ export default {
         line-height: 40px;
         padding-left: 24px;
         padding-top: 5px;
+        font-size: 16px;
         text-align: left;
     }
     .submenu-list {
