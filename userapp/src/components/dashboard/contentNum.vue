@@ -49,6 +49,18 @@ export default {
         case "文件":
           return "file";
       }
+    },
+    bytesToSize(bytes, flag) {
+      if (bytes === 0) return "0 B";
+      let k = 1024;
+      let sizes = ["B", "K", "M", "G", "T", "P", "E", "Z", "Y"];
+      let i = Math.floor(Math.log(bytes) / Math.log(k));
+      let b = bytes / Math.pow(k, i);
+      //   if (flag === 1) {
+      b = b.toFixed(1);
+      //   }
+      let storage = b + sizes[i];
+      return storage;
     }
   },
   watch: {
@@ -74,8 +86,8 @@ export default {
         },
         {
           name: "文件",
-          num: (this.contentNumber.fileStorageInfo.currentVal/1024/1024/1024).toFixed(1),
-          maxNum: this.contentNumber.fileStorageInfo.maxVal/1024/1024/1024 + "G",
+          num: this.bytesToSize(this.contentNumber.fileStorageInfo.currentVal),
+          maxNum: this.bytesToSize(this.contentNumber.fileStorageInfo.maxVal),
           url: fileManageUrl
         }
       ];
