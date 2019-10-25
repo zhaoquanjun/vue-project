@@ -1,6 +1,7 @@
 <template>
   <div class="define-menu__area clearfix">
     <div class="btn">
+      <h4>自定义菜单</h4>
       <span @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</span>
     </div>
     <div class="phone-box__area">
@@ -1056,12 +1057,22 @@ export default {
   color: #0595E6;
 }
 .btn {
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   height: 40px;
-  text-align: right;
   margin: 16px 0 -10px;
-  padding-right: 20px;
+}
+.btn h4 {
+  height: 16px;
+  margin: 12px 0;
+  font-size:16px;
+  font-family:'PingFangSC-Medium,PingFang SC';
+  font-weight:500;
+  color:rgba(38,38,38,1);
+  line-height:16px;
+  padding-left: 16px;
+  border-left: 4px solid #09CCEB;
 }
 .btn span {
   display: inline-block;
