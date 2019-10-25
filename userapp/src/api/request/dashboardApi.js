@@ -42,6 +42,12 @@ export const updateSiteLanguage = (siteId, language) => {
     return ajaxRequest.put(`${environment.designerManageApi}/api/v1/siteInfo/UpdateSiteLanguage`, para);
 };
 /**
+* 更改站点语言
+*/
+export const updateSiteInfo = (para) => {
+    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/siteInfo/UpdateSiteInfo`, para);
+};
+/**
  * 获取site列表
  */
 export const getSites = () => {

@@ -407,7 +407,11 @@ export default {
         return;
       }
       this.$refs[`popover`].doClose();
-      await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
+      let para = {
+        siteId: this.siteId,
+        siteName: this.siteNameValue
+      };
+      await dashboardApi.updateSiteInfo(para);
       this.siteName = this.siteNameValue;
       this.editPopover = false;
     },
@@ -422,10 +426,11 @@ export default {
       this.radio = this.language;
     },
     async changeLanguage() {
-      let { data, status } = await dashboardApi.updateSiteLanguage(
-        this.siteId,
-        this.radio
-      );
+      let para = {
+        siteId: this.siteId,
+        language: this.radio
+      };
+      let { data, status } = await dashboardApi.updateSiteInfo(para);
       if (status == 200) {
         this.language = this.radio;
         this.closeSiteLanguageDialog();
