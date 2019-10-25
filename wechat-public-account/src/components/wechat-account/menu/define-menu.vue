@@ -455,18 +455,15 @@ export default {
         return
       }
       this.isCanAdd = false
-      //确认是否添加第一个子菜单
-      let flag = this.testParameters();
-      if (!flag || !this.hasTrueName) {
-        notify(this, '请完善菜单信息', "error");
-        this.isCanAdd = true
-        return
-      }
       if (level == 1 && order == 1) {
-          this.$confirm("提示", {
+        if(!this.menuDetail.name) {
+          notify(this, '请完善菜单信息', "error");
+          return
+        }
+        this.$confirm("提示", {
           title: "提示",
           iconClass: "icon-warning",
-            message:  `发布成功后会覆盖原版本，且将在24小时内对所有用户生效，是否确认发布？`,
+            message:  `添加子菜单后，主菜单的内容将被清除。确定添加子菜单？`,
             callback: async action => {
                 if (action === "confirm") {
                   this.addMenu(name,order,id,level)
@@ -483,8 +480,16 @@ export default {
     async addMenu (name,order,id,level) {
       let flag = this.testParameters();
       let  dataObj = {};
+
+      //校验菜单名
+      if (!this.hasTrueName) {
+        this.isCanAdd = true
+        return
+      }
+      //确认是否添加第一个子菜单
+      
       //前端校验
-      if (order > 0 && flag && !(order== 1 && level == 1)) {
+      if (order > 0 && flag ) {
         let dataDetail = this.menuDetail
         dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
         dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
