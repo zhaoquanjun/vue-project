@@ -157,21 +157,30 @@
         <div class="mySiteTitle">网站设置</div>
         <div class="siteSettingWrap" style="margin-top:32px">
           <span class="siteSetting">网站icon</span>
+          <el-tooltip class="item" effect="dark" content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB" placement="top-start">
+            <i style="color: #D8D8D8; font-size: 16px;padding: 10px" class="icon iconfont iconicon-exclamationmark"></i>
+          </el-tooltip>
           <span class="siteSetting showAliService">显示阿里云服务信息</span>
+          <el-tooltip class="item" effect="dark" content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字" placement="top-start">
+            <i style="color: #D8D8D8; font-size: 16px;padding: 10px" class="icon iconfont iconicon-exclamationmark"></i>
+          </el-tooltip>
           <el-switch
             v-model="isShowAliServiceValue"
             active-color="#01C0DE"
-            style="margin-left:16px"
+            style="margin: -2px 0 0 16px"
           ></el-switch>
         </div>
         <div class="siteSettingWrap">
           <span class="siteSetting">启用Powered by</span>
-          <el-switch v-model="isOpenPoweredValue" active-color="#01C0DE" style="margin-left:38px"></el-switch>
+          <el-tooltip class="item" effect="dark" content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字" placement="top-start">
+            <i style="color: #D8D8D8; font-size: 16px;padding: 10px;margin-bottom: -2px;" class="icon iconfont iconicon-exclamationmark"></i>
+          </el-tooltip>
+          <el-switch @change="isOpenPowered" v-model="isOpenPoweredValue" active-color="#01C0DE" style="margin: -2px 0 0 16px"></el-switch>
           <span class="siteSetting rightClickSave">禁止右键保存图片</span>
           <el-switch
             v-model="isRightClickSaveValue"
             active-color="#01C0DE"
-            style="margin-left:16px"
+            style="margin: -2px 0 0 16px"
           ></el-switch>
         </div>
       </el-row>
@@ -330,6 +339,10 @@ export default {
     };
   },
   methods: {
+    //启用Powered by
+    async isOpenPowered(){
+      await siteBackupApi.updateSitePoweredBy({siteId: this.siteId,PoweredBy: this.isOpenPoweredValue});
+    },
     // 跳转至设计器
     toDesign() {
       window.location.href = `${designerUrl}?siteId=${this.siteId}`;
