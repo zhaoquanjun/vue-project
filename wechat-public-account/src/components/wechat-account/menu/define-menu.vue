@@ -277,7 +277,7 @@ export default {
         let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
         this._getMenuDetail(id)
       }
-      if(this.menuTree.length >=2 || this.menuTree[0].subMenuList.length >=2 ) {
+      if(this.menuTree.length >=2 || (this.menuTree[0].subMenuList && this.menuTree[0].subMenuList.length >=2)) {
         this.canOrder = true
       } else {
         this.canOrder = false
