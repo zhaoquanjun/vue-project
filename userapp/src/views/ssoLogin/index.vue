@@ -160,12 +160,17 @@ export default {
           return;
         }
       }
-
+      let isChange = "";
+      if (this.hasPhone) {
+        isChange = this.useNewPhone ? true : false;
+      } else {
+        isChange = true;
+      }
       let para = {
-        Mobile: this.hasPhone ? this.oldPhone : this.phone,
-        NewMobile: this.hasPhone ? this.newPhone : "",
+        Mobile: this.oldPhone,
+        NewMobile: this.hasPhone ? this.newPhone : this.phone,
         Code: this.hasPhone ? this.newSmsCode : this.smsCode,
-        IsChanged: this.useNewPhone ? true : false,
+        IsChanged: isChange,
         OrderBizId: this.$route.query.orderBizId,
         Sign: this.sign
       };
