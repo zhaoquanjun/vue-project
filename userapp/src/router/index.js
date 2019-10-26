@@ -15,9 +15,13 @@ export default router;
 
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
+  if (to.path.includes("ssologin")) {
+    next()
+    return
+  }
   let user = await securityService.getUser();
   let accessToken;
-  if (user){
+  if (user) {
     await store.dispatch("_getAppHeadInfo");//临时
     accessToken = user.access_token;
   };
@@ -27,12 +31,12 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
-      if(to.path==="/404"){
-          next()
-          return
+      if (to.path === "/404") {
+        next()
+        return
       }
       // 切换app 主动调接口   本地测试调用
-      if(process.env.NODE_ENV === "development"){
+      if (process.env.NODE_ENV === "development") {
         let appId = store.state.dashboard.appId;
         if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
       }
@@ -41,7 +45,7 @@ router.beforeEach(async (to, from, next) => {
         if (store.getters.getMenuList.length < 1) {
           await store.dispatch('_getMenuListData')
         }
-        
+
         if (to.path.includes("/website")) {
           let haveTemplate = await store.dispatch('_haveTemplate');
           if (!haveTemplate) {
@@ -55,11 +59,11 @@ router.beforeEach(async (to, from, next) => {
       }
     }
     next()
-    
+
   } else {
-    if(to.path == "/callback"){
+    if (to.path == "/callback") {
       next()
-    }else{
+    } else {
       securityService.signIn(to.path)
     }
   }
