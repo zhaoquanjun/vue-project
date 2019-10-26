@@ -13,7 +13,7 @@
           <span class="phoneTip">+86</span>
           <el-input class="phoneInput" placeholder="请输入手机号" v-model="phone"></el-input>
         </div>
-        <div class="slider"></div>
+        <!-- <div class="slider"></div> -->
         <div class="smsCode">
           <el-input class="smsCodeInput" placeholder="短信验证码" v-model="smsCode"></el-input>
           <button class="smsText" v-show="!smsShow" @click="sendSms">{{smsText}}</button>
@@ -42,7 +42,7 @@
             <span class="phoneTip">+86</span>
             <el-input class="phoneInput" placeholder="请输入手机号" v-model="newPhone"></el-input>
           </div>
-          <div class="slider"></div>
+          <!-- <div class="slider"></div> -->
           <div class="smsCode">
             <el-input class="smsCodeInput" placeholder="短信验证码" v-model="newSmsCode"></el-input>
             <button class="smsText" v-show="!smsShow" @click="sendNewSms">{{smsText}}</button>
@@ -120,16 +120,57 @@ export default {
       this.useNewPhone = false;
     },
     async create() {
+      if (this.hasPhone) {
+        if (this.useNewPhone) {
+          if (this.newPhone == "") {
+            this.$notify({
+              customClass: "notify-error",
+              message: "请输入手机号",
+              duration: 1500,
+              showClose: false
+            });
+            return;
+            console.log(123);
+          } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.newPhone)) {
+            this.$notify({
+              customClass: "notify-error",
+              message: "您输入的手机号格式有误，请重新输入",
+              duration: 1500,
+              showClose: false
+            });
+            return;
+          }
+        }
+      } else {
+        if (this.phone == "") {
+          this.$notify({
+            customClass: "notify-error",
+            message: "请输入手机号",
+            duration: 1500,
+            showClose: false
+          });
+          return;
+        } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
+          this.$notify({
+            customClass: "notify-error",
+            message: "您输入的手机号格式有误，请重新输入",
+            duration: 1500,
+            showClose: false
+          });
+          return;
+        }
+      }
+
       let para = {
         Mobile: this.hasPhone ? this.oldPhone : this.phone,
         NewMobile: this.hasPhone ? this.newPhone : "",
         Code: this.hasPhone ? this.newSmsCode : this.smsCode,
         IsChanged: this.useNewPhone ? true : false,
-        OrderBizId: this.request("OrderBizId"),
+        OrderBizId: this.$route.query.orderBizId,
         Sign: this.sign
       };
       let { data, status } = await dashboardApi.createAliyunSsoLoginUser(para);
-      if (status == 200) {
+      if (data.isSuccess == true) {
         this.creating = false;
         this.gongzhonghao = true;
         this.redirectUrl = data.redirectUrl;
@@ -159,23 +200,51 @@ export default {
       window.location.href = this.redirectUrl;
     },
     sendSms() {
-      if (this.phone == "" || this.phone == null) {
+      if (this.phone == "") {
+        this.$notify({
+          customClass: "notify-error",
+          message: "请输入手机号",
+          duration: 1500,
+          showClose: false
+        });
+      } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
+        this.$notify({
+          customClass: "notify-error",
+          message: "您输入的手机号格式有误，请重新输入",
+          duration: 1500,
+          showClose: false
+        });
       } else {
         this.sendAliyunMobileVerifyCode(this.phone);
       }
     },
     sendNewSms() {
-      if (this.newPhone == "" || this.newPhone == null) {
+      if (this.newPhone == "") {
+        this.$notify({
+          customClass: "notify-error",
+          message: "请输入手机号",
+          duration: 1500,
+          showClose: false
+        });
+      } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.newPhone)) {
+        this.$notify({
+          customClass: "notify-error",
+          message: "您输入的手机号格式有误，请重新输入",
+          duration: 1500,
+          showClose: false
+        });
       } else {
         this.sendAliyunMobileVerifyCode(this.newPhone);
       }
     },
     async sendAliyunMobileVerifyCode(phone) {
-      let { status } = await dashboardApi.sendAliyunMobileVerifyCode(phone);
+      let { data, status } = await dashboardApi.sendAliyunMobileVerifyCode(
+        phone
+      );
       if (status === 200) {
         this.$notify({
           customClass: "notify-success",
-          message: data.message,
+          message: "发送成功",
           duration: 1500,
           showClose: false
         });
@@ -197,7 +266,7 @@ export default {
       } else {
         this.$notify({
           customClass: "notify-error",
-          message: data.message,
+          message: "发送失败",
           duration: 1500,
           showClose: false
         });
@@ -205,10 +274,10 @@ export default {
     },
     async getAliyunSsoLoginInfo() {
       let para = {
-        OrderBizId: this.request("OrderBizId"),
-        Verify: this.request("Verify"),
-        TimeStamp: this.request("TimeStamp"),
-        Token: this.request("token")
+        OrderBizId: this.$route.query.orderBizId,
+        Verify: this.$route.query.verify,
+        TimeStamp: this.$route.query.timestamp,
+        Token: this.$route.query.token
       };
       let { data, status } = await dashboardApi.getAliyunSsoLoginInfo(para);
       if (status == 200) {
