@@ -12,7 +12,7 @@ export const sendAliyunMobileVerifyCode = (phone) => {
 };
 // 首次免登用户发送验证码
 export const createAliyunSsoLoginUser = (para) => {
-    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/phone/CreateAliyunSsoLoginUser`, para);
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/ssologin/CreateAliyunSsoLoginUser`, para);
 };
 // 获取dashboard站点信息
 export const getTodoInfo = (siteId) => {
