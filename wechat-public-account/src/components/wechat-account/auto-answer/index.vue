@@ -92,6 +92,7 @@ export default {
                 Type: null,
                 Href: null
             },
+            canHandlerSave: true,
             replyType: "1", //replyType 回复类型
             msgType: 1, //msgType 消息类型
             addAnswer: true,
@@ -259,6 +260,7 @@ export default {
         async _addKeywordReply(option) {
             let { data, status } = await autoAnswerApi.addKeywordReply(option,this.siteId);
             if (status === 200) {
+                this.canHandlerSave = true
                 this.$notify({
                     customClass: "notify-success",
                     message: `保存成功`,
@@ -271,6 +273,9 @@ export default {
                 }
                 this.isSet = true;
                 this.replyDetail.id = data;
+            } else {
+                this.canHandlerSave = true
+                notify(this, "保存失败", "error");
             }
         },
         //新增或者覆盖回复信息
@@ -289,12 +294,16 @@ export default {
                 }
                 this.isSet = true;
                 this.replyDetail.id = data;
+            } else {
+                this.canHandlerSave = true
+                notify(this, "保存失败", "error");
             }
         },
         //编辑关键词回复信息
         async _updateKeywordReply(option, editorId) {
             let data = await autoAnswerApi.updateKeywordReply(option, editorId, this.siteId);
             if(data.status && data.status === 200) {
+                this.canHandlerSave = true
                 this.$notify({
                     customClass: "notify-success",
                     message: `保存成功`,
@@ -306,11 +315,16 @@ export default {
                 this.isSet = true;
                 this.replyDetail.id = data;
             } else {
+                this.canHandlerSave = true
                 notify(this, "保存失败", "error");
             }
         },
         // 保存
         async handlerSave() {
+            if(!this.canHandlerSave) {
+                return
+            }
+            this.canHandlerSave = false
             let option = {
                 siteId: this.siteId,
                 replyType: this.replyType,
@@ -340,22 +354,24 @@ export default {
                 if (this.msgType == 1) {
                     if (!trim(picUrl)) {
                         notify(this, "请添加图片", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                 } else if (this.msgType == 2) {
                     if (!trim(text)) {
                         notify(this, "请输入内容", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                 } else if (this.msgType == 3) {
                     if (newsMsg.length === 0) {
                         notify(this, "请添加图文", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                 }
             } else if (this.replyType == 3) {
                 let keywordList = this.$refs.keywordAnswer.keywordList;
-
                 let flag = keywordList.every((item, index) => {
                     if (!trim(item.keyword)) {
                         return false;
@@ -363,8 +379,11 @@ export default {
                         return true;
                     }
                 });
-                if (!flag)
-                    return notify(this, "无法保存，请完善页面信息!", "error");
+                if (!flag) {
+                    notify(this, "无法保存，请完善页面信息!", "error");
+                    this.canHandlerSave = true
+                    return
+                }
                 let option = {
                     msgType: this.msgType,
                     keywordList
@@ -374,6 +393,7 @@ export default {
                     let picUrl = this.replycontentData.imageMsg.picUrl;
                     if (!trim(picUrl)) {
                         notify(this, "无法保存，请完善页面信息!", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                     newOption = {
@@ -384,6 +404,7 @@ export default {
                     let text = this.replycontentData.textMsg.text;
                     if (!trim(text)) {
                         notify(this, "无法保存，请完善页面信息!", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                     newOption = {
@@ -394,6 +415,7 @@ export default {
                     let newsMsg = this.replycontentData.newsMsg;
                     if (newsMsg.length === 0) {
                         notify(this, "无法保存，请完善页面信息!", "error");
+                        this.canHandlerSave = true
                         return;
                     }
 
