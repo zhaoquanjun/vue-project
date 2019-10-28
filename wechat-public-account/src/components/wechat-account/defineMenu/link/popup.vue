@@ -21,6 +21,7 @@
           :model="model"
           :selectedUrl="selectedUrl"
           :way="way"
+          ref="pageArea"
           :type="type"
           :curType="curType"
           @handleChangeUrl="handleChangeUrl"
@@ -93,12 +94,7 @@ export default {
         { name: "网址", label: "url" },
         { name: "页面", label: "page" },
         { name: "文章", label: "news" },
-        { name: "产品", label: "product" },
-        // { name: "链接", label: "link" },
-        // { name: "邮件", label: "email" },
-        // { name: "文件", label: "file" },
-        // { name: "电话", label: "tel" },
-        // { name: "弹窗", label: "popup" }
+        { name: "产品", label: "product" }
       ],
       noneUrl: '',
       pageIndex: this.model['PageIndex'],
@@ -119,6 +115,8 @@ export default {
           { name: "文章", label: "news" },
           { name: "产品", label: "product" },
         ]
+    } else {
+      this.slider = this.sliderList[0].label;
     }
   },
   watch: {
@@ -130,6 +128,8 @@ export default {
           { name: "文章", label: "news" },
           { name: "产品", label: "product" },
         ]
+      } else {
+        this.slider = this.sliderList[0].label;
       }
     },
   },
@@ -209,13 +209,19 @@ export default {
         oldData['PageIndex'] = oldPageIndex;
         oldData['Id'] = oldId;
         this.$emit("handleClosePopup", false, data, oldData);
-        this.slider = "url";
+        if (this.slider == 'page') {
+          this.$refs.pageArea.pageId = null
+        }
+        this.slider = this.sliderList[0].label;
         this.title = null;
         this.selectedUrl = null;
         this.id = null;
       } else {
         this.$emit("handleClosePopup", false, data);
-        this.slider = "url";
+        if (this.slider == 'page') {
+          this.$refs.pageArea.pageId = null
+        }
+        this.slider = this.sliderList[0].label;
         this.title = null
         this.selectedUrl = null;
         this.id = null;

@@ -34,7 +34,7 @@
               :class="{active: newId==i}"
               @click.stop="_handleSelectPage(i)"
             >
-              <p class="single-line__overflow--hide">{{it.title}}</p>
+              <p class="single-line__overflow--hide ellipsis">{{it.title}}</p>
               <p class="date single-line__overflow--hide">
                 <!-- <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span> -->
                 <span
@@ -139,6 +139,7 @@ export default {
       newId: -1,
       urlId: '',
       productHref: '',
+      pageIndex: 1,
       nodeId: 0,
       loading: false,
       target: "createArticle",
@@ -162,14 +163,6 @@ export default {
   components: {
     NoneArea,
     Loading
-  },
-  computed: {
-    pageIndex: {
-      get: function() {
-        return parseInt(this.model["PageIndex"]) || 1;
-      },
-      set: function() {}
-    }
   },
   created() {
     this.getNewsList(this.nodeId);
@@ -258,6 +251,7 @@ export default {
     },
     _handleChangeCurrent(val) {
       this.model["PageIndex"] = val;
+      this.pageIndex = val
       this.getNewsList(this.nodeId);
     }
   },
@@ -365,6 +359,7 @@ export default {
               padding: 0;
               font-size: 14px;
               line-height: 26px;
+              height: 26px;
               overflow: hidden;
               color: #262626;
               text-align: left;
