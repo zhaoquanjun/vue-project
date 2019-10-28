@@ -413,6 +413,9 @@ export default {
     },
     //校验参数 
     testParameters(){
+      if(!this.menuDetail.id) {
+        return
+      }
       let flag = true;
       this.testMenu()
       if (!this.hasTrueName || !this.menuDetail.name) {
@@ -478,6 +481,7 @@ export default {
     },
     //添加
     async addMenu (name,order,id,level) {
+      console.log('name,order,id,level',name,order,id,level)
       let flag = this.testParameters();
       let  dataObj = {};
 
@@ -486,10 +490,12 @@ export default {
         this.isCanAdd = true
         return
       }
+      console.log('00001')
       //确认是否添加第一个子菜单
       
       //前端校验
       if (order > 0 && flag ) {
+        console.log('00002')
         let dataDetail = this.menuDetail
         dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
         dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
@@ -500,6 +506,7 @@ export default {
       }
       //接口校验
       if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
+        console.log('00001')
           let newMenuItem = {
           name: name,  //菜单名称
           displayOrder: order, //菜单排序
