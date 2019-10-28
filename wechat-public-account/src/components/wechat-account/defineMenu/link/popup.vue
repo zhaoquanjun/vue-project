@@ -161,10 +161,14 @@ export default {
   methods: {
     _handleSliderChange(val) {
       this.slider = val;
+      this.title = null;
+      this.selectedUrl = null;
+      this.id = null;
       return false;
     },
     _handleConfirm() {
       if(this.slider == 'url' && !this.title){
+        notify(this, '请输入网址', "error");
         return
       }
       if (!this.selectedUrl || !this.title){
@@ -205,11 +209,13 @@ export default {
         oldData['Id'] = oldId;
         this.$emit("handleClosePopup", false, data, oldData);
         this.slider = "url";
+        this.title = null;
         this.selectedUrl = null;
         this.id = null;
       } else {
         this.$emit("handleClosePopup", false, data);
         this.slider = "url";
+        this.title = null
         this.selectedUrl = null;
         this.id = null;
       }

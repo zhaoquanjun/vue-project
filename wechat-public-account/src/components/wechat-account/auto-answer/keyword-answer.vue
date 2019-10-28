@@ -74,12 +74,15 @@
 
             <ul class="advance-list__area">
                 <li class="title">
-                    <p class="list-columns__1">关键词</p>
-                    <p class="list-columns__2">回复内容</p>
+                    <p class="list-columns__1">回复内容</p>
+                    <p class="list-columns__2">关键词</p>
                     <p class="list-columns__3">操作</p>
                 </li>
                <div>
                     <li v-for="(item, index) in keywordData.list" :key="index">
+                    <p class="list-columns__1 ellipsis">
+                        {{magTypeFn(item.msgType)}}
+                    </p>
                     <el-tooltip placement="top">
                         <div slot="content" style="max-width:400px;">
                             <span v-for="(child,index) in item.keywordList" :key="index">
@@ -87,14 +90,13 @@
                                 {{item.keywordList.length-1 !=index ? ',':''}}
                             </span>
                         </div>
-                        <p class="list-columns__1 ellipsis pointer">
+                        <p class="list-columns__2 ellipsis pointer">
                             <span v-for="(child,index) in item.keywordList" :key="index">
                                 {{child.keyword}} 
                                 {{item.keywordList.length-1 !=index ? ',':''}}
                             </span>
                         </p>
                     </el-tooltip>
-                    <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
                         <el-tooltip class="item" effect="dark" content="编辑" placement="top">
                             <button>
@@ -111,7 +113,7 @@
             </div>
                 <div class="empty-table" v-if="keywordData.list && keywordData.list.length===0">
                     <img src="~img/table-empty.png" />
-                    <span>无数据</span>
+                    <p>未设置关键词回复</p>
                 </div>
             </ul>
             <div class="paging">
@@ -223,6 +225,7 @@ export default {
         },
         removeKeyword(index) {
             this.keywordList.splice(index, 1);
+            this.error.splice(index, 1);
         },
         handlerDelete(id) {
             this.$emit("removeKeywordReply", id);
@@ -335,10 +338,10 @@ button {
                     padding-right: 16px;
                 }
                 p.list-columns__1 {
-                    width: 50%;
+                    width: 40%;
                 }
                 p.list-columns__2 {
-                    width: 40%;
+                    width: 50%;
                 }
                 .list-columns__3 {
                     width: 10%;
