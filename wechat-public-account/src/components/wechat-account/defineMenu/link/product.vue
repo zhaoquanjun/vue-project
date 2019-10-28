@@ -132,6 +132,7 @@ export default {
       promotionUrl: this.$store.getters.account_info.promotionUrl,
       pageSize: 6,
       total: 6,
+      pageIndex: 1,
       productHref: '',
       productTitle: "",
       defaultExpandedKeys: [],
@@ -165,14 +166,6 @@ export default {
   components: {
     noneArea,
     Loading
-  },
-  computed: {
-    pageIndex: {
-      get: function() {
-        return parseInt(this.model["PageIndex"]) || 1;
-      },
-      set: function() {}
-    }
   },
   created() {
     this.getProductList(this.nodeIdArr);
