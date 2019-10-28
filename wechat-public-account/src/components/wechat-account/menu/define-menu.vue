@@ -192,7 +192,7 @@ export default {
         siteId: this.$store.state.dashboard.siteId || getLocal("ymSd"),
         name: "",
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
-        behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
+        behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url网址,WZPage页面, WZNews文章,WZProduct产品
         behaviorBody: {
           imageMsg: {
             picUrl: '',
@@ -506,9 +506,20 @@ export default {
       }
       //接口校验
       if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
-        console.log('00001')
-          let newMenuItem = {
-          name: name,  //菜单名称
+        let nameOrder = 1
+        if(this.menuTree.length > 0) {
+          if(level == 1) {
+            this.menuTree.map((item,index)=> {
+              nameOrder = item.subMenuList.length + nameOrder
+            }) 
+          } else {
+            nameOrder = this.menuTree.length + nameOrder
+          }
+        }
+        
+
+        let newMenuItem = {
+          name: name + nameOrder,  //菜单名称
           displayOrder: order, //菜单排序
           parentId: id, //父菜单id，当为父菜单时为0
           siteId: this.siteId, //站点id

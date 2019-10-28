@@ -24,7 +24,7 @@
           <template slot="empty">
               <div class="empty-table">
                   <img src="~img/table-empty.png" />
-                  <p>无数据</p>
+                  <p>暂无数据</p>
               </div>
           </template>
           <el-table-column
