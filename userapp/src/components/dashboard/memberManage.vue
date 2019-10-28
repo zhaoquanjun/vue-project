@@ -98,8 +98,10 @@ export default {
           border-radius: 2px;
         }
         .item-name {
+          height: 100%;
+          display: flex;
+          align-items: center;
           .vip-img {
-            margin-top: 9px;
             margin-right: 8px;
             display: inline-block;
             width: 32px;
@@ -109,7 +111,6 @@ export default {
             vertical-align: top;
           }
           .viplevel-img {
-            margin-top: 9px;
             margin-right: 8px;
             display: inline-block;
             width: 32px;
@@ -121,17 +122,16 @@ export default {
           }
           .name {
             display: inline-block;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 400;
             color: rgba(38, 38, 38, 1);
-            line-height: 25px;
-            margin-top: 12px;
+            line-height: 22px;
           }
         }
         .item-content {
           .item-num {
             display: inline-block;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 500;
             color: rgba(38, 38, 38, 1);
             line-height: 50px;
@@ -142,8 +142,7 @@ export default {
             font-size: 14px;
             font-weight: 400;
             color: rgba(185, 203, 207, 1);
-            line-height: 18px;
-            margin-top: 20px;
+            line-height: 20px;
           }
           .item-btn {
             display: inline-block;
