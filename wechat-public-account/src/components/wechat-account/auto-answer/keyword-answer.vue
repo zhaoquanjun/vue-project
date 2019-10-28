@@ -326,6 +326,7 @@ button {
                 align-items: center;
                 padding: 10px 32px;
                 border-bottom: 1px solid #e5e5e5;
+                min-width: 1020px;
 
                 p {
                     display: inline-block;
@@ -333,12 +334,14 @@ button {
                     line-height: 40px;
                     padding-right: 16px;
                 }
-                p.list-columns__1,
+                p.list-columns__1 {
+                    width: 50%;
+                }
                 p.list-columns__2 {
-                    width: 45%;
+                    width: 40%;
                 }
                 .list-columns__3 {
-                    width: 8%;
+                    width: 10%;
                     color: #0595e6;
                     cursor: pointer;
                 }
