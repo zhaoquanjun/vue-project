@@ -96,12 +96,16 @@
                     </el-tooltip>
                     <p class="list-columns__2 ellipsis">{{magTypeFn(item.msgType)}}</p>
                     <div class="list-columns__3 handler-btn">
-                        <button>
-                            <i class="iconfont iconbianji" @click="handlerAdd(item)"></i>
-                        </button>
-                        <button @click="handlerDelete(item.id)">
-                            <i class="iconfont iconshanchu"></i>
-                        </button>
+                        <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                            <button>
+                                <i class="iconfont iconbianji" @click="handlerAdd(item)"></i>
+                            </button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                            <button @click="handlerDelete(item.id)">
+                                <i class="iconfont iconshanchu"></i>
+                            </button>
+                        </el-tooltip>
                     </div>
                 </li>
             </div>
@@ -320,13 +324,13 @@ button {
             li {
                 display: flex;
                 align-items: center;
-                padding: 24px 32px;
+                padding: 10px 32px;
                 border-bottom: 1px solid #e5e5e5;
 
                 p {
                     display: inline-block;
                     font-size: 14px;
-                    line-height: 22px;
+                    line-height: 40px;
                     padding-right: 16px;
                 }
                 p.list-columns__1,
@@ -334,14 +338,14 @@ button {
                     width: 45%;
                 }
                 .list-columns__3 {
-                    width: 7%;
+                    width: 8%;
                     color: #0595e6;
                     cursor: pointer;
                 }
             }
             div {
                 li:hover {
-                    background-color: #f0fcfe;
+                    background:rgba(248,250,252,1);
                 }
             }
             .title {
@@ -351,13 +355,15 @@ button {
             }
             
             .handler-btn {
-                display: flex;
-                justify-content: space-between;
                 .iconfont {
                     color: #262626;
+                    padding: 8px;
                     &:hover{
-                           color: #09cceb
+                           background: #F0F3F7;
                     }
+                }
+                .iconbianji {
+                    margin-right: 30px;
                 }
             }
         }
