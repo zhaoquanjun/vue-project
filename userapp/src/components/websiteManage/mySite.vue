@@ -663,7 +663,7 @@ export default {
       }
     },
     bindDomain() {
-      this.$router.push("/website/mysite/siteDomain");
+      this.$router.push("/website/mysite/sitedomain");
     }
   }
 };
