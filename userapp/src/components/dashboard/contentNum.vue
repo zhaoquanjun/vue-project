@@ -142,8 +142,9 @@ export default {
             border-radius: 2px;
           }
           .item-name {
+            display: flex;
+            align-items: center;
             .item-img {
-              margin-top: 10px;
               margin-right: 8px;
               display: inline-block;
               width: 32px;
@@ -170,17 +171,16 @@ export default {
             }
             .name {
               display: inline-block;
-              font-size: 18px;
+              font-size: 16px;
               font-weight: 400;
               color: rgba(38, 38, 38, 1);
-              line-height: 25px;
-              margin-top: 14px;
+              line-height: 22px;
             }
           }
           .item-content {
             .item-num {
               display: inline-block;
-              font-size: 32px;
+              font-size: 28px;
               font-weight: 500;
               color: rgba(38, 38, 38, 1);
               line-height: 50px;
@@ -192,7 +192,6 @@ export default {
               font-weight: 400;
               color: rgba(185, 203, 207, 1);
               line-height: 20px;
-              margin-top: 18px;
             }
           }
         }
