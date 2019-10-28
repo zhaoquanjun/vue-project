@@ -227,7 +227,7 @@ export default {
     },
     _handleSelectPage(i) {
       this.newId = i
-      this.newsTitle = this.newsList[i].title
+      //this.newsTitle = this.newsList[i].title
       this.urlId = this.newsList[i].id
       this.productHref = `http://${this.promotionUrl}/news/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
       this.$emit("handleChangeUrl", {

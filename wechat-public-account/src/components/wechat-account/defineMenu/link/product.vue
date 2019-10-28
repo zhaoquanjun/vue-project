@@ -230,7 +230,7 @@ export default {
     },
     _handleSelectPage(i) {
       this.productId = i
-      this.productTitle = this.productList[i].name
+      //this.productTitle = this.productList[i].name
       this.urlId = this.productList[i].id
       this.productHref = `http://${this.promotionUrl}/product/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
         this.$emit("handleChangeUrl", {

@@ -31,6 +31,7 @@
                   <li 
                     v-for="(child, idx) in item.subMenuList"
                     :class="{selected: idx == curSubIndex,singleSub:isOrder}"
+                    class="ellipsis pointer"
                     @click.stop="_handleSelectMenu(2,idx,child.id)"
                     :key="idx">
                     <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
@@ -371,7 +372,7 @@ export default {
     // 切换menu
     async _handleSelectMenu(type,i,id) {
       //点击自身
-      if (id == this.menuDetail.id ) {
+      if (!this.isOrder &&  id == this.menuDetail.id  ) {
         console.log(id,this.menuDetail.id,'333')
         return
       }
@@ -812,11 +813,11 @@ export default {
             border-radius: 2px;
             li {
               margin: 0 auto;
-              padding: 8px 0;
-              height: auto;
-              line-height: 34px;
+              padding: 8px 6px;
+              height: 34px;
+              line-height: 18px;
               text-align: center;
-              width: 144px;
+              width: 140px;
               font-size: 14px;
               color: #262626;
               border-right: none;
