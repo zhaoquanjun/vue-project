@@ -89,7 +89,7 @@ export default {
   data() {
     return {
       sliderList: [
-        { name: "纯链接", label: "url" },
+        { name: "网址", label: "url" },
         { name: "页面", label: "page" },
         { name: "文章", label: "news" },
         { name: "产品", label: "product" },

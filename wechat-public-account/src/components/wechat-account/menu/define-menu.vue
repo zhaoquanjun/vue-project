@@ -192,7 +192,7 @@ export default {
         siteId: this.$store.state.dashboard.siteId || getLocal("ymSd"),
         name: "",
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
-        behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
+        behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url网址,WZPage页面, WZNews文章,WZProduct产品
         behaviorBody: {
           imageMsg: {
             picUrl: '',
