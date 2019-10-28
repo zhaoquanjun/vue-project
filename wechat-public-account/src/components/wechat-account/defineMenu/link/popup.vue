@@ -13,7 +13,8 @@
         </ul>
         <none-area 
           @handleChangeUrl="handleChangeUrl"
-          v-show="slider == 'url'" 
+          v-show="slider == 'url'"
+          ref="text"
           :noneUrl="noneUrl">
         </none-area>
         <page-area
@@ -168,7 +169,7 @@ export default {
     },
     _handleConfirm() {
       if(this.slider == 'url' && !this.title){
-        notify(this, '请输入网址', "error");
+        this.$refs.text.isUrl = true
         return
       }
       if (!this.selectedUrl || !this.title){

@@ -18,7 +18,7 @@ export default {
     return {
       url: '',
       isUrl: false,
-      tipText: ''
+      tipText: '请输入网址'
     }
   },
   methods: {
