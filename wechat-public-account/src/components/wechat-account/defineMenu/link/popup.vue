@@ -204,8 +204,14 @@ export default {
         oldData['PageIndex'] = oldPageIndex;
         oldData['Id'] = oldId;
         this.$emit("handleClosePopup", false, data, oldData);
+        this.slider = "url";
+        this.selectedUrl = null;
+        this.id = null;
       } else {
         this.$emit("handleClosePopup", false, data);
+        this.slider = "url";
+        this.selectedUrl = null;
+        this.id = null;
       }
     },
     _handleCancle() {
