@@ -9,7 +9,7 @@
           :class="{active: pageId == i }"
           @click.stop="_handleSelectPage(i)"
         >
-          <p class="single-line__overflow--hide">{{it.title}}</p>
+          <p class="single-line__overflow--hide ellipsis">{{it.title}}</p>
           <p class="date single-line__overflow--hide">
             <!-- <span>{{it.createTime.slice(0, 10)}}</span> -->
             <span
@@ -118,6 +118,8 @@ export default {
         width: 450px;
         padding: 0;
         font-size: 14px;
+        line-height: 26px;
+        height: 26px;
         color: #262626;
       }
       p.date {

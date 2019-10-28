@@ -34,7 +34,7 @@
                 :class="{active: productId == i }"
                 @click.stop="_handleSelectPage(i)"
               >
-                <p class="single-line__overflow--hide">{{it.name}}</p>
+                <p class="single-line__overflow--hide ellipsis">{{it.name}}</p>
                 <p class="date single-line__overflow--hide">
                   <!-- <span>{{it.createTime && it.createTime.slice(0, 10)}}</span> -->
                   <span
@@ -361,6 +361,7 @@ export default {
               padding: 0;
               font-size: 14px;
               line-height: 26px;
+              height: 26px;
               color: #262626;
               text-align: left;
             }

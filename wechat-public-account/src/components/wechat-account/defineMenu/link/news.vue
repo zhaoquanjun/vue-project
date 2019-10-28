@@ -34,7 +34,7 @@
               :class="{active: newId==i}"
               @click.stop="_handleSelectPage(i)"
             >
-              <p class="single-line__overflow--hide">{{it.title}}</p>
+              <p class="single-line__overflow--hide ellipsis">{{it.title}}</p>
               <p class="date single-line__overflow--hide">
                 <!-- <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span> -->
                 <span
@@ -359,6 +359,7 @@ export default {
               padding: 0;
               font-size: 14px;
               line-height: 26px;
+              height: 26px;
               overflow: hidden;
               color: #262626;
               text-align: left;
