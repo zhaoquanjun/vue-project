@@ -36,7 +36,7 @@ export const defaultRoutes = [
     name: 'board',
     component: () => import('@/views/board/index.vue'),
     meta: {
-      title: "控制台首页",
+      title: "控制台",
       requiresAuth: true,
       requiresRole: {},
     }
@@ -211,7 +211,15 @@ export const defaultRoutes = [
       },
     ]
   },
-
+  {
+    path: "/ssologin",
+    name: "ssologin",
+    component: () => import("@/views/ssoLogin/index"),
+    meta: {
+      title: "控制台",
+      requiresRole: {},
+    }
+  },
   {
     path: "/recycle",
     name: "recycle",
