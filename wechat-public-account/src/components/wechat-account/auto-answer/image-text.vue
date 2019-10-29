@@ -6,9 +6,13 @@
            v-show="isShowPopup"
         />
         <ul class="list" ref="list">
+            <div v-if="!isEditorShow && list.length <= 0" class="add-img" @click="handlerAddNewsImg">
+                <img src="~img/add-img.png" />
+                <p>添加图文信息</p>
+            </div>
             <li
                 ref="listItem"
-                v-show="!isEditorShow"
+                v-show="!isEditorShow && list.length > 0"
                 :class="index===0?'fist-item':'list-item'"
                 v-for="(item,index) in list"
                 :key="index"
@@ -95,7 +99,7 @@
                 </div>
             </li>
         </ul>
-        <div class="footer-add" @click="handlerAddNewsImg" v-if="!isEditorShow&&list.length<8 && replyTypes == 1">
+        <div class="footer-add" @click="handlerAddNewsImg" v-show="!isEditorShow && list.length > 0 && list.length<8 && replyTypes == 1">
             <span class="el-icon-plus avatar-uploader-icon"></span>
             <span>还可添加 {{(8-list.length)}} 个图文消息</span>
         </div>
@@ -150,7 +154,6 @@ export default {
     mounted() {
         this.list = this.newsMsg;
         this.replyTypes = this.replyType;
-        this.isEditorShow = this.list.length > 0 ? false : true;
     },
     methods: {
         showPopup(){
@@ -264,8 +267,6 @@ export default {
         newsMsg() {
             this.list = this.newsMsg;
             this.replyTypes = this.replyType;
-            this.isEditorShow = this.newsMsg.length > 0 ? false : true;
-         
         },
        
     }
@@ -296,7 +297,26 @@ export default {
 </style>
 <style lang="scss" scoped>
 .image-text {
-    padding-top: 16px;
+    padding-top: 16px; 
+}
+.add-img {
+    width: 100%;
+    margin: 0;
+    min-height: 320px;
+    cursor: pointer;
+    img {
+        display: block;
+        width: 60px;
+        height: 60px;
+        margin: 100px auto 0;
+    }
+    p {
+        display: block;
+        width: 100%;
+        padding-top: 16px;
+        color: #09cceb;
+        text-align: center;
+    }
 }
 .list {
     width: 280px;
