@@ -87,7 +87,7 @@
           @current-change="handleCurrentChange"
           layout="total, sizes, prev, pager, next"
           :total="TotalRecord"
-          :page-sizes="[10,20,50]"
+          :page-sizes="[5,10,20]"
         ></el-pagination>
       </div>
     </div>
@@ -134,7 +134,7 @@ export default {
     return {
       siteId: this.$store.state.dashboard.siteId,
       replyType: 'page',
-      PageSize: 10, //每页数
+      PageSize: 5, //每页数
       PageIndex: 1, //当前页面
       TotalPage: 0, //总页数
       TotalRecord: 0, //总数量
