@@ -29,7 +29,11 @@
           <div class="site-img"></div>
           <span class="site-name">{{curSiteinfo.siteName}}</span>
           <span class="site-language">{{_getLanguage(curSiteinfo.language)}}</span>
-          <i class="iconfont iconicon-dash-edit editIcon" v-show="isSystem"></i>
+          <i
+            class="iconfont iconicon-dash-edit editIcon"
+            v-show="isSystem"
+            @click="changeSiteInfoShow"
+          ></i>
         </div>
         <div class="site-btn">
           <button
@@ -71,6 +75,9 @@
                   :class="{'siteInfo-icon-red':!curSiteTodoinfo.siteDomain, 'siteInfo-icon-green':curSiteTodoinfo.siteDomain}"
                 ></span>
                 <span class="siteInfo-title">站点域名</span>
+                <span
+                  class="siteInfo-domain"
+                >{{curSiteTodoinfo.resolvedDomainList?curSiteTodoinfo.resolvedDomainList[0]:""}}</span>
               </div>
               <div class="siteInfo-right">
                 <span class="siteInfo-btn">管理</span>
@@ -173,36 +180,77 @@
       :show-close="false"
       :close-on-click-modal="false"
     >
-      <div class="right-pannel" :style="{width:'600px'}">
+      <div class="right-pannel" :style="{width:'520px'}">
         <div class="pannel-head">
-          <span class="headTitle">创建网站</span>
-          <span class="close-pannel" @click="closeDialog">
+          <span class="headTitle">新建站点</span>
+          <span class="close-pannel" @click="closeCreateDialog">
             <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
           </span>
         </div>
-        <div>
-          <div class="createSiteName">
-            <span class="createSiteNameTitle">请设置您的网站名称：</span>
-            <el-input v-model="createSiteName" placeholder="请输入内容" class="createSiteNameInput"></el-input>
-          </div>
-          <div style="margin-top:24px;margin-left:32px;">
-            <div class="createSiteLanguageTitle">请选择您的网站语言：</div>
-            <el-radio-group v-model="radio" class="radio">
-              <el-radio label="zh-CN">中文</el-radio>
-              <el-radio label="en-US">英文</el-radio>
-              <el-radio label="ja-JP">日语</el-radio>
-              <el-radio label="es-ES">西班牙语</el-radio>
-              <el-radio label="ko-KR">韩语</el-radio>
-            </el-radio-group>
-          </div>
-          <div class="create">
-            <el-button
-              class="createBtn"
-              :disabled="radio == '' || createSiteName == ''"
-              :class="{disabled: radio == '' || createSiteName == ''}"
-              @click="createSite"
-            >立即创建</el-button>
-          </div>
+        <div class="createSiteName">
+          <span class="createSiteTitle">站点名称</span>
+          <el-input
+            v-model="createSiteName"
+            @blur="blurSiteName(createSiteName)"
+            placeholder="请输入内容"
+            class="createSiteNameInput"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="createSiteTitle">站点语言</div>
+          <el-radio-group v-model="radio" @change="changeLanguage" class="radio">
+            <el-radio label="zh-CN">中文</el-radio>
+            <el-radio label="en-US">英文</el-radio>
+            <el-radio label="ja-JP">日文</el-radio>
+            <el-radio label="es-ES">西班牙语</el-radio>
+            <el-radio label="ko-KR">韩语</el-radio>
+          </el-radio-group>
+          <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
+        </div>
+        <div class="create">
+          <button @click="closeCreateDialog" class="cancelBtn">取消</button>
+          <button @click="createSite" class="createBtn">确定</button>
+        </div>
+      </div>
+    </el-dialog>
+    <el-dialog
+      width="0"
+      :visible.sync="changeSiteShow"
+      :show-close="false"
+      :close-on-click-modal="false"
+    >
+      <div class="right-pannel" :style="{width:'520px'}">
+        <div class="pannel-head">
+          <span class="headTitle">设置站点</span>
+          <span class="close-pannel" @click="closeChangeDialog">
+            <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+          </span>
+        </div>
+        <div class="createSiteName">
+          <span class="createSiteTitle">站点名称</span>
+          <el-input
+            v-model="changeSiteName"
+            @blur="blurSiteName(changeSiteName)"
+            placeholder="请输入内容"
+            class="createSiteNameInput"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="createSiteTitle">站点语言</div>
+          <el-radio-group v-model="changeRadio" @change="changeLanguage" class="radio">
+            <el-radio label="zh-CN">中文</el-radio>
+            <el-radio label="en-US">英文</el-radio>
+            <el-radio label="ja-JP">日文</el-radio>
+            <el-radio label="es-ES">西班牙语</el-radio>
+            <el-radio label="ko-KR">韩语</el-radio>
+          </el-radio-group>
+          <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
+        </div>
+        <div class="create">
+          <button @click="closeChangeDialog" class="cancelBtn">取消</button>
+          <button @click="changeSiteInfo" class="createBtn">确定</button>
         </div>
       </div>
     </el-dialog>
@@ -235,7 +283,14 @@ export default {
       curSiteTodoinfo: {},
       createShow: false,
       createSiteName: "",
-      radio: ""
+      radio: "",
+      errorSiteName: false,
+      errorSiteNameText: "",
+      errorSiteLanguage: false,
+      errorSiteLanguageText: "站点语言不能为空",
+      changeSiteShow: false,
+      changeSiteName: "",
+      changeRadio: ""
     };
   },
   components: {
@@ -264,10 +319,12 @@ export default {
       }
     },
     changeSite(item) {
-      this.siteId = item.siteId;
-      this.curSiteinfo = item;
-      this.getTodoInfo(this.siteId);
-      this.$store.commit("SETSITEID", this.siteId);
+      if (item.siteId != this.siteId) {
+        this.siteId = item.siteId;
+        this.curSiteinfo = item;
+        this.getTodoInfo(this.siteId);
+        this.$store.commit("SETSITEID", this.siteId);
+      }
     },
     jumpTo(type) {
       if (type == "domain") {
@@ -292,16 +349,56 @@ export default {
       let { data } = await dashboardApi.getTodoInfo(siteId);
       this.curSiteTodoinfo = data;
     },
-    closeDialog() {
+    closeCreateDialog() {
       this.radio = "";
       this.createSiteName = "";
       this.createShow = false;
+      this.errorSiteName = false;
+      this.errorSiteNameText = "";
+      this.errorSiteLanguage = false;
     },
     addSite() {
       this.createShow = true;
     },
+    // 点击语言radio
+    changeLanguage() {
+      this.errorSiteLanguage = false;
+    },
+    // 创建站点Inputblur
+    blurSiteName(name) {
+      if (name == "") {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能为空";
+        return;
+      } else {
+        this.errorSiteName = false;
+        this.errorSiteNameText = "";
+      }
+      if (name.length > 20) {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能超过20个字符，请重新输入";
+        return;
+      } else {
+        this.errorSiteName = false;
+        this.errorSiteNameText = "";
+      }
+    },
     // 创建site
     async createSite() {
+      if (this.createSiteName == "") {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能为空";
+        return;
+      }
+      if (this.createSiteName.length > 20) {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能超过20个字符，请重新输入";
+        return;
+      }
+      if (this.radio == "") {
+        this.errorSiteLanguage = true;
+        return;
+      }
       let { status } = await dashboardApi.CreateSite(
         this.radio,
         this.createSiteName
@@ -314,6 +411,46 @@ export default {
         this.$notify({
           customClass: "notify-success",
           message: `创建成功`,
+          duration: 2000,
+          showClose: false
+        });
+      }
+    },
+    // 展示修改site信息弹框
+    changeSiteInfoShow() {
+      this.changeSiteName = this.curSiteinfo.siteName;
+      this.changeRadio = this.curSiteinfo.language;
+      this.changeSiteShow = true;
+    },
+    // 关闭修改site弹窗
+    closeChangeDialog() {
+      this.changeSiteShow = false;
+    },
+    // 确定修改site信息
+    async changeSiteInfo() {
+      if (this.changeSiteName == "") {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能为空";
+        return;
+      }
+      if (this.changeSiteName.length > 20) {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能超过20个字符，请重新输入";
+        return;
+      }
+      let para = {
+        siteId: this.siteId,
+        siteName: this.changeSiteName,
+        language: this.changeRadio
+      };
+      let { data, status } = await dashboardApi.updateSiteInfo(para);
+      if (status == 200) {
+        this.curSiteinfo.siteName = this.changeSiteName;
+        this.curSiteinfo.language = this.changeRadio;
+        this.changeSiteShow = false;
+        this.$notify({
+          customClass: "notify-success",
+          message: `修改成功`,
           duration: 2000,
           showClose: false
         });
@@ -349,10 +486,10 @@ export default {
 <style scoped>
 .createSiteNameInput /deep/ .el-input__inner {
   margin-top: 16px;
-  width: 536px;
-  height: 32px;
-  background: rgba(255, 255, 255, 1);
-  border: 1px solid rgba(229, 229, 229, 1);
+  /* width: 536px;
+  height: 32px; */
+  /* background: rgba(255, 255, 255, 1); */
+  /* border: 1px solid rgba(229, 229, 229, 1); */
 }
 .radio /deep/ .is-checked .el-radio__inner {
   background: #00c1de;
@@ -362,13 +499,13 @@ export default {
   margin-right: 17px;
 }
 .radio /deep/ .el-radio__label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
-  color: rgba(140, 140, 140, 1);
+  color: rgba(38, 38, 38, 1);
   line-height: 20px;
 }
 .radio /deep/ .is-checked .el-radio__label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
@@ -400,7 +537,7 @@ export default {
       justify-content: space-between;
       .sitelist {
         width: calc(100% - 100px);
-        margin-top: 32px;
+        margin-top: 31px;
         display: inline-block;
         .sitelist-item:first-child {
           border-left: 1px solid rgba(229, 229, 229, 1);
@@ -655,6 +792,13 @@ export default {
                 color: rgba(161, 168, 177, 1);
                 line-height: 20px;
               }
+              .siteInfo-domain {
+                margin-left: 16px;
+                font-size: 14px;
+                font-weight: 400;
+                color: rgba(5, 149, 230, 1);
+                line-height: 20px;
+              }
             }
             .siteInfo-right {
               .siteInfo-btn {
@@ -670,54 +814,48 @@ export default {
     }
   }
   .right-pannel {
-    width: 600px;
-    height: 356px;
+    width: 520px;
     background: #ffffff;
     position: fixed;
     z-index: 2200;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 3px #ccc;
+    box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
     transition: width 0.2s linear;
     background-color: "#fff";
     color: #262626;
     overflow: hidden;
+    padding: 30px 24px 40px;
     .pannel-head {
-      height: 70px;
-      overflow: hidden;
-      border-bottom: 2px solid #efefef;
+      display: flex;
+      justify-content: space-between;
       .headTitle {
         font-size: 16px;
         font-weight: 500;
         color: rgba(38, 38, 38, 1);
-        line-height: 70px;
-        margin-left: 32px;
-        margin-top: 24px;
+        line-height: 22px;
       }
       .close-pannel {
-        line-height: 70px;
-        float: right;
+        line-height: 22px;
         cursor: pointer;
-        margin-right: 32px;
+        .iconguanbi {
+          padding: 8px;
+          background: transparent;
+          &:hover {
+            background: rgba(240, 243, 247, 1);
+            border-radius: 4px;
+          }
+        }
       }
-    }
-    .disabled {
-      opacity: 0.4;
     }
     .createSiteName {
-      margin-top: 24px;
-      padding-left: 32px;
-      .createSiteNameTitle {
-        font-size: 12px;
-        font-weight: 500;
-        color: rgba(38, 38, 38, 1);
-        line-height: 20px;
-      }
+      margin-top: 20px;
     }
-    .createSiteLanguageTitle {
-      font-size: 12px;
-      font-weight: 500;
+    .createSiteTitle {
+      font-size: 14px;
+      font-weight: 400;
       color: rgba(38, 38, 38, 1);
       line-height: 20px;
       margin-bottom: 16px;
@@ -725,20 +863,34 @@ export default {
     .create {
       margin-top: 30px;
       width: 100%;
-      height: 80px;
-      border-top: 2px solid #eee;
-      text-align: center;
-      .createBtn {
-        width: 116px;
-        height: 32px;
-        background: rgba(1, 192, 222, 1);
+      text-align: right;
+      .cancelBtn {
+        width: 76px;
+        height: 40px;
+        background: rgba(255, 255, 255, 1);
         border-radius: 2px;
-        padding: 0px;
-        margin-top: 24px;
-        font-size: 12px;
-        font-weight: 500;
+        border: 1px solid rgba(9, 204, 235, 1);
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(9, 204, 235, 1);
+        line-height: 40px;
+        margin-right: 16px;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+      .createBtn {
+        width: 76px;
+        height: 40px;
+        background: rgba(9, 204, 235, 1);
+        border-radius: 2px;
+        font-size: 14px;
+        font-weight: 400;
         color: rgba(255, 255, 255, 1);
-        line-height: 32px;
+        line-height: 40px;
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
   }

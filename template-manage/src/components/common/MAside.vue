@@ -108,7 +108,9 @@ export default {
             this.width = 150;
         },
         collapseClose() {
-            this.width = 60;
+            setTimeout(()=>{
+                this.width = 60;
+            },250)
         },
         iconfonts(code) {
             switch (code) {

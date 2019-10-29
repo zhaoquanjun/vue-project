@@ -74,3 +74,15 @@ export const getSiteInfo = siteId => {
     { siteId: siteId }
   );
 };
+/**
+ * 网站icon
+ */
+export const updateSiteIcon = option => {
+  return ajaxRequest.put(`${enbironmemy.designerManageApi}/api/v1/siteInfo/UpdateSiteIcon`,option);
+};
+/**
+ * 启用powered by
+ */
+export const updateSitePoweredBy = option => {
+  return ajaxRequest.put(`${enbironmemy.designerManageApi}/api/v1/siteInfo/UpdateSitePoweredBy`,option);
+};

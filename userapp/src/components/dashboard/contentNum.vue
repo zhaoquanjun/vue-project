@@ -49,6 +49,18 @@ export default {
         case "文件":
           return "file";
       }
+    },
+    bytesToSize(bytes, flag) {
+      if (bytes === 0) return "0 B";
+      let k = 1024;
+      let sizes = ["B", "K", "M", "G", "T", "P", "E", "Z", "Y"];
+      let i = Math.floor(Math.log(bytes) / Math.log(k));
+      let b = bytes / Math.pow(k, i);
+      //   if (flag === 1) {
+      b = b.toFixed(1);
+      //   }
+      let storage = b + sizes[i];
+      return storage;
     }
   },
   watch: {
@@ -74,8 +86,8 @@ export default {
         },
         {
           name: "文件",
-          num: (this.contentNumber.fileStorageInfo.currentVal/1024/1024/1024).toFixed(1),
-          maxNum: this.contentNumber.fileStorageInfo.maxVal/1024/1024/1024 + "G",
+          num: this.bytesToSize(this.contentNumber.fileStorageInfo.currentVal),
+          maxNum: this.bytesToSize(this.contentNumber.fileStorageInfo.maxVal),
           url: fileManageUrl
         }
       ];
@@ -130,8 +142,9 @@ export default {
             border-radius: 2px;
           }
           .item-name {
+            display: flex;
+            align-items: center;
             .item-img {
-              margin-top: 10px;
               margin-right: 8px;
               display: inline-block;
               width: 32px;
@@ -158,17 +171,16 @@ export default {
             }
             .name {
               display: inline-block;
-              font-size: 18px;
+              font-size: 16px;
               font-weight: 400;
               color: rgba(38, 38, 38, 1);
-              line-height: 25px;
-              margin-top: 14px;
+              line-height: 22px;
             }
           }
           .item-content {
             .item-num {
               display: inline-block;
-              font-size: 32px;
+              font-size: 28px;
               font-weight: 500;
               color: rgba(38, 38, 38, 1);
               line-height: 50px;
@@ -180,7 +192,6 @@ export default {
               font-weight: 400;
               color: rgba(185, 203, 207, 1);
               line-height: 20px;
-              margin-top: 18px;
             }
           }
         }

@@ -39,14 +39,14 @@ export const notify = (that,mag, type) => {
 
 //转换链接
 //转换规则
-// 纯链接：url
+// 网址：url
 // 页面:http://域名/页面id
 // 文章:http://域名/news/文章详情页id/文章id.html
 // 产品:http://域名/product/产品详情页id/产品id.html
 export const transformationUrl = (type, domian, id, detailId) => {
     // type: Url; Page; Product; News
     // domian: 域名
-    // id：页面，文章，产品id 纯链接url；
+    // id：页面，文章，产品id 网址url；
     // detailId：详情页id
     let url = '无效链接'
     if (type == 'Url'){

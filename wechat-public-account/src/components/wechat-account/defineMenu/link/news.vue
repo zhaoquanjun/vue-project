@@ -34,7 +34,7 @@
               :class="{active: newId==i}"
               @click.stop="_handleSelectPage(i)"
             >
-              <p class="single-line__overflow--hide">{{it.title}}</p>
+              <p class="single-line__overflow--hide ellipsis">{{it.title}}</p>
               <p class="date single-line__overflow--hide">
                 <!-- <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span> -->
                 <span
@@ -48,6 +48,7 @@
             layout="prev, pager, next"
             :page-size="pageSize"
             :total="total"
+            :pager-count="5"
             :current-page="pageIndex"
             @current-change="_handleChangeCurrent"
             style="margin-top: 12px"
@@ -124,8 +125,8 @@ export default {
   data() {
     return {
       timer: null,
-      pageSize: 6,
-      total: 6,
+      pageSize: 10,
+      total: 0,
       pageActiveIndex: null,
       siteId: this.$store.state.dashboard.siteId,
       promotionUrl: this.$store.getters.account_info.promotionUrl,
@@ -139,6 +140,7 @@ export default {
       newId: -1,
       urlId: '',
       productHref: '',
+      pageIndex: 1,
       nodeId: 0,
       loading: false,
       target: "createArticle",
@@ -162,14 +164,6 @@ export default {
   components: {
     NoneArea,
     Loading
-  },
-  computed: {
-    pageIndex: {
-      get: function() {
-        return parseInt(this.model["PageIndex"]) || 1;
-      },
-      set: function() {}
-    }
   },
   created() {
     this.getNewsList(this.nodeId);
@@ -234,7 +228,7 @@ export default {
     },
     _handleSelectPage(i) {
       this.newId = i
-      this.newsTitle = this.newsList[i].title
+      //this.newsTitle = this.newsList[i].title
       this.urlId = this.newsList[i].id
       this.productHref = `http://${this.promotionUrl}/news/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
       this.$emit("handleChangeUrl", {
@@ -258,6 +252,7 @@ export default {
     },
     _handleChangeCurrent(val) {
       this.model["PageIndex"] = val;
+      this.pageIndex = val
       this.getNewsList(this.nodeId);
     }
   },
@@ -309,25 +304,26 @@ export default {
     display: flex;
     justify-content: flex-start;
     width: 563px;
-    height: 60%;
+    min-height: 490px;
+    height: 72%;
     text-align: right;
     border: 1px solid rgba(238, 238, 238, 1);
     .content-main__slider {
       padding: 16px 8px;
-      width: 128px;
+      width: 180px;
       height: 100%;
       overflow-y: auto;
       border-right: 1px solid #eee;
     }
     .content-main__list {
       position: relative;
-      width: 434px;
+      width: 380px;
       height: 100%;
       .content-main__search {
         display: flex;
         align-items: flex-end;
         margin-left: 8px;
-        width: 415px;
+        width: 360px;
         height: 36px;
         border-bottom: 1px solid #e5e5e5;
       }
@@ -348,8 +344,8 @@ export default {
         overflow: hidden;
         .content-main__list--item {
           padding: 10px 6px 0;
-          width: 434px;
-          height: 200px;
+          width: 380px;
+          height: 320px;
           overflow-y: auto;
           li {
             display: flex;
@@ -365,6 +361,7 @@ export default {
               padding: 0;
               font-size: 14px;
               line-height: 26px;
+              height: 26px;
               overflow: hidden;
               color: #262626;
               text-align: left;
@@ -373,7 +370,7 @@ export default {
               display: flex;
               justify-content: flex-end;
               align-items: center;
-              width: 128px;
+              width: 164px;
               span {
                 color: #b5b5b5;
               }
@@ -476,11 +473,13 @@ export default {
       position: absolute;
       top: 86px;
       left: 20px;
-      width:560px;
-      height: 240px;
+      width:260px;
+      height: 64px;
       overflow: hidden;
       overflow-y: auto;
       li {
+        display: inline-block;
+        margin-right: 0;
         color:rgba(38,38,38,1);
         height:32px;
         font-size:14px;

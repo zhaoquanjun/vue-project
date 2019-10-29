@@ -257,6 +257,7 @@ export default {
       isAllTab: true,
       templateInfo: [],
       languageSelect: "",
+      themeSelect:"",
       languageOptions: [
         {
           value: "",
@@ -286,32 +287,14 @@ export default {
       search: "",
       colorArray: [
         {
-          color: "rgba(98,54,255,1)",
-          isCur: true
+          color: "rgba(7,102,227,1)",
+          isCur: true,
+          code:'blue_color1'
         },
         {
-          color: "rgba(5,149,230,1)",
-          isCur: false
-        },
-        {
-          color: "rgba(99,220,140,1)",
-          isCur: false
-        },
-        {
-          color: "rgba(254,152,55,1)",
-          isCur: false
-        },
-        {
-          color: "rgba(251,77,104,1)",
-          isCur: false
-        },
-        {
-          color: "rgba(74,72,249,1)",
-          isCur: false
-        },
-        {
-          color: "rgba(185,203,207,1)",
-          isCur: false
+            color: "rgba(251,77,104,1)",
+            isCur: false,
+            code: 'pink_color1'
         }
       ],
       orderType: [
@@ -363,10 +346,10 @@ export default {
         this.secondIndustryId = item.id;
       }
       let para = {
-        TemplateName: "",
+        TemplateName: this.search,
         FirstIndustry: this.firstIndustryId,
         SecondIndustry: this.secondIndustryId,
-        Theme: "",
+        Theme: this.themeSelect,
         Language: this.languageSelect,
         IsRecommend: this.isRecommend,
         PageIndex: this.pageIndex,
@@ -388,10 +371,10 @@ export default {
     // 切换语言
     async changeLanguage() {
       let para = {
-        TemplateName: "",
-        FirstIndustry: 0,
-        SecondIndustry: 0,
-        Theme: "",
+        TemplateName: this.search,
+        FirstIndustry: this.firstIndustryId,
+        SecondIndustry: this.secondIndustryId,
+        Theme: this.themeSelect,
         Language: this.languageSelect,
         IsRecommend: this.isRecommend,
         PageIndex: this.pageIndex,
@@ -404,12 +387,30 @@ export default {
       this.templateInfo = data.items;
     },
     // 选择主题颜色
-    changeColor(item) {
-      this.colorArray.forEach((item, index) => {
-        item.isCur = false;
-      });
-      item.isCur = true;
-      console.log(item);
+   async changeColor(item) {
+        this.colorArray.forEach((_item, index) => {
+            if (item.code == _item.code) {
+                item.isCur = _item.isCur ? false : true;
+                this.themeSelect = item.isCur ? item.code : "";
+            } else {
+                _item.isCur = false;
+            }
+        });
+        let para = {
+            TemplateName: this.search,
+            FirstIndustry: this.firstIndustryId,
+            SecondIndustry: this.secondIndustryId,
+            Theme: this.themeSelect,
+            Language: this.languageSelect,
+            IsRecommend: this.isRecommend,
+            PageIndex: this.pageIndex,
+            PageSize: this.pageSize,
+            IsOrderByUpdateTime: this.isOrderByUpdateTime,
+            IsMostPopular: this.isMostPopular
+        };
+        let { data, status } = await templateApi.getSiteTemplates(para);
+        this.templatePage = data;
+        this.templateInfo = data.items;
     },
     // 选择最新/最热/推荐
     async changeOrder(item) {
@@ -429,10 +430,10 @@ export default {
           this.isRecommend = true;
         }
         let para = {
-          TemplateName: "",
-          FirstIndustry: 0,
-          SecondIndustry: 0,
-          Theme: "",
+          TemplateName: this.search,
+          FirstIndustry: this.firstIndustryId,
+          SecondIndustry: this.secondIndustryId,
+          Theme: this.themeSelect,
           Language: this.languageSelect,
           IsRecommend: this.isRecommend,
           PageIndex: this.pageIndex,
@@ -556,9 +557,9 @@ export default {
       } else {
         let para = {
           TemplateName: this.search,
-          FirstIndustry: 0,
-          SecondIndustry: 0,
-          Theme: "",
+          FirstIndustry: this.firstIndustryId,
+          SecondIndustry: this.secondIndustryId,
+          Theme: this.themeSelect,
           Language: this.languageSelect,
           IsRecommend: this.isRecommend,
           PageIndex: this.pageIndex,

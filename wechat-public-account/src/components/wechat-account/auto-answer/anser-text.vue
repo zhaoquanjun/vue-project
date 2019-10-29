@@ -46,10 +46,11 @@ export default {
 </script>
 <style scoped>
 .textarea /deep/ .el-textarea__inner {
-    height: 370px;
-    min-height: 373px;
-    max-height: 373px;
+    height: 460px;
     border: none;
     padding: 16px 16px;
+}
+.el-textarea /deep/ .el-input__count {
+    right: 20px;
 }
 </style>
