@@ -346,10 +346,10 @@ export default {
         this.secondIndustryId = item.id;
       }
       let para = {
-        TemplateName: "",
+        TemplateName: this.search,
         FirstIndustry: this.firstIndustryId,
         SecondIndustry: this.secondIndustryId,
-        Theme: "",
+        Theme: this.themeSelect,
         Language: this.languageSelect,
         IsRecommend: this.isRecommend,
         PageIndex: this.pageIndex,
@@ -371,9 +371,9 @@ export default {
     // 切换语言
     async changeLanguage() {
       let para = {
-        TemplateName: "",
-        FirstIndustry: 0,
-        SecondIndustry: 0,
+        TemplateName: this.search,
+        FirstIndustry: this.firstIndustryId,
+        SecondIndustry: this.secondIndustryId,
         Theme: this.themeSelect,
         Language: this.languageSelect,
         IsRecommend: this.isRecommend,
@@ -387,7 +387,7 @@ export default {
       this.templateInfo = data.items;
     },
     // 选择主题颜色
-    changeColor(item) {
+   async changeColor(item) {
         this.colorArray.forEach((_item, index) => {
             if (item.code == _item.code) {
                 item.isCur = _item.isCur ? false : true;
@@ -396,6 +396,21 @@ export default {
                 _item.isCur = false;
             }
         });
+        let para = {
+            TemplateName: this.search,
+            FirstIndustry: this.firstIndustryId,
+            SecondIndustry: this.secondIndustryId,
+            Theme: this.themeSelect,
+            Language: this.languageSelect,
+            IsRecommend: this.isRecommend,
+            PageIndex: this.pageIndex,
+            PageSize: this.pageSize,
+            IsOrderByUpdateTime: this.isOrderByUpdateTime,
+            IsMostPopular: this.isMostPopular
+        };
+        let { data, status } = await templateApi.getSiteTemplates(para);
+        this.templatePage = data;
+        this.templateInfo = data.items;
     },
     // 选择最新/最热/推荐
     async changeOrder(item) {
@@ -415,9 +430,9 @@ export default {
           this.isRecommend = true;
         }
         let para = {
-          TemplateName: "",
-          FirstIndustry: 0,
-          SecondIndustry: 0,
+          TemplateName: this.search,
+          FirstIndustry: this.firstIndustryId,
+          SecondIndustry: this.secondIndustryId,
           Theme: this.themeSelect,
           Language: this.languageSelect,
           IsRecommend: this.isRecommend,
@@ -542,8 +557,8 @@ export default {
       } else {
         let para = {
           TemplateName: this.search,
-          FirstIndustry: 0,
-          SecondIndustry: 0,
+          FirstIndustry: this.firstIndustryId,
+          SecondIndustry: this.secondIndustryId,
           Theme: this.themeSelect,
           Language: this.languageSelect,
           IsRecommend: this.isRecommend,
