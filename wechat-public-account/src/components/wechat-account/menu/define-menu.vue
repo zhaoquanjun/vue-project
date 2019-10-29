@@ -433,8 +433,22 @@ export default {
           if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.imageMsg.picUrl) {
             flag = false
             console.log('flag',3)
-          } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.textMsg.text) {
-            flag = false
+          } else if (this.menuDetail.behaviorType == 2 ) {
+            if (!this.menuDetail.behaviorBody.textMsg.text) {
+              flag = false
+            } else {
+              let str = this.menuDetail.behaviorBody.textMsg.text
+              let strFlag = false
+              for (let i=0; i<str.length; i++) { 
+                let c = str.charCodeAt(i);
+                if (c != 32 && c!= 10) {
+                  strFlag = true
+                }
+              }
+              if (!strFlag) {
+                flag = false
+              }
+            }
             console.log('flag',4)
           } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.newsMsg.length == 0) {
             flag = false
