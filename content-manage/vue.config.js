@@ -9,33 +9,13 @@ module.exports = {
 
     publicPath: '/',
     // 打包 不再使用sourcemap
-    // productionSourceMap: false,
+    productionSourceMap: false,
     lintOnSave:false,
     chainWebpack: config => {
         config.entry('main').add('babel-polyfill');
         config.resolve.alias.set('_c', path.resolve(__dirname, 'src/components'));
         config.resolve.alias.set('_v', path.resolve(__dirname, 'src/views'));
         config.resolve.alias.set('img', path.resolve(__dirname, 'static/images'));
-        config.module.rules.delete("svg"); //重点:删除默认配置中处理svg,
-        //const svgRule = config.module.rule('svg')
-        //svgRule.uses.clear()
-        config.module
-            .rule('svg-sprite-loader')
-            .test(/\.svg$/)
-            .include
-            .add(resolve('src/icons')) //处理svg目录
-            .end()
-            .use('svg-sprite-loader')
-            .loader('svg-sprite-loader')
-            .options({
-                symbolId: 'icon-[name]'
-            })
-        // 修改images loader 添加svg处理
-        const imagesRule = config.module.rule('images')
-        imagesRule.exclude.add(resolve('src/icons'))
-        config.module
-            .rule('images')
-            .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
 
     },
     css: {
@@ -48,11 +28,13 @@ module.exports = {
           }
         }
     },
+   
     devServer: {
         disableHostCheck: true,
         port: 8081,
     },
     configureWebpack:{
+       
         plugins: [
             new webpack.ProvidePlugin({
               'window.Quill': 'quill/dist/quill.js',
