@@ -342,7 +342,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .spread-setting__section {
-    padding: 32px;
+    padding: 10px 32px 0;
     min-width: 1100px;
     overflow-y: auto;
     .iconfont {

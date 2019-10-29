@@ -578,7 +578,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .auto-answer {
-    padding: 32px;
+    padding: 10px 32px 0;
     .answer-tabs {
         padding-top: 32px;
     }
