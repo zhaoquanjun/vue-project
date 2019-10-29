@@ -26,8 +26,9 @@
                         v-model="scope.row.httpsStatus"
                         @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
                     ></el-switch>-->
+                    <span v-if="!scope.row.isInAliDns">仅阿里云域名可开启https,请将域名转移到阿里云后再操作</span>
                     <template
-                        v-if="scope.row.cdnDomainResolveStatus===2 && scope.row.cdnStatus===5 &&scope.row.httpsStatus!==1"
+                        v-else-if="scope.row.cdnDomainResolveStatus===2 && scope.row.cdnStatus===5 &&scope.row.httpsStatus!==1 && scope.row.isInAliDns"
                     >
                         <!-- v-model="scope.row.httpsStatus" -->
                         <el-switch
@@ -86,32 +87,7 @@
                                     <span v-if="index<3" class="step-bar"></span>
                                 </div>
                             </el-col>
-                            <!-- <el-col :span="7">
-                                <div class="step-content">
-                                    <div class="step-item">
-                                        <span class="circle " :class="stepClass(props.row)">2</span>
-                                        <span class="step-desc">配置解析</span>
-                                    </div>
-                                    <span class="step-bar"></span>
-                                </div>
-                            </el-col>
-                            <el-col :span="7">
-                                <div class="step-content">
-                                    <div class="step-item">
-                                        <span class="circle " :class="stepClass(props.row)">3</span>
-                                        <span class="step-desc">等待解析生效</span>
-                                    </div>
-                                    <span class="step-bar"></span>
-                                </div>
-                            </el-col>
-                            <el-col :span="3">
-                                <div class="step-content">
-                                    <div class="step-item">
-                                        <span class="circle " :class="stepClass(props.row)">4</span>
-                                        <span class="step-desc">解析成功</span>
-                                    </div>
-                                </div>
-                            </el-col>-->
+                        
                         </el-row>
                         <el-row>
                             <el-col :span="7">
@@ -163,6 +139,7 @@
                                     <div class="explain-item">使用“一键解析”自动完成域名解析或前往阿里云控制台自行设置解析</div>
                                     <div class="explain-item islink">如何进行域名解析？</div>
                                     <button
+                                        v-if="props.row.isInAliDns"
                                         class="wezhan-btn btn-small btn-lightblue"
                                         @click="resolveCdnByAliYunToken(props.row)"
                                     >一键解析</button>
@@ -196,12 +173,12 @@
                                 >{{props.row.cdnStatusDesc}}</span>
                                 <button
                                     class="open-cnd-btn"
-                                    v-if="props.row.cdnStatus!==2 && props.row.cdnStatus!==5"
+                                    v-if="props.row.cdnStatus!==2 && props.row.cdnStatus!==5 && props.row.isInAliDns"
                                     @click="reopenCdn(props.row.id)"
                                 >开启</button>
                                 <button
                                     class="open-cnd-btn"
-                                    v-if="props.row.cdnStatus===5"
+                                    v-if="props.row.cdnStatus===5 && props.row.isInAliDns"
                                     @click="pauseCdn(props.row.id)"
                                 >关闭</button>
                             </div>
