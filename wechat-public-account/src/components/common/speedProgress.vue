@@ -58,6 +58,7 @@ export default {
         margin: 0 auto;
         justify-content: space-between;
         li {
+            width: 100px;
             text-align: center;
             span {
                 display: inline-block;
