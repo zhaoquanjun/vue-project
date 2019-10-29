@@ -50,7 +50,7 @@
       <div v-show="!isOrder" class="menu-operate__none">
         <div class="empty" v-if="menuTree.length <= 0">
           <div class="empty-icon"></div>
-          <p>您还没有添加菜单</p>
+          <p>请先在左侧添加菜单</p>
         </div>
         <div class="menu-operate__box" v-else>
           <div class="menu-operate__header">
