@@ -5,8 +5,9 @@ import store from "./store/index";
 import './plugins/element';
 import "./styles/reset.css";
 import "./styles/common.scss";
-import "./plugins/element-reset.scss"
-import "./styles/pop-up/pup-up.scss"
+import "./plugins/element-reset.scss";
+import "./styles/pop-up/pup-up.scss";
+//import 'babel-polyfill';
 Vue.config.productionTip = false;
 //插件的包
 import PerfectScrollbar from 'perfect-scrollbar';

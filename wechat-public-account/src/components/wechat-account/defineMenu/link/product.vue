@@ -34,7 +34,7 @@
                 :class="{active: productId == i }"
                 @click.stop="_handleSelectPage(i)"
               >
-                <p class="single-line__overflow--hide">{{it.name}}</p>
+                <p class="single-line__overflow--hide ellipsis">{{it.name}}</p>
                 <p class="date single-line__overflow--hide">
                   <!-- <span>{{it.createTime && it.createTime.slice(0, 10)}}</span> -->
                   <span
@@ -48,6 +48,7 @@
               layout="prev, pager, next"
               :page-size="pageSize"
               :total="total"
+              :pager-count="5"
               :current-page="pageIndex"
               @current-change="_handleChangeCurrent"
               style="margin-top: 12px"
@@ -130,8 +131,9 @@ export default {
       timer: null,
       siteId: this.$store.state.dashboard.siteId,
       promotionUrl: this.$store.getters.account_info.promotionUrl,
-      pageSize: 6,
-      total: 6,
+      pageSize: 10,
+      total: 0,
+      pageIndex: 1,
       productHref: '',
       productTitle: "",
       defaultExpandedKeys: [],
@@ -165,14 +167,6 @@ export default {
   components: {
     noneArea,
     Loading
-  },
-  computed: {
-    pageIndex: {
-      get: function() {
-        return parseInt(this.model["PageIndex"]) || 1;
-      },
-      set: function() {}
-    }
   },
   created() {
     this.getProductList(this.nodeIdArr);
@@ -237,7 +231,7 @@ export default {
     },
     _handleSelectPage(i) {
       this.productId = i
-      this.productTitle = this.productList[i].name
+      //this.productTitle = this.productList[i].name
       this.urlId = this.productList[i].id
       this.productHref = `http://${this.promotionUrl}/product/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
         this.$emit("handleChangeUrl", {
@@ -312,24 +306,25 @@ export default {
     display: flex;
     justify-content: flex-start;
     width: 563px;
-    height: 60%;
+    height: 72%;
+    min-height: 490px;
     text-align: right;
     border: 1px solid rgba(238, 238, 238, 1);
     .content-main__slider {
       padding: 16px 8px;
-      width: 128px;
+      width: 180px;
       height: 100%;
       overflow-y: auto;
       border-right: 1px solid #eee;
     }
     .content-main__list {
-      width: 434px;
+      width: 380px;
       height: 100%;
       .content-main__search {
         display: flex;
         align-items: flex-end;
         margin-left: 8px;
-        width: 415px;
+        width: 360px;
         height: 36px;
         border-bottom: 1px solid #e5e5e5;
       }
@@ -352,7 +347,8 @@ export default {
         height: 100%;
         .content-main__list--item {
           padding: 10px 6px 0;
-          width: 434px;
+          width: 380px;
+          height: 320px;
           overflow-y: auto;
           li {
             display: flex;
@@ -368,6 +364,7 @@ export default {
               padding: 0;
               font-size: 14px;
               line-height: 26px;
+              height: 26px;
               color: #262626;
               text-align: left;
             }
@@ -375,7 +372,7 @@ export default {
               display: flex;
               justify-content: flex-end;
               align-items: center;
-              width: 128px;
+              width: 164px;
               span {
                 color: #b5b5b5;
               }
@@ -478,11 +475,13 @@ export default {
       position: absolute;
       top: 86px;
       left: 20px;
-      width:472px;
-      height: 200px;
+      width:260px;
+      height: 64px;
       overflow: hidden;
       overflow-y: auto;
       li {
+        display: inline-block;
+        margin-right: 0;
         color:rgba(38,38,38,1);
         height:32px;
         font-size:14px;

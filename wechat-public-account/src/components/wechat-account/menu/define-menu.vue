@@ -1,6 +1,7 @@
 <template>
   <div class="define-menu__area clearfix">
     <div class="btn">
+      <h4>自定义菜单</h4>
       <span @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</span>
     </div>
     <div class="phone-box__area">
@@ -30,6 +31,7 @@
                   <li 
                     v-for="(child, idx) in item.subMenuList"
                     :class="{selected: idx == curSubIndex,singleSub:isOrder}"
+                    class="ellipsis pointer"
                     @click.stop="_handleSelectMenu(2,idx,child.id)"
                     :key="idx">
                     <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
@@ -48,7 +50,7 @@
       <div v-show="!isOrder" class="menu-operate__none">
         <div class="empty" v-if="menuTree.length <= 0">
           <div class="empty-icon"></div>
-          <p>您还没有添加菜单</p>
+          <p>请先在左侧添加菜单</p>
         </div>
         <div class="menu-operate__box" v-else>
           <div class="menu-operate__header">
@@ -191,7 +193,7 @@ export default {
         siteId: this.$store.state.dashboard.siteId || getLocal("ymSd"),
         name: "",
         clickBehavior: '1', // None 0无, Reply1消息, RedirectUrl2 链接, RedirectSmallProgram3 小程序
-        behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url纯链接,WZPage页面, WZNews文章,WZProduct产品
+        behaviorType: '1',//None0无,Image1图片,Text2文字,News3图文,； Url网址,WZPage页面, WZNews文章,WZProduct产品
         behaviorBody: {
           imageMsg: {
             picUrl: '',
@@ -276,7 +278,7 @@ export default {
         let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
         this._getMenuDetail(id)
       }
-      if(this.menuTree.length >=2 || this.menuTree[0].subMenuList.length >=2 ) {
+      if(this.menuTree.length >=2 || (this.menuTree[0].subMenuList && this.menuTree[0].subMenuList.length >=2)) {
         this.canOrder = true
       } else {
         this.canOrder = false
@@ -370,7 +372,7 @@ export default {
     // 切换menu
     async _handleSelectMenu(type,i,id) {
       //点击自身
-      if (id == this.menuDetail.id ) {
+      if (!this.isOrder &&  id == this.menuDetail.id  ) {
         console.log(id,this.menuDetail.id,'333')
         return
       }
@@ -412,6 +414,9 @@ export default {
     },
     //校验参数 
     testParameters(){
+      if(!this.menuDetail.id) {
+        return
+      }
       let flag = true;
       this.testMenu()
       if (!this.hasTrueName || !this.menuDetail.name) {
@@ -428,8 +433,22 @@ export default {
           if(this.menuDetail.behaviorType == 1 && !this.menuDetail.behaviorBody.imageMsg.picUrl) {
             flag = false
             console.log('flag',3)
-          } else if (this.menuDetail.behaviorType == 2 && !this.menuDetail.behaviorBody.textMsg.text) {
-            flag = false
+          } else if (this.menuDetail.behaviorType == 2 ) {
+            if (!this.menuDetail.behaviorBody.textMsg.text) {
+              flag = false
+            } else {
+              let str = this.menuDetail.behaviorBody.textMsg.text
+              let strFlag = false
+              for (let i=0; i<str.length; i++) { 
+                let c = str.charCodeAt(i);
+                if (c != 32 && c!= 10) {
+                  strFlag = true
+                }
+              }
+              if (!strFlag) {
+                flag = false
+              }
+            }
             console.log('flag',4)
           } else if (this.menuDetail.behaviorType == 3 && this.menuDetail.behaviorBody.newsMsg.length == 0) {
             flag = false
@@ -454,18 +473,15 @@ export default {
         return
       }
       this.isCanAdd = false
-      //确认是否添加第一个子菜单
-      let flag = this.testParameters();
-      if (!flag || !this.hasTrueName) {
-        notify(this, '请完善菜单信息', "error");
-        this.isCanAdd = true
-        return
-      }
       if (level == 1 && order == 1) {
-          this.$confirm("提示", {
+        if(!this.menuDetail.name) {
+          notify(this, '请完善菜单信息', "error");
+          return
+        }
+        this.$confirm("提示", {
           title: "提示",
           iconClass: "icon-warning",
-            message:  `发布成功后会覆盖原版本，且将在24小时内对所有用户生效，是否确认发布？`,
+            message:  `添加子菜单后，主菜单的内容将被清除。确定添加子菜单？`,
             callback: async action => {
                 if (action === "confirm") {
                   this.addMenu(name,order,id,level)
@@ -480,10 +496,21 @@ export default {
     },
     //添加
     async addMenu (name,order,id,level) {
+      console.log('name,order,id,level',name,order,id,level)
       let flag = this.testParameters();
       let  dataObj = {};
+
+      //校验菜单名
+      if (!this.hasTrueName) {
+        this.isCanAdd = true
+        return
+      }
+      console.log('00001')
+      //确认是否添加第一个子菜单
+      
       //前端校验
-      if (order > 0 && flag && !(order== 1 && level == 1)) {
+      if (order > 0 && flag ) {
+        console.log('00002')
         let dataDetail = this.menuDetail
         dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
         dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
@@ -494,8 +521,20 @@ export default {
       }
       //接口校验
       if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
-          let newMenuItem = {
-          name: name,  //菜单名称
+        let nameOrder = 1
+        if(this.menuTree.length > 0) {
+          if(level == 1) {
+            this.menuTree.map((item,index)=> {
+              nameOrder = item.subMenuList.length + nameOrder
+            }) 
+          } else {
+            nameOrder = this.menuTree.length + nameOrder
+          }
+        }
+        
+
+        let newMenuItem = {
+          name: name + nameOrder,  //菜单名称
           displayOrder: order, //菜单排序
           parentId: id, //父菜单id，当为父菜单时为0
           siteId: this.siteId, //站点id
@@ -788,11 +827,11 @@ export default {
             border-radius: 2px;
             li {
               margin: 0 auto;
-              padding: 8px 0;
-              height: auto;
-              line-height: 34px;
+              padding: 8px 6px;
+              height: 34px;
+              line-height: 18px;
               text-align: center;
-              width: 144px;
+              width: 140px;
               font-size: 14px;
               color: #262626;
               border-right: none;
@@ -1056,12 +1095,22 @@ export default {
   color: #0595E6;
 }
 .btn {
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   height: 40px;
-  text-align: right;
   margin: 16px 0 -10px;
-  padding-right: 20px;
+}
+.btn h4 {
+  height: 16px;
+  margin: 12px 0;
+  font-size:16px;
+  font-family:'PingFangSC-Medium,PingFang SC';
+  font-weight:500;
+  color:rgba(38,38,38,1);
+  line-height:16px;
+  padding-left: 16px;
+  border-left: 4px solid #09CCEB;
 }
 .btn span {
   display: inline-block;

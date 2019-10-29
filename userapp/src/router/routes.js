@@ -36,7 +36,7 @@ export const defaultRoutes = [
     name: 'board',
     component: () => import('@/views/board/index.vue'),
     meta: {
-      title: "控制台首页",
+      title: "控制台",
       requiresAuth: true,
       requiresRole: {},
     }
@@ -49,7 +49,7 @@ export const defaultRoutes = [
       title: "网站管理",
       requiresAuth: true,
       requiresRole: {},
-      isSub:true
+      isSub: true
     },
     children: [
       {
@@ -58,7 +58,7 @@ export const defaultRoutes = [
         component: () => import("@/views/website-manage/selectTemplate.vue"),
         meta: {
           title: "选择模版",
-          isSub:true
+          isSub: true
         }
       },
       {
@@ -68,7 +68,7 @@ export const defaultRoutes = [
         meta: {
           title: "网站备份",
           requiresAuth: true,
-          isSub:true
+          isSub: true
         }
       },
       {
@@ -78,7 +78,7 @@ export const defaultRoutes = [
         meta: {
           title: "网站信息",
           requiresAuth: true,
-          isSub:true
+          isSub: true
         }
       },
       {
@@ -88,17 +88,17 @@ export const defaultRoutes = [
         meta: {
           title: "公司信息",
           requiresAuth: true,
-          isSub:true
+          isSub: true
         }
       },
       {
-        path: "mysite/siteDomain",
+        path: "mysite/sitedomain",
         name: "siteDomain",
         component: () => import("@/views/website-manage/siteDomain.vue"),
         meta: {
           title: "域名管理",
           requiresAuth: true,
-          isSub:true
+          isSub: true
         }
       },
       {
@@ -108,7 +108,7 @@ export const defaultRoutes = [
         meta: {
           title: "邮件服务器",
           requiresAuth: true,
-          isSub:true
+          isSub: true
         }
       },
       {
@@ -118,7 +118,7 @@ export const defaultRoutes = [
         meta: {
           title: "站点验证",
           requiresAuth: true,
-          isSub:true
+          isSub: true
         }
       },
       {
@@ -128,7 +128,7 @@ export const defaultRoutes = [
         meta: {
           title: "Robots.txt",
           requiresAuth: true,
-          isSub:true
+          isSub: true
         }
       },
       {
@@ -138,7 +138,7 @@ export const defaultRoutes = [
         meta: {
           title: "站点地图",
           requiresAuth: true,
-          isSub:true
+          isSub: true
         }
       }
     ]
@@ -164,28 +164,28 @@ export const defaultRoutes = [
     }
   },
   {
-    path: "/system",
-    name: 'system',
-    component: () => import("@/views/system/system.vue"),
+    path: "/role",
+    name: 'role',
+    component: () => import("@/views/member-manage.vue"),
     meta: {
-      title: "系统设置",
+      title: "成员管理",
       requiresAuth: true,
       requiresRole: {},
 
     },
-    children: [
-      {
-        path: "role",
-        name: "role",
-        component: () => import("@/views/member-manage.vue"),
-        meta: {
-          title: "成员管理",
-          requiresAuth: true,
-          requiresRole: {},
-          isSub:true
-        }
-      },
-    ]
+    // children: [
+    //   {
+    //     path: "role",
+    //     name: "role",
+    //     component: () => import("@/views/member-manage.vue"),
+    //     meta: {
+    //       title: "成员管理",
+    //       requiresAuth: true,
+    //       requiresRole: {},
+    //       isSub:true
+    //     }
+    //   },
+    // ]
   },
   {
     path: "/sitemember",
@@ -206,12 +206,20 @@ export const defaultRoutes = [
           title: "会员列表",
           requiresAuth: true,
           requiresRole: {},
-          isSub:true
+          isSub: true
         }
       },
     ]
   },
-
+  {
+    path: "/ssologin",
+    name: "ssologin",
+    component: () => import("@/views/ssoLogin/index"),
+    meta: {
+      title: "控制台",
+      requiresRole: {},
+    }
+  },
   {
     path: "/recycle",
     name: "recycle",
@@ -222,7 +230,7 @@ export const defaultRoutes = [
       requiresRole: {},
     }
   },
- 
+
   {
     path: "/personal",
     name: "personal",
@@ -249,7 +257,7 @@ export const defaultRoutes = [
     // meta: {
     //     requiresAuth: true,
     // }
-},
+  },
   {
     path: '/403',
     name: '403',

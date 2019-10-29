@@ -157,21 +157,46 @@
         <div class="mySiteTitle">网站设置</div>
         <div class="siteSettingWrap" style="margin-top:32px">
           <span class="siteSetting">网站icon</span>
+          <el-tooltip class="item" effect="dark" content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB" placement="top-start">
+            <i class="icon iconfont iconicon-exclamationmark"></i>
+          </el-tooltip>
+          <el-upload
+            class="avatar-uploader"
+            :action="uploadPicUrl"
+            :headers= "headers"
+            :show-file-list="false"
+            :auto-upload="true"
+            ref="uploadIcon"
+            :on-success="iconAvatarSuccess"
+            :on-error="iconAvatarError"
+            :before-upload="iconAvatarUpload">
+            <div v-if="!iconUrl" class="iconNo"></div>
+            <img v-if="iconUrl" :src="iconUrl" class="iconImg">
+            <i v-if="iconUrl" class="icon iconfont mask iconqiehuanxingshiyi"></i>
+          </el-upload>
+          <i v-if="iconUrl" class="icon iconfont iconshanchu" @click="removeIcon">
+          </i>
           <span class="siteSetting showAliService">显示阿里云服务信息</span>
+          <el-tooltip class="item" effect="dark" content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字" placement="top-start">
+            <i class="icon iconfont iconicon-exclamationmark"></i>
+          </el-tooltip>
           <el-switch
             v-model="isShowAliServiceValue"
             active-color="#01C0DE"
-            style="margin-left:16px"
+            style="margin: -2px 0 0 16px"
           ></el-switch>
         </div>
         <div class="siteSettingWrap">
           <span class="siteSetting">启用Powered by</span>
-          <el-switch v-model="isOpenPoweredValue" active-color="#01C0DE" style="margin-left:38px"></el-switch>
+          <el-tooltip class="item" effect="dark" content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字" placement="top-start">
+            <i class="icon iconfont iconicon-exclamationmark"></i>
+          </el-tooltip>
+          <el-switch @change="isOpenPowered" v-model="isOpenPoweredValue" active-color="#01C0DE" style="margin: -2px 0 0 16px"></el-switch>
           <span class="siteSetting rightClickSave">禁止右键保存图片</span>
           <el-switch
             v-model="isRightClickSaveValue"
             active-color="#01C0DE"
-            style="margin-left:16px"
+            style="margin: -2px 0 0 16px"
           ></el-switch>
         </div>
       </el-row>
@@ -276,13 +301,15 @@
 
 <script>
 import PageSubmenu from "@/components/common/PageSubmenu";
+import securityService from "@/services/authentication/securityService";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import SelectTemplateDialog from "@/components/websiteManage/selectTemplateDialog.vue";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { getLanguage } from "@/configure/appCommon";
 import { formatDateTime } from "@/api/index";
-import { designerUrl } from "@/environment/index";
+import environment from "@/environment/index.js";
+import { designerUrl} from "@/environment/index";
 export default {
   components: {
     PageSubmenu,
@@ -326,10 +353,103 @@ export default {
       radio: "zh-CN",
       changeSiteInfoShow: false,
       editPopover: false,
-      isNullInput: false
+      isNullInput: false,
+      iconUrl: '',
+      isUpload: true,
+      headers: {
+          appId: this.$store.state.dashboard.appId,
+          Authorization:
+            "Bearer " + this.$store.state.user.accessToken.Authorization
+        },
+      uploadPicUrl: environment.uploadPicUrl + "/0"
     };
   },
   methods: {
+    //启用Powered by
+    async isOpenPowered(){
+      await siteBackupApi.updateSitePoweredBy({siteId: this.siteId,PoweredBy: this.isOpenPoweredValue});
+    },
+    //删除icon
+    async removeIcon(){
+      let data = await siteBackupApi.updateSiteIcon({siteId: this.siteId,Icon: ''});
+      if(data && data.status == 200) {
+          this.iconUrl = '';
+            this.$notify({
+            customClass: "notify-success",
+            message: `删除成功`,
+            duration: 1500,
+            showClose: false
+          });
+        } else {
+          this.$notify({
+            customClass: "notify-error",
+            message: `删除失败`,
+            duration: 1500,
+            showClose: false
+          });
+        }
+    },
+    //上传图片成功回调
+    async iconAvatarSuccess(res, file){
+      if (this.isUpload) {
+        let data = await siteBackupApi.updateSiteIcon({siteId: this.siteId,Icon: res});
+        if(data && data.status == 200) {
+          this.iconUrl = res;
+            this.$notify({
+            customClass: "notify-success",
+            message: `上传成功`,
+            duration: 2000,
+            showClose: false
+          });
+        } else {
+          this.$notify({
+            customClass: "notify-error",
+            message: `上传失败`,
+            duration: 1500,
+            showClose: false
+          });
+        }
+      }
+    },
+    //上传图片成功回调
+    iconAvatarError(){
+      this.$notify({
+        customClass: "notify-error",
+        message: `上传失败`,
+        duration: 1500,
+        showClose: false
+      });
+    },
+    //上传之前判断
+    async iconAvatarUpload(file){
+      this.isUpload = true
+      let data = await securityService.getUser();
+      let token ="";
+      if (data && data.access_token){  
+        this.headers.Authorization = "Bearer " + data.access_token
+      }
+      const isJPG = file.type === 'image/png';
+      const isLt2M = file.size < 500 * 1024;
+      console.log(isJPG)
+        if (!isJPG) {
+          this.isUpload = false;
+          this.$notify({
+            customClass: "notify-error",
+            message: `上传头像图片只能是 PNG 格式!`,
+            duration: 1500,
+            showClose: false
+          });
+        } else if (!isLt2M) {
+          this.isUpload = false;
+          this.$notify({
+            customClass: "notify-error",
+            message: `上传头像图片大小不能超过 500KB!`,
+            duration: 1500,
+            showClose: false
+          });
+        }
+        return false
+    },
     // 跳转至设计器
     toDesign() {
       window.location.href = `${designerUrl}?siteId=${this.siteId}`;
@@ -357,6 +477,8 @@ export default {
         this.domain = data.domain;
         this.secondDomain = data.secondDomain;
         this.templateId = data.templateId;
+        this.iconUrl = data.icon;
+        this.isOpenPoweredValue =data.poweredBy
         this.lastPublishedTime = formatDateTime(
           data.lastPublishedTime,
           "yyyy-MM-dd hh:mm"
@@ -407,7 +529,11 @@ export default {
         return;
       }
       this.$refs[`popover`].doClose();
-      await dashboardApi.updateSiteName(this.siteId, this.siteNameValue);
+      let para = {
+        siteId: this.siteId,
+        siteName: this.siteNameValue
+      };
+      await dashboardApi.updateSiteInfo(para);
       this.siteName = this.siteNameValue;
       this.editPopover = false;
     },
@@ -422,10 +548,11 @@ export default {
       this.radio = this.language;
     },
     async changeLanguage() {
-      let { data, status } = await dashboardApi.updateSiteLanguage(
-        this.siteId,
-        this.radio
-      );
+      let para = {
+        siteId: this.siteId,
+        language: this.radio
+      };
+      let { data, status } = await dashboardApi.updateSiteInfo(para);
       if (status == 200) {
         this.language = this.radio;
         this.closeSiteLanguageDialog();
@@ -536,7 +663,7 @@ export default {
       }
     },
     bindDomain() {
-      this.$router.push("/website/mysite/siteDomain");
+      this.$router.push("/website/mysite/sitedomain");
     }
   }
 };
@@ -636,6 +763,51 @@ export default {
     }
   }
 }
+.avatar-uploader {
+  float: left;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-left: 16px;
+  &:hover .mask {
+    display: block;
+  }
+  cursor: pointer;
+  .iconImg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+  }
+  .iconNo {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url("~img/icon.png") no-repeat center;
+    background-size: contain;
+  }
+  .iconNo:hover {
+    background: url("~img/iconActive.png") no-repeat center;
+    background-size: contain;
+  }
+  .mask {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    background: rgba(26,26,26,0.4);
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    margin: 0 !important;
+  }
+}
+
 .mySiteTitle {
   font-size: 14px;
   font-weight: 500;
@@ -832,11 +1004,33 @@ export default {
 
 .siteSettingWrap {
   margin-top: 17px;
+  height: 20px;
   margin-left: 31px;
   .siteSetting {
+    float: left;
     font-size: 14px;
+    line-height: 20px;
     font-weight: 400;
     color: rgba(140, 140, 140, 1);
+  }
+  i {
+    float: left;
+    color: #D8D8D8; 
+    font-size: 16px;
+    line-height: 20px;
+    margin-left: 8px;
+  }
+  .iconshanchu {
+    float: left;
+    font-size: 16px;
+    line-height: 20px;
+    color: #8c8c8c;
+    font-weight: 600;
+    padding-left: 10px;
+    cursor: pointer;
+  }
+  .el-switch {
+    float: left;
   }
   .showAliService {
     margin-left: 310px;

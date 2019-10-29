@@ -15,11 +15,12 @@
         <el-tooltip class="item" effect="dark" placement="right" content="为保持验证通过的状态,成功验证后请不要删除该标签">
           <i class="iconfont iconyiwen"></i>
         </el-tooltip>
-        <button
+        <el-button
+                :disabled="disable"
           class="btn-small btn-lightblue handler-btn"
           type="primary"
           @click="submitForm('verifyDetail')"
-        >保存</button>
+        >保存</el-button>
       </el-row>
       <el-row>
         <el-col>
@@ -40,6 +41,7 @@
                 maxlength="3000"
                 show-word-limit
                 resize="none"
+                @blur="blur()"
               ></el-input>
             </el-form-item>
             <el-form-item label="360验证" prop="qihuTag">
@@ -51,6 +53,7 @@
                 maxlength="3000"
                 show-word-limit
                 resize="none"
+                @blur="blur()"
               ></el-input>
             </el-form-item>
             <el-form-item label="搜狗验证" prop="sougouTag">
@@ -62,6 +65,7 @@
                 maxlength="3000"
                 show-word-limit
                 resize="none"
+                @blur="blur()"
               ></el-input>
             </el-form-item>
             <el-form-item label="谷歌验证" prop="googleTag">
@@ -73,6 +77,7 @@
                 maxlength="3000"
                 show-word-limit
                 resize="none"
+                @blur="blur()"
               ></el-input>
             </el-form-item>
             <el-form-item label="必应验证" prop="bingTag">
@@ -84,6 +89,7 @@
                 maxlength="3000"
                 show-word-limit
                 resize="none"
+                @blur="blur()"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -116,7 +122,8 @@ export default {
         qihuTag: null,
         bingTag: null,
         googleTag: null
-      },
+        },
+        disable: true,
       curSiteId: "",
       rules: {
         baiduTag: [
@@ -161,8 +168,9 @@ export default {
   methods: {
     // 获取siteId
     getSiteId(siteId) {
-      this.curSiteId = siteId;
-      this.getSiteValidationTags(siteId);
+          this.curSiteId = siteId;
+          this.verifyDetail.siteId = siteId;
+          this.getSiteValidationTags(siteId);
     },
     // 选择切换网站
     chooseWebsite(siteId) {
@@ -191,7 +199,7 @@ export default {
       }
     },
     //插入验证标签
-    async insertSiteValidationTags() {
+      async insertSiteValidationTags() {
       let { status, data } = await siteVerifyApi.createSiteValidationTags(
         this.verifyDetail
       );
@@ -231,7 +239,15 @@ export default {
      */
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
+      },
+    
+      blur() {
+          if (this.verifyDetail.baiduTag || this.verifyDetail.qihuTag || this.verifyDetail.sougouTag || this.verifyDetail.googleTag || this.verifyDetail.bingTag) {
+              this.disable = false;
+          } else {
+              this.disable = true;
+          }
+      }
   }
 };
 </script>

@@ -6,9 +6,9 @@
                 <button>
                     <i class="iconfont iconqiehuanxingshiyi" @click="handlerUpload"></i>
                 </button>
-                <button @click="handlerDelete">
+                <!-- <button @click="handlerDelete">
                     <i class="iconfont iconshanchu"></i>
-                </button>
+                </button> -->
             </span>
         </div>
         <div @click="handlerUpload"  class="upload-wrap" v-else>

@@ -24,7 +24,7 @@
           <template slot="empty">
               <div class="empty-table">
                   <img src="~img/table-empty.png" />
-                  <p>无数据</p>
+                  <p>暂无数据</p>
               </div>
           </template>
           <el-table-column
@@ -67,9 +67,15 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <i class="icon iconfont iconbianji" @click="handlelook(scope.row)"></i>
-              <i class="icon iconfont iconshanchu" @click="remove(scope.row)"></i>
-              <i class="icon iconfont iconshuju" @click="getStatistics(scope.row)"></i>
+              <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                <i class="icon iconfont iconbianji" @click="handlelook(scope.row)"></i>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                <i class="icon iconfont iconshanchu" @click="remove(scope.row)"></i>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="查看数据" placement="top">
+                <i class="icon iconfont iconshuju" @click="getStatistics(scope.row)"></i>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -81,7 +87,7 @@
           @current-change="handleCurrentChange"
           layout="total, sizes, prev, pager, next"
           :total="TotalRecord"
-          :page-sizes="[10,20,50]"
+          :page-sizes="[5,10,20]"
         ></el-pagination>
       </div>
     </div>
@@ -128,7 +134,7 @@ export default {
     return {
       siteId: this.$store.state.dashboard.siteId,
       replyType: 'page',
-      PageSize: 10, //每页数
+      PageSize: 5, //每页数
       PageIndex: 1, //当前页面
       TotalPage: 0, //总页数
       TotalRecord: 0, //总数量
@@ -320,11 +326,15 @@ export default {
     border-top: 3px solid #09cceb;
 }
 .el-table /deep/ .cell {
-  height: 23px;
+  height: 42px;
+  line-height: 42px;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.el-table /deep/ td {
+  padding: 10px 0 8px 36px;
 }
 .el-table .cell, .el-table th div {
   padding-right: 30px !important;
@@ -332,12 +342,17 @@ export default {
 </style>
 <style lang="scss" scoped>
 .spread-setting__section {
-    padding: 32px;
+    padding: 10px 32px 0;
     min-width: 1100px;
     overflow-y: auto;
     .iconfont {
-      margin-right: 20px !important;
+      padding: 8px;
+      border-radius: 2px;
+      margin-right: 10px !important;
       cursor: pointer;
+      &:hover {
+        background: #E5E5E5;
+      }
     }
     .answer-tabs {
         padding-top: 32px;

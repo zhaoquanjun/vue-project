@@ -19,16 +19,16 @@ axios.defaults.headers.put['Content-Type'] = 'application/json-patch+json;charse
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.withCredentials = true; //允许携带cookie
 // 请求拦截器
-axios.interceptors.request.use( async config => {
-        let data = await securityService.getUser();
-        let token ="";
-        if (data){  token = data.access_token }
-        token && (config.headers.Authorization = "Bearer " + token);
-        if (process.env.NODE_ENV === 'development') {
-            config.headers.AppId = getLocal('ymId') ? getLocal('ymId') : store.state.dashboard.appId;
-        }
-        return config;
-    },
+axios.interceptors.request.use(async config => {
+    let data = await securityService.getUser();
+    let token = "";
+    if (data) { token = data.access_token }
+    token && (config.headers.Authorization = "Bearer " + token);
+    if (process.env.NODE_ENV === 'development') {
+        config.headers.AppId = getLocal('ymId') ? getLocal('ymId') : store.state.dashboard.appId;
+    }
+    return config;
+},
     error => {
         return Promise.error(error);
     })
@@ -49,15 +49,24 @@ axios.interceptors.response.use(
             if (error.response.status) {
                 switch (error.response.status) {
                     case 400:
+                        if (error.response.data.message) {
+                            Notification({
+                                customClass: "notify-error", //  notify-success ||  notify-error
+                                message: error.response.data.message,
+                                showClose: false,
+                                type: "error",
+                                duration: 2000
+                            })
+                        } else {
                             Notification({
                                 customClass: "notify-error", //  notify-success ||  notify-error
                                 message: error.response.data,
                                 showClose: false,
-                                type:"error",
-                                duration:2000
-                              
+                                type: "error",
+                                duration: 2000
                             })
-                            break;
+                        }
+                        break;
                     // 401: 未登录                
                     // 未登录则跳转登录页面，并携带当前页面的路径                
                     // 在登录成功后返回当前页面，这一步需要在登录页操作。                
@@ -69,7 +78,7 @@ axios.interceptors.response.use(
                     // 清除本地token和清空vuex中token对象                
                     // 跳转登录页面                
                     case 403:
-                       
+
                         clearAllLocal();
                         securityService.signIn();
                         break;
@@ -89,9 +98,9 @@ axios.interceptors.response.use(
                             customClass: "notify-error", //  notify-success ||  notify-error
                             message: error.response.data.message,
                             showClose: false,
-                            type:"error",
-                            duration:2000
-                          
+                            type: "error",
+                            duration: 2000
+
                         })
 
                 }
@@ -110,7 +119,7 @@ axios.interceptors.response.use(
 export function get(url, params) {
     var timestamp = (new Date()).valueOf();
     return new Promise((resolve, reject) => {
-        axios.get(url +'?random='+timestamp, {
+        axios.get(url + '?random=' + timestamp, {
             params: params
         })
             .then(res => {

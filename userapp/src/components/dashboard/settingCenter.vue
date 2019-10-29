@@ -112,10 +112,10 @@ export default {
           vertical-align: top;
           display: inline-block;
           //   margin-top: 27px;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 500;
           color: rgba(38, 38, 38, 1);
-          line-height: 22px;
+          line-height: 20px;
           text-align: center;
           word-wrap: break-word;
           word-break: break-all;
@@ -135,10 +135,10 @@ export default {
           display: inline-block;
           //   margin-top: 27px;
           margin-left: 20px;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 500;
           color: rgba(38, 38, 38, 1);
-          line-height: 22px;
+          line-height: 20px;
         }
         .memberNum {
           vertical-align: top;

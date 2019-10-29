@@ -92,6 +92,7 @@ export default {
                 Type: null,
                 Href: null
             },
+            canHandlerSave: true,
             replyType: "1", //replyType 回复类型
             msgType: 1, //msgType 消息类型
             addAnswer: true,
@@ -108,6 +109,7 @@ export default {
             myText: "",
             lastSaveId: "",
             editorId: '',
+            id: '',
             isSet: false, // 是否设置过回复
             replyDetail: "", // 接口返回
             keywordData: "", //关键词列表,
@@ -172,6 +174,7 @@ export default {
         async _getReplyDetail(replyType) {
             let data = await autoAnswerApi.getReplyDetail(this.siteId,replyType);
             this.replyDetail = data.data.data;
+            this.id = data.data.id;
             this.msgType = data.data.msgType;
             this.isSet = data.data.isSet;
             let jsonData = data.data.data;
@@ -208,6 +211,7 @@ export default {
         },
         //删除回复信息
         async _removeReply(siteId,id) {
+            console.log('this.replyDetail',this.replyDetail)
             let { data, status } = await autoAnswerApi.removeReply(siteId,id);
             if (status === 200) {
                 if (this.replyType != 3) {
@@ -216,6 +220,8 @@ export default {
                 this.resetReplycontentData();
                 notify(this, "删除成功", "success");
                 this.isSet = false;
+            } else {
+                notify(this, "删除失败", "error");
             }
         },
         //删除关键词回复信息
@@ -254,6 +260,7 @@ export default {
         async _addKeywordReply(option) {
             let { data, status } = await autoAnswerApi.addKeywordReply(option,this.siteId);
             if (status === 200) {
+                this.canHandlerSave = true
                 this.$notify({
                     customClass: "notify-success",
                     message: `保存成功`,
@@ -266,6 +273,9 @@ export default {
                 }
                 this.isSet = true;
                 this.replyDetail.id = data;
+            } else {
+                this.canHandlerSave = true
+                notify(this, "保存失败", "error");
             }
         },
         //新增或者覆盖回复信息
@@ -284,12 +294,16 @@ export default {
                 }
                 this.isSet = true;
                 this.replyDetail.id = data;
+            } else {
+                this.canHandlerSave = true
+                notify(this, "保存失败", "error");
             }
         },
         //编辑关键词回复信息
         async _updateKeywordReply(option, editorId) {
             let data = await autoAnswerApi.updateKeywordReply(option, editorId, this.siteId);
             if(data.status && data.status === 200) {
+                this.canHandlerSave = true
                 this.$notify({
                     customClass: "notify-success",
                     message: `保存成功`,
@@ -301,11 +315,16 @@ export default {
                 this.isSet = true;
                 this.replyDetail.id = data;
             } else {
+                this.canHandlerSave = true
                 notify(this, "保存失败", "error");
             }
         },
         // 保存
         async handlerSave() {
+            if(!this.canHandlerSave) {
+                return
+            }
+            this.canHandlerSave = false
             let option = {
                 siteId: this.siteId,
                 replyType: this.replyType,
@@ -335,22 +354,24 @@ export default {
                 if (this.msgType == 1) {
                     if (!trim(picUrl)) {
                         notify(this, "请添加图片", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                 } else if (this.msgType == 2) {
                     if (!trim(text)) {
                         notify(this, "请输入内容", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                 } else if (this.msgType == 3) {
                     if (newsMsg.length === 0) {
                         notify(this, "请添加图文", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                 }
             } else if (this.replyType == 3) {
                 let keywordList = this.$refs.keywordAnswer.keywordList;
-
                 let flag = keywordList.every((item, index) => {
                     if (!trim(item.keyword)) {
                         return false;
@@ -358,8 +379,11 @@ export default {
                         return true;
                     }
                 });
-                if (!flag)
-                    return notify(this, "无法保存，请完善页面信息!", "error");
+                if (!flag) {
+                    notify(this, "无法保存，请完善页面信息!", "error");
+                    this.canHandlerSave = true
+                    return
+                }
                 let option = {
                     msgType: this.msgType,
                     keywordList
@@ -369,6 +393,7 @@ export default {
                     let picUrl = this.replycontentData.imageMsg.picUrl;
                     if (!trim(picUrl)) {
                         notify(this, "无法保存，请完善页面信息!", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                     newOption = {
@@ -379,6 +404,7 @@ export default {
                     let text = this.replycontentData.textMsg.text;
                     if (!trim(text)) {
                         notify(this, "无法保存，请完善页面信息!", "error");
+                        this.canHandlerSave = true
                         return;
                     }
                     newOption = {
@@ -389,6 +415,7 @@ export default {
                     let newsMsg = this.replycontentData.newsMsg;
                     if (newsMsg.length === 0) {
                         notify(this, "无法保存，请完善页面信息!", "error");
+                        this.canHandlerSave = true
                         return;
                     }
 
@@ -433,7 +460,7 @@ export default {
                 this.$createElement(
                     "p",
                     { style: "color: #8C8C8C" },
-                    "删除后，关注该公众号用户后台再无法接收该消息"
+                    "删除后，关注该公众号用户再无法接收该消息"
                 )
             );
 
@@ -443,7 +470,7 @@ export default {
                 message: this.$createElement("div", null, message),
                 callback: async action => {
                     if (action === "confirm") {
-                        this._removeReply(this.siteId,this.replyDetail.id);
+                        this._removeReply(this.siteId,this.id);
                     }
                 }
             });
@@ -551,7 +578,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .auto-answer {
-    padding: 32px;
+    padding: 10px 32px 0;
     .answer-tabs {
         padding-top: 32px;
     }

@@ -58,6 +58,7 @@ import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import environment from "@/environment/index.js";
 import * as robotsApi from "@/api/request/robotsApi";
+import securityService from "@/services/authentication/securityService";
 import { formatDateTime } from "@/api/index";
 
 export default {
@@ -73,15 +74,8 @@ export default {
         testChunks: false,
         allowDuplicateUploads: true,
         headers: {
-          appId: this.$store.state.dashboard.appId,
-          Authorization:
-            "Bearer " + this.$store.state.user.accessToken.Authorization
+          Authorization: ""
         }
-      },
-      uploadAction: "",
-      headers: {
-        appId: "",
-        Authorization: ""
       },
       attrs: {
         accept: "*/*"
@@ -104,35 +98,44 @@ export default {
       let { data } = await robotsApi.preview(siteId);
     },
     // 获取siteId
-    getSiteId(siteId) {
+    async getSiteId(siteId) {
       this.curSiteId = siteId;
       this.hasUploadFile(siteId);
-      this.preview(siteId);
       this.$set(
         this.options,
         "target",
         `${environment.uploadRobotsUrl}${this.curSiteId}`
       );
+      if (this.$store.state.dashboard.appId) {
+        this.options.headers.appId = this.$store.state.dashboard.appId;
+      }
+      let data = await securityService.getUser();
+      if (data && data.access_token) {
+        this.options.headers.Authorization = "Bearer " + data.access_token;
+      }
       this.$refs.uploader.resetOption();
     },
     // 选择切换网站
-    chooseWebsite(siteId) {
+    async chooseWebsite(siteId) {
       this.curSiteId = siteId;
       this.$set(
         this.options,
         "target",
         `${environment.uploadRobotsUrl}${this.curSiteId}`
       );
+      if (this.$store.state.dashboard.appId) {
+        this.options.headers.appId = this.$store.state.dashboard.appId;
+      }
+      let data = await securityService.getUser();
+      if (data && data.access_token) {
+        this.options.headers.Authorization = "Bearer " + data.access_token;
+      }
       this.$refs.uploader.resetOption();
       this.hasUploadFile(siteId);
-      this.preview(siteId);
       this.file = {};
       this.progressFlag = false;
     },
     onFileAdded(file) {
-      this.options.headers.Authorization =
-        "Bearer " + this.$store.state.user.accessToken.Authorization;
-      this.options.headers.appId = this.$store.state.dashboard.appId;
       if (file.name != "robots.txt") {
         this.$notify({
           customClass: "notify-error",
@@ -292,7 +295,7 @@ export default {
     .member-list-title {
       border-left: 4px solid #01c0de;
       padding-left: 8px;
-      font-size:16px;
+      font-size: 16px;
       font-weight: 500;
     }
   }

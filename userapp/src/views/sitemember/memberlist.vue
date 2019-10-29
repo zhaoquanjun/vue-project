@@ -165,7 +165,6 @@
                 let { status, data } = await memberManageApi.exportMemberList(
                     (options = this.searchOptions)
                 );
-                console.log(data);
                 if (status == 200) {
                     var a = document.createElement('a');
                     a.setAttribute('href', data);
@@ -174,7 +173,12 @@
                     a.click();
                     document.body.removeChild(a);
                 } else {
-                    notify(this, '导出失败', "error");
+                    this.$notify({
+                        customClass: "notify-error", //  notify-success ||  notify-error
+                        message: `导出失败!`,
+                        showClose: false,
+                        duration: 1000
+                    });
                 }
             },
             //获取app下所有站点
@@ -194,9 +198,20 @@
                             this.idList.push(id);
                             let { status, data } = await memberManageApi.removeMember(this.idList);
                             if (status == 200) {
-                                notify(this, '删除成功', "success");
+                                this.$notify({
+                                    customClass: "notify-success", //  notify-success ||  notify-error
+                                    message: `删除成功!`,
+                                    showClose: false,
+                                    duration: 1000
+                                });
+                                this.getMemberList();
                             } else {
-                                notify(this, '删除失败', "error");
+                                this.$notify({
+                                    customClass: "notify-error", //  notify-success ||  notify-error
+                                    message: `删除失败!`,
+                                    showClose: false,
+                                    duration: 1000
+                                });
                             }
                         }
                     }

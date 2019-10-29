@@ -2,7 +2,7 @@
   <div class="popup-content__none">
     <h5>请输入网址</h5>
     <input @blur="_handleChangeUrl" placeholder="请输入网站" v-model="url">
-    <div v-if="isUrl" class="tips ym-form-item__error">请输入正确网址</div>
+    <div v-if="isUrl" class="tips ym-form-item__error">{{tipText}}</div>
   </div>
 </template>
 
@@ -17,13 +17,19 @@ export default {
   data(){
     return {
       url: '',
-      isUrl: false
+      isUrl: false,
+      tipText: '请输入网址'
     }
   },
   methods: {
     _handleChangeUrl(){
-      console.log('999',this.url)
+      if(!this.url) {
+        this.tipText = '请输入网址';
+        this.isUrl = true
+        return
+      } 
       if(!reg.test(this.url)){
+        this.tipText = '请输入正确网址';
         this.isUrl = true
         return
       } else {

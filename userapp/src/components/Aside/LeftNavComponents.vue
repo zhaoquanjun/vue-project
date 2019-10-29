@@ -70,16 +70,15 @@ export default {
     width: 100%;
     line-height: 50px;
     padding-left: 16px;
-    cursor: pointer;
 }
 .el-menu .el-menu-item-left p{
     line-height: 50px;
     padding-left: 40px;
     cursor: pointer;
 }
-.el-menu .el-menu-item-left span:hover {
+/* .el-menu .el-menu-item-left span:hover {
     background: #fff;
-}
+} */
 .el-menu .el-menu-item-left p:hover {
     background: #fff;
 }

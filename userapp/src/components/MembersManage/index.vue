@@ -1,10 +1,10 @@
 <template>
     <el-container class="member-container">
-        <el-aside style="width:150px">
+        <!-- <el-aside style="width:150px">
             <page-submenu>
                 <template v-slot:title>系统设置</template>
             </page-submenu>
-        </el-aside>
+        </el-aside> -->
         <el-main class="member-content" style="padding:32px">
             <el-row class="user-list">
                 <span class="member-list-title fs14">成员列表</span>
@@ -107,11 +107,6 @@ export default {
     },
     data() {
         return {
-            submenuList: [
-                // { name: "企业信息", url: "/system/role" },
-                // { name: "显示设置", url: "/system/role" },
-                { name: "成员列表", url: "/system/role" }
-            ],
             rightPanelTitle: "权限配置",
             memberPhone: "",
             dialogVisible: true,
