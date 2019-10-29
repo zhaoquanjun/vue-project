@@ -282,6 +282,7 @@ export default {
         async _addOrOverrideReply(option) {
             let { data, status } = await autoAnswerApi.addOrOverrideReply(option);
             if (status === 200) {
+                this.canHandlerSave = true
                 this.$notify({
                     customClass: "notify-success",
                     message: `保存成功`,
@@ -422,7 +423,6 @@ export default {
                     newOption = { ...option, newsMsg: newsMsg };
                 }
                 if (this.editorId) {
-                    
                     this._updateKeywordReply(newOption, this.editorId);
                 } else {
                     this._addKeywordReply(newOption);
