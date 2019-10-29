@@ -95,10 +95,10 @@
           <a class="siteinfoBtn prev" :href="`//${secondDomain}`" target="_blank">预览</a>
         </div>
       </el-row>
-      <el-row class="siteContent">
+      <!-- <el-row class="siteContent">
         <div class="mySiteTitle">流量统计</div>
         <div style="height:401px"></div>
-      </el-row>
+      </el-row>-->
       <el-row class="siteContent">
         <div class="mySiteTitle">
           网站信息
@@ -157,27 +157,53 @@
         <div class="mySiteTitle">网站设置</div>
         <div class="siteSettingWrap" style="margin-top:32px">
           <span class="siteSetting">网站icon</span>
-          <el-tooltip class="item" effect="dark" content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB" placement="top-start">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB"
+            placement="top-start"
+          >
             <i class="icon iconfont iconicon-exclamationmark"></i>
           </el-tooltip>
           <el-upload
             class="avatar-uploader"
             :action="uploadPicUrl"
-            :headers= "headers"
+            :headers="headers"
             :show-file-list="false"
-            :auto-upload="true"
-            ref="uploadIcon"
+            ref="upload"
             :on-success="iconAvatarSuccess"
             :on-error="iconAvatarError"
-            :before-upload="iconAvatarUpload">
+            :before-upload="iconAvatarUpload"
+          >
             <div v-if="!iconUrl" class="iconNo"></div>
-            <img v-if="iconUrl" :src="iconUrl" class="iconImg">
+            <img v-if="iconUrl" :src="iconUrl" class="iconImg" />
             <i v-if="iconUrl" class="icon iconfont mask iconqiehuanxingshiyi"></i>
           </el-upload>
-          <i v-if="iconUrl" class="icon iconfont iconshanchu" @click="removeIcon">
-          </i>
-          <span class="siteSetting showAliService">显示阿里云服务信息</span>
-          <el-tooltip class="item" effect="dark" content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字" placement="top-start">
+          <i v-if="iconUrl" class="icon iconfont iconshanchu" @click="removeIcon"></i>
+          <span class="siteSetting showAliService">启用Powered by</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字"
+            placement="top-start"
+          >
+            <i class="icon iconfont iconicon-exclamationmark"></i>
+          </el-tooltip>
+          <el-switch
+            @change="isOpenPowered"
+            v-model="isOpenPoweredValue"
+            active-color="#01C0DE"
+            style="margin-left:16px"
+          ></el-switch>
+        </div>
+        <!-- <div class="siteSettingWrap">
+          <span class="siteSetting ">显示阿里云服务信息</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字"
+            placement="top-start"
+          >
             <i class="icon iconfont iconicon-exclamationmark"></i>
           </el-tooltip>
           <el-switch
@@ -185,20 +211,13 @@
             active-color="#01C0DE"
             style="margin: -2px 0 0 16px"
           ></el-switch>
-        </div>
-        <div class="siteSettingWrap">
-          <span class="siteSetting">启用Powered by</span>
-          <el-tooltip class="item" effect="dark" content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字" placement="top-start">
-            <i class="icon iconfont iconicon-exclamationmark"></i>
-          </el-tooltip>
-          <el-switch @change="isOpenPowered" v-model="isOpenPoweredValue" active-color="#01C0DE" style="margin: -2px 0 0 16px"></el-switch>
           <span class="siteSetting rightClickSave">禁止右键保存图片</span>
           <el-switch
             v-model="isRightClickSaveValue"
             active-color="#01C0DE"
             style="margin: -2px 0 0 16px"
           ></el-switch>
-        </div>
+        </div>-->
       </el-row>
       <el-dialog
         width="0"
@@ -309,7 +328,7 @@ import * as dashboardApi from "@/api/request/dashboardApi";
 import { getLanguage } from "@/configure/appCommon";
 import { formatDateTime } from "@/api/index";
 import environment from "@/environment/index.js";
-import { designerUrl} from "@/environment/index";
+import { designerUrl } from "@/environment/index";
 export default {
   components: {
     PageSubmenu,
@@ -354,65 +373,69 @@ export default {
       changeSiteInfoShow: false,
       editPopover: false,
       isNullInput: false,
-      iconUrl: '',
-      isUpload: true,
+      iconUrl: "",
       headers: {
-          appId: this.$store.state.dashboard.appId,
-          Authorization:
-            "Bearer " + this.$store.state.user.accessToken.Authorization
-        },
+        Authorization: ""
+      },
       uploadPicUrl: environment.uploadPicUrl + "/0"
     };
   },
   methods: {
     //启用Powered by
-    async isOpenPowered(){
-      await siteBackupApi.updateSitePoweredBy({siteId: this.siteId,PoweredBy: this.isOpenPoweredValue});
+    async isOpenPowered() {
+      await siteBackupApi.updateSitePoweredBy({
+        siteId: this.siteId,
+        PoweredBy: this.isOpenPoweredValue
+      });
     },
     //删除icon
-    async removeIcon(){
-      let data = await siteBackupApi.updateSiteIcon({siteId: this.siteId,Icon: ''});
-      if(data && data.status == 200) {
-          this.iconUrl = '';
-            this.$notify({
-            customClass: "notify-success",
-            message: `删除成功`,
-            duration: 1500,
-            showClose: false
-          });
-        } else {
-          this.$notify({
-            customClass: "notify-error",
-            message: `删除失败`,
-            duration: 1500,
-            showClose: false
-          });
-        }
-    },
-    //上传图片成功回调
-    async iconAvatarSuccess(res, file){
-      if (this.isUpload) {
-        let data = await siteBackupApi.updateSiteIcon({siteId: this.siteId,Icon: res});
-        if(data && data.status == 200) {
-          this.iconUrl = res;
-            this.$notify({
-            customClass: "notify-success",
-            message: `上传成功`,
-            duration: 2000,
-            showClose: false
-          });
-        } else {
-          this.$notify({
-            customClass: "notify-error",
-            message: `上传失败`,
-            duration: 1500,
-            showClose: false
-          });
-        }
+    async removeIcon() {
+      let data = await siteBackupApi.updateSiteIcon({
+        siteId: this.siteId,
+        Icon: ""
+      });
+      if (data && data.status == 200) {
+        this.iconUrl = "";
+        this.$notify({
+          customClass: "notify-success",
+          message: `删除成功`,
+          duration: 1500,
+          showClose: false
+        });
+      } else {
+        this.$notify({
+          customClass: "notify-error",
+          message: `删除失败`,
+          duration: 1500,
+          showClose: false
+        });
       }
     },
     //上传图片成功回调
-    iconAvatarError(){
+    async iconAvatarSuccess(res, file) {
+      let data = await siteBackupApi.updateSiteIcon({
+        siteId: this.siteId,
+        Icon: res
+      });
+      if (data && data.status == 200) {
+        this.iconUrl = res;
+        this.$notify({
+          customClass: "notify-success",
+          message: `上传成功`,
+          duration: 2000,
+          showClose: false
+        });
+      } else {
+        this.$notify({
+          customClass: "notify-error",
+          message: `上传失败`,
+          duration: 1500,
+          showClose: false
+        });
+      }
+    },
+    //上传图片失败回调
+    iconAvatarError() {
       this.$notify({
         customClass: "notify-error",
         message: `上传失败`,
@@ -421,43 +444,44 @@ export default {
       });
     },
     //上传之前判断
-    async iconAvatarUpload(file){
-      this.isUpload = true
-      let data = await securityService.getUser();
-      let token ="";
-      if (data && data.access_token){  
-        this.headers.Authorization = "Bearer " + data.access_token
-      }
-      const isJPG = file.type === 'image/png';
+    iconAvatarUpload(file) {
+      const isJPG = file.type === "image/png";
       const isLt2M = file.size < 500 * 1024;
-      console.log(isJPG)
-        if (!isJPG) {
-          this.isUpload = false;
-          this.$notify({
-            customClass: "notify-error",
-            message: `上传头像图片只能是 PNG 格式!`,
-            duration: 1500,
-            showClose: false
-          });
-        } else if (!isLt2M) {
-          this.isUpload = false;
-          this.$notify({
-            customClass: "notify-error",
-            message: `上传头像图片大小不能超过 500KB!`,
-            duration: 1500,
-            showClose: false
-          });
-        }
-        return false
+      if (!isJPG) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `上传头像图片只能是 PNG 格式!`,
+          duration: 1500,
+          showClose: false
+        });
+        return false;
+      }
+      if (!isLt2M) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `上传头像图片大小不能超过 500KB!`,
+          duration: 1500,
+          showClose: false
+        });
+        return false;
+      }
+      return isJPG && isLt2M;
     },
     // 跳转至设计器
     toDesign() {
       window.location.href = `${designerUrl}?siteId=${this.siteId}`;
     },
     // 获取siteId
-    getSiteId(siteId) {
+    async getSiteId(siteId) {
       this.siteId = siteId;
       this.getSiteInfo(siteId);
+      if (this.$store.state.dashboard.appId) {
+        this.headers.appId = this.$store.state.dashboard.appId;
+      }
+      let data = await securityService.getUser();
+      if (data && data.access_token) {
+        this.headers.Authorization = "Bearer " + data.access_token;
+      }
     },
     _getLanguage() {
       return getLanguage(this.language);
@@ -478,7 +502,7 @@ export default {
         this.secondDomain = data.secondDomain;
         this.templateId = data.templateId;
         this.iconUrl = data.icon;
-        this.isOpenPoweredValue =data.poweredBy
+        this.isOpenPoweredValue = data.poweredBy;
         this.lastPublishedTime = formatDateTime(
           data.lastPublishedTime,
           "yyyy-MM-dd hh:mm"
@@ -501,6 +525,13 @@ export default {
     // 切换站点刷新信息
     chooseWebsite(siteId) {
       this.getSiteInfo(siteId);
+      if (this.$store.state.dashboard.appId) {
+        this.headers.appId = this.$store.state.dashboard.appId;
+      }
+      let data = await securityService.getUser();
+      if (data && data.access_token) {
+        this.headers.Authorization = "Bearer " + data.access_token;
+      }
     },
     // 修改网站名称
     showChangeSitename() {
@@ -799,7 +830,7 @@ export default {
     left: 0px;
     width: 20px;
     height: 20px;
-    background: rgba(26,26,26,0.4);
+    background: rgba(26, 26, 26, 0.4);
     color: #ffffff;
     font-size: 12px;
     line-height: 20px;
@@ -1015,7 +1046,7 @@ export default {
   }
   i {
     float: left;
-    color: #D8D8D8; 
+    color: #d8d8d8;
     font-size: 16px;
     line-height: 20px;
     margin-left: 8px;
@@ -1026,7 +1057,7 @@ export default {
     line-height: 20px;
     color: #8c8c8c;
     font-weight: 600;
-    padding-left: 10px;
+    margin-left: 16px;
     cursor: pointer;
   }
   .el-switch {
