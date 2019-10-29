@@ -36,6 +36,7 @@
 </template>
 <script>
 import * as sitemapApi from "@/api/request/sitemapApi";
+import securityService from "@/services/authentication/securityService";
 import environment from "@/environment/index.js";
 import { formatDateTime } from "@/api/index";
 export default {
@@ -47,12 +48,9 @@ export default {
         testChunks: false,
         allowDuplicateUploads: true,
         headers: {
-          appId: this.$store.state.dashboard.appId,
-          Authorization:
-            "Bearer " + this.$store.state.user.accessToken.Authorization
+          Authorization: ""
         }
       },
-      uploadAction: "",
       attrs: {
         accept: "*/*"
       },
@@ -65,7 +63,7 @@ export default {
     };
   },
   methods: {
-    init(siteId) {
+    async init(siteId) {
       this.siteId = siteId;
       this.hasUploadFile(this.siteId);
       // this.preview(this.siteId);
@@ -74,8 +72,11 @@ export default {
         "target",
         `${environment.uploadSitemapUrl}${this.siteId}`
       );
+      let data = await securityService.getUser();
+      if (data && data.access_token) {
+        this.options.headers.Authorization = "Bearer " + data.access_token;
+      }
       this.$refs.uploader.resetOption();
-      console.log(this.options);
     },
     async hasUploadFile(siteId) {
       let { data } = await sitemapApi.hasUploadFile(siteId);
@@ -86,15 +87,6 @@ export default {
       let { data } = await sitemapApi.preview(siteId);
     },
     onFileAdded(file) {
-      console.log(this.$store)
-      this.options.headers.Authorization =
-        "Bearer " + this.$store.state.user.accessToken.Authorization;
-      this.options.headers.appId = this.$store.state.dashboard.appId;
-      this.$set(
-        this.options,
-        "target",
-        `${environment.uploadSitemapUrl}${this.siteId}`
-      );
       if (file.name != "sitemap.xml") {
         this.$notify({
           customClass: "notify-error",
