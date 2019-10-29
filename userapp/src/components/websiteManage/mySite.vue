@@ -523,7 +523,7 @@ export default {
       }
     },
     // 切换站点刷新信息
-    chooseWebsite(siteId) {
+    async chooseWebsite(siteId) {
       this.getSiteInfo(siteId);
       if (this.$store.state.dashboard.appId) {
         this.headers.appId = this.$store.state.dashboard.appId;
