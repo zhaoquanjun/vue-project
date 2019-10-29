@@ -106,6 +106,9 @@ export default {
         "target",
         `${environment.uploadRobotsUrl}${this.curSiteId}`
       );
+      if (this.$store.state.dashboard.appId) {
+        this.options.headers.appId = this.$store.state.dashboard.appId;
+      }
       let data = await securityService.getUser();
       if (data && data.access_token) {
         this.options.headers.Authorization = "Bearer " + data.access_token;
@@ -120,6 +123,9 @@ export default {
         "target",
         `${environment.uploadRobotsUrl}${this.curSiteId}`
       );
+      if (this.$store.state.dashboard.appId) {
+        this.options.headers.appId = this.$store.state.dashboard.appId;
+      }
       let data = await securityService.getUser();
       if (data && data.access_token) {
         this.options.headers.Authorization = "Bearer " + data.access_token;
