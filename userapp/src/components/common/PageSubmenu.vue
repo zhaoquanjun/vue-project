@@ -99,14 +99,13 @@ export default {
     .submenu-list {
         padding-top: 7px;
         li {
-          cursor: pointer;
           line-height: 50px;
           font-size: 14px;
           font-weight:400;
           color:#262626;
           span {
             padding-left: 24px;
-            cursor: pointer;
+            // cursor: pointer;
           }
           // &:hover {
           //   color: #262626;
