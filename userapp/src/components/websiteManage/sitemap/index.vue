@@ -11,7 +11,13 @@
       </el-row>
       <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
       <el-row class="content">
-        <el-tabs class="tab" v-model="uploadType" type="card" @tab-click="handleClick">
+        <el-tabs
+          class="tab"
+          v-model="uploadType"
+          type="card"
+          @tab-click="handleClick"
+          :before-leave="beforeClick"
+        >
           <el-tab-pane label="系统自动生成" name="auto"></el-tab-pane>
           <el-tab-pane label="手动上传" name="manual"></el-tab-pane>
         </el-tabs>
@@ -374,17 +380,33 @@ export default {
       this.getList();
     },
     // 切换手动上传和自动上传
-    handleClick() {
-      if (this.uploadType == "auto") {
+    beforeClick(item) {
+      if (item == "auto") {
         this.getList();
-      } else {
+      } else if (item == "manual") {
         this.$refs.manualUpload.init(this.curSiteId);
       }
+    },
+    handleClick(item) {
+      // console.log(this.uploadType);
+      // console.log(item.name);
+      // if (item.name == this.uploadType) {
+      //   return;
+      // }
+      // console.log(this.uploadType == "auto");
+      // if (this.uploadType == "auto") {
+      //   this.getList();
+      // } else if (this.uploadType == "manual") {
+      //   this.$refs.manualUpload.init(this.curSiteId);
+      // }
     },
     search() {
       this.getList();
     },
     choseListType(type) {
+      if (type == this.listType) {
+        return;
+      }
       this.keyword = "";
       this.listType = type;
       this.getList();

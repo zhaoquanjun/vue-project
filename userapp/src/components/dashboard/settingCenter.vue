@@ -37,7 +37,7 @@
           <div class="item-icon member"></div>
           <div>
             <div class="item-text">成员协作</div>
-            <div class="memberNum">6</div>
+            <div class="memberNum">{{contentNumber.managerCount}}</div>
           </div>
         </div>
       </div>
@@ -47,7 +47,7 @@
 
 <script>
 export default {
-  //   props: ["recommend"]
+  props: ["contentNumber"]
 };
 </script>
 
@@ -148,7 +148,7 @@ export default {
           font-size: 16px;
           font-weight: 500;
           color: rgba(5, 149, 230, 1);
-          line-height: 22px;
+          line-height: 20px;
         }
         .tianmao {
           background: url("~img/dashboard/board-tianmao.png") no-repeat center;
