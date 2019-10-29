@@ -24,7 +24,7 @@
     />
     <content-num :contentNumber="contentNumber" />
     <memberManage :contentNumber="contentNumber" />
-    <settingCenter />
+    <settingCenter :contentNumber="contentNumber" />
   </div>
 </template>
 

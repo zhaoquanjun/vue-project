@@ -19,28 +19,47 @@
         <div v-if="step == 2" class="account-setting__resolve">
           <img :src="wechanSpare" alt />
           <p>设置推广域名，立即开启自定菜单</p>
-          <input type='text' v-model="addDomain" v-if="domainList.length <= 0"  placeholder="请输入需添加的域名"/>
-          
+          <input 
+            type='text' 
+            v-model="addDomain" 
+            v-if="domainList.length <= 0" 
+            placeholder="请输入需添加的域名"/>
           <ul v-else>
-            <span>{{domainName}}<i @click="showDomainList(false)" class="icon iconfont iconicon-des-lower"></i></span>
+            <span 
+              class="pointer" 
+              @click="showDomainList(false)" >
+                {{domainName}}
+              <i class="icon iconfont iconicon-des-lower"></i>
+            </span>
             <li 
               v-show="isShowDomainList" 
-              v-for="(item,index) in domainList" 
-              @click="showDomainList(item)" 
+              v-for="(item,index) in domainList"
+              :class="{active: domainIndex == index}"
+              @click="showDomainList(item,index)" 
               :key="index"
             >
               {{item.domain}}
+              <i class="icon iconfont iconduihao"></i>
             </li>
           </ul>
-          <div v-if="isShowTips" class='tips'>
+          <div v-if="isShowTips && !isShowDomainList" class='tips'>
             <p class="ym-form-item__error">{{tipsText}}</p>
             <span @click='goResolve'>去解析</span>
           </div>
           <div class="add" @click='changeResolve'>完成设置</div>
         </div>
         <!-- 第三部完成设置 -->
+        
         <div class='account-setting__complete' v-if='step == 3'>
-          <i class='icon iconfont iconduihao'></i>
+          <!-- <i class='icon iconfont iconduihao'></i> -->
+          <el-progress 
+            type="circle" 
+            :percentage="percentage"
+            :width="100"
+            color="#63DC8C"
+            :stroke-width='2'
+            status="success">
+          </el-progress>
           <p>配置成功</p>
         </div>
         <div v-if="step == 1" class="account-bind__tips">
@@ -66,12 +85,14 @@ import { notify } from "@/utlis/index.js";
 import environment from "@/environment/index";
 import { wxAuth, getCdnDomainList, bindDomain, setPromotionUrl} from "@/api/request/account.js";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
+import { setTimeout } from 'timers';
 
 export default {
   data() {
     return {
       step: 1,
       title: "账号设置",
+      domainIndex: 0,
       siteId: this.$store.state.dashboard.siteId,
       isResolveSuccess: this.$store.state.wxaccount.wx_status.isResolveSuccess,
       isAuth: this.$store.state.wxaccount.wx_status.isAuth,
@@ -84,6 +105,7 @@ export default {
       tipsText: '请输入正确的域名',
       isShowTips: false,
       addDomain: '',
+      percentage: 0,
       isShowDomainList: false
     };
   },
@@ -153,22 +175,30 @@ export default {
         let data = await setPromotionUrl({siteId: this.siteId, domain:this.domainName})
         if(data && data.status == 200) {
           this.step = 3
-          setTimeout(()=>{
-            this.$router.replace({
-                name: 'accountsetting'
-            })
-          },3000); 
+          var t1=window.setInterval(()=> {
+            if(this.percentage >= 100) {
+              window.clearInterval(t1);
+              setTimeout(()=>{
+                this.$router.replace({
+                    name: 'accountsetting'
+                })
+              },2000); 
+            } else {
+              this.percentage = this.percentage + 2
+            }
+          }, 50);
         } else {
           notify(this,'推广域名设置失败', 'error')
         }
       }
     },
     //显示域名选择列表
-    showDomainList(val){
-      this.isShowTips = false
+    showDomainList(val,ind){
       this.isShowDomainList = !this.isShowDomainList;
       if(val) {
+        this.isShowTips = false
         this.domainName = val.domain
+        this.domainIndex = ind
         this.isResolve = val.cdnDomainResolveStatus
         if (val.cdnDomainResolveStatus != 2) {
           this.tipsText = '域名未解析，请先完成域名解析'
@@ -214,7 +244,13 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+.el-progress.is-success /deep/ .el-progress__text {
+  color: #63DC8C;
+  font-size: 40px !important;
+  font-weight: 700;
+}
+</style>
 <style lang="scss" scoped>
 .account-setting__section {
   box-sizing: border-box;
@@ -358,7 +394,7 @@ export default {
           }
           li {
             height: 40px;
-            padding-left: 15px;
+            padding: 0 16px;
             font-size:14px;
             font-family:'PingFangSC-Regular,PingFangSC';
             font-weight:400;
@@ -368,6 +404,9 @@ export default {
             border: 1px solid #E5E5E5;
             border-bottom: none;
             cursor: pointer;
+            i {
+              float: right;
+            }
           }
           li:last-child {
             border-bottom: 1px solid #E5E5E5;
@@ -375,12 +414,17 @@ export default {
           li:hover {
             background: #F8FAFC;
           }
+          .active {
+            background: #F0F3F7 !important;
+            color: #09CCEB;
+          }
         }
       }
       .account-setting__complete {
         width:320px;
         height:280px;
         margin: 0 auto;
+        padding-top: 50px;
         text-align: center;
         background:rgba(255,255,255,1);
         box-shadow:0px 2px 12px 0px rgba(243,243,243,1);
@@ -401,6 +445,7 @@ export default {
         p {
           font-size:18px;
           font-weight:300;
+          margin-top: 14px;
           color:rgba(38,38,38,1);
         }
       }
