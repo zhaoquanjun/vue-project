@@ -78,6 +78,13 @@ export default {
 };
 </script>
 <style scoped>
+.textarea /deep/ .el-textarea__inner {
+    height: 400px !important;
+    border: none;
+    padding: 16px 16px;
+}
+</style>
+<style scoped>
 .el-radio-group .el-radio {
     margin-right: 119px;
 }
@@ -85,7 +92,7 @@ export default {
 <style lang="scss" scoped>
 .reply {
     .reply-content {
-        min-height: 444px;
+        height: 372px;
         border: 1px solid #e5e5e5;
         border-radius: 2px;
         .radio-tabs {
@@ -111,8 +118,9 @@ export default {
         }
         .slot-content {
             float: left;
-            min-height: 373px;
+            height: 330px;
             width: 100%;
+            background: #fff;
             overflow: auto;
         }
         .picture {
@@ -123,10 +131,10 @@ export default {
     }
 }
 .footer-btn {
-    padding-top: 25px;
+    padding: 16px;
     button {
         width: 90px;
-        height: 40px;
+        height: 32px;
         background: rgba(9, 204, 235, 1);
         color: #fff;
     }

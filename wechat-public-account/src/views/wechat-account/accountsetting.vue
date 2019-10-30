@@ -209,7 +209,7 @@ export default {
   height: 100%;
   .account-setting__manage {
     h4 {
-      padding-top: 32px;
+      padding-top: 24px;
       font-size: 16px;
       font-family: "PingFangSC";
       font-weight: 500;
@@ -217,11 +217,10 @@ export default {
       line-height: 22px;
     }
     .account-info__area {
-      margin-top: 13px;
-      margin-bottom: 26px;
-      height: 100px;
-      background: #F8FAFC;
-      padding: 0 32px 0 24px;
+      margin-top: 16px;
+      height: 116px;
+      background: #fff;
+      padding: 14px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -286,13 +285,13 @@ export default {
       }
     }
     .account-domain__area {
-      height:100px;
+      height:88px;
       background:rgba(255,255,255,1);
       border-radius:2px;
-      border:1px solid rgba(229,229,229,1);
+      border-top:1px solid rgba(229,229,229,1);
       display: flex;
       justify-content: space-between;
-      padding: 30px;
+      padding: 24px;
       line-height: 14px;
       .domain-title__area {
         position: relative;
@@ -336,6 +335,9 @@ export default {
     }
     .account-explain__area {
       margin-top: 20px;
+      padding: 24px;
+      background: #fff;
+      border-radius: 3px;
       h5 {
         height:20px;
         font-size:14px;
