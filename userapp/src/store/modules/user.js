@@ -1,5 +1,6 @@
 import { getAppHeadInfo } from "@/api/request/dashboardApi.js"
-import { setLocal } from '@/libs/local'
+// import { setLocal } from '@/libs/local';
+import {setCookie} from "@/libs/cookie"
 const user = {
   state: {
     userInfo:"",
@@ -8,7 +9,13 @@ const user = {
   mutations: {
     SET_USERINFO: (state, payload) => {
       state.userInfo = payload;
-      setLocal("userInfo",payload)
+      let data = {
+        appName: payload.appName,
+        userName: payload.userName,
+      }
+      // uxp => userInfo 
+      setCookie("uxp", data)
+      // setLocal("userInfo",payload)
     },
     SET_USER: (state, data) => {
       if (data) {

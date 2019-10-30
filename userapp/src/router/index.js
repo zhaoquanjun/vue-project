@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import { defaultRoutes } from "./routes"
 import securityService from "@/services/authentication/securityService";
 import store from "@/store/index";
-
+import { getCookie } from "@/libs/cookie"
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -22,7 +22,6 @@ router.beforeEach(async (to, from, next) => {
   let user = await securityService.getUser();
   let accessToken;
   if (user) {
-    await store.dispatch("_getAppHeadInfo");//临时
     accessToken = user.access_token;
   };
   if (accessToken) {
@@ -35,6 +34,10 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
+      if(getCookie("userInfo") ){
+          await store.dispatch("_getAppHeadInfo");//临时
+      }
+      
       // 切换app 主动调接口   本地测试调用
       if (process.env.NODE_ENV === "development") {
         let appId = store.state.dashboard.appId;

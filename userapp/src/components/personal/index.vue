@@ -384,7 +384,12 @@ export default {
 
             this.$confirm("支付宝绑定完成", "提示", {
                 showCancelButton: false, // 是否显示取消按钮
-                iconClass: "icon-success" // 自定义图标
+                iconClass: "icon-success", // 自定义图标
+                callback: async action => {
+                    if (action === "confirm") {
+                        this._getExternalUserAsync();
+                    }
+                }
             });
             let result = await getAlipayBindUrl();
             if (result != undefined && result.data)

@@ -1,10 +1,10 @@
 import Cookies from "js-cookie";
-
+const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'wezhan.cn':'clouddream.net';
 let domain;
 if (process.env.NODE_ENV === 'development') {
     domain = ""
 }else{
-    domain = { domain: '.wezhan.net' }
+    domain = { domain: baseServerUrl }
 }
 
 
