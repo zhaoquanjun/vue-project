@@ -23,7 +23,7 @@
         >保存</el-button>
       </el-row>
       
-      <div class="verify-tip">提示:请将您从站长工具中获取的标签验证代码添加到此处(格式为 <meta name='站点名-site-verification' content='验证码'/>)</div>
+      <div class="verify-tip">提示:请将您从站长工具中获取的标签验证代码添加到此处(格式为 {{meta}})</div>
       <el-row>
         <el-col>
           <el-form
@@ -122,6 +122,7 @@ export default {
         },
         disable: true,
       curSiteId: "",
+      meta: "<meta name='站点名-site-verification' content='验证码'/>",
       rules: {
         baiduTag: [
           {
