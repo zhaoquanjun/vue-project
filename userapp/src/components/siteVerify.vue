@@ -22,6 +22,8 @@
           @click="submitForm('verifyDetail')"
         >保存</el-button>
       </el-row>
+      
+      <div class="verify-tip">提示:请将您从站长工具中获取的标签验证代码添加到此处(格式为 <meta name='站点名-site-verification' content='验证码'/>)</div>
       <el-row>
         <el-col>
           <el-form
@@ -37,7 +39,6 @@
                 v-model="verifyDetail.baiduTag"
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 10}"
-                placeholder="请将您从站长工具中获取的标签验证代码添加到此处(格式为 <meta name='站点名-site-verification' content='验证码'/>)。保存代码成功后，您才可以到站长工具里进行后续操作步骤。"
                 maxlength="3000"
                 show-word-limit
                 resize="none"
@@ -49,7 +50,6 @@
                 v-model="verifyDetail.qihuTag"
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 10}"
-                placeholder="请将您从站长工具中获取的标签验证代码添加到此处(格式为 <meta name='站点名-site-verification' content='验证码'/>)。保存代码成功后，您才可以到站长工具里进行后续操作步骤。"
                 maxlength="3000"
                 show-word-limit
                 resize="none"
@@ -61,7 +61,6 @@
                 v-model="verifyDetail.sougouTag"
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 10}"
-                placeholder="请将您从站长工具中获取的标签验证代码添加到此处(格式为 <meta name='站点名-site-verification' content='验证码'/>)。保存代码成功后，您才可以到站长工具里进行后续操作步骤。"
                 maxlength="3000"
                 show-word-limit
                 resize="none"
@@ -73,7 +72,6 @@
                 v-model="verifyDetail.googleTag"
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 10}"
-                placeholder="请将您从站长工具中获取的标签验证代码添加到此处(格式为 <meta name='站点名-site-verification' content='验证码'/>)。保存代码成功后，您才可以到站长工具里进行后续操作步骤。"
                 maxlength="3000"
                 show-word-limit
                 resize="none"
@@ -85,7 +83,6 @@
                 v-model="verifyDetail.bingTag"
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 10}"
-                placeholder="请将您从站长工具中获取的标签验证代码添加到此处(格式为 <meta name='站点名-site-verification' content='验证码'/>)。保存代码成功后，您才可以到站长工具里进行后续操作步骤。"
                 maxlength="3000"
                 show-word-limit
                 resize="none"
@@ -308,5 +305,16 @@ export default {
   color: #ccc;
   padding-left: 16px;
   vertical-align: middle;
+}
+
+.verify-tip{
+  height:32px;
+  background:rgba(245, 255, 239, 1);
+  border-radius:2px;
+  border:1px solid #63DC8C;
+  text-align: center;
+  line-height: 32px;
+  color: #63DC8C;
+  margin-bottom: 16px;
 }
 </style>
