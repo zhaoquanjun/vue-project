@@ -269,7 +269,7 @@ import * as dashboardApi from "@/api/request/dashboardApi";
 import { designerUrl, wechatSpreadUrl } from "@/environment/index";
 import SelectTemplateDialog from "@/components/websiteManage/selectTemplateDialog.vue";
 import { getLanguage } from "@/configure/appCommon";
-import { getLocal } from "@/libs/local.js";
+import { getCookie } from "@/libs/cookie";
 
 export default {
   props: ["siteCount", "isSystem"],
@@ -475,8 +475,8 @@ export default {
   },
   computed: {
     mySiteId() {
-      this.siteId = getLocal("ymSd")
-        ? getLocal("ymSd")
+      this.siteId = getCookie("tjufje")
+        ? getCookie("tjufje")
         : this.$store.state.dashboard.siteId;
       return this.siteId;
     }
