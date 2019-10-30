@@ -1,5 +1,6 @@
 import oidcMgr from '@/services/authentication/oidcService';
 import {clearAllLocal } from "@/libs/local.js";
+import { clearAllCookie } from "@/libs/cookie"
 const globalAuthData = {
   isAuthenticated: false,
   token: ''
@@ -25,11 +26,13 @@ class SecurityService {
   }
   signIn(returnPath) {
     clearAllLocal();
+    clearAllCookie();
     returnPath ? oidcMgr.signinRedirect({ state: returnPath })
       : oidcMgr.signinRedirect()
   }
   signOut(returnPath) {
     clearAllLocal();
+    clearAllCookie();
     oidcMgr.signoutRedirect({ state: returnPath }).then(function(resp) {
       
     }).catch(function(err) {

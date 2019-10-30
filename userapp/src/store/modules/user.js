@@ -11,11 +11,10 @@ const user = {
       state.userInfo = payload;
       let data = {
         appName: payload.appName,
-        userName: payload.userName,
+        headImageUrl: payload.headImageUrl,
       }
-      // uxp => userInfo 
-      setCookie("uxp", data)
-      // setLocal("userInfo",payload)
+      // vtfsjogp => userInfo
+      setCookie("vtfsjogp", data)
     },
     SET_USER: (state, data) => {
       if (data) {

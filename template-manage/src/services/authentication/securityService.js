@@ -1,5 +1,6 @@
 import oidcMgr from '@/services/authentication/oidcService';
 import {clearAllLocal } from "@/libs/local.js";
+import { clearAllCookie } from "@/libs/cookie"
 class SecurityService {
   async authenticate(returnPath) {
     const user = await this.getUser() // see if the user details are in local storage
@@ -15,11 +16,14 @@ class SecurityService {
     return user
   }
   signIn(returnPath) {
+    clearAllLocal();
+    clearAllCookie();
     returnPath ? oidcMgr.signinRedirect({ state: returnPath })
       : oidcMgr.signinRedirect()
   }
   signOut() {
-    clearAllLocal()
+    clearAllLocal();
+    clearAllCookie();
     oidcMgr.signoutRedirect().then(function(resp) {
       clearAllLocal()
     }).catch(function(err) {

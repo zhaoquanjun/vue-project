@@ -1,14 +1,14 @@
 import Cookies from "js-cookie";
-
+const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'wezhan.cn':'clouddream.net';
 let domain;
 if (process.env.NODE_ENV === 'development') {
     domain = ""
 }else{
-    domain = { domain: '.wezhan.net' }
+    domain = { domain: baseServerUrl }
 }
 
 
-export const setLocal = (key,value)=>{
+export const setCookie = (key,value)=>{
     if(typeof value == 'object'){
         value = JSON.stringify(value);
     }
@@ -16,11 +16,11 @@ export const setLocal = (key,value)=>{
    
     Cookies.set(key,value,domain);
 }
-export const getLocal = (key)=>{
+export const getCookie = (key)=>{
     return Cookies.get(key,domain);
 }
 
-export const removeLocal = (key)=>{
+export const removeCookie = (key)=>{
     return Cookies.remove(key,domain);
 }
 //清除所有cookie函数
@@ -29,9 +29,7 @@ export  const clearAllCookie = ()=> {
     var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
     if(keys) {
         for(var i = keys.length; i--;){
-            removeLocal(keys[i])
+            removeCookie(keys[i])
         }
     }
 }
-
-

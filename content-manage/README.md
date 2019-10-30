@@ -39,7 +39,9 @@ background: url("~img/list-mode.png") no-repeat center;
  ### SVN
  <svg-icon icon-class="l-recyclebin"></svg-icon>
 
-
+cookies内  vtfsjogp 的值为 userInfo的appName和头像url
+           tjufje 为 siteId
+<!-- 对应的每一个字母为对应的字母的下一个字母 -->
 
 ### 删除对话框
  ```

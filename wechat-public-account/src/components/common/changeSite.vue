@@ -64,7 +64,7 @@ import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local.js";
 import { getLanguage } from "@/configure/appCommon";
-
+import { getCookie } from "@/libs/cookie";
 export default {
   props: ["changeSiteName", "changeSiteLanguage"],
   components: {},
@@ -93,7 +93,7 @@ export default {
   },
   computed: {
     mySiteId() {
-      return this.$store.state.dashboard.siteId;
+      return getCookie("tjufje");
     }
   },
   methods: {
@@ -149,7 +149,6 @@ export default {
     // 选择新的site
     async choseSite(item) {
       this.changeSiteShow = false;
-      // setLocal("siteid", item.siteId);
       this.$store.commit("SETSITEID", item.siteId);
       await dashboardApi.updateUserLastSiteId(item.siteId);
       this.$emit("chooseWebsite", item.siteId);

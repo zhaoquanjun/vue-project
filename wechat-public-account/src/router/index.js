@@ -4,7 +4,7 @@ import { defaultRoutes } from "./routes"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
 import {getLocal} from '@/libs/local'
-
+import { getCookie } from "@/libs/cookie"
 
 Vue.use(VueRouter);
 let router = new VueRouter({
@@ -16,7 +16,7 @@ export default router;
 
 
 let appId = store.state.dashboard.appId || getLocal("ymId");
-let siteId = store.state.dashboard.siteId || getLocal("ymSd");
+let siteId = getCookie("vtfsjogp") || store.state.dashboard.siteId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
   let user = await securityService.getUser();
@@ -24,7 +24,6 @@ router.beforeEach(async (to, from, next) => {
   if (user) {
     accessToken = user.access_token;
     store.commit("SET_USER",accessToken)
-    await store.dispatch("_getAppHeadInfo");//临时
   }
 
   if (accessToken) {
@@ -36,6 +35,10 @@ router.beforeEach(async (to, from, next) => {
       store.dispatch('_getMenuListData')
       next()
       return
+    }
+    // vtfsjogp => userinfo
+    if (!getCookie("vtfsjogp")) {
+      await store.dispatch("_getAppHeadInfo");
     }
       if (!appId) {
         await store.dispatch('_updateAppIdAndSiteIdToCookie')

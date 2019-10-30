@@ -4,6 +4,7 @@ import {  defaultRoutes } from "./routes"
 import { getLocal } from "@/libs/local"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
+import { getCookie } from "@/libs/cookie"
 
 Vue.use(VueRouter);
 let router = new VueRouter({
@@ -25,7 +26,6 @@ router.beforeEach(async (to, from, next) => {
   if (user) {
     accessToken = user.access_token;
     store.commit("SET_USER",accessToken)
-    await store.dispatch("_getAppHeadInfo");//临时
   }
   if (accessToken) {
     if (to.path !== "/callback") {
@@ -38,9 +38,11 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
-      if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'location') {
-        if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
+      // vtfsjogp => userinfo
+      if (!getCookie("vtfsjogp")) {
+        await store.dispatch("_getAppHeadInfo");
       }
+      if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
       if (!getLocal("authList")) await store.dispatch('_getMenuListData');
       let r = await store.dispatch('getCurRouteAuth', to.path);
       if (r) {
