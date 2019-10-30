@@ -17,9 +17,10 @@ export default {};
   align-items: center;
   width: 100%;
   height: 100%;
+  background: #fff;
   .order-content {
     .order-icon {
-      margin: 200px auto 0;
+      margin: 0 auto;
       width: 136px;
       height: 157px;
       background: url('~img/account/define_menu_order.png') no-repeat center center;

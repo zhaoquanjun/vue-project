@@ -865,7 +865,10 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       bottom: -42px;
+      height: 32px;
+      line-height: 32px;
       cursor: pointer;
+      padding: 0 16px;
     }
   }
   .menu-operate__arae {
@@ -877,6 +880,7 @@ export default {
     border-radius: 2px;
     .menu-operate__none {
       width: 100%;
+      background: #fff;
       display: flex;
       justify-content: center;
       .empty {
@@ -1116,7 +1120,7 @@ export default {
 .btn span {
   display: inline-block;
   width:100px;
-  height:36px;
+  height:32px;
   background:#09cceb; 
   border-radius:2px;
   font-size:14px;
@@ -1124,7 +1128,8 @@ export default {
   font-weight:400;
   text-align: center;
   color: rgba(255, 255, 255, 1);
-  line-height:36px;
+  line-height:32px;
+  margin-top: 2px;
   cursor: pointer;
 }
 .tipsName {
