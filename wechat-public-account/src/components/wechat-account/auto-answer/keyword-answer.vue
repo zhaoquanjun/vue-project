@@ -3,7 +3,7 @@
         <div v-if="!addAnswer" class="keyword-answer-content">
             <div v-for="(item,index) in keywordList" :key="index" class="keyword-list">
                 <span>
-                    <span class="title">回复设置</span>
+                    <span class="title">关键词</span>
                     <span class="select-item">
                         <el-select
                             size="small"

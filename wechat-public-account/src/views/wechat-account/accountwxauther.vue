@@ -258,8 +258,7 @@ export default {
   height: 100%;
   .account-setting__content {
     position: relative;
-    height: calc(100% - 103px);
-    min-height: 600px;
+    min-height: 500px;
     .account-setting__bind--box {
       width: 100%;
       height: calc(100% - 266px);
