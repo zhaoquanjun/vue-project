@@ -27,3 +27,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+cookies内  vtfsjogp 的值为 userInfo的appName和头像url
+<!-- 对应的每一个字母为对应的字母的下一个字母 -->

@@ -34,8 +34,9 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
-      if(getCookie("userInfo") ){
-          await store.dispatch("_getAppHeadInfo");//临时
+      // vtfsjogp => userinfo
+      if (!getCookie("vtfsjogp")) {
+        await store.dispatch("_getAppHeadInfo");
       }
       
       // 切换app 主动调接口   本地测试调用

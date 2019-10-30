@@ -45,9 +45,7 @@ const dashboard = {
         },
         SETAPPID(state, appId) {
             state.appId = appId;
-            if(process.env.NODE_ENV === "development"){
-                setLocal('ymId', appId);
-              }
+            setLocal('ymId', appId);
            
         },
         set_menuList(state, m) {
