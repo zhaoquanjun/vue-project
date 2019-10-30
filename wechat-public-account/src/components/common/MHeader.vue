@@ -122,6 +122,7 @@ import {
 import * as dashboardApi from "@/api/request/common.js";
 import { formatDateTime } from "@/utlis/date.js";
 import { setLocal, getLocal } from "@/libs/local.js";
+import { getCookie } from "@/libs/cookie";
 export default {
   data() {
     return {
@@ -130,9 +131,6 @@ export default {
       appList: [],
       changeAppShow: false
     };
-  },
-  created() {
-    // this.$store.dispatch("_getAppHeadInfo");
   },
   methods: {
     signOut() {
@@ -215,7 +213,10 @@ export default {
   },
   computed: {
     headUrl() {
-      let avatar = this.$store.state.user.userInfo.headImageUrl;
+      let avatar = "";
+      if (getCookie("vtfsjogp")) {
+        avatar = JSON.parse(getCookie("vtfsjogp")).headImageUrl;
+      }
       if (avatar) {
         return avatar;
       } else {
@@ -223,9 +224,10 @@ export default {
       }
     },
     headAppName() {
-      let appName = getLocal("userInfo").appName
-        ? getLocal("userInfo").appName
-        : this.$store.state.user.userInfo.appName;
+      let appName = "";
+      if (getCookie("vtfsjogp")) {
+        appName = JSON.parse(getCookie("vtfsjogp")).appName;
+      }
       return appName;
     }
   }
