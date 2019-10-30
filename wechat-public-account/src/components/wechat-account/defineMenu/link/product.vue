@@ -88,7 +88,8 @@
           <li 
             v-for="(item,index) in productPageList" 
             :key="index"
-             @click="selectPage(index)"
+            :class="{active: pageActiveIndex == index}"
+            @click="selectPage(index)"
           >
             {{item.title}}
             <i class="icon iconfont iconduihao"></i>
@@ -145,7 +146,7 @@ export default {
       pageUrl: '',
       pageTitle: '',
       productTips: '全部分类',
-      pageActiveIndex: null,
+      pageActiveIndex: 0,
       productPageList: [],
       productId: -1,
       nodeIdArr: [],
@@ -494,13 +495,17 @@ export default {
         i {
           display: none;
           float: right;
-          color: #09CCEB;
         }
       }
       li:hover {
         background:#F0F3F7;
+        color: #00c1de;
+      }
+      .active {
+        background:#00c1de !important;
+        color: #fff !important;
         i {
-          display: inline-block;
+          display: inline-block !important;
         }
       }
     }
