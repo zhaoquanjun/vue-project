@@ -58,7 +58,7 @@ export default {
     },
     // 校验是否已经授权认证
     async _getWxIsAuth() {
-      await this.$store.dispatch('_setSiteId')
+      // await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
       if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
