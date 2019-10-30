@@ -128,7 +128,7 @@ export default {
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
-      await this.$store.dispatch('_setSiteId')
+      // await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.getters.wx_status;
       if (wx_status.isAuth && wx_status.isCertification && wx_status.isResolveSuccess) {
