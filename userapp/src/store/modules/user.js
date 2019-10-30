@@ -13,7 +13,7 @@ const user = {
         appName: payload.appName,
         userName: payload.userName,
       }
-      // uxp => userinfo
+      // uxp => userInfo 
       setCookie("uxp", data)
       // setLocal("userInfo",payload)
     },
