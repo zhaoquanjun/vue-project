@@ -53,7 +53,7 @@ export default {
 <style lang="scss" scoped>
 .account-setting__section {
   box-sizing: border-box;
-  padding: 10px 32px 0;
+  padding: 16px 32px 0;
   height: 100%;
   .account-setting__certification {
     text-align: center;

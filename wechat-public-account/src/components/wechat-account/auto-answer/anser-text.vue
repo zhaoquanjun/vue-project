@@ -46,7 +46,7 @@ export default {
 </script>
 <style scoped>
 .textarea /deep/ .el-textarea__inner {
-    height: 460px;
+    height: 306px;
     border: none;
     padding: 16px 16px;
 }
