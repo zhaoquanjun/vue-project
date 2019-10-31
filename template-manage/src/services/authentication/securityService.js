@@ -17,7 +17,6 @@ class SecurityService {
   }
   signIn(returnPath) {
     clearAllLocal();
-    clearAllCookie();
     returnPath ? oidcMgr.signinRedirect({ state: returnPath })
       : oidcMgr.signinRedirect()
   }
