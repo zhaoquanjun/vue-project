@@ -41,11 +41,11 @@ export default {
     jumpTo(type) {
       if (type == "vipList") {
         this.$router.push({
-          path: "/sitemember/memberlist"
+          path: "/membercenter/sitemember/memberlist"
         });
       } else if (type == "vipLevel") {
         this.$router.push({
-          path: "/sitemember/memberlevel"
+          path: "/membercenter/sitemember/memberlevel"
         });
       }
     }

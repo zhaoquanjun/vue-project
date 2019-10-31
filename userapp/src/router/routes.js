@@ -62,7 +62,7 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "mysite/backup",
+        path: "sitemanage/backup",
         name: "backup",
         component: () => import("@/views/website-manage/websiteBackup.vue"),
         meta: {
@@ -188,7 +188,7 @@ export const defaultRoutes = [
     // ]
   },
   {
-    path: "/sitemember",
+    path: "/membercenter/sitemember",
     name: 'sitemember',
     component: () => import("@/views/sitemember/sitemember.vue"),
     meta: {
@@ -204,6 +204,17 @@ export const defaultRoutes = [
         component: () => import("@/views/sitemember/memberlist.vue"),
         meta: {
           title: "会员列表",
+          requiresAuth: true,
+          requiresRole: {},
+          isSub: true
+        }
+      },
+      {
+        path: "memberlevel",
+        name: "memberlevel",
+        component: () => import("@/views/sitemember/memberlevel.vue"),
+        meta: {
+          title: "会员等级",
           requiresAuth: true,
           requiresRole: {},
           isSub: true

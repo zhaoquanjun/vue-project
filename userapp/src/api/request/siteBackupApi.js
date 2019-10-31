@@ -81,8 +81,20 @@ export const updateSiteIcon = option => {
   return ajaxRequest.put(`${enbironmemy.designerManageApi}/api/v1/siteInfo/UpdateSiteIcon`,option);
 };
 /**
- * 启用powered by
+ *禁止右键保存图片
  */
 export const updateSitePoweredBy = option => {
   return ajaxRequest.put(`${enbironmemy.designerManageApi}/api/v1/siteInfo/UpdateSitePoweredBy`,option);
+};
+/**
+ *禁止右键保存图片
+ */
+export const updateSiteRightCopy = option => {
+  return ajaxRequest.put(`${enbironmemy.designerManageApi}/api/v1/siteInfo/UpdateSiteRightCopy`,option);
+};
+/**
+ * 显示阿里云服务信息
+ */
+export const updateSiteServiceInfo = option => {
+  return ajaxRequest.put(`${enbironmemy.designerManageApi}/api/v1/siteInfo/UpdateSiteServiceInfo`,option);
 };

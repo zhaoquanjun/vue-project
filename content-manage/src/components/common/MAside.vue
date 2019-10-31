@@ -118,7 +118,7 @@ export default {
                     return "iconicon-neirong";
                 case "website":
                     return "iconicon-moban1";
-                case "sitemember":
+                case "membercenter":
                     return "iconicon-huiyuan1";
                 case "role":
                     return "iconicon-chengyuan";
