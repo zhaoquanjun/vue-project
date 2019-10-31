@@ -29,8 +29,8 @@ export const amIAdmin = () => {
 /**
  * 更改appName
  */
-export const UpdateAppName = (appName) => {
-    return ajaxRequest.put(`${environment.memberManageApi}/api/v1/appInfo/UpdateAppName`, JSON.stringify(appName));
+export const updateAppName = (para) => {
+    return ajaxRequest.put(`${environment.memberManageApi}/api/v1/appInfo/UpdateAppName`, para);
 };
 /**
  * 获取当前siteId

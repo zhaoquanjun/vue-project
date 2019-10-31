@@ -45,7 +45,8 @@ import {
     Radio,
     RadioGroup,
     Drawer,
-    Progress
+    Progress,
+    Popover
 } from 'element-ui';
 Vue.use(Container)
     .use(Aside)
@@ -89,6 +90,7 @@ Vue.use(Container)
     .use(RadioGroup)
     .use(Drawer)
     .use(Progress)
+    .use(Popover)
 ;
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
