@@ -308,7 +308,7 @@ export default {
         display: block;
         width: 60px;
         height: 60px;
-        margin: 50px auto 0;
+        margin: 70px auto 0;
     }
     p {
         font-size:14px;

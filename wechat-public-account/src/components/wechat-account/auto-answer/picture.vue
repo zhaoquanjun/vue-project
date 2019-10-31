@@ -116,7 +116,7 @@ export default {
     text-align: center;
     .upload-icon {
         display: inline-block;
-        margin-top: 50px;
+        margin-top: 86px;
         width: 60px;
         height: 60px;
         background: url("~img/upload-icon.png") no-repeat center;
@@ -126,6 +126,7 @@ export default {
         font-size:14px;
         font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
+        margin: 12px 0;
         color:rgba(161,168,177,1);
         line-height:20px;
     }
@@ -136,7 +137,6 @@ export default {
         line-height: 32px; 
         margin: 0 auto;
         color: #ffffff;
-        margin-top: 16px;
         background: #09cceb;
     }
 }

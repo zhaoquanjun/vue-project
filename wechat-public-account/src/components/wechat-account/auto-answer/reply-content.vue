@@ -125,7 +125,6 @@ export default {
         }
         .picture {
             display: flex;
-            align-items: center;
             justify-content: center;
         }
     }
