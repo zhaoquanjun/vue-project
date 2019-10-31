@@ -16,8 +16,8 @@ export const getAppHeadInfo = () => {
 /**
  * 更改appName
  */
-export const UpdateAppName = (appName) => {
-    return ajaxRequest.put(`${environment.dashboardApi}/api/v1/appInfo/UpdateAppName`, JSON.stringify(appName));
+export const updateAppName = (para) => {
+    return ajaxRequest.put(`${environment.dashboardApi}/api/v1/appInfo/UpdateAppName`, para);
 };
 /**
  * 切换app记录appId

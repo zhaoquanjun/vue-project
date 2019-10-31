@@ -76,6 +76,35 @@
               <div class="appTitle">
                 <span class="appName" v-if="item.name">{{item.name}}</span>
                 <span class="appName" v-else>公司名称</span>
+                <el-popover
+                  :ref="`popover-${index}`"
+                  placement="bottom"
+                  width="317"
+                  trigger="click"
+                  style="padding:0"
+                  @show="showRemark(item)"
+                >
+                  <button slot="reference">
+                    <i class="iconfont iconbianji" v-show="item.isSystem"></i>
+                  </button>
+                  <div class="textareaWrap">
+                    <el-input
+                      type="textarea"
+                      :autosize="{ minRows: 3, maxRows: 3}"
+                      placeholder="请输入内容"
+                      v-model="appName"
+                      maxlength="30"
+                      show-word-limit
+                      resize="none"
+                      @blur="textBlur"
+                    ></el-input>
+                    <div class="ym-form-item__error" v-show="isNullInput">请输入公司名称</div>
+                    <div class="btn-wrap">
+                      <button class="cancel" slot="refenrence" @click="cancelInput(index)">取消</button>
+                      <button class="save" @click="saveInputValue(item, index)">保存</button>
+                    </div>
+                  </div>
+                </el-popover>
                 <span
                   class="appMember"
                   :style="{color:item.isSystem? '#35B24B':'#0070CC'}"
@@ -129,7 +158,9 @@ export default {
       aliMarketUrl: aliMarketUrl,
       isdropdownAvatarShow: false,
       appList: [],
-      changeAppShow: false
+      changeAppShow: false,
+      appName: "",
+      isNullInput: false
     };
   },
   methods: {
@@ -147,6 +178,42 @@ export default {
     },
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
+    },
+    // 显示修改appName弹框
+    showRemark(item) {
+      this.appName = item.name ? item.name : "";
+      if (this.appName) {
+        this.isNullInput = false;
+      } else {
+        this.isNullInput = true;
+      }
+    },
+    textBlur() {
+      if (!this.appName) {
+        this.isNullInput = true;
+      } else {
+        this.isNullInput = false;
+      }
+    },
+    // 取消修改
+    cancelInput(index) {
+      this.$refs[`popover-${index}`][0].doClose();
+      this.appName = "";
+      this.isNullInput = false;
+    },
+    // 修改appName
+    async saveInputValue(item, index) {
+      if (!this.appName) {
+        this.isNullInput = true;
+        return;
+      }
+      this.$refs[`popover-${index}`][0].doClose();
+      let para = {
+        appId: item.appId,
+        appName: this.appName
+      };
+      await dashboardApi.updateAppName(para);
+      item.name = this.appName;
     },
     /**
      * 获取app列表
@@ -242,6 +309,39 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.textareaWrap {
+  background: #fff;
+  position: relative;
+  .btn-wrap {
+    text-align: right;
+    padding-top: 16px;
+    button {
+      width: 63px;
+      height: 32px;
+      line-height: 25px;
+      font-size: 12px;
+      border: none;
+    }
+    .cancel {
+      border: 1px solid #eeeeee;
+      margin-right: 10px;
+    }
+    .save {
+      background: #00c1de;
+      color: #fff;
+    }
+  }
+}
+.iconbianji {
+  color: #262626;
+  line-height: 55px;
+  margin-left: 16px;
+  padding: 8px;
+  &:hover {
+    background: rgba(240, 243, 247, 1);
+    border-radius: 4px;
+  }
+}
 .disabled {
   opacity: 0.2;
 }
