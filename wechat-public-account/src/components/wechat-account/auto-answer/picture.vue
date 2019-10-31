@@ -116,6 +116,7 @@ export default {
     cursor: pointer;
     .upload-icon {
         display: inline-block;
+        margin-top: 50px;
         width: 60px;
         height: 60px;
         background: url("~img/upload-icon.png") no-repeat center;

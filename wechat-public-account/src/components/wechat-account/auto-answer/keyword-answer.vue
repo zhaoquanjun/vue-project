@@ -95,7 +95,7 @@
                     <el-tooltip placement="top">
                         <div slot="content" style="max-width:400px;">
                              <span v-if="keywordListFn(item.keywordList,2)" class="keyword">全匹配：{{keywordListFn(item.keywordList,2)}}；</span>
-                             <span>半匹配：{{keywordListFn(item.keywordList,1)}}</span>
+                             <span v-if="keywordListFn(item.keywordList,1)" >半匹配：{{keywordListFn(item.keywordList,1)}}</span>
                         </div>
                         <p class="list-columns__2 ellipsis pointer">
                             <i v-if="keywordListFn(item.keywordList,2)" class="icon iconfont iconicon-quanpipei"></i>
@@ -328,7 +328,7 @@ button {
             }
         }
         .keyword-list:last-child{
-            padding-bottom: 0;
+            padding-bottom: 8px;
         }
         .select-item {
             padding-left: 16px;

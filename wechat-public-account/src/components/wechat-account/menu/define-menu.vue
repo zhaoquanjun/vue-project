@@ -749,7 +749,6 @@ export default {
 }
 .define-menu__area {
   margin: 0 auto;
-  max-width: 1200px;
   min-width: 990px;
   border-radius: 20px;
   font-family: "PingFangSC-Medium,PingFangSC";
