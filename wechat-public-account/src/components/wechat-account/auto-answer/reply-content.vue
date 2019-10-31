@@ -13,15 +13,15 @@
             </div> -->
             <ul class="radio-tabs">
                 <li @click="changeHandler(1)" :class="{active: radio == 1}">
-                <i class="icon iconfont iconicon-des-picture"></i>
+                <i class="icon iconfont iconicon-tupian"></i>
                 <span>图片</span>
                 </li>
                 <li @click="changeHandler(2)" :class="{active: radio == 2}">
-                <i class="icon iconfont iconicon-editext"></i>
+                <i class="icon iconfont iconicon-wenzi"></i>
                 <span>文字</span>
                 </li>
                 <li @click="changeHandler(3)" :class="{active: radio == 3}">
-                <i class="icon iconfont iconicon-picword"></i>
+                <i class="icon iconfont iconicon-tuwen"></i>
                 <span>图文</span>
                 </li>
             </ul>

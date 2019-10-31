@@ -88,15 +88,15 @@
                 <section class="menu-content__area">
                   <ul class="radio-tabs">
                     <li @click="_handleChangeBehaviorType('1')" :class="{active: menuDetail.behaviorType == '1'}">
-                      <i class="icon iconfont iconicon-des-picture"></i>
+                      <i class="icon iconfont iconicon-tupian"></i>
                       <span>图片</span>
                     </li>
                     <li @click="_handleChangeBehaviorType('2')" :class="{active: menuDetail.behaviorType == '2'}">
-                      <i class="icon iconfont iconicon-editext"></i>
+                      <i class="icon iconfont iconicon-wenzi"></i>
                       <span>文字</span>
                     </li>
                     <li @click="_handleChangeBehaviorType('3')" :class="{active: menuDetail.behaviorType == '3'}">
-                      <i class="icon iconfont iconicon-picword"></i>
+                      <i class="icon iconfont iconicon-tuwen"></i>
                       <span>图文</span>
                     </li>
                   </ul>
@@ -131,8 +131,9 @@
                   <span>设置跳转链接</span>
                   <div>
                     <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}</p>
-                    <i class="iconfont iconicon-des-lj" @click="selectUrl"></i>
+                    <!-- <i class="iconfont iconicon-des-lj" @click="selectUrl"></i> -->
                   </div>
+                  <span class="select-btn" @click="selectUrl">{{menuDetail.behaviorBody.customMenuRedirectMsg.title ? '修改链接':'选择链接'}}</span>
                 </div>
               </div>
               <PopUp
@@ -1068,6 +1069,8 @@ export default {
 }
 .selectUrl {
   padding-left: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
 }
 .selectUrl span{
     float: left;
@@ -1094,6 +1097,16 @@ export default {
   line-height:36px;
   padding: 0 10px;
   overflow: hidden;
+}
+.selectUrl .select-btn {
+  box-sizing: border-box;
+  height: 40px;
+  border: 1px solid #09CCEB;
+  text-align: center;
+  width: 90px;
+  margin: 0 0 0 12px;
+  color: #09CCEB !important;
+  cursor: pointer;
 }
 .selectUrl div i {
   color: #0595E6;

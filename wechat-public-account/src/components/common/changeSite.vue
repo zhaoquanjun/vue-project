@@ -47,7 +47,7 @@
             <div>
               <div class="itemSiteName">{{item.siteName}}</div>
               <a
-                class="itemSiteDomain"
+                class="itemSiteDomain ellipsis"
                 :href="`//${item.secondDomain}`"
                 target="_blank"
               >{{item.secondDomain}}</a>
@@ -359,6 +359,7 @@ export default {
       font-size: 14px;
       font-weight: 400;
       line-height: 22px;
+      height: 22px;
       color: rgba(0, 193, 222, 1);
     }
   }
