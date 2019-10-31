@@ -234,8 +234,6 @@ export default {
         item.appId
       );
       if (status === 200) {
-        // removeLocal("menulist");
-        this.$store.dispatch('_getMenuListData');
         this.$store.dispatch("_getAppHeadInfo");
         let { data } = await dashboardApi.getCurSiteId();
         this.$store.commit("SETSITEID", data);
