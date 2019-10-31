@@ -1133,7 +1133,7 @@ export default {
   cursor: pointer;
 }
 .tipsName {
-  padding-left: 80px;
+  padding-left: 100px;
   height: 20px;
 	color: rgba(56, 56, 56, 1);
 	font-size: 14px;
