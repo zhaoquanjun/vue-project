@@ -128,7 +128,7 @@ export default {
     },
     // 获取当前可选域名列表
     async _getCdnDomainList() {
-      await this.$store.dispatch('_setSiteId')
+      // await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.getters.wx_status;
       if (wx_status.isAuth && wx_status.isCertification && wx_status.isResolveSuccess) {
@@ -254,12 +254,11 @@ export default {
 <style lang="scss" scoped>
 .account-setting__section {
   box-sizing: border-box;
-  padding: 0 32px;
+  padding: 16px 32px 0;
   height: 100%;
   .account-setting__content {
     position: relative;
-    height: calc(100% - 103px);
-    min-height: 600px;
+    min-height: 500px;
     .account-setting__bind--box {
       width: 100%;
       height: calc(100% - 266px);

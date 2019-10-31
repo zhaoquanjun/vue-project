@@ -2,7 +2,7 @@ import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuLis
 import { getSiteInfo } from "@/api/request/siteBackupApi";
 import { getCurSiteId } from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local"
-
+import { setCookie } from "@/libs/cookie"
 
 // 序列化菜单
 let filterMenuListData = (source) => {
@@ -38,17 +38,16 @@ const dashboard = {
         isFormShow: false
     },
     mutations: {
-       
+
         SETSITEID(state, siteId) {
             state.siteId = siteId;
-            setLocal('ymSd', siteId);
+            // siteid => tjufje  对应的下一个字母
+            setCookie("tjufje", siteId)
         },
         SETAPPID(state, appId) {
             state.appId = appId;
-            if(process.env.NODE_ENV === "development"){
-                setLocal('ymId', appId);
-              }
-           
+            setLocal('ymId', appId);
+
         },
         set_menuList(state, m) {
             state.menuList = m;
@@ -103,7 +102,7 @@ const dashboard = {
             })
             return data
         },
-      
+
         async getCurRouteAuth({ state, getters }, path) {
             if (!state.authList) return;
             return state.authList.some((item, index, array) => {

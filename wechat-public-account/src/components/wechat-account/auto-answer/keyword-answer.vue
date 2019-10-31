@@ -3,7 +3,7 @@
         <div v-if="!addAnswer" class="keyword-answer-content">
             <div v-for="(item,index) in keywordList" :key="index" class="keyword-list">
                 <span>
-                    <span class="title">回复设置</span>
+                    <span class="title">关键词</span>
                     <span class="select-item">
                         <el-select
                             size="small"
@@ -12,6 +12,9 @@
                             @change="changeStatus($event,index)"
                             :popper-append-to-body="false"
                         >
+                            <template slot = "prefix">
+                                <i class = 'icon iconfont prefixIcon' :class="item.matchType=='1'?'iconicon-banpipei':'iconicon-quanpipei'" />
+                            </template>
                             <el-option
                                 v-for="item in matchOption"
                                 :key="item.matchType"
@@ -80,21 +83,25 @@
                 </li>
                <div>
                     <li v-for="(item, index) in keywordData.list" :key="index">
-                    <p class="list-columns__1 ellipsis">
+                    <p v-if="item.msgType == 1" class="list-columns__1 ellipsis">
+                        <img :src="item.data.imageMsg.picUrl" />
+                    </p>
+                    <p v-if="item.msgType == 2" class="list-columns__1 ellipsis">
+                        {{magTypeFn(item.msgType)}}:{{item.data.textMsg.text}}
+                    </p>
+                    <p v-if="item.msgType == 3" class="list-columns__1 ellipsis">
                         {{magTypeFn(item.msgType)}}
                     </p>
                     <el-tooltip placement="top">
                         <div slot="content" style="max-width:400px;">
-                            <span v-for="(child,index) in item.keywordList" :key="index">
-                                {{child.keyword}} 
-                                {{item.keywordList.length-1 !=index ? ',':''}}
-                            </span>
+                             <span v-if="keywordListFn(item.keywordList,2)" class="keyword">全匹配：{{keywordListFn(item.keywordList,2)}}；</span>
+                             <span v-if="keywordListFn(item.keywordList,1)" >半匹配：{{keywordListFn(item.keywordList,1)}}</span>
                         </div>
                         <p class="list-columns__2 ellipsis pointer">
-                            <span v-for="(child,index) in item.keywordList" :key="index">
-                                {{child.keyword}} 
-                                {{item.keywordList.length-1 !=index ? ',':''}}
-                            </span>
+                            <i v-if="keywordListFn(item.keywordList,2)" class="icon iconfont iconicon-quanpipei"></i>
+                            <span v-if="keywordListFn(item.keywordList,2)" class="keyword">{{keywordListFn(item.keywordList,2)}}</span>
+                            <i v-if="keywordListFn(item.keywordList,1)" class="icon iconfont iconicon-banpipei"></i>
+                            <span>{{keywordListFn(item.keywordList,1)}}</span>
                         </p>
                     </el-tooltip>
                     <div class="list-columns__3 handler-btn">
@@ -239,6 +246,16 @@ export default {
                 case 3:
                     return "图文";
             }
+        },
+        keywordListFn(list,type){
+            let text = ''
+            list.map((item,index)=> {
+                if(item.matchType == type) {
+                    text = text + item.keyword + ','
+                }
+            })
+            text=(text.substring(text.length-1)==',')?text.substring(0,text.length-1):text;
+            return text
         }
     },
     watch: {
@@ -299,17 +316,26 @@ button {
     background: transparent;
 }
 .keyword-answer {
+    padding: 16px 24px;
+    border-radius: 2px;
     .keyword-answer-content {
         // padding: 24px 0 0 0;
         // border-top: 1px solid #e5e5e5;
         .keyword-list {
-            padding-bottom: 32px;
+            padding-bottom: 24px;
             .title{
                 color: #B9CBCF
             }
         }
+        .keyword-list:last-child{
+            padding-bottom: 8px;
+        }
         .select-item {
             padding-left: 16px;
+            .prefixIcon {
+                line-height: 40px;
+                margin-left: 4px;
+            }
         }
         .addKeyword {
             padding-left: 24px;
@@ -339,9 +365,21 @@ button {
                 }
                 p.list-columns__1 {
                     width: 40%;
+                    img {
+                        float: left;
+                        width: 40px;
+                        height: 40px;
+                    }
                 }
                 p.list-columns__2 {
                     width: 50%;
+                    i {
+                        color: #A1A8B1;
+                        margin-right: 4px;
+                    }
+                    .keyword {
+                        margin-right: 8px;
+                    }
                 }
                 .list-columns__3 {
                     width: 10%;
@@ -374,17 +412,18 @@ button {
             }
         }
         .paging {
-            float: right;
-            padding-top: 33px;
+            text-align: right;
+            padding-top: 24px;
         }
         .handler-menu {
-            padding: 8px 0 24px;
+            margin: 0 0 16px;
             .answer-btn {
                 float: right;
                 width: 90px;
-                height: 40px;
+                height: 32px;
                 border-radius: 2px;
-                color: rgba(9, 204, 235, 1);
+                background: rgba(9, 204, 235, 1);
+                color: #ffffff;
             }
             .input-with-select {
                 width: 600px;

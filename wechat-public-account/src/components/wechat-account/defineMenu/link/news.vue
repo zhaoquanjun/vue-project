@@ -127,7 +127,7 @@ export default {
       timer: null,
       pageSize: 10,
       total: 0,
-      pageActiveIndex: null,
+      pageActiveIndex: 0,
       siteId: this.$store.state.dashboard.siteId,
       promotionUrl: this.$store.getters.account_info.promotionUrl,
       newsTitle: "",
@@ -486,19 +486,23 @@ export default {
         font-family:"PingFangSC";
         font-weight:400;
         line-height:32px;
-        padding-left: 10px;
+        padding: 0 6px 0 10px;
         width: 246px;
         cursor: pointer;
         i {
           display: none;
           float: right;
-          color: #09CCEB;
         }
       }
       li:hover {
         background:#F0F3F7;
+        color: #00c1de;
+      }
+      .active {
+        background:#00c1de !important;
+        color: #fff !important;
         i {
-          display: inline-block;
+          display: inline-block !important;
         }
       }
     }

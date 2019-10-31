@@ -8,14 +8,15 @@
 </template>
 <style scoped lang="scss">
 .container404 .main {
-    position: absolute;
-    width: 300px;
-    height: 150px;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
+    width: 100%;
+    height: 600px;
+    margin: 0 auto;
+    background: #ffffff;
+    text-align: center;
+    img {
+        display: inline-block;
+        margin: 150px auto 0;
+    }
 }
 .tip-404 {
     text-align: center;

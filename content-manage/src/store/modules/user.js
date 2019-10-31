@@ -1,20 +1,26 @@
 import { getAppHeadInfo } from "@/api/request/user.js"
 import { setLocal } from '@/libs/local'
+import { setCookie } from "@/libs/cookie"
 const user = {
   state: {
-    userInfo:"",
+    userInfo: "",
   },
   mutations: {
-  
+
     SET_USERINFO: (state, payload) => {
       state.userInfo = payload;
-      setLocal("userInfo",payload)
+      let data = {
+        appName: payload.appName,
+        headImageUrl: payload.headImageUrl,
+      }
+      // vtfsjogp => userInfo
+      setCookie("vtfsjogp", data)
     }
   },
   actions: {
-    async _set(context,data){
+    async _set(context, data) {
       // if (process.env.NODE_ENV === 'development') {
-        await context.dispatch('_updateAppIdAndSiteIdToCookie')
+      await context.dispatch('_updateAppIdAndSiteIdToCookie')
       // }
       await context.dispatch('_getMenuListData')
       await context.dispatch('_getAppHeadInfo')

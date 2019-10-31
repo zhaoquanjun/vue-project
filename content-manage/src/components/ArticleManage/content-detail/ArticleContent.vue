@@ -126,7 +126,7 @@
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="font-size:12px">预览网站</span>
+                                    <span style="padding: 0 12px 0 0;">预览网站</span>
                                     <el-tooltip class="item" effect="dark" placement="top">
                                         <div slot="content">将在所选网站的二级域名下打开预览页面</div>
                                         <i class="iconfont iconyiwen"></i>
@@ -175,7 +175,7 @@
                                     placeholder="每个关键词之间用回车键分离"
                                     v-model="keywordValue"
                                     @keyup.enter.native="keywords(keywordValue)"
-                                    @blur="keywords(keywordValue)"
+                                    @blur="keywordsBlur(keywordValue)"
                                 ></el-input>
                             </ul>
                             <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
@@ -223,7 +223,7 @@
                                     placeholder="每个关键词之间用回车键分离"
                                     v-model="metaKeyword"
                                     @keyup.enter.native="keywords(metaKeyword,'metaKeywords')"
-                                    @blur="keywords(metaKeyword,'metaKeywords')"
+                                    @blur="keywordsBlur(metaKeyword,'metaKeywords')"
                                 ></el-input>
                             </ul>
                             <div class="el-form-item__error" v-if="isOutSeo">每篇文章最多填写5个关键词！</div>
@@ -430,14 +430,26 @@ export default {
             this.metaKeyword = this.keywordValue = "";
             if (name === "metaKeywords") {
                 if (this.articleDetail.metaKeywords.length >= 5 || !value) {
+                    this.isOutSeo = true;
                     return;
                 }
+                this.isOutSeo = false;
                 this.articleDetail.metaKeywords.push(value);
             } else {
                 if (this.articleDetail.searchKeywords.length >= 5 || !value) {
+                    this.isOutSearch = true;
                     return;
                 }
+                this.isOutSearch = false;
                 this.articleDetail.searchKeywords.push(value);
+            }
+        },
+        keywordsBlur(value, name) {
+            this.metaKeyword = this.keywordValue = "";
+            if (name === "metaKeywords") {
+                this.isOutSeo = false;
+            } else {
+                this.isOutSearch = false;
             }
         },
         removeCurKeyWord(index) {
@@ -668,16 +680,12 @@ export default {
     computed: {},
     watch: {
         "articleDetail.searchKeywords"() {
-            if (this.articleDetail.searchKeywords.length >= 5) {
-                this.isOutSearch = true;
-            } else {
+            if (this.articleDetail.searchKeywords.length < 5) {
                 this.isOutSearch = false;
             }
         },
         "articleDetail.metaKeywords"() {
-            if (this.articleDetail.metaKeywords.length >= 5) {
-                this.isOutSeo = true;
-            } else {
+            if (this.articleDetail.metaKeywords.length < 5) {
                 this.isOutSeo = false;
             }
         },

@@ -1,9 +1,10 @@
 <template>
   <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
+      <img src="~img/siteManage/itemSiteIcon.png" class="itemSiteIcon" />
       <el-tooltip :content="siteName" placement="bottom" :disabled="siteName.trim().length < 30">
         <span
-          class="siteName"
+          class="siteName ellipsis"
         >{{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}</span>
       </el-tooltip>
       <a class="secondDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
@@ -46,7 +47,7 @@
             <div>
               <div class="itemSiteName">{{item.siteName}}</div>
               <a
-                class="itemSiteDomain"
+                class="itemSiteDomain ellipsis"
                 :href="`//${item.secondDomain}`"
                 target="_blank"
               >{{item.secondDomain}}</a>
@@ -63,7 +64,7 @@ import * as siteBackupApi from "@/api/request/siteBackupApi";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local.js";
 import { getLanguage } from "@/configure/appCommon";
-
+import { getCookie } from "@/libs/cookie";
 export default {
   props: ["changeSiteName", "changeSiteLanguage"],
   components: {},
@@ -92,7 +93,7 @@ export default {
   },
   computed: {
     mySiteId() {
-      return this.$store.state.dashboard.siteId;
+      return getCookie("tjufje");
     }
   },
   methods: {
@@ -148,7 +149,6 @@ export default {
     // 选择新的site
     async choseSite(item) {
       this.changeSiteShow = false;
-      // setLocal("siteid", item.siteId);
       this.$store.commit("SETSITEID", item.siteId);
       await dashboardApi.updateUserLastSiteId(item.siteId);
       this.$emit("chooseWebsite", item.siteId);
@@ -186,46 +186,54 @@ export default {
 <style lang="scss" scoped>
 .siteBox {
   width: 100%;
-  height: 69px;
-  border-bottom: 1px solid #eee;
+  box-sizing: border-box;
+  height: 50px;
+  background: white;
+  min-width: 800px;
+  border: 1px solid #E5E5E5;
   .siteInfo {
     width: 100%;
-    height: 69px;
+    height: 50px;
+    padding: 0 24px;
     position: relative;
+    .itemSiteIcon {
+      margin: 12px 16px 14px 0;
+      width: 28px;
+      height: 25px;
+      float: left;
+    }
     .siteName {
       font-size: 14px;
+      height: 50px;
+      max-width: 200px;
+      line-height: 50px;
       font-weight: 400;
       color: rgba(38, 38, 38, 1);
-      position: absolute;
-      left: 44px;
-      margin-top: 28px;
+      margin-right: 24px;
+      float: left;
     }
     .secondDomain {
       font-size: 12px;
       font-weight: 400;
       color: rgba(1, 192, 222, 1);
-      line-height: 69px;
-      position: absolute;
-      right: 226px;
+      height: 50px;
+      line-height: 50px;
+      margin-right: 24px;
+      float: left;
     }
     .language {
       font-size: 12px;
       font-weight: 400;
       color: rgba(38, 38, 38, 1);
-      line-height: 69px;
-      position: absolute;
-      right: 154px;
+      line-height: 50px;
+      float: left;
     }
     .changeSite {
-      width: 90px;
-      height: 32px;
-      border: 1px solid rgba(1, 192, 222, 1);
-
+      font-size: 14px;
       font-weight: 400;
+      line-height: 50px;
       color: rgba(1, 192, 222, 1);
-      position: absolute;
-      top: 19px;
-      right: 32px;
+      float: right;
     }
   }
 }
@@ -351,6 +359,7 @@ export default {
       font-size: 14px;
       font-weight: 400;
       line-height: 22px;
+      height: 22px;
       color: rgba(0, 193, 222, 1);
     }
   }

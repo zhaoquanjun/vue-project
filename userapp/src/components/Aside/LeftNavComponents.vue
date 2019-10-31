@@ -11,7 +11,7 @@
                 @click="handlerRoute(item,index)"
                 :class="{'active':lastRoute==item.code}"
             >
-                <span>{{item.name}}</span>
+                <span :class="{'hasHover': !(item.children && item.children.length > 0)}">{{item.name}}</span>
                 <div v-show="item.children">
                     <p 
                         v-for="(item,ind) in item.children"
@@ -76,9 +76,10 @@ export default {
     padding-left: 40px;
     cursor: pointer;
 }
-/* .el-menu .el-menu-item-left span:hover {
+.el-menu .el-menu-item-left .hasHover:hover {
     background: #fff;
-} */
+    cursor: pointer;
+}
 .el-menu .el-menu-item-left p:hover {
     background: #fff;
 }

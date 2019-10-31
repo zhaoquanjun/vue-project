@@ -8,6 +8,8 @@ import dashboard from "./modules/dashboard";
 import website from "./modules/website"
 import memberManager from "./modules/member-manager";
 import { getLocal } from "@/libs/local"
+import { getCookie } from "@/libs/cookie"
+
 Vue.use(Vuex);
 const store = new Vuex.Store({
   modules: {
@@ -29,8 +31,8 @@ export default store;
 
 getLocal("authList")&& store.commit("set_authList",getLocal("authList"))
 getLocal("menulist")&& store.commit("set_menuList",getLocal("menulist"))
-if(getLocal("ymSd")){
-  store.commit("SETSITEID",getLocal("ymSd"))
+if(getCookie("tjufje")){
+  store.commit("SETSITEID",getCookie("tjufje"))
 }
 if (process.env.NODE_ENV === 'development') {
   if(getLocal("ymId")){

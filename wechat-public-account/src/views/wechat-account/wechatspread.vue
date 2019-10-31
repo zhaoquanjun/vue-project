@@ -30,17 +30,17 @@
           <el-table-column
             prop="pageTitle"
             :label="listTitle"
-            width="160">
+          >
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享标题"
-            width="160">
+          >
           </el-table-column>
           <el-table-column
             prop="shareTitle"
             label="分享封面"
-            width="140">
+          >
             <template slot-scope="scope">
               <img class="img" :src="scope.row.coverUrl">
             </template>
@@ -52,12 +52,12 @@
           <el-table-column
             prop="shareCount"
             label="阅读数"
-            width="110">
+          >
           </el-table-column>
           <el-table-column
             prop="createTime"
             label="创建时间"
-            width="140">
+          >
             <template slot-scope="scope">
               <span>{{scope.row.createTime.slice(0,10)}}</span>
             </template>
@@ -284,7 +284,7 @@ export default {
     },
     // 校验是否已经授权认证
     async _getWxIsAuth() {
-      await this.$store.dispatch('_setSiteId')
+      // await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
       this.siteId = this.$store.state.dashboard.siteId
@@ -308,22 +308,21 @@ export default {
 </script>
 <style scoped>
 .el-tabs /deep/ .el-tabs__item {
-    background: rgba(245, 245, 245, 1);
     font-size: 14px;
     padding: 0 32px;
     font-weight: 400;
     color: #262626;
-    height: 60px;
-    line-height: 57px;
-    border-top: 3px solid transparent;
+    height: 50px;
+    line-height: 48px;
+    border-bottom: 2px solid transparent;
     box-sizing: border-box;
 }
 .el-tabs /deep/ .el-tabs__header {
     margin: 0;
 } 
 .el-tabs /deep/ .is-active {
-    background: #fff;
-    border-top: 3px solid #09cceb;
+    background: #F8FAFC;
+    border-bottom: 2px solid #09cceb !important;
 }
 .el-table /deep/ .cell {
   height: 42px;
@@ -342,7 +341,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .spread-setting__section {
-    padding: 10px 32px 0;
+    padding: 16px 32px 0;
     min-width: 1100px;
     overflow-y: auto;
     .iconfont {
@@ -355,19 +354,21 @@ export default {
       }
     }
     .answer-tabs {
-        padding-top: 32px;
+        margin-top: 24px;
         position: relative;
+        background: #fff;
         .add {
           position: absolute;
-          top: 42px;
+          top: 9px;
           right: 0px;
           width:90px;
-          height:40px;
+          height:32px;
           background:rgba(9,204,235,1);
           border-radius:2px;
           font-weight:400;
+          margin-right: 24px;
           color:rgba(255,255,255,1);
-          line-height:40px;
+          line-height:32px;
           text-align: center;
           cursor: pointer;
         }
@@ -378,7 +379,7 @@ export default {
         //  overflow-y: auto;
     }
     .spread-continer {
-      margin-top: 28px;
+      margin-top: 12px;
       border: 1px solid rgba(229,229,229,1);
       padding-bottom: 16px;
       .img {

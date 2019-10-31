@@ -11,10 +11,11 @@
                 </button> -->
             </span>
         </div>
-        <div @click="handlerUpload"  class="upload-wrap" v-else>
+        <div class="upload-wrap" v-else>
             <div>
                 <div class="upload-icon"></div>
-                <button class="handler-upload">点击上传</button>
+                <p>请点击此处上传您要上传的图片</p>
+                <button class="handler-upload" @click="handlerUpload">点击上传</button>
             </div>
         </div>
          <image-manage
@@ -111,21 +112,32 @@ export default {
     margin: 0;
     justify-content: center;
     align-items: center;
-    min-height: 320px;
+    height: 100%;
     text-align: center;
-    cursor: pointer;
     .upload-icon {
         display: inline-block;
+        margin-top: 86px;
         width: 60px;
         height: 60px;
         background: url("~img/upload-icon.png") no-repeat center;
         background-size: contain;
     }
+    p {
+        font-size:14px;
+        font-family:'PingFangSC-Regular,PingFang SC';
+        font-weight:400;
+        margin: 12px 0;
+        color:rgba(161,168,177,1);
+        line-height:20px;
+    }
     .handler-upload {
         display: block;
-        width: 60px;
-        padding-top: 16px;
-        color: #09cceb;
+        width: 90px;
+        height: 32px;
+        line-height: 32px; 
+        margin: 0 auto;
+        color: #ffffff;
+        background: #09cceb;
     }
 }
 </style>

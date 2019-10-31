@@ -6,9 +6,10 @@
            v-show="isShowPopup"
         />
         <ul class="list" ref="list">
-            <div v-if="!isEditorShow && list.length <= 0" class="add-img" @click="handlerAddNewsImg">
+            <div v-if="!isEditorShow && list.length <= 0" class="add-img">
                 <img src="~img/add-img.png" />
-                <p>添加图文信息</p>
+                <p>点击此处编辑您的图文</p>
+                <span @click="handlerAddNewsImg">添加图文</span>
             </div>
             <li
                 ref="listItem"
@@ -297,25 +298,38 @@ export default {
 </style>
 <style lang="scss" scoped>
 .image-text {
-    padding-top: 16px; 
+    padding-top: 16px;
+    height: 100%;
 }
 .add-img {
     width: 100%;
     margin: 0;
-    min-height: 320px;
-    cursor: pointer;
     img {
         display: block;
         width: 60px;
         height: 60px;
-        margin: 100px auto 0;
+        margin: 70px auto 0;
     }
     p {
-        display: block;
-        width: 100%;
-        padding-top: 16px;
-        color: #09cceb;
+        font-size:14px;
+        font-weight:400;
+        color:rgba(161,168,177,1);
+        line-height:20px;
         text-align: center;
+        margin: 12px 0;
+    }
+    span {
+        display: block;
+        width: 90px;
+        height: 32px;
+        text-align: center;
+        margin: 0 auto;
+        font-size:14px;
+        font-weight:400;
+        line-height:32px;
+        color: #fff;
+        background: #09cceb;
+        cursor: pointer;
     }
 }
 .list {

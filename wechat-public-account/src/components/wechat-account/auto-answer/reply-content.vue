@@ -13,15 +13,15 @@
             </div> -->
             <ul class="radio-tabs">
                 <li @click="changeHandler(1)" :class="{active: radio == 1}">
-                <i class="icon iconfont iconicon-des-picture"></i>
+                <i class="icon iconfont iconicon-tupian"></i>
                 <span>图片</span>
                 </li>
                 <li @click="changeHandler(2)" :class="{active: radio == 2}">
-                <i class="icon iconfont iconicon-editext"></i>
+                <i class="icon iconfont iconicon-wenzi"></i>
                 <span>文字</span>
                 </li>
                 <li @click="changeHandler(3)" :class="{active: radio == 3}">
-                <i class="icon iconfont iconicon-picword"></i>
+                <i class="icon iconfont iconicon-tuwen"></i>
                 <span>图文</span>
                 </li>
             </ul>
@@ -78,6 +78,13 @@ export default {
 };
 </script>
 <style scoped>
+.textarea /deep/ .el-textarea__inner {
+    height: 400px !important;
+    border: none;
+    padding: 16px 16px;
+}
+</style>
+<style scoped>
 .el-radio-group .el-radio {
     margin-right: 119px;
 }
@@ -85,7 +92,7 @@ export default {
 <style lang="scss" scoped>
 .reply {
     .reply-content {
-        min-height: 444px;
+        height: 372px;
         border: 1px solid #e5e5e5;
         border-radius: 2px;
         .radio-tabs {
@@ -111,22 +118,22 @@ export default {
         }
         .slot-content {
             float: left;
-            min-height: 373px;
+            height: 330px;
             width: 100%;
+            background: #fff;
             overflow: auto;
         }
         .picture {
             display: flex;
-            align-items: center;
             justify-content: center;
         }
     }
 }
 .footer-btn {
-    padding-top: 25px;
+    padding: 16px;
     button {
         width: 90px;
-        height: 40px;
+        height: 32px;
         background: rgba(9, 204, 235, 1);
         color: #fff;
     }

@@ -11,7 +11,8 @@
                 <el-tab-pane label="关键词回复" name="3"></el-tab-pane>
             </el-tabs>
         </div>
-        <div class="reply-wrap" :style="{height:scrollHeight+'px'}" v-scrollBar>
+        <!-- <div class="reply-wrap" :style="{height:scrollHeight+'px'}" v-scrollBar> -->
+        <div class="reply-wrap">
             <reply-content
                 ref="replycontent"
                 v-if="replyType!=='3' || addAnswer===false"
@@ -558,32 +559,33 @@ export default {
 </script>
 <style scoped>
 .el-tabs /deep/ .el-tabs__item {
-    background: rgba(245, 245, 245, 1);
     font-size: 14px;
     padding: 0 24px;
     font-weight: 400;
     color: #262626;
-    height: 60px;
-    line-height: 57px;
-    border-top: 3px solid transparent;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 2px solid transparent;
     box-sizing: border-box;
 }
 .el-tabs /deep/ .el-tabs__header {
     margin: 0;
 }
 .el-tabs /deep/ .is-active {
-    background: #fff;
-    border-top: 3px solid #09cceb;
+    background: #F8FAFC;
+    border-bottom: 2px solid #09cceb !important;
 }
 </style>
 <style lang="scss" scoped>
 .auto-answer {
-    padding: 10px 32px 0;
+    padding: 16px 32px 0;
     .answer-tabs {
-        padding-top: 32px;
+        margin-top: 24px;
+        background: #ffffff;
     }
     .reply-wrap {
-        padding: 24px 0;
+        margin-top: 12px;
+        background: #ffffff;
         position: relative;
         //  overflow-y: auto;
     }

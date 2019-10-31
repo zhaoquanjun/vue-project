@@ -67,6 +67,7 @@ export default {
 }
 .content-table-wrap {
   position: relative;
+  background: #F4F5F6;
 }
 </style>
 
