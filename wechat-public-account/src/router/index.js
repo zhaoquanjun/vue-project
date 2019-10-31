@@ -48,14 +48,11 @@ router.beforeEach(async (to, from, next) => {
         await store.dispatch('_setSiteId')
         next()
       }
-      if (!getLocal("authList")) {
+      if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
       let r = await store.dispatch('getCurRouteAuth', to.path);
       if (r) {
-        if (store.getters.getMenuList.length < 1) {
-          await store.dispatch('_getMenuListData')
-        }
         if (!store.getters.wx_status.isAuth || !store.getters.wx_status.isCertification || !store.getters.wx_status.isResolveSuccess) {
           await store.dispatch('_getWxStatus')
           let wx_status = store.state.wxaccount.wx_status || getLocal("wx_status");

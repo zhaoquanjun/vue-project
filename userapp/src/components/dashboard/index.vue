@@ -20,7 +20,7 @@
       :siteCount="siteCount"
       :isSystem="isSystem"
       @getSites="getSites"
-      v-show="siteInfoList.length"
+      v-show="isSiteInfoShow&&siteInfoList.length"
     />
     <content-num :contentNumber="contentNumber" />
     <memberManage :contentNumber="contentNumber" />
@@ -52,8 +52,11 @@ export default {
     settingCenter
   },
   mounted() {
+    console.log(this.$store.state.dashboard.isWechataccountShow);
     this.$Loading.show();
-    this.getSites();
+    if (this.isSiteInfoShow) {
+      this.getSites();
+    }
     this.getContentInfo();
     this.amIAdmin();
     this.$Loading.hide();
@@ -84,6 +87,9 @@ export default {
     }
   },
   computed: {
+    isSiteInfoShow() {
+      return this.$store.state.dashboard.isSiteInfoShow;
+    },
     appId() {
       return this.$store.state.dashboard.appId;
     },
@@ -107,6 +113,7 @@ export default {
       return curDate;
     }
   },
+
   watch: {
     appId() {}
   }

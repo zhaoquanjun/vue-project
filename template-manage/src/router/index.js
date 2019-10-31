@@ -43,10 +43,9 @@ router.beforeEach(async (to, from, next) => {
         await store.dispatch("_getAppHeadInfo");
       }
       if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
-      if (!getLocal("authList")) await store.dispatch('_getMenuListData');
+      if (store.getters.getMenuList.length < 1) await store.dispatch('_getMenuListData')
       let r = await store.dispatch('getCurRouteAuth', to.path);
       if (r) {
-        if (store.getters.getMenuList.length < 1) await store.dispatch('_getMenuListData')
         next()
       } else {
         next('/404')
