@@ -82,5 +82,10 @@
             padding-left: 10px;
             border-left: 2px solid #09CCEB;
         }
+        .b-content {
+            border: 1px solid #e5e5e5;
+            border-bottom: none;
+            margin-top: 24px;
+        }
     }
 </style>
