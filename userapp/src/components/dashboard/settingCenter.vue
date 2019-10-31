@@ -5,23 +5,28 @@
       <div class="item">
         <div class="item-box">
           <div class="item-icon tianmao"></div>
-          <div class="item-text">云·速成美站【天猫专享】</div>
+          <div class="item-text-wrap">
+            <div class="item-text">
+              <span>云·速成美站</span>
+              <span style="white-space:nowrap;">【天猫专享】</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="item">
         <div class="item-box">
           <div class="item-icon video"></div>
-          <div>
+          <div class="item-text-wrap">
             <div class="item-text">一分钟快速上手</div>
-            <div class="item-videoLength">1：49</div>
+            <div class="item-videoLength">1:49</div>
           </div>
         </div>
       </div>
       <div class="item">
         <div class="item-box">
           <div class="item-icon website"></div>
-          <div>
-            <div class="item-text" style="color:rgba(5,149,230,1);">ac.clouddream.net</div>
+          <div class="item-text-wrap">
+            <div class="item-text">ac.clouddream.net</div>
             <div class="collection">收藏</div>
           </div>
         </div>
@@ -33,9 +38,9 @@
         </div>
       </div>
       <div class="item">
-        <div class="item-box">
+        <div class="item-box" @click="jumpTo('member')">
           <div class="item-icon member"></div>
-          <div>
+          <div class="item-text-wrap">
             <div class="item-text">成员协作</div>
             <div class="memberNum">{{contentNumber.managerCount}}</div>
           </div>
@@ -47,7 +52,16 @@
 
 <script>
 export default {
-  props: ["contentNumber"]
+  props: ["contentNumber"],
+  methods: {
+    jumpTo(type) {
+      if (type == "member") {
+        this.$router.push({
+          path: "/role"
+        });
+      }
+    }
+  }
 };
 </script>
 
@@ -108,6 +122,12 @@ export default {
           vertical-align: top;
           min-width: 50px;
         }
+        .item-text-wrap {
+          width: calc(100% - 78px);
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+        }
         .item-text {
           vertical-align: top;
           display: inline-block;
@@ -116,39 +136,39 @@ export default {
           font-weight: 500;
           color: rgba(38, 38, 38, 1);
           line-height: 20px;
-          text-align: center;
-          word-wrap: break-word;
-          word-break: break-all;
+          text-align: left;
+          // word-wrap: break-word;
+          // word-break: break-all;
+          // overflow: hidden;
+          // text-overflow: ellipsis;
+          // white-space: nowrap;
         }
         .item-videoLength {
           vertical-align: top;
           display: inline-block;
-          //   margin-top: 27px;
-          margin-left: 30px;
           font-size: 16px;
+          font-family: PingFangSC-Light, PingFang SC;
           font-weight: 300;
-          color: rgba(161, 168, 177, 1);
+          color: rgba(38, 38, 38, 1);
           line-height: 22px;
         }
         .collection {
           vertical-align: top;
           display: inline-block;
-          //   margin-top: 27px;
-          margin-left: 20px;
           font-size: 14px;
+          font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 500;
-          color: rgba(38, 38, 38, 1);
+          color: rgba(5, 149, 230, 1);
           line-height: 20px;
         }
         .memberNum {
           vertical-align: top;
           display: inline-block;
-          //   margin-top: 27px;
-          margin-left: 18px;
           font-size: 16px;
+          font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 500;
           color: rgba(5, 149, 230, 1);
-          line-height: 20px;
+          line-height: 22px;
         }
         .tianmao {
           background: url("~img/dashboard/board-tianmao.png") no-repeat center;
