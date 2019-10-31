@@ -10,7 +10,7 @@
         <el-main class="member-content" style="padding:32px">
             <el-row class="user-list">
                 <h4 class="member-title">
-                    会员列表
+                    会员等级
                 </h4>
                 <div class="b-content">
                     <template>

@@ -92,7 +92,7 @@
                                        :page-size="memberPageResult.pageSize"
                                        :page-sizes="[10,20,50]"></el-pagination>
                     </div>
-                    <edit v-show="isEdit"
+                    <edit v-if="isEdit"
                           @closeEdit='closeEdit' 
                           :memberDetail="memberDetail"></edit>
                 </div>
