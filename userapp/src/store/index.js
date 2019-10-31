@@ -34,8 +34,7 @@ getLocal("menulist")&& store.commit("set_menuList",getLocal("menulist"))
 if(getCookie("tjufje")){
   store.commit("SETSITEID",getCookie("tjufje"))
 }
-if (process.env.NODE_ENV === 'development') {
-  if(getLocal("ymId")){
+
+if(getLocal("ymId")){
     store.commit("SETAPPID",getLocal("ymId"))
-   }
 }
