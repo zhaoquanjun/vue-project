@@ -145,7 +145,7 @@
 import securityService from "@/services/authentication/securityService";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { formatDateTime } from "@/api/index";
-import { setLocal, getLocal } from "@/libs/local.js";
+import { setLocal, getLocal, removeLocal } from "@/libs/local.js";
 import { dashboardUrl, aliMarketUrl } from "@/environment/index";
 import { getCookie } from "@/libs/cookie";
 export default {
@@ -234,6 +234,8 @@ export default {
         item.appId
       );
       if (status === 200) {
+        // removeLocal("menulist");
+        this.$store.dispatch('_getMenuListData');
         this.$store.dispatch("_getAppHeadInfo");
         let { data } = await dashboardApi.getCurSiteId();
         this.$store.commit("SETSITEID", data);
