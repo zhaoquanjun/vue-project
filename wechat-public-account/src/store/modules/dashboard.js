@@ -1,6 +1,7 @@
 import { updateAppIdToCookie, getSliderMenuList} from "@/api/request/common.js"
 import { getCurSiteId } from "@/api/request/dashboardApi.js"
 import {setLocal} from '@/libs/local'
+import { setCookie } from "@/libs/cookie"
 
 // 序列化菜单
 let filterMenuListData = (source) => {
@@ -34,7 +35,8 @@ const dashboard = {
         },
         SETSITEID(state, siteId) {
             state.siteId = siteId;
-            setLocal('ymSd', siteId);
+            // siteid => tjufje  对应的下一个字母
+            setCookie("tjufje", siteId)
         },
         set_menuList(state,m){
             state.menuList = m;

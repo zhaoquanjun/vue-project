@@ -4,151 +4,147 @@
       <h4>自定义菜单</h4>
       <span @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</span>
     </div>
-    <div class="phone-box__area">
-      <div class="phone-menu__area">
-        <div class="phone-menu__keyboard"></div>
-        <div class="phone-menu__divider"></div>
-        <div class="no-menu__area" v-if="menuTree.length == 0" @click="_handleAddMainMenu('主菜单',0,0,0)">+ 添加菜单</div>
-          <draggable 
-            class="phone-menu__list"
-            draggable = ".singlePerson"
-            v-model="menuTree"
-            @end="end(menuTree)"
-            v-show="menuTree.length > 0">
-            <li
-              v-for="(item, index) in menuTree"
-              :key="index"
-              :class="{selected: (curSubIndex == -1 && index == curIndex && !isOrder) || (index == orderIndex && isOrder),singlePerson:isOrder}"
-              @click="_handleSelectMenu(1,index,item.id)"
-            >
-              {{item.name || '主菜单'}}
-              <draggable
-                v-model="item.subMenuList" 
-                @end="end(item.subMenuList)"
-                draggable = ".singleSub"
-                class="menu-child__area"
-                v-show="(index == curIndex && !isOrder) || (index == orderIndex && isOrder)">
-                  <li 
-                    v-for="(child, idx) in item.subMenuList"
-                    :class="{selected: idx == curSubIndex,singleSub:isOrder}"
-                    class="ellipsis pointer"
-                    @click.stop="_handleSelectMenu(2,idx,child.id)"
-                    :key="idx">
-                    <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
-                    {{child.name || '子菜单'}}
-                  </li>
-                  <li v-if="item.subMenuList.length<5 && !isOrder" @click.stop="_handleAddMainMenu('子菜单',item.subMenuList.length+1,item.id,1)">+</li>
-              </draggable>
-            </li>
-            <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
-          </draggable>
-      </div>
-      <div class="primary-button__nomal order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
-    </div>
-    <div class="menu-operate__arae">
-      <order-menu v-show="isOrder"></order-menu>
-      <div v-show="!isOrder" class="menu-operate__none">
-        <div class="empty" v-if="menuTree.length <= 0">
-          <div class="empty-icon"></div>
-          <p>请先在左侧添加菜单</p>
+    <div class="phone-bg ">
+      <div class="phone-box__area">
+        <div class="phone-menu__area">
+          <div class="phone-menu__divider"></div>
+          <div class="no-menu__area" v-if="menuTree.length == 0" @click="_handleAddMainMenu('主菜单',0,0,0)">+ 添加菜单</div>
+            <draggable 
+              class="phone-menu__list"
+              draggable = ".singlePerson"
+              v-model="menuTree"
+              @end="end(menuTree)"
+              v-show="menuTree.length > 0">
+              <li
+                v-for="(item, index) in menuTree"
+                :key="index"
+                :class="{selected: (curSubIndex == -1 && index == curIndex && !isOrder) || (index == orderIndex && isOrder),singlePerson:isOrder}"
+                @click="_handleSelectMenu(1,index,item.id)"
+              >
+                {{item.name || '主菜单'}}
+                <draggable
+                  v-model="item.subMenuList" 
+                  @end="end(item.subMenuList)"
+                  draggable = ".singleSub"
+                  class="menu-child__area"
+                  v-show="(index == curIndex && !isOrder) || (index == orderIndex && isOrder)">
+                    <li 
+                      v-for="(child, idx) in item.subMenuList"
+                      :class="{selected: idx == curSubIndex,singleSub:isOrder}"
+                      class="ellipsis pointer"
+                      @click.stop="_handleSelectMenu(2,idx,child.id)"
+                      :key="idx">
+                      <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
+                      {{child.name || '子菜单'}}
+                    </li>
+                    <li v-if="item.subMenuList.length<5 && !isOrder" @click.stop="_handleAddMainMenu('子菜单',item.subMenuList.length+1,item.id,1)">+</li>
+                </draggable>
+              </li>
+              <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
+            </draggable>
         </div>
-        <div class="menu-operate__box" v-else>
-          <div class="menu-operate__header">
-            <p>编辑菜单</p>
-            <div class="menu-operate__delete" @click="_handleDeleteMenu">删除菜单</div>
+        <div class="primary-button__nomal order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
+      </div>
+      <div class="menu-operate__arae">
+        <order-menu v-show="isOrder"></order-menu>
+        <div v-show="!isOrder" class="menu-operate__none">
+          <div class="empty" v-if="menuTree.length <= 0">
+            <div class="empty-icon"></div>
+            <p>请先在左侧添加菜单</p>
           </div>
-          <div class="menu-operate__content">
-            <el-form label-width="80px">
-              <el-form-item label="菜单名称">
-                <el-input 
-                  v-model="menuDetail.name" 
-                  @blur="testMenu()"
-                  placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母">
-                </el-input>
-              </el-form-item>
-              <div v-if='!hasTrueName' class="tipsName">
-                <span class="ym-form-item__error">{{textTips}}</span>
-                <a href="https://kf.qq.com/faq/181228f2iMV7181228RbMfAr.html" target="_blank">查看详情</a>
-              </div>
-              <el-form-item v-if="hasSubList" label="菜单内容">
-                <el-radio
-                  label='1'
-                  v-model="menuDetail.clickBehavior"
-                  @change="_handleBehaviorType('1')"
-                >发送消息</el-radio>
-                <el-radio
-                  label='2'
-                  v-model="menuDetail.clickBehavior"
-                  @change="_handleBehaviorType('2')"
-                >跳转网页</el-radio>
-                <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
-              </el-form-item>
-            </el-form>
-            <div v-show="menuDetail.clickBehavior == '1' && hasSubList" class="message-content__section">
-              <section class="menu-content__area">
-                <!-- <div class="radio-tabs">
-                  <el-radio label="1" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('1')">图片</el-radio>
-                  <el-radio label="2" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('2')">文字</el-radio>
-                  <el-radio label="3" v-model="menuDetail.behaviorType" @click="_handleChangeBehaviorType('3')">图文</el-radio>
-                </div> -->
-                <ul class="radio-tabs">
-                  <li @click="_handleChangeBehaviorType('1')" :class="{active: menuDetail.behaviorType == '1'}">
-                    <i class="icon iconfont iconicon-des-picture"></i>
-                    <span>图片</span>
-                  </li>
-                  <li @click="_handleChangeBehaviorType('2')" :class="{active: menuDetail.behaviorType == '2'}">
-                    <i class="icon iconfont iconicon-editext"></i>
-                    <span>文字</span>
-                  </li>
-                  <li @click="_handleChangeBehaviorType('3')" :class="{active: menuDetail.behaviorType == '3'}">
-                    <i class="icon iconfont iconicon-picword"></i>
-                    <span>图文</span>
-                  </li>
-                </ul>
-                <div class="slot-content">
-                  <!-- 图片 -->
-                  <Picture
-                      ref="pictureComponent"
-                      v-if="menuDetail.behaviorType === '1'"
-                      :image-msg="menuDetail.behaviorBody.imageMsg.picUrl"
-                      @handlerPic="handlerPic"
-                  ></Picture>
-                  <!-- 文字 -->
-                  <anser-text
-                      :serve-text="menuDetail.behaviorBody.textMsg.text"
-                      v-if="menuDetail.behaviorType === '2'"
-                      @handlerText="handlerText"
-                  ></anser-text>
-                  <!-- 图文 -->
-                  <image-text
-                      ref="newMsg"
-                      v-if="menuDetail.behaviorType === '3'"
-                      :news-msg="menuDetail.behaviorBody.newsMsg"
-                      :replyType= 'replyType'
-                      @handlerSaveImgText="handlerSaveImgText"
-                  ></image-text>
-                </div>
-              </section>
+          <div class="menu-operate__box" v-else>
+            <div class="menu-operate__header">
+              <p>编辑菜单</p>
+              <div class="menu-operate__delete" @click="_handleDeleteMenu">删除菜单</div>
             </div>
-            <!-- 跳转链接 -->
-            <div v-show="menuDetail.clickBehavior == '2' && hasSubList" class="website-area">
-              <div class="selectUrl">
-                <span>设置跳转链接</span>
-                <div>
-                  <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}</p>
-                  <i class="iconfont iconicon-des-lj" @click="selectUrl"></i>
+            <div class="menu-operate__content">
+              <el-form label-width="80px">
+                <el-form-item label="菜单名称">
+                  <el-input 
+                    v-model="menuDetail.name" 
+                    @blur="testMenu()"
+                    placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母">
+                  </el-input>
+                </el-form-item>
+                <div v-if='!hasTrueName' class="tipsName">
+                  <span class="ym-form-item__error">{{textTips}}</span>
+                  <a href="https://kf.qq.com/faq/181228f2iMV7181228RbMfAr.html" target="_blank">查看详情</a>
+                </div>
+                <el-form-item v-if="hasSubList" label="菜单内容">
+                  <el-radio
+                    label='1'
+                    v-model="menuDetail.clickBehavior"
+                    @change="_handleBehaviorType('1')"
+                  >发送消息</el-radio>
+                  <el-radio
+                    label='2'
+                    v-model="menuDetail.clickBehavior"
+                    @change="_handleBehaviorType('2')"
+                  >跳转网页</el-radio>
+                  <!-- <el-radio label="miniprogram" disabled>跳转小程序</el-radio> -->
+                </el-form-item>
+              </el-form>
+              <div v-show="menuDetail.clickBehavior == '1' && hasSubList" class="message-content__section">
+                <section class="menu-content__area">
+                  <ul class="radio-tabs">
+                    <li @click="_handleChangeBehaviorType('1')" :class="{active: menuDetail.behaviorType == '1'}">
+                      <i class="icon iconfont iconicon-des-picture"></i>
+                      <span>图片</span>
+                    </li>
+                    <li @click="_handleChangeBehaviorType('2')" :class="{active: menuDetail.behaviorType == '2'}">
+                      <i class="icon iconfont iconicon-editext"></i>
+                      <span>文字</span>
+                    </li>
+                    <li @click="_handleChangeBehaviorType('3')" :class="{active: menuDetail.behaviorType == '3'}">
+                      <i class="icon iconfont iconicon-picword"></i>
+                      <span>图文</span>
+                    </li>
+                  </ul>
+                  <div class="slot-content">
+                    <!-- 图片 -->
+                    <Picture
+                        ref="pictureComponent"
+                        v-if="menuDetail.behaviorType === '1'"
+                        :image-msg="menuDetail.behaviorBody.imageMsg.picUrl"
+                        @handlerPic="handlerPic"
+                    ></Picture>
+                    <!-- 文字 -->
+                    <anser-text
+                        :serve-text="menuDetail.behaviorBody.textMsg.text"
+                        v-if="menuDetail.behaviorType === '2'"
+                        @handlerText="handlerText"
+                    ></anser-text>
+                    <!-- 图文 -->
+                    <image-text
+                        ref="newMsg"
+                        v-if="menuDetail.behaviorType === '3'"
+                        :news-msg="menuDetail.behaviorBody.newsMsg"
+                        :replyType= 'replyType'
+                        @handlerSaveImgText="handlerSaveImgText"
+                    ></image-text>
+                  </div>
+                </section>
+              </div>
+              <!-- 跳转链接 -->
+              <div v-show="menuDetail.clickBehavior == '2' && hasSubList" class="website-area">
+                <div class="selectUrl">
+                  <span>设置跳转链接</span>
+                  <div>
+                    <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}</p>
+                    <i class="iconfont iconicon-des-lj" @click="selectUrl"></i>
+                  </div>
                 </div>
               </div>
+              <PopUp
+                :model="model"
+                @handleClosePopup="handleClosePopup"
+                v-show="isShowPopup"
+              />
             </div>
-            <PopUp
-              :model="model"
-              @handleClosePopup="handleClosePopup"
-              v-show="isShowPopup"
-            />
           </div>
         </div>
       </div>
-    </div>
+    </div> 
   </div>
 </template>
 <script>
@@ -721,9 +717,9 @@ export default {
 }
 .message-content__section {
   background-color: #fff;
-  min-height: 400px;
   border-radius:2px;
-  border:1px solid rgba(211,211,211,1);
+  height: 348px;
+
   .radio-tabs {
     height: 40px;
     background:rgba(240,243,247,1);
@@ -745,6 +741,11 @@ export default {
       }
     }
   }
+  .slot-content {
+    width: 100%;
+    height: 308px;
+    overflow: auto;
+  }
 }
 .define-menu__area {
   margin: 0 auto;
@@ -752,34 +753,29 @@ export default {
   min-width: 990px;
   border-radius: 20px;
   font-family: "PingFangSC-Medium,PingFangSC";
+  .phone-bg {
+    height: 528px;
+    border: 1px solid #e5e5e5;
+  }
   .phone-box__area {
     position: relative;
     float: left;
-    margin: 0 auto 2px;
-    width: 355px;
-    height: 711px;
+    margin: 0;
+    width: 295px;
+    height: 526px;
     background: url("~img/account/account_menu_phone.png") no-repeat center
       center;
     background-size: 100% 100%;
     .phone-menu__area {
       position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 32px;
+      left: 56px;
+      bottom: 1px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      width: 294px;
+      width: 238px;
       height: 48px;
       background: rgba(248, 250, 252, 1);
-      .phone-menu__keyboard {
-        margin: 8px auto;
-        width: 26px;
-        height: 17px;
-        background: url("~img/account/define_menu_keyboard.png") no-repeat
-          center center;
-        background-size: 100% 100%;
-      }
       .phone-menu__divider {
         width: 1px;
         height: 32px;
@@ -800,10 +796,11 @@ export default {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        width: calc(100% - 42px);
+        width: 100%;
+        background: #fff;
         li:nth-child(3) {
           .menu-child__area {
-            left: 13%;
+            left: 5px;
           }
         }
         li {
@@ -868,20 +865,22 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       bottom: -42px;
+      height: 32px;
+      line-height: 32px;
       cursor: pointer;
+      padding: 0 16px;
     }
   }
   .menu-operate__arae {
     display: flex;
     justify-content: center;
     float: left;
-    margin-top: 20px;
-    width: calc(100% - 355px);
-    min-height: 660px;
-    background: #f8fafc;
+    width: calc(100% - 295px);
+    height: 526px;
     border-radius: 2px;
     .menu-operate__none {
       width: 100%;
+      background: #fff;
       display: flex;
       justify-content: center;
       .empty {
@@ -907,29 +906,31 @@ export default {
       }
     }
     .menu-operate__box {
-      padding: 24px;
+      margin-left: 24px;
       width: 100%;
       border-radius: 2px;
-      border: 1px solid rgba(229, 229, 229, 1);
+      border-left: 1px solid rgba(229, 229, 229, 1);
+      background: #ffffff;
       .menu-operate__header {
         display: flex;
+        padding: 0 24px;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
-        border-bottom: 1px solid #D3D3D3;
-        padding-bottom: 10px;
+        border-bottom: 1px solid #e5e5e5;
+        height: 50px;
         p {
           font-size:14px;
           font-weight:500;
           color:rgba(38,38,38,1);
-          line-height:20px;
+          line-height:50px;
         }
         .menu-operate__delete {
           font-size: 14px;
           font-family: "PingFangSC";
           font-weight: 400;
           color: #09CCEB;
-          line-height: 20px;
+          line-height: 50px;
           cursor: pointer;
         }
       }
@@ -1061,9 +1062,13 @@ export default {
 }
 .el-form /deep/ .el-form-item {
   margin-bottom: 6px;
+  padding: 0 24px;
 }
 .el-form-item /deep/ .el-form-item__label {
   color: #a1a8b1;
+}
+.selectUrl {
+  padding-left: 24px;
 }
 .selectUrl span{
     float: left;
@@ -1098,13 +1103,13 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 40px;
-  margin: 16px 0 -10px;
+  height: 36px;
+  margin: 24px 0 16px;
 }
 .btn h4 {
   height: 16px;
-  margin: 12px 0;
-  font-size:16px;
+  margin: 10px 0;
+  font-size:14px;
   font-family:'PingFangSC-Medium,PingFang SC';
   font-weight:500;
   color:rgba(38,38,38,1);
@@ -1114,8 +1119,8 @@ export default {
 }
 .btn span {
   display: inline-block;
-  width:110px;
-  height:40px;
+  width:100px;
+  height:32px;
   background:#09cceb; 
   border-radius:2px;
   font-size:14px;
@@ -1123,7 +1128,8 @@ export default {
   font-weight:400;
   text-align: center;
   color: rgba(255, 255, 255, 1);
-  line-height:40px;
+  line-height:32px;
+  margin-top: 2px;
   cursor: pointer;
 }
 .tipsName {

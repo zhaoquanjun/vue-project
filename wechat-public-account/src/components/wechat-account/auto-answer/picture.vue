@@ -111,7 +111,7 @@ export default {
     margin: 0;
     justify-content: center;
     align-items: center;
-    min-height: 320px;
+    height: 100%;
     text-align: center;
     cursor: pointer;
     .upload-icon {

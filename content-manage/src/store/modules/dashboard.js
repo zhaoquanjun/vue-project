@@ -1,6 +1,7 @@
 import {  updateAppIdToCookie, getSliderMenuList } from "@/api/request/user"
 
 import { setLocal } from '@/libs/local'
+import { setCookie } from "@/libs/cookie"
 
 // 序列化菜单
 let filterMenuListData = (source) => {
@@ -36,7 +37,11 @@ const dashboard = {
         isContentwrite: false,
     },
     mutations: {
-
+        SETSITEID(state, siteId) {
+            state.siteId = siteId;
+            // siteid => tjufje  对应的下一个字母
+            setCookie("tjufje", siteId)
+        },
         SETAPPID(state, payload) {
             state.appId = payload;
             setLocal('ymId', payload);

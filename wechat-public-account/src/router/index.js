@@ -16,7 +16,7 @@ export default router;
 
 
 let appId = store.state.dashboard.appId || getLocal("ymId");
-let siteId = store.state.dashboard.siteId || getLocal("ymSd");
+let siteId = getCookie("tjufje") || store.state.dashboard.siteId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
   let user = await securityService.getUser();

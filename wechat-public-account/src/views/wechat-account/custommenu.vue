@@ -58,7 +58,7 @@ export default {
     },
     // 校验是否已经授权认证
     async _getWxIsAuth() {
-      await this.$store.dispatch('_setSiteId')
+      // await this.$store.dispatch('_setSiteId')
       await this.$store.dispatch('_getWxStatus')
       let wx_status = this.$store.state.wxaccount.wx_status
       if (!wx_status.isAuth || !wx_status.isCertification || !wx_status.isResolveSuccess) {
@@ -72,11 +72,11 @@ export default {
 
 <style lang="scss" scoped>
 .define-menu__section {
-  padding: 10px 32px 0;
+  padding: 16px 32px 0;
   height: 100%;
+  background: #F4F5F6;
   .define-menu__content {
     width: 100%;
-    height: calc(100% - 73px);
   }
 }
 </style>

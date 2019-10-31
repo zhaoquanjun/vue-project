@@ -299,14 +299,19 @@ button {
     background: transparent;
 }
 .keyword-answer {
+    padding: 16px 24px;
+    border-radius: 2px;
     .keyword-answer-content {
         // padding: 24px 0 0 0;
         // border-top: 1px solid #e5e5e5;
         .keyword-list {
-            padding-bottom: 32px;
+            padding-bottom: 24px;
             .title{
                 color: #B9CBCF
             }
+        }
+        .keyword-list:last-child{
+            padding-bottom: 0;
         }
         .select-item {
             padding-left: 16px;
@@ -374,11 +379,11 @@ button {
             }
         }
         .paging {
-            float: right;
-            padding-top: 33px;
+            text-align: right;
+            padding-top: 24px;
         }
         .handler-menu {
-            padding: 8px 0 24px;
+            margin: 0 0 16px;
             .answer-btn {
                 float: right;
                 width: 90px;

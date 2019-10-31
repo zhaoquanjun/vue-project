@@ -192,13 +192,16 @@ export default {
 .statistics {
   .title {
     height: 68px;
+    width: 100%;
     padding: 14px 0;
     display: flex;
     justify-content: space-between;
     line-height: 40px;
     .btn {
       width:90px;
-      height:40px;
+      height:32px;
+      margin-top: 4px;
+      line-height: 32px;
       border-radius:2px;
       border:1px solid rgba(9,204,235,1);
       color: rgba(9,204,235,1);
@@ -209,6 +212,7 @@ export default {
   .body {
     padding: 0 32px;
     height:570px;
+    min-width: 1050px;
     background:rgba(255,255,255,1);
     border-radius:4px;
     border:1px solid rgba(229,229,229,1);

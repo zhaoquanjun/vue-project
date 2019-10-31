@@ -297,12 +297,12 @@ export default {
 </style>
 <style lang="scss" scoped>
 .image-text {
-    padding-top: 16px; 
+    padding-top: 16px;
+    height: 100%;
 }
 .add-img {
     width: 100%;
     margin: 0;
-    min-height: 320px;
     cursor: pointer;
     img {
         display: block;
