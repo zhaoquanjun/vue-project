@@ -35,10 +35,7 @@ export default store;
  * 页面刷新再将local中的token 写入store中
  */
 
-getLocal("authList")&& store.commit("set_authList",getLocal("authList"))
-
-if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'location') {
-  if(getLocal("ymId")){
+getLocal("authList")&& store.commit("set_authList",getLocal("authList"));
+if(getLocal("ymId")){
     store.commit("SETAPPID",getLocal("ymId"))
-   }
 }

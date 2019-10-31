@@ -107,19 +107,7 @@
                     @close="closeDialog"
                 >
                     <audio ref="audio" class="audio" :src="fullOssUrl" controls="controls" />
-                    <!-- <div class="dislog-footer" slot="footer">
-                         <el-tooltip
-                            class="item"
-                            effect="dark"
-                            :content="picInfo.title"
-                            placement="top"
-                        >
-                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
-                        </el-tooltip>
-                      
-                        <span>分类: {{picInfo.categoryName}}</span>
-                        <span>大小: {{picInfo.sizeStr}}</span>
-                    </div> -->
+                   
                 </el-dialog>
             </div>
         </div>
@@ -280,6 +268,11 @@ export default {
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
     align-items: center;
+}
+#img-list-dialog /deep/ .el-dialog__body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>
 <style lang="scss" scoped>
