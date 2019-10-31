@@ -160,7 +160,7 @@
           <el-tooltip
             class="item"
             effect="dark"
-            content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB"
+            content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB，仅支持.png格式"
             placement="top-start"
           >
             <i class="icon iconfont iconicon-exclamationmark"></i>
@@ -450,7 +450,7 @@ export default {
       if (!isJPG) {
         this.$notify({
           customClass: "notify-error",
-          message: `上传头像图片只能是 PNG 格式!`,
+          message: `请上传png格式图片，大小不超过500k`,
           duration: 1500,
           showClose: false
         });
@@ -459,7 +459,7 @@ export default {
       if (!isLt2M) {
         this.$notify({
           customClass: "notify-error",
-          message: `上传头像图片大小不能超过 500KB!`,
+          message: `请上传png格式图片，大小不超过500k`,
           duration: 1500,
           showClose: false
         });
