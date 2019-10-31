@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import dashboard from "./modules/dashboard";
 import user from "./modules/user";
 Vue.use(Vuex);
-
+import { getCookie } from "@/libs/cookie"
 import { getLocal } from '@/libs/local'
 
 const store = new Vuex.Store({

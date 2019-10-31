@@ -4,6 +4,7 @@ import dashboard from "./modules/dashboard";
 import user from "./modules/user";
 Vue.use(Vuex);
 import { getLocal } from '@/libs/local'
+import { getCookie } from "@/libs/cookie"
 const store = new Vuex.Store({
   modules: {
     dashboard,
