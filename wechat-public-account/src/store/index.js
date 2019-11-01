@@ -38,3 +38,6 @@ if (getCookie("tjufje")) {
 if (getCookie("bqqje")) {
   store.commit("SETAPPID", getCookie("bqqje"))
 }
+if (getCookie("vtfsjogp")) {
+  store.commit("SET_USERINFO", JSON.parse(getCookie("vtfsjogp")))
+}

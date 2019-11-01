@@ -210,8 +210,13 @@ export default {
         appId: item.appId,
         appName: this.appName
       };
-      await dashboardApi.updateAppName(para);
-      item.name = this.appName;
+      let { status } = await dashboardApi.updateAppName(para);
+      if (status == 200) {
+        item.name = this.appName;
+        if (item.appId == this.$store.state.dashboard.appId) {
+          this.$store.dispatch("_getAppHeadInfo");
+        }
+      }
     },
     /**
      * 获取app列表
@@ -277,10 +282,7 @@ export default {
   },
   computed: {
     headUrl() {
-      let avatar = "";
-      if (getCookie("vtfsjogp")) {
-        avatar = JSON.parse(getCookie("vtfsjogp")).headImageUrl;
-      }
+      let avatar = this.$store.state.user.userInfo.headImageUrl;
       if (avatar) {
         return avatar;
       } else {
@@ -288,10 +290,7 @@ export default {
       }
     },
     headAppName() {
-      let appName = "";
-      if (getCookie("vtfsjogp")) {
-        appName = JSON.parse(getCookie("vtfsjogp")).appName;
-      }
+      let appName = this.$store.state.user.userInfo.appName;
       return appName;
     }
   }
