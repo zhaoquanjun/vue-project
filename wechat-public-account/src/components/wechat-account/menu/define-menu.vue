@@ -512,7 +512,7 @@ export default {
         dataDetail.behaviorType = JSON.parse(this.menuDetail.behaviorType)
         dataDetail.clickBehavior = JSON.parse(this.menuDetail.clickBehavior)
         dataObj = await updateMenu(dataDetail)
-      }else if (order > 0 && !flag) {
+      }else if (order > 0 && !flag && !(order== 1 && level == 1)) {
         notify(this, '请完善菜单信息', "error");
         this.isCanAdd = true
       }
