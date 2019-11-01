@@ -77,3 +77,10 @@ export const isAliYunTokenSet = () => {
     const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
     return ajaxRequest.get(`${designerManageApi}/api/v1/DomainManage/IsAliYunTokenSet/${siteId}`);
 }
+
+
+
+export const publishdata = () => {
+    const siteId =store.state.dashboard.siteId?store.state.dashboard.siteId:Cookies("ymSd");
+    return ajaxRequest.post(`${designerManageApi}/api/v1/Designer/publishdata?siteId=${siteId}`);
+} 

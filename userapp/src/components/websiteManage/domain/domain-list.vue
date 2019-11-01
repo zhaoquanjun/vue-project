@@ -325,7 +325,7 @@ export default {
                     }
                 )
                     .then(() => {
-                        this.$emit("disableHttps", domainId);
+                        this.$emit("publishdata",domainId);
                     })
                     .catch(action => {
                         if (action === "cancel") {
