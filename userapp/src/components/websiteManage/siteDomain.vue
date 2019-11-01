@@ -16,6 +16,7 @@
           <DomainList
             v-if="showType"
             :tableData="domainListData"
+            @publishdata="_publishdata"
             @_deleteCdnDomain="_deleteCdnDomain"
             @oneKeyEnableHttps="_oneKeyEnableHttps"
             @disableHttps="_disableHttps"
@@ -142,12 +143,22 @@ export default {
     async _removeAliYunToken() {
       await domainApi.removeAliYunToken();
     },
+
+ 
     /**
      * 获取站点信息
      */
     async getSiteInfo(siteId) {
       let { data } = await getSiteInfo(siteId);
       this.siteInfo = data;
+    },
+    /**
+     * 发布网站
+     */
+     async _publishdata(domainId) {
+      let { data } = await domainApi.publishdata();
+      this._oneKeyEnableHttps(domainId)
+     
     },
     /**
      * 获取域名列表

@@ -41,7 +41,7 @@ export function tryHideFullScreenLoading() {
 }
 axios.defaults.baseURL = environment.contentApi;
 // 请求超时时间
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 15000;
 //axios.defaults.withCredentials = true; //允许携带cookie
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
@@ -64,7 +64,7 @@ axios.interceptors.request.use(
         token && (config.headers.Authorization = 'Bearer ' + token);
         //todo 测试阶段写死
         
-        if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'location') {
+        if (process.env.NODE_ENV === 'development') {
             let appId = store.state.dashboard.appId;
             config.headers.AppId = appId?appId: getLocal('ymId');
         }
