@@ -359,7 +359,7 @@ export default {
         });
       } else if (type == "backup") {
         this.$router.push({
-          path: "/website/mysite/backup"
+          path: "/website/sitemanage/backup"
         });
       } else if (type == "wechat") {
         window.location.href = this.wechatSpreadUrl;
