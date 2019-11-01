@@ -1,6 +1,6 @@
 <template>
   <div class="content-section">
-    <p class="section-title">内容管理</p>
+    <p class="section-title">内容中心</p>
     <el-row class="content">
       <el-col class="item" :span="6" v-for="(item, index) in content" :key="index">
         <div class="item-box">
@@ -180,7 +180,7 @@ export default {
           .item-content {
             .item-num {
               display: inline-block;
-              font-size: 28px;
+              font-size: 18px;
               font-weight: 500;
               color: rgba(38, 38, 38, 1);
               line-height: 50px;

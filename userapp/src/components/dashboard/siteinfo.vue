@@ -1,6 +1,6 @@
 <template>
   <div class="content-section">
-    <p class="section-title">网站管理</p>
+    <p class="section-title">网站中心</p>
     <el-row class="content">
       <div class="sitelist-wrap">
         <ul class="sitelist">
@@ -17,11 +17,13 @@
             <div class="site-num">{{siteInfo.length}}</div>
             <div class="site-total">/ {{siteCount}}</div>
           </div>
-          <div
-            class="sitelist-addSite"
-            v-show="isSystem&&siteInfo.length < siteCount"
-            @click="addSite"
-          ></div>
+          <el-dropdown @command="handleCreateSite" :hide-timeout="500">
+            <div class="sitelist-addSite" v-show="isSystem&&siteInfo.length < siteCount"></div>
+            <el-dropdown-menu slot="dropdown" class="createSiteDrop">
+              <el-dropdown-item class="createSiteDropText" command="copy">复制当前站点</el-dropdown-item>
+              <el-dropdown-item class="createSiteDropText" command="addNew">新建站点</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </div>
       <div class="site-operating">
@@ -75,9 +77,23 @@
                   :class="{'siteInfo-icon-red':!curSiteTodoinfo.siteDomain, 'siteInfo-icon-green':curSiteTodoinfo.siteDomain}"
                 ></span>
                 <span class="siteInfo-title">站点域名</span>
-                <span
-                  class="siteInfo-domain"
-                >{{curSiteTodoinfo.resolvedDomainList?curSiteTodoinfo.resolvedDomainList[0]:""}}</span>
+                <el-dropdown :hide-timeout="500" placement="bottom-start">
+                  <span
+                    class="siteInfo-domain"
+                  >{{curSiteTodoinfo.resolvedDomainList?curSiteTodoinfo.resolvedDomainList[0]:""}}</span>
+                  <el-dropdown-menu slot="dropdown" class="siteDomainDrop">
+                    <a
+                      class="siteDomainDropList"
+                      v-for="(item, index) in curSiteTodoinfo.resolvedDomainList"
+                      :key="index"
+                      :href="`//${curSiteTodoinfo.resolvedDomainList[index]}`"
+                      target="_blank"
+                    >
+                      <span class="siteDomainDropItem">{{curSiteTodoinfo.resolvedDomainList[index]}}</span>
+                      <i class="iconfont iconchakan"></i>
+                    </a>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
               <div class="siteInfo-right">
                 <span class="siteInfo-btn">管理</span>
@@ -110,7 +126,11 @@
                 <span class="siteInfo-btn">管理</span>
               </div>
             </div>
-            <div class="siteInfo-item" @click="jumpTo('wechat')">
+            <div
+              class="siteInfo-item"
+              @click="jumpTo('wechat')"
+              v-show="$store.state.dashboard.isWechataccountShow"
+            >
               <div class="siteInfo-left">
                 <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.weChatAccount, 'siteInfo-icon-green':curSiteTodoinfo.weChatAccount}"
@@ -318,12 +338,13 @@ export default {
         });
       }
     },
-    changeSite(item) {
+    async changeSite(item) {
       if (item.siteId != this.siteId) {
         this.siteId = item.siteId;
         this.curSiteinfo = item;
         this.getTodoInfo(this.siteId);
         this.$store.commit("SETSITEID", this.siteId);
+        await dashboardApi.updateUserLastSiteId(this.siteId);
       }
     },
     jumpTo(type) {
@@ -339,7 +360,7 @@ export default {
         });
       } else if (type == "backup") {
         this.$router.push({
-          path: "/website/mysite/backup"
+          path: "/website/sitemanage/backup"
         });
       } else if (type == "wechat") {
         window.location.href = this.wechatSpreadUrl;
@@ -348,6 +369,13 @@ export default {
     async getTodoInfo(siteId) {
       let { data } = await dashboardApi.getTodoInfo(siteId);
       this.curSiteTodoinfo = data;
+    },
+    // 点击创建站点下拉菜单
+    handleCreateSite(command) {
+      if (command == "copy") {
+      } else if (command == "addNew") {
+        this.addSite();
+      }
     },
     closeCreateDialog() {
       this.radio = "";
@@ -483,6 +511,68 @@ export default {
   }
 };
 </script>
+<style>
+.createSiteDrop {
+  width: 108px;
+  height: 87px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.createSiteDrop .createSiteDropText {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(38, 38, 38, 1);
+  line-height: 32px;
+  padding: 0;
+  height: 32px;
+  text-align: center;
+}
+.createSiteDrop .createSiteDropText:hover {
+  background: rgba(240, 243, 247, 1);
+  color: rgba(38, 38, 38, 1);
+}
+.siteDomainDrop {
+  width: 300px;
+  max-height: 150px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+.siteDomainDrop .siteDomainDropList {
+  width: 284px;
+  height: 32px;
+  margin-left: 4px;
+  padding-right: 8px;
+  padding-left: 8px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+}
+.siteDomainDrop .siteDomainDropList .siteDomainDropItem {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(38, 38, 38, 1);
+  line-height: 32px;
+}
+.siteDomainDrop .siteDomainDropList .iconchakan {
+  display: none;
+  font-size: 16px;
+  line-height: 32px;
+  color: #262626;
+}
+.siteDomainDrop .siteDomainDropList:hover {
+  background: rgba(240, 243, 247, 1);
+  color: rgba(38, 38, 38, 1);
+}
+.siteDomainDrop .siteDomainDropList:hover .iconchakan {
+  display: inline-block;
+  color: rgba(5, 149, 230, 1);
+}
+</style>
 <style scoped>
 .createSiteNameInput /deep/ .el-input__inner {
   margin-top: 16px;
@@ -603,7 +693,7 @@ export default {
           background: url("~img/dashboard/board-add.png") no-repeat center;
           background-size: contain;
           vertical-align: top;
-          margin-top: 30px;
+          margin-top: 31px;
           margin-left: 28px;
           cursor: pointer;
           &:hover {
@@ -736,15 +826,15 @@ export default {
         // padding: 0 28px 0 42px;
         .site-title {
           display: inline-block;
-          margin-top: 24px;
+          margin-top: 20px;
           margin-left: 42px;
-          font-size: 18px;
+          font-size: 20px;
           font-weight: 500;
           color: rgba(38, 38, 38, 1);
-          line-height: 25px;
+          line-height: 28px;
         }
         .siteInfo-wrap {
-          margin-top: 24px;
+          margin-top: 20px;
           .siteInfo-item {
             height: 36px;
             display: flex;

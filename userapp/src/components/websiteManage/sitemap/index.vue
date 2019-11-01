@@ -21,7 +21,7 @@
           <el-tab-pane label="系统自动生成" name="auto"></el-tab-pane>
           <el-tab-pane label="手动上传" name="manual"></el-tab-pane>
         </el-tabs>
-        <div v-show="uploadType == 'auto'" style="padding:16px 32px">
+        <div v-show="uploadType == 'auto'" style="padding:16px 0px">
           <ul class="autoType">
             <li
               class="typeItem"

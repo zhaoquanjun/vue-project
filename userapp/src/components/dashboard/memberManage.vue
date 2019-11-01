@@ -1,6 +1,6 @@
 <template>
   <div class="content-section">
-    <p class="section-title">会员管理</p>
+    <p class="section-title">会员中心</p>
     <el-row class="content">
       <el-col :span="12" class="item">
         <div class="item-wrap" @click="jumpTo('vipList')">
@@ -41,11 +41,11 @@ export default {
     jumpTo(type) {
       if (type == "vipList") {
         this.$router.push({
-          path: "/sitemember/memberlist"
+          path: "/membercenter/sitemember/memberlist"
         });
       } else if (type == "vipLevel") {
         this.$router.push({
-          path: "/sitemember/memberlevel"
+          path: "/membercenter/sitemember/memberlevel"
         });
       }
     }
@@ -131,7 +131,7 @@ export default {
         .item-content {
           .item-num {
             display: inline-block;
-            font-size: 28px;
+            font-size: 18px;
             font-weight: 500;
             color: rgba(38, 38, 38, 1);
             line-height: 50px;

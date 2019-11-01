@@ -30,26 +30,20 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
-      if (to.path === "/404") {
-        next()
-        return
-      }
       // vtfsjogp => userinfo
       if (!getCookie("vtfsjogp")) {
         await store.dispatch("_getAppHeadInfo");
       }
-      
-      // 切换app 主动调接口   本地测试调用
-      if (process.env.NODE_ENV === "development") {
-        let appId = store.state.dashboard.appId;
-        if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
+      // 上传需要appId
+      // if (process.env.NODE_ENV === "development") {
+      let appId = store.state.dashboard.appId;
+      if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
+      // }
+      if (store.getters.getMenuList.length < 1) {
+        await store.dispatch('_getMenuListData')
       }
       let r = await store.dispatch('getCurRouteAuth', to.path);
       if (r) {
-        if (store.getters.getMenuList.length < 1) {
-          await store.dispatch('_getMenuListData')
-        }
-
         if (to.path.includes("/website")) {
           let haveTemplate = await store.dispatch('_haveTemplate');
           if (!haveTemplate) {

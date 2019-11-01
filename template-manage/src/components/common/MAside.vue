@@ -120,7 +120,7 @@ export default {
                     return "iconicon-neirong";
                 case "website":
                     return "iconicon-moban1";
-                case "sitemember":
+                case "membercenter":
                     return "iconicon-huiyuan1";
                 case "role":
                     return "iconicon-chengyuan";
@@ -176,7 +176,7 @@ export default {
     /* bottom: 0; */
     z-index: 10;
     overflow: hidden;
-    transition: 0.2s ease-in-out;
+    /* transition: 0.2s ease-in-out; */
     /* transition:  0.3s linear;  */
 }
 .m-asideleft {

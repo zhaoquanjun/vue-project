@@ -34,8 +34,6 @@ const dashboard = {
         hasRules: false,
         isSiteInfoShow: false,
         isWechataccountShow: false,
-        isMicroShow: false,
-        isFormShow: false
     },
     mutations: {
 
@@ -46,18 +44,18 @@ const dashboard = {
         },
         SETAPPID(state, appId) {
             state.appId = appId;
-            setLocal('ymId', appId);
-
+            // appid => bqqje  对应的下一个字母
+            setCookie("bqqje", appId)
         },
         set_menuList(state, m) {
             state.menuList = m;
-            setLocal("menulist", m)
+            // setLocal("menulist", m)
 
         },
         set_authList(state, a) {
             state.authList = a;
             state.hasRules = true;
-            setLocal("authList", a)
+            // setLocal("authList", a)
         },
         reset_store(state) {
             state.appId = "";
@@ -87,17 +85,13 @@ const dashboard = {
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
             data.menus.forEach(item => {
+                // 判断是否有设计器权限
                 if (item.code === "design") {
                     state.isSiteInfoShow = true
                 }
+                // 判断是否有微信公众号权限
                 if (item.code == "wechataccount") {
                     state.isWechataccountShow = true
-                }
-                if (item.code == "micro") {
-                    state.isMicroShow = true
-                }
-                if (item.code == "form") {
-                    state.isFormShow = true
                 }
             })
             return data

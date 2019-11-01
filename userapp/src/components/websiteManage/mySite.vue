@@ -196,7 +196,7 @@
             style="margin-left:16px"
           ></el-switch>
         </div>
-        <!-- <div class="siteSettingWrap">
+        <div class="siteSettingWrap">
           <span class="siteSetting ">显示阿里云服务信息</span>
           <el-tooltip
             class="item"
@@ -207,17 +207,19 @@
             <i class="icon iconfont iconicon-exclamationmark"></i>
           </el-tooltip>
           <el-switch
-            v-model="isShowAliServiceValue"
+            @change="updateSiteServiceInfo"
+            v-model="siteServiceInfoValue"
             active-color="#01C0DE"
             style="margin: -2px 0 0 16px"
           ></el-switch>
           <span class="siteSetting rightClickSave">禁止右键保存图片</span>
           <el-switch
-            v-model="isRightClickSaveValue"
+            @change="updateSiteRightCopy"
+            v-model="siteRightCopyValue"
             active-color="#01C0DE"
             style="margin: -2px 0 0 16px"
           ></el-switch>
-        </div>-->
+        </div>
       </el-row>
       <el-dialog
         width="0"
@@ -363,9 +365,9 @@ export default {
       siteSecondIndustryValue: "",
       siteSecondIndustry: [],
       secondIndustryId: 0,
-      isShowAliServiceValue: false,
+      siteServiceInfoValue: false,
       isOpenPoweredValue: false,
-      isRightClickSaveValue: false,
+      siteRightCopyValue: false,
       siteNameValue: "",
       changeSiteLanguageShow: false,
       remarkInfo: "",
@@ -386,6 +388,20 @@ export default {
       await siteBackupApi.updateSitePoweredBy({
         siteId: this.siteId,
         PoweredBy: this.isOpenPoweredValue
+      });
+    },
+    //禁止右键保存图片
+    async updateSiteRightCopy() {
+      await siteBackupApi.updateSiteRightCopy({
+        siteId: this.siteId,
+        AllowedRightCopy: this.siteRightCopyValue
+      });
+    },
+    //显示阿里云服务信息
+    async updateSiteServiceInfo() {
+      await siteBackupApi.updateSiteServiceInfo({
+        siteId: this.siteId,
+        AliServiceInfo: this.siteServiceInfoValue
       });
     },
     //删除icon
@@ -503,6 +519,8 @@ export default {
         this.templateId = data.templateId;
         this.iconUrl = data.icon;
         this.isOpenPoweredValue = data.poweredBy;
+        this.siteServiceInfoValue = data.aliServiceInfo;
+        this.siteRightCopyValue = data.allowedRightCopy;
         this.lastPublishedTime = formatDateTime(
           data.lastPublishedTime,
           "yyyy-MM-dd hh:mm"
@@ -1067,7 +1085,7 @@ export default {
     margin-left: 310px;
   }
   .rightClickSave {
-    margin-left: 184px;
+    margin-left: 218px;
   }
 }
 //右侧弹框
