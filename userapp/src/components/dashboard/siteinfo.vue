@@ -18,11 +18,7 @@
             <div class="site-total">/ {{siteCount}}</div>
           </div>
           <el-dropdown @command="handleCreateSite" :hide-timeout="500">
-            <div
-              class="sitelist-addSite"
-              v-show="isSystem&&siteInfo.length < siteCount"
-              @click="addSite"
-            ></div>
+            <div class="sitelist-addSite" v-show="isSystem&&siteInfo.length < siteCount"></div>
             <el-dropdown-menu slot="dropdown" class="createSiteDrop">
               <el-dropdown-item class="createSiteDropText" command="copy">复制当前站点</el-dropdown-item>
               <el-dropdown-item class="createSiteDropText" command="addNew">新建站点</el-dropdown-item>
