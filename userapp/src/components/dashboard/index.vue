@@ -52,7 +52,6 @@ export default {
     settingCenter
   },
   mounted() {
-    console.log(this.$store.state.dashboard.isWechataccountShow);
     this.$Loading.show();
     if (this.isSiteInfoShow) {
       this.getSites();
