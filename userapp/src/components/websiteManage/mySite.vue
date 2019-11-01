@@ -385,7 +385,6 @@ export default {
   methods: {
     //启用Powered by
     async isOpenPowered() {
-      console.log('99')
       await siteBackupApi.updateSitePoweredBy({
         siteId: this.siteId,
         PoweredBy: this.isOpenPoweredValue

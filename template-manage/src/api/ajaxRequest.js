@@ -4,6 +4,7 @@
 import axios from 'axios';
 import qs from 'qs';
 import { getLocal } from "@/libs/local.js"
+import { getCookie } from "@/libs/cookie";
 import environment from "@/environment/index.js"
 import store from "@/store/index"
 import { MessageBox, Message, Loading, Notification } from 'element-ui';
@@ -66,7 +67,7 @@ axios.interceptors.request.use(
 
         let appId = store.state.dashboard.appId;
         if (process.env.NODE_ENV === 'development') {
-            config.headers.AppId = appId?appId: getLocal('ymId');
+            config.headers.AppId = appId?appId: getCookie('bqqje');
         }
         //showFullScreenLoading()
         return config;

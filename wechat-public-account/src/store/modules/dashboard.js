@@ -29,9 +29,10 @@ const dashboard = {
         authList:[], 
     },
     mutations: {
-        SETAPPID(state, payload) {
-            state.appId = payload;
-            setLocal('ymId', payload);
+        SETAPPID(state, appId) {
+            state.appId = appId;
+            // appid => bqqje  对应的下一个字母
+            setCookie("bqqje", appId)
         },
         SETSITEID(state, siteId) {
             state.siteId = siteId;

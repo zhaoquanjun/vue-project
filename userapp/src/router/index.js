@@ -30,10 +30,6 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
       }
-      if (to.path === "/404") {
-        next()
-        return
-      }
       // vtfsjogp => userinfo
       if (!getCookie("vtfsjogp")) {
         await store.dispatch("_getAppHeadInfo");

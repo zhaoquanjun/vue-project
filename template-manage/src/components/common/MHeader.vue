@@ -230,7 +230,6 @@ export default {
     },
     //切换app 选择新的app
     async choseApp(item) {
-      // setLocal("ymId", item.appId);
       this.$store.commit("SETAPPID", item.appId);
       let { data, status } = await dashboardApi.updateUserLastAppIdAndCookie(
         item.appId

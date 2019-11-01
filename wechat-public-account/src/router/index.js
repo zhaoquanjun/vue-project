@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import { defaultRoutes } from "./routes"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
-import {getLocal} from '@/libs/local'
+import { getLocal } from '@/libs/local'
 import { getCookie } from "@/libs/cookie"
 
 Vue.use(VueRouter);
@@ -15,7 +15,7 @@ let router = new VueRouter({
 export default router;
 
 
-let appId = store.state.dashboard.appId || getLocal("ymId");
+let appId = store.state.dashboard.appId;
 let siteId = getCookie("tjufje") || store.state.dashboard.siteId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
@@ -23,23 +23,18 @@ router.beforeEach(async (to, from, next) => {
   let accessToken;
   if (user) {
     accessToken = user.access_token;
-    store.commit("SET_USER",accessToken)
   }
 
   if (accessToken) {
-  if (to.name !== "callback") {
-    if (!to.meta.requiresAuth) {
-      if (!appId) {
-        await store.dispatch('_updateAppIdAndSiteIdToCookie')
+    if (to.name !== "callback") {
+      if (!to.meta.requiresAuth) {
+        next()
+        return
       }
-      store.dispatch('_getMenuListData')
-      next()
-      return
-    }
-    // vtfsjogp => userinfo
-    if (!getCookie("vtfsjogp")) {
-      await store.dispatch("_getAppHeadInfo");
-    }
+      // vtfsjogp => userinfo
+      if (!getCookie("vtfsjogp")) {
+        await store.dispatch("_getAppHeadInfo");
+      }
       if (!appId) {
         await store.dispatch('_updateAppIdAndSiteIdToCookie')
         next()
@@ -65,14 +60,13 @@ router.beforeEach(async (to, from, next) => {
       } else {
         next('/404')
       }
-    } 
-  }else {
-    if(to.path == "/callback" || to.path == "/401"){
+    }
+  } else {
+    if (to.path == "/callback") {
       next()
-    }else{
+    } else {
       securityService.signIn(to.path)
     }
-  } 
+  }
 });
 
-     
