@@ -20,7 +20,6 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
  * @param {HTMLElement} el - 必填。dom元素
  */
 const el_scrollBar = (el) => {
-  //在元素上加点私货，名字随便取，确保不会和已有属性重复即可，我取名叫做_ps_
   if (el._ps_ instanceof PerfectScrollbar) {
     el._ps_.update();
   } else {
@@ -33,7 +32,6 @@ const el_scrollBar = (el) => {
     });
   }
 };
-//接着，自定义Vue指令,指令名你自己随便编一个，我们假定它叫scrollBar
 Vue.directive("scrollBar", {
   //使用inserted钩子函数（初次创建dom）获取使用自定义指令处的dom
   inserted(el, binding, vnode) {
