@@ -15,6 +15,7 @@
         </el-container>
     </div>
 </template>
+<script src="https://cdn.bootcss.com/babel-polyfill/6.23.0/polyfill.min.js"></script>
 <script>
 import MHeader from "@/components/common/MHeader";
 import MAside from "@/components/common/MAside";
