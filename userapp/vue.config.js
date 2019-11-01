@@ -36,8 +36,14 @@ module.exports = {
         imagesRule.exclude.add(resolve('src/icons'))
         config.module
             .rule('images')
-            .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
-
+            .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/);
+        config.externals = {
+            'vue':'Vue',
+            'vuex':'Vuex',
+            'vue-router':'VueRouter',
+            'axios':'axios',
+            'element-ui': 'ELEMENT',
+        }
     },
     configureWebpack: { // webpack-merge
         plugins: [],
@@ -51,5 +57,7 @@ module.exports = {
 
     }
 }
+
+
 
 
