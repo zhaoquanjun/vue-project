@@ -274,6 +274,47 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog
+      width="0"
+      :visible.sync="copySiteShow"
+      :show-close="false"
+      :close-on-click-modal="false"
+    >
+      <div class="right-pannel" :style="{width:'520px'}">
+        <div class="pannel-head">
+          <span class="headTitle">复制当前站点</span>
+          <span class="close-pannel" @click="closeCopyDialog">
+            <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+          </span>
+        </div>
+        <div class="tips">使用当前站点空间作为模板创建当前站点</div>
+        <div class="createSiteName">
+          <span class="createSiteTitle">站点名称</span>
+          <el-input
+            v-model="copySiteName"
+            @blur="blurSiteName(copySiteName)"
+            placeholder="请输入内容"
+            class="createSiteNameInput"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="createSiteTitle">站点语言</div>
+          <el-radio-group v-model="copyRadio" @change="changeLanguage" class="radio">
+            <el-radio label="zh-CN">中文</el-radio>
+            <el-radio label="en-US">英文</el-radio>
+            <el-radio label="ja-JP">日文</el-radio>
+            <el-radio label="es-ES">西班牙语</el-radio>
+            <el-radio label="ko-KR">韩语</el-radio>
+          </el-radio-group>
+          <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
+        </div>
+        <div class="create">
+          <button @click="closeCopyDialog" class="cancelBtn">取消</button>
+          <button @click="copySiteCreate" class="createBtn">确定</button>
+        </div>
+      </div>
+    </el-dialog>
     <SelectTemplateDialog
       ref="selectTemplateDialog"
       :siteId="curSiteinfo.siteId"
@@ -310,7 +351,10 @@ export default {
       errorSiteLanguageText: "站点语言不能为空",
       changeSiteShow: false,
       changeSiteName: "",
-      changeRadio: ""
+      changeRadio: "",
+      copySiteShow: false,
+      copySiteName: "",
+      copyRadio: ""
     };
   },
   components: {
@@ -373,14 +417,57 @@ export default {
     // 点击创建站点下拉菜单
     handleCreateSite(command) {
       if (command == "copy") {
+        this.copySite();
       } else if (command == "addNew") {
         this.addSite();
       }
     },
-    closeCreateDialog() {
+    copySite() {
+      this.copySiteName = this.curSiteinfo.siteName + "-副本";
+      this.copyRadio = this.curSiteinfo.language;
+      this.copySiteShow = true;
+    },
+    closeCopyDialog() {
+      this.copySiteShow = false;
       this.radio = "";
       this.createSiteName = "";
+      this.errorSiteName = false;
+      this.errorSiteNameText = "";
+      this.errorSiteLanguage = false;
+    },
+    // 确定复制站点创建
+    async copySiteCreate() {
+      if (this.copySiteName == "") {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能为空";
+        return;
+      }
+      if (this.copySiteName.length > 20) {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能超过20个字符，请重新输入";
+        return;
+      }
+      let para = {
+        siteId: this.siteId,
+        siteName: this.copySiteName,
+        language: this.copyRadio
+      };
+      let { data, status } = await dashboardApi.copySite(para);
+      if (status == 200) {
+        this.$emit("getSites");
+        this.copySiteShow = false;
+        this.$notify({
+          customClass: "notify-success",
+          message: `创建成功`,
+          duration: 2000,
+          showClose: false
+        });
+      }
+    },
+    closeCreateDialog() {
       this.createShow = false;
+      this.radio = "";
+      this.createSiteName = "";
       this.errorSiteName = false;
       this.errorSiteNameText = "";
       this.errorSiteLanguage = false;
@@ -939,6 +1026,18 @@ export default {
           }
         }
       }
+    }
+    .tips {
+      height: 32px;
+      background: rgba(231, 252, 255, 0.5);
+      border-radius: 2px;
+      border: 1px solid rgba(93, 220, 240, 1);
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(9, 204, 235, 1);
+      line-height: 32px;
+      padding-left: 16px;
+      margin-top: 16px;
     }
     .createSiteName {
       margin-top: 20px;
