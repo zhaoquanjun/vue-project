@@ -5,6 +5,7 @@
 import axios from 'axios';
 import { Notification } from 'element-ui';
 import { getLocal, clearAllLocal } from "@/libs/local.js";
+import { getCookie } from "@/libs/cookie";
 import environment from "@/environment/index.js";
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
@@ -25,7 +26,7 @@ axios.interceptors.request.use(async config => {
     if (data) { token = data.access_token }
     token && (config.headers.Authorization = "Bearer " + token);
     if (process.env.NODE_ENV === 'development') {
-        config.headers.AppId = getLocal('ymId') ? getLocal('ymId') : store.state.dashboard.appId;
+        config.headers.AppId = getCookie('bqqje') ? getCookie('bqqje') : store.state.dashboard.appId;
     }
     return config;
 },

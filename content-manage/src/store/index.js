@@ -12,20 +12,20 @@ const store = new Vuex.Store({
   },
   state: {
     accessToken: { Authorization: '' },
-    
+
   },
   mutations: {
     SET_USER: (state, data) => {
       if (data) {
         state.accessToken.Authorization = data;
-      } 
+      }
     },
   },
   actions: {
-   
+
   },
   getters: {
-    
+
   }
 });
 export default store;
@@ -36,10 +36,10 @@ export default store;
  * 页面刷新再将local中的token 写入store中
  */
 
-if(getCookie("tjufje")){
-  store.commit("SETSITEID",getCookie("tjufje"))
+if (getCookie("tjufje")) {
+  store.commit("SETSITEID", getCookie("tjufje"))
 }
 
-if(getLocal("ymId")){
-    store.commit("SETAPPID",getLocal("ymId"))
+if (getCookie("bqqje")) {
+  store.commit("SETAPPID", getCookie("bqqje"))
 }

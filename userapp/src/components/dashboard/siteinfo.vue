@@ -338,12 +338,13 @@ export default {
         });
       }
     },
-    changeSite(item) {
+    async changeSite(item) {
       if (item.siteId != this.siteId) {
         this.siteId = item.siteId;
         this.curSiteinfo = item;
         this.getTodoInfo(this.siteId);
         this.$store.commit("SETSITEID", this.siteId);
+        await dashboardApi.updateUserLastSiteId(this.siteId);
       }
     },
     jumpTo(type) {

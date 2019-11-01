@@ -44,8 +44,8 @@ const dashboard = {
         },
         SETAPPID(state, appId) {
             state.appId = appId;
-            setLocal('ymId', appId);
-
+            // appid => bqqje  对应的下一个字母
+            setCookie("bqqje", appId)
         },
         set_menuList(state, m) {
             state.menuList = m;
