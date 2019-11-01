@@ -1,7 +1,7 @@
 <template>
   <div class="popup-content__none">
     <h5>请输入网址</h5>
-    <input @blur="_handleChangeUrl" placeholder="请输入网站" v-model="url">
+    <input @blur="_handleChangeUrl" placeholder="请输入网址" v-model="url">
     <div v-if="isUrl" class="tips ym-form-item__error">{{tipText}}</div>
   </div>
 </template>

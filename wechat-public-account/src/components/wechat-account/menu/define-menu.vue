@@ -604,7 +604,7 @@ export default {
                 notify(this, '保存并发布成功', "success");
                 //this.hasChangeMeunName()
               } else {
-                notify(this, '保存并发布失败', "error");
+                // notify(this, '保存并发布失败', "error");
                 this.menuDetail.behaviorType = JSON.stringify(this.menuDetail.behaviorType);
                 this.menuDetail.clickBehavior = JSON.stringify(this.menuDetail.clickBehavior);
               }
