@@ -7,7 +7,7 @@ module.exports = {
       //     'es6.symbol'
       //   ]
       // }
-      ['@babel/preset-env',{'modules':false}]
+      // ['@babel/preset-env',{'modules': 'es2015'}]
     ],
     "plugins": [
       [
