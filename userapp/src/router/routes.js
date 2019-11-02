@@ -58,6 +58,7 @@ export const defaultRoutes = [
         component: () => import("@/views/website-manage/selectTemplate.vue"),
         meta: {
           title: "选择模版",
+          requiresAuth: true,
           isSub: true
         }
       },
