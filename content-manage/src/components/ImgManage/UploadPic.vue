@@ -80,6 +80,7 @@
 <script>
 import SelectTree from "@/components/common/SelectTree";
 import { isImgFile, imgSize } from "@/utlis/index";
+import securityService from "@/services/authentication/securityService";
 
 export default {
     props: ["treeResult", "uploadPicUrl", "nodeData"],
@@ -183,7 +184,7 @@ export default {
             this.uploadPicAction = `${this.uploadPicUrl}/${this.upload2Category.id}`;
         },
         // 点击上传按钮
-        submitUpload() {
+        async submitUpload() {
         
             this.hideImgName();
             this.isUploading = true;
@@ -192,9 +193,8 @@ export default {
             if (this.nodeData) {
                 this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
             }
-           
-            this.headers.Authorization =
-                "Bearer " + this.$store.state.accessToken.Authorization;
+            let data = await securityService.getUser();
+            this.headers.Authorization = "Bearer " + data.access_token;
             this.$refs.upload.submit();
         },
         // 上传图片时

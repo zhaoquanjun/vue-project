@@ -86,6 +86,7 @@ import environment from "@/environment/index";
 import { wxAuth, getCdnDomainList, bindDomain, setPromotionUrl} from "@/api/request/account.js";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
 import { setTimeout } from 'timers';
+import {getLocal} from '@/libs/local'
 
 export default {
   data() {
@@ -103,6 +104,7 @@ export default {
       isResolve: 2,  //0暂未设置解析,1等待解析生效,2解析成功,3等待服务器生成解析记录值
       domainName: '请输入需添加的域名',
       tipsText: '请输入正确的域名',
+      authTipText: '请在新打开的窗口中完成授权...',
       isShowTips: false,
       addDomain: '',
       percentage: 0,
@@ -228,13 +230,18 @@ export default {
       document.body.appendChild(oA);
       let btn = document.getElementById("authBtn");
       btn.click();
+       var authTimer=window.setInterval(()=> {
+        let data = getLocal("transitTips")
+        this.authTipText = data.data
+      },200)
       if (btn) document.body.removeChild(document.getElementById("authBtn"));
       this.$confirm("提示", {
         title: "提示",
         showCancelButton: false,
-        message: this.$createElement("div", null, '是否授权成功'),
+        message: this.$createElement("div", null, this.authTipText),
         callback: async action => {
           if (action === "confirm") {
+            window.clearInterval(authTimer)
             this.$router.push('/wechat/accountsetting')
             this._getCdnDomainList()
           }

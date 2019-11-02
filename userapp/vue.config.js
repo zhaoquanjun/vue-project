@@ -37,18 +37,21 @@ module.exports = {
         config.module
             .rule('images')
             .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/);
-        config.externals = {
-            'vue':'Vue',
-            'vuex':'Vuex',
-            'vue-router':'VueRouter',
-            'axios':'axios',
-            'element-ui': 'ELEMENT',
-        }
+        
     },
-    configureWebpack: { // webpack-merge
-        plugins: [],
-        module: {}
+    configureWebpack: config => {
+        // config.externals = {
+        //     'vue':'Vue',
+        //     'vuex':'Vuex',
+        //     'vue-router':'VueRouter',
+        //     'axios':'axios',
+        //     'element-ui': 'ELEMENT',
+        // }
     },
+    //configureWebpack: { // webpack-merge
+        // plugins: [],
+        // module: {}
+    // },
     devServer: { // 开发 服务时使用
         disableHostCheck: true,
         port: 8082,

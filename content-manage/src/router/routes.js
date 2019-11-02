@@ -64,6 +64,7 @@ export const defaultRoutes = [
                 name: "createarticle",
                 component: () => import('@/components/ArticleManage/ContentDetail.vue'),
                 meta: {
+                    requiresAuth: true,
                     title: "新增文章"
                 }
             },
@@ -97,7 +98,7 @@ export const defaultRoutes = [
                 name: "video",
                 component: () => import('@/views/content-manage/video-manage.vue'),
                 meta: {
-                    // requiresAuth: true,
+                    requiresAuth: true,
                     title: "视频管理",
                     isSub: true
                 },
@@ -107,7 +108,7 @@ export const defaultRoutes = [
                 name: "audio",
                 component: () => import('@/views/content-manage/audio-manage.vue'),
                 meta: {
-                    // requiresAuth: true,
+                    requiresAuth: true,
                     title: "音频管理",
                     isSub: true
                 },
@@ -125,7 +126,10 @@ export const defaultRoutes = [
                 path: 'createProduct',
                 name: "createProduct",
                 component: () => import('@/components/ProductManage/ContentDetail.vue'),
-                meta: { title: "新增产品" }
+                meta: { 
+                    requiresAuth: true,
+                    title: "新增产品" 
+                }
             },
             {
                 path: "content",

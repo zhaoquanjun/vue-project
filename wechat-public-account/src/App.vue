@@ -23,11 +23,6 @@
     </el-container>
   </div>
 </template>
-<script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
-<script src="https://cdn.bootcss.com/vue-router/3.0.1/vue-router.min.js"></script>
-<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
-<script src="https://cdn.bootcss.com/element-ui/2.4.0/index.js"></script>
-<script src="https://cdn.bootcss.com/vuex/3.0.1/vuex.min.js"></script>
 <script>
 import MHeader from "@/components/common/MHeader";
 import MAside from "@/components/common/MAside";

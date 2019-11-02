@@ -140,3 +140,7 @@ export const CreateSite = (language, siteName) => {
     let para = { language: language, siteName: siteName };
     return ajaxRequest.post(`${environment.memberManageApi}/api/v1/siteInfo/CreateSite`, para);
 }
+// 复制当前站点
+export const copySite = (para) => {
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/siteInfo/CopySite`, para);
+}

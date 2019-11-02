@@ -119,6 +119,7 @@ import SparkMD5 from "spark-md5";
 import * as chunkUploadManageApi from "@/api/request/chunkUploadManageApi";
 import SelectTree from "@/components/common/SelectTree";
 import { format } from "path";
+import securityService from "@/services/authentication/securityService";
 export default {
     props: [
         "displayName",
@@ -143,8 +144,7 @@ export default {
                 simultaneousUploads: 1,
                 headers: {
                     AppId: this.$store.state.dashboard.appId,
-                    Authorization:
-                        "Bearer " + this.$store.state.accessToken.Authorization
+                    Authorization: ""
                 },
                 checkChunkUploadedByResponse: (chunk, message) => {
                     let data = JSON.parse(message);
@@ -279,7 +279,9 @@ export default {
             allFileSize: 0
         };
     },
-    created() {
+    async created() {
+        let data = await securityService.getUser();
+        this.options.headers.Authorization = "Bearer " + data.access_token;
         this.options.target = `${this.apiHost}/api/v1/chunkupload/${this.uploadType}/${this.nodeData.id}`;
     },
     methods: {

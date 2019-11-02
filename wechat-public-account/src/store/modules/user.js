@@ -15,12 +15,7 @@ const user = {
       }
       // vtfsjogp => userInfo
       setCookie("vtfsjogp", data)
-    },
-    SET_USER: (state, data) => {
-      if (data) {
-        state.accessToken.Authorization = data;
-      } 
-    },
+    }
   },
   actions: {
     async _set(context,data){

@@ -15,11 +15,6 @@ const store = new Vuex.Store({
 
   },
   mutations: {
-    SET_USER: (state, data) => {
-      if (data) {
-        state.accessToken.Authorization = data;
-      }
-    },
   },
   actions: {
 
