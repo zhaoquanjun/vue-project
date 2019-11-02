@@ -27,6 +27,9 @@ router.beforeEach(async (to, from, next) => {
 
   if (accessToken) {
     if (to.name !== "callback") {
+      if (store.getters.getMenuList.length < 1) {
+        await store.dispatch('_getMenuListData')
+      }
       if (!to.meta.requiresAuth) {
         next()
         return
@@ -40,9 +43,6 @@ router.beforeEach(async (to, from, next) => {
       }
       if (!siteId) {
         await store.dispatch('_setSiteId')
-      }
-      if (store.getters.getMenuList.length < 1) {
-        await store.dispatch('_getMenuListData')
       }
       let r = await store.dispatch('getCurRouteAuth', to.path);
       if (r) {
