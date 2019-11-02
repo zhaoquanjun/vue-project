@@ -18,7 +18,7 @@
         <!-- 第二步绑定域名 -->
         <div v-if="step == 2" class="account-setting__resolve">
           <img :src="wechanSpare" alt />
-          <p>设置推广域名，立即开启自定菜单</p>
+          <p>设置推广域名，立即开启自定义菜单</p>
           <input 
             type='text' 
             v-model="addDomain" 
@@ -86,7 +86,7 @@ import environment from "@/environment/index";
 import { wxAuth, getCdnDomainList, bindDomain, setPromotionUrl} from "@/api/request/account.js";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
 import { setTimeout } from 'timers';
-import {getLocal} from '@/libs/local'
+import {getLocal,setLocal} from '@/libs/local'
 
 export default {
   data() {
@@ -230,10 +230,13 @@ export default {
       document.body.appendChild(oA);
       let btn = document.getElementById("authBtn");
       btn.click();
-       var authTimer=window.setInterval(()=> {
+      setTimeout(function (){
+        setLocal("transitTips", {data:'999',status: 200})
+      }, 4000)
+      var authTimer=window.setInterval(()=> {
         let data = getLocal("transitTips")
         this.authTipText = data.data
-      },200)
+      },1000)
       if (btn) document.body.removeChild(document.getElementById("authBtn"));
       this.$confirm("提示", {
         title: "提示",
