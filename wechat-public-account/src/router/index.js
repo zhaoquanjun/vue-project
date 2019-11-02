@@ -37,11 +37,9 @@ router.beforeEach(async (to, from, next) => {
       }
       if (!appId) {
         await store.dispatch('_updateAppIdAndSiteIdToCookie')
-        next()
       }
       if (!siteId) {
         await store.dispatch('_setSiteId')
-        next()
       }
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')

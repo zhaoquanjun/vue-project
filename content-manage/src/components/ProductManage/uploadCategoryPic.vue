@@ -60,6 +60,7 @@
 <script>
 import environment from "@/environment/index.js";
 import { trim } from "@/utlis/index.js";
+import securityService from "@/services/authentication/securityService";
 export default {
     props: {
         isUpload: {
@@ -148,9 +149,9 @@ export default {
             // this.imageUrl = URL.createObjectURL(file.raw);
             this.imageUrl1 = file.response;
         },
-        beforeAvatarUpload(file) {
-            this.headers.Authorization =
-                "Bearer " + this.$store.state.accessToken.Authorization;
+        async beforeAvatarUpload(file) {
+            let data = await securityService.getUser();
+            this.headers.Authorization = "Bearer " + data.access_token;
             const isPic =
                 ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !==
                 -1;

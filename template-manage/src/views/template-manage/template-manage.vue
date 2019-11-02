@@ -365,7 +365,7 @@
 import * as templateApi from "@/api/request/templateApi";
 import { getLanguage, formatDateTime } from "@/utlis/index";
 import environment from "@/environment/index.js";
-
+import securityService from "@/services/authentication/securityService";
 export default {
   data() {
     return {
@@ -570,9 +570,9 @@ export default {
     handleAvatarSuccess(res, file) {
       this.picUrl = file.response;
     },
-    beforeAvatarUpload(file) {
-      this.headers.Authorization =
-        "Bearer " + this.$store.state.user.accessToken.Authorization;
+    async beforeAvatarUpload(file) {
+      let data = await securityService.getUser();
+      this.headers.Authorization = "Bearer " + data.access_token;
       this.headers.appId = this.$store.state.dashboard.appId;
 
       const isPic =
@@ -603,9 +603,9 @@ export default {
     handleAvatarSuccessMobile(res, file) {
       this.picUrlMobile = file.response;
     },
-    beforeAvatarUploadMobile(file) {
-      this.headersMobile.Authorization =
-        "Bearer " + this.$store.state.user.accessToken.Authorization;
+    async beforeAvatarUploadMobile(file) {
+      let data = await securityService.getUser();
+      this.headersMobile.Authorization = "Bearer " + data.access_token;
       this.headersMobile.appId = this.$store.state.dashboard.appId;
 
       const isPic =
