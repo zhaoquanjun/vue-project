@@ -1,4 +1,5 @@
 import * as ajaxRequest from "../ajaxRequest";
+import enbironmemy from "../../environment/index" 
 
 
 // 获取文章列表
@@ -69,4 +70,15 @@ export const getPicList = options => {
 }
 export const picBatchRecovery = (isDelete, idList) => {
     return ajaxRequest.put(`/api/v1/Picture/ChangeDeleteStatus/${isDelete}`, idList);
+}
+
+/**
+ * 获取页面列表
+ * @param {*} option 
+ */
+export const getPageList = options => {
+    return ajaxRequest.get(`${enbironmemy.designerManageApi}/api/v1/Page/GetRecyclePageList`, options);
+}
+export const pageRecovery = options => {
+    return ajaxRequest.put(`${enbironmemy.designerManageApi}/api/v1/Page/RestorePage`, options);
 }
