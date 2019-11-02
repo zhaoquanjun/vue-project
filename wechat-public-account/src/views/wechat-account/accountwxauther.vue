@@ -230,12 +230,12 @@ export default {
       document.body.appendChild(oA);
       let btn = document.getElementById("authBtn");
       btn.click();
-      setTimeout(function (){
-        setLocal("transitTips", {data:'999',status: 200})
-      }, 4000)
+      // setTimeout(function (){
+      //   setLocal("transitTips", {data:'999',status: 200})
+      // }, 4000)
       var authTimer=window.setInterval(()=> {
         let data = getLocal("transitTips")
-        this.authTipText = data.data
+        this.authTipText = data.data 
       },1000)
       if (btn) document.body.removeChild(document.getElementById("authBtn"));
       this.$confirm("提示", {
@@ -247,6 +247,7 @@ export default {
             window.clearInterval(authTimer)
             this.$router.push('/wechat/accountsetting')
             this._getCdnDomainList()
+            this.authTipText = '请在新打开的窗口中完成授权...'
           }
         }
       });
