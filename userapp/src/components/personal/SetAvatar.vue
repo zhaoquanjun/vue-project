@@ -37,6 +37,7 @@
 <script>
 import environment from "@/environment/index.js";
 import { updateUserPicture } from "@/api/index.js";
+import securityService from "@/services/authentication/securityService";
 export default {
     props: ["imageUrl"],
     data() {
@@ -66,10 +67,9 @@ export default {
             this.picUrl = file.response;
             this.disabled = false;
         },
-        beforeAvatarUpload(file) {
-            this.headers.Authorization =
-                "Bearer " + this.$store.state.user.accessToken.Authorization;
-                console.log(this.$store.state.dashboard)
+        async beforeAvatarUpload(file) {
+            let data = await securityService.getUser();
+            this.headers.Authorization = "Bearer " + data.access_token;
             this.headers.appId = this.$store.state.dashboard.appId;
 
             const isPic =

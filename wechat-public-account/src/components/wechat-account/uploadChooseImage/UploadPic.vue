@@ -4,7 +4,7 @@
     <!-- <div class="select-btn">
       <el-button class="choose-img upload-btn" size="small" type="default">选择图片</el-button>
       <el-button class="upload-btn" size="small" type="default">选择文件夹</el-button>
-    </div> -->
+    </div>-->
     <el-row class="upload-head" type="flex" justify="space-between">
       <!-- [{{upload2Category.label}}] -->
       <el-col :span="12">
@@ -54,6 +54,7 @@
 
 <script>
 import { Message } from "element-ui";
+import securityService from "@/services/authentication/securityService";
 export default {
   props: ["treeResult", "uploadPicUrl"],
 
@@ -65,23 +66,21 @@ export default {
       uploadPicAction: `${this.uploadPicUrl}/0`,
       headers: {
         appId: this.$store.state.dashboard.appId,
-        Authorization: this.$store.getters.token
+        Authorization: ""
       },
-      
+
       uploadSucess: false,
       count: 0
     };
   },
-  created() {
+  async created() {
     let appid = null;
     let token = this._getJwtToken();
     if (window.smSite.getAppIdByCookie) {
       appid = window.smSite.getAppIdByCookie();
     }
-    this.headers = {
-      appId: appid,
-      Authorization: "Bearer " + token
-    };
+    let data = await securityService.getUser();
+    this.headers.Authorization = "Bearer " + data.access_token;
   },
   methods: {
     handleChange(file) {
@@ -152,7 +151,7 @@ export default {
   border-top: 1px solid #eee;
 }
 .select-btn {
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 #upload-img {
   .upload-tree {
