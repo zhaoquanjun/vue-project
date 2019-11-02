@@ -4,6 +4,7 @@
 <script>
 import { transit } from "@/api/request/account.js";
 import { notify } from "@/utlis/index.js";
+import {setLocal} from '@/libs/local'
 export default {
   created() {
     this._appendSpace();
@@ -17,16 +18,17 @@ export default {
   },
   methods: {
     async _transitPage(str) {
-      let  {data, status}  = await transit(str);
-      if (status == 200) {
-        notify(this, data, "success");
-      } else {
-        notify(this, data, "error");
-      }
-      
+      let  data = await transit(str);
+      // if (status == 200) {
+      //   notify(this, data, "success");
+      // } else {
+      //   notify(this, data, "error");
+      // }
+      console.log('transitTips', data)
+      setLocal("transitTips", data)
       setTimeout(function (){
         window.close();
-      }, 3000)
+      }, 200)
     },
     _appendSpace() {
       var oDiv = document.createElement("div");
