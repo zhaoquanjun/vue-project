@@ -68,7 +68,7 @@
                 </el-form-item>
                 <div v-if='!hasTrueName' class="tipsName">
                   <span class="ym-form-item__error">{{textTips}}</span>
-                  <a href="https://kf.qq.com/faq/181228f2iMV7181228RbMfAr.html" target="_blank">查看详情</a>
+                  <!-- <a href="https://kf.qq.com/faq/181228f2iMV7181228RbMfAr.html" target="_blank">查看详情</a> -->
                 </div>
                 <el-form-item v-if="hasSubList" label="菜单内容">
                   <el-radio
@@ -376,6 +376,10 @@ export default {
       //在排序时
       if (this.isOrder) {
         this.orderIndex = i
+        return
+      } 
+
+      if (!hasTrueName) {
         return
       }
       let flag = this.testParameters();
