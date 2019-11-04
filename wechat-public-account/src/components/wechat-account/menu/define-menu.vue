@@ -379,7 +379,7 @@ export default {
         return
       } 
 
-      if (!hasTrueName) {
+      if (!this.hasTrueName) {
         return
       }
       let flag = this.testParameters();
