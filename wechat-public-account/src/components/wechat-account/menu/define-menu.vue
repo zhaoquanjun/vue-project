@@ -658,13 +658,13 @@ export default {
       let BlankNum = 1;
       let strLength = 0;
       for(let i = 0; i<this.menuTree.length;i++) {
-        if(str == this.menuTree[i].name && i != this.curIndex) {
+        if(str == this.menuTree[i].name && this.menuDetail.id != this.menuTree[i].id) {
           this.hasTrueName = false
           this.textTips = '菜单名已存在,请重新输入'
           return
         } else if (this.menuTree[i].subMenuList.length>0) {
           for(let j = 0; j<this.menuTree[i].subMenuList.length;j++) {
-            if(str == this.menuTree[i].subMenuList[j].name && (i != this.curIndexj && j !=  this.curSubIndex)) {
+            if(str == this.menuTree[i].subMenuList[j].name && this.menuDetail.id != this.menuTree[i].subMenuList[j].id) {
               this.hasTrueName = false
               this.textTips = '菜单名已存在,请重新输入'
               return

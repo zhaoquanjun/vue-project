@@ -235,13 +235,15 @@ export default {
       // }, 4000)
       var authTimer=window.setInterval(()=> {
         let data = getLocal("transitTips")
-        this.authTipText = data.data 
+        this.authTipText = data.data;
+        console.log(this.authTipText)
+        // this.$message.close()
       },1000)
       if (btn) document.body.removeChild(document.getElementById("authBtn"));
       this.$confirm("提示", {
         title: "提示",
         showCancelButton: false,
-        message: this.$createElement("div", null, this.authTipText),
+        message:  this.authTipText,
         callback: async action => {
           if (action === "confirm") {
             window.clearInterval(authTimer)
