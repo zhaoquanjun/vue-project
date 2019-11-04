@@ -145,7 +145,6 @@ export default {
             return this.isInvitationPanelShow === true ? 331 : 0;
         },
         isBatchHeaderShow() {
-            console.log(this.idsList.length);
             return this.idsList.length > 0 ? true : false;
         }
     },
@@ -170,7 +169,6 @@ export default {
             if (options.switchType === 1) {
                 stateTip = `删除后，网站中引用的文章列表将不再显示该产品，是否确定删除？`;
             } else if (options.switchType === 2) {
-                console.log(options);
                 var message = options.flag ? "取消置顶" : "置顶";
 
                 stateTip = "您确定要" + message + "文章吗？";
@@ -180,7 +178,7 @@ export default {
                 options.flag = !options.flag;
                 stateTip = "您确定要" + message + "产品吗？";
             } else if (options.switchType === 4) {
-                var message = options.flag ? "全部" : "仅登录";
+                var message = !options.flag ? "全部" : "仅登录";
                 options.flag = options.flag;
                 stateTip = "您确定要设置" + message + "用户可访问吗？";
             }
@@ -192,7 +190,6 @@ export default {
                 customClass: "medium",
                 iconClass: "icon-warning",
                 callback: async action => {
-                    console.log(action);
                     if (action === "confirm") {
                         let {
                             status,
@@ -206,6 +203,9 @@ export default {
                                 showClose: false,
                                 duration: 1000
                             });
+                            if(options.switchType === 4){
+                                this.isInvitationPanelShow = false;
+                            }
                             this.contentTableList();
                         }
                     }
@@ -238,6 +238,7 @@ export default {
             this.isInvitationPanelShow = false;
         },
         moveClassify(data, flag) {
+            this.clickType = "";
             if (flag === "move") {
                 this.tipText = "移动至";
             } else if (flag === "copy") {
@@ -394,7 +395,6 @@ export default {
          * z新增分类
          */
         async newCategory(entity) {
-            console.log(entity, "000000");
             await productCategoryManageApi.create(entity);
             this.getTree();
         },
@@ -420,7 +420,6 @@ export default {
                     customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
-                        console.log(action);
                         if (action === "confirm") {
                             let {
                                 status
@@ -486,7 +485,6 @@ export default {
             }
         },
         handleEditArticle(row) {
-            console.log(row);
             this.$router.push({
                 path: "/product/create",
                 query: { id: row.id, isEditor: 1 }

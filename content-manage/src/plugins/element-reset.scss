@@ -275,7 +275,11 @@
         background: #F8FAFC
     }
     .el-tree > :first-child >.el-tree-node__children{
-        height: calc(100vh - 250px);
+        // height: calc(100vh - 250px);
+        // overflow: auto
+    }
+    .el-scrollbar{
+        height: calc(100vh - 200px);
         overflow: auto
     }
 }
