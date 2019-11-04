@@ -569,7 +569,8 @@ export default {
       margin-top: 56px;
       width: 130px;
       height: 130px;
-      background: #ccc;
+      background: url("~img/gongzhonghao.png") no-repeat center;
+      background-size: contain;
     }
     .imgTips {
       margin-top: 16px;
