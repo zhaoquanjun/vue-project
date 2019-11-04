@@ -73,7 +73,7 @@
         <div class="createComplete" v-show="isCreateComplete">恭喜您，创建成功!</div>
         <div class="createText">您现在可以使用管理员手机号登录以下网址 快捷管理您已购的服务</div>
         <div style="margin-top:32px">
-          <span class="domain">abc.wezhan.cn</span>
+          <span class="domain">login.clouddream.net</span>
           <span class="collection">收藏</span>
         </div>
         <button class="complete" @click="complete">完成</button>
