@@ -79,7 +79,7 @@
             </div>
             <div class="siteinfoItem">
               <span>网站地址：</span>
-              <a class="siteinfoDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
+              <a class="siteinfoDomain" :href="`http://${secondDomain}`" target="_blank">{{secondDomain}}</a>
             </div>
             <div class="siteinfoItem">
               <span>绑定域名：</span>
@@ -92,7 +92,7 @@
             </div>
           </div>
           <button class="siteinfoBtn design" @click="toDesign">设计</button>
-          <a class="siteinfoBtn prev" :href="`//${secondDomain}`" target="_blank">预览</a>
+          <a class="siteinfoBtn prev" :href="`http://${secondDomain}`" target="_blank">预览</a>
         </div>
       </el-row>
       <!-- <el-row class="siteContent">

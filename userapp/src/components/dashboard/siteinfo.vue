@@ -45,7 +45,7 @@
           >选择模版</button>
           <a
             class="preview-btn"
-            :href="`//${curSiteinfo.secondDomain}`"
+            :href="`http://${curSiteinfo.secondDomain}`"
             target="_blank"
             v-show="curSiteTodoinfo.siteTemplate"
           >预览</a>
@@ -82,11 +82,12 @@
                     class="siteInfo-domain"
                   >{{curSiteTodoinfo.resolvedDomainList?curSiteTodoinfo.resolvedDomainList[0]:""}}</span>
                   <el-dropdown-menu slot="dropdown" class="siteDomainDrop">
+                    <!-- 域名默认为http 若域名为https的会自动跳到https -->
                     <a
                       class="siteDomainDropList"
                       v-for="(item, index) in curSiteTodoinfo.resolvedDomainList"
                       :key="index"
-                      :href="`//${curSiteTodoinfo.resolvedDomainList[index]}`"
+                      :href="`http://${curSiteTodoinfo.resolvedDomainList[index]}`"
                       target="_blank"
                     >
                       <span class="siteDomainDropItem">{{curSiteTodoinfo.resolvedDomainList[index]}}</span>

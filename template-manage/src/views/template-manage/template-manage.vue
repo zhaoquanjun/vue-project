@@ -99,7 +99,7 @@
                     :src="scope.row.imageUrl"
                     alt
                     style="width:100%;height:100%;object-fit:cover;"
-                    :href="`//${scope.row.domain}`"
+                    :href="`http://${scope.row.domain}`"
                   />
                 </div>
               </template>
@@ -150,7 +150,7 @@
                 <div class="handle-btn-wrap">
                   <a
                     style="vertical-align: middle;"
-                    :href="scope.row.status == 3 || scope.row.status == 1 ? `//${scope.row.domain}`:'javascript:;'"
+                    :href="scope.row.status == 3 || scope.row.status == 1 ? `http://${scope.row.domain}`:'javascript:;'"
                     :target="scope.row.status == 3 || scope.row.status == 1 ?'_blank':''"
                     :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
                     class="more-operate"
