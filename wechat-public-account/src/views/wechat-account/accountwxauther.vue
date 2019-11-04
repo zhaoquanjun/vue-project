@@ -97,7 +97,7 @@ export default {
     return {
       step: 1,
       title: "账号设置",
-      domainIndex: 0,
+      domainIndex: -1,
       siteId: this.$store.state.dashboard.siteId,
       isResolveSuccess: this.$store.state.wxaccount.wx_status.isResolveSuccess,
       isAuth: this.$store.state.wxaccount.wx_status.isAuth,
