@@ -10,12 +10,12 @@
         <div>
           <img src="~img/share01.png"/>
           <p>近30日阅读数</p>
-          <span>{{pvTotal}}</span>
+          <span>{{uvTotal}}</span>
         </div>
         <div>
           <img src="~img/share02.png"/>
           <p>近30日访客数</p>
-          <span>{{uvTotal}}</span>
+          <span>{{pvTotal}}</span>
         </div>
         <div>
           <img src="~img/share03.png"/>
@@ -176,7 +176,7 @@ export default {
                   stack: '总量',
                   symbolSize:10,
                   symbol:'circle',  
-                  data: this.interval == 1 ? this.pvList:this.pvLast
+                  data: this.interval == 1 ? this.uvList:this.uvLast
               },
               {
                   name:'访问数',
@@ -184,7 +184,7 @@ export default {
                   stack: '总量',
                   symbolSize:10,
                   symbol:'circle', 
-                  data: this.interval == 1 ? this.uvList:this.uvLast
+                  data: this.interval == 1 ? this.pvList:this.pvLast
               }
           ],
           color: ['#09CCEB', '#0595E6']
