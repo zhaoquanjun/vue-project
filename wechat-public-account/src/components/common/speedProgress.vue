@@ -2,11 +2,13 @@
     <div class="speed-progress">
         <ul>
             <li v-for="(item,index) in list" :key="index" :class="{ active: index <step }">
-                <span>{{item.title}}</span>
+                <!-- <span>{{item.title}}</span> -->
+                <span><i v-if="index <step" class="icon iconfont iconduihao"></i></span>
                 <p>{{item.text}}</p>
+                <div :class="{ lineActive: index <step-1 }" v-if="index < list.length -1" class="line"></div>
             </li>
         </ul>
-        <div class="line"></div>
+        
     </div>
 </template>
 <script>
@@ -49,27 +51,36 @@ export default {
     position: relative;
     height: 72px;
     width: 100%;
-    margin: 60px 0 50px;
+    margin: 32px 0;
     ul {
-        position: relative;
         z-index: 2;
         width: 700px;
         display: flex;
         margin: 0 auto;
         justify-content: space-between;
         li {
+            position: relative;
             width: 100px;
             text-align: center;
             span {
+                position: relative;
                 display: inline-block;
                 width:32px;
                 height:32px;
                 margin-bottom: 20px;
                 line-height: 32px;
-                background:rgba(212,225,228,1);
+                z-index: 10;
+                background: #E5E5E5;
                 color: #FFFFFF;
-                border:1px solid rgba(255,255,255,1);
+                background:rgba(245,246,250,1);
+                border: 2px solid rgba(223,226,233,1);
                 border-radius: 50%;
+                text-align: center;
+                i {
+                    font-size: 14px;
+                    font-weight: 700;
+                    line-height: 32px;
+                }
             }
             p {
                 font-size:14px;
@@ -78,25 +89,28 @@ export default {
                 color: #A1A8B1;
                 line-height: 20px;
             }
+            .line {
+                box-shadow: border-box;
+                border: 1px solid #E5E5E5;
+                width: 300px;
+                position: absolute;
+                top: 16px;
+                left: 50%;
+                z-index: 1;
+            }
+            .lineActive {
+                border: 1px solid #01c0de;
+            }
         }
         .active {
             span {
-                background: #63DC8C;
+                background: #01c0de;
+                border: 2px solid #01c0de;
             }
             p {
               color:rgba(38,38,38,1);  
             }
         }
-    }
-    .line {
-        box-shadow: border-box;
-        border: 1px dashed #E5E5E5;
-        width: 600px;
-        position: absolute;
-        top: 16px;
-        left: 50%;
-        margin-left: -300px;
-        z-index: 1;
     }
 }
 </style>
