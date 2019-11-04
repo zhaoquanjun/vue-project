@@ -134,6 +134,7 @@ export default {
     // 选择切换网站
     chooseWebsite(siteId) {
       this._getCdnDomainList(siteId);
+      this.curSiteId = siteId;
     },
     async _isAliYunTokenSet() {
       let { data } = await domainApi.isAliYunTokenSet();

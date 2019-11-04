@@ -16,13 +16,13 @@
           <i class="iconfont iconyiwen"></i>
         </el-tooltip>
         <el-button
-                :disabled="disable"
+          :disabled="disable"
           class="btn-small btn-lightblue handler-btn"
           type="primary"
           @click="submitForm('verifyDetail')"
         >保存</el-button>
       </el-row>
-      
+
       <div class="verify-tip">提示:请将您从站长工具中获取的标签验证代码添加到此处(格式为 {{meta}})</div>
       <el-row>
         <el-col>
@@ -119,8 +119,8 @@ export default {
         qihuTag: null,
         bingTag: null,
         googleTag: null
-        },
-        disable: true,
+      },
+      disable: true,
       curSiteId: "",
       meta: "<meta name='站点名-site-verification' content='验证码'/>",
       rules: {
@@ -166,13 +166,15 @@ export default {
   methods: {
     // 获取siteId
     getSiteId(siteId) {
-          this.curSiteId = siteId;
-          this.verifyDetail.siteId = siteId;
-          this.getSiteValidationTags(siteId);
+      this.curSiteId = siteId;
+      this.verifyDetail.siteId = siteId;
+      this.getSiteValidationTags(siteId);
     },
     // 选择切换网站
     chooseWebsite(siteId) {
-      this._getCdnDomainList(siteId);
+      this.curSiteId = siteId;
+      this.verifyDetail.siteId = siteId;
+      this.getSiteValidationTags(siteId);
     },
     async getSiteValidationTags(siteId) {
       let { data } = await siteVerifyApi.getSiteValidationTags(siteId);
@@ -197,7 +199,7 @@ export default {
       }
     },
     //插入验证标签
-      async insertSiteValidationTags() {
+    async insertSiteValidationTags() {
       let { status, data } = await siteVerifyApi.createSiteValidationTags(
         this.verifyDetail
       );
@@ -237,15 +239,21 @@ export default {
      */
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      },
-    
-      blur() {
-          if (this.verifyDetail.baiduTag || this.verifyDetail.qihuTag || this.verifyDetail.sougouTag || this.verifyDetail.googleTag || this.verifyDetail.bingTag) {
-              this.disable = false;
-          } else {
-              this.disable = true;
-          }
+    },
+
+    blur() {
+      if (
+        this.verifyDetail.baiduTag ||
+        this.verifyDetail.qihuTag ||
+        this.verifyDetail.sougouTag ||
+        this.verifyDetail.googleTag ||
+        this.verifyDetail.bingTag
+      ) {
+        this.disable = false;
+      } else {
+        this.disable = true;
       }
+    }
   }
 };
 </script>
@@ -287,8 +295,8 @@ export default {
   background: rgba(9, 204, 235, 1);
   border-radius: 2px;
   color: #fff;
-  &:hover{
-      opacity: 0.8;
+  &:hover {
+    opacity: 0.8;
   }
 }
 .ruleForm {
@@ -308,14 +316,14 @@ export default {
   vertical-align: middle;
 }
 
-.verify-tip{
-  height:32px;
-  background:rgba(245, 255, 239, 1);
-  border-radius:2px;
-  border:1px solid #63DC8C;
+.verify-tip {
+  height: 32px;
+  background: rgba(245, 255, 239, 1);
+  border-radius: 2px;
+  border: 1px solid #63dc8c;
   text-align: center;
   line-height: 32px;
-  color: #63DC8C;
+  color: #63dc8c;
   margin-bottom: 16px;
 }
 </style>
