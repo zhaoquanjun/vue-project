@@ -48,7 +48,7 @@
               <p class="ym-form-item__error">{{tipsText}}</p>
               <span @click='goResolve'>去解析</span>
             </div>
-            <div class="add" @click='changeResolve'>完成设置</div>
+            <div class="add" @click='changeResolve'>{{domainList.length>0?'完成设置':'添加域名'}}</div>
           </div>
           <!-- 第三部完成设置 -->
           
