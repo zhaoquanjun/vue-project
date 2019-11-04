@@ -33,6 +33,7 @@ let redirectUrl = {
     createProduct: `${httpSchema}content.${baseServerUrl}/content/createproduct`,
     uploadFile: `${httpSchema}content.${baseServerUrl}/content/file`,
     siteDomain: `${httpSchema}dashboard.${baseServerUrl}/website/mysite/sitedomain`,
+    selectTemplate: `${httpSchema}dashboard.${baseServerUrl}/website/selectTemplate`,
     addPicture: `${httpSchema}content.${baseServerUrl}/content/picture`
 };
 /**

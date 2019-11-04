@@ -5,6 +5,7 @@ import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
 import { getLocal } from '@/libs/local'
 import { getCookie } from "@/libs/cookie"
+import environment from "@/environment/index";
 
 Vue.use(VueRouter);
 let router = new VueRouter({
@@ -30,6 +31,14 @@ router.beforeEach(async (to, from, next) => {
       if (store.getters.getMenuList.length < 1) {
         await store.dispatch('_getMenuListData')
       }
+      let r = await store.dispatch('getCurRouteAuth', to.path);
+      if (to.path.includes("/wechat")) {
+        let haveTemplate = await store.dispatch('_haveTemplate');
+        if (!haveTemplate) {
+          window.location.href=environment.redirectUrl.selectTemplate;
+          return
+        }
+      }
       if (!to.meta.requiresAuth) {
         next()
         return
@@ -44,7 +53,7 @@ router.beforeEach(async (to, from, next) => {
       if (!siteId) {
         await store.dispatch('_setSiteId')
       }
-      let r = await store.dispatch('getCurRouteAuth', to.path);
+      
       if (r) {
         if (!store.getters.wx_status.isAuth || !store.getters.wx_status.isCertification || !store.getters.wx_status.isResolveSuccess) {
           await store.dispatch('_getWxStatus')
