@@ -54,7 +54,7 @@ export const transformationUrl = (type, domian, id, detailId) => {
     } else if(type == 'Page') {
         url = `http://${domian}/${id}`;
     } else if(type == 'Product' || type == 'News') {
-        url = `http://${domian}/${detailId}/${id}.html`;
+        url = `http://${domian}/${type}/${detailId}/${id}.html`;
     }
     return url
 }
