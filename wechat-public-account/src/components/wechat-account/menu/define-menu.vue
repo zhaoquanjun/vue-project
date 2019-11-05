@@ -567,7 +567,7 @@ export default {
       this.$confirm("提示", {
         title: "提示",
         iconClass: "icon-warning",
-          message:  `删除后，"${this.menuDetail.name}"菜单下的设置的内容将被删除，是否确定删除？`,
+          message:  `删除后，"${this.menuDetail.name}"菜单下设置的内容将被删除，是否确定删除？`,
           callback: async action => {
               if (action === "confirm") {
                   let data = await removeMenu(this.siteId, this.menuDetail.id);
