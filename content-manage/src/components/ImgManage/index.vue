@@ -10,6 +10,8 @@
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
+                :isPopup="isPopup"
+                :isSecond="isSecond"
                 @getList="getList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
@@ -135,6 +137,10 @@ export default {
             }
         },
         isPopup: {
+            type: Boolean,
+            default: false
+        },
+        isSecond: {
             type: Boolean,
             default: false
         }
