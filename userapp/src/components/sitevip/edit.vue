@@ -17,7 +17,7 @@
                 <span class="type">注册会员</span>
             </div>
             <div class="content">
-                <h6>描述</h6>
+                <h6>备注</h6>
                 <el-input class="textarea"
                           type="textarea"
                           rows="5"
