@@ -38,7 +38,7 @@
                         @click.stop="handleShow($event,node,data)"
                         v-show="data.id === treeNodeId && draggable"
                     >
-                        <i class="iconfont iconsangedian" style="font-size:30px"></i>
+                        <i class="iconfont iconsangedian" style="font-size:24px"></i>
                     </span>
                 </div>
             </el-tree>
@@ -75,7 +75,7 @@ import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
 import { trim } from "@/utlis/index";
 export default {
     // picSearchOptions
-    props: ["treeResult", "listOptions", "isArticle", "isProduct"], // 与产品分类不一致的地方 picSearchOptions
+    props: ["treeResult", "listOptions", "isArticle", "isProduct", "isPopup"], // 与产品分类不一致的地方 picSearchOptions isPopup是否为图片弹框
     components: {
         UploadCategoryPic
     },
@@ -330,9 +330,16 @@ export default {
         // 分类上传图片
         _handleShowMoreOperate(ev, node, data) {
             this.createCategoryData = this.curClickData;
-            this.$refs.operateSection.style.left =
-                ev.pageX - ev.offsetX + 16 + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            if(this.isPopup){
+                let location = this.handlerClicklocation();
+                this.$refs.operateSection.style.left =
+                    ev.pageX - location.clientWidth - ev.offsetX + 8 + "px";
+                this.$refs.operateSection.style.top =
+                    ev.pageY - location.clientHeight - ev.offsetY + "px";
+            }else{
+                this.$refs.operateSection.style.left = ev.pageX - ev.offsetX + 16 + "px";
+                this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            }
             // this.$refs.operateSection.style.display = "block";
             this.isHandlerCategoryMenuShow = true;
         },
@@ -350,14 +357,37 @@ export default {
         },
         // 新增0730   分类操作菜单显示
         _handleShowMoreOperate1(ev, row) {
-            this.$refs.operateSection1.style.left =
-                ev.pageX - ev.offsetX + 46 + "px";
-            this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + "px";
+            if(this.isPopup){
+                let location = this.handlerClicklocation();
+                this.$refs.operateSection1.style.left =
+                    ev.pageX - location.clientWidth - ev.offsetX + 32 + "px";
+                this.$refs.operateSection1.style.top =
+                    ev.pageY - location.clientHeight - ev.offsetY + "px";
+            }else{
+                this.$refs.operateSection1.style.left = ev.pageX - ev.offsetX + 32 + "px";
+                this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + "px";
+            }
             if (this.$refs.operateSection1.style.display === "block") {
                 this.$refs.operateSection1.style.display = "none";
             } else {
                 this.$refs.operateSection1.style.display = "block";
             }
+        },
+        handlerClicklocation() {
+            let content = document.getElementsByClassName("contentDialog")[0];
+            let contentW = parseFloat(getComputedStyle(content).width);
+            let contentH = parseFloat(getComputedStyle(content).height);
+            let clientWidth =
+                ((document.documentElement.clientWidth ||
+                    document.body.clientWidth) -
+                    contentW) /
+                2;
+            let clientHeight =
+                ((document.documentElement.clientHeight ||
+                    document.body.clientHeight) -
+                    contentH) /
+                2;
+            return { clientWidth, clientHeight };
         }
     },
     computed: {
@@ -464,9 +494,9 @@ export default {
         cursor: pointer;
         position: absolute;
         right: 5px;
-        width: 33px;
-        height: 28px;
-        top: 5px;
+        // width: 33px;
+        // height: 28px;
+        // top: 5px;
         z-index: 10;
         border-radius: 2px;
         text-align: center;

@@ -1,6 +1,6 @@
 const titleConfig = {
     'ql-bold': '加粗',  
-    'ql-color': '颜色',  
+    'ql-color': '字体颜色',  
     'ql-font': '字体',  
     'ql-code': '插入代码',  
     'ql-italic': '斜体',  
