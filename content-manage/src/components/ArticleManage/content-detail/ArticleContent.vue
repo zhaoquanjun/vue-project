@@ -126,7 +126,7 @@
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="padding: 0 12px 0 0;">预览网站</span>
+                                    <span style="padding: 0 12px 0 0;color: #606266;">预览网站</span>
                                     <el-tooltip class="item" effect="dark" placement="top">
                                         <div slot="content">将在所选网站的二级域名下打开预览页面</div>
                                         <i class="iconfont iconyiwen"></i>

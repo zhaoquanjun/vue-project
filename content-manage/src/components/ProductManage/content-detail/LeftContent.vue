@@ -139,7 +139,7 @@
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="padding: 0 12px 0 0;">
+                                    <span style="padding: 0 12px 0 0;color: #606266;">
                                         预览网站
                                     </span>
                                     <el-tooltip class="item" effect="dark" placement="top">
