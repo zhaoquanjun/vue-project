@@ -21,7 +21,7 @@ module.exports = {
         config.resolve.alias.set('_c', path.resolve(__dirname, 'src/components'));
         config.resolve.alias.set('_v', path.resolve(__dirname, 'src/views'));
         config.resolve.alias.set('img', path.resolve(__dirname, 'static/images'));
-        生产环境配置
+        // 生产环境配置
         if (isProduction) {
             // 压缩代码
             config.optimization.minimize(true);
