@@ -63,7 +63,7 @@
                                 <el-table-column prop="siteName"
                                                  label="来源">
                                 </el-table-column>
-                                <el-table-column prop="type"
+                                <el-table-column prop="userLevelPrt"
                                                  label="会员类型">
                                 </el-table-column>
                                 <el-table-column prop="createTimePrt"
@@ -155,7 +155,7 @@
         methods: {
             async getMemberList(options) {
                 this.$Loading.show();
-                let data = await memberManageApi.getMemberList(
+                let {data} = await memberManageApi.getMemberList(
                     (options = this.searchOptions)
                 );
                 this.$Loading.hide();
@@ -168,6 +168,8 @@
                 if (status == 200) {
                     var a = document.createElement('a');
                     a.setAttribute('href', data);
+                    var fileName = '会员_' + this.getDate();
+                    a.setAttribute('download',fileName);
                     a.style.display = 'none';
                     document.body.appendChild(a);
                     a.click();
@@ -246,6 +248,16 @@
             changeSite(value) {
                 this.searchOptions.siteId = value;
                 this.getMemberList();
+            },
+            getDate(){
+                    var now = new Date();
+                    var year = now.getFullYear(); //得到年份
+                    var month = now.getMonth();//得到月份
+                    var date = now.getDate();//得到日期
+                    month = month + 1;
+                    if (month < 10) month = "0" + month;
+                    if (date < 10) date = "0" + date;
+                    return year + "" + month + "" + date;
             }
         }
     };
