@@ -7,7 +7,7 @@
           class="siteName ellipsis"
         >{{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}</span>
       </el-tooltip>
-      <a class="secondDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
+      <a class="secondDomain" :href="`http://${secondDomain}`" target="_blank">{{secondDomain}}</a>
       <span class="language">{{_getLanguage(language)}}</span>
       <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
     </el-col>
@@ -48,7 +48,7 @@
               <div class="itemSiteName">{{item.siteName}}</div>
               <a
                 class="itemSiteDomain ellipsis"
-                :href="`//${item.secondDomain}`"
+                :href="`http://${item.secondDomain}`"
                 target="_blank"
               >{{item.secondDomain}}</a>
             </div>

@@ -97,6 +97,7 @@ export default {
             curClickNode: { data: { level: "" } },
             isHandlerCategoryMenuShow: false,
             isChangeCategoryShow:false,
+            categoryId: 0
         };
     },
     mounted() {
@@ -279,6 +280,10 @@ export default {
         },
         // 点击节点的时候
         changeCategory(data) {
+            if(this.categoryId == data.id){
+                return
+            }
+            this.categoryId = data.id
             let allCategoryEle = document.querySelector(".el-tree")
                 .childNodes[0].childNodes[0];
             if (data.level === 0) {
@@ -311,7 +316,6 @@ export default {
         },
         // 操作按钮出现 || 消失
         handleShow(ev, node, data) {
-            console.log(node);
             if (this.curId === node.data.id) {
                 node.checked = false;
                 this.curId = 1;
@@ -325,7 +329,6 @@ export default {
         },
         // 分类上传图片
         _handleShowMoreOperate(ev, node, data) {
-            console.log(this.curClickNode);
             this.createCategoryData = this.curClickData;
             this.$refs.operateSection.style.left =
                 ev.pageX - ev.offsetX + 16 + "px";

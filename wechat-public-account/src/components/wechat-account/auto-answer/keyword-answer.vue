@@ -275,9 +275,12 @@ export default {
     border: 1px solid #E5E5E5;
     width: 100%;
 }
-.handler-menu .el-input /deep/ .el-input__inner {
+.handler-menu  /deep/ .input-with-select {
+    width: 400px !important;
+}
+.handler-menu /deep/ .el-input__inner {
     border: 1px solid #E5E5E5;
-    width: 600px;
+    width: 400px;
 }
 .el-input /deep/ .el-input__inner:hover {
     border: 1px solid #E5E5E5;
@@ -316,13 +319,14 @@ button {
     background: transparent;
 }
 .keyword-answer {
-    padding: 16px 24px;
+    padding: 16px 0px;
     border-radius: 2px;
     .keyword-answer-content {
         // padding: 24px 0 0 0;
         // border-top: 1px solid #e5e5e5;
         .keyword-list {
             padding-bottom: 24px;
+            margin-left: 24px;
             .title{
                 color: #B9CBCF
             }
@@ -349,11 +353,11 @@ button {
     }
     .table-list {
         .advance-list__area {
-            border: 1px solid #e5e5e5;
+            border-top: 1px solid #e5e5e5;
             li {
                 display: flex;
                 align-items: center;
-                padding: 10px 32px;
+                padding: 10px 24px;
                 border-bottom: 1px solid #e5e5e5;
                 min-width: 1020px;
 
@@ -417,6 +421,7 @@ button {
         }
         .handler-menu {
             margin: 0 0 16px;
+            padding: 0 24px;
             .answer-btn {
                 float: right;
                 width: 90px;

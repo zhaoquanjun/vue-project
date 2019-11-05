@@ -75,7 +75,7 @@
                     </div>
                 </right-pannel>
             </el-main>
-            <el-footer >
+            <el-footer style="height:auto">
                 <slot name="modal-footer"></slot>
             </el-footer>
         </el-main>
@@ -213,7 +213,6 @@ export default {
                     iconClass: "icon-warning",
 
                     callback: async action => {
-                        console.log(action);
                         if (action === "confirm") {
                             let {
                                 status,
@@ -283,7 +282,6 @@ export default {
                     customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
-                        console.log(action);
                         if (action === "confirm") {
                             let {
                                 status
@@ -322,7 +320,6 @@ export default {
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
             this.curImgInfo = data;
-            console.log(data, "data--=======");
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
@@ -392,7 +389,6 @@ export default {
             return this.isInvitationPanelShow === true ? 331 : 0;
         },
         isBatchHeaderShow() {
-            console.log(this.idsList.length);
             return this.idsList.length > 0 ? true : false;
         }
     },

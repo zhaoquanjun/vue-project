@@ -75,7 +75,7 @@
                     </div>
                 </right-pannel>
             </el-main>
-            <el-footer>
+            <el-footer style="height:auto">
                 <slot name="modal-footer"></slot>
             </el-footer>
         </el-main>

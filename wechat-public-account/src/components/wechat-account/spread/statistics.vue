@@ -10,12 +10,12 @@
         <div>
           <img src="~img/share01.png"/>
           <p>近30日阅读数</p>
-          <span>{{pvTotal}}</span>
+          <span>{{uvTotal}}</span>
         </div>
         <div>
           <img src="~img/share02.png"/>
           <p>近30日访客数</p>
-          <span>{{uvTotal}}</span>
+          <span>{{pvTotal}}</span>
         </div>
         <div>
           <img src="~img/share03.png"/>
@@ -62,6 +62,8 @@ export default {
       uvList:[],
       yList:[],
       yLast:[],
+      pvLast:[],
+      uvLast:[],
       sticsTitle: '',
       interval: 0 //设置X轴数据间隔几个显示一个，为0表示都显示
     }
@@ -93,18 +95,24 @@ export default {
         this.uvList = [];
         this.yList=[];
         this.yLast= [];
+        this.pvLast=[];
+        this.uvLast=[];
         if(data.data.pv.length > 0) {
           data.data.pv.map((item, index)=>{
             this.pvTotal = this.pvTotal + item.count;
             this.pvList.push(item.count);
             this.yList.push(item.flag.slice(5,10))
             if(index > 23) {
+              this.pvLast = push(item.count);
               this.yLast.push(item.flag.slice(5,10))
             }
           })
           data.data.uv.map((item, index)=>{
             this.uvTotal = this.uvTotal + item.count;
             this.uvList.push(item.count)
+            if(index > 23) {
+              this.uvLast = push(item.count);
+            }
           })
         }
         this.initCode()
@@ -168,7 +176,7 @@ export default {
                   stack: '总量',
                   symbolSize:10,
                   symbol:'circle',  
-                  data:this.pvList
+                  data: this.interval == 1 ? this.uvList:this.uvLast
               },
               {
                   name:'访问数',
@@ -176,7 +184,7 @@ export default {
                   stack: '总量',
                   symbolSize:10,
                   symbol:'circle', 
-                  data:this.uvList
+                  data: this.interval == 1 ? this.pvList:this.pvLast
               }
           ],
           color: ['#09CCEB', '#0595E6']

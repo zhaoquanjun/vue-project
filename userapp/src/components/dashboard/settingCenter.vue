@@ -23,10 +23,10 @@
         </div>
       </div>
       <div class="item">
-        <div class="item-box">
+        <div class="item-box" @click="jumpTo('collect')">
           <div class="item-icon website"></div>
           <div class="item-text-wrap">
-            <div class="item-text">ac.clouddream.net</div>
+            <div class="item-text">login.clouddream.net</div>
             <div class="collection">收藏</div>
           </div>
         </div>
@@ -59,6 +59,11 @@ export default {
         this.$router.push({
           path: "/role"
         });
+      } else if ("collect") {
+        // console.log(window.external.addFavorite)
+        // console.log(window.sidebar)
+        // console.log(document.all)
+        // window.external.addFavorite("http://baidu.com", "你的网站名称");
       }
     }
   }

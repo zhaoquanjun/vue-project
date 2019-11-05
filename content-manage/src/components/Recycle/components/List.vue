@@ -44,7 +44,7 @@
                         </span>-->
                     </div>
                     <div class="video-cover" v-if="['video'].includes(recycleTempData.type)">
-                        <img width="100%" height="100%" :src="scope.row.coverUrl" />
+                        <img :src="scope.row.coverUrl" />
                         <!-- <span class="play" @click="viewPic( scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
                         </span>-->
@@ -305,10 +305,15 @@ export default {
     white-space: unset !important;
 }
 .video-cover {
+    display: inline-block;
     width: 190px;
     height: 130px;
     margin-right: 10px;
     position: relative;
+    img {
+        height: 130px;
+        width: 190px;
+    }
 }
 </style>
 
