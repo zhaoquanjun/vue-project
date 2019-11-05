@@ -105,7 +105,7 @@ axios.interceptors.response.use(
                         })
 
                 }
-                return Promise.reject(error.response);
+                Promise.reject(error.response);
             }
         } catch (e) {
             console.log(e)
