@@ -532,8 +532,6 @@ export default {
             nameOrder = this.menuTree.length + nameOrder
           }
         }
-        
-
         let newMenuItem = {
           name: name + nameOrder,  //菜单名称
           displayOrder: order, //菜单排序
