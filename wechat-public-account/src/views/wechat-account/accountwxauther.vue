@@ -22,27 +22,29 @@
             <!-- <img :src="wechanSpare" alt /> -->
             <p>设置推广域名，立即开启自定义菜单</p>
             <input 
-              type='text' 
+              type='text'
               v-model="addDomain" 
               v-if="domainList.length <= 0" 
               placeholder="请输入需添加的域名"/>
             <ul v-else>
-              <span 
+              <span
                 class="pointer" 
                 @click="showDomainList(false)" >
                   {{domainName}}
                 <i class="icon iconfont iconicon-des-lower"></i>
               </span>
-              <li 
-                v-show="isShowDomainList" 
-                v-for="(item,index) in domainList"
-                :class="{active: domainIndex == index}"
-                @click="showDomainList(item,index)" 
-                :key="index"
-              >
-                {{item.domain}}
-                <i class="icon iconfont iconduihao"></i>
-              </li>
+              <div class="select-contant">
+                <li
+                  v-show="isShowDomainList" 
+                  v-for="(item,index) in domainList"
+                  :class="{active: domainIndex == index}"
+                  @click="showDomainList(item,index)" 
+                  :key="index"
+                >
+                  {{item.domain}}
+                  <i v-if="domainIndex == index" class="icon iconfont iconduihao"></i>
+                </li>
+              </div>
             </ul>
             <div v-if="isShowTips && !isShowDomainList" class='tips'>
               <p class="ym-form-item__error">{{tipsText}}</p>
@@ -147,6 +149,10 @@ export default {
       let {data} = await getCdnDomainList(this.siteId)
       if (data) {
         this.domainList = data
+        if(this.domainList.length > 0) {
+          this.showDomainList(this.domainList[0],0)
+          this.isShowDomainList =false
+        }
       }
     },
     //去解析
@@ -200,7 +206,7 @@ export default {
     },
     //显示域名选择列表
     showDomainList(val,ind){
-      this.isShowDomainList = !this.isShowDomainList;
+      this.isShowDomainList = !this.isShowDomainList;     
       if(val) {
         this.isShowTips = false
         this.domainName = val.domain
@@ -276,6 +282,7 @@ export default {
   box-sizing: border-box;
   padding: 16px 32px 0;
   height: 100%;
+  min-width: 800px;
   .account-setting__content {
     position: relative;
     min-height: 500px;
@@ -405,7 +412,7 @@ export default {
           span {
             display: inline-block;
             width: 340px;
-            color: #D3D3D3;
+            color: #262626;
             padding: 0 10px;
             line-height: 40px;
             margin-bottom: 4px;
@@ -413,6 +420,10 @@ export default {
               color: #a1a8b1;
               float: right;
             }
+          }
+          .select-contant {
+            max-height: 162px;
+            overflow-y: auto;
           }
           li {
             height: 40px;
