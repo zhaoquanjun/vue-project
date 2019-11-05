@@ -10,6 +10,7 @@
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
+                :isPopup="isPopup"
                 @getList="getList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"

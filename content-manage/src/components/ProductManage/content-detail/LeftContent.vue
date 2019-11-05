@@ -109,7 +109,7 @@
                         @change="onEditorChange($event)"
                     ></quill-editor>
                     <div class="mask" v-show="isModalShow"></div>
-                    <div id="content" v-show="isModalShow">
+                    <div id="content" class="contentDialog" v-show="isModalShow">
                         <el-header class="modal-header">
                             <span style="font-size: 16px;">我的图片</span>
                             <button @click="cancelEditorImg">X</button>
