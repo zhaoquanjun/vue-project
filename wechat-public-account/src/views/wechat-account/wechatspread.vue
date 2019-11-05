@@ -85,7 +85,7 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+              <el-tooltip class="item" effect="dark" content="分享设置" placement="top">
                 <i class="icon iconfont iconbianji" @click="handlelook(scope.row)"></i>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="删除" placement="top">
