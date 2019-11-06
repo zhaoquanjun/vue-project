@@ -247,7 +247,7 @@ export default {
             );
             if (status == 200) {
                 this.$notify({
-                    customClass: "notify-success",
+                    customClass: "notify-success", 
                     message: `移动成功!`,
                     showClose: false,
                     duration: 1000
