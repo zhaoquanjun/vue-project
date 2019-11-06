@@ -74,7 +74,6 @@
         <div class="createText">您现在可以使用管理员手机号登录以下网址 快捷管理您已购的服务</div>
         <div style="margin-top:32px">
           <span class="domain">login.clouddream.net</span>
-          <span class="collection">收藏</span>
         </div>
         <button class="complete" @click="complete">完成</button>
       </div>
@@ -130,7 +129,6 @@ export default {
               showClose: false
             });
             return;
-            console.log(123);
           } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.newPhone)) {
             this.$notify({
               customClass: "notify-error",
@@ -638,13 +636,6 @@ export default {
       font-size: 14px;
       font-weight: 400;
       color: rgba(38, 38, 38, 1);
-      line-height: 20px;
-    }
-    .collection {
-      margin-left: 8px;
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(5, 149, 230, 1);
       line-height: 20px;
     }
     .complete {
