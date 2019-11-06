@@ -382,6 +382,7 @@ export default {
   overflow: hidden;
   border-radius: 2px;
   padding: 0 24px 40px;
+  box-sizing: border-box;
   .headTitle {
     position: relative;
     margin-top: 32px;
