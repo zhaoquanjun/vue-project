@@ -231,7 +231,7 @@
                         </el-form-item>
 
                         <el-form-item label="自定义地址" prop="customUrl">
-                            <el-input placeholder="请输入自定义地址" v-model="detailData.customUrl"></el-input>
+                            <el-input placeholder="请输入自定义地址" class="address" v-model="detailData.customUrl"></el-input>
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -801,6 +801,12 @@ export default {
     }
 };
 </script>
+<style scoped>
+    .address /deep/ .el-input__inner{
+        height: 35px;
+        line-height: 35px;
+    }
+</style>
 <style scoped lang="scss">
 @import "../../style/contentDetail";
 .category {
