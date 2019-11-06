@@ -63,7 +63,7 @@ export const updateSiteInfo = (para) => {
  * 获取site列表
  */
 export const getSites = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/siteInfo/GetSites`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/siteInfo/GetSites`);
 }
 /**
  * 获取app信息

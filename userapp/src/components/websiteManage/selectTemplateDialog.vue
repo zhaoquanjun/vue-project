@@ -26,14 +26,14 @@
               <div class="tab" :class="{allTab:isAllTab}" @click="choseAllTab">
                 <div class="allBackground"></div>全部
               </div>
-              <div
+              <!-- <div
                 class="tab"
                 :class="{myTab:!isAllTab}"
                 style="margin-top:10px"
                 @click="choseMyTab"
               >
                 <div class="myBackground"></div>已有网站
-              </div>
+              </div>-->
             </div>
             <el-tree
               style="margin-top:20px"
@@ -49,22 +49,8 @@
           <el-main style="overflow:hidden">
             <el-header
               class="templateHeader"
-              style="height:136px;padding:48px 81px;border-bottom:1px solid #E5E5E5"
+              style="height:86px;padding:24px 40px;border-bottom:1px solid #E5E5E5;display: flex;justify-content: space-between;"
             >
-              <el-input
-                size="medium"
-                v-model="search"
-                placeholder="输入关键词搜索"
-                class="input-with-select"
-                style="width:260px"
-              >
-                <i
-                  class="el-icon-search el-input__icon"
-                  style="cursor: pointer;"
-                  slot="suffix"
-                  @click="searchTemplate"
-                ></i>
-              </el-input>
               <div class="colorType" v-show="isAllTab">
                 <span class="colorTheme">主题</span>
                 <span class="color">
@@ -73,11 +59,11 @@
                     :key="index"
                     class="colorItem"
                     :class="{curColorItem:item.isCur}"
-                    :style="{background:item.color}"
+                    :style="{background:item.color?item.color:''}"
                     @click="changeColor(item)"
                   ></div>
                 </span>
-                <el-select
+                <!-- <el-select
                   v-model="languageSelect"
                   placeholder="全部语言"
                   class="languageSelect"
@@ -90,18 +76,29 @@
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
-                </el-select>
+                </el-select>-->
               </div>
-              <span class="close-pannel" @click="closeDialog">
+              <el-input
+                size="medium"
+                v-model="search"
+                placeholder="输入关键词搜索"
+                class="input-with-select"
+                style="width:260px;position:absolute;left:40%"
+              >
                 <i
-                  class="iconfont iconguanbi"
-                  style="line-height:40px;font-size:16px;color:#262626;"
+                  class="el-icon-search el-input__icon"
+                  style="cursor: pointer;"
+                  slot="suffix"
+                  @click="searchTemplate"
                 ></i>
+              </el-input>
+              <span class="close-pannel" @click="closeDialog">
+                <i class="iconfont iconguanbi"></i>
               </span>
             </el-header>
             <el-main
               class="templateContent"
-              style="padding:60px 81px;position:relative"
+              style="padding:0 80px;position:relative"
               v-scrollBar
             >
               <el-row :gutter="80">
@@ -121,7 +118,7 @@
                       <div class="modal" v-if="item.id != templateId">
                         <div>
                           <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <a :href="`//${item.domain}`" class="previewSite" target="_blank">预览</a>
+                          <a :href="`http://${item.domain}`" class="previewSite" target="_blank">预览</a>
                         </div>
                       </div>
                       <div class="curModal" v-show="item.id == templateId">当前选择</div>
@@ -134,7 +131,11 @@
                       <div class="modal" v-if="item.id != siteId">
                         <div>
                           <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <a :href="`//${item.secondDomain}`" class="previewSite" target="_blank">预览</a>
+                          <a
+                            :href="`http://${item.secondDomain}`"
+                            class="previewSite"
+                            target="_blank"
+                          >预览</a>
                         </div>
                       </div>
                       <div class="curModal" v-show="item.id == siteId">当前选择</div>
@@ -247,6 +248,7 @@
 import * as templateApi from "@/api/request/templateApi";
 import { getLanguage } from "@/configure/appCommon";
 import { designerUrl } from "@/environment/index";
+import { getMemberList } from '@/api/request/siteMemberApi';
 
 export default {
   props: ["siteId", "siteName", "templateId", "isChangeTemplate"],
@@ -257,7 +259,7 @@ export default {
       isAllTab: true,
       templateInfo: [],
       languageSelect: "",
-      themeSelect:"",
+      themeSelect: "",
       languageOptions: [
         {
           value: "",
@@ -287,14 +289,18 @@ export default {
       search: "",
       colorArray: [
         {
-          color: "rgba(7,102,227,1)",
           isCur: true,
-          code:'blue_color1'
+          code: ""
         },
         {
-            color: "rgba(251,77,104,1)",
-            isCur: false,
-            code: 'pink_color1'
+          color: "rgba(7,102,227,1)",
+          isCur: false,
+          code: "blue_color1"
+        },
+        {
+          color: "rgba(251,77,104,1)",
+          isCur: false,
+          code: "pink_color1"
         }
       ],
       orderType: [
@@ -336,7 +342,6 @@ export default {
   mounted() {},
   methods: {
     async changeIndustry(item) {
-      console.log(item);
       this.firstIndustryId = 0;
       this.secondIndustryId = 0;
       if (item.parentId == 0) {
@@ -365,6 +370,7 @@ export default {
     async getIndustryTree() {
       let { data, status } = await templateApi.getIndustryTree();
       if (status == 200) {
+        data.splice(0, 1);
         this.firstIndustry = data;
       }
     },
@@ -387,30 +393,33 @@ export default {
       this.templateInfo = data.items;
     },
     // 选择主题颜色
-   async changeColor(item) {
-        this.colorArray.forEach((_item, index) => {
-            if (item.code == _item.code) {
-                item.isCur = _item.isCur ? false : true;
-                this.themeSelect = item.isCur ? item.code : "";
-            } else {
-                _item.isCur = false;
-            }
-        });
-        let para = {
-            TemplateName: this.search,
-            FirstIndustry: this.firstIndustryId,
-            SecondIndustry: this.secondIndustryId,
-            Theme: this.themeSelect,
-            Language: this.languageSelect,
-            IsRecommend: this.isRecommend,
-            PageIndex: this.pageIndex,
-            PageSize: this.pageSize,
-            IsOrderByUpdateTime: this.isOrderByUpdateTime,
-            IsMostPopular: this.isMostPopular
-        };
-        let { data, status } = await templateApi.getSiteTemplates(para);
-        this.templatePage = data;
-        this.templateInfo = data.items;
+    async changeColor(item) {
+      if (item.isCur) {
+        return;
+      }
+      this.colorArray.forEach((_item, index) => {
+        if (item.code == _item.code) {
+          item.isCur = true;
+          this.themeSelect = item.code;
+        } else {
+          _item.isCur = false;
+        }
+      });
+      let para = {
+        TemplateName: this.search,
+        FirstIndustry: this.firstIndustryId,
+        SecondIndustry: this.secondIndustryId,
+        Theme: this.themeSelect,
+        Language: this.languageSelect,
+        IsRecommend: this.isRecommend,
+        PageIndex: this.pageIndex,
+        PageSize: this.pageSize,
+        IsOrderByUpdateTime: this.isOrderByUpdateTime,
+        IsMostPopular: this.isMostPopular
+      };
+      let { data, status } = await templateApi.getSiteTemplates(para);
+      this.templatePage = data;
+      this.templateInfo = data.items;
     },
     // 选择最新/最热/推荐
     async changeOrder(item) {
@@ -442,7 +451,6 @@ export default {
           IsMostPopular: this.isMostPopular
         };
         let { data, status } = await templateApi.getSiteTemplates(para);
-        console.log(data);
         this.templatePage = data;
         this.templateInfo = data.items;
       }
@@ -541,7 +549,6 @@ export default {
         IsMostPopular: false
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
-      console.log(data);
       this.templatePage = data;
       this.templateInfo = data.items;
     },
@@ -569,7 +576,6 @@ export default {
         };
         var { data, status } = await templateApi.getSiteTemplates(para);
       }
-      console.log(data);
       this.templatePage = data;
       this.templateInfo = data.items;
     },
@@ -594,12 +600,21 @@ export default {
       this.orderType[0].isOrder = true;
     },
     // 选择全部模版
-    choseAllTab() {
+    async choseAllTab() {
       this.isAllTab = true;
       this.orderType.forEach((item, index) => {
         item.isOrder = false;
         if (item.type == "updataTime") {
           item.isOrder = true;
+        }
+      });
+      this.search = "";
+      this.colorArray.forEach((item, index) => {
+        if (item.code == "") {
+          item.isCur = true;
+          this.themeSelect = "";
+        } else {
+          item.isCur = false;
         }
       });
       this.getTemplateList();
@@ -613,7 +628,6 @@ export default {
         PageSize: this.pageSize
       };
       let { data, status } = await templateApi.getTemplateSites(para);
-      console.log(data);
       this.templatePage = data;
       this.templateInfo = data.items;
     },
@@ -881,13 +895,21 @@ export default {
     .close-pannel {
       float: right;
       cursor: pointer;
+      .iconguanbi {
+        line-height: 40px;
+        font-size: 16px;
+        color: #262626;
+        padding: 8px;
+        &:hover {
+          background: rgba(240, 243, 247, 1);
+          border-radius: 4px;
+        }
+      }
     }
     .colorType {
       height: 40px;
-      display: inline-block;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
       .colorTheme {
         vertical-align: middle;
         text-align: center;
@@ -902,23 +924,24 @@ export default {
         line-height: 40px;
       }
       .color {
-        vertical-align: middle;
-        display: inline-block;
-        width: 194px;
+        width: 120px;
         height: 40px;
         background: rgba(9, 204, 235, 0.1);
         border-radius: 0px 2px 2px 0px;
+        display: flex;
+        align-items: center;
         .colorItem {
           display: inline-block;
           width: 16px;
           height: 16px;
           border-radius: 2px;
-          margin-top: 12px;
           margin-left: 8px;
-          vertical-align: middle;
+          cursor: pointer;
         }
         .colorItem:first-child {
           margin-left: 16px;
+          background: url("~img/allTheme.png") no-repeat center;
+          background-size: contain;
         }
         .curColorItem {
           border: 2px solid rgba(9, 204, 235, 1);
