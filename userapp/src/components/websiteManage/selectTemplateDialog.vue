@@ -617,6 +617,8 @@ export default {
           item.isCur = false;
         }
       });
+      this.firstIndustryId = 0;
+      this.secondIndustryId = 0;
       this.getTemplateList();
     },
     // 选择已有网站
