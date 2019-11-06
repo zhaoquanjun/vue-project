@@ -109,7 +109,7 @@
                         @change="onEditorChange($event)"
                     ></quill-editor>
                     <div class="mask" v-show="isModalShow"></div>
-                    <div id="content" v-show="isModalShow">
+                    <div id="content" class="contentDialog" v-show="isModalShow">
                         <el-header class="modal-header">
                             <span style="font-size: 16px;">我的图片</span>
                             <button @click="cancelEditorImg">X</button>
@@ -139,7 +139,7 @@
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="padding: 0 12px 0 0;">
+                                    <span style="padding: 0 12px 0 0;color: #606266;">
                                         预览网站
                                     </span>
                                     <el-tooltip class="item" effect="dark" placement="top">
@@ -395,7 +395,8 @@ export default {
             isModalShow: false,
             editorOption: {},
             keywordValue: "",
-            metaKeyword: ""
+            metaKeyword: "",
+            selectRangeIndex: 0
         };
     },
     created() {
@@ -413,7 +414,8 @@ export default {
                     [{ direction: "rtl" }],
                     [{ size: sizes }],
                     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                    [{ color: [] }, { background: [] }],
+                    [{ color: [] }],
+                    [{ background: [] }],
                     [{ font: fonts }],
                     [{ align: [] }],
                     ["clean"],
@@ -685,6 +687,8 @@ export default {
         },
         imageHandler() {
             this.isModalShow = !this.isModalShow;
+            this.imgRange = this.$refs.myQuillEditor.quill.getSelection();
+            this.selectRangeIndex = this.imgRange !== null ? this.imgRange.index : 0;
         },
         getImgInfo(info) {
             this.imgData = info;
@@ -703,7 +707,7 @@ export default {
                     var value = imgFiles[i].fullOssUrl;
                     // 调用编辑器的 insertEmbed 方法，插入URL
                     this.$refs.myQuillEditor.quill.insertEmbed(
-                        this.addRange !== null ? this.addRange.index : 0,
+                        this.addRange !== null ? this.addRange.index : this.selectRangeIndex,
                         "image",
                         value,
                         Quill.sources.USER

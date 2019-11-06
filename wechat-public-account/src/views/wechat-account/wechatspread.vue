@@ -6,20 +6,38 @@
         @getSiteId="getSiteId"
       />
     </div>
+    <div class="spread-title">
+      <span>微信推广</span>
+      <div class="add" @click="addSpread">新增推广</div>
+    </div>
     <div v-if="!isShowStatistics" class="answer-tabs">
       <el-tabs v-model="replyType" type="card" @tab-click="getInfo">
         <el-tab-pane label="页面推广" name="page"></el-tab-pane>
         <el-tab-pane label="文章推广" name="news"></el-tab-pane>
         <el-tab-pane label="产品推广" name="product"></el-tab-pane>
       </el-tabs>
-      <div class="add" @click="addSpread">新增推广</div>
+      <span class="promotion">当前域名：{{accountInfo.promotionUrl}}</span>
     </div>
     <div v-if="!isShowStatistics" class="spread-continer">
+      <el-input
+        size="medium"
+        v-model="serchTitle"
+        placeholder="请输入内容"
+        @keyup.enter.native="getInfo"
+        class="input-with-select"
+      >
+          <i
+            class="el-icon-search el-input__icon"
+            style="cursor: pointer;"
+            slot="suffix"
+            @click="getInfo"
+          ></i>
+        </el-input>
       <template>
         <el-table
           :data="list"
-          :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '36px',paddingLeft: '40px'}"
-          :cell-style="{color:'#262626',lineHeight: '36px',paddingLeft: '40px'}"
+          :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '36px',paddingLeft: '14px',borderTop: '1px solid #e5e5e5'}"
+          :cell-style="{color:'#262626',lineHeight: '36px',paddingLeft: '14px'}"
           style="width: 100%">
           <template slot="empty">
               <div class="empty-table">
@@ -51,7 +69,7 @@
           </el-table-column>
           <el-table-column
             prop="shareCount"
-            label="阅读数"
+            label="分享数"
           >
           </el-table-column>
           <el-table-column
@@ -67,7 +85,7 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+              <el-tooltip class="item" effect="dark" content="分享设置" placement="top">
                 <i class="icon iconfont iconbianji" @click="handlelook(scope.row)"></i>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="删除" placement="top">
@@ -81,6 +99,7 @@
         </el-table>
       </template>
       <div class="paging">
+        <a href="">如何进行页面推广？</a>
         <el-pagination
           background
           @size-change="handleSizeChange"
@@ -133,6 +152,7 @@ export default {
   data() {
     return {
       siteId: this.$store.state.dashboard.siteId,
+      accountInfo: this.$store.state.wxaccount.account_info,
       replyType: 'page',
       PageSize: 5, //每页数
       PageIndex: 1, //当前页面
@@ -146,6 +166,7 @@ export default {
       isShowCode: false,
       shareInfo: '',
       infoData: {},
+      serchTitle: '',
       isShowStatistics: false,
       model: {
           PageIndex: null,
@@ -199,7 +220,8 @@ export default {
         PageSize: this.PageSize,
         PageIndex: this.PageIndex, //
         EntityType: EntityTyp, //Page, News, Product
-        SiteId: this.siteId
+        SiteId: this.siteId,
+        Keyword: this.serchTitle
       }
       let {data} = await getList(option)
       if(data&&data.list) {
@@ -338,6 +360,27 @@ export default {
 .el-table .cell, .el-table th div {
   padding-right: 30px !important;
 }
+.spread-continer  /deep/ .input-with-select.el-input--suffix {
+    width: 400px !important;
+}
+.el-input /deep/ .el-input__inner {
+    border: 1px solid #E5E5E5;
+    width: 400px;
+    margin: 16px 0 16px 24px;
+}
+.el-input /deep/ .el-input__suffix {
+ right: -20px;
+}
+.el-input /deep/ .el-input__inner:hover {
+    border: 1px solid #E5E5E5;
+}
+.el-input /deep/ .el-input__inner:focus {
+    border: 1px solid #E5E5E5;
+}
+.el-input /deep/ .el-input__inner {
+    border: 1px solid #E5E5E5;
+}
+
 </style>
 <style lang="scss" scoped>
 .spread-setting__section {
@@ -353,24 +396,49 @@ export default {
         background: #E5E5E5;
       }
     }
-    .answer-tabs {
-        margin-top: 24px;
-        position: relative;
-        background: #fff;
-        .add {
-          position: absolute;
-          top: 9px;
-          right: 0px;
+    .spread-title {
+      display: flex;
+      height: 32px;
+      width: 100%;
+      margin: 24px 0;
+      justify-content: space-between;
+      span {
+        height: 20px;
+        margin: 6px 0;
+        padding-left: 12px;
+        line-height: 20px;
+        border-left: 4px solid #09CCEB;
+        font-size:14px;
+        font-family:'PingFangSC-Regular,PingFang SC';
+        font-weight:400;
+        color:rgba(38,38,38,1);
+      }
+      .add {
           width:90px;
           height:32px;
           background:rgba(9,204,235,1);
           border-radius:2px;
           font-weight:400;
-          margin-right: 24px;
           color:rgba(255,255,255,1);
           line-height:32px;
           text-align: center;
           cursor: pointer;
+        }
+    }
+    .answer-tabs {
+        margin-top: 24px;
+        position: relative;
+        background: #fff;
+        .promotion {
+          position: absolute;
+          top: 0;
+          right: 24px;
+          height:50px;
+          font-size:14px;
+          font-family:'PingFangSC-Regular,PingFang SC';
+          font-weight:400;
+          color:rgba(38,38,38,1);
+          line-height:50px;
         }
     }
     .reply-wrap {
@@ -382,6 +450,7 @@ export default {
       margin-top: 12px;
       border: 1px solid rgba(229,229,229,1);
       padding-bottom: 16px;
+      background: #fff;
       .img {
         width: 37px;
         height: 32px;
@@ -391,8 +460,17 @@ export default {
       }
     }
     .paging {
+      display: flex;
+      justify-content: space-between;
       margin-top: 40px;
-      text-align: right;
+      a {
+        font-size:14px;
+        margin-left: 24px;
+        font-family:'PingFangSC-Regular,PingFang SC';
+        font-weight:400;
+        color:rgba(9,204,235,1);
+        line-height:32px;
+      }
     }
 }
 </style>

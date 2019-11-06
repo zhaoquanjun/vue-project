@@ -4,24 +4,61 @@
             <list-header
             style="margin-left: 16px;    margin-bottom: 16px;"
                 v-if="$store.state.dashboard.isContentwrite"
-                :count-pic="countPic"
+                :count-data="countData"
+                :totalRecord="recyclePageResult.totalRecord"
                 :display-name="displayName"
-                :pic-search-options="picSearchOptions"
+                :recycle-search-options="pageSearchOptions"
                 :is-batch-header-show="isBatchHeaderShow"
-                @getPicList="getPicList"
-                @batchDelete="batchDelete"
+                :recycle-temp-data="recycleTempData"
+                @getRecycleDataList="getPageList"
+                @batchRecovery="batchRecovery"
                 
             ></list-header>
             <el-main>
                 <div class="recycle-tip">回收站的内容可保存30天，30天之后将永久删除</div>
                 <List
                     style="margin-left: 16px;"
-                    :img-page-result="imgPageResult"
-                    :pic-search-options="picSearchOptions"
-                    @getPicList="getPicList"
-                    @batchRemove="batchRemovePic"
+                    :recycle-page-result="recyclePageResult"
+                    :recycle-search-options="pageSearchOptions"
+                    :recycle-temp-data="recycleTempData"
+                    @getRecycleDataList="getPageList"
+                    @batchRecovery="batchRecovery"
                     @handleSelectionChange="handleSelectionChange"
                 ></List>
+                <el-dialog
+                    width="0"
+                    style="z-index:10"
+                    :close-on-click-modal="false"
+                    :show-close="false"
+                    :visible.sync="isInvitationPanelShow"
+                ></el-dialog>
+                <right-pannel
+                    :style="{width:isInvitationlWidth+'px'}"
+                    @closeRightPanel="closeCreateDialog"
+                >
+                    <span slot="title-text">恢复页面</span>
+                    <div class="createSiteName">
+                        <span class="createSiteTitle">页面标题</span>
+                        <el-input
+                            v-model="reconveryData.title"
+                            placeholder="请输入内容"
+                            class="createSiteNameInput"
+                        ></el-input>
+                    </div>
+                    <div class="createSiteName">
+                        <span class="createSiteTitle">页面地址</span>
+                        <el-input
+                            v-model="reconveryData.url"
+                            placeholder="请输入内容"
+                            class="createSiteNameInput"
+                        ></el-input>
+                    </div>
+
+                    <div slot="footer" class="pannle-footer">
+                        <button @click="recovery" class="sure">恢复</button>
+                        <button @click="closeCreateDialog" class="cancel">取消</button>
+                    </div>
+                </right-pannel>
             </el-main>
         </el-main>
     </el-container>
@@ -29,100 +66,119 @@
 <script>
 import ListHeader from "_c/Recycle/components/ListHeader";
 import List from "_c/Recycle/components/List";
-import * as fileManageApi from "@/api/request/fileManageApi";
-import * as fileCategoryManageApi from "@/api/request/fileCategoryManageApi";
+import * as recycleManageApi from "@/api/request/recycleManageApi";
 import environment from "@/environment/index.js";
+import RightPannel from "@/components/common/RightPannel";
 import { trim } from "@/utlis/index.js";
 export default {
     components: {
         ListHeader,
         List,
+        RightPannel,
     },
     data() {
         return {
-            displayName: "文件",
-            isImgList: false,
-            countPic: 0,
+            recycleTempData: {
+                type:"page",
+                keyword:"title",
+                batchText:"个页面",
+                placeholder: '输入页面标题搜索',
+                firstColumnName:"页面标题",
+                secondColumnName:"所属网站",
+                thirdColumnName:"删除时间",
+                forthColumnName:"保留天数"
+            },
+            displayName: "文章",
+            countData: 0,
             idsList: [],
-            selectedImg: [],
+            selectedData: [],
             isInvitationPanelShow: false,
-            imgPageResult: {},
+            recyclePageResult: {},
             dialogTableVisible: false,
             totalSum: 0,
-            picSearchOptions: {
-                pageSize: 10,
+            pageSearchOptions: {
+                title: "",
+                orderColumns: "deletetime",
                 pageIndex: 1,
-                orderByType: 1,
-                isTop: null,
-                isDescending: true,
-                categoryIdList: [],
-                keyword: "",
-                isDelete: false,
-                fileExtensionType: null
+                pageSize: 10,
+                isDescending: true
             },
+            reconveryData:{
+                title:"",
+                url:"",
+                siteId: 0,
+                pageId:0
+            }
         };
     },
     mounted() {
-        console.log('page');
-        this.getPicList();
+        this.getPageList();
     },
     methods: {
      
         // 获取列表
-        async getPicList(node) {
+        async getPageList(node) {
             this.$Loading.show();            
-            let { data, status } = await fileManageApi.getPicList(
-                this.picSearchOptions
+            let { data, status } = await recycleManageApi.getPageList(
+                this.pageSearchOptions
             );
             this.$Loading.hide();
-            this.imgPageResult = data;
+            this.recyclePageResult = data;
+            this.recyclePageResult.list.forEach((item, index) => {
+                item.url = this.recyclePageResult.list[
+                    index
+                ].url.substr(1);
+            });
         },
-        // 批量删除列表
-        async batchRemovePic(idlist) {
-            this.$confirm(
-                `删除后，网站中引用的文件数据将同步删除，同时文件将被移动到回收站，是否确认删除？`,
-                "提示",
-                {
-                    customClass: "medium",
-                    iconClass: "icon-warning",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            let {
-                                status,
-                                data
-                            } = await fileManageApi.batchRemove(true, idlist);
-                            if (status === 200) {
-                              
-                                this.$notify({
-                                    customClass: "notify-success", //  notify-success ||  notify-error
-                                    message: `删除成功`,
-                                    duration: 1500,
-                                    showClose: false
-                                });
-                                this.getPicList();
-                            }
-                        } 
-                    }
-                }
-            );
+        // 恢复页面
+        async batchRecovery(pageInfo) {
+            console.log(pageInfo);
+            
+            this.isInvitationPanelShow = true;
+            this.reconveryData.title = pageInfo.title;
+            this.reconveryData.url = pageInfo.url;
+            this.reconveryData.siteId = pageInfo.siteId;
+            this.reconveryData.pageId = pageInfo.id;
         },
-
+        // 关闭弹窗
+        closeCreateDialog(){
+            this.isInvitationPanelShow = false;
+        },
+        async recovery(){
+            let {
+                status,
+                data
+            } = await recycleManageApi.pageRecovery(this.reconveryData);
+            console.log(status, data)
+            if (status === 200) {
+                this.isInvitationPanelShow = false;
+                this.$notify({
+                    customClass: "notify-success", //  notify-success ||  notify-error
+                    message: `恢复成功`,
+                    duration: 1500,
+                    showClose: false
+                });
+                this.getPageList();
+            }
+            else{
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `恢复失败，请重试`,
+                    duration: 1500,
+                    showClose: false
+                });
+            }
+        },
         // 批量更新的选中数量
         handleSelectionChange(list) {
             this.idsList = [];
-            this.countPic = list.length;
+            this.countData = list.length;
             if (list.length < 1) return;
             list.forEach(item => {
                 this.idsList.push(item.id);
             });
-            this.selectedImg = list;
-        },
-       
-        //批量删除
-        batchDelete() {
-            this.batchRemovePic(this.idsList);
-        },
+            this.selectedData = list;
+        }
       
     },
     computed: {
@@ -152,6 +208,12 @@ text-align: center;
 line-height: 32px;
 color: #FE9837;
 margin-bottom: 16px;
+}
+.createSiteName{
+    margin-top: 16px;
+    .createSiteNameInput{
+        margin-top:16px;
+    }
 }
 </style>
 

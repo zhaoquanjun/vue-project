@@ -26,6 +26,9 @@ router.beforeEach(async (to, from, next) => {
   };
   if (accessToken) {
     if (to.path !== "/callback") {
+      if (store.getters.getMenuList.length < 1) {
+        await store.dispatch('_getMenuListData')
+      }
       if (!to.meta.requiresAuth) {
         next()
         return
@@ -39,9 +42,6 @@ router.beforeEach(async (to, from, next) => {
       let appId = store.state.dashboard.appId;
       if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
       // }
-      if (store.getters.getMenuList.length < 1) {
-        await store.dispatch('_getMenuListData')
-      }
       let r = await store.dispatch('getCurRouteAuth', to.path);
       if (r) {
         if (to.path.includes("/website")) {

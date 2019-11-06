@@ -4,6 +4,9 @@
             @chooseWebsite="chooseWebsite"
             @getSiteId="getSiteId"
         />
+        <div class="spread-title">
+            <span>微信推广</span>
+        </div>
         <div class="answer-tabs">
             <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
                 <el-tab-pane label="被关注时回复" name="1"></el-tab-pane>
@@ -374,15 +377,20 @@ export default {
                 }
             } else if (this.replyType == 3) {
                 let keywordList = this.$refs.keywordAnswer.keywordList;
-                let flag = keywordList.every((item, index) => {
+                let error = this.$refs.keywordAnswer.error;
+                let flag = true
+                keywordList.every((item, index) => {
                     if (!trim(item.keyword)) {
-                        return false;
+                        error[index].onerrorTip = true;
+                        error[index].onerrorText = "关键词不能为空";
+                        flag = false
                     } else {
-                        return true;
+                        error[index].onerrorTip = false;
+                        error[index].onerrorText = "";
                     }
                 });
                 if (!flag) {
-                    notify(this, "无法保存，请完善页面信息!", "error");
+                    // notify(this, "无法保存，请完善页面信息!", "error");
                     this.canHandlerSave = true
                     return
                 }
@@ -582,6 +590,24 @@ export default {
     .answer-tabs {
         margin-top: 24px;
         background: #ffffff;
+    }
+    .spread-title {
+      display: flex;
+      height: 32px;
+      width: 100%;
+      margin: 24px 0;
+      justify-content: space-between;
+      span {
+        height: 20px;
+        margin: 6px 0;
+        padding-left: 12px;
+        line-height: 20px;
+        border-left: 4px solid #09CCEB;
+        font-size:14px;
+        font-family:'PingFangSC-Regular,PingFang SC';
+        font-weight:400;
+        color:rgba(38,38,38,1);
+      }
     }
     .reply-wrap {
         margin-top: 12px;

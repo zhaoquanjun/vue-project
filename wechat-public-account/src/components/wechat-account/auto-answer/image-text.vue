@@ -173,7 +173,10 @@ export default {
                 this.curEditorItem.contentPageId = data.Id;
                 this.curEditorTitle = transformationUrl(data.Type,this.promotionUrl,data.Href,data.Id)
                 if (data.PicUrl) {
+                    this.picUrl = data.PicUrl
                     this.curEditorItem.picUrl = data.PicUrl
+                } else {
+                    this.picUrl = ''
                 }
             }
         },
@@ -204,6 +207,10 @@ export default {
         },
         //确定
         handlerConfirm() {
+            if(!this.picUrl) {
+                notify(this, "请设置封面图片!", "error");
+                return false;
+            }
             for (let key in this.curEditorItem) {
                 console.log('999',key, this.curEditorItem[key])
                 if (

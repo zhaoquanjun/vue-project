@@ -44,6 +44,20 @@
         }
     }
 }
+.ym-form-item__error {
+    color: #262626;
+    padding-top: 8px;
+    &::before {
+        display: inline-block;
+        content: "";
+        width: 13px;
+        height: 13px;
+        vertical-align: -2px;
+        padding-right: 8px;
+        background: url("~img/jian-icon.png") no-repeat center;
+        background-size: contain;
+    }
+}
 .pannle-footer {
     // position: absolute;
     // bottom: 17px;
@@ -197,7 +211,7 @@
         height: 300px;
     }
     .img-list{
-        height: 300px;
+        height: 400px;
         overflow-y: auto;
     }
     .head-middle{
@@ -216,7 +230,7 @@
         overflow: hidden;
     }
     .el-tree > :first-child >.el-tree-node__children{
-        height:340px;
+        height:480px;
         overflow: auto
     }
        

@@ -6,7 +6,7 @@
           class="siteName"
         >{{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}</span>
       </el-tooltip>
-      <a class="secondDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
+      <a class="secondDomain" :href="`http://${secondDomain}`" target="_blank">{{secondDomain}}</a>
       <span class="language">{{_getLanguage(language)}}</span>
       <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
     </el-col>
@@ -47,7 +47,7 @@
               <div class="itemSiteName">{{item.siteName}}</div>
               <a
                 class="itemSiteDomain"
-                :href="`//${item.secondDomain}`"
+                :href="`http://${item.secondDomain}`"
                 target="_blank"
               >{{item.secondDomain}}</a>
             </div>
@@ -215,7 +215,7 @@ export default {
       font-weight: 400;
       color: rgba(5, 149, 230, 1);
       position: absolute;
-      right: 144px;
+      right: 165px;
       top: 29px;
       &:hover {
         opacity: 0.8;
@@ -224,7 +224,7 @@ export default {
     .language {
       font-size: 12px;
       font-weight: 400;
-      color: rgba(211, 211, 211, 1);
+      color: #262626;
       position: absolute;
       right: 112px;
       top: 29px;

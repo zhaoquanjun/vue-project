@@ -15,15 +15,18 @@
                 </h4>
                 <div class="member-body">
                     <div class="b-header">
-                        <template style="margin-right: 16px;">
-                            <el-select v-model="searchOptions.siteId" placeholder="全部来源"
-                                           @change="changeSite">
-                                <el-option v-for="item in siteOptions"
-                                           :key="item.siteId"
-                                           :label="item.siteName"
-                                           :value="item.siteId"></el-option>
-                            </el-select>
-                        </template>
+                        <div style="float: left;">
+                            <template>
+                                <el-select v-model="searchOptions.siteId" placeholder="全部来源"
+                                            @change="changeSite">
+                                    <el-option v-for="item in siteOptions"
+                                            :key="item.siteId"
+                                            :label="item.siteName"
+                                            :value="item.siteId"></el-option>
+                                </el-select>
+                            </template>
+                        </div>
+                        
 
                         <span class="times">注册时间</span>
                         <div class="el-input-content">
@@ -63,7 +66,7 @@
                                 <el-table-column prop="siteName"
                                                  label="来源">
                                 </el-table-column>
-                                <el-table-column prop="type"
+                                <el-table-column prop="userLevelPrt"
                                                  label="会员类型">
                                 </el-table-column>
                                 <el-table-column prop="createTimePrt"
@@ -155,7 +158,7 @@
         methods: {
             async getMemberList(options) {
                 this.$Loading.show();
-                let { data } = await memberManageApi.getMemberList(
+                let {data} = await memberManageApi.getMemberList(
                     (options = this.searchOptions)
                 );
                 this.$Loading.hide();
@@ -168,6 +171,8 @@
                 if (status == 200) {
                     var a = document.createElement('a');
                     a.setAttribute('href', data);
+                    var fileName = '会员_' + this.getDate();
+                    a.setAttribute('download',fileName);
                     a.style.display = 'none';
                     document.body.appendChild(a);
                     a.click();
@@ -246,6 +251,16 @@
             changeSite(value) {
                 this.searchOptions.siteId = value;
                 this.getMemberList();
+            },
+            getDate(){
+                    var now = new Date();
+                    var year = now.getFullYear(); //得到年份
+                    var month = now.getMonth();//得到月份
+                    var date = now.getDate();//得到日期
+                    month = month + 1;
+                    if (month < 10) month = "0" + month;
+                    if (date < 10) date = "0" + date;
+                    return year + "" + month + "" + date;
             }
         }
     };
@@ -266,6 +281,7 @@
 <style lang="scss" scoped>
     .member-content {
         font-family: "PingFangSC-Regular,PingFangSC";
+        min-width: 1150px;
         .member-title
 
     {
@@ -311,20 +327,20 @@
     }
 
     .times {
+        float: left;
         margin: 0 8px 0 16px;
     }
 
     .el-input-content {
-        display: inline-block;
-        margin-right: 32px;
+        float: left;
+        margin-right: 0px;
     }
 
     .line {
-        position: absolute;
-        top: 44px;
-        left: 502px;
+        float: left;
         width: 16px;
         height: 1px;
+        margin: 19px 8px;
         background: #e5e5e5;
     }
 

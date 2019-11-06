@@ -30,9 +30,10 @@ export let aliMarketUrl = "https://market.console.aliyun.com/imageconsole/index.
 
 let redirectUrl = {
     createArticle: `${httpSchema}content.${baseServerUrl}/content/createarticle`,
-    createProduct: `${httpSchema}content.${baseServerUrl}/content/createproduct`,
+    createProduct: `${httpSchema}content.${baseServerUrl}/content/createProduct`,
     uploadFile: `${httpSchema}content.${baseServerUrl}/content/file`,
     siteDomain: `${httpSchema}dashboard.${baseServerUrl}/website/mysite/sitedomain`,
+    selectTemplate: `${httpSchema}dashboard.${baseServerUrl}/website/selectTemplate`,
     addPicture: `${httpSchema}content.${baseServerUrl}/content/picture`
 };
 /**
@@ -56,7 +57,7 @@ if (process.env.NODE_ENV === 'development') {
     newsApi = 'http://api.content.console.wezhan.cn';
     imageApi = 'http://api.content.console.wezhan.cn';
     redirectUrl['createArticle'] = 'http://content.console.wezhan.cn/content/createarticle';
-    redirectUrl['createProduct'] = 'http://content.console.wezhan.cn/content/createproduct';
+    redirectUrl['createProduct'] = 'http://content.console.wezhan.cn/content/createProduct';
     redirectUrl['uploadFile'] = 'http://content.console.wezhan.cn/content/file';
 }
 

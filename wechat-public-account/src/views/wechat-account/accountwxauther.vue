@@ -7,69 +7,75 @@
     <div class="account-setting__content" > 
       <!-- 微信认证 -->
       <!-- <account-certification></account-certification> -->
+
       <div class="account-setting__bind--box">
         <SpeedProgress :steps = 'step' />
-        <!-- 第一步绑定工众号 -->
-        <div v-if="step == 1" class="account-setting__bind">
-          <img :src="wechanIcon" alt />
-          <p>请先绑定微信公众号</p>
-          <div @click="_handleWxAuth">授权绑定微信公众号</div>
-        </div>
-        <!-- 第二步绑定域名 -->
-        <div v-if="step == 2" class="account-setting__resolve">
-          <img :src="wechanSpare" alt />
-          <p>设置推广域名，立即开启自定菜单</p>
-          <input 
-            type='text' 
-            v-model="addDomain" 
-            v-if="domainList.length <= 0" 
-            placeholder="请输入需添加的域名"/>
-          <ul v-else>
-            <span 
-              class="pointer" 
-              @click="showDomainList(false)" >
-                {{domainName}}
-              <i class="icon iconfont iconicon-des-lower"></i>
-            </span>
-            <li 
-              v-show="isShowDomainList" 
-              v-for="(item,index) in domainList"
-              :class="{active: domainIndex == index}"
-              @click="showDomainList(item,index)" 
-              :key="index"
-            >
-              {{item.domain}}
-              <i class="icon iconfont iconduihao"></i>
-            </li>
-          </ul>
-          <div v-if="isShowTips && !isShowDomainList" class='tips'>
-            <p class="ym-form-item__error">{{tipsText}}</p>
-            <span @click='goResolve'>去解析</span>
+        <div class="account-body">
+          <!-- 第一步绑定工众号 -->
+          <div v-if="step == 1" class="account-setting__bind">
+            <img :src="wechanIcon" alt />
+            <p>请先绑定微信公众号</p>
+            <div @click="_handleWxAuth">授权绑定微信公众号</div>
           </div>
-          <div class="add" @click='changeResolve'>完成设置</div>
-        </div>
-        <!-- 第三部完成设置 -->
-        
-        <div class='account-setting__complete' v-if='step == 3'>
-          <!-- <i class='icon iconfont iconduihao'></i> -->
-          <el-progress 
-            type="circle" 
-            :percentage="percentage"
-            :width="100"
-            color="#63DC8C"
-            :stroke-width='2'
-            status="success">
-          </el-progress>
-          <p>配置成功</p>
-        </div>
-        <div v-if="step == 1" class="account-bind__tips">
-          <p>1、请确定您有一个正常使用的微信公众号，且您是公众号管理员；</p>
-          <p>2、请确定您授权的微信公众号是认证的服务号或订阅号。</p>
-        </div>
-        <div v-if="step != 1" class="account-bind__tips account-bind__tips2">
-          <p>1、公众号发送图文消息时，将在设置的推广域名下打开页面、文章、产品链接；</p>
-          <p>2、推广域名必须是当前网站下解析成功的域名，请先添加并解析域名；</p>
-          <p>3、如需解除绑定的微信公众号，请前往微信公众平台【公众号设置-授权管理】中取消授权。</p>
+          <!-- 第二步绑定域名 -->
+          <div v-if="step == 2" class="account-setting__resolve">
+            <!-- <img :src="wechanSpare" alt /> -->
+            <p>设置推广域名，立即开启自定义菜单</p>
+            <input 
+              type='text'
+              v-model="addDomain" 
+              v-if="domainList.length <= 0" 
+              placeholder="请输入需添加的域名"/>
+            <ul v-else>
+              <span
+                class="pointer" 
+                @click="showDomainList(false)" >
+                  {{domainName}}
+                <i class="icon iconfont iconicon-des-lower"></i>
+              </span>
+              <div class="select-contant">
+                <li
+                  v-show="isShowDomainList" 
+                  v-for="(item,index) in domainList"
+                  :class="{active: domainIndex == index}"
+                  @click="showDomainList(item,index)" 
+                  :key="index"
+                >
+                  {{item.domain}}
+                  <i v-if="domainIndex == index" class="icon iconfont iconduihao"></i>
+                </li>
+              </div>
+            </ul>
+            <div v-if="isShowTips && !isShowDomainList" class='tips'>
+              <p class="ym-form-item__error">{{tipsText}}</p>
+              <span @click='goResolve'>去解析</span>
+            </div>
+            <div class="add" @click='changeResolve'>{{domainList.length>0?'完成设置':'添加域名'}}</div>
+          </div>
+          <!-- 第三部完成设置 -->
+          
+          <div class='account-setting__complete' v-if='step == 3'>
+            <!-- <i class='icon iconfont iconduihao'></i> -->
+            <el-progress 
+              type="circle" 
+              :percentage="percentage"
+              :width="100"
+              color="#63DC8C"
+              :stroke-width='2'
+            >
+            </el-progress>
+            <p v-if="percentage<100">正在配置...</p>
+            <p v-else>配置成功</p>
+          </div>
+          <div v-if="step == 1" class="account-bind__tips">
+            <p>1、请确定您有一个正常使用的微信公众号，且您是公众号管理员；</p>
+            <p>2、请确定您授权的微信公众号是认证的服务号或订阅号。</p>
+          </div>
+          <div v-if="step != 1" class="account-bind__tips account-bind__tips2">
+            <p>1、公众号发送图文消息时，将在设置的推广域名下打开页面、文章、产品链接；</p>
+            <p>2、推广域名必须是当前网站下解析成功的域名，请先添加并解析域名；</p>
+            <p>3、如需解除绑定的微信公众号，请前往微信公众平台【公众号设置-授权管理】中取消授权。</p>
+          </div>
         </div>
       </div>
     </div>
@@ -86,13 +92,14 @@ import environment from "@/environment/index";
 import { wxAuth, getCdnDomainList, bindDomain, setPromotionUrl} from "@/api/request/account.js";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
 import { setTimeout } from 'timers';
+import {getLocal,setLocal} from '@/libs/local'
 
 export default {
   data() {
     return {
       step: 1,
       title: "账号设置",
-      domainIndex: 0,
+      domainIndex: -1,
       siteId: this.$store.state.dashboard.siteId,
       isResolveSuccess: this.$store.state.wxaccount.wx_status.isResolveSuccess,
       isAuth: this.$store.state.wxaccount.wx_status.isAuth,
@@ -103,6 +110,7 @@ export default {
       isResolve: 2,  //0暂未设置解析,1等待解析生效,2解析成功,3等待服务器生成解析记录值
       domainName: '请输入需添加的域名',
       tipsText: '请输入正确的域名',
+      authTipText: '请在新打开的窗口中完成授权...',
       isShowTips: false,
       addDomain: '',
       percentage: 0,
@@ -116,7 +124,7 @@ export default {
     AccountCertification
   },
   created() {
-    this._getCdnDomainList();
+     this._getCdnDomainList();
   },
   methods: {
     getSiteId(siteId) {
@@ -141,6 +149,10 @@ export default {
       let {data} = await getCdnDomainList(this.siteId)
       if (data) {
         this.domainList = data
+        if(this.domainList.length > 0) {
+          this.showDomainList(this.domainList[0],0)
+          this.isShowDomainList =false
+        }
       }
     },
     //去解析
@@ -152,7 +164,7 @@ export default {
       if(this.domainList.length <=0) {
         //新增域名
         if (!regDomain.test(this.addDomain)) {
-          this.tipsText = '请输入正确格式的域名';
+          this.tipsText = '名称仅包含中英文、数字、特殊符号。';
           this.isShowTips = true
           return
         }
@@ -194,7 +206,7 @@ export default {
     },
     //显示域名选择列表
     showDomainList(val,ind){
-      this.isShowDomainList = !this.isShowDomainList;
+      this.isShowDomainList = !this.isShowDomainList;     
       if(val) {
         this.isShowTips = false
         this.domainName = val.domain
@@ -228,15 +240,26 @@ export default {
       document.body.appendChild(oA);
       let btn = document.getElementById("authBtn");
       btn.click();
+      // setTimeout(function (){
+      //   setLocal("transitTips", {data:'999',status: 200})
+      // }, 4000)
+      var authTimer=window.setInterval(()=> {
+        let data = getLocal("transitTips")
+        this.authTipText = data.data;
+        console.log(this.authTipText)
+        // this.$message.close()
+      },1000)
       if (btn) document.body.removeChild(document.getElementById("authBtn"));
       this.$confirm("提示", {
         title: "提示",
         showCancelButton: false,
-        message: this.$createElement("div", null, '是否授权成功'),
+        message:  this.authTipText,
         callback: async action => {
           if (action === "confirm") {
+            window.clearInterval(authTimer)
             this.$router.push('/wechat/accountsetting')
             this._getCdnDomainList()
+            this.authTipText = '请在新打开的窗口中完成授权...'
           }
         }
       });
@@ -250,58 +273,65 @@ export default {
   font-size: 40px !important;
   font-weight: 700;
 }
+.el-progress /deep/ .el-progress__text {
+  font-size: 22px !important;
+}
 </style>
 <style lang="scss" scoped>
 .account-setting__section {
   box-sizing: border-box;
   padding: 16px 32px 0;
   height: 100%;
+  min-width: 800px;
   .account-setting__content {
     position: relative;
     min-height: 500px;
     .account-setting__bind--box {
       width: 100%;
       height: calc(100% - 266px);
+      .account-body {
+        background:rgba(255,255,255,1);
+        border-radius:2px;
+        border:1px solid rgba(221,226,234,1);
+      }
       .account-setting__bind {
-        width:290px;
-        height:225px;
+        width: 100%;
         margin: 0 auto;
         text-align: center;
-        background:rgba(255,255,255,1);
-        box-shadow:0px 2px 12px 0px rgba(243,243,243,1);
-        border-radius:3px;
-        border:1px solid rgba(99,220,140,1);
+        
         img {
-          width: 85px;
-          height: 61px;
-          margin: 48px 0 12px;
+          width: 58px;
+          height: 44px;
+          margin: 72px 0 24px;
         }
         p {
           font-size:14px;
           font-family:"PingFangSC";
           font-weight:400;
-          color:rgba(161,168,177,1);
+          color:#A1A8B1;
           line-height:20px;
         }
         div {
+          display: inline-block;
+          width: 340px;
+          height: 40px;
           cursor: pointer;
           font-size:14px;
           font-family:"PingFangSC";
           font-weight:400;
           margin-top: 20px;
-          color:rgba(99,220,140,1);
-          line-height:20px;
+          color:#ffffff;
+          background: #01c0de;
+          line-height:40px;
+          border-radius: 3px;
         }
       }
       .account-setting__resolve {
+        padding-top: 50px;
         width:425px;
-        height:293px;
         margin: 0 auto;
         text-align: center;
         background:rgba(255,255,255,1);
-        box-shadow:0px 2px 12px 0px rgba(243,243,243,1);
-        border-radius:3px;
-        border:1px solid rgba(99,220,140,1);
         img {
           width: 64px;
           height: 56px;
@@ -382,7 +412,7 @@ export default {
           span {
             display: inline-block;
             width: 340px;
-            color: #D3D3D3;
+            color: #262626;
             padding: 0 10px;
             line-height: 40px;
             margin-bottom: 4px;
@@ -390,6 +420,10 @@ export default {
               color: #a1a8b1;
               float: right;
             }
+          }
+          .select-contant {
+            max-height: 162px;
+            overflow-y: auto;
           }
           li {
             height: 40px;
@@ -420,15 +454,9 @@ export default {
         }
       }
       .account-setting__complete {
-        width:320px;
-        height:280px;
         margin: 0 auto;
         padding-top: 50px;
         text-align: center;
-        background:rgba(255,255,255,1);
-        box-shadow:0px 2px 12px 0px rgba(243,243,243,1);
-        border-radius:3px;
-        border:1px solid rgba(99,220,140,1);
         i {
           display: inline-block;
           width:100px;
@@ -450,7 +478,8 @@ export default {
       }
       .account-bind__tips {
         width: 418px;
-        margin: 40px auto 0;
+        margin: 32px auto 50px;
+        background: white;
         p {
           font-size:14px;
           font-family:"PingFangSC";

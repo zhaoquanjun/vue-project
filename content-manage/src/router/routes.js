@@ -144,10 +144,10 @@ export const defaultRoutes = [
        component: () => import('@/views/recycle/content.vue'),
        children:[
         {
-            path: "page",
-            name: "page",
+            path: "recyclepage",
+            name: "recyclepage",
             component: () => import('@/views/recycle/page.vue'),
-            meta: {title: "回收站", isSub: true }
+            meta: {title: "回收站", isSub: true ,requiresAuth: true }
         },
         {
             path: "recyclenews",

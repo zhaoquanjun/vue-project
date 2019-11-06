@@ -14,7 +14,7 @@
                     <p>无数据</p>
                 </div>
             </template>
-            <el-table-column type="selection"></el-table-column>
+            <el-table-column v-if="!['page'].includes(recycleTempData.type)" type="selection"></el-table-column>
 
             <el-table-column :label="recycleTempData.firstColumnName" :width="videoWidth">
                 <template slot-scope="scope">
@@ -44,7 +44,7 @@
                         </span>-->
                     </div>
                     <div class="video-cover" v-if="['video'].includes(recycleTempData.type)">
-                        <img width="100%" height="100%" :src="scope.row.coverUrl" />
+                        <img :src="scope.row.coverUrl" />
                         <!-- <span class="play" @click="viewPic( scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
                         </span>-->
@@ -58,14 +58,12 @@
                     <div v-if="contentType==='video'">
                         <div
                             class="video-img-name"
-                            @click="rename(scope.row.id,scope.row.title,scope.$index)"
                         >{{scope.row.title}}</div>
                         <div class="format">格式： {{scope.row.fileExtension}}</div>
                     </div>
                     <span
                         v-else
                         class="img-name"
-                        @click="rename(scope.row.id,scope.row.title,scope.$index)"
                     >{{ recycleTempData.type == 'product' ? scope.row.name : scope.row.title}}</span>
                 </template>
             </el-table-column>
@@ -86,6 +84,13 @@
                 show-overflow-tooltip
             ></el-table-column>
             <el-table-column
+                v-if="['page'].includes(recycleTempData.type)"
+                prop="url"
+                label="页面地址"
+                show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+                v-if="!['page'].includes(recycleTempData.type)"
                 prop="categoryName"
                 :label="recycleTempData.secondColumnName"
                 show-overflow-tooltip
@@ -94,6 +99,18 @@
                     <span>{{ recycleTempData.type == 'product' ? getProductCateNames(scope.row.productCategoryList) : scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
+            <el-table-column
+                v-if="['page'].includes(recycleTempData.type)"
+                prop="siteName"
+                :label="recycleTempData.secondColumnName"
+                show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+                v-if="['page'].includes(recycleTempData.type)"
+                prop="pageTypeStr"
+                label="页面类型"
+                show-overflow-tooltip
+            ></el-table-column>
             <el-table-column
                 min-width="150"
                 prop="deleteTimePrt"
@@ -219,7 +236,11 @@ export default {
          */
         handleRecoveryData(row) {
             console.log(row);
-            this.$emit("batchRecovery", [row.id]);
+            if(['page'].includes(this.recycleTempData.type)){
+                this.$emit("batchRecovery", row);
+            }else{
+                this.$emit("batchRecovery", [row.id]);
+            }
         },
         /**
          * 单选或全选操作
@@ -284,10 +305,15 @@ export default {
     white-space: unset !important;
 }
 .video-cover {
+    display: inline-block;
     width: 190px;
     height: 130px;
     margin-right: 10px;
     position: relative;
+    img {
+        height: 130px;
+        width: 190px;
+    }
 }
 </style>
 

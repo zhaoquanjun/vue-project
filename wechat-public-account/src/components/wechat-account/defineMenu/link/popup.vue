@@ -228,11 +228,11 @@ export default {
       }
     },
     _handleCancle() {
-      this.selectedUrl = this.model["Href"];
-      this.curType = this.model["Type"];
-      this.way = this.model["Target"];
-      this.slider = this.model["Type"];
-      this.model['PageIndex'] = this.pageIndex;
+      this.slider = this.sliderList[0].label;
+      this.title = null
+      this.selectedUrl = null;
+      this.id = null;
+      this.$refs.text.isUrl = false
       this.$emit("handleClosePopup", false);
     },
     _handleClosePopup(e) {

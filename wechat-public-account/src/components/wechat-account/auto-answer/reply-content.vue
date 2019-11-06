@@ -4,13 +4,6 @@
             <slot name="keyword"></slot>
         </div>
             <section class="reply-content clear">
-            <!-- <div class="radio-tabs">
-                <el-radio-group v-model="radio" @change="changeHandler">
-                    <el-radio :label="1">图片</el-radio>
-                    <el-radio :label="2">文字</el-radio>
-                    <el-radio :label="3">图文</el-radio>
-                </el-radio-group>
-            </div> -->
             <ul class="radio-tabs">
                 <li @click="changeHandler(1)" :class="{active: radio == 1}">
                 <i class="icon iconfont iconicon-tupian"></i>
@@ -105,7 +98,7 @@ export default {
                 font-weight:400;
                 color:rgba(38,38,38,1);
                 line-height:40px;
-                padding: 0 15px 0 30px;
+                padding: 0 15px 0 24px;
                 cursor: pointer;
                 i {
                     font-size: 12px;
@@ -130,7 +123,7 @@ export default {
     }
 }
 .footer-btn {
-    padding: 16px;
+    padding: 16px 24px;
     button {
         width: 90px;
         height: 32px;

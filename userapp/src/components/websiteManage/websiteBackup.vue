@@ -220,6 +220,7 @@ export default {
     },
     // 选择切换网站
     chooseWebsite(siteId) {
+      this.siteId = siteId;
       this.getBackupSite(siteId);
     },
     /**
@@ -264,8 +265,6 @@ export default {
         );
         this.autoSite[i].dataSize = this.autoSite[i].dataSize.toFixed(5) + "M";
       }
-
-      console.log(this.siteInfo);
     },
     /**
      * 还原站点
@@ -303,7 +302,6 @@ export default {
                 scope.row.fileName
               )
               .then(res => {
-                console.log(res.status);
                 if (res.status === 200) {
                   this.$notify({
                     customClass: "notify-success",
@@ -384,14 +382,12 @@ export default {
       this.$confirm(`确定下载该备份包？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
-          console.log(action);
           if (action === "confirm") {
             var res = await siteBackupApi.exportBackup(
               scope.row.siteName,
               scope.row.siteId,
               scope.row.fileName
             );
-            console.log(res);
             var a = document.createElement("a");
             var binaryData = [];
             binaryData.push(res.data);
@@ -416,14 +412,12 @@ export default {
       this.$confirm(`备份包删除后不可恢复，确定要删除吗？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
-          console.log(action);
           if (action === "confirm") {
             let { status } = await siteBackupApi.deleteBackup(
               scope.row.id,
               scope.row.fileName,
               scope.row.siteId
             );
-            console.log(status);
             if (status === 200) {
               this.$notify({
                 customClass: "notify-success",

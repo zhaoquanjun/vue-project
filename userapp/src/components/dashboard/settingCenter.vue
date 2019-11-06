@@ -24,15 +24,6 @@
       </div>
       <div class="item">
         <div class="item-box">
-          <div class="item-icon website"></div>
-          <div class="item-text-wrap">
-            <div class="item-text">ac.clouddream.net</div>
-            <div class="collection">收藏</div>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="item-box">
           <div class="item-icon assistant"></div>
           <div class="item-text">云建站助手</div>
         </div>
@@ -91,7 +82,7 @@ export default {
     }
     .item {
       display: inline-block;
-      width: 20%;
+      width: 25%;
       height: 100%;
       //   padding-left: 32px;
       box-sizing: border-box;
@@ -119,7 +110,6 @@ export default {
           margin-right: 18px;
           //   margin-top: 14px;
           display: inline-block;
-          vertical-align: top;
           min-width: 50px;
         }
         .item-text-wrap {
@@ -129,7 +119,6 @@ export default {
           flex-wrap: wrap;
         }
         .item-text {
-          vertical-align: top;
           display: inline-block;
           //   margin-top: 27px;
           font-size: 14px;
@@ -144,7 +133,6 @@ export default {
           // white-space: nowrap;
         }
         .item-videoLength {
-          vertical-align: top;
           display: inline-block;
           font-size: 16px;
           font-family: PingFangSC-Light, PingFang SC;
@@ -152,17 +140,7 @@ export default {
           color: rgba(38, 38, 38, 1);
           line-height: 22px;
         }
-        .collection {
-          vertical-align: top;
-          display: inline-block;
-          font-size: 14px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 500;
-          color: rgba(5, 149, 230, 1);
-          line-height: 20px;
-        }
         .memberNum {
-          vertical-align: top;
           display: inline-block;
           font-size: 16px;
           font-family: PingFangSC-Medium, PingFang SC;
@@ -176,10 +154,6 @@ export default {
         }
         .video {
           background: url("~img/dashboard/board-video.png") no-repeat center;
-          background-size: contain;
-        }
-        .website {
-          background: url("~img/dashboard/board-website.png") no-repeat center;
           background-size: contain;
         }
         .assistant {

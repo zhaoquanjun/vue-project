@@ -37,7 +37,7 @@
             <li class="mobilePhone clear">
                 <div class="fleft">
                     <span class="set-name">手机号码</span>
-                    <span class="social-desc">手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：www.clouddream.net</span>
+                    <span class="social-desc">手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：login.clouddream.net</span>
                 </div>
                 <div class="fright">
                     <span class="user-value">{{userInfo.phoneNumber | geTel }}</span>
@@ -54,7 +54,7 @@
                     <span class="social-desc">设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码</span>
                 </div>
                 <div class="fright">
-                    <span class="user-value" v-if="!!pwdTitle">******</span>
+                    <span class="user-value" v-if="pwdTitle != '0'">******</span>
                     <span class="pd-left">
                         <button
                             class="bind"

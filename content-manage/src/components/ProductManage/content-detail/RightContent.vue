@@ -69,12 +69,12 @@
         </el-dialog>
         <!-- 图片预览 end -->
         <div class="mask" v-show="isModalShow"></div>
-        <div id="content" v-show="isModalShow">
+        <div id="content" class="contentDialog" v-show="isModalShow">
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
                 <button @click="cancelEditorImg">X</button>
             </el-header>
-            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="true" :isPopup="true">
+            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="true" :isPopup="true" :isSecond="true">
                 <div slot="modal-footer" class="modal-footer">
                     <button type="button" @click="getEditorImg" class="sure">确定</button>
                     <button type="button" @click="cancelEditorImg" class="cancel">取消</button>

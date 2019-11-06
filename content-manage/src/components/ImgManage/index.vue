@@ -10,6 +10,8 @@
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
+                :isPopup="isPopup"
+                :isSecond="isSecond"
                 @getList="getList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
@@ -75,7 +77,7 @@
                     </div>
                 </right-pannel>
             </el-main>
-            <el-footer >
+            <el-footer style="height:auto">
                 <slot name="modal-footer"></slot>
             </el-footer>
         </el-main>
@@ -135,6 +137,10 @@ export default {
             }
         },
         isPopup: {
+            type: Boolean,
+            default: false
+        },
+        isSecond: {
             type: Boolean,
             default: false
         }
@@ -213,7 +219,6 @@ export default {
                     iconClass: "icon-warning",
 
                     callback: async action => {
-                        console.log(action);
                         if (action === "confirm") {
                             let {
                                 status,
@@ -283,7 +288,6 @@ export default {
                     customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
-                        console.log(action);
                         if (action === "confirm") {
                             let {
                                 status
@@ -322,7 +326,6 @@ export default {
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
             this.curImgInfo = data;
-            console.log(data, "data--=======");
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
@@ -392,7 +395,6 @@ export default {
             return this.isInvitationPanelShow === true ? 331 : 0;
         },
         isBatchHeaderShow() {
-            console.log(this.idsList.length);
             return this.idsList.length > 0 ? true : false;
         }
     },
