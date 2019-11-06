@@ -15,12 +15,12 @@
                     <span>暂无数据</span>
                 </div>
             </template>
-            <el-table-column prop="domain" label="域名" class="domain-name">
+            <el-table-column prop="domain" label="域名" class="domain-name" min-width="230">
                 <template slot-scope="scope">
                     <span class="domain-name">{{scope.row.domain}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="httpsStatusDesc" label="HTTPS状态">
+            <el-table-column prop="httpsStatusDesc" label="HTTPS状态" min-width="390">
                 <template slot-scope="scope">
                     <!-- <el-switch
                         v-model="scope.row.httpsStatus"
@@ -40,7 +40,7 @@
                     <span v-else>—</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="cdnDomainResolveStatusDesc" label="解析状态">
+            <el-table-column prop="cdnDomainResolveStatusDesc" label="解析状态" min-width="100">
                 <template slot-scope="props">
                     <el-tooltip
                         v-if="props.row.cdnDomainResolveStatus!==2"
@@ -186,7 +186,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column width="150">
+            <el-table-column min-width="60">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <!-- <button class="resolve-set" @click="expandSelect(scope.row,scope.row)">解析设置</button> -->
