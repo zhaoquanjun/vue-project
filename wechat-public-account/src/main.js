@@ -7,6 +7,7 @@ import "./styles/reset.css";
 import "./styles/common.scss";
 import "./plugins/element-reset.scss";
 import "./styles/pop-up/pup-up.scss";
+import "./styles/weizhan.scss";
 //import 'babel-polyfill';
 Vue.config.productionTip = false;
 //插件的包

@@ -1,15 +1,17 @@
 <template>
     <div>
-        <div class="picture-wrap" v-if="picUrl">
-            <img :src="picUrl" alt />
-            <span class="mask">
-                <button>
-                    <i class="iconfont iconqiehuanxingshiyi" @click="handlerUpload"></i>
-                </button>
-                <!-- <button @click="handlerDelete">
-                    <i class="iconfont iconshanchu"></i>
-                </button> -->
-            </span>
+        <div class="picture-content-mask"  v-if="picUrl">
+            <div class="picture-wrap">
+                <img :src="picUrl" alt />
+                <span class="mask">
+                    <button>
+                        <i class="iconfont iconqiehuanxingshiyi" @click="handlerUpload"></i>
+                    </button>
+                    <!-- <button @click="handlerDelete">
+                        <i class="iconfont iconshanchu"></i>
+                    </button> -->
+                </span>
+            </div>
         </div>
         <div class="upload-wrap" v-else>
             <div>
@@ -19,7 +21,7 @@
             </div>
         </div>
          <image-manage
-            :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
+            v-if="imageChooseAreaShowFlag"
             @getImage="getImage"
             @handleCloseModal="handleCloseModal"
         ></image-manage>
@@ -33,8 +35,8 @@ export default {
     data() {
         return {
             isUploaded: true,
-             picUrl: "",
-             imageChooseAreaShowFlag: false,
+            picUrl: "",
+            imageChooseAreaShowFlag: false,
         };
     },
      components: {
@@ -58,6 +60,7 @@ export default {
             //this.picUrl = data;
             this.picUrl = src;
             this.$emit("handlerPic",this.picUrl)
+            this.imageChooseAreaShowFlag = false;
         },
         // 关闭弹层
         handleCloseModal() {
@@ -72,16 +75,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.picture-content-mask {
+    text-align: center;
+}
 .picture-wrap {
-    width: 180px;
     position: relative;
     overflow: hidden;
-    text-align: center;
+    display: inline-block;
     margin: 30px auto;
-    flex: none;
     img {
+        display: inline-block;
         border-radius: 2px;
-        width: 180px;
+        min-height: 180px;
+        max-width: 700px;
+        max-height: 240px;
     }
     &:hover .mask {
         opacity: 1;
@@ -89,7 +96,7 @@ export default {
     .mask {
         opacity: 0;
         position: absolute;
-        width: 180px;
+        width: 100%;
         height: 100%;
         left: 0;
         top: 0;

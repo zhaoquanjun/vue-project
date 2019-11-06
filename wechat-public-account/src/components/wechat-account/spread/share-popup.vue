@@ -80,7 +80,7 @@
       </div>
     </div>
     <image-manage
-      :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
+      v-if="imageChooseAreaShowFlag"
       @getImage="getImage"
       @handleCloseModal="handleCloseModal"
     ></image-manage>
@@ -159,6 +159,7 @@ export default {
     //切换图片
     async getImage(src) {
       this.initData.coverUrl = src;
+      this.imageChooseAreaShowFlag = false;
     },
     //选则文章详情页
     changePageList(val){
@@ -172,7 +173,7 @@ export default {
       this.imageChooseAreaShowFlag = false;
     },
     handlerUpload(){
-      this.imageChooseAreaShowFlag=true
+      this.imageChooseAreaShowFlag= true
     },
     //复制
     oCopy(){
