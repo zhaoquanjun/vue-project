@@ -103,7 +103,7 @@
                         v-if="contentType=='File'"
                     >
                         <span class="el-dropdown-link">
-                            <button class="btn-small btn-notboard">
+                            <button class="btn-small btn-notboard btn-black-notboard">
                                 <i class="iconfont iconsangedian"></i>
                             </button>
                         </span>
@@ -305,6 +305,13 @@ export default {
 
 <style  lang="scss" scoped>
 @import "@/styles/manage-head.scss";
+.btn-black-notboard{
+    padding: 6px;
+    &:hover{
+        background:rgba(240,243,247,1);
+        border-radius:4px;
+    }
+}
 .desBtn{
     width: 32px;
     height: 32px;
