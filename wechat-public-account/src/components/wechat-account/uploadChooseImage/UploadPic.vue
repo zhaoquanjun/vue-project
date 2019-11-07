@@ -1,213 +1,414 @@
 <template>
-  <div id="upload-img">
-    <!-- 一次可上传60张图片，单张图片大小不超过10MB -->
-    <!-- <div class="select-btn">
-      <el-button class="choose-img upload-btn" size="small" type="default">选择图片</el-button>
-      <el-button class="upload-btn" size="small" type="default">选择文件夹</el-button>
-    </div>-->
-    <el-row class="upload-head" type="flex" justify="space-between">
-      <!-- [{{upload2Category.label}}] -->
-      <el-col :span="12">
-        <span style="vertical-align: -5px;">上传至:</span>
-        <span style="vertical-align: -5px;padding:0 10px">{{upload2Category.label}}</span>
-        <el-tree
-          class="upload-tree"
-          ref="treeX"
-          :data="treeResult"
-          node-key="id"
-          accordion
-          :expand-on-click-node="true"
-          @node-click="chooseNode"
-        ></el-tree>
-      </el-col>
-    </el-row>
-    <el-upload
-      class="upload-pic"
-      :action="uploadPicAction"
-      :headers="headers"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      :on-success="handleSucess"
-      :on-change="handleChange"
-      :file-list="fileList"
-      list-type="picture-card"
-      :auto-upload="false"
-      :limit="60"
-      :multiple="true"
-      ref="upload"
-      :before-upload="beforeUpload"
-    >
-      <i class="el-icon-plus avatar-uploader-icon"></i>
-    </el-upload>
-    <el-row class="footer-upload-btn">
-      <el-button
-        :disabled="uoloadDisabled"
-        class="handle-upload"
-        :class="[{'handle-upload-disabled':uoloadDisabled}]"
-        style="float:right"
-        size="small"
-        @click="submitUpload"
-      >开始上传</el-button>
-    </el-row>
-  </div>
+    <div id="upload-img" class="upload-img">
+        <!-- 一次可上传60张图片，单张图片大小不超过10MB -->
+        <!-- 图片上传弹窗 header -->
+        <el-row class="upload-head" type="flex" justify="space-between">
+            <el-col :span="12">
+                <span style="padding-right:8px">上传至:</span>
+                <SelectTree
+                    style="width:140px"
+                    ref="treeX"
+                    :tree-result="treeResult"
+                    node-key="id"
+                    accordion
+                    :expand-on-click-node="true"
+                    @chooseNode="chooseNode"
+                    :categoryName="nodeData.label"
+                    :categoryId="nodeData.id"
+                />
+            </el-col>
+            <div></div>
+        </el-row>
+        <!-- 图片上传组件 begin-->
+        <el-upload
+            class="upload-pic"
+            :action="uploadPicAction"
+            :headers="headers"
+            :with-credentials="true"
+            :on-remove="handleRemove"
+            :on-success="handleSucess"
+            :on-change="handleChange"
+            :on-preview="handlePictureCardPreview"
+            :file-list="fileList"
+            list-type="picture-card"
+            :auto-upload="false"
+            :multiple="true"
+            ref="upload"
+            drag
+            :isFolder="isFolder"
+            :before-upload="beforeUpload"
+        >
+            <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
+            <div @click="setFolder(false)" class="el-upload__text">
+                将文件拖到此处，或
+                <em>点击上传</em>
+            </div>
+            <el-button
+                class="upload-btn"
+                @click="setFolder(false)"
+                size="small"
+                type="default"
+                style=" position: absolute;top: 57px; right: 136px;"
+            >选择图片</el-button>
+            <el-button
+                class="choose-img upload-btn"
+                size="small"
+                @click="setFolder(true)"
+                type="default"
+                style="position: absolute;top: 57px; right: 6px;"
+            >选择文件夹</el-button>
+        </el-upload>
+        <el-row class="footer-upload-btn">
+            <button
+                :disabled="uploadDisabled"
+                class="handle-upload"
+                :class="[{'handle-upload-disabled':uploadDisabled}]"
+                style="float:right"
+                size="small"
+                @click="submitUpload"
+            >{{isUploading?"上传中…":"开始上传"}}</button>
+        </el-row>
+        <!-- 图片上传组件 end-->
+        <!-- 图片预览 begin -->
+        <el-dialog :append-to-body="true" :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt />
+        </el-dialog>
+        <!-- 图片预览 end -->
+    </div>
 </template>
 
 <script>
-import { Message } from "element-ui";
+import SelectTree from "./SelectTree";
+import { isImgFile, imgSize } from "@/utlis/index";
 import securityService from "@/services/authentication/securityService";
+
 export default {
-  props: ["treeResult", "uploadPicUrl"],
-
-  data() {
-    return {
-      uoloadDisabled: true,
-      fileList: [],
-      upload2Category: { label: "全部分类", id: 0 },
-      uploadPicAction: `${this.uploadPicUrl}/0`,
-      headers: {
-        appId: this.$store.state.dashboard.appId,
-        Authorization: ""
-      },
-
-      uploadSucess: false,
-      count: 0
-    };
-  },
-  async created() {
-    let appid = null;
-    let token = this._getJwtToken();
-    if (window.smSite.getAppIdByCookie) {
-      appid = window.smSite.getAppIdByCookie();
-    }
-    let data = await securityService.getUser();
-    this.headers.Authorization = "Bearer " + data.access_token;
-  },
-  methods: {
-    handleChange(file) {
-      this.uoloadDisabled = false;
+    props: ["treeResult", "uploadPicUrl", "nodeData"],
+    components: {
+        SelectTree
     },
-    handleSucess(response, file, fileList) {
-      if (++this.count == fileList.length) {
-        Message.success(`成功上传${fileList.length}张图片`);
-        setTimeout(() => {
-          this.$emit("switchUploadBoxShowStatus", "uploadImg");
-          this.$refs.upload.clearFiles();
-        }, 500);
-      }
+    data() {
+        return {
+            dialogImageUrl: "",
+            dialogVisible: false,
+            isFolder: false,
+            uploadDisabled: true,
+            isUploading: false,
+            fileList: [],
+            upload2Category: { label: "全部分类", id: 0 },
+            uploadPicAction: `${this.uploadPicUrl}/0`,
+            headers: {
+                Authorization: ""
+            },
+            uploadSucess: false,
+            count: 0,
+            limit: 60 // 自定义允许上传的个数
+        };
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-      if (fileList < 1) this.uoloadDisabled = true;
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
-    chooseNode(data) {
-      this.upload2Category = data;
-      console.log(this.upload2Category);
-      this.uploadPicAction = `${this.uploadPicUrl}/${this.upload2Category.id}`;
-
-      for (var i = 0; i < this.$refs.treeX.store._getAllNodes().length; i++) {
-        this.$refs.treeX.store._getAllNodes()[i].expanded = this.isexpand;
-      }
-    },
-    submitUpload() {
-      this.$refs.upload.submit();
-    },
-    beforeUpload(file) {
-      const isPic =
-        ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !== -1;
-      const maxMb = 10;
-      const isSizeOk = file.size / 1024 / 1024 < maxMb;
-
-      if (!isPic) {
-        Message.error("上传头像图片只能是 图片 格式!");
-      }
-      if (!isSizeOk) {
-        Message.error(`上传图片大小不能超过 ${maxMb}MB!`);
-      }
-      return isPic && isSizeOk;
-    },
-    _getJwtToken() {
-      var tk = window.sessionStorage.getItem("wzdesignxkoen");
-      if (tk) {
-        var jsonData = JSON.parse(tk);
-        var currentTime = new Date();
-        currentTime = currentTime.toISOString();
-        var diff = Date.parse(jsonData.expiredTime) - Date.parse(currentTime);
-        if (diff > 0) {
-          return jsonData.token;
+    mounted() {
+       
+        if (this.nodeData) {
+            this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
         }
-      }
+    },
+    methods: {
+        // 预览大图
+        handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
+        // 选择图片时触发
+        handleChange(file, fileList) {
+            fileList.filter((item, index) => {
+                if (!imgSize(item.size, 10)) {
+                    fileList.splice(index, 1);
+                }
+                if (!isImgFile(item.raw.type)) {
+                    fileList.splice(index, 1);
+                    this.$notify({
+                        customClass: "notify-error", //  notify-success ||  notify-error
+                        message: `请上传图片格式文件`,
+                        showClose: false,
+                        duration: 1500
+                    });
+                }
+                if (imgSize(item.size, 10) && isImgFile(item.raw.type)) {
+                    this.uploadDisabled = false;
+                }
+            });
+            //
+            if (fileList && fileList.length > this.limit) {
+                this.onExceed(fileList);
+            }
+        },
+        // 上传图片超出数量限制时触发
+        onExceed(fileList) {
+            if (fileList.length > this.limit) {
+                fileList = fileList.splice(this.limit);
+            }
+            this.$notify({
+                customClass: "notify-error", //  notify-success ||  notify-error
+                message: `上传图片文件超过数量限制`,
+                showClose: false,
+                duration: 1500
+            });
+        },
+        // 图片上传成功时触发
+        handleSucess(response, file, fileList) {
+            if (++this.count == fileList.length) {
+                setTimeout(() => {
+                    this.$emit("switchUploadBoxShowStatus", "uploadImg");
+                    this.uploadDisabled = true;
+                    this.isUploading = false;
+                    this.$emit("getTree");
+                    this.$refs.upload.clearFiles();
+                    this.$notify({
+                        customClass: "notify-success", //  notify-success ||  notify-error
+                        message: `成功上传${fileList.length}张图片`,
+                        showClose: false,
+                        duration: 1500
+                    });
+                }, 500);
+            }
+        },
+        // 移除图片时触发
+        handleRemove(file, fileList) {
+            if (fileList < 1) this.uploadDisabled = true;
+        },
+        setFolder(isFolder) {
+            this.isFolder = isFolder;
+        },
+        // 选择分类节点
+        chooseNode(data) {
+            this.upload2Category = data;
+            this.uploadPicAction = `${this.uploadPicUrl}/${this.upload2Category.id}`;
+        },
+        // 点击上传按钮
+        async submitUpload() {
+        
+            this.hideImgName();
+            this.isUploading = true;
+            this.uploadDisabled = true;
+            this.count = 0;
+            if (this.nodeData) {
+                this.uploadPicAction = `${this.uploadPicUrl}/${this.nodeData.id}`;
+            }
+            let data = await securityService.getUser();
+            this.headers.Authorization = "Bearer " + data.access_token;
+            this.$refs.upload.submit();
+        },
+        // 上传图片时
+        beforeUpload(file) {
+            const isPic = isImgFile(file.type);
+            const isSizeOk = imgSize(file.size);
+            let maxMb = 10;
+            if (!isPic) {
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `上传图片只能是 图片 格式!`,
+                    showClose: false,
+                    duration: 2000
+                });
+                return false;
+            }
+            if (!isSizeOk) {
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `上传图片大小不能超过 ${maxMb}MB!`,
+                    showClose: false,
+                    duration: 2000
+                });
+                return false;
+            }
+            return isPic && isSizeOk;
+        },
+        hideImgName() {
+            // 点击上传时隐藏图片名称避免样式错乱
+            let imgName = document.querySelectorAll(
+                ".el-upload-list__item-name"
+            );
+            for (let i = 0; i < imgName.length; i++) {
+                imgName[i].style.display = "none";
+            }
+        }
     }
-  },
-  watch: {}
 };
 </script>
-
-<style scoped lang="scss">
-#upload-img .upload-head {
-  padding-top: 12px;
-  border-top: 1px solid #eee;
+<style scoped>
+.upload-pic /deep/ .el-upload-dragger {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
-.select-btn {
-  margin-top: 20px;
+.upload-pic /deep/ .el-upload-dragger .el-upload__text em {
+    display: block;
+    padding-top: 10px;
 }
-#upload-img {
-  .upload-tree {
-    width: 140px;
+.upload-pic /deep/ .el-upload--picture-card {
     display: inline-block;
-    vertical-align: top;
-    position: absolute;
-    z-index: 10;
-    box-shadow: 0 0 3px #ccc;
-  }
+    border: none;
+    line-height: 1;
+}
 
-  .upload-btn {
-    width: 98px;
-    height: 32px;
-    font-weight: 400;
+.upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item {
+    /* overflow: visible; */
+    height: 181px;
     border: none;
     border-radius: 0;
-    border: 1px solid #00c1de;
-    color: #00c1de;
-  }
-  .choose-img {
-    margin-right: 13px;
-    color: #fff;
+}
+
+.upload-pic /deep/ .el-upload-list__item .el-upload-list__item-actions {
+    height: 148px;
+}
+
+.upload-pic /deep/ .el-upload-list__item-actions > span {
+    position: absolute;
+    right: 17px;
+    bottom: 19px;
+    top: auto;
+    width: 27px;
+    border: 1px solid #fff;
+    height: 27px;
+    border-radius: 50%;
+}
+
+.upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
+    left: 17px;
+    bottom: 20px;
+    border: none;
+}
+
+.upload-pic /deep/ .el-upload-list__item-actions .el-icon-delete {
+    font-size: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: auto;
+    transform: translate(-50%, -50%);
+}
+
+.upload-pic /deep/ .el-upload-list__item-actions .el-icon-zoom-in:before {
+    content: "";
+}
+
+.upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
+    left: 17px;
+    bottom: 20px;
+    border: none;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    background: url("~img/eye.png") no-repeat center;
+    background-size: 60%;
+    box-sizing: border-box;
+}
+.upload-pic
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-delete:hover {
     background: #00c1de;
-  }
-  .upload-pic {
-    min-height: 320px;
-    border: 1px solid #eee;
-    margin: 13px 0 16px 0;
-    padding: 18px 20px;
-  }
-  .footer-upload-btn {
-    .handle-upload {
-      width: 76px;
-      height: 32px;
-      background: #00c1de;
-      border: none;
-      color: #fff;
-    }
-    .handle-upload-disabled {
-      background: rgba(245, 245, 245, 1);
-      font-weight: 400;
-      color: #8c8c8c;
-    }
-  }
+    border: 1px solid #00c1de;
+}
+
+.upload-pic
+    /deep/
+    .el-upload-list__item-actions
+    .el-upload-list__item-preview:hover {
+    color: #00c1de;
+}
+
+.upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item
+    .el-upload-list__item-thumbnail {
+    height: 148px;
+    object-fit: cover;
+}
+
+.upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item-status-label {
+    display: none;
+}
+
+.upload-pic /deep/ .el-upload-list--picture-card .el-upload-list__item-name {
+    display: block;
+    text-align: center;
+    margin-right: 0;
+}
+
+.upload-pic
+    /deep/
+    .el-upload-list--picture-card
+    .el-upload-list__item-name
+    .el-icon-document {
+    display: none;
 }
 </style>
+<style scoped lang="scss">
+.upload-img {
+    .upload-head {
+        padding-top: 12px;
+        border-top: 1px solid #eee;
+    }
 
-<style scoped>
-#upload-img /deep/ .choose-img span {
-  color: #fff;
-}
-#upload-img /deep/ .handle-upload span {
-  color: #fff;
-}
-.upload-tree /deep/ .el-tree__empty-block {
-  min-height: 32px !important;
+    .el-upload-dragger {
+        position: none;
+    }
+
+    .upload-tree {
+        width: 240px;
+        display: inline-block;
+        vertical-align: top;
+        position: absolute;
+        z-index: 10;
+        box-shadow: 0 0 3px #ccc;
+    }
+
+    .upload-btn {
+        width: 98px;
+        height: 32px;
+        font-weight: 400;
+        border: none;
+        border: 1px solid #00c1de;
+        color: #00c1de;
+    }
+
+    .choose-img {
+        margin-right: 13px;
+        color: #fff;
+        background: #00c1de;
+    }
+
+    .upload-pic {
+        max-height: 320px;
+        min-height: 320px;
+        border: 1px solid #eee;
+        margin: 13px 0 16px 0;
+        padding: 18px 20px;
+        overflow-y: auto;
+    }
+
+    .footer-upload-btn {
+        .handle-upload {
+            width: 76px;
+            height: 32px;
+            background: #00c1de;
+            border: none;
+            color: #fff;
+        }
+
+        .handle-upload-disabled {
+            background: rgba(245, 245, 245, 1);
+            font-weight: 400;
+            color: #8c8c8c;
+        }
+    }
 }
 </style>

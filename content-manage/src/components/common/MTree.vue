@@ -409,7 +409,7 @@ export default {
     background: #fff;
     display: block;
     position: absolute;
-    z-index: 19;
+    z-index: 2000;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
 }
 

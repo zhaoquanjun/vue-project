@@ -27,7 +27,8 @@ const dashboard = {
         appId:"",
         siteId: "",
         menuList:[],
-        authList:[], 
+        authList:[],
+        isContentwrite: false,
     },
     mutations: {
         SETAPPID(state, appId) {
@@ -78,6 +79,11 @@ const dashboard = {
              let { result1, pathArr } = filterMenuListData(data.menus);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
+            data && data.operations.forEach(item => {
+                if (item === "ContentWrite") {
+                    state.isContentwrite = true;
+                }
+            })
             return data
         },
         async getCurRouteAuth({state,getters}, path) {

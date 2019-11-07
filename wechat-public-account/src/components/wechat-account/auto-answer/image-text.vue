@@ -105,7 +105,7 @@
             <span>还可添加 {{(8-list.length)}} 个图文消息</span>
         </div>
         <image-manage
-            :imageChooseAreaShowFlag="imageChooseAreaShowFlag"
+            v-if="imageChooseAreaShowFlag"
             @getImage="getImage"
             @handleCloseModal="handleCloseModal"
         ></image-manage>
@@ -256,9 +256,9 @@ export default {
         async getImage(src) {
             // let {data} = await uploadImg(src);
             // this.picUrl = data;
-             this.picUrl = src;
-             this.curEditorItem.picUrl = src;
-          
+            this.picUrl = src;
+            this.curEditorItem.picUrl = src;
+            this.imageChooseAreaShowFlag = false;
         },
         // 关闭弹层
         handleCloseModal() {
@@ -448,6 +448,7 @@ export default {
                 color:rgba(211,211,211,1);
                 line-height:40px;
                 padding: 0 14px;
+                width: 100%;
                 cursor: pointer;
             }
             .select {

@@ -1,258 +1,163 @@
 <template>
-  <el-header class="content-header" id="uploadHeader">
-    <template v-if="!isBatchHeaderShow">
-      <div class="seachInput head-item">
-        <el-input
-          size="small"
-          v-model="picSearchOptions.keyword"
-          placeholder="输入图片名称搜索"
-          class="input-with-select"
-        >
-          <el-button slot="append" @click="getPicList">
-            <!-- <svg-icon icon-class="search-icon"></svg-icon> -->
-            <span class="search-icon"></span>
-          </el-button>
-        </el-input>
-      </div>
-      <div class="head-item head-middle">
-        <span>排序</span>
-        <span class="select-sort">
-          <el-select size="small" v-model="orderByLabel" placeholder="请选择" @change="changeSelected">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </span>
-        <span @click="switchIsDesc" style="display: flex; align-items: center;">
-          <span class="sort-up sort-icon" v-if="picSearchOptions.isDescending"></span>
-          <span class="sort-down sort-icon" v-else></span>
-        </span>
+    <el-header class="content-header">
+        <template v-if="!isBatchHeaderShow">
+            <div class="seachInput head-item">
+                <el-input
+                    size="medium"
+                    v-model="picSearchOptions.keyword"
+                    placeholder="输入名称搜索"
+                    @keyup.enter.native="searchEnterFun"
+                    class="input-with-select"
+                    
+                >
+                    <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getList"></i>
+               
+                </el-input>
+            </div>
+            <div class="head-item head-middle">
+                <span>排序</span>
+                <span class="select-sort">
+                    <el-select
+                        size="small"
+                        v-model="orderByLabel"
+                        placeholder="请选择"
+                        @change="changeSelected"
+                    >
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </span>
+                <button @click="switchIsDesc('dec')" class="desBtn">
+                    <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                </button>
+                <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
+                    <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
+                </button>
 
-        <span class="list-mode mode-item" style="margin-left: 10px;" @click="showType('list')">
-          <!-- <svg-icon icon-class="list-mode "></svg-icon> -->
-          <i class="list-icon mode-icon" :class="{'list-iconOn':!modeSelecte}"></i>
-        </span>
-        <span class="grid-mode mode-item" @click="showType('grid')">
-          <!-- <svg-icon icon-class="grid-mode"></svg-icon> -->
-          <i class="list-icon mode-icon" :class="{'mode-iconOn':modeSelecte}"></i>
-        </span>
-      </div>
-      <div class="head-item head-right">
-        <el-button class="upload-wrap" size="small" @click="switchUploadBoxShowStatus">
-          <!-- <svg-icon icon-class="upload-img"></svg-icon> -->
-          上传图片
-        </el-button>
-      </div>
-    </template>
-    <template v-else>
-      <div style="padding:0 21px">
-        <span>
-          已选
-          <i>{{countPic}}</i> 张图片
-        </span>
-        <el-button style="margin:0 16px" size="small" @click="batchMove">
-          <!-- <svg-icon icon-class="tab-moved"></svg-icon> -->
-          移动
-        </el-button>
-        <el-button size="small" @click="batchDelete">
-          <!-- <svg-icon icon-class="l-recyclebin"></svg-icon> -->
-          删除
-        </el-button>
-      </div>
-    </template>
-  </el-header>
+                <button class="list-mode mode-item" @click="showType('list')" v-show="!isPopup">
+                   
+                    <i class="list-icon mode-icon" :class="{'list-iconOn':modeSelecte}"></i>
+                </button>
+                <button class="grid-mode mode-item" @click="showType('grid')" v-show="!isPopup">
+                    
+                    <i class="list-icon mode-icon"  :class="{'mode-iconOn':!modeSelecte}"></i>
+                </button>
+            </div>
+            <div class="head-item head-right">
+                <button
+                    class="btn-lightblue btn-small upload-wrap"
+                    @click="switchUploadBoxShowStatus"
+                >
+                   
+                    上传图片
+                </button>
+            </div>
+        </template>
+        <template v-else>
+            <div class="handle-batch">
+                <span>
+                    已选
+                    <i>{{countPic}}</i> 张图片
+                </span>
+                <div>
+                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
+                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                </div>
+            </div>
+        </template>
+    </el-header>
 </template>
 <script>
-import environment from "@/environment/index";
 export default {
-  props: ["picSearchOptions", "isBatchHeaderShow", "countPic"],
-  data() {
-    return {
-      modeSelecte: true,
-      options: [
-        {
-          value: "1",
-          label: "创建时间"
+    props: ["picSearchOptions", "isBatchHeaderShow", "countPic", "isPopup"],
+    data() {
+        return {
+            ascSort: false,
+            descSort: true,
+
+            modeSelecte: true,
+            options: [
+                {
+                    value: "CreateTime",
+                    label: "创建时间"
+                },
+                {
+                    value: "FileSize",
+                    label: "文件大小"
+                },
+                {
+                    value: "FileName",
+                    label: "文件名"
+                }
+            ],
+            orderByLabel: "CreateTime"
+        };
+    },
+    methods: {
+        changeSelected(value) {
+            this.picSearchOptions.orderByType = value;
+            this.getList();
         },
-        {
-          value: "2",
-          label: "文件大小"
+        getList() {
+            this.$emit("getList");
         },
-        {
-          value: "3",
-          label: "文件名"
+        searchEnterFun() {
+            this.getList();
+        },
+        switchUploadBoxShowStatus() {
+            this.$emit("switchUploadBoxShowStatus");
+        },
+        switchIsDesc(flag) {
+            if (flag === "asc") {
+                this.ascSort = true;
+                this.descSort = !this.ascSort;
+                this.picSearchOptions.isDescending = false.isDescending;
+            } else {
+                this.descSort = true;
+                this.ascSort = !this.descSort;
+                this.picSearchOptions.isDescending = true;
+            }
+
+            this.getList();
+        },
+        batchMove() {
+            this.$emit("batchMove", true);
+        },
+        batchDelete() {
+            this.$emit("batchDelete");
+        },
+        showType(value) {
+            if (value === "list") {
+                this.modeSelecte = true;
+            }
+            if (value === "grid") {
+                this.modeSelecte = false;
+            }
+            this.$emit("showType", value);
         }
-      ],
-      orderByLabel: ""
-    };
-  },
-  methods: {
-    changeSelected(value) {
-      this.picSearchOptions.orderByType = value;
-      this.getPicList();
-    },
-    getPicList() {
-      this.$emit("getPicList");
-    },
-    switchUploadBoxShowStatus() {
-      //this.$emit("switchUploadBoxShowStatus");
-      window.open(environment.redirectUrl.addPicture);
-    },
-    switchIsDesc() {
-      this.picSearchOptions.isDescending = !this.picSearchOptions.isDescending;
-      this.getPicList();
-    },
-    batchMove() {
-      this.$emit("batchMove");
-    },
-    batchDelete() {
-      this.$emit("batchDelete");
-    },
-    showType(value) {
-      if (value === "list") {
-        this.modeSelecte = false;
-      }
-      if (value === "grid") {
-        this.modeSelecte = true;
-      }
-      this.$emit("showType", value);
     }
-  }
 };
 </script>
-<style lang="scss" scoped>
-#uploadHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #e8eaf3;
-  height: 70px !important;
-  background: #fff;
-  .seachInput {
-    display: inline-block;
-    width: 230px;
-    /* height: 36px; */
-    box-sizing: border-box;
-    margin-left: 24px;
-  }
 
-  .head-middle {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 14px;
-    .select-sort {
-      margin-left: 12px;
-    }
-    .mode-item {
-      margin: 0 10px;
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      text-align: center;
-      box-sizing: border-box;
-      .mode-icon {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-  .head-right {
-    height: 40px;
-    margin-right: 25px;
-    button {
-      display: flex;
-      align-items: center;
-      height: 40px;
-      color: #fff;
-      text-align: center;
-      background: #00c1de;
-      span {
-        color: #fff;
-      }
-    }
-  }
 
-  .head-item {
-    display: flex;
-    align-items: center;
-    .sort-icon {
-      display: inline-block;
-      margin: 10px;
-      width: 24px;
-      height: 24px;
+<style  lang="scss" scoped>
+@import "@/styles/manage-head.scss";
+.desBtn{
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    &:hover{
+        opacity: 0.8;
     }
-    .sort-up {
-      background: url("~img/account/down_arrow.png") no-repeat center center;
-      background-size: 100% 100%;
-    }
-    .sort-down {
-      background: url("~img/account/upon_arrow.png") no-repeat center center;
-      background-size: 100% 100%;
-    }
-  }
-
-  .list-mode {
-    border-right: none;
-
-    .list-icon {
-      // background: url("~@static/images/list-mode.png") no-repeat center;
-      background-size: 100%;
-    }
-    .list-iconOn {
-      // background: url("~@static/images/list-modeOn.png") no-repeat center;
-      background-size: 100%;
-    }
-  }
-  .grid-mode {
-    .mode-icon {
-      // background: url("~@static/images/grid-mode.png") no-repeat center;
-      background-size: 100%;
-    }
-    .mode-iconOn {
-      // background: url("~@static/images/grid-modeOn.png") no-repeat center;
-      background-size: 100%;
-    }
-  }
-  .head-right,
-  .head-middle {
-    float: right;
-  }
 }
-</style>
-
-<style scoped>
-.seachInput /deep/ .el-input-group {
-  position: relative;
-}
-
-.seachInput /deep/ .el-input-group .el-input-group__append {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 8px;
-  background: #fff;
-  border: none;
-}
-.seachInput /deep/ .el-input-group .el-input-group__append button {
-  padding: 12;
-}
-.seachInput /deep/ .el-input-group .el-input-group__append button .search-icon {
-  display: block;
-  width: 18px;
-  height: 18px;
-  background: url("~img/account/search.png") no-repeat center center;
-  background-size: 100% 100%;
-}
-
-.head-right /deep/.el-button {
-  color: #fff;
-}
-.head-right /deep/.el-button span {
-  color: #fff;
+.upload-wrap{
+    &:hover{
+        opacity: 0.8;
+    }
 }
 </style>

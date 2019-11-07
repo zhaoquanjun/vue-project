@@ -92,7 +92,7 @@
                     <button class="btn-small  btn-red-notboard"  @click="batchRemove">删除</button>
                     <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
-                            <button class="btn-small btn-notboard">
+                            <button class="btn-small btn-notboard btn-black-notboard">
                                 <i class="iconfont iconsangedian"></i>
                             </button>
                         </span>
@@ -259,6 +259,13 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/manage-head.scss";
 
+.btn-black-notboard{
+    padding: 6px;
+    &:hover{
+        background:rgba(240,243,247,1);
+        border-radius:4px;
+    }
+}
 .select-item {
     display: inline-block;
     width: 80px;

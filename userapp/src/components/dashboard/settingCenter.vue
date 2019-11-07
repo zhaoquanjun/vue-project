@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="item">
-        <div class="item-box" @click="jumpTo('collect')">
+        <div class="item-box">
           <div class="item-icon website"></div>
           <div class="item-text-wrap">
             <div class="item-text">login.clouddream.net</div>
@@ -59,11 +59,6 @@ export default {
         this.$router.push({
           path: "/role"
         });
-      } else if ("collect") {
-        // console.log(window.external.addFavorite)
-        // console.log(window.sidebar)
-        // console.log(document.all)
-        // window.external.addFavorite("http://baidu.com", "你的网站名称");
       }
     }
   }
@@ -124,7 +119,6 @@ export default {
           margin-right: 18px;
           //   margin-top: 14px;
           display: inline-block;
-          vertical-align: top;
           min-width: 50px;
         }
         .item-text-wrap {
@@ -134,7 +128,6 @@ export default {
           flex-wrap: wrap;
         }
         .item-text {
-          vertical-align: top;
           display: inline-block;
           //   margin-top: 27px;
           font-size: 14px;
@@ -149,7 +142,6 @@ export default {
           // white-space: nowrap;
         }
         .item-videoLength {
-          vertical-align: top;
           display: inline-block;
           font-size: 16px;
           font-family: PingFangSC-Light, PingFang SC;
@@ -167,7 +159,6 @@ export default {
           line-height: 20px;
         }
         .memberNum {
-          vertical-align: top;
           display: inline-block;
           font-size: 16px;
           font-family: PingFangSC-Medium, PingFang SC;
