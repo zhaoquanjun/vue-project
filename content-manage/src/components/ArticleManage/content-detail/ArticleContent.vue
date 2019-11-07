@@ -303,6 +303,10 @@ import { ImageDrop } from "quill-image-drop-module";
 Quill.register("modules/imageDrop", ImageDrop);
 import ModalContent from "@/components/ImgManage/index.vue";
 
+//全屏
+import Fullscreen from "@/assets/Fullscreen"
+Quill.register("modules/fullscreen", Fullscreen)
+
 export default {
     components: {
         SelectTree,
@@ -390,25 +394,34 @@ export default {
         this.editorOption = {
             placeholder: "请输入文本",
             modules: {
-                toolbar: [
-                    ["bold", "italic", "underline", "strike"],
-                    ["blockquote", "code-block"],
-                    [{ header: 1 }, { header: 2 }],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    [{ script: "sub" }, { script: "super" }],
-                    [{ indent: "-1" }, { indent: "+1" }],
-                    [{ direction: "rtl" }],
-                    [{ size: sizes }],
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                    [{ color: [] }],
-                    [{ background: [] }],
-                    [{ font: fonts }],
-                    [{ align: [] }],
-                    ["clean"],
-                    ["image"], //["image", "video"],
-                    [{ lineheight: lineheights }],
-                    [{ letterspacing: letterspacings }]
-                ],
+                fullscreen: {},
+                toolbar: {
+                    container: [
+                        ["bold", "italic", "underline", "strike"],
+                        ["blockquote", "code-block"],
+                        // [{ header: 1 }, { header: 2 }],
+                        [{ list: "ordered" }, { list: "bullet" }],
+                        [{ script: "sub" }, { script: "super" }],
+                        [{ indent: "-1" }, { indent: "+1" }],
+                        //[{ direction: "rtl" }],
+                        [{ size: sizes }],
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        [{ color: [] }],
+                        [{ background: [] }],
+                        [{ font: fonts }],
+                        [{ align: [] }],
+                        ["clean"],
+                        ["image"], //["image", "video"],
+                        [{ lineheight: lineheights }],
+                        [{ letterspacing: letterspacings }],
+                        ['fullscreen']
+                    ],
+                    handlers: {
+                        fullscreen() {
+                            this.quill.getModule('fullscreen').handle()
+                        }
+                    }
+                },
                 imageDrop: true,
                 imageResize: {
                     displayStyles: {
@@ -758,5 +771,28 @@ export default {
 .ql-snow .ql-picker.ql-font .ql-picker-label::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item::before {
     content: "字体";
+}
+
+.editor-fullscreen{
+    background: white;
+    margin: 0 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100000;
+    .ql-editor{
+        height: 100%;
+    }
+    .fullscreen-editor {
+        border-radius: 0;
+        border: none;
+    }
+    .ql-container {
+        height: calc(100vh - 3rem - 24px) !important; 
+        margin: 0 auto;
+        overflow-y: auto;
+    }
 }
 </style>
