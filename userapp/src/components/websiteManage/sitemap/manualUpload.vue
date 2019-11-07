@@ -5,17 +5,21 @@
       :options="options"
       :autoStart="true"
       @file-added="onFileAdded"
+      @file-success="onFileSuccess"
+      @file-error="onFileError"
       class="uploader-example"
     >
       <uploader-unsupport></uploader-unsupport>
       <uploader-list uploadType="File" class="uploadList">
         <div class="fileImg" v-show="isUpload">
-          <i class="iconfont iconshanchu1 fileRemove" @click="fileRemove"></i>
+          <div class="fileRemove" @click="fileRemove">
+            <i class="iconfont iconshanchu"></i>
+          </div>
         </div>
         <div v-show="isUpload" class="fileName">sitemap.xml</div>
         <div v-show="isUpload" class="fileName" style="margin-top:5px">{{date?date:""}}</div>
         <div v-show="isUpload" v-if="progressFlag" class="progress">
-          <el-progress :percentage="progressPercent" status="success"></el-progress>
+          <el-progress :percentage="progressPercent"></el-progress>
         </div>
       </uploader-list>
       <uploader-drop>
@@ -110,19 +114,38 @@ export default {
         file.pause();
         return;
       }
+    },
+    onFileSuccess(file) {
       this.file = file;
       // this.fileList.push(file);
       this.isUpload = true;
       this.progressFlag = true;
-      this.progressPercent = 100;
+      this.progressPercent = 0;
+      let timer = null;
+      timer = setInterval(() => {
+        this.progressPercent++;
+        if (this.progressPercent == 100) {
+          this.progressFlag = false;
+          clearInterval(timer); // 清除定时器
+          timer = null;
+          this.$notify({
+            customClass: "notify-success",
+            message: `上传成功`,
+            duration: 1500,
+            showClose: false
+          });
+          this.date = this.getNowFormatDate();
+        }
+      }, 1);
       // file.resume();
+    },
+    onFileError(rootFile, file, response, chunk) {
       this.$notify({
-        customClass: "notify-success",
-        message: `上传成功`,
+        customClass: "notify-error",
+        message: `${JSON.parse(response).message}`,
         duration: 1500,
         showClose: false
       });
-      this.date = this.getNowFormatDate();
     },
     fileRemove() {
       this.$confirm(`您确定要删除当前sitemap文件吗？删除后不可恢复。`, "提示", {
@@ -300,7 +323,7 @@ export default {
       color: rgba(185, 203, 207, 1);
       line-height: 22px;
       margin: auto;
-      width: 265px;
+      width: 280px;
     }
   }
   .uploadList {
@@ -316,11 +339,12 @@ export default {
       font-weight: 400;
       color: rgba(185, 203, 207, 1);
       line-height: 22px;
+      margin-top: 8px;
     }
     .fileImg {
       margin: auto;
-      width: 92px;
-      height: 109px;
+      width: 64px;
+      height: 81px;
       background: url("~img/upload/upload.png") no-repeat center;
       background-size: cover;
       text-align: center;
@@ -330,13 +354,20 @@ export default {
         }
       }
       .fileRemove {
-        color: #63dc8c;
-        margin-top: 45px;
-        font-size: 20px;
+        margin-top: 25px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(38, 43, 65, 0.8);
         display: none;
         &:hover {
           opacity: 0.7;
           cursor: pointer;
+        }
+        .iconshanchu {
+          color: #fff;
+          font-size: 20px;
+          line-height: 34px;
         }
       }
     }
