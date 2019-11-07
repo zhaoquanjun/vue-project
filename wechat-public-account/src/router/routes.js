@@ -35,7 +35,7 @@ export const defaultRoutes = [{
                 component: () => import('@/views/wechat-account/wechatspread.vue'),
                 meta: {
                     requiresAuth: true,
-                    title: "微信推广",
+                    title: "推广设置",
                     isSub: true
                 }
             },

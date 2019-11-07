@@ -5,7 +5,7 @@
         @chooseWebsite="chooseWebsite"
         @getSiteId="getSiteId"
       />
-      <h4>公众号管理</h4>
+      <h4>账号设置</h4>
       <div class="account-info__area">
         <div class="info-desc__area">
           <div class="account-icon">

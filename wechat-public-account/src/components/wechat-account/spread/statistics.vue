@@ -103,7 +103,7 @@ export default {
             this.pvList.push(item.count);
             this.yList.push(item.flag.slice(5,10))
             if(index > 23) {
-              this.pvLast = push(item.count);
+              this.pvLast.push(item.count);
               this.yLast.push(item.flag.slice(5,10))
             }
           })
