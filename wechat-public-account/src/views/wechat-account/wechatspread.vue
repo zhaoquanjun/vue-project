@@ -7,7 +7,7 @@
       />
     </div>
     <div class="spread-title">
-      <span>微信推广</span>
+      <span>推广设置</span>
       <div class="add" @click="addSpread">新增推广</div>
     </div>
     <div v-if="!isShowStatistics" class="answer-tabs">

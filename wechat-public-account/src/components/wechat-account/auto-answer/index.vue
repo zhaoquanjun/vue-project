@@ -5,7 +5,7 @@
             @getSiteId="getSiteId"
         />
         <div class="spread-title">
-            <span>微信推广</span>
+            <span>自动回复</span>
         </div>
         <div class="answer-tabs">
             <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
