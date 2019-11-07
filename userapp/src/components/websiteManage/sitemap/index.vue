@@ -187,7 +187,7 @@
                 <template slot="empty">
                   <div class="empty-table">
                     <img src="~img/memberManage/table-empty.png" />
-                    <span>无数据</span>
+                    <p>无数据</p>
                   </div>
                 </template>
                 <el-table-column type="selection"></el-table-column>

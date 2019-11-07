@@ -84,15 +84,14 @@ button {
 // 暂无数据
 .empty-table {
     height: 230px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
     img {
-        width: 54px;
+        margin-top: 45px;
+        width: 80px;
         vertical-align: middle;
         padding: 18px 28px;
     }
-    span {
+    p {
         color: #8c8c8c;
     }
 }

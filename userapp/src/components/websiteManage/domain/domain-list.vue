@@ -12,7 +12,7 @@
             <template slot="empty">
                 <div class="empty-table">
                     <img src="~img/memberManage/table-empty.png" />
-                    <span>暂无数据</span>
+                    <p>暂无数据</p>
                 </div>
             </template>
             <el-table-column prop="domain" label="域名" class="domain-name" min-width="230">
