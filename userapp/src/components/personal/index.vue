@@ -88,7 +88,7 @@
                     </span>
                 </div>
             </li>
-            <li class="dingtalk clear">
+            <!-- <li class="dingtalk clear">
                 <div class="fleft">
                     <span class="set-name">绑定钉钉</span>
                     <span class="social-desc">绑定钉钉，可使用钉钉登录管理平台</span>
@@ -111,7 +111,7 @@
                         <button v-else @click="_bindingDing()">绑定</button>
                     </span>
                 </div>
-            </li>
+            </li> -->
             <li class="alipay clear">
                 <div class="fleft">
                     <span class="set-name">绑定支付宝</span>

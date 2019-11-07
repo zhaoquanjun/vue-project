@@ -11,7 +11,7 @@
             <template slot="empty">
                 <div class="empty-table">
                     <img src="~img/memberManage/table-empty.png" />
-                    <span>无搜索结果</span>
+                    <p>无搜索结果</p>
                 </div>
             </template>
             <el-table-column type="selection" :selectable="handleDisable"></el-table-column>

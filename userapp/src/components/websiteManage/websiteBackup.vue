@@ -34,7 +34,7 @@
               <template slot="empty">
                 <div class="empty-table">
                   <img src="~img/memberManage/table-empty.png" />
-                  <span>暂无数据</span>
+                  <p>暂无数据</p>
                 </div>
               </template>
               <el-table-column label="站点名称" show-overflow-tooltip min-width="200">

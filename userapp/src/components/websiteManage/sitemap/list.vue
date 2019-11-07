@@ -10,7 +10,7 @@
       <template slot="empty">
         <div class="empty-table">
           <img src="~img/memberManage/table-empty.png" />
-          <span>无数据</span>
+          <p>无数据</p>
         </div>
       </template>
       <el-table-column type="selection"></el-table-column>
@@ -172,6 +172,9 @@ export default {
     // 单选或全选操作
     handleSelectionChange(list) {
       this.$emit("handleSelectionChange", list);
+    },
+    cancelSelect() {
+      this.$refs.multipleTable.clearSelection();
     },
     chosePriority(row) {
       let para = {
