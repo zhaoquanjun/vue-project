@@ -322,6 +322,7 @@ export default {
           h5 {
             margin-bottom: 20px;
             height:22px;
+            width: 100%;
             font-size:16px;
             text-align: left;
             font-family:"AlibabaPuHuiTiR";
