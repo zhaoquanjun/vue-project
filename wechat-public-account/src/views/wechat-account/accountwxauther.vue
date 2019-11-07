@@ -224,7 +224,7 @@ export default {
           return
         }
         let data = await setPromotionUrl({siteId: this.siteId, domain:this.domainName})
-        if(data && data.status == 200) {
+        if(data && data.data == 'success') {
           this.step = 3
           var t1=window.setInterval(()=> {
             if(this.percentage >= 100) {
@@ -240,6 +240,7 @@ export default {
             }
           }, 600);
         } else {
+          this.isShowPopup = false
           notify(this,'推广域名设置失败', 'error')
         }
       }

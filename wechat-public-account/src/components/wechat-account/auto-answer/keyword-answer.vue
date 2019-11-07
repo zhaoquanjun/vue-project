@@ -120,7 +120,7 @@
             </div>
                 <div class="empty-table" v-if="keywordData.list && keywordData.list.length===0">
                     <img src="~img/table-empty.png" />
-                    <p>未设置关键词回复</p>
+                    <p>暂无数据</p>
                 </div>
             </ul>
             <div class="paging">

@@ -58,9 +58,9 @@
               <div class="menu-operate__delete" @click="_handleDeleteMenu">删除菜单</div>
             </div>
             <div class="menu-operate__content">
-              <el-form label-width="80px">
+              <el-form @submit.native.prevent label-width="80px">
                 <el-form-item label="菜单名称">
-                  <el-input 
+                  <el-input
                     v-model="menuDetail.name" 
                     @blur="testMenu()"
                     placeholder="仅支持中英文和数字，字数不超过4个汉字或8个字母">
