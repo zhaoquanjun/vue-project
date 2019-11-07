@@ -79,6 +79,27 @@
         </div>
       </div>
     </div>
+    <div class="popup-mask" v-if="isShowPopup">
+      <div class="popup-contant">
+        <div class="auther-top">
+          <span>提示</span>
+          <i class="icon iconfont iconguanbi"></i>
+        </div>
+        <div class="auther-body">
+          <i class="icon iconfont iconyiwen"></i>
+          <span v-if="authStatus != 0">
+            {{authStatus == 1 ? '授权失败':'授权成功'}}
+          </span>
+          <p v-if="authStatus != 2">{{authTipText}}</p>
+        </div>
+        <div class="auther-footer">
+          <!-- <span >取消</span> -->
+          <span v-if="authStatus != 0" class="sure" @click="closeAuther">
+            {{authStatus == 1 ? '关闭':'确定'}}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -92,7 +113,7 @@ import environment from "@/environment/index";
 import { wxAuth, getCdnDomainList, bindDomain, setPromotionUrl} from "@/api/request/account.js";
 import AccountCertification from '_c/wechat-account/defineMenu/account-wxcertification';
 import { setTimeout } from 'timers';
-import {getLocal,setLocal} from '@/libs/local'
+import {getLocal,setLocal,removeLocal} from '@/libs/local'
 
 export default {
   data() {
@@ -112,6 +133,8 @@ export default {
       tipsText: '请输入正确的域名',
       authTipText: '请在新打开的窗口中完成授权...',
       isShowTips: false,
+      isShowPopup: false,
+      authStatus: 1,//0 为获取，1 失败， 2成功，
       addDomain: '',
       percentage: 0,
       isShowDomainList: false
@@ -129,7 +152,12 @@ export default {
   methods: {
     getSiteId(siteId) {
       this.siteId = siteId;
-      // this.getSiteInfo(siteId);
+    },
+    // 切换站点刷新信息
+    chooseWebsite(siteId) {
+      this.siteId = siteId;
+      this._getWxIsAuth()
+      this._getCdnDomainList();
     },
     async _getInfo(){
       await this.$store.dispatch('_getWxStatus')
@@ -218,10 +246,6 @@ export default {
         }
       }
     },
-    // 切换站点刷新信息
-    chooseWebsite(siteId) {
-      this._getWxIsAuth()
-    },
     // 校验是否已经授权认证
     async _getWxIsAuth() {
       await this.$store.dispatch('_getWxStatus')
@@ -240,29 +264,37 @@ export default {
       document.body.appendChild(oA);
       let btn = document.getElementById("authBtn");
       btn.click();
-      // setTimeout(function (){
-      //   setLocal("transitTips", {data:'999',status: 200})
-      // }, 4000)
-      var authTimer=window.setInterval(()=> {
-        let data = getLocal("transitTips")
-        this.authTipText = data.data;
-        console.log(this.authTipText)
-        // this.$message.close()
-      },1000)
       if (btn) document.body.removeChild(document.getElementById("authBtn"));
-      this.$confirm("提示", {
-        title: "提示",
-        showCancelButton: false,
-        message:  this.authTipText,
-        callback: async action => {
-          if (action === "confirm") {
-            window.clearInterval(authTimer)
-            this.$router.push('/wechat/accountsetting')
-            this._getCdnDomainList()
-            this.authTipText = '请在新打开的窗口中完成授权...'
+      
+      this.isShowPopup = true
+      this.authStatus = 0
+      this.authTipText = '请在新打开的窗口中完成授权...',
+      removeLocal("transitTips")
+      // setTimeout(function (){
+      //   setLocal("transitTips", {data:'999',status: 500})
+      // }, 6000)
+      var authTimer=window.setInterval(()=> {
+        if(!this.isShowPopup) {
+          window.clearInterval(this.authTimer)
+        }
+        let data = getLocal("transitTips")
+        if(data) {
+          this.authTipText = data.data;
+          if (data.status == 200) {
+            this.authStatus = 2
+            this.authTipText = ''
+          } else {
+            this.authStatus = 1
+            this.authTipText = data.data
           }
         }
-      });
+      },1200)
+    },
+    closeAuther(){
+      this.isShowPopup = false
+      removeLocal("transitTips")
+      this.$router.push('/wechat/accountsetting')
+      this._getCdnDomainList()
     }
   }
 };
@@ -490,6 +522,89 @@ export default {
       }
       .account-bind__tips2 {
         width: 580px;
+      }
+    }
+  }
+}
+.popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1000;
+  .popup-contant {
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 520px;
+    background: #ffffff;
+    border-radius: 3px;
+    padding: 32px 24px;
+    .auther-top {
+      height: 20px;
+      display: flex;
+      justify-content: space-between;
+      span {
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 500;
+        color: #303133;
+      }
+      i {
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: 500;
+        padding-right: 16px;
+        color: #909399;
+      }
+    }
+    .auther-body {
+      position: relative;
+      padding: 40px;
+      i {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 24px;
+        color: #FEB26B;
+      }
+      p {
+        padding: 0 12px 0 32px;
+        color: #a1a8b1;
+        font-size: 14px;
+        line-height: 20px;
+        max-height: 80px;
+      }
+      span {
+        padding: 0 12px 0 32px;
+        line-height: 20px;
+      }
+    }
+    .auther-footer {
+      height: 45px;
+      padding: 5px 16px 0;
+      text-align: right;
+      span {
+        display: inline-block;
+        width: 76px;
+        height: 40px;
+        cursor: pointer;
+        background: #ffffff;
+        border-radius: 3px;
+        text-align: center;
+        line-height: 40px;
+        border: 1px solid #09cceb;
+        margin-left: 24px;
+        color: #09cceb;
+      }
+      .sure {
+        border: 1px solid #09cceb;
+        background: #09cceb;
+        color: #ffffff;
       }
     }
   }
