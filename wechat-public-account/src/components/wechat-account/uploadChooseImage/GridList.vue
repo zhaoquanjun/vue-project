@@ -209,6 +209,11 @@ export default {
     }
 };
 </script>
+<style scoped>
+.pageing /deep/ .el-pagination .el-select .el-input {
+    width: 90px;
+} 
+</style>
 <style lang="scss" scoped>
 @import "@/styles/manege-table.scss";
 .left-prev,

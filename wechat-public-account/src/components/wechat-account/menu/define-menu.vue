@@ -784,7 +784,7 @@ export default {
         background: #c9d9dc;
       }
       .no-menu__area {
-        width: calc(100% - 74px);
+        width: 100%;
         height: 52px;
         text-align: center;
         line-height: 52px;
