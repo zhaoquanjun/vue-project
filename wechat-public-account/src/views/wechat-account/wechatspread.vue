@@ -363,6 +363,9 @@ export default {
 .spread-continer  /deep/ .input-with-select.el-input--suffix {
     width: 400px !important;
 }
+.el-table /deep/ .el-table__empty-block {
+  border-bottom: 1px solid #EBEEF5;
+}
 .el-input /deep/ .el-input__inner {
     border: 1px solid #E5E5E5;
     width: 400px;
