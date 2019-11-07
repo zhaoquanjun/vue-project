@@ -7,7 +7,7 @@
       />
     </div>
     <div class="spread-title">
-      <span>微信推广</span>
+      <span>推广设置</span>
       <div class="add" @click="addSpread">新增推广</div>
     </div>
     <div v-if="!isShowStatistics" class="answer-tabs">
@@ -362,6 +362,9 @@ export default {
 }
 .spread-continer  /deep/ .input-with-select.el-input--suffix {
     width: 400px !important;
+}
+.el-table /deep/ .el-table__empty-block {
+  border-bottom: 1px solid #EBEEF5;
 }
 .el-input /deep/ .el-input__inner {
     border: 1px solid #E5E5E5;

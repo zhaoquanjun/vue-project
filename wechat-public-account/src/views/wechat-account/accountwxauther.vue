@@ -57,10 +57,20 @@
           <div class='account-setting__complete' v-if='step == 3'>
             <!-- <i class='icon iconfont iconduihao'></i> -->
             <el-progress 
+              v-if="!percenStatus"
               type="circle" 
               :percentage="percentage"
               :width="100"
               color="#63DC8C"
+              :stroke-width='2'
+            >
+            </el-progress>
+            <el-progress
+              v-if="percenStatus"
+              type="circle" 
+              :width="100"
+              color="#63DC8C"
+              :status="percenStatus"
               :stroke-width='2'
             >
             </el-progress>
@@ -83,7 +93,7 @@
       <div class="popup-contant">
         <div class="auther-top">
           <span>提示</span>
-          <i class="icon iconfont iconguanbi"></i>
+          <i class="icon iconfont iconguanbi" @click="isShowPopup = !isShowPopup"></i>
         </div>
         <div class="auther-body">
           <i class="icon iconfont iconyiwen"></i>
@@ -137,6 +147,7 @@ export default {
       authStatus: 1,//0 为获取，1 失败， 2成功，
       addDomain: '',
       percentage: 0,
+      percenStatus: false,
       isShowDomainList: false
     };
   },
@@ -218,15 +229,16 @@ export default {
           var t1=window.setInterval(()=> {
             if(this.percentage >= 100) {
               window.clearInterval(t1);
+              this.percenStatus = 'success'
               setTimeout(()=>{
                 this.$router.replace({
                     name: 'accountsetting'
                 })
-              },2000); 
+              },2500); 
             } else {
-              this.percentage = this.percentage + 2
+              this.percentage = this.percentage + 5
             }
-          }, 50);
+          }, 600);
         } else {
           notify(this,'推广域名设置失败', 'error')
         }
@@ -290,6 +302,7 @@ export default {
         }
       },1200)
     },
+
     closeAuther(){
       this.isShowPopup = false
       removeLocal("transitTips")

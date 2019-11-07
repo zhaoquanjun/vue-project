@@ -5,7 +5,7 @@
             @getSiteId="getSiteId"
         />
         <div class="spread-title">
-            <span>微信推广</span>
+            <span>自动回复</span>
         </div>
         <div class="answer-tabs">
             <el-tabs v-model="replyType" type="card" @tab-click="handleClick">
@@ -276,7 +276,7 @@ export default {
                     this._getKeywordReplyList(this.searchOption);
                 }
                 this.isSet = true;
-                this.replyDetail.id = data;
+                this.id = data;
             } else {
                 this.canHandlerSave = true
                 notify(this, "保存失败", "error");
@@ -297,8 +297,9 @@ export default {
                     this.addAnswer = true;
                     this._getKeywordReplyList(this.searchOption);
                 }
+                
                 this.isSet = true;
-                this.replyDetail.id = data;
+                this.id = data;
             } else {
                 this.canHandlerSave = true
                 notify(this, "保存失败", "error");
@@ -318,7 +319,7 @@ export default {
                 this.addAnswer = true;
                 this._getKeywordReplyList(this.searchOption);
                 this.isSet = true;
-                this.replyDetail.id = data;
+                this.id = data;
             } else {
                 this.canHandlerSave = true
                 notify(this, "保存失败", "error");

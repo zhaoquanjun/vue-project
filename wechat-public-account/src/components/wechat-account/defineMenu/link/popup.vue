@@ -215,6 +215,7 @@ export default {
         this.slider = this.sliderList[0].label;
         this.title = null;
         this.selectedUrl = null;
+        this.$refs.text.url = '';
         this.id = null;
       } else {
         this.$emit("handleClosePopup", false, data);
@@ -224,6 +225,7 @@ export default {
         this.slider = this.sliderList[0].label;
         this.title = null
         this.selectedUrl = null;
+        this.$refs.text.url = '';
         this.id = null;
       }
     },
@@ -232,7 +234,8 @@ export default {
       this.title = null
       this.selectedUrl = null;
       this.id = null;
-      this.$refs.text.isUrl = false
+      this.$refs.text.isUrl = false;
+      this.$refs.text.url = '';
       this.$emit("handleClosePopup", false);
     },
     _handleClosePopup(e) {

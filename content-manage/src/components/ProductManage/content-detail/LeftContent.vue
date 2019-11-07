@@ -163,7 +163,7 @@
                             </div>
                         </el-form-item>
 
-                        <el-form-item label="搜索关键词" prop="searchKeyword">
+                        <!-- <el-form-item label="搜索关键词" prop="searchKeyword">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
@@ -185,15 +185,15 @@
                                           @blur="keywords(keywordValue)"></el-input>
                             </ul>
                             <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item>
                         </el-form-item>
                         <el-form-item label="置頂" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
-                            <span style=" font-size: 14px; color: #606266;
+                            <!-- <span style=" font-size: 14px; color: #606266;
     vertical-align: middle;
     padding:0  16px 0 32px ;">仅登录用户可访问</span>
-                            <el-switch v-model="detailData.isLoggedInCanView"></el-switch>
+                            <el-switch v-model="detailData.isLoggedInCanView"></el-switch> -->
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -659,6 +659,9 @@ export default {
                         });
                         return;
                     }
+                    if(this.detailData.productCategoryList[0].id==0){
+                        this.$refs.detailCheckTree.setChecked(0);
+                     }
                     this.detailData.productCategoryList.push({
                         displayName: data.label,
                         id: data.id,
