@@ -276,7 +276,7 @@ export default {
                     this._getKeywordReplyList(this.searchOption);
                 }
                 this.isSet = true;
-                this.replyDetail.id = data;
+                this.id = data;
             } else {
                 this.canHandlerSave = true
                 notify(this, "保存失败", "error");
@@ -297,8 +297,9 @@ export default {
                     this.addAnswer = true;
                     this._getKeywordReplyList(this.searchOption);
                 }
+                
                 this.isSet = true;
-                this.replyDetail.id = data;
+                this.id = data;
             } else {
                 this.canHandlerSave = true
                 notify(this, "保存失败", "error");
@@ -318,7 +319,7 @@ export default {
                 this.addAnswer = true;
                 this._getKeywordReplyList(this.searchOption);
                 this.isSet = true;
-                this.replyDetail.id = data;
+                this.id = data;
             } else {
                 this.canHandlerSave = true
                 notify(this, "保存失败", "error");
