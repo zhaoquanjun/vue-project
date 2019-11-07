@@ -23,6 +23,7 @@ const titleConfig = {
     'ql-clean': '清除字体样式',
     'ql-lineheight':'行间距',
     'ql-letterspacing':'字间距',
+    'ql-fullscreen':'全屏'
  }; 
  export function addQuillTitle(){ 
      const oToolBar = document.querySelector('.ql-toolbar'),        

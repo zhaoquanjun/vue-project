@@ -158,11 +158,11 @@
         methods: {
             async getMemberList(options) {
                 this.$Loading.show();
-                let {data} = await memberManageApi.getMemberList(
+                let data = await memberManageApi.getMemberList(
                     (options = this.searchOptions)
                 );
                 this.$Loading.hide();
-                this.memberPageResult = data;
+                this.memberPageResult = data.data;
             },
             async exportMemberList(options) {
                 let { status, data } = await memberManageApi.exportMemberList(

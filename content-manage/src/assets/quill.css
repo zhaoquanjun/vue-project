@@ -211,3 +211,10 @@
 }
 
 
+.ql-snow.ql-toolbar .ql-fullscreen
+ {
+    background:url('./quanping-2.png') no-repeat center;
+    background-size: contain;
+    height: 16px;
+ }
+

@@ -104,7 +104,7 @@
                             <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
                             <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
-                            <el-dropdown-item command="permission">访问权限</el-dropdown-item>
+                            <!-- <el-dropdown-item command="permission">访问权限</el-dropdown-item> 双十一版本注释 -->
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
