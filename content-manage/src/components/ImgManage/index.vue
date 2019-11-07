@@ -208,16 +208,28 @@ export default {
         },
         // 批量删除列表
         async batchRemovePic(idlist) {
-            this.$confirm(
-                "删除后，图片将被移动到回收站，可在回收站中恢复，是否确定删除？",
-                "提示",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    customClass: "medium",
+               let message = [];
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #262626" },
+                        `删除后，图片将被移动到回收站，可在回收站中恢复，是否确定删除？`
+                    )
+                );
+                message.push(
+                    this.$createElement(
+                        "p",
+                        { style: "color: #8C8C8C" },
+                        "图片被删除后，引用的图片应同步不显示。删除图片时，增加提示文字【删除后，使用图片的地方将受影响】"
+                    )
+                );
+                this.$confirm("提示", {
+                    title: "提示",
+                    message: this.$createElement("div", null, message),
                     iconClass: "icon-warning",
-
+                    customClass: "large",
+                    showCancelButton:false,
+                    closeOnClickModal: false,
                     callback: async action => {
                         if (action === "confirm") {
                             let {
@@ -236,8 +248,8 @@ export default {
                             }
                         }
                     }
-                }
-            );
+                });
+           
         },
         // resetCategoryId() {
         //     this.picSearchOptions.categoryIdList = [];

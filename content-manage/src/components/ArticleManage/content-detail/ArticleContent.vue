@@ -150,7 +150,7 @@
                             </div>
                         </el-form-item>
 
-                        <el-form-item style="position:relative" label="搜索关键词" prop="searchKeywords">
+                        <!-- <el-form-item style="position:relative" label="搜索关键词" prop="searchKeywords">
                             <el-tooltip class="item" effect="dark" placement="right">
                                 <div slot="content">
                                     网站使用了搜索控件时，将使该网站的搜索
@@ -179,15 +179,15 @@
                                 ></el-input>
                             </ul>
                             <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="articleDetail.isTop"></el-switch>
-                            <span
+                            <!-- <span
                                 style=" font-size: 14px; color: #606266;
     vertical-align: middle;
     padding:0  16px 0 32px ;"
                             >仅登录用户可访问</span>
-                            <el-switch v-model="articleDetail.isLoggedInCanView"></el-switch>
+                            <el-switch v-model="articleDetail.isLoggedInCanView"></el-switch> -->
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -672,6 +672,11 @@ export default {
         }
     },
     mounted() {
+
+
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
         this.$refs.myQuillEditor.quill
             .getModule("toolbar")
