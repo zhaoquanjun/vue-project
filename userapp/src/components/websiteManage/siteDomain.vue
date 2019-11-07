@@ -145,7 +145,6 @@ export default {
       await domainApi.removeAliYunToken();
     },
 
- 
     /**
      * 获取站点信息
      */
@@ -156,10 +155,9 @@ export default {
     /**
      * 发布网站
      */
-     async _publishdata(domainId) {
+    async _publishdata(domainId) {
       let { data } = await domainApi.publishdata();
-      this._oneKeyEnableHttps(domainId)
-     
+      this._oneKeyEnableHttps(domainId);
     },
     /**
      * 获取域名列表
@@ -452,8 +450,20 @@ export default {
       this.$refs.redirectDomainList._get301List();
     },
     righPanelShow(backupType) {
-      this.backupShow = true;
+      if (backupType === "domainList") {
+        var maxDomainCount = 10;
+        if (this.domainListData.length >= maxDomainCount) {
+          this.$notify({
+            customClass: "notify-error",
+            message: `最多添加${maxDomainCount}个域名`,
+            duration: 2000,
+            showClose: false
+          });
+          return;
+        }
+      }
       if (backupType === "301Redirect") this._getActiveAndNotInUseDomainList();
+      this.backupShow = true;
     },
 
     closeDialog() {
@@ -489,7 +499,7 @@ export default {
     .member-list-title {
       border-left: 4px solid #01c0de;
       padding-left: 8px;
-      font-size:16px;
+      font-size: 16px;
       font-weight: 500;
     }
   }
