@@ -5,6 +5,8 @@
       :options="options"
       :autoStart="true"
       @file-added="onFileAdded"
+      @file-success="onFileSuccess"
+      @file-error="onFileError"
       class="uploader-example"
     >
       <uploader-unsupport></uploader-unsupport>
@@ -110,6 +112,8 @@ export default {
         file.pause();
         return;
       }
+    },
+    onFileSuccess(file) {
       this.file = file;
       // this.fileList.push(file);
       this.isUpload = true;
@@ -123,6 +127,14 @@ export default {
         showClose: false
       });
       this.date = this.getNowFormatDate();
+    },
+    onFileError(rootFile, file, response, chunk) {
+      this.$notify({
+        customClass: "notify-error",
+        message: `${JSON.parse(response).message}`,
+        duration: 1500,
+        showClose: false
+      });
     },
     fileRemove() {
       this.$confirm(`您确定要删除当前sitemap文件吗？删除后不可恢复。`, "提示", {
@@ -300,7 +312,7 @@ export default {
       color: rgba(185, 203, 207, 1);
       line-height: 22px;
       margin: auto;
-      width: 265px;
+      width: 280px;
     }
   }
   .uploadList {
