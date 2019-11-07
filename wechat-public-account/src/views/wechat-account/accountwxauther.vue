@@ -236,9 +236,9 @@ export default {
                 })
               },2500); 
             } else {
-              this.percentage = this.percentage + 1
+              this.percentage = this.percentage + 5
             }
-          }, 100);
+          }, 600);
         } else {
           notify(this,'推广域名设置失败', 'error')
         }
