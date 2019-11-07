@@ -173,6 +173,9 @@ export default {
     handleSelectionChange(list) {
       this.$emit("handleSelectionChange", list);
     },
+    cancelSelect() {
+      this.$refs.multipleTable.clearSelection();
+    },
     chosePriority(row) {
       let para = {
         idList: [row.id],

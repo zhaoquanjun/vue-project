@@ -125,13 +125,15 @@
                 <span>{{selectedList.length}}</span>
                 个{{type}}
               </span>
-              <button @click="batchDelete">删除</button>
+              <button class="delete" @click="batchDelete">删除</button>
+              <button class="cancel" @click="batchCancel">取消</button>
             </div>
           </div>
           <div>
             <List
               :listData="listData"
               :listType="listType"
+              ref="list"
               @remove="remove"
               @handleSelectionChange="handleSelectionChange"
               @update="update"
@@ -508,6 +510,9 @@ export default {
         this.batchDeleteShow = false;
       }
     },
+    batchCancel() {
+      this.$refs.list.cancelSelect();
+    },
     // 批量删除
     batchDelete() {
       let idList = [];
@@ -801,13 +806,22 @@ export default {
           color: #09cceb;
         }
       }
-      button {
+      .delete {
         margin-left: 24px;
         color: rgba(251, 77, 104, 1);
         padding: 8px;
         background: transparent;
         &:hover {
           background: rgba(251, 77, 104, 0.09);
+        }
+      }
+      .cancel {
+        margin-left: 16px;
+        color: rgba(9, 204, 235, 1);
+        padding: 8px;
+        background: transparent;
+        &:hover {
+          background: rgba(9, 204, 235, 0.09);
         }
       }
     }
