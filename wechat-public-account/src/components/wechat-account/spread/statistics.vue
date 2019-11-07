@@ -10,12 +10,12 @@
         <div>
           <img src="~img/share01.png"/>
           <p>近30日阅读数</p>
-          <span>{{uvTotal}}</span>
+          <span>{{pvTotal}}</span>
         </div>
         <div>
           <img src="~img/share02.png"/>
           <p>近30日访客数</p>
-          <span>{{pvTotal}}</span>
+          <span>{{uvTotal}}</span>
         </div>
         <div>
           <img src="~img/share03.png"/>
@@ -111,7 +111,7 @@ export default {
             this.uvTotal = this.uvTotal + item.count;
             this.uvList.push(item.count)
             if(index > 23) {
-              this.uvLast = push(item.count);
+              this.uvLast.push(item.count);
             }
           })
         }
