@@ -319,6 +319,7 @@ export default {
                 this.addAnswer = true;
                 this._getKeywordReplyList(this.searchOption);
                 this.isSet = true;
+                this.editorId = ''
                 this.id = data;
             } else {
                 this.canHandlerSave = true
