@@ -329,6 +329,7 @@ export default {
         },
         updateWeiXinHtml() {
             this.weixinHtml = "绑定微信" + new Date();
+            this._getExternalUserAsync();
         },
         // 修改手机号
         modifiPhoneNum() {
