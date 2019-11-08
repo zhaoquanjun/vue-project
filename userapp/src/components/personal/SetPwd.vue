@@ -223,9 +223,11 @@ export default {
             let { status } = await updateUserPwd(option);
             if (status === 200) {
                 this.isSetPassWord = true;
-                this.$message({
-                    type: "success",
-                    message: "设置成功!"
+                this.$notify({
+                    customClass: "notify-success",
+                    message: `设置成功`,
+                    duration: 1500,
+                    showClose: false
                 });
                 this.$store.commit("CLOSERIGHTPANNEL", false);
                 this.$emit("setPwdTitleAndBtn");
