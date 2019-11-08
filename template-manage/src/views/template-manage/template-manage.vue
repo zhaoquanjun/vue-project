@@ -1245,12 +1245,14 @@ export default {
     margin-top: 24px;
     width: 130px;
     height: 40px;
+    vertical-align: top;
   }
   .searchInput {
     margin-left: -2px;
     margin-top: 24px;
     width: 180px;
     height: 40px;
+    vertical-align: top;
   }
   .firstIndustrySelect {
     margin-top: 24px;
