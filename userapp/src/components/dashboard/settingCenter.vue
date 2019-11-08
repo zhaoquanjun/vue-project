@@ -68,7 +68,6 @@ export default {
 <style lang="scss" scoped>
 .content-num-section {
   margin-top: 32px;
-  margin-bottom: 40px;
   width: 100%;
   background: rgba(255, 255, 255, 1);
   border-radius: 3px;

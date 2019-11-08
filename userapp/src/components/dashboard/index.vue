@@ -7,14 +7,6 @@
       </div>
       <div class="img"></div>
     </div>
-    <!-- <siteinfo
-          ref="siteInfo"
-          :siteInfo="siteInfoList"
-          :isCanCreate="isCanCreate"
-          :isSystem="isSystem"
-          @getDashboardData="getDashboardData"
-          v-show="siteInfoList.length && $store.state.dashboard.isSiteInfoShow"
-    />-->
     <siteInfo
       ref="siteInfo"
       :siteCount="siteCount"
@@ -25,6 +17,7 @@
     <content-num :contentNumber="contentNumber" />
     <memberManage :contentNumber="contentNumber" />
     <settingCenter :contentNumber="contentNumber" />
+    <div style="margin-top:40px;width:100px;height:1px;"></div><!-- 兼容safari 底部不显示问题 -->
   </div>
 </template>
 
@@ -122,7 +115,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .home-page {
-  padding: 0 24px 32px;
+  padding: 0 24px;
   background: rgba(244, 245, 246, 1);
   position: relative;
   .welcome-wrap {
