@@ -71,7 +71,7 @@
                 </div>
                 <div class="fright">
                     <span class="user-value" v-if="WeChatUser">
-                        <img v-if="WeChatUser.headImgUrl" :src="WeChatUser.headImgUrl" />
+                        <img v-if="WeChatUser.externalHeadImgUrl" :src="WeChatUser.externalHeadImgUrl" />
                         <img
                             v-else
                             :src='defaultAvatar'
@@ -119,7 +119,7 @@
                 </div>
                 <div class="fright">
                     <span class="user-value" v-if="AlipayUser">
-                        <img v-if="AlipayUser.headImgUrl" :src="AlipayUser.headImgUrl" />
+                        <img v-if="AlipayUser.externalHeadImgUrl" :src="AlipayUser.externalHeadImgUrl" />
                         <img
                             v-else
                             :src='defaultAvatar'
@@ -275,17 +275,16 @@ export default {
             this.AlipayUser = null;
             this.DingDingUser = null;
             let { data } = await getExternalUserInfo();
-            // console.log(data);
             this.ExternalUsers = data;
             if (this.ExternalUsers && this.ExternalUsers.length > 0) {
                 this.ExternalUsers.forEach(element => {
-                    if (
-                        element != null &&
-                        (element.headImgUrl == null ||
-                            element.headImgUrl.length < 1)
-                    ) {
-                        element.headImgUrl = this.defaultAvatar;
-                    }
+                    // if (
+                    //     element != null &&
+                    //     (element.headImgUrl == null ||
+                    //         element.headImgUrl.length < 1)
+                    // ) {
+                    //     element.headImgUrl = this.defaultAvatar;
+                    // }
                     if (element.provider == "Weixin") {
                         this.WeChatUser = element;
                     } else if (element.provider == "Alipay") {
