@@ -564,7 +564,7 @@ export default {
         async insertArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
             var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
-            this.detailData.contentDetail = html;
+            this.detailData.detailContent = html;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
             );
@@ -612,7 +612,7 @@ export default {
         async saveArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
             var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
-            this.detailData.contentDetail = html;
+            this.detailData.detailContent = html;
             let { status, data } = await productManageApi.update(
                 this.curProduct,
                 this.detailData
