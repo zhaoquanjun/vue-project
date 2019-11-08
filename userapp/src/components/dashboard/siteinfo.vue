@@ -288,7 +288,7 @@
             <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
           </span>
         </div>
-        <div class="tips">使用当前站点空间作为模板创建当前站点</div>
+        <div class="tips">使用当前站点空间作为模板创建新站点</div>
         <div class="createSiteName">
           <span class="createSiteTitle">站点名称</span>
           <el-input
