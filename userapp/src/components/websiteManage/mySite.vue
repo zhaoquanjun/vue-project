@@ -355,7 +355,7 @@ export default {
         },
         {
           value: "2",
-          label: "网站"
+          label: "企业"
         }
       ],
       chosedSiteType: "",

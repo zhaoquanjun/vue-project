@@ -220,7 +220,7 @@ export default {
                     this.$createElement(
                         "p",
                         { style: "color: #8C8C8C" },
-                        "图片被删除后，引用的图片应同步不显示。删除图片时，增加提示文字【删除后，使用图片的地方将受影响】"
+                        "删除后，使用图片的地方将受影响"
                     )
                 );
                 this.$confirm("提示", {
