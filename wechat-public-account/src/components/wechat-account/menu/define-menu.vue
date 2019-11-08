@@ -581,7 +581,7 @@ export default {
     },
     // 保存并发布
      async _handleSaveAndPublish() {
-       if (this.menuTree.length == 0) {
+       if (this.menuTree.length == 0 || !this.hasTrueName) {
         return
       }
       let flag = this.testParameters();
