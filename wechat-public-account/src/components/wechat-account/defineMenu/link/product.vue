@@ -54,7 +54,7 @@
               style="margin-top: 12px"
             ></el-pagination>
           </div>
-          <none-area v-show="!productList.length" :target="target">
+          <none-area v-show="!productList.length && !loading" :target="target">
             <span v-if="!search">
               暂无产品，请先
               <span style="color: #00C1DE;cursor: pointer;">
