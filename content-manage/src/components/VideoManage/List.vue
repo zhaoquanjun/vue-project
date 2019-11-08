@@ -374,7 +374,7 @@ export default {
     cursor: pointer;
     outline: none;
     width: 800px;
-    height: 700px;
+    margin-top: 150px;
 }
 </style>
 

@@ -204,7 +204,7 @@ export default {
     position: relative;
     .siteName {
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       color: rgba(38, 38, 38, 1);
       position: absolute;
       left: 0px;

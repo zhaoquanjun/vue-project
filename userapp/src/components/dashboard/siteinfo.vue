@@ -1011,7 +1011,7 @@ export default {
       justify-content: space-between;
       .headTitle {
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 600;
         color: rgba(38, 38, 38, 1);
         line-height: 22px;
       }
