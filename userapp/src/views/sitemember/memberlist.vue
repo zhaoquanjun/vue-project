@@ -57,8 +57,8 @@
                     <div class="b-content">
                         <template>
                             <el-table :data="memberPageResult.list"
-                                      :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '36px',paddingLeft: '40px'}"
-                                      :cell-style="{color:'#262626',lineHeight: '36px',paddingLeft: '40px'}"
+                                      :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '40px',paddingLeft: '40px'}"
+                                      :cell-style="{color:'#262626',lineHeight: '40px',paddingLeft: '40px'}"
                                       style="width: 100%">
                                 <el-table-column prop="mobile"
                                                  label="注册账号">
@@ -79,8 +79,12 @@
                                                  label="操作"
                                                  width="220">
                                     <template slot-scope="scope">
-                                        <i class="icon iconfont iconicon-dash-details" @click="edit(scope.row.id)"></i>
-                                        <i class="icon iconfont iconshanchu" @click="remove(scope.row.id)"></i>
+                                        <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                                            <i class="icon iconfont iconicon-dash-details" @click="edit(scope.row.id)"></i>
+                                        </el-tooltip>
+                                        <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                                            <i class="icon iconfont iconshanchu" @click="remove(scope.row.id)"></i>
+                                        </el-tooltip>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -269,19 +273,25 @@
     .el-input /deep/ .el-input-group__append {
         padding: 0;
     }
-
     .el-input--suffix /deep/ .el-input__inner {
         padding-right: 10px;
     }
-
     .el-input /deep/ .el-input--suffix .el-input__inner {
         padding-right: 10px;
+    }
+    .el-tabs /deep/ .is-active {
+        background: #F8FAFC;
+        border-bottom: 2px solid #09cceb !important;
+    }
+    .el-tabs /deep/ .hover__row {
+        background: #F8FAFC !important;
     }
 </style>
 <style lang="scss" scoped>
     .member-content {
         font-family: "PingFangSC-Regular,PingFangSC";
         min-width: 1150px;
+        height: 100%;
         .member-title
 
     {
@@ -353,11 +363,18 @@
 
     .b-content {
         border: 1px solid rgba(229,229,229,1);
-        min-height: 600px;
         .iconfont
 
     {
+        cursor: pointer;
+        display: inline-block;
         margin-right: 20%;
+        padding: 4px 8px;
+        border-radius: 2px;
+        &:hover {
+            background: rgba(240, 243, 247, 1);
+            border-radius: 4px;
+        }
     }
 
     }
