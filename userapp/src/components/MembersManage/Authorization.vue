@@ -7,7 +7,7 @@
                     class="auth-input"
                     v-model="input"
                     placeholder="请输入权限名称"
-                    @input="changeInput"
+                    @input="searchAuth"
                     :clearable="true"
                 />
                 <button class="auth-btn" @click="searchAuth">
@@ -135,6 +135,8 @@ export default {
             border: none;
             background: #fff;
         }
+        input::-ms-clear { display: none; }
+        input::-ms-reveal { display: none; }
         .auth-input {
             font-size: 12px;
             width: 100%;
