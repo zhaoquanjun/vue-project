@@ -79,8 +79,6 @@
                         ref="myQuillEditor"
                         themes="bubble"
                         :options="editorOption"
-                        @blur="onEditorBlur($event)"
-                        @focus="onEditorFocus($event)"
                         @change="onEditorChange($event)"
                     ></quill-editor>
                     <div class="mask" v-show="isModalShow"></div>
@@ -528,6 +526,8 @@ export default {
         //插入文章
         async insertArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
+            var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
+            this.articleDetail.contentDetail = html;
             let { status, data } = await articleManageApi.createArticle(
                 this.articleDetail
             );
@@ -572,6 +572,8 @@ export default {
         //编辑保存文章
         async saveArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
+            var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
+            this.articleDetail.contentDetail = html;
             let { status, data } = await articleManageApi.editArticle(
                 this.articleDetail
             );
@@ -612,14 +614,6 @@ export default {
         },
         onEditorChange({ editor, html, text }) {
             this.articleDetail.contentDetail = html;
-        },
-        onEditorBlur(quill) {
-           var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
-           this.articleDetail.contentDetail = html;
-        },
-        onEditorFocus(quill) {
-           var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
-           this.articleDetail.contentDetail = html;
         },
         imageHandler() {
             this.isModalShow = !this.isModalShow;
