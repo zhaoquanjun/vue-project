@@ -18,6 +18,10 @@
     <!-- <link rel="stylesheet" href="//at.alicdn.com/t/font_1334010_je9mm0gpqmr.css"> -->
     <!-- 微站后台 -->
     <!-- <link rel="stylesheet" href="//at.alicdn.com/t/font_1335614_ueg26thqzpj.css"> -->
+    <!-- 使用CDN的JS文件 -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+      <link href="<%= htmlWebpackPlugin.options.cdn.js[i] %>" rel="preload" as="script">
+    <% } %>
     
 </head>
 
@@ -27,8 +31,10 @@
       continue.</strong>
   </noscript>
   <div id="app"></div>
-  
   <!-- built files will be auto injected -->
+  <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+    <link href="<%= htmlWebpackPlugin.options.cdn.js[i] %>" rel="preload" as="script">
+  <% } %>
 </body>
 <!-- <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/vue-router/3.0.7/vue-router.min.js"></script>
