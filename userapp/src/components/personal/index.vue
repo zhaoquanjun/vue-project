@@ -152,6 +152,7 @@
                     :sourcePhone="userInfo.phoneNumber"
                     :provider="CurrentProvider"
                     :imageUrl="userInfo.userHeadUrl"
+                    :defaultAvatarHeadUrl="defaultAvatarHeadUrl"
                     :isSetPassWord="userInfo.isSetPassWord"
                     @setPwdTitleAndBtn="_setPwdTitleAndBtn"
                     @removeExternalUserAsync="_removeExternalUserAsync"
@@ -213,6 +214,7 @@ export default {
             CurrentProvider: "",
             weixinHtml: "",
             createTime: "",
+            defaultAvatarHeadUrl: false,
             // alipayBindTip: false,
             pwdTitle: "0",
             pwdBtn: "设置"
@@ -261,7 +263,10 @@ export default {
                 this._setPwdTitleAndBtn();
             }
             if (!data.userHeadUrl) {
+                this.defaultAvatarHeadUrl = true;
                 this.userInfo.userHeadUrl = this.defaultAvatar;
+            } else {
+                this.defaultAvatarHeadUrl = false;
             }
             // console.log(this.userInfo)
         },

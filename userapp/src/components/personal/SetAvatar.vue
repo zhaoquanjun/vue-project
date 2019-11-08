@@ -12,7 +12,7 @@
     >
       <img v-if="picUrl" :src="picUrl" class="avatar" />
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      <button class="upload-btn" size="small" plain type="primary">{{ !!picUrl ?'重新上传':'上传头像'}}</button>
+      <button class="upload-btn" size="small" plain type="primary">{{ !defaultHeadUrl ?'重新上传':'上传头像'}}</button>
     </el-upload>
     <div class="picture-format">
       <span class="gray8c">支持格式</span>
@@ -35,10 +35,10 @@ import environment from "@/environment/index.js";
 import { updateUserPicture } from "@/api/index.js";
 import securityService from "@/services/authentication/securityService";
 export default {
-  props: ["imageUrl"],
+  props: ["imageUrl","defaultAvatarHeadUrl"],
   data() {
     return {
-      picUrl: "",
+      defaultHeadUrl: false,
       uploadPicAction: `${environment.uploadPicUrl}/-1`,
       headers: {
         appId: "",
@@ -53,6 +53,7 @@ export default {
   },
   created() {
     this.picUrl = this.imageUrl;
+    this.defaultHeadUrl = this.defaultAvatarHeadUrl
     if (!this.imageUrl) {
       this.disabled = true;
     }
@@ -115,6 +116,7 @@ export default {
   watch: {
     pannelShow() {
       this.picUrl = this.imageUrl;
+      this.defaultHeadUrl = this.defaultAvatarHeadUrl;
       this.authtipShow = false;
     }
   }
