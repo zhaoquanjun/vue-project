@@ -130,6 +130,8 @@
                     :total="keywordData.totalRecord"
                     :page-count="keywordData.totalPage"
                     :page-size="keywordData.pageSize"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
                     :page-sizes="[10,20,50]"
                 ></el-pagination>
             </div>
@@ -211,6 +213,16 @@ export default {
         // 回车搜索
         searchEnterFun() {
             this.searchOption.Keyword = this.serchTitle;
+            this.$emit("getKeywordReplyList");
+        },
+        //分页 每页条数
+        handleSizeChange(val) {
+            this.searchOption.pageSize = val;
+            this.$emit("getKeywordReplyList");
+        },
+        //分页 当前页数
+        handleCurrentChange(val){
+            this.searchOption.pageIndex = val;
             this.$emit("getKeywordReplyList");
         },
         // 添加回复
