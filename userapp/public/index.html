@@ -13,17 +13,18 @@
     <title></title>
     <script type="text/javascript" src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
 
-    <!-- <script type="text/javascript"  src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/vue-router/3.0.7/vue-router.min.js"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/element-ui/2.11.1/index.js"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/vuex/3.1.1/vuex.min.js"></script>  -->
+    <!-- 使用CDN的JS文件 -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+      <link href="<%= htmlWebpackPlugin.options.cdn.js[i] %>" rel="preload" as="script">
+    <% } %>
 </head>
 
 <body>
   <div id="app"></div>
   <!-- built files will be auto injected -->
+   <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+    <link href="<%= htmlWebpackPlugin.options.cdn.js[i] %>" rel="preload" as="script">
+  <% } %>
 </body>
 <!-- <script src="https://static.geetest.com/static/tools/gt.js"></script> -->
 
