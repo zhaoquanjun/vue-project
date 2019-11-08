@@ -40,7 +40,7 @@
                     <span v-else>—</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="cdnDomainResolveStatusDesc" label="解析状态" min-width="100">
+            <el-table-column prop="cdnDomainResolveStatusDesc" label="解析状态" min-width="150">
                 <template slot-scope="props">
                     <el-tooltip
                         v-if="props.row.cdnDomainResolveStatus!==2"
