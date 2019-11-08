@@ -101,11 +101,12 @@
                 </el-row>
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
-                    <quill-editor
-                        v-model="detailData.detailContent"
+                    <quill-editor                        
                         ref="myQuillEditor"
                         themes="bubble"
                         :options="editorOption"
+                        @blur="onEditorBlur($event)"
+                        @focus="onEditorFocus($event)"
                         @change="onEditorChange($event)"
                     ></quill-editor>
                     <div class="mask" v-show="isModalShow"></div>
@@ -535,6 +536,7 @@ export default {
             //  JSON.parse(categoryList22).forEach(item=>{
             //       this.categoryId.push(item.id);
             //  })
+            document.getElementsByClassName("ql-editor")[0].innerHTML = this.detailData.detailContent;
             this.categoryIdList(this.detailData.productCategoryList);
             this.$emit("changePreviewId", id, this.detailData.defaultSiteId);
         },
@@ -698,8 +700,16 @@ export default {
                 }
             );
         },
-        onEditorChange({ editor, html, text }) {
+        onEditorChange({ editor, html, text }) {          
             this.detailData.detailContent = html;
+        },
+        onEditorBlur(quill) {
+           var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
+           this.detailData.detailContent = html;
+        },
+        onEditorFocus(quill) {
+           var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
+           this.detailData.detailContent = html;
         },
         imageHandler() {
             this.isModalShow = !this.isModalShow;
@@ -707,11 +717,10 @@ export default {
             this.selectRangeIndex = this.imgRange !== null ? this.imgRange.index : 0;
         },
         fullScreenHandler(){
-            console.log('fullScreenHandler');
+            //console.log('fullScreenHandler');
         },
         getImgInfo(info) {
             this.imgData = info;
-            console.log(info)
         },
         getEditorImg() {
             // 获取选中的图片信息 有两种方式

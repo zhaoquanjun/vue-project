@@ -75,11 +75,12 @@
                 </el-row>
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
-                    <quill-editor
-                        v-model="articleDetail.contentDetail"
+                    <quill-editor                        
                         ref="myQuillEditor"
                         themes="bubble"
                         :options="editorOption"
+                        @blur="onEditorBlur($event)"
+                        @focus="onEditorFocus($event)"
                         @change="onEditorChange($event)"
                     ></quill-editor>
                     <div class="mask" v-show="isModalShow"></div>
@@ -488,7 +489,6 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await articleManageApi.getArticleDetail(id);
-
             if (Object.keys(data.metaKeywords).length < 1) {
                 data.metaKeywords = [];
             } else {
@@ -500,6 +500,7 @@ export default {
                 data.searchKeywords = data.searchKeywords.split(",");
             }
             this.articleDetail = data;
+            document.getElementsByClassName("ql-editor")[0].innerHTML = this.articleDetail.contentDetail;
             this.articleDetail.NewId = data.id;
             this.$emit("changePreviewId", id, this.articleDetail.defaultSiteId);
         },
@@ -511,7 +512,6 @@ export default {
         // 新建保存
         submitForm(formName, imageUrl, disableRefObj) {
             this.articleDetail.pictureUrl = imageUrl;
-
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.insertArticle(disableRefObj);
@@ -603,7 +603,6 @@ export default {
         },
 
         imgChangeSizeHandler(img) {
-            console.log("imgChangeSizeHandler");
             img.width = "100";
             img.height = "100";
         },
@@ -613,13 +612,14 @@ export default {
         },
         onEditorChange({ editor, html, text }) {
             this.articleDetail.contentDetail = html;
-            var imgNodes = document.querySelectorAll(".ql-editor img");
-            imgNodes.forEach(img => {
-                //if(img.isBind==undefined || img.isBind==null||!img.isBind){
-                //   img.isBind = true;
-                //   img.addEventListener("dblclick",this.imgChangeSizeHandler,img);
-                //}
-            });
+        },
+        onEditorBlur(quill) {
+           var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
+           this.articleDetail.contentDetail = html;
+        },
+        onEditorFocus(quill) {
+           var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
+           this.articleDetail.contentDetail = html;
         },
         imageHandler() {
             this.isModalShow = !this.isModalShow;
