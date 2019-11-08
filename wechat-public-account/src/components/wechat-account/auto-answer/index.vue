@@ -42,21 +42,21 @@
                 :keyword-data="keywordData"
                 ref="pictureComponent"
                 :image-msg="replycontentData.imageMsg.picUrl"
-                v-show="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)"
+                v-if="(msgType===1 && addAnswer) || (replyType=='3' && !addAnswer && msgType==1)"
                 @handlerPic="handlerPic"
             ></Picture>
             <!-- 文字 -->
             <anser-text
                 :keyword-data="keywordData"
                 :serve-text="replycontentData.textMsg.text"
-                v-show="msgType===2"
+                v-if="msgType===2"
                 @handlerText="handlerText"
             ></anser-text>
             <!-- 图文 -->
             <image-text
                 :keyword-data="keywordData"
                 ref="newMsg"
-                v-show="msgType===3"
+                v-if="msgType===3"
                 :news-msg="replycontentData.newsMsg"
                 :replyType= 'replyType'
                 @handlerSaveImgText="handlerSaveImgText"
@@ -319,6 +319,7 @@ export default {
                 this.addAnswer = true;
                 this._getKeywordReplyList(this.searchOption);
                 this.isSet = true;
+                this.editorId = ''
                 this.id = data;
             } else {
                 this.canHandlerSave = true

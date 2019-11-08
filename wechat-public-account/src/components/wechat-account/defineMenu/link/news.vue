@@ -54,7 +54,7 @@
             style="margin-top: 12px"
           ></el-pagination>
         </div>
-        <none-area v-show="!newsList.length" :target="target">
+        <none-area v-show="!newsList.length && !loading" :target="target">
           <span v-if="!search">
             暂无文章，请先
             <span style="color: #00C1DE;cursor: pointer;">

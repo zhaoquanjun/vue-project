@@ -30,7 +30,7 @@ export default {
     .loading-icon__area {
       width: 50px;
       height: 52px;
-      background: url('~img/account/loading.gif') no-repeat center center;
+      // background: url('~img/account/loading.gif') no-repeat center center;
       background-size: 100% 100%;
     }
     p {
