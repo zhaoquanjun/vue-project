@@ -1064,23 +1064,26 @@ export default {
   border-top-color: transparent;
   border-left-color: transparent;
   border-right-color: transparent;
+  line-height: 20px;
 }
 .remarkInput /deep/ input {
   border-top-color: transparent;
   border-left-color: transparent;
   border-right-color: transparent;
+  line-height: 20px;
 }
 .templateNameInput /deep/ input {
   border-top-color: transparent;
   border-left-color: transparent;
   border-right-color: transparent;
+  line-height: 20px;
 }
 .borderColor /deep/ input {
   border: 1px solid rgba(185, 203, 207, 1);
 }
-/* .searchInput /deep/ input {
-  border-left-color: transparent;
-} */
+.searchInput /deep/ input {
+  line-height: 20px;
+}
 .isRecommend /deep/ .el-checkbox__label {
   font-size: 14px;
   font-weight: 400;
