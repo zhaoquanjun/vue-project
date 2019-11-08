@@ -4,6 +4,8 @@ node_modules
 !node_modules/vue-simple-uploader
 !node_modules/simple-uploader.js
 !node_modules/element-ui/lib/pagination.js
+!node_modules/oidc-client/dist/
+
 /dist
 .MERGE_MSG.swp
 # local env files
