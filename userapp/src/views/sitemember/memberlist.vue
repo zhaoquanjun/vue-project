@@ -33,6 +33,7 @@
                             <el-date-picker v-model="registerStartTime"
                                             @change="getMemberList"
                                             type="date"
+                                            :editable=false
                                             placeholder="请选择时间">
                             </el-date-picker>
                         </div>
@@ -42,6 +43,7 @@
                             <el-date-picker v-model="registerEndTime"
                                             @change="getMemberList"
                                             type="date"
+                                            :editable=false
                                             placeholder="请选择时间">
                             </el-date-picker>
                         </div>
@@ -147,7 +149,11 @@
                     return this.searchOptions.registerStartTime;
                 },
                 set: function (newVal) {
-                    this.searchOptions.registerStartTime = formatDate(newVal, "yyyy-MM-dd hh:mm:ss");
+                    if(newVal == null){
+                        this.searchOptions.registerStartTime = null;
+                    }else{
+                        this.searchOptions.registerStartTime = formatDate(newVal, "yyyy-MM-dd hh:mm:ss");
+                    }
                 }
             },
             registerEndTime: {
@@ -155,7 +161,11 @@
                     return this.searchOptions.registerEndTime;
                 },
                 set: function (newVal) {
-                    this.searchOptions.registerEndTime = formatDate(newVal, "yyyy-MM-dd hh:mm:ss");
+                    if(newVal == null){
+                        this.searchOptions.registerEndTime = null;
+                    }else{
+                        this.searchOptions.registerEndTime = formatDate(newVal, "yyyy-MM-dd hh:mm:ss");
+                    }
                 }
             }
         },
