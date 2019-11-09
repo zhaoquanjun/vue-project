@@ -781,7 +781,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100000;
+    z-index: 2000;
     .ql-editor{
         height: 100%;
     }
