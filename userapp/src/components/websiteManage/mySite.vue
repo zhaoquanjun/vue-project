@@ -155,70 +155,78 @@
       </el-row>
       <el-row class="siteContent">
         <div class="mySiteTitle">网站设置</div>
-        <div class="siteSettingWrap" style="margin-top:32px">
-          <span class="siteSetting">网站icon</span>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB，仅支持.png格式"
-            placement="top-start"
-          >
-            <i class="icon iconfont iconicon-exclamationmark"></i>
-          </el-tooltip>
-          <el-upload
-            class="avatar-uploader"
-            :action="uploadPicUrl"
-            :headers="headers"
-            :show-file-list="false"
-            ref="upload"
-            :on-success="iconAvatarSuccess"
-            :on-error="iconAvatarError"
-            :before-upload="iconAvatarUpload"
-          >
-            <div v-if="!iconUrl" class="iconNo"></div>
-            <img v-if="iconUrl" :src="iconUrl" class="iconImg" />
-            <i v-if="iconUrl" class="icon iconfont mask iconqiehuanxingshiyi"></i>
-          </el-upload>
-          <i v-if="iconUrl" class="icon iconfont iconshanchu" @click="removeIcon"></i>
-          <span class="siteSetting showAliService">启用Powered by</span>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字"
-            placement="top-start"
-          >
-            <i class="icon iconfont iconicon-exclamationmark"></i>
-          </el-tooltip>
-          <el-switch
-            @change="isOpenPowered"
-            v-model="isOpenPoweredValue"
-            active-color="#01C0DE"
-            style="margin-left:16px"
-          ></el-switch>
+        <div class="siteSettingWrap clear" style="margin-top:32px">
+          <div class="siteSettingWrap-item">
+            <span class="siteSetting">网站icon</span>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB，仅支持.png格式"
+              placement="top-start"
+            >
+              <i class="icon iconfont iconicon-exclamationmark"></i>
+            </el-tooltip>
+            <el-upload
+              class="avatar-uploader"
+              :action="uploadPicUrl"
+              :headers="headers"
+              :show-file-list="false"
+              ref="upload"
+              :on-success="iconAvatarSuccess"
+              :on-error="iconAvatarError"
+              :before-upload="iconAvatarUpload"
+            >
+              <div v-if="!iconUrl" class="iconNo"></div>
+              <img v-if="iconUrl" :src="iconUrl" class="iconImg" />
+              <i v-if="iconUrl" class="icon iconfont mask iconqiehuanxingshiyi"></i>
+            </el-upload>
+            <i v-if="iconUrl" class="icon iconfont iconshanchu" @click="removeIcon"></i>
+          </div>
+          <div class="siteSettingWrap-item">
+            <span class="siteSetting">启用Powered by</span>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字"
+              placement="top-start"
+            >
+              <i class="icon iconfont iconicon-exclamationmark"></i>
+            </el-tooltip>
+            <el-switch
+              @change="isOpenPowered"
+              v-model="isOpenPoweredValue"
+              active-color="#01C0DE"
+              style="margin-left:16px"
+            ></el-switch>
+          </div>
         </div>
-        <div class="siteSettingWrap">
-          <span class="siteSetting ">显示阿里云服务信息</span>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字"
-            placement="top-start"
-          >
-            <i class="icon iconfont iconicon-exclamationmark"></i>
-          </el-tooltip>
-          <el-switch
-            @change="updateSiteServiceInfo"
-            v-model="siteServiceInfoValue"
-            active-color="#01C0DE"
-            style="margin: -2px 0 0 16px"
-          ></el-switch>
-          <span class="siteSetting rightClickSave">禁止右键保存图片</span>
-          <el-switch
-            @change="updateSiteRightCopy"
-            v-model="siteRightCopyValue"
-            active-color="#01C0DE"
-            style="margin: -2px 0 0 16px"
-          ></el-switch>
+        <div class="siteSettingWrap clear">
+          <div class="siteSettingWrap-item">
+            <span class="siteSetting ">显示阿里云服务信息</span>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字"
+              placement="top-start"
+            >
+              <i class="icon iconfont iconicon-exclamationmark"></i>
+            </el-tooltip>
+            <el-switch
+              @change="updateSiteServiceInfo"
+              v-model="siteServiceInfoValue"
+              active-color="#01C0DE"
+              style="margin: -2px 0 0 16px"
+            ></el-switch>
+          </div>
+          <div class="siteSettingWrap-item">
+            <span class="siteSetting">禁止右键保存图片</span>
+            <el-switch
+              @change="updateSiteRightCopy"
+              v-model="siteRightCopyValue"
+              active-color="#01C0DE"
+              style="margin: -2px 0 0 16px"
+            ></el-switch>
+          </div>
         </div>
       </el-row>
       <el-dialog
@@ -1053,9 +1061,15 @@ export default {
 }
 
 .siteSettingWrap {
-  margin-top: 17px;
-  height: 20px;
-  margin-left: 31px;
+  float: left;
+  height: 66px;
+  margin: 8px 0 0 0 !important;
+  width: 50%;
+  .siteSettingWrap-item {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 14px;
+  }
   .siteSetting {
     float: left;
     font-size: 14px;
@@ -1081,12 +1095,6 @@ export default {
   }
   .el-switch {
     float: left;
-  }
-  .showAliService {
-    margin-left: 310px;
-  }
-  .rightClickSave {
-    margin-left: 218px;
   }
 }
 //右侧弹框

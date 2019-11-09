@@ -354,7 +354,6 @@ export default {
                         text: text
                     };
                 //图文
-                let curEditorItem = this.$refs.newMsg.curEditorItem;
                 let newsMsg = this.replycontentData.newsMsg;
                 option.publicPlatformReplyInput.newsMsg = newsMsg;
                 //校验

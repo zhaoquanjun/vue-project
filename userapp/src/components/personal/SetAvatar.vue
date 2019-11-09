@@ -12,7 +12,7 @@
     >
       <img v-if="picUrl" :src="picUrl" class="avatar" />
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      <button class="upload-btn" size="small" plain type="primary">{{ !defaultHeadUrl ?'重新上传':'上传头像'}}</button>
+      <button class="upload-btn" size="small" plain type="primary">{{'上传头像'}}</button>
     </el-upload>
     <div class="picture-format">
       <span class="gray8c">支持格式</span>
