@@ -601,7 +601,9 @@ export default {
     display: flex;
     align-items: center;
 }
-
+.uploader-list /deep/ .uploader-file-name .file-info p {
+    padding-right: 12px;
+}
 .chunkUpload-select-tree /deep/ .el-input--small .el-input__inner {
     height: 40px;
     line-height: 40px;
