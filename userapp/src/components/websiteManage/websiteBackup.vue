@@ -106,17 +106,17 @@
               <el-table-column label="操作" min-width="170">
                 <template slot-scope="scope">
                   <div class="handle-btn-wrap">
-                    <el-tooltip content="还原备份包" placement="top" :v-model="false">
+                    <el-tooltip content="还原备份包" placement="top" :disabled="disabled">
                       <button class="handle-btn" @click="recovery( scope )">
                         <i class="iconfont iconhuifu" style="color:#262626"></i>
                       </button>
                     </el-tooltip>
-                    <el-tooltip content="下载备份包" placement="top">
+                    <el-tooltip content="下载备份包" placement="top" :disabled="disabled">
                       <button class="handle-btn" @click="downloadBackup( scope )">
                         <i class="iconfont iconxiazai" style="color:#262626"></i>
                       </button>
                     </el-tooltip>
-                    <el-tooltip content="删除备份包" placement="top" visible-arrow="false">
+                    <el-tooltip content="删除备份包" placement="top" :disabled="disabled">
                       <button class="handle-btn" @click="deleteBackup( scope )">
                         <i class="iconfont iconshanchu" style="color:#262626"></i>
                       </button>
@@ -205,7 +205,8 @@ export default {
       backupType: "manual",
       backupShow: false,
       backuping: false,
-      remarkInfo: ""
+      remarkInfo: "",
+      disabled: false
     };
   },
   methods: {
@@ -270,6 +271,7 @@ export default {
      * 还原站点
      */
     async recovery(scope) {
+      this.disabled = true;
       let message = [];
       message.push(
         this.$createElement("p", null, "确定要将网站还原至该备份版本吗？")
@@ -322,6 +324,11 @@ export default {
                 }
               });
           }
+          let timer = setTimeout(() => {
+            this.disabled = false;
+            clearTimeout(timer);
+            timer = null;
+          }, 5);
         }
       });
     },
@@ -379,6 +386,7 @@ export default {
      * 下载备份
      */
     async downloadBackup(scope) {
+      this.disabled = true;
       this.$confirm(`确定下载该备份包？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
@@ -402,6 +410,11 @@ export default {
             a.click();
             document.body.removeChild(a);
           }
+          let timer = setTimeout(() => {
+            this.disabled = false;
+            clearTimeout(timer);
+            timer = null;
+          }, 5);
         }
       });
     },
@@ -409,6 +422,7 @@ export default {
      * 删除备份
      */
     async deleteBackup(scope) {
+      this.disabled = true;
       this.$confirm(`备份包删除后不可恢复，确定要删除吗？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
@@ -435,6 +449,11 @@ export default {
               });
             }
           }
+          let timer = setTimeout(() => {
+            this.disabled = false;
+            clearTimeout(timer);
+            timer = null;
+          }, 5);
         }
       });
     },
