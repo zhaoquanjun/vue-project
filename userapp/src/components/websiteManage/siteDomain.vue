@@ -500,7 +500,7 @@ export default {
       border-left: 4px solid #01c0de;
       padding-left: 8px;
       font-size: 16px;
-      font-weight: 500;
+      font-weight: 700;
     }
   }
 }
