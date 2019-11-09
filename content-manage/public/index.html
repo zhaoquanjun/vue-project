@@ -9,10 +9,7 @@
     <meta http-equiv="Content-Security-Policy" content="form-action 'self';">
     <!-- 通用 -->
     <link rel="stylesheet" href="//at.alicdn.com/t/font_1386718_lpl5z4g3dps.css">
-    <!-- 使用CDN的JS文件 -->
-    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
-      <link href="<%= htmlWebpackPlugin.options.cdn.js[i] %>" rel="preload" as="script">
-    <% } %>
+   
     <title>content-manage</title>
 </head>
   <body>
@@ -23,7 +20,7 @@
     <!-- built files will be auto injected -->
     <!-- 使用CDN的JS文件 -->
     <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
-      <link href="<%= htmlWebpackPlugin.options.cdn.js[i] %>" rel="preload" as="script">
+      <link href="<%= htmlWebpackPlugin.options.cdn.js[i] %>">
     <% } %>
   </body>
 </html>
