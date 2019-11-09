@@ -116,6 +116,7 @@
                     indicator-position="none"
                     :loop="true"
                     ref="carousel"
+                    class="myCarousel"
                 >
                     <el-button
                         @click="prev"
@@ -282,6 +283,17 @@ export default {
 
 
 <style scoped>
+.myCarousel{
+    overflow-x: visible;
+}
+.myCarousel /deep/ .el-carousel__arrow--left{
+    position: absolute;
+    left: -50px;
+}
+.myCarousel /deep/ .el-carousel__arrow--right{
+    position: absolute;
+    right: -50px;
+}
 .left-prev,
 .right-next {
     opacity: 0;
