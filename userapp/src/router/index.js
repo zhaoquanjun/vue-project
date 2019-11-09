@@ -3,7 +3,8 @@ import VueRouter from 'vue-router';
 import { defaultRoutes } from "./routes"
 import securityService from "@/services/authentication/securityService";
 import store from "@/store/index";
-import { getCookie } from "@/libs/cookie"
+import { getCookie } from "@/libs/cookie";
+import environment from "@/environment/index";
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -52,7 +53,7 @@ router.beforeEach(async (to, from, next) => {
           }
         }
       } else {
-        next("/404")
+        window.location.href = environment.errorUrl
         return
       }
     }

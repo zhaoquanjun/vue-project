@@ -17,6 +17,7 @@ let silentRedirectUri = `${httpSchema}template.${baseServerUrl}/static/silent-re
 let clientId = `produce.api`;
 let scope = `openid profile dashboard.api content.api designer.api produce.api weixinopen.api`;
 export let siteDomain = `template.${baseServerUrl}`;
+let errorUrl = `${httpSchema}login.${baseServerUrl}/404`;
 // 个人中心
 export let personalUrl = `//dashboard.${baseServerUrl}/personal`;
 export let dashboardUrl = `${httpSchema}dashboard.${baseServerUrl}/board`;
@@ -49,6 +50,7 @@ const enbironmemy = {
     uploadPicUrl,
     silentRedirectUri,
     clientId,
-    scope
+    scope,
+    errorUrl
 };
 export default enbironmemy;
