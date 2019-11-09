@@ -1,6 +1,6 @@
 <template>
     <div id="asideTree" class="aside-tree">
-        <el-scrollbar>
+        <div class="el-scrollbar" v-scrollBar>
             <el-tree
                 :data="treeResult"
                 node-key="id"
@@ -42,7 +42,7 @@
                     </span>
                 </div>
             </el-tree>
-        </el-scrollbar>
+        </div>
         <div
             class="category-name-pic"
             :class="{upload:isProduct}"
