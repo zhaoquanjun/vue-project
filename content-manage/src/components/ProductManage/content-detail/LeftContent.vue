@@ -906,7 +906,7 @@ export default {
 <style scoped>
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
-    min-height: 400px;
+    height: 400px;
     overflow: auto;
 }
 .el-textarea /deep/ .el-input__count {
