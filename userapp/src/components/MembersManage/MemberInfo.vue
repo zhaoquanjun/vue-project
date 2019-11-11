@@ -124,12 +124,15 @@ export default {
             line-height: 25px;
         }
         .remark-wrap{
-            display: flex;align-items: center;
+            display: inline-block;
+            width: 100%;
             .remark-title{
-               flex: none;padding-right: 10px;
+                float: left;
+                width: 42px;
             }
             .remark-text{
-               display: inline-block;
+                float: left;
+                width: calc(100% - 42px);
                .iconWrap{
                    cursor: pointer;
                }
