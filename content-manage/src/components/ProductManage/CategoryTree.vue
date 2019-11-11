@@ -30,7 +30,9 @@
                         <i class="iconfont icontuodongdian"></i>
                     </button>
                     <div class="node-label-wrap" :class="{'label-weight':node.data.level<=1}">
-                        <span class="node-label">{{data.label}}</span>
+                        <el-tooltip :disabled="data.label.length < 8" effect="dark" :content="data.label" placement="top">
+                            <span class="node-label">{{data.label}}</span>
+                        </el-tooltip>
                         <span v-if="!isProduct">({{data.inUseSum }})</span>
                     </div>
                     <span
