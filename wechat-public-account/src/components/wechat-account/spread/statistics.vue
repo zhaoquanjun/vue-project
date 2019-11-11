@@ -176,7 +176,7 @@ export default {
                   stack: '总量',
                   symbolSize:10,
                   symbol:'circle',  
-                  data: this.interval == 1 ? this.uvList:this.uvLast
+                  data: this.interval == 1 ? this.pvList:this.pvLast
               },
               {
                   name:'访问数',
@@ -184,7 +184,7 @@ export default {
                   stack: '总量',
                   symbolSize:10,
                   symbol:'circle', 
-                  data: this.interval == 1 ? this.pvList:this.pvLast
+                  data: this.interval == 1 ? this.uvList:this.uvLast
               }
           ],
           color: ['#09CCEB', '#0595E6']
