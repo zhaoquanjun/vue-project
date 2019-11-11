@@ -173,7 +173,7 @@ export default {
               {
                   name:'阅读数',
                   type:'line',
-                  stack: '总量',
+                  stack: '阅读数',
                   symbolSize:10,
                   symbol:'circle',  
                   data: this.interval == 1 ? this.pvList:this.pvLast
@@ -181,7 +181,7 @@ export default {
               {
                   name:'访问数',
                   type:'line',
-                  stack: '总量',
+                  stack: '访问数',
                   symbolSize:10,
                   symbol:'circle', 
                   data: this.interval == 1 ? this.uvList:this.uvLast
