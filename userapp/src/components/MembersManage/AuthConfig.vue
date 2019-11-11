@@ -84,7 +84,8 @@ export default {
             "CHOOSEAUTH",
             "REMOVESELECTEDAUTH",
             "EMPTYSELECTEDAUTH",
-            "ISRIGHTPANNELSHOW"
+            "ISRIGHTPANNELSHOW",
+           
         ]),
         ...mapActions(["_updateUserPolicy", "_batchUpdateUserPolicy"]),
         /**
@@ -180,6 +181,7 @@ export default {
             this.$store.commit("USERPERMISSION", ary);
         },
         changeInput() {
+            
             if (this.input === "" && this.oldUserPermission) {
                 this.$store.commit(
                     "USERPERMISSION",
@@ -203,7 +205,6 @@ export default {
                 return this.invitationValue;
             },
             set: function(newVal) {
-                console.log(newVal);
                 this.$store.commit("SETINVITATIONVALUE", newVal);
             }
         }
