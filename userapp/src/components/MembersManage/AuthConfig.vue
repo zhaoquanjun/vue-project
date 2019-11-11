@@ -2,7 +2,7 @@
     <div class="auth-config">
         <div class="auth-tip" v-if="authtipShow">请至少选择一项权限</div>
         <member-info
-            v-if="!isBatch"
+            v-show="!isBatch"
             v-model="value"
             :memberInfo="memberInfo"
         ></member-info>

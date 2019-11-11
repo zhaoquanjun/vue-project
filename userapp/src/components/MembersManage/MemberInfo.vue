@@ -1,17 +1,17 @@
 <template>
     <dl class="members—info" id="members—info">
         <dt class="avatar">
-            <img v-if="memberInfo && memberInfo.userHeadUrl" :src="memberInfo && memberInfo.userHeadUrl" >
+            <img v-if="memberInfo && memberInfo.userHeadUrl" :src="memberInfo.userHeadUrl" >
             <img v-else src="../../assets/defualtAvatar.png" alt="">
         </dt>
         <dd class="basic">
             <span>
                 姓名 :
-                <i>{{memberInfo && memberInfo.displayName}}</i>
+                <i>{{ memberInfo && memberInfo.displayName}}</i>
             </span>
             <span>
                 手机 :
-                <i>{{memberInfo && memberInfo.phoneNumber}}</i>
+                <i>{{ memberInfo && memberInfo.phoneNumber}}</i>
             </span>
             <span class="remark-wrap">
                <i class="remark-title"> 备注 :</i>
@@ -44,12 +44,9 @@
     </dl>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
-    props: {
-        memberInfo: {
-          
-        }
-    },
+   
     data() {
         return {
             inputType:true,
@@ -81,6 +78,9 @@ export default {
         }
     },
     computed: {
+         ...mapState({
+            memberInfo: state => state.memberManager.memberInfo,
+        }),
         remarkValue() {
             return this.memberInfo && this.memberInfo.remark ? this.memberInfo.remark : "";
         }

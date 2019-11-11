@@ -272,7 +272,7 @@ export default {
          * table组件 点击编辑后触发此方法
          */
         authEdit(data) {
-            console.log(data);
+         
             this.isBatch = false;
             this.rightPanelTitle = "编辑成员";
             this.ISRIGHTPANNELSHOW(true);
