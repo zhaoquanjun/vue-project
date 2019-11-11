@@ -7,7 +7,7 @@
                     class="auth-input"
                     v-model="input"
                     placeholder="请输入权限名称"
-                    @input="searchAuth"
+                    @input="changeInput"
                     :clearable="true"
                 />
                 <button class="auth-btn" @click="searchAuth">
@@ -84,15 +84,10 @@ export default {
         },
         changeInput() {
             if (this.input == "" && this.oldUserPermission) {
-                console.log(
-                    JSON.stringify(this.oldUserPermission),
-                    "this.oldUserPermission"
-                );
                 this.$store.commit(
                     "USERPERMISSION",
                     JSON.parse(this.oldUserPermission)
                 );
-                console.log(this.userPermission);
             }
         }
     },

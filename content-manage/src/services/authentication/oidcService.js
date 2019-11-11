@@ -1,3 +1,7 @@
+Array.from = Array.from || function (r) {
+    [].slice.call(r);
+  }; 
+
 import Oidc from 'oidc-client';
 import enbironmemy from "@/environment/index";
 const config = {

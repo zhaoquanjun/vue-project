@@ -88,7 +88,7 @@
                 </div>
                 <span
                     class="storage-content"
-                >{{storageUsage.currentUsage}} / {{storageUsage.maxSize}}</span>
+                >{{storageUsage.currentUsage}} /3 {{storageUsage.maxSize}}</span>
             </div>
             <div class="storage-wrap">
                 <span class="title">已用流量</span>
@@ -310,6 +310,12 @@ export default {
             }
             return "";
         }
+    },
+    watch: {
+        "imgPageResult.list"() {
+            this._getStorageUsage();
+        },
+        deep: true,
     }
 };
 </script>

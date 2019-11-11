@@ -2,7 +2,7 @@
     <div class="auth-config">
         <div class="auth-tip" v-if="authtipShow">请至少选择一项权限</div>
         <member-info
-            v-if="!isBatch"
+            v-show="!isBatch"
             v-model="value"
             :memberInfo="memberInfo"
         ></member-info>
@@ -84,7 +84,8 @@ export default {
             "CHOOSEAUTH",
             "REMOVESELECTEDAUTH",
             "EMPTYSELECTEDAUTH",
-            "ISRIGHTPANNELSHOW"
+            "ISRIGHTPANNELSHOW",
+           
         ]),
         ...mapActions(["_updateUserPolicy", "_batchUpdateUserPolicy"]),
         /**
@@ -180,6 +181,7 @@ export default {
             this.$store.commit("USERPERMISSION", ary);
         },
         changeInput() {
+            
             if (this.input === "" && this.oldUserPermission) {
                 this.$store.commit(
                     "USERPERMISSION",
@@ -203,7 +205,6 @@ export default {
                 return this.invitationValue;
             },
             set: function(newVal) {
-                console.log(newVal);
                 this.$store.commit("SETINVITATIONVALUE", newVal);
             }
         }

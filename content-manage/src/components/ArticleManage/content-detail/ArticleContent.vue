@@ -75,7 +75,7 @@
                 </el-row>
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
-                    <quill-editor                        
+                    <quill-editor
                         ref="myQuillEditor"
                         themes="bubble"
                         :options="editorOption"
@@ -93,6 +93,23 @@
                                 <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
                             </div>
                         </modal-content>
+                    </div>
+                    <div class="image-select--upload__area" v-show="videoShow">
+                        <div class="mask"></div>
+                        <div id="videoContent">
+                            <el-header class="modal-header" style="height:65px">
+                                <span class="title" style="font-size: 16px;">我的视频</span>
+                                <span class="close-icon" @click="cancelgetVideo">
+                                    <i class="iconfont iconguanbi"></i>
+                                </span>
+                            </el-header>
+                            <videoManage ref="imgList" :multiple="false" @getCheckedList="getCheckedList">
+                                <div slot="modal-footer" class="modal-footer">
+                                    <button @click="cancelgetVideo" class="cancel">取消</button>
+                                    <button @click="getVideoOssUrl" class="sure">确定</button>
+                                </div>
+                            </videoManage>
+                        </div>
                     </div>
                 </el-form-item>
             </div>
@@ -306,10 +323,12 @@ import ModalContent from "@/components/ImgManage/index.vue";
 import Fullscreen from "@/assets/Fullscreen"
 Quill.register("modules/fullscreen", Fullscreen)
 
+import videoManage from "@/components/VideoManage/popupIndex.vue";
 export default {
     components: {
         SelectTree,
-        ModalContent
+        ModalContent,
+        videoManage
     },
     provide: {
         popper: true
@@ -376,7 +395,8 @@ export default {
             keywordValue: "",
             metaKeyword: "",
             isNewAdd: false,
-            selectRangeIndex: 0
+            selectRangeIndex: 0,
+            videoShow: false
         };
     },
     created() {
@@ -411,6 +431,7 @@ export default {
                         [{ align: [] }],
                         ["clean"],
                         ["image"], //["image", "video"],
+                        // ["video"],
                         [{ lineheight: lineheights }],
                         [{ letterspacing: letterspacings }],
                         ['fullscreen']
@@ -650,6 +671,25 @@ export default {
         cancelEditorImg() {
             this.isModalShow = false;
         },
+        videoHandler(){
+            console.log(123)
+            this.videoShow = true;
+        },
+        getCheckedList(info) {
+            this.checkedList = info;
+        },
+        getVideoOssUrl() {
+            if (this.checkedList.length > 0) {
+                this.videoShow = false;
+                console.log(this.checkedList)
+            } else {
+                Message.warning('请选择视频');
+            }
+        },
+        // 关闭图片选择弹窗
+        cancelgetVideo() {
+            this.videoShow = false;
+        },
         resetDetail() {
        
             this.articleDetail = {
@@ -668,6 +708,7 @@ export default {
                 pictureUrl: "",
                 defaultSiteId: 0
             };
+            document.getElementsByClassName("ql-editor")[0].innerHTML = "";
         },
         //获取app下所有站点
         async getSiteList() {
@@ -735,7 +776,7 @@ export default {
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 420px;
-    overflow: auto;
+    overflow: hidden;
 }
 .el-textarea /deep/ .el-input__count {
     background: #fff;
@@ -753,6 +794,7 @@ export default {
     width: 100%;
     z-index: 100;
     text-align: right;
+    padding-top: 0;
 }
 </style>
 
@@ -793,6 +835,77 @@ export default {
         height: calc(100vh - 3rem - 24px) !important; 
         margin: 0 auto;
         overflow-y: auto;
+    }
+}
+</style>
+<style lang="scss" scoped>
+#videoContent {
+    position: fixed;
+    width: 1170px;
+    height: 840px;
+    margin: auto;
+    z-index: 1020;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    box-shadow: 0px 2px 32px 4px rgba(0,0,0,0.13);
+    border: 1px solid rgba(229,229,229,1);
+    border-radius: 3px;
+}
+#videoContent .modal-header {
+    background: rgb(255, 255, 255);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e5e5e5;
+    .title{
+        font-size: 16px;
+        font-weight: 500;
+        color: rgba(38,38,38,1);
+    }
+    .close-icon {
+        display: block;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+
+}
+#videoContent .el-container {
+    background: #fff;
+    height: 773px;
+}
+#videoContent .el-dialog {
+    margin-top: 5vh !important;
+    width: 80%;
+    overflow: hidden;
+}
+#videoContent .el-dialog__body {
+    padding-top: 0;
+}
+// #videoContent /deep/ .el-footer {
+//     border-top: 1px solid #EEEEEE;
+// }
+.modal-footer {
+    float: right;
+    height: 88px;
+    button {
+        margin-top: 24px;
+        width: 76px;
+        height: 40px;
+        background: rgba(0,193,222,1);
+        border-radius: 2px;
+        // line-height: 40px;
+        background: rgba(0, 193, 222, 1);
+        margin-right: 16px;
+        color: #fff;
+    }
+    .cancel {
+        color: rgba(9,204,235,1);
+        background: rgba(255,255,255,1);
+        border: 1px solid rgba(9,204,235,1);
     }
 }
 </style>
