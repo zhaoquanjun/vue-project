@@ -77,11 +77,11 @@
                                 <el-table-column prop="lastLoginTimePrt"
                                                  label="最后登录时间">
                                 </el-table-column>
-                                <el-table-column fixed="right"
+                                <el-table-column 
                                                  label="操作"
                                                  width="220">
                                     <template slot-scope="scope">
-                                        <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                                        <el-tooltip class="item" effect="dark" content="详情" placement="top">
                                             <i class="icon iconfont iconicon-dash-details" @click="edit(scope.row.id)"></i>
                                         </el-tooltip>
                                         <el-tooltip class="item" effect="dark" content="删除" placement="top">
@@ -293,9 +293,9 @@
         background: #F8FAFC;
         border-bottom: 2px solid #09cceb !important;
     }
-    /* .el-table /deep/ tbody tr:hover>td { 
+    .el-table /deep/ tbody tr:hover>td { 
         background-color:#F8FAFC !important
-    } */
+    }
 </style>
 <style lang="scss" scoped>
     .member-content {
