@@ -286,6 +286,13 @@ export default {
 .myCarousel{
     overflow-x: visible;
 }
+.el-table /deep/ .el-table_1_column_3 .cell span{
+    display: inline-block;
+    width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .myCarousel /deep/ .el-carousel__arrow--left{
     position: absolute;
     left: -50px;

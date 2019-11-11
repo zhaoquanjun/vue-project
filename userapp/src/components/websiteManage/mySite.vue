@@ -1064,7 +1064,7 @@ export default {
   float: left;
   height: 66px;
   margin: 8px 0 0 8px !important;
-  width: 50%;
+  width: 48%;
   .siteSettingWrap-item {
     display: inline-block;
     width: 100%;
