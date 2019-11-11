@@ -275,7 +275,7 @@ export default {
         let id = this.curSubIndex == -1 ? this.menuTree[this.curIndex].id : this.menuTree[this.curIndex].subMenuList[this.curSubIndex].id
         this._getMenuDetail(id)
       }
-      if(this.menuTree.length >=2 || (this.menuTree[0].subMenuList && this.menuTree[0].subMenuList.length >=2)) {
+      if(this.menuTree.length >=2 || (this.menuTree.length > 0 && this.menuTree[0].subMenuList && this.menuTree[0].subMenuList.length >=2)) {
         this.canOrder = true
       } else {
         this.canOrder = false
@@ -416,6 +416,7 @@ export default {
     //校验参数 
     testParameters(){
       if(!this.menuDetail.id) {
+        this.isCanAdd = true
         return
       }
       let flag = true;
@@ -477,6 +478,7 @@ export default {
       if (level == 1 && order == 1) {
         if(!this.menuDetail.name) {
           notify(this, '请完善菜单信息', "error");
+          this.isCanAdd = true
           return
         }
         this.$confirm("提示", {
@@ -519,6 +521,7 @@ export default {
       }else if (order > 0 && !flag && !(order== 1 && level == 1)) {
         notify(this, '请完善菜单信息', "error");
         this.isCanAdd = true
+        return
       }
       //接口校验
       if (order == 0 || dataObj.status == 200 || (order== 1 && level == 1)) {
