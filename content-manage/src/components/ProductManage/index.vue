@@ -92,9 +92,9 @@
     </el-container>
 </template>
 <script>
-// import CategoryTree from "./CategoryTree";
+import MTree from "./CategoryTree";
 import CheckTree from "./CheckTree";
-import MTree from "@/components/common/MTree";
+//import MTree from "@/components/common/MTree";
 import ContentHeader from "./ProductHeader";
 import ContentTable from "./ProductTable";
 import RightPannel from "@/components/common/RightPannel";
