@@ -205,6 +205,9 @@ export default {
         },
         //获取关键词回复列表
         async _getKeywordReplyList(option) {
+            if(this.keywordData.list && this.keywordData.list.length <= 1) {
+                this.searchOption.pageIndex = 1
+            }
             let { data } = await autoAnswerApi.getKeywordReplyList(
                 this.searchOption
             );
