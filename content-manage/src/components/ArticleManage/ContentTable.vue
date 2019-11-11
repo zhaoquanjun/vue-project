@@ -22,6 +22,7 @@
                 min-width="250"
             >
                 <template slot-scope="scope">
+                    <span class="isTop" v-show="scope.row.isTop">置顶</span>
                     <div style="display: flex; align-items: center;" @click="preview(scope.row.id, scope.row.defaultSiteId)">
                         <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" onerror="onImgError(this)" class="cover" />
                         <img v-else :src="defaultImg" class="cover" alt />
@@ -42,7 +43,7 @@
 
             <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
 
-            <el-table-column  prop="isTopPrt" label="置顶"  min-width="80"></el-table-column>
+            <!-- <el-table-column  prop="isTopPrt" label="置顶"  min-width="80"></el-table-column> -->
 
             <el-table-column prop="createUser" label="作者" min-width="100">
                 <template slot-scope="scope">

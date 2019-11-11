@@ -18,6 +18,7 @@
 
             <el-table-column label="文件名称" min-width="220">
                 <template slot-scope="scope">
+                    <span class="isTop" v-show="scope.row.isTop">置顶</span>
                     <span  class="file-cover cover"><img width="100%" :src="scope.row | fileCover" /></span>
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
                         <span
@@ -48,11 +49,11 @@
             </el-table-column>
 
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip min-width="80"></el-table-column>
-            <el-table-column prop="downloadCount" label="置顶" min-width="80">
+            <!-- <el-table-column prop="downloadCount" label="置顶" min-width="80">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="downloadCount" min-width="80" label="下载次数">
                 <template slot-scope="scope">
                     <span>{{ scope.row.downloadCount}}</span>

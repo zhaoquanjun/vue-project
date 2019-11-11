@@ -18,6 +18,7 @@
 
             <el-table-column width="300" prop="name" label="产品标题">
                 <template slot-scope="scope">
+                    <span class="isTop" v-show="scope.row.isTop">置顶</span>
                     <div style="display: flex; align-items: center;" @click="preview(scope.row.id, scope.row.defaultSiteId)">
                         <img v-if="scope.row.thumbnailPicUrlList.length"
                              :src="scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
@@ -57,11 +58,11 @@
                 </template>
             </el-table-column>
 
-            <el-table-column min-width="100" prop="isTop" label="置顶">
+            <!-- <el-table-column min-width="100" prop="isTop" label="置顶">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
 
             <el-table-column min-width="100" prop="createTimeStr" label="创建时间"></el-table-column>
 

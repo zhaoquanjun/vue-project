@@ -888,6 +888,7 @@ export default {
     width: 100%;
     z-index: 100;
     text-align: right;
+    padding-top: 0;
 }
 .el-form-item__error {
     color: #262626;
@@ -906,8 +907,8 @@ export default {
 <style scoped>
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
-    min-height: 400px;
-    overflow: auto;
+    height: 400px;
+    overflow: hidden;
 }
 .el-textarea /deep/ .el-input__count {
     background: #fff;
