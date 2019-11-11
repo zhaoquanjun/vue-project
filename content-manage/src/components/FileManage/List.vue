@@ -73,7 +73,7 @@
 
             <el-table-column
                 label="操作"
-                min-width="230"
+                min-width="160"
                 v-if="$store.state.dashboard.isContentwrite"
             >
                 <template slot-scope="scope">
@@ -267,7 +267,6 @@ export default {
          * 单选或全选操作
          */
         handleSelectionChange(list) {
-            console.log(list);
             this.multipleSelection = list;
             this.$emit("handleSelectionChange", list);
         },
@@ -337,8 +336,7 @@ export default {
                     .clientHeight + 10;
             let clientW = this.$refs.operateSection.clientWidth;
 
-            this.$refs.operateSection.style.left =
-                ev.pageX - ev.offsetX + 28 + "px";
+            this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
             if (this.$refs.operateSection.style.display == "block") {

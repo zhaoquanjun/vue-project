@@ -187,8 +187,7 @@ export default {
                 { name: "删除", flag: "delete" }
             ]),
                 (this.row = row);
-            this.$refs.operateSection.style.left =
-                ev.pageX - ev.offsetX + 16 + "px";
+            this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
             if (this.$refs.operateSection.style.display == "block") {

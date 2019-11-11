@@ -33,7 +33,7 @@
             </el-table-column>
 
             <el-table-column prop="productCategoryList"  min-width="100" label="分类" show-overflow-tooltip>
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                        <span style="margin-right: 5px;">分类</span> <el-tooltip content="一个产品最多可属于5个分类" effect="dark" placement="right">
                                <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
@@ -205,8 +205,7 @@ export default {
                 { name: row.isTop ? "取消置顶" : "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ];
-            this.$refs.operateSection.style.left =
-                ev.pageX - ev.offsetX + 16 + "px";
+            this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
             // if (this.$refs.operateSection.style.display == "block") {
