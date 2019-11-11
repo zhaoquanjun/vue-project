@@ -26,9 +26,7 @@ export default {
       // }
       console.log('transitTips', data)
       setLocal("transitTips", data)
-      setTimeout(function (){
-        window.close();
-      }, 200)
+      window.close();
     },
     _appendSpace() {
       var oDiv = document.createElement("div");

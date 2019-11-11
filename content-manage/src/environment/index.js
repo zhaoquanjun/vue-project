@@ -17,6 +17,7 @@ let designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
 let clientId = 'content.api';
 let scope = 'openid profile dashboard.api content.api designer.api produce.api weixinopen.api';
 export let siteDomain = `content.${baseServerUrl}`;
+export let errorUrl = `${httpSchema}login.${baseServerUrl}/404`;
 // 个人中心
 export let personalUrl = `${httpSchema}dashboard.${baseServerUrl}/personal`;
 export let dashboardUrl = `${httpSchema}dashboard.${baseServerUrl}/board`;
