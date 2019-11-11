@@ -293,9 +293,9 @@
         background: #F8FAFC;
         border-bottom: 2px solid #09cceb !important;
     }
-    .el-tabs /deep/ .hover__row {
-        background: #F8FAFC !important;
-    }
+    /* .el-table /deep/ tbody tr:hover>td { 
+        background-color:#F8FAFC !important
+    } */
 </style>
 <style lang="scss" scoped>
     .member-content {
