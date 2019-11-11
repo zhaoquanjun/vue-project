@@ -794,6 +794,7 @@ export default {
     width: 100%;
     z-index: 100;
     text-align: right;
+    padding-top: 0;
 }
 </style>
 

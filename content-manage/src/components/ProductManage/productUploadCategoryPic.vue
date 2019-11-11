@@ -296,6 +296,7 @@ export default {
     width: 100%;
     z-index: 100;
     text-align: right;
+    padding-top: 0;
 }
 .avatar-uploader .el-upload i {
     color: #00c1de;
