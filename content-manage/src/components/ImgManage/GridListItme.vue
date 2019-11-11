@@ -5,7 +5,7 @@
             @mousemove="handleMouseMove"
             @mouseleave="handleMouseLeave"
             class="img-item"
-            :style="{background: 'url(' + (curItem.fullOssUrl +'?x-oss-process=image/resize,m_lfit,h_400,w_400' ) + ') no-repeat center',backgroundSize:'cover'}"
+            :style="{background: 'url(' + (curItem.fullOssUrl) + ') no-repeat center',backgroundSize:'cover'}"
         >
             <span class="img-wrap">
                 <div :class="{ mask:isMaskShow }"></div>

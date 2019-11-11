@@ -378,7 +378,6 @@ export default {
                 this.formatSize = this.bytesToSize(fileSize, 1);
                
             };
-
             fileReader.onerror = function() {
                 this.error(
                     "FileReader onerror was triggered, maybe the browser aborted due to high memory usage."
@@ -386,7 +385,6 @@ export default {
             };
         },
         limitCount(file) {
-           
             if (this.uploadType === "Video"){
                  this.checkFormat(file, videoFormat);
             }
@@ -396,7 +394,7 @@ export default {
                
             if (this.uploadType === "File") {
                  this.checkFormat(file, forbidUpload);
-                if (this.fileList.length <= 100) {
+                if (this.fileList.length < 100) {
                     if (file.size / 1024 / 1024 > 50) {
                         this.$notify({
                             customClass: "notify-error",
@@ -601,7 +599,9 @@ export default {
     display: flex;
     align-items: center;
 }
-
+.uploader-list /deep/ .uploader-file-name .file-info p {
+    padding-right: 12px;
+}
 .chunkUpload-select-tree /deep/ .el-input--small .el-input__inner {
     height: 40px;
     line-height: 40px;

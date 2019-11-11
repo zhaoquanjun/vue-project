@@ -1,6 +1,6 @@
 <template>
     <div id="asideTree" class="aside-tree">
-        <el-scrollbar>
+        <div class="el-scrollbar" v-scrollBar>
             <el-tree
                 :data="treeResult"
                 node-key="id"
@@ -30,7 +30,9 @@
                         <i class="iconfont icontuodongdian"></i>
                     </button>
                     <div class="node-label-wrap" :class="{'label-weight':node.data.level<=1}">
-                        <span class="node-label">{{data.label}}</span>
+                        <el-tooltip :disabled="data.label.length < 8" effect="dark" :content="data.label" placement="top">
+                            <span class="node-label">{{data.label}}</span>
+                        </el-tooltip>
                         <span v-if="!isProduct">({{data.inUseSum }})</span>
                     </div>
                     <span
@@ -42,7 +44,7 @@
                     </span>
                 </div>
             </el-tree>
-        </el-scrollbar>
+        </div>
         <div
             class="category-name-pic"
             :class="{upload:isProduct}"

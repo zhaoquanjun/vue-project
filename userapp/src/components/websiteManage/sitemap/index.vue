@@ -446,6 +446,7 @@ export default {
         this.addShow = false;
         this.getList();
       }
+      this.$refs.multipleTable.clearSelection();
     },
     // 删除
     async remove(idList) {
@@ -592,6 +593,7 @@ export default {
     },
     closeAddDialog() {
       this.addShow = false;
+      this.$refs.multipleTable.clearSelection();
     },
     addSearch() {
       this.getAddList();

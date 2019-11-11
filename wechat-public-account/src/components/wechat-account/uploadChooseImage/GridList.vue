@@ -1,6 +1,6 @@
 <template>
     <div class="table-wrap" id="img-list" style="overflow: auto;">
-        <ul class="img-list">
+        <ul v-if="imgPageResult && imgPageResult.list && imgPageResult.list.length > 0" class="img-list">
             <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
                 <grid-list-item
                     :isSelected="isSelected(item)"
@@ -15,7 +15,7 @@
             </li>
         </ul>
         <div v-if="imgPageResult && imgPageResult.list && imgPageResult.list.length<1">
-                <div class="empty-table" style="margin-top: 400px">
+                <div class="empty-table">
                     <img src="~img/table-empty.png" />
                     <p>无数据</p>
                 </div>

@@ -18,6 +18,7 @@
 
             <el-table-column width="300" prop="name" label="产品标题">
                 <template slot-scope="scope">
+                    <span class="isTop" v-show="scope.row.isTop">置顶</span>
                     <div style="display: flex; align-items: center;" @click="preview(scope.row.id, scope.row.defaultSiteId)">
                         <img v-if="scope.row.thumbnailPicUrlList.length"
                              :src="scope.row.thumbnailPicUrlList[0]+'?x-oss-process=image/resize,m_lfit,h_40,w_40'"
@@ -33,7 +34,7 @@
             </el-table-column>
 
             <el-table-column prop="productCategoryList"  min-width="100" label="分类" show-overflow-tooltip>
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                        <span style="margin-right: 5px;">分类</span> <el-tooltip content="一个产品最多可属于5个分类" effect="dark" placement="right">
                                <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
@@ -57,11 +58,11 @@
                 </template>
             </el-table-column>
 
-            <el-table-column min-width="100" prop="isTop" label="置顶">
+            <!-- <el-table-column min-width="100" prop="isTop" label="置顶">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
 
             <el-table-column min-width="100" prop="createTimeStr" label="创建时间"></el-table-column>
 
@@ -205,8 +206,7 @@ export default {
                 { name: row.isTop ? "取消置顶" : "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ];
-            this.$refs.operateSection.style.left =
-                ev.pageX - ev.offsetX + 16 + "px";
+            this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
             // if (this.$refs.operateSection.style.display == "block") {

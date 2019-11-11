@@ -774,7 +774,8 @@ export default {
                 isAllowComment: true,
                 defaultSiteId: 0
             };
-            this.detailData = {...this.detailData,...detailData}
+            this.detailData = {...this.detailData,...detailData};
+            document.getElementsByClassName("ql-editor")[0].innerHTML = "";
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
@@ -887,6 +888,7 @@ export default {
     width: 100%;
     z-index: 100;
     text-align: right;
+    padding-top: 0;
 }
 .el-form-item__error {
     color: #262626;
@@ -905,7 +907,8 @@ export default {
 <style scoped>
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
-    min-height: 400px;
+    height: 400px;
+    overflow: hidden;
 }
 .el-textarea /deep/ .el-input__count {
     background: #fff;
@@ -941,7 +944,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100000;
+    z-index: 2000;
     .ql-editor{
         height: 100%;
     }

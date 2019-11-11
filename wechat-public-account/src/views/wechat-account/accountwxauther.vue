@@ -220,11 +220,11 @@ export default {
           notify(this,'请选择推广域名', 'error')
           return
         } else if (this.isResolve != 2) {
-          notify(this,'请先在完成域名解析', 'error')
+          // notify(this,'请先在完成域名解析', 'error')
           return
         }
         let data = await setPromotionUrl({siteId: this.siteId, domain:this.domainName})
-        if(data && data.data == 'success') {
+        if(data &&  data.status == 200) {
           this.step = 3
           var t1=window.setInterval(()=> {
             if(this.percentage >= 100) {
@@ -240,7 +240,6 @@ export default {
             }
           }, 600);
         } else {
-          this.isShowPopup = false
           notify(this,'推广域名设置失败', 'error')
         }
       }
@@ -293,7 +292,7 @@ export default {
         let data = getLocal("transitTips")
         if(data) {
           this.authTipText = data.data;
-          if (data.status == 200) {
+          if (data.data == 'success') {
             this.authStatus = 2
             this.authTipText = ''
           } else {
