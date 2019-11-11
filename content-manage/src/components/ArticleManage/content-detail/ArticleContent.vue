@@ -776,7 +776,7 @@ export default {
 @import "../../style/contentDetailCommon.css";
 .quill-editor /deep/ .ql-container {
     height: 420px;
-    overflow: auto;
+    overflow: hidden;
 }
 .el-textarea /deep/ .el-input__count {
     background: #fff;
