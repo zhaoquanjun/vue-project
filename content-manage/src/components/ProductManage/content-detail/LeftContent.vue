@@ -774,7 +774,8 @@ export default {
                 isAllowComment: true,
                 defaultSiteId: 0
             };
-            this.detailData = {...this.detailData,...detailData}
+            this.detailData = {...this.detailData,...detailData};
+            document.getElementsByClassName("ql-editor")[0].innerHTML = "";
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
