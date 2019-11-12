@@ -5,11 +5,9 @@ import environment from "@/environment/index.js"
  * 获取个人信息含权限
  */
 export const getUserPolicy = (userId) => {
-    console.log(userId, '获取用户的policy');
     let params = {
         userId: userId
     };
-    console.log(userId,'获取用户的policy');
     return ajaxRequest.get('/api/v1/userInfo/GetUserPolicy', params);
 }
 /**

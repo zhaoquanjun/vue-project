@@ -718,8 +718,8 @@ export default {
         },
         getEditorImg() {
             // 获取选中的图片信息 有两种方式
-
             this.isModalShow = false;
+             this.$refs.imgList.clearSelectedList()
             this.insertEditorImg(this.imgData);
         },
         insertEditorImg(imgFiles) {

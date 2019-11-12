@@ -139,6 +139,8 @@ export default {
             }
             this.$emit("handleSelectionChange", this.seletedList);
         },
+
+       
         // 判断是否被选中
         isSelected(item) {
             for(let i = 0; i < this.seletedList.length; i++){

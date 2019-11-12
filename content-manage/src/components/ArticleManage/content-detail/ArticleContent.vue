@@ -103,7 +103,7 @@
                                     <i class="iconfont iconguanbi"></i>
                                 </span>
                             </el-header>
-                            <videoManage ref="imgList" :multiple="false" @getCheckedList="getCheckedList">
+                            <videoManage  :multiple="false" @getCheckedList="getCheckedList">
                                 <div slot="modal-footer" class="modal-footer">
                                     <button @click="cancelgetVideo" class="cancel">取消</button>
                                     <button @click="getVideoOssUrl" class="sure">确定</button>
@@ -646,10 +646,8 @@ export default {
             this.imgData = info;
         },
         getEditorImg() {
-            // 获取选中的图片信息 有两种方式
-            //console.log(this.imgData, "imgData");
-            //console.log(this.$refs.imgList.selectedImg, "selectedImg");
             this.isModalShow = false;
+             this.$refs.imgList.clearSelectedList()
             this.insertEditorImg(this.imgData);
         },
         insertEditorImg(imgFiles) {
