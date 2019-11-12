@@ -398,7 +398,7 @@ export default {
                     if (file.size / 1024 / 1024 > 50) {
                         this.$notify({
                             customClass: "notify-error",
-                            message: `单个${this.displayName}不允许超过50M`,
+                            message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
                             duration: 1500,
                             showClose: false
                         });
@@ -413,7 +413,7 @@ export default {
                 } else {
                     this.$notify({
                         customClass: "notify-error",
-                        message: `单个${this.displayName}一次最多上传100个文件`,
+                        message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
                         duration: 1500,
                         showClose: false
                     });
