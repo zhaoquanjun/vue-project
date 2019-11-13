@@ -97,11 +97,11 @@
      }
   .el-carousel__item.is-animating{
         display: flex;
-        align-items: center;
+        align-items: top;
         justify-content: center;
     } 
     .el-carousel__item.is-animating h3{
-       height: 100%;
+       height: calc(100% - 60px);
        display: flex;
        align-items: center;
     }
@@ -117,6 +117,7 @@
   .el-dialog__wrapper{
         display: flex;
         align-items: center;
+        overflow: hidden;
     }
     .el-dialog__wrapper::-webkit-scrollbar{
         width: 0;

@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { defaultRoutes } from "./routes"
-import { getLocal } from "@/libs/local"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
 import { getCookie } from "@/libs/cookie";
@@ -10,6 +9,13 @@ import environment from "@/environment/index.js"
 Vue.use(VueRouter);
 let router = new VueRouter({
   mode: "history",
+  scrollBehavior(to, from, saveTop){
+    if (saveTop) {
+        return saveTop;
+    } else {
+        return {x: 0, y: 0}
+    }
+  },
   base: process.env.BASE_URL,
   routes: defaultRoutes
 });
