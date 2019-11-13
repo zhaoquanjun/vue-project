@@ -124,7 +124,7 @@
                     ></el-button>
                     <el-carousel-item>
                         <h3>
-                            <img width="100%" :src="fullOssUrl" />
+                            <img style="max-width: 100%;max-height: 100%;width: auto;" :src="fullOssUrl" />
                         </h3>
                     </el-carousel-item>
                     <el-button

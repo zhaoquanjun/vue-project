@@ -344,6 +344,7 @@ export default {
         this.menuDetail.behaviorBody.newsMsg = [];
         this.menuDetail.behaviorBody.customMenuRedirectMsg = {};
       }
+      this.isCanAdd = true
     },
     _handleChangeBehaviorType(val) {
       this.menuDetail.behaviorType = val
@@ -477,7 +478,6 @@ export default {
       this.isCanAdd = false
       if (level == 1 && order == 1) {
         if(!this.menuDetail.name) {
-          notify(this, '请完善菜单信息', "error");
           this.isCanAdd = true
           return
         }
@@ -499,7 +499,6 @@ export default {
     },
     //添加
     async addMenu (name,order,id,level) {
-      console.log('name,order,id,level',name,order,id,level)
       let flag = this.testParameters();
       let  dataObj = {};
 
@@ -508,7 +507,6 @@ export default {
         this.isCanAdd = true
         return
       }
-      console.log('00001')
       //确认是否添加第一个子菜单
       
       //前端校验
@@ -544,7 +542,6 @@ export default {
         };
         let data =  await addMenu(newMenuItem);
         if(data.status && data.status == 200 ) {
-          this.isCanAdd = true
           notify(this, '添加菜单成功', "success");
           this._getMenuTree('add')
           //添加成功，改变按钮状态
