@@ -218,3 +218,11 @@
     height: 16px;
  }
 
+
+
+ .ql-snow.ql-toolbar .ql-cloudDreamVideo
+ {
+    background:url('./quanping-2.png') no-repeat center;
+    background-size: contain;
+    height: 16px;
+ }

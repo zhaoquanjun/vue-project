@@ -323,6 +323,9 @@ import ModalContent from "@/components/ImgManage/index.vue";
 import Fullscreen from "@/assets/Fullscreen"
 Quill.register("modules/fullscreen", Fullscreen)
 
+import Video from "@/assets/quill-video"
+Quill.register(Video, true)
+
 import videoManage from "@/components/VideoManage/popupIndex.vue";
 export default {
     components: {
@@ -396,6 +399,7 @@ export default {
             metaKeyword: "",
             isNewAdd: false,
             selectRangeIndex: 0,
+            selectVideoRangeIndex: 0,
             videoShow: false
         };
     },
@@ -431,7 +435,7 @@ export default {
                         [{ align: [] }],
                         ["clean"],
                         ["image"], //["image", "video"],
-                        // ["video"],
+                        //["video"],
                         [{ lineheight: lineheights }],
                         [{ letterspacing: letterspacings }],
                         ['fullscreen']
@@ -670,8 +674,9 @@ export default {
             this.isModalShow = false;
         },
         videoHandler(){
-            console.log(123)
             this.videoShow = true;
+            this.videoRange = this.$refs.myQuillEditor.quill.getSelection();
+            this.selectVideoRangeIndex = this.videoRange !== null ? this.videoRange.index : 0;
         },
         getCheckedList(info) {
             this.checkedList = info;
@@ -679,9 +684,28 @@ export default {
         getVideoOssUrl() {
             if (this.checkedList.length > 0) {
                 this.videoShow = false;
-                console.log(this.checkedList)
+                console.log(this.checkedList);
+                this.insertQuillVideo(this.checkedList);
             } else {
                 Message.warning('请选择视频');
+            }
+        },
+        insertQuillVideo(videoList) {
+            if (videoList && videoList.length > 0) {
+                for (var i = 0; i < videoList.length; i++) {
+                    this.addRange = this.$refs.myQuillEditor.quill.getSelection();
+                    var videoUrl = videoList[i].videoPlayUrl;
+                    // 调用编辑器的 insertEmbed 方法，插入URL
+                    this.$refs.myQuillEditor.quill.insertEmbed(
+                        this.addRange !== null ? this.addRange.index :this.selectVideoRangeIndex,
+                        "video",
+                        {
+                            url: videoUrl,
+                            width: '100%',
+                            height: '100%'
+                        }
+                    )
+                }
             }
         },
         // 关闭图片选择弹窗
@@ -728,7 +752,7 @@ export default {
             .getModule("toolbar")
             .addHandler("image", this.imageHandler);
         // 为视频ICON绑定事件
-        // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
+        this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         //this.$refs.myQuillEditor.quill.root.addEventListener("dblclick",this.imgChangeSizeHandler,!1);
         addQuillTitle();
     },
