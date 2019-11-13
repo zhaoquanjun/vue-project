@@ -256,16 +256,31 @@ export default {
           this.manualSite[i].backupTime,
           "yyyy-MM-dd hh:mm:ss"
         );
-        this.manualSite[i].dataSize =
-          this.manualSite[i].dataSize.toFixed(5) + "M";
+        this.manualSite[i].dataSize = this.bytesToSize(
+          this.manualSite[i].dataSize * 1024 * 1024
+        );
       }
       for (var i = 0; i < this.autoSite.length; i++) {
         this.autoSite[i].backupTime = formatDateTime(
           this.autoSite[i].backupTime,
           "yyyy-MM-dd hh:mm:ss"
         );
-        this.autoSite[i].dataSize = this.autoSite[i].dataSize.toFixed(5) + "M";
+        this.autoSite[i].dataSize = this.bytesToSize(
+          this.autoSite[i].dataSize * 1024 * 1024
+        );
       }
+    },
+    bytesToSize(bytes, flag) {
+      if (bytes === 0) return "0 B";
+      let k = 1024;
+      let sizes = ["B", "K", "M", "G", "T", "P", "E", "Z", "Y"];
+      let i = Math.floor(Math.log(bytes) / Math.log(k));
+      let b = bytes / Math.pow(k, i);
+      //   if (flag === 1) {
+      b = b.toFixed(2);
+      //   }
+      let storage = b + sizes[i];
+      return storage;
     },
     /**
      * 还原站点
