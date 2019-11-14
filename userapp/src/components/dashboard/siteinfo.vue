@@ -32,7 +32,7 @@
           <span class="site-name">{{curSiteinfo.siteName}}</span>
           <span class="site-language">{{_getLanguage(curSiteinfo.language)}}</span>
           <i
-            class="iconfont iconicon-dash-edit editIcon"
+            class="iconfont iconicon-dash-edit editIcon is-circle" 
             v-show="isSystem"
             @click="changeSiteInfoShow"
           ></i>
@@ -48,12 +48,14 @@
             :href="`http://${curSiteinfo.secondDomain}`"
             target="_blank"
             v-show="curSiteTodoinfo.siteTemplate"
-          >预览</a>
+          >
+             <button class="cl-button cl-button--primary_notbg ">预览</button>
+          </a>
           <a
-            class="design-btn"
+            
             :href="`${designerUrl}?siteId=${curSiteinfo.siteId}`"
             v-show="curSiteTodoinfo.siteTemplate"
-          >设计站点</a>
+          ><button class="cl-button  cl-button--primary">设计站点</button></a>
         </div>
       </div>
       <el-row class="site-wrap">
@@ -91,7 +93,7 @@
                       target="_blank"
                     >
                       <span class="siteDomainDropItem">{{curSiteTodoinfo.resolvedDomainList[index]}}</span>
-                      <i class="iconfont iconchakan"></i>
+                      <i class="iconfont iconchakan "></i>
                     </a>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -205,7 +207,7 @@
         <div class="pannel-head">
           <span class="headTitle">新建站点</span>
           <span class="close-pannel" @click="closeCreateDialog">
-            <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+            <i class="iconfont iconguanbi " style="font-size:16px;color:#262626"></i>
           </span>
         </div>
         <div class="createSiteName">
@@ -669,7 +671,7 @@ export default {
   /* background: rgba(255, 255, 255, 1); */
   /* border: 1px solid rgba(229, 229, 229, 1); */
 }
-.radio /deep/ .is-checked .el-radio__inner {
+/* .radio /deep/ .is-checked .el-radio__inner {
   background: #00c1de;
   border-color: #00c1de;
 }
@@ -687,7 +689,7 @@ export default {
   font-weight: 400;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
-}
+} */
 </style>
 <style lang="scss" scoped>
 .content-section {
@@ -745,9 +747,9 @@ export default {
           }
         }
         .sitelist-curitem {
-          border-top: 2px solid #0595e6;
+          border-top: 2px solid $--color-primary;
           border-bottom: 1px solid transparent;
-          color: #0595e6;
+          color: $--color-primary;
         }
       }
       .sitelist-add {
@@ -851,21 +853,9 @@ export default {
           }
         }
         .preview-btn {
-          display: inline-block;
-          width: 92px;
-          height: 32px;
-          border-radius: 2px;
-          border: 1px solid rgba(9, 204, 235, 1);
-          font-size: 14px;
-          font-weight: 400;
-          color: rgba(9, 204, 235, 1);
-          line-height: 32px;
-          text-align: center;
-          vertical-align: middle;
+        
           margin-right: 16px;
-          &:hover {
-            opacity: 0.8;
-          }
+          
         }
         .design-btn {
           display: inline-block;
@@ -879,9 +869,7 @@ export default {
           line-height: 32px;
           text-align: center;
           vertical-align: middle;
-          &:hover {
-            opacity: 0.8;
-          }
+          
         }
       }
     }
@@ -974,7 +962,7 @@ export default {
                 margin-left: 16px;
                 font-size: 14px;
                 font-weight: 400;
-                color: rgba(5, 149, 230, 1);
+                color: $--color-primary;
                 line-height: 20px;
               }
             }
@@ -982,7 +970,7 @@ export default {
               .siteInfo-btn {
                 font-size: 14px;
                 font-weight: 400;
-                color: rgba(5, 149, 230, 1);
+                color: $--color-text-primary;
                 line-height: 20px;
               }
             }

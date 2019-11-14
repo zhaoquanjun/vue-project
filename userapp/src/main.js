@@ -9,8 +9,12 @@ import "./assets/reset.css";
 import "./styles/common.scss";
 import "./styles/wezhan.scss";
 import "./plugins/element-reset.scss"
-import "./styles/pop-up/pup-up.scss"
-import './icons';
+// import "./styles/pop-up/pup-up.scss"
+
+import "@/styles/theme-chalk/index.scss"
+import "@/styles/elementui-reset/index.scss"
+
+
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 import uploader from 'vue-simple-uploader'

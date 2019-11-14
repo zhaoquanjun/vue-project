@@ -1,12 +1,73 @@
+@import "./common/var.scss";
+@import "./mixins/_button.scss";
+
+.cl-button {
+    cursor: pointer;
+    min-width: $--button-medium-min-width;
+    border: $--border-base;
+    @include button-size($--button-padding-vertical, $--button-padding-horizontal, $--font-size-small, $--button-border-radius);
 
 
-
-.cl-button{
-    padding: 10px;
-    &--primary{
-        color: red;
-        &:hover{
-            color: black;
+    &--primary {
+        color: $--color-white;
+        background-color: $--button-primary-background-color;
+        &:hover {
+            background-color: $--button-hover-primary-background-color;
+        }
+        &.is-disabled{
+            cursor: not-allowed;
+            color: $--button-disabled-primary-color;
+            border-color:$--button-disabled-primary-color;
         }
     }
+
+    &--primary_notbg {
+        color: $--color-primary;
+        border-color: $--color-primary;
+        &:hover {
+            color: $--color-white;
+            background-color: $--button-primary-background-color;
+        }
+        &.is-disabled{
+            cursor: not-allowed;
+            color: $--button-disabled-primary-color;
+            border-color: $--button-disabled-primary-color;
+        }
+    }
+
+    &--disabled {
+        color: $--color-white;
+        border-color: $--button-disabled-defualt-background-color;
+        background: $--button-disabled-defualt-background-color;
+    }
+
+
+    &--text{
+        border-color: transparent;
+        color: $--button-default-font-color;
+    }
+    &--text_orange{
+        border-color: transparent;
+        color: $--button-primary-font-color;
+    }
+
+    &--text_success{
+        border-color: transparent;
+        color: $--button-success-font-color;
+    }
+
+    &--text_danger{
+        border-color: transparent;
+        color: $--button-danger-font-color;
+    }
+
+    &--medium {
+        min-width: $--button-medium-min-width;
+    }
+
+    &--small {
+        min-width: $--button-small-min-width;
+    }
+
+
 }

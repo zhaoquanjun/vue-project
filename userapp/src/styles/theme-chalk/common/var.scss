@@ -5,32 +5,33 @@
 
 // Backgorund color
 $--background-color-base: #F5F7FA !default;
-$--color-primary: #409EFF !default;
+
+$--color-primary: rgba(255, 107, 0, 1) !default;
+$--color-success: rgba(99, 220, 140, 1) !default;
+$--color-warning: rgba(254, 152, 55, 1) !default;
+$--color-danger: rgba(251, 77, 104, 1) !default;
+$--color-info: rgba(240, 243, 247, 1) !default;
 $--color-white: #FFFFFF !default;
-$--color-black: #000000 !default;
-$--color-success: #67C23A !default;
-$--color-warning: #E6A23C !default;
-$--color-danger: #F56C6C !default;
-$--color-info: #909399 !default;
+$--color-black: rgba(31, 35, 37, 1) !default;
 
 // Font  text-color 
-$--color-text-primary: #303133 !default;
-$--color-text-regular: #606266 !default;
-$--color-text-secondary: #909399 !default;
-$--color-text-placeholder: #C0C4CC !default;
+$--color-text-primary: rgba(38, 38, 38, 1) !default;
+$--color-text-regular:rgba(159, 159, 159, 1) !default;
+$--color-text-secondary: rgba(215, 216, 217, 1) !default;
+$--color-text-orange: $--color-primary !default;
 
 // Border color
-$--border-color-base: $--color-white !default;
+$--border-color-base: rgba(215, 216, 217, 1) !default;
 $--border-color-light: #E4E7ED !default;
 $--border-color-lighter: #EBEEF5 !default;
 $--border-color-extra-light: #F2F6FC !default;
-
+$--border-radius-base: 2px !default;
 
 /* Border
 -------------------------- */
 $--border-width-base: 1px !default;
 $--border-style-base: solid !default;
-$--border-color-base: $--color-text-placeholder !default;
+$--border-color-base: $--color-primary !default;
 $--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
 
 
@@ -46,8 +47,7 @@ $--font-size-extra-large: 20px !default;
 $--font-size-large: 18px !default;
 $--font-size-medium: 16px !default;
 $--font-size-base: 14px !default;
-$--font-size-small: 13px !default;
-$--font-size-extra-small: 12px !default;
+$--font-size-small: 12px !default;
 
 /* FontWeight
 -------------------------- */
@@ -63,12 +63,11 @@ $--index-popper: 2000 !default;
 
 /* Disable base
 -------------------------- */
-$--disabled-color-base: $--color-text-placeholder !default;
 
 /* Icon
 -------------------------- */
-$--icon-color: #666 !default;
-$--icon-hover-color: #666 !default;
+$--icon-color: $--color-text-primary !default;
+$--icon-hover-color: rgba(244, 245, 246, 1) !default;
 $--icon-color-base: $--color-info !default;
 
 /* Paddings
@@ -87,54 +86,17 @@ $--margin-xs: 8px;
 
 /* Button
 -------------------------- */
-/// fontSize||Font|1
+$--button-medium-min-width: 90px;
+
+$--button-small-min-width: 76px;
+
 $--button-font-size: $--font-size-base !default;
-/// fontWeight||Font|1
-$--button-font-weight: $--font-weight-primary !default;
-/// borderRadius||Border|2
+
 $--button-border-radius: $--border-radius-base !default;
-/// padding||Spacing|3
-$--button-padding-vertical: 12px !default;
-/// padding||Spacing|3
-$--button-padding-horizontal: 20px !default;
 
-/// fontSize||Font|1
-$--button-medium-font-size: $--font-size-base !default;
-/// borderRadius||Border|2
-$--button-medium-border-radius: $--border-radius-base !default;
-/// padding||Spacing|3
-$--button-medium-padding-vertical: 10px !default;
-/// padding||Spacing|3
-$--button-medium-padding-horizontal: 20px !default;
+$--button-padding-vertical: 9px !default;
 
-/// fontSize||Font|1
-$--button-small-font-size: 12px !default;
-$--button-small-border-radius: #{$--border-radius-base - 1} !default;
-/// padding||Spacing|3
-$--button-small-padding-vertical: 9px !default;
-/// padding||Spacing|3
-$--button-small-padding-horizontal: 15px !default;
-/// fontSize||Font|1
-$--button-mini-font-size: 12px !default;
-$--button-mini-border-radius: #{$--border-radius-base - 1} !default;
-/// padding||Spacing|3
-$--button-mini-padding-vertical: 7px !default;
-/// padding||Spacing|3
-$--button-mini-padding-horizontal: 15px !default;
-
-/// color||Color|0
-$--button-default-font-color: $--color-text-regular !default;
-/// color||Color|0
-$--button-default-background-color: $--color-white !default;
-/// color||Color|0
-$--button-default-border-color: $--border-color-base !default;
-
-/// color||Color|0
-$--button-disabled-font-color: $--color-text-placeholder !default;
-/// color||Color|0
-$--button-disabled-background-color: $--color-white !default;
-/// color||Color|0
-$--button-disabled-border-color: $--border-color-lighter !default;
+$--button-padding-horizontal: 22px !default;
 
 $--button-primary-border-color: $--color-primary !default;
 
@@ -142,19 +104,22 @@ $--button-primary-font-color: $--color-white !default;
 
 $--button-primary-background-color: $--color-primary !default;
 
-$--button-success-border-color: $--color-success !default;
+$--button-hover-primary-background-color: rgba(255, 122, 27, 1) !default;
 
-$--button-success-font-color: $--color-white !default;
-$--button-success-background-color: $--color-success !default;
-$--button-warning-border-color: $--color-warning !default;
-$--button-warning-font-color: $--color-white !default;
-$--button-warning-background-color: $--color-warning !default;
-$--button-danger-border-color: $--color-danger !default;
-$--button-danger-font-color: $--color-white !default;
-$--button-danger-background-color: $--color-danger !default;
-$--button-info-border-color: $--color-info !default;
-$--button-info-font-color: $--color-white !default;
-$--button-info-background-color: $--color-info !default;
+$--button-disabled-defualt-background-color: rgba(215, 216, 217, 1) !default;
 
-$--button-hover-tint-percent: 20% !default;
-$--button-active-shade-percent: 10% !default;
+$--button-disabled-primary-color:rgba(255, 196, 153, 1);
+
+
+
+
+$--button-default-font-color: $--color-text-primary !default;
+$--button-primary-font-color: $--color-primary !default;
+$--button-success-font-color:$--color-success !default;
+$--button-danger-font-color: $--color-danger !default;
+
+
+
+
+
+

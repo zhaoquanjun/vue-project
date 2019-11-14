@@ -24,37 +24,37 @@
     outline: none !important;
 }
 /* table 头部颜色 和 高度 */
-#table-list .el-table thead  th {
-    padding: 0;
-    height: 60px;
-    background: #fff !important;
-    color: #A1A8B1;
-    font-weight: 400;
-    font-size: 14px;
+// #table-list .el-table thead  th {
+//     padding: 0;
+//     height: 60px;
+//     background: #fff !important;
+//     color: #A1A8B1;
+//     font-weight: 400;
+//     font-size: 14px;
     
-}
-#table-list .el-table td{
-    border-bottom: 1px solid #e5e5e5;
-}
-#table-list{
-    .el-table td{
-        padding: 19px 0;
-    }
-    .el-table--enable-row-hover .el-table__body tr:hover>td{
-        background:rgba(248,250,252,1);
-    }
-    .el-table-column--selection{
-        .el-checkbox__inner{
-            width: 18px;
-            height: 18px;
-        }
-        .el-checkbox__inner::after{
-            left: 6px;
-            top: 3px;
-        }     
-    } 
+// }
+// #table-list .el-table td{
+//     border-bottom: 1px solid #e5e5e5;
+// }
+// #table-list{
+//     .el-table td{
+//         padding: 19px 0;
+//     }
+//     .el-table--enable-row-hover .el-table__body tr:hover>td{
+//         background:rgba(248,250,252,1);
+//     }
+//     .el-table-column--selection{
+//         .el-checkbox__inner{
+//             width: 18px;
+//             height: 18px;
+//         }
+//         .el-checkbox__inner::after{
+//             left: 6px;
+//             top: 3px;
+//         }     
+//     } 
         
-}
+// }
 /* 查看大图 弹出层 */
 #img-list-dialog{
     .el-dialog {
@@ -213,10 +213,7 @@
     border-radius: 2px;
 }
 
-.el-checkbox__input.is-checked .el-checkbox__inner,.el-checkbox__input.is-indeterminate .el-checkbox__inner,.el-switch.is-checked .el-switch__core{
-   background-color: #09CCEB;
-   border-color: #09CCEB;
-}
+
 
 // 修改 button默认样式  begin
 .el-button{

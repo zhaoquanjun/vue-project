@@ -1,0 +1,21 @@
+@import "./common/var.scss";
+
+[class^="icon-"], [class*="icon-"] {
+    width: 32px;
+    height: 32px;
+    color: $--icon-color;
+    &:hover{
+        text-align: center;
+        box-sizing: border-box;
+    }
+    &.is-circle{
+        &:hover{
+            background-color: $--icon-hover-color;
+            border-radius: 50%;
+        }
+    }
+    &.is-square{
+        background-color: $--icon-hover-color;
+        border-radius: $--border-radius-base;
+    }
+}
