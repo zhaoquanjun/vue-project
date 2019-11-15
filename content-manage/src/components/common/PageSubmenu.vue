@@ -131,7 +131,7 @@ export default {
     }
 }
 .active {
-    color: #0595e6 !important;
+   color: $--color-primary !important;
 }
 .active:hover {
     background: #fff ;

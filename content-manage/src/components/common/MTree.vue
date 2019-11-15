@@ -77,7 +77,7 @@ import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
 import { trim } from "@/utlis/index";
 export default {
     // picSearchOptions
-    props: ["treeResult", "listOptions", "isArticle", "isProduct", "isPopup" ,"isSecond"], // 与产品分类不一致的地方 picSearchOptions isPopup是否为图片弹框
+    props: ["treeResult", "listOptions", "isArticle", "isProduct", "isPopup" ,"isSecond", "isThird"], // 与产品分类不一致的地方 picSearchOptions isPopup是否为图片弹框
     components: {
         UploadCategoryPic
     },
@@ -378,6 +378,9 @@ export default {
             let content = document.getElementsByClassName("contentDialog")[0];
             if(this.isSecond){
                 content = document.getElementsByClassName("contentDialog")[1];
+            }
+            if(this.isThird){
+                content = document.getElementsByClassName("contentDialog")[2];
             }
             let contentW = parseFloat(getComputedStyle(content).width);
             let contentH = parseFloat(getComputedStyle(content).height);

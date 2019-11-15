@@ -890,19 +890,7 @@ export default {
     text-align: right;
     padding-top: 0;
 }
-.el-form-item__error {
-    color: #262626;
-    &::before {
-        display: inline-block;
-        content: "";
-        width: 13px;
-        height: 13px;
-        vertical-align: -2px;
-        padding-right: 8px;
-        background: url("~img/jian-icon.png") no-repeat center;
-        background-size: contain;
-    }
-}
+
 </style>
 <style scoped>
 @import "../../style/contentDetailCommon.css";

@@ -137,13 +137,5 @@ export default {
     font-weight:600;
     padding-bottom: 24px;
 }
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    &:hover{
-        opacity: 0.8;
-    }
-}
+
 </style>

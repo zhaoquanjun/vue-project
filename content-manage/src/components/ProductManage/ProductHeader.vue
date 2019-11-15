@@ -74,7 +74,7 @@
                 </div>
                 <div class="head-item head-handle-btn">
                     <!-- <button class="btn-lightblue btn-small" @click="importArticle">导入产品</button> -->
-                    <button class="add-article btn-lightblue btn-small" @click="addArticle">新增产品</button>
+                    <button class="cl-button cl-button--primary" @click="addArticle">新增产品</button>
                 </div>
             </div>
         </template>
@@ -319,13 +319,5 @@ export default {
         }
     }
 }
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    &:hover{
-        opacity: 0.8;
-    }
-}
+
 </style>

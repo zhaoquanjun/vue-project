@@ -77,7 +77,7 @@
             </div>
             <div class="head-item head-right">
                 <button
-                    class="btn-lightblue btn-small upload-wrap"
+                    class="cl-button cl-button--primary"
                     @click="switchUploadBoxShowStatus"
                 >上传{{displayName}}</button>
             </div>
@@ -312,15 +312,7 @@ export default {
         border-radius:4px;
     }
 }
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-        &:hover{
-        opacity: 0.8;
-    }
-}
+
 .upload-wrap{
     &:hover{
         opacity: 0.8;

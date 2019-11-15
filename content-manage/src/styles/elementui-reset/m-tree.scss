@@ -99,7 +99,7 @@
 
 
     .el-tree .el-tree__drop-indicator{
-        background: #0595E6 !important;
+        background: $--color-primary !important;
         height: 2px !important;
         left: 0 !important;
     }
@@ -127,7 +127,7 @@
     .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
        
         background: #F8FAFC;
-        border-left: 3px solid #0595E6;
+        border-left: 3px solid $--color-primary;
     }
     .el-tree > :first-child > .el-tree-node__content .set-tree-type ,.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .set-tree-type{
         background: #F8FAFC

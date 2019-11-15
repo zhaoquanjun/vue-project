@@ -7,7 +7,7 @@
         <div>时长</div>
         <div>上传时间</div>
       </div>
-      <div v-show="imgPageResult.list && imgPageResult.list.length > 0">
+      <div v-show="imgPageResult.list && imgPageResult.list.length > 0" style="overflow:hidden">
         <ul class="tableList">
           <li
             v-for="(item, i) in imgPageResult.list"
@@ -50,7 +50,7 @@
           </li>
         </ul>
       </div>
-      <div v-show="imgPageResult.list && imgPageResult.list.length < 0" class="empty-table">
+      <div v-show="imgPageResult.list && imgPageResult.list.length == 0" class="empty-table">
         <img src="~img/table-empty.png" />
         <p>无数据</p>
       </div>
@@ -349,6 +349,7 @@ export default {
   }
   .tableList {
     height: 486px;
+    margin-right: -15px;
     overflow-y: auto;
     .tableListItem {
       height: 160px;
@@ -545,6 +546,7 @@ export default {
     margin-top: 0;
     padding-bottom: 0;
     margin-left: auto;
+    margin-right: 0;
   }
 }
 
