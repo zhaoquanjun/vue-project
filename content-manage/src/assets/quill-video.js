@@ -13,8 +13,8 @@ export default class Video extends BlockEmbed {
     node.setAttribute('webkit-playsinline', true);
     node.setAttribute('playsinline', true);
     node.setAttribute('x5-playsinline', true);
-    let container = document.createElement('div');
-    container.setAttribute('class', 'ssjlkfajklj');
+    let container = document.createElement('p');
+    container.setAttribute('class', 'ql-dragHandler');
     let qlEditor=document.getElementsByClassName('ql-editor');
     //if(document.getElementsByClassName('ssjlkfajklj')==undefined){
       qlEditor[0].append(container);
@@ -33,5 +33,5 @@ export default class Video extends BlockEmbed {
 }
 
 Video.blotName = 'video';
-Video.className = 'ql-video';
+Video.className = 'ql-video-content';
 Video.tagName = 'video';

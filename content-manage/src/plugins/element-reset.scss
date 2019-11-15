@@ -230,6 +230,7 @@
 
 // 侧边分类树节点
 .aside-tree{
+    height: calc(100vh - 200px);
     .el-tree .el-tree__drop-indicator{
         background: #0595E6 !important;
         height: 2px !important;
@@ -280,7 +281,7 @@
         // overflow: auto
     }
     .el-scrollbar{
-        height: calc(100vh - 200px);
+        height: 100%;
     }
 }
 
