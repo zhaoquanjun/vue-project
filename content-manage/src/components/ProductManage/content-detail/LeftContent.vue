@@ -930,8 +930,8 @@ export default {
                         "video",
                         {
                             url: videoUrl,
-                            width: '80%',
-                            height: '80%'
+                            width: 'auto',
+                            height: 'auto'
                         }
                     );
                     this.videoAddDragEvent();
