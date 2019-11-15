@@ -1,0 +1,30 @@
+
+
+.el-table{
+    border: 1px solid #EEEEEE; 
+     position: relative;
+    color: rgba(38, 38, 38, 1);
+}
+.el-table thead th > .cell {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(159, 159, 159, 1);
+   
+}
+.el-table tbody .el-table__row .cell{
+    display: flex;
+    align-items: center;
+}
+.el-table thead th,.el-table tbody td{
+    padding: 8px 0;
+}
+.el-table--enable-row-hover .el-table__body tr:hover>td{
+    background: rgba(249, 249, 249, 1);
+}
+
+.el-table .el-table__body-wrapper .el-table__row .cell span{
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

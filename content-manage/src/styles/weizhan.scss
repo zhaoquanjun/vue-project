@@ -1,10 +1,9 @@
 #content-manage {
-  
-    margin-top: 24px;
+
     .tree-aside {
         width: 220px !important;
         background: #fff;
-        margin: 0 24px 0 32px;
+        margin: 20px 24px 0 32px;
         border: 1px solid #E5E5E5;
         border-radius: 2px;
     }
@@ -13,153 +12,13 @@
         padding-bottom: 38px;
       
     }
-   
-    .content-table-wrap{
-        height: calc(100vh);
-       
-    }
-
-
-    .pannle-footer {
-        // position: absolute;
-        // bottom: 17px;
-        width: 100%;
-        border-top: 1px solid #eee;
-        padding: 17px 17px 0 17px;
-        box-sizing: border-box;
-        button,span {
-            cursor: pointer;
-            display: inline-block;
-            width: 66px;
-            height: 32px;
-            line-height: 32px;
-            background: #09CCEB;
-            margin-right: 8px;
-            color: #fff;
-            text-align: center;
-        }
-        .cancel{
-            color: #262626;
-            background:#E5E5E5;
-        }
-    }
-}
-.ym-form-item__error {
-    color: #262626;
-    padding-top: 8px;
-    &::before {
-        display: inline-block;
-        content: "";
-        width: 13px;
-        height: 13px;
-        vertical-align: -2px;
-        padding-right: 8px;
-        background: url("~img/jian-icon.png") no-repeat center;
-        background-size: contain;
-    }
-}
-.pannle-footer {
-    // position: absolute;
-    // bottom: 17px;
-    width: 100%;
-    border-top: 1px solid #eee;
-    padding: 17px 17px 0 17px;
-    box-sizing: border-box;
-    button,span {
-        cursor: pointer;
-        display: inline-block;
-        width: 66px;
-        height: 32px;
-        line-height: 32px;
-        background: #09CCEB;
-        margin-right: 8px;
-        color: #fff;
-        text-align: center;
-    }
-    .cancel{
-        color: #262626;
-        background:#E5E5E5;
-    }
-}
-.el-table::before{
-    height: 0;
-}
-.table-wrap {
-    margin-right: 16px;
-    background: #fff;
-}
-.content-table {
-    width: 100%;
-    box-sizing: border-box;
-    background: #fff;
-    color: #262626;
-    border:1px solid #e5e5e5;
 }
 
-.mask {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    z-index: 100;
-    background: #000;
-    width: 100%;
-    height: 100%;
-    opacity: 0.5;
-}
 
-// 右侧面板弹窗面板底部按钮
-.modal-footer {
-    padding-top: 20px;
-    float: right;
-    button {
-        width: 66px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        margin-right: 8px;
-        color: #fff;
-    }
-    .cancel {
-        color: #262626;
-        background: rgba(238, 238, 238, 1);
-    }
-}
-// table 无内容时的样式
-.empty-table {
-    text-align: center;
-    img {
-        margin-top: 160px;
-        width: 80px;
-        vertical-align: middle;
-        padding: 18px 28px;
-    }
-    p {
-        color: #8c8c8c;
-    }
-}
-// table 操作按钮
-.handle-btn-wrap {
-    width: 70%;
-    display: flex;
-    justify-content: space-between;
-    // .iconfont:hover{
-    //     color: #09CCEB;
-    // }
-    .handle-btn {
-        // width: 16px;
-        // height: 16px;
-        position: relative;
-    }
-    .move-btn {
-        background: url("~img/move.png") no-repeat center;
-        background-size: 100%;
-        &:hover {
-            background: url("~img/move-selected.png") no-repeat center;
-            background-size: 100%;
-        }
-    }
-}
+
+
+
+
 //内容管理 table 封面 begin
 .cover {
     width: 32px;
@@ -171,98 +30,17 @@
 }
 
 
-// icon 统一颜色
-.iconyiwen{
-    color: #A1A8B1
-}
 
-.ellipsis{
-    display: inline-block;
-    overflow: hidden;/*超出部分隐藏*/
-    text-overflow:ellipsis;/* 超出部分显示省略号 */
-    text-overflow:ellipsis;/* 超出部分显示省略号 */
-    white-space: nowrap;/*规定段落中的文本不进行换行 */
-}
-.cursor-p{
-    cursor: pointer;
-}
-.flexSpace{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+
+
+
+
+
+.fs14{
+    font-size: 14px
 }
 
 
-#content {
-    white-space:normal;
-    position: fixed;
-    width: 80%;
-    min-width: 800px;
-    max-width: 1200px;
-    height: 710px;
-    margin: auto;
-    z-index: 100;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
-    overflow: hidden;
-    border-radius: 5px;
-    background: #fff;
-    .content-table{
-        height: 300px;
-    }
-    .img-list{
-        height: 400px;
-        overflow-y: auto;
-    }
-    .head-middle{
-        padding-right: 16px;
-    }
-    .el-dialog{
-        margin-top: 10px !important;
-    }
-    .el-table--scrollable-y .el-table__body-wrapper{
-        height: 300px !important;
-    }
-    .upload-img .upload-btn{
-        // top: 90px !important;
-    }
-    #content-manage .tree-aside{
-        overflow: hidden;
-    }
-    .el-tree > :first-child >.el-tree-node__children{
-        height:480px;
-        overflow: auto
-    }
-       
-}
-#content .el-container {
-    padding-bottom: 25px;
-    background: #fff;
-    
-    height: 90%;
-}
+/// 新增 11.15
 
-#content .el-dialog__body {
-    padding-top: 0;
-  
-}
-#content .modal-header {
-    height: 30px;
-    background: rgb(255, 255, 255);
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #e8eaf3;
-}
-
-#content li::before {
-    display: none;
-    content: '';
-}
-
-#content .el-pagination .el-pager li {
-    padding: 0 !important;
-}

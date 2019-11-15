@@ -128,7 +128,7 @@ export default {
 
 
 <style  lang="scss" scoped>
-@import "@/styles/manage-head.scss";
+@import "@/styles/content-manage/manage-head.scss";
 .head-middle {
     padding-right: 0;
 }

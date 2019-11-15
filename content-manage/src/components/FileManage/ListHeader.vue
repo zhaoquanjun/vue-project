@@ -304,7 +304,7 @@ export default {
 
 
 <style  lang="scss" scoped>
-@import "@/styles/manage-head.scss";
+@import "@/styles/content-manage/manage-head.scss";
 .btn-black-notboard{
     padding: 6px;
     &:hover{

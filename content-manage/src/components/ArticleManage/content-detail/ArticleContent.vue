@@ -261,15 +261,6 @@
                 </el-collapse>
             </div>
         </el-form>
-
-        <!-- 
-
-                 <el-form-item>
-        <el-button type="primary" @click="submitForm('articleDetail')">立即创建</el-button>
-        <el-button @click="resetForm('articleDetail')">重置</el-button>
-        <el-button type="primary" @click="editArticle('articleDetail')">编辑保存</el-button>
-      </el-form-item>
-        -->
     </div>
 </template>
 <script>
@@ -742,11 +733,6 @@ export default {
         }
     },
     mounted() {
-
-
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
         this.$refs.myQuillEditor.quill
             .getModule("toolbar")
@@ -820,7 +806,7 @@ export default {
 }
 </style>
 
-<style >
+<style lang="scss">
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
@@ -907,9 +893,7 @@ export default {
 #videoContent .el-dialog__body {
     padding-top: 0;
 }
-// #videoContent /deep/ .el-footer {
-//     border-top: 1px solid #EEEEEE;
-// }
+
 .modal-footer {
     float: right;
     height: 88px;

@@ -4,8 +4,6 @@
             <h4 class="pic-type-title">
                 <span>{{displayName}}分类</span>
             </h4>
-            <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
-            <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree
                 ref="myTree"
                 :tree-result="treeResult"
@@ -709,20 +707,7 @@ export default {
         background: #35b24b;
     }
 }
-.el-form-item__error {
-    color: #262626;
-    padding-top: 8px;
-    &::before {
-        display: inline-block;
-        content: "";
-        width: 13px;
-        height: 13px;
-        vertical-align: bottom;
-        padding-right: 8px;
-        background: url("~img/jian-icon.png") no-repeat center;
-        background-size: contain;
-    }
-}
+
 </style>
 
 

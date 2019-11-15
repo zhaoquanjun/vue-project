@@ -11,6 +11,7 @@
     &--primary {
         color: $--color-white;
         background-color: $--button-primary-background-color;
+        border-color: $--button-primary-background-color;
         &:hover {
             background-color: $--button-hover-primary-background-color;
         }

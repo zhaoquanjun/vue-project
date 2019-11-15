@@ -287,7 +287,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 .operate-section{
     display: block ;
 }

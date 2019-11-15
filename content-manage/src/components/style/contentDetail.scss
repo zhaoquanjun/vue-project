@@ -1,7 +1,6 @@
 // 文章 产品详情 
 // 设置的关键词 
 .keyword-list {
-    // position: absolute;
     display: inline-block;
     z-index: 1;
     top: 50px;
@@ -11,14 +10,6 @@
     padding: 5px;
     box-sizing: border-box;
     li {
-        // word-break: break-all;
-        // display: inline-block;
-        // padding: 5px 10px;
-        // margin: 0 5px 8px;
-        // background: #609ee9;
-        // border-radius: 30px;
-        // font-size: 12px;
-        // color: #fff;
         position: relative;
         word-break: break-all;
         cursor: pointer;
@@ -31,7 +22,6 @@
         vertical-align: top;
         background-color: #609ee9;
         border-radius: 16px;
-        // border: 1px #609ee9 solid;
         color: #FFF;
         overflow: hidden;
     
@@ -45,12 +35,9 @@
             bottom: 1px;
             min-height: 21px;
             height: 100%;
-           
             margin-left: 6px;
             padding: 0px 10px;
-            // border-left: 1px #5C9AE6 solid;
             display: block;
-            // border-radius: 0 20px 20px 0;
             overflow: hidden;
             font-size: 16px;
         }
@@ -73,9 +60,6 @@
         font-size: 18px;
         border-bottom: 1px solid #e5e5e5;
     }
-}
-.title-item {
-    padding: 28px 0 12px 12px;
 }
 
 
@@ -101,13 +85,7 @@
         padding-bottom: 0;
     }
 }
-// .select-sort {
-//     display: inline-block;
-//     width: 117px;
-//     box-sizing: border-box;
-//     height: 32px;
-//     margin: 0 0 0 7px;
-// }
+
 .select-sort{
     padding-left: 16px;
 }
@@ -115,9 +93,7 @@
     width: 300px;
     height: auto;
 }
-.quill-editor {
-    //height: 500px;
-}
+
 .ql-container {
     height: 400px;
     overflow: auto;

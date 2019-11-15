@@ -120,18 +120,6 @@
                 @close="closeDialog"
             >
                 <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
-                <!-- <div class="dislog-footer" slot="footer">
-                       <el-tooltip
-                            class="item"
-                            effect="light"
-                            :content="picInfo.title"
-                            placement="top"
-                        >
-                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
-                        </el-tooltip>
-                    <span>大小: {{picInfo.sizeStr}}</span>
-                    <span>格式: {{(picInfo.fileExtension)}}</span>
-                </div> -->
             </el-dialog>
         </div>
     </div>
@@ -327,9 +315,10 @@ export default {
     display: flex;
     align-items: center;
 }
+
 </style>
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 .file-title {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -364,15 +353,7 @@ export default {
             border-radius: 50%;
             transform: translate(-50%, -50%);
             background: url("~img/cover.png") no-repeat center;
-            // span {
-            //     width: 0;
-            //     height: 0;
-            //     margin: 9px 0 0 14px;
-            //     border-top: 8px solid transparent;
-            //     border-right: 10px solid transparent;
-            //     border-bottom: 8px solid transparent;
-            //     border-left: 10px solid #fff;
-            // }
+          
         }
     }
 }

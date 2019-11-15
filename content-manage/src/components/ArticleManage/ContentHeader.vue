@@ -73,7 +73,6 @@
                     </button>
                 </div>
                 <div class="head-item head-handle-btn">
-                    <!-- <button @click="importArticle">导入文章</button> -->
                     <button class="btn-lightblue btn-small add-article" @click="addArticle">新增文章</button>
                 </div>
             </div>
@@ -249,15 +248,9 @@ export default {
     }
 };
 </script>
-<style>
-
-.seachInput .el-input__inner {
-    font-size: 12px;
-}
-</style>
 
 <style lang="scss" scoped>
-@import "@/styles/manage-head.scss";
+@import "@/styles/content-manage/manage-head.scss";
 
 .btn-black-notboard{
     padding: 6px;

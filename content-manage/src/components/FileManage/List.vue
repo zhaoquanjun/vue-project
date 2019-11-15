@@ -372,7 +372,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 .file-cover{
     width:22px;
 height:28px;
