@@ -13,6 +13,12 @@ export default class Video extends BlockEmbed {
     node.setAttribute('webkit-playsinline', true);
     node.setAttribute('playsinline', true);
     node.setAttribute('x5-playsinline', true);
+    let container = document.createElement('div');
+    container.setAttribute('class', 'ssjlkfajklj');
+    let qlEditor=document.getElementsByClassName('ql-editor');
+    //if(document.getElementsByClassName('ssjlkfajklj')==undefined){
+      qlEditor[0].append(container);
+    //}
     return node;
   }
 
