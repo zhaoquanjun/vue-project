@@ -116,17 +116,6 @@
             <div class="content-item set-article">
                 <el-collapse v-model="activeName" accordion>
                     <el-collapse-item title="文章设置" name="1">
-                        <!--<el-form-item label="时间">
-                            <el-col :span="11">
-                                <el-form-item prop="createTime">
-                                    <el-date-picker type="datetime"
-                                                    v-model="articleDetail.createTime"
-                                                    placeholder="选择日期时间"
-                                                    style="width: 100%;"></el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                        </el-form-item>-->
-
                         <el-form-item label="时间">
                             <div>
                                 <div style="float:left">
@@ -166,44 +155,8 @@
                             </div>
                         </el-form-item>
 
-                        <!-- <el-form-item style="position:relative" label="搜索关键词" prop="searchKeywords">
-                            <el-tooltip class="item" effect="dark" placement="right">
-                                <div slot="content">
-                                    网站使用了搜索控件时，将使该网站的搜索
-                                    <br />结果更加准确，一篇文章最多可以设置5个关键词
-                                </div>
-                                <i class="iconfont iconyiwen"></i>
-                            </el-tooltip>
-                            <ul class="keyword-list" ref="keywordList">
-                                <li
-                                    v-for="(item,index) in articleDetail.searchKeywords"
-                                    :key="index"
-                                >
-                                    {{item}}
-                                    <i
-                                        class="el-icon-close"
-                                        @click.stop="removeCurKeyWord(index)"
-                                    ></i>
-                                </li>
-                                <el-input
-                                    maxlength="10"
-                                    ref="keywordInput"
-                                    placeholder="每个关键词之间用回车键分离"
-                                    v-model="keywordValue"
-                                    @keyup.enter.native="keywords(keywordValue)"
-                                    @blur="keywordsBlur(keywordValue)"
-                                ></el-input>
-                            </ul>
-                            <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
-                        </el-form-item> -->
                         <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="articleDetail.isTop"></el-switch>
-                            <!-- <span
-                                style=" font-size: 14px; color: #606266;
-    vertical-align: middle;
-    padding:0  16px 0 32px ;"
-                            >仅登录用户可访问</span>
-                            <el-switch v-model="articleDetail.isLoggedInCanView"></el-switch> -->
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -245,31 +198,11 @@
                             <div class="el-form-item__error" v-if="isOutSeo">每篇文章最多填写5个关键词！</div>
                             <!-- <el-input placeholder="SEO关键词" v-model="articleDetail.metaKeywords"></el-input> -->
                         </el-form-item>
-
-                        <!-- <el-form-item label="文章描述" prop="metaDescription">
-                            <el-input
-                                type="textarea"
-                                :rows="5"
-                                placeholder
-                                v-model="articleDetail.metaDescription"
-                            ></el-input>
-                        </el-form-item>-->
-                        <!-- <el-form-item label="自定义地址" prop="metaDescription">
-                        <el-input placeholder="请输入自定义地址" v-model="articleDetail.metaDescription"></el-input>
-                        </el-form-item>-->
                     </el-collapse-item>
                 </el-collapse>
             </div>
         </el-form>
 
-        <!-- 
-
-                 <el-form-item>
-        <el-button type="primary" @click="submitForm('articleDetail')">立即创建</el-button>
-        <el-button @click="resetForm('articleDetail')">重置</el-button>
-        <el-button type="primary" @click="editArticle('articleDetail')">编辑保存</el-button>
-      </el-form-item>
-        -->
     </div>
 </template>
 <script>
@@ -408,7 +341,6 @@ export default {
     },
     created() {
         let start = new Date();
-        // console.log(this.$route.query)
         var id = this.$route.query.id;
         this.articleDetail.categoryId = this.$route.query.categoryId;
         if (id != null || id != undefined) {
@@ -529,6 +461,7 @@ export default {
             document.getElementsByClassName("ql-editor")[0].innerHTML = this.articleDetail.contentDetail;
             this.articleDetail.NewId = data.id;
             this.$emit("changePreviewId", id, this.articleDetail.defaultSiteId);
+            this.videoAddDragEvent();
         },
         //选择移动分类时的节点
         chooseNode(node) {
@@ -684,11 +617,6 @@ export default {
         getCheckedList(info) {
             this.checkedList = info;
         },
-        setCss(obj, css) {
-            for (var attr in css) {
-                obj.style[attr] = css[attr];
-            }
-        },
         getVideoOssUrl() {
             if (this.checkedList.length > 0) {
                 this.videoShow = false;
@@ -707,6 +635,7 @@ export default {
             var dragging = false;
             var start = 0;
             var moveDis = 0;
+            let thisDom= this;
             dragEle.addEventListener('mousedown', (e)=> {
                 e.stopPropagation();
                 dragging = true;
@@ -722,16 +651,16 @@ export default {
                 e.stopPropagation();
                 if (dragging) {
                 moveDis = e.pageX - start;
-                this._setElementSize(ele, moveDis, i);
-                this._setHandlerPos(dragEle, ele);
+                thisDom._setElementSize(ele, moveDis, i);
+                thisDom._setHandlerPos(dragEle, ele);
                 }
             })
             container.addEventListener('mouseup', (e)=> {
                 e.stopPropagation();
                 if (dragging) {
                 moveDis = e.pageX - start;
-                this._setElementSize(ele, moveDis, i)
-                this._setHandlerPos(dragEle, ele);
+                thisDom._setElementSize(ele, moveDis, i)
+                thisDom._setHandlerPos(dragEle, ele);
                 dragging = false;
                 }
             })
@@ -739,22 +668,22 @@ export default {
                 e.stopPropagation();
                 if (dragging) {
                 moveDis = e.pageX - start;
-                this._setElementSize(ele, moveDis, i)
-                this._setHandlerPos(dragEle, ele);
+                thisDom._setElementSize(ele, moveDis, i)
+                thisDom._setHandlerPos(dragEle, ele);
                 dragging = false;
                 }
             })
             dragEle.addEventListener('mouseup', (e)=> {
                 e.stopPropagation();
                 moveDis = e.pageX - start;
-                this._setElementSize(ele, moveDis, i);
-                this._setHandlerPos(dragEle, ele);
+                thisDom._setElementSize(ele, moveDis, i);
+                thisDom._setHandlerPos(dragEle, ele);
                 dragging = false;
             })
             ele.addEventListener('mouseup', (e)=> {
                 e.stopPropagation();
-                this._setElementSize(ele, moveDis, i);
-                this._setHandlerPos(dragEle, ele);
+                thisDom._setElementSize(ele, moveDis, i);
+                thisDom._setHandlerPos(dragEle, ele);
                 dragging = false;
             })
         },
@@ -766,7 +695,7 @@ export default {
                 ele.style.height = newWidth * this.ratio[i] + 'px';
             }
         },
-        // repos 拖动 icon 位置
+        // repos 拖动  位置
         _setHandlerPos(handlerEle, clickEle) {
             handlerEle.style.display = 'block';
             handlerEle.style.left = clickEle.offsetLeft + clickEle.offsetWidth - 4 + 'px';
@@ -774,9 +703,6 @@ export default {
         },
         insertQuillVideo(videoList) {
             if (videoList && videoList.length > 0) {
-                let editorEle = document.getElementsByClassName("ql-editor")[0];
-                let videoEle = document.getElementsByClassName("ql-video-content");
-                let handler = document.getElementsByClassName("ql-dragHandler");
                 for (var i = 0; i < videoList.length; i++) {
                     this.addRange = this.$refs.myQuillEditor.quill.getSelection();
                     var videoUrl = videoList[i].videoPlayUrl;
@@ -786,23 +712,11 @@ export default {
                         "video",
                         {
                             url: videoUrl,
-                            width: '100%',
-                            height: '100%'
+                            width: '80%',
+                            height: '80%'
                         }
-                    )
-                    this.setCss(handler[i], {
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        display: "none",
-                        border: "2px solid rgb(170, 24, 121)",
-                        borderRadius: "50%",
-                        width: "8px",
-                        height: "8px",
-                        cursor: "nwse-resize"
-                    });
-                    console.log(handler[i], editorEle, videoEle[i], i)
-                    this._bindDragEvents(handler[i], editorEle, videoEle[i], i)
+                    );
+                    this.videoAddDragEvent();
                 }
                 
             }
@@ -811,8 +725,7 @@ export default {
         cancelgetVideo() {
             this.videoShow = false;
         },
-        resetDetail() {
-       
+        resetDetail() {       
             this.articleDetail = {
                 NewId: "",
                 title: "",
@@ -838,14 +751,22 @@ export default {
         },
         changeSiteId(siteId) {
             this.articleDetail.defaultSiteId = siteId;
+        },
+        //视频增加拖动事件
+        videoAddDragEvent(){
+            let dragEles = document.getElementsByClassName("ql-dragHandler");
+            let videoEles = document.getElementsByClassName("ql-video-content");
+            let container = document.getElementsByClassName("ql-editor")[0];
+            if(videoEles){
+                for(var i=0; i<videoEles.length; i++){
+                    this._bindDragEvents(dragEles[i], container, videoEles[i], i);
+                } 
+            }
         }
     },
     mounted() {
-
-
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
         this.$refs.myQuillEditor.quill
             .getModule("toolbar")

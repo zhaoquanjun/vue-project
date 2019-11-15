@@ -120,6 +120,23 @@
                             </div>
                         </modal-content>
                     </div>
+                    <div class="image-select--upload__area" v-show="videoShow">
+                        <div class="mask"></div>
+                        <div id="videoContent" class="contentDialog">
+                            <el-header class="modal-header" style="height:65px">
+                                <span class="title" style="font-size: 16px;">我的视频</span>
+                                <span class="close-icon" @click="cancelgetVideo">
+                                    <i class="iconfont iconguanbi"></i>
+                                </span>
+                            </el-header>
+                            <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
+                                <div slot="modal-footer" class="modal-footer">
+                                    <button @click="cancelgetVideo" class="cancel">取消</button>
+                                    <button @click="getVideoOssUrl" class="sure">确定</button>
+                                </div>
+                            </videoManage>
+                        </div>
+                    </div>
                 </el-form-item>
             </div>
             <div class="content-item set-article">
@@ -296,10 +313,16 @@ import ModalContent from "@/components/ImgManage/index.vue";
 import Fullscreen from "@/assets/Fullscreen";
 Quill.register("modules/fullscreen", Fullscreen);
 
+import Video from "@/assets/quill-video"
+Quill.register(Video, true)
+
+import videoManage from "@/components/VideoManage/popupIndex.vue";
+
 export default {
     components: {
         ModalContent,
-        DetailCheckTree
+        DetailCheckTree,
+        videoManage,
     },
     provide: {
       popper:true
@@ -399,7 +422,12 @@ export default {
             editorOption: {},
             keywordValue: "",
             metaKeyword: "",
-            selectRangeIndex: 0
+            selectRangeIndex: 0,
+            selectVideoRangeIndex: 0,
+            videoShow: false,
+            checkedList: [],
+            ratio:[],
+            origin: [],
         };
     },
     created() {
@@ -425,6 +453,7 @@ export default {
                         [{ align: [] }],
                         ["clean"],
                         ["image"], //["image", "video"],
+                        ["video"],
                         [{ lineheight: lineheights }],
                         [{ letterspacing: letterspacings }],
                         ['fullscreen']
@@ -453,7 +482,7 @@ export default {
             .getModule("toolbar")
             .addHandler("image", this.imageHandler);
         // 为视频ICON绑定事件
-        // this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
+        this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         addQuillTitle();
         document.addEventListener("click", e => {
             e.stopPropagation();
@@ -537,6 +566,7 @@ export default {
             document.getElementsByClassName("ql-editor")[0].innerHTML = this.detailData.detailContent;
             this.categoryIdList(this.detailData.productCategoryList);
             this.$emit("changePreviewId", id, this.detailData.defaultSiteId);
+            this.videoAddDragEvent();
         },
         categoryIdList(list) {
             this.categoryId = [];
@@ -796,6 +826,133 @@ export default {
         },
         changeSiteId(siteId) {
             this.detailData.defaultSiteId = siteId;
+        },
+        videoHandler(){
+            this.videoShow = true;
+            this.videoRange = this.$refs.myQuillEditor.quill.getSelection();
+            this.selectVideoRangeIndex = this.videoRange !== null ? this.videoRange.index : 0;
+        },
+        getCheckedList(info) {
+            this.checkedList = info;
+        },
+        getVideoOssUrl() {
+            if (this.checkedList.length > 0) {
+                this.videoShow = false;
+                this.insertQuillVideo(this.checkedList);
+            } else {
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `请选择视频`,
+                    showClose: false,
+                    duration: 1000
+                });
+            }
+        },
+        // 注册 鼠标拖动 事件 
+        _bindDragEvents(dragEle, container, ele, i) {
+            var dragging = false;
+            var start = 0;
+            var moveDis = 0;
+            let thisDom= this;
+            dragEle.addEventListener('mousedown', (e)=> {
+                e.stopPropagation();
+                dragging = true;
+                this.origin[i] = {
+                width: ele.offsetWidth,
+                height: ele.offsetHeight
+                };
+                this._setHandlerPos(dragEle, ele);
+                start = e.pageX;
+                this.ratio[i] = ele.offsetHeight / ele.offsetWidth;
+            })
+            container.addEventListener('mousemove', (e)=> {
+                e.stopPropagation();
+                if (dragging) {
+                moveDis = e.pageX - start;
+                thisDom._setElementSize(ele, moveDis, i);
+                thisDom._setHandlerPos(dragEle, ele);
+                }
+            })
+            container.addEventListener('mouseup', (e)=> {
+                e.stopPropagation();
+                if (dragging) {
+                moveDis = e.pageX - start;
+                thisDom._setElementSize(ele, moveDis, i)
+                thisDom._setHandlerPos(dragEle, ele);
+                dragging = false;
+                }
+            })
+            container.addEventListener('mouseleave', (e)=> {
+                e.stopPropagation();
+                if (dragging) {
+                moveDis = e.pageX - start;
+                thisDom._setElementSize(ele, moveDis, i)
+                thisDom._setHandlerPos(dragEle, ele);
+                dragging = false;
+                }
+            })
+            dragEle.addEventListener('mouseup', (e)=> {
+                e.stopPropagation();
+                moveDis = e.pageX - start;
+                thisDom._setElementSize(ele, moveDis, i);
+                thisDom._setHandlerPos(dragEle, ele);
+                dragging = false;
+            })
+            ele.addEventListener('mouseup', (e)=> {
+                e.stopPropagation();
+                thisDom._setElementSize(ele, moveDis, i);
+                thisDom._setHandlerPos(dragEle, ele);
+                dragging = false;
+            })
+        },
+        // resize 元素大小
+        _setElementSize(ele, dis, i) {
+            if (this.origin[i]) {
+                var newWidth = this.origin[i].width + dis
+                ele.style.width = newWidth + 'px';
+                ele.style.height = newWidth * this.ratio[i] + 'px';
+            }
+        },
+        // repos 拖动  位置
+        _setHandlerPos(handlerEle, clickEle) {
+            handlerEle.style.display = 'block';
+            handlerEle.style.left = clickEle.offsetLeft + clickEle.offsetWidth - 4 + 'px';
+            handlerEle.style.top = clickEle.offsetTop + clickEle.offsetHeight - 4 + 'px';
+        },
+        insertQuillVideo(videoList) {
+            if (videoList && videoList.length > 0) {
+                for (var i = 0; i < videoList.length; i++) {
+                    this.addRange = this.$refs.myQuillEditor.quill.getSelection();
+                    var videoUrl = videoList[i].videoPlayUrl;
+                    // 调用编辑器的 insertEmbed 方法，插入URL
+                    this.$refs.myQuillEditor.quill.insertEmbed(
+                        this.addRange !== null ? this.addRange.index :this.selectVideoRangeIndex,
+                        "video",
+                        {
+                            url: videoUrl,
+                            width: '80%',
+                            height: '80%'
+                        }
+                    );
+                    this.videoAddDragEvent();
+                }
+                
+            }
+        },
+        // 关闭视频选择弹窗
+        cancelgetVideo() {
+            this.videoShow = false;
+        },
+        //视频增加拖动事件
+        videoAddDragEvent(){
+            let dragEles = document.getElementsByClassName("ql-dragHandler");
+            let videoEles = document.getElementsByClassName("ql-video-content");
+            let container = document.getElementsByClassName("ql-editor")[0];
+            if(videoEles){
+                for(var i=0; i<videoEles.length; i++){
+                    this._bindDragEvents(dragEles[i], container, videoEles[i], i);
+                } 
+            }
         }
     },
 
@@ -962,3 +1119,74 @@ export default {
 
 </style>
 
+<style lang="scss" scoped>
+#videoContent {
+    position: fixed;
+    width: 1170px;
+    // height: 840px;
+    margin: auto;
+    z-index: 1020;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    box-shadow: 0px 2px 32px 4px rgba(0,0,0,0.13);
+    border: 1px solid rgba(229,229,229,1);
+    border-radius: 3px;
+}
+#videoContent .modal-header {
+    background: rgb(255, 255, 255);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e5e5e5;
+    .title{
+        font-size: 16px;
+        font-weight: 500;
+        color: rgba(38,38,38,1);
+    }
+    .close-icon {
+        display: block;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+
+}
+#videoContent .el-container {
+    background: #fff;
+    height: 773px;
+}
+#videoContent .el-dialog {
+    margin-top: 5vh !important;
+    width: 80%;
+    overflow: hidden;
+}
+#videoContent .el-dialog__body {
+    padding-top: 0;
+}
+// #videoContent /deep/ .el-footer {
+//     border-top: 1px solid #EEEEEE;
+// }
+.modal-footer {
+    float: right;
+    height: 88px;
+    button {
+        margin-top: 24px;
+        width: 76px;
+        height: 40px;
+        background: rgba(0,193,222,1);
+        border-radius: 2px;
+        // line-height: 40px;
+        background: rgba(0, 193, 222, 1);
+        margin-right: 16px;
+        color: #fff;
+    }
+    .cancel {
+        color: rgba(9,204,235,1);
+        background: rgba(255,255,255,1);
+        border: 1px solid rgba(9,204,235,1);
+    }
+}
+</style>
