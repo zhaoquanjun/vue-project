@@ -86,7 +86,7 @@ export default {
 .submenu {
     width: 149px;
     height: calc(100vh - 50px);
-    background: #FFFFFF;
+    background: $--color-black2;
     border-right: 1px solid #e5e5e5;
     .submenu-title {
         height: 40px;
@@ -95,6 +95,7 @@ export default {
         font-size: 16px;
         padding-top: 5px;
         text-align: left;
+        color: $--color-white;
     }
     .submenu-list {
         padding-top: 7px;
@@ -103,7 +104,7 @@ export default {
           line-height: 50px;
           font-size: 14px;
           font-weight:400;
-          color:#262626;
+          color:$--color-white;
           span {
             padding-left: 24px;
             cursor: pointer;
