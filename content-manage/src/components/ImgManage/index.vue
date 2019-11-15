@@ -12,6 +12,7 @@
                 :isexpand="true"
                 :isPopup="isPopup"
                 :isSecond="isSecond"
+                :isThird="isThird"
                 @getList="getList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
@@ -141,6 +142,10 @@ export default {
             default: false
         },
         isSecond: {
+            type: Boolean,
+            default: false
+        },
+        isThird: {
             type: Boolean,
             default: false
         }

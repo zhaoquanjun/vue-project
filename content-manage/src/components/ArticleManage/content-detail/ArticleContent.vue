@@ -96,14 +96,14 @@
                     </div>
                     <div class="image-select--upload__area" v-show="videoShow">
                         <div class="mask"></div>
-                        <div id="videoContent">
+                        <div id="videoContent" class="contentDialog">
                             <el-header class="modal-header" style="height:65px">
                                 <span class="title" style="font-size: 16px;">我的视频</span>
                                 <span class="close-icon" @click="cancelgetVideo">
                                     <i class="iconfont iconguanbi"></i>
                                 </span>
                             </el-header>
-                            <videoManage  :multiple="false" @getCheckedList="getCheckedList">
+                            <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
                                 <div slot="modal-footer" class="modal-footer">
                                     <button @click="cancelgetVideo" class="cancel">取消</button>
                                     <button @click="getVideoOssUrl" class="sure">确定</button>
@@ -400,7 +400,10 @@ export default {
             isNewAdd: false,
             selectRangeIndex: 0,
             selectVideoRangeIndex: 0,
-            videoShow: false
+            videoShow: false,
+            checkedList: [],
+            ratio:[],
+            origin: [],
         };
     },
     created() {
@@ -435,7 +438,7 @@ export default {
                         [{ align: [] }],
                         ["clean"],
                         ["image"], //["image", "video"],
-                        //["video"],
+                        ["video"],
                         [{ lineheight: lineheights }],
                         [{ letterspacing: letterspacings }],
                         ['fullscreen']
@@ -681,17 +684,99 @@ export default {
         getCheckedList(info) {
             this.checkedList = info;
         },
+        setCss(obj, css) {
+            for (var attr in css) {
+                obj.style[attr] = css[attr];
+            }
+        },
         getVideoOssUrl() {
             if (this.checkedList.length > 0) {
                 this.videoShow = false;
-                console.log(this.checkedList);
                 this.insertQuillVideo(this.checkedList);
             } else {
-                Message.warning('请选择视频');
+                this.$notify({
+                    customClass: "notify-error", //  notify-success ||  notify-error
+                    message: `请选择视频`,
+                    showClose: false,
+                    duration: 1000
+                });
             }
+        },
+        // 注册 鼠标拖动 事件 
+        _bindDragEvents(dragEle, container, ele, i) {
+            var dragging = false;
+            var start = 0;
+            var moveDis = 0;
+            dragEle.addEventListener('mousedown', (e)=> {
+                e.stopPropagation();
+                dragging = true;
+                this.origin[i] = {
+                width: ele.offsetWidth,
+                height: ele.offsetHeight
+                };
+                this._setHandlerPos(dragEle, ele);
+                start = e.pageX;
+                this.ratio[i] = ele.offsetHeight / ele.offsetWidth;
+            })
+            container.addEventListener('mousemove', (e)=> {
+                e.stopPropagation();
+                if (dragging) {
+                moveDis = e.pageX - start;
+                this._setElementSize(ele, moveDis, i);
+                this._setHandlerPos(dragEle, ele);
+                }
+            })
+            container.addEventListener('mouseup', (e)=> {
+                e.stopPropagation();
+                if (dragging) {
+                moveDis = e.pageX - start;
+                this._setElementSize(ele, moveDis, i)
+                this._setHandlerPos(dragEle, ele);
+                dragging = false;
+                }
+            })
+            container.addEventListener('mouseleave', (e)=> {
+                e.stopPropagation();
+                if (dragging) {
+                moveDis = e.pageX - start;
+                this._setElementSize(ele, moveDis, i)
+                this._setHandlerPos(dragEle, ele);
+                dragging = false;
+                }
+            })
+            dragEle.addEventListener('mouseup', (e)=> {
+                e.stopPropagation();
+                moveDis = e.pageX - start;
+                this._setElementSize(ele, moveDis, i);
+                this._setHandlerPos(dragEle, ele);
+                dragging = false;
+            })
+            ele.addEventListener('mouseup', (e)=> {
+                e.stopPropagation();
+                this._setElementSize(ele, moveDis, i);
+                this._setHandlerPos(dragEle, ele);
+                dragging = false;
+            })
+        },
+        // resize 元素大小
+        _setElementSize(ele, dis, i) {
+            if (this.origin[i]) {
+                var newWidth = this.origin[i].width + dis
+                ele.style.width = newWidth + 'px';
+                ele.style.height = newWidth * this.ratio[i] + 'px';
+            }
+        },
+        // repos 拖动 icon 位置
+        _setHandlerPos(handlerEle, clickEle) {
+            handlerEle.style.display = 'block';
+            handlerEle.style.left = clickEle.offsetLeft + clickEle.offsetWidth - 4 + 'px';
+            handlerEle.style.top = clickEle.offsetTop + clickEle.offsetHeight - 4 + 'px';
         },
         insertQuillVideo(videoList) {
             if (videoList && videoList.length > 0) {
+                let editorEle = document.getElementsByClassName("ql-editor")[0];
+                let videoEle = document.getElementsByClassName("ql-video-content");
+                let handler = document.getElementsByClassName("ql-dragHandler");
                 for (var i = 0; i < videoList.length; i++) {
                     this.addRange = this.$refs.myQuillEditor.quill.getSelection();
                     var videoUrl = videoList[i].videoPlayUrl;
@@ -705,7 +790,21 @@ export default {
                             height: '100%'
                         }
                     )
+                    this.setCss(handler[i], {
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        display: "none",
+                        border: "2px solid rgb(170, 24, 121)",
+                        borderRadius: "50%",
+                        width: "8px",
+                        height: "8px",
+                        cursor: "nwse-resize"
+                    });
+                    console.log(handler[i], editorEle, videoEle[i], i)
+                    this._bindDragEvents(handler[i], editorEle, videoEle[i], i)
                 }
+                
             }
         },
         // 关闭图片选择弹窗
@@ -847,6 +946,7 @@ export default {
     height: 100%;
     z-index: 2000;
     .ql-editor{
+        position: relative;
         height: 100%;
     }
     .fullscreen-editor {
@@ -864,7 +964,7 @@ export default {
 #videoContent {
     position: fixed;
     width: 1170px;
-    height: 840px;
+    // height: 840px;
     margin: auto;
     z-index: 1020;
     left: 50%;
