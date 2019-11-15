@@ -4,8 +4,7 @@
       class="tree-aside"
       style="width:250px;height:686px;border-right:1px solid rgb(229, 229, 229);border-bottom:1px solid rgb(229, 229, 229);"
     >
-      <h4 class="pic-type-title">视频分类</h4>
-
+      <h4 class="pic-type-title"><span>视频分类</span></h4>
       <m-tree
         style="height:calc(100% - 59px);padding-top:8px"
         ref="myTree"
@@ -490,6 +489,7 @@ export default {
   margin: 0;
   border: none;
 }
+
 </style>
 
 
