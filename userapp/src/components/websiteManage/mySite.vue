@@ -195,7 +195,6 @@
             <el-switch
               @change="isOpenPowered"
               v-model="isOpenPoweredValue"
-              active-color="#01C0DE"
               style="margin-left:16px"
             ></el-switch>
           </div>
@@ -775,25 +774,7 @@ export default {
 .siteSecondIndustrySelect /deep/ .el-input__icon {
   line-height: 32px;
 }
-.radio /deep/ .is-checked .el-radio__inner {
-  background: #00c1de;
-  border-color: #00c1de;
-}
-.radio /deep/ .el-radio {
-  margin-right: 17px;
-}
-.radio /deep/ .el-radio__label {
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(140, 140, 140, 1);
-  line-height: 20px;
-}
-.radio /deep/ .is-checked .el-radio__label {
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(38, 38, 38, 1);
-  line-height: 20px;
-}
+
 .textareaWrap /deep/ .el-input__count {
   right: 25px;
 }

@@ -890,26 +890,11 @@ export default {
     text-align: right;
     padding-top: 0;
 }
-.el-form-item__error {
-    color: #262626;
-    &::before {
-        display: inline-block;
-        content: "";
-        width: 13px;
-        height: 13px;
-        vertical-align: -2px;
-        padding-right: 8px;
-        background: url("~img/jian-icon.png") no-repeat center;
-        background-size: contain;
-    }
-}
+
 </style>
 <style scoped>
 @import "../../style/contentDetailCommon.css";
-.quill-editor /deep/ .ql-container {
-    height: 400px;
-    overflow: hidden;
-}
+
 .el-textarea /deep/ .el-input__count {
     background: #fff;
     bottom: 1px;
@@ -918,8 +903,13 @@ export default {
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
+.quill-editor /deep/ .ql-container {
+    height: 400px;
+    overflow: hidden;
+}
 </style>
-<style>
+<style lang="scss">
+
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
@@ -958,7 +948,11 @@ export default {
         overflow-y: auto;
     }
 }
- 
+ .flexSpace{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
 </style>
 

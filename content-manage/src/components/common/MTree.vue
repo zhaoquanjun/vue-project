@@ -137,7 +137,6 @@ export default {
             this.closeUploadCategoryPic();
         },
 
-        //////////////
         handlerOver(data) {
             if (!isNaN(data.id)) this.treeNodeId = data.id;
             if (this.isNewAdd) this.treeNodeId = null;
@@ -405,114 +404,11 @@ export default {
     }
 };
 </script>
+<style lang="scss">
 
+</style>
 <style lang="scss" scoped>
+// 侧边分类树节点
 
-.category-name-pic {
-    width: 282px;
-    height: 140px;
-    background: #fff;
-    display: block;
-    position: absolute;
-    z-index: 2000;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.09);
-}
 
-.upload {
-    height: 200px;
-}
-
-.categoryPic {
-    width: 16px;
-    height: 16px;
-    padding-right: 5px;
-}
-
-.label-weight {
-    font-weight: 500;
-    // line-height: 40px;
-    // height: 40px !important;
-}
-
-.aside-tree{
-    // height: calc(100% - 60px);
-    padding-top: 25px;
-    .drop-btn{
-        display: none;
-        width:20px;height:20px;
-        position: absolute;
-        left: 5px;
-        top: 10px;
-        cursor:grab;
-      i{
-          color: #A1A8B1;
-      }
-    }
-    .custom-tree-node {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: block;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-         .node-label-wrap{
-             color: #262626;
-            display: flex;align-items: center;height: 100%;width: 100%;
-        }
-          .node-label {
-            display: block;
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .category-name {
-            width: 86px;
-            height: 30px;
-            border: none;
-            border: 1px solid rgba(229, 229, 229, 1);
-        }
-    }
-    .tree-handle {
-        display: none;
-        position: absolute;
-        right: -88px;
-        top: 0;
-        z-index: 1000;
-        background: #ffffff;
-        width: 120px;
-        background: rgba(255, 255, 255, 1);
-        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.07);
-        padding: 5px 0;
-        border-radius: 2px;
-        button {
-            width: 100%;
-            display: block;
-            padding: 8px 14px;
-            text-align: left;
-            font-size: 14px;
-            &:hover {
-                background: #e0fcff;
-            }
-        }
-    }
-    .set-tree-type {
-        cursor: pointer;
-        position: absolute;
-        right: 5px;
-        // width: 33px;
-        // height: 28px;
-        // top: 5px;
-        z-index: 10;
-        border-radius: 2px;
-        text-align: center;
-        // background: #e0faff;
-    }
-    .set-tree-type:hover{
-        // background: #C5F0F8;
-       
-    }
-}
 </style>

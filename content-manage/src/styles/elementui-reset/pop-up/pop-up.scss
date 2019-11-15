@@ -32,24 +32,24 @@
         .icon-warning {
             width: 24px;
             height: 24px;
-            background: url("./images/warning.png") no-repeat center;
+            background: url("~img/popup/warning.png") no-repeat center;
             background-size: contain;
         }
 
-        //success success
         .icon-success {
             width: 24px;
             height: 24px;
-            background: url("./images/sucess.png") no-repeat center;
+            background: url("~img/popup/sucess.png") no-repeat center;
             background-size: contain;
         }
 
         .icon-error {
             width: 24px;
             height: 24px;
-            background: url("./images/error.png") no-repeat center;
+            background: url("~img/popup/error.png") no-repeat center;
             background-size: contain;
         }
+
     }
 
     .el-message-box__btns {
@@ -59,26 +59,27 @@
             font-size: 14px;
             border-radius: 2px;
             font-weight: 400;
-            color: #09CCEB;
-            border-color: #09CCEB;
+            color:$--button-primary-background-color;
+            border-color: $--button-primary-background-color;
+
         }
 
         .el-button:hover {
-            color: #09CCEB;
-            border-color: #09CCEB;
-            background-color: #fff;
+            color: $--color-white;
+            border-color: $--button-hover-primary-background-color;
+            background-color:$--button-hover-primary-background-color;
         }
 
         .el-button--primary {
-            color: #fff;
-            background: #09CCEB;
-            border: 1px solid #09CCEB;
+            color:  $--color-white;
+            background: $--button-primary-background-color;
+            border: 1px solid $--button-primary-background-color;;
         }
 
         .el-button--primary:hover {
-            color: #fff;
-            background: #09CCEB;
-            border: 1px solid #09CCEB;
+            color: $--color-white;
+            background:  $--button-hover-primary-background-color;
+            border: 1px solid  $--button-hover-primary-background-color;
         }
 
         button:nth-child(2) {
@@ -117,7 +118,7 @@
 /* notify-success */
 .el-notification {
     border: none;
-    color: #fff;
+    color:  $--color-white;
     border-radius: 2px;
     padding: 12px 26px 12px 13px;
     top: 68px !important;
@@ -128,7 +129,7 @@
     .el-notification__content,
     .el-notification__title,
     .el-notification__closeBtn {
-        color: #fff;
+        color:  $--color-white;
     }
     .el-notification__content {
         margin: 0;

@@ -1,28 +1,29 @@
-.content-header {
+@mixin flexcenter {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #e8eaf3;
+}
+
+.content-header {
+    @include flexcenter;
     background: #fff;
-    margin-bottom: 24px;
     height: 70px !important;
     border: 1px solid #E5E5E5;
     border-radius: 2px;
-    margin-right: 16px;
+    margin: 0 16px 24px 0;
     padding: 0 24px;
+    .seachInput {
+        display: inline-block;
+        width: 200px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
 }
-.seachInput {
-    display: inline-block;
-    width: 200px;
-    // height: 33px;
-    box-sizing: border-box;
-    overflow: hidden;
-}
+
 .select-sort {
     display: inline-block;
     width: 117px;
     box-sizing: border-box;
-    // height: 32px;
     margin: 0 16px 0 7px;
 }
 .head-item {
@@ -90,7 +91,6 @@
 .handle-batch {
     display: flex;
     align-items: center;
-   
     width: 100%;
     >div{
         margin-left: 16px;
@@ -103,9 +103,7 @@
 .bach-header {
     display: flex;
     align-items: center;
-    
     width: 100%;
-    
     .bach-hanlder{
         padding-left: 24px;
     }
@@ -116,4 +114,14 @@
     box-sizing: border-box;
     height: 32px;
     margin: 0 16px 0 7px;
+}
+// 排序按钮
+.desBtn{
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    &:hover{
+        opacity: 0.8;
+    }
 }

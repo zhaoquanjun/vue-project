@@ -4,13 +4,13 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, button,
   margin: 0;
   padding: 0;
   line-height: 1;
-  /*font-family: "微软雅黑";*/
-  /* font-family:Helvetica; */
+  font-size: 12px;
 }
 
 body {
-  font-size: 12px;
+  
   font-style: normal;
+ 
 }
 /**{ touch-action: none; }*/
 small {
@@ -26,7 +26,7 @@ h2 {
 }
 
 h3 {
-  font-size: 14px
+  line-height: 24px;
 }
 
 h4, h5, h6 {
@@ -79,8 +79,8 @@ html {
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: 100%
 }
-audio{
-  outline: none
+button{
+  background: transparent;
 }
 input, textarea, button, a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
@@ -139,7 +139,10 @@ button, select {
 textarea {
   overflow: auto
 }
-
+button{
+  border: none;
+  cursor: pointer;
+}
 button, html [type="button"], [type="reset"], [type="submit"] {
   -webkit-appearance: button
 }

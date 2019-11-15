@@ -274,7 +274,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 .title-color{
     color: #262626;
 }

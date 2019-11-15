@@ -49,10 +49,9 @@
             </div>
             <div class="head-item head-right">
                 <button
-                    class="btn-lightblue btn-small upload-wrap"
+                    class="cl-button cl-button--primary"
                     @click="switchUploadBoxShowStatus"
                 >
-                   
                     上传图片
                 </button>
             </div>
@@ -145,16 +144,8 @@ export default {
 
 
 <style  lang="scss" scoped>
-@import "@/styles/manage-head.scss";
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    &:hover{
-        opacity: 0.8;
-    }
-}
+@import "@/styles/content-manage/manage-head.scss";
+
 .upload-wrap{
     &:hover{
         opacity: 0.8;

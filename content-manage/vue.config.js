@@ -46,10 +46,7 @@ module.exports = {
     css: {
         loaderOptions: {
             sass: {
-              //  @import "@/styles/wezhan.var.scss"; 
-              data: `
-                   
-              `
+              data: `@import "@/styles/theme-chalk/common/var.scss";`
           }
         }
     },

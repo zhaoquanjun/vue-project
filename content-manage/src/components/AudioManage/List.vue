@@ -17,9 +17,9 @@
             <el-table-column type="selection"></el-table-column>
             <el-table-column label="音频名称" width="250">
                 <template slot-scope="scope">
-                      <div class="cover">
+                    <div class="cover">
                         <img width="100%" src="~img/file-icon/audio.png" />
-                        <span class="play"  @click="viewPic( scope.row,scope.$index)">
+                        <span class="play" @click="viewPic( scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
                         </span>
                     </div>
@@ -34,32 +34,30 @@
                         show-word-limit
                         @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
-                  
-                      <el-tooltip
-                            v-else
-                            class="item"
-                            effect="dark"
-                            :content="scope.row.title"
-                            placement="top"
-                        >
-                            <div
-                                 style="width:150px"
-                                class="ellipsis cursor-p"
-                                @click="rename(scope.row.id,scope.row,scope.$index)"
-                            >{{scope.row.title}}</div>
-                        </el-tooltip>
+
+                    <el-tooltip
+                        v-else
+                        class="item"
+                        effect="dark"
+                        :content="scope.row.title"
+                        placement="top"
+                    >
+                        <div
+                            style="width:150px"
+                            class="ellipsis cursor-p"
+                            @click="rename(scope.row.id,scope.row,scope.$index)"
+                        >{{scope.row.title}}</div>
+                    </el-tooltip>
                     <!-- <input v-model="scope.row.title" />
                     <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
             <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="durationStr" label="时长"  min-width="150">
-
-            </el-table-column>
+            <el-table-column prop="durationStr" label="时长" min-width="150"></el-table-column>
             <el-table-column prop="categoryName" label="分类" min-width="150">
-                 <template slot-scope="scope">
-                    <span  style="width:150px" class="ellipsis">{{ scope.row.categoryName }}</span>
+                <template slot-scope="scope">
+                    <span style="width:150px" class="ellipsis">{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
 
@@ -69,17 +67,21 @@
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="more-operate" @click="handleMove(scope.row)" style="margin-right:16px">
-                           <i class="iconfont iconyidong"></i>
+                        <button
+                            class="more-operate"
+                            @click="handleMove(scope.row)"
+                            style="margin-right:16px"
+                        >
+                            <i class="iconfont iconyidong"></i>
                         </button>
                         <button class="more-operate delete-btn" @click="batchRemove( scope.row)">
-                             <i class="iconfont iconshanchu "></i>
+                            <i class="iconfont iconshanchu"></i>
                         </button>
                     </div>
                 </template>
             </el-table-column>
         </el-table>
-          <div class="list-footer" >
+        <div class="list-footer">
             <div class="storage-wrap">
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
@@ -99,7 +101,6 @@
                     @size-change="changeSize"
                 ></el-pagination>
             </div>
-            <!-- :title="picTitle" -->
             <div id="img-list-dialog">
                 <el-dialog
                     :visible.sync="imgVisible"
@@ -107,7 +108,6 @@
                     @close="closeDialog"
                 >
                     <audio ref="audio" class="audio" :src="fullOssUrl" controls="controls" />
-                   
                 </el-dialog>
             </div>
         </div>
@@ -165,21 +165,19 @@ export default {
          * 管理员下载
          */
         async _adminDownload(row) {
-          
             let type = row.fileType;
             let id = row.id;
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
-             this.$nextTick(()=>{
-                 this.$refs.audio.play()
-            })
+            this.$nextTick(() => {
+                this.$refs.audio.play();
+            });
         },
         /**
          * 单选或全选操作
          */
         handleSelectionChange(list) {
-          
             this.multipleSelection = list;
             this.$emit("handleSelectionChange", list);
         },
@@ -197,9 +195,9 @@ export default {
         },
         // 重命名名称
         rename(id, row, index) {
-             if(row.title)this.newName = row.title;
-             if (!trim(row.title)) {
-                row.title=this.newName
+            if (row.title) this.newName = row.title;
+            if (!trim(row.title)) {
+                row.title = this.newName;
                 this.$notify({
                     customClass: "notify-error",
                     message: `音频名称不能为空`,
@@ -261,22 +259,17 @@ export default {
     }
 };
 </script>
-<style scoped>
-.el-table /deep/ .el-table__row .el-input .el-input__inner {
-    padding-right: 50px;
-}
-.el-table /deep/ .el-table__row .el-input .el-input__suffix {
-    display: flex;
-    align-items: center;
-}
-#img-list-dialog /deep/ .el-dialog__body{
+<style  scoped>
+/* 音频弹窗居中播放 */
+#img-list-dialog /deep/ .el-dialog__body {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 </style>
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "../../styles/content-manage/manege-table.scss";
+
 .cover {
     position: relative;
     &:hover .play {
@@ -294,7 +287,6 @@ export default {
         }
     }
 }
-
 </style>
 
 

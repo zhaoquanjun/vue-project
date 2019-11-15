@@ -4,12 +4,12 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, button,
   margin: 0;
   padding: 0;
   line-height: 1;
-  font-size: 14px;
 }
 
 body {
-  font-size: 14px;
+  font-size: 12px;
   font-style: normal;
+ 
 }
 /**{ touch-action: none; }*/
 small {

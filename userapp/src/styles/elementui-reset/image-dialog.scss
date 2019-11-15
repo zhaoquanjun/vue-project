@@ -1,0 +1,55 @@
+/* 查看大图 弹出层 */
+#img-list-dialog{
+    .el-dialog {
+         background: transparent;
+         box-shadow: none;
+         height: auto;
+     }
+    .el-dialog__body {
+         text-align: center;
+     }
+     .el-dialog__headerbtn{
+         position: fixed;
+         right: 57px;
+     }
+    .el-dialog__headerbtn .el-dialog__close {
+         color: #fff;
+         font-size: 30px;
+     }
+    .el-carousel__arrow--right, .el-carousel__arrow--left {
+         background: none;
+     }
+    .el-carousel__arrow i {
+         font-size: 40px;
+     }
+     .el-carousel__container img{
+         max-width: 658px;
+         max-height: 370px;
+     }
+  .el-carousel__item.is-animating{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    } 
+    .dislog-footer{
+        text-align: center;
+        position: fixed;
+            width: 100%;
+        left: 0;
+        bottom: 15px;
+       
+    }
+  .el-dialog__wrapper{
+        display: flex;
+        align-items: center;
+       
+        
+    }
+   .dislog-footer span{
+        padding: 0 20px;
+        color: #fff;
+    }
+    .v-modal{
+        opacity: 0.8;
+    }
+ }

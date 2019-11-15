@@ -436,19 +436,7 @@ export default {
   }
 }
 
-// 侧边分类title样式
-.pic-type-title {
-  box-sizing: border-box;
-  padding-left: 16px;
-  height: 50px;
-  line-height: 50px;
-  width: 100%;
-  font-size: 18px;
-  border-bottom: 1px solid #e5e5e5;
-}
-.title-item {
-  padding: 28px 0 12px 12px;
-}
+
 
 .article-content {
   .content-item {

@@ -33,13 +33,13 @@
                             class="input-with-select"
                         >
                             <el-button slot="append" @click="memberSearch">
-                                <svg-icon icon-class="search-icon"></svg-icon>
+                               <i class="iconfont iconbianzu"></i>
                             </el-button>
                         </el-input>
                     </div>
                 </el-col>
                 <el-col :span="3" :offset="6">
-                    <button class="btn-item invite-member" @click="invitation">邀请成员</button>
+                    <button class="cl-button cl-button--primary invite-member" @click="invitation">邀请成员</button>
                 </el-col>
             </div>
             <m-table
@@ -390,8 +390,6 @@ export default {
         color: #c3c3c3;
     }
     .invite-member {
-        color: #fff;
-        background: rgba(1, 192, 222, 1);
         margin: 0;
         float: right;
     }
