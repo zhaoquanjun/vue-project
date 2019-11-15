@@ -34,7 +34,7 @@
                 </el-form-item>
                 <el-form-item>
                     <div class="flexSpace">
-                        <div >
+                        <div>
                             <span style="font-size:12px">分类:</span>
                             <span class="select-sort category">
                                 <div class="product-category" @click.stop="multipleCatagory">
@@ -45,7 +45,6 @@
                                             :key="item.id"
                                             @click.stop
                                         >
-                                       
                                             <div class="category-item">
                                                 <span>{{item.displayName}}</span>
                                                 <i
@@ -74,13 +73,16 @@
                                         @chooseNode="chooseNode"
                                     />
                                 </div>
-                               
                             </span>
                         </div>
                         <div>
                             <span style="font-size:12px">状态</span>
                             <span class="select-sort">
-                                <el-select size="small" v-model="detailData.isOnSell" placeholder="请选择">
+                                <el-select
+                                    size="small"
+                                    v-model="detailData.isOnSell"
+                                    placeholder="请选择"
+                                >
                                     <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -101,7 +103,7 @@
                 </el-row>
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
-                    <quill-editor                        
+                    <quill-editor
                         ref="myQuillEditor"
                         themes="bubble"
                         :options="editorOption"
@@ -113,8 +115,14 @@
                             <span style="font-size: 16px;">我的图片</span>
                             <button @click="cancelEditorImg">X</button>
                         </el-header>
-                        <modal-content ref="imgList" :isGrid="true" :multiple="true"  @getImgInfo="getImgInfo" :isPopup="true">
-                            <div slot="modal-footer" class="modal-footer" style="">
+                        <modal-content
+                            ref="imgList"
+                            :isGrid="true"
+                            :multiple="true"
+                            @getImgInfo="getImgInfo"
+                            :isPopup="true"
+                        >
+                            <div slot="modal-footer" class="modal-footer" style>
                                 <button type="button" @click="getEditorImg" class="sure">确定</button>
                                 <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
                             </div>
@@ -130,32 +138,34 @@
                                 <div style="float:left">
                                     <el-col>
                                         <el-form-item prop="createTime">
-                                            <el-date-picker type="datetime"
-                                                            v-model="detailData.publishTime"
-                                                            placeholder="选择日期时间"
-                                                            style="width: 100%;"></el-date-picker>
+                                            <el-date-picker
+                                                type="datetime"
+                                                v-model="detailData.publishTime"
+                                                placeholder="选择日期时间"
+                                                style="width: 100%;"
+                                            ></el-date-picker>
                                         </el-form-item>
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="padding: 0 12px 0 0;color: #606266;">
-                                        预览网站
-                                    </span>
+                                    <span style="padding: 0 12px 0 0;color: #606266;">预览网站</span>
                                     <el-tooltip class="item" effect="dark" placement="top">
-                                        <div slot="content">
-                                            将在所选网站的二级域名下打开预览页面
-                                        </div>
+                                        <div slot="content">将在所选网站的二级域名下打开预览页面</div>
                                         <i class="iconfont iconyiwen"></i>
                                     </el-tooltip>
                                     <span class="select-sort">
-                                        <el-select size="small"
-                                                   :value="detailData.defaultSiteId == 0 ? null : detailData.defaultSiteId"
-                                                   placeholder="请选择"
-                                                   @change="changeSiteId">
-                                            <el-option v-for="item in siteOptions"
-                                                       :key="item.siteId"
-                                                       :label="item.siteName"
-                                                       :value="item.siteId"></el-option>
+                                        <el-select
+                                            size="small"
+                                            :value="detailData.defaultSiteId == 0 ? null : detailData.defaultSiteId"
+                                            placeholder="请选择"
+                                            @change="changeSiteId"
+                                        >
+                                            <el-option
+                                                v-for="item in siteOptions"
+                                                :key="item.siteId"
+                                                :label="item.siteName"
+                                                :value="item.siteId"
+                                            ></el-option>
                                         </el-select>
                                     </span>
                                 </div>
@@ -184,15 +194,14 @@
                                           @blur="keywords(keywordValue)"></el-input>
                             </ul>
                             <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
-                        </el-form-item> -->
-                        <el-form-item>
-                        </el-form-item>
+                        </el-form-item>-->
+                        <el-form-item></el-form-item>
                         <el-form-item label="置頂" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
                             <!-- <span style=" font-size: 14px; color: #606266;
     vertical-align: middle;
     padding:0  16px 0 32px ;">仅登录用户可访问</span>
-                            <el-switch v-model="detailData.isLoggedInCanView"></el-switch> -->
+                            <el-switch v-model="detailData.isLoggedInCanView"></el-switch>-->
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -205,7 +214,13 @@
                                 <div slot="content">不填写则默认使用产品标题</div>
                                 <i class="iconfont iconyiwen"></i>
                             </el-tooltip>
-                            <el-input  class="contentDetail-title" maxlength="100" show-word-limit placeholder="seo标题" v-model="detailData.seoTitle"></el-input>
+                            <el-input
+                                class="contentDetail-title"
+                                maxlength="100"
+                                show-word-limit
+                                placeholder="seo标题"
+                                v-model="detailData.seoTitle"
+                            ></el-input>
                         </el-form-item>
                         <el-form-item style="position:relative" label="seo关键词" prop="seoKeyword">
                             <ul class="keyword-list" ref="metaKeywordList">
@@ -230,13 +245,16 @@
                         </el-form-item>
 
                         <el-form-item label="自定义地址" prop="customUrl">
-                            <el-input placeholder="请输入自定义地址" class="address" v-model="detailData.customUrl"></el-input>
+                            <el-input
+                                placeholder="请输入自定义地址"
+                                class="address"
+                                v-model="detailData.customUrl"
+                            ></el-input>
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
             </div>
-            <div class="content-item seo-key">
-            </div>
+            <div class="content-item seo-key"></div>
         </el-form>
     </div>
 </template>
@@ -302,7 +320,7 @@ export default {
         DetailCheckTree
     },
     provide: {
-      popper:true
+        popper: true
     },
     data() {
         return {
@@ -427,11 +445,11 @@ export default {
                         ["image"], //["image", "video"],
                         [{ lineheight: lineheights }],
                         [{ letterspacing: letterspacings }],
-                        ['fullscreen']
+                        ["fullscreen"]
                     ],
                     handlers: {
                         fullscreen() {
-                            this.quill.getModule('fullscreen').handle()
+                            this.quill.getModule("fullscreen").handle();
                         }
                     }
                 },
@@ -465,13 +483,11 @@ export default {
         let categoryId = this.$route.query.categoryId;
         let categoryName = this.$route.query.categoryName;
         if (!!categoryId) {
-           
             this.detailData.productCategoryList = [
                 { id: categoryId, displayName: categoryName }
             ];
             this.categoryId = [categoryId];
         } else {
-           
             this.detailData.productCategoryList = [
                 { id: 0, displayName: "全部分类" }
             ];
@@ -529,12 +545,14 @@ export default {
             }
             this.detailData = data;
             this.detailData.NewId = data.id;
-           
+
             //  let categoryList22 = JSON.stringify(this.detailData.productCategoryList);
             //  JSON.parse(categoryList22).forEach(item=>{
             //       this.categoryId.push(item.id);
             //  })
-            document.getElementsByClassName("ql-editor")[0].innerHTML = this.detailData.detailContent;
+            document.getElementsByClassName(
+                "ql-editor"
+            )[0].innerHTML = this.detailData.detailContent;
             this.categoryIdList(this.detailData.productCategoryList);
             this.$emit("changePreviewId", id, this.detailData.defaultSiteId);
         },
@@ -563,7 +581,8 @@ export default {
         //新建产品
         async insertArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
-            var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
+            var html = document.getElementsByClassName("ql-editor")[0]
+                .innerHTML;
             this.detailData.detailContent = html;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
@@ -583,12 +602,15 @@ export default {
                             this.$emit("changePreviewId", "", 0);
                             this.$emit("handlerClickNewAdd");
                             // this.$refs.detailCheckTree.resetChecked();
-                           
                         } else {
                             this.curProduct = data;
                             this.detailData.id = data;
                             this.$emit("changeSaveWay", true);
-                            this.$emit("changePreviewId", data, this.detailData.defaultSiteId);
+                            this.$emit(
+                                "changePreviewId",
+                                data,
+                                this.detailData.defaultSiteId
+                            );
                         }
                     }
                 });
@@ -611,7 +633,8 @@ export default {
         //编辑保存产品
         async saveArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
-            var html=document.getElementsByClassName("ql-editor")[0].innerHTML;
+            var html = document.getElementsByClassName("ql-editor")[0]
+                .innerHTML;
             this.detailData.detailContent = html;
             let { status, data } = await productManageApi.update(
                 this.curProduct,
@@ -636,7 +659,11 @@ export default {
                             this.curProduct = data;
                             this.detailData.id = data;
                             this.$emit("changeSaveWay", true);
-                            this.$emit("changePreviewId", data, this.detailData.defaultSiteId);
+                            this.$emit(
+                                "changePreviewId",
+                                data,
+                                this.detailData.defaultSiteId
+                            );
                         }
                     }
                 });
@@ -650,9 +677,7 @@ export default {
             this.treeResult = data.treeArray;
         },
         chooseNode(data, boolean) {
-          
             if (!!boolean) {
-                
                 if (!this.categoryId.includes(data.id)) {
                     if (this.detailData.productCategoryList.length >= 5) {
                         this.$notify({
@@ -663,17 +688,18 @@ export default {
                         });
                         return;
                     }
-                    if(this.detailData.productCategoryList[0].id==0){
+                    if (this.detailData.productCategoryList[0].id == 0) {
                         this.$refs.detailCheckTree.setChecked(0);
-                     }
+                    }
                     this.detailData.productCategoryList.push({
                         displayName: data.label,
                         id: data.id,
                         thumbnailPicUrl: data.thumbnailPicUrl
                     });
                 }
-                 if(this.detailData.productCategoryList[0].id==0){
-                     if( this.$route.query.isEditor !=1) this.detailData.productCategoryList.splice(0,1)
+                if (this.detailData.productCategoryList[0].id == 0) {
+                    if (this.$route.query.isEditor != 1)
+                        this.detailData.productCategoryList.splice(0, 1);
                 }
             } else {
                 this.categoryId = [];
@@ -685,7 +711,7 @@ export default {
                         }
                     }
                 );
-             
+
                 if (this.detailData.productCategoryList.length == 0) {
                     this.detailData.productCategoryList = [
                         { id: 0, displayName: "全部分类" }
@@ -702,15 +728,16 @@ export default {
                 }
             );
         },
-        onEditorChange({ editor, html, text }) {          
+        onEditorChange({ editor, html, text }) {
             this.detailData.detailContent = html;
         },
         imageHandler() {
             this.isModalShow = !this.isModalShow;
             this.imgRange = this.$refs.myQuillEditor.quill.getSelection();
-            this.selectRangeIndex = this.imgRange !== null ? this.imgRange.index : 0;
+            this.selectRangeIndex =
+                this.imgRange !== null ? this.imgRange.index : 0;
         },
-        fullScreenHandler(){
+        fullScreenHandler() {
             //console.log('fullScreenHandler');
         },
         getImgInfo(info) {
@@ -719,7 +746,7 @@ export default {
         getEditorImg() {
             // 获取选中的图片信息 有两种方式
             this.isModalShow = false;
-             this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList.clearSelectedList();
             this.insertEditorImg(this.imgData);
         },
         insertEditorImg(imgFiles) {
@@ -729,7 +756,9 @@ export default {
                     var value = imgFiles[i].fullOssUrl;
                     // 调用编辑器的 insertEmbed 方法，插入URL
                     this.$refs.myQuillEditor.quill.insertEmbed(
-                        this.addRange !== null ? this.addRange.index : this.selectRangeIndex,
+                        this.addRange !== null
+                            ? this.addRange.index
+                            : this.selectRangeIndex,
                         "image",
                         value,
                         Quill.sources.USER
@@ -764,7 +793,7 @@ export default {
                         name: "string"
                     }
                 ],
-              
+
                 params: { name: 1 }, //
                 isTop: true,
                 isOnSell: true,
@@ -774,13 +803,13 @@ export default {
                 isAllowComment: true,
                 defaultSiteId: 0
             };
-            this.detailData = {...this.detailData,...detailData};
+            this.detailData = { ...this.detailData, ...detailData };
             document.getElementsByClassName("ql-editor")[0].innerHTML = "";
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
         },
-      
+
         removeCategory(id) {
             this.$refs.detailCheckTree.setChecked(id);
             this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
@@ -824,14 +853,13 @@ export default {
     }
 };
 </script>
-<style scoped>
-    .address /deep/ .el-input__inner{
-        height: 35px;
-        line-height: 35px;
-    }
-</style>
+
 <style scoped lang="scss">
 @import "../../style/contentDetail";
+.address /deep/ .el-input__inner {
+    height: 35px;
+    line-height: 35px;
+}
 .category {
     position: relative;
     vertical-align: middle;
@@ -842,7 +870,7 @@ export default {
     justify-content: space-between;
     padding: 5px;
     min-height: 20px;
-     width: 250px;
+    width: 250px;
     border: 1px solid #dcdfe6;
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     .category-list {
@@ -880,8 +908,8 @@ export default {
     border-radius: 4px;
     overflow: hidden;
 }
-.modal-footer{
-     height: 60px;
+.modal-footer {
+    height: 60px;
     position: absolute;
     bottom: -11px;
     right: 16px;
@@ -890,11 +918,9 @@ export default {
     text-align: right;
     padding-top: 0;
 }
-
 </style>
-<style scoped>
-@import "../../style/contentDetailCommon.css";
 
+<style lang="scss">
 .el-textarea /deep/ .el-input__count {
     background: #fff;
     bottom: 1px;
@@ -907,9 +933,6 @@ export default {
     height: 400px;
     overflow: hidden;
 }
-</style>
-<style lang="scss">
-
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
@@ -926,7 +949,7 @@ export default {
     content: "字体";
 }
 
-.editor-fullscreen{
+.editor-fullscreen {
     background: white;
     margin: 0 !important;
     position: fixed;
@@ -935,7 +958,7 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 2000;
-    .ql-editor{
+    .ql-editor {
         height: 100%;
     }
     .fullscreen-editor {
@@ -943,16 +966,15 @@ export default {
         border: none;
     }
     .ql-container {
-        height: calc(100vh - 3rem - 24px) !important; 
+        height: calc(100vh - 3rem - 24px) !important;
         margin: 0 auto;
         overflow-y: auto;
     }
 }
- .flexSpace{
+.flexSpace {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-
 </style>
 

@@ -861,14 +861,10 @@ export default {
 
 
 <style scoped lang="scss">
-@import "../../style/contentDetail";
+@import "@/components/style/contentDetail.scss";
 
-#content{
-    overflow: hidden;
-}
 </style>
-<style scoped>
-@import "../../style/contentDetailCommon.css";
+<style scoped lang="scss">
 .quill-editor /deep/ .ql-container {
     height: 420px;
     overflow: hidden;
@@ -881,16 +877,7 @@ export default {
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
-.modal-footer {
-    height: 60px;
-    position: absolute;
-    bottom: -11px;
-    right: 16px;
-    width: 100%;
-    z-index: 100;
-    text-align: right;
-    padding-top: 0;
-}
+
 </style>
 
 <style lang="scss">
@@ -935,6 +922,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+#content{
+    overflow: hidden;
+}
 #videoContent {
     position: fixed;
     width: 1170px;
@@ -985,6 +975,14 @@ export default {
 .modal-footer {
     float: right;
     height: 88px;
+   
+    position: absolute;
+    bottom: -11px;
+    right: 16px;
+    width: 100%;
+    z-index: 100;
+    text-align: right;
+    padding-top: 0;
     button {
         margin-top: 24px;
         width: 76px;
