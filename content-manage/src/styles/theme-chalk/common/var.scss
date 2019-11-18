@@ -29,13 +29,12 @@ $--color-text-orange: $--color-primary !default;
 // Border color
 $--border-color-base: #D7D8D9 !default;
 $--border-radius-base: 2px !default;
-
+$--border-color-primary: $--color-primary !default;
 /* Border
 -------------------------- */
 $--border-width-base: 1px !default;
 $--border-style-base: solid !default;
-$--border-color-primary: $--color-primary !default;
-$--border-base: $--border-width-base $--border-style-base $--border-color-primary !default;
+$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
 
 
 /* Box-shadow
@@ -77,15 +76,15 @@ $--icon-color-base: $--color-info !default;
 -------------------------- */
 $--padding-lg: 24px; 
 $--padding-md: 16px;
-$--padding-sm: 12px; 
-$--padding-xs: 8px; 
+$--padding-sm: 14px; 
+$--padding-xs: 12px; 
 
 /* Margins
 -------------------------- */
 $--margin-lg: 24px; 
 $--margin-md: 16px;
-$--margin-sm: 12px; 
-$--margin-xs: 8px; 
+$--margin-sm: 14px; 
+$--margin-xs: 12px; 
 
 /* width  height
 -------------------------- */
