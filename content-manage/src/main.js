@@ -4,11 +4,11 @@ import router from "./router/index";
 import store from "./store/index";
 import './plugins/element';
 
-
+// public begin
 import "./styles/custom.scss";
 import "@/styles/theme-chalk/index.scss"
 import "@/styles/elementui-reset/index.scss"
-
+//  public end
 
 import "@/styles/content-manage/popup-wrap.scss"
 import "@/directive/index.js"
