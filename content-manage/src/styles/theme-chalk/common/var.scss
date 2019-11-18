@@ -15,6 +15,11 @@ $--color-info: rgba(240, 243, 247, 1) !default;
 $--color-white: #FFFFFF !default;
 $--color-black: rgba(31, 35, 37, 1) !default;
 $--color-black2: rgba(55, 61, 65, 1) !default;
+
+$--background-color-selected: #F4F5F6;
+$--background-color-hover: #F9F9F9;
+
+
 // Font  text-color 
 $--color-text-primary: #262626 !default;
 $--color-text-regular:#9F9F9F !default;
@@ -22,7 +27,7 @@ $--color-text-secondary: #D7D8D9 !default;
 $--color-text-orange: $--color-primary !default;
 
 // Border color
-$--border-color-base: #D7D8D9 !default;
+$--border-color: #D7D8D9 !default;
 $--border-radius-base: 2px !default;
 
 /* Border

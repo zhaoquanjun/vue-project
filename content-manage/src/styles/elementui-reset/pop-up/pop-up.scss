@@ -143,9 +143,9 @@
 }
 
 .notify-success {
-    background: #63DC8C;
+    background: $--color-success;
 }
 
 .notify-error {
-    background: #FB4D68;
+    background: $--color-danger;
 }
