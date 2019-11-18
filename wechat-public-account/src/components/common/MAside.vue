@@ -173,16 +173,17 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang="scss"  scoped >
 .m-aside {
     position: absolute;
     left: 0;
     top: 0px;
-    /* bottom: 0; */
     z-index: 10;
     overflow: hidden;
     transition: 0.2s ease-in-out;
-    /* transition:  0.3s linear;  */
+    background-color:$--color-black;
+   
+    // border-right: 1px solid rgb(229, 229, 229);
 }
 .m-asideleft {
     overflow: hidden;
@@ -200,31 +201,42 @@ export default {
     border-right: none !important;
     /* border-right: 1px solid #E5E5E5; */
 }
-.el-aside /deep/ .el-menu {
+.el-aside  .el-menu {
     /* height: 100%; */
     border: none;
 }
 </style>
 <style lang="scss" scoped>
-// 选中的样式
-.active-color {
-    color: #0595e6 !important;
-}
+
 .menu-hover {
-    background:rgba(248,250,252,1);
-    border-left: 4px solid rgba(248,250,252,1) !important;
+    background:$--color-info;
+    border-left: 4px solid $--color-primary  !important;
+    .menu-icon {
+        color: $--color-primary !important;
+    }
+    .menu-item-content {
+         color: $--color-black !important;   
+     }
 }
 .menu-bg {
-    background:rgba(240, 243, 247, 1);
-    color: #0595e6;
-    border-left: 4px solid #0595e6 !important;
+    background:$--color-info;
+    color: $--color-primary ;
+    border-left: 4px solid $--color-primary !important;
     .menu-icon {
-        color: #0595e6 !important;
+        color: $--color-primary !important;
     }
+    .menu-item-content {
+         color: $--color-black !important;   
+     }
+    
+}
+// 选中的样式
+.active-color {
+    color: $--color-primary  !important;
+     
 }
 .left-menu {
-    // border-right: solid 1px #e6e6e6;
-    background: #fff;
+    background-color:$--color-black;
     height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
@@ -232,10 +244,11 @@ export default {
         line-height: 50px;
         white-space: nowrap;
         margin-bottom: 14px;
-        border-left: 4px solid #fff;
+        border-left: 4px solid $--color-black;
         .menu-item-content {
             display: inline-block;
             line-height: 50px;
+            color: $--color-white;
         }
         .menu-icon {
             display: inline-block;
@@ -243,7 +256,7 @@ export default {
             width: 60px;
             text-align: center;
             line-height: 50px;
-            color: #262626;
+            color:$--color-white;
             margin-left: -4px;
         }
         .iconicon-des-Arrow{

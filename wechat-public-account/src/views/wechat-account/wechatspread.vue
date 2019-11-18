@@ -98,7 +98,7 @@
           </el-table-column>
         </el-table>
       </template>
-      <div class="paging">
+      <div class="cl-paganation paging">
         <a href="">如何进行页面推广？</a>
         <el-pagination
           background

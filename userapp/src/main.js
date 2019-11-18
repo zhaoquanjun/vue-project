@@ -5,7 +5,6 @@ import store from "./store/index";
 import ElementUI from 'element-ui'
 import globComponents from "@/globalComponents/index.js"
 
-import "./styles/wezhan.scss";
 import "@/styles/theme-chalk/index.scss"
 import "@/styles/elementui-reset/index.scss"
 

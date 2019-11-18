@@ -36,6 +36,13 @@ module.exports = {
                 });
         }
     },
+    css: {
+        loaderOptions: {
+            sass: {
+              data: `@import "@/styles/theme-chalk/common/var.scss";`
+          }
+        }
+    },
     devServer: {
         disableHostCheck: true,
         port: 8084,

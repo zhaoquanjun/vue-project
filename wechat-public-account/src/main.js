@@ -3,11 +3,14 @@ import App from "./App.vue";
 import router from "./router/index";
 import store from "./store/index";
 import './plugins/element';
-import "./styles/reset.css";
+
+
+
+import "@/styles/custom.scss";
+import "@/styles/theme-chalk/index.scss"
+import "@/styles/elementui-reset/index.scss"
+
 import "./styles/common.scss";
-import "./plugins/element-reset.scss";
-import "./styles/pop-up/pup-up.scss";
-import "./styles/weizhan.scss";
 //import 'babel-polyfill';
 Vue.config.productionTip = false;
 //插件的包
