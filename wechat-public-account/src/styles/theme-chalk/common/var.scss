@@ -28,7 +28,11 @@ $--color-text-orange: $--color-primary !default;
 
 // Border color
 $--border-color-base: #D7D8D9 !default;
+
 $--border-radius-base: 2px !default;
+
+$--border-radius-circle: 50% !default;
+
 $--border-color-primary: $--color-primary !default;
 /* Border
 -------------------------- */
@@ -69,7 +73,7 @@ $--index-popper: 2000 !default;
 /* Icon
 -------------------------- */
 $--icon-color: $--color-text-primary !default;
-$--icon-hover-color: rgba(244, 245, 246, 1) !default;
+$--icon-hover-color: #F4F5F6 !default;
 $--icon-color-base: $--color-info !default;
 
 /* Paddings

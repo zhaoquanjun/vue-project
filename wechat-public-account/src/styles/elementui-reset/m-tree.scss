@@ -78,7 +78,7 @@
     .category-name-pic {
         width: 282px;
         height: 140px;
-        background: #fff;
+        background: $--color-white;
         display: block;
         position: absolute;
         z-index: 2000;
@@ -109,7 +109,7 @@
     .el-tree .el-tree-node__content {
         height: 40px;
         position: relative !important;
-        background: #fff;
+        background: $--color-white;
         cursor: auto
     }
     .el-tree-node .el-tree-node__content:hover{
@@ -146,10 +146,9 @@
         height: 70px;
         line-height: 70px;
         width: 100%;
-       
         box-sizing: border-box;
         font-size: 18px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: $--border-base
     }
 }
 
@@ -157,9 +156,9 @@
     margin-top: 24px;
     .tree-aside {
         width: 220px !important;
-        background: #fff;
+        background: $--color-white;
         margin: 0 24px 0 32px;
-        border: 1px solid #E5E5E5;
+        border: $--border-base;
         border-radius: 2px;
     }
     .el-dialog__body {
