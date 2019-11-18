@@ -5,7 +5,7 @@
 }
 .el-form {
     .el-select {
-        width: 100%;
+        // width: 100%;
         .el-input.is-focus,
         .el-input__inner:focus{
             border-color: $--color-primary ;
@@ -22,7 +22,7 @@
         }
        
     }
-    .el-form-item {
-        margin-bottom: 30px;
-    }
+    // .el-form-item {
+    //     margin-bottom: 30px;
+    // }
 }
