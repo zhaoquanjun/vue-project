@@ -27,15 +27,15 @@ $--color-text-secondary: #D7D8D9 !default;
 $--color-text-orange: $--color-primary !default;
 
 // Border color
-$--border-color: #D7D8D9 !default;
+$--border-color-base: #D7D8D9 !default;
 $--border-radius-base: 2px !default;
 
 /* Border
 -------------------------- */
 $--border-width-base: 1px !default;
 $--border-style-base: solid !default;
-$--border-color-base: $--color-primary !default;
-$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
+$--border-color-primary: $--color-primary !default;
+$--border-base: $--border-width-base $--border-style-base $--border-color-primary !default;
 
 
 /* Box-shadow
