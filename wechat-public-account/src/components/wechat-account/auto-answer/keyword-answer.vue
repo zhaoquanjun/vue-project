@@ -332,7 +332,7 @@ button {
 }
 .keyword-answer {
     padding: 16px 0px;
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     .keyword-answer-content {
         // padding: 24px 0 0 0;
         // border-top: 1px solid #e5e5e5;
@@ -438,7 +438,7 @@ button {
                 float: right;
                 width: 90px;
                 height: 32px;
-                border-radius: 2px;
+                border-radius: $--border-radius-base;
                 background: rgba(9, 204, 235, 1);
                 color: #ffffff;
             }

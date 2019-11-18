@@ -720,7 +720,7 @@ export default {
 }
 .message-content__section {
   background-color: #fff;
-  border-radius:2px;
+  border-radius:$--border-radius-base;
   height: 348px;
 
   .radio-tabs {
@@ -823,7 +823,7 @@ export default {
             bottom: 54px;
             width: 146x;
             border: 1px solid #c9d9dc; // 需换底图
-            border-radius: 2px;
+            border-radius: $--border-radius-base;
             li {
               margin: 0 auto;
               padding: 8px 6px;
@@ -879,7 +879,7 @@ export default {
     float: left;
     width: calc(100% - 295px);
     height: 526px;
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     .menu-operate__none {
       width: 100%;
       background: #fff;
@@ -910,7 +910,7 @@ export default {
     .menu-operate__box {
       margin-left: 24px;
       width: 100%;
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       border-left: 1px solid rgba(229, 229, 229, 1);
       background: #ffffff;
       .menu-operate__header {
@@ -1090,7 +1090,7 @@ export default {
   height:40px;
   float: left;
   background:rgba(255,255,255,1);
-  border-radius:2px;
+  border-radius:$--border-radius-base;
   border:1px solid rgba(229,229,229,1);
   font-size:14px;
   font-family:'PingFangSC-Regular,PingFangSC';
@@ -1136,7 +1136,7 @@ export default {
   width:100px;
   height:32px;
   background:#09cceb; 
-  border-radius:2px;
+  border-radius: $--border-radius-base;
   font-size:14px;
   font-family:'PingFangSC-Regular,PingFangSC';
   font-weight:400;

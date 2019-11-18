@@ -70,7 +70,7 @@ export default {
       height:40px;
       padding-left: 10px;
       background:rgba(255,255,255,1);
-      border-radius:2px;
+      border-radius:$--border-radius-base;
       border:1px solid rgba(5,149,230,1);
     }
     .tips {

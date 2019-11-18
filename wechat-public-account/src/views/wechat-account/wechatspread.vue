@@ -392,7 +392,7 @@ export default {
     overflow-y: auto;
     .iconfont {
       padding: 8px;
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       margin-right: 10px !important;
       cursor: pointer;
       &:hover {
@@ -420,7 +420,7 @@ export default {
           width:90px;
           height:32px;
           background:rgba(9,204,235,1);
-          border-radius:2px;
+          border-radius:$--border-radius-base;
           font-weight:400;
           color:rgba(255,255,255,1);
           line-height:32px;

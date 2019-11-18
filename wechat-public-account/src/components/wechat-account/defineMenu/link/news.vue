@@ -291,7 +291,7 @@ export default {
       width: 120px;
       height: 32px;
       background: rgba(0, 193, 222, 1);
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       border-color: rgba(0, 193, 222, 1);
       span,
       i {
@@ -443,7 +443,7 @@ export default {
       display: inline-block;
       width:250px;
       height:32px;
-      border-radius:2px;
+      border-radius:$--border-radius-base;
       border:1px solid rgba(229,229,229,1);
       font-size:14px;
       font-family:"PingFangSC";

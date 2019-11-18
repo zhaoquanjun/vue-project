@@ -210,7 +210,7 @@ export default {
       height:32px;
       margin-top: 4px;
       line-height: 32px;
-      border-radius:2px;
+      border-radius:$--border-radius-base;
       border:1px solid rgba(9,204,235,1);
       color: rgba(9,204,235,1);
       text-align: center;
@@ -222,7 +222,7 @@ export default {
     height:570px;
     min-width: 1050px;
     background:rgba(255,255,255,1);
-    border-radius:4px;
+    border-radius:$--border-radius-base;
     border:1px solid rgba(229,229,229,1);
     h4 {
       font-size:14px;
@@ -238,7 +238,7 @@ export default {
         padding: 8px;
         flex: 1;
         height:85px;
-        border-radius:4px;
+        border-radius:$--border-radius-base;
         border:1px solid rgba(229,229,229,1);
         margin-right: 24px;
         &:last-child {

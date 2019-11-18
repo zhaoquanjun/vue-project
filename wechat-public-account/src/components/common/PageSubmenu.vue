@@ -100,7 +100,7 @@ created(){
     width: 150px;
     height: calc(100vh - 50px);
     background: #FFFFFF;
-    border-right: 1px solid #e5e5e5;
+    border-right: $--border-base;
     .submenu-title {
         height: 40px;
         line-height: 40px;

@@ -336,7 +336,7 @@ export default {
       height: calc(100% - 266px);
       .account-body {
         background:rgba(255,255,255,1);
-        border-radius:2px;
+        border-radius:$--border-radius-base;
         border:1px solid rgba(221,226,234,1);
       }
       .account-setting__bind {
@@ -368,7 +368,7 @@ export default {
           color:#ffffff;
           background: #01c0de;
           line-height:40px;
-          border-radius: 3px;
+          border-radius: $--border-radius-base;
         }
       }
       .account-setting__resolve {
@@ -393,7 +393,7 @@ export default {
           width:340px;
           height:40px;
           background:rgba(255,255,255,1);
-          border-radius:2px;
+          border-radius:$--border-radius-base;
           border:1px solid rgba(229,229,229,1);
           font-family:'PingFangSC-Regular,PingFangSC';
           font-weight:400;
@@ -450,7 +450,7 @@ export default {
           width:340px;
           height:40px;
           background:rgba(255,255,255,1);
-          border-radius:2px;
+          border-radius:$--border-radius-base;
           border:1px solid rgba(229,229,229,1);
           margin: 20px auto 30px;
           text-align: left;
@@ -555,7 +555,7 @@ export default {
     transform: translate(-50%, -50%);
     width: 520px;
     background: #ffffff;
-    border-radius: 3px;
+    border-radius: $--border-radius-base;
     padding: 32px 24px;
     .auther-top {
       height: 20px;
@@ -607,7 +607,7 @@ export default {
         height: 40px;
         cursor: pointer;
         background: #ffffff;
-        border-radius: 3px;
+        border-radius: $--border-radius-base;
         text-align: center;
         line-height: 40px;
         border: 1px solid #09cceb;

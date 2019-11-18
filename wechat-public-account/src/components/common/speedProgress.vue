@@ -91,7 +91,7 @@ export default {
             }
             .line {
                 box-shadow: border-box;
-                border: 1px solid #E5E5E5;
+                border: $--border-base;
                 width: 300px;
                 position: absolute;
                 top: 16px;
