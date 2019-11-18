@@ -714,8 +714,8 @@ export default {
                         "video",
                         {
                             url: `${environment.contentQueryApi}/`+videoUrl,
-                            width: 'auto',
-                            height: 'auto',
+                            width: '100%',
+                            height: '100%',
                             poster: poster
                         }
                     );

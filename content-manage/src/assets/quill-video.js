@@ -6,6 +6,7 @@ let Link = Quill.import('formats/link')
 export default class Video extends BlockEmbed {
   static create(value) {
     let node = super.create();
+    node.setAttribute("style","width:100%;height:100%");
     let video= document.createElement('video');
     video.setAttribute('class','ql-video-content');
     video.setAttribute('vsrc', this.sanitize(value.url));
