@@ -6,25 +6,28 @@
 // Backgorund color
 $--background-color-base: #F5F7FA !default;
 
-$--color-primary: rgba(255, 107, 0, 1) !default;
-$--color-success: rgba(99, 220, 140, 1) !default;
-$--color-warning: rgba(254, 152, 55, 1) !default;
-$--color-danger: rgba(251, 77, 104, 1) !default;
+$--color-primary: #FF6B00 !default;
+$--color-success: #63DC8C !default;
+$--color-warning: #FE9837 !default;
+$--color-danger: #FB4D68 !default;
 $--color-info: rgba(240, 243, 247, 1) !default;
+
 $--color-white: #FFFFFF !default;
 $--color-black: rgba(31, 35, 37, 1) !default;
+$--color-black2: rgba(55, 61, 65, 1) !default;
+
+$--background-color-selected: #F4F5F6;
+$--background-color-hover: #F9F9F9;
+
 
 // Font  text-color 
-$--color-text-primary: rgba(38, 38, 38, 1) !default;
-$--color-text-regular:rgba(159, 159, 159, 1) !default;
-$--color-text-secondary: rgba(215, 216, 217, 1) !default;
+$--color-text-primary: #262626 !default;
+$--color-text-regular:#9F9F9F !default;
+$--color-text-secondary: #D7D8D9 !default;
 $--color-text-orange: $--color-primary !default;
 
 // Border color
-$--border-color-base: rgba(215, 216, 217, 1) !default;
-$--border-color-light: #E4E7ED !default;
-$--border-color-lighter: #EBEEF5 !default;
-$--border-color-extra-light: #F2F6FC !default;
+$--border-color: #D7D8D9 !default;
 $--border-radius-base: 2px !default;
 
 /* Border
@@ -89,6 +92,12 @@ $--margin-xs: 8px;
 $--height-base: 32px; 
 $--width-base: 32px;
 
+/* Break-point
+--------------------------*/
+$--sm: 768px !default;
+$--md: 992px !default;
+$--lg: 1200px !default;
+$--xl: 1920px !default;
 
 /* Button
 -------------------------- */
@@ -110,18 +119,18 @@ $--button-primary-font-color: $--color-white !default;
 
 $--button-primary-background-color: $--color-primary !default;
 
-$--button-hover-primary-background-color: rgba(255, 122, 27, 1) !default;
+$--button-hover-primary-background-color: #FF7A1B !default;
 
-$--button-disabled-defualt-background-color: rgba(215, 216, 217, 1) !default;
+$--button-disabled-defualt-background-color: #D7D8D9 !default;
 
-$--button-disabled-primary-color:rgba(255, 196, 153, 1);
-
-
-
+$--button-disabled-primary-color:#FFC499;
 
 $--button-default-font-color: $--color-text-primary !default;
+
 $--button-primary-font-color: $--color-primary !default;
+
 $--button-success-font-color:$--color-success !default;
+
 $--button-danger-font-color: $--color-danger !default;
 
 

@@ -349,12 +349,11 @@ export default {
 .header {
   padding: 0 10px;
   font-size: 14px;
-  background: #08cceb;
-  color: #fff;
+  background: $--color-white;
+  color: $--color-text-primary;
   position: relative;
   .head-item {
     .logo-icon {
-      border-right: 1px solid hsla(0, 0%, 100%, 0.3);
       width: 60px;
       box-sizing: border-box;
       text-align: center;
@@ -363,6 +362,10 @@ export default {
       margin-left: -10px;
       height: 50px;
       vertical-align: top;
+      background: $--color-primary;
+      .iconfont{
+        color: $--color-white;
+      }
     }
     span {
       display: inline-block;
@@ -392,8 +395,8 @@ export default {
         min-width: 60px;
         max-width: 150px;
         vertical-align: middle;
-        padding: 0;
-        margin-right: 6px;
+        padding-left: 0;
+        padding-right: 6px;
       }
     }
   }

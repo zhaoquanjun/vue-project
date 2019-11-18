@@ -43,6 +43,7 @@ export default {
 };
 </script>
 <style >
+
 .common-header {
   height: 50px !important;
   line-height: 50px;

@@ -1,7 +1,7 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',backgroundColor:'#F8FAFC',borderRight: '1px solid rgb(229, 229, 229)'}"
+        :style="{width:width+'px',backgroundColor:'#F8FAFC'}"
         @mouseenter="collapseOpen(150,0.8)"
         @mouseleave="collapseClose"
     >
@@ -175,6 +175,7 @@ export default {
     overflow: hidden;
     transition: 0.2s ease-in-out;
     background-color:$--color-black;
+   
     // border-right: 1px solid rgb(229, 229, 229);
 }
 .m-asideleft {

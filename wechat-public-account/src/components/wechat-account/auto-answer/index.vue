@@ -589,6 +589,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+
 .auto-answer {
     padding: 16px 32px 0;
     .answer-tabs {
@@ -596,6 +597,7 @@ export default {
         background: #ffffff;
     }
     .spread-title {
+    
       display: flex;
       height: 32px;
       width: 100%;

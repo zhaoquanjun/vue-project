@@ -47,7 +47,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .leftNavAside {
     width: 100%;
     background: #f8fafc !important;
@@ -62,7 +62,7 @@ export default {
     text-align: left;
 }
 .el-menu :active.el-menu-item-left span{
-    color: #0595e6;
+   color: $--color-primary;
 }
 .el-menu .el-menu-item-left span{
     display: inline-block;
@@ -70,31 +70,20 @@ export default {
     width: 100%;
     line-height: 50px;
     padding-left: 16px;
+    cursor: pointer;
 }
 .el-menu .el-menu-item-left p{
     line-height: 50px;
     padding-left: 40px;
     cursor: pointer;
 }
-.el-menu .el-menu-item-left .hasHover:hover {
+.el-menu .el-menu-item-left span:hover {
     background: #fff;
-    cursor: pointer;
 }
 .el-menu .el-menu-item-left p:hover {
     background: #fff;
 }
-.active {
-    color: #0595e6;
-    background: #fff;
-    /* border-left: 4px solid #0595e6; */
-}
-.active:hover {
-    /* color: #0595e6; */
-    background: #ffffff !important;
-}
-.active:active{
-     color: #0595e6;
-}
+
 .submenu-title {
     height: 40px;
     line-height: 40px;

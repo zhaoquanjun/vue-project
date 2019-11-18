@@ -1,14 +1,14 @@
 
-
+@import "../theme-chalk/mixins/utlis";
 .el-table{
-    border: 1px solid #EEEEEE; 
-     position: relative;
-    color: rgba(38, 38, 38, 1);
+    border: 1px solid $--border-color; 
+    position: relative;
+    color: $--color-text-primary;
 }
 .el-table thead th > .cell {
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(159, 159, 159, 1);
+    font-size: $--font-size-small;
+    font-weight: $--font-weight-base;
+    color: $--color-text-regular;
    
 }
 .el-table tbody .el-table__row .cell{
@@ -19,5 +19,10 @@
     padding: 8px 0;
 }
 .el-table--enable-row-hover .el-table__body tr:hover>td{
-    background: rgba(249, 249, 249, 1);
+    background: $--background-color-hover;
+}
+
+.el-table .el-table__body-wrapper .el-table__row .cell span{
+    display: block;
+    @include utils-ellipsis
 }

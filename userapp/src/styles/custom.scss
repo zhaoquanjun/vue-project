@@ -1,3 +1,17 @@
+
+
+body{
+    color: #262626;
+    overflow: hidden;
+    font-family:  "PingFang SC",  "Microsoft YaHei", "Helvetica Neue",  Arial;
+    background:rgba(255,255,255,1);
+    min-width: 1170px;
+    min-height: 500px;
+}
+.page-scroll{
+    overflow: auto;
+    height: calc(100vh - 50px);
+}
 .ellipsis{
     display: inline-block;
     overflow: hidden;/*超出部分隐藏*/
@@ -6,25 +20,48 @@
     white-space: nowrap;/*规定段落中的文本不进行换行 */
 }
 // 右侧面板底部操作按钮
-.pannle-footer {
+// .pannle-footer {
+//     width: 100%;
+//     border-top: 1px solid #eee;
+//     padding: 17px 17px 0 17px;
+//     box-sizing: border-box;
+//     button,span {
+//         cursor: pointer;
+//         display: inline-block;
+//         width: 66px;
+//         height: 32px;
+//         line-height: 32px;
+//         background: #09CCEB;
+//         margin-right: 8px;
+//         color: #fff;
+//         text-align: center;
+//     }
+//     .cancel{
+//         color: #262626;
+//         background:#E5E5E5;
+//     }
+// }
+.pannel-footer {
     width: 100%;
-    border-top: 1px solid #eee;
-    padding: 17px 17px 0 17px;
-    box-sizing: border-box;
-    button,span {
-        cursor: pointer;
-        display: inline-block;
-        width: 66px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 15px 17px;
+    border-top: 1px solid #efefef;
+    background: #fff;
+    .button {
+        padding: 0 15px;
         height: 32px;
-        line-height: 32px;
-        background: #09CCEB;
-        margin-right: 8px;
+        font-size: 14px;
+        background: rgba(0, 193, 222, 1);
         color: #fff;
-        text-align: center;
+        border-radius: 2px;
     }
-    .cancel{
-        color: #262626;
-        background:#E5E5E5;
+    .cancel {
+        margin-left: 20px;
+        background: #fff;
+        border: 1px solid rgba(0, 193, 222, 1);
+        color: rgba(0, 193, 222, 1);
     }
 }
 // 自定义input错误提示图标
@@ -129,4 +166,51 @@
 
 .fs14{
     font-size: 14px
+}
+
+
+.icon-size{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+
+// 暂无数据
+// .empty-table {
+//     height: 230px;
+//     text-align: center;
+//     img {
+//         margin-top: 45px;
+//         width: 80px;
+//         vertical-align: middle;
+//         padding: 18px 28px;
+//     }
+//     p {
+//         color: #8c8c8c;
+//     }
+// }
+
+.auth-tip {
+    box-sizing: border-box;
+    margin: 10px 16px 0;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 16px;
+    color: #ff451d;
+    background: rgba(253, 240, 237, 1);
+    border: 1px solid rgba(253, 171, 153, 1);
+}
+.submenu-aside{
+    width: 150px !important;
+}
+
+.copy-icon {
+    margin-top: 17px;
+    display: inline-block;
+    width: 142px;
+    height: 89px;
+    background: url("~img/copy.gif") no-repeat center;
+    background-size: contain;
 }
