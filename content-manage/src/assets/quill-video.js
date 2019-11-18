@@ -8,13 +8,14 @@ export default class Video extends BlockEmbed {
     let node = super.create();
     let video= document.createElement('video');
     video.setAttribute('class','ql-video-content');
-    video.setAttribute('src', this.sanitize(value.url));
+    video.setAttribute('vsrc', this.sanitize(value.url));
     video.setAttribute('controls', 'controls');
     video.setAttribute('width', value.width);
     video.setAttribute('height', value.height);
     video.setAttribute('webkit-playsinline', true);
     video.setAttribute('playsinline', true);
     video.setAttribute('x5-playsinline', true);
+    video.setAttribute('poster',value.poster)
     let dragP = document.createElement('p');
     let dragPStyle="position:absolute; top:0; left:0; display:none; border:2px solid rgb(170, 24, 121); border-radius:50%; width:8px; height:8px; cursor:nesw-resize; ";
     dragP.setAttribute('class', 'ql-dragHandler');

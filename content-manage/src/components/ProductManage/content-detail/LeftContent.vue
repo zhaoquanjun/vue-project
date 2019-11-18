@@ -258,6 +258,7 @@
     </div>
 </template>
 <script>
+import environment from "@/environment/index";
 import * as productManageApi from "@/api/request/productManageApi";
 import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
 import DetailCheckTree from "./DetailCheckTree";
@@ -923,15 +924,17 @@ export default {
             if (videoList && videoList.length > 0) {
                 for (var i = 0; i < videoList.length; i++) {
                     this.addRange = this.$refs.myQuillEditor.quill.getSelection();
-                    var videoUrl = videoList[i].videoPlayUrl;
+                    var videoUrl = videoList[i].contentQueryDownloadApiUrl;
+                    var poster = videoList[i].coverUrl;
                     // 调用编辑器的 insertEmbed 方法，插入URL
                     this.$refs.myQuillEditor.quill.insertEmbed(
                         this.addRange !== null ? this.addRange.index :this.selectVideoRangeIndex,
                         "video",
                         {
-                            url: videoUrl,
+                            url: `${environment.contentQueryApi}/`+videoUrl,
                             width: 'auto',
-                            height: 'auto'
+                            height: 'auto',
+                            poster: poster
                         }
                     );
                     this.videoAddDragEvent();
