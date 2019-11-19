@@ -5,7 +5,7 @@
                 <span>文章分类</span>
             </h4>
             <m-tree
-                    ref="myTree"
+                ref="myTree"
                 :treeResult="treeResult"
                 :list-options="articleSearchOptions"
                 :isArticle="true"
@@ -49,7 +49,7 @@
                     @handleSelectionChange="handleSelectionChange"
                     @changeOperateName="changeOperateName"
                 ></content-table>
-                
+
                 <el-dialog
                     width="0"
                     style="z-index:10"
@@ -95,7 +95,7 @@ export default {
         ContentHeader,
         ContentTable,
         RightPannel,
-        SelectTree,
+        SelectTree
     },
     data() {
         return {
@@ -153,7 +153,7 @@ export default {
             });
         },
         async getArticleList(options) {
-           this.$Loading.show();
+            this.$Loading.show();
             let { data } = await articleManageApi.getArticleList(
                 (options = this.articleSearchOptions)
             );
@@ -172,23 +172,12 @@ export default {
                 "删除后，网站中引用的文章列表将不再显示该文章，是否确定删除？",
                 "提示",
                 {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
                         if (action === "confirm") {
-                            let {
-                                status,
-                                data
-                            } = await articleManageApi.batchRemove(
-                                true,
-                                idlist
-                            );
+                            let { status, data } = await articleManageApi.batchRemove( true, idlist );
                             if (status === 200) {
-                                // this.getTree();
                                 this.$notify({
                                     customClass: "notify-success", //  notify-success ||  notify-error
                                     message: `删除成功!`,
@@ -210,10 +199,6 @@ export default {
             var message = "置顶";
             if (isTop) message = "取消置顶";
             this.$confirm("您确定要" + message + "文章吗？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-                customClass: "medium",
                 iconClass: "icon-warning",
                 callback: async action => {
                     console.log(action);
@@ -243,23 +228,12 @@ export default {
             var message = "上线";
             if (isPublish) message = "下线";
             this.$confirm("您确认要" + message + "文章吗？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-                customClass: "medium",
                 iconClass: "icon-warning",
                 callback: async action => {
                     console.log(action);
                     if (action === "confirm") {
-                        let {
-                            status,
-                            data
-                        } = await articleManageApi.batchPublish(
-                            !isPublish,
-                            idlist
-                        );
+                        let {  status,  data } = await articleManageApi.batchPublish( !isPublish, idlist );
                         if (status === 200) {
-                            // this.getTree();
                             this.$notify({
                                 customClass: "notify-success", //  notify-success ||  notify-error
                                 message: `${message}成功!`,
@@ -268,8 +242,7 @@ export default {
                             });
                             this.getArticleList();
                         }
-                    } else {
-                    }
+                    } 
                 }
             });
         },
@@ -279,8 +252,8 @@ export default {
             this.isInvitationPanelShow = true;
             this.rightPanelType = 1;
             this.newsIdList = idlist;
-            if (isHeader ) {
-                this.moveToClassiFy ="";    
+            if (isHeader) {
+                this.moveToClassiFy = "";
                 this.curArticleInfo = {
                     categoryName: "全部分类",
                     categoryId: 0
@@ -293,8 +266,8 @@ export default {
             this.isInvitationPanelShow = true;
             this.rightPanelType = 2;
             this.newsIdList = idlist;
-               if (isHeader ) {
-                this.moveToClassiFy ="";    
+            if (isHeader) {
+                this.moveToClassiFy = "";
                 this.curArticleInfo = {
                     categoryName: "全部分类",
                     categoryId: 0
@@ -314,7 +287,6 @@ export default {
         },
         //选择移动分类时的节点
         chooseNode(node) {
-            console.log(node, "nnnnnnnnnn");
             this.moveToClassiFy = node;
         },
         // 点击左侧分类树菜单时的节点
@@ -327,7 +299,6 @@ export default {
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
             this.curArticleInfo = data;
-           
         },
         // 判断是 移动还是复制
         handOperateArticle() {
@@ -365,7 +336,7 @@ export default {
         },
         // 点击确定按钮 复制
         async copyArticle() {
-           let cateId = this.moveToClassiFy
+            let cateId = this.moveToClassiFy
                 ? this.moveToClassiFy.id
                 : this.curArticleInfo.categoryId;
             let { data, status } = await articleManageApi.batchCopy(
@@ -373,15 +344,7 @@ export default {
                 this.newsIdList
             );
             if (status == 200) {
-                //  this.$notify({
-                //     customClass: "notify-success", //  notify-success ||  notify-error
-                //     message: `复制成功!`,
-                //     duration: 1000
-                // });
-                if (
-                    Array.isArray(this.newsIdList) &&
-                    this.newsIdList.length > 1
-                ) {
+                if ( Array.isArray(this.newsIdList) &&  this.newsIdList.length > 1 ) {
                     this.$notify({
                         customClass: "notify-success", //  notify-success ||  notify-error
                         message: `批量复制成功!`,
@@ -429,7 +392,7 @@ export default {
         async getTreeAsync() {
             let { data } = await articleManageApi.getArticleCategory();
             this.treeResult = data;
-            this.$refs.myTree.selectCategoryByNodeId(this.selectCategory.id)
+            this.$refs.myTree.selectCategoryByNodeId(this.selectCategory.id);
         },
 
         // 重命名分类名称
@@ -442,10 +405,7 @@ export default {
             await articleManageApi.create(entity);
             this.getTreeAsync();
         },
-        // async modifyNodeCategory(id, parentId, idOrderByArr) {
-        //     //await articleManageApi.modifyNode(id, parentId, idOrderByArr);
-        //     this.getTreeAsync();
-        // },
+       
         /**
          * 删除分类
          */
@@ -455,10 +415,6 @@ export default {
                 "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
                 "提示",
                 {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
@@ -483,13 +439,7 @@ export default {
                 }
             );
         },
-        /**获取编辑产品详情 */
-        // async getArticleDetail(id) {
-        //     let { data } = await articleManageApi.getArticleDetail(id);
-        //     this.articleDetail = data;
-        //     this.articleDetail.NewId = data.id;
-        //     this.imageUrl = data.pictureUrl;
-        // },
+       
         // 点击新增跳转到详情页
         addArticle() {
             if (!this.selectCategory) {

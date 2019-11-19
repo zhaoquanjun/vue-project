@@ -7,11 +7,8 @@ import enbironmemy from "@/environment/index";
 const config = {
     authority: enbironmemy.authorityUrl,
     client_id: enbironmemy.clientId,
-    //client_id: "content.api",
     redirect_uri: enbironmemy.redirectUrl,
     response_type: 'code',
-    // content.api
-    //scope: 'openid profile content.api',
     userStore: new Oidc.WebStorageStateStore({ store: window.localStorage }),
     scope: enbironmemy.scope,
     post_logout_redirect_uri: enbironmemy.logoutRedirectUri,

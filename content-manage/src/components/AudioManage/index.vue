@@ -5,7 +5,7 @@
                 <span>{{displayName}}分类</span>
             </h4>
             <m-tree
-                    ref="myTree"
+                ref="myTree"
                 :tree-result="treeResult"
                 :list-options="picSearchOptions"
                 :isexpand="true"
@@ -105,7 +105,6 @@
                 :displayName="displayName"
                 :uploadType="contentType"
                 :apiHost="apiHost"
-                
                 @getList="getList"
                 @getTree="getTree"
                 @closeDialog="closeDialog"
@@ -153,7 +152,6 @@ export default {
             isImgList: false,
             countPic: 0,
             curImgInfo: {},
-
             moveToClassiFy: "",
             categoryName: "", //当前选中的分类名字
             idsList: [],
@@ -191,13 +189,10 @@ export default {
         async getList(node) {
             this.$Loading.show();
             if (node) {
-              
                 this.nodeData = node; // 上传弹窗所需
             }
-            let { data } = await audioManageApi.getList(
-                this.picSearchOptions
-            );
-             this.$Loading.hide();
+            let { data } = await audioManageApi.getList(this.picSearchOptions);
+            this.$Loading.hide();
             this.getTree();
             this.imgPageResult = data;
         },
@@ -207,13 +202,9 @@ export default {
                 `删除后，网站中引用的音频将被同步删除，同时音频将被移动到回收站，是否确认删除？`,
                 "提示",
                 {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    customClass: "medium",
+                 
                     iconClass: "icon-warning",
                     callback: async action => {
-                       
                         if (action === "confirm") {
                             let {
                                 status,
@@ -228,7 +219,6 @@ export default {
                                 });
                                 this.getTree();
                                 this.getList();
-                               
                             }
                         }
                     }
@@ -247,7 +237,7 @@ export default {
             );
             if (status == 200) {
                 this.$notify({
-                    customClass: "notify-success", 
+                    customClass: "notify-success",
                     message: `移动成功!`,
                     showClose: false,
                     duration: 1000
@@ -265,10 +255,9 @@ export default {
             let { data } = await audioCategoryManageApi.get();
             this.treeResult = data.treeArray;
             this.totalSum = data.totalSum;
-            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id)
+            this.$refs.myTree.selectCategoryByNodeId(this.nodeData.id);
         },
         async newCategory(entity) {
-           
             await audioCategoryManageApi.create(entity);
             this.getTree();
         },
@@ -277,13 +266,8 @@ export default {
                 "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
                 "提示",
                 {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                    customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
-                       
                         if (action === "confirm") {
                             let {
                                 status
@@ -321,7 +305,6 @@ export default {
         moveClassify(b, data) {
             this.isInvitationPanelShow = b;
             this.curImgInfo = data;
-           
         },
         closeRightPanel(b) {
             this.isInvitationPanelShow = b;
@@ -357,7 +340,7 @@ export default {
         },
         //批量移动
         batchMove(isHeader) {
-            if(isHeader){
+            if (isHeader) {
                 this.curImgInfo = {
                     categoryName: "全部分类",
                     categoryId: 0

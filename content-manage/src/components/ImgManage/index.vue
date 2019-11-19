@@ -202,7 +202,7 @@ export default {
             this.$Loading.show()
             if (node) this.nodeData = node; // 上传图片所需
             let { data } = await imgManageApi.getList(this.picSearchOptions);
-             this.$Loading.hide()
+            this.$Loading.hide()
             this.getTree();
             this.imgPageResult = data;
             this.imgPageResult.list.forEach((item, index) => {
@@ -256,10 +256,7 @@ export default {
                 });
            
         },
-        // resetCategoryId() {
-        //     this.picSearchOptions.categoryIdList = [];
-        //     this.getList();
-        // },
+       
         // 清空选中的列表
         clearSelectedList() {
             this.$refs.imgList.clearSelectedList()

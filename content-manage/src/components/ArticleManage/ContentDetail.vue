@@ -115,10 +115,6 @@ export default {
             if (this.previewId) {
                 let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail', this.siteId == null ? 0 : this.siteId);
                 var prevAddress = data;
-                //var a = document.createElement('a');
-                //a.setAttribute('href', prevAddress + this.previewId + '.html');
-                //a.setAttribute('target', '_blank');
-                //a.click();
                 if (prevAddress) {
                     let newWindow = window.open();
                     newWindow.location.href = prevAddress + this.previewId + '.html';

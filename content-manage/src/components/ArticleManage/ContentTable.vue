@@ -156,16 +156,6 @@ export default {
             this.articleSearchOptions.pageSize = size;
             this.$emit("getArticleList");
         },
-        // sortByTopStatus: function(column, prop, order) {
-        //     // descending ascending
-        //     this.articleSearchOptions.OrderByTopOrder =
-        //         column.order == "ascending"
-        //             ? true
-        //             : column.order == "descending"
-        //             ? false
-        //             : null;
-        //     this.$emit("getArticleList");
-        // },
         /**
          * 单选或全选操作
          */
@@ -262,10 +252,6 @@ export default {
             let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail', siteId);
             var prevAddress = data;
             if(prevAddress){
-                //var a = document.createElement('a');
-                //a.setAttribute('href', prevAddress + previewId + '.html');
-                //a.setAttribute('target', '_blank');
-                //a.click();
                 let newWindow = window.open();
                 newWindow.location.href = prevAddress + previewId + '.html';
             }

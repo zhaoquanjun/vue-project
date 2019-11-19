@@ -206,10 +206,7 @@ export default {
             this.changeCategoryPicId = row.id;
             this.$emit("moveClassify", true, row);
         },
-        // changeCategory(data) {
-        //     this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
-        //     this.categoryVisable = false;
-        // },
+      
         // 重命名图片名称
         rename(id, row, index) {
            if(row.title)this.newName = row.title;
@@ -280,9 +277,9 @@ export default {
 };
 </script>
 
+<style lang="scss" scoped>
+@import "@/styles/content-manage/manege-table.scss";
 
-
-<style scoped>
 
 .el-table /deep/ .el-table_1_column_3 .cell span{
     display: inline-block;
@@ -297,9 +294,5 @@ export default {
     align-items: center;
 }
 
-
-</style>
-<style lang="scss" scoped>
-@import "@/styles/content-manage/manege-table.scss";
 </style>
 

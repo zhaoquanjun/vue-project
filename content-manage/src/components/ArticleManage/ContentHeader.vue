@@ -9,7 +9,6 @@
                     placeholder="输入名称搜索"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
-                    
                 >
                     <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getArticleList"></i>
                 </el-input>
@@ -96,14 +95,9 @@
                             </button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <!-- <span size="small" @click="batchclassifySet">移动</span> -->
                             <el-dropdown-item command="move">移动</el-dropdown-item>
-                            <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
                             <el-dropdown-item command="top">置顶</el-dropdown-item>
-                            <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                            <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
-                            <!-- <el-dropdown-item command="permission">访问权限</el-dropdown-item> -->
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>

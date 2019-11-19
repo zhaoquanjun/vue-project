@@ -1,6 +1,4 @@
 
-@import "../common/var";
-
 
 @mixin button-size($padding-vertical, $padding-horizontal, $font-size, $border-radius) {
     padding: $padding-vertical $padding-horizontal;
