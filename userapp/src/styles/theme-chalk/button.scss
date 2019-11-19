@@ -6,6 +6,9 @@
     border: 1px solid $--color-primary;
     @include button-size($--button-padding-vertical, $--button-padding-horizontal, $--font-size-small, $--button-border-radius);
 
+    & + & {
+        margin-left: $--margin-md
+      }
 
     &--primary {
         color: $--color-white;

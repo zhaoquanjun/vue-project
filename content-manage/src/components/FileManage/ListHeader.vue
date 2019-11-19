@@ -20,7 +20,7 @@
             <div class="head-item head-middle">
                 <template v-if="contentType==='File'">
                     <span>文件类型</span>
-                    <span class="select-sort ">
+                    <span class="select-sort">
                         <el-select
                             size="small"
                             v-model="fileTypeLabel"
@@ -53,7 +53,7 @@
                     </span>
                 </template>
                 <span>排序</span>
-                <span class="select-sort ">
+                <span class="select-sort">
                     <el-select
                         size="small"
                         v-model="orderByLabel"
@@ -69,10 +69,16 @@
                     </el-select>
                 </span>
                 <button @click="switchIsDesc('dec')" class="desBtn">
-                    <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                    <i
+                        class="iconfont iconicon-Arrow1"
+                        :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
+                    ></i>
                 </button>
                 <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
-                    <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
+                    <i
+                        class="iconfont iconicon-Arrow"
+                        :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
+                    ></i>
                 </button>
             </div>
             <div class="head-item head-right">
@@ -95,7 +101,7 @@
                         class="btn-small btn-lightblue-notboard"
                         @click="batchDownLoad"
                     >下载</button>
-                    <button  class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
 
                     <el-dropdown
                         trigger="click"
@@ -275,15 +281,14 @@ export default {
             this.$emit("batchDelete");
         },
         batchDownLoad() {
-             this.$confirm(`您确定要下载所选文件吗？`, "提示", {
+            this.$confirm(`您确定要下载所选文件吗？`, "提示", {
                 iconClass: "icon-warning",
                 callback: async action => {
-                   if (action === "confirm") {
+                    if (action === "confirm") {
                         this.$emit("batchDownLoad");
-                   }
+                    }
                 }
-             })
-           
+            });
         },
         handleCommand(command) {
             switch (command) {
@@ -304,16 +309,16 @@ export default {
 
 <style  lang="scss" scoped>
 @import "@/styles/content-manage/manage-head.scss";
-.btn-black-notboard{
+.btn-black-notboard {
     padding: 6px;
-    &:hover{
-        background:rgba(240,243,247,1);
-        border-radius:4px;
+    &:hover {
+        background: rgba(240, 243, 247, 1);
+        border-radius: 4px;
     }
 }
 
-.upload-wrap{
-    &:hover{
+.upload-wrap {
+    &:hover {
         opacity: 0.8;
     }
 }

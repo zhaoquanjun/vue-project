@@ -25,6 +25,8 @@
     width: 117px;
     box-sizing: border-box;
     margin: 0 16px 0 7px;
+  
+    
 }
 .head-item {
     display: inline-block;
@@ -124,4 +126,10 @@
     &:hover{
         opacity: 0.8;
     }
+    .desc-active-color{
+        color: $--color-text-orange;     
+     }
+     .desc-regular-color{
+         color: $--color-text-primary;  
+     }
 }
