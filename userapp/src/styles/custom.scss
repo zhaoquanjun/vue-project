@@ -19,28 +19,7 @@ body{
     text-overflow:ellipsis;/* 超出部分显示省略号 */
     white-space: nowrap;/*规定段落中的文本不进行换行 */
 }
-// 右侧面板底部操作按钮
-// .pannle-footer {
-//     width: 100%;
-//     border-top: 1px solid #eee;
-//     padding: 17px 17px 0 17px;
-//     box-sizing: border-box;
-//     button,span {
-//         cursor: pointer;
-//         display: inline-block;
-//         width: 66px;
-//         height: 32px;
-//         line-height: 32px;
-//         background: #09CCEB;
-//         margin-right: 8px;
-//         color: #fff;
-//         text-align: center;
-//     }
-//     .cancel{
-//         color: #262626;
-//         background:#E5E5E5;
-//     }
-// }
+
 .pannel-footer {
     width: 100%;
     position: absolute;
@@ -175,22 +154,6 @@ body{
     height: 16px;
     vertical-align: middle;
 }
-
-
-// 暂无数据
-// .empty-table {
-//     height: 230px;
-//     text-align: center;
-//     img {
-//         margin-top: 45px;
-//         width: 80px;
-//         vertical-align: middle;
-//         padding: 18px 28px;
-//     }
-//     p {
-//         color: #8c8c8c;
-//     }
-// }
 
 .auth-tip {
     box-sizing: border-box;

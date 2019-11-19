@@ -43,8 +43,6 @@
 
             <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
 
-            <!-- <el-table-column  prop="isTopPrt" label="置顶"  min-width="80"></el-table-column> -->
-
             <el-table-column prop="createUser" label="作者" min-width="100">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createUser" placement="top">
@@ -64,15 +62,8 @@
             <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="150">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <!-- <button class="edit-icon" @click="handleEdit(scope.row)"> -->
                             <i class="cl-iconfont iconfont iconbianji is-square" @click="handleEdit(scope.row)"></i>
-                        <!-- </button> -->
-                        <!-- <button
-                            class="more-operate"
-                            @click.stop="_handleShowMoreOperate($event,scope.row)"
-                        > -->
                             <i class="cl-iconfont iconfont iconsangedian is-square"  @click.stop="_handleShowMoreOperate($event,scope.row)"></i>
-                        <!-- </button> -->
                     </div>
                 </template>
             </el-table-column>
