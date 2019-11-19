@@ -9,7 +9,6 @@
                     placeholder="输入名称搜索"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
-                    
                 >
                     <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getArticleList"></i>
                 </el-input>
@@ -66,15 +65,14 @@
                         </el-select>
                     </span>
                     <button @click="switchIsDesc('dec')" class="desBtn">
-                        <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                        <i class="iconfont iconicon-Arrow1" :class=" descSort ? 'desc-active-color': 'desc-regular-color' " ></i>
                     </button>
                     <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
-                        <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
+                        <i class="iconfont iconicon-Arrow" :class=" ascSort ? 'desc-active-color': 'desc-regular-color' " ></i>
                     </button>
                 </div>
                 <div class="head-item head-handle-btn">
-                    <!-- <button @click="importArticle">导入文章</button> -->
-                    <button class="btn-lightblue btn-small add-article" @click="addArticle">新增文章</button>
+                    <button class="cl-button cl-button--primary" @click="addArticle">新增文章</button>
                 </div>
             </div>
         </template>
@@ -97,14 +95,9 @@
                             </button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <!-- <span size="small" @click="batchclassifySet">移动</span> -->
                             <el-dropdown-item command="move">移动</el-dropdown-item>
-                            <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
                             <el-dropdown-item command="top">置顶</el-dropdown-item>
-                            <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                            <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
-                            <!-- <el-dropdown-item command="permission">访问权限</el-dropdown-item> -->
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -249,15 +242,9 @@ export default {
     }
 };
 </script>
-<style>
-
-.seachInput .el-input__inner {
-    font-size: 12px;
-}
-</style>
 
 <style lang="scss" scoped>
-@import "@/styles/manage-head.scss";
+@import "@/styles/content-manage/manage-head.scss";
 
 .btn-black-notboard{
     padding: 6px;
@@ -299,13 +286,5 @@ export default {
 
     }
 }
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    &:hover{
-        opacity: 0.8;
-    }
-}
+
 </style>

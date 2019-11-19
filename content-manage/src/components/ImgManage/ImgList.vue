@@ -103,7 +103,7 @@
             </el-pagination>
         </div>
         <!-- :title="picTitle" -->
-        <div id="img-list-dialog">
+        <div id="img-list-dialog" class="previw-dialog" >
             <el-dialog
                 :visible.sync="imgVisible"
                 :modal-append-to-body="false"
@@ -206,10 +206,7 @@ export default {
             this.changeCategoryPicId = row.id;
             this.$emit("moveClassify", true, row);
         },
-        // changeCategory(data) {
-        //     this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
-        //     this.categoryVisable = false;
-        // },
+      
         // 重命名图片名称
         rename(id, row, index) {
            if(row.title)this.newName = row.title;
@@ -280,12 +277,10 @@ export default {
 };
 </script>
 
+<style lang="scss" scoped>
+@import "@/styles/content-manage/manege-table.scss";
 
 
-<style scoped>
-.myCarousel{
-    overflow-x: visible;
-}
 .el-table /deep/ .el-table_1_column_3 .cell span{
     display: inline-block;
     width: 90px;
@@ -293,47 +288,11 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.myCarousel /deep/ .el-carousel__arrow--left{
-    position: absolute;
-    left: -50px;
-}
-.myCarousel /deep/ .el-carousel__arrow--right{
-    position: absolute;
-    right: -50px;
-}
-.left-prev,
-.right-next {
-    opacity: 0;
-}
+
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
     align-items: center;
 }
 
-.img-name {
-    cursor: pointer;
-}
-
-#img-list-dialog .dislog-footer {
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    left: 0;
-    bottom: 15px;
-}
-
-#img-list-dialog .dislog-footer span {
-    padding: 0 20px;
-    color: #fff;
-}
-
-#img-list-dialog .el-dialog {
-    background: #262626;
-    opacity: 0.7;
-    height: auto;
-}
-</style>
-<style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
 </style>
 

@@ -3,11 +3,14 @@ import App from "./App.vue";
 import router from "./router/index";
 import store from "./store/index";
 import './plugins/element';
-import "./assets/reset.css";
-import "./styles/common.scss";
-import "./plugins/element-reset.scss"
-import "./styles/pop-up/pup-up.scss"
-import "./styles/weizhan.scss";
+
+// public begin
+import "./styles/custom.scss";
+import "@/styles/theme-chalk/index.scss"
+import "@/styles/elementui-reset/index.scss"
+//  public end
+
+import "@/styles/content-manage/popup-wrap.scss"
 import "@/directive/index.js"
 
 import VueQuillEditor from 'vue-quill-editor'

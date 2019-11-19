@@ -255,28 +255,7 @@ export default {
 .el-collapse /deep/ .el-collapse-item__header {
     font-weight: 600;
 }
-.avatar-uploader
-    /deep/
-    .el-upload-list__item-actions
-    .el-upload-list__item-preview {
-    /* left: 17px;
-    bottom: 20px;
-    border: none;
-    width: 27px;
-    height: 27px;
-    background: url("~img/pic-icon/switch.png") no-repeat center;
-    background-size: contain; */
-}
 
-.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete {
-    /* right: 17px;
-    bottom: 20px;
-    border: none;
-    width: 27px;
-    height: 27px;
-    background: url("~img/pic-icon/delete-1.png") no-repeat center;
-      background-size: 50%; */
-}
 .avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete:before {
     content: "";
 }

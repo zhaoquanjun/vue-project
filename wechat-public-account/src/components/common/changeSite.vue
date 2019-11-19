@@ -190,7 +190,7 @@ export default {
   height: 50px;
   background: white;
   min-width: 800px;
-  border: 1px solid #E5E5E5;
+  border: $--border-base;
   .siteInfo {
     width: 100%;
     height: 50px;
@@ -215,7 +215,7 @@ export default {
     .secondDomain {
       font-size: 12px;
       font-weight: 400;
-      color: rgba(1, 192, 222, 1);
+      color: $--color-primary;
       height: 50px;
       line-height: 50px;
       margin-right: 24px;
@@ -232,7 +232,7 @@ export default {
       font-size: 14px;
       font-weight: 400;
       line-height: 50px;
-      color: rgba(1, 192, 222, 1);
+      color: $--color-primary;
       float: right;
     }
   }
@@ -254,7 +254,7 @@ export default {
   overflow: hidden;
   .dialogTitle {
     padding: 24px;
-    border-bottom: 1px solid #eee;
+    border-bottom: $--border-base;
     .dialogTitleText {
       font-size: 16px;
       font-family: PingFangSC-Medium;
@@ -281,7 +281,7 @@ export default {
         top: 40px;
         right: 12px;
         background: rgba(255, 255, 255, 0.8);
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         padding: 0 12px;
         font-size: 14px;
         font-weight: 400;
@@ -298,7 +298,7 @@ export default {
         width: 90px;
         height: 40px;
         background: rgba(9, 204, 235, 1);
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         font-size: 14px;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);

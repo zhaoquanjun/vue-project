@@ -349,7 +349,7 @@ export default {
     li.fist-item {
         height: 140px;
         overflow: hidden;
-        border-radius: 4px;
+        border-radius: $--border-radius-base;
         .imgwrap {
             width: 100%;
             height: 100%;
@@ -374,7 +374,7 @@ export default {
         padding: 0 16px;
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
-        border-radius: 4px;
+        border-radius: $--border-radius-base;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -428,7 +428,7 @@ export default {
             padding: 12px 8px 8px;
             margin-top: 8px;
             border: 1px solid rgba(211,211,211,1);
-            border-radius: 2px;
+            border-radius: $--border-radius-base;
             box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
             .seting-item {
                 padding-bottom: 16px;
@@ -440,7 +440,7 @@ export default {
             .seting-line {
                 height:40px;
                 background:rgba(255,255,255,1);
-                border-radius:2px;
+                border-radius:$--border-radius-base;
                 border:1px solid rgba(229,229,229,1);
                 font-size:14px;
                 font-family:'PingFangSC-Regular,PingFangSC';
@@ -463,7 +463,7 @@ export default {
                 width: 70px;
                 height: 32px;
                 background: rgba(9, 204, 235, 1);
-                border-radius: 2px;
+                border-radius: $--border-radius-base;
                 margin-left: 16px;
                 cursor: pointer;
                 color: #fff;
@@ -474,14 +474,14 @@ export default {
                 height: 32px;
                 cursor: pointer;
                 background: #fff;
-                border-radius: 2px;
+                border-radius: $--border-radius-base;
                 color: rgba(9, 204, 235, 1);
                 border: 1px solid rgba(9, 204, 235, 1);
             }
             .cover {
                 width: 140px;
                 height: 70px;
-                border-radius: 2px;
+                border-radius: $--border-radius-base;
                 overflow: hidden;
                 position: relative;
                 img {
@@ -518,7 +518,7 @@ export default {
     padding: 0 10px 0 32px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
-    border-radius: 4px;
+    border-radius: $--border-radius-base;
     margin-bottom: 16px;
     .el-icon-plus {
         margin-right: 16px;

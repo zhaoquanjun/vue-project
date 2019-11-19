@@ -213,17 +213,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
-.left-prev,
-.right-next {
-    opacity: 0;
-}
+@import "../../styles/content-manage/manege-table.scss";
 .img-list {
     width: 100%;
     box-sizing: border-box;
     li.item {
         display: inline-block;
-        // width: 141px;
         width: 20%;
         padding: 10px;
         box-sizing: border-box;

@@ -202,7 +202,6 @@
                 </el-collapse>
             </div>
         </el-form>
-
     </div>
 </template>
 <script>
@@ -768,8 +767,6 @@ export default {
         }
     },
     mounted() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
         this.$refs.myQuillEditor.quill
             .getModule("toolbar")
@@ -799,26 +796,10 @@ export default {
 
 
 <style scoped lang="scss">
-@import "../../style/contentDetail";
-.el-form-item__error {
-    color: #262626;
-    &::before {
-        display: inline-block;
-        content: "";
-        width: 13px;
-        height: 13px;
-        vertical-align: -2px;
-        padding-right: 8px;
-        background: url("~img/jian-icon.png") no-repeat center;
-        background-size: contain;
-    }
-}
-#content{
-    overflow: hidden;
-}
+@import "@/components/style/contentDetail.scss";
+
 </style>
-<style scoped>
-@import "../../style/contentDetailCommon.css";
+<style scoped lang="scss">
 .quill-editor /deep/ .ql-container {
     height: 420px;
     overflow: hidden;
@@ -831,19 +812,10 @@ export default {
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
-.modal-footer {
-    height: 60px;
-    position: absolute;
-    bottom: -11px;
-    right: 16px;
-    width: 100%;
-    z-index: 100;
-    text-align: right;
-    padding-top: 0;
-}
+
 </style>
 
-<style >
+<style lang="scss">
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
@@ -885,6 +857,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+#content{
+    overflow: hidden;
+}
 #videoContent {
     position: fixed;
     width: 1170px;
@@ -931,12 +906,18 @@ export default {
 #videoContent .el-dialog__body {
     padding-top: 0;
 }
-// #videoContent /deep/ .el-footer {
-//     border-top: 1px solid #EEEEEE;
-// }
+
 .modal-footer {
     float: right;
     height: 88px;
+   
+    position: absolute;
+    bottom: -11px;
+    right: 16px;
+    width: 100%;
+    z-index: 100;
+    text-align: right;
+    padding-top: 0;
     button {
         margin-top: 24px;
         width: 76px;

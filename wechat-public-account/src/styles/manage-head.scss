@@ -1,119 +1,119 @@
-.content-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #e8eaf3;
-    background: #fff;
-    margin-bottom: 24px;
-    height: 70px !important;
-    border: 1px solid #E5E5E5;
-    border-radius: 2px;
-    margin-right: 16px;
-    padding: 0 24px;
-}
-.seachInput {
-    display: inline-block;
-    width: 200px;
-    // height: 33px;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-.select-sort {
-    display: inline-block;
-    width: 117px;
-    box-sizing: border-box;
-    // height: 32px;
-    margin: 0 16px 0 7px;
-}
-.head-item {
-    display: inline-block;
-    flex: none;
-}
-.mode-item {
-    display: inline-block;
-    width: 45px;
-    padding: 8px 0;
-    text-align: center;
-    box-sizing: border-box;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    .mode-icon {
-        display: inline-block;
-        width: 16px;
-        height: 14px;
-    }
-}
-.list-mode {
-    border-right: none;
-    margin-left: 16px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    .list-icon {
-        background: url("~img/list-mode.png") no-repeat center;
-        background-size: 100%;
-    }
-    .list-iconOn {
-        background: url("~img/list-modeOn.png") no-repeat center;
-        background-size: 100%;
-    }
-}
+// .content-header {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     border-bottom: 1px solid #e8eaf3;
+//     background: #fff;
+//     margin-bottom: 24px;
+//     height: 70px !important;
+//     border: 1px solid #E5E5E5;
+//     border-radius: 2px;
+//     margin-right: 16px;
+//     padding: 0 24px;
+// }
+// .seachInput {
+//     display: inline-block;
+//     width: 200px;
+//     // height: 33px;
+//     box-sizing: border-box;
+//     overflow: hidden;
+// }
+// .select-sort {
+//     display: inline-block;
+//     width: 117px;
+//     box-sizing: border-box;
+//     // height: 32px;
+//     margin: 0 16px 0 7px;
+// }
+// .head-item {
+//     display: inline-block;
+//     flex: none;
+// }
+// .mode-item {
+//     display: inline-block;
+//     width: 45px;
+//     padding: 8px 0;
+//     text-align: center;
+//     box-sizing: border-box;
+//     border: 1px solid #e5e5e5;
+//     border-radius: 2px;
+//     .mode-icon {
+//         display: inline-block;
+//         width: 16px;
+//         height: 14px;
+//     }
+// }
+// .list-mode {
+//     border-right: none;
+//     margin-left: 16px;
+//     border-top-right-radius: 0;
+//     border-bottom-right-radius: 0;
+//     .list-icon {
+//         background: url("~img/list-mode.png") no-repeat center;
+//         background-size: 100%;
+//     }
+//     .list-iconOn {
+//         background: url("~img/list-modeOn.png") no-repeat center;
+//         background-size: 100%;
+//     }
+// }
 
-.grid-mode {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    .mode-icon {
-        background: url("~img/grid-mode.png") no-repeat center;
-        background-size: 100%;
-    }
-    .mode-iconOn {
-        background: url("~img/grid-modeOn.png") no-repeat center;
-        background-size: 100%;
-    }
-}
-.head-right,
-.head-middle {
-    float: right;
-    display: flex;
-    align-items: center;
-}
-.head-middle {
-    margin-left: auto;
-    padding-right: 82px;
+// .grid-mode {
+//     border-top-left-radius: 0;
+//     border-bottom-left-radius: 0;
+//     .mode-icon {
+//         background: url("~img/grid-mode.png") no-repeat center;
+//         background-size: 100%;
+//     }
+//     .mode-iconOn {
+//         background: url("~img/grid-modeOn.png") no-repeat center;
+//         background-size: 100%;
+//     }
+// }
+// .head-right,
+// .head-middle {
+//     float: right;
+//     display: flex;
+//     align-items: center;
+// }
+// .head-middle {
+//     margin-left: auto;
+//     padding-right: 82px;
   
-}
-.upload-wrap {
-    background: #00c1de;
-    color: #fff;
-}
+// }
+// .upload-wrap {
+//     background: #00c1de;
+//     color: #fff;
+// }
 
-// IMG 批量操作的头部样式
-.handle-batch {
-    display: flex;
-    align-items: center;
+// // IMG 批量操作的头部样式
+// .handle-batch {
+//     display: flex;
+//     align-items: center;
    
-    width: 100%;
-    >div{
-        margin-left: 16px;
-    }
-    .handle-btn{
-        margin:0 8px
-    }
-}
-// 文章 产品
-.bach-header {
-    display: flex;
-    align-items: center;
+//     width: 100%;
+//     >div{
+//         margin-left: 16px;
+//     }
+//     .handle-btn{
+//         margin:0 8px
+//     }
+// }
+// // 文章 产品
+// .bach-header {
+//     display: flex;
+//     align-items: center;
     
-    width: 100%;
+//     width: 100%;
     
-    .bach-hanlder{
-        padding-left: 24px;
-    }
-}
-.select-item {
-    display: inline-block;
-    width: 80px;
-    box-sizing: border-box;
-    height: 32px;
-    margin: 0 16px 0 7px;
-}
+//     .bach-hanlder{
+//         padding-left: 24px;
+//     }
+// }
+// .select-item {
+//     display: inline-block;
+//     width: 80px;
+//     box-sizing: border-box;
+//     height: 32px;
+//     margin: 0 16px 0 7px;
+// }

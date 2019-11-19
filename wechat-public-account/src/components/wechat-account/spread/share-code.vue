@@ -165,7 +165,7 @@ export default {
           height:40px;
           padding: 0 10px;
           background:rgba(240,243,248,1);
-          border-radius:4px;
+          border-radius: $--border-radius-base;;
           border:1px solid rgba(229,229,229,1);
           font-size:14px;
           font-weight:400;

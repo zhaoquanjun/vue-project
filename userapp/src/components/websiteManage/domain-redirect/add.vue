@@ -188,7 +188,7 @@ export default {
 };
 </script>
 <style scoped>
-.el-form /deep/ .el-select {
+/* .el-form /deep/ .el-select {
     width: 100%;
 }
 .el-form /deep/ .el-form-item {
@@ -214,7 +214,7 @@ export default {
     position: absolute;
     right: 10px;
     top: 6px;
-}
+} */
 </style>
 
 <style scoped lang="scss">

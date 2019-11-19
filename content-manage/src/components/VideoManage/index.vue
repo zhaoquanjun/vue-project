@@ -119,7 +119,6 @@ import environment from "@/environment/index.js";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
 
-
 export default {
     props: {
         isGrid: {
@@ -425,11 +424,7 @@ export default {
     }
 };
 </script>
-<style scoped>
-.el-dialog__wrapper /deep/ .el-dialog {
-    width: 900px;
-}
-</style>
+
 <style lang="scss" scoped>
 @import "../style/contentDetail";
 </style>

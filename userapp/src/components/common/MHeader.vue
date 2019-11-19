@@ -347,12 +347,11 @@ export default {
 .header {
   padding: 0 10px;
   font-size: 14px;
-  background: #08cceb;
-  color: #fff;
+  background: $--color-white;
+  color: $--color-text-primary;
   position: relative;
   .head-item {
     .logo-icon {
-      border-right: 1px solid rgba(255, 255, 255, 0.3);
       width: 60px;
       box-sizing: border-box;
       text-align: center;
@@ -361,6 +360,10 @@ export default {
       margin-left: -10px;
       height: 50px;
       vertical-align: top;
+      background: $--color-primary;
+      .iconfont{
+        color: $--color-white;
+      }
     }
     span {
       display: inline-block;
@@ -374,6 +377,7 @@ export default {
       cursor: pointer;
       display: flex;
       justify-content: center;
+      align-items: center;
       padding: 0;
       margin-left: 16px;
       height: 40px;

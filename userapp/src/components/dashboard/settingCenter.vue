@@ -18,7 +18,7 @@
           <div class="item-icon video"></div>
           <div class="item-text-wrap">
             <div class="item-text">一分钟快速上手</div>
-            <div class="item-videoLength">1:49</div>
+            <div class="cl-text--orange item-videoLength">1:49</div>
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@
           <div class="item-icon website"></div>
           <div class="item-text-wrap">
             <div class="item-text">login.clouddream.net</div>
-            <div class="collection">收藏</div>
+            <div class="cl-text--orange collection">收藏</div>
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@
           <div class="item-icon member"></div>
           <div class="item-text-wrap">
             <div class="item-text">成员协作</div>
-            <div class="memberNum">{{contentNumber.managerCount}}</div>
+            <div class="cl-text--orange memberNum">{{contentNumber.managerCount}}</div>
           </div>
         </div>
       </div>
@@ -145,7 +145,6 @@ export default {
           font-size: 16px;
           font-family: PingFangSC-Light, PingFang SC;
           font-weight: 300;
-          color: rgba(38, 38, 38, 1);
           line-height: 22px;
         }
         .collection {
@@ -154,7 +153,6 @@ export default {
           font-size: 14px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 500;
-          color: rgba(5, 149, 230, 1);
           line-height: 20px;
         }
         .memberNum {
@@ -162,7 +160,6 @@ export default {
           font-size: 16px;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 500;
-          color: rgba(5, 149, 230, 1);
           line-height: 22px;
         }
         .tianmao {

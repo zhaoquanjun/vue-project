@@ -43,8 +43,6 @@
 
             <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
 
-            <!-- <el-table-column  prop="isTopPrt" label="置顶"  min-width="80"></el-table-column> -->
-
             <el-table-column prop="createUser" label="作者" min-width="100">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createUser" placement="top">
@@ -64,13 +62,8 @@
             <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="150">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="edit-icon" @click="handleEdit(scope.row)"><i class="iconfont iconbianji"></i></button>
-                        <button
-                            class="more-operate"
-                            @click.stop="_handleShowMoreOperate($event,scope.row)"
-                        >
-                            <i class="iconfont iconsangedian"></i>
-                        </button>
+                            <i class="cl-iconfont iconfont iconbianji is-square" @click="handleEdit(scope.row)"></i>
+                            <i class="cl-iconfont iconfont iconsangedian is-square"  @click.stop="_handleShowMoreOperate($event,scope.row)"></i>
                     </div>
                 </template>
             </el-table-column>
@@ -154,16 +147,6 @@ export default {
             this.articleSearchOptions.pageSize = size;
             this.$emit("getArticleList");
         },
-        // sortByTopStatus: function(column, prop, order) {
-        //     // descending ascending
-        //     this.articleSearchOptions.OrderByTopOrder =
-        //         column.order == "ascending"
-        //             ? true
-        //             : column.order == "descending"
-        //             ? false
-        //             : null;
-        //     this.$emit("getArticleList");
-        // },
         /**
          * 单选或全选操作
          */
@@ -260,10 +243,6 @@ export default {
             let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail', siteId);
             var prevAddress = data;
             if(prevAddress){
-                //var a = document.createElement('a');
-                //a.setAttribute('href', prevAddress + previewId + '.html');
-                //a.setAttribute('target', '_blank');
-                //a.click();
                 let newWindow = window.open();
                 newWindow.location.href = prevAddress + previewId + '.html';
             }
@@ -274,7 +253,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 .title-color{
     color: #262626;
 }

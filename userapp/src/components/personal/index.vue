@@ -146,7 +146,7 @@
         >
             <right-pannel :style="{width:pannelWidth+'px'}">
                 <span slot="title-text">{{titText}}</span>
-                <component
+                  <component
                     v-if="$store.state.isRightPanelShow || $store.state.isInvitationPanelShow"
                     :is="curComponent"
                     :sourcePhone="userInfo.phoneNumber"

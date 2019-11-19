@@ -19,13 +19,16 @@
             <el-table-column label="文件名称" min-width="220">
                 <template slot-scope="scope">
                     <span class="isTop" v-show="scope.row.isTop">置顶</span>
-                    <span  class="file-cover cover"><img width="100%" :src="scope.row | fileCover" /></span>
-                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
-                        <span
-                            style="width:150px"
-                            :title="scope.row.title"
-                           
-                        >{{scope.row.title }}</span>
+                    <span class="file-cover cover">
+                        <img width="100%" :src="scope.row | fileCover" />
+                    </span>
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        :content="scope.row.title"
+                        placement="top"
+                    >
+                        <span style="width:150px" :title="scope.row.title">{{scope.row.title }}</span>
                         <!--  @click="rename(scope.row.id,scope.row.title,scope.$index)" -->
                     </el-tooltip>
                 </template>
@@ -43,7 +46,7 @@
                         :content="scope.row.categoryName"
                         placement="top"
                     >
-                        <div class="ellipsis" style="width:100px" >{{ scope.row.categoryName }}</div>
+                        <div class="ellipsis" style="width:100px">{{ scope.row.categoryName }}</div>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -53,7 +56,7 @@
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
-            </el-table-column> -->
+            </el-table-column>-->
             <el-table-column prop="downloadCount" min-width="80" label="下载次数">
                 <template slot-scope="scope">
                     <span>{{ scope.row.downloadCount}}</span>
@@ -79,10 +82,18 @@
             >
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn edit-icon" @click="handleEditor(scope.row)" style="margin-right:16px">
+                        <button
+                            class="handle-btn edit-icon"
+                            @click="handleEditor(scope.row)"
+                            style="margin-right:16px"
+                        >
                             <i class="iconfont iconbianji"></i>
                         </button>
-                        <button class="handle-btn look-btn edit-icon" @click="download(scope.row)" style="margin-right:16px">
+                        <button
+                            class="handle-btn look-btn edit-icon"
+                            @click="download(scope.row)"
+                            style="margin-right:16px"
+                        >
                             <i class="iconfont iconxiazai"></i>
                         </button>
                         <button
@@ -193,26 +204,41 @@ export default {
     filters: {
         fileCover: function(row) {
             let fileExtensionType = row.fileExtensionType;
-            let fileExtension = row.fileExtension
-        
-       
-           let excelAry = [".xlsx",".xlsm","xltx",".xltm",".xlsb",".xlam"]; 
-           let wordAry = [".docx",".docm",".dotx",".dotm"]
-           let pptAry =[".pptx",".pptm",".ppsx",".ppsx",".potx",".potm",".ppam",'.ppt'];
-           let pdfAry = [".pdf"];
-           let txtAry = [".txt"]
-            if(excelAry.includes(fileExtension)){
+            let fileExtension = row.fileExtension;
+
+            let excelAry = [
+                ".xlsx",
+                ".xlsm",
+                "xltx",
+                ".xltm",
+                ".xlsb",
+                ".xlam"
+            ];
+            let wordAry = [".docx", ".docm", ".dotx", ".dotm"];
+            let pptAry = [
+                ".pptx",
+                ".pptm",
+                ".ppsx",
+                ".ppsx",
+                ".potx",
+                ".potm",
+                ".ppam",
+                ".ppt"
+            ];
+            let pdfAry = [".pdf"];
+            let txtAry = [".txt"];
+            if (excelAry.includes(fileExtension)) {
                 return require("img/file-icon/new/excel.png");
-            }else if(wordAry.includes(fileExtension)){
+            } else if (wordAry.includes(fileExtension)) {
                 return require("img/file-icon/new/word.png");
-            }else if(pptAry.includes(fileExtension)){
+            } else if (pptAry.includes(fileExtension)) {
                 return require("img/file-icon/new/ppt.png");
-            }else if(pdfAry.includes(fileExtension)){
+            } else if (pdfAry.includes(fileExtension)) {
                 return require("img/file-icon/new/pdf.png");
-            }else if(txtAry.includes(fileExtension)){
-                return require("img/file-icon/new/txt.png"); 
+            } else if (txtAry.includes(fileExtension)) {
+                return require("img/file-icon/new/txt.png");
             }
-                switch (fileExtensionType) {
+            switch (fileExtensionType) {
                 case 0:
                     return require("img/file-icon/new/video.png");
                 case 1:
@@ -229,7 +255,6 @@ export default {
         },
         formatterFileExt(fileExt) {
             if (fileExt) {
-              
                 if (fileExt.substring(0, 1) == ".") return fileExt.substring(1);
                 return fileExt;
             }
@@ -282,8 +307,8 @@ export default {
 
         download(row) {
             //this.userDownload(row)
-             this.adminDownload(row);
-             ++row.downloadCount
+            this.adminDownload(row);
+            ++row.downloadCount;
         },
         /**
          * 用户下载
@@ -300,7 +325,7 @@ export default {
             let type = row.fileType;
             let id = row.id;
             let { data } = await adminDownload(type, id);
-            
+
             var link = document.createElement("a");
             link.download = row.title;
             link.style.display = "none";
@@ -308,7 +333,6 @@ export default {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
         },
         change(index) {
             this.fullOssUrl = this.imgList[index].fullOssUrl;
@@ -337,7 +361,11 @@ export default {
                     .clientHeight + 10;
             let clientW = this.$refs.operateSection.clientWidth;
 
-            this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
+            this.$refs.operateSection.style.right =
+                document.documentElement.clientWidth -
+                ev.pageX +
+                ev.offsetX +
+                "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
             if (this.$refs.operateSection.style.display == "block") {
@@ -372,10 +400,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
-.file-cover{
-    width:22px;
-height:28px;
+@import "@/styles/content-manage/manege-table.scss";
+.file-cover {
+    width: 22px;
+    height: 28px;
 }
 </style>
 

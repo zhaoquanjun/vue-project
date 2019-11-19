@@ -21,7 +21,7 @@ export default {
   color: rgba(254, 152, 55, 1);
   line-height: 17px;
   background: rgba(255, 248, 242, 1);
-  border-radius: 2px;
+  border-radius: $--border-radius-base;
   border: 1px solid rgba(250, 223, 197, 1);
 }
 </style>

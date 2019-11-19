@@ -4,7 +4,7 @@
             :data="memberList"
             style="width: 100%"
             :height="tableHeight"
-            :header-cell-style="{background:'#F5F5F5'}"
+            
             @selection-change="handleSelectionChange"
             :cell-class-name="checkbox"
         >
@@ -217,60 +217,8 @@ export default {
 .mycell .el-checkbox__input {
     display: none !important;
 }
-#member-table .el-table th {
-    padding: 10px 0;
-    background: #f5f5f5;
-}
-#member-table .el-table td {
-    padding: 10px 0;
-}
-#member-table .el-table th > .cell {
-    color: #333;
-    font-size: 12px;
-}
-#member-table .el-table .cell {
-    color: #333;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-}
-#member-table .el-table .cell .remark-desc {
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    /* width: 81%; */
-    vertical-align: middle;
-}
-#member-table .el-checkbox__input.is-checked .el-checkbox__inner,
-.el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: #00c1de;
-    border-color: #00c1de;
-}
-#member-table
-    .el-pagination.is-background
-    .el-pager
-    li:not(.disabled)#member-table
-    .active {
-    background-color: #01c0de;
-}
-#member-table .el-pagination .el-pager li {
-    font-weight: 400;
-    color: #252525;
-}
-#member-table .el-pagination .el-pager .active {
-    background-color: #01c0de;
-    color: #fff;
-}
-#member-table .el-pagination .el-pagination__total {
-    color: #8c8c8c;
-}
-#member-table .el-pagination /deep/ .btn-prev,
-#member-table .el-pagination /deep/ .btn-next {
-    padding: 0 10px;
-}
+
+
 </style>
 <style  scoped>
 .textareaWrap /deep/ .el-textarea .el-textarea__inner{
@@ -281,7 +229,6 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-@import "../../styles/table-list.scss";
 .textareaWrap {
     background: #fff;
     position: relative;
