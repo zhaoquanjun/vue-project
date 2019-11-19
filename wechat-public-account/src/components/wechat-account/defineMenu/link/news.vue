@@ -43,7 +43,8 @@
               </p>
             </li>
           </ul>
-          <el-pagination
+         <div class="cl-paganation"> 
+           <el-pagination
             background
             layout="prev, pager, next"
             :page-size="pageSize"
@@ -52,7 +53,7 @@
             :current-page="pageIndex"
             @current-change="_handleChangeCurrent"
             style="margin-top: 12px"
-          ></el-pagination>
+          ></el-pagination></div>
         </div>
         <none-area v-show="!newsList.length && !loading" :target="target">
           <span v-if="!search">
