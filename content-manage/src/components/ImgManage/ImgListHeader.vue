@@ -32,10 +32,16 @@
                     </el-select>
                 </span>
                 <button @click="switchIsDesc('dec')" class="desBtn">
-                    <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                    <i
+                        class="iconfont iconicon-Arrow1"
+                        :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
+                    ></i>
                 </button>
                 <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
-                    <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
+                    <i
+                        class="iconfont iconicon-Arrow"
+                        :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
+                    ></i>
                 </button>
 
                 <button class="list-mode mode-item" @click="showType('list')" v-show="!isPopup">

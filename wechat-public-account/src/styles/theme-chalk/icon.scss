@@ -1,31 +1,16 @@
-
-
-// [class^="iconfont"],
-// [class*="iconfont"] {
-//     cursor: pointer;
-//     display: inline-block;
-//     color: $--icon-color;
-//     font-size: $--font-size-base;
-//     // padding: 8px;
-//     background-color: transparent;
-//     line-height: 1;
-//     &.is-circle {
-//         &:hover {
-//             background-color: $--icon-hover-color;
-//             border-radius: $--border-radius-circle;
-//         }
-//     }
-//     &.is-square {
-//         &:hover {
-//             background-color: $--icon-hover-color;
-//             border-radius:$--border-radius-base;
-//         }
-//     }
-// }
+[class^="iconfont"],
+[class*="iconfont"] {
+    cursor: pointer;
+    display: inline-block;
+    color: $--icon-color;
+    font-size: $--font-size-base;
+    background-color: transparent;
+    
+}
 
 [class^="el-icon"],
 [class*="el-icon"] {
-    color: $--icon-color !important;
+    color: $--icon-color ;
     &:hover {
         color: $--icon-color;
         text-align: center;
@@ -35,12 +20,8 @@
 }
 
 .cl-iconfont{
-    cursor: pointer;
-    display: inline-block;
-    color: $--icon-color;
     font-size: $--font-size-base;
     padding: 8px;
-    background-color: transparent;
     line-height: 1;
     &.is-circle {
         &:hover {
