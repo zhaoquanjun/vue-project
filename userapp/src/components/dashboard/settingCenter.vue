@@ -12,22 +12,48 @@
             </div>
           </div>
         </div>
+        <div class="item-mask">
+          <div class="item-info">
+            <div>到期时间：{{expiredTime}}</div>
+          </div>
+          <div>
+            <a class="item-btn" :href="aliMarketUrl" target="_blank">去续费</a>
+          </div>
+        </div>
       </div>
       <div class="item">
         <div class="item-box">
           <div class="item-icon video"></div>
           <div class="item-text-wrap">
             <div class="item-text">一分钟快速上手</div>
-            <div class="cl-text--orange item-videoLength">1:49</div>
           </div>
+        </div>
+        <div class="item-mask">
+          <div class="item-info">
+            <div>一分钟快速上手 01:28</div>
+          </div>
+          <div class="item-play"></div>
         </div>
       </div>
       <div class="item">
         <div class="item-box">
           <div class="item-icon website"></div>
           <div class="item-text-wrap">
-            <div class="item-text">login.clouddream.net</div>
-            <div class="cl-text--orange collection">收藏</div>
+            <div class="item-text">{{link}}</div>
+          </div>
+        </div>
+        <div class="item-mask">
+          <div class="item-info">
+            <div>{{link}}</div>
+            <div>统一登录地址</div>
+          </div>
+          <div>
+            <button
+              class="item-btn"
+              v-clipboard:copy="link"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError"
+            >{{copyInfo}}</button>
           </div>
         </div>
       </div>
@@ -36,13 +62,28 @@
           <div class="item-icon assistant"></div>
           <div class="item-text">云建站助手</div>
         </div>
+        <div class="item-mask">
+          <div class="item-info">
+            <div>云建站助手</div>
+          </div>
+          <div class="assistant"></div>
+        </div>
       </div>
       <div class="item">
-        <div class="item-box" @click="jumpTo('member')">
+        <div class="item-box">
           <div class="item-icon member"></div>
           <div class="item-text-wrap">
             <div class="item-text">成员协作</div>
             <div class="cl-text--orange memberNum">{{contentNumber.managerCount}}</div>
+          </div>
+        </div>
+        <div class="item-mask">
+          <div class="item-info">
+            <div>成员协作</div>
+            <div>成员数量：{{contentNumber.managerCount}}</div>
+          </div>
+          <div>
+            <button class="item-btn" @click="jumpTo('member')">去管理</button>
           </div>
         </div>
       </div>
@@ -51,8 +92,17 @@
 </template>
 
 <script>
+import { aliMarketUrl } from "@/environment/index";
 export default {
   props: ["contentNumber"],
+  data() {
+    return {
+      aliMarketUrl: aliMarketUrl,
+      expiredTime: "",
+      link: "login.clouddream.net",
+      copyInfo: "复制"
+    };
+  },
   methods: {
     jumpTo(type) {
       if (type == "member") {
@@ -60,29 +110,37 @@ export default {
           path: "/role"
         });
       }
-    }
+    },
+    onCopy() {
+      this.copyInfo = "已复制";
+      let timer = setTimeout(() => {
+        this.copyInfo = "复制";
+        clearTimeout(timer);
+      }, 1500);
+    },
+    onError() {}
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .content-num-section {
-  margin-top: 32px;
+  margin-top: $--margin-md;
   width: 100%;
   background: rgba(255, 255, 255, 1);
-  border-radius: 3px;
-  border: 1px solid rgba(229, 229, 229, 1);
+  border-radius: $--border-radius-base;
+  border: $--border-base;
   .section-title {
-    height: 64px;
-    padding-left: 25px;
-    font-size: 16px;
-    font-weight: 500;
-    color: rgba(38, 38, 38, 1);
-    line-height: 64px;
-    border-bottom: 1px solid #e5e5e5;
+    height: 42px;
+    padding-left: $--padding-xs;
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-primary;
+    color: $--color-text-primary;
+    line-height: 42px;
+    border-bottom: $--border-base;
   }
   .item-wrap {
-    height: 125px;
+    height: 77px;
     width: 100%;
     box-sizing: border-box;
     .item:last-of-type {
@@ -92,33 +150,27 @@ export default {
       display: inline-block;
       width: 20%;
       height: 100%;
-      //   padding-left: 32px;
       box-sizing: border-box;
       border-right: 1px solid #eeeeee;
       vertical-align: top;
+      position: relative;
+      &:hover {
+        .item-mask {
+          opacity: 1;
+        }
+      }
       .item-box {
-        // margin-left: 8px;
-        // margin-right: 40px;
-        margin-top: 24px;
-        margin: 24px auto 0 auto;
         padding-left: 16px;
         padding-right: 16px;
-        height: 80px;
+        box-sizing: border-box;
         display: flex;
         align-items: center;
         cursor: pointer;
-        width: 80%;
-        &:hover {
-          background: rgba(240, 243, 247, 1);
-          border-radius: 2px;
-        }
+        width: 100%;
+        height: 100%;
         .item-icon {
-          width: 60px;
-          height: 50px;
           margin-right: 18px;
-          //   margin-top: 14px;
           display: inline-block;
-          min-width: 50px;
         }
         .item-text-wrap {
           width: calc(100% - 78px);
@@ -128,58 +180,93 @@ export default {
         }
         .item-text {
           display: inline-block;
-          //   margin-top: 27px;
-          font-size: 14px;
+          font-size: $--font-size-small;
           font-weight: 500;
           color: rgba(38, 38, 38, 1);
           line-height: 20px;
           text-align: left;
-          // word-wrap: break-word;
-          // word-break: break-all;
-          // overflow: hidden;
-          // text-overflow: ellipsis;
-          // white-space: nowrap;
-        }
-        .item-videoLength {
-          display: inline-block;
-          font-size: 16px;
-          font-family: PingFangSC-Light, PingFang SC;
-          font-weight: 300;
-          line-height: 22px;
-        }
-        .collection {
-          vertical-align: top;
-          display: inline-block;
-          font-size: 14px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 500;
-          line-height: 20px;
         }
         .memberNum {
           display: inline-block;
-          font-size: 16px;
+          font-size: $--font-size-small;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 500;
           line-height: 22px;
         }
         .tianmao {
+          width: 32px;
+          height: 30px;
           background: url("~img/dashboard/board-tianmao.png") no-repeat center;
           background-size: contain;
         }
         .video {
+          width: 19px;
+          height: 20px;
           background: url("~img/dashboard/board-video.png") no-repeat center;
           background-size: contain;
         }
         .website {
+          width: 27px;
+          height: 20px;
           background: url("~img/dashboard/board-website.png") no-repeat center;
           background-size: contain;
         }
         .assistant {
+          width: 52px;
+          height: 52px;
           background: url("~img/dashboard/board-assistant.png") no-repeat center;
           background-size: contain;
         }
         .member {
+          width: 27px;
+          height: 20px;
           background: url("~img/dashboard/board-member.png") no-repeat center;
+          background-size: contain;
+        }
+      }
+      .item-mask {
+        transition: all 0.2s linear;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 107, 0, 0.94);
+        padding: 0 16px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .item-info {
+          font-size: $--font-size-small;
+          font-weight: $--font-weight-base;
+          color: $--color-white;
+          line-height: 17px;
+        }
+        .item-btn {
+          display: inline-block;
+          width: 76px;
+          height: 32px;
+          border-radius: $--border-radius-base;
+          border: 1px solid rgba(255, 255, 255, 1);
+          font-size: $--font-size-small;
+          font-weight: $--font-weight-base;
+          color: $--color-white;
+          line-height: 32px;
+          text-align: center;
+        }
+        .item-play{
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          background: url("~img/dashboard/board-play.png") no-repeat center;
+          background-size: contain;
+        }
+        .assistant {
+          width: 52px;
+          height: 52px;
+          background: url("~img/dashboard/board-assistant.png") no-repeat center;
           background-size: contain;
         }
       }

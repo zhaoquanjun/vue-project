@@ -60,19 +60,19 @@ export default {
 
 <style lang="scss" scoped>
 .content-section {
-  margin-top: 32px;
+  margin-top: $--margin-md;
   width: 100%;
   background: rgba(255, 255, 255, 1);
-  border-radius: 3px;
-  border: 1px solid rgba(229, 229, 229, 1);
+  border-radius: $--border-radius-base;
+  border: $--border-base;
   .section-title {
-    height: 64px;
-    padding-left: 25px;
-    font-size: 16px;
-    font-weight: 500;
-    color: rgba(38, 38, 38, 1);
-    line-height: 64px;
-    border-bottom: 1px solid #e5e5e5;
+    height: 42px;
+    padding-left: $--padding-xs;
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-primary;
+    color: $--color-text-primary;
+    line-height: 42px;
+    border-bottom: $--border-base;
   }
   .content {
     width: 100%;
@@ -80,16 +80,17 @@ export default {
       border-right: 1px solid transparent;
     }
     .item {
-      height: 100px;
-      border-right: 1px solid #eeeeee;
-
+      height: 77px;
+      border-right: $--border-base;
+      display: flex;
+      align-items: center;
       .item-wrap {
         margin-left: 16px;
         margin-right: 16px;
-        margin-top: 30px;
         padding-left: 12px;
         padding-right: 26px;
         height: 50px;
+        width: calc(100% - 70px);
         display: flex;
         justify-content: space-between;
         cursor: pointer;
@@ -104,8 +105,8 @@ export default {
           .vip-img {
             margin-right: 8px;
             display: inline-block;
-            width: 32px;
-            height: 32px;
+            width: 21px;
+            height: 23px;
             background: url("~img/dashboard/board-vip.png") no-repeat center;
             background-size: contain;
             vertical-align: top;
@@ -113,8 +114,8 @@ export default {
           .viplevel-img {
             margin-right: 8px;
             display: inline-block;
-            width: 32px;
-            height: 32px;
+            width: 21px;
+            height: 23px;
             background: url("~img/dashboard/board-viplevel.png") no-repeat
               center;
             background-size: contain;
@@ -122,33 +123,32 @@ export default {
           }
           .name {
             display: inline-block;
-            font-size: 16px;
-            font-weight: 400;
-            color: rgba(38, 38, 38, 1);
-            line-height: 22px;
+            font-size: $--font-size-small;
+            font-weight: $--font-weight-base;
+            color: $--color-text-primary;
           }
         }
         .item-content {
           .item-num {
             display: inline-block;
-            font-size: 18px;
-            font-weight: 500;
-            color: rgba(38, 38, 38, 1);
+            font-size: $--font-size-base;
+            font-weight: $--font-weight-primary;
+            color: $--color-text-primary;
             line-height: 50px;
             margin-right: 4px;
           }
           .item-type {
             display: inline-block;
-            font-size: 14px;
-            font-weight: 400;
+            font-size: $--font-size-small;
+            font-weight: $--font-weight-base;
             color: rgba(185, 203, 207, 1);
             line-height: 20px;
           }
           .item-btn {
             display: inline-block;
-            font-size: 14px;
-            font-weight: 400;
-            color: rgba(5, 149, 230, 1);
+            font-size: $--font-size-small;
+            font-weight: $--font-weight-base;
+            color: $--color-text-primary;
             line-height: 20px;
             margin-top: 15px;
           }
