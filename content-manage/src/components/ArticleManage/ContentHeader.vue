@@ -84,10 +84,10 @@
                     <i>{{count}}</i> 个文章
                 </span>
                 <div class="bach-hanlder">
-                    <button class="btn-small  btn-lightblue-notboard" @click="batchPublish(false)">上线</button>
-                    <button class="btn-small  btn-lightblue-notboard"  @click="batchPublish(true)">下线</button>
-                    <button class="btn-small  btn-lightblue-notboard"  @click="batchCopy">复制</button>
-                    <button class="btn-small  btn-red-notboard"  @click="batchRemove">删除</button>
+                    <button class="cl-button cl-button--small cl-button--text_info" @click="batchPublish(false)">上线</button>
+                    <button class="cl-button cl-button--small cl-button--text_info"  @click="batchPublish(true)">下线</button>
+                    <button class="cl-button cl-button--small cl-button--text_info"  @click="batchCopy">复制</button>
+                    <button class="cl-button cl-button--small cl-button--text_danger"  @click="batchRemove">删除</button>
                     <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard btn-black-notboard">

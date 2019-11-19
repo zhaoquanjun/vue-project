@@ -95,13 +95,13 @@
                     <i>{{countPic}}</i> 个文件
                 </span>
                 <div>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
+                    <button class="cl-button cl-button--small cl-button--text_info" @click="batchMove">移动</button>
                     <button
                         v-if="contentType!='Video'"
-                        class="btn-small btn-lightblue-notboard"
+                       class="cl-button cl-button--small cl-button--text_info"
                         @click="batchDownLoad"
                     >下载</button>
-                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                    <button class="cl-button cl-button--small cl-button--text_danger" @click="batchDelete">删除</button>
 
                     <el-dropdown
                         trigger="click"
