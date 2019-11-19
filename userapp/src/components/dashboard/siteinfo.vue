@@ -965,6 +965,8 @@ export default {
     .pannel-head {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      
       .headTitle {
         font-size: 16px;
         font-weight: 600;
