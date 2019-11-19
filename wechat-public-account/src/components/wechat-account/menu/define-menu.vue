@@ -2,7 +2,7 @@
   <div class="define-menu__area clearfix">
     <div class="btn">
       <h4>自定义菜单</h4>
-      <span @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</span>
+      <button class="cl-button cl-button--primary" @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</button>
     </div>
     <div class="phone-bg ">
       <div class="phone-box__area">
@@ -43,7 +43,7 @@
               <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
             </draggable>
         </div>
-        <div class="primary-button__nomal order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
+        <button class="cl-button cl-button--text_primary order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</button>
       </div>
       <div class="menu-operate__arae">
         <order-menu v-show="isOrder"></order-menu>
@@ -740,7 +740,10 @@ export default {
         margin-right: 8px;
       }
       &.active {
-        color: #09CCEB;
+        color: $--color-primary;
+        i {
+          color: $--color-primary;
+        }
       }
     }
   }
@@ -757,7 +760,7 @@ export default {
   font-family: "PingFangSC-Medium,PingFangSC";
   .phone-bg {
     height: 528px;
-    border: 1px solid #e5e5e5;
+    border: $--border-base;
   }
   .phone-box__area {
     position: relative;
@@ -814,7 +817,7 @@ export default {
           line-height: 32px;
           text-align: center;
           color: #262626;
-          border-right: 1px solid #c9d9dc;
+          border-right: $--border-base;
           cursor: pointer;
           .menu-child__area {
             position: absolute;
@@ -822,19 +825,20 @@ export default {
             transform: translateX(-50%);
             bottom: 54px;
             width: 146x;
-            border: 1px solid #c9d9dc; // 需换底图
+            border: $--border-base; // 需换底图
             border-radius: $--border-radius-base;
             li {
               margin: 0 auto;
               padding: 8px 6px;
               height: 34px;
-              line-height: 18px;
+              line-height: 34px;
+              display: list-item;
               text-align: center;
               width: 140px;
               font-size: 14px;
               color: #262626;
               border-right: none;
-              border-top: 1px solid #c9d9dc;
+              border-top: $--border-base;
               cursor: pointer;
               .menu-move__icon {
                 margin-right: 4px;
@@ -858,7 +862,7 @@ export default {
           border-right: none;
         }
         .selected {
-          color: #09cceb !important;
+          color: $--color-primary !important;
         }
       }
     }
@@ -929,9 +933,8 @@ export default {
         }
         .menu-operate__delete {
           font-size: 14px;
-          font-family: "PingFangSC";
           font-weight: 400;
-          color: #09CCEB;
+          color: $--color-primary;
           line-height: 50px;
           cursor: pointer;
         }
@@ -1051,24 +1054,6 @@ export default {
     overflow: hidden;
   }
 }
-</style>
-<style scoped>
-.el-radio-group /deep/ .el-radio .el-radio__label {
-  color: #262626;
-}
-.el-textarea /deep/ .el-textarea__inner {
-  padding: 24px 32px;
-  border: none;
-  width: 100%;
-  height: 364px;
-}
-.el-form /deep/ .el-form-item {
-  margin-bottom: 6px;
-  padding: 0 24px;
-}
-.el-form-item /deep/ .el-form-item__label {
-  color: #a1a8b1;
-}
 .selectUrl {
   padding-left: 24px;
   padding-top: 20px;
@@ -1090,7 +1075,7 @@ export default {
   height:40px;
   float: left;
   background:rgba(255,255,255,1);
-  border-radius:$--border-radius-base;
+  border-radius:2px;
   border:1px solid rgba(229,229,229,1);
   font-size:14px;
   font-family:'PingFangSC-Regular,PingFangSC';
@@ -1117,34 +1102,21 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 36px;
+  height: 32px;
   margin: 24px 0 16px;
+  .cl-button--primary {
+    height: 32px;
+  }
 }
 .btn h4 {
   height: 16px;
   margin: 10px 0;
   font-size:14px;
-  font-family:'PingFangSC-Medium,PingFang SC';
   font-weight:500;
   color:rgba(38,38,38,1);
   line-height:16px;
   padding-left: 16px;
-  border-left: 4px solid #09CCEB;
-}
-.btn span {
-  display: inline-block;
-  width:100px;
-  height:32px;
-  background:#09cceb; 
-  border-radius: $--border-radius-base;
-  font-size:14px;
-  font-family:'PingFangSC-Regular,PingFangSC';
-  font-weight:400;
-  text-align: center;
-  color: rgba(255, 255, 255, 1);
-  line-height:32px;
-  margin-top: 2px;
-  cursor: pointer;
+  border-left: 4px solid $--color-primary;
 }
 .tipsName {
   padding-left: 100px;
@@ -1162,5 +1134,23 @@ export default {
 .tipsName a {
   float: left;
   color: rgba(0, 193, 222, 1);
+}
+</style>
+<style scoped>
+.el-radio-group /deep/ .el-radio .el-radio__label {
+  color: #262626;
+}
+.el-textarea /deep/ .el-textarea__inner {
+  padding: 24px 32px;
+  border: none;
+  width: 100%;
+  height: 364px;
+}
+.el-form /deep/ .el-form-item {
+  margin-bottom: 6px;
+  padding: 0 24px;
+}
+.el-form-item /deep/ .el-form-item__label {
+  color: #a1a8b1;
 }
 </style>

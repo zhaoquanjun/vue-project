@@ -8,7 +8,7 @@
     </div>
     <div class="spread-title">
       <span>推广设置</span>
-      <div class="add" @click="addSpread">新增推广</div>
+      <button class="cl-button cl-button--primary" @click="addSpread">新增推广</button>
     </div>
     <div v-if="!isShowStatistics" class="answer-tabs">
       <el-tabs v-model="replyType" type="card" @tab-click="getInfo">
@@ -36,9 +36,7 @@
       <template>
         <el-table
           :data="list"
-          :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '36px',paddingLeft: '14px',borderTop: '1px solid #e5e5e5'}"
-          :cell-style="{color:'#262626',lineHeight: '36px',paddingLeft: '14px'}"
-          style="width: 100%">
+        >
           <template slot="empty">
               <div class="empty-table">
                   <img src="~img/table-empty.png" />
@@ -339,14 +337,21 @@ export default {
     border-bottom: 2px solid transparent;
     box-sizing: border-box;
 }
+.el-table {
+  border: none;
+  border-top: 1px solid #D7D8D9;
+}
 .el-tabs /deep/ .el-tabs__header {
     margin: 0;
 } 
 .el-tabs /deep/ .is-active {
     background: #F8FAFC;
-    border-bottom: 2px solid #09cceb !important;
+    border-bottom: 2px solid #FF6B00 !important;
 }
 .el-table /deep/ .cell {
+  padding-left: 24px;
+}
+/*.el-table /deep/ .cell {
   height: 42px;
   line-height: 42px;
   display: block;
@@ -354,20 +359,20 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.el-table /deep/ td {
+ .el-table /deep/ td {
   padding: 10px 0 8px 36px;
 }
 .el-table .cell, .el-table th div {
   padding-right: 30px !important;
-}
+} */
 .spread-continer  /deep/ .input-with-select.el-input--suffix {
     width: 400px !important;
 }
-.el-table /deep/ .el-table__empty-block {
+/* .el-table /deep/ .el-table__empty-block {
   border-bottom: 1px solid #EBEEF5;
-}
+} */
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: 1px solid #D7D8D9;
     width: 400px;
     margin: 16px 0 16px 24px;
 }
@@ -375,13 +380,13 @@ export default {
  right: -20px;
 }
 .el-input /deep/ .el-input__inner:hover {
-    border: 1px solid #E5E5E5;
+    border: 1px solid #D7D8D9;
 }
 .el-input /deep/ .el-input__inner:focus {
-    border: 1px solid #E5E5E5;
+    border: 1px solid #D7D8D9;
 }
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: 1px solid #D7D8D9;
 }
 
 </style>
@@ -410,23 +415,12 @@ export default {
         margin: 6px 0;
         padding-left: 12px;
         line-height: 20px;
-        border-left: 4px solid #09CCEB;
+        border-left: 4px solid $--color-primary;
         font-size:14px;
         font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
         color:rgba(38,38,38,1);
       }
-      .add {
-          width:90px;
-          height:32px;
-          background:rgba(9,204,235,1);
-          border-radius:$--border-radius-base;
-          font-weight:400;
-          color:rgba(255,255,255,1);
-          line-height:32px;
-          text-align: center;
-          cursor: pointer;
-        }
     }
     .answer-tabs {
         margin-top: 24px;
@@ -451,7 +445,7 @@ export default {
     }
     .spread-continer {
       margin-top: 12px;
-      border: 1px solid rgba(229,229,229,1);
+      border: $--border-base;
       padding-bottom: 16px;
       background: #fff;
       .img {
@@ -471,7 +465,7 @@ export default {
         margin-left: 24px;
         font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
-        color:rgba(9,204,235,1);
+        color: $--color-primary;
         line-height:32px;
       }
     }
