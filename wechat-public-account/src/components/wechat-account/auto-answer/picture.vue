@@ -17,7 +17,7 @@
             <div>
                 <div class="upload-icon"></div>
                 <p>请点击此处上传您要上传的图片</p>
-                <button class="handler-upload" @click="handlerUpload">点击上传</button>
+                <button class="cl-button cl-button--primary" @click="handlerUpload">点击上传</button>
             </div>
         </div>
          <image-manage
@@ -136,15 +136,6 @@ export default {
         margin: 12px 0;
         color:rgba(161,168,177,1);
         line-height:20px;
-    }
-    .handler-upload {
-        display: block;
-        width: 90px;
-        height: 32px;
-        line-height: 32px; 
-        margin: 0 auto;
-        color: #ffffff;
-        background: #09cceb;
     }
 }
 </style>

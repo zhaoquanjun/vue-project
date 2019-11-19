@@ -9,7 +9,7 @@
             <div v-if="!isEditorShow && list.length <= 0" class="add-img">
                 <img src="~img/add-img.png" />
                 <p>点击此处编辑您的图文</p>
-                <span @click="handlerAddNewsImg">添加图文</span>
+                <button class="cl-button cl-button--primary" @click="handlerAddNewsImg">添加图文</button>
             </div>
             <li
                 ref="listItem"
@@ -311,6 +311,7 @@ export default {
 .add-img {
     width: 100%;
     margin: 0;
+    text-align: center;
     img {
         display: block;
         width: 60px;
@@ -324,19 +325,6 @@ export default {
         line-height:20px;
         text-align: center;
         margin: 12px 0;
-    }
-    span {
-        display: block;
-        width: 90px;
-        height: 32px;
-        text-align: center;
-        margin: 0 auto;
-        font-size:14px;
-        font-weight:400;
-        line-height:32px;
-        color: #fff;
-        background: #09cceb;
-        cursor: pointer;
     }
 }
 .list {
