@@ -33,7 +33,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类" min-width="80">
+            <el-table-column prop="categoryName" label="分类" min-width="150">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.categoryName" placement="top">
                         <span style="width:80px" class="ellipsis">{{ scope.row.categoryName }}</span>
@@ -41,17 +41,9 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
+            <el-table-column  prop="isPublishPrt" label="状态" min-width="150"></el-table-column>
 
-            <el-table-column prop="createUser" label="作者" min-width="100">
-                <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" :content="scope.row.createUser" placement="top">
-                        <span style="width:100px" class="ellipsis">{{ scope.row.createUser }}</span>
-                    </el-tooltip>
-                </template>
-            </el-table-column>
-
-            <el-table-column prop="createTimePrt" label="创建时间" min-width="80">
+            <el-table-column prop="createTimePrt" label="创建时间" min-width="100">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createTimePrt" placement="top">
                         <span>{{ scope.row.createTimePrt }}</span>
