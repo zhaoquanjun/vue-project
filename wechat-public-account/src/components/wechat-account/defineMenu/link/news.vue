@@ -286,7 +286,7 @@ export default {
     padding: 0 12px;
     p {
       color: $--color-primary;
-      font-size: 14px;
+      font-size: $--font-size-small;
       line-height: 17px;
       cursor: auto;
     }
@@ -364,7 +364,7 @@ export default {
             p {
               width: 300px;
               padding: 0;
-              font-size: 14px;
+              font-size: $--font-size-small;
               line-height: 26px;
               height: 26px;
               overflow: hidden;

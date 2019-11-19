@@ -588,7 +588,7 @@ export default {
       p {
         padding: 0 12px 0 32px;
         color: #a1a8b1;
-        font-size: 14px;
+        font-size: $--font-size-small;
         line-height: 20px;
         max-height: 80px;
       }

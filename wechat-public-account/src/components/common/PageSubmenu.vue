@@ -114,7 +114,7 @@ created(){
         li {
           cursor: pointer;
           line-height: 50px;
-          font-size: 14px;
+          font-size: $--font-size-small;
           font-weight:400;
           color:#262626;
           span {
@@ -129,7 +129,7 @@ created(){
             cursor: pointer;
             padding-left: 40px;
             line-height: 50px;
-            font-size: 14px;
+            font-size: $--font-size-small;
             font-weight:400;
             color:rgba(38,38,38,1);
             &:hover {

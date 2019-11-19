@@ -571,7 +571,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .el-tabs /deep/ .el-tabs__item {
-    font-size: 14px;
+    font-size: $--font-size-small;
     padding: 0 24px;
     font-weight: 400;
     color: #262626;

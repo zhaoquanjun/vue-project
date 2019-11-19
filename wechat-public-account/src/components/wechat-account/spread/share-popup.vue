@@ -535,7 +535,7 @@ export default {
           span {
             padding-left: 10px;
             color: rgba(128, 128, 128, 1);
-            font-size: 14px;
+            font-size: $--font-size-small;
             font-weight:400;
             text-align: left;
           }

@@ -348,7 +348,7 @@ export default {
 }
 .header {
   padding: 0 10px;
-  font-size: 14px;
+  font-size: $--font-size-small;
   background: $--color-white;
   color: $--color-text-primary;
   position: relative;
@@ -539,7 +539,7 @@ export default {
       .appMember {
         float: right;
         margin-right: 35px;
-        font-size: 14px;
+        font-size: $--font-size-small;
         font-weight: 400;
         line-height: 55px;
       }
@@ -549,7 +549,7 @@ export default {
       margin-bottom: 2px;
       line-height: 22px;
       .versionText {
-        font-size: 14px;
+        font-size: $--font-size-small;
         font-weight: 400;
         color: #a1a8b1;
         margin-left: 32px;
@@ -561,7 +561,7 @@ export default {
       margin-bottom: 26px;
       line-height: 32px;
       .expiredText {
-        font-size: 14px;
+        font-size: $--font-size-small;
         font-weight: 400;
         color: #a1a8b1;
         margin-left: 32px;
@@ -590,7 +590,7 @@ export default {
       background: rgba(0, 193, 222, 1);
       border-radius: $--border-radius-base;
       border: 1px solid rgba(1, 192, 222, 1);
-      font-size: 14px;
+      font-size: $--font-size-small;
       font-weight: 400;
       color: rgba(255, 255, 255, 1);
       line-height: 40px;
@@ -617,7 +617,7 @@ export default {
       height: 40px;
       border-radius: $--border-radius-base;
       border: 1px solid rgba(1, 192, 222, 1);
-      font-size: 14px;
+      font-size: $--font-size-small;
       font-weight: 400;
       color: rgba(0, 193, 222, 1);
       line-height: 40px;

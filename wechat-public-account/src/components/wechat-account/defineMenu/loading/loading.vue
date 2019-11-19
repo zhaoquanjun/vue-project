@@ -35,7 +35,7 @@ export default {
     }
     p {
       padding-top: 16px;
-      font-size: 14px;
+      font-size: $--font-size-small;
       color: #666;
     }
   }

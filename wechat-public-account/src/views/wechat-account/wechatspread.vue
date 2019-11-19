@@ -328,7 +328,7 @@ export default {
 </script>
 <style scoped>
 .el-tabs /deep/ .el-tabs__item {
-    font-size: 14px;
+    font-size: 12px;
     padding: 0 32px;
     font-weight: 400;
     color: #262626;
