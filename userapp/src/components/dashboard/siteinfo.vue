@@ -18,7 +18,8 @@
             <div class="site-total">/ {{siteCount}}</div>
           </div>
           <el-dropdown @command="handleCreateSite" :hide-timeout="500">
-            <div class="sitelist-addSite" v-show="isSystem&&siteInfo.length < siteCount"></div>
+            <!-- v-show="isSystem&&siteInfo.length < siteCount" -->
+            <div class="sitelist-addSite"></div>
             <el-dropdown-menu slot="dropdown" class="createSiteDrop">
               <el-dropdown-item class="createSiteDropText" command="copy">复制当前站点</el-dropdown-item>
               <el-dropdown-item class="createSiteDropText" command="addNew">新建站点</el-dropdown-item>
@@ -32,7 +33,7 @@
           <span class="site-name">{{curSiteinfo.siteName}}</span>
           <span class="site-language">{{_getLanguage(curSiteinfo.language)}}</span>
           <i
-            class="iconfont iconicon-dash-edit editIcon is-circle" 
+            class="iconfont iconicon-dash-edit editIcon"
             v-show="isSystem"
             @click="changeSiteInfoShow"
           ></i>
@@ -49,13 +50,14 @@
             target="_blank"
             v-show="curSiteTodoinfo.siteTemplate"
           >
-             <button class="cl-button cl-button--primary_notbg ">预览</button>
+            <button class="cl-button cl-button--primary_notbg">预览</button>
           </a>
           <a
-            
             :href="`${designerUrl}?siteId=${curSiteinfo.siteId}`"
             v-show="curSiteTodoinfo.siteTemplate"
-          ><button class="cl-button  cl-button--primary">设计站点</button></a>
+          >
+            <button class="cl-button cl-button--primary">设计站点</button>
+          </a>
         </div>
       </div>
       <el-row class="site-wrap">
@@ -65,7 +67,7 @@
             <div class="siteInfo-item" @click="jumpTo('template')">
               <div class="siteInfo-left">
                 <span
-                  :class="{'siteInfo-icon-red':!curSiteTodoinfo.siteTemplate, 'siteInfo-icon-green':curSiteTodoinfo.siteTemplate}"
+                  :class="{'siteInfo-icon-gray':!curSiteTodoinfo.siteTemplate, 'siteInfo-icon-green':curSiteTodoinfo.siteTemplate}"
                 ></span>
                 <span class="siteInfo-title">站点模版</span>
               </div>
@@ -76,7 +78,7 @@
             <div class="siteInfo-item" @click="jumpTo('domain')">
               <div class="siteInfo-left">
                 <span
-                  :class="{'siteInfo-icon-red':!curSiteTodoinfo.siteDomain, 'siteInfo-icon-green':curSiteTodoinfo.siteDomain}"
+                  :class="{'siteInfo-icon-gray':!curSiteTodoinfo.siteDomain, 'siteInfo-icon-green':curSiteTodoinfo.siteDomain}"
                 ></span>
                 <span class="siteInfo-title">站点域名</span>
                 <el-dropdown :hide-timeout="500" placement="bottom-start">
@@ -93,7 +95,7 @@
                       target="_blank"
                     >
                       <span class="siteDomainDropItem">{{curSiteTodoinfo.resolvedDomainList[index]}}</span>
-                      <i class="iconfont iconchakan "></i>
+                      <i class="iconfont iconchakan"></i>
                     </a>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -105,7 +107,7 @@
             <a class="siteInfo-item" :href="`https://beian.aliyun.com`" target="_blank">
               <div class="siteInfo-left">
                 <span
-                  :class="{'siteInfo-icon-red':!curSiteTodoinfo.domainHasBeenRecord, 'siteInfo-icon-green':curSiteTodoinfo.domainHasBeenRecord}"
+                  :class="{'siteInfo-icon-gray':!curSiteTodoinfo.domainHasBeenRecord, 'siteInfo-icon-green':curSiteTodoinfo.domainHasBeenRecord}"
                 ></span>
                 <span class="siteInfo-title">网站备案</span>
               </div>
@@ -120,9 +122,9 @@
           <div class="siteInfo-wrap">
             <div class="siteInfo-item" @click="jumpTo('seo')">
               <div class="siteInfo-left">
-                <span
+                <!-- <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.seo, 'siteInfo-icon-green':curSiteTodoinfo.seo}"
-                ></span>
+                ></span>-->
                 <span class="siteInfo-title">SEO</span>
               </div>
               <div class="siteInfo-right">
@@ -135,9 +137,9 @@
               v-show="$store.state.dashboard.isWechataccountShow"
             >
               <div class="siteInfo-left">
-                <span
+                <!-- <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.weChatAccount, 'siteInfo-icon-green':curSiteTodoinfo.weChatAccount}"
-                ></span>
+                ></span>-->
                 <span class="siteInfo-title">公众号</span>
               </div>
               <div class="siteInfo-right">
@@ -162,9 +164,9 @@
           <div class="siteInfo-wrap">
             <div class="siteInfo-item" @click="jumpTo('backup')">
               <div class="siteInfo-left">
-                <span
+                <!-- <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.siteBackUp, 'siteInfo-icon-green':curSiteTodoinfo.siteBackUp}"
-                ></span>
+                ></span>-->
                 <span class="siteInfo-title">备份</span>
               </div>
               <div class="siteInfo-right">
@@ -207,7 +209,7 @@
         <div class="pannel-head">
           <span class="headTitle">新建站点</span>
           <span class="close-pannel" @click="closeCreateDialog">
-            <i class="iconfont iconguanbi " style="font-size:16px;color:#262626"></i>
+            <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
           </span>
         </div>
         <div class="createSiteName">
@@ -232,8 +234,8 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeCreateDialog" class="cancelBtn">取消</button>
-          <button @click="createSite" class="createBtn">确定</button>
+          <button @click="closeCreateDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button @click="createSite" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
     </el-dialog>
@@ -247,7 +249,7 @@
         <div class="pannel-head">
           <span class="headTitle">设置站点</span>
           <span class="close-pannel" @click="closeChangeDialog">
-            <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+            <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
           </span>
         </div>
         <div class="createSiteName">
@@ -272,8 +274,8 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeChangeDialog" class="cancelBtn">取消</button>
-          <button @click="changeSiteInfo" class="createBtn">确定</button>
+          <button @click="closeChangeDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button @click="changeSiteInfo" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
     </el-dialog>
@@ -287,7 +289,7 @@
         <div class="pannel-head">
           <span class="headTitle">复制当前站点</span>
           <span class="close-pannel" @click="closeCopyDialog">
-            <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+            <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
           </span>
         </div>
         <div class="tips">使用当前站点空间作为模板创建新站点</div>
@@ -313,8 +315,8 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeCopyDialog" class="cancelBtn">取消</button>
-          <button @click="copySiteCreate" class="createBtn">确定</button>
+          <button @click="closeCopyDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button @click="copySiteCreate" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
     </el-dialog>
@@ -601,149 +603,115 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
 .createSiteDrop {
-  width: 108px;
-  height: 87px;
+  width: 100px;
+  height: 84px;
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  border-radius: $--border-radius-base;
   box-sizing: border-box;
-}
-.createSiteDrop .createSiteDropText {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(38, 38, 38, 1);
-  line-height: 32px;
-  padding: 0;
-  height: 32px;
-  text-align: center;
-}
-.createSiteDrop .createSiteDropText:hover {
-  background: rgba(240, 243, 247, 1);
-  color: rgba(38, 38, 38, 1);
+  .createSiteDropText {
+    font-size: $--font-size-small;
+    font-weight: $--font-weight-base;
+    color: $--color-text-primary;
+    line-height: 32px;
+    padding: 0;
+    height: 32px;
+    text-align: center;
+    &:hover {
+      background: $--background-color-selected;
+      color: $--color-primary;
+    }
+  }
 }
 .siteDomainDrop {
   width: 300px;
-  max-height: 150px;
+  max-height: 135px;
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  border-radius: $--border-radius-base;
   box-sizing: border-box;
   overflow-x: auto;
+  .siteDomainDropList {
+    width: 284px;
+    height: 30px;
+    margin-left: 4px;
+    padding-right: 8px;
+    padding-left: 8px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    &:hover {
+      background: $--background-color-selected;
+      .iconchakan {
+        display: inline-block;
+        color: $--color-primary;
+      }
+    }
+    .siteDomainDropItem {
+      font-size: $--font-size-small;
+      font-weight: $--font-weight-base;
+      color: $--color-text-primary;
+      line-height: 30px;
+    }
+    .iconchakan {
+      display: none;
+      font-size: 14px;
+      line-height: 30px;
+    }
+  }
 }
-.siteDomainDrop .siteDomainDropList {
-  width: 284px;
-  height: 32px;
-  margin-left: 4px;
-  padding-right: 8px;
-  padding-left: 8px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-}
-.siteDomainDrop .siteDomainDropList .siteDomainDropItem {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(38, 38, 38, 1);
-  line-height: 32px;
-}
-.siteDomainDrop .siteDomainDropList .iconchakan {
-  display: none;
-  font-size: 16px;
-  line-height: 32px;
-  color: #262626;
-}
-.siteDomainDrop .siteDomainDropList:hover {
-  background: rgba(240, 243, 247, 1);
-  color: rgba(38, 38, 38, 1);
-}
-.siteDomainDrop .siteDomainDropList:hover .iconchakan {
-  display: inline-block;
-  color: rgba(5, 149, 230, 1);
-}
-</style>
-<style scoped>
-.createSiteNameInput /deep/ .el-input__inner {
-  margin-top: 16px;
-  /* width: 536px;
-  height: 32px; */
-  /* background: rgba(255, 255, 255, 1); */
-  /* border: 1px solid rgba(229, 229, 229, 1); */
-}
-/* .radio /deep/ .is-checked .el-radio__inner {
-  background: #00c1de;
-  border-color: #00c1de;
-}
-.radio /deep/ .el-radio {
-  margin-right: 17px;
-}
-.radio /deep/ .el-radio__label {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(38, 38, 38, 1);
-  line-height: 20px;
-}
-.radio /deep/ .is-checked .el-radio__label {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(38, 38, 38, 1);
-  line-height: 20px;
-} */
-</style>
-<style lang="scss" scoped>
 .content-section {
+  margin-top: $--margin-md;
   width: 100%;
   background: rgba(255, 255, 255, 1);
-  border-radius: 3px;
-  border: 1px solid rgba(229, 229, 229, 1);
+  border-radius: $--border-radius-base;
+  border: $--border-base;
   .section-title {
-    height: 64px;
-    padding-left: 25px;
-    font-size: 16px;
+    height: 45px;
+    padding-left: $--padding-xs;
+    font-size: $--font-size-base;
     font-weight: 500;
-    color: rgba(38, 38, 38, 1);
-    line-height: 64px;
-    border-bottom: 1px solid #e5e5e5;
+    line-height: 45px;
+    border-bottom: $--border-base;
   }
   .content {
     width: 100%;
-    padding: 0 26px;
+    padding: 0 24px;
     .sitelist-wrap {
       width: 100%;
-      height: 75px;
-      border-bottom: 1px solid rgba(229, 229, 229, 1);
+      height: 52px;
+      border-bottom: $--border-base;
       display: flex;
       justify-content: space-between;
       .sitelist {
         width: calc(100% - 100px);
-        margin-top: 31px;
+        margin-top: 21px;
         display: inline-block;
         .sitelist-item:first-child {
-          border-left: 1px solid rgba(229, 229, 229, 1);
+          border-left: $--border-base;
         }
         .sitelist-item {
           display: inline-block;
-          height: 45px;
+          height: 32px;
           width: 19%;
           padding: 0 16px;
           text-align: center;
-          font-size: 16px;
-          font-weight: 400;
-          color: #262626;
-          line-height: 45px;
+          font-size: 12px;
+          line-height: 32px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
           box-sizing: border-box;
-          border-top: 1px solid rgba(229, 229, 229, 1);
-          border-bottom: 1px solid rgba(229, 229, 229, 1);
-          border-right: 1px solid rgba(229, 229, 229, 1);
+          border-top: $--border-base;
+          border-bottom: $--border-base;
+          border-right: $--border-base;
           background: #fff;
           z-index: 1;
           cursor: pointer;
           &:hover {
-            color: #0595e6;
+            color: $--color-primary;
           }
         }
         .sitelist-curitem {
@@ -754,26 +722,26 @@ export default {
       }
       .sitelist-add {
         display: inline-block;
-        height: 75px;
+        height: 52px;
         .site-num-wrap {
           display: inline-block;
           vertical-align: top;
+          margin-right: 8px;
           .site-num {
             display: inline-block;
-            font-size: 24px;
+            font-size: 16px;
             font-weight: 500;
-            color: rgba(38, 38, 38, 1);
-            line-height: 33px;
-            margin-top: 27px;
+            line-height: 22px;
+            margin-top: 17px;
             margin-right: 4px;
           }
           .site-total {
             display: inline-block;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 400;
-            color: rgba(185, 203, 207, 1);
-            line-height: 20px;
-            margin-top: 36px;
+            color: rgba(161, 168, 177, 1);
+            line-height: 17px;
+            margin-top: 20px;
           }
         }
         .sitelist-addSite {
@@ -783,8 +751,8 @@ export default {
           background: url("~img/dashboard/board-add.png") no-repeat center;
           background-size: contain;
           vertical-align: top;
-          margin-top: 31px;
-          margin-left: 28px;
+          margin-top: 14px;
+          margin-left: 12px;
           cursor: pointer;
           &:hover {
             opacity: 0.8;
@@ -794,13 +762,17 @@ export default {
     }
     .site-operating {
       width: 100%;
-      height: 75px;
+      height: 60px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 0 $--padding-md;
+      box-sizing: border-box;
+      border-left: 1px solid $--border-color-base;
+      border-right: 1px solid $--border-color-base;
       .site-edit {
         min-width: 350px;
-        height: 75px;
+        height: 60px;
         display: flex;
         align-items: center;
         .site-img {
@@ -819,14 +791,15 @@ export default {
         }
         .site-language {
           margin-left: 24px;
-          font-size: 14px;
+          font-size: $--font-size-small;
           font-weight: 400;
           color: rgba(161, 168, 177, 1);
         }
         .editIcon {
           margin-left: 15px;
+          font-size: 14px;
           cursor: pointer;
-          color: rgba(9, 204, 235, 1);
+          color: $--color-primary;
           padding: 8px;
           background: transparent;
           &:hover {
@@ -853,9 +826,7 @@ export default {
           }
         }
         .preview-btn {
-        
           margin-right: 16px;
-          
         }
         .design-btn {
           display: inline-block;
@@ -869,22 +840,21 @@ export default {
           line-height: 32px;
           text-align: center;
           vertical-align: middle;
-          
         }
       }
     }
     .site-wrap {
-      border-top: 1px solid #e5e5e5;
-      height: 200px;
-      .site-item:last-of-type {
-        border-right: 1px solid transparent;
-      }
+      border-top: $--border-base;
+      border-bottom: $--border-base;
+      height: 125px;
+      margin-bottom: $--margin-lg;
       .site-item:first-of-type {
         background: rgba(248, 250, 252, 1);
         background-image: url("~img/dashboard/board-siteBackground1.png");
         background-repeat: no-repeat;
         background-position: 80% top;
         background-size: 38%;
+        border-left: $--border-base;
         .siteInfo-wrap .siteInfo-item {
           &:hover {
             background: rgba(255, 255, 255, 1);
@@ -894,7 +864,7 @@ export default {
       }
       .site-item {
         height: 100%;
-        border-right: 1px solid #e5e5e5;
+        border-right: $--border-base;
         background-image: url("~img/dashboard/board-siteBackground2.png");
         background-repeat: no-repeat;
         background-position: 80% top;
@@ -902,17 +872,15 @@ export default {
         // padding: 0 28px 0 42px;
         .site-title {
           display: inline-block;
-          margin-top: 20px;
-          margin-left: 42px;
-          font-size: 20px;
+          margin-top: 12px;
+          margin-left: 27px;
+          font-size: $--font-size-base;
           font-weight: 500;
-          color: rgba(38, 38, 38, 1);
-          line-height: 28px;
         }
         .siteInfo-wrap {
-          margin-top: 20px;
+          margin-top: 7px;
           .siteInfo-item {
-            height: 36px;
+            height: 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -953,14 +921,14 @@ export default {
                 margin-right: 8px;
               }
               .siteInfo-title {
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 400;
-                color: rgba(161, 168, 177, 1);
+                color: $--color-text-primary;
                 line-height: 20px;
               }
               .siteInfo-domain {
                 margin-left: 16px;
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 400;
                 color: $--color-primary;
                 line-height: 20px;
@@ -968,7 +936,7 @@ export default {
             }
             .siteInfo-right {
               .siteInfo-btn {
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 400;
                 color: $--color-text-primary;
                 line-height: 20px;
@@ -1006,14 +974,14 @@ export default {
       .close-pannel {
         line-height: 22px;
         cursor: pointer;
-        .iconguanbi {
-          padding: 8px;
-          background: transparent;
-          &:hover {
-            background: rgba(240, 243, 247, 1);
-            border-radius: 4px;
-          }
-        }
+        // .iconguanbi {
+        //   padding: 8px;
+        //   background: transparent;
+        //   &:hover {
+        //     background: rgba(240, 243, 247, 1);
+        //     border-radius: 4px;
+        //   }
+        // }
       }
     }
     .tips {
@@ -1030,6 +998,9 @@ export default {
     }
     .createSiteName {
       margin-top: 20px;
+      .createSiteNameInput {
+        margin-top: 16px;
+      }
     }
     .createSiteTitle {
       font-size: 14px;
@@ -1042,34 +1013,6 @@ export default {
       margin-top: 30px;
       width: 100%;
       text-align: right;
-      .cancelBtn {
-        width: 76px;
-        height: 40px;
-        background: rgba(255, 255, 255, 1);
-        border-radius: 2px;
-        border: 1px solid rgba(9, 204, 235, 1);
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(9, 204, 235, 1);
-        line-height: 40px;
-        margin-right: 16px;
-        &:hover {
-          opacity: 0.8;
-        }
-      }
-      .createBtn {
-        width: 76px;
-        height: 40px;
-        background: rgba(9, 204, 235, 1);
-        border-radius: 2px;
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 1);
-        line-height: 40px;
-        &:hover {
-          opacity: 0.8;
-        }
-      }
     }
   }
 }
