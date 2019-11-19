@@ -17,14 +17,14 @@
             <p>{{accountInfo.serviceTypeInfo == 2 ? '服务号' : '订阅号'}}</p>
           </div>
         </div>
-        <div class="domain-button__area" @click="unBind">解除绑定</div>
+        <button class="cl-button cl-button--primary" @click="unBind">解除绑定</button>
       </div>
       <div class="account-domain__area">
         <div class="domain-title__area">
           <span>推广域名</span>
           <p>{{accountInfo.promotionUrl}}</p>
         </div>
-        <div class="domain-button__area" @click="changeShow">修改</div>
+        <button class="cl-button cl-button--primary" @click="changeShow">修改</button>
       </div>
       <div class="account-explain__area">
         <h5>推广域名说明</h5>
@@ -234,11 +234,11 @@ export default {
           width: 80px;
           height: 80px;
           box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.06);
-          border-radius: 4px;
+          border-radius: $--border-radius-base;
           img {
             width: 80px;
             height: 80px;
-            border-radius: 4px;
+            border-radius: $--border-radius-base;
           }
         }
         .account-name-certification {
@@ -267,7 +267,7 @@ export default {
               #3ECD6E 100%
             );
             box-shadow: 0px 5px 8px 0px rgba(9, 204, 235, 0.1);
-            border-radius: 4px;
+            border-radius: $--border-radius-base;
             &::after {
               position: absolute;
               top: 8px;
@@ -285,30 +285,33 @@ export default {
       }
     }
     .account-domain__area {
-      height:88px;
+      height:32px;
       background:rgba(255,255,255,1);
-      border-radius:2px;
+      border-radius:$--border-radius-base;
       border-top:1px solid rgba(229,229,229,1);
       display: flex;
       justify-content: space-between;
       padding: 24px;
       line-height: 14px;
+      .cl-button--primary {
+        height: 32px;
+      }
       .domain-title__area {
         position: relative;
         width: 80%;
-        line-height: 40px;
+        line-height: 32px;
         display: flex;
         justify-content: flex-start;
         font-size:14px;
-        font-family:"PingFangSC";
         font-weight:400;
-        color:rgba(38,38,38,1); 
+        color:rgba(38,38,38,1);
         p {
           display: inline-block;
           min-width: 240px;
           margin-left: 20px;
-          border-radius:2px;
-          border:1px solid rgba(229,229,229,1);
+          line-height: 32px;
+          border-radius:$--border-radius-base;
+          border:$--border-base;
           padding: 0 10px;
         }
         ul {
@@ -337,7 +340,7 @@ export default {
       margin-top: 20px;
       padding: 24px;
       background: #fff;
-      border-radius: 3px;
+      border-radius: $--border-radius-base;
       h5 {
         height:20px;
         font-size:14px;
@@ -394,7 +397,7 @@ export default {
       .tips-top {
         height:32px;
         background:rgba(252,242,244,1);
-        border-radius:2px;
+        border-radius:$--border-radius-base;
         border:1px solid rgba(255,143,160,1);
         font-size:12px;
         font-weight:400;
@@ -461,7 +464,7 @@ export default {
           margin: 0 16px 24px 24px;
           background:rgba(9,204,235,1);
           color: #FFFFFF;
-          border-radius:2px;
+          border-radius:$--border-radius-base;
           cursor: pointer;
         }
         span:nth-child(2) {
@@ -479,7 +482,7 @@ export default {
       width:90px;
       height:40px;
       background:rgba(9,204,235,1);
-      border-radius:2px;
+      border-radius:$--border-radius-base;
       line-height: 40px;
       font-size:14px;
       font-weight:400;

@@ -280,7 +280,7 @@ export default {
     height: 100%;
     background: rgba(255, 255, 255, 1);
     // box-shadow: 0px 0px 8px 2px rgba(228, 234, 239, 1);
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     .popup-header__area {
       display: flex;
       justify-content: space-between;

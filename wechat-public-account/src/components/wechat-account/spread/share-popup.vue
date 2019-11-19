@@ -440,7 +440,7 @@ export default {
             width:450px;
             height:40px;
             padding-left: 10px;
-            border-radius:2px;
+            border-radius:$--border-radius-base;;
             border:1px solid rgba(229,229,229,1);
             font-size:14px;
             font-family: "PingFangSC-Regular,PingFangSC";
@@ -477,7 +477,7 @@ export default {
             position: relative;
             width:400px;
             height:40px;
-            border-radius:2px;
+            border-radius:$--border-radius-base;
             border:1px solid rgba(229,229,229,1);
             padding: 0;
             display: flex;
@@ -552,7 +552,7 @@ export default {
             line-height: 22px;
             margin: 0;
             background:rgba(240,243,248,1);
-            border-radius:4px;
+            border-radius: $--border-radius-base;
             border:1px solid rgba(229,229,229,1);
           }
           span {
@@ -561,7 +561,7 @@ export default {
             height:40px;
             margin-left: 8px;
             background:rgba(5,149,230,1);;
-            border-radius:2px;
+            border-radius: $--border-radius-base;
             font-size:14px;
             font-family:'PingFangSC-Regular,PingFangSC';
             font-weight:400;
@@ -646,7 +646,7 @@ export default {
           height:40px;
           padding: 0 10px;
           background:rgba(240,243,248,1);
-          border-radius:4px;
+          border-radius:$--border-radius-base;
           border:1px solid rgba(229,229,229,1);
           font-size:14px;
           font-weight:400;
