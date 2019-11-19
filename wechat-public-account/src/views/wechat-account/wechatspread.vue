@@ -416,7 +416,7 @@ export default {
         padding-left: 12px;
         line-height: 20px;
         border-left: 4px solid $--color-primary;
-        font-size:14px;
+        font-size:$--font-size-small;
         font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
         color:rgba(38,38,38,1);
@@ -431,7 +431,7 @@ export default {
           top: 0;
           right: 24px;
           height:50px;
-          font-size:14px;
+          font-size:$--font-size-small;
           font-family:'PingFangSC-Regular,PingFang SC';
           font-weight:400;
           color:rgba(38,38,38,1);
@@ -461,7 +461,7 @@ export default {
       justify-content: space-between;
       margin-top: 40px;
       a {
-        font-size:14px;
+        font-size:$--font-size-small;
         margin-left: 24px;
         font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;

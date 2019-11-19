@@ -609,7 +609,7 @@ export default {
         padding-left: 12px;
         line-height: 20px;
         border-left: 4px solid $--color-primary;
-        font-size:14px;
+        font-size:$--font-size-small;
         font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
         color:rgba(38,38,38,1);

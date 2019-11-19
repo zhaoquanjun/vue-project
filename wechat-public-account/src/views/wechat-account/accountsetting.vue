@@ -211,7 +211,7 @@ export default {
   .account-setting__manage {
     h4 {
       padding-top: 24px;
-      font-size: 16px;
+      font-size: $--font-size-small;
       font-family: "PingFangSC";
       font-weight: 500;
       color: rgba(38, 38, 38, 1);
@@ -249,8 +249,7 @@ export default {
             display: inline-block;
             width: 300px;
             margin-bottom: 16px;
-            font-size: 16px;
-            font-family: "PingFangSC";
+            font-size: $--font-size-base;
             font-weight: 500;
             line-height: 22px;
             color:rgba(38,38,38,1);
@@ -289,7 +288,7 @@ export default {
       height:32px;
       background:rgba(255,255,255,1);
       border-radius:$--border-radius-base;
-      border-top:1px solid rgba(229,229,229,1);
+      border-top:$--border-base;
       display: flex;
       justify-content: space-between;
       padding: 24px;
@@ -303,7 +302,7 @@ export default {
         line-height: 32px;
         display: flex;
         justify-content: flex-start;
-        font-size:14px;
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(38,38,38,1);
         p {
@@ -320,14 +319,14 @@ export default {
           top: 40px;
           left: 76px;
           width: 240px;
-          font-size:14px;
+          font-size:$--font-size-small;
           line-height: 40px;
           background: #FFFFFF;
-          border: 1px solid rgba(229,229,229,1);
+          border: $--border-base;
           border-bottom: none;
           color: #a1a8b1;
           li {
-            border-bottom: 1px solid rgba(229,229,229,1);
+            border-bottom: $--border-base;
             padding-left: 10px;
             cursor: pointer;
             &:hover {
@@ -344,15 +343,14 @@ export default {
       border-radius: $--border-radius-base;
       h5 {
         height:20px;
-        font-size:14px;
-        font-family:"PingFangSC";
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(38,38,38,1);
         line-height:20px;
         margin-bottom: 8px;
       }
       p {
-        font-size:14px;
+        font-size:$--font-size-small;
         font-family:"PingFangSC";
         font-weight:400;
         color:rgba(161,168,177,1);
@@ -381,7 +379,7 @@ export default {
       box-sizing: border-box;
       background: #FFFFFF;
       .title {
-        font-size:12px;
+        font-size:$--font-size-small;
         font-family:"PingFangSC-Regular,PingFangSC";
         font-weight:400;
         color:rgba(38,38,38,1);
@@ -389,7 +387,7 @@ export default {
         padding: 20px 0 12px;
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #E5E5E5;
+        border-bottom: $--border-base;
         i {
           color: #A1A8B1;
           font-size: 18px;
@@ -401,7 +399,7 @@ export default {
         background:rgba(252,242,244,1);
         border-radius:$--border-radius-base;
         border:1px solid rgba(255,143,160,1);
-        font-size:12px;
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(251,77,104,1);
         line-height:32px;
@@ -410,7 +408,7 @@ export default {
       }
       ul {
         p {
-          font-size:12px;
+          font-size:$--font-size-small;
           font-family:"PingFangSC-Regular,PingFangSC";
           font-weight:400;
           color:rgba(38,38,38,1);
@@ -420,7 +418,7 @@ export default {
         li {
           height: 32px;
           padding: 0 16px;
-          font-size: 12px;
+          font-size: $--font-size-small;
           font-weight: 400;
           color:$--color-text-primary;
           line-height: 32px;
@@ -447,7 +445,7 @@ export default {
           margin-top: 30px;
           p {
             margin: 0;
-            font-size:12px;
+            font-size:$--font-size-small;
             font-family:"PingFangSC-Regular,PingFangSC";
             font-weight:400;
             color:rgba(161,168,177,1);
@@ -472,7 +470,7 @@ export default {
       background:rgba(9,204,235,1);
       border-radius:$--border-radius-base;
       line-height: 40px;
-      font-size:14px;
+      font-size:$--font-size-small;
       font-weight:400;
       text-align: center;
       color:rgba(255,255,255,1);
