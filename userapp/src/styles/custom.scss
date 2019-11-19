@@ -1,12 +1,12 @@
 
 
 body{
-    color: #262626;
-    overflow: hidden;
-    font-family:  "PingFang SC",  "Microsoft YaHei", "Helvetica Neue",  Arial;
-    background:rgba(255,255,255,1);
     min-width: 1170px;
     min-height: 500px;
+    font-family:  "PingFang SC",  "Microsoft YaHei", "Helvetica Neue",  Arial;
+    color:$--color-text-primary;
+    background:$--background-color-selected;
+    overflow: hidden;
 }
 .page-scroll{
     overflow: auto;
@@ -169,11 +169,4 @@ body{
     width: 150px !important;
 }
 
-.copy-icon {
-    margin-top: 17px;
-    display: inline-block;
-    width: 142px;
-    height: 89px;
-    background: url("~img/copy.gif") no-repeat center;
-    background-size: contain;
-}
+
