@@ -64,13 +64,15 @@
             <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="150">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="edit-icon" @click="handleEdit(scope.row)"><i class="iconfont iconbianji"></i></button>
-                        <button
+                        <!-- <button class="edit-icon" @click="handleEdit(scope.row)"> -->
+                            <i class="iconfont iconbianji is-square" @click="handleEdit(scope.row)"></i>
+                        <!-- </button> -->
+                        <!-- <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
-                        >
-                            <i class="iconfont iconsangedian"></i>
-                        </button>
+                        > -->
+                            <i class="iconfont iconsangedian is-square"  @click.stop="_handleShowMoreOperate($event,scope.row)"></i>
+                        <!-- </button> -->
                     </div>
                 </template>
             </el-table-column>
