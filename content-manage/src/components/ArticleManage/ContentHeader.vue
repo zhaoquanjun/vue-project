@@ -72,7 +72,7 @@
                     </button>
                 </div>
                 <div class="head-item head-handle-btn">
-                    <button class="cl-button cl-button--primary" @click="addArticle">新增文章</button>
+                    <button class="cl-button cl-button--primary_notbg is-disabled" @click="addArticle">新增文章</button>
                 </div>
             </div>
         </template>

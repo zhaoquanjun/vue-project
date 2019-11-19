@@ -13,8 +13,9 @@ $--color-danger: #FB4D68 !default;
 $--color-info: rgba(240, 243, 247, 1) !default;
 
 $--color-white: #FFFFFF !default;
-$--color-black: rgba(31, 35, 37, 1) !default;
-$--color-black2: rgba(55, 61, 65, 1) !default;
+$--color-black-1: #1F2325 !default;
+$--color-black-2: #373D41 !default;
+$--color-transparent: transparent !default;
 
 $--background-color-selected: #F4F5F6;
 $--background-color-hover: #F9F9F9;
@@ -113,7 +114,6 @@ $--button-font-size: $--font-size-base !default;
 $--button-border-radius: $--border-radius-base !default;
 
 $--button-padding-vertical: 9px !default;
-
 $--button-padding-horizontal: 22px !default;
 
 $--button-primary-border-color: $--color-primary !default;

@@ -16,8 +16,10 @@
         }
         &.is-disabled{
             cursor: not-allowed;
-            color: $--button-disabled-primary-color;
+            color: $--color-white;
             border-color:$--button-disabled-primary-color;
+            background-color: $--button-disabled-primary-color;
+           
         }
     }
 
@@ -32,6 +34,8 @@
             cursor: not-allowed;
             color: $--button-disabled-primary-color;
             border-color: $--button-disabled-primary-color;
+            background-color: $--color-white;
+            
         }
     }
 
