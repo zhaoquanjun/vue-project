@@ -1098,6 +1098,9 @@ export default {
 .selectUrl div i {
   color: $--color-primary;
 }
+.selectUrl div p {
+  line-height: 40px;
+}
 .btn {
   display: flex;
   justify-content: space-between;

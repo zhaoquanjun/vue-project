@@ -3,7 +3,9 @@
     <div class="popup-content__add">
       <p>请选择所需链接的产品</p>
       <a :href="redirectUrl" target="_blank">
-        <el-button type="primary" icon="el-icon-plus" size="small">添加产品</el-button>
+        <button class="cl-button cl-button--primary">
+          + 添加产品
+        </button>
       </a>
     </div>
     <div class="popup-content__main">
@@ -37,9 +39,10 @@
                 <p class="single-line__overflow--hide ellipsis">{{it.name}}</p>
                 <p class="date single-line__overflow--hide">
                   <!-- <span>{{it.createTime && it.createTime.slice(0, 10)}}</span> -->
-                  <span
+                  <i
+                    class="icon iconfont iconduihao"
                     :style="{visibility: productId == i ? 'visible' : 'hidden'}"
-                  ></span>
+                  ></i>
                 </p>
               </li>
             </ul>
@@ -284,7 +287,7 @@ export default {
     height: 56px;
     padding: 0 12px;
     p {
-      color: #00c1de;
+      color: $--color-primary;
       font-size: 14px;
       line-height: 17px;
     }
@@ -310,13 +313,14 @@ export default {
     height: 72%;
     min-height: 490px;
     text-align: right;
-    border: 1px solid rgba(238, 238, 238, 1);
+    border: $--border-base;
     .content-main__slider {
       padding: 16px 8px;
       width: 180px;
       height: 100%;
+      box-sizing: border-box;
       overflow-y: auto;
-      border-right: 1px solid #eee;
+      border-right: $--border-base;
     }
     .content-main__list {
       width: 380px;
@@ -327,7 +331,7 @@ export default {
         margin-left: 8px;
         width: 360px;
         height: 36px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: $--border-base;
       }
       .content-main__search {
         .el-icon-search {
@@ -366,7 +370,7 @@ export default {
               font-size: 14px;
               line-height: 26px;
               height: 26px;
-              color: #262626;
+              color: $--color-text-primary;
               text-align: left;
             }
             p.date {
@@ -375,40 +379,19 @@ export default {
               align-items: center;
               width: 164px;
               span {
-                color: #b5b5b5;
-              }
-              span:last-of-type {
-                display: block;
-                margin-left: 14px;
-                width: 18px;
-                height: 18px;
-                background: url("~img/link/selected.png") no-repeat
-                  center center;
-                background-size: 100% 100%;
+                color: $--color-text-primary;
               }
             }
             &:hover {
-              background: #f8fafc;
-              p {
-                color: #00c1de;
-              }
+              background: $--background-color-hover;
             }
           }
           .active {
-            background: #00c1de;
+            background: $--background-color-selected !important;
             p {
-              color: #fff;
+              color: $--color-primary !important;
               span:first-of-type {
-                color: #fff;
-              }
-            }
-            &:hover {
-              background: #00c1de;
-              p {
-                color: #fff;
-                span:first-of-type {
-                  color: #fff;
-                }
+                color: $--color-primary !important;
               }
             }
           }
@@ -419,12 +402,7 @@ export default {
   .popup-content__main {
     .btn-prev, .btn-next,.el-pager li {
       background: #fff;
-      border: 1px solid rgba(229, 229, 229, 1);
-    }
-  } 
-  .popup-content__main {
-    .el-pager li:not(.disabled).active {
-      background: #01c0de;
+      border: $--border-base;
     }
   }
   .popup-content__open {
@@ -433,9 +411,9 @@ export default {
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
-    border-top: 1px solid #eee;
+    border-top: $--border-base;
     p {
-      font-size:14px;
+      font-size:$--font-size-small;
       font-family:"PingFangSC";
       font-weight:400;
       color:rgba(38,38,38,1);
@@ -448,7 +426,7 @@ export default {
       height:32px;
       border-radius:$--border-radius-base;
       border:1px solid rgba(229,229,229,1);
-      font-size:14px;
+      font-size:$--font-size-small;
       font-family:"PingFangSC";
       font-weight:400;
       line-height:32px;
@@ -466,10 +444,9 @@ export default {
       }
     }
     a {
-      font-size:14px;
-      font-family:"PingFangSC";
+      font-size:$--font-size-small;
       font-weight:400;
-      color:rgba(9,204,235,1);
+      color:$--color-primary;
       margin-left: 10px;
     }
     .product-page-list {
@@ -483,10 +460,9 @@ export default {
       li {
         display: inline-block;
         margin-right: 0;
-        color:rgba(38,38,38,1);
+        color:$--color-text-primary;
         height:32px;
-        font-size:14px;
-        font-family:"PingFangSC";
+        font-size:$--font-size-small;
         font-weight:400;
         line-height:32px;
         padding-left: 10px;
@@ -498,12 +474,11 @@ export default {
         }
       }
       li:hover {
-        background:#F0F3F7;
-        color: #00c1de;
+        background: $--background-color-hover;
       }
       .active {
-        background:#00c1de !important;
-        color: #fff !important;
+        background: $--background-color-selected !important;
+        color: $--color-primary !important;
         i {
           display: inline-block !important;
         }
