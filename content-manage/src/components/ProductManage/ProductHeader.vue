@@ -70,13 +70,13 @@
                     </span>
                     <button @click="switchIsDesc('dec')" class="desBtn">
                         <i
-                            class="iconfont iconicon-Arrow1"
+                            class="iconfont iconxiayi"
                             :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
                         ></i>
                     </button>
                     <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
                         <i
-                            class="iconfont iconicon-Arrow"
+                            class="iconfont iconshangyi"
                             :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
                         ></i>
                     </button>
