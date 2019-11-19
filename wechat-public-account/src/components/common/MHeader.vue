@@ -379,6 +379,7 @@ export default {
       cursor: pointer;
       display: flex;
       justify-content: center;
+      align-items: center;
       padding: 0;
       margin-left: 16px;
       height: 40px;

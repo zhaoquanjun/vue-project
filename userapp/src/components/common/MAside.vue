@@ -250,6 +250,7 @@ export default {
             line-height: 50px;
             color:$--color-white;
             margin-left: -4px;
+            
         }
         .iconicon-des-Arrow{
             position: absolute;
