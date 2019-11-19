@@ -57,7 +57,10 @@
         border-color: transparent;
         color: $--button-primary-font-color;
     }
-
+    &--text_info{
+        border-color: transparent;
+        color: $--button-info-font-color
+    }
     &--text_success{
         border-color: transparent;
         color: $--button-success-font-color;
