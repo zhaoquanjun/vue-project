@@ -150,7 +150,7 @@ export default {
     width: 32px;
     height: 32px;
     border: 1px solid #e5e5e5;
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     &:hover{
         opacity: 0.8;
     }

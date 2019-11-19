@@ -48,8 +48,6 @@
                             @click="rename(scope.row.id,scope.row,scope.$index)"
                         >{{scope.row.title}}</div>
                     </el-tooltip>
-                    <!-- <input v-model="scope.row.title" />
-                    <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
@@ -61,7 +59,6 @@
                 </template>
             </el-table-column>
 
-            <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
             <el-table-column prop="createTimeStr" width="150" label="上传时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
@@ -259,17 +256,14 @@ export default {
     }
 };
 </script>
-<style  scoped>
+<style lang="scss" scoped>
+@import "../../styles/content-manage/manege-table.scss";
 /* 音频弹窗居中播放 */
 #img-list-dialog /deep/ .el-dialog__body {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-</style>
-<style lang="scss" scoped>
-@import "../../styles/content-manage/manege-table.scss";
-
 .cover {
     position: relative;
     &:hover .play {

@@ -1,21 +1,57 @@
-@import "./common/var.scss";
 
-[class^="iconfont"], [class*="iconfont"] {
-    // width: 32px;
-    // height: 32px;
-    color: $--icon-color;
-    &:hover{
+
+// [class^="iconfont"],
+// [class*="iconfont"] {
+//     cursor: pointer;
+//     display: inline-block;
+//     color: $--icon-color;
+//     font-size: $--font-size-base;
+//     // padding: 8px;
+//     background-color: transparent;
+//     line-height: 1;
+//     &.is-circle {
+//         &:hover {
+//             background-color: $--icon-hover-color;
+//             border-radius: $--border-radius-circle;
+//         }
+//     }
+//     &.is-square {
+//         &:hover {
+//             background-color: $--icon-hover-color;
+//             border-radius:$--border-radius-base;
+//         }
+//     }
+// }
+
+[class^="el-icon"],
+[class*="el-icon"] {
+    color: $--icon-color !important;
+    &:hover {
+        color: $--icon-color;
         text-align: center;
         box-sizing: border-box;
     }
-    &.is-circle{
-        &:hover{
+
+}
+
+.cl-iconfont{
+    cursor: pointer;
+    display: inline-block;
+    color: $--icon-color;
+    font-size: $--font-size-base;
+    padding: 8px;
+    background-color: transparent;
+    line-height: 1;
+    &.is-circle {
+        &:hover {
             background-color: $--icon-hover-color;
-            border-radius: 50%;
+            border-radius: $--border-radius-circle;
         }
     }
-    &.is-square{
-        background-color: $--icon-hover-color;
-        border-radius: $--border-radius-base;
+    &.is-square {
+        &:hover {
+            background-color: $--icon-hover-color;
+            border-radius:$--border-radius-base;
+        }
     }
 }

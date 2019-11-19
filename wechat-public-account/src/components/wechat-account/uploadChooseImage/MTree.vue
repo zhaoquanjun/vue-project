@@ -481,7 +481,7 @@ export default {
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.07);
         padding: 5px 0;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         button {
             width: 100%;
             display: block;
@@ -501,7 +501,7 @@ export default {
         // height: 28px;
         // top: 5px;
         z-index: 10;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         text-align: center;
         // background: #e0faff;
     }

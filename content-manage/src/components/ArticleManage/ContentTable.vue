@@ -64,13 +64,15 @@
             <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="150">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="edit-icon" @click="handleEdit(scope.row)"><i class="iconfont iconbianji"></i></button>
-                        <button
+                        <!-- <button class="edit-icon" @click="handleEdit(scope.row)"> -->
+                            <i class="cl-iconfont iconfont iconbianji is-square" @click="handleEdit(scope.row)"></i>
+                        <!-- </button> -->
+                        <!-- <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
-                        >
-                            <i class="iconfont iconsangedian"></i>
-                        </button>
+                        > -->
+                            <i class="cl-iconfont iconfont iconsangedian is-square"  @click.stop="_handleShowMoreOperate($event,scope.row)"></i>
+                        <!-- </button> -->
                     </div>
                 </template>
             </el-table-column>
@@ -154,16 +156,6 @@ export default {
             this.articleSearchOptions.pageSize = size;
             this.$emit("getArticleList");
         },
-        // sortByTopStatus: function(column, prop, order) {
-        //     // descending ascending
-        //     this.articleSearchOptions.OrderByTopOrder =
-        //         column.order == "ascending"
-        //             ? true
-        //             : column.order == "descending"
-        //             ? false
-        //             : null;
-        //     this.$emit("getArticleList");
-        // },
         /**
          * 单选或全选操作
          */
@@ -260,10 +252,6 @@ export default {
             let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail', siteId);
             var prevAddress = data;
             if(prevAddress){
-                //var a = document.createElement('a');
-                //a.setAttribute('href', prevAddress + previewId + '.html');
-                //a.setAttribute('target', '_blank');
-                //a.click();
                 let newWindow = window.open();
                 newWindow.location.href = prevAddress + previewId + '.html';
             }

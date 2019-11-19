@@ -294,7 +294,6 @@ export default {
                 `删除后，网站中引用的文件数据将同步删除，同时文件将被移动到回收站，是否确认删除？`,
                 "提示",
                 {
-                    customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
@@ -420,8 +419,6 @@ export default {
             let idList = id || this.idsList;
             let msg = !isTop ? "取消置顶" : "置顶";
             this.$confirm(`您确认要${msg}所选文件吗？`, "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
                 iconClass: "icon-warning",
                 callback: async action => {
                     if (action === "confirm") {

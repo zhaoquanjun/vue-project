@@ -302,7 +302,6 @@ export default {
 };
 </script>
 
-
 <style  lang="scss" scoped>
 @import "@/styles/content-manage/manage-head.scss";
 .btn-black-notboard{

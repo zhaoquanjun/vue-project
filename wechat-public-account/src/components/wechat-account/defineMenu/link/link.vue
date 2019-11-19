@@ -117,7 +117,7 @@ export default {
   width: 219px;
   height: 40px;
   background: rgba(255, 255, 255, 1);
-  border-radius: 4px;
+  border-radius: $--border-radius-base;
   border: 1px solid rgba(201, 217, 220, 1);
   cursor: pointer;
   li {

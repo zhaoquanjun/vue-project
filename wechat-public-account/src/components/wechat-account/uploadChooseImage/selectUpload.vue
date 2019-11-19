@@ -79,7 +79,7 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
     overflow: hidden;
-    border-radius: 5px;
+    border-radius: $--border-radius-base;
     background: #fff;
   }
   #content-manage .tree-aside {

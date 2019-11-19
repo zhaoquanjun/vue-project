@@ -4,14 +4,11 @@
 .el-select .el-input.is-focus .el-input__inner{
     border-color: $--color-primary;
 }
-.el-select-dropdown__item.selected{
-    color: $--color-primary;
-}
+
 .el-select .el-input__inner:focus{
     border-color: $--color-primary;
 }
 
-// 将圆角改为直角
 .el-input .el-input__inner,.el-button,.el-input-group__append, .el-input-group__prepend{
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
 }

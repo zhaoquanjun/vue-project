@@ -321,7 +321,7 @@ export default {
       border: none;
     }
     .cancel {
-      border: 1px solid #eeeeee;
+      border: $--border-base;
       margin-right: 10px;
     }
     .save {
@@ -337,7 +337,7 @@ export default {
   padding: 8px;
   &:hover {
     background: rgba(240, 243, 247, 1);
-    border-radius: 4px;
+    border-radius: $--border-radius-base;
   }
 }
 .disabled {
@@ -379,6 +379,7 @@ export default {
       cursor: pointer;
       display: flex;
       justify-content: center;
+      align-items: center;
       padding: 0;
       margin-left: 16px;
       height: 40px;
@@ -386,7 +387,7 @@ export default {
       width: 250px;
       &:hover {
         background: #06bdda;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
       }
       .headAppNameInfo {
         overflow: hidden;
@@ -427,7 +428,7 @@ export default {
     z-index: 10000;
     right: 0;
     top: 50px;
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
     padding: 9px 0;
     dd {
@@ -507,7 +508,7 @@ export default {
   right: 0;
   bottom: 0;
   background: rgba(245, 245, 245, 1);
-  border-top: 1px solid #eee;
+  border-top: $--border-base;
   width: 100%;
   height: 100%;
   .appitem {
@@ -517,7 +518,7 @@ export default {
     width: 900px;
     height: 165px;
     background: rgba(255, 255, 255, 1);
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     padding-left: 0px;
     &:hover {
       box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
@@ -526,7 +527,7 @@ export default {
     .appTitle {
       width: 100%;
       height: 55px;
-      border-bottom: 1px solid #eee;
+      border-bottom: $--border-base;
       .appName {
         margin-left: 32px;
         font-size: 17px;
@@ -572,7 +573,7 @@ export default {
       width: 56px;
       height: 20px;
       background: rgba(241, 85, 51, 1);
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       text-align: center;
       font-size: 10px;
       font-family: PingFangSC-Regular;
@@ -587,7 +588,7 @@ export default {
       width: 90px;
       height: 40px;
       background: rgba(0, 193, 222, 1);
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       border: 1px solid rgba(1, 192, 222, 1);
       font-size: 14px;
       font-weight: 400;
@@ -602,7 +603,7 @@ export default {
       width: 90px;
       height: 32px;
       background: rgba(140, 140, 140, 1);
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       font-size: 12px;
       font-family: PingFangSC-Medium;
       font-weight: 500;
@@ -614,7 +615,7 @@ export default {
       display: inline-block;
       width: 90px;
       height: 40px;
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       border: 1px solid rgba(1, 192, 222, 1);
       font-size: 14px;
       font-weight: 400;

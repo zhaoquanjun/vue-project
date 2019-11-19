@@ -85,7 +85,7 @@ export default {
     margin: 30px auto;
     img {
         display: inline-block;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         min-height: 180px;
         max-width: 700px;
         max-height: 240px;

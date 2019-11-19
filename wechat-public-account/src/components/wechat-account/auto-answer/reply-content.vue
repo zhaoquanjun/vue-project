@@ -87,7 +87,7 @@ export default {
     .reply-content {
         height: 372px;
         border: 1px solid #e5e5e5;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         .radio-tabs {
             height: 40px;
             background:rgba(240,243,247,1);

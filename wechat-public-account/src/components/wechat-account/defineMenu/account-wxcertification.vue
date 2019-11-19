@@ -66,7 +66,7 @@ export default {
       color: #fe9837;
       text-align: left;
       background: rgba(255, 248, 242, 1);
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       border: 1px solid rgba(250, 223, 197, 1);
       span {
         color: #0595e6;

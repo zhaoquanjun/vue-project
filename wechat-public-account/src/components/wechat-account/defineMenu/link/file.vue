@@ -238,7 +238,7 @@ export default {
       width: 120px;
       height: 32px;
       background: rgba(0, 193, 222, 1);
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       border-color: rgba(0, 193, 222, 1);
       span,
       i {

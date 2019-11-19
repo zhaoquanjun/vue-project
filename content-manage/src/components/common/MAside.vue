@@ -174,7 +174,7 @@ export default {
     z-index: 10;
     overflow: hidden;
     transition: 0.2s ease-in-out;
-    background-color:$--color-black;
+    background-color:$--color-black-1;
    
     // border-right: 1px solid rgb(229, 229, 229);
 }
@@ -202,24 +202,24 @@ export default {
 <style lang="scss" scoped>
 
 .menu-hover {
-    background:$--color-info;
+    background: $--background-color-selected;
     border-left: 4px solid $--color-primary  !important;
     .menu-icon {
         color: $--color-primary !important;
     }
     .menu-item-content {
-         color: $--color-black !important;   
+         color: $--color-black-1 !important;   
      }
 }
 .menu-bg {
-    background:$--color-info;
+    background:$--background-color-selected;
     color: $--color-primary ;
     border-left: 4px solid $--color-primary !important;
     .menu-icon {
         color: $--color-primary !important;
     }
     .menu-item-content {
-         color: $--color-black !important;   
+         color: $--color-black-1 !important;   
      }
     
 }
@@ -229,7 +229,7 @@ export default {
      
 }
 .left-menu {
-    background-color:$--color-black;
+    background-color: $--color-black-1;
     height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
@@ -237,7 +237,7 @@ export default {
         line-height: 50px;
         white-space: nowrap;
         margin-bottom: 14px;
-        border-left: 4px solid $--color-black;
+        border-left: 4px solid $--color-black-1;
         .menu-item-content {
             display: inline-block;
             line-height: 50px;
