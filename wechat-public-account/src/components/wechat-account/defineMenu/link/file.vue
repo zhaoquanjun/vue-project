@@ -227,8 +227,8 @@ export default {
     height: 56px;
     padding: 0 12px;
     p {
-      color: #00c1de;
-      font-size: 14px;
+      color: $--color-primary;
+      font-size: $--font-size-small;
       line-height: 17px;
       cursor: auto;
     }
@@ -308,7 +308,7 @@ export default {
             p {
               width: 300px;
               padding: 0;
-              font-size: 14px;
+              font-size: $--font-size-small;
               color: #262626;
               text-align: left;
             }
@@ -364,12 +364,7 @@ export default {
       background: #fff;
       border: 1px solid rgba(229, 229, 229, 1);
     }
-  } 
-  .popup-content__main {
-    .el-pager li:not(.disabled).active {
-      background: #01c0de;
-    }
-  } 
+  }
   .popup-content__open {
     margin-top: 16px;
     padding: 16px 16px 0;
@@ -378,7 +373,7 @@ export default {
     border-top: 1px solid #eee;
     p {
       padding: 0 0 12px;
-      font-size: 14px;
+      font-size: $--font-size-small;
       line-height: 17px;
       color: #00c1de;
     }

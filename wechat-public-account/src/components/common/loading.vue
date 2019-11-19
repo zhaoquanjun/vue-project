@@ -38,7 +38,7 @@ export default {
 //     }
 //     p {
 //       padding-top: 16px;
-//       font-size: 14px;
+//       font-size: $--font-size-small;
 //       color: #666;
 //     }
 //   }
@@ -108,7 +108,7 @@ h1 {
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 0.1em;
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: lighter;
   color: white;
 }

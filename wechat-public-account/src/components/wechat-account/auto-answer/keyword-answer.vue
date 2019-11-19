@@ -72,7 +72,7 @@
                         @click="searchEnterFun"
                     ></i>
                 </el-input>
-                <button class="answer-btn" @click="handlerAdd">添加回复</button>
+                <button class="answer-btn cl-button cl-button--primary" @click="handlerAdd">添加回复</button>
             </div>
 
             <ul class="advance-list__area">
@@ -349,8 +349,9 @@ button {
         .select-item {
             padding-left: 16px;
             .prefixIcon {
-                line-height: 40px;
-                margin-left: 4px;
+                padding: 13px 6px;
+                line-height: 14px;
+                margin-left: 0px;
             }
         }
         .addKeyword {
@@ -375,7 +376,7 @@ button {
 
                 p {
                     display: inline-block;
-                    font-size: 14px;
+                    font-size: $--font-size-small;
                     line-height: 40px;
                     padding-right: 16px;
                 }
@@ -436,10 +437,10 @@ button {
             padding: 0 24px;
             .answer-btn {
                 float: right;
-                width: 90px;
                 height: 32px;
+                font-size: 12px;
                 border-radius: $--border-radius-base;
-                background: rgba(9, 204, 235, 1);
+                background: $--color-primary;
                 color: #ffffff;
             }
             .input-with-select {
@@ -451,7 +452,7 @@ button {
 .keyword-btn {
     .iconfont {
         font-size: 32px;
-        color: #09cceb;
+        color: $--color-primary;
         vertical-align: middle;
     }
 }

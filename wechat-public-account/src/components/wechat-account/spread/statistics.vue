@@ -225,7 +225,7 @@ export default {
     border-radius:$--border-radius-base;
     border:1px solid rgba(229,229,229,1);
     h4 {
-      font-size:14px;
+      font-size:$--font-size-small;
       font-weight:400;
       color:rgba(38,38,38,1);
       line-height:22px;

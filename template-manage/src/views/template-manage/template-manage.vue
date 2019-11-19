@@ -1037,6 +1037,14 @@ export default {
 };
 </script>
 <style>
+.copy-icon {
+    margin-top: 17px;
+    display: inline-block;
+    width: 142px;
+    height: 89px;
+    background: url("~img/copy.gif") no-repeat center;
+    background-size: contain;
+}
 .createTemplateLoading .el-loading-spinner {
   margin-top: 0 !important;
   left: 50%;

@@ -28,8 +28,7 @@ export default {};
     }
     p {
       margin-top: 6px;
-      font-size: 14px;
-      font-family: 'PingFangSC';
+      font-size: $--font-size-small;
       font-weight: 400;
       color: rgba(164, 178, 191, 1);
       line-height: 20px;

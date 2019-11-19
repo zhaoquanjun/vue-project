@@ -203,7 +203,7 @@ export default {
       float: left;
     }
     .siteName {
-      font-size: 14px;
+      font-size: $--font-size-small;
       height: 50px;
       max-width: 200px;
       line-height: 50px;
@@ -229,7 +229,7 @@ export default {
       float: left;
     }
     .changeSite {
-      font-size: 14px;
+      font-size: $--font-size-small;
       font-weight: 400;
       line-height: 50px;
       color: $--color-primary;
@@ -283,7 +283,7 @@ export default {
         background: rgba(255, 255, 255, 0.8);
         border-radius: $--border-radius-base;
         padding: 0 12px;
-        font-size: 14px;
+        font-size: $--font-size-small;
         font-weight: 400;
         color: rgba(38, 38, 38, 1);
         line-height: 22px;
@@ -299,7 +299,7 @@ export default {
         height: 40px;
         background: rgba(9, 204, 235, 1);
         border-radius: $--border-radius-base;
-        font-size: 14px;
+        font-size: $--font-size-small;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
         line-height: 40px;
@@ -356,7 +356,7 @@ export default {
     }
     .itemSiteDomain {
       display: block;
-      font-size: 14px;
+      font-size: $--font-size-small;
       font-weight: 400;
       line-height: 22px;
       height: 22px;

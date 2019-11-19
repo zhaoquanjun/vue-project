@@ -350,7 +350,7 @@ export default {
           margin: 72px 0 24px;
         }
         p {
-          font-size:14px;
+          font-size:$--font-size-small;
           font-family:"PingFangSC";
           font-weight:400;
           color:#A1A8B1;
@@ -361,7 +361,7 @@ export default {
           width: 340px;
           height: 40px;
           cursor: pointer;
-          font-size:14px;
+          font-size:$--font-size-small;
           font-family:"PingFangSC";
           font-weight:400;
           margin-top: 20px;
@@ -383,7 +383,7 @@ export default {
           margin: 48px 0 12px;
         }
         p {
-          font-size:14px;
+          font-size:$--font-size-small;
           font-family:"PingFangSC";
           font-weight:400;
           color:rgba(161,168,177,1);
@@ -427,13 +427,13 @@ export default {
           height: 34px;
           color: rgba(255, 255, 255, 1);
           background-color: rgba(0, 193, 222, 1);
-          font-size: 14px;
+          font-size: $--font-size-small;
           line-height: 34px;
           text-align: center;
           margin: 0 auto;
         }
         div {
-          font-size:14px;
+          font-size:$--font-size-small;
           font-weight:400;
           color:rgba(99,220,140,1);
           line-height:20px;
@@ -473,7 +473,7 @@ export default {
           li {
             height: 40px;
             padding: 0 16px;
-            font-size:14px;
+            font-size:$--font-size-small;
             font-family:'PingFangSC-Regular,PingFangSC';
             font-weight:400;
             color:rgba(38,38,38,1);
@@ -526,7 +526,7 @@ export default {
         margin: 32px auto 50px;
         background: white;
         p {
-          font-size:14px;
+          font-size:$--font-size-small;
           font-family:"PingFangSC";
           font-weight:400;
           color:rgba(161,168,177,1);
@@ -588,7 +588,7 @@ export default {
       p {
         padding: 0 12px 0 32px;
         color: #a1a8b1;
-        font-size: 14px;
+        font-size: $--font-size-small;
         line-height: 20px;
         max-height: 80px;
       }

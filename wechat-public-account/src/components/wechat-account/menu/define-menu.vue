@@ -729,7 +729,7 @@ export default {
     border-radius:1px 1px 0px 0px;
     li {
       float: left;
-      font-size:14px;
+      font-size:12px;
       font-weight:400;
       color:rgba(38,38,38,1);
       line-height:40px;
@@ -792,7 +792,7 @@ export default {
         text-align: center;
         line-height: 52px;
         color: #09cceb;
-        font-size: 14px;
+        font-size: 12px;
         font-family: "PingFangSC";
         font-weight: 400;
         cursor: pointer;
@@ -835,7 +835,7 @@ export default {
               display: list-item;
               text-align: center;
               width: 140px;
-              font-size: 14px;
+              font-size: 12px;
               color: #262626;
               border-right: none;
               border-top: $--border-base;
@@ -902,7 +902,7 @@ export default {
         }
         p {
           margin-top: 3px;
-          font-size: 14px;
+          font-size: 12px;
           font-family: "PingFangSC";
           font-weight: 400;
           color: rgba(164, 178, 191, 1);
@@ -926,13 +926,13 @@ export default {
         border-bottom: 1px solid #e5e5e5;
         height: 50px;
         p {
-          font-size:14px;
+          font-size:12px;
           font-weight:500;
           color:rgba(38,38,38,1);
           line-height:50px;
         }
         .menu-operate__delete {
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 400;
           color: $--color-primary;
           line-height: 50px;
@@ -957,7 +957,7 @@ export default {
           }
           p {
             padding-top: 24px;
-            font-size: 14px;
+            font-size: 12px;
             font-family: "PingFangSC";
             font-weight: 400;
             color: rgba(9, 204, 235, 1);
@@ -1061,7 +1061,7 @@ export default {
 }
 .selectUrl span{
     float: left;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 40px;
     margin-right: 16px;
     font-family:"PingFangSC-Regular,PingFangSC";
@@ -1077,7 +1077,7 @@ export default {
   background:rgba(255,255,255,1);
   border-radius:2px;
   border:1px solid rgba(229,229,229,1);
-  font-size:14px;
+  font-size:12px;
   font-family:'PingFangSC-Regular,PingFangSC';
   font-weight:400;
   color: #606266;
@@ -1088,15 +1088,18 @@ export default {
 .selectUrl .select-btn {
   box-sizing: border-box;
   height: 40px;
-  border: 1px solid #09CCEB;
+  border: 1px solid $--color-primary;
   text-align: center;
   width: 90px;
   margin: 0 0 0 12px;
-  color: #09CCEB !important;
+  color: $--color-primary !important;
   cursor: pointer;
 }
 .selectUrl div i {
-  color: #0595E6;
+  color: $--color-primary;
+}
+.selectUrl div p {
+  line-height: 40px;
 }
 .btn {
   display: flex;
@@ -1111,7 +1114,7 @@ export default {
 .btn h4 {
   height: 16px;
   margin: 10px 0;
-  font-size:14px;
+  font-size:12px;
   font-weight:500;
   color:rgba(38,38,38,1);
   line-height:16px;
@@ -1122,7 +1125,7 @@ export default {
   padding-left: 100px;
   height: 20px;
 	color: rgba(56, 56, 56, 1);
-	font-size: 14px;
+	font-size: 12px;
 	line-height: 20px;
 	text-align: left;
 }

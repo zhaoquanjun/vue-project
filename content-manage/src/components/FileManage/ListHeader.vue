@@ -70,13 +70,13 @@
                 </span>
                 <button @click="switchIsDesc('dec')" class="desBtn">
                     <i
-                        class="iconfont iconicon-Arrow1"
+                        class="iconfont iconxiayi"
                         :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
                     ></i>
                 </button>
                 <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
                     <i
-                        class="iconfont iconicon-Arrow"
+                        class="iconfont iconshangyi"
                         :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
                     ></i>
                 </button>
@@ -95,13 +95,13 @@
                     <i>{{countPic}}</i> 个文件
                 </span>
                 <div>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
+                    <button class="cl-button cl-button--small cl-button--text_info" @click="batchMove">移动</button>
                     <button
                         v-if="contentType!='Video'"
-                        class="btn-small btn-lightblue-notboard"
+                       class="cl-button cl-button--small cl-button--text_info"
                         @click="batchDownLoad"
                     >下载</button>
-                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                    <button class="cl-button cl-button--small cl-button--text_danger" @click="batchDelete">删除</button>
 
                     <el-dropdown
                         trigger="click"

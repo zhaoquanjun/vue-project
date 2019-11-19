@@ -7,7 +7,7 @@
             <i class="iconfont iconicon-logo" style="font-size:24px"></i>
           </span>
           <span @click="changeApp" class="headAppName">
-            <span class="headAppNameInfo">{{headAppName?headAppName:"公司名称"}}</span>
+            <span class="headAppNameInfo">已购买服务</span>
             <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;vertical-align:middle"></i>
           </span>
         </div>
@@ -53,19 +53,33 @@
         >
           <div slot="title">
             <div class="myAppTitle">
-              我的应用
-              <span
-                style="float:right;margin-right:32px;cursor:pointer;"
-                @click="closeChangeApp"
-              >
-                <i
-                  class="iconfont iconguanbi"
-                  style="color:#262626;font-size:20px;vertical-align:middle"
-                ></i>
+              已购买的服务
+              <span style="cursor:pointer;" @click="closeChangeApp">
+                <i class="iconfont iconguanbi" style="color:#262626;font-size:17px;"></i>
               </span>
             </div>
           </div>
           <div class="appBackground" v-scrollBar>
+            <div class="app-title">
+              <span class="app-title-text">
+                <span class="app-title-border"></span>
+                已购买的服务
+              </span>
+              <el-input
+                v-model="keyword"
+                placeholder="输入服务名称或备注内容搜索"
+                @keyup.enter.native="search"
+                clearable
+                class="input-with-select"
+              >
+                <i
+                  class="el-icon-search el-input__icon"
+                  style="cursor: pointer;float:right"
+                  slot="suffix"
+                  @click="search"
+                ></i>
+              </el-input>
+            </div>
             <el-col
               :span="24"
               class="appitem"
@@ -74,65 +88,71 @@
               style="padding:0px"
             >
               <div class="appTitle">
-                <span class="appName" v-if="item.name">{{item.name}}</span>
-                <span class="appName" v-else>公司名称</span>
-                <el-popover
-                  :ref="`popover-${index}`"
-                  placement="bottom"
-                  width="317"
-                  trigger="click"
-                  style="padding:0"
-                  @show="showRemark(item)"
-                >
-                  <button slot="reference">
-                    <i class="iconfont iconbianji" v-show="item.isSystem"></i>
-                  </button>
-                  <div class="textareaWrap">
-                    <el-input
-                      type="textarea"
-                      :autosize="{ minRows: 3, maxRows: 3}"
-                      placeholder="请输入内容"
-                      v-model="appName"
-                      maxlength="30"
-                      show-word-limit
-                      resize="none"
-                      @blur="textBlur"
-                    ></el-input>
-                    <div class="ym-form-item__error" v-show="isNullInput">请输入公司名称</div>
-                    <div class="btn-wrap">
-                      <button class="cancel" slot="refenrence" @click="cancelInput(index)">取消</button>
-                      <button class="save" @click="saveInputValue(item, index)">保存</button>
+                <div class="appNameWrap">
+                  <div :class="{'templateApp':item.isTemplateApp,'normalApp':!item.isTemplateApp}"></div>
+                  <span class="appName">{{item.productName}}</span>
+                </div>
+                <span>
+                  <i
+                    class="iconfont"
+                    :class="{'iconicon-guanliyuan' : item.isSystem,'iconicon-chengyuan1':!item.isSystem}"
+                    style="margin-right:5px;font-size:14px"
+                  ></i>
+                  <span class="appMember">{{item.isSystem ? "管理员" : "成员"}}</span>
+                </span>
+              </div>
+              <div class="appInfo">
+                <div class="version">
+                  <span class="versionText">{{item.name}}</span>
+                  <el-popover
+                    :ref="`popover-${index}`"
+                    placement="bottom"
+                    width="317"
+                    trigger="click"
+                    style="padding:0"
+                    @show="showRemark(item)"
+                  >
+                    <button slot="reference">
+                      <i class="iconfont iconbianji" v-show="item.isSystem"></i>
+                    </button>
+                    <div class="textareaWrap">
+                      <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 3, maxRows: 3}"
+                        placeholder="请输入内容"
+                        v-model="appName"
+                        maxlength="30"
+                        show-word-limit
+                        resize="none"
+                      ></el-input>
+                      <div class="btn-wrap">
+                        <button class="cancel" slot="refenrence" @click="cancelInput(index)">取消</button>
+                        <button class="save" @click="saveInputValue(item, index)">保存</button>
+                      </div>
                     </div>
-                  </div>
-                </el-popover>
-                <span
-                  class="appMember"
-                  :style="{color:item.isSystem? '#35B24B':'#0070CC'}"
-                >{{item.isSystem ? "管理员" : "成员"}}</span>
-              </div>
-              <div class="version">
-                <span class="versionText">应用版本</span>
-                <span class="versionText">{{item.productName}}</span>
-              </div>
-              <div class="expired">
-                <span class="expiredText">有效期</span>
-                <span class="expiredText" style="margin-left:46px">{{item.expired}}</span>
-                <div class="isExpired" v-show="isExpired(item)">已过期</div>
-                <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
-                <a class="renewal" v-show="item.isSystem" :href="aliMarketUrl" target="_blank">续费</a>
-                <el-button
-                  class="choseApp"
-                  @click="choseApp(item)"
-                  :disabled="isExpired(item)||(item.releaseTime&&isreleased(item))"
-                  :class="{'disabled':isExpired(item)||(item.releaseTime&&isreleased(item))}"
-                  v-if="!item.isCurrentApp"
-                >进入应用</el-button>
-                <el-button
-                  class="choseApp disabled"
-                  @click="choseApp(item)"
-                  disabled
-                  v-if="item.isCurrentApp"
-                >当前应用</el-button>
+                  </el-popover>
+                </div>
+                <div class="expired">
+                  <span class="expiredText">有效期</span>
+                  <span class="expiredText" style="margin-left:16px">{{item.expired}}</span>
+                  <div class="isExpiredSoon" v-show="isExpiredSoon(item)">即将过期</div>
+                  <div class="isExpired" v-show="isExpired(item)">已过期</div>
+                  <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
+                  <a class="renewal" v-show="item.isSystem" :href="aliMarketUrl" target="_blank">续费</a>
+                  <el-button
+                    class="choseApp"
+                    @click="choseApp(item)"
+                    :disabled="isExpired(item)||(item.releaseTime&&isreleased(item))"
+                    :class="{'disabled':isExpired(item)||(item.releaseTime&&isreleased(item))}"
+                    v-if="!item.isCurrentApp"
+                  >进入管理</el-button>
+                  <el-button
+                    class="choseApp disabled"
+                    @click="choseApp(item)"
+                    disabled
+                    v-if="item.isCurrentApp"
+                  >当前管理</el-button>
+                </div>
               </div>
             </el-col>
           </div>
@@ -156,7 +176,7 @@ export default {
       appList: [],
       changeAppShow: false,
       appName: "",
-      isNullInput: false
+      keyword: ""
     };
   },
   methods: {
@@ -177,34 +197,27 @@ export default {
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
     },
+    async search() {
+      let { data } = await dashboardApi.getApplicationsByUserId(this.keyword);
+      this.appList = data;
+      for (var i = 0; i < this.appList.length; i++) {
+        this.appList[i].expired =
+          formatDateTime(this.appList[i].createTime, "yyyy年MM月dd日") +
+          "-" +
+          formatDateTime(this.appList[i].expiredTime, "yyyy年MM月dd日");
+      }
+    },
     // 显示修改appName弹框
     showRemark(item) {
       this.appName = item.name ? item.name : "";
-      if (this.appName) {
-        this.isNullInput = false;
-      } else {
-        this.isNullInput = true;
-      }
-    },
-    textBlur() {
-      if (!this.appName) {
-        this.isNullInput = true;
-      } else {
-        this.isNullInput = false;
-      }
     },
     // 取消修改
     cancelInput(index) {
       this.$refs[`popover-${index}`][0].doClose();
       this.appName = "";
-      this.isNullInput = false;
     },
     // 修改appName
     async saveInputValue(item, index) {
-      if (!this.appName) {
-        this.isNullInput = true;
-        return;
-      }
       this.$refs[`popover-${index}`][0].doClose();
       let para = {
         appId: item.appId,
@@ -260,16 +273,25 @@ export default {
         this.$nextTick(() => {
           window.addEventListener("resize", () => {
             document.getElementsByClassName("appBackground")[0].style.height =
-              window.innerHeight - 142 + "px";
+              window.innerHeight - 100 + "px";
           });
           document.getElementsByClassName("appBackground")[0].style.height =
-            window.innerHeight - 142 + "px";
+            window.innerHeight - 100 + "px";
         });
       }
     },
     // 判断是否过期
     isExpired(item) {
       if (new Date(item.expiredTime) < new Date()) {
+        return true;
+      }
+    },
+    // 判断是否即将过期
+    isExpiredSoon(item) {
+      if (
+        new Date(item.expiredTime) - new Date() < 1000 * 60 * 60 * 24 * 30 &&
+        new Date(item.expiredTime) > new Date()
+      ) {
         return true;
       }
     },
@@ -303,6 +325,9 @@ export default {
 .myApp /deep/ .el-dialog__body {
   padding: 0;
 }
+.myApp /deep/ .el-dialog__header {
+  padding: 0;
+}
 </style>
 <style lang="scss" scoped>
 .textareaWrap {
@@ -330,7 +355,6 @@ export default {
 }
 .iconbianji {
   color: #262626;
-  line-height: 55px;
   margin-left: 16px;
   padding: 8px;
   &:hover {
@@ -339,7 +363,7 @@ export default {
   }
 }
 .disabled {
-  opacity: 0.2;
+  opacity: 0.3;
 }
 .iconlogo1 {
   font-size: 24px;
@@ -492,12 +516,15 @@ export default {
   }
 }
 .myAppTitle {
-  text-align: center;
-  font-size: 18px;
+  height: 50px;
+  font-size: 16px;
   font-weight: 500;
   color: rgba(0, 0, 0, 1);
-  line-height: 28px;
-  padding: 12px 0 22px;
+  line-height: 22px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .appBackground {
   position: relative;
@@ -509,12 +536,38 @@ export default {
   border-top: 1px solid #eee;
   width: 100%;
   height: 100%;
+  .app-title {
+    margin-left: 50%;
+    transform: translateX(-50%);
+    height: 76px;
+    width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .app-title-text {
+      .app-title-border {
+        display: inline-block;
+        width: 2px;
+        height: 17px;
+        background: rgba(9, 204, 235, 1);
+        margin-right: 12px;
+      }
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 1);
+    }
+    .input-with-select {
+      width: 260px;
+    }
+  }
   .appitem {
     margin-left: 50%;
     transform: translateX(-50%);
-    margin-top: 32px;
-    width: 900px;
-    height: 165px;
+    margin-bottom: 24px;
+    width: 800px;
+    height: 140px;
     background: rgba(255, 255, 255, 1);
     border-radius: 2px;
     padding-left: 0px;
@@ -524,103 +577,133 @@ export default {
     }
     .appTitle {
       width: 100%;
-      height: 55px;
-      border-bottom: 1px solid #eee;
-      .appName {
-        margin-left: 32px;
-        font-size: 17px;
-        font-family: PingFangSC-Medium;
-        font-weight: 500;
-        color: rgba(38, 38, 38, 1);
-        line-height: 55px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .appNameWrap {
+        display: flex;
+        align-items: center;
+        .templateApp {
+          margin-left: 24px;
+          display: inline-block;
+          width: 29px;
+          height: 21px;
+          background: url("~img/templateApp.png") no-repeat center;
+          background-size: contain;
+        }
+        .normalApp {
+          margin-left: 24px;
+          display: inline-block;
+          width: 29px;
+          height: 21px;
+          background: url("~img/normalApp.png") no-repeat center;
+          background-size: contain;
+        }
+        .appName {
+          margin-left: 16px;
+          font-size: 16px;
+          font-weight: 500;
+          color: rgba(38, 38, 38, 1);
+        }
       }
       .appMember {
         float: right;
-        margin-right: 35px;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 55px;
+        margin-right: 24px;
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(38, 38, 38, 1);
       }
     }
-    .version {
-      margin-top: 25px;
-      margin-bottom: 2px;
-      line-height: 22px;
-      .versionText {
+    .appInfo {
+      width: 100%;
+      height: 90px;
+      background: rgba(250, 250, 252, 1);
+      border-radius: 2px 2px 0px 0px;
+      .version {
+        line-height: normal;
+        padding-top: 21px;
+        .versionText {
+          font-size: 14px;
+          font-weight: 400;
+          color: rgba(153, 153, 153, 1);
+          margin-left: 24px;
+          line-height: 22px;
+        }
+      }
+      .expired {
+        margin-top: 8px;
+        line-height: normal;
+        .expiredText {
+          font-size: 14px;
+          font-weight: 400;
+          color: rgba(153, 153, 153, 1);
+          margin-left: 24px;
+          line-height: 22px;
+        }
+      }
+      .isExpiredSoon {
+        margin-left: 24px;
+        display: inline-block;
+        width: 57px;
+        height: 19px;
+        background: rgba(250, 100, 0, 0.2);
+        border-radius: 2px;
+        font-size: 12px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: rgba(250, 100, 0, 1);
+        line-height: 19px;
+        text-align: center;
+      }
+      .isExpired {
+        margin-left: 24px;
+        display: inline-block;
+        width: 46px;
+        height: 19px;
+        background: rgba(251, 77, 104, 0.2);
+        border-radius: 2px;
+        font-size: 12px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: rgba(251, 77, 104, 1);
+        line-height: 19px;
+        text-align: center;
+      }
+      .choseApp {
+        position: absolute;
+        right: 24px;
+        bottom: 16px;
+        width: 90px;
+        height: 32px;
+        background: rgba(255, 106, 0, 1);
+        border-radius: 2px;
         font-size: 14px;
         font-weight: 400;
-        color: #a1a8b1;
+        color: rgba(255, 255, 255, 1);
+        line-height: 32px;
+        border: none;
+        padding: 0px;
+        margin: 0;
+      }
+      .renewal {
+        position: absolute;
+        right: 130px;
+        bottom: 16px;
+        display: inline-block;
+        width: 90px;
+        height: 32px;
+        border-radius: 2px;
+        border: 1px solid rgba(255, 106, 0, 1);
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(255, 106, 0, 1);
+        line-height: 32px;
+        text-align: center;
         margin-left: 32px;
-        line-height: 22px;
+        margin: 0;
+        box-sizing: border-box;
       }
-    }
-    .expired {
-      height: 32px;
-      margin-bottom: 26px;
-      line-height: 32px;
-      .expiredText {
-        font-size: 14px;
-        font-weight: 400;
-        color: #a1a8b1;
-        margin-left: 32px;
-      }
-    }
-    .isExpired {
-      margin-left: 30px;
-      display: inline-block;
-      width: 56px;
-      height: 20px;
-      background: rgba(241, 85, 51, 1);
-      border-radius: 2px;
-      text-align: center;
-      font-size: 10px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 20px;
-    }
-    .choseApp {
-      position: absolute;
-      right: 32px;
-      bottom: 28px;
-      width: 90px;
-      height: 40px;
-      background: rgba(0, 193, 222, 1);
-      border-radius: 2px;
-      border: 1px solid rgba(1, 192, 222, 1);
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 40px;
-      padding: 0px;
-    }
-    .choseCurApp {
-      position: absolute;
-      right: 32px;
-      bottom: 28px;
-      width: 90px;
-      height: 32px;
-      background: rgba(140, 140, 140, 1);
-      border-radius: 2px;
-      font-size: 12px;
-      font-family: PingFangSC-Medium;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 1);
-      line-height: 32px;
-      padding: 0px;
-    }
-    .renewal {
-      display: inline-block;
-      width: 90px;
-      height: 40px;
-      border-radius: 2px;
-      border: 1px solid rgba(1, 192, 222, 1);
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(0, 193, 222, 1);
-      line-height: 40px;
-      text-align: center;
-      margin-left: 32px;
     }
   }
   .appitem:last-of-type {

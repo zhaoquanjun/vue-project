@@ -98,19 +98,19 @@ export default {
 
 <style lang="scss" scoped>
 .content-section {
-  margin-top: 32px;
+  margin-top: $--margin-md;
   width: 100%;
   background: rgba(255, 255, 255, 1);
-  border-radius: 3px;
-  border: 1px solid rgba(229, 229, 229, 1);
+  border-radius: $--border-radius-base;
+  border: $--border-base;
   .section-title {
-    height: 64px;
-    padding-left: 25px;
-    font-size: 16px;
-    font-weight: 500;
-    color: rgba(38, 38, 38, 1);
-    line-height: 64px;
-    border-bottom: 1px solid #e5e5e5;
+    height: 42px;
+    padding-left: $--padding-xs;
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-primary;
+    color: $--color-text-primary;
+    line-height: 42px;
+    border-bottom: $--border-base;
   }
   .content {
     .item:last-of-type .item-box {
@@ -123,15 +123,16 @@ export default {
 
       .item-box {
         width: 100%;
-        height: 100px;
-        border-right: 1px solid #eee;
-
+        height: 77px;
+        border-right: $--border-base;
+        display: flex;
+        align-items: center;
         .item-wrap {
-          margin-top: 27px;
           margin-left: 12px;
           margin-right: 12px;
           padding-left: 14px;
           padding-right: 8px;
+          width: calc(100% - 52px);
           height: 50px;
           cursor: pointer;
           display: flex;
@@ -139,7 +140,7 @@ export default {
 
           &:hover {
             background: rgba(240, 243, 247, 1);
-            border-radius: 2px;
+            border-radius: $--border-radius-base;
           }
           .item-name {
             display: flex;
@@ -147,8 +148,8 @@ export default {
             .item-img {
               margin-right: 8px;
               display: inline-block;
-              width: 32px;
-              height: 32px;
+              width: 20px;
+              height: 20px;
               vertical-align: top;
             }
             .article {
@@ -171,26 +172,26 @@ export default {
             }
             .name {
               display: inline-block;
-              font-size: 16px;
-              font-weight: 400;
-              color: rgba(38, 38, 38, 1);
+              font-size: $--font-size-small;
+              font-weight: $--font-weight-base;
+              color: $--color-text-primary;
               line-height: 22px;
             }
           }
           .item-content {
             .item-num {
               display: inline-block;
-              font-size: 18px;
-              font-weight: 500;
-              color: rgba(38, 38, 38, 1);
+              font-size: $--font-size-base;
+              font-weight: $--font-weight-primary;
+              color: $--color-text-primary;
               line-height: 50px;
               margin-right: 4px;
             }
             .item-type {
               display: inline-block;
-              font-size: 14px;
-              font-weight: 400;
-              color: rgba(185, 203, 207, 1);
+              font-size: $--font-size-base;
+              font-weight: $--font-weight-base;
+              color: rgba(161, 168, 177, 1);
               line-height: 20px;
             }
           }

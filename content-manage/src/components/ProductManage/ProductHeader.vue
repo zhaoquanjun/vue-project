@@ -70,13 +70,13 @@
                     </span>
                     <button @click="switchIsDesc('dec')" class="desBtn">
                         <i
-                            class="iconfont iconicon-Arrow1"
+                            class="iconfont iconxiayi"
                             :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
                         ></i>
                     </button>
                     <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
                         <i
-                            class="iconfont iconicon-Arrow"
+                            class="iconfont iconshangyi"
                             :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
                         ></i>
                     </button>
@@ -96,15 +96,15 @@
                 </span>
                 <div class="bach-hanlder">
                     <button
-                        class="btn-small btn-lightblue-notboard"
+                        class="cl-button cl-button--small cl-button--text_info"
                         @click="batchPublish(3, false)"
                     >上架</button>
                     <button
-                        class="btn-small btn-lightblue-notboard"
+                       class="cl-button cl-button--small cl-button--text_info"
                         @click="batchPublish(3, true)"
                     >下架</button>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchCopy">复制</button>
-                    <button class="btn-small btn-red-notboard" @click="batchRemove(1,true)">删除</button>
+                    <button class="cl-button cl-button--small cl-button--text_info" @click="batchCopy">复制</button>
+                    <button class="cl-button cl-button--small cl-button--text_danger" @click="batchRemove(1,true)">删除</button>
                     <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard btn-black-notboard">

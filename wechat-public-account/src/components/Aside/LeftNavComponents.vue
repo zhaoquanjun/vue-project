@@ -58,7 +58,7 @@ export default {
 }
 .el-menu .el-menu-item-left {
     line-height: 50px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     text-align: left;
 }
 .el-menu :active.el-menu-item-left span{

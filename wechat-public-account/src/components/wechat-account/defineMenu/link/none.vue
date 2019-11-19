@@ -45,7 +45,7 @@ export default {
       }
       p {
         margin-top: 24px;
-        font-size: 14px;
+        font-size: $--font-size-small;
         line-height: 17px;
         text-align: center;
       }

@@ -569,9 +569,9 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .el-tabs /deep/ .el-tabs__item {
-    font-size: 14px;
+    font-size: $--font-size-small;
     padding: 0 24px;
     font-weight: 400;
     color: #262626;
@@ -585,7 +585,7 @@ export default {
 }
 .el-tabs /deep/ .is-active {
     background: #F8FAFC;
-    border-bottom: 2px solid #09cceb !important;
+    border-bottom: 2px solid $--color-primary !important;
 }
 </style>
 <style lang="scss" scoped>
@@ -608,8 +608,8 @@ export default {
         margin: 6px 0;
         padding-left: 12px;
         line-height: 20px;
-        border-left: 4px solid #09CCEB;
-        font-size:14px;
+        border-left: 4px solid $--color-primary;
+        font-size:$--font-size-small;
         font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
         color:rgba(38,38,38,1);

@@ -191,17 +191,12 @@ export default {
     },
     // 获取列表
     async getList(node) {
-      const loading = this.$loading({
-        target: document.querySelector("#img-list"),
-        lock: true,
-        spinner: "loading-icon",
-        background: "rgba(255, 255, 255, 0.75)"
-      });
+      this.$Loading.show();
       if (node) {
         this.nodeData = node; // 上传图片所需
       }
       let { data } = await videoManageApi.getList(this.picSearchOptions);
-      loading.close();
+      this.$Loading.hide();
       this.getTree();
       this.imgPageResult = data;
     },

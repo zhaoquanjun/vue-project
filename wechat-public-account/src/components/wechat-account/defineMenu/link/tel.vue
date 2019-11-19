@@ -74,9 +74,9 @@ export default {
 <style lang="scss" scoped>
 .popup-content__area {
   .popup-content__title {
-    font-size: 14px;
+    font-size: $--font-size-small;
     line-height: 17px;
-    color: #00c1de;
+    color: $--color-primary;
     padding: 20px 12px 16px;
     cursor: auto;
   }
@@ -87,7 +87,7 @@ export default {
     padding-left: 12px;
     padding-top: 8px;
     padding-bottom: 10px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     line-height: 17px;
     visibility: hidden;
     span {
