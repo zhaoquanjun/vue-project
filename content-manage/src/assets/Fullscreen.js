@@ -17,12 +17,12 @@ export default class Fullscreen {
         windowHeight= (windowHeight-100) < 400 ? 400 : windowHeight - 100;
         if (! this.fullscreen) {
             this.fullscreen = true
-            this.editorContainer.className = 'ql-editor ql-blank editor-fullscreen'
+            this.editorContainer.className = 'el-form-item__content editor-fullscreen'
             this.editorDiv.style.height = windowHeight + 'px';
             noScroll.on()
         }else{
             this.fullscreen = false
-            this.editorContainer.className = 'ql-editor ql-blank'
+            this.editorContainer.className = 'el-form-item__content'
             this.editorDiv.style.height =  '400px';
             noScroll.off()
         }
