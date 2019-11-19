@@ -227,7 +227,7 @@ export default {
     height: 56px;
     padding: 0 12px;
     p {
-      color: #00c1de;
+      color: $--color-primary;
       font-size: 14px;
       line-height: 17px;
       cursor: auto;
@@ -364,12 +364,7 @@ export default {
       background: #fff;
       border: 1px solid rgba(229, 229, 229, 1);
     }
-  } 
-  .popup-content__main {
-    .el-pager li:not(.disabled).active {
-      background: #01c0de;
-    }
-  } 
+  }
   .popup-content__open {
     margin-top: 16px;
     padding: 16px 16px 0;

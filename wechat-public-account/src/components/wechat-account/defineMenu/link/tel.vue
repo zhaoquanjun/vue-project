@@ -76,7 +76,7 @@ export default {
   .popup-content__title {
     font-size: 14px;
     line-height: 17px;
-    color: #00c1de;
+    color: $--color-primary;
     padding: 20px 12px 16px;
     cursor: auto;
   }

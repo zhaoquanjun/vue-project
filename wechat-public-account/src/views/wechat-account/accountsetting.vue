@@ -64,8 +64,9 @@
           </div>
         </ul>
         <div class="btn">
-          <span @click="_hasPromotionUrl">确定</span>
-          <span @click="closeDomain">取消</span>
+
+          <button class="cl-button cl-button--primary" @click="_hasPromotionUrl">确定</button>
+          <button class="cl-button cl-button--primary_notbg" @click="closeDomain">取消</button>
         </div>
       </div>
     </div>
@@ -377,9 +378,10 @@ export default {
       width: 500px;
       height: 100%;
       padding: 24px;
+      box-sizing: border-box;
       background: #FFFFFF;
       .title {
-        font-size:14px;
+        font-size:12px;
         font-family:"PingFangSC-Regular,PingFangSC";
         font-weight:400;
         color:rgba(38,38,38,1);
@@ -408,7 +410,7 @@ export default {
       }
       ul {
         p {
-          font-size:14px;
+          font-size:12px;
           font-family:"PingFangSC-Regular,PingFangSC";
           font-weight:400;
           color:rgba(38,38,38,1);
@@ -416,34 +418,36 @@ export default {
           margin: 20px 0 14px;
         }
         li {
-          height: 60px;
+          height: 32px;
           padding: 0 16px;
-          font-size:14px;
-          font-family:'PingFangSC-Regular,PingFangSC';
-          font-weight:400;
-          color:rgba(38,38,38,1);
-          line-height:60px;
-          border-bottom: 1px solid #E5E5E5;
+          font-size: 12px;
+          font-weight: 400;
+          color:$--color-text-primary;
+          line-height: 32px;
+          border-bottom: $--border-base;
           cursor: pointer;
           i {
             float: right;
           }
         }
         li:nth-child(1) {
-          border-top: 1px solid #E5E5E5;
+          border-top: $--border-base;
         }
         li:hover {
-          background: #F8FAFC;
+          background: $--background-color-hover;
         }
         .active {
-          background: #F0F3F7 !important;
-          color: #09CCEB;
+          background: $--background-color-selected !important;
+          color: $--color-primary;
+          i {
+            color: $--color-primary;
+          }
         }
         .tips {
           margin-top: 30px;
           p {
             margin: 0;
-            font-size:14px;
+            font-size:12px;
             font-family:"PingFangSC-Regular,PingFangSC";
             font-weight:400;
             color:rgba(161,168,177,1);
@@ -455,24 +459,8 @@ export default {
         position:absolute;
         left: 0px;
         bottom: 0;
-        span {
-          display: inline-block;
-          width:76px;
-          height:40px;
-          line-height: 40px;
-          text-align: center;
-          margin: 0 16px 24px 24px;
-          background:rgba(9,204,235,1);
-          color: #FFFFFF;
-          border-radius:$--border-radius-base;
-          cursor: pointer;
-        }
-        span:nth-child(2) {
-          color: rgba(9,204,235,1);
-          background: white;
-          border: 1px solid rgba(9,204,235,1);
-          margin: 0;
-
+        button {
+          margin: 0 0 24px 24px; 
         }
       }
     }

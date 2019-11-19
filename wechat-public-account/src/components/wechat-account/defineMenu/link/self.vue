@@ -58,7 +58,7 @@ export default {
     padding-left: 24px;
     h5 {
       height:20px;
-      font-size:14px;
+      font-size:$--font-size-small;
       font-family:"PingFangSC";
       font-weight:400;
       color:rgba(38,38,38,1);
@@ -71,11 +71,11 @@ export default {
       padding-left: 10px;
       background:rgba(255,255,255,1);
       border-radius:$--border-radius-base;
-      border:1px solid rgba(5,149,230,1);
+      border:1px solid $--color-primary;
     }
     .tips {
       margin-top: 10px;
-      font-size:14px;
+      font-size:$--font-size-small;
       font-family:"PingFangSC";
       font-weight:400;
       color:rgba(38,38,38,1);

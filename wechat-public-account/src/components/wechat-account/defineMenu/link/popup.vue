@@ -60,8 +60,8 @@
         />
       </div>
       <div class="popup-footer__area">
-        <el-button type="primary" size="small" @click.stop="_handleConfirm">确定</el-button>
-        <el-button size="small" @click.stop="_handleCancle">取消</el-button>
+        <button class="cl-button cl-button--primary" @click.stop="_handleConfirm">确定</button>
+        <button class="cl-button cl-button--primary_notbg" @click.stop="_handleCancle">取消</button>
       </div>
     </div>
   </div>
@@ -290,7 +290,7 @@ export default {
       border-bottom: 1px solid #eee;
       cursor: auto;
       span:first-of-type {
-        font-size: 14px;
+        font-size: $--font-size-small;
       }
       span:last-of-type {
         width: 12px;
@@ -315,7 +315,7 @@ export default {
         border-right: 1px solid #eee;
         cursor: auto;
         li {
-          font-size: 14px;
+          font-size: $--font-size-small;
           padding-bottom: 16px;
         }
       }
@@ -323,6 +323,9 @@ export default {
     .popup-footer__area {
       padding: 15px 20px 20px;
       display: flex;
+      button {
+        margin-right: 24px;
+      }
     }
   }
 }

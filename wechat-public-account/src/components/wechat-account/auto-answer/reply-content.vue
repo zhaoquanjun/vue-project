@@ -25,9 +25,9 @@
             </div>
         </section>
         <footer class="footer-btn">
-            <button class="handler-item" @click="handlerSave">保存</button>
-            <button v-if="replyType == '3'" class="handler-item handler-delete" @click="handlerCancel">取消</button>
-            <button v-else class="handler-item handler-delete" :class="{'disabled-btn':!isSet}" @click="handlerDelete" :disabled="!isSet">删除回复</button>
+            <button class="cl-button cl-button--primary" @click="handlerSave">保存</button>
+            <button v-if="replyType == '3'" class="cl-button cl-button--primary_notbg" @click="handlerCancel">取消</button>
+            <button v-else class="cl-button cl-button--primary_notbg" :class="{'is-disabled':!isSet}" @click="handlerDelete" :disabled="!isSet">删除回复</button>
         </footer>
     </div>
 </template>
@@ -105,7 +105,10 @@ export default {
                     margin-right: 8px;
                 }
                 &.active {
-                    color: #09CCEB;
+                    color:  $--color-primary;
+                    i {
+                        color:  $--color-primary;
+                    }
                 }
             }
         }
@@ -124,12 +127,12 @@ export default {
 }
 .footer-btn {
     padding: 16px 24px;
-    button {
-        width: 90px;
-        height: 32px;
-        background: rgba(9, 204, 235, 1);
-        color: #fff;
-    }
+    // button {
+    //     width: 90px;
+    //     height: 32px;
+    //     background: rgba(9, 204, 235, 1);
+    //     color: #fff;
+    // }
     :first-child {
         margin-right: 24px;
         border: 1px solid transparent;
