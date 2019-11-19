@@ -11,8 +11,7 @@ export default class Video extends BlockEmbed {
     video.setAttribute('class','ql-video-content');
     video.setAttribute('vsrc', this.sanitize(value.url));
     video.setAttribute('controls', 'controls');
-    video.setAttribute('width', value.width);
-    video.setAttribute('height', value.height);
+    video.setAttribute('style',`width:${value.width};height:${value.height};`)
     video.setAttribute('webkit-playsinline', true);
     video.setAttribute('playsinline', true);
     video.setAttribute('x5-playsinline', true);
