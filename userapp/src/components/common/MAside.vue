@@ -201,7 +201,7 @@ export default {
 <style lang="scss" scoped>
 
 .menu-hover {
-    background:$--color-info;
+    background:$--background-color-selected;
     border-left: 4px solid $--color-primary  !important;
     .menu-icon {
         color: $--color-primary !important;
@@ -211,7 +211,7 @@ export default {
      }
 }
 .menu-bg {
-    background:$--color-info;
+    background:$--background-color-selected;
     color: $--color-primary ;
     border-left: 4px solid $--color-primary !important;
     .menu-icon {
