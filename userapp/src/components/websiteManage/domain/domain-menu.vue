@@ -41,36 +41,46 @@ export default {
 
 <style scoped>
 .domain-menu{
-    position: relative
+    position: relative;
+    height:50px;
+    background:rgba(255,255,255,1);
+    border-radius:2px;
+    border:1px solid rgba(215,216,217,1);
+    margin-bottom: 12px;
+    
 }
-.el-tabs {
-    margin-top: 24px;
+.domain-menu /deep/ .el-tabs--card>.el-tabs__header {
+    border:0;
+    padding: 6px 0;
+}
+.domain-menu /deep/ .el-tabs--card>.el-tabs__header .el-tabs__nav{
+    border:0;
 }
 .el-tabs /deep/ .el-tabs__item {
-    width:100px;
-    height: 38px;
+    padding:0;
+    margin:0 12px 0 24px;
+    width:56px;
+    height: 36px;
     font-size: 14px;
     font-weight: 400;
     color: rgba(51, 51, 51, 1);
     line-height: 36px;
-    border-bottom: 1px solid #e4e7ed;
-    background: rgba(245, 245, 245, 1);
-    vertical-align: top;
-    border-top: 2px solid transparent;
+    background: rgba(255, 255, 255, 1);
+    vertical-align: center;
+    border-left:0;
+    box-sizing: border-box;
 }
 .el-tabs /deep/ .is-active {
-    color: rgba(1, 192, 222, 1);
-    border-top: 2px solid rgb(72, 201, 226);
-    border-bottom: 1px solid transparent;
     background: rgb(255, 255, 255);
+    border-bottom:2px solid #ff6b00;
 }
 .backupBtn {
     width: 110px;
     height: 32px;
-    background: rgba(0, 193, 222, 1);
+    background: #ff6b00;
     position: absolute;
     right: 16px;
-    top: 0;
+    top: 9px;
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
 }

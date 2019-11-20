@@ -469,10 +469,9 @@ export default {
     padding-left: 40px;
 }
 
-.el-table /deep/ thead th {
+/* .el-table /deep/ thead th {
     padding: 0;
-    height: 35px;
-    background: #00c1de !important;
+    height: 43px;
     color: #fff;
     font-weight: 400;
     font-size: 12px;
@@ -489,7 +488,7 @@ export default {
 
 .el-table /deep/ th > .cell {
     text-align: left;
-}
+} */
 
 /* .el-table /deep/ .el-table__expand-column .cell{
             width: 160px;
@@ -506,7 +505,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .table-list {
-    border: 1px solid #e1e6ea;
+    // border: 1px solid #e1e6ea;
 }
 .relove-step {
     margin-top: 12px;

@@ -6,7 +6,7 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <div style="padding: 32px;">
+      <div style="padding: 22px 16px;">
         <el-row class="user-list">
           <span class="member-list-title fs14">域名管理</span>
         </el-row>
@@ -495,11 +495,11 @@ export default {
   position: relative;
   .user-list {
     border-bottom: 1px solid #eee;
-    padding-bottom: 24px;
+    padding-bottom: 21px;
     .member-list-title {
-      border-left: 4px solid #01c0de;
+      border-left: 4px solid #ff6b00;
       padding-left: 8px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
     }
   }
@@ -543,18 +543,22 @@ export default {
 }
 
 .handle-guide {
-  margin-top: 48px;
-  border: 1px solid #e1e6ea;
+  margin-top: 16px;
+  background: #fff;
+  border: 1px solid #d7d8d9;
+  border-radius: 2px;
   h3 {
-    border-bottom: 1px solid #e1e6ea;
-    padding: 24px 32px;
+    font-size:14px;
+    color:#262626;
+    padding: 24px 0 16px 23px;
   }
 
   ul {
-    padding: 16px 32px;
+    padding:0 0 28px 23px;
     li {
-      padding-bottom: 16px;
-      color: #8c8c8c;
+      height:22px;
+      line-height: 22px;
+      color: #262626;
     }
   }
 }
