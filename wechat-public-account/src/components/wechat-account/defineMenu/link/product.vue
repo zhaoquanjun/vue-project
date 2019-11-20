@@ -481,6 +481,7 @@ export default {
         color: $--color-primary !important;
         i {
           display: inline-block !important;
+          color: $--color-primary !important;
         }
       }
     }
