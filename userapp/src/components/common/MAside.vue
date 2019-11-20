@@ -174,7 +174,7 @@ export default {
     z-index: 10;
     overflow: hidden;
     transition: 0.2s ease-in-out;
-    background-color:$--color-black-1;
+    background-color:$--color-black-dark;
     // border-right: 1px solid rgb(229, 229, 229);
 }
 .m-asideleft {
@@ -207,7 +207,7 @@ export default {
         color: $--color-primary !important;
     }
     .menu-item-content {
-         color: $--color-black-1 !important;   
+         color: $--color-black-dark !important;   
      }
 }
 .menu-bg {
@@ -218,7 +218,7 @@ export default {
         color: $--color-primary !important;
     }
     .menu-item-content {
-         color: $--color-black-1 !important;   
+         color: $--color-black-dark !important;   
      }
     
 }
@@ -228,7 +228,7 @@ export default {
      
 }
 .left-menu {
-    background-color:$--color-black-1;
+    background-color:$--color-black-dark;
     height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
@@ -236,7 +236,7 @@ export default {
         line-height: 50px;
         white-space: nowrap;
         margin-bottom: 14px;
-        border-left: 4px solid $--color-black-1;
+        border-left: 4px solid $--color-black-dark;
         .menu-item-content {
             display: inline-block;
             line-height: 50px;

@@ -6,12 +6,13 @@
                   <el-input
                     size="medium"
                     v-model="articleSearchOptions.title"
-                    placeholder="输入名称搜索"
+                    placeholder="请输入内容"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
-                >
-                    <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getArticleList"></i>
+                    style="width:200px;"                >
+                    <i class="el-icon-search el-input__icon" style="cursor: pointer;color:#D7D8D9" slot="suffix" @click="getArticleList"></i>
                 </el-input>
+                
             </div>
 
             <div class="head-item head-right">
@@ -63,7 +64,7 @@
                                 :value="item.orderValue"
                             ></el-option>
                         </el-select>
-                    </span>
+                    </span> 
                     <button @click="switchIsDesc('dec')" class="desBtn">
                         <i class="iconfont iconxiayi" :class=" descSort ? 'desc-active-color': 'desc-regular-color' " ></i>
                     </button>
@@ -81,7 +82,7 @@
             <div class="bach-header">
                 <span>
                     已选
-                    <i>{{count}}</i> 个文章
+                    <i style="color:#fe9837;">{{count}}</i> 个文章
                 </span>
                 <div class="bach-hanlder">
                     <button class="cl-button cl-button--small cl-button--text_info" @click="batchPublish(false)">上线</button>

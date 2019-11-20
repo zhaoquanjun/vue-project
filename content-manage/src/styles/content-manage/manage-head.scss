@@ -17,6 +17,7 @@
         width: 200px;
         box-sizing: border-box;
         overflow: hidden;
+        margin-left:-4px;
     }
 }
 
@@ -31,6 +32,7 @@
 .head-item {
     display: inline-block;
     flex: none;
+    margin-left: 16px;
 }
 .mode-item {
     display: inline-block;

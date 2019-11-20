@@ -54,7 +54,7 @@
                         ></el-input>
                     </div>
 
-                    <div slot="footer" class="pannle-footer">
+                    <div slot="footer" class="pannel-footer">
                         <button @click="recovery" class="sure">恢复</button>
                         <button @click="closeCreateDialog" class="cancel">取消</button>
                     </div>

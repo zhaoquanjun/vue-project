@@ -72,7 +72,7 @@
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
                     ></SelectTree>
-                    <div slot="footer" class="pannle-footer">
+                    <div slot="footer" class="pannel-footer">
                         <span @click="updateCategoryPic" class="sure">确定</span>
                         <button @click="cancelUpdateCategor" class="cancel">取消</button>
                     </div>

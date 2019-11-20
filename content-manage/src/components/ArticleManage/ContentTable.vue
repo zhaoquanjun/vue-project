@@ -14,12 +14,13 @@
                     <p>无数据</p>
                 </div>
             </template>
-            <el-table-column type="selection" style="width:80px;padding-left:24px;"></el-table-column>
+            <el-table-column type="selection" width="80"></el-table-column>
 
             <el-table-column
                 prop="title"
                 label="文章标题"
-                min-width="250"
+                min-width="200"
+                height="50"
             >
                 <template slot-scope="scope">
                     <span class="isTop" v-show="scope.row.isTop">置顶</span>
@@ -33,7 +34,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类" min-width="150">
+            <el-table-column prop="categoryName" label="分类" min-width="100" height="50">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.categoryName" placement="top">
                         <span style="width:80px" class="ellipsis">{{ scope.row.categoryName }}</span>
@@ -41,7 +42,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  prop="isPublishPrt" label="状态" min-width="150"></el-table-column>
+            <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
 
             <el-table-column prop="createTimePrt" label="创建时间" min-width="100">
                 <template slot-scope="scope">
@@ -51,7 +52,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="150">
+            <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="100">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                             <i class="cl-iconfont iconfont iconbianji is-square" @click="handleEdit(scope.row)"></i>
@@ -245,10 +246,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/content-manage/manege-table.scss";
-.title-color{
-    color: #262626;
-}
+    @import "@/styles/content-manage/manege-table.scss";
+    .title-color{
+        color: #262626;
+    }
+    // checkbox 尺寸
+    #table-list /deep/ .el-checkbox__inner{
+        width:18px;
+        height:18px;
+        margin-left:16px;
+    }
+    #table-list /deep/ .el-table__row>td{
+        height:50px;
+        padding:9px 0;
+    }
 </style>
 
 

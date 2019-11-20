@@ -86,7 +86,7 @@ export default {
 .submenu {
     width: 149px;
     height: calc(100vh - 50px);
-    background: $--color-black-2;
+    background: $--color-black-light;
     border-right: 1px solid #e5e5e5;
     .submenu-title {
         height: 40px;
