@@ -61,7 +61,7 @@
               type="circle" 
               :percentage="percentage"
               :width="100"
-              color="#63DC8C"
+              color="#FF6B00"
               :stroke-width='2'
             >
             </el-progress>
@@ -69,7 +69,8 @@
               v-if="percenStatus"
               type="circle" 
               :width="100"
-              color="#63DC8C"
+              :percentage="percentage"
+              color="#FF6B00"
               :status="percenStatus"
               :stroke-width='2'
             >
@@ -312,14 +313,19 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .el-progress.is-success /deep/ .el-progress__text {
-  color: #63DC8C;
+  color: $--color-primary;
   font-size: 40px !important;
   font-weight: 700;
 }
 .el-progress /deep/ .el-progress__text {
+  color: $--color-primary !important;
   font-size: 22px !important;
+}
+.el-progress /deep/ .el-progress__text i {
+  font-size: 48px !important;
+  color: $--color-primary !important;
 }
 </style>
 <style lang="scss" scoped>
@@ -351,7 +357,6 @@ export default {
         }
         p {
           font-size:$--font-size-small;
-          font-family:"PingFangSC";
           font-weight:400;
           color:#A1A8B1;
           line-height:20px;
@@ -362,11 +367,10 @@ export default {
           height: 40px;
           cursor: pointer;
           font-size:$--font-size-small;
-          font-family:"PingFangSC";
           font-weight:400;
           margin-top: 20px;
           color:#ffffff;
-          background: #01c0de;
+          background: $--color-primary;
           line-height:40px;
           border-radius: $--border-radius-base;
         }
@@ -395,7 +399,6 @@ export default {
           background:rgba(255,255,255,1);
           border-radius:$--border-radius-base;
           border:1px solid rgba(229,229,229,1);
-          font-family:'PingFangSC-Regular,PingFangSC';
           font-weight:400;
           padding-left: 10px;
           margin: 20px 0 30px;
@@ -419,14 +422,14 @@ export default {
           }
           span {
             padding-left: 5px;
-            color: rgba(0, 193, 222, 1);
+            color: $--color-primary;
           }
         }
         .add {
           width: 340px;
           height: 34px;
           color: rgba(255, 255, 255, 1);
-          background-color: rgba(0, 193, 222, 1);
+          background-color: $--color-primary;
           font-size: $--font-size-small;
           line-height: 34px;
           text-align: center;
@@ -451,14 +454,14 @@ export default {
           height:40px;
           background:rgba(255,255,255,1);
           border-radius:$--border-radius-base;
-          border:1px solid rgba(229,229,229,1);
+          border:$--border-base;
           margin: 20px auto 30px;
           text-align: left;
           span {
             display: inline-block;
-            width: 340px;
+            width: 320px;
             color: #262626;
-            padding: 0 10px;
+            padding-left: 14px;
             line-height: 40px;
             margin-bottom: 4px;
             i {
@@ -471,15 +474,14 @@ export default {
             overflow-y: auto;
           }
           li {
-            height: 40px;
+            height: 32px;
             padding: 0 16px;
             font-size:$--font-size-small;
-            font-family:'PingFangSC-Regular,PingFangSC';
             font-weight:400;
             color:rgba(38,38,38,1);
-            line-height:40px;
+            line-height: 32px;
             background: #ffffff;
-            border: 1px solid #E5E5E5;
+            border: $--border-base;
             border-bottom: none;
             cursor: pointer;
             i {
@@ -487,14 +489,17 @@ export default {
             }
           }
           li:last-child {
-            border-bottom: 1px solid #E5E5E5;
+            border-bottom: $--border-base;
           }
           li:hover {
-            background: #F8FAFC;
+            background: $--background-color-hover;
           }
           .active {
-            background: #F0F3F7 !important;
-            color: #09CCEB;
+            background: $--background-color-selected !important;
+            color: $--color-primary;
+            i {
+              color: $--color-primary;
+            }
           }
         }
       }
@@ -527,7 +532,6 @@ export default {
         background: white;
         p {
           font-size:$--font-size-small;
-          font-family:"PingFangSC";
           font-weight:400;
           color:rgba(161,168,177,1);
           line-height:30px;
