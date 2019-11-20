@@ -94,7 +94,7 @@ export default {
             border-radius:1px 1px 0px 0px;
             li {
                 float: left;
-                font-size:14px;
+                font-size:$--font-size-small;
                 font-weight:400;
                 color:rgba(38,38,38,1);
                 line-height:40px;
@@ -133,10 +133,6 @@ export default {
     //     background: rgba(9, 204, 235, 1);
     //     color: #fff;
     // }
-    :first-child {
-        margin-right: 24px;
-        border: 1px solid transparent;
-    }
     .handler-delete {
         border: 1px solid rgba(9, 204, 235, 1);
         background: #fff;

@@ -141,14 +141,14 @@ export default {
     .share-body {
       text-align: center;
       h6 {
-        font-size:14px;
+        font-size:$--font-size-small;
         font-family:'PingFangSC-Regular,PingFangSC';
         color:rgba(38,38,38,1);
         line-height:20px;
         margin-bottom: 24px;
       }
       p {
-        font-size:14px;
+        font-size:$--font-size-small;
         font-family:'PingFangSC-Regular,PingFangSC';
         font-weight:400;
         color:rgba(38,38,38,1);
@@ -167,7 +167,7 @@ export default {
           background:rgba(240,243,248,1);
           border-radius: $--border-radius-base;;
           border:1px solid rgba(229,229,229,1);
-          font-size:14px;
+          font-size:$--font-size-small;
           font-weight:400;
           color:rgba(38,38,38,1);
           line-height:40px;

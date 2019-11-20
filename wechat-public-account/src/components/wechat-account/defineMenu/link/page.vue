@@ -98,7 +98,7 @@ export default {
   height: 90%;
   p {
     padding: 20px 12px 13px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     line-height: 17px;
     color: $--color-primary;
   }
@@ -117,7 +117,7 @@ export default {
       p {
         width: 450px;
         padding: 0;
-        font-size: 14px;
+        font-size: $--font-size-small;
         line-height: 26px;
         height: 26px;
         color: $--color-text-primary;
@@ -161,7 +161,7 @@ export default {
     border-top: $--border-base;
     p {
       padding: 0 0 12px;
-      font-size: 14px;
+      font-size: $--font-size-small;
       line-height: 17px;
       color: #00c1de;
     }

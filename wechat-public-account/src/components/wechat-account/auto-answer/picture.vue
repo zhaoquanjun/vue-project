@@ -130,7 +130,7 @@ export default {
         background-size: contain;
     }
     p {
-        font-size:14px;
+        font-size:$--font-size-small;
         font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
         margin: 12px 0;

@@ -319,7 +319,7 @@ export default {
         margin: 70px auto 0;
     }
     p {
-        font-size:14px;
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(161,168,177,1);
         line-height:20px;
@@ -430,7 +430,7 @@ export default {
                 background:rgba(255,255,255,1);
                 border-radius:$--border-radius-base;
                 border:1px solid rgba(229,229,229,1);
-                font-size:14px;
+                font-size:$--font-size-small;
                 font-family:'PingFangSC-Regular,PingFangSC';
                 font-weight:400;
                 color:rgba(211,211,211,1);

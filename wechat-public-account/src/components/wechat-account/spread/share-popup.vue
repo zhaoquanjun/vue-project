@@ -335,7 +335,7 @@ export default {
             height:60px;
             margin: 0;
             padding-right: 8px;
-            font-size:14px;
+            font-size:$--font-size-small;
             overflow: hidden;
             font-family:'AlibabaPuHuiTiR';
             color:rgba(136,136,136,1);
@@ -414,7 +414,7 @@ export default {
               height:34px;
               background:rgba(38,38,38,1);
               opacity:0.7;
-              font-size:14px;
+              font-size:$--font-size-small;
               text-align: center;
               font-weight:400;
               color:rgba(255,255,255,1);
@@ -442,7 +442,7 @@ export default {
             padding-left: 10px;
             border-radius:$--border-radius-base;;
             border:1px solid rgba(229,229,229,1);
-            font-size:14px;
+            font-size:$--font-size-small;
             font-family: "PingFangSC-Regular,PingFangSC";
             font-weight:400;
             color:rgba(38,38,38,1);
@@ -484,7 +484,7 @@ export default {
             justify-content: space-between;
             background: none;
             span {
-              font-size:14px;
+              font-size:$--font-size-small;
               font-family:'PingFangSC-Regular,PingFangSC';
               font-weight:400;
               color:rgba(38,38,38,1);
@@ -513,7 +513,7 @@ export default {
                 width: 100%;
                 text-align: left;
                 height: 32px;
-                font-size:14px;
+                font-size:$--font-size-small;
                 padding-left: 14px;
                 font-weight:400;
                 color:rgba(38,38,38,1);
@@ -535,7 +535,7 @@ export default {
           span {
             padding-left: 10px;
             color: rgba(128, 128, 128, 1);
-            font-size: 14px;
+            font-size: $--font-size-small;
             font-weight:400;
             text-align: left;
           }
@@ -562,7 +562,7 @@ export default {
             margin-left: 8px;
             background:rgba(5,149,230,1);;
             border-radius: $--border-radius-base;
-            font-size:14px;
+            font-size:$--font-size-small;
             font-family:'PingFangSC-Regular,PingFangSC';
             font-weight:400;
             color:rgba(255,255,255,1);
@@ -574,7 +574,7 @@ export default {
           }
           p {
             height:20px;
-            font-size:14px;
+            font-size:$--font-size-small;
             font-family:'PingFangSC-Regular,PingFangSC';
             font-weight:400;
             color:rgba(38,38,38,1);
@@ -621,14 +621,14 @@ export default {
       width: 100px;
       text-align: center;
       h6 {
-        font-size:14px;
+        font-size:$--font-size-small;
         font-family:'PingFangSC-Regular,PingFangSC';
         color:rgba(38,38,38,1);
         line-height:20px;
         margin-bottom: 24px;
       }
       p {
-        font-size:14px;
+        font-size:$--font-size-small;
         font-family:'PingFangSC-Regular,PingFangSC';
         font-weight:400;
         color:rgba(38,38,38,1);
@@ -648,7 +648,7 @@ export default {
           background:rgba(240,243,248,1);
           border-radius:$--border-radius-base;
           border:1px solid rgba(229,229,229,1);
-          font-size:14px;
+          font-size:$--font-size-small;
           font-weight:400;
           color:rgba(38,38,38,1);
           line-height:40px;

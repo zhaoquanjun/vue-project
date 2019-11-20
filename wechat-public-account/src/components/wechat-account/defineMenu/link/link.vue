@@ -130,7 +130,7 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      font-size: 14px;
+      font-size: $--font-size-small;
       max-width: 160px;
       i {
         margin-right: 8px;
@@ -140,7 +140,7 @@ export default {
       .title {
         display: inline-block;
         margin-right: 0;
-        font-size: 14px;
+        font-size: $--font-size-small;
         height: 14px;
         line-height: 14px;
         width: 150px;

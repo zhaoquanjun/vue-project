@@ -228,7 +228,7 @@ export default {
     padding: 0 12px;
     p {
       color: $--color-primary;
-      font-size: 14px;
+      font-size: $--font-size-small;
       line-height: 17px;
       cursor: auto;
     }
@@ -308,7 +308,7 @@ export default {
             p {
               width: 300px;
               padding: 0;
-              font-size: 14px;
+              font-size: $--font-size-small;
               color: #262626;
               text-align: left;
             }
@@ -373,7 +373,7 @@ export default {
     border-top: 1px solid #eee;
     p {
       padding: 0 0 12px;
-      font-size: 14px;
+      font-size: $--font-size-small;
       line-height: 17px;
       color: #00c1de;
     }

@@ -376,7 +376,7 @@ button {
 
                 p {
                     display: inline-block;
-                    font-size: 14px;
+                    font-size: $--font-size-small;
                     line-height: 40px;
                     padding-right: 16px;
                 }

@@ -286,7 +286,7 @@ export default {
     padding: 0 12px;
     p {
       color: $--color-primary;
-      font-size: 14px;
+      font-size: $--font-size-small;
       line-height: 17px;
       cursor: auto;
     }
@@ -364,7 +364,7 @@ export default {
             p {
               width: 300px;
               padding: 0;
-              font-size: 14px;
+              font-size: $--font-size-small;
               line-height: 26px;
               height: 26px;
               overflow: hidden;
@@ -423,7 +423,7 @@ export default {
     height: 78px;
     border-top: $--border-base;
     p {
-      font-size:14px;
+      font-size:$--font-size-small;
       font-family:"PingFangSC";
       font-weight:400;
       color:$--color-text-primary;
@@ -436,7 +436,7 @@ export default {
       height:32px;
       border-radius:$--border-radius-base;
       border:$--border-base;
-      font-size:14px;
+      font-size:$--font-size-small;
       font-family:"PingFangSC";
       font-weight:400;
       line-height:32px;
@@ -454,7 +454,7 @@ export default {
       }
     }
     a {
-      font-size:14px;
+      font-size:$--font-size-small;
       font-weight:400;
       color:$--color-primary;
       margin-left: 10px;
@@ -472,7 +472,7 @@ export default {
         margin-right: 0;
         color:$--color-text-primary;
         height:32px;
-        font-size:14px;
+        font-size:$--font-size-small;
         font-weight:400;
         line-height:32px;
         padding: 0 6px 0 10px;
