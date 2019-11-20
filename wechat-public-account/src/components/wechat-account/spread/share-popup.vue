@@ -333,7 +333,7 @@ export default {
           }
           p {
             float: left;
-            width:196px;
+            width:186px;
             height:60px;
             margin: 0;
             padding-right: 8px;
@@ -443,7 +443,7 @@ export default {
             height:40px;
             padding-left: 10px;
             border-radius:$--border-radius-base;;
-            border:1px solid rgba(229,229,229,1);
+            border:$--border-base;
             font-size:$--font-size-small;
             font-family: "PingFangSC-Regular,PingFangSC";
             font-weight:400;
@@ -554,7 +554,7 @@ export default {
             margin: 0;
             background:rgba(240,243,248,1);
             border-radius: $--border-radius-base;
-            border:1px solid rgba(229,229,229,1);
+            border:$--border-base;
           }
           span {
             float: right;
@@ -589,7 +589,7 @@ export default {
       position: absolute;
       left: 0;
       bottom: 0;
-      border-top: 1px solid #EFEFEF;
+      border-top: $--border-base;
       width: 100%;
       height: 32px;
       padding: 24px;
@@ -624,7 +624,7 @@ export default {
       float: right;
       div {
           display: inline-block;
-          width:433px;
+          width:412px;
           height:40px;
           padding: 0 10px;
           background:rgba(240,243,248,1);
@@ -640,9 +640,8 @@ export default {
           float: right;
           width:90px;
           height:40px;
-          background:rgba(9,204,235,1);
+          background:$--color-primary;
           font-size:12px;
-          font-family:'PingFangSC-Regular,PingFangSC';
           font-weight:400;
           color:rgba(255,255,255,1);
           line-height:40px;
@@ -651,9 +650,7 @@ export default {
           cursor: pointer;
         }
         .hasCopy {
-          background:rgba(255,255,255,1);
-          color:$--color-primary;
-          border: 1px solid $--color-primary;
+          background:$--color-success;
         }
     }
   }

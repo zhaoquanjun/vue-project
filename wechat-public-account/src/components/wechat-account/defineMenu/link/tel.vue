@@ -109,7 +109,7 @@ export default {
     border-radius: 0;
     text-align: left;
     background: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(229, 229, 229, 1);
+    border: $--border-base;
   }
 } 
 </style>

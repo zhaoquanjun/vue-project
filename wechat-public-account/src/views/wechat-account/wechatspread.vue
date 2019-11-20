@@ -326,7 +326,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .el-tabs /deep/ .el-tabs__item {
     font-size: 12px;
     padding: 0 32px;
@@ -339,7 +339,7 @@ export default {
 }
 .el-table {
   border: none;
-  border-top: 1px solid #D7D8D9;
+  border-top: $--border-base;
 }
 .el-tabs /deep/ .el-tabs__header {
     margin: 0;
@@ -372,7 +372,7 @@ export default {
   border-bottom: 1px solid #EBEEF5;
 } */
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #D7D8D9;
+    border: $--border-base;
     width: 400px;
     margin: 16px 0 16px 24px;
 }
@@ -380,13 +380,13 @@ export default {
  right: -20px;
 }
 .el-input /deep/ .el-input__inner:hover {
-    border: 1px solid #D7D8D9;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner:focus {
-    border: 1px solid #D7D8D9;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #D7D8D9;
+    border: $--border-base;
 }
 
 </style>

@@ -343,7 +343,7 @@ export default {
       .account-body {
         background:rgba(255,255,255,1);
         border-radius:$--border-radius-base;
-        border:1px solid rgba(221,226,234,1);
+        border:$--border-base;
       }
       .account-setting__bind {
         width: 100%;
@@ -397,7 +397,7 @@ export default {
           height:40px;
           background:rgba(255,255,255,1);
           border-radius:$--border-radius-base;
-          border:1px solid rgba(229,229,229,1);
+          border:$--border-base;
           font-weight:400;
           padding-left: 10px;
           margin: 20px 0 30px;

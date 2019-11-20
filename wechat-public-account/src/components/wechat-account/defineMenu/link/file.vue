@@ -253,13 +253,13 @@ export default {
     width: 563px;
     height: 297px;
     text-align: right;
-    border: 1px solid rgba(238, 238, 238, 1);
+    border: $--border-base;
     .content-main__slider {
       padding: 16px 8px;
       width: 128px;
       height: 294px;
       overflow-y: auto;
-      border-right: 1px solid #eee;
+      border-right: $--border-base;
     }
     .content-main__list {
       width: 434px;
@@ -273,7 +273,7 @@ export default {
         margin-left: 8px;
         width: 415px;
         height: 36px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: $--border-base;
       }
       .content-main__search {
         .el-icon-search {
@@ -362,7 +362,7 @@ export default {
   .popup-content__main {
     .btn-prev, .btn-next, .el-pager li {
       background: #fff;
-      border: 1px solid rgba(229, 229, 229, 1);
+      border: $--border-base;
     }
   }
   .popup-content__open {
@@ -370,7 +370,7 @@ export default {
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
-    border-top: 1px solid #eee;
+    border-top: $--border-base;
     p {
       padding: 0 0 12px;
       font-size: $--font-size-small;

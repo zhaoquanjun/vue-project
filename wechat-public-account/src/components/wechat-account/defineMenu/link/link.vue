@@ -118,7 +118,7 @@ export default {
   height: 40px;
   background: rgba(255, 255, 255, 1);
   border-radius: $--border-radius-base;
-  border: 1px solid rgba(201, 217, 220, 1);
+  border: $--border-base;
   cursor: pointer;
   li {
     display: flex;

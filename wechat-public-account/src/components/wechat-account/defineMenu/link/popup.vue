@@ -307,12 +307,12 @@ export default {
       align-items: flex-start;
       height:calc(100% - 100px);
       overflow: hidden;
-      border-bottom: 1px solid #eee;
+      border-bottom: $--border-base;
       .popup-content__slider {
         width: 90px;
         height: 100%;
         padding: 21px 12px;
-        border-right: 1px solid #eee;
+        border-right: $--border-base;
         cursor: auto;
         li {
           font-size: $--font-size-small;

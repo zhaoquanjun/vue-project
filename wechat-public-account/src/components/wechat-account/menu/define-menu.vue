@@ -912,7 +912,7 @@ export default {
       margin-left: 24px;
       width: 100%;
       border-radius: $--border-radius-base;
-      border-left: 1px solid rgba(229, 229, 229, 1);
+      border-left: $--border-base;
       background: #ffffff;
       .menu-operate__header {
         display: flex;
@@ -920,7 +920,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: $--border-base;
         height: 50px;
         p {
           font-size:12px;
@@ -1071,7 +1071,7 @@ export default {
   float: left;
   background:rgba(255,255,255,1);
   border-radius:2px;
-  border:1px solid rgba(229,229,229,1);
+  border:$--border-base;
   font-size:12px;
   font-weight:400;
   color: #606266;
