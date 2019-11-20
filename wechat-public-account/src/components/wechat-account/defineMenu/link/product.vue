@@ -416,7 +416,6 @@ export default {
     border-top: $--border-base;
     p {
       font-size:$--font-size-small;
-      font-family:"PingFangSC";
       font-weight:400;
       color:rgba(38,38,38,1);
       line-height:20px;
@@ -429,7 +428,6 @@ export default {
       border-radius:$--border-radius-base;
       border:1px solid rgba(229,229,229,1);
       font-size:$--font-size-small;
-      font-family:"PingFangSC";
       font-weight:400;
       line-height:32px;
       padding: 0 10px;

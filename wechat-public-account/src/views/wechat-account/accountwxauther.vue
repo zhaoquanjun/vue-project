@@ -388,7 +388,6 @@ export default {
         }
         p {
           font-size:$--font-size-small;
-          font-family:"PingFangSC";
           font-weight:400;
           color:rgba(161,168,177,1);
           line-height:30px;

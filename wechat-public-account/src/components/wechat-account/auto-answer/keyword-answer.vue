@@ -334,11 +334,18 @@ button {
     padding: 16px 0px;
     border-radius: $--border-radius-base;
     .keyword-answer-content {
-        // padding: 24px 0 0 0;
-        // border-top: 1px solid #e5e5e5;
         .keyword-list {
+            display: inline-block;
+            z-index: 1;
+            top: 50px;
+            left: 0;
+            width: 100%;
             padding-bottom: 24px;
             margin-left: 24px;
+            padding: 5px;
+            display: flex;
+            justify-content: flex-start;
+            box-sizing: border-box;
             .title{
                 color: #B9CBCF
             }

@@ -417,7 +417,6 @@ export default {
         line-height: 20px;
         border-left: 4px solid $--color-primary;
         font-size:$--font-size-small;
-        font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
         color:rgba(38,38,38,1);
       }
@@ -432,7 +431,6 @@ export default {
           right: 24px;
           height:50px;
           font-size:$--font-size-small;
-          font-family:'PingFangSC-Regular,PingFang SC';
           font-weight:400;
           color:rgba(38,38,38,1);
           line-height:50px;
@@ -463,7 +461,6 @@ export default {
       a {
         font-size:$--font-size-small;
         margin-left: 24px;
-        font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
         color: $--color-primary;
         line-height:32px;

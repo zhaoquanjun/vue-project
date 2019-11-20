@@ -258,7 +258,6 @@ export default {
         }
         span {
           font-size:24px;
-          font-family:"HelveticaNeue";
           color:rgba(38,38,38,1);
           line-height:24px;
         }
@@ -279,7 +278,6 @@ export default {
         text-align: center;
         line-height: 36px;
         border-radius:18px;
-        font-family:'PingFangSC-Regular,PingFangSC';
         font-weight:400;
         color:rgba(38,38,38,1);
         cursor: pointer;

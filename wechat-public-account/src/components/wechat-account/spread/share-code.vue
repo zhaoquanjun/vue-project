@@ -127,7 +127,6 @@ export default {
       border-bottom: 1px solid #EFEFEF;
       span {
         font-size:16px;
-        font-family:'PingFangSC-Medium,PingFangSC';
         font-weight:600;
         color:rgba(38,38,38,1);
         line-height:24px;
@@ -142,14 +141,12 @@ export default {
       text-align: center;
       h6 {
         font-size:$--font-size-small;
-        font-family:'PingFangSC-Regular,PingFangSC';
         color:rgba(38,38,38,1);
         line-height:20px;
         margin-bottom: 24px;
       }
       p {
         font-size:$--font-size-small;
-        font-family:'PingFangSC-Regular,PingFangSC';
         font-weight:400;
         color:rgba(38,38,38,1);
         line-height:20px;
@@ -179,7 +176,6 @@ export default {
           height:40px;
           background:rgba(9,204,235,1);
           font-size:12px;
-          font-family:'PingFangSC-Regular,PingFangSC';
           font-weight:400;
           color:rgba(255,255,255,1);
           line-height:40px;
@@ -208,7 +204,6 @@ export default {
         height:32px;
         border:1px solid rgba(9,204,235,1);
         font-size:12px;
-        font-family:'PingFangSC-Regular,PingFangSC';
         font-weight:400;
         color:rgba(9,204,235,1);
         line-height:32px;

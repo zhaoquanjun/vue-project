@@ -84,7 +84,6 @@ export default {
             }
             p {
                 font-size:$--font-size-small;
-                font-family:"PingFangSC";
                 font-weight:400;
                 color: #A1A8B1;
                 line-height: 20px;

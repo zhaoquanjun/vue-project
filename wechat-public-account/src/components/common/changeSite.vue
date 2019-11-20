@@ -257,7 +257,6 @@ export default {
     border-bottom: $--border-base;
     .dialogTitleText {
       font-size: 16px;
-      font-family: PingFangSC-Medium;
       font-weight: 500;
       color: rgba(38, 38, 38, 1);
     }

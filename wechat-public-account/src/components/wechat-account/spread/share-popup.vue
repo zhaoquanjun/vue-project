@@ -75,8 +75,8 @@
         </div>
       </div>
       <div class="btn">
-        <span @click="closeShare(true)">保存</span>
-        <span @click="closeShare(false)">取消</span>
+        <button class="cl-button cl-button--primary" @click="closeShare(true)">保存</button>
+        <button class="cl-button cl-button--primary_notbg" @click="closeShare(false)">取消</button>
       </div>
     </div>
     <image-manage
@@ -286,6 +286,7 @@ export default {
     width: 700px;
     height: 100%;
     padding: 24px;
+    box-sizing: border-box;
     background: white;
     .share-title {
       display: flex;
@@ -318,6 +319,7 @@ export default {
           box-shadow:0px 2px 4px 0px rgba(236,236,236,1);
           border-radius:6px 6px 6px 2px;
           text-align: left;
+          box-sizing: border-box;
           padding: 16px;
           h5 {
             margin-bottom: 20px;
@@ -478,14 +480,13 @@ export default {
             width:400px;
             height:40px;
             border-radius:$--border-radius-base;
-            border:1px solid rgba(229,229,229,1);
+            border:$--border-base;
             padding: 0;
             display: flex;
             justify-content: space-between;
             background: none;
             span {
               font-size:$--font-size-small;
-              font-family:'PingFangSC-Regular,PingFangSC';
               font-weight:400;
               color:rgba(38,38,38,1);
               line-height:40px;
@@ -590,28 +591,9 @@ export default {
       bottom: 0;
       border-top: 1px solid #EFEFEF;
       width: 100%;
-      height: 80px;
+      height: 32px;
+      padding: 24px;
       text-align: left;
-      span {
-        display: inline-block;
-        width:90px;
-        height:32px;
-        background:rgba(9,204,235,1);
-        font-size:12px;
-        font-family:'PingFangSC-Regular,PingFangSC';
-        font-weight:400;
-        color:rgba(255,255,255,1);
-        line-height:32px;
-        margin: 24px;
-        text-align: center;
-        cursor: pointer;
-      }
-      span:nth-child(2) {
-        background:rgba(255,255,255,1);
-        color:rgba(9,204,235,1);
-        border: 1px solid rgba(9,204,235,1);
-        margin-left: 0px;
-      }
     }
   }
   .share-url {
@@ -647,7 +629,7 @@ export default {
           padding: 0 10px;
           background:rgba(240,243,248,1);
           border-radius:$--border-radius-base;
-          border:1px solid rgba(229,229,229,1);
+          border:$--border-base;
           font-size:$--font-size-small;
           font-weight:400;
           color:rgba(38,38,38,1);
@@ -670,8 +652,8 @@ export default {
         }
         .hasCopy {
           background:rgba(255,255,255,1);
-          color:rgba(9,204,235,1);
-          border: 1px solid rgba(9,204,235,1);
+          color:$--color-primary;
+          border: 1px solid $--color-primary;
         }
     }
   }

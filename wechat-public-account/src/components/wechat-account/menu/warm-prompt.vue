@@ -16,7 +16,6 @@ export default {
 .tips {
   padding: 7px 11px 8px;
   font-size: 12px;
-  font-family: "PingFangSC";
   font-weight: 500;
   color: rgba(254, 152, 55, 1);
   line-height: 17px;
