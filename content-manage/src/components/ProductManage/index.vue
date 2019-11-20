@@ -80,7 +80,7 @@
                                 @chooseNode="chooseNode"
                             ></CheckTree>
                         </template>
-                        <div slot="footer" class="pannle-footer">
+                        <div slot="footer" class="pannel-footer">
                             <button @click="updateCategoryArticle" class="sure">确定</button>
                             <button @click="cancelUpdateCategory" class="cancel">取消</button>
                         </div>
