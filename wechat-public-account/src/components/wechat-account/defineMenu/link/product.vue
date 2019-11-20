@@ -392,7 +392,7 @@ export default {
             background: $--background-color-selected !important;
             p {
               color: $--color-primary !important;
-              span:first-of-type {
+              i {
                 color: $--color-primary !important;
               }
             }
