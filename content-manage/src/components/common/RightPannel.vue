@@ -18,7 +18,7 @@
     <div class="pannel-main" style="padding:0 17px">
         <slot></slot>
     </div>
-    <div class="pannel_footer"><slot name="footer"></slot></div>
+    <slot name="footer"></slot>
   </div>
 </template>
 <script>

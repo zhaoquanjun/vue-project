@@ -51,7 +51,7 @@
                 </el-upload>
             </el-form-item>
         </el-form>
-        <div class="pannle-footer">
+        <div class="pannel-footer">
             <button class="confrim" @click="submitForm('ruleForm')">确定</button>
             <button class="cancel" @click="cancel">取消</button>
         </div>
@@ -304,7 +304,7 @@ export default {
     font-size: 14px;
 }
 #content-manage .uploadCategoryPic {
-    .pannle-footer {
+    .pannel-footer {
         text-align: right;
         padding: 5px 8px 0 0;
         box-sizing: border-box;

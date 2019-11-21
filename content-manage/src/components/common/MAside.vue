@@ -174,7 +174,7 @@ export default {
     z-index: 10;
     overflow: hidden;
     transition: 0.2s ease-in-out;
-    background-color:$--color-black-1;
+    background-color:$--color-black-dark;
    
     // border-right: 1px solid rgb(229, 229, 229);
 }

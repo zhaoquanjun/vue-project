@@ -69,7 +69,7 @@
                         :isexpand="true"
                     ></SelectTree>
 
-                    <div slot="footer" class="pannle-footer">
+                    <div slot="footer" class="pannel-footer">
                         <button @click="updateCategoryPic" class="sure">确定</button>
                         <button @click="cancelUpdateCategor" class="cancel">取消</button>
                     </div>

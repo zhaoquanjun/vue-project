@@ -222,7 +222,7 @@ export default {
      
 }
 .left-menu {
-    background-color:$--color-black-1;
+    background-color:$--color-black-dark;
     height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {

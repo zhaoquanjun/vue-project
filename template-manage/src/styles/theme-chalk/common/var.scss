@@ -100,6 +100,7 @@ $--width-base: 32px;
 --------------------------*/
 $--sm: 768px !default;
 $--md: 992px !default;
+
 $--lg: 1200px !default;
 $--xl: 1920px !default;
 
@@ -114,7 +115,8 @@ $--button-font-size: $--font-size-base !default;
 $--button-border-radius: $--border-radius-base !default;
 
 $--button-padding-vertical: 9px !default;
-$--button-padding-horizontal: 22px !default;
+
+$--button-padding-horizontal: 8px !default;
 
 $--button-primary-border-color: $--color-primary !default;
 
