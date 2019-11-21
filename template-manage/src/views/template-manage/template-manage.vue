@@ -10,7 +10,7 @@
           <el-select
             v-model="searchValue"
             placeholder="请选择"
-            class="selectSearchValue borderColor"
+            class="selectSearchValue inputHeight"
             @change="changeSearchType"
           >
             <el-option
@@ -20,11 +20,11 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput borderColor"></el-input>
+          <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput inputHeight"></el-input>
           <el-select
             v-model="firstIndustrySelect"
             placeholder="一级行业"
-            class="firstIndustrySelect borderColor"
+            class="firstIndustrySelect inputHeight"
             @change="choseFirstIndustry"
           >
             <el-option
@@ -38,7 +38,7 @@
           <el-select
             v-model="secondIndustrySelect"
             placeholder="二级行业"
-            class="secondIndustrySelect borderColor"
+            class="secondIndustrySelect inputHeight"
           >
             <el-option
               v-for="item in secondIndustryOptions"
@@ -47,7 +47,7 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          <el-select v-model="languageSelect" placeholder="语言" class="languageSelect borderColor">
+          <el-select v-model="languageSelect" placeholder="语言" class="languageSelect inputHeight">
             <el-option
               v-for="item in languageOptions"
               :key="item.value"
@@ -55,7 +55,7 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-select v-model="themeSelect" placeholder="主题" class="themeSelect borderColor">
+          <el-select v-model="themeSelect" placeholder="主题" class="themeSelect inputHeight">
             <el-option
               v-for="item in themeOptions"
               :key="item.value"
@@ -63,7 +63,7 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-select v-model="templateStatus" placeholder="模版状态" class="templateStatus borderColor">
+          <el-select v-model="templateStatus" placeholder="模版状态" class="templateStatus inputHeight">
             <el-option
               v-for="item in templateStatusOptions"
               :key="item.value"
@@ -72,7 +72,11 @@
             ></el-option>
           </el-select>
           <el-checkbox v-model="isRecommend" class="isRecommend">仅推荐</el-checkbox>
-          <button class="cl-button cl-button--primary_notbg" @click="searchTemplate">查询</button>
+          <button
+            class="cl-button cl-button--primary_notbg"
+            style="margin-top:14px"
+            @click="searchTemplate"
+          >查询</button>
         </div>
       </div>
       <el-main>
@@ -268,7 +272,7 @@
               <el-select
                 v-model="settingFirstIndustrySelect"
                 placeholder="一级行业"
-                class="settingFirstIndustrySelect borderColor"
+                class="settingFirstIndustrySelect inputHeight"
                 @change="choseSettingFirstIndustry"
               >
                 <el-option
@@ -282,7 +286,7 @@
               <el-select
                 v-model="settingSecondIndustrySelect"
                 placeholder="二级行业"
-                class="settingSecondIndustrySelect borderColor"
+                class="settingSecondIndustrySelect inputHeight"
                 @change="choseSettingSecondIndustry"
               >
                 <el-option
@@ -300,7 +304,7 @@
                 <el-select
                   v-model="settingTemplateStatus"
                   placeholder="模版状态"
-                  class="settingStatusSelect"
+                  class="settingStatusSelect inputHeight"
                 >
                   <el-option
                     v-for="item in settingTemplateStatusOptions"
@@ -1088,16 +1092,15 @@ export default {
 .el-select /deep/ .el-input__icon {
   line-height: 32px;
 }
-.borderColor /deep/ input {
+.inputHeight /deep/ input {
   height: 32px;
-  border: $--border-base;
 }
 .searchInput /deep/ input {
   line-height: 20px;
 }
 .isRecommend /deep/ .el-checkbox__label {
-  font-size: 14px;
-  font-weight: 400;
+  font-size: $--font-size-base;
+  font-weight: $--font-weight-base;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
 }
@@ -1217,10 +1220,8 @@ export default {
   margin: 0 16px;
   .contentHeader {
     background: $--color-white;
-    height: 60px;
-    // display: flex;
-    // align-items: center;
     padding: 0 24px;
+    padding-bottom: 14px;
     border: $--border-base;
     margin-bottom: 12px;
   }
@@ -1290,9 +1291,9 @@ export default {
       height: 22px;
       background: rgba(254, 152, 55, 1);
       border-radius: 2px 0px 10px 0px;
-      font-size: 12px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 1);
+      font-size: $--font-size-small;
+      font-weight: $--font-weight-primary;
+      color: $--color-white;
       line-height: 22px;
       text-align: center;
       position: absolute;
@@ -1302,17 +1303,9 @@ export default {
   }
   .templateName {
     font-size: $--font-size-small;
-    font-weight: 400;
-    // color: rgba(102, 102, 102, 1);
+    font-weight: $--font-weight-base;
     line-height: 17px;
   }
-  // .templateDomain {
-  //   font-size: 14px;
-  //   font-weight: 400;
-  //   color: rgba(9, 204, 235, 1);
-  //   line-height: 20px;
-  //   cursor: pointer;
-  // }
   .disable {
     opacity: 0.5;
     cursor: not-allowed;
@@ -1320,26 +1313,22 @@ export default {
 }
 // 右侧弹框
 .right-pannel {
-  background: #ffffff;
+  background: $--color-white;
   position: fixed;
   z-index: 2200;
   right: 0;
   top: 0;
   bottom: 0;
-  box-shadow: 0 0 3px #ccc;
   transition: width 0.2s linear;
-  background-color: "#fff";
-  color: #262626;
   overflow: hidden;
   .pannel-head {
     height: 70px;
     line-height: 70px;
     overflow: hidden;
-    border-bottom: 1px solid #efefef;
+    border-bottom: $--border-base;
     span {
-      font-size: 16px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-medium;
+      font-weight: $--font-weight-primary;
       padding: 0 10px;
     }
     .close-pannel {
@@ -1352,8 +1341,8 @@ export default {
     height: 32px;
     background: rgba(242, 255, 234, 1);
     border: 1px solid rgba(199, 221, 185, 1);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: $--font-size-small;
+    font-weight: $--font-weight-primary;
     color: rgba(0, 182, 57, 1);
     line-height: 32px;
     text-align: center;
@@ -1364,9 +1353,8 @@ export default {
     margin-bottom: 0;
     height: 107px;
     .phoneTitle {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
     .phoneInput {
@@ -1376,9 +1364,8 @@ export default {
   .remarkWrap {
     margin: 0 24px;
     .remarkTitle {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
     .remarkInput {
@@ -1392,14 +1379,11 @@ export default {
     margin: 32px 24px 10px;
     height: 97px;
     .templateName {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
     .templateNameInput {
-      //   width: 200px;
-      //   height: 45px;
       margin-top: 15px;
     }
   }
@@ -1407,9 +1391,8 @@ export default {
     height: 113px;
     margin: 0 24px;
     .templateindustryTitle {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
       margin-bottom: 16px;
     }
@@ -1433,9 +1416,8 @@ export default {
   .settingStatusWrap {
     margin-left: 24px;
     .settingStatus {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
     .settingStatusSelect {
@@ -1446,22 +1428,20 @@ export default {
     margin-top: 24px;
     margin-left: 24px;
     .imgTitle {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
   }
 
   .tipTypeText {
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(38, 38, 38, 1);
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-primary;
     line-height: 20px;
   }
   .tipInfoText {
-    font-size: 14px;
-    font-weight: 400;
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-base;
     color: rgba(140, 140, 140, 1);
     line-height: 20px;
   }
@@ -1471,19 +1451,13 @@ export default {
     width: 470px;
     height: 80px;
     bottom: 0px;
-    border-top: 1px solid #efefef;
+    border-top: $--border-base;
     display: flex;
     align-items: center;
     .confirmBtn {
       margin-left: 16px;
     }
   }
-}
-.blue {
-  color: #09cceb;
-}
-.black {
-  color: #262626;
 }
 </style>
 

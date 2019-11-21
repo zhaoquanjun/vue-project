@@ -3,8 +3,8 @@ import environment from "@/environment/index";
 /**
  * 获取app列表
  */
-export const getApplicationsByUserId = () => {
-    return ajaxRequest.get(`${environment.dashboardApi}/api/v1/appInfo/GetApplicationsByUserId`);
+export const getApplicationsByUserId = (appName) => {
+    return ajaxRequest.get(`${environment.dashboardApi}/api/v1/appInfo/GetApplicationsByUserId`,{appName:appName});
 }
 /**
  * 获取用户头像 
