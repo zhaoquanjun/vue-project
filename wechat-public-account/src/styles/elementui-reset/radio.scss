@@ -6,16 +6,16 @@
       height: 16px;
     }
     .el-radio__inner:hover{
-      border-color:  $--color-primary;
+      border-color:  $--border-color-primary;
     }
     .el-radio__input.is-checked {
       .el-radio__inner {
-        border-color:  $--color-primary;
+        border-color:  $--border-color-primary;
         background: transparent;
       }
     }
     .el-radio__input.is-checked+.el-radio__label{
-      color:  $--color-primary;
+      color:  $--color-text-orange;
     }
     .el-radio__inner::after{
         width: 8px;
@@ -26,16 +26,16 @@
         margin-right: 17px;
       }
       .el-radio__label {
-        font-size: 12px;
-        font-weight: 400;
+        font-size: $--font-size-small;
+        font-weight: $--font-weight-primary;
         color:  $--color-text-primary;
         line-height: 20px;
       }
       .is-checked {
         .el-radio__label {
-            font-size: 12px;
-            font-weight: 400;
-            color: rgba(38, 38, 38, 1);
+            font-size: $--font-size-small;
+            font-weight: $--font-weight-primary;
+            color: $--color-text-primary;
             line-height: 20px;
           }
       }
