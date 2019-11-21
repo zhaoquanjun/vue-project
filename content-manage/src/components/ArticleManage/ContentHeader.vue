@@ -84,11 +84,15 @@
                     <i>{{count}}</i> 个文章
                 </span>
                 <div class="bach-hanlder">
-                    <button class="cl-button cl-button--small cl-button--text_info" @click="batchPublish(false)">上线</button>
-                    <button class="cl-button cl-button--small cl-button--text_info"  @click="batchPublish(true)">下线</button>
-                    <button class="cl-button cl-button--small cl-button--text_info"  @click="batchCopy">复制</button>
-                    <button class="cl-button cl-button--small cl-button--text_danger"  @click="batchRemove">删除</button>
-                    <el-dropdown trigger="click" @command="handleCommand">
+                    <button class="cl-button cl-button--text_primary" @click="batchPublish(false)">上线</button>
+                    <button class="cl-button cl-button--text_primary"  @click="batchPublish(true)">下线</button>
+                    <button class="cl-button cl-button--text_primary"  @click="batchCopy">复制</button>
+                    <button class="cl-button cl-button--text_primary"  @click="handleCommand('move')">移动</button>
+                    <button class="cl-button cl-button--text_primary"  @click="handleCommand('top')">置顶</button>
+                    <button class="cl-button cl-button--text_primary"  @click="handleCommand('cancelTop')">取消置顶</button>
+                    <button class="cl-button cl-button--text_danger"  @click="batchRemove">删除</button>
+
+                    <!-- <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard btn-black-notboard">
                                 <i class="iconfont iconsangedian"></i>
@@ -99,7 +103,7 @@
                             <el-dropdown-item command="top">置顶</el-dropdown-item>
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
                         </el-dropdown-menu>
-                    </el-dropdown>
+                    </el-dropdown> -->
                 </div>
             </div>
         </template>
@@ -285,6 +289,11 @@ export default {
         }
 
     }
+}
+.bach-hanlder button {
+    padding: 9px 16px;
+    margin: 0;
+    min-width: 60px;
 }
 
 </style>

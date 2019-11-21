@@ -69,8 +69,8 @@
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <div>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
-                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                    <button class="cl-button cl-button--text_primary" @click="batchMove">移动</button>
+                    <button class="cl-button cl-button--text_danger" @click="batchDelete">删除</button>
                 </div>
             </div>
         </template>
@@ -156,5 +156,10 @@ export default {
     &:hover{
         opacity: 0.8;
     }
+}
+.handle-batch button {
+    padding: 9px 16px;
+    margin: 0;
+    min-width: 60px;
 }
 </style>
