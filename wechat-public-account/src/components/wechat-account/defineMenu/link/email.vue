@@ -110,7 +110,7 @@ export default {
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
-    border-top: 1px solid #eee;
+    border-top: $--border-base;
     p {
       color: #00C1DE;
       padding: 0 0 12px;

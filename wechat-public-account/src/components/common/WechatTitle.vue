@@ -14,10 +14,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .wechat-title {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: $--border-base;
   padding-bottom: 24px;
   .wechat-content {
-    border-left: 4px solid #01c0de;
+    border-left: 4px solid $--color-primary;
     padding-left: 10px;
     font-size: 16px;
     font-weight: 500;

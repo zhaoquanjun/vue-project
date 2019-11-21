@@ -429,14 +429,14 @@ export default {
                 height:40px;
                 background:rgba(255,255,255,1);
                 border-radius:$--border-radius-base;
-                border:1px solid rgba(229,229,229,1);
+                border:$--border-base;
                 font-size:$--font-size-small;
-                font-family:'PingFangSC-Regular,PingFangSC';
                 font-weight:400;
                 color:rgba(211,211,211,1);
                 line-height:40px;
                 padding: 0 14px;
                 width: 100%;
+                box-sizing: border-box;
                 cursor: pointer;
             }
             .select {

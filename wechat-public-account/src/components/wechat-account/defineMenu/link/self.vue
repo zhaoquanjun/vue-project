@@ -59,7 +59,6 @@ export default {
     h5 {
       height:20px;
       font-size:$--font-size-small;
-      font-family:"PingFangSC";
       font-weight:400;
       color:rgba(38,38,38,1);
       line-height:20px;
@@ -76,7 +75,6 @@ export default {
     .tips {
       margin-top: 10px;
       font-size:$--font-size-small;
-      font-family:"PingFangSC";
       font-weight:400;
       color:rgba(38,38,38,1);
       line-height:20px;

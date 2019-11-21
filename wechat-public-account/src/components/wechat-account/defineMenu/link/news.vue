@@ -391,7 +391,7 @@ export default {
             background: $--background-color-selected;
             p {
               color: $--color-primary;
-              span:first-of-type {
+              i {
                 color: $--color-primary;
               }
             }
@@ -399,7 +399,7 @@ export default {
               background: $--background-color-selected;
               p {
                 color: $--color-primary;
-                span:first-of-type {
+                i {
                   color: $--color-primary;
                 }
               }
@@ -424,7 +424,6 @@ export default {
     border-top: $--border-base;
     p {
       font-size:$--font-size-small;
-      font-family:"PingFangSC";
       font-weight:400;
       color:$--color-text-primary;
       line-height:20px;
@@ -437,7 +436,6 @@ export default {
       border-radius:$--border-radius-base;
       border:$--border-base;
       font-size:$--font-size-small;
-      font-family:"PingFangSC";
       font-weight:400;
       line-height:32px;
       padding: 0 10px;
@@ -492,6 +490,7 @@ export default {
         color: $--color-primary !important;
         i {
           display: inline-block !important;
+          color: $--color-primary !important;
         }
       }
     }

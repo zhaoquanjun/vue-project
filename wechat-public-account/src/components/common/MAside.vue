@@ -1,16 +1,16 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',backgroundColor:'#F8FAFC',borderRight: '1px solid rgb(229, 229, 229)'}"
-        @mouseenter="collapseOpen(150,0.8)"
+        :style="{width:width+'px'}"
+        @mouseenter="collapseOpen(130,0.8)"
         @mouseleave="collapseClose"
     >
-        <el-aside class="m-asideleft" :style="{width:150+'px'}">
+        <el-aside class="m-asideleft" :style="{width:130+'px'}">
             <ul class="left-menu">
                 <li
                     ref="menuItem"
                     class="left-menu-item"
-                    :class="{'menu-bg':i==2,'menu-hover':curIndex==i}"
+                    :class="{'menu-bg':i==2}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(it,i)"
@@ -34,7 +34,7 @@
                 :subTitle="subTitle"
                 :lastRoute="lastRoute"
                 v-if="isLeftNavComponentsShow"
-                :style="{width: 150 + 'px !important',height: '100%',borderRight:'1px solid #e6e6e6' }"
+                :style="{width: 130 + 'px !important',height: '100%',borderRight:'1px solid #e6e6e6' }"
                 class="m-asideright"
                 :menuList="menuListChild"
             ></LeftNavComponents>
@@ -48,7 +48,6 @@ export default {
         return {
             aa: true,
             width: 60,
-            width1: 0,
             time: "0.8s",
             curIndex: -1,
             menuList: [],
@@ -79,9 +78,9 @@ export default {
             if (this.curIndex == -1) {
                 this.curIndex = i;
                 if(it.children && it.children.length > 0) {
-                    this.width = 300;
+                    this.width = 260;
                 } else {
-                    this.width = 150;
+                    this.width = 130;
                 }
             } else {
                 this.temer = setTimeout(()=>{
@@ -89,9 +88,9 @@ export default {
                     if(!this.enterTime || (levtimes - this.enterTime >=200)) {
                         this.curIndex = i;
                         if(it.children && it.children.length > 0) {
-                            this.width = 300;
+                            this.width = 260;
                         } else {
-                            this.width = 150;
+                            this.width = 130;
                         }
                     } else {
                         return
@@ -107,11 +106,12 @@ export default {
         },
         collapseOpen(width, time) {
             this.$store.commit("SET_DIALOG",true)
-            this.width = 150;
+            this.width = 130;
         },
         collapseClose() {
             setTimeout(()=>{
                 this.width = 60;
+                this.padding = '0 23px'
             },250)
         },
         iconfonts(code) {
@@ -194,7 +194,7 @@ export default {
 .m-asideright {
     width: 0px !important;
     position: absolute;
-    left: 150px;
+    left: 130px;
     z-index: 10;
     top: 0;
     text-align: center;
@@ -207,27 +207,20 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-
-.menu-hover {
-    background:$--background-color-selected;
-    border-left: 4px solid $--color-primary  !important;
-    .menu-icon {
-        color: $--color-primary !important;
-    }
-    .menu-item-content {
-         color: $--color-black-dark !important;   
-     }
-}
 .menu-bg {
-    background:$--background-color-selected;
-    color: $--color-primary ;
+    background:$--background-color-selected !important;
+    color: $--color-primary !important;
     border-left: 4px solid $--color-primary !important;
+    padding-left: 0 !important;
     .menu-icon {
         color: $--color-primary !important;
     }
     .menu-item-content {
-         color: $--color-black-dark !important;   
+         color: $--color-primary !important;   
      }
+     .iconicon-des-Arrow{
+        color: $--color-primary !important;
+    }
     
 }
 // 选中的样式
@@ -243,8 +236,7 @@ export default {
         cursor: pointer;
         line-height: 50px;
         white-space: nowrap;
-        margin-bottom: 14px;
-        border-left: 4px solid $--color-black-dark;
+        border-left: 4px solid $--color-black-1;
         .menu-item-content {
             display: inline-block;
             line-height: 50px;
@@ -252,22 +244,32 @@ export default {
         }
         .menu-icon {
             display: inline-block;
-            font-size: 16px;
-            width: 60px;
+            font-size: 14px;
+            padding: 0 23px;
             text-align: center;
             line-height: 50px;
             color:$--color-white;
             margin-left: -4px;
+            transition: 0.2s ease-in-out;
         }
         .iconicon-des-Arrow{
             position: absolute;
-            left: 126px;
+            left: 114px;
             font-size: 12px;
+            line-height: 52px;
             vertical-align: middle;
-            color: #B9CBCF;
+            color: $--color-text-regular;
         }
         .iconweixingongzhonghao{
             font-size: 19px;
+        }
+    }
+    .left-menu-item:hover {
+        background: rgba(245,246,247,0.1);
+        border-left: 0px;
+        padding-left: 4px;
+        .iconicon-des-Arrow{
+           color: $--color-white;
         }
     }
 }

@@ -10,8 +10,11 @@
         :key="index"
         :class="{'active':lastRoute == item.code}"
       >
-      <span>{{item.name}}</span>
-        <div v-show="item.children">
+      <span :class="[item.children && item.children.length > 0==1?'haschildren':'nochildren']">
+          <i v-show="item.children && item.children.length>0" class="icon iconfont" :class="[iconfonts(item.code)]"></i>
+          {{item.name}}
+      </span>
+      <div v-show="item.children && item.children.length>0">
           <p 
             v-for="(item2,ind) in item.children"
             @click.stop="handlerRoute(item2,index)"
@@ -51,6 +54,20 @@ export default {
         window.location.href = "//" + item.menuUrl;
       }
     },
+    iconfonts(code) {
+      switch (code) {
+          case "mysite":
+              return "iconicon-dash-Mymanagement";
+          case "wechataccount":
+              return "iconicon-dash-Publicpromotion";
+          case "seo":
+              return "iconicon-dash-seo";
+          case "sitemanage":
+              return "iconicon-dash-Webmanagement";
+          case "sitemember":
+              return "iconicon-banpipei"    
+      }
+    }
     
   },
   mounted() {
@@ -84,57 +101,71 @@ export default {
 </script>
 <style lang="scss" scoped>
 .submenu {
-    width: 149px;
+    width: 130px;
     height: calc(100vh - 50px);
-    background: $--color-black-light;
-    border-right: 1px solid #e5e5e5;
+    background: $--color-black-2;
+    border-right: $--border-base;
     .submenu-title {
-        height: 40px;
-        line-height: 40px;
-        padding-left: 24px;
-        font-size: 16px;
-        padding-top: 5px;
-        text-align: left;
+        height: 50px;
+        line-height: 50px;
         color: $--color-white;
+        font-size: 14px;
+        text-align: center;
     }
     .submenu-list {
-        padding-top: 7px;
         li {
           cursor: pointer;
-          line-height: 50px;
-          font-size: 14px;
-          font-weight:400;
-          color:$--color-white;
+          line-height: 32px;
+          font-size: $--font-size-small;
           span {
+            display: inline-block;
+            color: $--color-white;
+            height: 32px;
+            line-height: 32px;
+            width: 100%;
             padding-left: 24px;
             cursor: pointer;
           }
-          &:hover {
-            color: #262626;
-            background:#f0f3f7;
+          .nochildren {
+            &:hover {
+              color: $--color-white;
+              background: rgba(245, 246, 247, 0.1);
+            }
+          }
+          .haschildren {
+            padding-left: 0px;
+            cursor: default;
+            i {
+              width: 14px;
+              height: 32px;
+              font-size: 14px;
+              line-height: 32px;
+              padding: 0 12px;
+              color: $--color-white;
+            }
           }
           p {
             cursor: pointer;
             padding-left: 40px;
-            line-height: 50px;
-            font-size: 14px;
-            font-weight:400;
-            color:rgba(38,38,38,1);
+            line-height: 32px;
+            font-size: $--font-size-small;
+            color:$--color-text-regular;
             &:hover {
-              color: #262626;
-              background: #f0f3f7;
-            }
-            .active {
-              color: #0595e6 !important;
+              color: $--color-white;
+              background: rgba(245, 246, 247, 0.1);
             }
           }
         }
     }
 }
 .active {
-   color: $--color-primary !important;
+    color: $--color-primary !important;
+    span {
+        color: $--color-primary !important;
+    }
 }
 .active:hover {
-    background: #fff ;
+    color: $--color-white;
+    background: rgba(245, 246, 247, 0.1);
 }
 </style>

@@ -111,7 +111,7 @@ export default {
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
-    border-top: 1px solid #eee;
+    border-top: $--border-base;
     p {
       padding: 0 0 12px;
       font-size: 12px;
@@ -149,7 +149,7 @@ export default {
     border-radius: 0;
     text-align: left;
     background: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(229, 229, 229, 1);
+    border: $--border-base;
   }
 } 
 </style>

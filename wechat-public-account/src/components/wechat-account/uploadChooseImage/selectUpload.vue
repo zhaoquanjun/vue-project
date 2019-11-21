@@ -92,7 +92,6 @@ export default {
   }
   #content .el-dialog__body {
     padding-top: 0;
-    /* border-top: 1px solid #e8eaf3; */
   }
   #content .modal-header {
     background: rgb(255, 255, 255);
@@ -101,7 +100,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #e8eaf3;
+    border-bottom: $--border-base;
     .close-icon {
       display: block;
       width: 16px;

@@ -531,7 +531,6 @@ export default {
       .appName {
         margin-left: 32px;
         font-size: 17px;
-        font-family: PingFangSC-Medium;
         font-weight: 500;
         color: rgba(38, 38, 38, 1);
         line-height: 55px;
@@ -576,7 +575,6 @@ export default {
       border-radius: $--border-radius-base;
       text-align: center;
       font-size: 10px;
-      font-family: PingFangSC-Regular;
       font-weight: 400;
       color: rgba(255, 255, 255, 1);
       line-height: 20px;
@@ -605,7 +603,6 @@ export default {
       background: rgba(140, 140, 140, 1);
       border-radius: $--border-radius-base;
       font-size: 12px;
-      font-family: PingFangSC-Medium;
       font-weight: 500;
       color: rgba(255, 255, 255, 1);
       line-height: 32px;

@@ -212,7 +212,6 @@ export default {
     h4 {
       padding-top: 24px;
       font-size: $--font-size-small;
-      font-family: "PingFangSC";
       font-weight: 500;
       color: rgba(38, 38, 38, 1);
       line-height: 22px;
@@ -351,7 +350,6 @@ export default {
       }
       p {
         font-size:$--font-size-small;
-        font-family:"PingFangSC";
         font-weight:400;
         color:rgba(161,168,177,1);
         line-height:26px;
@@ -380,7 +378,6 @@ export default {
       background: #FFFFFF;
       .title {
         font-size:$--font-size-small;
-        font-family:"PingFangSC-Regular,PingFangSC";
         font-weight:400;
         color:rgba(38,38,38,1);
         line-height:20px;
@@ -409,7 +406,6 @@ export default {
       ul {
         p {
           font-size:$--font-size-small;
-          font-family:"PingFangSC-Regular,PingFangSC";
           font-weight:400;
           color:rgba(38,38,38,1);
           line-height:20px;
@@ -446,7 +442,6 @@ export default {
           p {
             margin: 0;
             font-size:$--font-size-small;
-            font-family:"PingFangSC-Regular,PingFangSC";
             font-weight:400;
             color:rgba(161,168,177,1);
             line-height:20px;
