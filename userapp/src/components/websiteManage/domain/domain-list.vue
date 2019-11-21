@@ -443,7 +443,7 @@ export default {
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
                     ele.innerHTML =
-                        "<span class='hoverBtn' style='color: #00c1de;font-size:14px' >域名解析</span>";
+                        "<span class='hoverBtn' style='color: #ff6b00;font-size:12px' >域名解析</span>";
                 }
             });
         }
@@ -498,9 +498,9 @@ export default {
     height: 40px;
     transform: rotate(0deg);
 }
-.el-table /deep/ .el-table__expand-icon .hoverBtn{
-    color:#ff6b00 !important;
-    font-size: 12px!important;
+#table-list /deep/ .el-table__expand-icon:hover  {
+    background: rgba(255,107,0,0.1) !important;
+
 }
 .el-table /deep/ .el-table__expanded-cell:hover {
     background: #eee !important;

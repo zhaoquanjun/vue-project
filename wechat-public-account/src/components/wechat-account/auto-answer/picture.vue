@@ -131,7 +131,6 @@ export default {
     }
     p {
         font-size:$--font-size-small;
-        font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
         margin: 12px 0;
         color:rgba(161,168,177,1);

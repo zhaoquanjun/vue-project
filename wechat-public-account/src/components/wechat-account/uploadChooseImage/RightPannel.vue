@@ -68,7 +68,7 @@ export default {
     line-height: 40px;
     font-size: $--font-size-small;
     overflow: hidden;
-    border-bottom: 1px solid #efefef;
+    border-bottom: $--border-base;
     span {
       padding: 0 10px;
     }

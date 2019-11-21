@@ -84,7 +84,6 @@ export default {
             }
             p {
                 font-size:$--font-size-small;
-                font-family:"PingFangSC";
                 font-weight:400;
                 color: #A1A8B1;
                 line-height: 20px;
@@ -99,13 +98,13 @@ export default {
                 z-index: 1;
             }
             .lineActive {
-                border: 1px solid #01c0de;
+                border: 1px solid $--color-primary;
             }
         }
         .active {
             span {
-                background: #01c0de;
-                border: 2px solid #01c0de;
+                background: $--color-primary;
+                border: 2px solid $--color-primary;
             }
             p {
               color:rgba(38,38,38,1);  

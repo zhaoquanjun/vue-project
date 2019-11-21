@@ -61,7 +61,6 @@ export default {
       margin-top: 16px;
       padding: 7px 11px 8px;
       font-size: 12px;
-      font-family: "PingFangSC";
       font-weight: 500;
       color: #fe9837;
       text-align: left;
@@ -81,7 +80,6 @@ export default {
     .certification-desc {
       margin-bottom: 16px;
       font-size: 16px;
-      font-family: P "ingFangSC";
       font-weight: 400;
       line-height: 22px;
       text-align: center;

@@ -139,7 +139,7 @@ export default {
       background: $--background-color-selected;
       p {
         color: $--color-primary;
-        span:first-of-type {
+        i {
           color: $--color-primary;
         }
       }
@@ -147,7 +147,7 @@ export default {
         background: $--background-color-selected;
         p {
           color: $--color-primary;
-          span:first-of-type {
+          i {
             color: $--color-primary;
           }
         }

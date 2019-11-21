@@ -1,8 +1,8 @@
 <template>
   <el-container class="templateManage">
-    <el-header class="templateTitle" style="height:86px">
+    <el-header class="templateTitle" style="height:50px">
       <span class="titleText">整站模版</span>
-      <button class="createBtn" @click="createTemplatedialogShow">开通整站模版</button>
+      <button class="cl-button cl-button--primary" @click="createTemplatedialogShow">开通整站模版</button>
     </el-header>
     <el-main class="contentWrap">
       <div class="contentHeader">
@@ -10,7 +10,7 @@
           <el-select
             v-model="searchValue"
             placeholder="请选择"
-            class="selectSearchValue borderColor"
+            class="selectSearchValue inputHeight"
             @change="changeSearchType"
           >
             <el-option
@@ -20,11 +20,11 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput borderColor"></el-input>
+          <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput inputHeight"></el-input>
           <el-select
             v-model="firstIndustrySelect"
             placeholder="一级行业"
-            class="firstIndustrySelect borderColor"
+            class="firstIndustrySelect inputHeight"
             @change="choseFirstIndustry"
           >
             <el-option
@@ -38,7 +38,7 @@
           <el-select
             v-model="secondIndustrySelect"
             placeholder="二级行业"
-            class="secondIndustrySelect borderColor"
+            class="secondIndustrySelect inputHeight"
           >
             <el-option
               v-for="item in secondIndustryOptions"
@@ -47,7 +47,7 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          <el-select v-model="languageSelect" placeholder="语言" class="languageSelect borderColor">
+          <el-select v-model="languageSelect" placeholder="语言" class="languageSelect inputHeight">
             <el-option
               v-for="item in languageOptions"
               :key="item.value"
@@ -55,7 +55,7 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-select v-model="themeSelect" placeholder="主题" class="themeSelect borderColor">
+          <el-select v-model="themeSelect" placeholder="主题" class="themeSelect inputHeight">
             <el-option
               v-for="item in themeOptions"
               :key="item.value"
@@ -63,7 +63,7 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-select v-model="templateStatus" placeholder="模版状态" class="templateStatus borderColor">
+          <el-select v-model="templateStatus" placeholder="模版状态" class="templateStatus inputHeight">
             <el-option
               v-for="item in templateStatusOptions"
               :key="item.value"
@@ -72,7 +72,11 @@
             ></el-option>
           </el-select>
           <el-checkbox v-model="isRecommend" class="isRecommend">仅推荐</el-checkbox>
-          <button class="inquire" @click="searchTemplate">查询</button>
+          <button
+            class="cl-button cl-button--primary_notbg"
+            style="margin-top:14px"
+            @click="searchTemplate"
+          >查询</button>
         </div>
       </div>
       <el-main>
@@ -82,7 +86,7 @@
             ref="multipleTable"
             :data="templateInfo"
             tooltip-effect="dark"
-            :row-style="{height:'200px'}"
+            :row-style="{height:'130px'}"
             :default-sort="{prop: 'myCreateTime', order: 'descending'}"
           >
             <template slot="empty">
@@ -91,7 +95,7 @@
                 <p>无数据</p>
               </div>
             </template>
-            <el-table-column prop="siteName" label="缩略图" width="240">
+            <el-table-column prop="siteName" label="缩略图" width="230">
               <template slot-scope="scope">
                 <div class="siteImg">
                   <div class="recommend" v-show="scope.row.isRecommend">推荐</div>
@@ -152,20 +156,19 @@
                     style="vertical-align: middle;"
                     :href="scope.row.status == 3 || scope.row.status == 1 ? `http://${scope.row.domain}`:'javascript:;'"
                     :target="scope.row.status == 3 || scope.row.status == 1 ?'_blank':''"
-                    :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
-                    class="more-operate"
-                  >
-                    <i class="iconfont iconchakan" style="font-size:16px;color:rgba(38,38,38,1);"></i>
-                  </a>
-                  <span
-                    class="more-operate"
-                    style="display:inline-block;margin-left:10px;vertical-align: middle;"
-                    @click.stop="_handleShowMoreOperate($event,scope.row)"
-                    :class="{disable : scope.row.status == 0 ? true : false}"
                   >
                     <i
-                      class="iconfont iconsangedian"
-                      style="font-size:20px;color:rgba(38,38,38,1);"
+                      class="iconfont iconchakan cl-iconfont"
+                      :class="{disable : scope.row.status == 3 || scope.row.status == 1 ? false : true}"
+                    ></i>
+                  </a>
+                  <span
+                    style="display:inline-block;margin-left:10px;vertical-align: middle;"
+                    @click.stop="_handleShowMoreOperate($event,scope.row)"
+                  >
+                    <i
+                      class="iconfont iconsangedian cl-iconfont"
+                      :class="{disable : scope.row.status == 0 ? true : false}"
                     ></i>
                   </span>
                 </div>
@@ -208,7 +211,7 @@
               <span>开通整站模版</span>
             </span>
             <span class="close-pannel" @click="cancelCreateTemplate">
-              <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+              <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
             </span>
           </div>
           <div class="tips">为保证设计师可正常登录系统，请填写真实的手机号</div>
@@ -229,12 +232,12 @@
           </div>
           <div class="confirm">
             <button
-              class="confirmBtn"
+              class="confirmBtn cl-button cl-button--primary"
               :disabled="isAble"
               @click="createTemplate"
               :class="{disable : isAble}"
             >开通</button>
-            <button class="cancelBtn" @click="cancelCreateTemplate">取消</button>
+            <button class="cl-button cl-button--primary_notbg" @click="cancelCreateTemplate">取消</button>
           </div>
         </div>
       </el-dialog>
@@ -250,7 +253,7 @@
               <span>整站模版设置</span>
             </span>
             <span class="close-pannel" @click="cancelSettingTemplate">
-              <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+              <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
             </span>
           </div>
           <div class="dialogContent" :style="{height:dialogHeight+'px'}">
@@ -269,7 +272,7 @@
               <el-select
                 v-model="settingFirstIndustrySelect"
                 placeholder="一级行业"
-                class="settingFirstIndustrySelect borderColor"
+                class="settingFirstIndustrySelect inputHeight"
                 @change="choseSettingFirstIndustry"
               >
                 <el-option
@@ -283,7 +286,7 @@
               <el-select
                 v-model="settingSecondIndustrySelect"
                 placeholder="二级行业"
-                class="settingSecondIndustrySelect borderColor"
+                class="settingSecondIndustrySelect inputHeight"
                 @change="choseSettingSecondIndustry"
               >
                 <el-option
@@ -301,7 +304,7 @@
                 <el-select
                   v-model="settingTemplateStatus"
                   placeholder="模版状态"
-                  class="settingStatusSelect"
+                  class="settingStatusSelect inputHeight"
                 >
                   <el-option
                     v-for="item in settingTemplateStatusOptions"
@@ -328,7 +331,7 @@
               >
                 <img v-if="picUrl" :src="picUrl" class="avatar" />
                 <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
-                <button class="upload-btn">上传图片</button>
+                <button class="upload-btn cl-button cl-button--primary">上传图片</button>
               </el-upload>
               <el-upload
                 class="avatar-mobile-uploader"
@@ -340,7 +343,7 @@
               >
                 <img v-if="picUrlMobile" :src="picUrlMobile" class="avatar-mobile" />
                 <img v-else src="~img/siteTemplate/defaultMobileImg.png" class="avatar-mobile" />
-                <button class="upload-mobile-btn">上传图片</button>
+                <button class="upload-mobile-btn cl-button cl-button--primary">上传图片</button>
               </el-upload>
             </div>
             <div style="margin-top:212px">
@@ -353,8 +356,8 @@
             </div>
           </div>
           <div class="confirm">
-            <button class="confirmBtn" @click="saveSettingTemplate">确定</button>
-            <button class="cancelBtn" @click="cancelSettingTemplate">取消</button>
+            <button class="confirmBtn cl-button cl-button--primary" @click="saveSettingTemplate">确定</button>
+            <button class="cl-button cl-button--primary_notbg" @click="cancelSettingTemplate">取消</button>
           </div>
         </div>
       </el-dialog>
@@ -534,18 +537,18 @@ export default {
     this.getFirstIndustry();
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
-        if (window.innerWidth < 1845) {
-          this.tableHeight = window.innerHeight - 390;
+        if (window.innerWidth < 1430) {
+          this.tableHeight = window.innerHeight - 265;
         } else {
-          this.tableHeight = window.innerHeight - 325;
+          this.tableHeight = window.innerHeight - 265;
         }
         this.dialogHeight = window.innerHeight - 152;
       });
       this.dialogHeight = window.innerHeight - 152;
-      if (window.innerWidth < 1845) {
-        this.tableHeight = window.innerHeight - 390;
+      if (window.innerWidth < 1430) {
+        this.tableHeight = window.innerHeight - 265;
       } else {
-        this.tableHeight = window.innerHeight - 325;
+        this.tableHeight = window.innerHeight - 265;
       }
     });
     document.addEventListener("click", () => {
@@ -1038,12 +1041,12 @@ export default {
 </script>
 <style>
 .copy-icon {
-    margin-top: 17px;
-    display: inline-block;
-    width: 142px;
-    height: 89px;
-    background: url("~img/copy.gif") no-repeat center;
-    background-size: contain;
+  margin-top: 17px;
+  display: inline-block;
+  width: 142px;
+  height: 89px;
+  background: url("~img/copy.gif") no-repeat center;
+  background-size: contain;
 }
 .createTemplateLoading .el-loading-spinner {
   margin-top: 0 !important;
@@ -1061,12 +1064,12 @@ export default {
   line-height: 20px;
 }
 </style>
-<style scoped>
+<style lang="scss" scoped>
 .table-list /deep/ .el-table .ascending .sort-caret.ascending {
-  border-bottom-color: rgba(9, 204, 235, 1);
+  border-bottom-color: $--color-primary;
 }
 .table-list /deep/ .el-table .descending .sort-caret.descending {
-  border-top-color: rgba(9, 204, 235, 1);
+  border-top-color: $--color-primary;
 }
 .phoneInput /deep/ input {
   border-top-color: transparent;
@@ -1086,15 +1089,18 @@ export default {
   border-right-color: transparent;
   line-height: 20px;
 }
-.borderColor /deep/ input {
-  border: 1px solid rgba(185, 203, 207, 1);
+.el-select /deep/ .el-input__icon {
+  line-height: 32px;
+}
+.inputHeight /deep/ input {
+  height: 32px;
 }
 .searchInput /deep/ input {
   line-height: 20px;
 }
 .isRecommend /deep/ .el-checkbox__label {
-  font-size: 14px;
-  font-weight: 400;
+  font-size: $--font-size-base;
+  font-weight: $--font-weight-base;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
 }
@@ -1116,15 +1122,6 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.more-operate {
-  position: relative;
-  cursor: pointer;
-  padding: 8px;
-  background: transparent;
-  &:hover {
-    background: rgba(240, 243, 247, 1);
-  }
-}
 .operate-section {
   // display: none;
   position: absolute;
@@ -1155,10 +1152,6 @@ export default {
   }
   .upload-btn {
     display: none;
-    width: 90px;
-    height: 32px;
-    color: #fff;
-    background: rgba(1, 192, 222, 1);
     position: absolute;
     bottom: 24px;
     left: 50%;
@@ -1196,10 +1189,6 @@ export default {
   }
   .upload-mobile-btn {
     display: none;
-    width: 90px;
-    height: 32px;
-    color: #fff;
-    background: rgba(1, 192, 222, 1);
     position: absolute;
     bottom: 24px;
     left: 50%;
@@ -1213,112 +1202,83 @@ export default {
   object-fit: cover;
 }
 .templateTitle {
-  height: 86px;
+  height: 50px;
+  padding: 0 16px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   .titleText {
-    font-size: 14px;
+    font-size: $--font-size-base;
     font-weight: 600;
-    color: rgba(38, 38, 38, 1);
-    line-height: 86px;
-    margin-left: 32px;
-  }
-  .createBtn {
-    width: 120px;
-    height: 40px;
-    background: rgba(9, 204, 235, 1);
-    border-radius: 2px;
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-    line-height: 40px;
-    float: right;
-    margin-top: 24px;
-    margin-right: 32px;
-    &:hover {
-      opacity: 0.8;
-    }
+    color: $--color-text-primary;
+    border-left: 2px solid $--color-primary;
+    padding-left: 10px;
   }
 }
 .contentWrap {
-  background: rgba(255, 255, 255, 1);
-  border-radius: 2px;
-  margin: 0 32px;
-  border: 1px solid #e5e5e5;
-  border-radius: 2px;
+  margin: 0 16px;
   .contentHeader {
-    padding: 0 22px 24px;
-    border-bottom: 1px solid #e5e5e5;
+    background: $--color-white;
+    padding: 0 24px;
+    padding-bottom: 14px;
+    border: $--border-base;
+    margin-bottom: 12px;
   }
   .selectSearchValue {
-    margin-top: 24px;
-    width: 130px;
-    height: 40px;
+    margin-top: 14px;
+    width: 103px;
+    height: 32px;
     vertical-align: top;
   }
   .searchInput {
+    margin-top: 14px;
     margin-left: -2px;
-    margin-top: 24px;
-    width: 180px;
-    height: 40px;
+    width: 156px;
+    height: 32px;
     vertical-align: top;
   }
   .firstIndustrySelect {
-    margin-top: 24px;
-    width: 180px;
-    height: 40px;
-    margin-left: 110px;
+    margin-top: 14px;
+    width: 140px;
+    height: 32px;
+    margin-left: 32px;
   }
   .line {
     margin: 0 9px;
     vertical-align: middle;
     display: inline-block;
     width: 14px;
-    height: 2px;
-    background: rgba(140, 140, 140, 1);
+    height: 1px;
+    background: $--border-color-base;
   }
   .secondIndustrySelect {
-    margin-right: 81px;
+    margin-top: 14px;
+    width: 140px;
+    height: 32px;
+    margin-right: 24px;
   }
   .languageSelect {
-    margin-top: 24px;
-    width: 130px;
-    height: 40px;
+    margin-top: 14px;
+    width: 90px;
+    height: 32px;
     margin-right: 24px;
   }
   .themeSelect {
-    margin-top: 24px;
-    width: 130px;
-    height: 40px;
+    margin-top: 14px;
+    width: 90px;
+    height: 32px;
     margin-right: 24px;
   }
   .templateStatus {
-    width: 130px;
-    height: 40px;
-    margin-top: 24px;
-    margin-right: 32px;
+    margin-top: 14px;
+    width: 120px;
+    height: 32px;
+    margin-right: 24px;
   }
   .isRecommend {
-    margin-top: 24px;
-    margin-right: 32px;
-  }
-  .inquire {
-    margin-top: 24px;
-    width: 90px;
-    height: 40px;
-    border-radius: 2px;
-    border: 1px solid rgba(9, 204, 235, 1);
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(9, 204, 235, 1);
-    line-height: 40px;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-  .sort {
-    width: 130px;
-    height: 40px;
-    margin-left: 12px;
+    margin-top: 14px;
+    margin-right: 24px;
   }
   .siteImg {
     width: 200px;
@@ -1331,9 +1291,9 @@ export default {
       height: 22px;
       background: rgba(254, 152, 55, 1);
       border-radius: 2px 0px 10px 0px;
-      font-size: 12px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 1);
+      font-size: $--font-size-small;
+      font-weight: $--font-weight-primary;
+      color: $--color-white;
       line-height: 22px;
       text-align: center;
       position: absolute;
@@ -1342,18 +1302,10 @@ export default {
     }
   }
   .templateName {
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(102, 102, 102, 1);
-    line-height: 20px;
+    font-size: $--font-size-small;
+    font-weight: $--font-weight-base;
+    line-height: 17px;
   }
-  // .templateDomain {
-  //   font-size: 14px;
-  //   font-weight: 400;
-  //   color: rgba(9, 204, 235, 1);
-  //   line-height: 20px;
-  //   cursor: pointer;
-  // }
   .disable {
     opacity: 0.5;
     cursor: not-allowed;
@@ -1361,26 +1313,22 @@ export default {
 }
 // 右侧弹框
 .right-pannel {
-  background: #ffffff;
+  background: $--color-white;
   position: fixed;
   z-index: 2200;
   right: 0;
   top: 0;
   bottom: 0;
-  box-shadow: 0 0 3px #ccc;
   transition: width 0.2s linear;
-  background-color: "#fff";
-  color: #262626;
   overflow: hidden;
   .pannel-head {
     height: 70px;
     line-height: 70px;
     overflow: hidden;
-    border-bottom: 1px solid #efefef;
+    border-bottom: $--border-base;
     span {
-      font-size: 16px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-medium;
+      font-weight: $--font-weight-primary;
       padding: 0 10px;
     }
     .close-pannel {
@@ -1393,8 +1341,8 @@ export default {
     height: 32px;
     background: rgba(242, 255, 234, 1);
     border: 1px solid rgba(199, 221, 185, 1);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: $--font-size-small;
+    font-weight: $--font-weight-primary;
     color: rgba(0, 182, 57, 1);
     line-height: 32px;
     text-align: center;
@@ -1405,9 +1353,8 @@ export default {
     margin-bottom: 0;
     height: 107px;
     .phoneTitle {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
     .phoneInput {
@@ -1417,9 +1364,8 @@ export default {
   .remarkWrap {
     margin: 0 24px;
     .remarkTitle {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
     .remarkInput {
@@ -1433,14 +1379,11 @@ export default {
     margin: 32px 24px 10px;
     height: 97px;
     .templateName {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
     .templateNameInput {
-      //   width: 200px;
-      //   height: 45px;
       margin-top: 15px;
     }
   }
@@ -1448,9 +1391,8 @@ export default {
     height: 113px;
     margin: 0 24px;
     .templateindustryTitle {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
       margin-bottom: 16px;
     }
@@ -1474,9 +1416,8 @@ export default {
   .settingStatusWrap {
     margin-left: 24px;
     .settingStatus {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
     .settingStatusSelect {
@@ -1487,22 +1428,20 @@ export default {
     margin-top: 24px;
     margin-left: 24px;
     .imgTitle {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
       line-height: 20px;
     }
   }
 
   .tipTypeText {
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(38, 38, 38, 1);
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-primary;
     line-height: 20px;
   }
   .tipInfoText {
-    font-size: 14px;
-    font-weight: 400;
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-base;
     color: rgba(140, 140, 140, 1);
     line-height: 20px;
   }
@@ -1512,33 +1451,13 @@ export default {
     width: 470px;
     height: 80px;
     bottom: 0px;
-    border-top: 1px solid #efefef;
+    border-top: $--border-base;
+    display: flex;
+    align-items: center;
     .confirmBtn {
-      margin: 24px;
-      width: 90px;
-      height: 32px;
-      background: rgba(9, 204, 235, 1);
-      font-size: 12px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 32px;
-    }
-    .cancelBtn {
-      width: 90px;
-      height: 32px;
-      border: 1px solid rgba(9, 204, 235, 1);
-      font-size: 12px;
-      font-weight: 400;
-      color: rgba(9, 204, 235, 1);
-      line-height: 32px;
+      margin-left: 16px;
     }
   }
-}
-.blue {
-  color: #09cceb;
-}
-.black {
-  color: #262626;
 }
 </style>
 

@@ -68,6 +68,7 @@ export default {
 .backupBtn {
     width: 90px;
     height: 32px;
+    font-size: 12px;
     background: #ff6b00;
     position: absolute;
     right: 16px;

@@ -2,7 +2,7 @@
   <div class="statistics">
     <div class="title">
       <span>{{sticsTitle}}</span>
-      <span class="btn" @click="closeStatistics">返回</span>
+      <button class="cl-button cl-button--primary_notbg" @click="closeStatistics">返回</button>
     </div>
     <div class="body">
       <h4>{{shareInfo.shareTitle}}</h4>
@@ -187,7 +187,7 @@ export default {
                   data: this.interval == 1 ? this.uvList:this.uvLast
               }
           ],
-          color: ['#09CCEB', '#0595E6']
+          color: ['#09CCEB', '#FF6B00']
         });
     }
   }
@@ -205,16 +205,9 @@ export default {
     display: flex;
     justify-content: space-between;
     line-height: 40px;
-    .btn {
-      width:90px;
-      height:32px;
-      margin-top: 4px;
-      line-height: 32px;
-      border-radius:$--border-radius-base;
-      border:1px solid rgba(9,204,235,1);
-      color: rgba(9,204,235,1);
-      text-align: center;
-      cursor: pointer;
+    button {
+      height: 32px;
+      line-height: 12px;
     }
   }
   .body {
@@ -258,7 +251,6 @@ export default {
         }
         span {
           font-size:24px;
-          font-family:"HelveticaNeue";
           color:rgba(38,38,38,1);
           line-height:24px;
         }
@@ -279,13 +271,12 @@ export default {
         text-align: center;
         line-height: 36px;
         border-radius:18px;
-        font-family:'PingFangSC-Regular,PingFangSC';
         font-weight:400;
         color:rgba(38,38,38,1);
         cursor: pointer;
       }
       .active {
-        background: #0595E6;
+        background: $--color-primary;
         color: white;
       }
     }

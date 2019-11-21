@@ -6,11 +6,12 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <div style="padding: 22px 16px;">
+      <div>
+        <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
         <el-row class="user-list">
           <span class="member-list-title fs14">域名管理</span>
         </el-row>
-        <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
+        
         <DomainMenu ref="domainMenu" @handleTabClick="handleTabClick" @handleBtn="righPanelShow" />
         <el-main>
           <DomainList

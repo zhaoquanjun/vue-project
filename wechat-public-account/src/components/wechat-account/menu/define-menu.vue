@@ -757,7 +757,6 @@ export default {
   margin: 0 auto;
   min-width: 990px;
   border-radius: 20px;
-  font-family: "PingFangSC-Medium,PingFangSC";
   .phone-bg {
     height: 528px;
     border: $--border-base;
@@ -793,7 +792,6 @@ export default {
         line-height: 52px;
         color: #09cceb;
         font-size: 12px;
-        font-family: "PingFangSC";
         font-weight: 400;
         cursor: pointer;
       }
@@ -903,7 +901,6 @@ export default {
         p {
           margin-top: 3px;
           font-size: 12px;
-          font-family: "PingFangSC";
           font-weight: 400;
           color: rgba(164, 178, 191, 1);
           line-height: 20px;
@@ -915,7 +912,7 @@ export default {
       margin-left: 24px;
       width: 100%;
       border-radius: $--border-radius-base;
-      border-left: 1px solid rgba(229, 229, 229, 1);
+      border-left: $--border-base;
       background: #ffffff;
       .menu-operate__header {
         display: flex;
@@ -923,7 +920,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: $--border-base;
         height: 50px;
         p {
           font-size:12px;
@@ -958,7 +955,6 @@ export default {
           p {
             padding-top: 24px;
             font-size: 12px;
-            font-family: "PingFangSC";
             font-weight: 400;
             color: rgba(9, 204, 235, 1);
             line-height: 20px;
@@ -1064,7 +1060,6 @@ export default {
     font-size: 12px;
     line-height: 40px;
     margin-right: 16px;
-    font-family:"PingFangSC-Regular,PingFangSC";
     font-weight:400;
     color:rgba(38,38,38,1);
 }
@@ -1076,9 +1071,8 @@ export default {
   float: left;
   background:rgba(255,255,255,1);
   border-radius:2px;
-  border:1px solid rgba(229,229,229,1);
+  border:$--border-base;
   font-size:12px;
-  font-family:'PingFangSC-Regular,PingFangSC';
   font-weight:400;
   color: #606266;
   line-height:36px;
