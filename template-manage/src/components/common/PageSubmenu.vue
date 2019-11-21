@@ -100,7 +100,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .submenu {
-    width: 130px;
+    width: 110px;
     height: calc(100vh - 50px);
     background: $--color-black-light;
     border-right: $--border-base;
