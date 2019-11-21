@@ -3,7 +3,7 @@
         <div class="tip" v-if="isWarmShow">
             <h5 class="title">温馨提示:</h5>
             <span class="content" >{{warmPromptText}}</span>
-            <button class="handler-btn btn-darkblue-notboard" @click="toSet">立即配置</button>
+            <button class="handler-btn" @click="toSet">立即配置</button>
             <button class="close-tip" @click="closeTip"><i class="iconfont iconguanbi"></i></button>
         </div>
         <RedirectDomainList
@@ -139,7 +139,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .tip {
-    background: #f6fdfe;
+    background: rgba(#ff7b00,.1);
     padding: 8px 16px;
     border: 1px solid #b9cbcf;
     border-radius: 2px;
@@ -148,16 +148,18 @@ export default {
         display: inline-block;
     }
     .content {
-        font-size: 14px;
+        font-size: 12px;
         padding-left: 8px;
     }
     .handler-btn {
         margin-left: 32px;
+        color:#ff6b00;
+        background:rgba(#ff7b00,.2);
     }
     .close-tip{
         float: right;
         i{
-            font-size: 14px;
+            font-size: 12px;
             color: #8c8c8c;
         }
     }

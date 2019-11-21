@@ -1,6 +1,6 @@
 <template>
     <div class="domain-menu">
-        <el-tabs v-model="backupType" type="card" @tab-click="handleTabClick('')">
+        <el-tabs v-model="backupType" @tab-click="handleTabClick('')">
             <el-tab-pane label="域名列表" name="domainList"></el-tab-pane>
             <el-tab-pane label="301重定向" name="301Redirect"></el-tab-pane>
         </el-tabs>
@@ -49,33 +49,24 @@ export default {
     margin-bottom: 12px;
     
 }
-.domain-menu /deep/ .el-tabs--card>.el-tabs__header {
-    border:0;
-    padding: 6px 0;
+.domain-menu /deep/ .el-tabs__nav-wrap::after{
+    height:0;
 }
-.domain-menu /deep/ .el-tabs--card>.el-tabs__header .el-tabs__nav{
-    border:0;
+.el-tabs /deep/ .el-tabs__active-bar.is-top {
+    width: 0 !important;
 }
-.el-tabs /deep/ .el-tabs__item {
-    padding:0;
-    margin:0 12px 0 24px;
-    width:56px;
-    height: 36px;
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(51, 51, 51, 1);
-    line-height: 36px;
-    background: rgba(255, 255, 255, 1);
-    vertical-align: center;
-    border-left:0;
-    box-sizing: border-box;
+.el-tabs /deep/ .el-tabs__item{
+    height:50px;
+    line-height: 50px;
+    margin:0 24px;
+    padding: 0;
+    color:#262626;
 }
-.el-tabs /deep/ .is-active {
-    background: rgb(255, 255, 255);
-    border-bottom:2px solid #ff6b00;
+.el-tabs /deep/ .el-tabs__item.is-active{
+    border-bottom: 2px solid #ff6b00;
 }
 .backupBtn {
-    width: 110px;
+    width: 90px;
     height: 32px;
     background: #ff6b00;
     position: absolute;

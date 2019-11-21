@@ -466,7 +466,7 @@ export default {
 </style>
 <style scoped>
 .el-table /deep/ thead :first-child > .cell {
-    padding-left: 40px;
+    padding-left: 62px;
 }
 
 /* .el-table /deep/ thead th {
@@ -498,15 +498,21 @@ export default {
     height: 40px;
     transform: rotate(0deg);
 }
-
+.el-table /deep/ .el-table__expand-icon .hoverBtn{
+    color:#ff6b00 !important;
+    font-size: 12px!important;
+}
 .el-table /deep/ .el-table__expanded-cell:hover {
     background: #eee !important;
 }
+.el-table /deep/  thead th{
+    padding:9px 0;
+}
+.el-table /deep/  td{
+    padding:5px 0;
+}
 </style>
 <style lang="scss" scoped>
-.table-list {
-    // border: 1px solid #e1e6ea;
-}
 .relove-step {
     margin-top: 12px;
     background: #eeeeee;
@@ -587,7 +593,7 @@ export default {
         }
 
         .islink {
-            color: #00c1de;
+            color: #ff6b00;
             padding-bottom: 16px;
         }
     }
@@ -633,7 +639,7 @@ export default {
 }
 
 .domainStatus0 {
-    color: #f15533;
+    color: #FB4D68;
 }
 
 .domainStatus1 {
@@ -649,7 +655,7 @@ export default {
 }
 
 .domain-name {
-    padding-left: 30px;
+    padding-left: 50px;
 }
 </style>
 
