@@ -115,7 +115,7 @@ created(){
 .submenu {
     width: 130px;
     height: calc(100vh - 50px);
-    background: $--color-black-2;
+    background: $--color-black-light;
     border-right: $--border-base;
     .submenu-title {
         height: 50px;

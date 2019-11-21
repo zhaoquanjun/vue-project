@@ -68,7 +68,7 @@ export default {
 <style scoped lang="scss">
 .leftNavAside {
     width: 100%;
-    background: $--color-black-2 !important;
+    background: $--color-black-light !important;
 }
 .submenu-title {
     height: 50px;

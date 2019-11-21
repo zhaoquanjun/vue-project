@@ -236,7 +236,7 @@ export default {
         cursor: pointer;
         line-height: 50px;
         white-space: nowrap;
-        border-left: 4px solid $--color-black-1;
+        border-left: 4px solid $--color-black-dark;
         .menu-item-content {
             display: inline-block;
             line-height: 50px;
