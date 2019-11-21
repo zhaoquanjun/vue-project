@@ -52,7 +52,7 @@
                         </el-select>
                     </span>
                 </template>
-                <span>排序</span>
+                <!-- <span>排序</span>
                 <span class="select-sort">
                     <el-select
                         size="small"
@@ -79,7 +79,7 @@
                         class="iconfont iconshangyi"
                         :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
                     ></i>
-                </button>
+                </button> -->
             </div>
             <div class="head-item head-right">
                 <button
@@ -95,15 +95,13 @@
                     <i>{{countPic}}</i> 个文件
                 </span>
                 <div>
-                    <button class="cl-button cl-button--small cl-button--text_info" @click="batchMove">移动</button>
-                    <button
-                        v-if="contentType!='Video'"
-                       class="cl-button cl-button--small cl-button--text_info"
-                        @click="batchDownLoad"
-                    >下载</button>
-                    <button class="cl-button cl-button--small cl-button--text_danger" @click="batchDelete">删除</button>
+                    <button class="cl-button cl-button--text_primary" @click="batchMove">移动</button>
+                    <button v-if="contentType!='Video'" class="cl-button cl-button--text_primary" @click="batchDownLoad">下载</button>
+                    <button v-if="contentType=='File'" class="cl-button cl-button--text_primary" @click="handleCommand('top')">置顶</button>
+                    <button v-if="contentType=='File'" class="cl-button cl-button--text_primary" @click="handleCommand('cancelTop')">取消置顶</button>
+                    <button class="cl-button cl-button--text_danger" @click="batchDelete">删除</button>
 
-                    <el-dropdown
+                    <!-- <el-dropdown
                         trigger="click"
                         @command="handleCommand"
                         v-if="contentType=='File'"
@@ -116,9 +114,8 @@
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="top">置顶</el-dropdown-item>
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                            <!-- <el-dropdown-item command="delete">删除</el-dropdown-item> -->
                         </el-dropdown-menu>
-                    </el-dropdown>
+                    </el-dropdown> -->
                 </div>
             </div>
         </template>
@@ -321,5 +318,15 @@ export default {
     &:hover {
         opacity: 0.8;
     }
+}
+.handle-batch button {
+    padding: 9px 16px;
+    margin: 0;
+    min-width: 60px;
+}
+.head-middle {
+    margin-left: 24px;
+    margin-right: auto;
+    padding-right: 0;
 }
 </style>
