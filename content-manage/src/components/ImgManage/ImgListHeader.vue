@@ -15,7 +15,7 @@
                 </el-input>
             </div>
             <div class="head-item head-middle">
-                <span>排序</span>
+                <!-- <span>排序</span>
                 <span class="select-sort">
                     <el-select
                         size="small"
@@ -42,7 +42,7 @@
                         class="iconfont iconshangyi"
                         :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
                     ></i>
-                </button>
+                </button> -->
 
                 <button class="list-mode mode-item" @click="showType('list')" v-show="!isPopup">
                    
@@ -156,6 +156,11 @@ export default {
     &:hover{
         opacity: 0.8;
     }
+}
+.head-middle {
+    margin-left: 0;
+    padding-right: 0;
+    margin-right: auto;
 }
 .handle-batch button {
     padding: 9px 16px;

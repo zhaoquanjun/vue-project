@@ -7,6 +7,7 @@
             class="content-table"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -64,7 +65,7 @@
                 </template>
             </el-table-column> -->
 
-            <el-table-column min-width="100" prop="createTimeStr" label="创建时间"></el-table-column>
+            <el-table-column min-width="100" prop="createTimeStr" sortable='custom' label="创建时间"></el-table-column>
 
             <el-table-column
                 width="150"
@@ -267,6 +268,15 @@ export default {
         clearSelection() {
             this.$refs.multipleTable.clearSelection();
         },
+        //创建时间排序
+        sortChange(row){
+            if (row.order == 'ascending') {
+                this.articleSearchOptions.isDescending  = false;
+            } else {
+                this.articleSearchOptions.isDescending = true;
+            }
+            this.$emit("contentTableList");
+        },
         /**
          * 预览
          */
@@ -293,6 +303,12 @@ export default {
 }
 .title-color{
     color: #262626;
+}
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
 }
 </style>
 

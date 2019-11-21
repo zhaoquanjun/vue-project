@@ -15,7 +15,7 @@
             </div>
 
             <div class="head-item head-right">
-                <div class="head-item">
+                <div class="head-item head-handle-right">
                     <span>状态</span>
                     <span class="select-item">
                         <el-select
@@ -48,7 +48,7 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span>排序</span>
+                    <!-- <span>排序</span>
                     <span class="select-sort select-item">
                         <el-select
                             size="small"
@@ -69,7 +69,7 @@
                     </button>
                     <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
                         <i class="iconfont iconshangyi" :class=" ascSort ? 'desc-active-color': 'desc-regular-color' " ></i>
-                    </button>
+                    </button> -->
                 </div>
                 <div class="head-item head-handle-btn">
                     <button class="cl-button cl-button--primary" @click="addArticle">新增文章</button>
@@ -277,10 +277,12 @@ export default {
 
 .head-right {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    padding-left: 42px;
-   
+    width: calc(100% - 200px);
+    .head-handle-right {
+        margin-left: 24px;
+    }
     .add-article {
         background: rgba(1, 192, 222, 1);
         color: #fff;

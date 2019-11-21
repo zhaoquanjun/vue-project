@@ -7,6 +7,7 @@
             tooltip-effect="dark"
             class="content-table table-content"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -56,10 +57,10 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="sizeStr" min-width="100" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sizeStr" min-width="100" label="大小" sortable='custom' show-overflow-tooltip></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" min-width="150" label="上传时间">
+            <el-table-column prop="createTimeStr" min-width="150" sortable='custom' label="上传时间">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createTimeStr" placement="top">
                         <span>{{ scope.row.createTimeStr }}</span>
@@ -272,7 +273,25 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
-        }
+        },
+        //改变排序
+        sortChange(row){
+                    // value: "CreateTime",
+                    // label: "创建时间"
+                    // value: "FileSize",
+                    // label: "文件大小"
+            if (row.prop == 'sizeStr') {
+                this.picSearchOptions.orderByType = "FileSize";
+            } else {
+                this.picSearchOptions.orderByType = "CreateTime";
+            }
+            if (row.order == 'ascending') {
+                this.picSearchOptions.isDescending  = false;
+            } else {
+                this.picSearchOptions.isDescending = true;
+            }
+            this.$emit("getList");
+        },
     }
 };
 </script>
@@ -292,6 +311,12 @@ export default {
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
     align-items: center;
+}
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
 }
 
 </style>

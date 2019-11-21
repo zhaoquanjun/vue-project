@@ -52,7 +52,7 @@
                         </el-select>
                     </span>
                 </template>
-                <span>排序</span>
+                <!-- <span>排序</span>
                 <span class="select-sort">
                     <el-select
                         size="small"
@@ -79,7 +79,7 @@
                         class="iconfont iconshangyi"
                         :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
                     ></i>
-                </button>
+                </button> -->
             </div>
             <div class="head-item head-right">
                 <button
@@ -323,5 +323,10 @@ export default {
     padding: 9px 16px;
     margin: 0;
     min-width: 60px;
+}
+.head-middle {
+    margin-left: 24px;
+    margin-right: auto;
+    padding-right: 0;
 }
 </style>

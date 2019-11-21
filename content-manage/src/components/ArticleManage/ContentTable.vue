@@ -7,6 +7,7 @@
             class="content-table"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -51,7 +52,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="createTimePrt" label="创建时间" min-width="80">
+            <el-table-column prop="createTimePrt" sortable='custom' label="创建时间" min-width="80">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createTimePrt" placement="top">
                         <span>{{ scope.row.createTimePrt }}</span>
@@ -213,6 +214,15 @@ export default {
             this.$emit("changeOperateName", "复制");
             this.$emit("batchCopy", [row.id]);
         },
+        //创建时间排序
+        sortChange(row){
+            if (row.order == 'ascending') {
+                this.articleSearchOptions.isDescending  = false;
+            } else {
+                this.articleSearchOptions.isDescending = true;
+            }
+            this.$emit("getArticleList");
+        },
 
         handleMoreOperate(flag) {
             let row = this.row;
@@ -257,6 +267,13 @@ export default {
 .title-color{
     color: #262626;
 }
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
+}
+
 </style>
 
 

@@ -19,7 +19,7 @@
             </div>
 
             <div class="head-item head-right">
-                <div class="head-item">
+                <div class="head-item head-handle-right">
                     <span>状态</span>
                     <span class="select-item">
                         <el-select
@@ -52,7 +52,7 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span>排序</span>
+                    <!-- <span>排序</span>
                     <span class="select-sort select-item">
                         <el-select
                             size="small"
@@ -79,7 +79,7 @@
                             class="iconfont iconshangyi"
                             :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
                         ></i>
-                    </button>
+                    </button> -->
                 </div>
                 <div class="head-item head-handle-btn">
                     <!-- <button class="btn-lightblue btn-small" @click="importArticle">导入产品</button> -->
@@ -298,6 +298,15 @@ export default {
 .head-item {
     display: inline-block;
     flex: none;
+}
+.head-right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 200px);
+    .head-handle-right {
+        margin-left: 24px;
+    }
 }
 .head-handle-btn {
     padding-left: 30px;
