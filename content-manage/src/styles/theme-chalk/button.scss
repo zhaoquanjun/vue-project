@@ -48,7 +48,9 @@
         border-color: $--button-disabled-defualt-background-color;
         background: $--button-disabled-defualt-background-color;
     }
-
+    &.is-block {
+        width: 100%;
+     }
 
     &--text{
         border-color: transparent;

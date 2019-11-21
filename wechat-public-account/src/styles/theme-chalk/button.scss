@@ -43,6 +43,10 @@
         }
     }
 
+    &.is-block {
+        width: 100%;
+    }
+
     &--disabled {
         color: $--color-white;
         border-color: $--button-disabled-defualt-background-color;
