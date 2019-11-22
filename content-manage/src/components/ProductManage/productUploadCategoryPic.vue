@@ -243,7 +243,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-input /deep/ .el-input__inner {
     padding-right: 50px;
 }
@@ -251,7 +251,7 @@ export default {
     padding: 10px;
 }
 .uploadCategoryPic /deep/ .el-form .el-form-item__label {
-    font-size: 12px;
+    font-size: $--font-size-small;
     text-align: left;
 }
 .uploadCategoryPic /deep/ .el-form .el-form-item__error{
@@ -367,7 +367,7 @@ export default {
 .article-cover {
     color: #262626;
     font-weight: 500;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 </style>
 

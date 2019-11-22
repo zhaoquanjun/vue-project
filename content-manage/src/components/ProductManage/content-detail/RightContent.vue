@@ -362,7 +362,7 @@ export default {
 .article-cover {
     color: #262626;
     font-weight: 500;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 .modal-footer {
     height: 60px;

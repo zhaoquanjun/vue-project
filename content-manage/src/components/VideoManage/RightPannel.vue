@@ -69,7 +69,7 @@ export default {
   .pannel-head {
     height: 40px;
     line-height: 40px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     overflow: hidden;
     border-bottom: $--border-base;
     span {

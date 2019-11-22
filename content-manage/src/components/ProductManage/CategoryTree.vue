@@ -489,7 +489,7 @@ export default {
             display: block;
             padding: 8px 14px;
             text-align: left;
-            font-size: 14px;
+            font-size: $--font-size-small;
             &:hover {
                 background: $--background-color-hover;
             }

@@ -1041,7 +1041,7 @@ export default {
             border-radius: 30px;
             padding: 5px 10px;
             margin-bottom: 5px;
-            font-size: 12px;
+            font-size: $--font-size-small;
             margin-right: 5px;
             background: #609ee9;
             .el-icon-close {
@@ -1051,7 +1051,7 @@ export default {
     }
     .el-select__caret {
         color: #c0c4cc;
-        font-size: 14px;
+        font-size: $--font-size-small;
         cursor: pointer;
     }
 }
@@ -1161,7 +1161,7 @@ export default {
     justify-content: space-between;
     border-bottom: $--border-base;
     .title{
-        font-size: 16px;
+        font-size: $--font-size-medium;
         font-weight: 500;
         color: rgba(38,38,38,1);
     }

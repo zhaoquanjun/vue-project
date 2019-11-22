@@ -606,7 +606,7 @@ export default {
     height: 40px;
     line-height: 40px;
     border-color: #a1a8b1;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 </style>
 <style scoped lang="scss">

@@ -129,7 +129,7 @@ export default {
         box-sizing: border-box;
         .title {
             line-height: 25px;
-            font-size: 18px;
+            font-size: $--font-size-large;
             font-weight: 500;
         }
         .download-btn {

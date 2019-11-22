@@ -170,7 +170,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-card /deep/ .el-card__body {
     text-align: center;
 }
@@ -236,7 +236,8 @@ export default {
     text-align: center;
     color: #fff;
     opacity: 0;
-    font-size: 20px;
+    font-size: $--font-size-extra-large;
+;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s;
 }
@@ -264,7 +265,7 @@ export default {
 .article-cover {
     color: #262626;
     font-weight: 600;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 .icon-change {
     display: inline-block;

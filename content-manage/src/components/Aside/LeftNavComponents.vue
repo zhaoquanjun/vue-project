@@ -74,7 +74,7 @@ export default {
     line-height: 50px;
     color: $--color-white;
     text-align: center;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 .submenu-list {
         li {
@@ -102,7 +102,7 @@ export default {
             i {
               width: 14px;
               height: 32px;
-              font-size: 14px;
+              font-size: $--font-size-small;
               line-height: 32px;
               padding: 0 12px;
               color: $--color-white;

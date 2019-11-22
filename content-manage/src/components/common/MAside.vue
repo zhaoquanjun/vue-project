@@ -237,7 +237,7 @@ export default {
         }
         .menu-icon {
             display: inline-block;
-            font-size: 14px;
+            font-size: $--font-size-small;
             padding: 0 23px;
             text-align: center;
             line-height: 50px;
@@ -248,7 +248,7 @@ export default {
         .iconicon-des-Arrow{
             position: absolute;
             left: 114px;
-            font-size: 12px;
+            font-size: $--font-size-small;
             line-height: 52px;
             vertical-align: middle;
             color: $--color-text-regular;

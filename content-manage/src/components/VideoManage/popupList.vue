@@ -313,7 +313,7 @@ export default {
 #table-list /deep/ .el-table thead th .cell {
     color: #a1a8b1;
     font-weight: 400;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 </style>
 <style lang="scss" scoped>
@@ -327,7 +327,7 @@ export default {
     border-bottom: $--border-base;
     div {
       display: inline-block;
-      font-size: 14px;
+      font-size: $--font-size-small;
       font-weight: 400;
       color: rgba(161, 168, 177, 1);
       line-height: 51px;
@@ -362,7 +362,7 @@ export default {
   }
 }
 .file-title {
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: 400;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
@@ -380,7 +380,7 @@ export default {
   padding-top: 24px;
 }
 .format {
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: 400;
   color: rgba(161, 168, 177, 1);
   line-height: 20px;
@@ -414,7 +414,7 @@ export default {
   }
 }
 .contentInfo {
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: 400;
   color: rgba(38, 38, 38, 1);
   line-height: 160px;
@@ -530,10 +530,10 @@ export default {
     }
   }
   .title {
-    font-size: 14px;
+    font-size: $--font-size-small;
   }
   .storage-content {
-    font-size: 14px;
+    font-size: $--font-size-small;
     color: #666666;
   }
 }
