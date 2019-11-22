@@ -11,6 +11,7 @@ const cdn = {
         "https://cdn.bootcss.com/vuex/3.1.1/vuex.min.js"
     ]
 }
+
 function resolve(dir) {
     return path.join(__dirname, '.', dir)
 }
@@ -21,7 +22,7 @@ module.exports = {
     publicPath: '/',
     // 打包 不再使用sourcemap
     productionSourceMap: false,
-    lintOnSave:false,
+    lintOnSave: false,
     chainWebpack: config => {
         config.entry('main').add('babel-polyfill');
         config.resolve.alias.set('_c', path.resolve(__dirname, 'src/components'));
@@ -41,16 +42,20 @@ module.exports = {
                     args[0].cdn = cdn;
                     return args;
                 });
+            
+
+           
         }
+          
     },
     css: {
         loaderOptions: {
             sass: {
-              data: `@import "@/styles/theme-chalk/common/var.scss";`
-          }
+                data: `@import "@/styles/theme-chalk/common/var.scss";`
+            }
         }
     },
-   
+
     devServer: {
         disableHostCheck: true,
         port: 8081,
@@ -59,28 +64,19 @@ module.exports = {
         // 生产环境配置
         if (isProduction) {
             config.externals = {
-                'vue':'Vue',
-                'vuex':'Vuex',
-                'vue-router':'VueRouter',
-                'axios':'axios',
+                'vue': 'Vue',
+                'vuex': 'Vuex',
+                'vue-router': 'VueRouter',
+                'axios': 'axios',
                 'element-ui': 'ELEMENT',
             }
         };
         config.plugins.push(
             new webpack.ProvidePlugin({
-              'window.Quill': 'quill/dist/quill.js',
-              'Quill': 'quill/dist/quill.js'
+                'window.Quill': 'quill/dist/quill.js',
+                'Quill': 'quill/dist/quill.js'
             }),
         )
     },
-    // configureWebpack:{
-    //     plugins: [
-    //         new webpack.ProvidePlugin({
-    //           'window.Quill': 'quill/dist/quill.js',
-    //           'Quill': 'quill/dist/quill.js'
-    //         }),
-    //     ]
-    // }
+
 }
-
-
