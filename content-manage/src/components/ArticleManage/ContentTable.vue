@@ -15,7 +15,7 @@
                     <p>无数据</p>
                 </div>
             </template>
-            <el-table-column type="selection" width="80"></el-table-column>
+            <el-table-column type="selection" ></el-table-column>
 
             <el-table-column
                 prop="title"
