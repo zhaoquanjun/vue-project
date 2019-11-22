@@ -1,4 +1,4 @@
-.el-input__inner:focus{
+.el-input__inner:focus,.el-textarea__inner:focus{
     border-color: $--color-primary;
 }
 .el-select .el-input.is-focus .el-input__inner{
