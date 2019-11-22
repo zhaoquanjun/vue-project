@@ -255,7 +255,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-card /deep/ .el-card__body {
     text-align: center;
     padding: 15px;
@@ -320,7 +320,7 @@ export default {
     bottom: 19px;
     top: auto;
     width: 27px;
-    border: 1px solid #fff;
+    border: $--border-base;
     height: 27px;
     border-radius: 50%;
 }

@@ -380,7 +380,7 @@ export default {
   top: 50px;
   left: 0;
   width: 100%;
-  border: 1px solid #dcdfe6;
+  border: $--border-base;
   padding: 5px;
   box-sizing: border-box;
   li {

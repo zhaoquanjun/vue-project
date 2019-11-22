@@ -286,7 +286,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-input /deep/ .el-input__inner {
   padding-right: 50px;
 }
@@ -302,7 +302,7 @@ export default {
   align-items: center;
 } */
 #table-list /deep/ .el-table td {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: $--border-base;
 }
 /* table 头部颜色 和 高度 */
 #table-list /deep/ .el-table thead th {
@@ -320,11 +320,11 @@ export default {
 .table {
   height: 537px;
   width: 870px;
-  border: 1px solid #e5e5e5;
+  border: $--border-base;
   .tableTitle {
     width: 100%;
     height: 51px;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: $--border-base;
     div {
       display: inline-block;
       font-size: 14px;
@@ -354,7 +354,7 @@ export default {
     .tableListItem {
       height: 160px;
       border: 2px solid transparent;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: $--border-base;
     }
     .checked {
       border: 2px solid #09cceb;

@@ -469,7 +469,7 @@ export default {
             width: 86px;
             height: 30px;
             border: none;
-            border: 1px solid rgba(229, 229, 229, 1);
+            border: $--border-base;
         }
     }
     .tree-handle {

@@ -271,7 +271,7 @@ export default {
     width: 27px;
     height: 27px;
     border: 1px solid #fff;
-    border-radius: 50%;
+    border-radius: $--border-radius-circle;
     background: url("~img/pic-icon/switch.png") no-repeat center;
     background-size: 50%;
 }
@@ -282,7 +282,7 @@ export default {
     width: 27px;
     height: 27px;
     border: 1px solid #fff;
-    border-radius: 50%;
+    border-radius: $--border-radius-circle;
     background: url("~img/pic-icon/delete-1.png") no-repeat center;
     background-size: 50%;
 }

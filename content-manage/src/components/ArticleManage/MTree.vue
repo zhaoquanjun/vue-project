@@ -334,6 +334,6 @@ export default {
     padding-right: 5px;
 }
 .aside-tree{
-    border-left-color:#ff6b00;
+    border-left-color:$--color-primary;
 }
 </style>

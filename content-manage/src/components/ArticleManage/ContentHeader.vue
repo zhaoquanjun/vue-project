@@ -255,7 +255,7 @@ export default {
     padding: 6px;
     &:hover{
         background:rgba(240,243,247,1);
-        border-radius:4px;
+        border-radius:$--border-radius-base;
     }
 }
 .select-item {

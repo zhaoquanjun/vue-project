@@ -186,12 +186,12 @@ export default {
         button {
             width: 70px;
             height: 32px;
-            border: 1px solid rgba(0, 193, 222, 1);
+            border: 1px solid $--color-primary;
             margin-left: 16px;
-            color: #00c1de;
+            color: $--color-primary;
         }
         > :last-child {
-            background: #00c1de;
+            background: $--color-primary;
             color: #fff;
         }
     }

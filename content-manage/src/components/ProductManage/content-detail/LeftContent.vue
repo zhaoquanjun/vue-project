@@ -1031,12 +1031,12 @@ export default {
     padding: 5px;
     min-height: 20px;
     width: 250px;
-    border: 1px solid #dcdfe6;
+    border: $--border-base;
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     .category-list {
         .category-item {
             display: inline-block;
-            border: 1px solid #eee;
+            border: $--border-base;
             color: #fff;
             border-radius: 30px;
             padding: 5px 10px;
@@ -1150,7 +1150,7 @@ export default {
     transform: translate(-50%, -50%);
     overflow: hidden;
     box-shadow: 0px 2px 32px 4px rgba(0,0,0,0.13);
-    border: 1px solid rgba(229,229,229,1);
+    border: $--border-base;
     border-radius: 3px;
 }
 #videoContent .modal-header {
@@ -1159,7 +1159,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: $--border-base;
     .title{
         font-size: 16px;
         font-weight: 500;
@@ -1195,17 +1195,16 @@ export default {
         margin-top: 24px;
         width: 76px;
         height: 40px;
-        background: rgba(0,193,222,1);
         border-radius: 2px;
         // line-height: 40px;
-        background: rgba(0, 193, 222, 1);
+        background: $--color-primary;
         margin-right: 16px;
         color: #fff;
     }
     .cancel {
-        color: rgba(9,204,235,1);
+        color: $--color-primary;
         background: rgba(255,255,255,1);
-        border: 1px solid rgba(9,204,235,1);
+        border: 1px solid $--color-primary;
     }
 }
 </style>
