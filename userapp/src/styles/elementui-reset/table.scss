@@ -12,6 +12,9 @@
     thead th,.el-table tbody td{
         padding: 8px 0;
     }
+    td, th.is-leaf{
+        border-bottom: $--border-base; 
+    }
     tbody .el-table__row .cell{
         display: flex;
         align-items: center;
