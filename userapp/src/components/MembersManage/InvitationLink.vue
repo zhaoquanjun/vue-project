@@ -19,7 +19,7 @@
             <div class="auth-tip" v-if="authtipShow">请至少选择一项权限</div>
             <Authorization />
             <footer class="footer">
-                <button class="create-link" @click="generate">生成链接</button>
+                <button class="cl-button cl-button--primary" @click="generate">生成链接</button>
             </footer>
         </template>
     </div>
@@ -171,14 +171,6 @@ export default {
         position: absolute;
         bottom: 14px;
         left: 16px;
-        .create-link {
-            border: none;
-            font-size: 12px;
-            width: 90px;
-            height: 32px;
-            color: #fff;
-            background: rgba(0, 193, 222, 1);
-        }
     }
 }
 
