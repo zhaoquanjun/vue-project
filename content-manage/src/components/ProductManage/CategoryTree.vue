@@ -491,7 +491,7 @@ export default {
             text-align: left;
             font-size: 14px;
             &:hover {
-                background: #e0fcff;
+                background: $--background-color-hover;
             }
         }
     }

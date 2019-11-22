@@ -306,15 +306,15 @@ export default {
 #content-manage .uploadCategoryPic {
     .pannel-footer {
         text-align: right;
-        padding: 5px 8px 0 0;
+        padding: 8;
         box-sizing: border-box;
         button {
             width: 58px;
         }
-        .cancel {
-            border: 1px solid #00c1de;
-            color: #00c1de;
+        .cancel {            
             background: #fff;
+            border: 1px solid $--color-primary;;
+            color: $--color-primary;
         }
     }
 }

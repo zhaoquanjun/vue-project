@@ -70,7 +70,7 @@
             font-size: 14px;
 
             &:hover {
-                background: #e0fcff;
+                background: $--background-color-hover;
             }
         }
     }
@@ -170,11 +170,11 @@
 
     span {
         display: inline-block;
-        height: 70px;
-        line-height: 70px;
+        height: 44px;
+        line-height: 44px;
         width: 100%;
         box-sizing: border-box;
-        font-size: 18px;
+        font-size: 14px;
         border-bottom: $--border-base
     }
 }
