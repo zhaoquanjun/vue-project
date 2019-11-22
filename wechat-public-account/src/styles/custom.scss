@@ -1,6 +1,8 @@
 body {
     min-width: 1170px;
     min-height: 500px;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial;
     color: $--color-text-primary;
     background: $--background-color-selected;
@@ -185,7 +187,7 @@ body {
 }
 
 .submenu-aside {
-    width: 150px !important;
+    width: 130px !important;
 }
 
 // popover 弹框样式
