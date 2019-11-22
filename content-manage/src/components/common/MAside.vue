@@ -6,7 +6,7 @@
         @mouseleave="collapseClose"
     >
         <el-aside class="m-asideleft" :style="{width:130+'px'}">
-            <ul class="left-menu">
+            <ul @mouseleave="collapseListClose" class="left-menu">
                 <li
                     ref="menuItem"
                     class="left-menu-item"
@@ -105,6 +105,11 @@ export default {
         collapseOpen(width, time) {
             this.width = 130;
         },
+        collapseListClose() {
+            setTimeout(()=>{
+                this.width = 130;
+            },250)
+        },
         collapseClose() {
             setTimeout(()=>{
                 this.width = 60;
@@ -175,7 +180,8 @@ export default {
     overflow: hidden;
     transition: 0.2s ease-in-out;
     background-color:$--color-black-dark;
-   
+    height: calc(100vh - 50px);
+    
     // border-right: 1px solid rgb(229, 229, 229);
 }
 .m-asideleft {
@@ -222,8 +228,6 @@ export default {
      
 }
 .left-menu {
-    background-color:$--color-black-dark;
-    height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
