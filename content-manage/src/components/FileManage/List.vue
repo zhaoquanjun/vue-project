@@ -7,6 +7,7 @@
             class="content-table"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -51,18 +52,18 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip min-width="80"></el-table-column>
+            <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip min-width="80"></el-table-column>
             <!-- <el-table-column prop="downloadCount" label="置顶" min-width="80">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
             </el-table-column>-->
-            <el-table-column prop="downloadCount" min-width="80" label="下载次数">
+            <el-table-column prop="downloadCount" sortable='custom' min-width="90" label="下载次数">
                 <template slot-scope="scope">
                     <span>{{ scope.row.downloadCount}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="createTimeStr" min-width="150" label="上传时间">
+            <el-table-column prop="createTimeStr" sortable='custom' min-width="150" label="上传时间">
                 <template slot-scope="scope">
                     <el-tooltip
                         class="item"
@@ -384,6 +385,28 @@ export default {
                     this.$emit("batchRemove", [row.id]);
                     break;
             }
+        },
+        //改变排序
+        sortChange(row){
+                    // value: "CreateTime",
+                    // label: "创建时间"
+                    // value: "FileSize",
+                    // label: "文件大小"
+                    // value: "DownloadCount",
+                    // label: "下载次数"
+            if (row.prop == 'sizeStr') {
+                this.picSearchOptions.orderByType = "FileSize";
+            } else if (row.prop == 'downloadCount'){
+                this.picSearchOptions.orderByType = "DownloadCount";
+            } else {
+                this.picSearchOptions.orderByType = "CreateTime";
+            }
+            if (row.order == 'ascending') {
+                this.picSearchOptions.isDescending  = false;
+            } else {
+                this.picSearchOptions.isDescending = true;
+            }
+           this.$emit("getPicList");
         }
     },
     watch: {
@@ -404,6 +427,12 @@ export default {
 .file-cover {
     width: 22px;
     height: 28px;
+}
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
 }
 </style>
 

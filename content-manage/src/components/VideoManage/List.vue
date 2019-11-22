@@ -7,6 +7,7 @@
             class="content-table table-content"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -56,7 +57,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
             <el-table-column prop="categoryName" label="分类" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -65,7 +66,7 @@
             </el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" label="上传时间" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" sortable='custom' label="上传时间" width="150" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
@@ -297,6 +298,25 @@ export default {
                 return fileExt;
             }
             return "";
+        },
+        //改变排序
+        sortChange(row){
+                    // value: "CreateTime",
+                    // label: "创建时间"
+                    // value: "FileSize",
+                    // label: "文件大小"
+            console.log(row,'row')   
+            if (row.prop == 'sizeStr') {
+                this.picSearchOptions.orderByType = "FileSize";
+            } else {
+                this.picSearchOptions.orderByType = "CreateTime";
+            }
+            if (row.order == 'ascending') {
+                this.picSearchOptions.isDescending  = false;
+            } else {
+                this.picSearchOptions.isDescending = true;
+            }
+            this.$emit("getList");
         }
     },
     watch: {
@@ -307,7 +327,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-input /deep/ .el-input__inner {
     padding-right: 50px;
 }
@@ -315,6 +335,13 @@ export default {
     display: flex;
     align-items: center;
 }
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
+}
+
 
 </style>
 <style lang="scss" scoped>

@@ -1,23 +1,27 @@
-
-
-body{
+body {
     min-width: 1170px;
     min-height: 500px;
-    font-family:  "PingFang SC",  "Microsoft YaHei", "Helvetica Neue",  Arial;
-    color:$--color-text-primary;
-    background:$--background-color-selected;
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial;
+    color: $--color-text-primary;
+    background: $--background-color-selected;
     overflow: hidden;
 }
-.page-scroll{
+
+.page-scroll {
     overflow: auto;
     height: calc(100vh - 50px);
 }
-.ellipsis{
+
+.ellipsis {
     display: inline-block;
-    overflow: hidden;/*超出部分隐藏*/
-    text-overflow:ellipsis;/* 超出部分显示省略号 */
-    text-overflow:ellipsis;/* 超出部分显示省略号 */
-    white-space: nowrap;/*规定段落中的文本不进行换行 */
+    overflow: hidden;
+    /*超出部分隐藏*/
+    text-overflow: ellipsis;
+    /* 超出部分显示省略号 */
+    text-overflow: ellipsis;
+    /* 超出部分显示省略号 */
+    white-space: nowrap;
+    /*规定段落中的文本不进行换行 */
 }
 
 .pannel-footer {
@@ -28,6 +32,7 @@ body{
     padding: 15px 17px;
     border-top: 1px solid #efefef;
     background: #fff;
+
     .button {
         padding: 0 15px;
         height: 32px;
@@ -36,6 +41,7 @@ body{
         color: #fff;
         border-radius: 2px;
     }
+
     .cancel {
         margin-left: 20px;
         background: #fff;
@@ -43,10 +49,12 @@ body{
         color: rgba(0, 193, 222, 1);
     }
 }
+
 // 自定义input错误提示图标
 .ym-form-item__error {
     color: #262626;
     padding-top: 8px;
+
     &::before {
         display: inline-block;
         content: "";
@@ -58,10 +66,12 @@ body{
         background-size: contain;
     }
 }
+
 // 表单错误提示图标
 .el-form-item__error {
     color: #262626;
     padding-top: 8px;
+
     &::before {
         display: inline-block;
         content: "";
@@ -73,10 +83,12 @@ body{
         background-size: contain;
     }
 }
+
 // 图片弹窗 确认 底部按钮
 .modal-footer {
     padding-top: 20px;
     float: right;
+
     button {
         width: 66px;
         height: 32px;
@@ -84,6 +96,7 @@ body{
         margin-right: 8px;
         color: #fff;
     }
+
     .cancel {
         color: #262626;
         background: rgba(238, 238, 238, 1);
@@ -93,11 +106,13 @@ body{
 // table 无内容时的样式
 .empty-table {
     text-align: center;
+
     img {
         width: 80px;
         vertical-align: middle;
         padding: 18px 28px;
     }
+
     p {
         color: #8c8c8c;
     }
@@ -115,6 +130,7 @@ body{
     color: #fe9837;
     margin-bottom: 16px;
 }
+
 // 蒙层
 .mask {
     position: fixed;
@@ -129,10 +145,12 @@ body{
     opacity: 0.5;
     transition: all cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 // 小手样式
-.cursor-p{
+.cursor-p {
     cursor: pointer;
 }
+
 //内容管理 table 封面 
 .cover {
     width: 32px;
@@ -143,12 +161,12 @@ body{
     flex: none;
 }
 
-.fs14{
+.fs14 {
     font-size: 14px
 }
 
 
-.icon-size{
+.icon-size {
     display: inline-block;
     width: 16px;
     height: 16px;
@@ -165,6 +183,19 @@ body{
     background: rgba(253, 240, 237, 1);
     border: 1px solid rgba(253, 171, 153, 1);
 }
-.submenu-aside{
+
+.submenu-aside {
     width: 150px !important;
+}
+
+// popover 弹框样式
+.textareaWrap {
+    background: $--color-white;
+    margin: 12px 4px;
+    position: relative;
+
+    .btn-wrap {
+        text-align: right;
+        padding-top: 16px;
+    }
 }

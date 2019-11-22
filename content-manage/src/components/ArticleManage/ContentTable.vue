@@ -7,6 +7,7 @@
             class="content-table"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -44,7 +45,15 @@
 
             <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
 
-            <el-table-column prop="createTimePrt" label="创建时间" min-width="100">
+            <el-table-column prop="createUser" label="作者" min-width="100">
+                <template slot-scope="scope">
+                    <el-tooltip class="item" effect="dark" :content="scope.row.createUser" placement="top">
+                        <span style="width:100px" class="ellipsis">{{ scope.row.createUser }}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="createTimePrt" sortable='custom' label="创建时间" min-width="80">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createTimePrt" placement="top">
                         <span>{{ scope.row.createTimePrt }}</span>
@@ -206,6 +215,15 @@ export default {
             this.$emit("changeOperateName", "复制");
             this.$emit("batchCopy", [row.id]);
         },
+        //创建时间排序
+        sortChange(row){
+            if (row.order == 'ascending') {
+                this.articleSearchOptions.isDescending  = false;
+            } else {
+                this.articleSearchOptions.isDescending = true;
+            }
+            this.$emit("getArticleList");
+        },
 
         handleMoreOperate(flag) {
             let row = this.row;
@@ -246,20 +264,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    @import "@/styles/content-manage/manege-table.scss";
-    .title-color{
-        color: #262626;
-    }
-    // checkbox 尺寸
-    #table-list /deep/ .el-checkbox__inner{
-        width:18px;
-        height:18px;
-        margin-left:16px;
-    }
-    #table-list /deep/ .el-table__row>td{
-        height:50px;
-        padding:9px 0;
-    }
+@import "@/styles/content-manage/manege-table.scss";
+.title-color{
+    color: #262626;
+}
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
+}
+
 </style>
 
 

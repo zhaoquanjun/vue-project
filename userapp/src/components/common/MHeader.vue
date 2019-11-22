@@ -1,18 +1,18 @@
 <template>
   <div class="header">
-    <el-row :gutter="20">
-      <el-col :span="12">
+    <div class="headerWrap">
+      <div>
         <div class="head-left head-item">
           <span class="logo-icon">
-            <i class="iconfont iconicon-logo" style="font-size:24px"></i>
+            <i class="iconfont iconicon-logo" style="font-size: 24px;line-height:50px"></i>
           </span>
           <span @click="changeApp" class="headAppName">
             <span class="headAppNameInfo">已购买服务</span>
             <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;vertical-align:middle"></i>
           </span>
         </div>
-      </el-col>
-      <el-col :span="12">
+      </div>
+      <div>
         <div class="head-right head-item">
           <span style="cursor: pointer">
             <i
@@ -28,144 +28,159 @@
             ></i>
             <b class="item-btn">通知</b>
           </span>
-          <span @mouseenter="dropdownAvatarShow" @mouseleave="dropdownAvatarhide">
+          <span
+            style="line-height:50px"
+            @mouseenter="dropdownAvatarShow"
+            @mouseleave="dropdownAvatarhide"
+          >
             <p class="avatar" style="cursor: pointer">
               <img :src="headUrl" alt />
             </p>
-            <dl class="login-set dropdown-avatar-menu" v-show="isdropdownAvatarShow">
+            <dl class="login-set dropdown-avatar-menu" v-if="isdropdownAvatarShow">
               <dd @click="pannelShow">个人设置</dd>
               <dd @click="signOut">退出控制台</dd>
             </dl>
           </span>
         </div>
-      </el-col>
-      <div class="my-chose-app">
-        <el-dialog
-          :fullscreen="true"
-          :visible.sync="changeAppShow"
-          :close-on-click-modal="false"
-          :modal-append-to-body="false"
-          :append-to-body="false"
-          :show-close="false"
-          style="margin-top:50px"
-          :modal="false"
-          class="myApp"
-        >
-          <div slot="title">
-            <div class="myAppTitle">
-              已购买的服务
-              <span style="cursor:pointer;" @click="closeChangeApp">
-                <i class="iconfont iconguanbi" style="color:#262626;font-size:17px;"></i>
-              </span>
-            </div>
-          </div>
-          <div class="appBackground" v-scrollBar>
-            <div class="app-title">
-              <span class="app-title-text">
-                <span class="app-title-border"></span>
-                已购买的服务
-              </span>
-              <el-input
-                v-model="keyword"
-                placeholder="输入服务名称或备注内容搜索"
-                @keyup.enter.native="search"
-                clearable
-                class="input-with-select"
-              >
-                <i
-                  class="el-icon-search el-input__icon"
-                  style="cursor: pointer;float:right"
-                  slot="suffix"
-                  @click="search"
-                ></i>
-              </el-input>
-            </div>
-            <el-col
-              :span="24"
-              class="appitem"
-              v-for="(item, index) in appList"
-              :key="index"
-              style="padding:0px"
-            >
-              <div class="appTitle">
-                <div class="appNameWrap">
-                  <div :class="{'templateApp':item.isTemplateApp,'normalApp':!item.isTemplateApp}"></div>
-                  <span class="appName">{{item.productName}}</span>
-                </div>
-                <span>
-                  <i
-                    class="iconfont"
-                    :class="{'iconicon-guanliyuan' : item.isSystem,'iconicon-chengyuan1':!item.isSystem}"
-                    style="margin-right:5px;font-size:14px"
-                  ></i>
-                  <span class="appMember">{{item.isSystem ? "管理员" : "成员"}}</span>
-                </span>
-              </div>
-              <div class="appInfo">
-                <div class="version">
-                  <span class="versionText">{{item.name}}</span>
-                  <el-popover
-                    :ref="`popover-${index}`"
-                    placement="bottom"
-                    width="317"
-                    trigger="click"
-                    style="padding:0"
-                    @show="showRemark(item)"
-                  >
-                    <button slot="reference">
-                      <i class="iconfont iconbianji" v-show="item.isSystem"></i>
-                    </button>
-                    <div class="textareaWrap">
-                      <el-input
-                        type="textarea"
-                        :autosize="{ minRows: 3, maxRows: 3}"
-                        placeholder="请输入内容"
-                        v-model="appName"
-                        maxlength="30"
-                        show-word-limit
-                        resize="none"
-                      ></el-input>
-                      <div class="btn-wrap">
-                        <button class="cancel" slot="refenrence" @click="cancelInput(index)">取消</button>
-                        <button class="save" @click="saveInputValue(item, index)">保存</button>
-                      </div>
-                    </div>
-                  </el-popover>
-                </div>
-                <div class="expired">
-                  <span class="expiredText">有效期</span>
-                  <span class="expiredText" style="margin-left:16px">{{item.expired}}</span>
-                  <div class="isExpiredSoon" v-show="isExpiredSoon(item)">即将过期</div>
-                  <div class="isExpired" v-show="isExpired(item)">已过期</div>
-                  <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
-                  <a class="renewal" v-show="item.isSystem" :href="aliMarketUrl" target="_blank">续费</a>
-                  <el-button
-                    class="choseApp"
-                    @click="choseApp(item)"
-                    :disabled="isExpired(item)||(item.releaseTime&&isreleased(item))"
-                    :class="{'disabled':isExpired(item)||(item.releaseTime&&isreleased(item))}"
-                    v-if="!item.isCurrentApp"
-                  >进入管理</el-button>
-                  <el-button
-                    class="choseApp disabled"
-                    @click="choseApp(item)"
-                    disabled
-                    v-if="item.isCurrentApp"
-                  >当前管理</el-button>
-                </div>
-              </div>
-            </el-col>
-          </div>
-        </el-dialog>
       </div>
-    </el-row>
+    </div>
+    <div class="my-chose-app">
+      <el-dialog
+        :fullscreen="true"
+        :visible.sync="changeAppShow"
+        :close-on-click-modal="false"
+        :modal-append-to-body="false"
+        :append-to-body="false"
+        :show-close="false"
+        :modal="false"
+        class="myApp"
+      >
+        <div slot="title">
+          <div class="myAppTitle">
+            已购买的服务
+            <span style="cursor:pointer;" @click="closeChangeApp">
+              <i class="iconfont iconguanbi is-circle cl-iconfont" style="font-size:17px;"></i>
+            </span>
+          </div>
+        </div>
+        <div class="appBackground" v-scrollBar>
+          <div class="app-title">
+            <span class="app-title-text">
+              <span class="app-title-border"></span>
+              已购买的服务
+            </span>
+            <el-input
+              v-model="keyword"
+              placeholder="输入服务名称或备注内容搜索"
+              @keyup.enter.native="search"
+              clearable
+              class="input-with-select"
+            >
+              <i
+                class="el-icon-search el-input__icon"
+                style="cursor: pointer;float:right"
+                slot="suffix"
+                @click="search"
+              ></i>
+            </el-input>
+          </div>
+          <el-col
+            :span="24"
+            class="appitem"
+            v-for="(item, index) in appList"
+            :key="index"
+            style="padding:0px"
+          >
+            <div class="appTitle">
+              <div class="appNameWrap">
+                <div :class="{'templateApp':item.isTemplateApp,'normalApp':!item.isTemplateApp}"></div>
+                <span class="appName">{{item.productName}}</span>
+              </div>
+              <span>
+                <i
+                  class="iconfont"
+                  :class="{'iconicon-guanliyuan' : item.isSystem,'iconicon-chengyuan1':!item.isSystem}"
+                  style="margin-right:5px;font-size:14px"
+                ></i>
+                <span class="appMember">{{item.isSystem ? "管理员" : "成员"}}</span>
+              </span>
+            </div>
+            <div class="appInfo">
+              <div class="version">
+                <span class="versionText">{{item.name}}</span>
+                <el-popover
+                  :ref="`popover-${index}`"
+                  placement="bottom"
+                  width="300"
+                  trigger="click"
+                  style="padding:0"
+                  @show="showRemark(item)"
+                >
+                  <button style="margin-left:8px" slot="reference">
+                    <i class="iconfont iconbianji cl-iconfont is-square" v-show="item.isSystem"></i>
+                  </button>
+                  <div class="textareaWrap">
+                    <el-input
+                      type="textarea"
+                      :autosize="{ minRows: 3, maxRows: 3}"
+                      placeholder="请输入内容"
+                      v-model="appName"
+                      maxlength="30"
+                      show-word-limit
+                      resize="none"
+                    ></el-input>
+                    <div class="btn-wrap">
+                      <button
+                        class="cl-button cl-button--primary_notbg cl-button--small"
+                        slot="refenrence"
+                        @click="cancelInput(index)"
+                      >取消</button>
+                      <button
+                        class="cl-button cl-button--primary cl-button--small"
+                        @click="saveInputValue(item, index)"
+                      >保存</button>
+                    </div>
+                  </div>
+                </el-popover>
+              </div>
+              <div class="expired">
+                <span class="expiredText">有效期</span>
+                <span class="expiredText" style="margin-left:16px">{{item.expired}}</span>
+                <div class="isExpiredSoon" v-show="isExpiredSoon(item)">即将过期</div>
+                <div class="isExpired" v-show="isExpired(item)">已过期</div>
+                <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
+                <a
+                  class="renewal cl-button cl-button--primary_notbg"
+                  v-show="item.isSystem"
+                  :href="aliMarketUrl"
+                  target="_blank"
+                >续费</a>
+                <button
+                  class="choseApp cl-button cl-button--primary"
+                  @click="choseApp(item)"
+                  :disabled="isExpired(item)||(item.releaseTime&&isreleased(item))"
+                  :class="{'is-disabled':isExpired(item)||(item.releaseTime&&isreleased(item))}"
+                  v-if="!item.isCurrentApp"
+                >进入管理</button>
+                <button
+                  class="choseApp is-disabled cl-button cl-button--primary"
+                  @click="choseApp(item)"
+                  disabled
+                  v-if="item.isCurrentApp"
+                >当前管理</button>
+              </div>
+            </div>
+          </el-col>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
 import securityService from "@/services/authentication/securityService";
 import * as dashboardApi from "@/api/request/dashboardApi";
 import { formatDateTime } from "@/api/index";
-import { setLocal, getLocal, removeLocal } from "@/libs/local.js";
+import { setLocal, getLocal } from "@/libs/local.js";
 import { dashboardUrl, aliMarketUrl } from "@/environment/index";
 import { getCookie } from "@/libs/cookie";
 export default {
@@ -273,10 +288,10 @@ export default {
         this.$nextTick(() => {
           window.addEventListener("resize", () => {
             document.getElementsByClassName("appBackground")[0].style.height =
-              window.innerHeight - 100 + "px";
+              window.innerHeight - 50 + "px";
           });
           document.getElementsByClassName("appBackground")[0].style.height =
-            window.innerHeight - 100 + "px";
+            window.innerHeight - 50 + "px";
         });
       }
     },
@@ -330,62 +345,30 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.textareaWrap {
-  background: #fff;
-  position: relative;
-  .btn-wrap {
-    text-align: right;
-    padding-top: 16px;
-    button {
-      width: 63px;
-      height: 32px;
-      line-height: 25px;
-      font-size: 12px;
-      border: none;
-    }
-    .cancel {
-      border: 1px solid #eeeeee;
-      margin-right: 10px;
-    }
-    .save {
-      background: #00c1de;
-      color: #fff;
-    }
-  }
-}
-.iconbianji {
-  color: #262626;
-  margin-left: 16px;
-  padding: 8px;
-  &:hover {
-    background: rgba(240, 243, 247, 1);
-    border-radius: 4px;
-  }
-}
-.disabled {
-  opacity: 0.3;
-}
 .iconlogo1 {
   font-size: 24px;
 }
 .header {
-  padding: 0 10px;
-  font-size: 14px;
+  font-size: $--font-size-base;
   background: $--color-white;
   color: $--color-text-primary;
   position: relative;
+  .headerWrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   .head-item {
     .logo-icon {
-      width: 60px;
-      box-sizing: border-box;
-      text-align: center;
       display: inline-block;
-      padding: 0;
-      margin-left: -10px;
+      width: 60px;
       height: 50px;
+      box-sizing: border-box;
+      padding: 0;
+      text-align: center;
       vertical-align: top;
       background: $--color-primary;
-      .iconfont{
+      .iconfont {
         color: $--color-white;
       }
     }
@@ -408,18 +391,12 @@ export default {
       line-height: 40px;
       width: 250px;
       &:hover {
-        background: #06bdda;
-        border-radius: 2px;
-      }
-      .headAppNameInfo {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        min-width: 60px;
-        max-width: 150px;
-        vertical-align: middle;
-        padding-left: 0;
-        padding-right: 6px;
+        .headAppNameInfo {
+          color: $--color-primary;
+        }
+        i {
+          color: $--color-primary;
+        }
       }
     }
   }
@@ -434,6 +411,7 @@ export default {
     display: inline-block;
     width: 30px;
     height: 30px;
+    margin-right: 10px;
     vertical-align: middle;
     img {
       width: 100%;
@@ -450,7 +428,7 @@ export default {
     z-index: 10000;
     right: 0;
     top: 50px;
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
     padding: 9px 0;
     dd {
@@ -459,28 +437,6 @@ export default {
       &:hover {
         color: #262626;
         background: #e0faff;
-      }
-    }
-  }
-  .intoDesign {
-    width: 120px;
-    text-align: left;
-    position: absolute;
-    z-index: 100;
-    left: 0;
-    top: 49px;
-    font-size: 12px;
-    background: #181c20;
-    padding: 4px 0;
-    padding-left: 20px;
-    box-sizing: border-box;
-
-    li {
-      cursor: pointer;
-      line-height: 20px;
-      padding: 4px;
-      &:hover {
-        color: #00c1de;
       }
     }
   }
@@ -517,10 +473,9 @@ export default {
 }
 .myAppTitle {
   height: 50px;
-  font-size: 16px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 1);
-  line-height: 22px;
+  font-size: $--font-size-medium;
+  color: $--color-text-primary;
+  font-weight: $--font-weight-primary;
   padding: 0 32px;
   display: flex;
   align-items: center;
@@ -549,14 +504,14 @@ export default {
         display: inline-block;
         width: 2px;
         height: 17px;
-        background: rgba(9, 204, 235, 1);
+        background: $--color-primary;
         margin-right: 12px;
       }
       display: flex;
       align-items: center;
-      font-size: 16px;
-      font-weight: 500;
-      color: rgba(0, 0, 0, 1);
+      font-size: $--font-size-medium;
+      color: $--color-text-primary;
+      font-weight: $--font-weight-primary;
     }
     .input-with-select {
       width: 260px;
@@ -568,8 +523,8 @@ export default {
     margin-bottom: 24px;
     width: 800px;
     height: 140px;
-    background: rgba(255, 255, 255, 1);
-    border-radius: 2px;
+    background: $--color-white;
+    border-radius: $--border-radius-base;
     padding-left: 0px;
     &:hover {
       box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
@@ -602,17 +557,17 @@ export default {
         }
         .appName {
           margin-left: 16px;
-          font-size: 16px;
-          font-weight: 500;
-          color: rgba(38, 38, 38, 1);
+          font-size: $--font-size-medium;
+          color: $--color-text-primary;
+          font-weight: $--font-weight-primary;
         }
       }
       .appMember {
         float: right;
         margin-right: 24px;
-        font-size: 12px;
-        font-weight: 600;
-        color: rgba(38, 38, 38, 1);
+        font-size: $--font-size-small;
+        color: $--color-text-primary;
+        font-weight: $--font-weight-primary;
       }
     }
     .appInfo {
@@ -624,8 +579,8 @@ export default {
         line-height: normal;
         padding-top: 21px;
         .versionText {
-          font-size: 14px;
-          font-weight: 400;
+          font-size: $--font-size-base;
+          font-weight: $--font-weight-base;
           color: rgba(153, 153, 153, 1);
           margin-left: 24px;
           line-height: 22px;
@@ -635,11 +590,10 @@ export default {
         margin-top: 8px;
         line-height: normal;
         .expiredText {
-          font-size: 14px;
-          font-weight: 400;
+          font-size: $--font-size-base;
+          font-weight: $--font-weight-base;
           color: rgba(153, 153, 153, 1);
           margin-left: 24px;
-          line-height: 22px;
         }
       }
       .isExpiredSoon {
@@ -648,10 +602,9 @@ export default {
         width: 57px;
         height: 19px;
         background: rgba(250, 100, 0, 0.2);
-        border-radius: 2px;
-        font-size: 12px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        border-radius: $--border-radius-base;
+        font-size: $--font-size-small;
+        font-weight: $--font-weight-primary;
         color: rgba(250, 100, 0, 1);
         line-height: 19px;
         text-align: center;
@@ -662,10 +615,9 @@ export default {
         width: 46px;
         height: 19px;
         background: rgba(251, 77, 104, 0.2);
-        border-radius: 2px;
-        font-size: 12px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        border-radius: $--border-radius-base;
+        font-size: $--font-size-small;
+        font-weight: $--font-weight-primary;
         color: rgba(251, 77, 104, 1);
         line-height: 19px;
         text-align: center;
@@ -674,35 +626,13 @@ export default {
         position: absolute;
         right: 24px;
         bottom: 16px;
-        width: 90px;
-        height: 32px;
-        background: rgba(255, 106, 0, 1);
-        border-radius: 2px;
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 1);
-        line-height: 32px;
-        border: none;
-        padding: 0px;
-        margin: 0;
       }
       .renewal {
         position: absolute;
         right: 130px;
         bottom: 16px;
-        display: inline-block;
-        width: 90px;
-        height: 32px;
-        border-radius: 2px;
-        border: 1px solid rgba(255, 106, 0, 1);
-        font-size: 12px;
-        font-weight: 400;
-        color: rgba(255, 106, 0, 1);
-        line-height: 32px;
-        text-align: center;
-        margin-left: 32px;
-        margin: 0;
         box-sizing: border-box;
+        line-height: 1;
       }
     }
   }

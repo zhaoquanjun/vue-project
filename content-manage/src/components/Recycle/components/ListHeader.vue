@@ -20,7 +20,7 @@
                     </el-input>
                 </div>
                 <div class="head-item head-middle">
-                    <span>排序</span>
+                    <span>排序3</span>
                     <span class="select-sort">
                         <el-select
                             size="small"
