@@ -46,7 +46,7 @@
                 </p>
               </li>
             </ul>
-           <div class="cl-paganation">
+           <div class="cl-pagination">
               <el-pagination
               background
               layout="prev, pager, next"

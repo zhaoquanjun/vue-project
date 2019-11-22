@@ -123,7 +123,7 @@
                     <p>暂无数据</p>
                 </div>
             </ul>
-            <div class="cl-paganation paging">
+            <div class="cl-pagination paging">
                 <el-pagination
                     background
                     layout="total, sizes, prev, pager, next"

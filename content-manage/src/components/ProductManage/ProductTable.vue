@@ -88,7 +88,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="cl-paganation pageing">
+        <div class="cl-pagination pageing">
             <el-pagination
                 background
                 layout="total, slot, sizes, prev, pager, next,jumper"
