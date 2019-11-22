@@ -74,7 +74,7 @@
           <div class="progress-bar" :style="{'width':usageTraffic.prograss+'%'}"></div>
         </div>
       </div>
-      <div class="pageing" id="pageing">
+      <div class="cl-paganation pageing" id="pageing">
         <slot name="paging"></slot>
         <el-pagination
           background

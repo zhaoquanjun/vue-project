@@ -1,5 +1,5 @@
 
-.pageing{
+.cl-paganation,.pageing{
     float: right;
     margin-top: 24px;
     padding-bottom: 10px;
@@ -7,7 +7,7 @@
     .sizes-title {
         line-height:$--height-base;
         color: #A1A8B1;
-        font-weight: 400;
+        font-weight: $--font-weight-base;
         display: inline-block;
         margin-right: 18px;
     }
@@ -18,8 +18,8 @@
         height: $--height-base;
         color:$--color-text-primary;
         font-size: $--font-size-small;
-        border: 1px solid $--border-color-base;
-        border-radius: 2px;
+        border: $--border-base;
+        border-radius: $--border-radius-base;
         background:  $--color-white;
         
     }
@@ -82,20 +82,20 @@
              border-right:none; 
              box-sizing: border-box;
              li {
-                font-weight: 400;
+                font-weight: $--font-weight-base;
                 color: $--color-text-primary;
                 background-color: $--color-white;
                 height: $--height-base;
                 line-height:$--height-base;
-                font-size: 12px;
+                font-size: $--font-size-small;
                 margin: 0;
                 border-radius: 0;
-                border: 1px solid $--border-color-base;
+                border: $--border-base;
                 border-left: 0;
             }  
          }
         .btn-prev, .btn-next{
-            border: 1px solid $--border-color-base;
+            border: $--border-base;
            
         } 
         .btn-next{

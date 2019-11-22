@@ -1,5 +1,6 @@
 let path = require('path');
-const webpack = require("webpack")
+const webpack = require("webpack");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isProduction = process.env.NODE_ENV === 'production';
 const cdn = {
     css: [],
@@ -33,9 +34,9 @@ module.exports = {
             // 压缩代码
             config.optimization.minimize(true);
             // 分割代码
-            config.optimization.splitChunks({
-                chunks: 'all'
-            })
+            // config.optimization.splitChunks({
+            //     chunks: 'all'
+            // })
             // 生产环境注入cdn
             config.plugin('html')
                 .tap(args => {
@@ -76,6 +77,7 @@ module.exports = {
                 'window.Quill': 'quill/dist/quill.js',
                 'Quill': 'quill/dist/quill.js'
             }),
+            // new BundleAnalyzerPlugin()
         )
     },
 

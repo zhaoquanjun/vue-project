@@ -1,9 +1,9 @@
 
 @import "../theme-chalk/mixins/utlis";
 .el-table{
-    border: 1px solid $--border-color-base; 
     position: relative;
     color: $--color-text-primary;
+    border: $--border-base;  
     thead th > .cell {
         font-size: $--font-size-small;
         font-weight: $--font-weight-base;

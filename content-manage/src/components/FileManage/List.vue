@@ -115,7 +115,7 @@
                 </div>
                 <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
             </div>
-            <div class="pageing" id="pageing">
+            <div class="cl-paganation pageing" id="pageing">
                 <slot name="paging"></slot>
                 <el-pagination
                     background
