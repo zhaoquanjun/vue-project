@@ -89,7 +89,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing" v-if="memberList && memberList.length > 0">
+        <div class="cl-paganation pageing" v-if="memberList && memberList.length > 0">
             <el-pagination
                 background
                 layout="total, slot, sizes, prev, pager, next,jumper"

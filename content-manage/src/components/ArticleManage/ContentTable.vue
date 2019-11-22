@@ -70,7 +70,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing">
+        <div class="cl-paganation pageing">
             <el-pagination
                 background
                 layout="total, slot, sizes, prev, pager, next,jumper"

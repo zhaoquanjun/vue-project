@@ -22,7 +22,7 @@
                 </div>
         </div>
         <div
-            class="pageing"
+            class="cl-paganation pageing"
             v-if="imgPageResult&& imgPageResult.list && imgPageResult.list.length>0"
         >
             <el-pagination

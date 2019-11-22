@@ -87,7 +87,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing" id="pageing">
+        <div class="cl-paganation pageing" id="pageing">
             <el-pagination
                 background
                 :layout="layout"

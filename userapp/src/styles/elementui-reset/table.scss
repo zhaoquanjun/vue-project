@@ -1,7 +1,7 @@
 
 @import "../theme-chalk/mixins/utlis";
 .el-table{
-    border: 1px solid $--border-color-base; 
+    border: $--border-base;  
     position: relative;
     color: $--color-text-primary;
     thead th > .cell {
