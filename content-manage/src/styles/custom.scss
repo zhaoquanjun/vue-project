@@ -30,23 +30,23 @@ body {
     bottom: 0;
     left: 0;
     padding: 15px 17px;
-    border-top: 1px solid #efefef;
+    border-top: $--border-base;
     background: #fff;
 
-    .button {
+    button {
         padding: 0 15px;
         height: 32px;
-        font-size: 14px;
-        background: rgba(0, 193, 222, 1);
+        font-size: 12px;
+        background: $--color-primary;
         color: #fff;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
     }
 
     .cancel {
         margin-left: 20px;
         background: #fff;
-        border: 1px solid rgba(0, 193, 222, 1);
-        color: rgba(0, 193, 222, 1);
+        border: 1px solid $--color-primary;;
+        color: $--color-primary;
     }
 }
 

@@ -369,20 +369,5 @@ export default {
     font-weight: 500;
     font-size: 14px;
 }
-#content-manage .uploadCategoryPic {
-    .pannel-footer {
-        text-align: right;
-        padding: 5px 8px 0 0;
-        box-sizing: border-box;
-        button {
-            width: 58px;
-        }
-        .cancel {
-            border: 1px solid #00c1de;
-            color: #00c1de;
-            background: #fff;
-        }
-    }
-}
 </style>
 

@@ -491,7 +491,7 @@ export default {
 //             text-align: left;
 //             font-size: 14px;
 //             &:hover {
-//                 background: #e0fcff;
+//                 background: $--background-color-hover;
 //             }
 //         }
 //     }
@@ -510,6 +510,6 @@ export default {
 //     .set-tree-type:hover{
 //         // background: #C5F0F8;
        
-//     }
-// }
+// //     }
+// // }
 </style>
