@@ -245,7 +245,7 @@ export default {
         .menu-icon {
             display: inline-block;
             font-size: 14px;
-            padding: 0 23px;
+            padding: 0 24px;
             text-align: center;
             line-height: 50px;
             color:$--color-white;
