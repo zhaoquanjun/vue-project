@@ -715,6 +715,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-input /deep/ .el-input__inner {
+  width: 240px;
+}
 .holder h3 {
   text-align: center
 }

@@ -45,7 +45,6 @@ export default {
 // }
 body {
   background: #0b0b14;
-  font-family: 'Inconsolata', monospace;
   overflow: hidden;
 }
 .arc {

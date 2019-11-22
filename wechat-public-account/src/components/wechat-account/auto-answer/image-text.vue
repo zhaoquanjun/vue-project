@@ -95,7 +95,7 @@
                     </div>
                     <div class="seting-item seting-btn">
                         <button v-show="list.length> 0" class="editor-cancel" @click="handlerCancel">取消</button>
-                        <button class="editor-comfirm" @click="handlerConfirm">确定</button>
+                        <button class="cl-button cl-button--primary" @click="handlerConfirm">确定</button>
                     </div>
                 </div>
             </li>
