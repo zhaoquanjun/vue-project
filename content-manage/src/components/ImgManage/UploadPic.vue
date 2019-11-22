@@ -246,6 +246,7 @@ export default {
 .upload-pic /deep/ .el-upload-dragger .el-upload__text em {
     display: block;
     padding-top: 10px;
+    color: $--color-primary;
 }
 .upload-pic /deep/ .el-upload--picture-card {
     display: inline-block;
@@ -383,7 +384,7 @@ export default {
     .choose-img {
         margin-right: 13px;
         color: #fff;
-        background: #00c1de;
+        background: $--color-primary;
     }
 
     .upload-pic {
