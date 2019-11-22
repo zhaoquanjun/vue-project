@@ -30,11 +30,13 @@
                             size="medium"
                             placeholder="输入成员手机号搜索"
                             v-model="memberPhone"
-                            class="input-with-select"
                         >
-                            <el-button slot="append" @click="memberSearch">
-                               <i class="iconfont iconbianzu"></i>
-                            </el-button>
+                            <i
+                                class="el-icon-search el-input__icon"
+                                style="cursor: pointer;"
+                                slot="suffix"
+                                @click="memberSearch"
+                            ></i>
                         </el-input>
                     </div>
                 </el-col>
@@ -355,12 +357,12 @@ export default {
 .member-container {
   position: relative;
   .user-list {
-    border-bottom: 1px solid #eee;
+    border-bottom: $--border-base;
     padding-bottom: 24px;
     .member-list-title {
-      border-left: 4px solid #01c0de;
+      border-left: 2px solid $--color-primary;
       padding-left: 8px;
-      font-size: 16px;
+      font-size: $--font-size-medium;
       font-weight: 500;
     }
   }
@@ -375,8 +377,8 @@ export default {
     padding: 15px 0;
     overflow: hidden;
     .btn-item {
-        height: 34px;
-        line-height: 34px;
+        height: 32px;
+        line-height: 32px;
         width: 90px;
 
         margin-right: 10px;
@@ -386,8 +388,9 @@ export default {
         color: #262626;
     }
     .noselected-btn-item {
-        background: #f2f2f2;
-        color: #c3c3c3;
+        line-height: 32px;
+        background: $--color-text-secondary;
+        color: $--color-white;
     }
     .invite-member {
         margin: 0;

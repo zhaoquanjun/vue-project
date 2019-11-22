@@ -615,7 +615,7 @@ export default {
     }
 };
 </script>
-<style  scoped>
+<style lang='scss'  scoped>
 .el-dialog__wrapper /deep/ .el-dialog__body {
     padding: 0;
 }
@@ -628,11 +628,11 @@ export default {
 }
 .el-form /deep/ .input-border .el-input__inner {
     border: none;
-    border-bottom: 1px solid #b9cbcf;
+    border-bottom: $--border-base;
     border-radius: 0;
 }
 .el-form /deep/ .input-border .el-input__inner:hover {
-    border-bottom: 1px solid #0595e6;
+    border-bottom: 1px solid $--color-primary;
 }
 .el-form /deep/ .select-tree .el-select {
     width: 100%;
@@ -695,7 +695,7 @@ export default {
         // padding: 0;
         margin-left: 8px;
         color: #8c8c8c;
-        border: 1px solid #b9cbcf;
+        border: $--border-base;
         background: #fff;
         box-sizing: border-box;
     }

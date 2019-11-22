@@ -293,7 +293,7 @@ export default {
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
         top: 0;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         text-align: center;
         img {
             width: 12px;

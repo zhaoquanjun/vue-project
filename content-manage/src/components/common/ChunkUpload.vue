@@ -538,7 +538,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .uploader-list /deep/ .uploader-file {
     /* min-height: 54px; */
     line-height: 1;
@@ -561,13 +561,13 @@ export default {
 
 .uploader-list /deep/ ul li {
     margin-bottom: 14px;
-    border: 1px solid #e5e5e5;
+    border: $--border-base;
 }
 
 .uploader-list /deep/ ul li:hover {
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
+    border-radius: $--border-radius-base;
 }
 /* zxb begin */
 .uploader-list /deep/ .uploader-file-status,
@@ -606,7 +606,7 @@ export default {
     height: 40px;
     line-height: 40px;
     border-color: #a1a8b1;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 </style>
 <style scoped lang="scss">
@@ -626,8 +626,8 @@ export default {
 .uploader-example {
     padding: 15px;
     min-height: 320px;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    border-top: $--border-base;
+    border-bottom: $--border-base;
     margin: 13px 0 16px 0;
     padding: 0 32px;
     .uploader-drop {
@@ -640,14 +640,14 @@ export default {
         padding: 0;
         height: 68px;
         background: rgba(245, 245, 245, 1);
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         border: 1px dashed rgba(215, 215, 215, 1);
         text-align: center;
         line-height: 68px;
         .uploader-btn {
             // border: 1px solid #09cceb;
             border: none;
-            color: #09cceb;
+            color: $--color-primary;
             padding-left: 0;
             &:hover {
                 background: transparent;
@@ -688,8 +688,8 @@ export default {
 
 .disable-btn {
     background: rgba(229, 229, 229, 1);
-    border-radius: 2px;
-    border: 1px solid rgba(229, 229, 229, 1);
+    border-radius: $--border-radius-base;
+    border: $--border-base;
     color: #fff;
 }
 </style>

@@ -79,13 +79,13 @@ export default {
     }
 };
 </script>
-<style  scoped>
+<style lang='scss' scoped>
 .download-pwd /deep/ .el-input {
     padding-top: 32px;
 }
 .download-pwd /deep/ .input-border .el-input__inner {
     border: none;
-    border-bottom: 1px solid #b9cbcf;
+    border-bottom: $--border-base;
     border-radius: 0;
 }
 </style>
@@ -129,7 +129,7 @@ export default {
         box-sizing: border-box;
         .title {
             line-height: 25px;
-            font-size: 18px;
+            font-size: $--font-size-large;
             font-weight: 500;
         }
         .download-btn {

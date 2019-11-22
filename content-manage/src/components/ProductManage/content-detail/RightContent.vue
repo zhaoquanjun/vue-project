@@ -255,7 +255,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-card /deep/ .el-card__body {
     text-align: center;
     padding: 15px;
@@ -271,7 +271,7 @@ export default {
     display: inline-block;
 }
 .avatar-uploader /deep/ .el-upload {
-    border: 1px dashed rgba(144, 220, 232, 1);
+    border: 1px dashed $--color-primary;
     border-radius: 0;
 
     vertical-align: middle;
@@ -280,7 +280,7 @@ export default {
     font-size: 22px;
 }
 .avatar-uploader .el-upload i {
-    color: #00c1de;
+    color: $--color-primary;
     cursor: pointer;
     padding-bottom: 5px;
 }
@@ -320,7 +320,7 @@ export default {
     bottom: 19px;
     top: auto;
     width: 27px;
-    border: 1px solid #fff;
+    border: $--border-base;
     height: 27px;
     border-radius: 50%;
 }
@@ -362,7 +362,7 @@ export default {
 .article-cover {
     color: #262626;
     font-weight: 500;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 .modal-footer {
     height: 60px;

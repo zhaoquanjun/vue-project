@@ -92,7 +92,7 @@
                     <p v-if="item.msgType == 3" class="list-columns__1 ellipsis">
                         {{magTypeFn(item.msgType)}}
                     </p>
-                    <el-tooltip placement="top">
+                    <el-tooltip placement="top-start">
                         <div slot="content" style="max-width:400px;">
                              <span v-if="keywordListFn(item.keywordList,2)" class="keyword">全匹配：{{keywordListFn(item.keywordList,2)}}；</span>
                              <span v-if="keywordListFn(item.keywordList,1)" >半匹配：{{keywordListFn(item.keywordList,1)}}</span>
@@ -277,31 +277,31 @@ export default {
     }
 };
 </script>
-<style  scoped>
+<style lang="scss"  scoped>
 .el-select /deep/ .el-input--small .el-input__inner {
-    height: 40px;
-    line-height: 40px;
-    border: 1px solid #b9cbcf;
+    height: 32px;
+    line-height: 32px;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
     width: 100%;
 }
 .handler-menu  /deep/ .input-with-select {
     width: 400px !important;
 }
 .handler-menu /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
     width: 400px;
 }
 .el-input /deep/ .el-input__inner:hover {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner:focus {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 .el-select /deep/ .el-input__inner::-webkit-input-placeholder {
     color: #262626;
@@ -356,7 +356,7 @@ button {
         .select-item {
             padding-left: 16px;
             .prefixIcon {
-                padding: 13px 6px;
+                padding: 10px 6px;
                 line-height: 14px;
                 margin-left: 0px;
             }
@@ -373,19 +373,21 @@ button {
     }
     .table-list {
         .advance-list__area {
-            border-top: 1px solid #e5e5e5;
+            border-top: $--border-base;
             li {
                 display: flex;
                 align-items: center;
                 padding: 10px 24px;
-                border-bottom: 1px solid #e5e5e5;
+                border-bottom: $--border-base;
                 min-width: 1020px;
 
                 p {
                     display: inline-block;
+                    box-sizing: border-box;
                     font-size: $--font-size-small;
                     line-height: 40px;
                     padding-right: 16px;
+                    cursor: pointer;
                 }
                 p.list-columns__1 {
                     width: 40%;
@@ -430,8 +432,8 @@ button {
                            background: #F0F3F7;
                     }
                 }
-                .iconbianji {
-                    margin-right: 30px;
+                .iconshanchu {
+                    margin: 0 32px;
                 }
             }
         }

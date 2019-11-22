@@ -380,7 +380,7 @@ export default {
   top: 50px;
   left: 0;
   width: 100%;
-  border: 1px solid #dcdfe6;
+  border: $--border-base;
   padding: 5px;
   box-sizing: border-box;
   li {
@@ -400,7 +400,7 @@ export default {
     min-height: 23px;
     line-height: 21px;
     padding: 0 26px 0 10px;
-    font-size: 12px;
+    font-size: $--font-size-small;
     vertical-align: top;
     background-color: #609ee9;
     border-radius: 16px;
@@ -443,7 +443,7 @@ export default {
   .content-title {
     padding-bottom: 20px;
     // height: 20px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     font-weight: 600;
     color: rgba(38, 38, 38, 1);
     // line-height: 20px;

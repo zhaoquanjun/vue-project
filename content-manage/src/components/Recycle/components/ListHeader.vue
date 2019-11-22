@@ -139,7 +139,7 @@ export default {
     padding-right: 0;
 }
 .recycle-count{
-    font-size: 14px;
+    font-size: $--font-size-small;
     font-weight:600;
     padding-bottom: 24px;
 }

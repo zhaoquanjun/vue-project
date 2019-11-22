@@ -21,9 +21,9 @@
                     >{{isEditor==1?'编辑产品':'新增产品'}}</el-col>
                     <el-col :span="9" :offset="3">
                         <div class="article-btn">
-                            <button @click="()=>$router.go(-1)">返回</button>
-                            <button v-if="isEdit" @click="preview">预览</button>
-                            <button :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
+                            <button class="cl-button cl-button--primary_notbg" @click="()=>$router.go(-1)">返回</button>
+                            <button class="cl-button cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
+                            <button class="cl-button cl-button--primary" :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
                         </div>
                     </el-col>
                 </el-row>
@@ -152,11 +152,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner {
     font-weight: 400;
     color: #262626;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 </style>
 <style lang="scss" scoped>
@@ -183,17 +183,6 @@ export default {
 .article-head {
     .article-btn {
         text-align: right;
-        button {
-            width: 70px;
-            height: 32px;
-            border: 1px solid rgba(0, 193, 222, 1);
-            margin-left: 16px;
-            color: #00c1de;
-        }
-        > :last-child {
-            background: #00c1de;
-            color: #fff;
-        }
     }
 }
 </style>

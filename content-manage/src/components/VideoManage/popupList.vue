@@ -286,7 +286,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-input /deep/ .el-input__inner {
   padding-right: 50px;
 }
@@ -302,7 +302,7 @@ export default {
   align-items: center;
 } */
 #table-list /deep/ .el-table td {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: $--border-base;
 }
 /* table 头部颜色 和 高度 */
 #table-list /deep/ .el-table thead th {
@@ -313,21 +313,21 @@ export default {
 #table-list /deep/ .el-table thead th .cell {
     color: #a1a8b1;
     font-weight: 400;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 </style>
 <style lang="scss" scoped>
 .table {
   height: 537px;
   width: 870px;
-  border: 1px solid #e5e5e5;
+  border: $--border-base;
   .tableTitle {
     width: 100%;
     height: 51px;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: $--border-base;
     div {
       display: inline-block;
-      font-size: 14px;
+      font-size: $--font-size-small;
       font-weight: 400;
       color: rgba(161, 168, 177, 1);
       line-height: 51px;
@@ -354,7 +354,7 @@ export default {
     .tableListItem {
       height: 160px;
       border: 2px solid transparent;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: $--border-base;
     }
     .checked {
       border: 2px solid #09cceb;
@@ -362,7 +362,7 @@ export default {
   }
 }
 .file-title {
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: 400;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
@@ -380,7 +380,7 @@ export default {
   padding-top: 24px;
 }
 .format {
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: 400;
   color: rgba(161, 168, 177, 1);
   line-height: 20px;
@@ -414,7 +414,7 @@ export default {
   }
 }
 .contentInfo {
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: 400;
   color: rgba(38, 38, 38, 1);
   line-height: 160px;
@@ -530,10 +530,10 @@ export default {
     }
   }
   .title {
-    font-size: 14px;
+    font-size: $--font-size-small;
   }
   .storage-content {
-    font-size: 14px;
+    font-size: $--font-size-small;
     color: #666666;
   }
 }

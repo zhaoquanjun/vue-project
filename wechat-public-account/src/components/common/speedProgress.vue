@@ -80,6 +80,7 @@ export default {
                     font-size: 14px;
                     font-weight: 700;
                     line-height: 32px;
+                    color: $--color-text-secondary;
                 }
             }
             p {

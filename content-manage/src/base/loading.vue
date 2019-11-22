@@ -36,9 +36,9 @@ export default {
   left: 0;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
+  border-radius: $--border-radius-circle;
    z-index: 100000;
-  border-top: 2px solid #09CCEB;
+  border-top: 2px solid $--color-primary;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 2s infinite linear;
@@ -52,8 +52,8 @@ export default {
   left: 0;
   width: 70px;
   height: 70px;
-  border-radius: 50%;
-  border-top: 2px solid #63DC8C;
+  border-radius: $--border-radius-circle;
+  border-top: 2px solid $--color-success;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 4s infinite linear reverse;
@@ -68,7 +68,7 @@ export default {
   left: 0;
   width: 0;
   height: 0;
-  border-radius: 50%;
+  border-radius: $--border-radius-circle;
   border-top: initial;
   border-left: initial;
   border-right: initial;
@@ -88,7 +88,7 @@ h1 {
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 0.1em;
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: lighter;
   color: white;
 }
