@@ -309,6 +309,7 @@ export default {
       .shaper-content {
         width:100%;
         height: 180px;
+        box-sizing: border-box;
         padding: 24px 0 0 160px;
         background:rgba(248,250,252,1);
         .left {
@@ -589,9 +590,10 @@ export default {
       position: absolute;
       left: 0;
       bottom: 0;
+      box-sizing: border-box;
       border-top: $--border-base;
       width: 100%;
-      height: 32px;
+      height: 80px;
       padding: 24px;
       text-align: left;
     }
