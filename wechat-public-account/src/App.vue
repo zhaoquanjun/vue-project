@@ -10,7 +10,7 @@
         </el-aside>
         <el-main>
           <el-container>
-            <el-aside class="page-sub-aside" width="150px" v-show="isSub">
+            <el-aside class="submenu-aside" v-show="isSub">
               <page-submenu></page-submenu>
             </el-aside>
             <el-main class="content-table-wrap">
