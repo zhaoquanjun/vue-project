@@ -271,7 +271,7 @@ export default {
     display: inline-block;
 }
 .avatar-uploader /deep/ .el-upload {
-    border: 1px dashed rgba(144, 220, 232, 1);
+    border: 1px dashed $--color-primary;
     border-radius: 0;
 
     vertical-align: middle;
@@ -280,7 +280,7 @@ export default {
     font-size: 22px;
 }
 .avatar-uploader .el-upload i {
-    color: #00c1de;
+    color: $--color-primary;
     cursor: pointer;
     padding-bottom: 5px;
 }

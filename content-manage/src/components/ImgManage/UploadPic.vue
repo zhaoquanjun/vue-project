@@ -234,7 +234,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .upload-pic /deep/ .el-upload-dragger {
     position: static;
     display: flex;
@@ -310,15 +310,15 @@ export default {
     /deep/
     .el-upload-list__item-actions
     .el-upload-list__item-delete:hover {
-    background: #00c1de;
-    border: 1px solid #00c1de;
+    background: $--color-primary;
+    border: 1px solid $--color-primary;
 }
 
 .upload-pic
     /deep/
     .el-upload-list__item-actions
     .el-upload-list__item-preview:hover {
-    color: #00c1de;
+    color: $--color-primary;
 }
 
 .upload-pic
@@ -376,8 +376,8 @@ export default {
         height: 32px;
         font-weight: 400;
         border: none;
-        border: 1px solid #00c1de;
-        color: #00c1de;
+        border: 1px solid $--color-primary;
+        color: $--color-primary;
     }
 
     .choose-img {

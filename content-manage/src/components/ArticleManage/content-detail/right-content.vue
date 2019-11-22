@@ -181,7 +181,7 @@ export default {
     padding: 0 10px;
 }
 .border-line {
-    border: 1px dashed rgba(144, 220, 232, 1);
+    border: 1px dashed $--color-primary;
     background: rgba(242, 250, 251, 0.501);
 }
 .avatar-uploader {
@@ -200,11 +200,11 @@ export default {
     /* display: table-cell; */
 }
 .avatar-uploader /deep/ .el-upload i {
-    color: #00c1de;
+    color: $--color-primary;
     cursor: pointer;
 }
 .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
+    border-color: $--color-primary;
 }
 .avatar-uploader-icon {
     font-size: 28px;

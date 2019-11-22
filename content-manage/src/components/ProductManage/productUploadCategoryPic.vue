@@ -277,7 +277,7 @@ export default {
     margin-left: 16px;
 }
 .avatar-uploader .el-upload {
-    border: 1px dashed rgba(144, 220, 232, 1);
+    border: 1px dashed $--color-primary;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -299,11 +299,11 @@ export default {
     padding-top: 0;
 }
 .avatar-uploader .el-upload i {
-    color: #00c1de;
+    color: $--color-primary;
     cursor: pointer;
 }
 .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
+    border-color: $--color-primary;
 }
 .avatar-uploader-icon {
     font-size: 22px;
