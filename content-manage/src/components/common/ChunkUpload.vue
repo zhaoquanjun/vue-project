@@ -53,8 +53,8 @@
                 </li>
             </ul>
             <button
-                class="btn-small"
-                :class="[disable?'disable-btn':'btn-bglightblue']"
+                class="btn-small cl-button"
+                :class="[disable?'cl-button--disabled':'cl-button--primary']"
                 :disabled="disable"
                 @click="upload"
             >{{uploadBtnText}}</button>
@@ -605,13 +605,12 @@ export default {
 .chunkUpload-select-tree /deep/ .el-input--small .el-input__inner {
     height: 40px;
     line-height: 40px;
-    border-color: #a1a8b1;
     font-size: $--font-size-small;
 }
 </style>
 <style scoped lang="scss">
 .defult-color {
-    color: #09cceb;
+    color: $--color-primary;
 }
 
 .upload-head {
