@@ -1,4 +1,5 @@
 .pageing {
+    position: relative;
     float: right;
     margin-top: 24px;
     padding-bottom: 10px;
@@ -9,7 +10,7 @@
         line-height: $--height-base;
         color: #A1A8B1;
         font-weight: $--font-weight-base;
-        margin-right: 18px;
+        margin-right: 8px;
     }
 
     button.paging-confirm {

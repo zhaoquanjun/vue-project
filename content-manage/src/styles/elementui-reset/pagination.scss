@@ -1,19 +1,23 @@
 
 .cl-paganation,.pageing{
+    position: relative;
     float: right;
     margin-top: 24px;
     padding-bottom: 10px;
-    margin-right: 70px;
+    margin-right: 50px;
+    &.noJumper {
+        margin-right: 0px;
+    }
     .sizes-title {
         line-height:$--height-base;
         color: #A1A8B1;
         font-weight: $--font-weight-base;
         display: inline-block;
-        margin-right: 18px;
+        margin-right: 8px;
     }
     button.paging-confirm{
         position: absolute;
-        right: 20px;
+        right: -50px;
         width: 41px;
         height: $--height-base;
         color:$--color-text-primary;

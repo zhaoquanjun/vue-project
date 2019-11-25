@@ -74,17 +74,20 @@
           <div class="progress-bar" :style="{'width':usageTraffic.prograss+'%'}"></div>
         </div>
       </div>
-      <div class="cl-paganation pageing" id="pageing">
+      <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':imgPageResult.totalPage <= 10}">
         <slot name="paging"></slot>
         <el-pagination
           background
-          layout="prev, pager, next"
+          :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
           :total="imgPageResult.totalRecord"
           :page-count="imgPageResult.totalPage"
           :page-size="picSearchOptions.pageSize"
           @current-change="changePage"
           @size-change="changeSize"
-        ></el-pagination>
+        >
+          <div class="sizes-title">，每页显示</div>
+          <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
+        </el-pagination>
       </div>
     </div>
     <div id="img-list-dialog">
@@ -511,7 +514,6 @@ export default {
   margin-right: 28px;
   line-height: 25px;
   .use-storage {
-    display: inline-block;
     width: 186px;
     background: rgba(109, 114, 120, 0.09);
     padding: 4px;
@@ -521,12 +523,8 @@ export default {
       height: 5px;
       width: 100%;
       border-radius: 30px;
-      background: linear-gradient(
-        270deg,
-        rgba(21, 232, 247, 1) 0%,
-        rgba(9, 204, 235, 1) 100%
-      );
-      box-shadow: 0px 0px 4px 0px rgba(105, 242, 255, 1);
+      background: $--color-primary;
+      box-shadow: 0px 0px 4px 0px $--color-primary;
     }
   }
   .title {
@@ -542,12 +540,6 @@ export default {
   overflow: hidden;
   display: flex;
   align-items: center;
-  .pageing {
-    margin-top: 0;
-    padding-bottom: 0;
-    margin-left: auto;
-    margin-right: 0;
-  }
 }
 
 #table-list {

@@ -88,10 +88,10 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="cl-paganation pageing">
+        <div class="cl-paganation pageing" :class="{'noJumper':articlePageResult.totalPage <= 10}">
             <el-pagination
                 background
-                layout="total, slot, sizes, prev, pager, next,jumper"
+                :layout="articlePageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="articlePageResult.totalRecord"
                 :page-count="articlePageResult.totalPage"
                 :page-size="articlePageResult.pageSize"
@@ -100,7 +100,7 @@
                 @size-change="changePageSize"
             >
                 <div class="sizes-title">，每页显示</div>
-                <button class="paging-confirm">跳转</button>
+                <button v-if="articlePageResult.totalPage > 10" class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <ul v-show="isOperateSectionShow" class="operate-section" ref="operateSection">

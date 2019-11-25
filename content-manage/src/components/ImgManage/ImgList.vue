@@ -88,19 +88,18 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="cl-paganation pageing" id="pageing">
+        <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':imgPageResult.totalPage <= 10}">
             <el-pagination
                 background
-                :layout="layout"
+                :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="imgPageResult.totalRecord"
-                :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePage"
                 @size-change="changeSize"
             >
                 <div class="sizes-title">，每页显示</div>
-                <button class="paging-confirm">跳转</button>
+                <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <!-- :title="picTitle" -->
@@ -159,7 +158,6 @@ export default {
 
     data() {
         return {
-            layout: "total, slot, sizes, prev, pager, next,jumper",
             picInfo: {},// 当前图片的信息
             index: -1, //
             imgVisible: false,// 查看图片弹窗 是否显示

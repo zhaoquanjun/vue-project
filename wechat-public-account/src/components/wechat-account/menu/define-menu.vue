@@ -793,7 +793,7 @@ export default {
         height: 52px;
         text-align: center;
         line-height: 52px;
-        color: #09cceb;
+        color: $--color-primary;
         font-size: 12px;
         font-weight: 400;
         cursor: pointer;

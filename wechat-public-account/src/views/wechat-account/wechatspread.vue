@@ -96,16 +96,20 @@
           </el-table-column>
         </el-table>
       </template>
-      <div class="cl-paganation paging">
+      <div class="cl-paganation paging" :class="{'noJumper':TotalPage <= 10}">
         <a href="">如何进行页面推广？</a>
         <el-pagination
           background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          layout="total, sizes, prev, pager, next"
+          :layout="TotalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
           :total="TotalRecord"
-          :page-sizes="[5,10,20]"
-        ></el-pagination>
+          :page-sizes="[5,10,20,50]"
+          :page-size="5"
+        >
+          <div class="sizes-title">，每页显示</div>
+          <button v-if="TotalPage > 10" class="paging-confirm">跳转</button>
+        </el-pagination>
       </div>
     </div>
     <statistics 

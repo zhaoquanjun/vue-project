@@ -123,17 +123,19 @@
                     <p>暂无数据</p>
                 </div>
             </ul>
-            <div class="cl-paganation paging">
+            <div class="cl-paganation paging" :class="{'noJumper':keywordData.totalPage <= 10}">
                 <el-pagination
                     background
-                    layout="total, sizes, prev, pager, next"
                     :total="keywordData.totalRecord"
-                    :page-count="keywordData.totalPage"
                     :page-size="keywordData.pageSize"
+                    :layout="keywordData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :page-sizes="[10,20,50]"
-                ></el-pagination>
+                >
+                    <div class="sizes-title">，每页显示</div>
+                    <button v-if="keywordData.totalPage > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
             </div>
         </div>
     </div>
