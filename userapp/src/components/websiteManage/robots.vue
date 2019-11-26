@@ -6,13 +6,11 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <div style="padding: 32px 32px 24px;">
-        <el-row class="user-list">
-          <span class="member-list-title fs14">Robots.txt</span>
-        </el-row>
-        <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
-      </div>
-      <el-row class="siteContent" style="padding:0 32px">
+      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
+      <el-row class="user-list">
+        <span class="member-list-title fs14">Robots.txt</span>
+      </el-row>
+      <el-row style="margin-top:24px;">
         <uploader
           ref="uploader"
           :options="options"
@@ -32,23 +30,15 @@
             <div v-show="isUpload" class="fileName">robots.txt</div>
             <div v-show="isUpload" class="fileName" style="margin-top:5px">{{date?date:""}}</div>
             <div v-show="isUpload" v-if="progressFlag" class="progress">
-              <el-progress :percentage="progressPercent"></el-progress>
+              <el-progress :percentage="progressPercent" style="width:150px"></el-progress>
             </div>
           </uploader-list>
           <uploader-drop>
-            <uploader-btn :attrs="attrs" class="uploadIcon" v-show="!isUpload">
-              <i
-                class="iconfont iconicon-add"
-                style="color:#09CCEB;line-height:60px;font-size:25px"
-              ></i>
-            </uploader-btn>
-            <span v-show="!isUpload">将Robots文件拖拽到此处或</span>
-            <uploader-btn :attrs="attrs" v-show="!isUpload">点击上传</uploader-btn>
-            <div class="uploadText" v-show="isUpload">
-              拖拽替换文件或
-              <uploader-btn style="color:#09CCEB">点击上传</uploader-btn>
-            </div>
+            <uploader-btn :attrs="attrs" class="uploadIcon" v-show="!isUpload"></uploader-btn>
+            <div class="uploadtip" v-show="!isUpload">将Robots文件拖拽到此处或点击上传按钮</div>
+            <div class="uploadText" v-show="isUpload">拖拽替换文件或点击上传按钮</div>
             <div class="uploadTextRemark">请上传文件名为“robots”的txt文件</div>
+            <uploader-btn class="uploadBtn" :attrs="attrs">上传</uploader-btn>
           </uploader-drop>
         </uploader>
         <div class="tip">Robots文件写法？</div>
@@ -241,171 +231,116 @@ export default {
   }
 };
 </script>
-<style scoped>
-.upload /deep/ .el-upload {
-  width: 100%;
-  height: 429px;
-}
-.upload /deep/ .el-upload .el-upload-dragger {
-  width: 100%;
-  height: 429px;
-}
-.upload /deep/ .el-upload-list {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin-top: -10px;
-}
-.upload /deep/ .el-upload-list .el-upload-list__item-name {
-  font-size: 16px;
-  font-weight: 400;
-  color: rgba(140, 140, 140, 1);
-  line-height: 22px;
-  height: 70px;
-  margin-right: 0px;
-  text-align: center;
-}
-.upload /deep/ .el-upload-list__item-name .el-icon-document {
-  font-size: 50px;
-  line-height: 50px;
-  height: 50px;
-  display: block;
-  text-align: center;
-}
-.uploader-example /deep/ .uploader-file {
-  border: none;
-  height: 200px;
-}
-.uploader-example /deep/ .uploader-file-name {
-  font-size: 16px;
-  font-weight: 400;
-  color: rgba(140, 140, 140, 1);
-  line-height: 22px;
-  width: 100%;
-  text-align: center;
-}
-.uploader-example /deep/ .uploader-file-icon {
-  display: block;
-  margin: auto;
-}
-.uploader-example /deep/ .uploader-file-size {
-  display: none;
-}
-.uploader-example /deep/ .uploader-file-meta {
-  display: none;
-}
-.uploader-example /deep/ .uploader-file-status {
-  display: none;
-}
-.uploader-example /deep/ .uploader-file-actions {
-  display: none;
-}
-
-.progress /deep/ .el-progress-bar__inner {
-  background-color: #09cceb;
-}
-.progress /deep/ .el-progress {
-  width: 150px;
-}
-</style>
 <style lang="scss" scoped>
 .member-container {
   position: relative;
-  .user-list {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 24px;
-    .member-list-title {
-      border-left: 4px solid #01c0de;
-      padding-left: 8px;
-      font-size: 16px;
-      font-weight: 700;
+  .member-content {
+    padding: 0 16px;
+    .user-list {
+      .member-list-title {
+        border-left: 2px solid $--color-primary;
+        padding-left: 8px;
+        font-size: $--font-size-base;
+        font-weight: 700;
+      }
     }
   }
 }
 .uploader-example {
   position: relative;
-  //   height: 470px;
-  margin-top: 20px;
-  padding: 20px;
-  background: rgba(230, 249, 253, 1);
-  border-radius: 2px;
-  border: 1px dashed rgba(9, 204, 235, 1);
+  padding: 10px;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
   .uploader-drop {
     padding: 0;
-    height: 430px;
-    background: #fff;
-    border-radius: 2px;
-    border: 1px dashed rgba(215, 215, 215, 1);
+    height: 350px;
+    background: $--color-white;
+    border-radius: $--border-radius-base;
+    border: 1px dashed $--border-color-base;
     text-align: center;
-    line-height: 68px;
-    span {
-      font-size: 16px;
-      font-weight: 400;
-      color: rgba(140, 140, 140, 1);
-      line-height: 22px;
-    }
     .uploadIcon {
       display: block;
-      margin: 142px auto 0;
-      width: 60px;
-      height: 60px;
-      background: rgba(9, 204, 235, 0.1);
-      border-radius: 4px;
+      margin: 110px auto 0;
+      width: 44px;
+      height: 32px;
+      padding: 0;
+      border: none;
+      background: url("~img/upload/uploadfile.png") no-repeat center;
+      background-size: cover;
+    }
+    .uploadBtn {
+      width: 72px;
+      height: 32px;
+      line-height: 32px;
+      margin-top: 12px;
+      padding: 0;
+      background: $--color-primary;
+      border-radius: $--border-radius-base;
+      color: $--color-white;
+      background-color: $--button-primary-background-color;
+      border-color: $--button-primary-background-color;
       &:hover {
-        background: rgba(9, 204, 235, 0.1) !important;
+        background-color: $--button-hover-primary-background-color;
       }
     }
-    .uploader-btn {
-      // border: 1px solid #09cceb;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 22px;
-      border: none;
-      color: #09cceb;
-      padding: 0;
-      &:hover {
-        background: transparent;
-      }
+    .uploadtip {
+      width: 230px;
+      font-size: $--font-size-small;
+      color: $--color-primary;
+      font-weight: $--font-weight-base;
+      margin: auto;
+      margin-top: 12px;
     }
     .uploadText {
-      font-size: 16px;
-      font-weight: 400;
-      color: rgba(140, 140, 140, 1);
-      line-height: 22px;
+      font-size: $--font-size-small;
+      color: $--color-primary;
+      font-weight: $--font-weight-base;
       margin: auto;
-      margin-top: 275px;
-      margin-bottom: 16px;
+      margin-top: 190px;
       width: 184px;
     }
     .uploadTextRemark {
-      font-size: 16px;
-      font-weight: 400;
-      color: rgba(185, 203, 207, 1);
-      line-height: 22px;
+      font-size: $--font-size-small;
+      color: #a1a8b1;
+      font-weight: $--font-weight-base;
       margin: auto;
-      width: 260px;
+      margin-top: 8px;
+      width: 200px;
+    }
+  }
+  .uploader-dragover {
+    border: 1px dashed $--color-primary !important;
+    background: $--color-white !important;
+    .uploadIcon {
+      display: block;
+      margin: 95px auto 0;
+      width: 44px;
+      height: 32px;
+      padding: 0;
+      border: none;
+      background: url("~img/upload/uploadfileHover.png") no-repeat center;
+      background-size: cover;
     }
   }
   .uploadList {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-top: -25px;
+    margin-top: -40px;
     transform: translate(-50%, -50%);
     z-index: 1;
     text-align: center;
     .fileName {
-      font-size: 16px;
-      font-weight: 400;
-      color: rgba(185, 203, 207, 1);
-      line-height: 22px;
+      font-size: $--font-size-small;
+      color: #a1a8b1;
+      font-weight: $--font-weight-base;
       margin-top: 8px;
     }
     .fileImg {
       margin: auto;
-      width: 64px;
-      height: 81px;
+      width: 44px;
+      height: 56px;
       background: url("~img/upload/upload.png") no-repeat center;
       background-size: cover;
       text-align: center;
@@ -415,9 +350,9 @@ export default {
         }
       }
       .fileRemove {
-        margin-top: 25px;
-        width: 34px;
-        height: 34px;
+        margin-top: 14px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         background: rgba(38, 43, 65, 0.8);
         display: none;
@@ -427,8 +362,8 @@ export default {
         }
         .iconshanchu {
           color: #fff;
-          font-size: 20px;
-          line-height: 34px;
+          font-size: 16px;
+          line-height: 30px;
         }
       }
     }
@@ -436,11 +371,11 @@ export default {
 }
 .tip {
   display: inline-block;
+  position: absolute;
   margin-top: 32px;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(9, 204, 235, 1);
-  line-height: 22px;
+  font-size: $--font-size-base;
+  font-weight: $--font-weight-primary;
+  color: $--color-primary;
   cursor: pointer;
 }
 </style>
