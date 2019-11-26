@@ -1,16 +1,18 @@
 <template>
     <div
         class="m-aside"
-        :style="{width:width+'px',backgroundColor:'#F8FAFC',borderRight: '1px solid rgb(229, 229, 229)'}"
-        @mouseenter="collapseOpen(150,0.8)"
+        :style="{width:width+'px'}"
+        @mouseenter="collapseOpen(130,0.8)"
         @mouseleave="collapseClose"
     >
-        <el-aside class="m-asideleft" :style="{width:150+'px'}">
-            <ul class="left-menu">
+        <el-aside class="m-asideleft" :style="{width:130+'px'}">
+            <ul 
+            @mouseleave="collapseListClose"
+            class="left-menu">
                 <li
                     ref="menuItem"
                     class="left-menu-item"
-                    :class="{'menu-bg':curPath==it.code,'menu-hover':curIndex==i}"
+                    :class="{'menu-bg':curPath==it.code}"
                     v-for="(it, i) in getMenuList"
                     :key="i"
                     @mouseenter="changeCurHoverItem(it,i)"
@@ -34,7 +36,7 @@
                 :subTitle="subTitle"
                 :lastRoute="lastRoute"
                 v-if="isLeftNavComponentsShow"
-                :style="{width: 150 + 'px !important',height: '100%',borderRight:'1px solid #e6e6e6' }"
+                :style="{width: 130 + 'px !important',height: '100%' }"
                 class="m-asideright"
                 :menuList="menuListChild"
             ></LeftNavComponents>
@@ -76,9 +78,9 @@ export default {
             if (this.curIndex == -1) {
                 this.curIndex = i;
                 if(it.children && it.children.length > 0) {
-                    this.width = 300;
+                    this.width = 260;
                 } else {
-                    this.width = 150;
+                    this.width = 130;
                 }
             } else {
                 this.temer = setTimeout(()=>{
@@ -86,9 +88,9 @@ export default {
                     if(!this.enterTime || (levtimes - this.enterTime >=200)) {
                         this.curIndex = i;
                         if(it.children && it.children.length > 0) {
-                            this.width = 300;
+                            this.width = 260;
                         } else {
-                            this.width = 150;
+                            this.width = 130;
                         }
                     } else {
                         return
@@ -103,11 +105,16 @@ export default {
             window.location.href = "//" + item.menuUrl;
         },
         collapseOpen(width, time) {
-            this.width = 150;
+            this.width = 130;
         },
         collapseClose() {
             setTimeout(()=>{
                 this.width = 60;
+            },250)
+        },
+        collapseListClose() {
+            setTimeout(()=>{
+                //this.width = 130;
             },250)
         },
         iconfonts(code) {
@@ -166,16 +173,18 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang="scss"  scoped >
 .m-aside {
     position: absolute;
     left: 0;
     top: 0px;
-    /* bottom: 0; */
     z-index: 10;
     overflow: hidden;
     transition: 0.2s ease-in-out;
-    /* transition:  0.3s linear;  */
+    background-color:$--color-black-dark;
+    height: calc(100vh - 50px);
+   
+    // border-right: 1px solid rgb(229, 229, 229);
 }
 .m-asideleft {
     overflow: hidden;
@@ -186,68 +195,80 @@ export default {
 .m-asideright {
     width: 0px !important;
     position: absolute;
-    left: 150px;
+    left: 130px;
     z-index: 10;
     top: 0;
     text-align: center;
     border-right: none !important;
     /* border-right: 1px solid #E5E5E5; */
 }
-.el-aside /deep/ .el-menu {
+.el-aside  .el-menu {
     /* height: 100%; */
     border: none;
 }
 </style>
 <style lang="scss" scoped>
+.menu-bg {
+    background:$--background-color-selected !important;
+    color: $--color-primary !important;
+    border-left: 4px solid $--color-primary !important;
+    padding-left: 0 !important;
+    .menu-icon {
+        color: $--color-primary !important;
+    }
+    .menu-item-content {
+         color: $--color-primary !important;   
+     }
+     .iconicon-des-Arrow{
+        color: $--color-primary !important;
+    }
+    
+}
 // 选中的样式
 .active-color {
-    color: #0595e6 !important;
-}
-.menu-hover {
-    background:rgba(248,250,252,1);
-    border-left: 4px solid rgba(248,250,252,1) !important;
-}
-.menu-bg {
-    background:rgba(240, 243, 247, 1);
-    color: #0595e6;
-    border-left: 4px solid #0595e6 !important;
-    .menu-icon {
-        color: #0595e6 !important;
-    }
+    color: $--color-primary  !important;
+     
 }
 .left-menu {
-    // border-right: solid 1px #e6e6e6;
-    background: #fff;
-    height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
         line-height: 50px;
         white-space: nowrap;
-        margin-bottom: 14px;
-        border-left: 4px solid #fff;
+        border-left: 4px solid $--color-black-dark;
         .menu-item-content {
             display: inline-block;
             line-height: 50px;
+            color: $--color-white;
         }
         .menu-icon {
             display: inline-block;
-            font-size: 16px;
-            width: 60px;
+            font-size: 14px;
+            padding: 0 24px;
             text-align: center;
             line-height: 50px;
-            color: #262626;
+            color:$--color-white;
             margin-left: -4px;
+            transition: 0.2s ease-in-out;
         }
         .iconicon-des-Arrow{
             position: absolute;
-            left: 126px;
+            left: 114px;
             font-size: 12px;
+            line-height: 52px;
             vertical-align: middle;
-            color: #B9CBCF;
+            color: $--color-text-regular;
         }
         .iconweixingongzhonghao{
             font-size: 19px;
+        }
+    }
+    .left-menu-item:hover {
+        background: rgba(245,246,247,0.1);
+        border-left: 0px;
+        padding-left: 4px;
+        .iconicon-des-Arrow{
+           color: $--color-white;
         }
     }
 }

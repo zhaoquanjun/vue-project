@@ -20,7 +20,7 @@
 .tip-404 {
     text-align: center;
     padding-top: 26px;
-    font-size: 18px;
+    font-size: $--font-size-large;
     color: #7d93a6;
 }
 </style>

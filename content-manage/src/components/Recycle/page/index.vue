@@ -54,7 +54,7 @@
                         ></el-input>
                     </div>
 
-                    <div slot="footer" class="pannle-footer">
+                    <div slot="footer" class="pannel-footer">
                         <button @click="recovery" class="sure">恢复</button>
                         <button @click="closeCreateDialog" class="cancel">取消</button>
                     </div>
@@ -198,17 +198,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 @import "../../style/contentDetail";
-.recycle-tip{
-margin: 0 16px; 
-height:32px;
-background:rgba(255,248,242,1);
-border-radius:2px;
-border:1px solid rgba(250,223,197,1);
-text-align: center;
-line-height: 32px;
-color: #FE9837;
-margin-bottom: 16px;
-}
+
 .createSiteName{
     margin-top: 16px;
     .createSiteNameInput{

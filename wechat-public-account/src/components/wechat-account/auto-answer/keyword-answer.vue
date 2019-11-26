@@ -72,7 +72,7 @@
                         @click="searchEnterFun"
                     ></i>
                 </el-input>
-                <button class="answer-btn" @click="handlerAdd">添加回复</button>
+                <button class="answer-btn cl-button cl-button--primary" @click="handlerAdd">添加回复</button>
             </div>
 
             <ul class="advance-list__area">
@@ -92,7 +92,7 @@
                     <p v-if="item.msgType == 3" class="list-columns__1 ellipsis">
                         {{magTypeFn(item.msgType)}}
                     </p>
-                    <el-tooltip placement="top">
+                    <el-tooltip placement="top-start">
                         <div slot="content" style="max-width:400px;">
                              <span v-if="keywordListFn(item.keywordList,2)" class="keyword">全匹配：{{keywordListFn(item.keywordList,2)}}；</span>
                              <span v-if="keywordListFn(item.keywordList,1)" >半匹配：{{keywordListFn(item.keywordList,1)}}</span>
@@ -123,17 +123,19 @@
                     <p>暂无数据</p>
                 </div>
             </ul>
-            <div class="paging">
+            <div class="cl-paganation paging" :class="{'noJumper':keywordData.totalPage <= 10}">
                 <el-pagination
                     background
-                    layout="total, sizes, prev, pager, next"
                     :total="keywordData.totalRecord"
-                    :page-count="keywordData.totalPage"
                     :page-size="keywordData.pageSize"
+                    :layout="keywordData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :page-sizes="[10,20,50]"
-                ></el-pagination>
+                >
+                    <div class="sizes-title">，每页显示</div>
+                    <button v-if="keywordData.totalPage > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
             </div>
         </div>
     </div>
@@ -277,31 +279,31 @@ export default {
     }
 };
 </script>
-<style  scoped>
+<style lang="scss"  scoped>
 .el-select /deep/ .el-input--small .el-input__inner {
-    height: 40px;
-    line-height: 40px;
-    border: 1px solid #b9cbcf;
+    height: 32px;
+    line-height: 32px;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
     width: 100%;
 }
 .handler-menu  /deep/ .input-with-select {
     width: 400px !important;
 }
 .handler-menu /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
     width: 400px;
 }
 .el-input /deep/ .el-input__inner:hover {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner:focus {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 .el-select /deep/ .el-input__inner::-webkit-input-placeholder {
     color: #262626;
@@ -332,13 +334,21 @@ button {
 }
 .keyword-answer {
     padding: 16px 0px;
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
+    min-width: 1100px;
     .keyword-answer-content {
-        // padding: 24px 0 0 0;
-        // border-top: 1px solid #e5e5e5;
         .keyword-list {
+            display: inline-block;
+            z-index: 1;
+            top: 50px;
+            left: 0;
+            width: 100%;
             padding-bottom: 24px;
             margin-left: 24px;
+            padding: 5px;
+            display: flex;
+            justify-content: flex-start;
+            box-sizing: border-box;
             .title{
                 color: #B9CBCF
             }
@@ -349,8 +359,9 @@ button {
         .select-item {
             padding-left: 16px;
             .prefixIcon {
-                line-height: 40px;
-                margin-left: 4px;
+                padding: 10px 6px;
+                line-height: 14px;
+                margin-left: 0px;
             }
         }
         .addKeyword {
@@ -365,19 +376,29 @@ button {
     }
     .table-list {
         .advance-list__area {
-            border-top: 1px solid #e5e5e5;
+            border-top: $--border-base;
+            height: 340px;
+            overflow-y: auto;
+            .empty-table {
+                margin-top: 80px;
+            }
+            .title {
+                padding: 0px 24px;
+            }
             li {
                 display: flex;
                 align-items: center;
-                padding: 10px 24px;
-                border-bottom: 1px solid #e5e5e5;
+                padding: 5px 24px;
+                border-bottom: $--border-base;
                 min-width: 1020px;
 
                 p {
                     display: inline-block;
-                    font-size: 14px;
+                    box-sizing: border-box;
+                    font-size: $--font-size-small;
                     line-height: 40px;
                     padding-right: 16px;
+                    cursor: pointer;
                 }
                 p.list-columns__1 {
                     width: 40%;
@@ -388,7 +409,7 @@ button {
                     }
                 }
                 p.list-columns__2 {
-                    width: 50%;
+                    width: 46%;
                     i {
                         color: #A1A8B1;
                         margin-right: 4px;
@@ -398,7 +419,7 @@ button {
                     }
                 }
                 .list-columns__3 {
-                    width: 10%;
+                    width: 14%;
                     color: #0595e6;
                     cursor: pointer;
                 }
@@ -422,8 +443,8 @@ button {
                            background: #F0F3F7;
                     }
                 }
-                .iconbianji {
-                    margin-right: 30px;
+                .iconshanchu {
+                    margin: 0 32px;
                 }
             }
         }
@@ -436,10 +457,10 @@ button {
             padding: 0 24px;
             .answer-btn {
                 float: right;
-                width: 90px;
                 height: 32px;
-                border-radius: 2px;
-                background: rgba(9, 204, 235, 1);
+                font-size: 12px;
+                border-radius: $--border-radius-base;
+                background: $--color-primary;
                 color: #ffffff;
             }
             .input-with-select {
@@ -451,7 +472,7 @@ button {
 .keyword-btn {
     .iconfont {
         font-size: 32px;
-        color: #09cceb;
+        color: $--color-primary;
         vertical-align: middle;
     }
 }

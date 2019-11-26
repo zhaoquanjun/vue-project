@@ -6,11 +6,12 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <div style="padding: 32px;">
+      <div>
+        <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
         <el-row class="user-list">
           <span class="member-list-title fs14">域名管理</span>
         </el-row>
-        <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
+
         <DomainMenu ref="domainMenu" @handleTabClick="handleTabClick" @handleBtn="righPanelShow" />
         <el-main>
           <DomainList
@@ -31,19 +32,19 @@
           <template v-if="showType">
             <h3>操作指引</h3>
             <ul>
-              <li>1、域名添加后，请根据“域名解析”中的解析步骤完成域名解析；</li>
-              <li>2、域名解析第一步（生成解析记录值）完成后，可使用一键解析自动完成域名解析，也可前往阿里云控制台自行设置解析；</li>
-              <li>3、添加域名时会自动为您开启CDN，可在域名解析中手动关闭；</li>
-              <li>4、已开启CDN且解析成功的域名，可在域名列表中选择开启HTTPS;</li>
+              <li>1、请在解析记录值生成后完成域名解析操作；阿里云域名可授权使用“一键解析”，非阿里云域名请前往域名平台进行自行设置解析；</li>
+              <li>2、阿里云域名添加时会自动开启CDN，可在添加后手动关闭;</li>
+              <li>3、已开启CDN的阿里云域名在解析成功后，可选择开启HTTPS。</li>
             </ul>
           </template>
           <template v-else>
-            <h3>310重定向说明</h3>
+            <h3>301定向说明</h3>
             <ul>
-              <li>1、310重定向是指从源域名跳转到目标域名的操作，有绑定且解析成功的域名才能使用此功能。</li>
-              <li>2、310重定向应用场景：①帮助保留流向301重定向页面的链接；②实现权重转移。</li>
-              <li>3、为使得301重定向成功生效，请在添加信息后发布一次网站。</li>
-              <li>4、301重定向可能不会马上生效，请耐心等待10-15分钟。</li>
+              <li>1、301重定向是指从源域名跳转到目标域名的操作，有绑定且解析成功的域名才能使用此功能；</li>
+              <li>2、301重定向应用场景：①帮助保留流向301重定向页面的链接；②实现权重转移。</li>
+              <li>3、为使得301重定向成功生效，请在添加信息后发布网站。</li>
+              <li>4、在阿里云管理后台做过301重定向的源域名，在此处做的301重定向不生效；</li>
+              <li>5、301重定向可能不会马上生效，请耐心等待10-15分钟。</li>
             </ul>
           </template>
         </div>
@@ -493,14 +494,17 @@ export default {
 <style lang="scss" scoped>
 .member-container {
   position: relative;
-  .user-list {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 24px;
-    .member-list-title {
-      border-left: 4px solid #01c0de;
-      padding-left: 8px;
-      font-size: 16px;
-      font-weight: 700;
+  .member-content {
+    padding: 0 16px;
+    .user-list {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 21px;
+      .member-list-title {
+        border-left: 2px solid $--color-primary;
+        padding-left: 8px;
+        font-size: 14px;
+        font-weight: 700;
+      }
     }
   }
 }
@@ -543,18 +547,20 @@ export default {
 }
 
 .handle-guide {
-  margin-top: 48px;
-  border: 1px solid #e1e6ea;
+  margin-top: 16px;
+  background: $--color-white;
+  border: $--border-base;
+  border-radius: $--border-radius-base;
   h3 {
-    border-bottom: 1px solid #e1e6ea;
-    padding: 24px 32px;
+    font-size: $--font-size-base;
+    padding: 24px 0 16px 23px;
   }
 
   ul {
-    padding: 16px 32px;
+    padding: 0 0 28px 23px;
     li {
-      padding-bottom: 16px;
-      color: #8c8c8c;
+      height: 22px;
+      line-height: 22px;
     }
   }
 }

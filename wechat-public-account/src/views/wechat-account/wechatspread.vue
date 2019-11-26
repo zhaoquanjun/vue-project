@@ -6,9 +6,9 @@
         @getSiteId="getSiteId"
       />
     </div>
-    <div class="spread-title">
+    <div v-if="!isShowStatistics" class="spread-title">
       <span>推广设置</span>
-      <div class="add" @click="addSpread">新增推广</div>
+      <button class="cl-button cl-button--primary" @click="addSpread">新增推广</button>
     </div>
     <div v-if="!isShowStatistics" class="answer-tabs">
       <el-tabs v-model="replyType" type="card" @tab-click="getInfo">
@@ -36,9 +36,7 @@
       <template>
         <el-table
           :data="list"
-          :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '36px',paddingLeft: '14px',borderTop: '1px solid #e5e5e5'}"
-          :cell-style="{color:'#262626',lineHeight: '36px',paddingLeft: '14px'}"
-          style="width: 100%">
+        >
           <template slot="empty">
               <div class="empty-table">
                   <img src="~img/table-empty.png" />
@@ -81,7 +79,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            fixed="right"
             label="操作"
             width="220">
             <template slot-scope="scope">
@@ -98,16 +95,20 @@
           </el-table-column>
         </el-table>
       </template>
-      <div class="paging">
+      <div class="cl-paganation paging" :class="{'noJumper':TotalPage <= 10}">
         <a href="">如何进行页面推广？</a>
         <el-pagination
           background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          layout="total, sizes, prev, pager, next"
+          :layout="TotalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
           :total="TotalRecord"
-          :page-sizes="[5,10,20]"
-        ></el-pagination>
+          :page-sizes="[5,10,20,50]"
+          :page-size="5"
+        >
+          <div class="sizes-title">，每页显示</div>
+          <button v-if="TotalPage > 10" class="paging-confirm">跳转</button>
+        </el-pagination>
       </div>
     </div>
     <statistics 
@@ -328,10 +329,25 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+.spread-continer /deep/ .el-table {
+  height: 340px;
+  overflow-y: auto;
+}
+ .empty-table {
+  margin-top: 80px;
+}
+.el-table /deep/ .el-table__row td {
+  padding: 5px 0;
+}
+.spread-continer /deep/ .el-table::before {
+  height: 0;
+}
 .el-tabs /deep/ .el-tabs__item {
-    font-size: 14px;
-    padding: 0 32px;
+    font-size: 12px;
+    padding: 0;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
     font-weight: 400;
     color: #262626;
     height: 50px;
@@ -339,14 +355,28 @@ export default {
     border-bottom: 2px solid transparent;
     box-sizing: border-box;
 }
+.el-tabs--card /deep/ .el-tabs__header .el-tabs__nav {
+  border: none;
+}
+.el-tabs--card /deep/ .el-tabs__header .el-tabs__item {
+  border: none;
+}
+.el-table {
+  border: none;
+  border-top: $--border-base;
+}
 .el-tabs /deep/ .el-tabs__header {
     margin: 0;
+    border-bottom: $--icon-color-base;
 } 
 .el-tabs /deep/ .is-active {
     background: #F8FAFC;
-    border-bottom: 2px solid #09cceb !important;
+    border-bottom: 2px solid #FF6B00 !important;
 }
 .el-table /deep/ .cell {
+  padding-left: 24px;
+}
+/*.el-table /deep/ .cell {
   height: 42px;
   line-height: 42px;
   display: block;
@@ -354,20 +384,20 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.el-table /deep/ td {
+ .el-table /deep/ td {
   padding: 10px 0 8px 36px;
 }
 .el-table .cell, .el-table th div {
   padding-right: 30px !important;
-}
+} */
 .spread-continer  /deep/ .input-with-select.el-input--suffix {
     width: 400px !important;
 }
-.el-table /deep/ .el-table__empty-block {
+/* .el-table /deep/ .el-table__empty-block {
   border-bottom: 1px solid #EBEEF5;
-}
+} */
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
     width: 400px;
     margin: 16px 0 16px 24px;
 }
@@ -375,13 +405,13 @@ export default {
  right: -20px;
 }
 .el-input /deep/ .el-input__inner:hover {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner:focus {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 .el-input /deep/ .el-input__inner {
-    border: 1px solid #E5E5E5;
+    border: $--border-base;
 }
 
 </style>
@@ -392,8 +422,9 @@ export default {
     overflow-y: auto;
     .iconfont {
       padding: 8px;
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       margin-right: 10px !important;
+      line-height: 14px;
       cursor: pointer;
       &:hover {
         background: #E5E5E5;
@@ -410,23 +441,11 @@ export default {
         margin: 6px 0;
         padding-left: 12px;
         line-height: 20px;
-        border-left: 4px solid #09CCEB;
-        font-size:14px;
-        font-family:'PingFangSC-Regular,PingFang SC';
+        border-left: 4px solid $--color-primary;
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(38,38,38,1);
       }
-      .add {
-          width:90px;
-          height:32px;
-          background:rgba(9,204,235,1);
-          border-radius:2px;
-          font-weight:400;
-          color:rgba(255,255,255,1);
-          line-height:32px;
-          text-align: center;
-          cursor: pointer;
-        }
     }
     .answer-tabs {
         margin-top: 24px;
@@ -437,8 +456,7 @@ export default {
           top: 0;
           right: 24px;
           height:50px;
-          font-size:14px;
-          font-family:'PingFangSC-Regular,PingFang SC';
+          font-size:$--font-size-small;
           font-weight:400;
           color:rgba(38,38,38,1);
           line-height:50px;
@@ -450,8 +468,8 @@ export default {
         //  overflow-y: auto;
     }
     .spread-continer {
-      margin-top: 12px;
-      border: 1px solid rgba(229,229,229,1);
+      margin-top: 16px;
+      border: $--border-base;
       padding-bottom: 16px;
       background: #fff;
       .img {
@@ -467,11 +485,10 @@ export default {
       justify-content: space-between;
       margin-top: 40px;
       a {
-        font-size:14px;
+        font-size:$--font-size-small;
         margin-left: 24px;
-        font-family:'PingFangSC-Regular,PingFang SC';
         font-weight:400;
-        color:rgba(9,204,235,1);
+        color: $--color-primary;
         line-height:32px;
       }
     }

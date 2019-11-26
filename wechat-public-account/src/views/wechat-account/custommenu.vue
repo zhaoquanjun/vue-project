@@ -71,6 +71,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .define-menu__section {
   padding: 16px 32px 0;
   height: 100%;

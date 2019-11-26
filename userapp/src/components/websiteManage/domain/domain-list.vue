@@ -443,7 +443,7 @@ export default {
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
                     ele.innerHTML =
-                        "<span class='hoverBtn' style='color: #00c1de;font-size:14px' >域名解析</span>";
+                        "<span class='hoverBtn' style='color: #ff6b00;font-size:12px' >域名解析</span>";
                 }
             });
         }
@@ -466,13 +466,12 @@ export default {
 </style>
 <style scoped>
 .el-table /deep/ thead :first-child > .cell {
-    padding-left: 40px;
+    padding-left: 62px;
 }
 
-.el-table /deep/ thead th {
+/* .el-table /deep/ thead th {
     padding: 0;
-    height: 35px;
-    background: #00c1de !important;
+    height: 43px;
     color: #fff;
     font-weight: 400;
     font-size: 12px;
@@ -489,7 +488,7 @@ export default {
 
 .el-table /deep/ th > .cell {
     text-align: left;
-}
+} */
 
 /* .el-table /deep/ .el-table__expand-column .cell{
             width: 160px;
@@ -499,15 +498,21 @@ export default {
     height: 40px;
     transform: rotate(0deg);
 }
+#table-list /deep/ .el-table__expand-icon:hover  {
+    background: rgba(255,107,0,0.1) !important;
 
+}
 .el-table /deep/ .el-table__expanded-cell:hover {
     background: #eee !important;
 }
+.el-table /deep/  thead th{
+    padding:9px 0;
+}
+.el-table /deep/  td{
+    padding:5px 0;
+}
 </style>
 <style lang="scss" scoped>
-.table-list {
-    border: 1px solid #e1e6ea;
-}
 .relove-step {
     margin-top: 12px;
     background: #eeeeee;
@@ -588,7 +593,7 @@ export default {
         }
 
         .islink {
-            color: #00c1de;
+            color: #ff6b00;
             padding-bottom: 16px;
         }
     }
@@ -634,7 +639,7 @@ export default {
 }
 
 .domainStatus0 {
-    color: #f15533;
+    color: #FB4D68;
 }
 
 .domainStatus1 {
@@ -650,7 +655,7 @@ export default {
 }
 
 .domain-name {
-    padding-left: 30px;
+    padding-left: 50px;
 }
 </style>
 

@@ -4,13 +4,12 @@ import router from "./router/index.js";
 import store from "./store/index";
 import ElementUI from 'element-ui'
 import globComponents from "@/globalComponents/index.js"
-import 'element-ui/lib/theme-chalk/index.css'
-import "./assets/reset.css";
-import "./styles/common.scss";
-import "./styles/wezhan.scss";
-import "./plugins/element-reset.scss"
-import "./styles/pop-up/pup-up.scss"
-import './icons';
+
+import "@/styles/custom.scss"
+import "@/styles/theme-chalk/index.scss"
+import "@/styles/elementui-reset/index.scss"
+
+    
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 import uploader from 'vue-simple-uploader'

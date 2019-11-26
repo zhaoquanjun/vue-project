@@ -18,7 +18,7 @@
     <div class="pannel-main" style="padding:0 17px">
         <slot></slot>
     </div>
-    <div class="pannel_footer"><slot name="footer"></slot></div>
+    <slot name="footer"></slot>
   </div>
 </template>
 <script>
@@ -66,9 +66,9 @@ export default {
   .pannel-head {
     height: 40px;
     line-height: 40px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     overflow: hidden;
-    border-bottom: 1px solid #efefef;
+    border-bottom: $--border-base;
     span {
       padding: 0 10px;
     }

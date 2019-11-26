@@ -61,7 +61,7 @@
               type="circle" 
               :percentage="percentage"
               :width="100"
-              color="#63DC8C"
+              color="#FF6B00"
               :stroke-width='2'
             >
             </el-progress>
@@ -69,7 +69,8 @@
               v-if="percenStatus"
               type="circle" 
               :width="100"
-              color="#63DC8C"
+              :percentage="percentage"
+              color="#FF6B00"
               :status="percenStatus"
               :stroke-width='2'
             >
@@ -238,7 +239,7 @@ export default {
             } else {
               this.percentage = this.percentage + 5
             }
-          }, 600);
+          }, 300);
         } else {
           notify(this,'推广域名设置失败', 'error')
         }
@@ -312,14 +313,19 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .el-progress.is-success /deep/ .el-progress__text {
-  color: #63DC8C;
+  color: $--color-primary;
   font-size: 40px !important;
   font-weight: 700;
 }
 .el-progress /deep/ .el-progress__text {
+  color: $--color-primary !important;
   font-size: 22px !important;
+}
+.el-progress /deep/ .el-progress__text i {
+  font-size: 48px !important;
+  color: $--color-primary !important;
 }
 </style>
 <style lang="scss" scoped>
@@ -336,8 +342,8 @@ export default {
       height: calc(100% - 266px);
       .account-body {
         background:rgba(255,255,255,1);
-        border-radius:2px;
-        border:1px solid rgba(221,226,234,1);
+        border-radius:$--border-radius-base;
+        border:$--border-base;
       }
       .account-setting__bind {
         width: 100%;
@@ -350,8 +356,7 @@ export default {
           margin: 72px 0 24px;
         }
         p {
-          font-size:14px;
-          font-family:"PingFangSC";
+          font-size:$--font-size-small;
           font-weight:400;
           color:#A1A8B1;
           line-height:20px;
@@ -359,16 +364,15 @@ export default {
         div {
           display: inline-block;
           width: 340px;
-          height: 40px;
+          height: 32px;
           cursor: pointer;
-          font-size:14px;
-          font-family:"PingFangSC";
+          font-size:$--font-size-small;
           font-weight:400;
           margin-top: 20px;
           color:#ffffff;
-          background: #01c0de;
-          line-height:40px;
-          border-radius: 3px;
+          background: $--color-primary;
+          line-height:32px;
+          border-radius: $--border-radius-base;
         }
       }
       .account-setting__resolve {
@@ -383,19 +387,17 @@ export default {
           margin: 48px 0 12px;
         }
         p {
-          font-size:14px;
-          font-family:"PingFangSC";
+          font-size:$--font-size-small;
           font-weight:400;
           color:rgba(161,168,177,1);
           line-height:30px;
         }
         input {
           width:340px;
-          height:40px;
+          height:32px;
           background:rgba(255,255,255,1);
-          border-radius:2px;
-          border:1px solid rgba(229,229,229,1);
-          font-family:'PingFangSC-Regular,PingFangSC';
+          border-radius:$--border-radius-base;
+          border:$--border-base;
           font-weight:400;
           padding-left: 10px;
           margin: 20px 0 30px;
@@ -419,21 +421,21 @@ export default {
           }
           span {
             padding-left: 5px;
-            color: rgba(0, 193, 222, 1);
+            color: $--color-primary;
           }
         }
         .add {
           width: 340px;
-          height: 34px;
+          height: 32px;
           color: rgba(255, 255, 255, 1);
-          background-color: rgba(0, 193, 222, 1);
-          font-size: 14px;
-          line-height: 34px;
+          background-color: $--color-primary;
+          font-size: $--font-size-small;
+          line-height: 32px;
           text-align: center;
           margin: 0 auto;
         }
         div {
-          font-size:14px;
+          font-size:$--font-size-small;
           font-weight:400;
           color:rgba(99,220,140,1);
           line-height:20px;
@@ -448,18 +450,18 @@ export default {
         ul {
           position: relative;
           width:340px;
-          height:40px;
+          height:32px;
           background:rgba(255,255,255,1);
-          border-radius:2px;
-          border:1px solid rgba(229,229,229,1);
+          border-radius:$--border-radius-base;
+          border:$--border-base;
           margin: 20px auto 30px;
           text-align: left;
           span {
             display: inline-block;
-            width: 340px;
+            width: 320px;
             color: #262626;
-            padding: 0 10px;
-            line-height: 40px;
+            padding-left: 14px;
+            line-height: 32px;
             margin-bottom: 4px;
             i {
               color: #a1a8b1;
@@ -471,15 +473,14 @@ export default {
             overflow-y: auto;
           }
           li {
-            height: 40px;
+            height: 32px;
             padding: 0 16px;
-            font-size:14px;
-            font-family:'PingFangSC-Regular,PingFangSC';
+            font-size:$--font-size-small;
             font-weight:400;
             color:rgba(38,38,38,1);
-            line-height:40px;
+            line-height: 32px;
             background: #ffffff;
-            border: 1px solid #E5E5E5;
+            border: $--border-base;
             border-bottom: none;
             cursor: pointer;
             i {
@@ -487,14 +488,17 @@ export default {
             }
           }
           li:last-child {
-            border-bottom: 1px solid #E5E5E5;
+            border-bottom: $--border-base;
           }
           li:hover {
-            background: #F8FAFC;
+            background: $--background-color-hover;
           }
           .active {
-            background: #F0F3F7 !important;
-            color: #09CCEB;
+            background: $--background-color-selected !important;
+            color: $--color-primary;
+            i {
+              color: $--color-primary;
+            }
           }
         }
       }
@@ -522,12 +526,11 @@ export default {
         }
       }
       .account-bind__tips {
-        width: 418px;
+        width: 360px;
         margin: 32px auto 50px;
         background: white;
         p {
-          font-size:14px;
-          font-family:"PingFangSC";
+          font-size:$--font-size-small;
           font-weight:400;
           color:rgba(161,168,177,1);
           line-height:30px;
@@ -555,7 +558,7 @@ export default {
     transform: translate(-50%, -50%);
     width: 520px;
     background: #ffffff;
-    border-radius: 3px;
+    border-radius: $--border-radius-base;
     padding: 32px 24px;
     .auther-top {
       height: 20px;
@@ -577,7 +580,7 @@ export default {
     }
     .auther-body {
       position: relative;
-      padding: 40px;
+      padding: 32px;
       i {
         position: absolute;
         top: 50%;
@@ -588,7 +591,7 @@ export default {
       p {
         padding: 0 12px 0 32px;
         color: #a1a8b1;
-        font-size: 14px;
+        font-size: $--font-size-small;
         line-height: 20px;
         max-height: 80px;
       }
@@ -604,12 +607,12 @@ export default {
       span {
         display: inline-block;
         width: 76px;
-        height: 40px;
+        height: 32px;
         cursor: pointer;
         background: #ffffff;
-        border-radius: 3px;
+        border-radius: $--border-radius-base;
         text-align: center;
-        line-height: 40px;
+        line-height: 32px;
         border: 1px solid #09cceb;
         margin-left: 24px;
         color: #09cceb;

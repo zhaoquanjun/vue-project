@@ -14,35 +14,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .loading-section {
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   background: #fff;
-//   .loading-content__area {
-//     .loading-icon__area {
-//       width: 50px;
-//       height: 52px;
-//       background: url('~img/loading.gif') no-repeat center center;
-//       background-size: 100% 100%;
-//     }
-//     p {
-//       padding-top: 16px;
-//       font-size: 14px;
-//       color: #666;
-//     }
-//   }
-// }
-body {
-  // background: #0b0b14;
-  // font-family: 'Inconsolata', monospace;
-  // overflow: hidden;
-}
+
 .loading-wrap{
     background: rgba(0,0,0,0.5);
     width: 100%;
@@ -53,13 +25,6 @@ body {
     right: 0;
     bottom: 0;
     top: 0;
-      // -webkit-filter: blur(5px) contrast(.5) brightness(.5);
-      //       -moz-filter: blur(5px);
-      //       -o-filter: blur(5px);
-      //       -ms-filter: blur(5px);
-      //       filter: blur(5px) contrast(.5) brightness(.5);
-      //       transition: 1.0s filter;
-
 
 }
 .arc {
@@ -71,9 +36,9 @@ body {
   left: 0;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
+  border-radius: $--border-radius-circle;
    z-index: 100000;
-  border-top: 2px solid #09CCEB;
+  border-top: 2px solid $--color-primary;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 2s infinite linear;
@@ -87,8 +52,8 @@ body {
   left: 0;
   width: 70px;
   height: 70px;
-  border-radius: 50%;
-  border-top: 2px solid #63DC8C;
+  border-radius: $--border-radius-circle;
+  border-top: 2px solid $--color-success;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 4s infinite linear reverse;
@@ -103,7 +68,7 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-radius: 50%;
+  border-radius: $--border-radius-circle;
   border-top: initial;
   border-left: initial;
   border-right: initial;
@@ -123,7 +88,7 @@ h1 {
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 0.1em;
-  font-size: 14px;
+  font-size: $--font-size-small;
   font-weight: lighter;
   color: white;
 }

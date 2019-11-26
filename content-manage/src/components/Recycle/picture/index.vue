@@ -2,7 +2,7 @@
     <el-container id="content-manage">
         <el-main>
             <list-header
-            style="margin-left: 16px;    margin-bottom: 16px;"
+                style="margin-left: 16px;    margin-bottom: 16px;"
                 v-if="$store.state.dashboard.isContentwrite"
                 :count-data="countData"
                 :totalRecord="recyclePageResult.totalRecord"
@@ -12,7 +12,6 @@
                 :recycle-temp-data="recycleTempData"
                 @getRecycleDataList="getPicList"
                 @batchRecovery="batchRecovery"
-                
             ></list-header>
             <el-main>
                 <div class="recycle-tip">回收站的内容可保存30天，30天之后将永久删除</div>
@@ -38,19 +37,19 @@ import { trim } from "@/utlis/index.js";
 export default {
     components: {
         ListHeader,
-        List,
+        List
     },
     data() {
         return {
             recycleTempData: {
-                type:"pic",
-                keyword:"keyword",
-                batchText:"张图片",
-                placeholder: '输入图片名称搜索',
-                firstColumnName:"图片名称",
-                secondColumnName:"分类",
-                thirdColumnName:"删除时间",
-                forthColumnName:"保留天数"
+                type: "pic",
+                keyword: "keyword",
+                batchText: "张图片",
+                placeholder: "输入图片名称搜索",
+                firstColumnName: "图片名称",
+                secondColumnName: "分类",
+                thirdColumnName: "删除时间",
+                forthColumnName: "保留天数"
             },
             displayName: "图片",
             countData: 0,
@@ -70,14 +69,13 @@ export default {
                 keyword: "",
                 isDelete: true,
                 fileExtensionType: null
-            },
+            }
         };
     },
     mounted() {
         this.getPicList();
     },
     methods: {
-     
         // 获取列表
         async getPicList(node) {
             this.$Loading.show();
@@ -90,41 +88,38 @@ export default {
         // 批量恢复图片
         async batchRecovery(idlist) {
             idlist = idlist == null ? this.idsList : idlist;
-            this.$confirm(
-                `图片将恢复到对应分类下，确定恢复吗？`,
-                "提示",
-                {
-                    customClass: "medium",
-                    iconClass: "icon-warning",
-                    callback: async action => {
-                        console.log(action);
-                        if (action === "confirm") {
-                            let {
-                                status,
-                                data
-                            } = await recycleManageApi.picBatchRecovery(false, idlist);
-                            if (status === 200) {
-                              
-                                this.$notify({
-                                    customClass: "notify-success", //  notify-success ||  notify-error
-                                    message: `恢复成功`,
-                                    duration: 1500,
-                                    showClose: false
-                                });
-                                this.getPicList();
-                            }
-                            else{
-                                this.$notify({
-                                    customClass: "notify-error", //  notify-success ||  notify-error
-                                    message: `恢复失败，请重试`,
-                                    duration: 1500,
-                                    showClose: false
-                                });
-                            }
-                        } 
+            this.$confirm(`图片将恢复到对应分类下，确定恢复吗？`, "提示", {
+                customClass: "medium",
+                iconClass: "icon-warning",
+                callback: async action => {
+                    console.log(action);
+                    if (action === "confirm") {
+                        let {
+                            status,
+                            data
+                        } = await recycleManageApi.picBatchRecovery(
+                            false,
+                            idlist
+                        );
+                        if (status === 200) {
+                            this.$notify({
+                                customClass: "notify-success", //  notify-success ||  notify-error
+                                message: `恢复成功`,
+                                duration: 1500,
+                                showClose: false
+                            });
+                            this.getPicList();
+                        } else {
+                            this.$notify({
+                                customClass: "notify-error", //  notify-success ||  notify-error
+                                message: `恢复失败，请重试`,
+                                duration: 1500,
+                                showClose: false
+                            });
+                        }
                     }
                 }
-            );
+            });
         },
 
         // 批量更新的选中数量
@@ -137,7 +132,6 @@ export default {
             });
             this.selectedData = list;
         }
-      
     },
     computed: {
         isInvitationlWidth() {
@@ -147,26 +141,13 @@ export default {
             console.log(this.idsList.length);
             return this.idsList.length > 0 ? true : false;
         }
-    },
-  
+    }
 };
 </script>
 <style  scoped>
-
 </style>
 <style lang="scss" scoped>
 @import "../../style/contentDetail";
-.recycle-tip{
-margin: 0 16px; 
-height:32px;
-background:rgba(255,248,242,1);
-border-radius:2px;
-border:1px solid rgba(250,223,197,1);
-text-align: center;
-line-height: 32px;
-color: #FE9837;
-margin-bottom: 16px;
-}
 </style>
 
 

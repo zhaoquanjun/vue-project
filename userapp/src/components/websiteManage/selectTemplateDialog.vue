@@ -96,11 +96,7 @@
                 <i class="iconfont iconguanbi"></i>
               </span>
             </el-header>
-            <el-main
-              class="templateContent"
-              style="padding:0 80px;position:relative"
-              v-scrollBar
-            >
+            <el-main class="templateContent" style="padding:0 80px;position:relative" v-scrollBar>
               <el-row :gutter="80">
                 <el-col
                   class="templateItem"
@@ -157,7 +153,7 @@
             </el-main>
             <div>
               <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
-              <div class="pageing" id="pageing" style="margin-bottom:20px">
+              <div class="cl-paganation pageing" id="pageing" style="margin-bottom:20px">
                 <el-pagination
                   v-show="templatePage.totalCount > 9"
                   background
@@ -248,7 +244,7 @@
 import * as templateApi from "@/api/request/templateApi";
 import { getLanguage } from "@/configure/appCommon";
 import { designerUrl } from "@/environment/index";
-import { getMemberList } from '@/api/request/siteMemberApi';
+import { getMemberList } from "@/api/request/siteMemberApi";
 
 export default {
   props: ["siteId", "siteName", "templateId", "isChangeTemplate"],
@@ -731,6 +727,14 @@ export default {
 };
 </script>
 <style>
+.copy-icon {
+  margin-top: 17px;
+  display: inline-block;
+  width: 142px;
+  height: 89px;
+  background: url("~img/copy.gif") no-repeat center;
+  background-size: contain;
+}
 .copyTemplateLoading .el-loading-spinner {
   margin-top: 0 !important;
   left: 50%;

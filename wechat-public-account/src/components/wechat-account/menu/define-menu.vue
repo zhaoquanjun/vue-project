@@ -2,7 +2,7 @@
   <div class="define-menu__area clearfix">
     <div class="btn">
       <h4>自定义菜单</h4>
-      <span @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</span>
+      <button class="cl-button cl-button--primary" @click="_handleSaveAndPublish" :class="{opacityhalf: menuTree.length == 0}">保存并发布</button>
     </div>
     <div class="phone-bg ">
       <div class="phone-box__area">
@@ -43,7 +43,7 @@
               <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
             </draggable>
         </div>
-        <div class="primary-button__nomal order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</div>
+        <button class="cl-button cl-button--text_primary order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</button>
       </div>
       <div class="menu-operate__arae">
         <order-menu v-show="isOrder"></order-menu>
@@ -715,12 +715,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-input /deep/ .el-input__inner {
+  width: 240px;
+}
 .holder h3 {
   text-align: center
 }
 .message-content__section {
   background-color: #fff;
-  border-radius:2px;
+  border-radius:$--border-radius-base;
   height: 348px;
 
   .radio-tabs {
@@ -729,7 +732,7 @@ export default {
     border-radius:1px 1px 0px 0px;
     li {
       float: left;
-      font-size:14px;
+      font-size:12px;
       font-weight:400;
       color:rgba(38,38,38,1);
       line-height:40px;
@@ -740,7 +743,10 @@ export default {
         margin-right: 8px;
       }
       &.active {
-        color: #09CCEB;
+        color: $--color-primary;
+        i {
+          color: $--color-primary;
+        }
       }
     }
   }
@@ -754,10 +760,9 @@ export default {
   margin: 0 auto;
   min-width: 990px;
   border-radius: 20px;
-  font-family: "PingFangSC-Medium,PingFangSC";
   .phone-bg {
     height: 528px;
-    border: 1px solid #e5e5e5;
+    border: $--border-base;
   }
   .phone-box__area {
     position: relative;
@@ -788,9 +793,8 @@ export default {
         height: 52px;
         text-align: center;
         line-height: 52px;
-        color: #09cceb;
-        font-size: 14px;
-        font-family: "PingFangSC";
+        color: $--color-primary;
+        font-size: 12px;
         font-weight: 400;
         cursor: pointer;
       }
@@ -814,7 +818,7 @@ export default {
           line-height: 32px;
           text-align: center;
           color: #262626;
-          border-right: 1px solid #c9d9dc;
+          border-right: $--border-base;
           cursor: pointer;
           .menu-child__area {
             position: absolute;
@@ -822,19 +826,20 @@ export default {
             transform: translateX(-50%);
             bottom: 54px;
             width: 146x;
-            border: 1px solid #c9d9dc; // 需换底图
-            border-radius: 2px;
+            border: $--border-base; // 需换底图
+            border-radius: $--border-radius-base;
             li {
               margin: 0 auto;
               padding: 8px 6px;
               height: 34px;
-              line-height: 18px;
+              line-height: 34px;
+              display: list-item;
               text-align: center;
               width: 140px;
-              font-size: 14px;
+              font-size: 12px;
               color: #262626;
               border-right: none;
-              border-top: 1px solid #c9d9dc;
+              border-top: $--border-base;
               cursor: pointer;
               .menu-move__icon {
                 margin-right: 4px;
@@ -858,7 +863,7 @@ export default {
           border-right: none;
         }
         .selected {
-          color: #09cceb !important;
+          color: $--color-primary !important;
         }
       }
     }
@@ -879,7 +884,7 @@ export default {
     float: left;
     width: calc(100% - 295px);
     height: 526px;
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     .menu-operate__none {
       width: 100%;
       background: #fff;
@@ -898,8 +903,7 @@ export default {
         }
         p {
           margin-top: 3px;
-          font-size: 14px;
-          font-family: "PingFangSC";
+          font-size: 12px;
           font-weight: 400;
           color: rgba(164, 178, 191, 1);
           line-height: 20px;
@@ -910,8 +914,8 @@ export default {
     .menu-operate__box {
       margin-left: 24px;
       width: 100%;
-      border-radius: 2px;
-      border-left: 1px solid rgba(229, 229, 229, 1);
+      border-radius: $--border-radius-base;
+      border-left: $--border-base;
       background: #ffffff;
       .menu-operate__header {
         display: flex;
@@ -919,19 +923,18 @@ export default {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: $--border-base;
         height: 50px;
         p {
-          font-size:14px;
+          font-size:12px;
           font-weight:500;
           color:rgba(38,38,38,1);
           line-height:50px;
         }
         .menu-operate__delete {
-          font-size: 14px;
-          font-family: "PingFangSC";
+          font-size: 12px;
           font-weight: 400;
-          color: #09CCEB;
+          color: $--color-primary;
           line-height: 50px;
           cursor: pointer;
         }
@@ -954,8 +957,7 @@ export default {
           }
           p {
             padding-top: 24px;
-            font-size: 14px;
-            font-family: "PingFangSC";
+            font-size: 12px;
             font-weight: 400;
             color: rgba(9, 204, 235, 1);
             line-height: 20px;
@@ -1051,6 +1053,88 @@ export default {
     overflow: hidden;
   }
 }
+.selectUrl {
+  padding-left: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+.selectUrl span{
+    float: left;
+    font-size: 12px;
+    line-height: 40px;
+    margin-right: 16px;
+    font-weight:400;
+    color:rgba(38,38,38,1);
+}
+.selectUrl div {
+  display: flex;
+  justify-content: space-between;
+  width:400px;
+  height:40px;
+  float: left;
+  background:rgba(255,255,255,1);
+  border-radius:2px;
+  border:$--border-base;
+  font-size:12px;
+  font-weight:400;
+  color: #606266;
+  line-height:36px;
+  padding: 0 10px;
+  overflow: hidden;
+}
+.selectUrl .select-btn {
+  box-sizing: border-box;
+  height: 40px;
+  border: 1px solid $--color-primary;
+  text-align: center;
+  width: 90px;
+  margin: 0 0 0 12px;
+  color: $--color-primary !important;
+  cursor: pointer;
+}
+.selectUrl div i {
+  color: $--color-primary;
+}
+.selectUrl div p {
+  line-height: 40px;
+}
+.btn {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 32px;
+  margin: 24px 0 16px;
+  .cl-button--primary {
+    height: 32px;
+  }
+}
+.btn h4 {
+  height: 16px;
+  margin: 10px 0;
+  font-size:12px;
+  font-weight:500;
+  color:rgba(38,38,38,1);
+  line-height:16px;
+  padding-left: 16px;
+  border-left: 4px solid $--color-primary;
+}
+.tipsName {
+  padding-left: 100px;
+  height: 20px;
+	color: rgba(56, 56, 56, 1);
+	font-size: 12px;
+	line-height: 20px;
+	text-align: left;
+}
+.tipsName span{
+  padding: 0;
+  position: relative;
+  float: left;
+}
+.tipsName a {
+  float: left;
+  color: rgba(0, 193, 222, 1);
+}
 </style>
 <style scoped>
 .el-radio-group /deep/ .el-radio .el-radio__label {
@@ -1068,99 +1152,5 @@ export default {
 }
 .el-form-item /deep/ .el-form-item__label {
   color: #a1a8b1;
-}
-.selectUrl {
-  padding-left: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e5e5;
-}
-.selectUrl span{
-    float: left;
-    font-size: 14px;
-    line-height: 40px;
-    margin-right: 16px;
-    font-family:"PingFangSC-Regular,PingFangSC";
-    font-weight:400;
-    color:rgba(38,38,38,1);
-}
-.selectUrl div {
-  display: flex;
-  justify-content: space-between;
-  width:400px;
-  height:40px;
-  float: left;
-  background:rgba(255,255,255,1);
-  border-radius:2px;
-  border:1px solid rgba(229,229,229,1);
-  font-size:14px;
-  font-family:'PingFangSC-Regular,PingFangSC';
-  font-weight:400;
-  color: #606266;
-  line-height:36px;
-  padding: 0 10px;
-  overflow: hidden;
-}
-.selectUrl .select-btn {
-  box-sizing: border-box;
-  height: 40px;
-  border: 1px solid #09CCEB;
-  text-align: center;
-  width: 90px;
-  margin: 0 0 0 12px;
-  color: #09CCEB !important;
-  cursor: pointer;
-}
-.selectUrl div i {
-  color: #0595E6;
-}
-.btn {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 36px;
-  margin: 24px 0 16px;
-}
-.btn h4 {
-  height: 16px;
-  margin: 10px 0;
-  font-size:14px;
-  font-family:'PingFangSC-Medium,PingFang SC';
-  font-weight:500;
-  color:rgba(38,38,38,1);
-  line-height:16px;
-  padding-left: 16px;
-  border-left: 4px solid #09CCEB;
-}
-.btn span {
-  display: inline-block;
-  width:100px;
-  height:32px;
-  background:#09cceb; 
-  border-radius:2px;
-  font-size:14px;
-  font-family:'PingFangSC-Regular,PingFangSC';
-  font-weight:400;
-  text-align: center;
-  color: rgba(255, 255, 255, 1);
-  line-height:32px;
-  margin-top: 2px;
-  cursor: pointer;
-}
-.tipsName {
-  padding-left: 100px;
-  height: 20px;
-	color: rgba(56, 56, 56, 1);
-	font-size: 14px;
-	line-height: 20px;
-	text-align: left;
-}
-.tipsName span{
-  padding: 0;
-  position: relative;
-  float: left;
-}
-.tipsName a {
-  float: left;
-  color: rgba(0, 193, 222, 1);
 }
 </style>

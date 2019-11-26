@@ -9,7 +9,7 @@
             <div v-if="!isEditorShow && list.length <= 0" class="add-img">
                 <img src="~img/add-img.png" />
                 <p>点击此处编辑您的图文</p>
-                <span @click="handlerAddNewsImg">添加图文</span>
+                <button class="cl-button cl-button--primary" @click="handlerAddNewsImg">添加图文</button>
             </div>
             <li
                 ref="listItem"
@@ -95,7 +95,7 @@
                     </div>
                     <div class="seting-item seting-btn">
                         <button v-show="list.length> 0" class="editor-cancel" @click="handlerCancel">取消</button>
-                        <button class="editor-comfirm" @click="handlerConfirm">确定</button>
+                        <button class="cl-button cl-button--primary" @click="handlerConfirm">确定</button>
                     </div>
                 </div>
             </li>
@@ -311,6 +311,7 @@ export default {
 .add-img {
     width: 100%;
     margin: 0;
+    text-align: center;
     img {
         display: block;
         width: 60px;
@@ -318,25 +319,12 @@ export default {
         margin: 70px auto 0;
     }
     p {
-        font-size:14px;
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(161,168,177,1);
         line-height:20px;
         text-align: center;
         margin: 12px 0;
-    }
-    span {
-        display: block;
-        width: 90px;
-        height: 32px;
-        text-align: center;
-        margin: 0 auto;
-        font-size:14px;
-        font-weight:400;
-        line-height:32px;
-        color: #fff;
-        background: #09cceb;
-        cursor: pointer;
     }
 }
 .list {
@@ -349,7 +337,7 @@ export default {
     li.fist-item {
         height: 140px;
         overflow: hidden;
-        border-radius: 4px;
+        border-radius: $--border-radius-base;
         .imgwrap {
             width: 100%;
             height: 100%;
@@ -374,7 +362,7 @@ export default {
         padding: 0 16px;
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
-        border-radius: 4px;
+        border-radius: $--border-radius-base;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -428,7 +416,7 @@ export default {
             padding: 12px 8px 8px;
             margin-top: 8px;
             border: 1px solid rgba(211,211,211,1);
-            border-radius: 2px;
+            border-radius: $--border-radius-base;
             box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
             .seting-item {
                 padding-bottom: 16px;
@@ -440,15 +428,15 @@ export default {
             .seting-line {
                 height:40px;
                 background:rgba(255,255,255,1);
-                border-radius:2px;
-                border:1px solid rgba(229,229,229,1);
-                font-size:14px;
-                font-family:'PingFangSC-Regular,PingFangSC';
+                border-radius:$--border-radius-base;
+                border:$--border-base;
+                font-size:$--font-size-small;
                 font-weight:400;
                 color:rgba(211,211,211,1);
                 line-height:40px;
                 padding: 0 14px;
                 width: 100%;
+                box-sizing: border-box;
                 cursor: pointer;
             }
             .select {
@@ -463,7 +451,7 @@ export default {
                 width: 70px;
                 height: 32px;
                 background: rgba(9, 204, 235, 1);
-                border-radius: 2px;
+                border-radius: $--border-radius-base;
                 margin-left: 16px;
                 cursor: pointer;
                 color: #fff;
@@ -474,14 +462,14 @@ export default {
                 height: 32px;
                 cursor: pointer;
                 background: #fff;
-                border-radius: 2px;
+                border-radius: $--border-radius-base;
                 color: rgba(9, 204, 235, 1);
                 border: 1px solid rgba(9, 204, 235, 1);
             }
             .cover {
                 width: 140px;
                 height: 70px;
-                border-radius: 2px;
+                border-radius: $--border-radius-base;
                 overflow: hidden;
                 position: relative;
                 img {
@@ -518,7 +506,7 @@ export default {
     padding: 0 10px 0 32px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 2px 10px 0px rgba(224, 224, 224, 0.5);
-    border-radius: 4px;
+    border-radius: $--border-radius-base;
     margin-bottom: 16px;
     .el-icon-plus {
         margin-right: 16px;

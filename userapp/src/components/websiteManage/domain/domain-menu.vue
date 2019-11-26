@@ -1,81 +1,72 @@
 <template>
-    <div class="domain-menu">
-        <el-tabs v-model="backupType" type="card" @tab-click="handleTabClick('')">
-            <el-tab-pane label="域名列表" name="domainList"></el-tab-pane>
-            <el-tab-pane label="301重定向" name="301Redirect"></el-tab-pane>
-        </el-tabs>
-        <button class="backupBtn" @click="handleBtn">{{handlerBtnText}}</button>
-    </div>
+  <div class="domain-menu">
+    <el-tabs v-model="backupType" @tab-click="handleTabClick('')">
+      <el-tab-pane label="域名列表" name="domainList"></el-tab-pane>
+      <el-tab-pane label="301重定向" name="301Redirect"></el-tab-pane>
+    </el-tabs>
+    <button class="backupBtn cl-button cl-button--primary" @click="handleBtn">{{handlerBtnText}}</button>
+  </div>
 </template>
 <script>
 export default {
-    data() {
-        return {
-            backupType: "domainList",
-            handlerBtnText:"添加域名"
-        };
+  data() {
+    return {
+      backupType: "domainList",
+      handlerBtnText: "添加域名"
+    };
+  },
+  methods: {
+    /**
+     * 切换列表
+     */
+    handleTabClick(backupType) {
+      this.backupType = backupType || this.backupType;
+      this.$emit("handleTabClick", this.backupType);
+      if (this.backupType == "301Redirect") {
+        this.handlerBtnText = "添加重定向";
+      } else {
+        this.handlerBtnText = "添加域名";
+      }
     },
-    methods: {
-        /**
-         * 切换列表
-         */
-        handleTabClick(backupType) {
-           this.backupType = backupType || this.backupType ;
-            this.$emit("handleTabClick",this.backupType)
-            if(this.backupType=="301Redirect"){
-                this.handlerBtnText="添加重定向"
-            }else{
-                 this.handlerBtnText="添加域名"
-            }
-        },
-        /**
-         * 点击右侧btn
-         */
-        handleBtn() {
-           
-            this.$emit("handleBtn",this.backupType);
-        }
+    /**
+     * 点击右侧btn
+     */
+    handleBtn() {
+      this.$emit("handleBtn", this.backupType);
     }
+  }
 };
 </script>
 
-<style scoped>
-.domain-menu{
-    position: relative
+<style lang="scss" scoped>
+.domain-menu {
+  position: relative;
+  height: 50px;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  margin-bottom: 12px;
 }
-.el-tabs {
-    margin-top: 24px;
+.domain-menu /deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+.el-tabs /deep/ .el-tabs__active-bar.is-top {
+  width: 0 !important;
 }
 .el-tabs /deep/ .el-tabs__item {
-    width:100px;
-    height: 38px;
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(51, 51, 51, 1);
-    line-height: 36px;
-    border-bottom: 1px solid #e4e7ed;
-    background: rgba(245, 245, 245, 1);
-    vertical-align: top;
-    border-top: 2px solid transparent;
+  height: 50px;
+  line-height: 50px;
+  margin: 0 24px;
+  padding: 0;
+  color: $--color-text-primary;
 }
-.el-tabs /deep/ .is-active {
-    color: rgba(1, 192, 222, 1);
-    border-top: 2px solid rgb(72, 201, 226);
-    border-bottom: 1px solid transparent;
-    background: rgb(255, 255, 255);
+.el-tabs /deep/ .el-tabs__item.is-active {
+  border-bottom: 2px solid $--color-primary;
 }
 .backupBtn {
-    width: 110px;
-    height: 32px;
-    background: rgba(0, 193, 222, 1);
-    position: absolute;
-    right: 16px;
-    top: 0;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-}
-.backupBtn:hover{
-    opacity: 0.8;
+  position: absolute;
+  right: 16px;
+  top: 9px;
 }
 </style>
 

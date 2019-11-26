@@ -236,7 +236,7 @@ export default {
                 this.setCss(allCategoryEle, {
                     background: "#e0faff",
                     color: "#262626",
-                    borderLeft: "2px solid #0595E6"
+                    borderLeft: "2px solid #ff6b00"
                 });
             } else {
                 this.setCss(allCategoryEle, {
@@ -332,5 +332,8 @@ export default {
     width: 16px;
     height: 16px;
     padding-right: 5px;
+}
+.aside-tree{
+    border-left-color:$--color-primary;
 }
 </style>

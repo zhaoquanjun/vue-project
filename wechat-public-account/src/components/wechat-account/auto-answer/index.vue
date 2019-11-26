@@ -569,10 +569,12 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .el-tabs /deep/ .el-tabs__item {
-    font-size: 14px;
-    padding: 0 24px;
+    font-size: $--font-size-small;
+    padding: 0;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
     font-weight: 400;
     color: #262626;
     height: 50px;
@@ -580,15 +582,30 @@ export default {
     border-bottom: 2px solid transparent;
     box-sizing: border-box;
 }
+.el-tabs--card /deep/ .el-tabs__header .el-tabs__nav {
+  border: none;
+}
+.el-tabs--card /deep/ .el-tabs__header .el-tabs__item {
+  border: none;
+}
 .el-tabs /deep/ .el-tabs__header {
     margin: 0;
+    border-bottom: $--icon-color-base;
 }
 .el-tabs /deep/ .is-active {
     background: #F8FAFC;
-    border-bottom: 2px solid #09cceb !important;
+    border-bottom: 2px solid $--color-primary !important;
+}
+.el-tabs /deep/ .el-tabs__active-bar {
+    background: #F8FAFC;
+    border-bottom: 2px solid $--color-primary !important;
+}
+.el-tabs /deep/.el-tabs__nav-wrap::after {
+ height: 1px;
 }
 </style>
 <style lang="scss" scoped>
+
 .auto-answer {
     padding: 16px 32px 0;
     .answer-tabs {
@@ -596,6 +613,7 @@ export default {
         background: #ffffff;
     }
     .spread-title {
+    
       display: flex;
       height: 32px;
       width: 100%;
@@ -606,9 +624,8 @@ export default {
         margin: 6px 0;
         padding-left: 12px;
         line-height: 20px;
-        border-left: 4px solid #09CCEB;
-        font-size:14px;
-        font-family:'PingFangSC-Regular,PingFang SC';
+        border-left: 4px solid $--color-primary;
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(38,38,38,1);
       }

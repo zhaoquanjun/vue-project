@@ -2,21 +2,24 @@
     <el-header class="content-header">
         <template v-if="!isBatchHeaderShow">
             <div class="seachInput head-item">
-              
-                      <el-input
+                <el-input
                     size="medium"
                     v-model="articleSearchOptions.keyword"
                     placeholder="输入名称搜索"
                     @keyup.enter.native="searchEnterFun"
                     class="input-with-select"
-                    
                 >
-                    <i class="el-icon-search el-input__icon" style="cursor: pointer;" slot="suffix" @click="getArticleList"></i>
+                    <i
+                        class="el-icon-search el-input__icon"
+                        style="cursor: pointer;"
+                        slot="suffix"
+                        @click="getArticleList"
+                    ></i>
                 </el-input>
             </div>
 
             <div class="head-item head-right">
-                <div class="head-item">
+                <div class="head-item head-handle-right">
                     <span>状态</span>
                     <span class="select-item">
                         <el-select
@@ -49,7 +52,7 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <span>排序</span>
+                    <!-- <span>排序</span>
                     <span class="select-sort select-item">
                         <el-select
                             size="small"
@@ -66,15 +69,21 @@
                         </el-select>
                     </span>
                     <button @click="switchIsDesc('dec')" class="desBtn">
-                        <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                        <i
+                            class="iconfont iconxiayi"
+                            :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
+                        ></i>
                     </button>
                     <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
-                        <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
-                    </button>
+                        <i
+                            class="iconfont iconshangyi"
+                            :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
+                        ></i>
+                    </button> -->
                 </div>
                 <div class="head-item head-handle-btn">
                     <!-- <button class="btn-lightblue btn-small" @click="importArticle">导入产品</button> -->
-                    <button class="add-article btn-lightblue btn-small" @click="addArticle">新增产品</button>
+                    <button class="cl-button cl-button--primary" @click="addArticle">新增产品</button>
                 </div>
             </div>
         </template>
@@ -86,35 +95,27 @@
                     <i>{{count}}</i> 个产品
                 </span>
                 <div class="bach-hanlder">
-                    <button class="btn-small  btn-lightblue-notboard" @click="batchPublish(3, false)">上架</button>
-                    <button class="btn-small  btn-lightblue-notboard" @click="batchPublish(3, true)">下架</button>
-                    <button class="btn-small  btn-lightblue-notboard" @click="batchCopy">复制</button>
-                    <button class="btn-small  btn-red-notboard" @click="batchRemove(1,true)" >删除</button>
-                    <el-dropdown trigger="click" @command="handleCommand">
+                    <button class="cl-button cl-button--text_primary" @click="batchPublish(3, false)">上架</button>
+                    <button class="cl-button cl-button--text_primary" @click="batchPublish(3, true)">下架</button>
+                    <button class="cl-button cl-button--text_primary" @click="batchCopy">复制</button>
+                    <button class="cl-button cl-button--text_primary" @click="handleCommand('move')">移动</button>
+                    <button class="cl-button cl-button--text_primary" @click="handleCommand('top')">置顶</button>
+                    <button class="cl-button cl-button--text_primary" @click="handleCommand('cancelTop')">取消置顶</button>
+                    <button class="cl-button cl-button--text_danger" @click="batchRemove(1,true)">删除</button>
+                    <!-- <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                             <button class="btn-small btn-notboard btn-black-notboard">
                                 <i class="iconfont iconsangedian"></i>
                             </button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <!-- <span size="small" @click="batchclassifySet">移动</span> -->
                             <el-dropdown-item command="move">移动</el-dropdown-item>
-                            <!--  <el-button size="small" @click="batchTop(2, false)">置顶</el-button> -->
                             <el-dropdown-item command="top">置顶</el-dropdown-item>
-                            <!--  <el-button size="small" @click="batchTop(2, true)">取消置顶</el-button> -->
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                            <!-- <el-button size="small" @click="batchViewAuth">访问权限</el-button> -->
-                            <!-- <el-dropdown-item command="permission">访问权限</el-dropdown-item> 双十一版本注释 -->
+                            
                         </el-dropdown-menu>
-                    </el-dropdown>
+                    </el-dropdown> -->
                 </div>
-
-                <!-- <el-button type="danger" @click="batchRemove(null)">批量删除</el-button>
-        <el-button type="danger" @click="batchTop(null, false)">批量置顶</el-button>
-        <el-button type="danger" @click="batchTop(null, true)">批量取消置顶</el-button>
-        <el-button type="danger" @click="batchPublish(null,false)">批量上线</el-button>
-        <el-button type="danger" @click="batchPublish(null,true)">批量下线</el-button>
-                <el-button type="danger" @click="batchMove(null)">批量移动</el-button>-->
             </div>
         </template>
     </el-header>
@@ -145,7 +146,7 @@ export default {
                 {
                     orderValue: "CreateTime",
                     orderLabel: "创建时间"
-                },
+                }
             ],
             orderValue: "CreateTime",
             topOptions: [
@@ -184,13 +185,12 @@ export default {
             if (isNaN(parseInt(value))) {
                 value = null;
             } else {
-               value = !!value;
+                value = !!value;
             }
             this.articleSearchOptions.isTop = value;
             this.getArticleList();
         },
         switchIsDesc(flag) {
-          
             if (flag === "asc") {
                 this.ascSort = true;
                 this.descSort = !this.ascSort;
@@ -202,7 +202,7 @@ export default {
                 this.articleSearchOptions.isDescending = true;
             }
 
-             this.getArticleList();
+            this.getArticleList();
         },
         importArticle() {
             // this.push({
@@ -273,20 +273,16 @@ export default {
     }
 };
 </script>
-<style>
-.seachInput .el-input__inner {
-    font-size: 12px;
-}
-</style>
+
 
 <style <style lang="scss" scoped>
-@import "@/styles/manage-head.scss";
+@import "@/styles/content-manage/manage-head.scss";
 
-.btn-black-notboard{
+.btn-black-notboard {
     padding: 6px;
-    &:hover{
-        background:rgba(240,243,247,1);
-        border-radius:4px;
+    &:hover {
+        background: rgba(240, 243, 247, 1);
+        border-radius: 4px;
     }
 }
 .select-item {
@@ -303,33 +299,21 @@ export default {
     display: inline-block;
     flex: none;
 }
+.head-right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 200px);
+    .head-handle-right {
+        margin-left: 24px;
+    }
+}
 .head-handle-btn {
     padding-left: 30px;
 }
-
-.head-right {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-left: 30px;
-    button {
-      
-    }
-    .add-article {
-        background: rgba(9, 204, 235, 1 );
-        color: #fff;
-        &:hover{
-            opacity: 0.8;
-        }
-    }
-}
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    &:hover{
-        opacity: 0.8;
-    }
+.bach-hanlder button {
+    padding: 9px 16px;
+    margin: 0;
+    min-width: 60px;
 }
 </style>

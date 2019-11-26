@@ -7,6 +7,7 @@
             class="content-table table-content"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -56,7 +57,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长"></el-table-column>
             <el-table-column prop="categoryName" label="分类" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -65,7 +66,7 @@
             </el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" label="上传时间" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" sortable='custom' label="上传时间" width="150" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
@@ -82,35 +83,45 @@
         </el-table>
         <div class="list-footer">
             <div class="storage-wrap">
-                <span class="title">已用空间</span>
+                <div class="use-title">
+                    <span class="title">已用空间</span>
+                    <span class="storage-content">
+                        {{storageUsage.currentUsage}} /3 {{storageUsage.maxSize}}
+                    </span>
+                </div>
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':storageUsage.prograss+'%'}"></div>
                 </div>
-                <span
-                    class="storage-content"
-                >{{storageUsage.currentUsage}} /3 {{storageUsage.maxSize}}</span>
             </div>
             <div class="storage-wrap">
-                <span class="title">已用流量</span>
+                <div class="use-title">
+                    <span class="title">已用流量</span>
+                    <span class="storage-content">
+                        {{usageTraffic.currentUsage}} / {{usageTraffic.maxSize}}
+                    </span>
+                </div>
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':usageTraffic.prograss+'%'}"></div>
                 </div>
-                <span
-                    class="storage-content"
-                >{{usageTraffic.currentUsage}} / {{usageTraffic.maxSize}}</span>
             </div>
-            <div class="pageing" id="pageing">
+            <div 
+                class="cl-paganation pageing" 
+                id="pageing" 
+                :class="{'noJumper':imgPageResult.totalPage <= 10}"
+            >
                 <slot name="paging"></slot>
                 <el-pagination
                     background
-                    layout="total, sizes, prev, pager, next"
+                    :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     :total="imgPageResult.totalRecord"
-                    :page-count="imgPageResult.totalPage"
                     :page-size="picSearchOptions.pageSize"
-                    :page-sizes="[10,20,50]"
+                    :page-sizes="[10,20,50,5]"
                     @current-change="changePage"
                     @size-change="changeSize"
-                ></el-pagination>
+                >
+                    <div class="sizes-title">，每页显示</div>
+                    <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
             </div>
         </div>
         <div id="img-list-dialog">
@@ -120,18 +131,6 @@
                 @close="closeDialog"
             >
                 <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
-                <!-- <div class="dislog-footer" slot="footer">
-                       <el-tooltip
-                            class="item"
-                            effect="light"
-                            :content="picInfo.title"
-                            placement="top"
-                        >
-                             <span class="ellipsis"  style="width:150px">{{picInfo.title}}</span>
-                        </el-tooltip>
-                    <span>大小: {{picInfo.sizeStr}}</span>
-                    <span>格式: {{(picInfo.fileExtension)}}</span>
-                </div> -->
             </el-dialog>
         </div>
     </div>
@@ -309,6 +308,25 @@ export default {
                 return fileExt;
             }
             return "";
+        },
+        //改变排序
+        sortChange(row){
+                    // value: "CreateTime",
+                    // label: "创建时间"
+                    // value: "FileSize",
+                    // label: "文件大小"
+            console.log(row,'row')   
+            if (row.prop == 'sizeStr') {
+                this.picSearchOptions.orderByType = "FileSize";
+            } else {
+                this.picSearchOptions.orderByType = "CreateTime";
+            }
+            if (row.order == 'ascending') {
+                this.picSearchOptions.isDescending  = false;
+            } else {
+                this.picSearchOptions.isDescending = true;
+            }
+            this.$emit("getList");
         }
     },
     watch: {
@@ -319,7 +337,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-input /deep/ .el-input__inner {
     padding-right: 50px;
 }
@@ -327,9 +345,17 @@ export default {
     display: flex;
     align-items: center;
 }
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
+}
+
+
 </style>
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 .file-title {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -344,8 +370,8 @@ export default {
 }
 .cover {
     position: relative;
-     width: 150px;
-    height: 100px;
+    width: 150px !important;
+    height: 100px !important;
     .play {
         cursor: pointer;
         position: absolute;
@@ -364,15 +390,7 @@ export default {
             border-radius: 50%;
             transform: translate(-50%, -50%);
             background: url("~img/cover.png") no-repeat center;
-            // span {
-            //     width: 0;
-            //     height: 0;
-            //     margin: 9px 0 0 14px;
-            //     border-top: 8px solid transparent;
-            //     border-right: 10px solid transparent;
-            //     border-bottom: 8px solid transparent;
-            //     border-left: 10px solid #fff;
-            // }
+          
         }
     }
 }
@@ -381,6 +399,10 @@ export default {
     outline: none;
     width: 800px;
     margin-top: 150px;
+}
+.list-footer .use-title {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
 

@@ -66,9 +66,9 @@ export default {
   .pannel-head {
     height: 40px;
     line-height: 40px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     overflow: hidden;
-    border-bottom: 1px solid #efefef;
+    border-bottom: $--border-base;
     span {
       padding: 0 10px;
     }
@@ -86,7 +86,7 @@ export default {
   padding: 30px 0 13px 0;
 }
 .pannel-main{
-  height: calc(100% - 107px);
+  height: calc(100% - 90px);
 }
 
 </style>

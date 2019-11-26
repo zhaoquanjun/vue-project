@@ -126,29 +126,26 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <el-tooltip class="item" effect="dark" content="恢复" placement="top">
-                            <button
-                                class="handle-btn edit-icon"
-                                @click="handleRecoveryData(scope.row)"
-                            >
-                                <i class="iconfont iconhuifu"></i>
-                            </button>
+                            <i  @click="handleRecoveryData(scope.row)" class="cl-iconfont iconfont iconhuifu"></i>
                         </el-tooltip>
                     </div>
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing" id="pageing">
+        <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':recyclePageResult.totalPage <= 10}">
             <slot name="paging"></slot>
             <el-pagination
                 background
-                layout="total, sizes, prev, pager, next"
+                :layout="recyclePageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="recyclePageResult.totalRecord"
-                :page-count="recyclePageResult.totalPage"
                 :page-size="recycleSearchOptions.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePage"
                 @size-change="changeSize"
-            ></el-pagination>
+            >
+                <div class="sizes-title">，每页显示</div>
+                <button v-if="recyclePageResult.totalPage > 10" class="paging-confirm">跳转</button>
+            </el-pagination>
         </div>
         <div id="img-list-dialog">
             <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false">
@@ -290,7 +287,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 
 .video-img-name {
     overflow: hidden;

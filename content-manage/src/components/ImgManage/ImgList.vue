@@ -7,6 +7,7 @@
             tooltip-effect="dark"
             class="content-table table-content"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -56,10 +57,10 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="sizeStr" min-width="100" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sizeStr" min-width="100" label="大小" sortable='custom' show-overflow-tooltip></el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" min-width="150" label="上传时间">
+            <el-table-column prop="createTimeStr" min-width="150" sortable='custom' label="上传时间">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createTimeStr" placement="top">
                         <span>{{ scope.row.createTimeStr }}</span>
@@ -87,23 +88,22 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing" id="pageing">
+        <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':imgPageResult.totalPage <= 10}">
             <el-pagination
                 background
-                :layout="layout"
+                :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="imgPageResult.totalRecord"
-                :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePage"
                 @size-change="changeSize"
             >
                 <div class="sizes-title">，每页显示</div>
-                <button class="paging-confirm">跳转</button>
+                <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <!-- :title="picTitle" -->
-        <div id="img-list-dialog">
+        <div id="img-list-dialog" class="previw-dialog" >
             <el-dialog
                 :visible.sync="imgVisible"
                 :modal-append-to-body="false"
@@ -158,7 +158,6 @@ export default {
 
     data() {
         return {
-            layout: "total, slot, sizes, prev, pager, next,jumper",
             picInfo: {},// 当前图片的信息
             index: -1, //
             imgVisible: false,// 查看图片弹窗 是否显示
@@ -206,10 +205,7 @@ export default {
             this.changeCategoryPicId = row.id;
             this.$emit("moveClassify", true, row);
         },
-        // changeCategory(data) {
-        //     this.$emit("changeCategory", data.id, [this.changeCategoryPicId]);
-        //     this.categoryVisable = false;
-        // },
+      
         // 重命名图片名称
         rename(id, row, index) {
            if(row.title)this.newName = row.title;
@@ -275,17 +271,33 @@ export default {
         },
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
-        }
+        },
+        //改变排序
+        sortChange(row){
+                    // value: "CreateTime",
+                    // label: "创建时间"
+                    // value: "FileSize",
+                    // label: "文件大小"
+            if (row.prop == 'sizeStr') {
+                this.picSearchOptions.orderByType = "FileSize";
+            } else {
+                this.picSearchOptions.orderByType = "CreateTime";
+            }
+            if (row.order == 'ascending') {
+                this.picSearchOptions.isDescending  = false;
+            } else {
+                this.picSearchOptions.isDescending = true;
+            }
+            this.$emit("getList");
+        },
     }
 };
 </script>
 
+<style lang="scss" scoped>
+@import "@/styles/content-manage/manege-table.scss";
 
 
-<style scoped>
-.myCarousel{
-    overflow-x: visible;
-}
 .el-table /deep/ .el-table_1_column_3 .cell span{
     display: inline-block;
     width: 90px;
@@ -293,47 +305,17 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.myCarousel /deep/ .el-carousel__arrow--left{
-    position: absolute;
-    left: -50px;
-}
-.myCarousel /deep/ .el-carousel__arrow--right{
-    position: absolute;
-    right: -50px;
-}
-.left-prev,
-.right-next {
-    opacity: 0;
-}
+
 .el-table /deep/ .el-table__row .el-input .el-input__suffix {
     display: flex;
     align-items: center;
 }
-
-.img-name {
-    cursor: pointer;
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
 }
 
-#img-list-dialog .dislog-footer {
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    left: 0;
-    bottom: 15px;
-}
-
-#img-list-dialog .dislog-footer span {
-    padding: 0 20px;
-    color: #fff;
-}
-
-#img-list-dialog .el-dialog {
-    background: #262626;
-    opacity: 0.7;
-    height: auto;
-}
-</style>
-<style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
 </style>
 

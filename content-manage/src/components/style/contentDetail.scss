@@ -1,7 +1,6 @@
 // 文章 产品详情 
 // 设置的关键词 
 .keyword-list {
-    // position: absolute;
     display: inline-block;
     z-index: 1;
     top: 50px;
@@ -11,14 +10,6 @@
     padding: 5px;
     box-sizing: border-box;
     li {
-        // word-break: break-all;
-        // display: inline-block;
-        // padding: 5px 10px;
-        // margin: 0 5px 8px;
-        // background: #609ee9;
-        // border-radius: 30px;
-        // font-size: 12px;
-        // color: #fff;
         position: relative;
         word-break: break-all;
         cursor: pointer;
@@ -31,7 +22,6 @@
         vertical-align: top;
         background-color: #609ee9;
         border-radius: 16px;
-        // border: 1px #609ee9 solid;
         color: #FFF;
         overflow: hidden;
     
@@ -45,39 +35,25 @@
             bottom: 1px;
             min-height: 21px;
             height: 100%;
-           
             margin-left: 6px;
             padding: 0px 10px;
-            // border-left: 1px #5C9AE6 solid;
             display: block;
-            // border-radius: 0 20px 20px 0;
             overflow: hidden;
             font-size: 16px;
         }
     }
-   
-}
-
-
-// 侧边分类title样式
-.pic-type-title {
-    padding: 0 10px;
-    box-sizing: border-box;
-    span {
-        display: inline-block;
-        height: 70px;
-        line-height: 70px;
-        width: 100%;
-       
-        box-sizing: border-box;
-        font-size: 18px;
-        border-bottom: 1px solid #e5e5e5;
+   .el-input{
+        width: auto;
+        min-width: 185px;
+    
+    }
+    .el-input /deep/ .el-input__inner{
+           border: none;
+           padding: 0;
+           height: 23px;
+           line-height: 23px;
     }
 }
-.title-item {
-    padding: 28px 0 12px 12px;
-}
-
 
 .article-content {
     .content-item {
@@ -85,15 +61,12 @@
         background: #fff;
         box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.03);
         margin-bottom: 16px;
-        // overflow: hidden;
     }
     .content-title {
         padding-bottom: 20px;
-        // height: 20px;
         font-size: 14px;
         font-weight: 600;
         color: rgba(38, 38, 38, 1);
-        // line-height: 20px;
     }
     .set-article,
     .seo-key {
@@ -101,26 +74,26 @@
         padding-bottom: 0;
     }
 }
-// .select-sort {
-//     display: inline-block;
-//     width: 117px;
-//     box-sizing: border-box;
-//     height: 32px;
-//     margin: 0 0 0 7px;
-// }
+
 .select-sort{
     padding-left: 16px;
 }
-.category{
-    width: 300px;
-    height: auto;
+
+/* 修改element input设置字数显示 最后遮挡问题 */
+.contentDetail-title.el-input  .el-input__inner {
+    height: 35px;
+    line-height: 35px;
+    padding-right: 70px;
 }
-.quill-editor {
-    //height: 500px;
+#article-content .el-collapse,
+#article-content .el-form  .el-collapse-item__header {
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
 }
-.ql-container {
-    height: 400px;
-    overflow: auto;
+.el-form-item__error{
+    font-weight: 400; 
 }
+/* 关键词样式修改 */
 
 

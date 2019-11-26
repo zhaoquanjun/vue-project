@@ -4,8 +4,6 @@
             <h4 class="pic-type-title">
                 <span>{{displayName}}分类</span>
             </h4>
-            <!-- <h5 class="title-item" @click="resetCategoryId">全部分类</h5> -->
-            <!-- <button @click="newCategory({DisplayName:'Test'})">新增</button> -->
             <m-tree
                 ref="myTree"
                 :tree-result="treeResult"
@@ -142,7 +140,7 @@
                             :isexpand="true"
                         ></SelectTree>
                     </template>
-                    <div slot="footer" class="pannle-footer">
+                    <div slot="footer" class="pannel-footer">
                         <button @click="updateCategoryPic" class="sure">确定</button>
                         <button @click="cancelUpdateCategor" class="cancel">取消</button>
                     </div>
@@ -296,7 +294,6 @@ export default {
                 `删除后，网站中引用的文件数据将同步删除，同时文件将被移动到回收站，是否确认删除？`,
                 "提示",
                 {
-                    customClass: "medium",
                     iconClass: "icon-warning",
                     callback: async action => {
                         console.log(action);
@@ -422,8 +419,6 @@ export default {
             let idList = id || this.idsList;
             let msg = !isTop ? "取消置顶" : "置顶";
             this.$confirm(`您确认要${msg}所选文件吗？`, "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
                 iconClass: "icon-warning",
                 callback: async action => {
                     if (action === "confirm") {
@@ -620,7 +615,7 @@ export default {
     }
 };
 </script>
-<style  scoped>
+<style lang='scss'  scoped>
 .el-dialog__wrapper /deep/ .el-dialog__body {
     padding: 0;
 }
@@ -633,11 +628,11 @@ export default {
 }
 .el-form /deep/ .input-border .el-input__inner {
     border: none;
-    border-bottom: 1px solid #b9cbcf;
+    border-bottom: $--border-base;
     border-radius: 0;
 }
 .el-form /deep/ .input-border .el-input__inner:hover {
-    border-bottom: 1px solid #0595e6;
+    border-bottom: 1px solid $--color-primary;
 }
 .el-form /deep/ .select-tree .el-select {
     width: 100%;
@@ -700,7 +695,7 @@ export default {
         // padding: 0;
         margin-left: 8px;
         color: #8c8c8c;
-        border: 1px solid #b9cbcf;
+        border: $--border-base;
         background: #fff;
         box-sizing: border-box;
     }
@@ -709,20 +704,7 @@ export default {
         background: #35b24b;
     }
 }
-.el-form-item__error {
-    color: #262626;
-    padding-top: 8px;
-    &::before {
-        display: inline-block;
-        content: "";
-        width: 13px;
-        height: 13px;
-        vertical-align: bottom;
-        padding-right: 8px;
-        background: url("~img/jian-icon.png") no-repeat center;
-        background-size: contain;
-    }
-}
+
 </style>
 
 

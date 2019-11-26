@@ -72,8 +72,8 @@
                         @chooseNode="chooseNode"
                     ></SelectTree>
                     <div slot="footer" class="pannle-footer">
-                        <span @click="updateCategoryPic" class="sure">确定</span>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        <button @click="updateCategoryPic" class="cl-button cl-button--primary" style="margin-left: 16px;">确定</button>
+                        <button @click="cancelUpdateCategor" class="cl-button cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>
@@ -399,7 +399,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../../styles/contentDetail";
+// @import "@/styles/contentDetail";
 </style>
 
 

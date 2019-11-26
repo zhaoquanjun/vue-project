@@ -7,6 +7,7 @@
             class="content-table"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -14,12 +15,13 @@
                     <p>无数据</p>
                 </div>
             </template>
-            <el-table-column type="selection"></el-table-column>
+            <el-table-column type="selection" ></el-table-column>
 
             <el-table-column
                 prop="title"
                 label="文章标题"
-                min-width="250"
+                min-width="200"
+                height="50"
             >
                 <template slot-scope="scope">
                     <span class="isTop" v-show="scope.row.isTop">置顶</span>
@@ -33,7 +35,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="categoryName" label="分类" min-width="80">
+            <el-table-column prop="categoryName" label="分类" min-width="100" height="50">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.categoryName" placement="top">
                         <span style="width:80px" class="ellipsis">{{ scope.row.categoryName }}</span>
@@ -43,8 +45,6 @@
 
             <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
 
-            <!-- <el-table-column  prop="isTopPrt" label="置顶"  min-width="80"></el-table-column> -->
-
             <el-table-column prop="createUser" label="作者" min-width="100">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createUser" placement="top">
@@ -53,7 +53,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="createTimePrt" label="创建时间" min-width="80">
+            <el-table-column prop="createTimePrt" sortable='custom' label="创建时间" min-width="80">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.createTimePrt" placement="top">
                         <span>{{ scope.row.createTimePrt }}</span>
@@ -61,33 +61,27 @@
                 </template>
             </el-table-column>
 
-            <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="150">
+            <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="100">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="edit-icon" @click="handleEdit(scope.row)"><i class="iconfont iconbianji"></i></button>
-                        <button
-                            class="more-operate"
-                            @click.stop="_handleShowMoreOperate($event,scope.row)"
-                        >
-                            <i class="iconfont iconsangedian"></i>
-                        </button>
+                            <i class="cl-iconfont iconfont iconbianji is-square" @click="handleEdit(scope.row)"></i>
+                            <i class="cl-iconfont iconfont iconsangedian is-square"  @click.stop="_handleShowMoreOperate($event,scope.row)"></i>
                     </div>
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing">
+        <div class="cl-paganation pageing" :class="{'noJumper':articlePageResult.totalPage <= 10}">
             <el-pagination
                 background
-                layout="total, slot, sizes, prev, pager, next,jumper"
+                :layout="articlePageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="articlePageResult.totalRecord"
-                :page-count="articlePageResult.totalPage"
                 :page-size="articlePageResult.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePageNum"
                 @size-change="changePageSize"
             >
                 <div class="sizes-title">，每页显示</div>
-                <button class="paging-confirm">跳转</button>
+                <button v-if="articlePageResult.totalPage > 10" class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <ul class="operate-section" ref="operateSection">
@@ -154,16 +148,6 @@ export default {
             this.articleSearchOptions.pageSize = size;
             this.$emit("getArticleList");
         },
-        // sortByTopStatus: function(column, prop, order) {
-        //     // descending ascending
-        //     this.articleSearchOptions.OrderByTopOrder =
-        //         column.order == "ascending"
-        //             ? true
-        //             : column.order == "descending"
-        //             ? false
-        //             : null;
-        //     this.$emit("getArticleList");
-        // },
         /**
          * 单选或全选操作
          */
@@ -230,6 +214,15 @@ export default {
             this.$emit("changeOperateName", "复制");
             this.$emit("batchCopy", [row.id]);
         },
+        //创建时间排序
+        sortChange(row){
+            if (row.order == 'ascending') {
+                this.articleSearchOptions.isDescending  = false;
+            } else {
+                this.articleSearchOptions.isDescending = true;
+            }
+            this.$emit("getArticleList");
+        },
 
         handleMoreOperate(flag) {
             let row = this.row;
@@ -260,10 +253,6 @@ export default {
             let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail', siteId);
             var prevAddress = data;
             if(prevAddress){
-                //var a = document.createElement('a');
-                //a.setAttribute('href', prevAddress + previewId + '.html');
-                //a.setAttribute('target', '_blank');
-                //a.click();
                 let newWindow = window.open();
                 newWindow.location.href = prevAddress + previewId + '.html';
             }
@@ -274,10 +263,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 .title-color{
     color: #262626;
 }
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
+}
+
 </style>
 
 

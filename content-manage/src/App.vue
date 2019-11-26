@@ -10,7 +10,7 @@
         </el-aside>
         <el-main style=" overflow: hidden;">
           <el-container>
-            <el-aside class="page-sub-aside" width="150px" v-show="isSub">
+            <el-aside class="submenu-aside" v-show="isSub">
               <page-submenu></page-submenu>
             </el-aside>
             <el-main class="content-table-wrap">
@@ -47,14 +47,11 @@ export default {
 
 .common-header {
   height: 50px !important;
-  line-height: 50px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
   z-index: 100;
-  /* overflow: hidden; */
 }
 .common-container {
   padding-top: 50px;

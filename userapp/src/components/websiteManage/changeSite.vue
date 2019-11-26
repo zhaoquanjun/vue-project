@@ -2,13 +2,21 @@
   <div class="siteBox" v-if="siteInfoList.length != 1">
     <el-col :span="24" class="siteInfo">
       <el-tooltip :content="siteName" placement="bottom" :disabled="siteName.trim().length < 30">
+        
         <span
           class="siteName"
-        >{{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}</span>
+        >
+          <span class="siteIconTriangle"></span>
+          <span class="siteIconTriangle" style="border-left-color:#ff964b;margin-left:-3px;"></span>
+          {{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}
+        </span>
       </el-tooltip>
       <a class="secondDomain" :href="`http://${secondDomain}`" target="_blank">{{secondDomain}}</a>
       <span class="language">{{_getLanguage(language)}}</span>
-      <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">切换站点</button>
+      <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">
+        <i class="iconfont iconqiehuanxingshier" style="color:#ff6b00;font-size:12px;margin-right:5px;"></i>
+        切换站点
+      </button>
     </el-col>
     <el-dialog
       width="0"
@@ -196,27 +204,33 @@ export default {
 <style lang="scss" scoped>
 .siteBox {
   width: 100%;
-  height: 69px;
-  border-bottom: 1px solid #eee;
+  height: 40px;
+  margin-bottom: 17px;
   .siteInfo {
     width: 100%;
-    height: 69px;
+    height: 40px;
+    background:rgba(255,107,0,.14);
     position: relative;
+    .siteIconTriangle{
+      display: inline-block;
+      width:5px;
+      height:0;
+      border:5px solid transparent;
+      border-right:0;
+      border-left:5px solid #ff6b00;
+    }
     .siteName {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 400;
       color: rgba(38, 38, 38, 1);
-      position: absolute;
-      left: 0px;
-      margin-top: 28px;
+      margin: 14px 16px;
     }
     .secondDomain {
       font-size: 12px;
       font-weight: 400;
-      color: rgba(5, 149, 230, 1);
-      position: absolute;
-      right: 165px;
-      top: 29px;
+      color: #ff6b00;
+      margin-left: 6px;
+      line-height: 40px;
       &:hover {
         opacity: 0.8;
       }
@@ -224,23 +238,21 @@ export default {
     .language {
       font-size: 12px;
       font-weight: 400;
-      color: #262626;
-      position: absolute;
-      right: 112px;
-      top: 29px;
+      color: #ff6b00;
+      padding:2px;
+      margin-left: 16px;
+      background: rgba(255,200,161,1);
+      line-height: 40px;
     }
     .changeSite {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 400;
-      color: rgba(5, 149, 230, 1);
+      color: #262626;
       position: absolute;
       right: 16px;
-      top: 28px;
+      line-height: 40px;
       &:hover {
-        top: 18px;
-        right: 6px;
-        padding: 10px;
-        background: rgba(5, 149, 230, 0.09);
+        color:#ff6b00;
       }
     }
   }

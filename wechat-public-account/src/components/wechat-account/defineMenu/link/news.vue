@@ -3,7 +3,9 @@
     <div class="popup-content__add">
       <p>请选择所需链接的文章</p>
       <a :href="redirectUrl" target="_blank">
-        <el-button type="primary" icon="el-icon-plus" size="small">添加文章</el-button>
+        <button class="cl-button cl-button--primary">
+          + 添加文章
+        </button>
       </a>
     </div>
     <div class="popup-content__main">
@@ -37,13 +39,15 @@
               <p class="single-line__overflow--hide ellipsis">{{it.title}}</p>
               <p class="date single-line__overflow--hide">
                 <!-- <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span> -->
-                <span
-                  :style="{visibility: newId==i ? 'visible' : 'hidden'}"
-                ></span>
+                <i
+                  class="icon iconfont iconduihao"
+                  :style="{visibility: newId == i ? 'visible' : 'hidden'}"
+                ></i>
               </p>
             </li>
           </ul>
-          <el-pagination
+         <div class="cl-paganation noJumper"> 
+           <el-pagination
             background
             layout="prev, pager, next"
             :page-size="pageSize"
@@ -52,7 +56,7 @@
             :current-page="pageIndex"
             @current-change="_handleChangeCurrent"
             style="margin-top: 12px"
-          ></el-pagination>
+          ></el-pagination></div>
         </div>
         <none-area v-show="!newsList.length && !loading" :target="target">
           <span v-if="!search">
@@ -270,6 +274,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .popup-content__area {
   width: 590px;
   height: 92%;
@@ -280,8 +285,8 @@ export default {
     height: 56px;
     padding: 0 12px;
     p {
-      color: #00c1de;
-      font-size: 14px;
+      color: $--color-primary;
+      font-size: $--font-size-small;
       line-height: 17px;
       cursor: auto;
     }
@@ -291,7 +296,7 @@ export default {
       width: 120px;
       height: 32px;
       background: rgba(0, 193, 222, 1);
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       border-color: rgba(0, 193, 222, 1);
       span,
       i {
@@ -307,13 +312,14 @@ export default {
     min-height: 490px;
     height: 72%;
     text-align: right;
-    border: 1px solid rgba(238, 238, 238, 1);
+    border: $--border-base;
     .content-main__slider {
       padding: 16px 8px;
       width: 180px;
       height: 100%;
+      box-sizing: border-box;
       overflow-y: auto;
-      border-right: 1px solid #eee;
+      border-right: $--border-base;
     }
     .content-main__list {
       position: relative;
@@ -322,10 +328,9 @@ export default {
       .content-main__search {
         display: flex;
         align-items: flex-end;
-        margin-left: 8px;
+        margin: 8px 8px 0;
         width: 360px;
         height: 36px;
-        border-bottom: 1px solid #e5e5e5;
       }
       .content-main__search {
         .el-icon-search {
@@ -351,7 +356,6 @@ export default {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
             padding: 0 8px;
             height: 26px;
             cursor: pointer;
@@ -359,11 +363,11 @@ export default {
             p {
               width: 300px;
               padding: 0;
-              font-size: 14px;
+              font-size: $--font-size-small;
               line-height: 26px;
               height: 26px;
               overflow: hidden;
-              color: #262626;
+              color: $--color-text-primary;
               text-align: left;
             }
             p.date {
@@ -372,39 +376,30 @@ export default {
               align-items: center;
               width: 164px;
               span {
-                color: #b5b5b5;
-              }
-              span:last-of-type {
-                display: block;
-                margin-left: 14px;
-                width: 18px;
-                height: 18px;
-                background: url("~img/link/selected.png") no-repeat
-                  center center;
-                background-size: 100% 100%;
+                color: $--color-text-primary;
               }
             }
             &:hover {
-              background: #f8fafc;
+              background: $--background-color-hover;
               p {
-                color: #00c1de;
+                color: $--color-text-primary;
               }
             }
           }
           .active {
-            background: #00c1de;
+            background: $--background-color-selected;
             p {
-              color: #fff;
-              span:first-of-type {
-                color: #fff;
+              color: $--color-primary;
+              i {
+                color: $--color-primary;
               }
             }
             &:hover {
-              background: #00c1de;
+              background: $--background-color-selected;
               p {
-                color: #fff;
-                span:first-of-type {
-                  color: #fff;
+                color: $--color-primary;
+                i {
+                  color: $--color-primary;
                 }
               }
             }
@@ -416,26 +411,20 @@ export default {
   .popup-content__main {
     .btn-prev,.btn-next,.el-pager li {
       background: #fff;
-      border: 1px solid rgba(229, 229, 229, 1);
+      border: $--border-base;
     }
-  } 
-  .popup-content__main {
-    .el-pager li:not(.disabled).active {
-      background: #01c0de;
-    }
-  } 
+  }
    .popup-content__open {
     position: relative;
     margin-top: 16px;
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
-    border-top: 1px solid #eee;
+    border-top: $--border-base;
     p {
-      font-size:14px;
-      font-family:"PingFangSC";
+      font-size:$--font-size-small;
       font-weight:400;
-      color:rgba(38,38,38,1);
+      color:$--color-text-primary;
       line-height:20px;
       margin-bottom: 10px;
     }
@@ -443,10 +432,9 @@ export default {
       display: inline-block;
       width:250px;
       height:32px;
-      border-radius:2px;
-      border:1px solid rgba(229,229,229,1);
-      font-size:14px;
-      font-family:"PingFangSC";
+      border-radius:$--border-radius-base;
+      border:$--border-base;
+      font-size:$--font-size-small;
       font-weight:400;
       line-height:32px;
       padding: 0 10px;
@@ -463,10 +451,9 @@ export default {
       }
     }
     a {
-      font-size:14px;
-      font-family:"PingFangSC";
+      font-size:$--font-size-small;
       font-weight:400;
-      color:rgba(9,204,235,1);
+      color:$--color-primary;
       margin-left: 10px;
     }
     .product-page-list {
@@ -480,10 +467,9 @@ export default {
       li {
         display: inline-block;
         margin-right: 0;
-        color:rgba(38,38,38,1);
+        color:$--color-text-primary;
         height:32px;
-        font-size:14px;
-        font-family:"PingFangSC";
+        font-size:$--font-size-small;
         font-weight:400;
         line-height:32px;
         padding: 0 6px 0 10px;
@@ -495,14 +481,15 @@ export default {
         }
       }
       li:hover {
-        background:#F0F3F7;
-        color: #00c1de;
+        background:$--background-color-hover;
+        color: $--color-text-primary;
       }
       .active {
-        background:#00c1de !important;
-        color: #fff !important;
+        background:$--background-color-selected !important;
+        color: $--color-primary !important;
         i {
           display: inline-block !important;
+          color: $--color-primary !important;
         }
       }
     }
