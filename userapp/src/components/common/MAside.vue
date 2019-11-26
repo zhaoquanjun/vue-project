@@ -114,7 +114,7 @@ export default {
         },
         collapseListClose() {
             setTimeout(()=>{
-                this.width = 130;
+                //this.width = 130;
             },250)
         },
         iconfonts(code) {

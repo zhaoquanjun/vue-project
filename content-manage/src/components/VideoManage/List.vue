@@ -370,8 +370,8 @@ export default {
 }
 .cover {
     position: relative;
-     width: 150px;
-    height: 100px;
+    width: 150px !important;
+    height: 100px !important;
     .play {
         cursor: pointer;
         position: absolute;
