@@ -817,37 +817,8 @@ export default {
         }
       }
       .site-btn {
-        .template-btn {
-          display: inline-block;
-          width: 92px;
-          height: 32px;
-          background: rgba(9, 204, 235, 1);
-          border-radius: 2px;
-          font-size: 14px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 1);
-          line-height: 32px;
-          text-align: center;
-          vertical-align: middle;
-          &:hover {
-            opacity: 0.8;
-          }
-        }
         .preview-btn {
           margin-right: 16px;
-        }
-        .design-btn {
-          display: inline-block;
-          width: 92px;
-          height: 32px;
-          background: rgba(9, 204, 235, 1);
-          border-radius: 2px;
-          font-size: 14px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 1);
-          line-height: 32px;
-          text-align: center;
-          vertical-align: middle;
         }
       }
     }
