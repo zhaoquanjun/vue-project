@@ -314,7 +314,7 @@ export default {
     background: $--color-white !important;
     .uploadIcon {
       display: block;
-      margin: 95px auto 0;
+      margin: 110px auto 0;
       width: 44px;
       height: 32px;
       padding: 0;
