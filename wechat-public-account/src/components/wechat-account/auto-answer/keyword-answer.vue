@@ -335,6 +335,7 @@ button {
 .keyword-answer {
     padding: 16px 0px;
     border-radius: $--border-radius-base;
+    min-width: 1100px;
     .keyword-answer-content {
         .keyword-list {
             display: inline-block;
@@ -376,10 +377,17 @@ button {
     .table-list {
         .advance-list__area {
             border-top: $--border-base;
+            min-height: 400px;
+            .empty-table {
+                margin-top: 110px;
+            }
+            .title {
+                padding: 0px 24px;
+            }
             li {
                 display: flex;
                 align-items: center;
-                padding: 10px 24px;
+                padding: 5px 24px;
                 border-bottom: $--border-base;
                 min-width: 1020px;
 
@@ -400,7 +408,7 @@ button {
                     }
                 }
                 p.list-columns__2 {
-                    width: 50%;
+                    width: 46%;
                     i {
                         color: #A1A8B1;
                         margin-right: 4px;
@@ -410,7 +418,7 @@ button {
                     }
                 }
                 .list-columns__3 {
-                    width: 10%;
+                    width: 14%;
                     color: #0595e6;
                     cursor: pointer;
                 }

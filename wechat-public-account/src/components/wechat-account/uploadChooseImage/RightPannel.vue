@@ -86,7 +86,7 @@ export default {
   padding: 30px 0 13px 0;
 }
 .pannel-main{
-  height: calc(100% - 107px);
+  height: calc(100% - 90px);
 }
 
 </style>

@@ -79,7 +79,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            fixed="right"
             label="操作"
             width="220">
             <template slot-scope="scope">
@@ -331,6 +330,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.spread-continer /deep/ .el-table {
+  min-height: 400px;
+}
+ .empty-table {
+  margin-top: 110px;
+}
+.el-table /deep/ .el-table__row td {
+  padding: 5px 0;
+}
+.spread-continer /deep/ .el-table::before {
+  height: 0;
+}
 .el-tabs /deep/ .el-tabs__item {
     font-size: 12px;
     padding: 0;
@@ -412,6 +423,7 @@ export default {
       padding: 8px;
       border-radius: $--border-radius-base;
       margin-right: 10px !important;
+      line-height: 14px;
       cursor: pointer;
       &:hover {
         background: #E5E5E5;

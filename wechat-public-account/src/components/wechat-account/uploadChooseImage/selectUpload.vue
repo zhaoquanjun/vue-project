@@ -8,8 +8,8 @@
       </el-header>
       <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true">
         <div slot="modal-footer" class="modal-footer">
-          <button type="button" @click="getImg" class="sure">确定</button>
-          <button type="button" @click="cancelgetImg" class="cancel">取消</button>
+          <button type="button" @click="getImg" class="cl-button cl-button--primary">确定</button>
+          <button type="button" @click="cancelgetImg" class="cl-button cl-button--primary_notbg">取消</button>
         </div>
       </modal-content>
     </div>
@@ -111,25 +111,13 @@ export default {
     }
   }
   .modal-footer {
-    height: 60px;
+    height: 32px;
     position: absolute;
     bottom: 16px;
     right: 16px;
     width: 100%;
     z-index: 100;
     text-align: right;
-    button {
-      width: 66px;
-      height: 40px;
-      line-height: 40px;
-      background: rgba(0, 193, 222, 1);
-      margin-right: 8px;
-      color: #fff;
-    }
-    .cancel {
-      color: #262626;
-      background: rgba(238, 238, 238, 1);
-    }
   }
 }
 </style>
