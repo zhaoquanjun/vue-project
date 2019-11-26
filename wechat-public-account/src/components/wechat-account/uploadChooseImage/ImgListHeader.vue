@@ -49,7 +49,7 @@
             </div>
             <div class="head-item head-right">
                 <button
-                    class="btn-lightblue btn-small upload-wrap"
+                    class="cl-button cl-button--primary"
                     @click="switchUploadBoxShowStatus"
                 >
                    
