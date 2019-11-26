@@ -377,9 +377,10 @@ button {
     .table-list {
         .advance-list__area {
             border-top: $--border-base;
-            min-height: 400px;
+            height: 340px;
+            overflow-y: auto;
             .empty-table {
-                margin-top: 110px;
+                margin-top: 80px;
             }
             .title {
                 padding: 0px 24px;

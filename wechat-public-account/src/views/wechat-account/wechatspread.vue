@@ -331,10 +331,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .spread-continer /deep/ .el-table {
-  min-height: 400px;
+  height: 340px;
+  overflow-y: auto;
 }
  .empty-table {
-  margin-top: 110px;
+  margin-top: 80px;
 }
 .el-table /deep/ .el-table__row td {
   padding: 5px 0;
