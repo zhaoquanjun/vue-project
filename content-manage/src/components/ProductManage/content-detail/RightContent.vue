@@ -76,8 +76,8 @@
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="true" :isPopup="true" :isSecond="true">
                 <div slot="modal-footer" class="modal-footer">
-                    <button type="button" @click="getEditorImg" class="sure">确定</button>
-                    <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                    <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
+                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
                 </div>
             </modal-content>
         </div>
