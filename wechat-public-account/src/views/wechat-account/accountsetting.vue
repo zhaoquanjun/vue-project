@@ -70,12 +70,19 @@
         </div>
       </div>
     </div>
+    <!-- <Dialog 
+      v-if="isShowDialog" 
+      text="6666" 
+      @sureDialog="sureDialog"
+      @cancelDialog="cancelDialog"
+    ></Dialog> -->
   </div>
 </template>
 
 <script>
 import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
+import Dialog from "@/components/common/Dialog";
 import { unBind, getCdnDomainList,setPromotionUrl } from "@/api/request/account.js";
 import { mapGetters } from "vuex";
 import {getLocal} from '@/libs/local'
@@ -89,6 +96,7 @@ export default {
       domainList: [],
       isShow: false,
       curInder: -1,
+      isShowDialog: false,
       scrollHeight: 500,
       accountAvator: require("img/account/account_type_icon.png"),
       accountInfo: this.$store.state.wxaccount.account_info
@@ -96,6 +104,7 @@ export default {
   },
   components: {
     ChangeSite,
+    Dialog,
     PageSubNav
   },
   created() {
@@ -106,6 +115,15 @@ export default {
     this._getCdnDomainList();
   },
   methods: {
+    test(){
+      this.isShowDialog = true
+    },
+    sureDialog(){
+      this.isShowDialog = false
+    },
+    cancelDialog(){
+      this.isShowDialog = false
+    },
     //页面初始化获取ID
     getSiteId(siteId) {
       console.log('siteId',siteId)

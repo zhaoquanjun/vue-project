@@ -55,13 +55,12 @@
     .el-message-box__btns {
         .el-button {
             min-width: 76px;
-            height: 40px;
+            height: 32px;
             font-size: 14px;
             border-radius: 2px;
             font-weight: 400;
             color:$--button-primary-background-color;
             border-color: $--button-primary-background-color;
-
         }
 
         .el-button:hover {
