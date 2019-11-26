@@ -18,8 +18,7 @@
             <div class="site-total">/ {{siteCount}}</div>
           </div>
           <el-dropdown @command="handleCreateSite" :hide-timeout="500">
-            <!-- v-show="isSystem&&siteInfo.length < siteCount" -->
-            <div class="sitelist-addSite"></div>
+            <div class="sitelist-addSite" v-show="isSystem&&siteInfo.length < siteCount"></div>
             <el-dropdown-menu slot="dropdown" class="createSiteDrop">
               <el-dropdown-item class="createSiteDropText" command="copy">复制当前站点</el-dropdown-item>
               <el-dropdown-item class="createSiteDropText" command="addNew">新建站点</el-dropdown-item>
@@ -234,7 +233,10 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeCreateDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button
+            @click="closeCreateDialog"
+            class="cl-button cl-button--primary_notbg cl-button--small"
+          >取消</button>
           <button @click="createSite" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
@@ -274,7 +276,10 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeChangeDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button
+            @click="closeChangeDialog"
+            class="cl-button cl-button--primary_notbg cl-button--small"
+          >取消</button>
           <button @click="changeSiteInfo" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
@@ -315,7 +320,10 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeCopyDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button
+            @click="closeCopyDialog"
+            class="cl-button cl-button--primary_notbg cl-button--small"
+          >取消</button>
           <button @click="copySiteCreate" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
@@ -966,7 +974,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
+
       .headTitle {
         font-size: 16px;
         font-weight: 600;

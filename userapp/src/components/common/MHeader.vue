@@ -526,6 +526,7 @@ export default {
     background: $--color-white;
     border-radius: $--border-radius-base;
     padding-left: 0px;
+    transition: all 0.2s linear;
     &:hover {
       box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
       transform: translate(-50%, -2px);

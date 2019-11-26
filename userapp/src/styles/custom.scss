@@ -1,7 +1,7 @@
 body {
     min-width: 1170px;
     min-height: 500px;
-    -webkit-font-smoothing:antialiased;
+    -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial;
     color: $--color-text-primary;
@@ -107,6 +107,7 @@ body {
 
 // table 无内容时的样式
 .empty-table {
+    padding: 50px;
     text-align: center;
 
     img {
@@ -199,5 +200,36 @@ body {
     .btn-wrap {
         text-align: right;
         padding-top: 16px;
+    }
+}
+
+// tip提示框
+.tip-wrap-primary {
+    width: 100%;
+    height: 32px;
+    background: rgba(255, 251, 248, 1);
+    border: 1px solid rgba(255, 202, 163, 1);
+    box-sizing: border-box;
+    border-radius: $--border-radius-base;
+
+    .tip-title {
+        font-size: $--font-size-small;
+        color: $--color-primary;
+        font-weight: $--font-weight-primary;
+        line-height: 32px;
+    }
+
+    .tip-text {
+        font-size: $--font-size-small;
+        color: $--color-primary;
+        font-weight: $--font-weight-base;
+        line-height: 32px;
+    }
+
+    .tip-btn {
+        font-size: $--font-size-small;
+        color: $--color-info;
+        font-weight: $--font-weight-base;
+        line-height: 32px;
     }
 }
