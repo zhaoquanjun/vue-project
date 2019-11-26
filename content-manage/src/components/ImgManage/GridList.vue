@@ -22,8 +22,8 @@
                 </div>
         </div>
         <div
-            class="cl-paganation pageing"
-            :class="{'noJumper':imgPageResult.totalPage <= 10}"
+            class="cl-paganation pageing "
+            :class="{'imgJumper':imgPageResult.totalPage > 10}"
             v-if="imgPageResult&& imgPageResult.list && imgPageResult.list.length>0"
         >
             <el-pagination
@@ -226,6 +226,13 @@ export default {
         padding: 10px;
         box-sizing: border-box;
     }
+}
+.cl-paganation {
+    margin-top: 16px;
+    margin-right: 11px;
+}
+.imgJumper {
+    margin-right: 66px;
 }
 </style>
 
