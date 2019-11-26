@@ -39,7 +39,7 @@
         </div>
         <div class="site-btn">
           <button
-            class="template-btn"
+            class="cl-button cl-button--primary"
             @click="jumpTo('template')"
             v-show="!curSiteTodoinfo.siteTemplate"
           >选择模版</button>
