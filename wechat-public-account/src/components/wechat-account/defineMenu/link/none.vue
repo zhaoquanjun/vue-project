@@ -3,6 +3,7 @@
     <div class="content-none__area">
       <div class="none-area__icon">
         <span></span>
+        <p>暂无数据</p>
       </div>
       <p>
         <slot></slot>  
@@ -32,15 +33,20 @@ export default {
     .content-none__area {
       .none-area__icon {
         margin: 0 auto;
-        width: 61px;
-        height: 47px;
+        width: 80px;
+        height: 76px;
         border-radius: 50%;
         span {
           display: block;
           width: 100%;
           height: 100%;
-          background: url('~img/link/none_tips.png') no-repeat center center;
+          background: url('~img/table-empty.png') no-repeat center center;
           background-size: 100% 100%;
+        }
+        p {
+          font-size: 12px;
+          margin-top: 18px;
+          color: #8c8c8c;
         }
       }
       p {
