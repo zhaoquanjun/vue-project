@@ -205,7 +205,7 @@
                 </el-table-column>
               </el-table>
               <div class="list-footer" v-show="addListData.totalRecord > 0">
-                <div class="cl-paganation pageing" id="pageing" style="margin-right:0">
+                <div class="cl-pagination pageing" id="pageing" style="margin-right:0">
                   <slot name="paging"></slot>
                   <el-pagination
                     background

@@ -121,7 +121,7 @@ export default {
             memberListParams: {
                 phone: "",
                 page: 1,
-                size: 9
+                size: 10
             }
         };
     },

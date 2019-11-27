@@ -153,7 +153,7 @@
             </el-main>
             <div>
               <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
-              <div class="cl-paganation pageing" id="pageing" style="margin-bottom:20px">
+              <div class="cl-pagination pageing" id="pageing" style="margin-bottom:20px">
                 <el-pagination
                   v-show="templatePage.totalCount > 9"
                   background
