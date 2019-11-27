@@ -7,8 +7,8 @@
             class="content-table"
         >
             <template slot="empty">
-                <div class="empty-table">
-                    <img src="~img/memberManage/table-empty.png" />
+                <div class="empty-table" style="height:251px;">
+                    <img src="~img/memberManage/table-empty.png" style="display:inline-block;width:50px;height:35px;margin-top:50px;"/>
                     <p>暂无数据</p>
                 </div>
             </template>
