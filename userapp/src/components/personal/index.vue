@@ -450,9 +450,6 @@ export default {
 .el-input /deep/ .el-input__inner {
     padding-right: 60px;
 }
-.el-input /deep/ .el-input__inner:focus {
-    border-color: #00c1de;
-}
 </style>
 
 <style lang="scss" scoped>
