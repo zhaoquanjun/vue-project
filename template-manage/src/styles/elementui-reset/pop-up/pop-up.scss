@@ -11,8 +11,8 @@
         .el-message-box__title {
             font-size: 16px;
             line-height: 1;
-            color: #262626;
-            font-weight: 500;
+            color: $--color-text-primary;
+            font-weight: $--font-weight-primary;
         }
 
         .el-message-box__headerbtn {
@@ -27,7 +27,7 @@
     .el-message-box__content {
         padding: 40px;
         color: #A1A8B1;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
         .icon-warning {
             width: 24px;
@@ -55,11 +55,11 @@
     .el-message-box__btns {
         .el-button {
             min-width: 76px;
-            height: 40px;
+            height: 32px;
             font-size: 14px;
             border-radius: 2px;
             font-weight: 400;
-            color:$--button-primary-background-color;
+            color: $--button-primary-background-color;
             border-color: $--button-primary-background-color;
 
         }

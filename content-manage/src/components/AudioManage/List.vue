@@ -7,6 +7,7 @@
             class="content-table table-content"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -51,7 +52,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip></el-table-column>
             <el-table-column prop="durationStr" label="时长" min-width="150"></el-table-column>
             <el-table-column prop="categoryName" label="分类" min-width="150">
                 <template slot-scope="scope">
@@ -59,7 +60,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="createTimeStr" width="150" label="上传时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" width="150" sortable='custom' label="上传时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
@@ -241,6 +242,25 @@ export default {
             if (row.fileExtension.substring(0, 1) == ".")
                 return row.fileExtension.substring(1);
             return row.fileExtension;
+        },
+        //改变排序
+        sortChange(row){
+                    // value: "CreateTime",
+                    // label: "创建时间"
+                    // value: "FileSize",
+                    // label: "文件大小"
+            console.log(row,'row')   
+            if (row.prop == 'sizeStr') {
+                this.picSearchOptions.orderByType = "FileSize";
+            } else {
+                this.picSearchOptions.orderByType = "CreateTime";
+            }
+            if (row.order == 'ascending') {
+                this.picSearchOptions.isDescending  = false;
+            } else {
+                this.picSearchOptions.isDescending = true;
+            }
+            this.$emit("getList");
         }
     },
     watch: {
@@ -280,6 +300,12 @@ export default {
             transform: translateY(50%);
         }
     }
+}
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
 }
 </style>
 

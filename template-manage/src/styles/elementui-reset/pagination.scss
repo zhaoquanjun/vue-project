@@ -7,7 +7,7 @@
     .sizes-title {
         line-height:$--height-base;
         color: #A1A8B1;
-        font-weight: 400;
+        font-weight: $--font-weight-base;
         display: inline-block;
         margin-right: 18px;
     }
@@ -82,7 +82,7 @@
              border-right:none; 
              box-sizing: border-box;
              li {
-                font-weight: 400;
+                font-weight: $--font-weight-base;
                 color: $--color-text-primary;
                 background-color: $--color-white;
                 height: $--height-base;
