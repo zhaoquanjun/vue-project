@@ -6,24 +6,28 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <el-row style="padding: 32px">
-        <el-row class="user-list">
-          <span class="member-list-title fs14">网站备份</span>
-        </el-row>
+      <el-row>
         <ChangeSite
           @chooseWebsite="chooseWebsite"
           @getSiteId="getSiteId"
           @getSiteName="getSiteName"
         />
-        <div style="position:relative">
-          <el-tabs v-model="backupType" type="card" @tab-click="handleClick">
-            <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
-            <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
-          </el-tabs>
-          <button class="backupBtn" @click="backup" v-show="showBackup">备份当前版本</button>
-        </div>
-        <el-main>
-          <div class="table-wrap table-list" id="table-list">
+        <el-row class="user-list">
+          <span class="member-list-title fs14">网站备份</span>
+          <button
+            class="backupBtn cl-button cl-button--primary"
+            @click="backup"
+            v-show="showBackup"
+          >备份当前版本</button>
+        </el-row>
+        <el-main style="margin-top:24px">
+          <div class="domain-menu">
+            <el-tabs v-model="backupType" @tab-click="handleClick">
+              <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
+              <el-tab-pane label="自动备份" name="auto"></el-tab-pane>
+            </el-tabs>
+          </div>
+          <div class="table-list" id="table-list">
             <el-table
               ref="multipleTable"
               :data="siteInfo"
@@ -70,8 +74,8 @@
                         >{{!scope.row.description?" ":scope.row.description}}</div>
                         <i
                           v-if="active == scope.row.id"
-                          class="iconfont iconicon-dash-edit editIcon"
-                          style="color:#09CCEB;font-size:16px;vertical-align:text-bottom;cursor:pointer;margin-left:5px"
+                          class="iconfont iconicon-dash-edit cl-iconfont"
+                          style="color:#09CCEB;vertical-align:text-bottom;margin-left:5px"
                           :data-type="'remarkIcon'+ scope.$index"
                           :ref="'remarkIcon'+ scope.$index"
                         ></i>
@@ -89,12 +93,12 @@
                       ></el-input>
                       <div class="btn-wrap">
                         <button
-                          class="popover-btn cancel"
+                          class="cl-button cl-button--primary_notbg cl-button--small"
                           slot="refenrence"
                           @click="cancelInput(scope.$index)"
                         >取消</button>
                         <button
-                          class="popover-btn save"
+                          class="cl-button cl-button--primary cl-button--small"
                           @click="saveInputValue(scope.$index,scope.row)"
                         >保存</button>
                       </div>
@@ -127,8 +131,8 @@
             </el-table>
           </div>
           <div class="backupTip">
-            <div style="margin-bottom:10px">1、系统将在您更换网站模版与还原备份包时自动备份当前站点设计</div>
-            <div>2、手动与自动备份包最多可分别保留20个，自动备份包数量已满时，最早的自动备份包会被删除</div>
+            <div>·系统将在您更换网站模版与还原备份包时自动备份当前站点设计</div>
+            <div>·手动与自动备份包最多可分别保留20个，自动备份包数量已满时，最早的自动备份包会被删除</div>
           </div>
           <el-dialog
             width="0"
@@ -140,7 +144,7 @@
               <div class="pannel-head">
                 <span>备份当前版本</span>
                 <span class="close-pannel" @click="closeDialog">
-                  <i class="iconfont iconguanbi" style="font-size:14px;color:#262626"></i>
+                  <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
                 </span>
               </div>
               <div class="tips">温馨提示：备份当前站点设计页面，包括电脑版、手机版和Pad版</div>
@@ -158,7 +162,8 @@
                 ></el-input>
               </div>
               <div class="confirm">
-                <button class="confirmBtn" @click="backupSite">确定</button>
+                <button class="confirmBtn cl-button cl-button--primary" @click="backupSite">确定</button>
+                <button class="cl-button cl-button--primary_notbg" @click="closeDialog">取消</button>
               </div>
             </div>
           </el-dialog>
@@ -504,65 +509,17 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .el-dialog {
   right: 0;
-}
-.el-tabs {
-  margin-top: 24px;
-}
-
-.el-tabs /deep/ .el-tabs__item {
-  width: 88px;
-  height: 38px;
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-  line-height: 36px;
-  border-bottom: 1px solid #e4e7ed;
-  background: rgba(245, 245, 245, 1);
-  vertical-align: top;
-  border-top: 2px solid transparent;
-}
-.el-tabs /deep/ .is-active {
-  color: rgba(1, 192, 222, 1);
-  border-top: 2px solid rgb(72, 201, 226);
-  border-bottom: 1px solid transparent;
-  background: rgb(255, 255, 255);
 }
 .content-table /deep/ .el-tooltip .el-popover__reference {
   width: 100%;
 }
-.editIcon {
-  padding: 8px;
-  background: transparent;
-}
-.editIcon:hover {
-  background: rgba(240, 243, 247, 1);
-}
 .backupBtn {
-  width: 110px;
-  height: 32px;
-  background: rgba(0, 193, 222, 1);
   position: absolute;
   right: 16px;
-  top: 0px;
-
-  font-weight: 400;
-  color: rgba(255, 255, 255, 1);
-}
-.backupBtn:hover {
-  opacity: 0.8;
-}
-.el-table /deep/ thead th {
-  padding: 0;
-  height: 35px;
-  background: #00c1de !important;
-  color: #fff;
-  font-weight: 400;
-}
-.table-wrap {
-  border: 1px solid #e5e5e5;
+  top: -6px;
 }
 .content-table {
   width: 100%;
@@ -584,27 +541,57 @@ export default {
   vertical-align: text-bottom;
 }
 .backupTip {
-  margin-top: 24px;
+  margin-top: 16px;
   margin-bottom: 32px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #262626;
+  width: 100%;
+  height: 72px;
+  padding: 16px;
+  border: $--border-base;
+  background: $--color-white;
+  font-size: $--font-size-small;
+  font-weight: $--font-weight-base;
+  line-height: 20px;
+  box-sizing: border-box;
 }
-</style>
 
-<style lang="scss" scoped>
 .member-container {
   position: relative;
-  .user-list {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 24px;
-    .member-list-title {
-      border-left: 4px solid #01c0de;
-      padding-left: 8px;
-      font-size: 16px;
-      font-weight: 700;
+  .member-content {
+    padding: 0 16px;
+    .user-list {
+      position: relative;
+      .member-list-title {
+        border-left: 2px solid $--color-primary;
+        padding-left: 8px;
+        font-size: $--font-size-base;
+        font-weight: 700;
+      }
     }
   }
+}
+.domain-menu {
+  position: relative;
+  height: 50px;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  margin-bottom: 12px;
+}
+.domain-menu /deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+.domain-menu /deep/ .el-tabs__active-bar.is-top {
+  width: 0 !important;
+}
+.el-tabs /deep/ .el-tabs__item {
+  height: 50px;
+  line-height: 50px;
+  margin: 0 24px;
+  padding: 0;
+  color: $--color-text-primary;
+}
+.el-tabs /deep/ .el-tabs__item.is-active {
+  border-bottom: 2px solid $--color-primary;
 }
 
 .handle-btn-wrap {
@@ -676,38 +663,8 @@ export default {
     bottom: 0px;
     border-top: 1px solid #efefef;
     .confirmBtn {
-      margin: 16px;
-      width: 58px;
-      height: 32px;
-      background: rgba(0, 193, 222, 1);
-      font-size: 12px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 32px;
-    }
-  }
-}
-// 修改备注
-.textareaWrap {
-  background: #fff;
-  position: relative;
-  .btn-wrap {
-    text-align: right;
-    padding-top: 10px;
-    button {
-      width: 63px;
-      height: 25px;
-      line-height: 25px;
-      font-size: 12px;
-      border: none;
-    }
-    .cancel {
-      border: 1px solid #eeeeee;
-      margin-right: 10px;
-    }
-    .save {
-      background: #00c1de;
-      color: #fff;
+      margin-left: 16px;
+      margin-top: 16px;
     }
   }
 }

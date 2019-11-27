@@ -4,12 +4,15 @@
     margin-top: 24px;
     padding-bottom: 10px;
     margin-right: 70px;
+    &.noJumper {
+        margin-right: 0px;
+    }
     .sizes-title {
         line-height:$--height-base;
         color: #A1A8B1;
         font-weight: $--font-weight-base;
         display: inline-block;
-        margin-right: 18px;
+        margin-right: 8px;
     }
     button.paging-confirm{
         position: absolute;

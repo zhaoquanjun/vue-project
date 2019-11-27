@@ -11,10 +11,12 @@
               <span style="white-space:nowrap;">【天猫专享】</span>
             </div>
           </div>
+          <div class="expiredSoonTip" v-if="isExpiredSoon"></div>
         </div>
         <div class="item-mask">
           <div class="item-info">
             <div>到期时间：{{expiredTime}}</div>
+            <div class="expiredSoon" v-if="isExpiredSoon">即将过期</div>
           </div>
           <div>
             <a class="item-btn" :href="aliMarketUrl" target="_blank">去续费</a>
@@ -93,15 +95,30 @@
 
 <script>
 import { aliMarketUrl } from "@/environment/index";
+import { formatDateTime } from "@/api/index";
+
 export default {
   props: ["contentNumber"],
   data() {
     return {
       aliMarketUrl: aliMarketUrl,
-      expiredTime: "",
       link: "login.clouddream.net",
       copyInfo: "复制"
     };
+  },
+  computed: {
+    expiredTime() {
+      return formatDateTime(this.contentNumber.expiredTime, "yyyy-MM-dd");
+    },
+    isExpiredSoon() {
+      if (
+        new Date(this.contentNumber.expiredTime) - new Date() <
+          1000 * 60 * 60 * 24 * 30 &&
+        new Date(this.contentNumber.expiredTime) > new Date()
+      ) {
+        return true;
+      }
+    }
   },
   methods: {
     jumpTo(type) {
@@ -168,6 +185,7 @@ export default {
         cursor: pointer;
         width: 100%;
         height: 100%;
+        position: relative;
         .item-icon {
           margin-right: 18px;
           display: inline-block;
@@ -192,6 +210,16 @@ export default {
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 500;
           line-height: 22px;
+        }
+        .expiredSoonTip {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          width: 14px;
+          height: 14px;
+          background: url("~img/dashboard/board-expiredSoonTip.png") no-repeat
+            center;
+          background-size: contain;
         }
         .tianmao {
           width: 32px;
@@ -243,6 +271,16 @@ export default {
           font-weight: $--font-weight-base;
           color: $--color-white;
           line-height: 17px;
+          .expiredSoon {
+            width: 56px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: $--font-size-small;
+            font-weight: $--font-weight-base;
+            color: $--color-primary;
+            line-height: 18px;
+            text-align: center;
+          }
         }
         .item-btn {
           display: inline-block;
@@ -256,7 +294,7 @@ export default {
           line-height: 32px;
           text-align: center;
         }
-        .item-play{
+        .item-play {
           cursor: pointer;
           width: 32px;
           height: 32px;

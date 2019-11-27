@@ -86,25 +86,6 @@ body {
     }
 }
 
-// 图片弹窗 确认 底部按钮
-.modal-footer {
-    padding-top: 20px;
-    float: right;
-
-    button {
-        width: 66px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        margin-right: 8px;
-        color: #fff;
-    }
-
-    .cancel {
-        color: #262626;
-        background: rgba(238, 238, 238, 1);
-    }
-}
-
 // table 无内容时的样式
 .empty-table {
     text-align: center;

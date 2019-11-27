@@ -5,48 +5,52 @@
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>
-    <el-main class="member-content page-scroll" style="padding: 32px">
+    <el-main class="member-content page-scroll">
+      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
       <el-row class="user-list">
         <span class="member-list-title fs14">网站地图</span>
       </el-row>
-      <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
       <el-row class="content">
-        <el-tabs
-          class="tab"
-          v-model="uploadType"
-          type="card"
-          @tab-click="handleClick"
-          :before-leave="beforeClick"
-        >
-          <el-tab-pane label="系统自动生成" name="auto"></el-tab-pane>
-          <el-tab-pane label="手动上传" name="manual"></el-tab-pane>
-        </el-tabs>
-        <div v-show="uploadType == 'auto'" style="padding:16px 0px">
-          <ul class="autoType">
-            <li
-              class="typeItem"
-              :class="{typeItemActive:listType == 'page'}"
-              @click="choseListType('page')"
-            >页面</li>
-            <li
-              class="typeItem"
-              :class="{typeItemActive:listType == 'news'}"
-              @click="choseListType('news')"
-            >文章</li>
-            <li
-              class="typeItem"
-              :class="{typeItemActive:listType == 'product'}"
-              @click="choseListType('product')"
-            >产品</li>
-          </ul>
+        <div class="domain-menu">
+          <el-tabs v-model="uploadType" :before-leave="beforeClick">
+            <el-tab-pane label="系统自动生成" name="auto"></el-tab-pane>
+            <el-tab-pane label="手动上传" name="manual"></el-tab-pane>
+          </el-tabs>
+        </div>
+        <div class="autoCreate" v-show="uploadType == 'auto'">
+          <div class="autoType">
+            <span>类型</span>
+            <ul class="typeWrap">
+              <li
+                class="typeItem"
+                :class="{typeItemActive:listType == 'page'}"
+                @click="choseListType('page')"
+              >页面</li>
+              <li
+                class="typeItem"
+                :class="{typeItemActive:listType == 'news'}"
+                @click="choseListType('news')"
+              >文章</li>
+              <li
+                class="typeItem"
+                :class="{typeItemActive:listType == 'product'}"
+                @click="choseListType('product')"
+              >产品</li>
+            </ul>
+          </div>
+
           <div class="addWrap">
             <div class="infoText">
               <span>自动生成网站地图</span>
               <i class="iconfont iconicon-exclamationmark" style="color:#e5e5e5;margin-left:8px"></i>
             </div>
             <div class="operateBtn">
-              <button class="addBtn" @click="showAddDialog">{{addType}}</button>
-              <a class="previewBtn" :href="`${previewSitemapUrl}${curSiteId}`" target="_blank">预览</a>
+              <button class="cl-button cl-button--primary" @click="showAddDialog">{{addType}}</button>
+              <a
+                class="previewBtn cl-button cl-button--primary_notbg"
+                :href="`${previewSitemapUrl}${curSiteId}`"
+                target="_blank"
+              >预览</a>
             </div>
           </div>
           <div class="searchWrap">
@@ -69,18 +73,16 @@
               <div class="rightText">批量设置</div>
               <div class="changeBtn" v-show="batchSetting == 'all'">
                 <button
+                  class="textBtn_primary"
                   :class="{disabled:listData.list.length == 0}"
                   @click="choseBatchSetting('priority')"
-                >
-                  <span>权重</span>
-                </button>
-                <span style="margin:0px 16px">|</span>
+                >权重</button>
+                <span style="margin:0px 8px">|</span>
                 <button
+                  class="textBtn_primary"
                   :class="{disabled:listData.list.length == 0}"
                   @click="choseBatchSetting('frequency')"
-                >
-                  <span>更新频率</span>
-                </button>
+                >更新频率</button>
               </div>
               <div style="display:inline-block" v-show="batchSetting == 'priority'">
                 <el-select v-model="priority" placeholder="权重">
@@ -92,12 +94,12 @@
                   ></el-option>
                 </el-select>
                 <div class="changeBtn" style="margin-left:24px">
-                  <button style="margin-right:8px" @click="determine('priority')">
-                    <span>确定</span>
-                  </button>
-                  <button @click="cancelSetting">
-                    <span>取消</span>
-                  </button>
+                  <button
+                    class="textBtn_info"
+                    style="margin-right:8px"
+                    @click="determine('priority')"
+                  >确定</button>
+                  <button class="textBtn_delete" @click="cancelSetting">取消</button>
                 </div>
               </div>
               <div style="display:inline-block" v-show="batchSetting == 'frequency'">
@@ -110,12 +112,12 @@
                   ></el-option>
                 </el-select>
                 <div class="changeBtn" style="margin-left:24px">
-                  <button style="margin-right:8px" @click="determine('frequency')">
-                    <span>确定</span>
-                  </button>
-                  <button @click="cancelSetting">
-                    <span>取消</span>
-                  </button>
+                  <button
+                    class="textBtn_info"
+                    style="margin-right:8px"
+                    @click="determine('frequency')"
+                  >确定</button>
+                  <button class="textBtn_delete" @click="cancelSetting">取消</button>
                 </div>
               </div>
             </div>
@@ -129,7 +131,7 @@
               <button class="cancel" @click="batchCancel">取消</button>
             </div>
           </div>
-          <div>
+          <div style="position:relative">
             <List
               :listData="listData"
               :listType="listType"
@@ -158,7 +160,7 @@
             <span class="title">{{addType}}</span>
             <span class="tips" v-show="type == '文章'">仅显示已上线文章</span>
             <span class="tips" v-show="type == '产品'">仅显示已上架产品</span>
-            <i class="iconfont iconguanbi close-pannel" @click="closeAddDialog"></i>
+            <i class="iconfont iconguanbi cl-iconfont is-circle close-pannel" @click="closeAddDialog"></i>
           </div>
           <div style="padding:24px">
             <el-input
@@ -221,11 +223,11 @@
           </div>
           <div class="confirm">
             <button
-              class="confirmBtn"
-              :class="{addDisabled:addSelectedList.length == 0}"
+              class="confirmBtn cl-button cl-button--primary"
+              :class="{'is-disabled':addSelectedList.length == 0}"
               @click="add"
             >确定</button>
-            <button class="cancelBtn" @click="closeAddDialog">取消</button>
+            <button class="cancelBtn cl-button cl-button--primary_notbg" @click="closeAddDialog">取消</button>
           </div>
         </div>
       </el-dialog>
@@ -388,19 +390,6 @@ export default {
       } else if (item == "manual") {
         this.$refs.manualUpload.init(this.curSiteId);
       }
-    },
-    handleClick(item) {
-      // console.log(this.uploadType);
-      // console.log(item.name);
-      // if (item.name == this.uploadType) {
-      //   return;
-      // }
-      // console.log(this.uploadType == "auto");
-      // if (this.uploadType == "auto") {
-      //   this.getList();
-      // } else if (this.uploadType == "manual") {
-      //   this.$refs.manualUpload.init(this.curSiteId);
-      // }
     },
     search() {
       this.getList();
@@ -620,37 +609,30 @@ export default {
   }
 };
 </script>
-<style scoped>
-.tab /deep/ .el-tabs__item {
-  height: 38px;
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-  line-height: 36px;
-  border-bottom: 1px solid #e4e7ed;
-  background: rgba(245, 245, 245, 1);
-  vertical-align: top;
-  border-top: 2px solid transparent;
-  width: 120px;
-  box-sizing: border-box;
+<style lang="scss" scoped>
+.domain-menu {
+  position: relative;
+  height: 50px;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  margin-bottom: 12px;
+}
+.domain-menu /deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+.domain-menu /deep/ .el-tabs__active-bar.is-top {
+  width: 0 !important;
+}
+.el-tabs /deep/ .el-tabs__item {
+  height: 50px;
+  line-height: 50px;
+  margin: 0 24px;
   padding: 0;
-  vertical-align: top;
-  text-align: center;
+  color: $--color-text-primary;
 }
-.tab /deep/ .el-tabs__item:nth-child(1) {
-  border-radius: 4px 0 0 0;
-}
-.tab /deep/ .el-tabs__item:nth-child(2) {
-  border-radius: 0 4px 0 0;
-}
-.tab /deep/ .el-tabs__nav {
-  border-top: none;
-}
-.tab /deep/ .is-active {
-  color: rgba(1, 192, 222, 1);
-  border-top: 2px solid rgb(72, 201, 226);
-  border-bottom: 1px solid transparent;
-  background: rgb(255, 255, 255);
+.el-tabs /deep/ .el-tabs__item.is-active {
+  border-bottom: 2px solid $--color-primary;
 }
 .smallTable /deep/ .el-table thead th {
   height: 45px !important;
@@ -662,18 +644,14 @@ export default {
   width: 15px !important;
   height: 15px !important;
 }
-.right /deep/ .el-select .el-input__inner {
-  height: 36px;
-}
 </style>
 <style lang="scss" scoped>
 .tip {
   display: inline-block;
+  position: absolute;
   margin-top: 32px;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(9, 204, 235, 1);
-  line-height: 22px;
+  font-size: $--font-size-base;
+  color: $--color-primary;
   cursor: pointer;
 }
 .disabled {
@@ -683,14 +661,15 @@ export default {
 }
 .member-container {
   position: relative;
-  .user-list {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 24px;
-    .member-list-title {
-      border-left: 4px solid #01c0de;
-      padding-left: 8px;
-      font-size: 16px;
-      font-weight: 700;
+  .member-content {
+    padding: 0 16px;
+    .user-list {
+      .member-list-title {
+        border-left: 2px solid $--color-primary;
+        padding-left: 8px;
+        font-size: $--font-size-base;
+        font-weight: 700;
+      }
     }
   }
 }
@@ -703,127 +682,112 @@ export default {
 }
 .content {
   margin-top: 24px;
-  .autoType {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    .typeItem {
-      width: 90px;
-      height: 32px;
-      border: 1px solid rgba(9, 204, 235, 1);
-      color: rgba(9, 204, 235, 1);
-      line-height: 32px;
-      text-align: center;
-      cursor: pointer;
-      &:nth-child(1) {
-        border-radius: 2px 0px 0px 2px;
-        border-right: none;
-      }
-      &:nth-child(3) {
-        border-radius: 0px 2px 2px 0px;
-        border-left: none;
-      }
-    }
-    .typeItemActive {
-      background: rgba(9, 204, 235, 1);
-      color: rgba(255, 255, 255, 1);
-    }
-  }
-  .addWrap {
-    padding: 16px 0;
-    border-bottom: 1px solid #e5e5e5;
-    display: flex;
-    justify-content: space-between;
-    .infoText {
-      padding-top: 6px;
-      span {
-        font-size: 16px;
-        color: rgba(161, 168, 177, 1);
-        line-height: 22px;
-      }
-    }
-    .operateBtn {
-      .addBtn {
-        width: 90px;
-        height: 32px;
-        background: rgba(9, 204, 235, 1);
-        border-radius: 2px;
-        color: rgba(255, 255, 255, 1);
-        line-height: 32px;
-        text-align: center;
-        vertical-align: middle;
-      }
-      .previewBtn {
-        display: inline-block;
-        width: 90px;
-        height: 32px;
-        border-radius: 2px;
-        border: 1px solid rgba(9, 204, 235, 1);
-        color: rgba(9, 204, 235, 1);
-        line-height: 32px;
-        text-align: center;
-        vertical-align: middle;
-        margin-left: 24px;
-      }
-    }
-  }
-  .searchWrap {
-    padding: 16px 0;
-    border-bottom: 1px solid #e5e5e5;
-    display: flex;
-    justify-content: space-between;
-    .input-with-select {
-      width: 400px;
-    }
-    .right {
-      float: right;
-      .rightText {
-        display: inline-block;
-        font-size: 14px;
-        color: rgba(38, 38, 38, 1);
-        line-height: 36px;
-        margin-right: 32px;
-      }
-      .changeBtn {
-        display: inline-block;
-        button {
-          padding: 8px;
-          background: transparent;
-          &:hover {
-            background: rgba(9, 204, 235, 0.09);
+  .autoCreate {
+    background: $--color-white;
+    .autoType {
+      border: $--border-base;
+      border-bottom: none;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      .typeWrap {
+        margin-left: 16px;
+        display: flex;
+        justify-content: center;
+        .typeItem {
+          width: 72px;
+          height: 32px;
+          line-height: 32px;
+          border: $--border-base;
+          text-align: center;
+          cursor: pointer;
+          &:nth-child(1) {
+            border-radius: 2px 0px 0px 2px;
+          }
+          &:nth-child(2) {
+            margin-left: -1px;
+          }
+          &:nth-child(3) {
+            margin-left: -1px;
+            border-radius: 0px 2px 2px 0px;
           }
         }
-        span {
-          font-size: 14px;
-          color: rgba(9, 204, 235, 1);
-          line-height: 20px;
+        .typeItemActive {
+          z-index: 2;
+          border: 1px solid $--color-primary;
+          color: $--color-primary;
         }
       }
     }
-    .batchDelete {
-      .batchDeleteText {
-        color: rgba(38, 38, 38, 1);
-        line-height: 36px;
+    .addWrap {
+      padding: 0 16px 12px 24px;
+      border: $--border-base;
+      border-top: none;
+      display: flex;
+      justify-content: space-between;
+      .infoText {
+        padding-top: 8px;
         span {
-          color: #09cceb;
+          font-size: $--font-size-small;
         }
       }
-      .delete {
-        margin-left: 24px;
-        color: rgba(251, 77, 104, 1);
-        padding: 8px;
-        background: transparent;
-        &:hover {
-          background: rgba(251, 77, 104, 0.09);
+      .operateBtn {
+        .previewBtn {
+          display: inline-block;
+          box-sizing: border-box;
         }
       }
-      .cancel {
-        margin-left: 16px;
-        color: rgba(9, 204, 235, 1);
-        padding: 8px;
-        background: transparent;
-        &:hover {
-          background: rgba(9, 204, 235, 0.09);
+    }
+    .searchWrap {
+      border-left: $--border-base;
+      border-right: $--border-base;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      .input-with-select {
+        width: 192px;
+      }
+      .right {
+        float: right;
+        .rightText {
+          display: inline-block;
+          font-size: $--font-size-small;
+          margin-right: 32px;
+        }
+        .changeBtn {
+          display: inline-block;
+          .textBtn_primary {
+            font-size: $--font-size-small;
+            color: $--color-primary;
+            line-height: 32px;
+          }
+          .textBtn_info {
+            font-size: $--font-size-small;
+            color: $--color-info;
+            line-height: 32px;
+          }
+          .textBtn_delete {
+            font-size: $--font-size-small;
+            color: $--color-danger;
+            line-height: 32px;
+          }
+        }
+      }
+      .batchDelete {
+        .batchDeleteText {
+          color: rgba(38, 38, 38, 1);
+          line-height: 32px;
+          span {
+            color: $--color-primary;
+          }
+        }
+        .delete {
+          margin-left: 24px;
+          color: $--color-danger;
+        }
+        .cancel {
+          margin-left: 16px;
+          color: $--color-info;
         }
       }
     }
@@ -855,11 +819,8 @@ export default {
     }
     .close-pannel {
       float: right;
-      cursor: pointer;
-      line-height: 70px;
+      margin-top: 20px;
       margin-right: 24px;
-      font-size: 14px;
-      color: #262626;
     }
     .tips {
       margin-left: 16px;
@@ -876,28 +837,11 @@ export default {
     bottom: 0px;
     border-top: 1px solid #efefef;
     .confirmBtn {
-      margin: 24px;
-      width: 90px;
-      height: 32px;
-      background: rgba(9, 204, 235, 1);
-      border-radius: 2px;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 1);
-      line-height: 32px;
-    }
-    .addDisabled {
-      opacity: 0.2;
-      cursor: not-allowed;
+      margin-top: 24px;
+      margin-left: 24px;
     }
     .cancelBtn {
       margin-top: 24px;
-      width: 90px;
-      height: 32px;
-      border-radius: 2px;
-      border: 1px solid rgba(9, 204, 235, 1);
-      font-size: 12px;
-      color: rgba(9, 204, 235, 1);
-      line-height: 32px;
     }
   }
 }

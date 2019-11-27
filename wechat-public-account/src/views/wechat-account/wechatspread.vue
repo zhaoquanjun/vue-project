@@ -79,7 +79,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            fixed="right"
             label="操作"
             width="220">
             <template slot-scope="scope">
@@ -96,16 +95,20 @@
           </el-table-column>
         </el-table>
       </template>
-      <div class="cl-pagination paging">
+      <div class="cl-paganation paging" :class="{'noJumper':TotalPage <= 10}">
         <a href="">如何进行页面推广？</a>
         <el-pagination
           background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          layout="total, sizes, prev, pager, next"
+          :layout="TotalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
           :total="TotalRecord"
-          :page-sizes="[5,10,20]"
-        ></el-pagination>
+          :page-sizes="[5,10,20,50]"
+          :page-size="5"
+        >
+          <div class="sizes-title">，每页显示</div>
+          <button v-if="TotalPage > 10" class="paging-confirm">跳转</button>
+        </el-pagination>
       </div>
     </div>
     <statistics 
@@ -327,6 +330,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.spread-continer /deep/ .el-table {
+  height: 340px;
+  overflow-y: auto;
+}
+ .empty-table {
+  margin-top: 80px;
+}
+.el-table /deep/ .el-table__row td {
+  padding: 5px 0;
+}
+.spread-continer /deep/ .el-table::before {
+  height: 0;
+}
 .el-tabs /deep/ .el-tabs__item {
     font-size: 12px;
     padding: 0;
@@ -408,6 +424,7 @@ export default {
       padding: 8px;
       border-radius: $--border-radius-base;
       margin-right: 10px !important;
+      line-height: 14px;
       cursor: pointer;
       &:hover {
         background: #E5E5E5;

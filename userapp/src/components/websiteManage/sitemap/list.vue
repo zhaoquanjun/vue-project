@@ -214,11 +214,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.table-list {
-  border: 1px solid #e1e6ea;
-  border-top: none;
-  border-bottom: none;
-}
 .overflow {
   display: inline-block;
   overflow: hidden;
