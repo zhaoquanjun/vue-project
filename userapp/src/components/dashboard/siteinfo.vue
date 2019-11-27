@@ -297,7 +297,9 @@
             <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
           </span>
         </div>
-        <div class="tips">使用当前站点空间作为模板创建新站点</div>
+        <div class="tip-wrap-primary" style="margin-top:16px">
+          <span class="tip-text">使用当前站点空间作为模板创建新站点</span>
+        </div>
         <div class="createSiteName">
           <span class="createSiteTitle">站点名称</span>
           <el-input
@@ -865,7 +867,7 @@ export default {
             align-items: center;
             margin-left: 16px;
             margin-right: 16px;
-            padding-left: 26px;
+            padding-left: 14px;
             padding-right: 22px;
             cursor: pointer;
             &:hover {
@@ -978,7 +980,7 @@ export default {
       margin-top: 16px;
     }
     .createSiteName {
-      margin-top: 20px;
+      margin-top: 16px;
       .createSiteNameInput {
         margin-top: 16px;
       }

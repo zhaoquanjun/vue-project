@@ -390,7 +390,12 @@ export default {
         }
     }
     .success {
+        font-size: 12px;
         color: #63dc8c;
+        i {
+            padding-right: 5px;
+            color: #63dc8c;
+        }
     }
 }
 </style>

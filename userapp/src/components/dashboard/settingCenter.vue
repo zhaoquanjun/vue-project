@@ -32,7 +32,8 @@
         </div>
         <div class="item-mask">
           <div class="item-info">
-            <div>一分钟快速上手 01:28</div>
+            <span>一分钟快速上手</span>
+            <span style="margin-left:12px">01:28</span>
           </div>
           <div class="item-play"></div>
         </div>
@@ -46,8 +47,8 @@
         </div>
         <div class="item-mask">
           <div class="item-info">
-            <div>{{link}}</div>
             <div>统一登录地址</div>
+            <div>{{link}}</div>
           </div>
           <div>
             <button
@@ -81,7 +82,6 @@
         </div>
         <div class="item-mask">
           <div class="item-info">
-            <div>成员协作</div>
             <div>成员数量：{{contentNumber.managerCount}}</div>
           </div>
           <div>

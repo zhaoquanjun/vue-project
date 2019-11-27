@@ -32,23 +32,41 @@ body {
     bottom: 0;
     left: 0;
     padding: 15px 17px;
-    border-top: 1px solid #efefef;
-    background: #fff;
+    border-top: $--border-base;
 
-    .button {
-        padding: 0 15px;
-        height: 32px;
-        font-size: 14px;
-        background: rgba(0, 193, 222, 1);
-        color: #fff;
-        border-radius: 2px;
+    .confirm {
+        cursor: pointer;
+        text-align: center;
+        min-width: $--button-small-min-width;
+        border: 1px solid $--color-primary;
+        color: $--color-white;
+        background-color: $--button-primary-background-color;
+        border-color: $--button-primary-background-color;
+        font-size: $--font-size-small;
+        border-radius: $--button-border-radius;
+        padding: $--button-padding-vertical $--button-padding-horizontal;
+
+        &:hover {
+            background-color: $--button-hover-primary-background-color;
+        }
     }
 
     .cancel {
-        margin-left: 20px;
-        background: #fff;
-        border: 1px solid rgba(0, 193, 222, 1);
-        color: rgba(0, 193, 222, 1);
+        margin-left: 16px;
+        cursor: pointer;
+        text-align: center;
+        min-width: $--button-small-min-width;
+        border: 1px solid $--color-primary;
+        color: $--color-primary;
+        border-color: $--color-primary;
+        font-size: $--font-size-small;
+        border-radius: $--button-border-radius;
+        padding: $--button-padding-vertical $--button-padding-horizontal;
+
+        &:hover {
+            color: $--color-white;
+            background-color: $--button-primary-background-color;
+        }
     }
 }
 
@@ -211,6 +229,7 @@ body {
     border: 1px solid rgba(255, 202, 163, 1);
     box-sizing: border-box;
     border-radius: $--border-radius-base;
+    padding-left: 12px;
 
     .tip-title {
         font-size: $--font-size-small;
