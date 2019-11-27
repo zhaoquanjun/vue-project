@@ -205,18 +205,24 @@
                 </el-table-column>
               </el-table>
               <div class="list-footer" v-show="addListData.totalRecord > 0">
-                <div class="cl-pagination pageing" id="pageing" style="margin-right:0">
+                <div 
+                  class="cl-pagination pageing" 
+                  id="pageing" 
+                  :class="{'noJumper':addListData.totalPage <= 10}"
+                >
                   <slot name="paging"></slot>
                   <el-pagination
                     background
-                    layout="total, sizes, prev, pager, next"
+                    :layout="addListData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     :total="addListData.totalRecord"
-                    :page-count="addListData.totalPage"
                     :page-size="addListData.pageSize"
                     :page-sizes="[10,20,50]"
                     @current-change="changeAddPage"
                     @size-change="changeAddSize"
-                  ></el-pagination>
+                  >
+                    <div class="sizes-title">，每页显示</div>
+                    <button v-if="addListData.totalPage > 10" class="paging-confirm">跳转</button>
+                  </el-pagination>
                 </div>
               </div>
             </div>

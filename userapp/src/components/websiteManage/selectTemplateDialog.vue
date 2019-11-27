@@ -153,19 +153,24 @@
             </el-main>
             <div>
               <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
-              <div class="cl-pagination pageing" id="pageing" style="margin-bottom:20px">
+              <div 
+                class="cl-pagination pageing" id="pageing" style="margin-bottom:20px"
+                :class="{'noJumper':templatePage.totalPage <= 10}"
+              >
                 <el-pagination
-                  v-show="templatePage.totalCount > 9"
+                  v-show="templatePage.totalCount > 0"
                   background
-                  layout="total, slot, sizes, prev, pager, next"
+                  :layout="templatePage.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                   :current-page="templatePage.pageIndex"
                   :total="templatePage.totalCount"
-                  :page-count="templatePage.totalPages"
                   :page-size="templatePage.pageSize"
                   :page-sizes="[9,18,45]"
                   @current-change="changePage"
                   @size-change="changeSize"
-                ></el-pagination>
+                >
+                  <div class="sizes-title">，每页显示</div>
+                  <button v-if="templatePage.totalPages > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
               </div>
             </div>
             <el-dialog
