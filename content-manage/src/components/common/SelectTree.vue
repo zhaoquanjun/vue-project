@@ -211,7 +211,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /* .el-tree /deep/ .is-checked {
     background: red;
 } */
@@ -228,7 +228,7 @@ export default {
 .el-select-dropdown__item.selected {
     font-weight: normal;
 }
-ul li >>> .el-tree .el-tree-node__content {
+ul li /deep/ .el-tree .el-tree-node__content {
     height: auto;
     padding: 0 20px;
     display: block;
@@ -240,11 +240,11 @@ ul li >>> .el-tree .el-tree-node__content {
 .el-tree-node__label {
     font-weight: normal;
 }
-.el-tree >>> .is-current .el-tree-node__label {
-    color: #409eff;
+.el-tree /deep/ .is-current .el-tree-node__label {
+    color: $--color-primary;
     font-weight: 700;
 }
-.el-tree >>> .is-current .el-tree-node__children .el-tree-node__label {
+.el-tree /deep/ .is-current .el-tree-node__children .el-tree-node__label {
     color: #606266;
     font-weight: normal;
 }

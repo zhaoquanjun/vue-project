@@ -418,6 +418,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/contentDetail";
+.el-dialog__wrapper /deep/ .el-dialog {
+    margin-top: 70px !important;
+}
 </style>
 
 

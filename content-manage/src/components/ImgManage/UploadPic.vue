@@ -43,26 +43,22 @@
                 将文件拖到此处，或
                 <em>点击上传</em>
             </div>
-            <el-button
-                class="upload-btn"
+            <button
+                class="cl-button cl-button--primary"
                 @click="setFolder(false)"
-                size="small"
-                type="default"
                 style=" position: absolute;top: 57px; right: 136px;"
-            >选择图片</el-button>
-            <el-button
-                class="choose-img upload-btn"
-                size="small"
+            >选择图片</button>
+            <button
+                class="cl-button cl-button--primary_notbg"
                 @click="setFolder(true)"
-                type="default"
-                style="position: absolute;top: 57px; right: 6px;"
-            >选择文件夹</el-button>
+                style="position: absolute;top: 57px; right: 20px;"
+            >选择文件夹</button>
         </el-upload>
         <el-row class="footer-upload-btn">
             <button
                 :disabled="uploadDisabled"
-                class="handle-upload"
-                :class="[{'handle-upload-disabled':uploadDisabled}]"
+                class="cl-button"
+                :class="[uploadDisabled?'cl-button--disabled':'cl-button--primary']"
                 style="float:right"
                 size="small"
                 @click="submitUpload"
@@ -242,6 +238,9 @@ export default {
     justify-content: center;
     width: 100%;
     height: 100%;
+    &:hover {
+        border-color: $--color-primary;
+    }
 }
 .upload-pic /deep/ .el-upload-dragger .el-upload__text em {
     display: block;
