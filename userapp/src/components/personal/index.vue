@@ -13,7 +13,7 @@
                         {{input!=''? input : '设置您的名字'}}
                         <i
                             @click="setName"
-                            class="icon-size icon-editor"
+                            class="icon-size iconfont iconbianji cl-iconfont is-square"
                         ></i>
                     </span>
                     <template v-else>
@@ -450,9 +450,6 @@ export default {
 .el-input /deep/ .el-input__inner {
     padding-right: 60px;
 }
-.el-input /deep/ .el-input__inner:focus {
-    border-color: #00c1de;
-}
 </style>
 
 <style lang="scss" scoped>
@@ -516,16 +513,6 @@ export default {
                     flex: none;
                     color: #0070cc;
                     padding-left: 16px;
-                }
-                .icon-editor {
-                    background: url("~img/personal/editor.png") no-repeat center;
-                    background-size: contain;
-                    padding-left: 16px;
-                    &:hover {
-                        background: url("~img/personal/editor-on.png") no-repeat
-                            center;
-                        background-size: contain;
-                    }
                 }
             }
             .create-time {

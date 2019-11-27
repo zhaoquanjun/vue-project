@@ -12,7 +12,7 @@
     >
       <img v-if="picUrl" :src="picUrl" class="avatar" />
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      <button class="upload-btn" size="small" plain type="primary">{{'上传头像'}}</button>
+      <button class="upload-btn cl-button cl-button--primary" size="small" plain type="primary">{{'上传头像'}}</button>
     </el-upload>
     <div class="picture-format">
       <span class="gray8c">支持格式</span>
@@ -23,7 +23,7 @@
       <button
         class="confirm footer-btn"
         :disabled="disabled"
-        :class="{'disabled-btn':disabled}"
+        :class="{'is-disabled':disabled}"
         @click="comfirm"
       >确定</button>
       <button class="cancel footer-btn" @click="close">取消</button>
@@ -129,10 +129,6 @@ export default {
   margin-top: 40px;
   position: relative;
   .upload-btn {
-    width: 90px;
-    height: 32px;
-    color: #fff;
-    background: rgba(1, 192, 222, 1);
     position: absolute;
     bottom: -64px;
     left: 50%;
@@ -171,9 +167,6 @@ export default {
     padding-top: 8px;
     font-weight: 500;
   }
-}
-.disabled-btn {
-  background: rgba(1, 192, 222, 1);
 }
 </style>
 
