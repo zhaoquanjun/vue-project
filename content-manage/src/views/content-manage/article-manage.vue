@@ -12,4 +12,5 @@ export default {
        ArticleManage
     }
 }
+
 </script>

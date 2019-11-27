@@ -74,8 +74,8 @@
                     />
 
                     <div slot="footer" class="pannel-footer">
-                        <button @click="handOperateArticle" class="sure">确定</button>
-                        <button @click="cancelUpdateCategory" class="cancel">取消</button>
+                        <button @click="handOperateArticle" class="cl-button cl-button--primary">确定</button>
+                        <button @click="cancelUpdateCategory" class="cl-button cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>

@@ -13,7 +13,7 @@
           <slot name="icon-tip"></slot>
         </el-tooltip>
       </span>
-      <span class="close-pannel" @click="closePanel"><i class="iconfont iconguanbi"></i></span>
+      <span class="close-pannel" @click="closePanel"><i class="iconfont iconguanbi cl-iconfont is-circle"></i></span>
     </div>
     <div class="pannel-main" style="padding:0 17px">
         <slot></slot>
@@ -66,9 +66,9 @@ export default {
   .pannel-head {
     height: 40px;
     line-height: 40px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     overflow: hidden;
-    border-bottom: 1px solid #efefef;
+    border-bottom: $--border-base;
     span {
       padding: 0 10px;
     }

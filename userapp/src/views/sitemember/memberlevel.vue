@@ -15,8 +15,6 @@
                 <div class="b-content">
                     <template>
                         <el-table :data="memberPageResult.list"
-                                    :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '36px',paddingLeft: '40px'}"
-                                    :cell-style="{color:'#262626',lineHeight: '36px',paddingLeft: '40px'}"
                                     style="width: 100%">
                             <el-table-column prop="mobile"
                                                 label="会员等级">
@@ -80,10 +78,9 @@
             color: rgba(38,38,38,1);
             margin: 5px 0 17px;
             padding-left: 10px;
-            border-left: 2px solid #09CCEB;
+            border-left: 2px solid $--color-primary;
         }
         .b-content {
-            border: 1px solid #e5e5e5;
             border-bottom: none;
             margin-top: 24px;
         }

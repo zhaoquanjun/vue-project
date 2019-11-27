@@ -72,10 +72,10 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="more-operate" @click="handleMove(scope.row)" style="margin-right:16px">
-                            <i class="iconfont  iconyidong"></i>
+                            <i class="iconfont  iconyidong cl-iconfont is-square"></i>
                         </button>
                         <button class="more-operate delete-btn" @click="batchRemove( scope.row)">
-                            <i class="iconfont iconshanchu"></i>
+                            <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>
@@ -83,35 +83,45 @@
         </el-table>
         <div class="list-footer">
             <div class="storage-wrap">
-                <span class="title">已用空间</span>
+                <div class="use-title">
+                    <span class="title">已用空间</span>
+                    <span class="storage-content">
+                        {{storageUsage.currentUsage}} /3 {{storageUsage.maxSize}}
+                    </span>
+                </div>
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':storageUsage.prograss+'%'}"></div>
                 </div>
-                <span
-                    class="storage-content"
-                >{{storageUsage.currentUsage}} /3 {{storageUsage.maxSize}}</span>
             </div>
             <div class="storage-wrap">
-                <span class="title">已用流量</span>
+                <div class="use-title">
+                    <span class="title">已用流量</span>
+                    <span class="storage-content">
+                        {{usageTraffic.currentUsage}} / {{usageTraffic.maxSize}}
+                    </span>
+                </div>
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':usageTraffic.prograss+'%'}"></div>
                 </div>
-                <span
-                    class="storage-content"
-                >{{usageTraffic.currentUsage}} / {{usageTraffic.maxSize}}</span>
             </div>
-            <div class="pageing" id="pageing">
+            <div 
+                class="cl-paganation pageing" 
+                id="pageing" 
+                :class="{'noJumper':imgPageResult.totalPage <= 10}"
+            >
                 <slot name="paging"></slot>
                 <el-pagination
                     background
-                    layout="total, sizes, prev, pager, next"
+                    :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     :total="imgPageResult.totalRecord"
-                    :page-count="imgPageResult.totalPage"
                     :page-size="picSearchOptions.pageSize"
-                    :page-sizes="[10,20,50]"
+                    :page-sizes="[10,20,50,5]"
                     @current-change="changePage"
                     @size-change="changeSize"
-                ></el-pagination>
+                >
+                    <div class="sizes-title">，每页显示</div>
+                    <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
             </div>
         </div>
         <div id="img-list-dialog">
@@ -360,8 +370,8 @@ export default {
 }
 .cover {
     position: relative;
-     width: 150px;
-    height: 100px;
+    width: 150px !important;
+    height: 100px !important;
     .play {
         cursor: pointer;
         position: absolute;
@@ -389,6 +399,10 @@ export default {
     outline: none;
     width: 800px;
     margin-top: 150px;
+}
+.list-footer .use-title {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
 

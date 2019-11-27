@@ -1,6 +1,8 @@
 body {
     min-width: 1170px;
     min-height: 500px;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial;
     color: $--color-text-primary;
     background: $--background-color-selected;
@@ -30,24 +32,9 @@ body {
     bottom: 0;
     left: 0;
     padding: 15px 17px;
-    border-top: 1px solid #efefef;
+    border-top: $--border-base;
     background: #fff;
-
-    .button {
-        padding: 0 15px;
-        height: 32px;
-        font-size: 14px;
-        background: rgba(0, 193, 222, 1);
-        color: #fff;
-        border-radius: 2px;
-    }
-
-    .cancel {
-        margin-left: 20px;
-        background: #fff;
-        border: 1px solid rgba(0, 193, 222, 1);
-        color: rgba(0, 193, 222, 1);
-    }
+   
 }
 
 // 自定义input错误提示图标
@@ -88,19 +75,6 @@ body {
 .modal-footer {
     padding-top: 20px;
     float: right;
-
-    button {
-        width: 66px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        margin-right: 8px;
-        color: #fff;
-    }
-
-    .cancel {
-        color: #262626;
-        background: rgba(238, 238, 238, 1);
-    }
 }
 
 // table 无内容时的样式
@@ -185,7 +159,7 @@ body {
 }
 
 .submenu-aside {
-    width: 150px !important;
+    width: 130px !important;
 }
 
 // popover 弹框样式

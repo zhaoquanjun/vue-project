@@ -1,7 +1,7 @@
 
 @import "../theme-chalk/mixins/utlis";
 .el-table{
-    border: 1px solid $--border-color-base; 
+    border: $--border-base; 
     position: relative;
     color: $--color-text-primary;
     thead th > .cell {
@@ -15,6 +15,9 @@
     tbody .el-table__row .cell{
         display: flex;
         align-items: center;
+    }
+    td, th.is-leaf{
+        border-bottom: $--border-base; 
     }
     .el-table__body-wrapper .el-table__row .cell span{
         display: block;

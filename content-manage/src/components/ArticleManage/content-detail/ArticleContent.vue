@@ -871,8 +871,8 @@ export default {
     transform: translate(-50%, -50%);
     overflow: hidden;
     box-shadow: 0px 2px 32px 4px rgba(0,0,0,0.13);
-    border: 1px solid rgba(229,229,229,1);
-    border-radius: 3px;
+    border: $--border-base;
+    border-radius: $--border-radius-base;
 }
 #videoContent .modal-header {
     background: rgb(255, 255, 255);
@@ -880,7 +880,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: $--border-base;
     .title{
         font-size: 16px;
         font-weight: 500;
@@ -923,7 +923,7 @@ export default {
         width: 76px;
         height: 40px;
         background: rgba(0,193,222,1);
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         // line-height: 40px;
         background: rgba(0, 193, 222, 1);
         margin-right: 16px;
@@ -932,7 +932,7 @@ export default {
     .cancel {
         color: rgba(9,204,235,1);
         background: rgba(255,255,255,1);
-        border: 1px solid rgba(9,204,235,1);
+        border: 1px solid $--color-success;
     }
 }
 </style>

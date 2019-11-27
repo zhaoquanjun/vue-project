@@ -199,12 +199,12 @@ export default {
 <style lang="scss" scoped>
 .statistics {
   .title {
-    height: 68px;
+    height: 32px;
     width: 100%;
-    padding: 14px 0;
+    padding: 16px 0;
     display: flex;
     justify-content: space-between;
-    line-height: 40px;
+    line-height: 32px;
     button {
       height: 32px;
       line-height: 12px;

@@ -239,7 +239,7 @@ export default {
             } else {
               this.percentage = this.percentage + 5
             }
-          }, 600);
+          }, 300);
         } else {
           notify(this,'推广域名设置失败', 'error')
         }
@@ -364,14 +364,14 @@ export default {
         div {
           display: inline-block;
           width: 340px;
-          height: 40px;
+          height: 32px;
           cursor: pointer;
           font-size:$--font-size-small;
           font-weight:400;
           margin-top: 20px;
           color:#ffffff;
           background: $--color-primary;
-          line-height:40px;
+          line-height:32px;
           border-radius: $--border-radius-base;
         }
       }
@@ -394,7 +394,7 @@ export default {
         }
         input {
           width:340px;
-          height:40px;
+          height:32px;
           background:rgba(255,255,255,1);
           border-radius:$--border-radius-base;
           border:$--border-base;
@@ -426,11 +426,11 @@ export default {
         }
         .add {
           width: 340px;
-          height: 34px;
+          height: 32px;
           color: rgba(255, 255, 255, 1);
           background-color: $--color-primary;
           font-size: $--font-size-small;
-          line-height: 34px;
+          line-height: 32px;
           text-align: center;
           margin: 0 auto;
         }
@@ -450,7 +450,7 @@ export default {
         ul {
           position: relative;
           width:340px;
-          height:40px;
+          height:32px;
           background:rgba(255,255,255,1);
           border-radius:$--border-radius-base;
           border:$--border-base;
@@ -461,7 +461,7 @@ export default {
             width: 320px;
             color: #262626;
             padding-left: 14px;
-            line-height: 40px;
+            line-height: 32px;
             margin-bottom: 4px;
             i {
               color: #a1a8b1;
@@ -526,7 +526,7 @@ export default {
         }
       }
       .account-bind__tips {
-        width: 418px;
+        width: 360px;
         margin: 32px auto 50px;
         background: white;
         p {
@@ -580,7 +580,7 @@ export default {
     }
     .auther-body {
       position: relative;
-      padding: 40px;
+      padding: 32px;
       i {
         position: absolute;
         top: 50%;
@@ -607,12 +607,12 @@ export default {
       span {
         display: inline-block;
         width: 76px;
-        height: 40px;
+        height: 32px;
         cursor: pointer;
         background: #ffffff;
         border-radius: $--border-radius-base;
         text-align: center;
-        line-height: 40px;
+        line-height: 32px;
         border: 1px solid #09cceb;
         margin-left: 24px;
         color: #09cceb;

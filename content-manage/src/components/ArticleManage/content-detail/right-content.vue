@@ -44,8 +44,8 @@
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true" :isThird="true">
                 <div slot="modal-footer" class="modal-footer">
-                    <button type="button" @click="getEditorImg" class="sure">确定</button>
-                    <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                    <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
+                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
                 </div>
             </modal-content>
         </div>
@@ -170,7 +170,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-card /deep/ .el-card__body {
     text-align: center;
 }
@@ -181,7 +181,7 @@ export default {
     padding: 0 10px;
 }
 .border-line {
-    border: 1px dashed rgba(144, 220, 232, 1);
+    border: 1px dashed $--color-primary;
     background: rgba(242, 250, 251, 0.501);
 }
 .avatar-uploader {
@@ -200,11 +200,11 @@ export default {
     /* display: table-cell; */
 }
 .avatar-uploader /deep/ .el-upload i {
-    color: #00c1de;
+    color: $--color-primary;
     cursor: pointer;
 }
 .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
+    border-color: $--color-primary;
 }
 .avatar-uploader-icon {
     font-size: 28px;
@@ -236,7 +236,8 @@ export default {
     text-align: center;
     color: #fff;
     opacity: 0;
-    font-size: 20px;
+    font-size: $--font-size-extra-large;
+;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s;
 }
@@ -264,14 +265,14 @@ export default {
 .article-cover {
     color: #262626;
     font-weight: 600;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 .icon-change {
     display: inline-block;
     width: 27px;
     height: 27px;
     border: 1px solid #fff;
-    border-radius: 50%;
+    border-radius: $--border-radius-circle;
     background: url("~img/pic-icon/switch.png") no-repeat center;
     background-size: 50%;
 }
@@ -282,7 +283,7 @@ export default {
     width: 27px;
     height: 27px;
     border: 1px solid #fff;
-    border-radius: 50%;
+    border-radius: $--border-radius-circle;
     background: url("~img/pic-icon/delete-1.png") no-repeat center;
     background-size: 50%;
 }

@@ -32,10 +32,10 @@
                     </el-select>
                 </span>
                 <button @click="switchIsDesc('dec')" class="desBtn">
-                    <i class="iconfont iconxiayi" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                    <i class="iconfont iconxiayi" :style="{'color':(descSort?'#FF6B00':'#262626')}"></i>
                 </button>
                 <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
-                    <i class="iconfont iconshangyi" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
+                    <i class="iconfont iconshangyi" :style="{'color':(ascSort?'#FF6B00':'#262626')}"></i>
                 </button>
 
                 <button class="list-mode mode-item" @click="showType('list')" v-show="!isPopup">
@@ -49,7 +49,7 @@
             </div>
             <div class="head-item head-right">
                 <button
-                    class="btn-lightblue btn-small upload-wrap"
+                    class="cl-button cl-button--primary"
                     @click="switchUploadBoxShowStatus"
                 >
                    
@@ -64,8 +64,8 @@
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <div>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
-                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                    <button class="cl-button cl-button--text_primary" @click="batchMove">移动</button>
+                    <button class="cl-button cl-button--text_danger" @click="batchDelete">删除</button>
                 </div>
             </div>
         </template>
@@ -154,6 +154,10 @@ export default {
     &:hover{
         opacity: 0.8;
     }
+}
+.handle-batch button {
+    min-width: 60px;
+    margin: 0px;
 }
 .upload-wrap{
     &:hover{

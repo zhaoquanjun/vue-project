@@ -1,0 +1,16 @@
+
+.cl-text{
+    font-size: $--font-size-base;
+    color: $--color-text-primary;
+    &--orange{
+        color: $--color-text-orange;
+    }
+
+    &--success{
+        color: $--color-success;
+    }
+
+    &--danger{
+        color: $--color-danger;
+    }
+}

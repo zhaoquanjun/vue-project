@@ -13,7 +13,7 @@
           <slot name="icon-tip"></slot>
         </el-tooltip>
       </span>
-      <span class="close-pannel" @click="closePanel">X</span>
+      <span class="close-pannel cl-iconfont is-circle" @click="closePanel">X</span>
     </div>
     <div style="padding:0 17px">
       <slot slot="cur-tip"></slot>
@@ -69,9 +69,9 @@ export default {
   .pannel-head {
     height: 40px;
     line-height: 40px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     overflow: hidden;
-    border-bottom: 1px solid #efefef;
+    border-bottom: $--border-base;
     span {
       padding: 0 10px;
     }

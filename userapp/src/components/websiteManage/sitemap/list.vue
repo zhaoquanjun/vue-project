@@ -63,19 +63,24 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="list-footer" v-show="listData.totalRecord > 0">
-      <div class="pageing" id="pageing">
+    <div 
+      class="list-footer" 
+      v-show="listData.totalRecord > 0" 
+    >
+      <div class="cl-pagination pageing" id="pageing" :class="{'noJumper':listData.totalPage <= 10}">
         <slot name="paging"></slot>
         <el-pagination
           background
-          layout="total, sizes, prev, pager, next"
+          :layout="listData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
           :total="listData.totalRecord"
-          :page-count="listData.totalPage"
           :page-size="listData.pageSize"
           :page-sizes="[10,20,50]"
           @current-change="changePage"
           @size-change="changeSize"
-        ></el-pagination>
+        >
+          <div class="sizes-title">，每页显示</div>
+          <button v-if="listData.totalPage > 10" class="paging-confirm">跳转</button>
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -214,11 +219,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.table-list {
-  border: 1px solid #e1e6ea;
-  border-top: none;
-  border-bottom: none;
-}
 .overflow {
   display: inline-block;
   overflow: hidden;

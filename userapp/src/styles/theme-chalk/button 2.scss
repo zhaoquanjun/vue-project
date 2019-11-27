@@ -2,6 +2,7 @@
 
 .cl-button {
     cursor: pointer;
+    text-align: center;
     min-width: $--button-medium-min-width;
     border: 1px solid $--color-primary;
     @include button-size($--button-padding-vertical, $--button-padding-horizontal, $--font-size-small, $--button-border-radius);
@@ -47,7 +48,10 @@
         border-color: $--button-disabled-defualt-background-color;
         background: $--button-disabled-defualt-background-color;
     }
-
+    
+    &.is-block {
+        width: 100%;
+     }
 
     &--text{
         border-color: transparent;
@@ -57,10 +61,7 @@
         border-color: transparent;
         color: $--button-primary-font-color;
     }
-    &--text_info{
-        border-color: transparent;
-        color: $--button-info-font-color;
-    }
+
     &--text_success{
         border-color: transparent;
         color: $--button-success-font-color;

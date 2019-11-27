@@ -8,7 +8,7 @@
         <el-aside 
             class="m-asideleft"
             :style="{width:130+'px'}">
-            <ul class="left-menu">
+            <ul @mouseleave="collapseListClose" class="left-menu">
                 <li
                     ref="menuItem"
                     class="left-menu-item"
@@ -112,6 +112,11 @@ export default {
                 this.width = 60;
             },250)
         },
+        collapseListClose() {
+            setTimeout(()=>{
+                //this.width = 130;
+            },250)
+        },
         iconfonts(code) {
             switch (code) {
                 case "board":
@@ -177,6 +182,7 @@ export default {
     overflow: hidden;
     transition: 0.2s ease-in-out;
     background-color:$--color-black-dark;
+    height: calc(100vh - 50px);
    
     // border-right: 1px solid rgb(229, 229, 229);
 }
@@ -224,8 +230,6 @@ export default {
      
 }
 .left-menu {
-    background-color:$--color-black-dark;
-    height: calc(100vh - 50px);
     padding-top: 16px;
     .left-menu-item {
         cursor: pointer;
@@ -240,7 +244,7 @@ export default {
         .menu-icon {
             display: inline-block;
             font-size: 14px;
-            padding: 0 23px;
+            padding: 0 24px;
             text-align: center;
             line-height: 50px;
             color:$--color-white;

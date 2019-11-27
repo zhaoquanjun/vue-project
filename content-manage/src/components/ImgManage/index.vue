@@ -73,8 +73,8 @@
                         @chooseNode="chooseNode"
                     ></SelectTree>
                     <div slot="footer" class="pannel-footer">
-                        <span @click="updateCategoryPic" class="sure">确定</span>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        <button @click="updateCategoryPic" class="cl-button cl-button--primary">确定</button>
+                        <button @click="cancelUpdateCategor" class="cl-button cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>
@@ -418,6 +418,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/contentDetail";
+.el-dialog__wrapper /deep/ .el-dialog {
+    margin-top: 70px !important;
+}
 </style>
 
 

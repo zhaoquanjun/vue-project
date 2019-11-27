@@ -70,12 +70,19 @@
         </div>
       </div>
     </div>
+    <!-- <Dialog 
+      v-if="isShowDialog" 
+      text="6666" 
+      @sureDialog="sureDialog"
+      @cancelDialog="cancelDialog"
+    ></Dialog> -->
   </div>
 </template>
 
 <script>
 import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
+import Dialog from "@/components/common/Dialog";
 import { unBind, getCdnDomainList,setPromotionUrl } from "@/api/request/account.js";
 import { mapGetters } from "vuex";
 import {getLocal} from '@/libs/local'
@@ -89,6 +96,7 @@ export default {
       domainList: [],
       isShow: false,
       curInder: -1,
+      isShowDialog: false,
       scrollHeight: 500,
       accountAvator: require("img/account/account_type_icon.png"),
       accountInfo: this.$store.state.wxaccount.account_info
@@ -96,6 +104,7 @@ export default {
   },
   components: {
     ChangeSite,
+    Dialog,
     PageSubNav
   },
   created() {
@@ -106,6 +115,15 @@ export default {
     this._getCdnDomainList();
   },
   methods: {
+    test(){
+      this.isShowDialog = true
+    },
+    sureDialog(){
+      this.isShowDialog = false
+    },
+    cancelDialog(){
+      this.isShowDialog = false
+    },
     //页面初始化获取ID
     getSiteId(siteId) {
       console.log('siteId',siteId)
@@ -260,11 +278,7 @@ export default {
             height: 32px;
             line-height: 32px;
             color:#FFFFFF;
-            background: linear-gradient(
-              270deg,
-              #63DC8C 0%,
-              #3ECD6E 100%
-            );
+            background: $--color-primary;
             box-shadow: 0px 5px 8px 0px rgba(9, 204, 235, 0.1);
             border-radius: $--border-radius-base;
             &::after {
@@ -303,15 +317,13 @@ export default {
         justify-content: flex-start;
         font-size:$--font-size-small;
         font-weight:400;
-        color:rgba(38,38,38,1);
+        color: $--color-text-primary;
         p {
           display: inline-block;
           min-width: 240px;
-          margin-left: 20px;
+          color: $--color-text-regular;
           line-height: 32px;
-          border-radius:$--border-radius-base;
-          border:$--border-base;
-          padding: 0 10px;
+          padding: 0 16px;
         }
         ul {
           position: absolute;
@@ -366,6 +378,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
+    min-height: 800px;
     background: rgba(0, 0, 0, 0.75);
     z-index: 100;
     .content {

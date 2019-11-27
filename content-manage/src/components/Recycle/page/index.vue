@@ -55,8 +55,8 @@
                     </div>
 
                     <div slot="footer" class="pannel-footer">
-                        <button @click="recovery" class="sure">恢复</button>
-                        <button @click="closeCreateDialog" class="cancel">取消</button>
+                        <button @click="recovery" class="cl-button cl-button--primary">恢复</button>
+                        <button @click="closeCreateDialog" class="cl-button cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>

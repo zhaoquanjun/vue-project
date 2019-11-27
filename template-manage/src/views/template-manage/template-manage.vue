@@ -176,7 +176,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="pageing" id="pageing" style="margin-bottom:20px">
+        <div class="cl-pagination pageing" id="pageing" style="margin-bottom:20px">
           <el-pagination
             v-show="templatePage.totalCount > 10"
             background

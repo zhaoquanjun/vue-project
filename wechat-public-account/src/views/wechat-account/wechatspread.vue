@@ -6,7 +6,7 @@
         @getSiteId="getSiteId"
       />
     </div>
-    <div class="spread-title">
+    <div v-if="!isShowStatistics" class="spread-title">
       <span>推广设置</span>
       <button class="cl-button cl-button--primary" @click="addSpread">新增推广</button>
     </div>
@@ -79,7 +79,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            fixed="right"
             label="操作"
             width="220">
             <template slot-scope="scope">
@@ -96,16 +95,20 @@
           </el-table-column>
         </el-table>
       </template>
-      <div class="cl-paganation paging">
+      <div class="cl-paganation paging" :class="{'noJumper':TotalPage <= 10}">
         <a href="">如何进行页面推广？</a>
         <el-pagination
           background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          layout="total, sizes, prev, pager, next"
+          :layout="TotalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
           :total="TotalRecord"
-          :page-sizes="[5,10,20]"
-        ></el-pagination>
+          :page-sizes="[5,10,20,50]"
+          :page-size="5"
+        >
+          <div class="sizes-title">，每页显示</div>
+          <button v-if="TotalPage > 10" class="paging-confirm">跳转</button>
+        </el-pagination>
       </div>
     </div>
     <statistics 
@@ -327,9 +330,27 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.cl-paganation {
+  width: 100%;
+}
+.spread-continer /deep/ .el-table {
+  height: 340px;
+  overflow-y: auto;
+}
+ .empty-table {
+  margin-top: 80px;
+}
+.el-table /deep/ .el-table__row td {
+  padding: 5px 0;
+}
+.spread-continer /deep/ .el-table::before {
+  height: 0;
+}
 .el-tabs /deep/ .el-tabs__item {
     font-size: 12px;
-    padding: 0 32px;
+    padding: 0;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
     font-weight: 400;
     color: #262626;
     height: 50px;
@@ -337,12 +358,19 @@ export default {
     border-bottom: 2px solid transparent;
     box-sizing: border-box;
 }
+.el-tabs--card /deep/ .el-tabs__header .el-tabs__nav {
+  border: none;
+}
+.el-tabs--card /deep/ .el-tabs__header .el-tabs__item {
+  border: none;
+}
 .el-table {
   border: none;
   border-top: $--border-base;
 }
 .el-tabs /deep/ .el-tabs__header {
     margin: 0;
+    border-bottom: $--icon-color-base;
 } 
 .el-tabs /deep/ .is-active {
     background: #F8FAFC;
@@ -399,6 +427,7 @@ export default {
       padding: 8px;
       border-radius: $--border-radius-base;
       margin-right: 10px !important;
+      line-height: 14px;
       cursor: pointer;
       &:hover {
         background: #E5E5E5;
@@ -442,7 +471,7 @@ export default {
         //  overflow-y: auto;
     }
     .spread-continer {
-      margin-top: 12px;
+      margin-top: 16px;
       border: $--border-base;
       padding-bottom: 16px;
       background: #fff;

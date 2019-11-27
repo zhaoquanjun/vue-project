@@ -72,35 +72,34 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="more-operate " @click="handleMove(scope.row)" style="margin-right:16px">
-                            <i class="iconfont iconyidong"></i>
+                            <i class="iconfont iconyidong cl-iconfont is-square"></i>
                         </button>
                         <button
                             class="more-operate look-btn"
                             @click="viewPic( scope.row,scope.$index)"
                             style="margin-right:16px"
                         >
-                            <i class="iconfont iconchakan"></i>
+                            <i class="iconfont iconchakan cl-iconfont is-square"></i>
                         </button>
                         <button class="more-operate delete-btn" @click="batchRemove( scope.row)">
-                            <i class="iconfont iconshanchu"></i>
+                            <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing" id="pageing">
+        <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':imgPageResult.totalPage <= 10}">
             <el-pagination
                 background
-                :layout="layout"
+                :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="imgPageResult.totalRecord"
-                :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePage"
                 @size-change="changeSize"
             >
                 <div class="sizes-title">，每页显示</div>
-                <button class="paging-confirm">跳转</button>
+                <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <!-- :title="picTitle" -->
@@ -159,7 +158,6 @@ export default {
 
     data() {
         return {
-            layout: "total, slot, sizes, prev, pager, next,jumper",
             picInfo: {},// 当前图片的信息
             index: -1, //
             imgVisible: false,// 查看图片弹窗 是否显示

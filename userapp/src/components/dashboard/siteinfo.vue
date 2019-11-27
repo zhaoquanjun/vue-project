@@ -18,8 +18,7 @@
             <div class="site-total">/ {{siteCount}}</div>
           </div>
           <el-dropdown @command="handleCreateSite" :hide-timeout="500">
-            <!-- v-show="isSystem&&siteInfo.length < siteCount" -->
-            <div class="sitelist-addSite"></div>
+            <div class="sitelist-addSite" v-show="isSystem&&siteInfo.length < siteCount"></div>
             <el-dropdown-menu slot="dropdown" class="createSiteDrop">
               <el-dropdown-item class="createSiteDropText" command="copy">复制当前站点</el-dropdown-item>
               <el-dropdown-item class="createSiteDropText" command="addNew">新建站点</el-dropdown-item>
@@ -40,7 +39,7 @@
         </div>
         <div class="site-btn">
           <button
-            class="template-btn"
+            class="cl-button cl-button--primary"
             @click="jumpTo('template')"
             v-show="!curSiteTodoinfo.siteTemplate"
           >选择模版</button>
@@ -234,7 +233,10 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeCreateDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button
+            @click="closeCreateDialog"
+            class="cl-button cl-button--primary_notbg cl-button--small"
+          >取消</button>
           <button @click="createSite" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
@@ -274,7 +276,10 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeChangeDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button
+            @click="closeChangeDialog"
+            class="cl-button cl-button--primary_notbg cl-button--small"
+          >取消</button>
           <button @click="changeSiteInfo" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
@@ -292,7 +297,9 @@
             <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
           </span>
         </div>
-        <div class="tips">使用当前站点空间作为模板创建新站点</div>
+        <div class="tip-wrap-primary" style="margin-top:16px">
+          <span class="tip-text">使用当前站点空间作为模板创建新站点</span>
+        </div>
         <div class="createSiteName">
           <span class="createSiteTitle">站点名称</span>
           <el-input
@@ -315,7 +322,10 @@
           <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
         </div>
         <div class="create">
-          <button @click="closeCopyDialog" class="cl-button cl-button--primary_notbg cl-button--small">取消</button>
+          <button
+            @click="closeCopyDialog"
+            class="cl-button cl-button--primary_notbg cl-button--small"
+          >取消</button>
           <button @click="copySiteCreate" class="cl-button cl-button--primary cl-button--small">确定</button>
         </div>
       </div>
@@ -809,37 +819,8 @@ export default {
         }
       }
       .site-btn {
-        .template-btn {
-          display: inline-block;
-          width: 92px;
-          height: 32px;
-          background: rgba(9, 204, 235, 1);
-          border-radius: 2px;
-          font-size: 14px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 1);
-          line-height: 32px;
-          text-align: center;
-          vertical-align: middle;
-          &:hover {
-            opacity: 0.8;
-          }
-        }
         .preview-btn {
           margin-right: 16px;
-        }
-        .design-btn {
-          display: inline-block;
-          width: 92px;
-          height: 32px;
-          background: rgba(9, 204, 235, 1);
-          border-radius: 2px;
-          font-size: 14px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 1);
-          line-height: 32px;
-          text-align: center;
-          vertical-align: middle;
         }
       }
     }
@@ -886,7 +867,7 @@ export default {
             align-items: center;
             margin-left: 16px;
             margin-right: 16px;
-            padding-left: 26px;
+            padding-left: 14px;
             padding-right: 22px;
             cursor: pointer;
             &:hover {
@@ -966,7 +947,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
+
       .headTitle {
         font-size: 16px;
         font-weight: 600;
@@ -999,7 +980,7 @@ export default {
       margin-top: 16px;
     }
     .createSiteName {
-      margin-top: 20px;
+      margin-top: 16px;
       .createSiteNameInput {
         margin-top: 16px;
       }

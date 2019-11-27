@@ -1,26 +1,30 @@
 
 .cl-paganation{
+    position: relative;
+    float: right;
     margin-top: 24px;
     padding-bottom: 10px;
-    margin-right: 70px;
+    margin-right: 50px;
+    &.noJumper {
+        margin-right: 0px;
+    }
     .sizes-title {
         line-height:$--height-base;
         color: #A1A8B1;
-        font-weight: 400;
+        font-weight: $--font-weight-base;
         display: inline-block;
-        margin-right: 18px;
+        margin-right: 8px;
     }
     button.paging-confirm{
         position: absolute;
-        right: 20px;
+        right: -50px;
         width: 41px;
         height: $--height-base;
         color:$--color-text-primary;
         font-size: $--font-size-small;
-        border: 1px solid $--border-color-base;
-        border-radius: 2px;
+        border: $--border-base;
+        border-radius: $--border-radius-base;
         background:  $--color-white;
-        
     }
     .el-pagination__editor.el-input .el-input__inner{
         height: $--height-base;
@@ -81,20 +85,20 @@
              border-right:none; 
              box-sizing: border-box;
              li {
-                font-weight: 400;
+                font-weight: $--font-weight-base;
                 color: $--color-text-primary;
                 background-color: $--color-white;
                 height: $--height-base;
                 line-height:$--height-base;
-                font-size: 12px;
+                font-size: $--font-size-small;
                 margin: 0;
                 border-radius: 0;
-                border: 1px solid $--border-color-base;
+                border: $--border-base;
                 border-left: 0;
             }  
          }
         .btn-prev, .btn-next{
-            border: 1px solid $--border-color-base;
+            border: $--border-base;
            
         } 
         .btn-next{

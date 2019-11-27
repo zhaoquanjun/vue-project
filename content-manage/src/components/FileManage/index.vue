@@ -89,7 +89,7 @@
                                 <div class="download-link">
                                     <span class="ellipsis download-url">{{ruleForm.link}}</span>
                                     <button
-                                        class="btn-small btn-bglightblue file-editor-btn"
+                                        class="file-editor-btn"
                                         :class="{'link-btn-green':isCopy}"
                                         v-clipboard:copy="`${ruleForm.link}`"
                                         v-clipboard:success="onCopy"
@@ -141,8 +141,8 @@
                         ></SelectTree>
                     </template>
                     <div slot="footer" class="pannel-footer">
-                        <button @click="updateCategoryPic" class="sure">确定</button>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        <button @click="updateCategoryPic" class="cl-button cl-button--primary">确定</button>
+                        <button @click="cancelUpdateCategor" class="cl-button cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>
@@ -615,7 +615,7 @@ export default {
     }
 };
 </script>
-<style  scoped>
+<style lang='scss'  scoped>
 .el-dialog__wrapper /deep/ .el-dialog__body {
     padding: 0;
 }
@@ -628,11 +628,11 @@ export default {
 }
 .el-form /deep/ .input-border .el-input__inner {
     border: none;
-    border-bottom: 1px solid #b9cbcf;
+    border-bottom: $--border-base;
     border-radius: 0;
 }
 .el-form /deep/ .input-border .el-input__inner:hover {
-    border-bottom: 1px solid #0595e6;
+    border-bottom: 1px solid $--color-primary;
 }
 .el-form /deep/ .select-tree .el-select {
     width: 100%;
@@ -693,15 +693,15 @@ export default {
     .file-editor-btn {
         flex: none;
         // padding: 0;
+        width: 96px;
         margin-left: 8px;
-        color: #8c8c8c;
-        border: 1px solid #b9cbcf;
-        background: #fff;
+        color: $--background-color-base;
+        background: $--color-primary;
         box-sizing: border-box;
     }
     .link-btn-green {
-        color: #fff;
-        background: #35b24b;
+        color: $--background-color-base;
+        background: $--color-success;
     }
 }
 

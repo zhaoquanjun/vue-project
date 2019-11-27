@@ -58,7 +58,7 @@ export default {
                 case "sitemanage":
                     return "iconicon-dash-Webmanagement";
                 case "sitemember":
-                    return "iconicon-banpipei"    
+                    return "iconicon-dash-membermanagement"    
             }
         }
     }
@@ -74,23 +74,23 @@ export default {
     line-height: 50px;
     color: $--color-white;
     text-align: center;
-    font-size: 14px;
+    font-size: $--font-size-small;
 }
 .submenu-list {
         li {
           cursor: pointer;
-          line-height: 32px;
+          line-height: 36px;
           text-align: left;
           font-size: $--font-size-small;
           span {
             display: inline-block;
             color: $--color-white;
-            line-height: 32px;
+            line-height: 36px;
             width: 100%;
-            padding-left: 24px;
             cursor: pointer;
           }
           .nochildren {
+              text-align: center;
               &:hover {
                 color: $--color-white;
                 background: rgba(245, 246, 247, 0.1);
@@ -101,9 +101,9 @@ export default {
             cursor: default;
             i {
               width: 14px;
-              height: 32px;
-              font-size: 14px;
-              line-height: 32px;
+              height: 36px;
+              font-size: $--font-size-small;
+              line-height: 36px;
               padding: 0 12px;
               color: $--color-white;
             }
@@ -111,7 +111,7 @@ export default {
           p {
             cursor: pointer;
             padding-left: 40px;
-            line-height: 32px;
+            line-height: 36px;
             font-size: $--font-size-small;
             color:$--color-text-regular;
             &:hover {

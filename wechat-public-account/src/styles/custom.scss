@@ -1,6 +1,8 @@
 body {
     min-width: 1170px;
     min-height: 500px;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial;
     color: $--color-text-primary;
     background: $--background-color-selected;
@@ -81,25 +83,6 @@ body {
         padding-right: 8px;
         background: url("~img/jian-icon.png") no-repeat center;
         background-size: contain;
-    }
-}
-
-// 图片弹窗 确认 底部按钮
-.modal-footer {
-    padding-top: 20px;
-    float: right;
-
-    button {
-        width: 66px;
-        height: 32px;
-        background: rgba(0, 193, 222, 1);
-        margin-right: 8px;
-        color: #fff;
-    }
-
-    .cancel {
-        color: #262626;
-        background: rgba(238, 238, 238, 1);
     }
 }
 
@@ -185,7 +168,7 @@ body {
 }
 
 .submenu-aside {
-    width: 150px !important;
+    width: 130px !important;
 }
 
 // popover 弹框样式

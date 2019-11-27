@@ -70,10 +70,10 @@
                             @click="handleMove(scope.row)"
                             style="margin-right:16px"
                         >
-                            <i class="iconfont iconyidong"></i>
+                            <i class="iconfont iconyidong cl-iconfont is-square"></i>
                         </button>
                         <button class="more-operate delete-btn" @click="batchRemove( scope.row)">
-                            <i class="iconfont iconshanchu"></i>
+                            <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>
@@ -81,23 +81,25 @@
         </el-table>
         <div class="list-footer">
             <div class="storage-wrap">
+                <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
                 </div>
-                <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
             </div>
-            <div class="pageing" id="pageing">
+            <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':imgPageResult.totalPage <= 10}">
                 <slot name="paging"></slot>
                 <el-pagination
                     background
-                    layout="total, sizes, prev, pager, next"
+                    :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     :total="imgPageResult.totalRecord"
-                    :page-count="imgPageResult.totalPage"
-                    :page-size="picSearchOptions.pageSize"
+                    :page-size="imgPageResult.pageSize"
                     :page-sizes="[10,20,50]"
                     @current-change="changePage"
                     @size-change="changeSize"
-                ></el-pagination>
+                >
+                    <div class="sizes-title">，每页显示</div>
+                    <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
             </div>
             <div id="img-list-dialog">
                 <el-dialog
@@ -293,7 +295,7 @@ export default {
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
         top: 0;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         text-align: center;
         img {
             width: 12px;

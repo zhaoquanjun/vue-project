@@ -20,7 +20,7 @@
                     </el-input>
                 </div>
                 <div class="head-item head-middle">
-                    <span>排序3</span>
+                    <span>排序</span>
                     <span class="select-sort">
                         <el-select
                             size="small"
@@ -139,7 +139,7 @@ export default {
     padding-right: 0;
 }
 .recycle-count{
-    font-size: 14px;
+    font-size: $--font-size-small;
     font-weight:600;
     padding-bottom: 24px;
 }

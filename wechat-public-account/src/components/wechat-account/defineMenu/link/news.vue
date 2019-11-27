@@ -46,7 +46,7 @@
               </p>
             </li>
           </ul>
-         <div class="cl-paganation"> 
+         <div class="cl-paganation noJumper"> 
            <el-pagination
             background
             layout="prev, pager, next"
@@ -328,10 +328,9 @@ export default {
       .content-main__search {
         display: flex;
         align-items: flex-end;
-        margin-left: 8px;
+        margin: 8px 8px 0;
         width: 360px;
         height: 36px;
-        border-bottom: $--border-base;
       }
       .content-main__search {
         .el-icon-search {

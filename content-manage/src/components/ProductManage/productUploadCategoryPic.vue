@@ -56,8 +56,8 @@
             </el-form-item>
         </el-form>
         <div class="pannel-footer">
-            <button class="confrim" @click="submitForm('ruleForm')">确定</button>
-            <button class="cancel" @click="cancel">取消</button>
+            <button class="cl-button cl-button--primary" @click="submitForm('ruleForm')">确定</button>
+            <button class="cl-button cl-button--primary_notbg" @click="cancel">取消</button>
         </div>
         <div class="mask" v-show="isModalShow"></div>
         <div id="content" class="contentDialog" v-show="isModalShow">
@@ -243,7 +243,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .el-input /deep/ .el-input__inner {
     padding-right: 50px;
 }
@@ -251,7 +251,7 @@ export default {
     padding: 10px;
 }
 .uploadCategoryPic /deep/ .el-form .el-form-item__label {
-    font-size: 12px;
+    font-size: $--font-size-small;
     text-align: left;
 }
 .uploadCategoryPic /deep/ .el-form .el-form-item__error{
@@ -277,7 +277,7 @@ export default {
     margin-left: 16px;
 }
 .avatar-uploader .el-upload {
-    border: 1px dashed rgba(144, 220, 232, 1);
+    border: 1px dashed $--color-primary;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -299,11 +299,11 @@ export default {
     padding-top: 0;
 }
 .avatar-uploader .el-upload i {
-    color: #00c1de;
+    color: $--color-primary;
     cursor: pointer;
 }
 .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
+    border-color: $--color-primary;
 }
 .avatar-uploader-icon {
     font-size: 22px;
@@ -367,22 +367,7 @@ export default {
 .article-cover {
     color: #262626;
     font-weight: 500;
-    font-size: 14px;
-}
-#content-manage .uploadCategoryPic {
-    .pannel-footer {
-        text-align: right;
-        padding: 5px 8px 0 0;
-        box-sizing: border-box;
-        button {
-            width: 58px;
-        }
-        .cancel {
-            border: 1px solid #00c1de;
-            color: #00c1de;
-            background: #fff;
-        }
-    }
+    font-size: $--font-size-small;
 }
 </style>
 

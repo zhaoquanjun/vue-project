@@ -11,7 +11,7 @@
         <el-row class="user-list">
           <span class="member-list-title fs14">域名管理</span>
         </el-row>
-        
+
         <DomainMenu ref="domainMenu" @handleTabClick="handleTabClick" @handleBtn="righPanelShow" />
         <el-main>
           <DomainList
@@ -34,7 +34,7 @@
             <ul>
               <li>1、请在解析记录值生成后完成域名解析操作；阿里云域名可授权使用“一键解析”，非阿里云域名请前往域名平台进行自行设置解析；</li>
               <li>2、阿里云域名添加时会自动开启CDN，可在添加后手动关闭;</li>
-              <li>3、已开启CDN的阿里云域名在解析成功后，可选择开启HTTPS。</li> 
+              <li>3、已开启CDN的阿里云域名在解析成功后，可选择开启HTTPS。</li>
             </ul>
           </template>
           <template v-else>
@@ -494,14 +494,17 @@ export default {
 <style lang="scss" scoped>
 .member-container {
   position: relative;
-  .user-list {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 21px;
-    .member-list-title {
-      border-left: 4px solid #ff6b00;
-      padding-left: 8px;
-      font-size: 14px;
-      font-weight: 700;
+  .member-content {
+    padding: 0 16px;
+    .user-list {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 21px;
+      .member-list-title {
+        border-left: 2px solid $--color-primary;
+        padding-left: 8px;
+        font-size: 14px;
+        font-weight: 700;
+      }
     }
   }
 }
@@ -545,21 +548,19 @@ export default {
 
 .handle-guide {
   margin-top: 16px;
-  background: #fff;
-  border: 1px solid #d7d8d9;
-  border-radius: 2px;
+  background: $--color-white;
+  border: $--border-base;
+  border-radius: $--border-radius-base;
   h3 {
-    font-size:14px;
-    color:#262626;
+    font-size: $--font-size-base;
     padding: 24px 0 16px 23px;
   }
 
   ul {
-    padding:0 0 28px 23px;
+    padding: 0 0 28px 23px;
     li {
-      height:22px;
+      height: 22px;
       line-height: 22px;
-      color: #262626;
     }
   }
 }
