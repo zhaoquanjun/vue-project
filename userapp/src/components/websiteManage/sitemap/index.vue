@@ -212,6 +212,7 @@
                 >
                   <slot name="paging"></slot>
                   <el-pagination
+                    v-if="addListData.totalRecord > 0"
                     background
                     :layout="addListData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     :total="addListData.totalRecord"

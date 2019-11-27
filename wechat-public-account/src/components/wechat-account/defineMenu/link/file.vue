@@ -45,6 +45,7 @@
                 </li>
               </ul>
               <el-pagination
+                v-if="total > 0"
                 background
                 layout="prev, pager, next"
                 :total="total"

@@ -48,6 +48,7 @@
           </ul>
          <div class="cl-paganation noJumper"> 
            <el-pagination
+            v-if="total > 0"
             background
             layout="prev, pager, next"
             :page-size="pageSize"

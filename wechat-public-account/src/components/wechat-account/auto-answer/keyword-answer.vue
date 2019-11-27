@@ -125,6 +125,7 @@
             </ul>
             <div class="cl-paganation paging" :class="{'noJumper':keywordData.totalPage <= 10}">
                 <el-pagination
+                    v-if="keywordData.totalRecord > 0"
                     background
                     :total="keywordData.totalRecord"
                     :page-size="keywordData.pageSize"

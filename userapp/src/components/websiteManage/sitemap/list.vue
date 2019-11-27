@@ -70,6 +70,7 @@
       <div class="cl-pagination pageing" id="pageing" :class="{'noJumper':listData.totalPage <= 10}">
         <slot name="paging"></slot>
         <el-pagination
+          v-if="listData.totalRecord > 0"
           background
           :layout="listData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
           :total="listData.totalRecord"

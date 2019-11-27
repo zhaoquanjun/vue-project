@@ -135,6 +135,7 @@
         <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':recyclePageResult.totalPage <= 10}">
             <slot name="paging"></slot>
             <el-pagination
+                v-if="recyclePageResult.totalRecord > 0"
                 background
                 :layout="recyclePageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="recyclePageResult.totalRecord"

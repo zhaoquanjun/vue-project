@@ -1,6 +1,7 @@
 <template>
      <div class="pageing" id="pageing" :class="{'noJumper':pagingOptions.totalPage <= 10}">
             <el-pagination
+                v-if="pagingOptions.totalRecord > 0"
                 background
                 :layout="pagingOptions.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="pagingOptions.totalRecord"
