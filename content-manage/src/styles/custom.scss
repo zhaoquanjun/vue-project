@@ -34,22 +34,7 @@ body {
     padding: 15px 17px;
     border-top: $--border-base;
     background: #fff;
-
-    button {
-        padding: 0 15px;
-        height: 32px;
-        font-size: 12px;
-        background: $--color-primary;
-        color: #fff;
-        border-radius: $--border-radius-base;
-    }
-
-    .cancel {
-        margin-left: 20px;
-        background: #fff;
-        border: 1px solid $--color-primary;;
-        color: $--color-primary;
-    }
+   
 }
 
 // 自定义input错误提示图标

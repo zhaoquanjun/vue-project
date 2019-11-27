@@ -89,7 +89,7 @@
                                 <div class="download-link">
                                     <span class="ellipsis download-url">{{ruleForm.link}}</span>
                                     <button
-                                        class="btn-small btn-bglightblue file-editor-btn"
+                                        class="file-editor-btn"
                                         :class="{'link-btn-green':isCopy}"
                                         v-clipboard:copy="`${ruleForm.link}`"
                                         v-clipboard:success="onCopy"
@@ -141,8 +141,8 @@
                         ></SelectTree>
                     </template>
                     <div slot="footer" class="pannel-footer">
-                        <button @click="updateCategoryPic" class="sure">确定</button>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                        <button @click="updateCategoryPic" class="cl-button cl-button--primary">确定</button>
+                        <button @click="cancelUpdateCategor" class="cl-button cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>
@@ -693,15 +693,15 @@ export default {
     .file-editor-btn {
         flex: none;
         // padding: 0;
+        width: 96px;
         margin-left: 8px;
-        color: #8c8c8c;
-        border: $--border-base;
-        background: #fff;
+        color: $--background-color-base;
+        background: $--color-primary;
         box-sizing: border-box;
     }
     .link-btn-green {
-        color: #fff;
-        background: #35b24b;
+        color: $--background-color-base;
+        background: $--color-success;
     }
 }
 

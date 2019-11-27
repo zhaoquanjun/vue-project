@@ -76,13 +76,13 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="edit-icon" @click="handleEdit(scope.row)">
-                            <i class="iconfont iconbianji"></i>
+                            <i class="iconfont iconbianji cl-iconfont is-square"></i>
                         </button>
                         <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
                         >
-                            <i class="iconfont iconsangedian"></i>
+                            <i class="iconfont iconsangedian cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>

@@ -70,10 +70,10 @@
                             @click="handleMove(scope.row)"
                             style="margin-right:16px"
                         >
-                            <i class="iconfont iconyidong"></i>
+                            <i class="iconfont iconyidong cl-iconfont is-square"></i>
                         </button>
                         <button class="more-operate delete-btn" @click="batchRemove( scope.row)">
-                            <i class="iconfont iconshanchu"></i>
+                            <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>

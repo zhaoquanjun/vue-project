@@ -52,8 +52,8 @@
             </el-form-item>
         </el-form>
         <div class="pannel-footer">
-            <button class="confrim" @click="submitForm('ruleForm')">确定</button>
-            <button class="cancel" @click="cancel">取消</button>
+            <button class="cl-button cl-button--primary" @click="submitForm('ruleForm')">确定</button>
+            <button class="cl-button cl-button--primary_notbg" @click="cancel">取消</button>
         </div>
     </div>
 </template>
@@ -308,14 +308,6 @@ export default {
         text-align: right;
         padding: 8;
         box-sizing: border-box;
-        button {
-            width: 58px;
-        }
-        .cancel {            
-            background: #fff;
-            border: 1px solid $--color-primary;;
-            color: $--color-primary;
-        }
     }
 }
 </style>

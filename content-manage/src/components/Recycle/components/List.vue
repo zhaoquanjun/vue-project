@@ -126,7 +126,7 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <el-tooltip class="item" effect="dark" content="恢复" placement="top">
-                            <i  @click="handleRecoveryData(scope.row)" class="cl-iconfont iconfont iconhuifu"></i>
+                            <i  @click="handleRecoveryData(scope.row)" class="cl-iconfont iconfont iconhuifu is-square"></i>
                         </el-tooltip>
                     </div>
                 </template>

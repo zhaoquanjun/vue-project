@@ -88,21 +88,21 @@
                             @click="handleEditor(scope.row)"
                             style="margin-right:16px"
                         >
-                            <i class="iconfont iconbianji"></i>
+                            <i class="iconfont iconbianji cl-iconfont is-square"></i>
                         </button>
                         <button
                             class="handle-btn look-btn edit-icon"
                             @click="download(scope.row)"
                             style="margin-right:16px"
                         >
-                            <i class="iconfont iconxiazai"></i>
+                            <i class="iconfont iconxiazai cl-iconfont is-square"></i>
                         </button>
                         <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
                             style="margin-right:16px"
                         >
-                            <i class="iconfont iconsangedian"></i>
+                            <i class="iconfont iconsangedian cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>
