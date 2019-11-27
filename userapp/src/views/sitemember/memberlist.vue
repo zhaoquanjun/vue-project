@@ -59,8 +59,7 @@
                     <div class="b-content">
                         <template>
                             <el-table :data="memberPageResult.list"
-                                      :header-cell-style="{color:'#A1A8B1',fontWeight: '400',lineHeight: '40px',paddingLeft: '40px'}"
-                                      :cell-style="{color:'#262626',lineHeight: '40px',paddingLeft: '40px'}"
+                                      
                                       style="width: 100%">
                                 <el-table-column prop="mobile"
                                                  label="注册账号">
@@ -279,7 +278,7 @@
         }
     };
 </script>
-<style scoped>
+<style lang="scss" scoped>
     .el-input /deep/ .el-input-group__append {
         padding: 0;
     }
@@ -291,10 +290,13 @@
     }
     .el-tabs /deep/ .is-active {
         background: #F8FAFC;
-        border-bottom: 2px solid #09cceb !important;
+        border-bottom: 2px solid $--color-primary !important;
     }
     .el-table /deep/ tbody tr:hover>td { 
         background-color:#F8FAFC !important
+    }
+    .el-pagination.is-background /deep/ .el-pager li:not(.disabled).active {
+        background: $--color-primary !important;
     }
 </style>
 <style lang="scss" scoped>
@@ -310,7 +312,7 @@
         color: rgba(38,38,38,1);
         margin: 5px 0 17px;
         padding-left: 10px;
-        border-left: 2px solid #09CCEB;
+        border-left: 2px solid $--color-primary;
         a
 
     {
@@ -319,10 +321,10 @@
         height: 32px;
         margin-top: -14px;
         border-radius: 2px;
-        border: 1px solid rgba(9,204,235,1);
+        border: 1px solid $--color-primary;
         font-size: 14px;
         font-weight: 400;
-        color: rgba(9,204,235,1);
+        color: $--color-primary;
         line-height: 32px;
         text-align: center;
         cursor: pointer;
@@ -370,25 +372,6 @@
     }
 
     }
-
-    .b-content {
-        border: 1px solid rgba(229,229,229,1);
-        .iconfont
-
-    {
-        cursor: pointer;
-        display: inline-block;
-        margin-right: 20%;
-        padding: 4px 8px;
-        border-radius: 2px;
-        &:hover {
-            background: rgba(240, 243, 247, 1);
-            border-radius: 4px;
-        }
-    }
-
-    }
-
     .paging {
         margin-top: 40px;
         text-align: right;
