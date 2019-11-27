@@ -43,18 +43,14 @@
                 将文件拖到此处，或
                 <em>点击上传</em>
             </div>
-            <el-button
-                class="upload-btn"
+            <button
+                class="cl-button cl-button--primary"
                 @click="setFolder(false)"
-                size="small"
-                type="default"
                 style=" position: absolute;top: 57px; right: 136px;"
-            >选择图片</el-button>
+            >选择图片</button>
             <el-button
-                class="choose-img upload-btn"
-                size="small"
+                class="cl-button cl-button--primary_notbg"
                 @click="setFolder(true)"
-                type="default"
                 style="position: absolute;top: 57px; right: 6px;"
             >选择文件夹</el-button>
         </el-upload>
@@ -234,7 +230,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .upload-pic /deep/ .el-upload-dragger {
     position: static;
     display: flex;
@@ -376,14 +372,14 @@ export default {
         height: 32px;
         font-weight: 400;
         border: none;
-        border: 1px solid #00c1de;
-        color: #00c1de;
+        border: 1px solid $--color-primary;
+        color: $--color-primary;
     }
 
     .choose-img {
         margin-right: 13px;
         color: #fff;
-        background: #00c1de;
+        background: $--color-primary;
     }
 
     .upload-pic {

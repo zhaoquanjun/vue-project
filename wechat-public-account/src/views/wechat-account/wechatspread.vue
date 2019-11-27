@@ -330,6 +330,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.cl-paganation {
+  width: 100%;
+}
 .spread-continer /deep/ .el-table {
   height: 340px;
   overflow-y: auto;

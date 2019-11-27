@@ -278,11 +278,7 @@ export default {
             height: 32px;
             line-height: 32px;
             color:#FFFFFF;
-            background: linear-gradient(
-              270deg,
-              #63DC8C 0%,
-              #3ECD6E 100%
-            );
+            background: $--color-primary;
             box-shadow: 0px 5px 8px 0px rgba(9, 204, 235, 0.1);
             border-radius: $--border-radius-base;
             &::after {
