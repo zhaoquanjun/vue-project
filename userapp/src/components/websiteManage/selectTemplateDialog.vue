@@ -158,7 +158,7 @@
                 :class="{'noJumper':templatePage.totalPage <= 10}"
               >
                 <el-pagination
-                  v-show="templatePage.totalCount > 0"
+                  v-if="templatePage.totalCount > 0"
                   background
                   :layout="templatePage.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                   :current-page="templatePage.pageIndex"

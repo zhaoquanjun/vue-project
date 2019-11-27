@@ -92,13 +92,16 @@
                         </template>
                     </div>
                     <div class="paging">
-                        <el-pagination background
-                                       @size-change="handleSizeChange"
-                                       @current-change="handleCurrentChange"
-                                       layout="total, sizes, prev, pager, next"
-                                       :total="memberPageResult.totalPage"
-                                       :page-size="memberPageResult.pageSize"
-                                       :page-sizes="[10,20,50]"></el-pagination>
+                        <el-pagination
+                            v-if="memberPageResult.totalPage > 0"
+                            background
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            layout="total, sizes, prev, pager, next"
+                            :total="memberPageResult.totalPage"
+                            :page-size="memberPageResult.pageSize"
+                            :page-sizes="[10,20,50]">
+                        </el-pagination>
                     </div>
                     <edit v-if="isEdit"
                           @closeEdit='closeEdit' 

@@ -72,6 +72,7 @@
         </el-table>
         <div class="cl-paganation pageing" :class="{'noJumper':articlePageResult.totalPage <= 10}">
             <el-pagination
+                v-if="articlePageResult.totalRecord > 0"
                 background
                 :layout="articlePageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="articlePageResult.totalRecord"

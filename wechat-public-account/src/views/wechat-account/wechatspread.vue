@@ -98,6 +98,7 @@
       <div class="cl-paganation paging" :class="{'noJumper':TotalPage <= 10}">
         <a href="">如何进行页面推广？</a>
         <el-pagination
+          v-if="TotalRecord > 0"
           background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"

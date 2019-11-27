@@ -27,6 +27,7 @@
             v-if="imgPageResult&& imgPageResult.list && imgPageResult.list.length>0"
         >
             <el-pagination
+                v-if="imgPageResult.totalRecord > 0"
                 background
                 :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="imgPageResult.totalRecord"

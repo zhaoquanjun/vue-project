@@ -93,6 +93,7 @@
             :class="{'noJumper':memberInfo.totalPage <= 10}"
              v-if="memberInfo.totalCount > 0">
             <el-pagination
+                v-if="memberInfo.totalCount > 0"
                 background
                 :layout="memberInfo.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="memberInfo.totalCount"
