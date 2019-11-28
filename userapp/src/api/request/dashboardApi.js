@@ -83,7 +83,7 @@ export const getAppExpandInfo = () => {
  * 获取app列表
  */
 export const getApplicationsByUserId = (appName) => {
-    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/appInfo/GetApplicationsByUserId`,{appName:appName});
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/appInfo/GetApplicationsByUserId`, { appName: appName });
 }
 /**
  * 切换app记录appId
@@ -124,13 +124,14 @@ export const GetSecondIndustries = (parentId) => {
     return ajaxRequest.get(`${environment.designerManageApi}/api/v1/siteInfo/GetSecondIndustries`, para);
 }
 /**
- * 保存网站类型和所属行业
+ * 修改网站类型和所属行业
  */
-export const updateSiteTypeAndIndustry = (siteId, siteType, firstIndustryId, secondIndustryId) => {
-    let para = { siteId: siteId, siteType: siteType, firstIndustryId: firstIndustryId, secondIndustryId: secondIndustryId };
-    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/siteInfo/UpdateSiteTypeAndIndustry`, para);
+export const updateSiteType = (para) => {
+    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/siteInfo/UpdateSiteType`, para);
 }
-
+export const updateSiteIndustry = (para) => {
+    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/siteInfo/UpdateSiteIndustry`, para);
+}
 /**
  *desc:创建站点
  * author:xuzhuan
