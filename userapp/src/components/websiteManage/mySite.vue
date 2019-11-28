@@ -366,7 +366,7 @@ export default {
     },
     //启用Powered by
     async isOpenPowered() {
-      await siteBackupApi.updateSiteType({
+      await siteBackupApi.updateSitePoweredBy({
         siteId: this.siteId,
         PoweredBy: this.isOpenPoweredValue
       });
