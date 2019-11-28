@@ -46,10 +46,7 @@ export default {
     this.amIAdmin();
     this.$Loading.hide();
     this.$nextTick(() => {
-      window.addEventListener("resize", () => {
-        document.getElementsByClassName("home-page")[0].style.height =
-          window.innerHeight - 50 + "px";
-      });
+      window.addEventListener("resize", this.resizeWindow);
       document.getElementsByClassName("home-page")[0].style.height =
         window.innerHeight - 50 + "px";
     });
@@ -69,6 +66,10 @@ export default {
     async amIAdmin() {
       let { data } = await dashboardApi.amIAdmin();
       this.isSystem = data;
+    },
+    resizeWindow(){
+      document.getElementsByClassName("home-page")[0].style.height =
+          window.innerHeight - 50 + "px";
     }
   },
   computed: {
@@ -82,6 +83,9 @@ export default {
 
   watch: {
     appId() {}
+  },
+  beforeDestroy(){
+    window.removeEventListener("resize",this.resizeWindow)
   }
 };
 </script>

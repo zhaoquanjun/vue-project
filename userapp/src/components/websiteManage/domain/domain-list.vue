@@ -118,16 +118,19 @@
                     <div class="domain-detail" v-else>
                         <el-row class="domain-detail-row"> 
                             <el-col :span="5">
-                                <span
-                                    class="domain-explain-item"
-                                >解析类型 &nbsp; 
-                                    <span 
-                                    class="domain-explain-text"
-                                    >{{props.row.cdnDomainResolveType?props.row.cdnDomainResolveType:'—'}}</span>
-                                </span>
+                                <div style="min-width:400px;">
+                                    <span
+                                        class="domain-explain-item"
+                                    >解析类型 &nbsp; 
+                                        <span 
+                                        class="domain-explain-text"
+                                        >{{props.row.cdnDomainResolveType?props.row.cdnDomainResolveType:'—'}}</span>
+                                    </span>
+                                </div>
+                                
                             </el-col>
                             <el-col :span="5">
-                                <div style="min-width:400px;">
+                                <div style="min-width:500px;">
                                     <span
                                         class="domain-explain-item"
                                     >解析记录值 &nbsp;
@@ -148,7 +151,7 @@
                         <el-row class="status-switch" v-if="props.row.isInAliDns" style="width:49.5%;">
                             <!-- cdn状态 -->
                             <el-col :span="10">
-                                <div>
+                                <div style="min-width:500px;">
                                     <span>CDN状态</span>
                                     <el-tooltip
                                         class="item"
@@ -323,7 +326,7 @@ export default {
     },
     mounted() {
         this.resetExpandText();
-        // this.resetExplainStatus();
+        this.resetExplainStatus();
     },
     methods: {
         //一键解析域名
@@ -566,15 +569,16 @@ export default {
                     let timer=setInterval(() => {
                         this.$emit("getCdnDomainList")
                         clearInterval(timer);
-                    }, 1000);
+                    }, 180000);
                 }
             })
+
         }
     },
     watch: {
         tableData() {
             this.resetExpandText();
-            // this.resetExplainStatus();
+            this.resetExplainStatus();
         }
     }
 };
