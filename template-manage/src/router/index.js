@@ -5,7 +5,7 @@ import { getLocal } from "@/libs/local"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
 import { getCookie } from "@/libs/cookie";
-import enbironmemy from "@/environment/index";
+import environment from "@/environment/index";
 Vue.use(VueRouter);
 let router = new VueRouter({
   mode: "history",

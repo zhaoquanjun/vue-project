@@ -336,6 +336,7 @@
       :siteName="curSiteinfo.siteName"
       :templateId="curSiteinfo.templateId"
       :isChangeTemplate="curSiteTodoinfo.siteTemplate"
+      @getTodoInfo="getTodoInfo"
     ></SelectTemplateDialog>
   </div>
 </template>
@@ -407,6 +408,10 @@ export default {
       }
     },
     jumpTo(type) {
+      if (!this.curSiteTodoinfo.siteTemplate) {
+        this.$refs.selectTemplateDialog.showTemplate();
+        return;
+      }
       if (type == "domain") {
         this.$router.push({
           path: "/website/mysite/sitedomain"
@@ -469,7 +474,6 @@ export default {
       };
       let { data, status } = await dashboardApi.copySite(para);
       if (status == 200) {
-        this.$emit("getSites");
         this.copySiteShow = false;
         this.$notify({
           customClass: "notify-success",
@@ -477,6 +481,10 @@ export default {
           duration: 2000,
           showClose: false
         });
+        this.$store.commit("SETSITEID", data);
+        await dashboardApi.updateUserLastSiteId(data);
+        this.$emit("getSites");
+        this.$refs.selectTemplateDialog.showTemplate();
       }
     },
     closeCreateDialog() {
@@ -529,14 +537,13 @@ export default {
         this.errorSiteLanguage = true;
         return;
       }
-      let { status } = await dashboardApi.CreateSite(
+      let { data, status } = await dashboardApi.CreateSite(
         this.radio,
         this.createSiteName
       );
       if (status == 200) {
         this.radio = "";
         this.createSiteName = "";
-        this.$emit("getSites");
         this.createShow = false;
         this.$notify({
           customClass: "notify-success",
@@ -544,6 +551,10 @@ export default {
           duration: 2000,
           showClose: false
         });
+        this.$store.commit("SETSITEID", data);
+        await dashboardApi.updateUserLastSiteId(data);
+        this.$emit("getSites");
+        this.$refs.selectTemplateDialog.showTemplate();
       }
     },
     // 展示修改site信息弹框

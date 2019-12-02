@@ -1,5 +1,5 @@
 import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index";
-import { getSiteInfo } from "@/api/request/siteBackupApi";
+import { getSiteInfoBySite } from "@/api/request/siteBackupApi";
 import { getCurSiteId } from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local"
 import { setCookie } from "@/libs/cookie"
@@ -68,7 +68,7 @@ const dashboard = {
                 let { data } = await getCurSiteId();
                 commit("SETSITEID", data)
             }
-            let { data } = await getSiteInfo(state.siteId);
+            let { data } = await getSiteInfoBySite(state.siteId);
             if (data.templateId == 0) {
                 return false
             } else {

@@ -127,11 +127,15 @@ body {
 .empty-table {
     padding: 50px;
     text-align: center;
+    height: 251px;
 
     img {
-        width: 80px;
         vertical-align: middle;
         padding: 18px 28px;
+        display: inline-block;
+        width: 50px;
+        height: 35px;
+        margin-top: 50px;
     }
 
     p {

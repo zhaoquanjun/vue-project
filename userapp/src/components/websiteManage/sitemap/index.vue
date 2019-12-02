@@ -671,6 +671,7 @@ export default {
   .member-content {
     padding: 0 16px;
     .user-list {
+      margin: 24px 0;
       .member-list-title {
         border-left: 2px solid $--color-primary;
         padding-left: 8px;
@@ -688,7 +689,6 @@ export default {
   width: 100%;
 }
 .content {
-  margin-top: 24px;
   .autoCreate {
     background: $--color-white;
     .autoType {
