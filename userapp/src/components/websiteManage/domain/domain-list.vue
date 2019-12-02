@@ -411,7 +411,6 @@ export default {
         },
         // 是否开启HTTPS
         swichChange(status, row, index) {
-            console.log(row, "00000000");
             let openTip = [
                 "将为您申请免费证书，请发布您的网站并确保可正常访问！"
             ];
@@ -423,7 +422,6 @@ export default {
             // let close = () => {
             //     this.$emit("disableHttps", domainId);
             // };
-            // console.log(status);
             if (status !== 4) {
                 this.$confirm(
                     "将为您申请免费证书，请发布您的网站并确保可正常访问！",
@@ -457,7 +455,6 @@ export default {
         },
         // 删除域名列表
         handleDelete(row, index) {
-            console.log(row, index, "0----");
             let domainId = row.id;
             this.$emit("_deleteCdnDomain", domainId, index);
         },
@@ -524,7 +521,6 @@ export default {
                     if (action === "confirm") {
                         callback(this);
                     } else {
-                        console.log(this, "----");
                     }
                 }
             });
@@ -532,7 +528,6 @@ export default {
 
         // 折叠面板每次只能展开一行
         expandSelect(row, expandedRows) {
-            console.log(row, expandedRows);
             var that = this;
             if (expandedRows.length) {
                 that.expands = [];

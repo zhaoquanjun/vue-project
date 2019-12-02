@@ -10,7 +10,7 @@
       <el-row class="user-list">
         <span class="member-list-title fs14">Robots.txt</span>
       </el-row>
-      <el-row style="margin-top:24px;">
+      <el-row>
         <uploader
           ref="uploader"
           :options="options"
@@ -237,6 +237,7 @@ export default {
   .member-content {
     padding: 0 16px;
     .user-list {
+      margin: 24px 0;
       .member-list-title {
         border-left: 2px solid $--color-primary;
         padding-left: 8px;

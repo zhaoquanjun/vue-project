@@ -66,7 +66,7 @@ export default {
 .backupBtn {
   position: absolute;
   right: 16px;
-  top: 9px;
+  top: -48px;
 }
 </style>
 

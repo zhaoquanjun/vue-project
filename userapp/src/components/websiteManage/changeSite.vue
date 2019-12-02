@@ -208,7 +208,6 @@ export default {
 .siteBox {
   width: 100%;
   height: 40px;
-  margin-bottom: 17px;
   .siteInfo {
     width: 100%;
     height: 40px;
