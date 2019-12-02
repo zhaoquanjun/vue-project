@@ -69,9 +69,9 @@
                         @chooseNode="chooseNode"
                     ></SelectTree>
 
-                    <div slot="footer" class="pannle-footer">
-                        <button @click="updateCategoryPic" class="sure">确定</button>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                    <div slot="footer" class="pannel-footer">
+                        <button @click="updateCategoryPic" class="cl-button cl-button--primary">确定</button>
+                        <button @click="cancelUpdateCategor" class="cl-button cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>
@@ -118,7 +118,6 @@ import List from "./List";
 import environment from "@/environment/index.js";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
-
 
 export default {
     props: {
@@ -425,11 +424,7 @@ export default {
     }
 };
 </script>
-<style scoped>
-.el-dialog__wrapper /deep/ .el-dialog {
-    width: 900px;
-}
-</style>
+
 <style lang="scss" scoped>
 @import "../style/contentDetail";
 </style>

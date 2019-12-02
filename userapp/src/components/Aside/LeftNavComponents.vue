@@ -1,9 +1,9 @@
 <template>
     <el-aside class="leftNavAside">
         <h4 class="submenu-title">
-            <i>{{subTitle}}</i>
+            {{subTitle}}
         </h4>
-        <ul class="el-menu-vertical-demo el-menu">
+        <ul class="el-menu-vertical-demo submenu-list">
             <li
                 class="el-menu-item-left"
                 v-for="(item,index) in menuList.children"
@@ -11,7 +11,10 @@
                 @click="handlerRoute(item,index)"
                 :class="{'active':lastRoute==item.code}"
             >
-                <span :class="{'hasHover': !(item.children && item.children.length > 0)}">{{item.name}}</span>
+                <span :class="[item.children && item.children.length > 0==1?'haschildren':'nochildren']">
+                    <i v-show="item.children && item.children.length>0" class="icon iconfont" :class="[iconfonts(item.code)]"></i>
+                    {{item.name}}
+                </span>
                 <div v-show="item.children">
                     <p 
                         v-for="(item,ind) in item.children"
@@ -44,63 +47,89 @@ export default {
                 window.location.href = "//" + item.menuUrl;
             }
         },
+        iconfonts(code) {
+            switch (code) {
+                case "mysite":
+                    return "iconicon-dash-Mymanagement";
+                case "wechataccount":
+                    return "iconicon-dash-Publicpromotion";
+                case "seo":
+                    return "iconicon-dash-seo";
+                case "sitemanage":
+                    return "iconicon-dash-Webmanagement";
+                case "sitemember":
+                    return "iconicon-dash-membermanagement"    
+            }
+        }
     }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .leftNavAside {
     width: 100%;
-    background: #f8fafc !important;
-}
-.submenu-title,
-.el-menu {
-    background: #f8fafc;
-}
-.el-menu .el-menu-item-left {
-    line-height: 50px;
-    font-size: 14px;
-    text-align: left;
-}
-.el-menu :active.el-menu-item-left span{
-    color: #0595e6;
-}
-.el-menu .el-menu-item-left span{
-    display: inline-block;
-    height: 50px;
-    width: 100%;
-    line-height: 50px;
-    padding-left: 16px;
-}
-.el-menu .el-menu-item-left p{
-    line-height: 50px;
-    padding-left: 40px;
-    cursor: pointer;
-}
-.el-menu .el-menu-item-left .hasHover:hover {
-    background: #fff;
-    cursor: pointer;
-}
-.el-menu .el-menu-item-left p:hover {
-    background: #fff;
-}
-.active {
-    color: #0595e6;
-    background: #fff;
-    /* border-left: 4px solid #0595e6; */
-}
-.active:hover {
-    /* color: #0595e6; */
-    background: #ffffff !important;
-}
-.active:active{
-     color: #0595e6;
+    background: $--color-black-light !important;
 }
 .submenu-title {
-    height: 40px;
-    line-height: 40px;
-    padding-top: 5px;
-    text-align: left;
-    padding-left: 16px;
+    height: 50px;
+    line-height: 50px;
+    color: $--color-white;
+    text-align: center;
+    font-size: 14px;
 }
+.submenu-list {
+        li {
+          cursor: pointer;
+          line-height: 36px;
+          text-align: left;
+          font-size: $--font-size-small;
+          span {
+            display: inline-block;
+            color: $--color-white;
+            line-height: 36px;
+            width: 100%;
+            cursor: pointer;
+          }
+          .nochildren {
+              text-align: center;
+              &:hover {
+                color: $--color-white;
+                background: rgba(245, 246, 247, 0.1);
+              }
+          }
+          .haschildren {
+            padding-left: 0px;
+            cursor: default;
+            i {
+              width: 14px;
+              height: 36px;
+              font-size: 14px;
+              line-height: 36px;
+              padding: 0 12px;
+              color: $--color-white;
+            }
+          }
+          p {
+            cursor: pointer;
+            padding-left: 40px;
+            line-height: 36px;
+            font-size: $--font-size-small;
+            color:$--color-text-regular;
+            &:hover {
+              color: $--color-white;
+              background: rgba(245, 246, 247, 0.1);
+            }
+          }
+        }
+        .active {
+            color: $--color-primary !important;
+            span {
+                color: $--color-primary !important;
+            }
+        }
+        .active:hover {
+            color: $--color-white;
+            background: rgba(245, 246, 247, 0.1);
+        }
+    }
 </style>
 

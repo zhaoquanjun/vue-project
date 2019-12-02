@@ -1,0 +1,117 @@
+
+.cl-pagination{
+    float: right;
+    margin-top: 24px;
+    padding-bottom: 10px;
+    margin-right: 70px;
+    &.noJumper {
+        margin-right: 0px;
+    }
+    .sizes-title {
+        line-height:$--height-base;
+        color: #A1A8B1;
+        font-weight: $--font-weight-base;
+        display: inline-block;
+        margin-right: 8px;
+    }
+    button.paging-confirm{
+        position: absolute;
+        right: 20px;
+        width: 41px;
+        height: $--height-base;
+        color:$--color-text-primary;
+        font-size: $--font-size-small;
+        border: $--border-base;
+        border-radius: $--border-radius-base;
+        background:  $--color-white;
+        
+    }
+    .el-pagination__editor.el-input .el-input__inner{
+        height: $--height-base;
+    }
+ 
+    .el-pagination{
+         &.is-background{
+            .el-pager {
+                li{
+                    min-width: $--width-base;
+                    &:not(.disabled){
+                        &:hover{
+                            color: $--color-primary;  
+                        }
+                        &.active{
+                            border: 1px solid $--color-primary;
+                            background-color: $--color-primary;
+                            color: $--color-white;
+                        }
+                        
+                    }
+                }
+            }
+            .btn-next,.btn-prev{
+                margin: 0;
+                height: $--height-base;
+                line-height: $--height-base;
+                background: $--color-white;
+                min-width: 32px;
+                
+            }
+         }
+         .el-pagination__sizes{
+            .el-select {
+                .el-input{
+                    width: 80px;
+                }
+            }
+            .el-input {
+                .el-input__inner:hover{
+                    border-color: $--color-primary;
+                }
+            }
+           
+         }
+
+         .el-select .el-input{
+             width: 60px;
+         }
+         .el-input__inner{
+             height: $--height-base;
+         }
+         .el-pagination__jump{
+             margin-left: 23px;
+         }
+         .el-pager{
+             border-left:none; 
+             border-right:none; 
+             box-sizing: border-box;
+             li {
+                font-weight: $--font-weight-base;
+                color: $--color-text-primary;
+                background-color: $--color-white;
+                height: $--height-base;
+                line-height:$--height-base;
+                font-size: $--font-size-small;
+                margin: 0;
+                border-radius: 0;
+                border: $--border-base;
+                border-left: 0;
+            }  
+         }
+        .btn-prev, .btn-next{
+            border: $--border-base;
+           
+        } 
+        .btn-next{
+            border-left: none;
+        }
+        button:hover{
+              color: $--color-primary;  
+        }
+        .el-pagination__total {
+            color: #A1A8B1;
+            margin: 0;
+            line-height: $--height-base;
+        }
+    }
+    
+}

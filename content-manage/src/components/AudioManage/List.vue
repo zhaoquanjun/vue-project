@@ -7,6 +7,7 @@
             class="content-table table-content"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -17,9 +18,9 @@
             <el-table-column type="selection"></el-table-column>
             <el-table-column label="音频名称" width="250">
                 <template slot-scope="scope">
-                      <div class="cover">
+                    <div class="cover">
                         <img width="100%" src="~img/file-icon/audio.png" />
-                        <span class="play"  @click="viewPic( scope.row,scope.$index)">
+                        <span class="play" @click="viewPic( scope.row,scope.$index)">
                             <img src="~img/file-icon/play.png" alt />
                         </span>
                     </div>
@@ -34,72 +35,73 @@
                         show-word-limit
                         @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
-                  
-                      <el-tooltip
-                            v-else
-                            class="item"
-                            effect="dark"
-                            :content="scope.row.title"
-                            placement="top"
-                        >
-                            <div
-                                 style="width:150px"
-                                class="ellipsis cursor-p"
-                                @click="rename(scope.row.id,scope.row,scope.$index)"
-                            >{{scope.row.title}}</div>
-                        </el-tooltip>
-                    <!-- <input v-model="scope.row.title" />
-                    <el-button @click="rename(scope.row.id,scope.row.title)">更新名称</el-button>-->
+
+                    <el-tooltip
+                        v-else
+                        class="item"
+                        effect="dark"
+                        :content="scope.row.title"
+                        placement="top"
+                    >
+                        <div
+                            style="width:150px"
+                            class="ellipsis cursor-p"
+                            @click="rename(scope.row.id,scope.row,scope.$index)"
+                        >{{scope.row.title}}</div>
+                    </el-tooltip>
                 </template>
             </el-table-column>
             <el-table-column prop="fileExtension" label="格式" :formatter="formatterFileExt"></el-table-column>
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="durationStr" label="时长"  min-width="150">
-
-            </el-table-column>
+            <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="durationStr" label="时长" min-width="150"></el-table-column>
             <el-table-column prop="categoryName" label="分类" min-width="150">
-                 <template slot-scope="scope">
-                    <span  style="width:150px" class="ellipsis">{{ scope.row.categoryName }}</span>
+                <template slot-scope="scope">
+                    <span style="width:150px" class="ellipsis">{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
 
-            <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" width="150" label="上传时间" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" width="150" sortable='custom' label="上传时间" show-overflow-tooltip></el-table-column>
 
             <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="more-operate" @click="handleMove(scope.row)" style="margin-right:16px">
-                           <i class="iconfont iconyidong"></i>
+                        <button
+                            class="more-operate"
+                            @click="handleMove(scope.row)"
+                            style="margin-right:16px"
+                        >
+                            <i class="iconfont iconyidong cl-iconfont is-square"></i>
                         </button>
                         <button class="more-operate delete-btn" @click="batchRemove( scope.row)">
-                             <i class="iconfont iconshanchu "></i>
+                            <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>
             </el-table-column>
         </el-table>
-          <div class="list-footer" >
+        <div class="list-footer">
             <div class="storage-wrap">
+                <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
                 </div>
-                <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
             </div>
-            <div class="pageing" id="pageing">
+            <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':imgPageResult.totalPage <= 10}">
                 <slot name="paging"></slot>
                 <el-pagination
+                    v-if="imgPageResult.totalRecord > 0"
                     background
-                    layout="total, sizes, prev, pager, next"
+                    :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     :total="imgPageResult.totalRecord"
-                    :page-count="imgPageResult.totalPage"
-                    :page-size="picSearchOptions.pageSize"
+                    :page-size="imgPageResult.pageSize"
                     :page-sizes="[10,20,50]"
                     @current-change="changePage"
                     @size-change="changeSize"
-                ></el-pagination>
+                >
+                    <div class="sizes-title">，每页显示</div>
+                    <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
             </div>
-            <!-- :title="picTitle" -->
             <div id="img-list-dialog">
                 <el-dialog
                     :visible.sync="imgVisible"
@@ -107,7 +109,6 @@
                     @close="closeDialog"
                 >
                     <audio ref="audio" class="audio" :src="fullOssUrl" controls="controls" />
-                   
                 </el-dialog>
             </div>
         </div>
@@ -165,21 +166,19 @@ export default {
          * 管理员下载
          */
         async _adminDownload(row) {
-          
             let type = row.fileType;
             let id = row.id;
             let { data } = await adminDownload(type, id);
             this.fullOssUrl = data;
             this.imgVisible = true;
-             this.$nextTick(()=>{
-                 this.$refs.audio.play()
-            })
+            this.$nextTick(() => {
+                this.$refs.audio.play();
+            });
         },
         /**
          * 单选或全选操作
          */
         handleSelectionChange(list) {
-          
             this.multipleSelection = list;
             this.$emit("handleSelectionChange", list);
         },
@@ -197,9 +196,9 @@ export default {
         },
         // 重命名名称
         rename(id, row, index) {
-             if(row.title)this.newName = row.title;
-             if (!trim(row.title)) {
-                row.title=this.newName
+            if (row.title) this.newName = row.title;
+            if (!trim(row.title)) {
+                row.title = this.newName;
                 this.$notify({
                     customClass: "notify-error",
                     message: `音频名称不能为空`,
@@ -246,6 +245,25 @@ export default {
             if (row.fileExtension.substring(0, 1) == ".")
                 return row.fileExtension.substring(1);
             return row.fileExtension;
+        },
+        //改变排序
+        sortChange(row){
+                    // value: "CreateTime",
+                    // label: "创建时间"
+                    // value: "FileSize",
+                    // label: "文件大小"
+            console.log(row,'row')   
+            if (row.prop == 'sizeStr') {
+                this.picSearchOptions.orderByType = "FileSize";
+            } else {
+                this.picSearchOptions.orderByType = "CreateTime";
+            }
+            if (row.order == 'ascending') {
+                this.picSearchOptions.isDescending  = false;
+            } else {
+                this.picSearchOptions.isDescending = true;
+            }
+            this.$emit("getList");
         }
     },
     watch: {
@@ -261,22 +279,14 @@ export default {
     }
 };
 </script>
-<style scoped>
-.el-table /deep/ .el-table__row .el-input .el-input__inner {
-    padding-right: 50px;
-}
-.el-table /deep/ .el-table__row .el-input .el-input__suffix {
-    display: flex;
-    align-items: center;
-}
-#img-list-dialog /deep/ .el-dialog__body{
+<style lang="scss" scoped>
+@import "../../styles/content-manage/manege-table.scss";
+/* 音频弹窗居中播放 */
+#img-list-dialog /deep/ .el-dialog__body {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-</style>
-<style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
 .cover {
     position: relative;
     &:hover .play {
@@ -286,7 +296,7 @@ export default {
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
         top: 0;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         text-align: center;
         img {
             width: 12px;
@@ -294,7 +304,12 @@ export default {
         }
     }
 }
-
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
+}
 </style>
 
 

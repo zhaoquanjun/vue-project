@@ -6,316 +6,226 @@
       </page-submenu>
     </el-aside>
     <el-main class="member-content page-scroll">
-      <el-row class="siteContent" style="padding-bottom:0;padding-top:32px">
-        <el-row class="user-list">
-          <span class="member-list-title fs14">我的网站</span>
-        </el-row>
-        <ChangeSite
-          @chooseWebsite="chooseWebsite"
-          @getSiteId="getSiteId"
-          :changeSiteName="siteName"
-          :changeSiteLanguage="language"
-        />
-        <div class="siteWrap">
-          <div class="siteImg">
-            <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
-            <div
-              class="siteImgBackground"
-              :style="{background: 'url(' + ( siteImage ) + ') no-repeat center/cover'}"
-            >
-              <div class="modal">
-                <button class="choseSite" @click="changeTemplate()">更换模版</button>
+      <ChangeSite
+        @chooseWebsite="chooseWebsite"
+        @getSiteId="getSiteId"
+        :changeSiteName="siteName"
+        :changeSiteLanguage="language"
+      />
+      <div class="siteInfo-wrap">
+        <div class="siteInfo-title">网站管理</div>
+        <div class="siteInfo">
+          <div>
+            <div class="siteImg">
+              <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
+              <div
+                class="siteImgBackground"
+                :style="{background: 'url(' + ( siteImage ) + ') no-repeat center/cover'}"
+              >
+                <div class="modal">
+                  <button class="choseSite" @click="changeTemplate()">更换模版</button>
+                </div>
+                <dir class="changeTemplate">更换模板</dir>
+              </div>
+            </div>
+            <div class="siteinfoWrap">
+              <div class="siteinfoItem siteName">
+                <span>网站名称：</span>
+                <span>{{siteName && siteName.trim().length > 20 ? siteName.slice(0, 20) + '...' : siteName}}</span>
+                <span class="language">{{_getLanguage()}}</span>
+                <i
+                  class="iconfont iconicon-dash-edit"
+                  style="font-size:12px;margin-left:8px"
+                  @click="changeSiteInfoShow"
+                ></i>
+              </div>
+              <div class="siteinfoItem">
+                <span>网站地址：</span>
+                <a
+                  class="siteinfoDomain"
+                  :href="`http://${secondDomain}`"
+                  target="_blank"
+                >{{secondDomain}}</a>
+              </div>
+              <div class="siteinfoItem">
+                <span>绑定域名：</span>
+                <span>{{domain ? domain : "未绑定"}}</span>
+                <button class="bindDomain" @click="bindDomain">绑定域名</button>
+              </div>
+              <div class="siteinfoItem">
+                <span>发布时间：</span>
+                <span>{{lastPublishedTime ? lastPublishedTime : "未发布"}}</span>
               </div>
             </div>
           </div>
-          <div class="siteinfoWrap">
-            <div class="siteinfoItem siteName">
-              <span>网站名称：</span>
-              <span
-                class="siteinfoName"
-              >{{siteName && siteName.trim().length > 20 ? siteName.slice(0, 20) + '...' : siteName}}</span>
-              <el-popover
-                ref="popover"
-                placement="bottom"
-                width="317"
-                trigger="manual"
-                v-model="editPopover"
-                style="padding:0"
-                class="popover"
-              >
-                <span
-                  slot="reference"
-                  style="margin-left:0px;vertical-align: middle;"
-                  class="hoverBtn"
-                  @click="showChangeSitename"
-                >
-                  <i class="iconfont iconbianji edit"></i>
-                </span>
-                <div class="textareaWrap">
-                  <el-input
-                    type="textarea"
-                    :autosize="{ minRows: 3, maxRows: 3}"
-                    placeholder="请输入站点名称"
-                    v-model="siteNameValue"
-                    maxlength="20"
-                    show-word-limit
-                    resize="none"
-                    @blur="textBulr"
-                  ></el-input>
-                  <div class="ym-form-item__error" v-show="isNullInput">请输入站点名称</div>
-                  <div class="btn-wrap">
-                    <button class="cancel" slot="refenrence" @click="cancelInput">取消</button>
-                    <button class="save" @click="saveInputValue">保存</button>
-                  </div>
-                </div>
-              </el-popover>
-            </div>
-            <div class="siteinfoItem">
-              <span>网站语言：</span>
-              <span class="siteinfoName">{{_getLanguage()}}</span>
-              <span @click="showChangeLanguage" class="hoverBtn" style="vertical-align: middle;">
-                <i class="iconfont iconbianji edit"></i>
+          <div class="rightWrap">
+            <button
+              class="cl-button cl-button--primary cl-button--small"
+              style="margin-top:8px"
+              @click="toDesign"
+            >设计</button>
+            <a :href="`http://${secondDomain}`" target="_blank" style="margin-top:16px">
+              <button class="cl-button cl-button--primary_notbg cl-button--small">预览</button>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="domain-menu">
+        <el-tabs v-model="siteInfoType" @tab-click="handleClick">
+          <el-tab-pane label="流量统计" name="flow"></el-tab-pane>
+          <el-tab-pane label="网站设置" name="setting"></el-tab-pane>
+        </el-tabs>
+      </div>
+      <div class="siteDetailinfo-wrap">
+        <div class="siteDetailinfo" v-show="siteInfoType == 'setting'">
+          <div class="siteType-wrap">
+            <div class="siteType">
+              <span>网站类型：</span>
+              <span class="siteType-info">
+                <el-radio-group v-model="chosedSiteType" @change="changeSitetype">
+                  <el-radio label="个人">个人</el-radio>
+                  <el-radio label="企业">企业</el-radio>
+                </el-radio-group>
               </span>
             </div>
-            <div class="siteinfoItem">
-              <span>网站地址：</span>
-              <a class="siteinfoDomain" :href="`http://${secondDomain}`" target="_blank">{{secondDomain}}</a>
+            <div class="siteType">
+              <span>所属行业：</span>
+              <span class="siteType-info">
+                <el-select
+                  v-model="siteFirstIndustryValue"
+                  placeholder="请选择行业"
+                  @change="choseIndustry"
+                >
+                  <el-option
+                    v-for="item in siteFirstIndustry"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </span>
             </div>
-            <div class="siteinfoItem">
-              <span>绑定域名：</span>
-              <span :class="{isBind:domain}">{{domain ? domain : "未绑定"}}</span>
-              <button class="bindDomain" @click="bindDomain">绑定域名</button>
+          </div>
+          <div class="siteSetting-wrap">
+            <div class="siteSetting">
+              <div class="siteSetting-item">
+                <span class="siteSettingText">网站图标：</span>
+                <el-tooltip
+                  effect="dark"
+                  content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB，仅支持.png格式"
+                  placement="top-start"
+                >
+                  <i class="iconfont iconicon-exclamationmark"></i>
+                </el-tooltip>
+                <el-upload
+                  class="avatar-uploader"
+                  :action="uploadPicUrl"
+                  :headers="headers"
+                  :show-file-list="false"
+                  ref="upload"
+                  :on-success="iconAvatarSuccess"
+                  :on-error="iconAvatarError"
+                  :before-upload="iconAvatarUpload"
+                >
+                  <div v-if="!iconUrl" class="iconNull">
+                    <i class="iconfont iconicon-dash-cloudx"></i>
+                  </div>
+                  <img v-if="iconUrl" :src="iconUrl" class="iconImg" />
+                  <div class="iconHover">
+                    <i class="iconfont iconicon-dash-cloudx"></i>
+                  </div>
+                </el-upload>
+                <!-- <i v-if="iconUrl" class="iconfont iconshanchu" @click="removeIcon"></i> -->
+              </div>
+              <div class="siteSetting-item">
+                <span class="siteSettingText">显示阿里云服务信息：</span>
+                <el-tooltip
+                  effect="dark"
+                  content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字"
+                  placement="top-start"
+                >
+                  <i class="iconfont iconicon-exclamationmark"></i>
+                </el-tooltip>
+                <el-switch
+                  @change="updateSiteServiceInfo"
+                  v-model="siteServiceInfoValue"
+                  style="margin: -2px 0 0 16px"
+                ></el-switch>
+              </div>
             </div>
-            <div class="siteinfoItem">
-              <span>发布时间：</span>
-              <span>{{lastPublishedTime ? lastPublishedTime : "未发布"}}</span>
+            <div class="siteSetting">
+              <div class="siteSetting-item">
+                <span class="siteSettingText">禁止右键保存图片：</span>
+                <el-tooltip effect="dark" content="开启右键保存图片后，将无法在网站内使用右键保存图片" placement="top-start">
+                  <i class="iconfont iconicon-exclamationmark"></i>
+                </el-tooltip>
+                <el-switch
+                  @change="updateSiteRightCopy"
+                  v-model="siteRightCopyValue"
+                  style="margin: -2px 0 0 16px"
+                ></el-switch>
+              </div>
+              <div class="siteSetting-item">
+                <span class="siteSettingText">启用Powered by：</span>
+                <el-tooltip
+                  effect="dark"
+                  content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字"
+                  placement="top-start"
+                >
+                  <i class="iconfont iconicon-exclamationmark"></i>
+                </el-tooltip>
+                <el-switch
+                  @change="isOpenPowered"
+                  v-model="isOpenPoweredValue"
+                  style="margin-left:16px"
+                ></el-switch>
+              </div>
             </div>
           </div>
-          <button class="siteinfoBtn design" @click="toDesign">设计</button>
-          <a class="siteinfoBtn prev" :href="`http://${secondDomain}`" target="_blank">预览</a>
         </div>
-      </el-row>
-      <!-- <el-row class="siteContent">
-        <div class="mySiteTitle">流量统计</div>
-        <div style="height:401px"></div>
-      </el-row>-->
-      <el-row class="siteContent">
-        <div class="mySiteTitle">
-          网站信息
-          <!-- <div class="edit" style="margin-left:16px" @click="showSiteInfo"></div> -->
-        </div>
-        <div class="siteTypeWrap">
-          <div class="siteType">网站类型</div>
-          <div class="siteTypeSelect">
-            <el-select v-model="chosedSiteType" placeholder="请选择站点类型" @change="choseType">
-              <el-option
-                v-for="item in siteType"
-                :key="item.value"
-                :label="item.label"
-                :value="item.label"
-              ></el-option>
-            </el-select>
-          </div>
-          <div class="siteIndustry">所属行业</div>
-          <div class="siteFirstIndustrySelect">
-            <el-select
-              v-model="siteFirstIndustryValue"
-              placeholder="一级行业"
-              @change="choseFirstIndustry"
-            >
-              <el-option
-                v-for="item in siteFirstIndustry"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </div>
-          <div class="siteSecondIndustrySelect">
-            <el-select
-              v-model="siteSecondIndustryValue"
-              placeholder="二级行业"
-              @change="choseSecondIndustry"
-            >
-              <el-option
-                v-for="item in siteSecondIndustry"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </div>
-          <el-button
-            class="saveBtn"
-            @click="saveSiteInfo"
-            :disabled="chosedSiteType == '' || siteFirstIndustryValue == '' || siteSecondIndustryValue == ''"
-            :class="{disabled:chosedSiteType == '' || siteFirstIndustryValue == '' || siteSecondIndustryValue == ''}"
-          >保存</el-button>
-        </div>
-      </el-row>
-      <el-row class="siteContent">
-        <div class="mySiteTitle">网站设置</div>
-        <div class="siteSettingWrap clear" style="margin-top:32px">
-          <div class="siteSettingWrap-item">
-            <span class="siteSetting">网站icon</span>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB，仅支持.png格式"
-              placement="top-start"
-            >
-              <i class="icon iconfont iconicon-exclamationmark"></i>
-            </el-tooltip>
-            <el-upload
-              class="avatar-uploader"
-              :action="uploadPicUrl"
-              :headers="headers"
-              :show-file-list="false"
-              ref="upload"
-              :on-success="iconAvatarSuccess"
-              :on-error="iconAvatarError"
-              :before-upload="iconAvatarUpload"
-            >
-              <div v-if="!iconUrl" class="iconNo"></div>
-              <img v-if="iconUrl" :src="iconUrl" class="iconImg" />
-              <i v-if="iconUrl" class="icon iconfont mask iconqiehuanxingshiyi"></i>
-            </el-upload>
-            <i v-if="iconUrl" class="icon iconfont iconshanchu" @click="removeIcon"></i>
-          </div>
-          <div class="siteSettingWrap-item">
-            <span class="siteSetting">启用Powered by</span>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字"
-              placement="top-start"
-            >
-              <i class="icon iconfont iconicon-exclamationmark"></i>
-            </el-tooltip>
-            <el-switch
-              @change="isOpenPowered"
-              v-model="isOpenPoweredValue"
-              active-color="#01C0DE"
-              style="margin-left:16px"
-            ></el-switch>
-          </div>
-        </div>
-        <div class="siteSettingWrap clear">
-          <div class="siteSettingWrap-item">
-            <span class="siteSetting ">显示阿里云服务信息</span>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字"
-              placement="top-start"
-            >
-              <i class="icon iconfont iconicon-exclamationmark"></i>
-            </el-tooltip>
-            <el-switch
-              @change="updateSiteServiceInfo"
-              v-model="siteServiceInfoValue"
-              active-color="#01C0DE"
-              style="margin: -2px 0 0 16px"
-            ></el-switch>
-          </div>
-          <div class="siteSettingWrap-item">
-            <span class="siteSetting">禁止右键保存图片</span>
-            <el-switch
-              @change="updateSiteRightCopy"
-              v-model="siteRightCopyValue"
-              active-color="#01C0DE"
-              style="margin: -2px 0 0 16px"
-            ></el-switch>
-          </div>
-        </div>
-      </el-row>
+      </div>
       <el-dialog
         width="0"
-        :visible.sync="changeSiteLanguageShow"
+        :visible.sync="changeSiteShow"
         :show-close="false"
         :close-on-click-modal="false"
       >
-        <div class="siteLanguage-right-pannel" :style="{width:'470px'}">
+        <div class="right-pannel" :style="{width:'520px'}">
           <div class="pannel-head">
-            <span class="headTitle">网站语言</span>
-            <span class="close-pannel" @click="closeSiteLanguageDialog">
-              <i class="iconfont iconguanbi" style="font-size:16px;color:#262626"></i>
+            <span class="headTitle">设置站点</span>
+            <span class="close-pannel" @click="closeChangeDialog">
+              <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
             </span>
           </div>
-          <div class="tips">为避免网站内容与网站语言不匹配，更换网站语言后，请及时更新控件内容</div>
-          <div class="remark">
-            <span class="remarkTitle">请选择您的网站语言：</span>
-            <el-radio-group v-model="radio" class="radio">
+          <div class="createSiteName">
+            <span class="createSiteTitle">站点名称</span>
+            <el-input
+              v-model="changeSiteName"
+              @blur="blurSiteName(changeSiteName)"
+              placeholder="请输入内容"
+              class="createSiteNameInput"
+            ></el-input>
+            <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
+          </div>
+          <div style="margin-top:16px">
+            <div class="createSiteTitle">站点语言</div>
+            <el-radio-group v-model="changeRadio">
               <el-radio label="zh-CN">中文</el-radio>
               <el-radio label="en-US">英文</el-radio>
-              <el-radio label="ja-JP">日语</el-radio>
+              <el-radio label="ja-JP">日文</el-radio>
               <el-radio label="es-ES">西班牙语</el-radio>
               <el-radio label="ko-KR">韩语</el-radio>
             </el-radio-group>
           </div>
-          <div class="confirm">
-            <button class="confirmBtn" @click="changeLanguage">确定</button>
-            <button class="cancelBtn" @click="closeSiteLanguageDialog">取消</button>
+          <div class="create">
+            <button
+              @click="closeChangeDialog"
+              class="cl-button cl-button--primary_notbg cl-button--small"
+            >取消</button>
+            <button @click="changeSiteInfo" class="cl-button cl-button--primary cl-button--small">确定</button>
           </div>
         </div>
       </el-dialog>
-      <!-- <el-dialog
-        width="0"
-        :visible.sync="changeSiteInfoShow"
-        :show-close="false"
-        :close-on-click-modal="false"
-      >
-        <div class="siteInfo-right-pannel" :style="{width:'470px'}">
-          <div class="pannel-head">
-            <span class="headTitle">网站信息</span>
-            <span class="close-pannel" @click="closeSiteInfoDialog">
-              <i class="iconfont iconX" style="font-size:12px;color:#ccc"></i>
-            </span>
-          </div>
-          <div class="siteTypeSelect">
-            <span>网站类型：</span>
-            <el-select v-model="chosedSiteType" placeholder="请选择站点类型" @change="choseType">
-              <el-option
-                v-for="item in siteType"
-                :key="item.value"
-                :label="item.label"
-                :value="item.label"
-              ></el-option>
-            </el-select>
-          </div>
-          <div class="siteFirstIndustrySelect">
-            <span>所属行业：</span>
-            <el-select
-              v-model="siteFirstIndustryValue"
-              placeholder="一级行业"
-              @change="choseFirstIndustry"
-            >
-              <el-option
-                v-for="item in siteFirstIndustry"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-            <el-select
-              v-model="siteSecondIndustryValue"
-              placeholder="二级行业"
-              @change="choseSecondIndustry"
-            >
-              <el-option
-                v-for="item in siteSecondIndustry"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </div>
-          <div class="confirm">
-            <button class="confirmBtn" @click="changeInfo">确定</button>
-            <button class="cancelBtn" @click="closeSiteInfoDialog">取消</button>
-          </div>
-        </div>
-      </el-dialog>-->
       <SelectTemplateDialog
         ref="selectTemplateDialog"
         :siteId="siteId"
@@ -356,16 +266,6 @@ export default {
       secondDomain: "",
       lastPublishedTime: "",
       language: "",
-      siteType: [
-        {
-          value: "1",
-          label: "个人"
-        },
-        {
-          value: "2",
-          label: "企业"
-        }
-      ],
       chosedSiteType: "",
       siteFirstIndustryValue: "",
       siteFirstIndustry: [],
@@ -376,21 +276,94 @@ export default {
       siteServiceInfoValue: false,
       isOpenPoweredValue: false,
       siteRightCopyValue: false,
-      siteNameValue: "",
-      changeSiteLanguageShow: false,
-      remarkInfo: "",
-      radio: "zh-CN",
-      changeSiteInfoShow: false,
-      editPopover: false,
-      isNullInput: false,
+      changeRadio: "",
+      changeSiteName: "",
+      changeSiteShow: false,
+      errorSiteName: false,
+      errorSiteNameText: "",
       iconUrl: "",
       headers: {
         Authorization: ""
       },
-      uploadPicUrl: environment.uploadPicUrl + "/0"
+      uploadPicUrl: environment.uploadPicUrl + "/0",
+      siteInfoType: "setting"
     };
   },
   methods: {
+    handleClick() {},
+    // 展示修改site信息弹框
+    changeSiteInfoShow() {
+      this.changeSiteName = this.siteName;
+      this.changeRadio = this.language;
+      this.changeSiteShow = true;
+    },
+    // 关闭修改site弹窗
+    closeChangeDialog() {
+      this.changeSiteShow = false;
+    },
+    // 创建站点Inputblur
+    blurSiteName(name) {
+      if (name == "") {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能为空";
+        return;
+      } else {
+        this.errorSiteName = false;
+        this.errorSiteNameText = "";
+      }
+      if (name.length > 20) {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能超过20个字符，请重新输入";
+        return;
+      } else {
+        this.errorSiteName = false;
+        this.errorSiteNameText = "";
+      }
+    },
+    // 确定修改site信息
+    async changeSiteInfo() {
+      if (this.changeSiteName == "") {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能为空";
+        return;
+      }
+      if (this.changeSiteName.length > 20) {
+        this.errorSiteName = true;
+        this.errorSiteNameText = "站点名称不能超过20个字符，请重新输入";
+        return;
+      }
+      let para = {
+        siteId: this.siteId,
+        siteName: this.changeSiteName,
+        language: this.changeRadio
+      };
+      let { data, status } = await dashboardApi.updateSiteInfo(para);
+      if (status == 200) {
+        this.siteName = this.changeSiteName;
+        this.language = this.changeRadio;
+        this.changeSiteShow = false;
+        this.$notify({
+          customClass: "notify-success",
+          message: `修改成功`,
+          duration: 2000,
+          showClose: false
+        });
+      }
+    },
+    // 切换网站类型
+    async changeSitetype() {
+      await dashboardApi.updateSiteType({
+        siteId: this.siteId,
+        siteType: this.chosedSiteType
+      });
+    },
+    // 切换网站行业
+    async choseIndustry() {
+      await dashboardApi.updateSiteIndustry({
+        siteId: this.siteId,
+        firstIndustryId: this.siteFirstIndustryValue
+      });
+    },
     //启用Powered by
     async isOpenPowered() {
       await siteBackupApi.updateSitePoweredBy({
@@ -560,107 +533,6 @@ export default {
         this.headers.Authorization = "Bearer " + data.access_token;
       }
     },
-    // 修改网站名称
-    showChangeSitename() {
-      this.siteNameValue = this.siteName ? this.siteName : "";
-      this.editPopover = true;
-    },
-    // 取消修改
-    cancelInput() {
-      this.$refs[`popover`].doClose();
-      this.siteNameValue = "";
-      this.editPopover = false;
-      this.isNullInput = false;
-    },
-    // input失去焦点
-    textBulr() {
-      if (!this.siteNameValue) {
-        this.isNullInput = true;
-      } else {
-        this.isNullInput = false;
-      }
-    },
-    // 保存siteName
-    async saveInputValue() {
-      if (!this.siteNameValue) {
-        this.isNullInput = true;
-        return;
-      }
-      this.$refs[`popover`].doClose();
-      let para = {
-        siteId: this.siteId,
-        siteName: this.siteNameValue
-      };
-      await dashboardApi.updateSiteInfo(para);
-      this.siteName = this.siteNameValue;
-      this.editPopover = false;
-    },
-    // 关闭选择网站语言弹窗
-    closeSiteLanguageDialog() {
-      // this.radio = this.language;
-      this.changeSiteLanguageShow = false;
-    },
-    //  切换网站语言
-    showChangeLanguage() {
-      this.changeSiteLanguageShow = true;
-      this.radio = this.language;
-    },
-    async changeLanguage() {
-      let para = {
-        siteId: this.siteId,
-        language: this.radio
-      };
-      let { data, status } = await dashboardApi.updateSiteInfo(para);
-      if (status == 200) {
-        this.language = this.radio;
-        this.closeSiteLanguageDialog();
-      }
-    },
-    // 关闭修改网站信息
-    closeSiteInfoDialog() {
-      this.changeSiteInfoShow = false;
-    },
-    showSiteInfo() {
-      this.changeSiteInfoShow = true;
-    },
-    async changeInfo() {
-      if (!this.chosedSiteType) {
-        this.$notify({
-          customClass: "notify-error",
-          message: `请选择网站类型`,
-          duration: 2000,
-          showClose: false
-        });
-        return;
-      }
-      if (this.secondIndustryId == "" || this.secondIndustryId == 0) {
-        this.$notify({
-          customClass: "notify-error",
-          message: `请选择所属行业`,
-          duration: 2000,
-          showClose: false
-        });
-        return;
-      }
-      let { data, status } = await dashboardApi.updateSiteTypeAndIndustry(
-        this.siteId,
-        this.chosedSiteType,
-        this.firstIndustryId,
-        this.secondIndustryId
-      );
-      if (status === 200) {
-        this.$notify({
-          customClass: "notify-success",
-          message: `保存成功`,
-          duration: 2000,
-          showClose: false
-        });
-      }
-    },
-    // 选择网站类型
-    choseType(value) {
-      this.chosedSiteType = value;
-    },
     // 选择一级行业菜单
     async choseFirstIndustrySelect() {
       let { data } = await dashboardApi.GetFirstIndustries();
@@ -685,587 +557,314 @@ export default {
     choseSecondIndustry(id) {
       this.secondIndustryId = id;
     },
-    // 保存网站信息
-    async saveSiteInfo() {
-      if (!this.chosedSiteType) {
-        this.$notify({
-          customClass: "notify-error",
-          message: `请选择网站类型`,
-          duration: 2000,
-          showClose: false
-        });
-        return;
-      }
-      if (this.secondIndustryId == "" || this.secondIndustryId == 0) {
-        this.$notify({
-          customClass: "notify-error",
-          message: `请选择所属行业`,
-          duration: 2000,
-          showClose: false
-        });
-        return;
-      }
-      let { data, status } = await dashboardApi.updateSiteTypeAndIndustry(
-        this.siteId,
-        this.chosedSiteType,
-        this.firstIndustryId,
-        this.secondIndustryId
-      );
-      if (status === 200) {
-        this.$notify({
-          customClass: "notify-success",
-          message: `保存成功`,
-          duration: 2000,
-          showClose: false
-        });
-      }
-    },
     bindDomain() {
       this.$router.push("/website/mysite/sitedomain");
     }
   }
 };
 </script>
-<style scoped>
-.popover /deep/ .el-popover__reference {
-  outline: none;
-}
-.siteTypeSelect {
-  display: inline-block;
-  margin-left: 24px;
-}
-.siteTypeSelect /deep/ .el-input__inner {
-  width: 225px;
-  height: 32px;
-  background: rgba(255, 255, 255, 1);
-  border-radius: 2px;
-  border: 1px solid rgba(229, 229, 229, 1);
-  line-height: 32px;
-}
-.siteTypeSelect /deep/ .el-input__icon {
-  line-height: 32px;
-}
-.siteFirstIndustrySelect {
-  display: inline-block;
-  margin-left: 24px;
-}
-.siteFirstIndustrySelect /deep/ .el-input__inner {
-  width: 225px;
-  height: 32px;
-  background: rgba(255, 255, 255, 1);
-  border-radius: 2px;
-  border: 1px solid rgba(229, 229, 229, 1);
-  line-height: 32px;
-}
-.siteFirstIndustrySelect /deep/ .el-input__icon {
-  line-height: 32px;
-}
-.siteSecondIndustrySelect {
-  display: inline-block;
-  margin-left: 24px;
-}
-.siteSecondIndustrySelect /deep/ .el-input__inner {
-  width: 225px;
-  height: 32px;
-  background: rgba(255, 255, 255, 1);
-  border-radius: 2px;
-  border: 1px solid rgba(229, 229, 229, 1);
-  line-height: 32px;
-}
-.siteSecondIndustrySelect /deep/ .el-input__icon {
-  line-height: 32px;
-}
-.radio /deep/ .is-checked .el-radio__inner {
-  background: #00c1de;
-  border-color: #00c1de;
-}
-.radio /deep/ .el-radio {
-  margin-right: 17px;
-}
-.radio /deep/ .el-radio__label {
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(140, 140, 140, 1);
-  line-height: 20px;
-}
-.radio /deep/ .is-checked .el-radio__label {
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(38, 38, 38, 1);
-  line-height: 20px;
-}
-.textareaWrap /deep/ .el-input__count {
-  right: 25px;
-}
-.hoverBtn {
-  padding: 8px;
-  background: transparent;
-  cursor: pointer;
-}
-.hoverBtn:hover {
-  background: rgba(248, 250, 252, 1);
-}
-</style>
 <style lang="scss" scoped>
 .member-container {
-  background: #fff;
   position: relative;
-  .user-list {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 24px;
-    .member-list-title {
-      border-left: 4px solid #01c0de;
-      padding-left: 8px;
-      font-size: 16px;
-      font-weight: 700;
+  .member-content {
+    padding: 0 16px;
+    .user-list {
+      .member-list-title {
+        border-left: 2px solid $--color-primary;
+        padding-left: 8px;
+        font-size: $--font-size-base;
+        font-weight: 700;
+      }
+    }
+  }
+}
+.siteInfo-wrap {
+  margin-top: 24px;
+  width: 100%;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  .siteInfo-title {
+    box-sizing: border-box;
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-primary;
+    border-bottom: $--border-base;
+    padding-left: 16px;
+  }
+  .siteInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    padding-right: 32px;
+    .siteImg {
+      position: relative;
+      display: inline-block;
+      width: 200px;
+      vertical-align: top;
+      .itemSiteImageHeader {
+        width: 100%;
+      }
+      .siteImgBackground {
+        margin-top: -2px;
+        width: 100%;
+        padding-bottom: 62%;
+        position: relative;
+        .changeTemplate {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 24px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          background: rgba(255, 107, 0, 0.9);
+          font-size: $--font-size-small;
+          line-height: 24px;
+          color: $--color-white;
+          font-weight: $--font-weight-base;
+          text-align: center;
+          transition: all 0.2s linear;
+        }
+      }
+      .modal {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        background: rgba(255, 107, 0, 0.9);
+        transition: all 0.2s linear;
+      }
+      &:hover {
+        .modal {
+          opacity: 1;
+        }
+        .changeTemplate {
+          opacity: 0;
+        }
+      }
+      .choseSite {
+        width: 90px;
+        height: 32px;
+        border-radius: 2px;
+        border: 1px solid $--color-white;
+        font-size: $--font-size-small;
+        font-weight: $--font-weight-base;
+        color: $--color-white;
+        line-height: 32px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.2s linear;
+      }
+    }
+    .siteinfoWrap {
+      display: inline-block;
+      margin-left: 24px;
+      .siteinfoItem {
+        margin-top: 12px;
+        span {
+          margin-left: 8px;
+          font-size: $--font-size-small;
+          font-weight: $--font-weight-base;
+          line-height: 17px;
+        }
+        .iconicon-dash-edit {
+          &:hover {
+            color: $--color-primary;
+          }
+        }
+        .language {
+          margin-left: 12px;
+          font-size: $--font-size-small;
+          font-weight: $--font-weight-base;
+          color: $--color-text-regular;
+        }
+        .siteinfoDomain {
+          margin-left: 8px;
+          font-size: $--font-size-small;
+          font-weight: $--font-weight-base;
+          color: $--color-primary;
+        }
+        .bindDomain {
+          font-size: $--font-size-small;
+          font-weight: $--font-weight-base;
+          color: $--color-primary;
+          margin-left: 30px;
+        }
+      }
+    }
+    .rightWrap {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+}
+.siteDetailinfo-wrap {
+  width: 100%;
+  height: calc(100% - 389px);
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  .siteDetailinfo {
+    width: calc(100% - 48px);
+    margin: 0 24px;
+    .siteType-wrap {
+      width: 100%;
+      border-bottom: $--border-base;
+      padding-bottom: 24px;
+      .siteType {
+        margin-top: 16px;
+        .siteType-info {
+          margin-left: 16px;
+        }
+      }
+    }
+    .siteSetting-wrap {
+      margin-top: 30px;
+      display: flex;
+      width: 100%;
+      .siteSetting {
+        width: 49%;
+        .siteSettingText {
+          font-size: $--font-size-small;
+          font-weight: $--font-weight-base;
+        }
+        .iconicon-exclamationmark {
+          color: #e5e5e5;
+        }
+        .siteSetting-item {
+          display: flex;
+          align-items: center;
+        }
+        .siteSetting-item:nth-child(2) {
+          margin-top: 24px;
+        }
+      }
     }
   }
 }
 .avatar-uploader {
-  float: left;
   position: relative;
+  display: inline-block;
   width: 20px;
   height: 20px;
   margin-left: 16px;
-  &:hover .mask {
-    display: block;
+  &:hover {
+    .iconHover {
+      display: inline-block;
+    }
   }
   cursor: pointer;
   .iconImg {
     display: inline-block;
     width: 20px;
     height: 20px;
-    box-sizing: border-box;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
+    border: $--border-base;
+    border-radius: $--border-radius-base;
   }
-  .iconNo {
+  .iconNull {
     display: inline-block;
     width: 20px;
     height: 20px;
-    background: url("~img/icon.png") no-repeat center;
-    background-size: contain;
+    border: $--border-base;
+    border-radius: $--border-radius-base;
   }
-  .iconNo:hover {
-    background: url("~img/iconActive.png") no-repeat center;
-    background-size: contain;
-  }
-  .mask {
+  .iconHover {
     display: none;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 20px;
     height: 20px;
-    background: rgba(26, 26, 26, 0.4);
-    color: #ffffff;
-    font-size: 12px;
+    background: rgba(38, 38, 38, 0.89);
+    border: $--border-base;
+    border-radius: $--border-radius-base;
+  }
+  .iconicon-dash-cloudx {
+    color: $--color-primary;
     line-height: 20px;
-    text-align: center;
-    margin: 0 !important;
   }
 }
 
-.mySiteTitle {
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(38, 38, 38, 1);
-  margin-bottom: 15px;
-}
-.edit {
-  font-size: 16px;
-  color: #262626;
-}
-.siteContent {
-  padding: 24px 32px;
-  border-bottom: 10px solid #f6f8fa;
-}
-.siteWrap {
-  width: 100%;
-  height: 201px;
+.domain-menu {
   position: relative;
-  padding-top: 17px;
-  background: url("~img/siteManage/mysiteBackground.png");
-  background-repeat: no-repeat;
-  background-position: 80% center;
-  background-size: contain;
-  .siteImg {
-    position: relative;
-    display: inline-block;
-    width: 260px;
-    margin-left: 32px;
-    vertical-align: top;
-    .itemSiteImageHeader {
-      width: 100%;
+  height: 50px;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  margin: 16px 0;
+}
+.domain-menu /deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+.domain-menu /deep/ .el-tabs__active-bar.is-top {
+  width: 0 !important;
+}
+.el-tabs /deep/ .el-tabs__item {
+  height: 50px;
+  line-height: 50px;
+  margin: 0 24px;
+  padding: 0;
+  color: $--color-text-primary;
+}
+.el-tabs /deep/ .el-tabs__item.is-active {
+  border-bottom: 2px solid $--color-primary;
+}
+.right-pannel {
+  width: 520px;
+  background: #ffffff;
+  position: fixed;
+  z-index: 2200;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  transition: width 0.2s linear;
+  background-color: "#fff";
+  color: #262626;
+  overflow: hidden;
+  padding: 30px 24px 40px;
+  .pannel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .headTitle {
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(38, 38, 38, 1);
+      line-height: 22px;
     }
-    .siteImgBackground {
-      margin-top: -2px;
-      width: 100%;
-      padding-bottom: 62%;
-      position: relative;
-    }
-    .modal {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      background: rgba(0, 0, 0, 0.5);
-    }
-    &:hover {
-      .modal {
-        opacity: 1;
-      }
-    }
-    .choseSite {
-      width: 90px;
-      height: 40px;
-      background: rgba(9, 204, 235, 1);
-      border-radius: 2px;
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 40px;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      &:hover {
-        opacity: 0.8;
-      }
+    .close-pannel {
+      line-height: 22px;
+      cursor: pointer;
     }
   }
-  .siteinfoWrap {
-    display: inline-block;
-    margin-left: 24px;
-    // height: 233px;
-  }
-  .siteinfoItem {
-    // margin-left: 339px;
-    // position: absolute;
+  .createSiteName {
     margin-top: 16px;
-    span {
-      margin-left: 24px;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 20px;
-      color: rgba(140, 140, 140, 1);
-    }
-    .siteinfoName {
-      color: rgba(38, 38, 38, 1);
-    }
-    .siteinfoDomain {
-      margin-left: 24px;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 20px;
-      color: rgba(0, 194, 222, 1);
-      &:hover {
-        opacity: 0.8;
-      }
-    }
-    .bindDomain {
-      width: 90px;
-      height: 32px;
-      border-radius: 2px;
-      border: 1px solid rgba(1, 192, 222, 1);
-      font-size: 12px;
-      font-weight: 400;
-      color: rgba(1, 192, 222, 1);
-      line-height: 32px;
-      margin-left: 32px;
-      &:hover {
-        opacity: 0.8;
-      }
-    }
-    .isBind {
-      color: #00c2de;
+    .createSiteNameInput {
+      margin-top: 16px;
     }
   }
-  .siteinfoItem:nth-child(4) {
-    margin-top: 10px;
-  }
-  .siteinfoItem:last-child {
-    margin-top: 10px;
-  }
-  .siteinfoBtn {
-    position: absolute;
-    right: 50px;
-    width: 110px;
-    height: 32px;
-    border-radius: 2px;
-    border: 1px solid rgba(1, 192, 222, 1);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 32px;
-    text-align: center;
-    color: rgba(1, 192, 222, 1);
-  }
-  .prev {
-    top: 113px;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-  .design {
-    background: rgba(1, 192, 222, 1);
-    color: rgba(255, 255, 255, 1);
-    top: 57px;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-}
-.siteTypeWrap {
-  position: relative;
-  .siteType {
-    display: inline-block;
-    margin-top: 37px;
-    margin-left: 29px;
-    margin-bottom: 37px;
+  .createSiteTitle {
     font-size: 14px;
     font-weight: 400;
-    color: rgba(140, 140, 140, 1);
-  }
-  .siteIndustry {
-    display: inline-block;
-    margin-top: 37px;
-    margin-left: 97px;
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(140, 140, 140, 1);
-  }
-  .saveBtn {
-    margin: 0;
-    border: none;
-    position: absolute;
-    bottom: 32px;
-    right: 50px;
-    width: 110px;
-    height: 32px;
-    padding: 0;
-    background: rgba(1, 192, 222, 1);
-    border-radius: 2px;
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-    line-height: 32px;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-  .disabled {
-    opacity: 0.4;
-  }
-}
-
-.siteSettingWrap {
-  float: left;
-  height: 66px;
-  margin: 8px 0 0 8px !important;
-  width: 48%;
-  .siteSettingWrap-item {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 14px;
-  }
-  .siteSetting {
-    float: left;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
-    color: rgba(140, 140, 140, 1);
-  }
-  i {
-    float: left;
-    color: #d8d8d8;
-    font-size: 16px;
-    line-height: 20px;
-    margin-left: 8px;
-  }
-  .iconshanchu {
-    float: left;
-    font-size: 16px;
-    line-height: 20px;
-    color: #8c8c8c;
-    font-weight: 600;
-    margin-left: 16px;
-    cursor: pointer;
-  }
-  .el-switch {
-    float: left;
-  }
-}
-//右侧弹框
-.siteLanguage-right-pannel {
-  background: #ffffff;
-  position: fixed;
-  z-index: 2200;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  box-shadow: 0 0 3px #ccc;
-  transition: width 0.2s linear;
-  background-color: "#fff";
-  color: #262626;
-  overflow: hidden;
-  .pannel-head {
-    height: 55px;
-    overflow: hidden;
-    border-bottom: 1px solid #efefef;
-    .headTitle {
-      font-size: 16px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
-      line-height: 55px;
-    }
-    span {
-      padding: 0 16px;
-    }
-    .close-pannel {
-      line-height: 55px;
-      float: right;
-      cursor: pointer;
-    }
-  }
-  .tips {
-    width: 406px;
-    height: 36px;
-    background: rgba(253, 240, 237, 1);
-    border: 1px solid rgba(253, 171, 153, 1);
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(255, 69, 29, 1);
-    line-height: 36px;
-    text-align: center;
-    margin: 32px;
-    padding: 0 5px;
-  }
-  .remarkTitle {
-    font-size: 14px;
-    font-weight: 500;
     color: rgba(38, 38, 38, 1);
-    line-height: 22px;
-    margin-left: 32px;
+    line-height: 20px;
+    margin-bottom: 16px;
   }
-  .radio {
+  .create {
     margin-top: 30px;
-    margin-left: 32px;
-    margin-right: 32px;
-  }
-  .confirm {
-    position: absolute;
-    width: 470px;
-    height: 80px;
-    bottom: 0px;
-    border-top: 1px solid #efefef;
-    .confirmBtn {
-      margin: 24px;
-      width: 90px;
-      height: 32px;
-      background: rgba(1, 192, 222, 1);
-      font-size: 12px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 32px;
-    }
-    .cancelBtn {
-      margin-top: 24px;
-      width: 90px;
-      height: 32px;
-      border: 1px solid rgba(1, 192, 222, 1);
-      font-size: 12px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(1, 192, 222, 1);
-      line-height: 32px;
-    }
-  }
-}
-.siteInfo-right-pannel {
-  background: #ffffff;
-  position: fixed;
-  z-index: 2200;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  box-shadow: 0 0 3px #ccc;
-  transition: width 0.2s linear;
-  background-color: "#fff";
-  color: #262626;
-  overflow: hidden;
-  .pannel-head {
-    height: 55px;
-    overflow: hidden;
-    border-bottom: 1px solid #efefef;
-    .headTitle {
-      font-size: 16px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
-      line-height: 55px;
-    }
-    span {
-      padding: 0 16px;
-    }
-    .close-pannel {
-      line-height: 55px;
-      float: right;
-      cursor: pointer;
-    }
-  }
-
-  .confirm {
-    position: absolute;
-    width: 470px;
-    height: 80px;
-    bottom: 0px;
-    border-top: 1px solid #efefef;
-    .confirmBtn {
-      margin: 24px;
-      width: 90px;
-      height: 32px;
-      background: rgba(1, 192, 222, 1);
-      font-size: 12px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 32px;
-    }
-    .cancelBtn {
-      margin-top: 24px;
-      width: 90px;
-      height: 32px;
-      border: 1px solid rgba(1, 192, 222, 1);
-      font-size: 12px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(1, 192, 222, 1);
-      line-height: 32px;
-    }
-  }
-}
-// 修改siteName
-.textareaWrap {
-  background: #fff;
-  position: relative;
-  .btn-wrap {
+    width: 100%;
     text-align: right;
-    padding-top: 16px;
-    button {
-      width: 63px;
-      height: 32px;
-      line-height: 25px;
-      font-size: 12px;
-      border: none;
-    }
-    .cancel {
-      border: 1px solid #eeeeee;
-      margin-right: 10px;
-    }
-    .save {
-      background: #00c1de;
-      color: #fff;
-    }
   }
 }
 </style>

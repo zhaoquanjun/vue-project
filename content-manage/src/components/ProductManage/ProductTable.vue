@@ -7,6 +7,7 @@
             class="content-table"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -64,7 +65,7 @@
                 </template>
             </el-table-column> -->
 
-            <el-table-column min-width="100" prop="createTimeStr" label="创建时间"></el-table-column>
+            <el-table-column min-width="100" prop="createTimeStr" sortable='custom' label="创建时间"></el-table-column>
 
             <el-table-column
                 width="150"
@@ -75,31 +76,31 @@
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="edit-icon" @click="handleEdit(scope.row)">
-                            <i class="iconfont iconbianji"></i>
+                            <i class="iconfont iconbianji cl-iconfont is-square"></i>
                         </button>
                         <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
                         >
-                            <i class="iconfont iconsangedian"></i>
+                            <i class="iconfont iconsangedian cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing">
+        <div class="cl-paganation pageing" :class="{'noJumper':articlePageResult.totalPage <= 10}">
             <el-pagination
+                v-if="articlePageResult.totalRecord > 0"
                 background
-                layout="total, slot, sizes, prev, pager, next,jumper"
+                :layout="articlePageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="articlePageResult.totalRecord"
-                :page-count="articlePageResult.totalPage"
                 :page-size="articlePageResult.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePageNum"
                 @size-change="changePageSize"
             >
                 <div class="sizes-title">，每页显示</div>
-                <button class="paging-confirm">跳转</button>
+                <button v-if="articlePageResult.totalPage > 10" class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
         <ul v-show="isOperateSectionShow" class="operate-section" ref="operateSection">
@@ -267,6 +268,15 @@ export default {
         clearSelection() {
             this.$refs.multipleTable.clearSelection();
         },
+        //创建时间排序
+        sortChange(row){
+            if (row.order == 'ascending') {
+                this.articleSearchOptions.isDescending  = false;
+            } else {
+                this.articleSearchOptions.isDescending = true;
+            }
+            this.$emit("contentTableList");
+        },
         /**
          * 预览
          */
@@ -287,12 +297,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
+@import "@/styles/content-manage/manege-table.scss";
 .operate-section{
     display: block ;
 }
 .title-color{
     color: #262626;
+}
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
 }
 </style>
 

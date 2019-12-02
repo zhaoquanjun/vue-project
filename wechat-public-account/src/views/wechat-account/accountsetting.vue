@@ -17,14 +17,14 @@
             <p>{{accountInfo.serviceTypeInfo == 2 ? '服务号' : '订阅号'}}</p>
           </div>
         </div>
-        <div class="domain-button__area" @click="unBind">解除绑定</div>
+        <button class="cl-button cl-button--primary" @click="unBind">解除绑定</button>
       </div>
       <div class="account-domain__area">
         <div class="domain-title__area">
           <span>推广域名</span>
           <p>{{accountInfo.promotionUrl}}</p>
         </div>
-        <div class="domain-button__area" @click="changeShow">修改</div>
+        <button class="cl-button cl-button--primary" @click="changeShow">修改</button>
       </div>
       <div class="account-explain__area">
         <h5>推广域名说明</h5>
@@ -64,17 +64,25 @@
           </div>
         </ul>
         <div class="btn">
-          <span @click="_hasPromotionUrl">确定</span>
-          <span @click="closeDomain">取消</span>
+
+          <button class="cl-button cl-button--primary" @click="_hasPromotionUrl">确定</button>
+          <button class="cl-button cl-button--primary_notbg" @click="closeDomain">取消</button>
         </div>
       </div>
     </div>
+    <!-- <Dialog 
+      v-if="isShowDialog" 
+      text="6666" 
+      @sureDialog="sureDialog"
+      @cancelDialog="cancelDialog"
+    ></Dialog> -->
   </div>
 </template>
 
 <script>
 import PageSubNav from "_c/common/WechatTitle";
 import ChangeSite from "@/components/common/changeSite";
+import Dialog from "@/components/common/Dialog";
 import { unBind, getCdnDomainList,setPromotionUrl } from "@/api/request/account.js";
 import { mapGetters } from "vuex";
 import {getLocal} from '@/libs/local'
@@ -88,6 +96,7 @@ export default {
       domainList: [],
       isShow: false,
       curInder: -1,
+      isShowDialog: false,
       scrollHeight: 500,
       accountAvator: require("img/account/account_type_icon.png"),
       accountInfo: this.$store.state.wxaccount.account_info
@@ -95,6 +104,7 @@ export default {
   },
   components: {
     ChangeSite,
+    Dialog,
     PageSubNav
   },
   created() {
@@ -105,6 +115,15 @@ export default {
     this._getCdnDomainList();
   },
   methods: {
+    test(){
+      this.isShowDialog = true
+    },
+    sureDialog(){
+      this.isShowDialog = false
+    },
+    cancelDialog(){
+      this.isShowDialog = false
+    },
     //页面初始化获取ID
     getSiteId(siteId) {
       console.log('siteId',siteId)
@@ -210,8 +229,7 @@ export default {
   .account-setting__manage {
     h4 {
       padding-top: 24px;
-      font-size: 16px;
-      font-family: "PingFangSC";
+      font-size: $--font-size-small;
       font-weight: 500;
       color: rgba(38, 38, 38, 1);
       line-height: 22px;
@@ -234,11 +252,11 @@ export default {
           width: 80px;
           height: 80px;
           box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.06);
-          border-radius: 4px;
+          border-radius: $--border-radius-base;
           img {
             width: 80px;
             height: 80px;
-            border-radius: 4px;
+            border-radius: $--border-radius-base;
           }
         }
         .account-name-certification {
@@ -248,8 +266,7 @@ export default {
             display: inline-block;
             width: 300px;
             margin-bottom: 16px;
-            font-size: 16px;
-            font-family: "PingFangSC";
+            font-size: $--font-size-base;
             font-weight: 500;
             line-height: 22px;
             color:rgba(38,38,38,1);
@@ -261,13 +278,9 @@ export default {
             height: 32px;
             line-height: 32px;
             color:#FFFFFF;
-            background: linear-gradient(
-              270deg,
-              #63DC8C 0%,
-              #3ECD6E 100%
-            );
+            background: $--color-primary;
             box-shadow: 0px 5px 8px 0px rgba(9, 204, 235, 0.1);
-            border-radius: 4px;
+            border-radius: $--border-radius-base;
             &::after {
               position: absolute;
               top: 8px;
@@ -285,45 +298,46 @@ export default {
       }
     }
     .account-domain__area {
-      height:88px;
+      height:32px;
       background:rgba(255,255,255,1);
-      border-radius:2px;
-      border-top:1px solid rgba(229,229,229,1);
+      border-radius:$--border-radius-base;
+      border-top:$--border-base;
       display: flex;
       justify-content: space-between;
       padding: 24px;
       line-height: 14px;
+      .cl-button--primary {
+        height: 32px;
+      }
       .domain-title__area {
         position: relative;
         width: 80%;
-        line-height: 40px;
+        line-height: 32px;
         display: flex;
         justify-content: flex-start;
-        font-size:14px;
-        font-family:"PingFangSC";
+        font-size:$--font-size-small;
         font-weight:400;
-        color:rgba(38,38,38,1); 
+        color: $--color-text-primary;
         p {
           display: inline-block;
           min-width: 240px;
-          margin-left: 20px;
-          border-radius:2px;
-          border:1px solid rgba(229,229,229,1);
-          padding: 0 10px;
+          color: $--color-text-regular;
+          line-height: 32px;
+          padding: 0 16px;
         }
         ul {
           position: absolute;
           top: 40px;
           left: 76px;
           width: 240px;
-          font-size:14px;
+          font-size:$--font-size-small;
           line-height: 40px;
           background: #FFFFFF;
-          border: 1px solid rgba(229,229,229,1);
+          border: $--border-base;
           border-bottom: none;
           color: #a1a8b1;
           li {
-            border-bottom: 1px solid rgba(229,229,229,1);
+            border-bottom: $--border-base;
             padding-left: 10px;
             cursor: pointer;
             &:hover {
@@ -337,19 +351,17 @@ export default {
       margin-top: 20px;
       padding: 24px;
       background: #fff;
-      border-radius: 3px;
+      border-radius: $--border-radius-base;
       h5 {
         height:20px;
-        font-size:14px;
-        font-family:"PingFangSC";
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(38,38,38,1);
         line-height:20px;
         margin-bottom: 8px;
       }
       p {
-        font-size:14px;
-        font-family:"PingFangSC";
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(161,168,177,1);
         line-height:26px;
@@ -366,6 +378,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
+    min-height: 800px;
     background: rgba(0, 0, 0, 0.75);
     z-index: 100;
     .content {
@@ -374,17 +387,17 @@ export default {
       width: 500px;
       height: 100%;
       padding: 24px;
+      box-sizing: border-box;
       background: #FFFFFF;
       .title {
-        font-size:14px;
-        font-family:"PingFangSC-Regular,PingFangSC";
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(38,38,38,1);
         line-height:20px;
         padding: 20px 0 12px;
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #E5E5E5;
+        border-bottom: $--border-base;
         i {
           color: #A1A8B1;
           font-size: 18px;
@@ -394,9 +407,9 @@ export default {
       .tips-top {
         height:32px;
         background:rgba(252,242,244,1);
-        border-radius:2px;
+        border-radius:$--border-radius-base;
         border:1px solid rgba(255,143,160,1);
-        font-size:12px;
+        font-size:$--font-size-small;
         font-weight:400;
         color:rgba(251,77,104,1);
         line-height:32px;
@@ -405,43 +418,43 @@ export default {
       }
       ul {
         p {
-          font-size:14px;
-          font-family:"PingFangSC-Regular,PingFangSC";
+          font-size:$--font-size-small;
           font-weight:400;
           color:rgba(38,38,38,1);
           line-height:20px;
           margin: 20px 0 14px;
         }
         li {
-          height: 60px;
+          height: 32px;
           padding: 0 16px;
-          font-size:14px;
-          font-family:'PingFangSC-Regular,PingFangSC';
-          font-weight:400;
-          color:rgba(38,38,38,1);
-          line-height:60px;
-          border-bottom: 1px solid #E5E5E5;
+          font-size: $--font-size-small;
+          font-weight: 400;
+          color:$--color-text-primary;
+          line-height: 32px;
+          border-bottom: $--border-base;
           cursor: pointer;
           i {
             float: right;
           }
         }
         li:nth-child(1) {
-          border-top: 1px solid #E5E5E5;
+          border-top: $--border-base;
         }
         li:hover {
-          background: #F8FAFC;
+          background: $--background-color-hover;
         }
         .active {
-          background: #F0F3F7 !important;
-          color: #09CCEB;
+          background: $--background-color-selected !important;
+          color: $--color-primary;
+          i {
+            color: $--color-primary;
+          }
         }
         .tips {
           margin-top: 30px;
           p {
             margin: 0;
-            font-size:14px;
-            font-family:"PingFangSC-Regular,PingFangSC";
+            font-size:$--font-size-small;
             font-weight:400;
             color:rgba(161,168,177,1);
             line-height:20px;
@@ -452,24 +465,8 @@ export default {
         position:absolute;
         left: 0px;
         bottom: 0;
-        span {
-          display: inline-block;
-          width:76px;
-          height:40px;
-          line-height: 40px;
-          text-align: center;
-          margin: 0 16px 24px 24px;
-          background:rgba(9,204,235,1);
-          color: #FFFFFF;
-          border-radius:2px;
-          cursor: pointer;
-        }
-        span:nth-child(2) {
-          color: rgba(9,204,235,1);
-          background: white;
-          border: 1px solid rgba(9,204,235,1);
-          margin: 0;
-
+        button {
+          margin: 0 0 24px 24px; 
         }
       }
     }
@@ -479,9 +476,9 @@ export default {
       width:90px;
       height:40px;
       background:rgba(9,204,235,1);
-      border-radius:2px;
+      border-radius:$--border-radius-base;
       line-height: 40px;
-      font-size:14px;
+      font-size:$--font-size-small;
       font-weight:400;
       text-align: center;
       color:rgba(255,255,255,1);

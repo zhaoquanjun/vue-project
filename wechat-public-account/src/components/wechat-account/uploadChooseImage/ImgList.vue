@@ -87,12 +87,12 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pageing" id="pageing">
+        <div class="cl-pagination pageing" id="pageing">
             <el-pagination
+                v-if="imgPageResult.totalRecord > 0"
                 background
                 :layout="layout"
                 :total="imgPageResult.totalRecord"
-                :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePage"

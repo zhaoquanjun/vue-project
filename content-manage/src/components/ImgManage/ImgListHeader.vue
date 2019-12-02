@@ -15,7 +15,7 @@
                 </el-input>
             </div>
             <div class="head-item head-middle">
-                <span>排序</span>
+                <!-- <span>排序</span>
                 <span class="select-sort">
                     <el-select
                         size="small"
@@ -32,11 +32,17 @@
                     </el-select>
                 </span>
                 <button @click="switchIsDesc('dec')" class="desBtn">
-                    <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                    <i
+                        class="iconfont iconxiayi"
+                        :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
+                    ></i>
                 </button>
                 <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
-                    <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
-                </button>
+                    <i
+                        class="iconfont iconshangyi"
+                        :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
+                    ></i>
+                </button> -->
 
                 <button class="list-mode mode-item" @click="showType('list')" v-show="!isPopup">
                    
@@ -49,10 +55,9 @@
             </div>
             <div class="head-item head-right">
                 <button
-                    class="btn-lightblue btn-small upload-wrap"
+                    class="cl-button cl-button--primary"
                     @click="switchUploadBoxShowStatus"
                 >
-                   
                     上传图片
                 </button>
             </div>
@@ -64,8 +69,8 @@
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <div>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
-                    <button class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                    <button class="cl-button cl-button--text_primary" @click="batchMove">移动</button>
+                    <button class="cl-button cl-button--text_danger" @click="batchDelete">删除</button>
                 </div>
             </div>
         </template>
@@ -145,19 +150,21 @@ export default {
 
 
 <style  lang="scss" scoped>
-@import "@/styles/manage-head.scss";
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    &:hover{
-        opacity: 0.8;
-    }
-}
+@import "@/styles/content-manage/manage-head.scss";
+
 .upload-wrap{
     &:hover{
         opacity: 0.8;
     }
+}
+.head-middle {
+    margin-left: 0;
+    padding-right: 0;
+    margin-right: auto;
+}
+.handle-batch button {
+    padding: 9px 16px;
+    margin: 0;
+    min-width: 60px;
 }
 </style>

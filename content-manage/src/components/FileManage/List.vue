@@ -7,6 +7,7 @@
             class="content-table"
             :height="tableHeight"
             @selection-change="handleSelectionChange"
+            @sort-change='sortChange'
         >
             <template slot="empty">
                 <div class="empty-table">
@@ -19,13 +20,16 @@
             <el-table-column label="文件名称" min-width="220">
                 <template slot-scope="scope">
                     <span class="isTop" v-show="scope.row.isTop">置顶</span>
-                    <span  class="file-cover cover"><img width="100%" :src="scope.row | fileCover" /></span>
-                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
-                        <span
-                            style="width:150px"
-                            :title="scope.row.title"
-                           
-                        >{{scope.row.title }}</span>
+                    <span class="file-cover cover">
+                        <img width="100%" :src="scope.row | fileCover" />
+                    </span>
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        :content="scope.row.title"
+                        placement="top"
+                    >
+                        <span style="width:150px" :title="scope.row.title">{{scope.row.title }}</span>
                         <!--  @click="rename(scope.row.id,scope.row.title,scope.$index)" -->
                     </el-tooltip>
                 </template>
@@ -43,23 +47,23 @@
                         :content="scope.row.categoryName"
                         placement="top"
                     >
-                        <div class="ellipsis" style="width:100px" >{{ scope.row.categoryName }}</div>
+                        <div class="ellipsis" style="width:100px">{{ scope.row.categoryName }}</div>
                     </el-tooltip>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="sizeStr" label="大小" show-overflow-tooltip min-width="80"></el-table-column>
+            <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip min-width="80"></el-table-column>
             <!-- <el-table-column prop="downloadCount" label="置顶" min-width="80">
                 <template slot-scope="scope">
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
-            </el-table-column> -->
-            <el-table-column prop="downloadCount" min-width="80" label="下载次数">
+            </el-table-column>-->
+            <el-table-column prop="downloadCount" sortable='custom' min-width="90" label="下载次数">
                 <template slot-scope="scope">
                     <span>{{ scope.row.downloadCount}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="createTimeStr" min-width="150" label="上传时间">
+            <el-table-column prop="createTimeStr" sortable='custom' min-width="150" label="上传时间">
                 <template slot-scope="scope">
                     <el-tooltip
                         class="item"
@@ -79,18 +83,26 @@
             >
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
-                        <button class="handle-btn edit-icon" @click="handleEditor(scope.row)" style="margin-right:16px">
-                            <i class="iconfont iconbianji"></i>
+                        <button
+                            class="handle-btn edit-icon"
+                            @click="handleEditor(scope.row)"
+                            style="margin-right:16px"
+                        >
+                            <i class="iconfont iconbianji cl-iconfont is-square"></i>
                         </button>
-                        <button class="handle-btn look-btn edit-icon" @click="download(scope.row)" style="margin-right:16px">
-                            <i class="iconfont iconxiazai"></i>
+                        <button
+                            class="handle-btn look-btn edit-icon"
+                            @click="download(scope.row)"
+                            style="margin-right:16px"
+                        >
+                            <i class="iconfont iconxiazai cl-iconfont is-square"></i>
                         </button>
                         <button
                             class="more-operate"
                             @click.stop="_handleShowMoreOperate($event,scope.row)"
                             style="margin-right:16px"
                         >
-                            <i class="iconfont iconsangedian"></i>
+                            <i class="iconfont iconsangedian cl-iconfont is-square"></i>
                         </button>
                     </div>
                 </template>
@@ -98,23 +110,26 @@
         </el-table>
         <div class="list-footer">
             <div class="storage-wrap">
+                <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
                 <div class="use-storage">
                     <div class="progress-bar" :style="{'width':prograss+'%'}"></div>
                 </div>
-                <span class="storage-content">{{currentUsage}} / {{maxSize}}</span>
             </div>
-            <div class="pageing" id="pageing">
+            <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':imgPageResult.totalPage <= 10}">
                 <slot name="paging"></slot>
                 <el-pagination
+                    v-if="imgPageResult.totalRecord > 0"
                     background
-                    layout="total, sizes, prev, pager, next"
+                    :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                     :total="imgPageResult.totalRecord"
-                    :page-count="imgPageResult.totalPage"
-                    :page-size="picSearchOptions.pageSize"
+                    :page-size="imgPageResult.pageSize"
                     :page-sizes="[10,20,50]"
                     @current-change="changePage"
                     @size-change="changeSize"
-                ></el-pagination>
+                >
+                    <div class="sizes-title">，每页显示</div>
+                    <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
             </div>
         </div>
 
@@ -193,26 +208,41 @@ export default {
     filters: {
         fileCover: function(row) {
             let fileExtensionType = row.fileExtensionType;
-            let fileExtension = row.fileExtension
-        
-       
-           let excelAry = [".xlsx",".xlsm","xltx",".xltm",".xlsb",".xlam"]; 
-           let wordAry = [".docx",".docm",".dotx",".dotm"]
-           let pptAry =[".pptx",".pptm",".ppsx",".ppsx",".potx",".potm",".ppam",'.ppt'];
-           let pdfAry = [".pdf"];
-           let txtAry = [".txt"]
-            if(excelAry.includes(fileExtension)){
+            let fileExtension = row.fileExtension;
+
+            let excelAry = [
+                ".xlsx",
+                ".xlsm",
+                "xltx",
+                ".xltm",
+                ".xlsb",
+                ".xlam"
+            ];
+            let wordAry = [".docx", ".docm", ".dotx", ".dotm"];
+            let pptAry = [
+                ".pptx",
+                ".pptm",
+                ".ppsx",
+                ".ppsx",
+                ".potx",
+                ".potm",
+                ".ppam",
+                ".ppt"
+            ];
+            let pdfAry = [".pdf"];
+            let txtAry = [".txt"];
+            if (excelAry.includes(fileExtension)) {
                 return require("img/file-icon/new/excel.png");
-            }else if(wordAry.includes(fileExtension)){
+            } else if (wordAry.includes(fileExtension)) {
                 return require("img/file-icon/new/word.png");
-            }else if(pptAry.includes(fileExtension)){
+            } else if (pptAry.includes(fileExtension)) {
                 return require("img/file-icon/new/ppt.png");
-            }else if(pdfAry.includes(fileExtension)){
+            } else if (pdfAry.includes(fileExtension)) {
                 return require("img/file-icon/new/pdf.png");
-            }else if(txtAry.includes(fileExtension)){
-                return require("img/file-icon/new/txt.png"); 
+            } else if (txtAry.includes(fileExtension)) {
+                return require("img/file-icon/new/txt.png");
             }
-                switch (fileExtensionType) {
+            switch (fileExtensionType) {
                 case 0:
                     return require("img/file-icon/new/video.png");
                 case 1:
@@ -229,7 +259,6 @@ export default {
         },
         formatterFileExt(fileExt) {
             if (fileExt) {
-              
                 if (fileExt.substring(0, 1) == ".") return fileExt.substring(1);
                 return fileExt;
             }
@@ -282,8 +311,8 @@ export default {
 
         download(row) {
             //this.userDownload(row)
-             this.adminDownload(row);
-             ++row.downloadCount
+            this.adminDownload(row);
+            ++row.downloadCount;
         },
         /**
          * 用户下载
@@ -300,7 +329,7 @@ export default {
             let type = row.fileType;
             let id = row.id;
             let { data } = await adminDownload(type, id);
-            
+
             var link = document.createElement("a");
             link.download = row.title;
             link.style.display = "none";
@@ -308,7 +337,6 @@ export default {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
         },
         change(index) {
             this.fullOssUrl = this.imgList[index].fullOssUrl;
@@ -337,7 +365,11 @@ export default {
                     .clientHeight + 10;
             let clientW = this.$refs.operateSection.clientWidth;
 
-            this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
+            this.$refs.operateSection.style.right =
+                document.documentElement.clientWidth -
+                ev.pageX +
+                ev.offsetX +
+                "px";
             this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
 
             if (this.$refs.operateSection.style.display == "block") {
@@ -356,6 +388,28 @@ export default {
                     this.$emit("batchRemove", [row.id]);
                     break;
             }
+        },
+        //改变排序
+        sortChange(row){
+                    // value: "CreateTime",
+                    // label: "创建时间"
+                    // value: "FileSize",
+                    // label: "文件大小"
+                    // value: "DownloadCount",
+                    // label: "下载次数"
+            if (row.prop == 'sizeStr') {
+                this.picSearchOptions.orderByType = "FileSize";
+            } else if (row.prop == 'downloadCount'){
+                this.picSearchOptions.orderByType = "DownloadCount";
+            } else {
+                this.picSearchOptions.orderByType = "CreateTime";
+            }
+            if (row.order == 'ascending') {
+                this.picSearchOptions.isDescending  = false;
+            } else {
+                this.picSearchOptions.isDescending = true;
+            }
+           this.$emit("getPicList");
         }
     },
     watch: {
@@ -372,10 +426,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
-.file-cover{
-    width:22px;
-height:28px;
+@import "@/styles/content-manage/manege-table.scss";
+.file-cover {
+    width: 22px;
+    height: 28px;
+}
+.el-table /deep/ .ascending .sort-caret.ascending{
+    border-bottom-color: $--color-primary ;
+}
+.el-table /deep/ .descending .sort-caret.descending{
+    border-top-color: $--color-primary ;
 }
 </style>
 

@@ -10,8 +10,8 @@
             :expand-row-keys="expands"
         >
             <template slot="empty">
-                <div class="empty-table">
-                    <img src="~img/memberManage/table-empty.png" />
+                <div class="empty-table" style="height:251px;">
+                    <img src="~img/memberManage/table-empty.png"  style="display:inline-block;width:50px;height:35px;margin-top:50px;"/>
                     <p>暂无数据</p>
                 </div>
             </template>
@@ -20,186 +20,248 @@
                     <span class="domain-name">{{scope.row.domain}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="httpsStatusDesc" label="HTTPS状态" min-width="390">
-                <template slot-scope="scope">
-                    <!-- <el-switch
-                        v-model="scope.row.httpsStatus"
-                        @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
-                    ></el-switch>-->
-                    <span v-if="!scope.row.isInAliDns">仅阿里云域名可开启https,请将域名转移到阿里云后再操作</span>
-                    <template
-                        v-else-if="scope.row.cdnDomainResolveStatus===2 && scope.row.cdnStatus===5 &&scope.row.httpsStatus!==1 && scope.row.isInAliDns"
-                    >
-                        <!-- v-model="scope.row.httpsStatus" -->
-                        <el-switch
-                            :value="scope.row.httpsStatus==4"
-                            @change="swichChange(scope.row.httpsStatus,scope.row,scope.$index)"
-                        ></el-switch>
-                    </template>
-                    <span v-else-if="scope.row.httpsStatus===1">{{scope.row.httpsStatusDesc}}</span>
-                    <span v-else>—</span>
+            <el-table-column prop="cdnDomainResolveStatusDesc" min-width="250">
+                <template slot="header">
+                    <div style="line-height:23px;padding-left:0;">
+                        <span>解析状态</span>
+                        <el-tooltip
+                            style="display:inline-block;"
+                            class="item"
+                            effect="dark"
+                            content='刷新解析状态'
+                            placement="top-start"
+                        >
+                            <i class="iconfont iconhuifu" @click="updateExplainStatus"></i>
+                        </el-tooltip>
+                    </div>
                 </template>
-            </el-table-column>
-            <el-table-column prop="cdnDomainResolveStatusDesc" label="解析状态" min-width="150">
                 <template slot-scope="props">
+                    <template v-if="props.row.cdnDomainResolveStatus===3">
+                        <div>
+                            <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content='服务器正在生成解析记录值，请耐心等待'
+                                placement="top-start"
+                                style="display:inline-block;"
+                            >
+                                 <span
+                                    :class="resolveStatus(props.row.cdnDomainResolveStatus)"
+                                    style="line-height:14px;"
+                                >{{props.row.cdnDomainResolveStatusDesc}}</span>
+                             </el-tooltip>
+                            <img src="~img/memberManage/loading.png" class="loading-img">
+                        </div>
+                    </template>
                     <el-tooltip
-                        v-if="props.row.cdnDomainResolveStatus!==2"
+                        v-else-if="props.row.cdnDomainResolveStatus===0 && props.row.isInAliDns"
                         class="item"
                         effect="dark"
-                        content="请根据“域名解析”中的解析步骤完成域名解析"
+                        content='点击“一键解析”，自动完成解析域名'
                         placement="top-start"
                     >
                         <span
-                            class="resolve-status"
                             :class="resolveStatus(props.row.cdnDomainResolveStatus)"
                         >{{props.row.cdnDomainResolveStatusDesc}}</span>
                     </el-tooltip>
+                    <el-tooltip
+                        v-else-if="props.row.cdnDomainResolveStatus===0 && !props.row.isInAliDns"
+                        class="item"
+                        effect="dark"
+                        content='请复制“解析详情”中的解析记录值后，前往域名购买平台完成域名解析'
+                        placement="top-start"
+                    >
+                        <span
+                            :class="resolveStatus(props.row.cdnDomainResolveStatus)"
+                        >{{props.row.cdnDomainResolveStatusDesc}}</span>
+                    </el-tooltip>
+                    <template v-else-if="props.row.cdnDomainResolveStatus===1">
+                        <div>
+                            <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content='域名解析存在一定延时，请耐心等待'
+                                placement="top-start"
+                                style="display:inline-block;"
+                            >
+                                <span
+                                    :class="resolveStatus(props.row.cdnDomainResolveStatus)"
+                                    style="line-height:14px;"
+                                >{{props.row.cdnDomainResolveStatusDesc}}
+                                </span>
+                            </el-tooltip> 
+                            <img src="~img/memberManage/loading.png" class="loading-img">
+                        </div>
+                    </template>
                     <span
                         v-else
-                        class="resolve-status"
                         :class="resolveStatus(props.row.cdnDomainResolveStatus)"
-                    >{{props.row.cdnDomainResolveStatusDesc}}</span>
+                    >{{props.row.cdnDomainResolveStatusDesc}}
+                        <i class="iconfont iconicon-dash-rightq" style="color:#00b539;width:14px;height:14px;margin-left:10px;"></i>
+                    </span>
                 </template>
             </el-table-column>
-            <el-table-column width="100" type="expand" label="操作">
+            <el-table-column width="150" label="操作">
                 <template slot-scope="props">
-                    <div class="relove-step">
-                        <el-row>
-                            <el-col
-                                :span="index===3?3:7"
-                                v-for="(item,index) in domainStepName"
-                                :key="index"
-                            >
-                                <div class="step-content">
-                                    <div class="step-item">
-                                        <div
-                                            class="circle"
-                                            :class="[stepClass(props.row,2),[active>=index?'circleOn':'circleOff']]"
-                                        >
-                                            <span>{{index+1}}</span>
-                                        </div>
-
-                                        <span
-                                            class="step-desc"
-                                            :class="[active>=index?'':'cndStop']"
-                                        >{{item}}</span>
-                                    </div>
-                                    <span v-if="index<3" class="step-bar"></span>
-                                </div>
-                            </el-col>
-                        
-                        </el-row>
-                        <el-row>
-                            <el-col :span="7">
-                                <div class="step-content">
-                                    <span
-                                        class="relove-msg"
-                                        v-if="props.row.cdnDomainResolveStatus===0"
-                                    >{{props.row.cdnDomainResolveStatusDesc}}</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="7">
-                                <div class="step-content">
-                                    <span
-                                        class="relove-msg"
-                                        v-if="props.row.cdnDomainResolveStatus===1"
-                                    >{{props.row.cdnDomainResolveStatusDesc}}</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="7">
-                                <div class="step-content">
-                                    <span
-                                        class="relove-msg"
-                                        v-if="props.row.cdnDomainResolveStatus===2"
-                                    >{{props.row.cdnDomainResolveStatusDesc}}</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="3">
-                                <div class="step-content">
-                                    <span
-                                        class="relove-msg"
-                                        v-if="props.row.cdnDomainResolveStatus===3"
-                                    >{{props.row.cdnDomainResolveStatusDesc}}</span>
-                                </div>
-                            </el-col>
-                        </el-row>
-                        <el-row class="step-explain" :gutter="20">
-                            <el-col :span="7" v-if="active >= 0">
-                                <div>
-                                    <div
-                                        class="explain-item"
-                                    >解析类型 :&nbsp; {{props.row.cdnDomainResolveType?props.row.cdnDomainResolveType:'—'}}</div>
-                                    <div
-                                        class="explain-item"
-                                    >解析记录值 : &nbsp;{{props.row.cdnDomainResolveValue?props.row.cdnDomainResolveValue:'—'}}</div>
-                                </div>
-                            </el-col>
-                            <el-col :span="7" v-if="active >= 1">
-                                <div>
-                                    <div class="explain-item">使用“一键解析”自动完成域名解析或前往阿里云控制台自行设置解析</div>
-                                    <div class="explain-item islink">如何进行域名解析？</div>
-                                    <button
-                                        v-if="props.row.isInAliDns"
-                                        class="wezhan-btn btn-small btn-lightblue"
-                                        @click="resolveCdnByAliYunToken(props.row)"
-                                    >一键解析</button>
-                                </div>
-                            </el-col>
-                            <el-col :span="7" v-if="active >= 2">
-                                <div>
-                                    <div
-                                        class="explain-item"
-                                    >{{props.row.cdnDomainResolveType}}的解析存在一定的延时，请耐心等待</div>
-                                </div>
-                            </el-col>
-                            <el-col :span="3" v-if="active >= 3">
-                                <div>
-                                    <div class="explain-item">解析成功！可根据您的需要,在域名列表中选择开启HTTPS。</div>
-                                    <div class="explain-item islink">为什么要开启HTTPS</div>
-                                </div>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                            <div class="cnd-status">
-                                <span>CDN状态：</span>
-                                <span
-                                    v-if="props.row.cdnStatus===3"
-                                    style="cursor: pointer;"
-                                    @click="notPassTip"
-                                >{{props.row.cdnStatusDesc}}</span>
-                                <span
-                                    v-else
-                                    :class="props.row.cdnStatus===4?'cndStop':''"
-                                >{{props.row.cdnStatusDesc}}</span>
-                                <button
-                                    class="open-cnd-btn"
-                                    v-if="props.row.cdnStatus!==2 && props.row.cdnStatus!==5 && props.row.isInAliDns"
-                                    @click="reopenCdn(props.row.id)"
-                                >开启</button>
-                                <button
-                                    class="open-cnd-btn"
-                                    v-if="props.row.cdnStatus===5 && props.row.isInAliDns"
-                                    @click="pauseCdn(props.row.id)"
-                                >关闭</button>
-                            </div>
-                        </el-row>
-                    </div>
+                    <button 
+                        v-if="props.row.isInAliDns && props.row.cdnDomainResolveStatus===0 &&props.row.cdnStatus!==1 && props.row.cdnStatus!==2 && props.row.cdnStatus!==3"  class='handle-btn'
+                        @click="resolveCdnByAliYunToken(props.row)" 
+                        style='color: #ff6b00;font-size:12px'>
+                        一键解析
+                    </button>
+                    <span v-else>-</span>
                 </template>
             </el-table-column>
-            <el-table-column min-width="60">
+            <el-table-column type="expand">
+                <template slot-scope="props">
+                    <span v-if="props.row.cdnDomainResolveStatus===3">-</span>
+                    <div class="domain-detail" v-else>
+                        <el-row class="domain-detail-row"> 
+                            <el-col :span="5">
+                                <div style="min-width:400px;">
+                                    <span
+                                        class="domain-explain-item"
+                                    >解析类型 &nbsp; 
+                                        <span 
+                                        class="domain-explain-text"
+                                        >{{props.row.cdnDomainResolveType?props.row.cdnDomainResolveType:'—'}}</span>
+                                    </span>
+                                </div>
+                                
+                            </el-col>
+                            <el-col :span="5">
+                                <div style="min-width:500px;">
+                                    <span
+                                        class="domain-explain-item"
+                                    >解析记录值 &nbsp;
+                                        <span 
+                                            class="domain-explain-text"
+                                        >{{props.row.cdnDomainResolveValue?props.row.cdnDomainResolveValue:'—'}}</span>
+                                        <span 
+                                            class="explain-text-copy" 
+                                            v-if="!hasCopy" :data-clipboard-text="props.row.cdnDomainResolveValue?props.row.cdnDomainResolveValue:'—'" 
+                                            @click="explainCopy"
+                                        >复制</span>
+                                        <span v-else class="explain-text-copy-success">复制成功</span>
+                                    </span>
+                                </div>  
+                            </el-col>
+                        </el-row>
+                        <div class="explain-islink">如何进行手动解析?</div>
+                        <el-row class="status-switch" v-if="props.row.isInAliDns" style="width:49.5%;">
+                            <!-- cdn状态 -->
+                            <el-col :span="10">
+                                <div style="min-width:500px;">
+                                    <span>CDN状态</span>
+                                    <el-tooltip
+                                        class="item"
+                                        effect="dark"
+                                        content='为提高您的网站访问速度，添加域名时将自动开启CDN'
+                                        placement="top-start"
+                                    >
+                                        <i class="iconfont iconicon-exclamationmark status" style="color:#cdcaca;margin-left:10px;"></i>
+                                    </el-tooltip>
+                                    
+                                    <span 
+                                        v-if="props.row.cdnStatus===1 ||props.row.cdnStatus===2"
+                                        class="status"
+                                    >{{props.row.cdnStatusDesc}}</span>
+                                    <div v-else-if="props.row.cdnStatus===3">
+                                        <el-switch
+                                            :value="props.row.cdnStatusDesc!=='审核未通过'"
+                                            @change="reopenCdn(props.row)"
+                                            class="status"
+                                        >
+                                        </el-switch>
+                                        <span
+                                            class="status"
+                                            style="cursor: pointer;"
+                                            @click="notPassTip()"
+                                        >{{props.row.cdnStatusDesc}}</span>
+                                    </div>
+
+                                    <el-switch 
+                                        v-else-if="props.row.cdnStatus===5"
+                                        :value="props.row.cdnStatusDesc==='已开启'"
+                                        @change="pauseCdn(props.row)"
+                                        class="status"
+                                    >
+                                    </el-switch>
+                                    <el-switch 
+                                        v-else-if="props.row.cdnStatus===0 || props.row.cdnStatus===4"
+                                        :value="props.row.cdnStatusDesc!=='未开启'"
+                                        @change="reopenCdn(props.row)"
+                                        class="status"
+                                    >
+                                    </el-switch>
+                                </div>
+                            </el-col>
+
+                            <!-- https状态 -->
+                            <el-col :span="10" min-width="200">
+                                <div 
+                                    v-if="props.row.cdnStatus===5 && props.row.cdnDomainResolveStatus===2"
+                                >
+                                    <span>HTTPS状态</span>
+                                    <el-tooltip
+                                        class="item"
+                                        effect="dark"
+                                        content='为让您的网站更安全，建议您开启HTTPS'
+                                        placement="top-start"
+                                    >
+                                        <i class="iconfont iconicon-exclamationmark status" style="color:#cdcaca;margin-left:10px;"></i>
+                                    </el-tooltip>
+                                    <el-switch
+                                        v-if="props.row.httpsStatus===0"
+                                        :value="props.row.httpsStatus!==0"
+                                        @change="swichChange(props.row.httpsStatus,props.row,props.$index)"
+                                        class="status"
+                                    >
+                                    </el-switch>
+                                    <span 
+                                        v-else-if="props.row.httpsStatus===1"
+                                        class="status"
+                                    >{{props.row.httpsStatusDesc}}</span>
+                                    <div v-else-if="props.row.httpsStatus===2 || props.row.httpsStatus===3">
+                                        <el-switch
+                                            :value="props.row.httpsStatus!==0"
+                                            @change="swichChange(props.row.httpsStatus,props.row,props.$index)"
+                                        >
+                                        </el-switch>
+                                        <span class="status">{{props.row.httpStatusDesc}}</span>
+                                    </div>
+                                    <el-switch 
+                                        v-else-if="props.row.httpsStatus===4"
+                                        :value="props.row.httpsStatus===4"
+                                        @change="swichChange(props.row.httpsStatus,props.row,props.$index)"
+                                    >
+                                    </el-switch>
+                                </div>                                
+                            </el-col>
+                        </el-row>
+                    </div>     
+                </template>
+            </el-table-column>
+            <el-table-column min-width="50">
                 <template slot-scope="scope">
-                    <div class="handle-btn-wrap">
-                        <!-- <button class="resolve-set" @click="expandSelect(scope.row,scope.row)">解析设置</button> -->
-                        <button
+                    <div class="handle-btn-wrap">   
+                        <el-tooltip
+                            class="item"
+                            effect="dark"
+                            content="删除域名"
+                            placement="top"
+                        >
+                            <button
                             class="handle-btn delete-btn"
                             @click="handleDelete(scope.row,scope.$index)"
                         >
-                            <i class="iconfont iconshanchu" style="color:#262626"></i>
-                        </button>
+                              <i class="iconfont iconshanchu" style="color:#262626"></i>
+                           </button>
+                        </el-tooltip>
                     </div>
                 </template>
-            </el-table-column>
-        </el-table>
+            </el-table-column>     
+            </el-table>
         <el-dialog title="提示" :visible.sync="passTip" width="50%">
             <span>
                 审核未通过？请排查以下事项并在调整后重新开启
@@ -242,6 +304,7 @@
     </div>
 </template>
 <script>
+import Clipboard from "clipboard"
 export default {
     props: ["tableData"],
     data() {
@@ -257,12 +320,13 @@ export default {
             getRowKeys(row) {
                 return row.id;
             },
-
-            passTip: false
+            passTip: false,
+            hasCopy: false
         };
     },
     mounted() {
         this.resetExpandText();
+        this.resetExplainStatus();
     },
     methods: {
         //一键解析域名
@@ -272,35 +336,81 @@ export default {
                 isForceUpdate: false,
                 curDomain: row.domain
             };
-            this.$emit("resolveCdnByAliYunToken", params);
+            let message = [];
+            message.push(
+                this.$createElement(
+                    "p",
+                    { style: "color: #262626" },
+                    params.curDomain
+                )
+            );
+            message.push(
+            this.$createElement(
+                "p",
+                { style: "color: #8C8C8C" },
+                "当前域名为阿里云DNS，可授权完成一键解析"
+            )
+            );
+            this.$confirm('提示', {
+                title: "提示",
+                iconClass: "icon-warning",
+                confirmButtonText: '授权并一键解析',
+                message: this.$createElement("div", null, message),
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '授权成功'
+                });
+                this.$emit("resolveCdnByAliYunToken", params);
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消授权'
+                });          
+            });
+        },
+        // 解析记录值复制
+        explainCopy(){
+            var clipboard=new Clipboard(".explain-text-copy")
+            clipboard.on("success",e=>{
+                this.hasCopy=true
+                setTimeout(()=>{
+                    this.hasCopy=false
+                },1500)
+                clipboard.destroy()
+            })
+            clipboard.on("error",e=>{
+                clipboard.destroy()
+            })
         },
         //开启cdn
-        reopenCdn(siteDomainId) {
+        reopenCdn(row) {
             let openTip = [
                 "确定开启CDN吗?",
                 "开启CDN后，原有的域名解析将失效，",
                 "请在开启CDN后进行域名解析，以确保网站能够正常访问。"
             ];
             let open = () => {
-                this.$emit("reopenCdn", siteDomainId);
+                this.$emit("reopenCdn", row.id);
             };
             this.elemnetConfirm("warning", openTip, open);
         },
         //关闭cdn
-        pauseCdn(siteDomainId) {
+        pauseCdn(row) {
             let closeTip = [
                 " 确定停用CDN吗?",
                 "停用CDN后，原有的域名解析将失效，",
                 "请在停用CDN后进行域名解析，以确保网站能够正常访问。"
             ];
             let close = () => {
-                this.$emit("pauseCdn", siteDomainId);
+                this.$emit("pauseCdn", row.id);
             };
             this.elemnetConfirm("warning", closeTip, close);
         },
         // 是否开启HTTPS
         swichChange(status, row, index) {
-            console.log(row, "00000000");
             let openTip = [
                 "将为您申请免费证书，请发布您的网站并确保可正常访问！"
             ];
@@ -312,7 +422,6 @@ export default {
             // let close = () => {
             //     this.$emit("disableHttps", domainId);
             // };
-            // console.log(status);
             if (status !== 4) {
                 this.$confirm(
                     "将为您申请免费证书，请发布您的网站并确保可正常访问！",
@@ -346,7 +455,6 @@ export default {
         },
         // 删除域名列表
         handleDelete(row, index) {
-            console.log(row, index, "0----");
             let domainId = row.id;
             this.$emit("_deleteCdnDomain", domainId, index);
         },
@@ -413,7 +521,6 @@ export default {
                     if (action === "confirm") {
                         callback(this);
                     } else {
-                        console.log(this, "----");
                     }
                 }
             });
@@ -421,7 +528,6 @@ export default {
 
         // 折叠面板每次只能展开一行
         expandSelect(row, expandedRows) {
-            console.log(row, expandedRows);
             var that = this;
             if (expandedRows.length) {
                 that.expands = [];
@@ -443,14 +549,31 @@ export default {
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
                     ele.innerHTML =
-                        "<span class='hoverBtn' style='color: #00c1de;font-size:14px' >域名解析</span>";
+                        '<el-tooltip class="item" effect="dark" content="解析详情" placement="top"><i class="iconfont iconicon-des-setup" style="color:#262626;"></i></el-tooltip>';
                 }
             });
+        },
+        // 刷新解析状态
+        updateExplainStatus(){
+            this.$emit("getCdnDomainList")
+        },
+        // 定时刷新解析状态
+        resetExplainStatus(){
+            this.tableData.forEach(elem=>{
+                if(elem.cdnDomainResolveStatus!==2){
+                    let timer=setInterval(() => {
+                        this.$emit("getCdnDomainList")
+                        clearInterval(timer);
+                    }, 180000);
+                }
+            })
+
         }
     },
     watch: {
         tableData() {
             this.resetExpandText();
+            this.resetExplainStatus();
         }
     }
 };
@@ -466,175 +589,52 @@ export default {
 </style>
 <style scoped>
 .el-table /deep/ thead :first-child > .cell {
-    padding-left: 40px;
+    padding-left: 62px;
 }
-
-.el-table /deep/ thead th {
-    padding: 0;
-    height: 35px;
-    background: #00c1de !important;
-    color: #fff;
-    font-weight: 400;
-    font-size: 12px;
-}
-
-.el-table /deep/ .el-table__body .cell {
-    color: #262626;
-}
-
-.el-table /deep/ .el-table__expanded-cell {
-    background: #eee;
-    padding: 16px 32px;
-}
-
-.el-table /deep/ th > .cell {
-    text-align: left;
-}
-
-/* .el-table /deep/ .el-table__expand-column .cell{
-            width: 160px;
-    } */
 
 .el-table /deep/ .el-table__expand-icon {
-    height: 40px;
+    height: auto;
     transform: rotate(0deg);
 }
+#table-list /deep/ .el-table__expand-icon:hover  {
+    background: rgba(211, 181, 160, 0.1) !important;
 
+}
 .el-table /deep/ .el-table__expanded-cell:hover {
     background: #eee !important;
 }
+.el-table /deep/  thead th{
+    padding:9px 0;
+}
+.el-table /deep/  td{
+    padding:10px 0;
+}
+.domain-detail /deep/ .el-switch__core{
+    height:18px;
+    width:30px !important;
+}
+.domain-detail /deep/ .el-switch__core:after{
+    width:13px;
+    height:13px;
+    line-height: 18px;
+}
 </style>
 <style lang="scss" scoped>
-.table-list {
-    border: 1px solid #e1e6ea;
-}
-.relove-step {
-    margin-top: 12px;
-    background: #eeeeee;
-    color: #262626;
-    position: relative;
-    &::before {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        top: -52px;
-        right: 199px;
-        border-width: 10px;
-        border-style: solid;
-        border-color: transparent transparent #eee transparent;
-    }
-    &:hover {
-        background: #eeeeee !important;
-    }
-
-    .step-content {
-        display: flex;
-        align-items: center;
-        .step-item {
-            flex: none;
-            padding: 0 16px;
-            .circle {
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                border: 1px solid transparent;
-                box-sizing: border-box;
-            }
-
-            .circleOn {
-                color: #fff;
-                background: #00c1de;
-            }
-
-            .circleOff {
-                color: #b5b5b5;
-                border: 1px solid #b5b5b5;
-            }
-
-            .step-desc {
-                padding-left: 8px;
-                font-weight: 500;
-            }
-        }
-
-        .step-bar {
-            width: 100%;
-            height: 2px;
-            background: #b5b5b5;
-        }
-
-        .relove-msg {
-            padding-left: 44px;
-            color: #8c8c8c;
-            line-height: 18px;
-            padding-top: 5px;
-        }
-    }
-
-    .step-explain {
-        padding: 20px 30px 22px;
-        margin-top: 12px;
-        background: #fff;
-        color: #262626;
-        .explain-item {
-            line-height: 25px;
-            padding-bottom: 11px;
-            word-wrap: break-word;
-        }
-
-        .islink {
-            color: #00c1de;
-            padding-bottom: 16px;
-        }
-    }
-
-    .cnd-status {
-        padding: 10px;
-        background: #fff;
-        margin-top: 20px;
-        color: #262626;
-    }
-}
-
 .handle-btn-wrap {
     width: 70%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     .delete-btn {
         padding: 8px;
+        margin-left: 10px;
         background: transparent;
         &:hover {
             background: rgba(240, 243, 247, 1);
         }
     }
 }
-
-.wezhan-btn {
-    width: 90px;
-    color: #fff;
-    background: rgba(0, 193, 222, 1);
-}
-
-.open-cnd-btn {
-    margin-left: 15px;
-    width: 55px;
-    height: 24px;
-    line-height: 24px;
-    color: #fff;
-    background: rgba(0, 193, 222, 1);
-}
-
-.cndStop {
-    color: #b5b5b5;
-}
-
 .domainStatus0 {
-    color: #f15533;
+    color: #FB4D68;
 }
 
 .domainStatus1 {
@@ -650,7 +650,81 @@ export default {
 }
 
 .domain-name {
-    padding-left: 30px;
+    padding-left: 50px;
+}
+@keyframes myloading-img {
+    from{
+        transform: rotate(0deg)
+    }
+    to{
+        transform: rotate(360deg)
+    }
+}
+.loading-img{
+    width:14px;
+    height:14px;
+    margin-left:10px;
+    animation:myloading-img .5s linear infinite;
+}
+.domain-detail{
+    background:$--background-color-selected;
+    display: block;
+    margin: -10px 3px -7px;
+    position: relative;
+    overflow: hidden;
+    &:hover{
+        background: $--background-color-selected !important;
+    }
+    .domain-detail-row{
+        background: $--color-white;
+        height:40px;
+        line-height: 40px;
+        width:99%;
+        display: inline-block;
+        margin:16px 7px 12px;
+        .domain-explain-item{
+            padding-left:50px;
+            .domain-explain-text{
+                color:$--color-text-regular;
+            }
+            .explain-text-copy{
+                color:$--color-text-orange;
+                display: inline-block;
+                margin: 0 10px;
+                cursor: pointer;
+            }
+            .explain-text-copy-success{
+                 margin: 0 10px;
+                color:$--color-success;
+            }
+        }  
+    }
+    .explain-islink{
+        float:right;
+        margin-right:10px;
+        margin-bottom:10px;
+        color:$--color-text-orange;
+        line-height: 20px;
+    }
+    .status-switch{
+        float: left;
+        margin-bottom:5px;
+        margin-left:55px; 
+        line-height: 20px;
+        line-height: 40px;
+        .status{
+            padding:0 10px;
+            line-height: 20px;
+        }   
+    }
+}
+.iconfont.iconhuifu{
+    font-size: 12px;
+    margin-left:10px;
+    font-weight: 400;
+    &:hover{
+        color:$--color-text-orange;
+    }
 }
 </style>
 

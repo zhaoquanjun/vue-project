@@ -1,0 +1,33 @@
+
+@import "../theme-chalk/mixins/utlis";
+.el-table{
+    position: relative;
+    color: $--color-text-primary;
+    border: $--border-base;  
+    thead th > .cell {
+        font-size: $--font-size-small;
+        font-weight: $--font-weight-base;
+        color: $--color-text-regular;
+    }
+    thead th,.el-table tbody td{
+        padding: 8px 0;
+    }
+    td, th.is-leaf{
+        border-bottom: $--border-base; 
+    }
+    tbody .el-table__row .cell{
+        display: flex;
+        align-items: center;
+    }
+    .el-table__body-wrapper .el-table__row .cell span{
+        display: block;
+        @include utils-ellipsis
+    }
+    .el-table__body tr .iconfont:hover {
+        background: $--color-white;
+    }
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover>td{
+    background: $--background-color-hover;
+}

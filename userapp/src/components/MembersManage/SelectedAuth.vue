@@ -126,7 +126,7 @@ export default {
 .empty {
     cursor: pointer;
     width: 20%;
-    color: #00c1de;
+    color: $--color-primary;
     text-align: right;
     float: right;
 }

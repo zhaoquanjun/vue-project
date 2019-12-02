@@ -117,8 +117,8 @@ export default {
   width: 219px;
   height: 40px;
   background: rgba(255, 255, 255, 1);
-  border-radius: 4px;
-  border: 1px solid rgba(201, 217, 220, 1);
+  border-radius: $--border-radius-base;
+  border: $--border-base;
   cursor: pointer;
   li {
     display: flex;
@@ -130,7 +130,7 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      font-size: 14px;
+      font-size: $--font-size-small;
       max-width: 160px;
       i {
         margin-right: 8px;
@@ -140,7 +140,7 @@ export default {
       .title {
         display: inline-block;
         margin-right: 0;
-        font-size: 14px;
+        font-size: $--font-size-small;
         height: 14px;
         line-height: 14px;
         width: 150px;

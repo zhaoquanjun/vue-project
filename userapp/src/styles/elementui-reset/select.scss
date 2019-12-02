@@ -1,0 +1,31 @@
+
+
+.el-input__inner{
+    border-color: $--border-color-base;
+}
+.el-select-dropdown__item.selected{
+    color: $--color-primary;
+}
+.el-form {
+    .el-select {
+        // width: 100%;
+        .el-input.is-focus,
+        .el-input__inner:focus{
+            border-color: $--color-primary ;
+        }
+        .el-input__inner::-webkit-input-placeholder {
+            color: $--color-text-primary;
+        }
+        .selected {
+            background-color: $--background-color-selected;
+            span {
+                color: $--color-primary;
+                font-weight: $--font-weight-base;
+            }
+        }
+       
+    }
+    // .el-form-item {
+    //     margin-bottom: 30px;
+    // }
+}

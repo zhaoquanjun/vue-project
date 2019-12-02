@@ -14,6 +14,7 @@ let redirectUrl = `${httpSchema}content.${baseServerUrl}/callback`;
 let logoutRedirectUri = `${httpSchema}content.${baseServerUrl}/index.html`;
 let silentRedirectUri = `${httpSchema}content.${baseServerUrl}/static/silent-renew.html`;
 let designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
+let contentQueryApi = `${httpSchema}api.contentquery.${baseServerUrl}`;
 let clientId = 'content.api';
 let scope = 'openid profile dashboard.api content.api designer.api produce.api weixinopen.api';
 export let siteDomain = `content.${baseServerUrl}`;
@@ -36,6 +37,7 @@ if (process.env.NODE_ENV === 'development') {
     logoutRedirectUri = `${httpSchema}content.console.wezhan.cn/index.html`;
     silentRedirectUri = `${httpSchema}localhost:8081/static/silent-renew.html`;
     designerManageApi = `${httpSchema}api.designer.console.wezhan.cn`;
+    contentQueryApi = `${httpSchema}api.contentquery.console.wezhan.cn`;
     clientId = 'dev.content.api';
     scope = 'openid profile dashboard.api content.api designer.api produce.api';
 } 
@@ -49,6 +51,7 @@ const enbironmemy = {
     silentRedirectUri,
     clientId,
     scope,
-    designerManageApi
+    designerManageApi,
+    contentQueryApi
 };
 export default enbironmemy;

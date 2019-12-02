@@ -12,9 +12,10 @@
           <p class="single-line__overflow--hide ellipsis">{{it.title}}</p>
           <p class="date single-line__overflow--hide">
             <!-- <span>{{it.createTime.slice(0, 10)}}</span> -->
-            <span
+            <i
+              class="icon iconfont iconduihao"
               :style="{visibility: pageId == i ? 'visible' : 'hidden'}"
-            ></span>
+            ></i>
           </p>
         </li>
       </ul>
@@ -97,9 +98,9 @@ export default {
   height: 90%;
   p {
     padding: 20px 12px 13px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     line-height: 17px;
-    color: #00c1de;
+    color: $--color-primary;
   }
   .content-list__area {
     padding: 0 6px;
@@ -110,17 +111,16 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
       padding: 0 8px;
       height: 26px;
       cursor: pointer;
       p {
         width: 450px;
         padding: 0;
-        font-size: 14px;
+        font-size: $--font-size-small;
         line-height: 26px;
         height: 26px;
-        color: #262626;
+        color: $--color-text-primary;
       }
       p.date {
         display: flex;
@@ -128,39 +128,27 @@ export default {
         align-items: center;
         width: 128px;
         span {
-          color: #b5b5b5;
-        }
-        span:last-of-type {
-          display: block;
-          margin-left: 14px;
-          width: 18px;
-          height: 18px;
-          background: url("~img/link/selected.png") no-repeat center
-            center;
-          background-size: 100% 100%;
+          color: $--color-text-primary;
         }
       }
       &:hover {
-        background: #f8fafc;
-        p {
-          color: #00c1de;
-        }
+        background: $--background-color-hover;
       }
     }
     .active {
-      background: #00c1de;
+      background: $--background-color-selected;
       p {
-        color: #fff;
-        span:first-of-type {
-          color: #fff;
+        color: $--color-primary;
+        i {
+          color: $--color-primary;
         }
       }
       &:hover {
-        background: #00c1de;
+        background: $--background-color-selected;
         p {
-          color: #fff;
-          span:first-of-type {
-            color: #fff;
+          color: $--color-primary;
+          i {
+            color: $--color-primary;
           }
         }
       }
@@ -170,10 +158,10 @@ export default {
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
-    border-top: 1px solid #eee;
+    border-top: $--border-base;
     p {
       padding: 0 0 12px;
-      font-size: 14px;
+      font-size: $--font-size-small;
       line-height: 17px;
       color: #00c1de;
     }

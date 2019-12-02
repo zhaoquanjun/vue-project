@@ -1,7 +1,6 @@
 <template>
   <div class="my-chose-template">
     <el-dialog
-      style="margin-top:50px"
       width="0"
       :show-close="false"
       :close-on-click-modal="false"
@@ -11,8 +10,23 @@
     >
       <div class="right-pannel">
         <el-container style="height:100%">
-          <el-aside class="aside" style="width:250px">
-            <div class="title">选择模版</div>
+          <el-aside class="aside" style="width:240px">
+            <div class="title">筛选</div>
+            <el-input
+              size="medium"
+              v-model="search"
+              placeholder="输入关键词搜索"
+              @keyup.enter.native="searchTemplate"
+              clearable
+              style="width:190px"
+            >
+              <i
+                class="el-icon-search el-input__icon"
+                style="cursor: pointer;color:#D7D8D9"
+                slot="prefix"
+                @click="searchTemplate"
+              ></i>
+            </el-input>
             <div class="order">
               <span
                 v-for="(item, index) in orderType"
@@ -22,36 +36,19 @@
                 @click="changeOrder(item)"
               >{{item.text}}</span>
             </div>
-            <div style="margin-top:26px">
-              <div class="tab" :class="{allTab:isAllTab}" @click="choseAllTab">
-                <div class="allBackground"></div>全部
-              </div>
-              <!-- <div
-                class="tab"
-                :class="{myTab:!isAllTab}"
-                style="margin-top:10px"
-                @click="choseMyTab"
-              >
-                <div class="myBackground"></div>已有网站
-              </div>-->
-            </div>
+            <div class="splitLine"></div>
             <el-tree
-              style="margin-top:20px"
               :data="firstIndustry"
               node-key="id"
               ref="tree"
               accordion
               :highlight-current="true"
-              class="tree"
+              class="industryTree"
               @node-click="changeIndustry"
             ></el-tree>
           </el-aside>
           <el-main style="overflow:hidden">
-            <el-header
-              class="templateHeader"
-              style="height:86px;padding:24px 40px;border-bottom:1px solid #E5E5E5;display: flex;justify-content: space-between;"
-            >
-              <div class="colorType" v-show="isAllTab">
+            <!-- <div class="colorType" v-show="isAllTab">
                 <span class="colorTheme">主题</span>
                 <span class="color">
                   <div
@@ -63,7 +60,7 @@
                     @click="changeColor(item)"
                   ></div>
                 </span>
-                <!-- <el-select
+                <el-select
                   v-model="languageSelect"
                   placeholder="全部语言"
                   class="languageSelect"
@@ -76,29 +73,15 @@
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
-                </el-select>-->
-              </div>
-              <el-input
-                size="medium"
-                v-model="search"
-                placeholder="输入关键词搜索"
-                class="input-with-select"
-                style="width:260px;position:absolute;left:40%"
-              >
-                <i
-                  class="el-icon-search el-input__icon"
-                  style="cursor: pointer;"
-                  slot="suffix"
-                  @click="searchTemplate"
-                ></i>
-              </el-input>
-              <span class="close-pannel" @click="closeDialog">
-                <i class="iconfont iconguanbi"></i>
-              </span>
-            </el-header>
+                </el-select>
+            </div>-->
+            <div class="templateHeader">
+              <span class="templateHeader-text">选择您喜欢的网站模板</span>
+              <i class="iconfont iconguanbi cl-iconfont is-circle" @click="closeDialog"></i>
+            </div>
             <el-main
               class="templateContent"
-              style="padding:0 80px;position:relative"
+              style="position:relative;padding:0 50px;width:100%"
               v-scrollBar
             >
               <el-row :gutter="80">
@@ -113,63 +96,45 @@
                     <div
                       class="itemSiteImageBackground"
                       :style="{background: 'url(' + (item.imageUrl ) + ') no-repeat center/cover'}"
-                      v-if="isAllTab"
-                    >
-                      <div class="modal" v-if="item.id != templateId">
-                        <div>
-                          <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <a :href="`http://${item.domain}`" class="previewSite" target="_blank">预览</a>
-                        </div>
-                      </div>
-                      <div class="curModal" v-show="item.id == templateId">当前选择</div>
+                    ></div>
+                    <div class="modal" v-if="item.id != templateId">
+                      <button class="cl-button cl-button--primary" @click="choseSite(item)">选择</button>
+                      <a :href="`http://${item.domain}`" target="_blank" style="margin-top:12px">
+                        <button class="cl-button cl-button--primary_notbg">预览</button>
+                      </a>
                     </div>
-                    <div
-                      class="itemSiteImageBackground"
-                      :style="{background: 'url(' + (item.image ) + ') no-repeat center/cover'}"
-                      v-else
-                    >
-                      <div class="modal" v-if="item.id != siteId">
-                        <div>
-                          <div class="choseSite" @click="choseSite(item)">选择</div>
-                          <a
-                            :href="`http://${item.secondDomain}`"
-                            class="previewSite"
-                            target="_blank"
-                          >预览</a>
-                        </div>
-                      </div>
-                      <div class="curModal" v-show="item.id == siteId">当前选择</div>
-                    </div>
-                    <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
+                    <div class="curModal" v-show="item.id == templateId">当前选择</div>
                   </div>
                   <div style="text-align:center">
                     <div
                       class="itemSiteName"
-                      v-if="isAllTab"
                     >{{item.templateName && item.templateName.trim().length > 10 ? item.templateName.slice(0, 10) + '...' : item.templateName}}</div>
-                    <div
-                      class="itemSiteName"
-                      v-else
-                    >{{item.siteName && item.siteName.trim().length > 10 ? item.siteName.slice(0, 10) + '...' : item.siteName}}</div>
                   </div>
                 </el-col>
               </el-row>
             </el-main>
             <div>
               <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
-              <div class="pageing" id="pageing" style="margin-bottom:20px">
+              <div
+                class="cl-pagination pageing"
+                id="pageing"
+                style="margin-bottom:20px"
+                :class="{'noJumper':templatePage.totalPage <= 10}"
+              >
                 <el-pagination
-                  v-show="templatePage.totalCount > 9"
+                  v-if="templatePage.totalCount > 0"
                   background
-                  layout="total, slot, sizes, prev, pager, next"
+                  :layout="templatePage.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                   :current-page="templatePage.pageIndex"
                   :total="templatePage.totalCount"
-                  :page-count="templatePage.totalPages"
                   :page-size="templatePage.pageSize"
                   :page-sizes="[9,18,45]"
                   @current-change="changePage"
                   @size-change="changeSize"
-                ></el-pagination>
+                >
+                  <div class="sizes-title">，每页显示</div>
+                  <button v-if="templatePage.totalPages > 10" class="paging-confirm">跳转</button>
+                </el-pagination>
               </div>
             </div>
             <el-dialog
@@ -182,12 +147,10 @@
               <div class="notFindTemplate-pannel" :style="{width:'600px'}">
                 <div class="pannel-head">
                   <span class="headTitle">未找到想要的模版</span>
-                  <span class="close-pannel" @click="closeNotFindTemplateDialog">
-                    <i
-                      class="iconfont iconguanbi"
-                      style="line-height:70px;font-size:16px;color:#262626;"
-                    ></i>
-                  </span>
+                  <i
+                    class="iconfont iconguanbi cl-iconfont is-circle"
+                    @click="closeNotFindTemplateDialog"
+                  ></i>
                 </div>
                 <div class="tips">请填写您的网站需求，帮助我们改进模版库</div>
                 <div class="industry">
@@ -233,7 +196,7 @@
                 </div>
 
                 <div class="confirm">
-                  <button class="confirmBtn" @click="submit">提交</button>
+                  <button class="cl-button cl-button--primary cl-button--small" @click="submit">提交</button>
                 </div>
               </div>
             </el-dialog>
@@ -246,9 +209,8 @@
 
 <script>
 import * as templateApi from "@/api/request/templateApi";
-import { getLanguage } from "@/configure/appCommon";
 import { designerUrl } from "@/environment/index";
-import { getMemberList } from '@/api/request/siteMemberApi';
+import { getMemberList } from "@/api/request/siteMemberApi";
 
 export default {
   props: ["siteId", "siteName", "templateId", "isChangeTemplate"],
@@ -305,17 +267,17 @@ export default {
       ],
       orderType: [
         {
-          text: "最新",
+          text: "按更新时间排序",
           isOrder: true,
           type: "updataTime"
         },
         {
-          text: "最热",
+          text: "按热度排序",
           isOrder: false,
           type: "mostPopular"
         },
         {
-          text: "推荐",
+          text: "按推荐排序",
           isOrder: false,
           type: "IsRecommend"
         }
@@ -370,7 +332,6 @@ export default {
     async getIndustryTree() {
       let { data, status } = await templateApi.getIndustryTree();
       if (status == 200) {
-        data.splice(0, 1);
         this.firstIndustry = data;
       }
     },
@@ -506,11 +467,15 @@ export default {
         }
         if (status == 200) {
           loading.close();
-          this.$confirm(`模版复制成功！是否前往设计页面？`, "提示", {
-            confirmButtonText: "前往设计页面",
-            cancelButtonText: "取消",
-            iconClass: "icon-success"
-          })
+          this.$confirm(
+            `您已选择${item.templateName}模板，是否立即开始设计？`,
+            "提示",
+            {
+              confirmButtonText: "开始设计",
+              cancelButtonText: "暂不设计",
+              iconClass: "icon-success"
+            }
+          )
             .then(() => {
               window.location.href = `${designerUrl}?siteId=${this.siteId}`;
             })
@@ -599,40 +564,40 @@ export default {
       });
       this.orderType[0].isOrder = true;
     },
-    // 选择全部模版
-    async choseAllTab() {
-      this.isAllTab = true;
-      this.orderType.forEach((item, index) => {
-        item.isOrder = false;
-        if (item.type == "updataTime") {
-          item.isOrder = true;
-        }
-      });
-      this.search = "";
-      this.colorArray.forEach((item, index) => {
-        if (item.code == "") {
-          item.isCur = true;
-          this.themeSelect = "";
-        } else {
-          item.isCur = false;
-        }
-      });
-      this.firstIndustryId = 0;
-      this.secondIndustryId = 0;
-      this.getTemplateList();
-    },
-    // 选择已有网站
-    async choseMyTab() {
-      this.isAllTab = false;
-      let para = {
-        siteName: this.search,
-        PageIndex: this.pageIndex,
-        PageSize: this.pageSize
-      };
-      let { data, status } = await templateApi.getTemplateSites(para);
-      this.templatePage = data;
-      this.templateInfo = data.items;
-    },
+    // // 选择全部模版
+    // async choseAllTab() {
+    //   this.isAllTab = true;
+    //   this.orderType.forEach((item, index) => {
+    //     item.isOrder = false;
+    //     if (item.type == "updataTime") {
+    //       item.isOrder = true;
+    //     }
+    //   });
+    //   this.search = "";
+    //   this.colorArray.forEach((item, index) => {
+    //     if (item.code == "") {
+    //       item.isCur = true;
+    //       this.themeSelect = "";
+    //     } else {
+    //       item.isCur = false;
+    //     }
+    //   });
+    //   this.firstIndustryId = 0;
+    //   this.secondIndustryId = 0;
+    //   this.getTemplateList();
+    // },
+    // // 选择已有网站
+    // async choseMyTab() {
+    //   this.isAllTab = false;
+    //   let para = {
+    //     siteName: this.search,
+    //     PageIndex: this.pageIndex,
+    //     PageSize: this.pageSize
+    //   };
+    //   let { data, status } = await templateApi.getTemplateSites(para);
+    //   this.templatePage = data;
+    //   this.templateInfo = data.items;
+    // },
     notFindTemplate() {
       this.notFindTemplateShow = true;
     },
@@ -717,20 +682,24 @@ export default {
       this.$nextTick(() => {
         window.addEventListener("resize", () => {
           document.getElementsByClassName("templateContent")[0].style.height =
-            window.innerHeight - 280 + "px";
+            window.innerHeight - 160 + "px";
         });
         document.getElementsByClassName("templateContent")[0].style.height =
-          window.innerHeight - 280 + "px";
+          window.innerHeight - 160 + "px";
       });
-    },
-    // 转换语言
-    _getLanguage(language) {
-      return getLanguage(language);
     }
   }
 };
 </script>
 <style>
+.copy-icon {
+  margin-top: 17px;
+  display: inline-block;
+  width: 142px;
+  height: 89px;
+  background: url("~img/copy.gif") no-repeat center;
+  background-size: contain;
+}
 .copyTemplateLoading .el-loading-spinner {
   margin-top: 0 !important;
   left: 50%;
@@ -747,52 +716,35 @@ export default {
   line-height: 20px;
 }
 </style>
-<style scoped>
-.el-tabs {
-  margin-top: 24px;
-}
-.el-tabs /deep/ .el-tabs__item {
-  height: 38px;
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-  line-height: 36px;
-  border-bottom: 1px solid #e4e7ed;
-  background: rgba(245, 245, 245, 1);
-  vertical-align: top;
-  border-top: 2px solid transparent;
-}
-.el-tabs /deep/ .is-active {
-  color: rgba(1, 192, 222, 1);
-  border-top: 2px solid rgb(72, 201, 226);
-  border-bottom: 1px solid transparent;
-  background: rgb(255, 255, 255);
-}
-.input-with-select /deep/ .el-input__inner {
-  height: 40px;
-}
-.el-select-dropdown {
-  margin-top: 0;
-}
+<style lang="scss" scoped>
 .languageSelect /deep/ .el-input__inner {
   border: none;
 }
-.tree /deep/ .is-leaf {
+.industryTree /deep/ .is-current > .el-tree-node__content {
+  background: rgba(255, 240, 229, 1);
+  .el-tree-node__label {
+    color: $--color-primary;
+  }
+}
+.industryTree /deep/ .el-tree-node__content:hover {
+  background: rgba(255, 247, 241, 1);
+}
+.industryTree /deep/ .is-leaf {
   display: none;
 }
-.tree /deep/ .el-tree-node__content {
+.industryTree /deep/ .el-tree-node__content {
   height: 46px;
 }
-.tree /deep/ .el-tree-node__expand-icon {
+.industryTree /deep/ .el-tree-node__expand-icon {
   position: absolute;
   right: 30px;
   transform: rotate(180deg);
   color: rgba(38, 38, 38, 1);
 }
-.tree /deep/ .expanded {
+.industryTree /deep/ .expanded {
   transform: rotate(135deg);
 }
-.tree /deep/ .el-tree-node__label {
+.industryTree /deep/ .el-tree-node__label {
   font-size: 14px;
   font-weight: 400;
   color: rgba(0, 0, 0, 1);
@@ -800,16 +752,14 @@ export default {
   display: inline-block;
   margin-left: 30px;
 }
-</style>
 
-<style lang="scss" scoped>
 .right-pannel {
   background: #ffffff;
   position: fixed;
   z-index: 100;
   left: 0;
   right: 0;
-  top: 50px;
+  top: 0;
   bottom: 0;
   box-shadow: 0 0 3px #ccc;
   transition: width 0.2s linear;
@@ -819,94 +769,55 @@ export default {
   .aside {
     height: 100%;
     background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 2px 14px 0px rgba(201, 201, 201, 0.5);
+    box-shadow: 0px 2px 10px 0px rgba(131, 131, 131, 0.3);
     text-align: center;
     .title {
-      height: 92px;
-      font-size: 18px;
-      font-weight: 500;
-      color: rgba(0, 0, 0, 1);
-      line-height: 92px;
-      border-bottom: 1px solid #eee;
-      margin: 0 32px;
+      font-size: $--font-size-base;
+      font-weight: $--font-weight-primary;
+      margin: 24px auto;
     }
     .order {
-      height: 84px;
-      border-bottom: 1px solid #eee;
-      margin: 0 32px;
-      display: flex;
-      justify-content: space-between;
+      margin-top: 20px;
       .orderText {
-        width: 44px;
-        height: 26px;
+        width: 100%;
+        height: 44px;
         display: inline-block;
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(38, 38, 38, 1);
-        line-height: 26px;
-        margin-top: 29px;
+        font-size: $--font-size-base;
+        font-weight: $--font-weight-base;
+        line-height: 44px;
         cursor: pointer;
+        padding-left: 24px;
+        box-sizing: border-box;
+        text-align: left;
       }
       .active {
-        background: rgba(9, 204, 235, 0.1);
-        border-radius: 2px;
-        color: rgba(9, 204, 235, 1);
+        background: rgba(255, 240, 229, 1);
+        color: $--color-primary;
       }
     }
-    .tab {
-      text-align: left;
-      height: 36px;
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(38, 38, 38, 1);
-      line-height: 36px;
-      cursor: pointer;
-      border-left: 3px solid transparent;
-      .allBackground {
-        margin-left: 34px;
-        margin-right: 15px;
-        display: inline-block;
-        width: 13px;
-        height: 13px;
-        background: url("~img/siteManage/allTemplate.png") no-repeat center;
-        background-size: contain;
-      }
-      .myBackground {
-        margin-left: 34px;
-        margin-right: 15px;
-        display: inline-block;
-        width: 13px;
-        height: 13px;
-        background: url("~img/siteManage/myTemplate.png") no-repeat center;
-        background-size: contain;
-      }
-    }
-    .allTab {
-      background: rgba(9, 204, 235, 0.1);
-      border-left: 3px solid #09cceb;
-    }
-    .myTab {
-      background: rgba(216, 216, 216, 0.2);
-      border-left: 3px solid #09cceb;
+    .splitLine {
+      margin: 24px;
+      box-sizing: border-box;
+      width: calc(100% - 48px);
+      height: 1px;
+      background: $--border-color-base;
     }
   }
   .templateHeader {
     // display: flex;
     // justify-content: space-between;
-    position: relative;
-    .close-pannel {
+    padding-top: 40px;
+    text-align: center;
+
+    .templateHeader-text {
+      font-size: 30px;
+      font-weight: 100;
+      color: #6d7278;
+    }
+    .iconguanbi {
       float: right;
-      cursor: pointer;
-      .iconguanbi {
-        line-height: 40px;
-        font-size: 16px;
-        color: #262626;
-        padding: 8px;
-        &:hover {
-          background: rgba(240, 243, 247, 1);
-          border-radius: 4px;
-        }
-      }
+      font-size: 16px;
+      margin-right: 30px;
     }
     .colorType {
       height: 40px;
@@ -959,20 +870,15 @@ export default {
       position: relative;
       width: 100%;
       transition: all 0.3s ease-in;
+      &:hover {
+        // transform: translateY(-15px);
+        // box-shadow: 0px 15px 15px -15px #b9cbcf;
+        .modal {
+          opacity: 1;
+        }
+      }
       .itemSiteImageHeader {
         width: 100%;
-      }
-      .siteLanguage {
-        position: absolute;
-        top: 40px;
-        right: 12px;
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 2px;
-        padding: 0 12px;
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(38, 38, 38, 1);
-        line-height: 22px;
       }
       .itemSiteImageBackground {
         margin-top: -2px;
@@ -980,35 +886,9 @@ export default {
         padding-bottom: 62%;
         position: relative;
       }
-      .choseSite {
-        width: 90px;
-        height: 40px;
-        background: rgba(9, 204, 235, 1);
-        border-radius: 2px;
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 1);
-        line-height: 40px;
-        text-align: center;
-        cursor: pointer;
-      }
-      .previewSite {
-        display: inline-block;
-        margin-top: 24px;
-        width: 88px;
-        height: 38px;
-        background: rgba(255, 255, 255, 1);
-        border-radius: 2px;
-        border: 1px solid rgba(9, 204, 235, 1);
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(9, 204, 235, 1);
-        line-height: 40px;
-        text-align: center;
-        cursor: pointer;
-      }
       .modal {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         position: absolute;
@@ -1017,16 +897,10 @@ export default {
         width: 100%;
         height: 100%;
         opacity: 0;
-        background: rgba(38, 38, 38, 0.5);
-        border-radius: 0px 0px 2px 2px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: $--border-radius-base;
+        transition: all 0.2s linear;
         // border: 1px solid rgba(185, 203, 207, 1);
-      }
-      &:hover {
-        transform: translateY(-15px);
-        box-shadow: 0px 15px 15px -15px #b9cbcf;
-        .modal {
-          opacity: 1;
-        }
       }
       .curModal {
         display: flex;
@@ -1066,49 +940,40 @@ export default {
     cursor: pointer;
     display: inline-block;
     margin-top: 24px;
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(0, 112, 204, 1);
-    line-height: 20px;
-    margin-left: 80px;
+    font-size: $--font-size-base;
+    font-weight: $--font-weight-base;
+    color: $--color-primary;
+    margin-left: 50px;
   }
   //右侧弹框
   .notFindTemplate-pannel {
-    background: #ffffff;
+    background: $--color-white;
     position: fixed;
     z-index: 2200;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 3px #ccc;
-    transition: width 0.2s linear;
-    background-color: "#fff";
-    color: #262626;
+    border-radius: $--border-radius-base;
     overflow: hidden;
     .pannel-head {
-      padding: 0 32px;
-      height: 70px;
-      overflow: hidden;
-      border-bottom: 2px solid #eee;
+      padding: 16px 24px 16px 32px;
+      border-bottom: $--border-base;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       .headTitle {
-        font-size: 16px;
-        font-family: PingFangSC-Medium;
-        font-weight: 500;
-        color: rgba(38, 38, 38, 1);
-        line-height: 70px;
-      }
-      .close-pannel {
-        float: right;
-        cursor: pointer;
+        font-size: $--font-size-medium;
+        font-weight: $--font-weight-primary;
+        color: $--color-text-primary;
       }
     }
     .tips {
       width: 537px;
       height: 32px;
       background: rgba(242, 255, 234, 1);
+      border-radius: $--border-radius-base;
       border: 1px solid rgba(199, 221, 185, 1);
       font-size: 12px;
-      font-family: PingFangSC;
       font-weight: 400;
       color: rgba(0, 182, 57, 1);
       line-height: 32px;
@@ -1118,40 +983,30 @@ export default {
     .industry {
       height: 72px;
       padding-left: 32px;
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
-      line-height: 20px;
+      font-size: $--font-size-small;
+      font-weight: $--font-weight-primary;
+      color: $--color-text-primary;
     }
     .reference {
       height: 72px;
       padding-left: 32px;
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
-      line-height: 20px;
+      font-size: $--font-size-small;
+      font-weight: $--font-weight-primary;
+      color: $--color-text-primary;
     }
     .description {
       padding-left: 32px;
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
-      line-height: 22px;
+      font-size: $--font-size-small;
+      font-weight: $--font-weight-primary;
+      color: $--color-text-primary;
     }
     .confirm {
       width: 100%;
       height: 64px;
-      text-align: center;
+      padding-right: 32px;
+      box-sizing: border-box;
+      text-align: right;
       margin-top: 24px;
-      .confirmBtn {
-        width: 116px;
-        height: 32px;
-        background: rgba(1, 192, 222, 1);
-        font-size: 12px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 1);
-        line-height: 32px;
-      }
     }
   }
 }

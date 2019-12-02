@@ -22,19 +22,23 @@
                 </div>
         </div>
         <div
-            class="pageing"
+            class="cl-paganation pageing "
+            :class="{'imgJumper':imgPageResult.totalPage > 10}"
             v-if="imgPageResult&& imgPageResult.list && imgPageResult.list.length>0"
         >
             <el-pagination
+                v-if="imgPageResult.totalRecord > 0"
                 background
-                layout="total, sizes, prev, pager, next"
+                :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="imgPageResult.totalRecord"
-                :page-count="imgPageResult.totalPage"
                 :page-size="picSearchOptions.pageSize"
                 :page-sizes="[10,20,50]"
                 @current-change="changePage"
                 @size-change="changeSize"
-            ></el-pagination>
+            >
+                <div class="sizes-title">，每页显示</div>
+                <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
+            </el-pagination>
         </div>
         <!-- :title="picTitle" -->
         <div id="img-list-dialog">
@@ -213,21 +217,23 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../styles/manege-table.scss";
-.left-prev,
-.right-next {
-    opacity: 0;
-}
+@import "../../styles/content-manage/manege-table.scss";
 .img-list {
     width: 100%;
     box-sizing: border-box;
     li.item {
         display: inline-block;
-        // width: 141px;
         width: 20%;
         padding: 10px;
         box-sizing: border-box;
     }
+}
+.cl-paganation {
+    margin-top: 16px;
+    margin-right: 11px;
+}
+.imgJumper {
+    margin-right: 66px;
 }
 </style>
 

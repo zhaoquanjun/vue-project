@@ -3,11 +3,13 @@ import App from "./App.vue";
 import router from "./router/index";
 import store from "./store/index";
 import './plugins/element';
-import "./plugins/element-reset.scss"
-import "./assets/reset.css";
-import "./styles/common.scss";
-import "./styles/pop-up/pup-up.scss"
-import "./styles/weizhan.scss";
+
+// public begin
+import "@/styles/common.scss";
+import "@/styles/theme-chalk/index.scss"
+import "@/styles/elementui-reset/index.scss"
+//  public end
+
 import Loading from './globalComponents/loading.js' 
 Vue.use(Loading)
 Vue.config.productionTip = false;

@@ -45,6 +45,7 @@
                 </li>
               </ul>
               <el-pagination
+                v-if="total > 0"
                 background
                 layout="prev, pager, next"
                 :total="total"
@@ -227,8 +228,8 @@ export default {
     height: 56px;
     padding: 0 12px;
     p {
-      color: #00c1de;
-      font-size: 14px;
+      color: $--color-primary;
+      font-size: $--font-size-small;
       line-height: 17px;
       cursor: auto;
     }
@@ -238,7 +239,7 @@ export default {
       width: 120px;
       height: 32px;
       background: rgba(0, 193, 222, 1);
-      border-radius: 2px;
+      border-radius: $--border-radius-base;
       border-color: rgba(0, 193, 222, 1);
       span,
       i {
@@ -253,13 +254,13 @@ export default {
     width: 563px;
     height: 297px;
     text-align: right;
-    border: 1px solid rgba(238, 238, 238, 1);
+    border: $--border-base;
     .content-main__slider {
       padding: 16px 8px;
       width: 128px;
       height: 294px;
       overflow-y: auto;
-      border-right: 1px solid #eee;
+      border-right: $--border-base;
     }
     .content-main__list {
       width: 434px;
@@ -273,7 +274,7 @@ export default {
         margin-left: 8px;
         width: 415px;
         height: 36px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: $--border-base;
       }
       .content-main__search {
         .el-icon-search {
@@ -308,7 +309,7 @@ export default {
             p {
               width: 300px;
               padding: 0;
-              font-size: 14px;
+              font-size: $--font-size-small;
               color: #262626;
               text-align: left;
             }
@@ -362,23 +363,18 @@ export default {
   .popup-content__main {
     .btn-prev, .btn-next, .el-pager li {
       background: #fff;
-      border: 1px solid rgba(229, 229, 229, 1);
+      border: $--border-base;
     }
-  } 
-  .popup-content__main {
-    .el-pager li:not(.disabled).active {
-      background: #01c0de;
-    }
-  } 
+  }
   .popup-content__open {
     margin-top: 16px;
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
-    border-top: 1px solid #eee;
+    border-top: $--border-base;
     p {
       padding: 0 0 12px;
-      font-size: 14px;
+      font-size: $--font-size-small;
       line-height: 17px;
       color: #00c1de;
     }

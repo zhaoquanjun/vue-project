@@ -7,8 +7,8 @@
             class="content-table"
         >
             <template slot="empty">
-                <div class="empty-table">
-                    <img src="~img/memberManage/table-empty.png" />
+                <div class="empty-table" style="height:251px;">
+                    <img src="~img/memberManage/table-empty.png" style="display:inline-block;width:50px;height:35px;margin-top:50px;"/>
                     <p>暂无数据</p>
                 </div>
             </template>
@@ -66,13 +66,13 @@ export default {
 </script>
 <style scoped>
 .el-table /deep/ thead :first-child > .cell {
-    padding-left: 40px;
+    padding-left: 62px;
 }
 .el-table /deep/ thead th {
     padding: 0;
-    height: 35px;
-    background: #00c1de !important;
-    color: #fff;
+    height: 42px;
+    background: #fff !important;
+    color: #9f9f9f;
     font-weight: 400;
     font-size: 12px;
 }
@@ -105,7 +105,7 @@ export default {
     }
 }
 .domain-name {
-    padding-left: 30px;
+    padding-left: 50px;
 }
 </style>
 

@@ -60,8 +60,8 @@
         />
       </div>
       <div class="popup-footer__area">
-        <el-button type="primary" size="small" @click.stop="_handleConfirm">确定</el-button>
-        <el-button size="small" @click.stop="_handleCancle">取消</el-button>
+        <button class="cl-button cl-button--primary" @click.stop="_handleConfirm">确定</button>
+        <button class="cl-button cl-button--primary_notbg" @click.stop="_handleCancle">取消</button>
       </div>
     </div>
   </div>
@@ -280,7 +280,7 @@ export default {
     height: 100%;
     background: rgba(255, 255, 255, 1);
     // box-shadow: 0px 0px 8px 2px rgba(228, 234, 239, 1);
-    border-radius: 2px;
+    border-radius: $--border-radius-base;
     .popup-header__area {
       display: flex;
       justify-content: space-between;
@@ -290,7 +290,7 @@ export default {
       border-bottom: 1px solid #eee;
       cursor: auto;
       span:first-of-type {
-        font-size: 14px;
+        font-size: $--font-size-small;
       }
       span:last-of-type {
         width: 12px;
@@ -307,15 +307,15 @@ export default {
       align-items: flex-start;
       height:calc(100% - 100px);
       overflow: hidden;
-      border-bottom: 1px solid #eee;
+      border-bottom: $--border-base;
       .popup-content__slider {
         width: 90px;
         height: 100%;
         padding: 21px 12px;
-        border-right: 1px solid #eee;
+        border-right: $--border-base;
         cursor: auto;
         li {
-          font-size: 14px;
+          font-size: $--font-size-small;
           padding-bottom: 16px;
         }
       }
@@ -323,6 +323,9 @@ export default {
     .popup-footer__area {
       padding: 15px 20px 20px;
       display: flex;
+      button {
+        margin-right: 24px;
+      }
     }
   }
 }

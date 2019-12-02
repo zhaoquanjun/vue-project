@@ -1,15 +1,17 @@
 <template>
-  <el-container id="content-manage">
+  <el-container id="videoContent-manage">
     <el-aside
       class="tree-aside"
       style="width:250px;height:686px;border-right:1px solid rgb(229, 229, 229);border-bottom:1px solid rgb(229, 229, 229);"
     >
-      <h4 class="pic-type-title">视频分类</h4>
-
+      <h4 class="pic-type-title"><span>视频分类</span></h4>
       <m-tree
+        style="height:calc(100% - 59px);padding-top:8px"
         ref="myTree"
         :treeResult="treeResult"
         :list-options="picSearchOptions"
+        :isPopup="isPopup"
+        :isSecond="isSecond"
         @getList="getList"
         @chooseCategoryNode="chooseNode"
         @create="newCategory"
@@ -21,13 +23,14 @@
 
     <el-main style="padding:0">
       <list-header
+        v-if="$store.state.dashboard.isContentwrite"
         :count-pic="countPic"
         :display-name="displayName"
         :pic-search-options="picSearchOptions"
         :is-batch-header-show="isBatchHeaderShow"
         :content-type="contentType"
         @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
-        @getList="getList"
+        @getPicList="getList"
         @batchDelete="batchDelete"
         @batchMove="batchMove"
       ></list-header>
@@ -70,9 +73,9 @@
             @chooseNode="chooseNode"
           ></SelectTree>
 
-          <div slot="footer" class="pannle-footer">
-            <button @click="cancelUpdateCategor" class="cancel">取消</button>
-            <button @click="updateCategoryPic" class="sure">确定</button>
+          <div slot="footer" class="pannel-footer">
+            <button @click="updateCategoryPic" class="cl-button cl-button--primary">确定</button>
+            <button @click="cancelUpdateCategor" class="cl-button cl-button--primary_notbg">取消</button>
           </div>
         </right-pannel>
       </el-main>
@@ -124,6 +127,14 @@ import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
 export default {
   props: {
     isGrid: {
+      type: Boolean,
+      default: false
+    },
+    isPopup: {
+      type: Boolean,
+      default: false
+    },
+    isSecond: {
       type: Boolean,
       default: false
     }
@@ -180,17 +191,12 @@ export default {
     },
     // 获取列表
     async getList(node) {
-      const loading = this.$loading({
-        target: document.querySelector("#img-list"),
-        lock: true,
-        spinner: "loading-icon",
-        background: "rgba(255, 255, 255, 0.75)"
-      });
+      this.$Loading.show();
       if (node) {
         this.nodeData = node; // 上传图片所需
       }
       let { data } = await videoManageApi.getList(this.picSearchOptions);
-      loading.close();
+      this.$Loading.hide();
       this.getTree();
       this.imgPageResult = data;
     },
@@ -374,7 +380,7 @@ export default {
   top: 50px;
   left: 0;
   width: 100%;
-  border: 1px solid #dcdfe6;
+  border: $--border-base;
   padding: 5px;
   box-sizing: border-box;
   li {
@@ -394,7 +400,7 @@ export default {
     min-height: 23px;
     line-height: 21px;
     padding: 0 26px 0 10px;
-    font-size: 12px;
+    font-size: $--font-size-small;
     vertical-align: top;
     background-color: #609ee9;
     border-radius: 16px;
@@ -424,19 +430,7 @@ export default {
   }
 }
 
-// 侧边分类title样式
-.pic-type-title {
-  box-sizing: border-box;
-  padding-left: 16px;
-  height: 50px;
-  line-height: 50px;
-  width: 100%;
-  font-size: 18px;
-  border-bottom: 1px solid #e5e5e5;
-}
-.title-item {
-  padding: 28px 0 12px 12px;
-}
+
 
 .article-content {
   .content-item {
@@ -449,7 +443,7 @@ export default {
   .content-title {
     padding-bottom: 20px;
     // height: 20px;
-    font-size: 14px;
+    font-size: $--font-size-small;
     font-weight: 600;
     color: rgba(38, 38, 38, 1);
     // line-height: 20px;
@@ -480,6 +474,17 @@ export default {
 .ql-container {
   height: 400px;
 }
+#videoContent-manage .tree-aside {
+  height: auto;
+}
+#videoContent-manage {
+  margin-top: 0;
+}
+#videoContent-manage .content-header {
+  margin: 0;
+  border: none;
+}
+
 </style>
 
 

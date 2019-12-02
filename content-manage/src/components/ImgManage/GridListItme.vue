@@ -123,17 +123,8 @@ export default {
                 this.$emit("rename", id, newName);
             } else {
                 this.isRename = false;
-
-                //
             }
-
-            // if (isNaN(index)) {
-            //     this.index = -1;
-            //     this.$emit("rename", id, newName);
-            //     return;
-            // }
-            // this.index = index;
-            //this.$emit("rename", id, newName);
+         
         }
     },
     computed: {
@@ -141,11 +132,6 @@ export default {
                 return this.isHandleBtnShow || this.isSelected ? true : false;
         }
     },
-    watch: {
-        //    curItem(){
-        //        alert(1)
-        //    }
-    }
 };
 </script>
 <style scoped>

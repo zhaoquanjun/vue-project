@@ -1,0 +1,143 @@
+/* CloundDream Chalk Variables */
+
+/* Color
+---------------------------- */
+
+// Backgorund color
+$--background-color-base: #F4F5F6 !default;
+
+$--color-primary: #FF6B00 !default;
+$--color-success: #63DC8C !default;
+$--color-warning: #FE9837 !default;
+$--color-danger: #FB4D68 !default;
+$--color-info: #0595E6 !default;
+
+$--color-primary-light: rgba(255, 107, 0, 0.1) !default;
+
+$--color-white: #FFFFFF !default;
+$--color-black-dark: #1F2325 !default;
+$--color-black-light: #373D41 !default;
+$--color-transparent: transparent !default;
+
+$--background-color-selected: #F4F5F6;
+$--background-color-hover: #F9F9F9;
+
+
+// Font  text-color 
+$--color-text-primary: #262626 !default;
+$--color-text-regular:#9F9F9F !default;
+$--color-text-secondary: #D7D8D9 !default;
+$--color-text-orange: $--color-primary !default;
+
+// Border color
+$--border-color-base: #D7D8D9 !default;
+
+$--border-radius-base: 2px !default;
+
+$--border-radius-circle: 50% !default;
+
+$--border-color-primary: $--color-primary !default;
+/* Border
+-------------------------- */
+$--border-width-base: 1px !default;
+$--border-style-base: solid !default;
+$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
+
+
+/* Box-shadow
+-------------------------- */
+$--box-shadow-base: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) !default;
+$--box-shadow-dark: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .12) !default;
+$--box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
+
+/* FontSize
+-------------------------- */
+$--font-size-extra-large: 20px !default;
+$--font-size-large: 18px !default;
+$--font-size-medium: 16px !default;
+$--font-size-base: 14px !default;
+$--font-size-small: 12px !default;
+
+/* FontWeight
+-------------------------- */
+$--font-weight-base: 400 !default;
+$--font-weight-primary: 500 !default;
+$--font-weight-secondary: 100 !default;
+
+/* z-index
+-------------------------- */
+$--index-normal: 1 !default;
+$--index-top: 1000 !default;
+$--index-popper: 2000 !default;
+
+/* Disable base
+-------------------------- */
+
+/* Icon
+-------------------------- */
+$--icon-color: $--color-text-primary !default;
+$--icon-hover-color: #F4F5F6 !default;
+$--icon-color-base: $--background-color-selected !default;
+
+/* Paddings
+-------------------------- */
+$--padding-lg: 24px; 
+$--padding-md: 16px;
+$--padding-sm: 14px; 
+$--padding-xs: 12px; 
+
+/* Margins
+-------------------------- */
+$--margin-lg: 24px; 
+$--margin-md: 16px;
+$--margin-sm: 14px; 
+$--margin-xs: 12px; 
+
+/* width  height
+-------------------------- */
+$--height-base: 32px; 
+$--width-base: 32px;
+
+/* Break-point
+--------------------------*/
+$--sm: 768px !default;
+$--md: 992px !default;
+$--lg: 1200px !default;
+$--xl: 1920px !default;
+
+/* Button
+-------------------------- */
+$--button-medium-min-width: 90px;
+
+$--button-small-min-width: 76px;
+
+$--button-font-size: $--font-size-base !default;
+
+$--button-border-radius: $--border-radius-base !default;
+
+$--button-padding-vertical: 9px !default;
+$--button-padding-horizontal: 8px !default;
+
+$--button-primary-border-color: $--color-primary !default;
+
+$--button-primary-background-color: $--color-primary !default;
+
+$--button-hover-primary-background-color: #FF7A1B !default;
+
+$--button-disabled-defualt-background-color: #D7D8D9 !default;
+
+$--button-disabled-primary-color:#FFC499;
+
+$--button-default-font-color: $--color-text-primary !default;
+
+$--button-primary-font-color: $--color-primary !default;
+
+$--button-success-font-color:$--color-success !default;
+
+$--button-danger-font-color: $--color-danger !default;
+
+$--button-info-font-color: $--color-info !default;
+
+
+
+

@@ -467,7 +467,7 @@ export default {
             width: 86px;
             height: 30px;
             border: none;
-            border: 1px solid rgba(229, 229, 229, 1);
+            border: $--border-base;
         }
     }
     .tree-handle {
@@ -481,13 +481,13 @@ export default {
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.07);
         padding: 5px 0;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         button {
             width: 100%;
             display: block;
             padding: 8px 14px;
             text-align: left;
-            font-size: 14px;
+            font-size: $--font-size-small;
             &:hover {
                 background: #e0fcff;
             }
@@ -501,7 +501,7 @@ export default {
         // height: 28px;
         // top: 5px;
         z-index: 10;
-        border-radius: 2px;
+        border-radius: $--border-radius-base;
         text-align: center;
         // background: #e0faff;
     }

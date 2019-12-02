@@ -1,0 +1,25 @@
+.el-input__inner:focus,
+.el-textarea__inner:focus{
+    border-color: $--color-primary;
+}
+.el-select .el-input.is-focus .el-input__inner{
+    border-color: $--color-primary;
+}
+
+.el-select .el-input__inner:focus{
+    border-color: $--color-primary;
+}
+
+.el-input .el-input__inner,.el-button,.el-input-group__append, .el-input-group__prepend{
+    border-radius: $--border-radius-base;
+}
+
+.el-input .el-input__inner {
+    font-size: $--font-size-small;
+    color: $--color-text-primary;
+    height: $--height-base;
+    line-height: $--height-base;
+}
+.el-input .el-input__icon{
+    line-height: $--height-base;
+}

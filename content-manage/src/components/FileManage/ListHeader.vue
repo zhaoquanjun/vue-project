@@ -20,7 +20,7 @@
             <div class="head-item head-middle">
                 <template v-if="contentType==='File'">
                     <span>文件类型</span>
-                    <span class="select-sort ">
+                    <span class="select-sort">
                         <el-select
                             size="small"
                             v-model="fileTypeLabel"
@@ -52,8 +52,8 @@
                         </el-select>
                     </span>
                 </template>
-                <span>排序</span>
-                <span class="select-sort ">
+                <!-- <span>排序</span>
+                <span class="select-sort">
                     <el-select
                         size="small"
                         v-model="orderByLabel"
@@ -69,15 +69,21 @@
                     </el-select>
                 </span>
                 <button @click="switchIsDesc('dec')" class="desBtn">
-                    <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                    <i
+                        class="iconfont iconxiayi"
+                        :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
+                    ></i>
                 </button>
                 <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
-                    <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
-                </button>
+                    <i
+                        class="iconfont iconshangyi"
+                        :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
+                    ></i>
+                </button> -->
             </div>
             <div class="head-item head-right">
                 <button
-                    class="btn-lightblue btn-small upload-wrap"
+                    class="cl-button cl-button--primary"
                     @click="switchUploadBoxShowStatus"
                 >上传{{displayName}}</button>
             </div>
@@ -89,15 +95,13 @@
                     <i>{{countPic}}</i> 个文件
                 </span>
                 <div>
-                    <button class="btn-small btn-lightblue-notboard" @click="batchMove">移动</button>
-                    <button
-                        v-if="contentType!='Video'"
-                        class="btn-small btn-lightblue-notboard"
-                        @click="batchDownLoad"
-                    >下载</button>
-                    <button  class="btn-small btn-red-notboard" @click="batchDelete">删除</button>
+                    <button class="cl-button cl-button--text_primary" @click="batchMove">移动</button>
+                    <button v-if="contentType!='Video'" class="cl-button cl-button--text_primary" @click="batchDownLoad">下载</button>
+                    <button v-if="contentType=='File'" class="cl-button cl-button--text_primary" @click="handleCommand('top')">置顶</button>
+                    <button v-if="contentType=='File'" class="cl-button cl-button--text_primary" @click="handleCommand('cancelTop')">取消置顶</button>
+                    <button class="cl-button cl-button--text_danger" @click="batchDelete">删除</button>
 
-                    <el-dropdown
+                    <!-- <el-dropdown
                         trigger="click"
                         @command="handleCommand"
                         v-if="contentType=='File'"
@@ -110,9 +114,8 @@
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="top">置顶</el-dropdown-item>
                             <el-dropdown-item command="cancelTop">取消置顶</el-dropdown-item>
-                            <!-- <el-dropdown-item command="delete">删除</el-dropdown-item> -->
                         </el-dropdown-menu>
-                    </el-dropdown>
+                    </el-dropdown> -->
                 </div>
             </div>
         </template>
@@ -275,15 +278,14 @@ export default {
             this.$emit("batchDelete");
         },
         batchDownLoad() {
-             this.$confirm(`您确定要下载所选文件吗？`, "提示", {
+            this.$confirm(`您确定要下载所选文件吗？`, "提示", {
                 iconClass: "icon-warning",
                 callback: async action => {
-                   if (action === "confirm") {
+                    if (action === "confirm") {
                         this.$emit("batchDownLoad");
-                   }
+                    }
                 }
-             })
-           
+            });
         },
         handleCommand(command) {
             switch (command) {
@@ -302,28 +304,29 @@ export default {
 };
 </script>
 
-
 <style  lang="scss" scoped>
-@import "@/styles/manage-head.scss";
-.btn-black-notboard{
+@import "@/styles/content-manage/manage-head.scss";
+.btn-black-notboard {
     padding: 6px;
-    &:hover{
-        background:rgba(240,243,247,1);
-        border-radius:4px;
+    &:hover {
+        background: rgba(240, 243, 247, 1);
+        border-radius: 4px;
     }
 }
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-        &:hover{
+
+.upload-wrap {
+    &:hover {
         opacity: 0.8;
     }
 }
-.upload-wrap{
-    &:hover{
-        opacity: 0.8;
-    }
+.handle-batch button {
+    padding: 9px 16px;
+    margin: 0;
+    min-width: 60px;
+}
+.head-middle {
+    margin-left: 24px;
+    margin-right: auto;
+    padding-right: 0;
 }
 </style>

@@ -13,7 +13,7 @@ export const defaultRoutes = [
     },
     {
         path: "/template",
-        component: () => import('@/views/template-manage/template-manage.vue'),
+        component: () => import('@/views/template-manage/index.vue'),
         children: [
             {
                 path: "sitetemplate",
@@ -22,6 +22,16 @@ export const defaultRoutes = [
                 meta: {
                     requiresAuth: true,
                     title: "整站模版",
+                    isSub: true
+                },
+            },
+            {
+                path: "composetemplate",
+                name: "composetemplate",
+                component: () => import('@/views/template-manage/controlTemplate.vue'),
+                meta: {
+                    requiresAuth: true,
+                    title: "控件模板",
                     isSub: true
                 },
             },

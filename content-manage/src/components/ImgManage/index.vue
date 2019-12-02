@@ -12,6 +12,7 @@
                 :isexpand="true"
                 :isPopup="isPopup"
                 :isSecond="isSecond"
+                :isThird="isThird"
                 @getList="getList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
@@ -71,9 +72,9 @@
                         :tree-result="treeResult"
                         @chooseNode="chooseNode"
                     ></SelectTree>
-                    <div slot="footer" class="pannle-footer">
-                        <span @click="updateCategoryPic" class="sure">确定</span>
-                        <button @click="cancelUpdateCategor" class="cancel">取消</button>
+                    <div slot="footer" class="pannel-footer">
+                        <button @click="updateCategoryPic" class="cl-button cl-button--primary">确定</button>
+                        <button @click="cancelUpdateCategor" class="cl-button cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>
@@ -143,6 +144,10 @@ export default {
         isSecond: {
             type: Boolean,
             default: false
+        },
+        isThird: {
+            type: Boolean,
+            default: false
         }
     },
     components: {
@@ -197,7 +202,7 @@ export default {
             this.$Loading.show()
             if (node) this.nodeData = node; // 上传图片所需
             let { data } = await imgManageApi.getList(this.picSearchOptions);
-             this.$Loading.hide()
+            this.$Loading.hide()
             this.getTree();
             this.imgPageResult = data;
             this.imgPageResult.list.forEach((item, index) => {
@@ -251,10 +256,7 @@ export default {
                 });
            
         },
-        // resetCategoryId() {
-        //     this.picSearchOptions.categoryIdList = [];
-        //     this.getList();
-        // },
+       
         // 清空选中的列表
         clearSelectedList() {
             this.$refs.imgList.clearSelectedList()
@@ -416,6 +418,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/contentDetail";
+.el-dialog__wrapper /deep/ .el-dialog {
+    margin-top: 70px !important;
+}
 </style>
 
 

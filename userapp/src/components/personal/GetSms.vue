@@ -340,23 +340,23 @@ export default {
 </style>
  
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 .el-form /deep/ .el-form-item {
     margin-bottom: 30px;
 }
 .el-form-item.is-error /deep/ .el-input__inner {
     border-color: #e5e5e5;
 }
-.el-form  .el-select-dropdown .el-select-dropdown__item.selected{
-    background: #00c1de;
-}
-.el-form .el-select-dropdown .el-select-dropdown__item.selected span{
-     color: #fff !important;
-}
-.el-form  .el-select-dropdown .el-select-dropdown__item span{
-    color: #262626 !important;
-    font-size: 14px;
-}
+// .el-form  .el-select-dropdown .el-select-dropdown__item.selected{
+//     background: #00c1de;
+// }
+// .el-form .el-select-dropdown .el-select-dropdown__item.selected span{
+//      color: #fff !important;
+// }
+// .el-form  .el-select-dropdown .el-select-dropdown__item span{
+//     color: #262626 !important;
+//     font-size: 14px;
+// }
 
 .verification-code {
     position: relative;
@@ -371,7 +371,7 @@ export default {
     bottom: 1px;
     right: 1px;
     border: none;
-    color: #00c1de;
+    color: $--color-primary;
     font-weight: 400;
     padding: 0 10px;
 }

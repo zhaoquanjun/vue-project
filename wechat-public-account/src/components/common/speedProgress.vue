@@ -80,18 +80,18 @@ export default {
                     font-size: 14px;
                     font-weight: 700;
                     line-height: 32px;
+                    color: $--color-text-secondary;
                 }
             }
             p {
-                font-size:14px;
-                font-family:"PingFangSC";
+                font-size:$--font-size-small;
                 font-weight:400;
                 color: #A1A8B1;
                 line-height: 20px;
             }
             .line {
                 box-shadow: border-box;
-                border: 1px solid #E5E5E5;
+                border: $--border-base;
                 width: 300px;
                 position: absolute;
                 top: 16px;
@@ -99,13 +99,13 @@ export default {
                 z-index: 1;
             }
             .lineActive {
-                border: 1px solid #01c0de;
+                border: 1px solid $--color-primary;
             }
         }
         .active {
             span {
-                background: #01c0de;
-                border: 2px solid #01c0de;
+                background: $--color-primary;
+                border: 2px solid $--color-primary;
             }
             p {
               color:rgba(38,38,38,1);  

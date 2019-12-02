@@ -36,11 +36,17 @@
                             ></el-option>
                         </el-select>
                     </span>
-                    <button @click="switchIsDesc('dec')" class="desBtn">
-                        <i class="iconfont iconicon-Arrow1" :style="{'color':(descSort?'#00c1de':'#262626')}"></i>
+                     <button @click="switchIsDesc('dec')" class="desBtn">
+                        <i
+                            class="iconfont iconxiayi"
+                            :class=" descSort ? 'desc-active-color': 'desc-regular-color' "
+                        ></i>
                     </button>
                     <button @click="switchIsDesc('asc')" class="desBtn" style="margin-left:8px">
-                        <i class="iconfont iconicon-Arrow" :style="{'color':(ascSort?'#00c1de':'#262626')}"></i>
+                        <i
+                            class="iconfont iconshangyi"
+                            :class=" ascSort ? 'desc-active-color': 'desc-regular-color' "
+                        ></i>
                     </button>
                 </div>
             </template>
@@ -128,22 +134,14 @@ export default {
 
 
 <style  lang="scss" scoped>
-@import "@/styles/manage-head.scss";
+@import "@/styles/content-manage/manage-head.scss";
 .head-middle {
     padding-right: 0;
 }
 .recycle-count{
-    font-size: 14px;
+    font-size: $--font-size-small;
     font-weight:600;
     padding-bottom: 24px;
 }
-.desBtn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-    &:hover{
-        opacity: 0.8;
-    }
-}
+
 </style>

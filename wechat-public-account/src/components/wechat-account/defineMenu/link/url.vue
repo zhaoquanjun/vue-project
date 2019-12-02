@@ -82,7 +82,7 @@ export default {
   .popup-content__title {
     font-size: 12px;
     line-height: 17px;
-    color: #00c1de;
+    color: $--color-primary;
     padding: 20px 12px 16px;
     cursor: auto;
   }
@@ -111,12 +111,12 @@ export default {
     padding: 16px 16px 0;
     width: 590px;
     height: 78px;
-    border-top: 1px solid #eee;
+    border-top: $--border-base;
     p {
       padding: 0 0 12px;
       font-size: 12px;
       line-height: 17px;
-      color: #00C1DE;
+      color: $--color-primary;
     }
     .way-list__box {
       display: flex;
@@ -149,7 +149,7 @@ export default {
     border-radius: 0;
     text-align: left;
     background: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(229, 229, 229, 1);
+    border: $--border-base;
   }
 } 
 </style>

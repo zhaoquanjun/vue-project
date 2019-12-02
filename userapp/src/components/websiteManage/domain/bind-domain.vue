@@ -38,7 +38,7 @@
         </div>
         <div class="pannel-footer">
             <button
-                class="footer-btn confirmBtn"
+                class="footer-btn confirm"
                 :disabled="disabled"
                 @click="handleConfirm"
             >{{btnText}}</button>
@@ -260,23 +260,6 @@ export default {
     .remarkInput {
         width: 470px;
         margin: 15px 15px 0 15px;
-    }
-    .confirm {
-        position: absolute;
-        width: 470px;
-        height: 64px;
-        bottom: 0px;
-        border-top: 1px solid #efefef;
-        .confirmBtn {
-            margin: 16px;
-            width: 58px;
-            height: 32px;
-            background: rgba(0, 193, 222, 1);
-            font-size: 12px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 1);
-            line-height: 32px;
-        }
     }
 }
 .domain-wrap {

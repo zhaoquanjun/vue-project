@@ -10,7 +10,7 @@
         </el-aside>
         <el-main>
           <el-container>
-            <el-aside class="page-sub-aside" width="150px" v-show="isSub">
+            <el-aside class="submenu-aside" v-show="isSub">
               <page-submenu></page-submenu>
             </el-aside>
             <el-main class="content-table-wrap">
@@ -45,12 +45,10 @@ export default {
 <style >
 .common-header {
   height: 50px !important;
-  line-height: 50px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
   z-index: 100;
 }
 .common-container {
@@ -59,15 +57,12 @@ export default {
 }
 .common-aside {
   width: 60px !important;
-  min-height: calc(100vh - 60px);
   position: relative;
   overflow: visible !important;
-  /* z-index: 200; */
-  padding-top: 16px;
 }
 .content-table-wrap {
   position: relative;
-  background: #F4F5F6;
+  background: #f4f5f6;
 }
 </style>
 
