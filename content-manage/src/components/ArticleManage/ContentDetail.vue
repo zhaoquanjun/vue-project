@@ -36,7 +36,7 @@
                                 ref="articleContent"
                             />
                         </el-col>
-                        <el-col :span="7">
+                        <el-col :span="6"  style="margin-left: 16px;max-width:345px;min-width:345px">
                             <RightContent :imageUrl="imageUrl" ref="articleRight" />
                         </el-col>
                     </el-row>

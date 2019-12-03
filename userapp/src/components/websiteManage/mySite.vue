@@ -579,11 +579,13 @@ export default {
   }
 }
 .siteInfo-wrap {
+  margin-top: 24px;
   width: 100%;
   background: $--color-white;
   border-radius: $--border-radius-base;
   border: $--border-base;
   .siteInfo-title {
+    box-sizing: border-box;
     width: 100%;
     height: 44px;
     line-height: 44px;

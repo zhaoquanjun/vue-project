@@ -164,7 +164,6 @@ export default {
      * 获取域名列表
      */
     async _getCdnDomainList(siteId) {
-      console.log(this);
       this.$Loading.show();
       siteId = siteId || this.curSiteId;
       let { data, status } = await domainApi.getCdnDomainList(siteId);
@@ -369,7 +368,6 @@ export default {
     },
     async _removeAliYunToken() {
       let data = await domainApi.removeAliYunToken();
-      console.log(data);
     },
 
     /**
@@ -497,12 +495,11 @@ export default {
   .member-content {
     padding: 0 16px;
     .user-list {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 21px;
+      margin: 24px 0;
       .member-list-title {
         border-left: 2px solid $--color-primary;
         padding-left: 8px;
-        font-size: 14px;
+        font-size: $--font-size-base;
         font-weight: 700;
       }
     }

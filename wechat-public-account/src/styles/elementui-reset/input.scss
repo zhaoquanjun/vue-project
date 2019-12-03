@@ -14,6 +14,8 @@
 }
 
 .el-input .el-input__inner {
+    font-size: $--font-size-small;
+    color: $--color-text-primary;
     height: $--height-base;
     line-height: $--height-base;
 }

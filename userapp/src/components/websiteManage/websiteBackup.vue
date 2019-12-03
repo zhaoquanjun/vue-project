@@ -20,7 +20,7 @@
             v-show="showBackup"
           >备份当前版本</button>
         </el-row>
-        <el-main style="margin-top:24px">
+        <el-main>
           <div class="domain-menu">
             <el-tabs v-model="backupType" @tab-click="handleClick">
               <el-tab-pane label="手动备份" name="manual"></el-tab-pane>
@@ -519,7 +519,7 @@ export default {
 .backupBtn {
   position: absolute;
   right: 16px;
-  top: -6px;
+  top: -9px;
 }
 .content-table {
   width: 100%;
@@ -559,6 +559,7 @@ export default {
   .member-content {
     padding: 0 16px;
     .user-list {
+      margin: 24px 0;
       position: relative;
       .member-list-title {
         border-left: 2px solid $--color-primary;

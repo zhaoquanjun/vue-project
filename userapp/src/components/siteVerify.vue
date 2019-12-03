@@ -191,7 +191,6 @@ export default {
     async getSiteValidationTags(siteId) {
       let { data } = await siteVerifyApi.getSiteValidationTags(siteId);
       this.verifyDetail = data;
-      console.log(data, "000-----");
     },
     /**
      * 提交表单
@@ -204,7 +203,6 @@ export default {
           if (valid) {
             this.insertSiteValidationTags();
           } else {
-            console.log("error submit!!");
             return false;
           }
         });
@@ -217,9 +215,11 @@ export default {
       );
       if (status === 200) {
         this.verifyDetail.siteId = data;
-        this.$message({
-          type: "success",
-          message: "添加成功!"
+        this.$notify({
+          customClass: "notify-success",
+          message: `添加成功`,
+          duration: 2000,
+          showClose: false
         });
       }
     },
@@ -229,7 +229,6 @@ export default {
         if (valid) {
           this.saveSiteValidationTags();
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -240,9 +239,11 @@ export default {
         this.verifyDetail
       );
       if (status === 200) {
-        this.$message({
-          type: "success",
-          message: "保存成功!"
+        this.$notify({
+          customClass: "notify-success",
+          message: `保存成功`,
+          duration: 2000,
+          showClose: false
         });
       }
     },
@@ -271,8 +272,6 @@ export default {
 </script>
 
 <style scoped>
-.el-form /deep/ .el-form-item__content .el-textarea textarea {
-}
 .el-form /deep/ .el-form-item__content .el-input__count {
   background: transparent;
   bottom: 0;
@@ -286,6 +285,7 @@ export default {
   .member-content {
     padding: 0 16px;
     .user-list {
+      margin: 24px 0;
       position: relative;
       .member-list-title {
         border-left: 2px solid $--color-primary;

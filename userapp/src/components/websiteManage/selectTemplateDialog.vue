@@ -482,10 +482,13 @@ export default {
             .catch(action => {
               if (action == "cancel") {
                 this.templateShow = false;
-                this.$router.push({
-                  path: "/website/mysite/siteinfo"
-                });
+                if (this.$route.path == "/website/selectTemplate") {
+                  this.$router.push({
+                    path: "/website/mysite/siteinfo"
+                  });
+                }
                 this.$emit("getSiteInfo", this.siteId);
+                this.$emit("getTodoInfo", this.siteId);
               }
             });
         }

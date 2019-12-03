@@ -73,10 +73,11 @@
           </el-select>
           <el-checkbox v-model="isRecommend" class="isRecommend">仅推荐</el-checkbox>
           <button
-            class="cl-button cl-button--primary_notbg"
+            class="cl-button cl-button--primary"
             style="margin-top:14px"
             @click="searchTemplate"
           >查询</button>
+          <button class="cl-button cl-button--primary_notbg" style="margin-top:14px" @click="searchReset">重置</button>
         </div>
       </div>
       <el-main>
@@ -91,7 +92,7 @@
           >
             <template slot="empty">
               <div class="empty-table">
-                <img src="~img/table-empty.png" />
+                <img src="~img/table-empty.png"  style="width:50px;"/>
                 <p>无数据</p>
               </div>
             </template>
@@ -130,17 +131,46 @@
             <el-table-column prop="myCreateTime" label="开通时间" sortable min-width="140"></el-table-column>
             <el-table-column prop="myUpdateTime" label="更新时间" sortable min-width="140"></el-table-column>
             <el-table-column prop="useCount" label="使用量" sortable min-width="90"></el-table-column>
-            <el-table-column label="设计师" min-width="120">
-              <template slot-scope="scope">
+            <el-table-column label="管理员|备注" min-width="120">
+              <template slot-scope="scope" style="position:relative;">
                 <div>
                   <p class="templateName">{{scope.row.designerPhone}}</p>
                   <p
                     class="templateName"
                     style="margin-top:5px;"
                     show-overflow-tooltip
-                  >{{scope.row.remark}}</p>
+                  >{{scope.row.remark}}
+                    <i 
+                      v-show="scope.row.siteId"
+                      class="iconfont iconicon-dash-bi" 
+                      :class="scope.row.id===isRemarkShowId?'active':''"
+                      @click="remarkShow(scope.row)"
+                    ></i>
+                  </p>
+                </div> 
+                <div  
+                   v-show="scope.row.id===isRemarkShowId"
+                   class="remarkDetail"
+                >
+                  <el-input
+                    type="textarea"
+                    placeholder="请输入备注内容"
+                    v-model="remarkText"
+                    maxlength="40"
+                    show-word-limit
+                  >
+                  </el-input>
+                  <button  
+                    class="cl-button cl-button--primary_notbg"
+                    style="margin-left:15px;"
+                    @click="cancelRemarkShow(scope.row)"
+                  >取 消</button>
+                  <button 
+                    class="confirmBtn cl-button cl-button--primary" @click="confirmRemarkShow(scope.row)"
+                  >保存</button>
                 </div>
               </template>
+             
             </el-table-column>
             <el-table-column label="模板状态">
               <template slot-scope="scope">
@@ -214,9 +244,12 @@
               <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
             </span>
           </div>
-          <div class="tips">为保证设计师可正常登录系统，请填写真实的手机号</div>
+          <div class="tips">开通【模板应用】服务，填写的手机号将是该模板的管理员</div>
           <div class="phoneWrap">
-            <div class="phoneTitle">设计师手机号</div>
+            <span class="phoneTitle">
+              <span style="color:#FB4D68">*</span>
+              管理员
+            </span>
             <el-input
               v-model="phone"
               placeholder="请输入手机号"
@@ -226,9 +259,13 @@
             ></el-input>
             <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
           </div>
+          <div class="newTemplateNameWrap">
+            <span class="newTemplateName">模版名称</span>
+            <el-input v-model="newTemplateName" placeholder="请输入模版名称" maxlength="20" class="inputNewTemplateName"></el-input>
+          </div>
           <div class="remarkWrap">
             <span class="remarkTitle">备注</span>
-            <el-input v-model="remark" placeholder="请输入备注信息" class="remarkInput" maxlength="20"></el-input>
+            <el-input v-model="remark" placeholder="请输入备注信息" class="remarkInput" maxlength="40"></el-input>
           </div>
           <div class="confirm">
             <button
@@ -253,12 +290,12 @@
               <span>整站模版设置</span>
             </span>
             <span class="close-pannel" @click="cancelSettingTemplate">
-              <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
+              <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:14px"></i>
             </span>
           </div>
           <div class="dialogContent" :style="{height:dialogHeight+'px'}">
             <div class="settingTemplateWrap">
-              <div class="templateName">模版名称</div>
+              <span class="templateName">模版名称</span>
               <el-input
                 v-model="settingTemplateName"
                 placeholder="请输入模版名称"
@@ -300,7 +337,7 @@
             </div>
             <div class="settingStatusWrap">
               <div class="settingStatus">模版状态</div>
-              <div>
+              <div style="display:inline-block;">
                 <el-select
                   v-model="settingTemplateStatus"
                   placeholder="模版状态"
@@ -333,6 +370,12 @@
                 <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
                 <button class="upload-btn cl-button cl-button--primary">上传图片</button>
               </el-upload>
+              <div class="tipTypeText">
+                PC端
+              </div>
+              <div class="tipInfoText">
+                推荐尺寸655×380px
+              </div>
               <el-upload
                 class="avatar-mobile-uploader"
                 :action="uploadPicActionMobile"
@@ -345,19 +388,59 @@
                 <img v-else src="~img/siteTemplate/defaultMobileImg.png" class="avatar-mobile" />
                 <button class="upload-mobile-btn cl-button cl-button--primary">上传图片</button>
               </el-upload>
-            </div>
-            <div style="margin-top:212px">
-              <span class="tipTypeText" style="margin-left:149px">PC端</span>
-              <span class="tipTypeText" style="margin-left:164px">Mobile端</span>
-            </div>
-            <div style="margin-top:8px">
-              <span class="tipInfoText" style="margin-left:102px">推荐尺寸655×380px</span>
-              <span class="tipInfoText" style="margin-left:79px">推荐尺寸148×236px</span>
+              <div class="tipTypeText">
+                 Mobile端
+              </div>
+              <div class="tipInfoText">
+                推荐尺寸148×236px
+              </div>
             </div>
           </div>
           <div class="confirm">
             <button class="confirmBtn cl-button cl-button--primary" @click="saveSettingTemplate">确定</button>
             <button class="cl-button cl-button--primary_notbg" @click="cancelSettingTemplate">取消</button>
+          </div>
+        </div>
+      </el-dialog>
+      <el-dialog
+        width="0"
+        :visible.sync="invitedMemberShow"
+        :show-close="false"
+        :close-on-click-modal="false"
+      >
+        <div class="right-pannel" :style="{width:'470px'}">
+          <div class="pannel-head">
+            <span>
+              <span>邀请成员</span>
+            </span>
+            <span class="close-pannel" @click="cancelInvitedMember">
+              <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
+            </span>
+          </div>
+          <div class="tips">输入成员手机号，可邀请成员协同管理模板</div>
+          <div class="phoneWrap">
+            <span class="phoneTitle">
+              <span style="color:#FB4D68">*</span>
+              邀请成员
+            </span>
+            <el-input
+              v-model="phoneMember"
+              placeholder="请输入邀请成员的手机号"
+              class="phoneInput"
+              style="width:332px;"
+              @blur="blurPhone"
+              :maxlength="11"
+            ></el-input>
+            <div 
+              class="ym-form-item__error" style="margin-left:85px;" v-show="errorTip"
+            >{{errorPhone}}</div>
+          </div>
+          <div class="confirm">
+            <button
+              class="confirmBtn cl-button cl-button--primary"
+              @click="confirmInvitedMember"
+            >确定</button>
+            <button class="cl-button cl-button--primary_notbg" @click="cancelInvitedMember">取消</button>
           </div>
         </div>
       </el-dialog>
@@ -377,8 +460,10 @@ export default {
       dialogHeight: 500,
       operateList: [
         { name: "设置", flag: "setting" },
-        { name: "更新", flag: "update" },
-        { name: "删除", flag: "delete" }
+        { name: "更新模版", flag: "update" },
+        { name: "邀请成员", flag: "invitedMember" },
+        { name: "删除成员", flag: "deleteMember" },
+        { name: "删除模版", flag: "delete" }
       ],
       operateShow: false,
       row: "",
@@ -396,7 +481,10 @@ export default {
       },
       createTemplateShow: false,
       phone: "",
+      newTemplateName:"",
       remark: "",
+      isRemarkShowId:"",
+      remarkText:"",
       errorTip: false,
       errorPhone: "",
       searchValue: "templateName",
@@ -411,7 +499,7 @@ export default {
         },
         {
           value: "designer",
-          label: "设计师"
+          label: "管理员"
         }
       ],
       search: "",
@@ -528,7 +616,12 @@ export default {
       curTemplateId: 0,
       curSiteId: 0,
       pageIndex: 1,
-      pageSize: 10
+      pageSize: 10,
+      //邀请成员 变量
+      invitedMemberShow:false,
+      deleteMemberShow:false,
+      phoneMember:"",
+      phoneMemberAppId:"",
     };
   },
   components: {},
@@ -640,6 +733,7 @@ export default {
     clearOpenDialog() {
       this.phone = "";
       this.remark = "";
+      this.newTemplateName="";
       this.errorTip = false;
       this.errorPhone = "";
     },
@@ -702,7 +796,7 @@ export default {
     async createTemplate() {
       if (this.phone == "") {
         this.errorTip = true;
-        this.errorPhone = "请输入设计师手机号";
+        this.errorPhone = "请输入手机号";
       } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
@@ -710,6 +804,7 @@ export default {
         this.isAble = true;
         let { status } = await templateApi.createTemplate(
           this.phone,
+          this.newTemplateName,
           this.remark
         );
         this.createTemplateShow = false;
@@ -744,7 +839,7 @@ export default {
     blurPhone() {
       if (this.phone == "") {
         this.errorTip = true;
-        this.errorPhone = "请输入设计师手机号";
+        this.errorPhone = "请输入手机号";
       } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
@@ -810,6 +905,17 @@ export default {
         this.formatTime();
       }
     },
+    // 重置查询内容
+    searchReset(){
+      this.search="";
+      this.firstIndustrySelect="";
+      this.secondIndustrySelect="";
+      this.languageSelect="zh-CN";
+      this.themeSelect="";
+      this.isRecommend="false";
+      this.templateStatus=-1;
+      this.searchTemplate();
+    },
     changePage(page) {
       this.pageIndex = page;
       this.searchTemplate();
@@ -830,6 +936,12 @@ export default {
         case "delete":
           this.deleteTemplate(row);
           return;
+        case "invitedMember":
+          this.invitedMember(row);
+          return;
+        case "deleteMember":
+          this.deleteMember(row);
+          return;
       }
     },
     _handleShowMoreOperate(ev, row) {
@@ -838,8 +950,8 @@ export default {
       }
       this.operateList = [
         { name: "设置", flag: "setting" },
-        { name: "更新", flag: "update" },
-        { name: "删除", flag: "delete" }
+        { name: "更新模版", flag: "update" },
+        { name: "删除模版", flag: "delete" }
       ];
       this.row = row;
       if (row.status == 2) {
@@ -850,7 +962,9 @@ export default {
       } else if (row.status == 3) {
         this.operateList = [
           { name: "设置", flag: "setting" },
-          { name: "删除", flag: "delete" }
+          { name: "邀请成员", flag: "invitedMember" },
+          { name: "删除成员", flag: "deleteMember" },
+          { name: "删除模版", flag: "delete" }
         ];
         this.$refs.operateSection.style.left =
           ev.pageX - ev.offsetX + 32 + "px";
@@ -858,8 +972,10 @@ export default {
       } else if (row.status == 1) {
         this.operateList = [
           { name: "设置", flag: "setting" },
-          { name: "更新", flag: "update" },
-          { name: "删除", flag: "delete" }
+          { name: "更新模版", flag: "update" },
+          { name: "邀请成员", flag: "invitedMember" },
+          { name: "删除成员", flag: "deleteMember" },
+          { name: "删除模版", flag: "delete" }
         ];
         this.$refs.operateSection.style.left =
           ev.pageX - ev.offsetX + 32 + "px";
@@ -1035,6 +1151,110 @@ export default {
     // 语言转换
     _getLanguage(language) {
       return getLanguage(language);
+    },
+    // 修改备注 弹窗
+    remarkShow(row){
+      this.isRemarkShowId=row.id;
+      this.remarkText=row.remark;
+      console.log(row);
+    },
+    // 备注弹窗取消
+    cancelRemarkShow(row){
+      this.isRemarkShowId="";
+    },
+    //备注弹窗确认
+    async confirmRemarkShow(row){
+      row.remark=this.remarkText;
+      this.isRemarkShowId="";
+      let { status }=await templateApi.updateTemplateRemark(row.siteId,this.remarkText);
+      if (status == 200){
+          this.isRemarkShowId = "";
+          this.$notify({
+            customClass: "notify-success",
+            message: `保存成功`,
+            duration: 1500,
+            showClose: false
+          });
+          this.searchTemplate();
+        }else{
+          this.$notify({
+            customClass: "notify-error",
+            message: `保存失败`,
+            duration: 1500,
+            showClose: false
+          });
+        } 
+    },
+    // 邀请成员
+    invitedMember(row){
+      this.phoneMember="";
+      this.errorTip=false;
+      this.invitedMemberShow=true;
+      this.phoneMemberAppId=row.id;
+    },
+    async confirmInvitedMember(){
+      console.log("queren")
+      if(this.phoneMember==""){
+        this.errorTip=true;
+        this.errorPhone="请输入手机号"
+      }else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phoneMember)) {
+        this.errorTip = true;
+        this.errorPhone = "您输入的手机号格式有误，请重新输入";
+      } else {
+        this.errorTip = false;
+        let { status } = await templateApi.invitedMember(
+          this.phoneMemberAppId,
+          this.phoneMember
+        );
+        if (status == 200){
+          this.invitedMemberShow = false;
+          this.$notify({
+            customClass: "notify-success",
+            message: `邀请成功`,
+            duration: 1500,
+            showClose: false
+          });
+          this.searchTemplate();
+        } else{
+          this.$notify({
+            customClass: "notify-error",
+            message: `邀请失败`,
+            duration: 1500,
+            showClose: false
+          });
+        }
+      }
+    },
+    cancelInvitedMember(){
+      this.invitedMemberShow=false;
+    },
+    // 删除成员
+    deleteMember(row){
+      this.$confirm(`将删除该模板下的所有成员，删除后不可恢复，是否确认删除？`, "提示", {
+        iconClass: "icon-warning",
+        callback: async action => {
+          if (action === "confirm") {
+            let { status } = await templateApi.deleteMember(row.id);
+             if (status === 200) {
+              this.$notify({
+                customClass: "notify-success",
+                message: `删除成功`,
+                duration: 1500,
+                showClose: false
+              });
+               this.searchTemplate();
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 1500,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
+      console.log(row.id,2222)
     }
   }
 };
@@ -1071,24 +1291,6 @@ export default {
 .table-list /deep/ .el-table .descending .sort-caret.descending {
   border-top-color: $--color-primary;
 }
-.phoneInput /deep/ input {
-  border-top-color: transparent;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  line-height: 20px;
-}
-.remarkInput /deep/ input {
-  border-top-color: transparent;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  line-height: 20px;
-}
-.templateNameInput /deep/ input {
-  border-top-color: transparent;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  line-height: 20px;
-}
 .el-select /deep/ .el-input__icon {
   line-height: 32px;
 }
@@ -1099,25 +1301,32 @@ export default {
   line-height: 20px;
 }
 .isRecommend /deep/ .el-checkbox__label {
-  font-size: $--font-size-base;
+  font-size: $--font-size-small;
   font-weight: $--font-weight-base;
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
+}
+.templateManage /deep/ .el-input__inner{
+  font-size: $--font-size-small;
 }
 #table-list /deep/ .el-table thead th:nth-child(1) .cell {
   padding-left: 24px;
 }
 .avatar-uploader /deep/ .el-upload {
   cursor: pointer;
-  position: absolute;
+  // position: absolute;
   left: 0;
   overflow: hidden;
 }
 .avatar-mobile-uploader /deep/ .el-upload {
   cursor: pointer;
-  position: absolute;
+  // position: absolute;
   left: 304px;
   overflow: hidden;
+}
+.remarkDetail /deep/ .el-textarea{
+  width:200px;
+  margin:9px;
 }
 </style>
 
@@ -1166,15 +1375,10 @@ export default {
   overflow: hidden;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  // display: inline-block;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  // white-space: nowrap;
-  // width: 100%;
 }
 .avatar {
-  width: 284px;
-  height: 176px;
+  width: 206px;
+  height: 120px;
   display: block;
   object-fit: cover;
 }
@@ -1196,8 +1400,8 @@ export default {
   }
 }
 .avatar-mobile {
-  width: 105px;
-  height: 176px;
+  width: 206px;
+  height: 328px;
   display: block;
   object-fit: cover;
 }
@@ -1209,7 +1413,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   .titleText {
-    font-size: $--font-size-base;
+    font-size: $--font-size-small;
     font-weight: 600;
     color: $--color-text-primary;
     border-left: 2px solid $--color-primary;
@@ -1305,6 +1509,31 @@ export default {
     font-size: $--font-size-small;
     font-weight: $--font-weight-base;
     line-height: 17px;
+    color:$--color-text-primary;
+    .iconicon-dash-bi{
+      font-size: $--font-size-small;
+      color:$--color-text-primary;
+      border-bottom: 2px solid $--color-text-primary;
+      &:hover{
+        color:$--color-text-orange;
+        border-bottom-color:$--color-text-orange;
+      }
+      &.active{
+        color:$--color-text-orange;
+        border-bottom-color:$--color-text-orange;
+      }
+    }
+  }
+  .remarkDetail{
+    position:absolute;
+    z-index: 1000;
+    background:$--color-white;
+    top:110px;
+    left:50px;
+    width:220px;
+    height:125px;
+    border:$--border-base;
+    border-radius: 2px;
   }
   .disable {
     opacity: 0.5;
@@ -1321,13 +1550,17 @@ export default {
   bottom: 0;
   transition: width 0.2s linear;
   overflow: hidden;
+  .ym-form-item__error{
+    margin-left:56px;
+  }
   .pannel-head {
     height: 70px;
     line-height: 70px;
     overflow: hidden;
     border-bottom: $--border-base;
     span {
-      font-size: $--font-size-medium;
+      font-size: $--font-size-base;
+      color: $--color-text-primary;
       font-weight: $--font-weight-primary;
       padding: 0 10px;
     }
@@ -1349,56 +1582,79 @@ export default {
     margin: 24px;
   }
   .phoneWrap {
-    margin: 24px;
-    margin-bottom: 0;
-    height: 107px;
+    margin: 24px 24px 16px;
+    font-size: $--font-size-small;
     .phoneTitle {
-      font-size: $--font-size-base;
       font-weight: $--font-weight-primary;
-      line-height: 20px;
+      line-height: 32px;
+      margin-right: 16px;
+      color: $--color-text-primary;
     }
     .phoneInput {
-      margin-top: 15px;
+      display: inline-block;
+      width: 352px;
+    }
+  }
+  .newTemplateNameWrap {
+    margin: 0 24px 16px;
+    .newTemplateName {
+      font-size: $--font-size-small;
+      font-weight: $--font-weight-primary;
+      line-height: 32px;
+      margin-right: 16px;
+      color: $--color-text-primary;
+    }
+    .inputNewTemplateName {
+      display: inline-block;
+      width: 352px;
     }
   }
   .remarkWrap {
-    margin: 0 24px;
+    margin: 0 24px 0 24px;
     .remarkTitle {
-      font-size: $--font-size-base;
+      color: $--color-text-primary;
+      font-size: $--font-size-small;
       font-weight: $--font-weight-primary;
-      line-height: 20px;
+      line-height: 32px;
+      margin-left:12px;
     }
     .remarkInput {
-      margin-top: 15px;
+      display: inline-block;
+      width: 352px;
+      margin-left:30px;
     }
   }
   .dialogContent {
     overflow-y: auto;
   }
   .settingTemplateWrap {
-    margin: 32px 24px 10px;
-    height: 97px;
+    margin: 24px 24px 16px;
+    font-size: $--font-size-small;
     .templateName {
-      font-size: $--font-size-base;
       font-weight: $--font-weight-primary;
-      line-height: 20px;
+      line-height: 32px;
     }
     .templateNameInput {
-      margin-top: 15px;
+      margin-left: 16px;
+      width:330px;
+      display: inline-block;
     }
   }
   .templateindustryWrap {
-    height: 113px;
     margin: 0 24px;
+    color: $--color-text-primary;
+    font-size: $--font-size-small;
     .templateindustryTitle {
-      font-size: $--font-size-base;
       font-weight: $--font-weight-primary;
-      line-height: 20px;
+      line-height: 32px;
       margin-bottom: 16px;
+      display: inline-block;
+      margin-right: 16px;
     }
     .settingFirstIndustrySelect {
-      width: 200px;
-      height: 45px;
+      height: 32px;
+      display: inline-block;
+      width:170px;
     }
     .settingLine {
       margin: 0 7px;
@@ -1409,41 +1665,51 @@ export default {
       background: rgba(185, 203, 207, 1);
     }
     .settingSecondIndustrySelect {
-      width: 200px;
-      height: 45px;
+      width: 138px;
+      height: 32px;
+      display: inline-block;
     }
   }
   .settingStatusWrap {
     margin-left: 24px;
+    font-size: $--font-size-small;
+    color: $--color-text-primary;
     .settingStatus {
-      font-size: $--font-size-base;
       font-weight: $--font-weight-primary;
-      line-height: 20px;
+      line-height: 32px;
+      display: inline-block;
+      margin-right: 16px;
+
     }
     .settingStatusSelect {
-      margin-top: 16px;
+      width:170px;
+      display: inline-block;
     }
   }
   .imgWrap {
     margin-top: 24px;
     margin-left: 24px;
+    font-size: $--font-size-small;
+    color: $--color-text-primary;
     .imgTitle {
-      font-size: $--font-size-base;
       font-weight: $--font-weight-primary;
       line-height: 20px;
     }
   }
 
   .tipTypeText {
-    font-size: $--font-size-base;
+    font-size: $--font-size-small;
     font-weight: $--font-weight-primary;
-    line-height: 20px;
+    margin-top: 12px;
+    text-align: center;
   }
   .tipInfoText {
-    font-size: $--font-size-base;
+    font-size: $--font-size-small;
     font-weight: $--font-weight-base;
     color: rgba(140, 140, 140, 1);
-    line-height: 20px;
+    line-height: 30px;
+    text-align: center;
+    margin: 0 auto 32px;
   }
 
   .confirm {
