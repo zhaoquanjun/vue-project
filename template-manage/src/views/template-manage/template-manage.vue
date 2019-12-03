@@ -20,7 +20,9 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput inputHeight"></el-input>
+          <el-input   
+          v-model="search" placeholder="请输入搜索内容" class="searchInput inputHeight"
+          ></el-input>
           <el-select
             v-model="firstIndustrySelect"
             placeholder="一级行业"
@@ -1341,13 +1343,18 @@ export default {
     cursor: pointer;
     padding: 8px 16px;
     line-height: 17px;
+    min-width: 48px;
     &:hover {
-      color: #00c1de;
-      background: rgba(0, 193, 222, 0.2);
+      color: $--color-primary;
+      background: $--background-color-hover;
     }
   }
   li:last-of-type {
     color: rgba(251, 77, 104, 1);
+    &:hover {
+      color: $--color-primary;
+      background: $--background-color-hover;
+    }
   }
 }
 .avatar-uploader {
@@ -1434,10 +1441,10 @@ export default {
     width: 103px;
     height: 32px;
     vertical-align: top;
+    border-right:none;
   }
   .searchInput {
     margin-top: 14px;
-    margin-left: -2px;
     width: 156px;
     height: 32px;
     vertical-align: top;

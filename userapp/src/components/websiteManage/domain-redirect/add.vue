@@ -35,7 +35,7 @@
         </div>
         <div class="pannel-footer">
             <button
-                class="footer-btn btn-bglightblue"
+                class="footer-btn confirm"
                 :disabled="disabled"
                 @click="handleConfirm"
             >确定</button>

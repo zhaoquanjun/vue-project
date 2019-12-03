@@ -365,10 +365,7 @@ export default {
                 });
                 this.$emit("resolveCdnByAliYunToken", params);
             }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消授权'
-                });          
+                         
             });
         },
         // 解析记录值复制
@@ -664,7 +661,7 @@ export default {
     width:14px;
     height:14px;
     margin-left:10px;
-    animation:myloading-img .5s linear infinite;
+    animation:myloading-img 1s linear infinite;
 }
 .domain-detail{
     background:$--background-color-selected;

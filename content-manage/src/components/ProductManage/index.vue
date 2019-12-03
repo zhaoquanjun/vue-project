@@ -167,7 +167,7 @@ export default {
         async batchSwitchStatus(options) {
             let stateTip;
             if (options.switchType === 1) {
-                stateTip = `删除后，网站中引用的文章列表将不再显示该产品，是否确定删除？`;
+                stateTip = `删除后，网站中引用的产品列表将不再显示该产品，是否确定删除？`;
             } else if (options.switchType === 2) {
                 var message = options.flag ? "取消置顶" : "置顶";
 

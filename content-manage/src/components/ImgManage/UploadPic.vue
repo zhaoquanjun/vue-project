@@ -39,7 +39,7 @@
             :before-upload="beforeUpload"
         >
             <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
-            <div @click="setFolder(false)" class="el-upload__text">
+            <div @click="setFolder(false)" class="el-upload__text" >
                 将文件拖到此处，或
                 <em>点击上传</em>
             </div>
@@ -242,6 +242,9 @@ export default {
         border-color: $--color-primary;
     }
 }
+.upload-pic /deep/ .el-upload:focus .el-upload-dragger{
+    border-color:$--color-primary;
+}
 .upload-pic /deep/ .el-upload-dragger .el-upload__text em {
     display: block;
     padding-top: 10px;
@@ -357,7 +360,7 @@ export default {
         padding-top: 12px;
         border-top: 1px solid #eee;
     }
-
+    
     .el-upload-dragger {
         position: none;
     }
