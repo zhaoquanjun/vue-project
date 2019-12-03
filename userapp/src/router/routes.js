@@ -63,6 +63,17 @@ export const defaultRoutes = [
         }
       },
       {
+        path: "prevtemplate",
+        name: "prevtemplate",
+        component: () => import("@/views/prevtemplate/prevtemplate.vue"),
+        meta: {
+          title: "模版预览",
+          requiresAuth: false,
+          isSub: true
+        }
+      },
+
+      {
         path: "sitemanage/backup",
         name: "backup",
         component: () => import("@/views/website-manage/websiteBackup.vue"),
