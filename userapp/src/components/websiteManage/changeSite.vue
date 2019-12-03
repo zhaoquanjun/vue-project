@@ -101,15 +101,10 @@ export default {
       this.language = this.changeSiteLanguage;
     }
   },
-  computed: {
-    mySiteId() {
-      return getCookie("tjufje");
-    }
-  },
   methods: {
     getSiteId() {
-      if (this.mySiteId) {
-        this.curSiteId = this.mySiteId;
+      if (this.$store.state.dashboard.siteId) {
+        this.curSiteId = this.$store.state.dashboard.siteId;
         this.$emit("getSiteId", this.curSiteId);
         this.getSiteInfo(this.curSiteId);
       } else {
@@ -317,7 +312,7 @@ export default {
           margin-top: 10px;
           background: $--color-white;
           border-radius: $--border-radius-base;
-          width: 44px;
+          padding: 0 10px;
           height: 32px;
           text-align: center;
           font-size: $--font-size-small;

@@ -154,7 +154,6 @@ export default {
     .handler-btn {
         margin-left: 32px;
         color:#ff6b00;
-        background:rgba(#ff7b00,.2);
     }
     .close-tip{
         float: right;

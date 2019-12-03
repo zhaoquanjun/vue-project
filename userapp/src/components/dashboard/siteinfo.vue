@@ -379,8 +379,8 @@ export default {
   methods: {
     getSiteInfo(info) {
       this.siteInfo = info;
-      if (this.mySiteId) {
-        this.siteId = this.mySiteId;
+      if (this.$store.state.dashboard.siteId) {
+        this.siteId = this.$store.state.dashboard.siteId;
         this.siteInfo.forEach(item => {
           if (item.siteId == this.siteId) {
             this.curSiteinfo = item;
@@ -613,14 +613,6 @@ export default {
       this.siteId = data;
       this.$store.commit("SETSITEID", this.siteId);
     }
-  },
-  computed: {
-    mySiteId() {
-      this.siteId = getCookie("tjufje")
-        ? getCookie("tjufje")
-        : this.$store.state.dashboard.siteId;
-      return this.siteId;
-    }
   }
 };
 </script>
@@ -845,7 +837,7 @@ export default {
         background-image: url("~img/dashboard/board-siteBackground1.png");
         background-repeat: no-repeat;
         background-position: 80% top;
-        background-size: 38%;
+        background-size: 140px;
         border-left: $--border-base;
         .siteInfo-wrap .siteInfo-item {
           &:hover {
@@ -860,7 +852,7 @@ export default {
         background-image: url("~img/dashboard/board-siteBackground2.png");
         background-repeat: no-repeat;
         background-position: 80% top;
-        background-size: 38%;
+        background-size: 140px;
         // padding: 0 28px 0 42px;
         .site-title {
           display: inline-block;
