@@ -79,7 +79,7 @@
             >
               <i
                 class="el-icon-search el-input__icon"
-                style="cursor: pointer;float:right"
+                style="cursor: pointer;float:right;color:#D7D8D9"
                 slot="suffix"
                 @click="search"
               ></i>
