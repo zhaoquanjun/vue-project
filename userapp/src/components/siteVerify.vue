@@ -271,15 +271,16 @@ export default {
 };
 </script>
 
-<style scoped>
-.el-form /deep/ .el-form-item__content .el-input__count {
-  background: transparent;
-  bottom: 0;
-  right: 15px;
-}
-</style>
-
 <style lang="scss" scoped>
+.el-form /deep/ .el-form-item {
+  margin-bottom: 32px;
+  .el-form-item__content .el-input__count {
+    background: transparent;
+    bottom: 0;
+    right: 15px;
+  }
+}
+
 .member-container {
   position: relative;
   .member-content {

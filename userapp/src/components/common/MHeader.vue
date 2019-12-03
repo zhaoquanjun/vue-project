@@ -14,14 +14,14 @@
       </div>
       <div>
         <div class="head-right head-item">
-          <span style="cursor: pointer">
+          <span class="operatingBtn">
             <i
               class="iconfont iconbianzu1"
               style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">帮助</b>
           </span>
-          <span style="cursor: pointer">
+          <span class="operatingBtn">
             <i
               class="iconfont iconbianzu2"
               style="margin-right:3px;font-size:16px;vertical-align:middle"
@@ -74,6 +74,7 @@
               placeholder="输入服务名称或备注内容搜索"
               @keyup.enter.native="search"
               clearable
+              @clear="search"
               class="input-with-select"
             >
               <i
@@ -84,9 +85,14 @@
               ></i>
             </el-input>
           </div>
+          <div class="empty-table" v-show="!appList.length">
+            <img src="~img/memberManage/table-empty.png" />
+            <p>无数据</p>
+          </div>
           <el-col
             :span="24"
             class="appitem"
+            v-show="appList.length"
             v-for="(item, index) in appList"
             :key="index"
             style="padding:0px"
@@ -125,7 +131,7 @@
                       :autosize="{ minRows: 3, maxRows: 3}"
                       placeholder="请输入内容"
                       v-model="appName"
-                      maxlength="30"
+                      maxlength="40"
                       show-word-limit
                       resize="none"
                     ></el-input>
@@ -399,6 +405,14 @@ export default {
         }
       }
     }
+    .operatingBtn {
+      cursor: pointer;
+      &:hover {
+        .iconfont {
+          color: $--color-primary;
+        }
+      }
+    }
   }
   .head-left {
     display: flex;
@@ -435,8 +449,8 @@ export default {
       padding: 0 30px;
       line-height: 32px;
       &:hover {
-        color: #262626;
-        background: #e0faff;
+        color: $--color-primary;
+        background: $--background-color-hover;
       }
     }
   }

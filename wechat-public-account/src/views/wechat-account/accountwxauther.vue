@@ -331,7 +331,7 @@ export default {
 <style lang="scss" scoped>
 .account-setting__section {
   box-sizing: border-box;
-  padding: 16px 32px 0;
+  padding: 0 32px;
   height: 100%;
   min-width: 800px;
   .account-setting__content {

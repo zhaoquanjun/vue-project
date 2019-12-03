@@ -10,7 +10,9 @@
                     placement="bottom-end"
                 ></el-tooltip>
             </span>
-            <span class="close-pannel" @click="handleCancel">X</span>
+            <span class="close-pannel" @click="handleCancel">
+                <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
+            </span>
         </div>
 
         <div class="domain-wrap">

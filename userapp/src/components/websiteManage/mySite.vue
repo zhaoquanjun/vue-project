@@ -22,8 +22,8 @@
                 class="siteImgBackground"
                 :style="{background: 'url(' + ( siteImage ) + ') no-repeat center/cover'}"
               >
-                <div class="modal">
-                  <button class="choseSite" @click="changeTemplate()">更换模版</button>
+                <div class="modal" @click="changeTemplate()">
+                  <button class="choseSite">更换模版</button>
                 </div>
                 <dir class="changeTemplate">更换模板</dir>
               </div>
@@ -109,14 +109,16 @@
           <div class="siteSetting-wrap">
             <div class="siteSetting">
               <div class="siteSetting-item">
-                <span class="siteSettingText">网站图标：</span>
-                <el-tooltip
-                  effect="dark"
-                  content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB，仅支持.png格式"
-                  placement="top-start"
-                >
-                  <i class="iconfont iconicon-exclamationmark"></i>
-                </el-tooltip>
+                <div class="siteSetting-left">
+                  <span class="siteSettingText">网站图标：</span>
+                  <el-tooltip
+                    effect="dark"
+                    content="上传网站icon后，浏览器标签左侧会显示您上传的图片，为保证浏览效果，推荐图片尺寸为256x256像素，大小不超过500KB，仅支持.png格式"
+                    placement="top-start"
+                  >
+                    <i class="iconfont iconicon-exclamationmark"></i>
+                  </el-tooltip>
+                </div>
                 <el-upload
                   class="avatar-uploader"
                   :action="uploadPicUrl"
@@ -138,14 +140,16 @@
                 <!-- <i v-if="iconUrl" class="iconfont iconshanchu" @click="removeIcon"></i> -->
               </div>
               <div class="siteSetting-item">
-                <span class="siteSettingText">显示阿里云服务信息：</span>
-                <el-tooltip
-                  effect="dark"
-                  content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字"
-                  placement="top-start"
-                >
-                  <i class="iconfont iconicon-exclamationmark"></i>
-                </el-tooltip>
+                <div class="siteSetting-left">
+                  <span class="siteSettingText">显示阿里云服务信息：</span>
+                  <el-tooltip
+                    effect="dark"
+                    content="关闭显示阿里云服务信息后，网页底部将不再显示“本网站由阿里云提供云计算及安全服务”文字"
+                    placement="top-start"
+                  >
+                    <i class="iconfont iconicon-exclamationmark"></i>
+                  </el-tooltip>
+                </div>
                 <el-switch
                   @change="updateSiteServiceInfo"
                   v-model="siteServiceInfoValue"
@@ -155,10 +159,16 @@
             </div>
             <div class="siteSetting">
               <div class="siteSetting-item">
-                <span class="siteSettingText">禁止右键保存图片：</span>
-                <el-tooltip effect="dark" content="开启右键保存图片后，将无法在网站内使用右键保存图片" placement="top-start">
-                  <i class="iconfont iconicon-exclamationmark"></i>
-                </el-tooltip>
+                <div class="siteSetting-left">
+                  <span class="siteSettingText">禁止右键保存图片：</span>
+                  <el-tooltip
+                    effect="dark"
+                    content="开启右键保存图片后，将无法在网站内使用右键保存图片"
+                    placement="top-start"
+                  >
+                    <i class="iconfont iconicon-exclamationmark"></i>
+                  </el-tooltip>
+                </div>
                 <el-switch
                   @change="updateSiteRightCopy"
                   v-model="siteRightCopyValue"
@@ -166,14 +176,16 @@
                 ></el-switch>
               </div>
               <div class="siteSetting-item">
-                <span class="siteSettingText">启用Powered by：</span>
-                <el-tooltip
-                  effect="dark"
-                  content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字"
-                  placement="top-start"
-                >
-                  <i class="iconfont iconicon-exclamationmark"></i>
-                </el-tooltip>
+                <div class="siteSetting-left">
+                  <span class="siteSettingText">启用Powered by：</span>
+                  <el-tooltip
+                    effect="dark"
+                    content="关闭Powered by后，网页底部将不再显示“Powered by CloudDream”文字"
+                    placement="top-start"
+                  >
+                    <i class="iconfont iconicon-exclamationmark"></i>
+                  </el-tooltip>
+                </div>
                 <el-switch
                   @change="isOpenPowered"
                   v-model="isOpenPoweredValue"
@@ -638,6 +650,7 @@ export default {
         opacity: 0;
         background: rgba(255, 107, 0, 0.9);
         transition: all 0.2s linear;
+        cursor: pointer;
       }
       &:hover {
         .modal {
@@ -726,6 +739,9 @@ export default {
           margin-left: 16px;
         }
       }
+      .siteType:nth-child(1) {
+        margin-top: 24px;
+      }
     }
     .siteSetting-wrap {
       margin-top: 30px;
@@ -743,6 +759,10 @@ export default {
         .siteSetting-item {
           display: flex;
           align-items: center;
+          .siteSetting-left {
+            display: inline-block;
+            width: 140px;
+          }
         }
         .siteSetting-item:nth-child(2) {
           margin-top: 24px;

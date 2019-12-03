@@ -15,11 +15,11 @@
             <el-header>
                 <el-row class="article-head">
                     <el-col
-                        :span="7"
+                        :span="13"
                         :offset="3"
                         style=" font-size: 22px;"
                     >{{isEditor==1?'编辑产品':'新增产品'}}</el-col>
-                    <el-col :span="9" :offset="3">
+                    <el-col :span="6" >
                         <div class="article-btn">
                             <button class="cl-button cl-button--primary_notbg" @click="()=>$router.go(-1)">返回</button>
                             <button class="cl-button cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
@@ -182,7 +182,7 @@ export default {
 }
 .article-head {
     .article-btn {
-        text-align: right;
+       padding-left: 16px
     }
 }
 </style>
