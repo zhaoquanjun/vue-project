@@ -73,6 +73,7 @@
               v-model="keyword"
               placeholder="输入服务名称或备注内容搜索"
               @keyup.enter.native="search"
+              @clear="search"
               clearable
               class="input-with-select"
             >

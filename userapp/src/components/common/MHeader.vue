@@ -74,6 +74,7 @@
               placeholder="输入服务名称或备注内容搜索"
               @keyup.enter.native="search"
               clearable
+              @clear="search"
               class="input-with-select"
             >
               <i
