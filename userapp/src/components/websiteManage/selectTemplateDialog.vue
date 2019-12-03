@@ -99,7 +99,7 @@
                     ></div>
                     <div class="modal" v-if="item.id != templateId">
                       <button class="cl-button cl-button--primary" @click="choseSite(item)">选择</button>
-                      <a :href="`http://${item.domain}`" target="_blank" style="margin-top:12px">
+                      <a @click="goPrevTemplate(item.domain)" style="margin-top:12px">
                         <button class="cl-button cl-button--primary_notbg">预览</button>
                       </a>
                     </div>
@@ -687,6 +687,13 @@ export default {
         document.getElementsByClassName("templateContent")[0].style.height =
           window.innerHeight - 160 + "px";
       });
+    },
+    goPrevTemplate(domain){
+      let routeData = this.$router.resolve({
+        name: "prevtemplate",
+        query: {domain: domain}
+     });
+      window.open(routeData.href, '_blank')
     }
   }
 };
