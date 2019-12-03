@@ -99,7 +99,7 @@
                     ></div>
                     <div class="modal" v-if="item.id != templateId">
                       <button class="cl-button cl-button--primary" @click="choseSite(item)">选择</button>
-                      <a @click="goPrevTemplate(item.domain)" style="margin-top:12px">
+                      <a @click="goPrevTemplate(item)" style="margin-top:12px">
                         <button class="cl-button cl-button--primary_notbg">预览</button>
                       </a>
                     </div>
@@ -691,10 +691,16 @@ export default {
           window.innerHeight - 160 + "px";
       });
     },
-    goPrevTemplate(domain){
+    goPrevTemplate(item){
       let routeData = this.$router.resolve({
         name: "prevtemplate",
-        query: {domain: domain}
+        query: {
+          CurrentSiteId: this.siteId,
+          SiteName: this.siteName,
+          Domain: item.domain,
+          TemplateId: item.id,
+          TemplateSiteId: item.siteId
+        }
      });
       window.open(routeData.href, '_blank')
     }

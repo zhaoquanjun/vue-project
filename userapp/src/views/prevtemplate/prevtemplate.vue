@@ -8,31 +8,39 @@
 </template>
 <script>
     import * as memberManageApi from "@/api/request/siteMemberApi";
+    import * as templateApi from "@/api/request/templateApi";
+    import { designerUrl } from "@/environment/index";
     export default {
         name: "members-site",
         data() {
             return {
+                item: this.$route.query,
                 src: ''
             }
         },
         created(){
-            this.src = `http://${this.$route.query.domain}/prev/showtemplate/?flag=pc`
+            this.src = `http://${this.item.Domain}/prev/showtemplate/?flag=pc`
         },
         methods: {
-            //deviceswitch
-            release(){
-                var iframe = document.getElementById("prve-iframe")
-
-               
-            // var iframeWindow = document.getElementById('prve-iframe').contentWindow;
-            // iframeWindow.postMessage(msg, "http://localhost:63342/HelloHBuilder/html2/onmessage.html");
-                
-                var temp = parent.window.frames["myframe"].document.getElementById("deviceswitch").innerHRML;
-                console.log('iframe:',iframe.contentWindow)
-                console.log('temp:',temp)
-
-                // let b =iframe.src;
-                // console.log('44:',b)
+            async release(){
+                let para ={
+                    CurrentSiteId: this.item.CurrentSiteId,
+                    SiteName: this.item.SiteName,
+                    TemplateId: this.item.TemplateId,
+                    TemplateSiteId: this.item.TemplateSiteId
+                }
+                let  {status} =  await templateApi.UseTemplateWithTheme(para);
+                if (status == 200) {
+                    this.$notify({
+                        customClass: "notify-success",
+                        message: `应用模版成功`,
+                        duration: 1500,
+                        showClose: false
+                    });
+                }
+                setTimeout(()=>{
+                    window.location.href = `${designerUrl}?siteId=${this.item.CurrentSiteId}`;
+                },2000)
             }
            
         }
