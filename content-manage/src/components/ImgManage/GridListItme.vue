@@ -193,8 +193,10 @@ export default {
             text-align: center;
             line-height: 27px;
             border-radius: 50%;
-            background: #00c1de;
-            
+            background: $--color-primary;
+            i {
+                color: #fff;
+            }
         }
         button {
             display: inline-block;
