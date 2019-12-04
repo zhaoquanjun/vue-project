@@ -102,6 +102,7 @@
                 </template>
             </el-table-column>
             <el-table-column width="150" label="操作">
+               
                 <template slot-scope="props">
                     <button 
                         v-if="props.row.isInAliDns && props.row.cdnDomainResolveStatus===0 &&props.row.cdnStatus!==1 && props.row.cdnStatus!==2 && props.row.cdnStatus!==3"  class='handle-btn'
@@ -112,10 +113,9 @@
                     <span v-else>-</span>
                 </template>
             </el-table-column>
-            <el-table-column type="expand" label="详情">
+            <el-table-column type="expand" >
                 <template slot-scope="props">
-                    <span v-if="props.row.cdnDomainResolveStatus===3">-</span>
-                    <div class="domain-detail" v-else>
+                    <div class="domain-detail" >
                         <el-row class="domain-detail-row"> 
                             <el-col :span="5">
                                 <div style="min-width:400px;">
@@ -149,6 +149,7 @@
                         </el-row>
                         <div class="explain-islink">如何进行手动解析?</div>
                         <el-row class="status-switch" v-if="props.row.isInAliDns" style="width:49.5%;">
+                            <!-- cdn状态 -->
                             <el-col :span="10">
                                 <div style="min-width:500px;">
                                     <span>CDN状态</span>
@@ -157,7 +158,6 @@
                                         effect="dark"
                                         content='为提高您的网站访问速度，添加域名时将自动开启CDN'
                                         placement="top-start"
-                                        
                                     >
                                         <i class="iconfont iconicon-exclamationmark status" style="color:#cdcaca;margin-left:10px;"></i>
                                     </el-tooltip>
@@ -166,7 +166,7 @@
                                         v-if="props.row.cdnStatus===1 ||props.row.cdnStatus===2"
                                         class="status"
                                     >{{props.row.cdnStatusDesc}}</span>
-                                    <div v-else-if="props.row.cdnStatus===3" style="display:inline-block;">
+                                    <div v-else-if="props.row.cdnStatus===3">
                                         <el-switch
                                             :value="props.row.cdnStatusDesc!=='审核未通过'"
                                             @change="reopenCdn(props.row)"
@@ -197,6 +197,7 @@
                                 </div>
                             </el-col>
 
+                            <!-- https状态 -->
                             <el-col :span="10" min-width="200">
                                 <div 
                                     v-if="props.row.cdnStatus===5 && props.row.cdnDomainResolveStatus===2"
@@ -235,7 +236,7 @@
                                         @change="swichChange(props.row.httpsStatus,props.row,props.$index)"
                                     >
                                     </el-switch>
-                                </div> 
+                                </div>                                
                             </el-col>
                         </el-row>
                     </div>     
@@ -300,6 +301,7 @@
                 <br />
             </span>
         </el-dialog>
+       
     </div>
 </template>
 <script>
@@ -320,12 +322,12 @@ export default {
                 return row.id;
             },
             passTip: false,
-            hasCopy: false,
-            showDomainDetail:""
+            hasCopy: false
         };
     },
     mounted() {
         this.resetExpandText();
+        this.resetExplainStatus();
     },
     methods: {
         //一键解析域名
@@ -537,15 +539,34 @@ export default {
         notPassTip() {
             this.passTip = true;
         },
-        resetExpandText() {
-            this.$nextTick(() => {
+        getListNotResolve(){
+               this.notResolveList = []
+            this.tableData.forEach((item,index)=>{
+            
+              
+                this.notResolveList.push(
+                  item.cdnDomainResolveStatus
+                )
+               
+            })
+        },
+        resetExpandText(index) {
+                this.$nextTick(() => {
                 let eles = document.getElementsByClassName(
                     "el-table__expand-icon"
                 );
+               
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
-                    ele.innerHTML =
-                        `<el-tooltip class="item" effect="dark" content="解析详情" placement="top"><i class="iconfont iconicon-des-setup" style="color:#262626;"></i></el-tooltip>`;
+                     console.log( this.notResolveList[i],'---')
+                    if(this.notResolveList[i] ==3){
+                         ele.innerHTML =
+                        '<button disabled="disabled" style="color:#262626;height: 24px;">-</button>';
+                    }else{
+                         ele.innerHTML =
+                        `<i aria-describedby="el-tooltip-5444" tabindex="2" class=" iconfont iconicon-des-setup relative" style="color:#262626;"></i>`;
+                    }
+                   
                 }
             });
         },
@@ -555,25 +576,22 @@ export default {
         },
         // 定时刷新解析状态
         resetExplainStatus(){
-            let tableData=this.tableData;
-            let flag=false;
-            tableData.forEach(elem=>{
+            this.tableData.forEach(elem=>{
                 if(elem.cdnDomainResolveStatus!==2){
-                   flag = true
-                }
-            })
-             if(flag){
-                 let timer=setInterval(() => {
-                        this.updateExplainStatus();
+                    let timer=setInterval(() => {
+                        this.$emit("getCdnDomainList")
                         clearInterval(timer);
                     }, 180000);
-             }
+                }
+            })
+
         }
     },
     watch: {
         tableData() {
-            this.resetExpandText();
-            this.resetExplainStatus();
+            this.getListNotResolve()
+           this.resetExpandText();
+           this.resetExplainStatus();
         }
     }
 };
@@ -620,6 +638,16 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.el-table /deep/ .tooltip{
+    display: none;
+    top:-20px;
+}
+.el-table /deep/ .iconicon-des-setup{
+        position: relative;
+}
+.el-table /deep/ .iconicon-des-setup:hover .tooltip{
+    display: block
+}
 .handle-btn-wrap {
     width: 70%;
     display: flex;
