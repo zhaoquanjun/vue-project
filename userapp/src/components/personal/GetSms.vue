@@ -168,7 +168,7 @@ export default {
     methods: {
         async send() {
             if(this.canSendClick){
-                this.canClick=false;
+                this.canSendClick=false;
                 console.log("send")
                 let { status } = await sendSourcePhoneCode();
                 if (status === 200) {
@@ -202,7 +202,7 @@ export default {
                 }
                 setTimeout(()=>{
                     this.canSendClick=true;
-                },1000)
+                },150)
             }
         },
         async sendChangePhoneCode() {

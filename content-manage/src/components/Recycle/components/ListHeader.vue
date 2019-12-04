@@ -54,7 +54,7 @@
                 <div class="handle-batch">
                     <span>
                         已选
-                        <i>{{countData}}</i>
+                        <i style="color:#fe9837;">{{countData}}</i>
                         {{recycleTempData.batchText}}
                     </span>
                     <div>
