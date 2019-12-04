@@ -102,6 +102,7 @@
                 </template>
             </el-table-column>
             <el-table-column width="150" label="操作">
+               
                 <template slot-scope="props">
                     <button 
                         v-if="props.row.isInAliDns && props.row.cdnDomainResolveStatus===0 &&props.row.cdnStatus!==1 && props.row.cdnStatus!==2 && props.row.cdnStatus!==3"  class='handle-btn'
@@ -112,10 +113,9 @@
                     <span v-else>-</span>
                 </template>
             </el-table-column>
-            <el-table-column type="expand">
+            <el-table-column type="expand" >
                 <template slot-scope="props">
-                    <span v-if="props.row.cdnDomainResolveStatus===3">-</span>
-                    <div class="domain-detail" v-else>
+                    <div class="domain-detail" >
                         <el-row class="domain-detail-row"> 
                             <el-col :span="5">
                                 <div style="min-width:400px;">
@@ -301,6 +301,7 @@
                 <br />
             </span>
         </el-dialog>
+       
     </div>
 </template>
 <script>
@@ -538,15 +539,34 @@ export default {
         notPassTip() {
             this.passTip = true;
         },
-        resetExpandText() {
-            this.$nextTick(() => {
+        getListNotResolve(){
+               this.notResolveList = []
+            this.tableData.forEach((item,index)=>{
+            
+              
+                this.notResolveList.push(
+                  item.cdnDomainResolveStatus
+                )
+               
+            })
+        },
+        resetExpandText(index) {
+                this.$nextTick(() => {
                 let eles = document.getElementsByClassName(
                     "el-table__expand-icon"
                 );
+               
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
-                    ele.innerHTML =
-                        '<el-tooltip class="item" effect="dark" content="解析详情" placement="top"><i class="iconfont iconicon-des-setup" style="color:#262626;"></i></el-tooltip>';
+                     console.log( this.notResolveList[i],'---')
+                    if(this.notResolveList[i] ==3){
+                         ele.innerHTML =
+                        '<button disabled="disabled" style="color:#262626;height: 24px;">-</button>';
+                    }else{
+                         ele.innerHTML =
+                        `<i aria-describedby="el-tooltip-5444" tabindex="2" class=" iconfont iconicon-des-setup relative" style="color:#262626;"></i>`;
+                    }
+                   
                 }
             });
         },
@@ -569,8 +589,9 @@ export default {
     },
     watch: {
         tableData() {
-            this.resetExpandText();
-            this.resetExplainStatus();
+            this.getListNotResolve()
+           this.resetExpandText();
+           this.resetExplainStatus();
         }
     }
 };
@@ -617,6 +638,16 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.el-table /deep/ .tooltip{
+    display: none;
+    top:-20px;
+}
+.el-table /deep/ .iconicon-des-setup{
+        position: relative;
+}
+.el-table /deep/ .iconicon-des-setup:hover .tooltip{
+    display: block
+}
 .handle-btn-wrap {
     width: 70%;
     display: flex;
