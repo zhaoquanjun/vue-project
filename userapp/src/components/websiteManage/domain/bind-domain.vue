@@ -22,7 +22,7 @@
                     <div class="el-form-item__error" v-if="onerrorTip">{{onerrorText}}</div>
                 </el-form-item>
             </el-form>
-            <div class="tips">
+            <!-- <div class="tips">
                 <h4 class="tips-title">温馨提示：</h4>
                 <p class="tips-item">
                     <span>1、仅支持添加阿里云域名，非阿里云域名，请先将域名转入阿里云后再添加。</span>
@@ -36,7 +36,7 @@
                         <a class="href-color" :href="whyOpenCdn" target="_blank">为什么要开启CDN？</a>
                     </span>
                 </p>
-            </div>
+            </div> -->
         </div>
         <div class="pannel-footer">
             <button
