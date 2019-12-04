@@ -74,7 +74,7 @@ export default {
             this.form.targetDomain = this._targetDomain;
              this.title="编辑"
         }else{
-                this.title="添加"
+                this.title="添加重定向"
             }
           
     },
