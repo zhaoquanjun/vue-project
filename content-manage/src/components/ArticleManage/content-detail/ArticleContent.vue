@@ -89,8 +89,8 @@
                         </el-header>
                         <modal-content ref="imgList" :isGrid="true" :multiple="true" @getImgInfo="getImgInfo" :isPopup="true">
                             <div slot="modal-footer" class="modal-footer" style=" ">
-                                <button type="button" @click="getEditorImg" class="sure">确定</button>
-                                <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                                <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
+                                <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
                             </div>
                         </modal-content>
                     </div>
@@ -99,14 +99,12 @@
                         <div id="videoContent" class="contentDialog">
                             <el-header class="modal-header" style="height:65px">
                                 <span class="title" style="font-size: 16px;">我的视频</span>
-                                <span class="close-icon" @click="cancelgetVideo">
-                                    <i class="iconfont iconguanbi"></i>
-                                </span>
+                                <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelgetVideo"></i>
                             </el-header>
                             <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
                                 <div slot="modal-footer" class="modal-footer">
-                                    <button @click="cancelgetVideo" class="cancel">取消</button>
-                                    <button @click="getVideoOssUrl" class="sure">确定</button>
+                                    <button @click="cancelgetVideo" class="cl-button cl-button--primary_notbg">取消</button>
+                                    <button @click="getVideoOssUrl" class="cl-button cl-button--primary">确定</button>
                                 </div>
                             </videoManage>
                         </div>
@@ -886,12 +884,6 @@ export default {
         font-weight: 500;
         color: rgba(38,38,38,1);
     }
-    .close-icon {
-        display: block;
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-    }
 
 }
 #videoContent .el-container {
@@ -920,19 +912,6 @@ export default {
     padding-top: 0;
     button {
         margin-top: 24px;
-        width: 76px;
-        height: 40px;
-        background: rgba(0,193,222,1);
-        border-radius: $--border-radius-base;
-        // line-height: 40px;
-        background: rgba(0, 193, 222, 1);
-        margin-right: 16px;
-        color: #fff;
-    }
-    .cancel {
-        color: rgba(9,204,235,1);
-        background: rgba(255,255,255,1);
-        border: 1px solid $--color-success;
     }
 }
 </style>
