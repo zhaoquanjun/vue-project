@@ -726,8 +726,5 @@ export default {
         color:$--color-text-orange;
     }
 }
-.iconfont.iconicon-des-setup:hover{
-    color:$--color-text-orange;
-}
 </style>
 
