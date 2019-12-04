@@ -182,7 +182,7 @@ export default {
 }
 .border-line {
     border: 1px dashed $--color-primary;
-    background: rgba(242, 250, 251, 0.501);
+    // background: rgba(242, 250, 251, 0.501);
 }
 .avatar-uploader {
     margin: 0 auto;

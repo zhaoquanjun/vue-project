@@ -15,8 +15,8 @@
         <el-container class="article-container" style>
             <el-header>
                 <el-row class="article-head">
-                    <el-col :span="11" :offset="3" style=" font-size: 22px;">{{operateName}}文章</el-col>
-                    <el-col :span="10">
+                    <el-col :span="14" :offset="3" style=" font-size: 22px;">{{operateName}}文章</el-col>
+                    <el-col :span="6">
                         <div class="article-btn">
                             <button class="cl-button cl-button--primary_notbg"  @click="()=>$router.go(-1)">返回</button>
                             <button class="cl-button cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
@@ -36,7 +36,7 @@
                                 ref="articleContent"
                             />
                         </el-col>
-                        <el-col :span="6"  style="margin-left: 16px;max-width:345px;min-width:345px">
+                        <el-col :span="6"  style="max-width:345px;min-width:345px">
                             <RightContent :imageUrl="imageUrl" ref="articleRight" />
                         </el-col>
                     </el-row>
@@ -162,7 +162,8 @@ export default {
 }
 .article-head {
     .article-btn {
-        float: right;
+        // float: right;
+        padding-left: 16px
         
     }
 }

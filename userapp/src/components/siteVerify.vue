@@ -255,31 +255,28 @@ export default {
     },
 
     blur() {
-      if (
-        this.verifyDetail.baiduTag ||
-        this.verifyDetail.qihuTag ||
-        this.verifyDetail.sougouTag ||
-        this.verifyDetail.googleTag ||
-        this.verifyDetail.bingTag
-      ) {
-        this.disable = false;
-      } else {
-        this.disable = true;
-      }
+      this.$refs["verifyDetail"].validate(valid => {
+        if (valid) {
+          this.disable = false;
+        } else {
+          this.disable = true;
+        }
+      });
     }
   }
 };
 </script>
 
-<style scoped>
-.el-form /deep/ .el-form-item__content .el-input__count {
-  background: transparent;
-  bottom: 0;
-  right: 15px;
-}
-</style>
-
 <style lang="scss" scoped>
+.el-form /deep/ .el-form-item {
+  margin-bottom: 32px;
+  .el-form-item__content .el-input__count {
+    background: transparent;
+    bottom: 0;
+    right: 15px;
+  }
+}
+
 .member-container {
   position: relative;
   .member-content {

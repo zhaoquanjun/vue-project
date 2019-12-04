@@ -160,41 +160,49 @@ export default {
                     label: "+39"
                 }
             ],
-            value: "中国大陆"
+            value: "中国大陆",
+            canSendClick:true
         };
     },
     mounted() {},
     methods: {
         async send() {
-            let { status } = await sendSourcePhoneCode();
-            if (status === 200) {
-                this.$notify({
-                    customClass: "notify-success",
-                    message: "发送成功",
-                    duration: 1500,
-                    showClose: false
-                });
-                if (!this.timer) {
-                    this.count = TIME_COUNT;
-                    this.show = false;
-                    this.timer = setInterval(() => {
-                        if (this.count > 0 && this.count <= TIME_COUNT) {
-                            this.count--;
-                        } else {
-                            this.show = true;
-                            clearInterval(this.timer); // 清除定时器
-                            this.timer = null;
-                            this.count = "";
-                        }
-                    }, 1000);
+            if(this.canSendClick){
+                this.canClick=false;
+                console.log("send")
+                let { status } = await sendSourcePhoneCode();
+                if (status === 200) {
+                    this.$notify({
+                        customClass: "notify-success",
+                        message: "发送成功",
+                        duration: 1500,
+                        showClose: false
+                    });
+                    if (!this.timer) {
+                        this.count = TIME_COUNT;
+                        this.show = false;
+                        this.timer = setInterval(() => {
+                            if (this.count > 0 && this.count <= TIME_COUNT) {
+                                this.count--;
+                            } else {
+                                this.show = true;
+                                clearInterval(this.timer); // 清除定时器
+                                this.timer = null;
+                                this.count = "";
+                            }
+                        }, 1000);
+                    }
+                } else {
+                    this.$notify({
+                        customClass: "notify-error",
+                        message: "发送失败",
+                        duration: 1500,
+                        showClose: false
+                    });
                 }
-            } else {
-                this.$notify({
-                    customClass: "notify-error",
-                    message: "发送失败",
-                    duration: 1500,
-                    showClose: false
-                });
+                setTimeout(()=>{
+                    this.canSendClick=true;
+                },1000)
             }
         },
         async sendChangePhoneCode() {

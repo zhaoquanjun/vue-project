@@ -20,7 +20,9 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput inputHeight"></el-input>
+          <el-input   
+          v-model="search" placeholder="请输入搜索内容" class="searchInput inputHeight"
+          ></el-input>
           <el-select
             v-model="firstIndustrySelect"
             placeholder="一级行业"
@@ -428,7 +430,7 @@
               placeholder="请输入邀请成员的手机号"
               class="phoneInput"
               style="width:332px;"
-              @blur="blurPhone"
+              @blur="blurPhoneMember"
               :maxlength="11"
             ></el-input>
             <div 
@@ -841,6 +843,18 @@ export default {
         this.errorTip = true;
         this.errorPhone = "请输入手机号";
       } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
+        this.errorTip = true;
+        this.errorPhone = "您输入的手机号格式有误，请重新输入";
+      } else {
+        this.errorTip = false;
+        this.errorPhone = "";
+      }
+    },
+    blurPhoneMember() {
+      if (this.phoneMember == "") {
+        this.errorTip = true;
+        this.errorPhone = "请输入手机号";
+      } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phoneMember)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
       } else {
@@ -1341,13 +1355,18 @@ export default {
     cursor: pointer;
     padding: 8px 16px;
     line-height: 17px;
+    min-width: 48px;
     &:hover {
-      color: #00c1de;
-      background: rgba(0, 193, 222, 0.2);
+      color: $--color-primary;
+      background: $--background-color-hover;
     }
   }
   li:last-of-type {
     color: rgba(251, 77, 104, 1);
+    &:hover {
+      color: $--color-primary;
+      background: $--background-color-hover;
+    }
   }
 }
 .avatar-uploader {
@@ -1434,10 +1453,10 @@ export default {
     width: 103px;
     height: 32px;
     vertical-align: top;
+    border-right:none;
   }
   .searchInput {
     margin-top: 14px;
-    margin-left: -2px;
     width: 156px;
     height: 32px;
     vertical-align: top;

@@ -54,14 +54,17 @@ body {
 
 // 暂无数据
 .empty-table {
-    height: 230px;
+    padding: 50px;
     text-align: center;
+    height: 251px;
 
     img {
-        margin-top: 45px;
-        width: 80px;
         vertical-align: middle;
         padding: 18px 28px;
+        display: inline-block;
+        width: 50px;
+        height: 35px;
+        margin-top: 50px;
     }
 
     p {

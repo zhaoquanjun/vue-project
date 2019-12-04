@@ -285,21 +285,7 @@ export default {
                 return
             }
             this.categoryId = data.id
-            let allCategoryEle = document.querySelector(".el-tree")
-                .childNodes[0].childNodes[0];
-            if (data.level === 0) {
-                this.setCss(allCategoryEle, {
-                    background: "#F8FAFC",
-                    color: "#262626",
-                    borderLeft: "2px solid #0595E6"
-                });
-            } else {
-                this.setCss(allCategoryEle, {
-                    background: "#fff",
-                    color: "#262626",
-                    border: 0
-                });
-            }
+          
             this.closeUploadCategoryPic();
             this.closeUploadCategoryPic1();
 

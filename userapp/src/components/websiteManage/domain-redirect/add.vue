@@ -4,7 +4,9 @@
             <span>
                 <span>{{title}}</span>
             </span>
-            <span class="close-pannel" @click="handleCancel">X</span>
+            <span class="close-pannel" @click="handleCancel">
+                <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
+            </span>
         </div>
 
         <div class="domain-wrap">
@@ -35,7 +37,7 @@
         </div>
         <div class="pannel-footer">
             <button
-                class="footer-btn btn-bglightblue"
+                class="footer-btn confirm"
                 :disabled="disabled"
                 @click="handleConfirm"
             >确定</button>
@@ -188,9 +190,7 @@ export default {
 };
 </script>
 <style scoped>
-/* .el-form /deep/ .el-select {
-    width: 100%;
-}
+/* 
 .el-form /deep/ .el-form-item {
     margin-bottom: 30px;
 }
@@ -218,6 +218,9 @@ export default {
 </style>
 
 <style scoped lang="scss">
+.el-form /deep/ .el-select {
+    width: 100%;
+}
 // 右侧弹框
 .right-pannel {
     background: #ffffff;
