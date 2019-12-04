@@ -113,7 +113,7 @@
                     <span v-else>-</span>
                 </template>
             </el-table-column>
-            <el-table-column type="expand" label="解析详情" >
+            <el-table-column type="expand">
                 <template slot-scope="props">
                     <div class="domain-detail" >
                         <el-row class="domain-detail-row"> 

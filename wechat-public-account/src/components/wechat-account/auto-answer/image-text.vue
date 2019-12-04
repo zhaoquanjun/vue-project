@@ -94,7 +94,7 @@
                         ></el-input>
                     </div>
                     <div class="seting-item seting-btn">
-                        <button v-show="list.length> 0" class="editor-cancel" @click="handlerCancel">取消</button>
+                        <button class="editor-cancel" @click="handlerCancel">取消</button>
                         <button class="cl-button cl-button--primary" @click="handlerConfirm">确定</button>
                     </div>
                 </div>
@@ -463,8 +463,9 @@ export default {
                 cursor: pointer;
                 background: #fff;
                 border-radius: $--border-radius-base;
-                color: rgba(9, 204, 235, 1);
-                border: 1px solid rgba(9, 204, 235, 1);
+                color: $--color-primary;
+                border: 1px solid $--color-primary;
+                margin-right: 16px;
             }
             .cover {
                 width: 140px;
