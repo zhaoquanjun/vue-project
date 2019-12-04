@@ -638,16 +638,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.el-table /deep/ .tooltip{
-    display: none;
-    top:-20px;
-}
-.el-table /deep/ .iconicon-des-setup{
-        position: relative;
-}
-.el-table /deep/ .iconicon-des-setup:hover .tooltip{
-    display: block
-}
+
 .handle-btn-wrap {
     width: 70%;
     display: flex;
