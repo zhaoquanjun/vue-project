@@ -255,17 +255,13 @@ export default {
     },
 
     blur() {
-      if (
-        this.verifyDetail.baiduTag ||
-        this.verifyDetail.qihuTag ||
-        this.verifyDetail.sougouTag ||
-        this.verifyDetail.googleTag ||
-        this.verifyDetail.bingTag
-      ) {
-        this.disable = false;
-      } else {
-        this.disable = true;
-      }
+      this.$refs["verifyDetail"].validate(valid => {
+        if (valid) {
+          this.disable = false;
+        } else {
+          this.disable = true;
+        }
+      });
     }
   }
 };
