@@ -430,7 +430,7 @@
               placeholder="请输入邀请成员的手机号"
               class="phoneInput"
               style="width:332px;"
-              @blur="blurPhone"
+              @blur="blurPhoneMember"
               :maxlength="11"
             ></el-input>
             <div 
@@ -843,6 +843,18 @@ export default {
         this.errorTip = true;
         this.errorPhone = "请输入手机号";
       } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)) {
+        this.errorTip = true;
+        this.errorPhone = "您输入的手机号格式有误，请重新输入";
+      } else {
+        this.errorTip = false;
+        this.errorPhone = "";
+      }
+    },
+    blurPhoneMember() {
+      if (this.phoneMember == "") {
+        this.errorTip = true;
+        this.errorPhone = "请输入手机号";
+      } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phoneMember)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
       } else {
