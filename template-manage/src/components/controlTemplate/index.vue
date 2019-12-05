@@ -33,11 +33,15 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <button style="margin-left:32px" class="cl-button cl-button--primary cl-button--small">查询</button>
-        <button class="cl-button cl-button--primary_notbg cl-button--small">重置</button>
+        <button
+          style="margin-left:32px"
+          class="cl-button cl-button--primary cl-button--small"
+          @click="searchList"
+        >查询</button>
+        <button class="cl-button cl-button--primary_notbg cl-button--small" @click="searchReset">重置</button>
       </div>
       <div>
-        <List :listData="templateInfo" ref="list"></List>
+        <List :listData="templateInfo" @orderList="orderList" ref="list"></List>
       </div>
       <el-dialog
         width="0"
@@ -126,7 +130,7 @@ export default {
           label: "开通中"
         },
         {
-          value: 1,
+          value: 3,
           label: "开通成功"
         },
         {
@@ -173,6 +177,14 @@ export default {
       this.templateInfo = data;
       console.log(data);
     },
+    searchList() {
+      this.getList();
+    },
+    searchReset() {
+      this.search = "";
+      this.sortValue = -1;
+      this.searchValue = "templateName";
+    },
     blurPhone() {},
     createTemplatedialogShow() {
       this.createTemplateShow = true;
@@ -189,6 +201,45 @@ export default {
         templateName: this.createTemplateName
       };
       let { data } = await templateApi.createComposeTemplate(para);
+    },
+    async orderList(prop, order) {
+      this.$Loading.show();
+      let templateNameText = "";
+      let domainText = "";
+      let phoneText = "";
+      if (this.searchValue == "templateName") {
+        templateNameText = this.search;
+      } else if (this.searchValue == "secondDomaon") {
+        domainText = this.search;
+      } else if (this.searchValue == "phone") {
+        phoneText = this.search;
+      }
+      let orderByUpdateTime = false;
+      let orderByCreateTime = false;
+      if (prop == "updateTime") {
+        orderByUpdateTime = true;
+      } else if (prop == "createTime") {
+        orderByCreateTime = true;
+      }
+      let isOrderByDesc = true;
+      if (order == "descending") {
+        isOrderByDesc = true;
+      } else if (order == "ascending") {
+        isOrderByDesc = false;
+      }
+      let para = {
+        templateName: templateNameText,
+        secondDomain: domainText,
+        phone: phoneText,
+        templateState: this.sortValue,
+        OrderByCreateTime: orderByCreateTime,
+        OrderByUpdateTime: orderByUpdateTime,
+        IsOrderByDesc: isOrderByDesc
+      };
+      let { data } = await templateApi.getComposeTemplates(para);
+      this.$Loading.hide();
+      this.templateInfo = data;
+      console.log(data);
     }
   }
 };
@@ -280,6 +331,7 @@ export default {
       line-height: 32px;
       text-align: right;
       padding-right: 16px;
+      box-sizing: border-box;
     }
   }
   .confirm {

@@ -4,7 +4,7 @@
       ref="multipleTable"
       :data="listData"
       tooltip-effect="dark"
-      @sort-change="sortChange"
+      :row-style="{height:'130px'}"
       class="content-table"
     >
       <template slot="empty">
@@ -13,44 +13,60 @@
           <p>无数据</p>
         </div>
       </template>
-      <el-table-column prop="templateName" label="模板名称" show-overflow-tooltip min-width="150">
+      <el-table-column type="selection" :selectable="selectable"></el-table-column>
+      <el-table-column prop="templateName" label="缩略图" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
           <div class="overflow">{{scope.row.templateName}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="pagePath" label="模板数量（上架/全部）" show-overflow-tooltip min-width="150">
+      <el-table-column prop="pagePath" label="控件名称" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
-          <div class="overflow">{{scope.row.onSaleCount}}/{{scope.row.composeCount}}</div>
+          <div class="overflow">{{scope.row.controlName}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="开通时间" sortable="custom" min-width="200">
+      <el-table-column prop="createTime" label="控件类型" min-width="100">
         <template slot-scope="scope">
-          <div>{{ _formatDateTime(scope.row.createTime, "yyyy/MM/dd hh:mm") }}</div>
+          <div>{{ scope.row.firstTypeName }}</div>
+          <div>{{ scope.row.secondTypeName }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" sortable="custom" min-width="200">
+      <el-table-column label="排序" min-width="100">
+        <template slot-scope="scope">
+          <div>{{scope.row.displayOrder}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="使用量" min-width="100">
+        <template slot-scope="scope">
+          <div>{{scope.row.useCount}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" min-width="150">
         <template slot-scope="scope">
           <div>{{ _formatDateTime(scope.row.updateTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="模板状态" min-width="100">
+      <el-table-column label="更新时间" min-width="150">
         <template slot-scope="scope">
-          <div>{{statusValue(scope.row.templateState)}}</div>
+          <div>{{ _formatDateTime(scope.row.updateTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="管理员|备注" min-width="200">
+      <el-table-column label="控件状态" min-width="100">
         <template slot-scope="scope">
-          <p>{{scope.row.designerPhone}}</p>
-          <p>{{scope.row.remark}}</p>
+          <div>{{ statusValue(scope.row.controlState) }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="80">
+      <el-table-column label="操作" min-width="150">
         <template slot-scope="scope">
-          <i
-            class="iconfont iconicon-des-setup cl-iconfont"
-            :class="{'disabled':scope.row.templateState != 3}"
-            @click="jumpToManage(scope.row)"
-          ></i>
+          <div>
+            <i class="iconfont iconchakan cl-iconfont" style="margin-right:16px"></i>
+            <el-dropdown trigger="click" @command="handleMore($event,scope.row)" placement="bottom">
+              <i class="iconfont iconsangedian cl-iconfont"></i>
+              <el-dropdown-menu slot="dropdown" class="moreList">
+                <el-dropdown-item class="moreListItem" command="setting">设置</el-dropdown-item>
+                <el-dropdown-item class="moreListItem" command="update">更新</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -91,6 +107,33 @@ export default {
     return {};
   },
   methods: {
+    // 更多操作下拉菜单
+    handleMore(command, row) {
+      console.log(command, row);
+      if (command == "setting") {
+        this.$emit("setting", row);
+      } else if (command == "update") {
+        this.$emit("update", row);
+      }
+    },
+    selectable(row) {
+      if (row.controlState == 1) {
+        return true;
+      } else if (row.controlState == 3) {
+        return false;
+      }
+    },
+    _formatDateTime(date, fmt) {
+      return formatDateTime(date, fmt);
+    },
+    statusValue(status) {
+      switch (status) {
+        case 1:
+          return "上架";
+        case 2:
+          return "下架";
+      }
+    }
     // 单选或全选操作
     // handleSelectionChange(list) {
     //   this.$emit("handleSelectionChange", list);
@@ -121,43 +164,24 @@ export default {
     // changeSize(size) {
     //   this.$emit("changeSize", size);
     // }
-    //改变排序
-    sortChange(row) {
-      console.log(row);
-      this.$emit("orderList", row.propm, row.order);
-    },
-    jumpToManage(row) {
-      if (row.templateState != 3) {
-        return;
-      }
-      this.$router.push({
-        path: "/template/composemanage",
-        query: {
-          siteId: row.siteId,
-          templateName: row.templateName
-        }
-      });
-    },
-    _formatDateTime(date, fmt) {
-      return formatDateTime(date, fmt);
-    },
-    statusValue(status) {
-      switch (status) {
-        case 0:
-          return "开通中";
-        case 3:
-          return "开通成功";
-        case 2:
-          return "开通失败";
-      }
-    }
   }
 };
 </script>
 <style lang="scss" scoped>
-.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.moreList {
+  width: 76px;
+  .moreListItem {
+    width: 100%;
+    height: 30px;
+    box-sizing: border-box;
+    text-align: center;
+    color: $--color-text-primary;
+    font-size: $--font-size-small;
+    line-height: 30px;
+    &:hover {
+      background: $--background-color-hover;
+    }
+  }
 }
 </style>
 
