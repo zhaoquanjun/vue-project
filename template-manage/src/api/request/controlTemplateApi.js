@@ -17,6 +17,10 @@ export const getCombinedControls = (para) => {
 export const updateCombinedControl = (para) => {
     return ajaxRequest.post(`${environment.templateApi}/api/v1/CombinedControl/UpdateCombinedControl`, para);
 }
+// 设置组合控件
+export const saveCombinedControl = (para) => {
+    return ajaxRequest.post(`${environment.templateApi}/api/v1/CombinedControl/SaveCombinedControl`, para);
+}
 // 删除组合控件
 export const deleteCombinedControl = (para) => {
     return ajaxRequest._delete(`${environment.templateApi}/api/v1/CombinedControl/DeleteCombinedControl`, para);
