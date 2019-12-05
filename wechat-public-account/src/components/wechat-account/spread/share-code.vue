@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="btn">
-        <button class="cl-button cl-button--primary_notbg" @click="closeShareCode(false)">关闭</button>
+        <button class="cl-button cl-button--small cl-button--primary_notbg" @click="closeShareCode(false)">关闭</button>
       </div>
     </div>
   </div>

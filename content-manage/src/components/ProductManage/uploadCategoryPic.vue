@@ -52,8 +52,8 @@
             </el-form-item>
         </el-form>
         <div class="pannel-footer">
-            <button class="cl-button cl-button--primary" @click="submitForm('ruleForm')">确定</button>
-            <button class="cl-button cl-button--primary_notbg" @click="cancel">取消</button>
+            <button class="cl-button cl-button--small cl-button--primary" @click="submitForm('ruleForm')">确定</button>
+            <button class="cl-button cl-button--small cl-button--primary_notbg" @click="cancel">取消</button>
         </div>
     </div>
 </template>

@@ -64,8 +64,8 @@
                     <i>{{countPic}}</i> 张图片
                 </span>
                 <div>
-                    <button class="cl-button cl-button--text_primary" @click="batchMove">移动</button>
-                    <button class="cl-button cl-button--text_danger" @click="batchDelete">删除</button>
+                    <button class="cl-button cl-button--small cl-button--text_primary" @click="batchMove">移动</button>
+                    <button class="cl-button cl-button--small cl-button--text_danger" @click="batchDelete">删除</button>
                 </div>
             </div>
         </template>

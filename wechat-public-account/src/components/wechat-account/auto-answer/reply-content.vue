@@ -25,8 +25,8 @@
             </div>
         </section>
         <footer class="footer-btn">
-            <button class="cl-button cl-button--primary" @click="handlerSave">保存</button>
-            <button v-if="replyType == '3'" class="cl-button cl-button--primary_notbg" @click="handlerCancel">取消</button>
+            <button class="cl-button cl-button--primary cl-button--small" @click="handlerSave">保存</button>
+            <button v-if="replyType == '3'" class="cl-button cl-button--small cl-button--primary_notbg" @click="handlerCancel">取消</button>
             <button v-else class="cl-button cl-button--primary_notbg" :class="{'is-disabled':!isSet}" @click="handlerDelete" :disabled="!isSet">删除回复</button>
         </footer>
     </div>

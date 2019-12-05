@@ -94,8 +94,8 @@
                         ></el-input>
                     </div>
                     <div class="seting-item seting-btn">
-                        <button class="editor-cancel" @click="handlerCancel">取消</button>
-                        <button class="cl-button cl-button--primary" @click="handlerConfirm">确定</button>
+                        <button class="cl-button cl-button--small cl-button--primary_notbg" @click="handlerCancel">取消</button>
+                        <button class="cl-button cl-button--small cl-button--primary" @click="handlerConfirm">确定</button>
                     </div>
                 </div>
             </li>

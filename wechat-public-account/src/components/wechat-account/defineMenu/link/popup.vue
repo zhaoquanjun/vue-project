@@ -60,8 +60,8 @@
         />
       </div>
       <div class="popup-footer__area">
-        <button class="cl-button cl-button--primary" @click.stop="_handleConfirm">确定</button>
-        <button class="cl-button cl-button--primary_notbg" @click.stop="_handleCancle">取消</button>
+        <button class="cl-button cl-button--small cl-button--primary" @click.stop="_handleConfirm">确定</button>
+        <button class="cl-button cl-button--small cl-button--primary_notbg" @click.stop="_handleCancle">取消</button>
       </div>
     </div>
   </div>
