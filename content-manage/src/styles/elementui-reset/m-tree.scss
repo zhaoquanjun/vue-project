@@ -84,6 +84,8 @@
         border-radius: 2px;
         text-align: center;
         .iconsangedian{
+            font-size: 14px !important;
+            margin-right: 8px;
             &:hover{
                 background: $--color-white;;
             }
