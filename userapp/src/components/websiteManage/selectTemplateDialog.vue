@@ -10,15 +10,15 @@
     >
       <div class="right-pannel">
         <el-container style="height:100%">
-          <el-aside class="aside" style="width:240px">
+          <el-aside class="aside">
             <div class="title">筛选</div>
-            <el-input
+            <!-- <el-input
               size="medium"
               v-model="search"
               placeholder="输入关键词搜索"
               @keyup.enter.native="searchTemplate"
               clearable
-              style="width:190px"
+              style="width:248px"
             >
               <i
                 class="el-icon-search el-input__icon"
@@ -26,7 +26,7 @@
                 slot="prefix"
                 @click="searchTemplate"
               ></i>
-            </el-input>
+            </el-input> -->
             <div class="order">
               <span
                 v-for="(item, index) in orderType"
@@ -743,7 +743,7 @@ export default {
   }
 }
 .industryTree /deep/ .el-tree-node__content:hover {
-  background: rgba(255, 247, 241, 1);
+  color: $--color-primary;
 }
 .industryTree /deep/ .is-leaf {
   display: none;
@@ -770,23 +770,22 @@ export default {
 }
 
 .right-pannel {
-  background: #ffffff;
+  background: $--color-black-dark;
   position: fixed;
   z-index: 100;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  box-shadow: 0 0 3px #ccc;
   transition: width 0.2s linear;
-  background-color: "#fff";
-  color: #262626;
+  color: $--color-white;
   // overflow: hidden;
   .aside {
+    width:240px;
     height: 100%;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 2px 10px 0px rgba(131, 131, 131, 0.3);
+    background: $--color-black-light;
     text-align: center;
+    color: $--color-white;
     .title {
       font-size: $--font-size-base;
       font-weight: $--font-weight-primary;
@@ -798,7 +797,7 @@ export default {
         width: 100%;
         height: 44px;
         display: inline-block;
-        font-size: $--font-size-base;
+        font-size: $--font-size-small;
         font-weight: $--font-weight-base;
         line-height: 44px;
         cursor: pointer;
@@ -807,16 +806,15 @@ export default {
         text-align: left;
       }
       .active {
-        background: rgba(255, 240, 229, 1);
-        color: $--color-primary;
+        background: #40494E;
       }
     }
     .splitLine {
-      margin: 24px;
+      margin: 15px auto;
       box-sizing: border-box;
       width: calc(100% - 48px);
-      height: 1px;
-      background: $--border-color-base;
+      height: 2px;
+      background-color:#40494E;
     }
   }
   .templateHeader {
