@@ -292,6 +292,8 @@ export default {
 }
 .cover {
     position: relative;
+    width: 24px !important;
+    height: 24px !important;
     &:hover .play {
         cursor: pointer;
         position: absolute;
@@ -303,7 +305,7 @@ export default {
         text-align: center;
         img {
             width: 12px;
-            transform: translateY(50%);
+            transform: translateY(25%);
         }
     }
 }

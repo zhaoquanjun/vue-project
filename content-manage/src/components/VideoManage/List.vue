@@ -126,13 +126,13 @@
             </div>
         </div>
         <div id="img-list-dialog">
-            <el-dialog
-                :visible.sync="imgVisible"
-                :modal-append-to-body="false"
-                @close="closeDialog"
-            >
+            
+            <div class="mask" v-if="imgVisible" style="text-align:center;">
+                <button class="closeBtn">
+                    <i class="el-icon-close icon-close" @click="imgVisible=false"></i>
+                </button>
                 <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
-            </el-dialog>
+            </div>
         </div>
     </div>
 </template>
@@ -395,9 +395,19 @@ export default {
         }
     }
 }
+.closeBtn{
+    position:absolute;
+    top:20px;
+    right:57px;
+    .icon-close{
+        font-size:30px;
+        color: #fff; 
+    }
+}
 .video {
     cursor: pointer;
     outline: none;
+    height: 50%;
     width: 800px;
     margin-top: 150px;
 }

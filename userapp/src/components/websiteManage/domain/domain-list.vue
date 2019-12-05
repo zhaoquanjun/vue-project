@@ -147,7 +147,9 @@
                                 </div>  
                             </el-col>
                         </el-row>
-                        <div class="explain-islink">如何进行手动解析?</div>
+                        <div class="explain-islink">
+                            <a href="https://help.aliyun.com/video_detail/36565.html?spm=5176.11065259.1996646101.searchclickresult.47d832c99op0ZR&aly_as=EDI_tgqS" class="explain-islink-manual">如何进行手动解析?</a>
+                        </div>
                         <el-row class="status-switch" v-if="props.row.isInAliDns" style="width:49.5%;">
                             <!-- cdn状态 -->
                             <el-col :span="10">
@@ -735,8 +737,15 @@ export default {
         float:right;
         margin-right:10px;
         margin-bottom:10px;
-        color:$--color-text-orange;
         line-height: 20px;
+        a.explain-islink-manual{
+            color:$--color-text-orange;
+            &:hover{
+            text-decoration: none;
+            color:$--color-text-orange;
+            }
+        }
+        
     }
     .status-switch{
         float: left;
