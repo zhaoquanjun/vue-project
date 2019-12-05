@@ -11,10 +11,11 @@ export const getSecondIndustries = (firstIndustryId) => {
     return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSecondIndustries`, para);
 }
 // 创建模版
-export const createTemplate = (designerPhone, remark) => {
+export const createTemplate = (designerPhone, newTemplateName,remark) => {
     let para = {
         designerPhone: designerPhone,
-        remark: remark
+        remark: remark,
+        templateName:newTemplateName
     }
     return ajaxRequest.post(`${environment.templateApi}/api/v1/Template/CreateTemplate`, para);
 }
@@ -37,4 +38,24 @@ export const uploadSiteTemplate = (templateId) => {
 // 删除模版
 export const deleteTemplate = (id) => {
     return ajaxRequest._delete(`${environment.templateApi}/api/v1/Template/DeleteTemplate/${id}`);
+}
+// 邀请成员
+export const invitedMember = (appId,phone) => {
+    let para={
+        appId:appId,
+        phone:phone
+    }
+    return ajaxRequest.post(`${environment.templateApi}/api/v1/Template/InviteUser`, para);
+}
+// 删除成员
+export const deleteMember = (id) => {
+    return ajaxRequest._delete(`${environment.templateApi}/api/v1/Template/DeleteInviteeMap/${id}`);
+}
+// 保存备注
+export const updateTemplateRemark = (siteId,remark) => {
+    let para={
+        siteId:siteId,
+        remark:remark
+    }
+    return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/UpdateTemplateRemark`, para);
 }

@@ -44,12 +44,20 @@
                     ></i>
                 </button> -->
 
-                <button class="list-mode mode-item" @click="showType('list')" v-show="!isPopup">
-                   
+                <button 
+                    class="list-mode mode-item" 
+                    @click="showType('list')" 
+                    v-show="!isPopup" 
+                    :class="{'selectedBorder':modeSelecte,'selectedBorderRightLost':!modeSelecte}"
+                >
                     <i class="list-icon mode-icon" :class="{'list-iconOn':modeSelecte}"></i>
                 </button>
-                <button class="grid-mode mode-item" @click="showType('grid')" v-show="!isPopup">
-                    
+                <button 
+                    class="grid-mode mode-item" 
+                    @click="showType('grid')" 
+                    v-show="!isPopup" 
+                    :class="{'selectedBorder':!modeSelecte,'selectedBorderLeftLost':modeSelecte}"
+                >
                     <i class="list-icon mode-icon"  :class="{'mode-iconOn':!modeSelecte}"></i>
                 </button>
             </div>
@@ -66,10 +74,10 @@
             <div class="handle-batch">
                 <span>
                     已选
-                    <i>{{countPic}}</i> 张图片
+                    <i style="color:#fe9837;">{{countPic}}</i> 张图片
                 </span>
                 <div>
-                    <button class="cl-button cl-button--text_primary" @click="batchMove">移动</button>
+                    <button class="cl-button cl-button--text_info" @click="batchMove">移动</button>
                     <button class="cl-button cl-button--text_danger" @click="batchDelete">删除</button>
                 </div>
             </div>

@@ -75,6 +75,15 @@ export const getSiteInfo = siteId => {
   );
 };
 /**
+ * 获取站点信息
+ */
+export const getSiteInfoBySite = siteId => {
+  return ajaxRequest.get(
+      `${enbironmemy.designerManageApi}/api/v1/SiteInfo/GetSiteInfoBySiteId`,
+    { siteId: siteId }
+  );
+};
+/**
  * 网站icon
  */
 export const updateSiteIcon = option => {

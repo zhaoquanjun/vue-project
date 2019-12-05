@@ -85,12 +85,12 @@
                     <i style="color:#fe9837;">{{count}}</i> 个文章
                 </span>
                 <div class="bach-hanlder">
-                    <button class="cl-button cl-button--text_primary" @click="batchPublish(false)">上线</button>
-                    <button class="cl-button cl-button--text_primary"  @click="batchPublish(true)">下线</button>
-                    <button class="cl-button cl-button--text_primary"  @click="batchCopy">复制</button>
-                    <button class="cl-button cl-button--text_primary"  @click="handleCommand('move')">移动</button>
-                    <button class="cl-button cl-button--text_primary"  @click="handleCommand('top')">置顶</button>
-                    <button class="cl-button cl-button--text_primary"  @click="handleCommand('cancelTop')">取消置顶</button>
+                    <button class="cl-button cl-button--text_info" @click="batchPublish(false)">上线</button>
+                    <button class="cl-button cl-button--text_info"  @click="batchPublish(true)">下线</button>
+                    <button class="cl-button cl-button--text_info"  @click="batchCopy">复制</button>
+                    <button class="cl-button cl-button--text_info"  @click="handleCommand('move')">移动</button>
+                    <button class="cl-button cl-button--text_info"  @click="handleCommand('top')">置顶</button>
+                    <button class="cl-button cl-button--text_info"  @click="handleCommand('cancelTop')">取消置顶</button>
                     <button class="cl-button cl-button--text_danger"  @click="batchRemove">删除</button>
 
                     <!-- <el-dropdown trigger="click" @command="handleCommand">
@@ -298,5 +298,4 @@ export default {
     margin: 0;
     min-width: 60px;
 }
-
 </style>

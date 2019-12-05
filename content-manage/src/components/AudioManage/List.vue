@@ -287,6 +287,9 @@ export default {
     align-items: center;
     justify-content: center;
 }
+#table-list /deep/ .el-table--scrollable-x .el-table__body-wrapper{
+    overflow-x: hidden;
+}
 .cover {
     position: relative;
     &:hover .play {

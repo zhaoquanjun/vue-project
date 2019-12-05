@@ -14,14 +14,14 @@
       </div>
       <div>
         <div class="head-right head-item">
-          <span style="cursor: pointer">
+          <span class="operatingBtn">
             <i
               class="iconfont iconbianzu1"
               style="margin-right:3px;font-size:16px;vertical-align:middle"
             ></i>
             <b class="item-btn">帮助</b>
           </span>
-          <span style="cursor: pointer">
+          <span class="operatingBtn">
             <i
               class="iconfont iconbianzu2"
               style="margin-right:3px;font-size:16px;vertical-align:middle"
@@ -73,20 +73,26 @@
               v-model="keyword"
               placeholder="输入服务名称或备注内容搜索"
               @keyup.enter.native="search"
+              @clear="search"
               clearable
               class="input-with-select"
             >
               <i
                 class="el-icon-search el-input__icon"
-                style="cursor: pointer;float:right"
+                style="cursor: pointer;float:right;color:#D7D8D9"
                 slot="suffix"
                 @click="search"
               ></i>
             </el-input>
           </div>
+          <div class="empty-table" v-show="!appList.length">
+            <img src="~img/table-empty.png" />
+            <p>无数据</p>
+          </div>
           <el-col
             :span="24"
             class="appitem"
+            v-show="appList.length"
             v-for="(item, index) in appList"
             :key="index"
             style="padding:0px"
@@ -125,7 +131,7 @@
                       :autosize="{ minRows: 3, maxRows: 3}"
                       placeholder="请输入内容"
                       v-model="appName"
-                      maxlength="30"
+                      maxlength="40"
                       show-word-limit
                       resize="none"
                     ></el-input>
@@ -401,6 +407,14 @@ export default {
         }
       }
     }
+    .operatingBtn {
+      cursor: pointer;
+      &:hover {
+        .iconfont {
+          color: $--color-primary;
+        }
+      }
+    }
   }
   .head-left {
     display: flex;
@@ -437,8 +451,8 @@ export default {
       padding: 0 30px;
       line-height: 32px;
       &:hover {
-        color: #262626;
-        background: #e0faff;
+        color: $--color-primary;
+        background: $--background-color-hover;
       }
     }
   }

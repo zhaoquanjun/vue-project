@@ -219,6 +219,7 @@ export default {
      }
      .iconicon-des-Arrow{
         color: $--color-primary !important;
+        transform: scale(0.7);
     }
     
 }
@@ -256,6 +257,7 @@ export default {
             line-height: 52px;
             vertical-align: middle;
             color: $--color-text-regular;
+            transform: scale(0.7);
         }
         .iconweixingongzhonghao{
             font-size: 19px;

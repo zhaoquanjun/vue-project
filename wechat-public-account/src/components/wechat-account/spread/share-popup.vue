@@ -403,6 +403,7 @@ export default {
             height: 160px;
             background: url("~img/cover.jpg") no-repeat center;
             background-size: contain;
+            opacity: 1;
             img {
               width: 160px;
               height: 160px;

@@ -92,15 +92,15 @@
             <div class="bach-header">
                 <span>
                     已选
-                    <i>{{count}}</i> 个产品
+                    <i style="color:#fe9837;">{{count}}</i> 个产品
                 </span>
                 <div class="bach-hanlder">
-                    <button class="cl-button cl-button--text_primary" @click="batchPublish(3, false)">上架</button>
-                    <button class="cl-button cl-button--text_primary" @click="batchPublish(3, true)">下架</button>
-                    <button class="cl-button cl-button--text_primary" @click="batchCopy">复制</button>
-                    <button class="cl-button cl-button--text_primary" @click="handleCommand('move')">移动</button>
-                    <button class="cl-button cl-button--text_primary" @click="handleCommand('top')">置顶</button>
-                    <button class="cl-button cl-button--text_primary" @click="handleCommand('cancelTop')">取消置顶</button>
+                    <button class="cl-button cl-button--text_info" @click="batchPublish(3, false)">上架</button>
+                    <button class="cl-button cl-button--text_info" @click="batchPublish(3, true)">下架</button>
+                    <button class="cl-button cl-button--text_info" @click="batchCopy">复制</button>
+                    <button class="cl-button cl-button--text_info" @click="handleCommand('move')">移动</button>
+                    <button class="cl-button cl-button--text_info" @click="handleCommand('top')">置顶</button>
+                    <button class="cl-button cl-button--text_info" @click="handleCommand('cancelTop')">取消置顶</button>
                     <button class="cl-button cl-button--text_danger" @click="batchRemove(1,true)">删除</button>
                     <!-- <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">

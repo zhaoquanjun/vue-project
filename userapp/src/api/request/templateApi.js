@@ -21,6 +21,10 @@ export const updateSiteTemplate = (para) => {
 export const updateSiteWithTemplate = (para) => {
     return ajaxRequest.put(`${environment.siteManageApi}/api/v1/siteInfo/UpdateSiteWithTemplate`, para);
 }
+// 应用模版
+export const UseTemplateWithTheme = (para) => {
+    return ajaxRequest.put(`${environment.siteManageApi}/api/v1/siteInfo/UseTemplateWithTheme`, para);
+}
 // 未找到想要的模版
 export const createReferenceIndustry = (para) => {
     return ajaxRequest.post(`${environment.siteManageApi}/api/v1/siteInfo/CreateReferenceIndustry`, para);

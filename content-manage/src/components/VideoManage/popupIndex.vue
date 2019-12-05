@@ -167,7 +167,7 @@ export default {
       treeResult: null,
       dialogTableVisible: false,
       totalSum: 0,
-      apiHost: environment.contentApiUri,
+      apiHost: environment.contentApi,
       picSearchOptions: {
         pageSize: 10,
         pageIndex: 1,

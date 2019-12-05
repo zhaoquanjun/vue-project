@@ -5,16 +5,11 @@
         <ChangeSite @getSiteId="getSiteId" @getSiteName="getSiteName"></ChangeSite>
       </el-row>
       <el-row class="wrap">
-        <el-col :span="8" style="min-width: 500px; max-width: 688px;">
+        <div class="tempalte-selected__section">
+          <div class="text">选择网站模板，立即开启网站管理</div>
           <img src="~img/siteManage/selectTemplate.png" alt class="backgroundImg" />
-        </el-col>
-        <el-col :span="8">
-          <div class="tempalte-selected__section">
-            <el-col class="textOne">选择网站模板，立即开启网站管理</el-col>
-            <el-col class="textTwo">建立您的第一个专业网站。</el-col>
-            <button class="select" @click="showTemplate">选择模版</button>
-          </div>
-        </el-col>
+          <button class="cl-button cl-button--primary" @click="showTemplate">选择模版</button>
+        </div>
       </el-row>
     </el-main>
     <SelectTemplateDialog ref="selectTemplateDialog" :siteId="siteId" :siteName="siteName"></SelectTemplateDialog>
@@ -66,77 +61,24 @@ export default {
 }
 .wrap {
   width: 100%;
-  height: calc(100% - 120px);
+  height: calc(100% - 160px);
   display: flex;
   justify-content: center;
   align-items: center;
-  .backgroundImg {
-    width: 100%;
-  }
+
   .tempalte-selected__section {
     display: flex;
-    justify-content: flex-start;
+    flex-flow: column;
     align-items: center;
-    flex-wrap: wrap;
-  }
-  .textOne {
-    margin-left: 63px;
-    font-size: 28px;
-    font-family: PingFangSC-Medium;
-    font-weight: 500;
-    color: rgba(38, 38, 38, 1);
-  }
-  .textTwo {
-    margin-top: 16px;
-    margin-left: 63px;
-    font-size: 28px;
-    font-family: PingFangSC-Regular;
-    font-weight: 400;
-    color: rgba(140, 140, 140, 1);
-  }
-  .select {
-    margin-top: 32px;
-    margin-left: 63px;
-    width: 202px;
-    height: 44px;
-    border: 1px solid rgba(0, 193, 222, 1);
-    font-size: 12px;
-    font-family: PingFangSC-Medium;
-    font-weight: 500;
-    color: rgba(0, 193, 222, 1);
-    line-height: 44px;
-    &:hover {
-      background: rgba(1, 192, 222, 1);
-      color: rgba(255, 255, 255, 1);
+    .text {
+      font-size: $--font-size-extra-large;
+      color: $--color-text-primary;
     }
-  }
-}
-@media screen and (max-width: 1650px) {
-  .wrap .textOne,
-  .wrap .textTwo {
-    font-size: 24px !important;
-  }
-  .wrap .select {
-    width: 180px;
-    height: 40px;
-    line-height: 40px;
-  }
-}
-@media screen and (max-width: 1440px) {
-  .wrap .textOne,
-  .wrap .textTwo {
-    font-size: 20px !important;
-  }
-  .wrap .select {
-    width: 140px;
-    height: 30px;
-    line-height: 30px;
-  }
-}
-@media screen and (max-width: 1260px) {
-  .wrap .textOne,
-  .wrap .textTwo {
-    font-size: 16px !important;
+    .backgroundImg {
+      margin-top: 12px;
+      width: 300px;
+      margin-bottom: 12px;
+    }
   }
 }
 </style>

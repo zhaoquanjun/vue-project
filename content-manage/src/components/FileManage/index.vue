@@ -677,7 +677,7 @@ export default {
         }
     }
     .success {
-        color: #63dc8c;
+        color: $--color-text-primary;
     }
 }
 .download-link {
@@ -704,7 +704,9 @@ export default {
         background: $--color-success;
     }
 }
-
+.iconfont.iconxingzhuangjiehe{
+    color:#23cd5d;
+}
 </style>
 
 
