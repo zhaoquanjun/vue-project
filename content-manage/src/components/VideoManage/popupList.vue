@@ -86,7 +86,6 @@
           @current-change="changePage"
           @size-change="changeSize"
         >
-          <div class="sizes-title">，每页显示</div>
           <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
         </el-pagination>
       </div>
@@ -323,7 +322,7 @@ export default {
 <style lang="scss" scoped>
 .table {
   height: 537px;
-  width: 870px;
+  width: 100%;
   border: $--border-base;
   .tableTitle {
     width: 100%;
@@ -348,7 +347,7 @@ export default {
       width: 130px;
     }
     div:nth-child(4) {
-      width: 178px;
+      width: 168px;
     }
   }
   .tableList {
@@ -361,7 +360,7 @@ export default {
       border-bottom: $--border-base;
     }
     .checked {
-      border: 2px solid #09cceb;
+      border: 2px solid $--color-primary;
     }
   }
 }
@@ -438,7 +437,7 @@ export default {
   width: 130px;
 }
 .contentTime {
-  width: 178px;
+  width: 158px;
 }
 .video {
   cursor: pointer;

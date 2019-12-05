@@ -8,7 +8,8 @@
               
                 <div class="avatar-uploader" :class="{'border-line':!imageUrl1}">
                     <div v-if="imageUrl1" class="imgWrap">
-                        <img :src="imageUrl1" class="avatar" />
+                        <!-- <img :src="imageUrl1" class="avatar" /> -->
+                        <img-size-auto :item="imageUrl1" :newFileList="fileList"></img-size-auto>
                          <span class="el-upload-list__item-actions">
                             <i @click="handlerAddPicture" class="icon-change"></i>
                             <i @click.stop="handleRemove" class="el-icon-delete"></i>
@@ -44,8 +45,8 @@
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true" :isThird="true">
                 <div slot="modal-footer" class="modal-footer">
-                    <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
-                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
+                    <button type="button" @click="getEditorImg" class="cl-button cl-button--small cl-button--primary">确定</button>
+                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
                 </div>
             </modal-content>
         </div>
@@ -55,10 +56,12 @@
 import environment from "@/environment/index.js";
 import ModalContent from "@/components/ImgManage/index.vue";
 import securityService from "@/services/authentication/securityService";
+import ImgSizeAuto from "@/base/ImgSizeAuto"
 export default {
     props: ["imageUrl"],
     components: {
-        ModalContent
+        ModalContent,
+        ImgSizeAuto
     },
     provide: {
       popper:true

@@ -89,8 +89,8 @@
                         </el-header>
                         <modal-content ref="imgList" :isGrid="true" :multiple="true" @getImgInfo="getImgInfo" :isPopup="true">
                             <div slot="modal-footer" class="modal-footer" style=" ">
-                                <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
-                                <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
+                                <button type="button" @click="cancelEditorImg" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
+                                <button type="button" @click="getEditorImg" class="cl-button cl-button--small cl-button--primary">确定</button>
                             </div>
                         </modal-content>
                     </div>
@@ -103,8 +103,8 @@
                             </el-header>
                             <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
                                 <div slot="modal-footer" class="modal-footer">
-                                    <button @click="cancelgetVideo" class="cl-button cl-button--primary_notbg">取消</button>
-                                    <button @click="getVideoOssUrl" class="cl-button cl-button--primary">确定</button>
+                                    <button @click="cancelgetVideo" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
+                                    <button @click="getVideoOssUrl" class="cl-button cl-button--small cl-button--primary" style="margin-right: 24px">确定</button>
                                 </div>
                             </videoManage>
                         </div>

@@ -10,15 +10,15 @@
     >
       <div class="right-pannel">
         <el-container style="height:100%">
-          <el-aside class="aside" style="width:240px">
+          <el-aside class="aside">
             <div class="title">筛选</div>
-            <el-input
+            <!-- <el-input
               size="medium"
               v-model="search"
               placeholder="输入关键词搜索"
               @keyup.enter.native="searchTemplate"
               clearable
-              style="width:190px"
+              style="width:248px"
             >
               <i
                 class="el-icon-search el-input__icon"
@@ -26,7 +26,7 @@
                 slot="prefix"
                 @click="searchTemplate"
               ></i>
-            </el-input>
+            </el-input> -->
             <div class="order">
               <span
                 v-for="(item, index) in orderType"
@@ -37,6 +37,7 @@
               >{{item.text}}</span>
             </div>
             <div class="splitLine"></div>
+            
             <el-tree
               :data="firstIndustry"
               node-key="id"
@@ -45,7 +46,16 @@
               :highlight-current="true"
               class="industryTree"
               @node-click="changeIndustry"
-            ></el-tree>
+            >
+              <div slot-scope="{ node, data }">
+               <template v-if="data.parentId !==0">
+                    <div class="thirdIndustryTitle">· {{data.label}}</div>
+               </template>
+               <template v-else>
+                    <div :class="data.id==0?'firstIndustryTitle':(data.parentId==0?'secondIndustryTitle':'thirdIndustryTitle')">{{data.label}}</div>
+               </template>
+            </div>
+            </el-tree>
           </el-aside>
           <el-main style="overflow:hidden">
             <!-- <div class="colorType" v-show="isAllTab">
@@ -76,6 +86,7 @@
                 </el-select>
             </div>-->
             <div class="templateHeader">
+              <div class="templateHeaderLine"></div>
               <span class="templateHeader-text">选择您喜欢的网站模板</span>
               <i class="iconfont iconguanbi cl-iconfont is-circle" @click="closeDialog"></i>
             </div>
@@ -736,57 +747,48 @@ export default {
 .languageSelect /deep/ .el-input__inner {
   border: none;
 }
-.industryTree /deep/ .is-current > .el-tree-node__content {
-  background: rgba(255, 240, 229, 1);
-  .el-tree-node__label {
-    color: $--color-primary;
-  }
+.right-pannel /deep/ .el-tree{
+  background: $--color-black-light;
 }
-.industryTree /deep/ .el-tree-node__content:hover {
-  background: rgba(255, 247, 241, 1);
-}
+
 .industryTree /deep/ .is-leaf {
   display: none;
 }
 .industryTree /deep/ .el-tree-node__content {
-  height: 46px;
+  height: 44px;
+}
+.industryTree /deep/ .el-tree-node__content {
+  background: $--color-black-light;
+}
+.industryTree /deep/.el-tree-node.is-expanded.is-current.is-focusable .secondIndustryTitle{
+  font-size: $--font-size-base !important;
 }
 .industryTree /deep/ .el-tree-node__expand-icon {
   position: absolute;
-  right: 30px;
-  transform: rotate(180deg);
-  color: rgba(38, 38, 38, 1);
+  right: 25px;
+  color: $--color-white;
 }
 .industryTree /deep/ .expanded {
-  transform: rotate(135deg);
-}
-.industryTree /deep/ .el-tree-node__label {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 1);
-  line-height: 22px;
-  display: inline-block;
-  margin-left: 30px;
+  transform: rotate(90deg);
 }
 
 .right-pannel {
-  background: #ffffff;
+  background: $--color-black-dark;
   position: fixed;
   z-index: 100;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  box-shadow: 0 0 3px #ccc;
   transition: width 0.2s linear;
-  background-color: "#fff";
-  color: #262626;
+  color: $--color-white;
   // overflow: hidden;
   .aside {
+    width:240px;
     height: 100%;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 2px 10px 0px rgba(131, 131, 131, 0.3);
+    background: $--color-black-light;
     text-align: center;
+    color: $--color-white;
     .title {
       font-size: $--font-size-base;
       font-weight: $--font-weight-primary;
@@ -798,7 +800,7 @@ export default {
         width: 100%;
         height: 44px;
         display: inline-block;
-        font-size: $--font-size-base;
+        font-size: $--font-size-small;
         font-weight: $--font-weight-base;
         line-height: 44px;
         cursor: pointer;
@@ -807,16 +809,52 @@ export default {
         text-align: left;
       }
       .active {
-        background: rgba(255, 240, 229, 1);
-        color: $--color-primary;
+        background: #40494E;
       }
     }
     .splitLine {
-      margin: 24px;
+      margin: 15px auto;
       box-sizing: border-box;
       width: calc(100% - 48px);
-      height: 1px;
-      background: $--border-color-base;
+      height: 2px;
+      background-color:#40494E;
+    }
+    .firstIndustryTitle{
+      height:44px;
+      display: block;
+      width: 300px;
+      background: #40494E;
+      font-size: $--font-size-small;
+      font-weight: 400;
+      color: $--color-white;
+      line-height: 44px;
+      padding-left: 30px;
+      text-align: left;
+    }
+    .secondIndustryTitle{
+      display: block;
+      width: 300px;
+      font-size: $--font-size-small;
+      background: $--color-black-light;
+      font-weight: 400;
+      color: $--color-white;
+      line-height: 44px;
+      padding-left: 30px;
+      text-align: left;
+    }
+    .thirdIndustryTitle{
+      display: block;
+      width: 300px;
+      font-size: $--font-size-small;
+       background: $--color-black-light;
+      font-weight: 400;
+      color: $--color-white;
+      line-height: 44px;
+      padding-left: 15px;
+      text-align: left;
+      &:hover{
+        color:$--color-primary;
+      }
     }
   }
   .templateHeader {
@@ -824,17 +862,33 @@ export default {
     // justify-content: space-between;
     padding-top: 40px;
     text-align: center;
-
+    position: relative;
+    .templateHeaderLine{
+      width: 348px;
+      height:11px;
+      position: absolute;
+      top:0;
+      right:0;
+      left:-64px;
+      bottom: 0;
+      margin: 54px auto 0;
+      background: $--color-primary;
+      opacity: .4;
+    }
     .templateHeader-text {
+      position: relative;
+      z-index: 100;
       font-size: 30px;
       font-weight: 100;
-      color: #6d7278;
+      color: $--color-white;
     }
     .iconguanbi {
       float: right;
-      font-size: 16px;
+      font-size: $--font-size-large;
       margin-right: 30px;
+      color: $--color-white;
     }
+    ·
     .colorType {
       height: 40px;
       display: flex;

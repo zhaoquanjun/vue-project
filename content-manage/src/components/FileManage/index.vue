@@ -141,8 +141,8 @@
                         ></SelectTree>
                     </template>
                     <div slot="footer" class="pannel-footer">
-                        <button @click="updateCategoryPic" class="cl-button cl-button--primary">确定</button>
-                        <button @click="cancelUpdateCategor" class="cl-button cl-button--primary_notbg">取消</button>
+                        <button @click="updateCategoryPic" class="cl-button cl-button--small cl-button--primary">确定</button>
+                        <button @click="cancelUpdateCategor" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
                     </div>
                 </right-pannel>
             </el-main>

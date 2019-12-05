@@ -106,6 +106,7 @@
                     <quill-editor
                         ref="myQuillEditor"
                         themes="bubble"
+                        id="quill-contentDetail"
                         :options="editorOption"
                         @change="onEditorChange($event)"
                     ></quill-editor>
@@ -123,8 +124,8 @@
                             :isPopup="true"
                         >
                             <div slot="modal-footer" class="modal-footer" style>
-                                <button type="button" @click="getEditorImg" class="sure">确定</button>
-                                <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                                <button type="button" @click="getEditorImg" class="cl-button cl-button--small cl-button--primary_notbg">确定</button>
+                                <button type="button" @click="cancelEditorImg" class="cl-button cl-button--small cl-button--primary">取消</button>
                             </div>
                         </modal-content>
                     </div>
@@ -139,13 +140,26 @@
                             </el-header>
                             <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
                                 <div slot="modal-footer" class="modal-footer">
-                                    <button @click="cancelgetVideo" class="cancel">取消</button>
-                                    <button @click="getVideoOssUrl" class="sure">确定</button>
+                                    <button @click="cancelgetVideo" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
+                                    <button @click="getVideoOssUrl" class="cl-button cl-button--small cl-button--primary" style="margin-right: 24px">确定</button>
                                 </div>
                             </videoManage>
                         </div>
                     </div>
                 </el-form-item>
+            </div>
+            <div class="content-item set-article">
+                <el-collapse v-model="activeName0" accordion>
+                    <el-collapse-item title="规格详情" name="1">
+                        <el-form-item label prop="specificationContent">
+                            <!-- quill-editor 编辑一-->
+                            <quill-detail
+                            :quillId="quillDetailId"
+                            :detailContent="detailData.specificationContent"
+                            @detailContentChange='detailContentChange'></quill-detail>                           
+                        </el-form-item>
+                    </el-collapse-item>
+                </el-collapse>
             </div>
             <div class="content-item set-article">
                 <el-collapse v-model="activeName" accordion>
@@ -189,36 +203,9 @@
                             </div>
                         </el-form-item>
 
-                        <!-- <el-form-item label="搜索关键词" prop="searchKeyword">
-                            <el-tooltip class="item" effect="dark" placement="right">
-                                <div slot="content">
-                                    网站使用了搜索控件时，将使该网站的搜索
-                                    <br />结果更加准确，一篇产品最多可以设置5个关键词
-                                </div>
-                                <i class="iconfont iconyiwen"></i>
-                            </el-tooltip>
-                            <ul class="keyword-list" ref="keywordList">
-                                <li v-for="(item,index) in detailData.searchKeyword" :key="index">
-                                    {{item}}
-                                    <i class="el-icon-close"
-                                       @click.stop="removeCurKeyWord(index)"></i>
-                                </li>
-                                <el-input maxlength="10"
-                                          ref="keywordInput"
-                                          placeholder="每个关键词之间用回车键分离"
-                                          v-model="keywordValue"
-                                          @keyup.enter.native="keywords(keywordValue)"
-                                          @blur="keywords(keywordValue)"></el-input>
-                            </ul>
-                            <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
-                        </el-form-item>-->
                         <el-form-item></el-form-item>
                         <el-form-item label="置頂" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
-                            <!-- <span style=" font-size: 14px; color: #606266;
-    vertical-align: middle;
-    padding:0  16px 0 32px ;">仅登录用户可访问</span>
-                            <el-switch v-model="detailData.isLoggedInCanView"></el-switch>-->
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -336,12 +323,13 @@ import Video from "@/assets/quill-video"
 Quill.register(Video, true)
 
 import videoManage from "@/components/VideoManage/popupIndex.vue";
-
+import QuillDetail from "@/components/ProductManage/QuillDetail.vue";
 export default {
     components: {
         ModalContent,
         DetailCheckTree,
         videoManage,
+        QuillDetail
     },
     provide: {
         popper: true
@@ -380,6 +368,7 @@ export default {
 
             siteOptions: null,
             activeName: "",
+            activeName0: "",
             activeName1: "",
             categoryName: [],
             categoryId: [],
@@ -420,7 +409,8 @@ export default {
                 isSkuSwitchOn: false, //
                 isNeedShipping: false, //
                 isAllowComment: true,
-                defaultSiteId: 0
+                defaultSiteId: 0,
+                specificationContent:""
             },
             rules: {
                 name: [
@@ -447,6 +437,7 @@ export default {
             checkedList: [],
             ratio:[],
             origin: [],
+            quillDetailId:"quill-specificationContent"
         };
     },
     created() {
@@ -560,7 +551,6 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
-
             this.categoryId = [];
 
             if (Object.keys(data.seoKeyword).length < 1) {
@@ -575,14 +565,8 @@ export default {
             }
             this.detailData = data;
             this.detailData.NewId = data.id;
-
-            //  let categoryList22 = JSON.stringify(this.detailData.productCategoryList);
-            //  JSON.parse(categoryList22).forEach(item=>{
-            //       this.categoryId.push(item.id);
-            //  })
-            document.getElementsByClassName(
-                "ql-editor"
-            )[0].innerHTML = this.detailData.detailContent;
+            document.getElementById("quill-contentDetail").querySelector(".ql-editor").innerHTML = this.detailData.detailContent;
+            document.getElementById(this.quillDetailId).querySelector(".ql-editor").innerHTML = this.detailData.specificationContent;
             this.categoryIdList(this.detailData.productCategoryList);
             this.$emit("changePreviewId", id, this.detailData.defaultSiteId);
             this.videoAddDragEvent();
@@ -612,8 +596,7 @@ export default {
         //新建产品
         async insertArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
-            var html = document.getElementsByClassName("ql-editor")[0]
-                .innerHTML;
+            var html = document.getElementById("quill-contentDetail").querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
@@ -664,9 +647,9 @@ export default {
         //编辑保存产品
         async saveArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
-            var html = document.getElementsByClassName("ql-editor")[0]
-                .innerHTML;
+            var html = document.getElementById("quill-contentDetail").querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
+            console.log('this.detailData',this.detailData);
             let { status, data } = await productManageApi.update(
                 this.curProduct,
                 this.detailData
@@ -835,7 +818,7 @@ export default {
                 defaultSiteId: 0
             };
             this.detailData = { ...this.detailData, ...detailData };
-            document.getElementsByClassName("ql-editor")[0].innerHTML = "";
+            document.getElementById("quill-contentDetail").querySelector(".ql-editor").innerHTML="";
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
@@ -965,10 +948,9 @@ export default {
                             height: '100%',
                             poster: poster
                         }
-                    );
-                    this.videoAddDragEvent();
+                    );                    
                 }
-                
+                this.videoAddDragEvent();
             }
         },
         // 关闭视频选择弹窗
@@ -977,14 +959,18 @@ export default {
         },
         //视频增加拖动事件
         videoAddDragEvent(){
-            let dragEles = document.getElementsByClassName("ql-dragHandler");
-            let videoEles = document.getElementsByClassName("ql-video-content");
-            let container = document.getElementsByClassName("ql-editor")[0];
+            let dragEles = document.getElementById("quill-contentDetail").querySelectorAll(".ql-dragHandler");
+            let videoEles = document.getElementById("quill-contentDetail").querySelectorAll(".ql-video-content");
+            let container = document.getElementById("quill-contentDetail").querySelector(".ql-editor");
+                        console.log('videoEles',videoEles);
             if(videoEles){
                 for(var i=0; i<videoEles.length; i++){
                     this._bindDragEvents(dragEles[i], container, videoEles[i], i);
                 } 
             }
+        },
+        detailContentChange(html){
+            this.detailData.specificationContent = html;
         }
     },
 
@@ -995,9 +981,6 @@ export default {
             } else {
                 this.isOutSearch = false;
             }
-            // let width = this.detailData.searchKeyword.length * 52 ;
-            // let ele = this.$refs.keywordInput.$el.children[0];
-            // this.textIndent(ele, width);
         },
         "detailData.seoKeyword"() {
             if (this.detailData.seoKeyword.length >= 5) {
@@ -1005,9 +988,6 @@ export default {
             } else {
                 this.isOutSeo = false;
             }
-            // let width = this.detailData.seoKeyword.length * 52;
-            // let ele = this.$refs.metaKeywordsInput.$el.children[0];
-            // this.textIndent(ele, width);
         },
         deep: true
     }
@@ -1092,6 +1072,17 @@ export default {
 .quill-editor /deep/ .ql-container {
     height: 400px;
     overflow: hidden;
+}
+.quill-editor /deep/ .ql-container .ql-dragHandler {
+    position:absolute;
+    top:0; 
+    left:0; 
+    display:none; 
+    border:2px solid rgb(170, 24, 121); 
+    border-radius:50%; 
+    width:12px; 
+    height:12px; 
+    cursor:nw-resize;
 }
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
@@ -1190,21 +1181,5 @@ export default {
 // }
 .modal-footer {
     float: right;
-    height: 88px;
-    button {
-        margin-top: 24px;
-        width: 76px;
-        height: 40px;
-        border-radius: 2px;
-        // line-height: 40px;
-        background: $--color-primary;
-        margin-right: 16px;
-        color: #fff;
-    }
-    .cancel {
-        color: $--color-primary;
-        background: rgba(255,255,255,1);
-        border: 1px solid $--color-primary;
-    }
 }
 </style>

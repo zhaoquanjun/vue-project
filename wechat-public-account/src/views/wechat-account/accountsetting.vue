@@ -24,7 +24,7 @@
           <span>推广域名</span>
           <p>{{accountInfo.promotionUrl}}</p>
         </div>
-        <button class="cl-button cl-button--primary" @click="changeShow">修改</button>
+        <button class="cl-button cl-button--small cl-button--primary" @click="changeShow">修改</button>
       </div>
       <div class="account-explain__area">
         <h5>推广域名说明</h5>
@@ -65,8 +65,8 @@
         </ul>
         <div class="btn">
 
-          <button class="cl-button cl-button--primary" @click="_hasPromotionUrl">确定</button>
-          <button class="cl-button cl-button--primary_notbg" @click="closeDomain">取消</button>
+          <button class="cl-button cl-button--small cl-button--primary" @click="_hasPromotionUrl">确定</button>
+          <button class="cl-button cl-button--small cl-button--primary_notbg" @click="closeDomain">取消</button>
         </div>
       </div>
     </div>
