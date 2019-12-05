@@ -219,9 +219,6 @@ export default {
 .uploadCategoryPic .category-name /deep/ .el-form-item__content {
     margin-left: 76px !important;
 }
-.uploadCategoryPic .upload-item /deep/ .el-form-item__label {
-    margin-left: 10px;
-}
 .uploadCategoryPic /deep/ .el-form .el-form-item {
     margin-bottom: 15px;
 }
