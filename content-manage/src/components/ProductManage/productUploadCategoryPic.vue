@@ -258,7 +258,7 @@ export default {
     padding-top: 0;
 }
 .uploadCategoryPic .category-name /deep/ .el-form-item__content {
-    margin-left: 82px !important;
+    margin-left: 76px !important;
 }
 .uploadCategoryPic .upload-item /deep/ .el-form-item__label {
     margin-left: 10px;
@@ -270,6 +270,10 @@ export default {
 .uploadCategoryPic /deep/ .el-form .el-form-item__error {
     background: #fff;
     z-index: 1;
+}
+.pannel-footer {
+    top: 154px;
+    box-sizing: border-box;
 }
 .avatar-uploader {
     width: 70px;

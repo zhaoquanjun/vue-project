@@ -96,7 +96,7 @@
                 </span>
                 <div>
                     <button class="cl-button cl-button--text_primary" @click="batchMove">移动</button>
-                    <button v-if="contentType!='Video'" class="cl-button cl-button--text_primary" @click="batchDownLoad">下载</button>
+                    <button v-if="contentType=='File'" class="cl-button cl-button--text_primary" @click="batchDownLoad">下载</button>
                     <button v-if="contentType=='File'" class="cl-button cl-button--text_primary" @click="handleCommand('top')">置顶</button>
                     <button v-if="contentType=='File'" class="cl-button cl-button--text_primary" @click="handleCommand('cancelTop')">取消置顶</button>
                     <button class="cl-button cl-button--text_danger" @click="batchDelete">删除</button>
