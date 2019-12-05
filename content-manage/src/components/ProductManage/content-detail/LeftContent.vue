@@ -123,8 +123,8 @@
                             :isPopup="true"
                         >
                             <div slot="modal-footer" class="modal-footer" style>
-                                <button type="button" @click="getEditorImg" class="sure">确定</button>
-                                <button type="button" @click="cancelEditorImg" class="cancel">取消</button>
+                                <button type="button" @click="getEditorImg" class="cl-button cl-button--primary_notbg">确定</button>
+                                <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary">取消</button>
                             </div>
                         </modal-content>
                     </div>
@@ -139,8 +139,8 @@
                             </el-header>
                             <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
                                 <div slot="modal-footer" class="modal-footer">
-                                    <button @click="cancelgetVideo" class="cancel">取消</button>
-                                    <button @click="getVideoOssUrl" class="sure">确定</button>
+                                    <button @click="cancelgetVideo" class="cl-button cl-button--primary_notbg">取消</button>
+                                    <button @click="getVideoOssUrl" class="cl-button cl-button--primary" style="margin-right: 24px">确定</button>
                                 </div>
                             </videoManage>
                         </div>
@@ -1190,21 +1190,5 @@ export default {
 // }
 .modal-footer {
     float: right;
-    height: 88px;
-    button {
-        margin-top: 24px;
-        width: 76px;
-        height: 40px;
-        border-radius: 2px;
-        // line-height: 40px;
-        background: $--color-primary;
-        margin-right: 16px;
-        color: #fff;
-    }
-    .cancel {
-        color: $--color-primary;
-        background: rgba(255,255,255,1);
-        border: 1px solid $--color-primary;
-    }
 }
 </style>

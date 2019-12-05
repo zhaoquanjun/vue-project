@@ -218,6 +218,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../styles/content-manage/manege-table.scss";
+.el-pagination /deep/ .el-pagination__total {
+    float: left;
+}
+.el-pagination /deep/ .sizes-title {
+    float: left;
+}
 .img-list {
     width: 100%;
     box-sizing: border-box;
