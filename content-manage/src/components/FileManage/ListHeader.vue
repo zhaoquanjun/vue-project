@@ -92,7 +92,7 @@
             <div class="handle-batch">
                 <span>
                     已选
-                    <i>{{countPic}}</i> 个文件
+                    <i style="color:#fe9837;">{{countPic}}</i> 个文件
                 </span>
                 <div>
                     <button class="cl-button cl-button--text_info" @click="batchMove">移动</button>

@@ -565,7 +565,7 @@ export default {
                         '<button disabled="disabled" style="color:#262626;height: 24px;">-</button>';
                     }else{
                          ele.innerHTML =
-                        `<i class=" iconfont iconicon-des-setup relative" style="color:#262626;"></i>`;
+                        `<i class=" iconfont iconicon-des-setup" style="color:#262626;" title="域名详情" id="iconfont-setup"></i>`;
                     }
                    
                 }
