@@ -349,9 +349,9 @@ export default {
 }
 .el-tabs /deep/ .el-tabs__item {
     font-size: 12px;
-    padding: 0;
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    margin: 0 24px;
     font-weight: 400;
     color: #262626;
     height: 50px;
@@ -374,7 +374,6 @@ export default {
     border-bottom: $--icon-color-base;
 } 
 .el-tabs /deep/ .is-active {
-    background: #F8FAFC;
     border-bottom: 2px solid #FF6B00 !important;
 }
 .el-table /deep/ .cell {
@@ -455,6 +454,8 @@ export default {
         margin-top: 24px;
         position: relative;
         background: #fff;
+        border: $--border-base;
+        border-radius: $--border-radius-base;
         .promotion {
           position: absolute;
           top: 0;
