@@ -27,16 +27,16 @@ router.beforeEach(async (to, from, next) => {
 
   if (accessToken) {
     if (to.path !== "/callback") {
-      if (!to.meta.requiresAuth) {
-        next()
-        return
-      }
+      if (store.getters.getMenuList.length < 1) await store.dispatch('_getMenuListData')
       // vtfsjogp => userinfo
       if (!getCookie("vtfsjogp")) {
         await store.dispatch("_getAppHeadInfo");
       }
       if (!appId) { await store.dispatch('_updateAppIdAndSiteIdToCookie') }
-      if (store.getters.getMenuList.length < 1) await store.dispatch('_getMenuListData')
+      if (!to.meta.requiresAuth) {
+        next()
+        return
+      }
       let r = await store.dispatch('getCurRouteAuth', to.path);
       if (r) {
         next()

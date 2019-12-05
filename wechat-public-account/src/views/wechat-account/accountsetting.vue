@@ -239,6 +239,8 @@ export default {
       height: 116px;
       background: #fff;
       padding: 14px 24px;
+      border: $--border-base;
+      border-radius: $--border-radius-base;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -301,7 +303,8 @@ export default {
       height:32px;
       background:rgba(255,255,255,1);
       border-radius:$--border-radius-base;
-      border-top:$--border-base;
+      border:$--border-base;
+      border-top:none;
       display: flex;
       justify-content: space-between;
       padding: 24px;
@@ -351,6 +354,7 @@ export default {
       margin-top: 20px;
       padding: 24px;
       background: #fff;
+      border: $--border-base;
       border-radius: $--border-radius-base;
       h5 {
         height:20px;

@@ -37,10 +37,10 @@
                       <i class="iconfont icontuodongdian1 menu-move__icon" v-show="isOrder"></i>
                       {{child.name || '子菜单'}}
                     </li>
-                    <li v-if="item.subMenuList.length<5 && !isOrder" @click.stop="_handleAddMainMenu('子菜单',item.subMenuList.length+1,item.id,1)">+</li>
+                    <li class="add-menu" v-if="item.subMenuList.length<5 && !isOrder" @click.stop="_handleAddMainMenu('子菜单',item.subMenuList.length+1,item.id,1)">+</li>
                 </draggable>
               </li>
-              <li v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
+              <li class="add-menu" v-if="menuTree.length > 0 &&  menuTree.length < 3  && !isOrder" @click.stop="_handleAddMainMenu('主菜单',menuTree.length,0,0)">+</li>
             </draggable>
         </div>
         <button class="cl-button cl-button--text_primary order-menu__btn" :class="{opacityhalf: !canOrder}" @click="_handleMenuOrder">{{isOrder?'完成排序':'菜单排序'}}</button>
@@ -58,7 +58,7 @@
               <div class="menu-operate__delete" @click="_handleDeleteMenu">删除菜单</div>
             </div>
             <div class="menu-operate__content">
-              <el-form @submit.native.prevent label-width="80px">
+              <el-form @submit.native.prevent label-width="88px">
                 <el-form-item label="菜单名称">
                   <el-input
                     v-model="menuDetail.name" 
@@ -133,7 +133,7 @@
                     <p>{{menuDetail.behaviorBody.customMenuRedirectMsg.title}}</p>
                     <!-- <i class="iconfont iconicon-des-lj" @click="selectUrl"></i> -->
                   </div>
-                  <span class="select-btn" @click="selectUrl">{{menuDetail.behaviorBody.customMenuRedirectMsg.title ? '修改链接':'选择链接'}}</span>
+                  <button class="cl-button cl-button--primary_notbg" @click="selectUrl">{{menuDetail.behaviorBody.customMenuRedirectMsg.title ? '修改链接':'选择链接'}}</button>
                 </div>
               </div>
               <PopUp
@@ -715,8 +715,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.add-menu {
+  font-size: 24px !important;
+  font-weight: 300;
+}
 .el-input /deep/ .el-input__inner {
   width: 240px;
+}
+.el-form /deep/ .el-form-item__label {
+  font-size: $--font-size-small;
+  color: $--color-text-primary !important;
+  padding-right: 16px;
 }
 .holder h3 {
   text-align: center
@@ -1061,7 +1070,7 @@ export default {
 .selectUrl span{
     float: left;
     font-size: 12px;
-    line-height: 40px;
+    line-height: 32px;
     margin-right: 16px;
     font-weight:400;
     color:rgba(38,38,38,1);
@@ -1070,7 +1079,7 @@ export default {
   display: flex;
   justify-content: space-between;
   width:400px;
-  height:40px;
+  height:32px;
   float: left;
   background:rgba(255,255,255,1);
   border-radius:2px;
@@ -1078,13 +1087,14 @@ export default {
   font-size:12px;
   font-weight:400;
   color: #606266;
-  line-height:36px;
+  line-height:32px;
   padding: 0 10px;
   overflow: hidden;
+  margin-right: 16px;
 }
 .selectUrl .select-btn {
   box-sizing: border-box;
-  height: 40px;
+  height: 32px;
   border: 1px solid $--color-primary;
   text-align: center;
   width: 90px;

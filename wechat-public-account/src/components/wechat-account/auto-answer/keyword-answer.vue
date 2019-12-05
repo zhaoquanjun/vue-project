@@ -335,6 +335,7 @@ button {
 }
 .keyword-answer {
     padding: 16px 0px;
+    border: $--border-base;
     border-radius: $--border-radius-base;
     min-width: 1100px;
     .keyword-answer-content {

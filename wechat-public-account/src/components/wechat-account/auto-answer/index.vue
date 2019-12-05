@@ -572,9 +572,9 @@ export default {
 <style lang="scss" scoped>
 .el-tabs /deep/ .el-tabs__item {
     font-size: $--font-size-small;
-    padding: 0;
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    margin: 0 24px;
     font-weight: 400;
     color: #262626;
     height: 50px;
@@ -593,7 +593,6 @@ export default {
     border-bottom: $--icon-color-base;
 }
 .el-tabs /deep/ .is-active {
-    background: #F8FAFC;
     border-bottom: 2px solid $--color-primary !important;
 }
 .el-tabs /deep/ .el-tabs__active-bar {
@@ -611,6 +610,8 @@ export default {
     .answer-tabs {
         margin-top: 24px;
         background: #ffffff;
+        border: $--border-base;
+        border-radius: $--border-radius-base;
     }
     .spread-title {
     

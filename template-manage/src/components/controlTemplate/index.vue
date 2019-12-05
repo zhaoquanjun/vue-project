@@ -33,11 +33,15 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <button style="margin-left:32px" class="cl-button cl-button--primary cl-button--small">查询</button>
-        <button class="cl-button cl-button--primary_notbg cl-button--small">重置</button>
+        <button
+          style="margin-left:32px"
+          class="cl-button cl-button--primary cl-button--small"
+          @click="searchList"
+        >查询</button>
+        <button class="cl-button cl-button--primary_notbg cl-button--small" @click="searchReset">重置</button>
       </div>
       <div>
-        <List :listData="templateInfo" ref="list"></List>
+        <List :listData="templateInfo" @orderList="orderList" ref="list"></List>
       </div>
       <el-dialog
         width="0"
@@ -85,8 +89,14 @@
             ></el-input>
           </div>
           <div class="confirm">
-            <button class="confirmBtn cl-button cl-button--primary" @click="createTemplate">开通</button>
-            <button class="cl-button cl-button--primary_notbg" @click="cancelCreateTemplate">取消</button>
+            <button
+              class="confirmBtn cl-button cl-button--primary cl-button--small"
+              @click="createTemplate"
+            >开通</button>
+            <button
+              class="cl-button cl-button--primary_notbg cl-button--small"
+              @click="cancelCreateTemplate"
+            >取消</button>
           </div>
         </div>
       </el-dialog>
@@ -99,6 +109,8 @@ import List from "./controlTemplateList";
 export default {
   data() {
     return {
+      prop: "createTime",
+      order: "descending",
       search: "",
       searchValue: "templateName",
       searchOptions: [
@@ -126,7 +138,7 @@ export default {
           label: "开通中"
         },
         {
-          value: 1,
+          value: 3,
           label: "开通成功"
         },
         {
@@ -162,18 +174,53 @@ export default {
       } else if (this.searchValue == "phone") {
         phoneText = this.search;
       }
+      let orderByUpdateTime = false;
+      let orderByCreateTime = false;
+      if (this.prop == "updateTime") {
+        orderByUpdateTime = true;
+      } else if (this.prop == "createTime") {
+        orderByCreateTime = true;
+      }
+      let isOrderByDesc = true;
+      if (this.order == "descending") {
+        isOrderByDesc = true;
+      } else if (this.order == "ascending") {
+        isOrderByDesc = false;
+      }
       let para = {
         templateName: templateNameText,
         secondDomain: domainText,
         phone: phoneText,
-        templateState: this.sortValue
+        templateState: this.sortValue,
+        OrderByCreateTime: orderByCreateTime,
+        OrderByUpdateTime: orderByUpdateTime,
+        IsOrderByDesc: isOrderByDesc
       };
       let { data } = await templateApi.getComposeTemplates(para);
       this.$Loading.hide();
       this.templateInfo = data;
       console.log(data);
     },
-    blurPhone() {},
+    searchList() {
+      this.getList();
+    },
+    searchReset() {
+      this.search = "";
+      this.sortValue = -1;
+      this.searchValue = "templateName";
+    },
+    blurPhone() {
+      if (this.createPhone == "") {
+        this.errorTip = true;
+        this.errorPhone = "请输入手机号";
+      } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.createPhone)) {
+        this.errorTip = true;
+        this.errorPhone = "您输入的手机号格式有误，请重新输入";
+      } else {
+        this.errorTip = false;
+        this.errorPhone = "";
+      }
+    },
     createTemplatedialogShow() {
       this.createTemplateShow = true;
     },
@@ -189,6 +236,18 @@ export default {
         templateName: this.createTemplateName
       };
       let { data } = await templateApi.createComposeTemplate(para);
+      this.$notify({
+        customClass: "notify-success",
+        message: `模版开通成功`,
+        duration: 2000,
+        showClose: false
+      });
+      this.getList();
+    },
+    async orderList(prop, order) {
+      this.prop = prop;
+      this.order = order;
+      this.getList();
     }
   }
 };
@@ -280,6 +339,10 @@ export default {
       line-height: 32px;
       text-align: right;
       padding-right: 16px;
+      box-sizing: border-box;
+    }
+    .ym-form-item__error {
+      margin-left: 100px;
     }
   }
   .confirm {
