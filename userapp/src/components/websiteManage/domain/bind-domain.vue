@@ -67,7 +67,6 @@ export default {
             let { data, status } = await bindDomainAndEnableCdn({
                 domain: this.domainValue
             });
-            this.$Loading.hide();
             if (status === 200 && !data.isSuccess) {
                 this.onerrorTip = true;
                 this.onerrorText = data.msg;
@@ -75,9 +74,12 @@ export default {
                 this.btnText = "确定";
                 return;
             }
+            this.$Loading.hide();
             if (status === 200 && data.isSuccess) {
+              
                 this.clickConfirmBtnSet();
                 this.$emit("getCdnDomainList"); //添加成功后刷新域名列表
+                this.$Loading.hide();
                 // this.onerrorTip = false;
                 let message = [];
                 message.push(

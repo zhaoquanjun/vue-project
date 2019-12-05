@@ -217,7 +217,7 @@ export default {
     padding-top: 0;
 }
 .uploadCategoryPic .category-name /deep/ .el-form-item__content {
-    margin-left: 82px !important;
+    margin-left: 76px !important;
 }
 .uploadCategoryPic .upload-item /deep/ .el-form-item__label {
     margin-left: 10px;

@@ -104,7 +104,7 @@
                             <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
                                 <div slot="modal-footer" class="modal-footer">
                                     <button @click="cancelgetVideo" class="cl-button cl-button--primary_notbg">取消</button>
-                                    <button @click="getVideoOssUrl" class="cl-button cl-button--primary">确定</button>
+                                    <button @click="getVideoOssUrl" class="cl-button cl-button--primary" style="margin-right: 24px">确定</button>
                                 </div>
                             </videoManage>
                         </div>

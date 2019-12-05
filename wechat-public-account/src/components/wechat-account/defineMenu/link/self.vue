@@ -66,7 +66,7 @@ export default {
     }
     input {
       width:470px;
-      height:40px;
+      height:30px;
       padding-left: 10px;
       background:rgba(255,255,255,1);
       border-radius:$--border-radius-base;

@@ -17,7 +17,7 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="文件名称" min-width="220">
+            <el-table-column label="文件名称" min-width="160">
                 <template slot-scope="scope">
                     <span class="isTop" v-show="scope.row.isTop">置顶</span>
                     <span class="file-cover cover">
@@ -34,12 +34,12 @@
                     </el-tooltip>
                 </template>
             </el-table-column>
-            <el-table-column prop="fileExtension" label="文件格式" min-width="100">
+            <el-table-column prop="fileExtension" label="文件格式" min-width="90">
                 <template slot-scope="scope">
                     <span>{{ scope.row.fileExtension | formatterFileExt}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="categoryName" label="分类" min-width="120">
+            <el-table-column prop="categoryName" label="分类" min-width="100">
                 <template slot-scope="scope">
                     <el-tooltip
                         class="item"
@@ -58,7 +58,7 @@
                     <span>{{ scope.row.isTop?"是":"否" }}</span>
                 </template>
             </el-table-column>-->
-            <el-table-column prop="downloadCount" sortable='custom' min-width="90" label="下载次数">
+            <el-table-column prop="downloadCount" sortable='custom' min-width="100" label="下载次数">
                 <template slot-scope="scope">
                     <span>{{ scope.row.downloadCount}}</span>
                 </template>

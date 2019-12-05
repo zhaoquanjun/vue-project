@@ -45,11 +45,11 @@
                     <i class="defult-color">{{formatSize}}</i>
                 </li>
                 <li v-if="successCount>0">
-                    <i class="success-color">，{{successCount}}</i> 个上传成功
+                    <i class="success-color">{{successCount}}</i> 个上传成功
                 </li>
                 <li v-if="errorCount>0">
                     &nbsp;&nbsp;
-                    <i class="error-color">，{{errorCount}}</i> 个上传失败
+                    <i class="error-color">{{errorCount}}</i> 个上传失败
                 </li>
             </ul>
             <button
@@ -478,7 +478,7 @@ export default {
         resetOption() {},
         upload() {
             this.disable = true;
-            this.uploadBtnText = "正在上传";
+            this.uploadBtnText = "开始上传";
             this.fileList.forEach(item => {
                 item.resume();
             });
