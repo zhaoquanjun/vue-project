@@ -3,7 +3,7 @@
     <div class="prve-form">
         <iframe id="prve-iframe" name="myframe" class="prve-form" :src="src" ref="iframe"></iframe>
     </div>
-    <button class="release" @click="release">应用模版</button>
+    <button class="release" @click="release">应用此模版</button>
 </div>
 </template>
 <script>
@@ -26,6 +26,7 @@
                 let para ={
                     CurrentSiteId: this.item.CurrentSiteId,
                     SiteName: this.item.SiteName,
+                    SecondDomain: this.item.Domain,
                     TemplateId: this.item.TemplateId,
                     TemplateSiteId: this.item.TemplateSiteId
                 }
