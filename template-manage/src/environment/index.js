@@ -10,6 +10,7 @@ let memberManageApi = `${httpSchema}api.content.${baseServerUrl}`;
 let dashboardApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
 let templateApi = `${httpSchema}api.wezhanproduce.${baseServerUrl}`;
 let uploadPicUrl = `${httpSchema}api.content.${baseServerUrl}/api/v1/picture`;
+let uploadComposeUrl = `${httpSchema}api.content.${baseServerUrl}/api/v1/picture/UploadControlPic/compose`;
 let authorityUrl = `${httpSchema}login.${baseServerUrl}`;
 let redirectUrl = `${httpSchema}template.${baseServerUrl}/callback`;
 let logoutRedirectUri = `${httpSchema}template.${baseServerUrl}/index.html`;
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV === `development`) {
     dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
     templateApi = `${httpSchema}api.wezhanproduce.console.wezhan.cn`
     uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture`;
+    uploadComposeUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture/UploadControlPic/compose`;
     authorityUrl = `${httpSchema}login.console.wezhan.cn`;
     redirectUrl = `${httpSchema}localhost:8083/callback`;
     logoutRedirectUri = `${httpSchema}localhost:8083/index.html`;
@@ -48,6 +50,7 @@ const enbironmemy = {
     dashboardApi,
     templateApi,
     uploadPicUrl,
+    uploadComposeUrl,
     silentRedirectUri,
     clientId,
     scope,

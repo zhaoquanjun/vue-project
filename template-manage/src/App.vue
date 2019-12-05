@@ -15,7 +15,7 @@
                 <i slot="title">模版管理</i>
               </page-submenu>
             </el-aside>
-            <el-main class="content-table-wrap">
+            <el-main class="page-scroll">
               <router-view />
             </el-main>
           </el-container>

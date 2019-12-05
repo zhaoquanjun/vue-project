@@ -35,6 +35,16 @@ export const defaultRoutes = [
                     isSub: true
                 },
             },
+            {
+                path: "composeManage",
+                name: "composeManage",
+                component: () => import('@/views/template-manage/controlManage.vue'),
+                meta: {
+                    requiresAuth: false,
+                    title: "控件管理",
+                    isSub: true
+                },
+            },
             // {
             //     path: "product",
             //     name: "product",
