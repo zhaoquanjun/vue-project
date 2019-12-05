@@ -17,7 +17,7 @@ export default class Video extends BlockEmbed {
     video.setAttribute('x5-playsinline', true);
     video.setAttribute('poster',value.poster)
     let dragP = document.createElement('p');
-    let dragPStyle="position:absolute; top:0; left:0; display:none; border:2px solid rgb(170, 24, 121); border-radius:50%; width:8px; height:8px; cursor:nesw-resize; ";
+    let dragPStyle=" ";
     dragP.setAttribute('class', 'ql-dragHandler');
     dragP.setAttribute('style', dragPStyle);
     node.append(video);
