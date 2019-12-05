@@ -323,9 +323,6 @@ export default {
     .popup-footer__area {
       padding: 15px 20px 20px;
       display: flex;
-      button {
-        margin-right: 24px;
-      }
     }
   }
 }

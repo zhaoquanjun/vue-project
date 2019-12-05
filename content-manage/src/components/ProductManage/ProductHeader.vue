@@ -92,7 +92,7 @@
             <div class="bach-header">
                 <span>
                     已选
-                    <i>{{count}}</i> 个产品
+                    <i style="color:#fe9837;">{{count}}</i> 个产品
                 </span>
                 <div class="bach-hanlder">
                     <button class="cl-button cl-button--text_info" @click="batchPublish(3, false)">上架</button>

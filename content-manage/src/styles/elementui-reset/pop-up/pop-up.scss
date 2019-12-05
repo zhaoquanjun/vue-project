@@ -19,7 +19,14 @@
             top: 0;
 
             .el-icon-close {
+                padding: 8px;
+                margin-top: -8px;
                 font-size: 20px;
+                border-radius: 50%;
+            }
+            .el-icon-close:hover {
+                background: $--icon-hover-color;
+                color: $--color-primary;
             }
         }
     }

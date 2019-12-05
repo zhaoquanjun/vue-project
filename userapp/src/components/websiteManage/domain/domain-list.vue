@@ -113,7 +113,7 @@
                     <span v-else>-</span>
                 </template>
             </el-table-column>
-            <el-table-column type="expand" >
+            <el-table-column type="expand">
                 <template slot-scope="props">
                     <div class="domain-detail" >
                         <el-row class="domain-detail-row"> 
@@ -166,7 +166,7 @@
                                         v-if="props.row.cdnStatus===1 ||props.row.cdnStatus===2"
                                         class="status"
                                     >{{props.row.cdnStatusDesc}}</span>
-                                    <div v-else-if="props.row.cdnStatus===3">
+                                    <div v-else-if="props.row.cdnStatus===3" style="display:inline-block;">
                                         <el-switch
                                             :value="props.row.cdnStatusDesc!=='审核未通过'"
                                             @change="reopenCdn(props.row)"
@@ -326,6 +326,7 @@ export default {
         };
     },
     mounted() {
+        this.getListNotResolve()
         this.resetExpandText();
         this.resetExplainStatus();
     },
@@ -564,7 +565,7 @@ export default {
                         '<button disabled="disabled" style="color:#262626;height: 24px;">-</button>';
                     }else{
                          ele.innerHTML =
-                        `<i aria-describedby="el-tooltip-5444" tabindex="2" class=" iconfont iconicon-des-setup relative" style="color:#262626;"></i>`;
+                        `<i class=" iconfont iconicon-des-setup" style="color:#262626;" title="域名详情" id="iconfont-setup"></i>`;
                     }
                    
                 }
@@ -576,20 +577,23 @@ export default {
         },
         // 定时刷新解析状态
         resetExplainStatus(){
+            let flag=false;
             this.tableData.forEach(elem=>{
                 if(elem.cdnDomainResolveStatus!==2){
-                    let timer=setInterval(() => {
-                        this.$emit("getCdnDomainList")
-                        clearInterval(timer);
-                    }, 180000);
+                    flag=true;
                 }
             })
-
+            if(flag){
+                let timer=setInterval(() => {
+                    this.$emit("getCdnDomainList")
+                    clearInterval(timer);
+                }, 180000);
+            }
         }
     },
     watch: {
         tableData() {
-            this.getListNotResolve()
+           this.getListNotResolve()
            this.resetExpandText();
            this.resetExplainStatus();
         }
