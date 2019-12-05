@@ -6,6 +6,8 @@
       tooltip-effect="dark"
       @sort-change="sortChange"
       class="content-table"
+      :row-style="{height:'70px'}"
+      :default-sort="{prop: 'createTime', order: 'descending'}"
     >
       <template slot="empty">
         <div class="empty-table">
@@ -40,8 +42,10 @@
       </el-table-column>
       <el-table-column label="管理员|备注" min-width="200">
         <template slot-scope="scope">
-          <p>{{scope.row.designerPhone}}</p>
-          <p>{{scope.row.remark}}</p>
+          <div>
+            <p>{{scope.row.designerPhone}}</p>
+            <p style="margin-top:8px">{{scope.row.remark}}</p>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="80">
@@ -123,7 +127,6 @@ export default {
     // }
     //改变排序
     sortChange(row) {
-      console.log(row);
       this.$emit("orderList", row.prop, row.order);
     },
     jumpToManage(row) {
@@ -155,6 +158,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.table-list /deep/ .el-table .ascending .sort-caret.ascending {
+  border-bottom-color: $--color-primary;
+}
+.table-list /deep/ .el-table .descending .sort-caret.descending {
+  border-top-color: $--color-primary;
+}
 .disabled {
   opacity: 0.5;
   cursor: not-allowed;

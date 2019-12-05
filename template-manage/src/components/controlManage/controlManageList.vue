@@ -6,6 +6,7 @@
       tooltip-effect="dark"
       :row-style="{height:'130px'}"
       class="content-table"
+      @selection-change="handleSelectionChange"
     >
       <template slot="empty">
         <div class="empty-table">
@@ -42,7 +43,7 @@
       </el-table-column>
       <el-table-column label="创建时间" min-width="150">
         <template slot-scope="scope">
-          <div>{{ _formatDateTime(scope.row.updateTime, "yyyy/MM/dd hh:mm") }}</div>
+          <div>{{ _formatDateTime(scope.row.creaetTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
       </el-table-column>
       <el-table-column label="更新时间" min-width="150">
@@ -113,8 +114,16 @@ export default {
       if (command == "setting") {
         this.$emit("setting", row);
       } else if (command == "update") {
-        this.$emit("update", row);
+        this.$emit("update", [row.pageId]);
       }
+    },
+    handleSelectionChange(list) {
+      console.log(list);
+      let idList = [];
+      list.forEach((item, index) => {
+        idList.push(item.pageId);
+      });
+      this.$emit("selectBatchUpdate", idList);
     },
     selectable(row) {
       if (row.controlState == 1) {

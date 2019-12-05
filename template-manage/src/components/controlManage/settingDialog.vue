@@ -147,7 +147,7 @@ export default {
           label: "上架"
         },
         {
-          value: 3,
+          value: 2,
           label: "下架"
         }
       ],
@@ -161,11 +161,10 @@ export default {
     };
   },
   components: {},
-  mounted() {
-      console.log(this.uploadPicAction)
-  },
+  mounted() {},
   methods: {
     showSettingTemplate(row) {
+      console.log(row);
       this.row = row;
       this.settingTemplateName = this.row.controlName;
       this.settingTemplateStatus = this.row.controlState;
@@ -175,8 +174,21 @@ export default {
     cancelSettingTemplate() {
       this.settingTemplateShow = false;
     },
-    saveSettingTemplate() {
+    async saveSettingTemplate() {
       this.settingTemplateShow = false;
+      this.$Loading.show();
+      let para = {
+        pageId: this.row.pageId,
+        siteId: this.$route.query.siteId,
+        controlName: this.settingTemplateName,
+        firstType: this.typeValue,
+        secondType: this.typeValue,
+        controlState: this.statusValue,
+        displayOrder: this.settingArrangement,
+        controlImg: "12"
+      };
+      let { data } = await templateApi.saveCombinedControl(para);
+      this.$Loading.hide();
     },
     blurTemplateName() {
       if (this.settingTemplateName == "") {
@@ -190,11 +202,9 @@ export default {
     choseSettingFirstType() {},
     choseSettingSecondType() {},
     async beforeAvatarUpload(file) {
-        console.log(123)
       let data = await securityService.getUser();
       this.headers.Authorization = "Bearer " + data.access_token;
       this.headers.appId = this.$store.state.dashboard.appId;
-        console.log(123)
       const isPic =
         ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !== -1;
       const maxMb = 10;

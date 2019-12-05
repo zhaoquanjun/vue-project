@@ -12,7 +12,7 @@
     </el-header>
     <el-main class="contentWrap">
       <div class="templateName">模板名称：{{templateName}}</div>
-      <div class="contentHeader">
+      <div class="contentHeader" v-show="!isBatch">
         <el-input v-model="searchValue" placeholder="请输入搜索内容" class="searchInput inputHeight">
           <i
             class="el-icon-search el-input__icon"
@@ -54,8 +54,21 @@
         >查询</button>
         <button class="cl-button cl-button--primary_notbg cl-button--small" @click="searchReset">重置</button>
       </div>
+      <div class="contentHeader" v-show="isBatch">
+        <div style="margin-right:32px">
+          已选
+          <span class="selectNum">{{idList.length}}</span>个控件
+        </div>
+        <button class="cl-button cl-button--primary_notbg cl-button--small" @click="batchUpdate">更新</button>
+      </div>
       <div>
-        <List :listData="templateInfo" ref="list" @setting="setting" @update="update"></List>
+        <List
+          :listData="templateInfo"
+          ref="list"
+          @setting="setting"
+          @update="update"
+          @selectBatchUpdate="selectBatchUpdate"
+        ></List>
       </div>
       <settingDialog ref="settingDialog"></settingDialog>
     </el-main>
@@ -69,6 +82,8 @@ export default {
   data() {
     return {
       templateName: this.$route.query.templateName,
+      isBatch: false,
+      idList: [],
       searchValue: "",
       typeValue: 0,
       typeOptions: [
@@ -138,17 +153,28 @@ export default {
         path: "/template/composetemplate"
       });
     },
-    setting(row){
-        this.$refs.settingDialog.showSettingTemplate(row);
+    setting(row) {
+      this.$refs.settingDialog.showSettingTemplate(row);
     },
-    async update(row) {
+    selectBatchUpdate(idList) {
+      this.idList = idList;
+      if (idList.length) {
+        this.isBatch = true;
+      } else {
+        this.isBatch = false;
+      }
+    },
+    batchUpdate() {
+      this.update(this.idList);
+    },
+    async update(idList) {
       this.$confirm(`确定要更新该模版吗？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
             let para = {
               siteId: this.$route.query.siteId,
-              pageIds: [row.pageId]
+              pageIds: idList
             };
             let { data, status } = await templateApi.updateCombinedControl(
               para
@@ -242,6 +268,9 @@ export default {
     .selectStatusValue {
       margin-left: 16px;
       width: 100px;
+    }
+    .selectNum {
+      color: $--color-primary;
     }
   }
 }
