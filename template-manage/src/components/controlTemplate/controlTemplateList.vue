@@ -124,7 +124,7 @@ export default {
     //改变排序
     sortChange(row) {
       console.log(row);
-      this.$emit("orderList", row.propm, row.order);
+      this.$emit("orderList", row.prop, row.order);
     },
     jumpToManage(row) {
       if (row.templateState != 3) {

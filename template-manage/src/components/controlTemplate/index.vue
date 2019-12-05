@@ -239,7 +239,6 @@ export default {
       let { data } = await templateApi.getComposeTemplates(para);
       this.$Loading.hide();
       this.templateInfo = data;
-      console.log(data);
     }
   }
 };
