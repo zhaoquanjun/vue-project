@@ -253,24 +253,17 @@ export default {
                     dragNode.setAttribute('style', " ");
                     containerNode.append(dragNode);
                 }
-                thisDom.maxHeight = containerNode.offsetHeight - 25;
-                thisDom.maxWidth = containerNode.offsetWidth - 25;
+                thisDom.maxHeight = containerNode.offsetHeight - 30;
+                thisDom.maxWidth = containerNode.offsetWidth - 30;
                 if(thisDom.maxHeight > 700) thisDom.maxHeight = 700;
                 thisDom._setDragOffset(dragNode,videoNode);
                 thisDom._setDragHandler(dragNode,videoNode);
             })
-            videoNode.addEventListener('blur',(e)=>{
-                var dragNode=containerNode.querySelector('.ql-dragHandler');
-                if(dragNode){
-                    containerNode.removeChild(dragNode);
-                }
-            })
-
         },        
         //设置拖拽的事件
         _setDragHandler(dragNode,videoNode){
             this.dragVideoNode = videoNode;
-            dragNode.addEventListener('mousedown',this._handleMousedown,false)
+            dragNode.addEventListener('mousedown',this._handleMousedown,false);
         },
         // 设置拖拽按钮的位置(根据视频的位置)
         _setDragOffset(handlerEle, videoNode) {            
@@ -305,6 +298,11 @@ export default {
             document.onmouseup = function () {
                 document.onmousemove = null;
                 document.onmouseup = null;
+                let container = document.getElementById(thisDom.quillId).querySelector(".ql-container");
+                var dragNode=container.querySelector('.ql-dragHandler');
+                if(dragNode){
+                    container.removeChild(dragNode);
+                }
             }
         },    
         insertQuillVideo(videoList) {
