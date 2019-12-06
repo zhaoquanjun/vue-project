@@ -9,7 +9,7 @@
 </template>
 <script>
 export default {
-    props:["item","newFileList"],
+    props:["item","newFileList","index"],
     data(){
         return {
             imgsViewWay:[]
