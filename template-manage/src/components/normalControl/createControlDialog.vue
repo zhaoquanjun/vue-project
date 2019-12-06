@@ -7,7 +7,7 @@
   >
     <div class="right-pannel" :style="{width:'400px'}">
       <div class="pannel-head">
-        <span class="headText">控件设置</span>
+        <span class="headText">新增控件</span>
         <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelSettingTemplate"></i>
       </div>
       <!-- :style="{height:dialogHeight+'px'}" -->
@@ -23,7 +23,7 @@
           <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
         </div>
         <div class="contentItem">
-          <div class="contentItem-title">控件类型</div>
+          <div class="contentItem-title">控件分类</div>
           <el-select
             v-model="settingFirstTypeSelect"
             placeholder="一级分类"
@@ -65,13 +65,20 @@
           </el-select>
         </div>
         <div class="contentItem">
-          <div class="contentItem-title">排列</div>
+          <div class="contentItem-title">排序</div>
           <el-input-number
             v-model="settingArrangement"
-            class="typeSelect"
+            class="arrangement"
             controls-position="right"
             :min="1"
           ></el-input-number>
+          <div class="rowNum-wrap">
+            <span class="rowNum-text">排列</span>
+            <el-radio-group v-model="rowNum">
+              <el-radio label="1">1列</el-radio>
+              <el-radio label="2">2列</el-radio>
+            </el-radio-group>
+          </div>
         </div>
         <div class="contentItem">
           <div class="contentItem-title">缩略图</div>
@@ -91,6 +98,35 @@
             <div class="tipInfoText">推荐尺寸250×140px</div>
           </div>
         </div>
+        <div>
+          <div>控件参数</div>
+          <div class="contentItem">
+            <div class="contentItem-title">类型</div>
+            <el-input v-model="settingType" placeholder="请输入模版名称" class="contentItem-input"></el-input>
+          </div>
+          <div class="contentItem">
+            <div class="contentItem-title">样式</div>
+            <el-select v-model="settingStyle" placeholder="模版状态" class="contentItem-input">
+              <el-option
+                v-for="item in settingStyleOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="contentItem">
+            <div class="contentItem-title">Html</div>
+            <el-input
+              v-model="settingHtml"
+              type="textarea"
+              :rows="3"
+              placeholder="请输入内容"
+              style="vertical-align: text-top;"
+              class="contentItem-input"
+            ></el-input>
+          </div>
+        </div>
       </div>
       <div class="confirm">
         <button
@@ -106,7 +142,7 @@
   </el-dialog>
 </template>
 <script>
-import * as templateApi from "@/api/request/controlTemplateApi";
+import * as templateApi from "@/api/request/normalControlApi";
 import securityService from "@/services/authentication/securityService";
 import environment from "@/environment/index.js";
 export default {
@@ -140,7 +176,7 @@ export default {
         }
       ],
       errorTemplateIndustryShow: false,
-      settingTemplateStatus: 0,
+      settingTemplateStatus: 2,
       settingTemplateStatusOptions: [
         {
           value: 1,
@@ -152,23 +188,32 @@ export default {
         }
       ],
       settingArrangement: 0,
+      rowNum: 1,
       picUrl: "",
       uploadPicAction: `${environment.uploadComposeUrl}`,
       headers: {
         appId: "",
         Authorization: ""
-      }
+      },
+      settingType: "",
+      settingStyle: "",
+      settingStyleOptions: [
+        {
+          value: 1,
+          label: "上架"
+        },
+        {
+          value: 2,
+          label: "下架"
+        }
+      ],
+      settingHtml: ""
     };
   },
   components: {},
   mounted() {},
   methods: {
-    showSettingTemplate(row) {
-      console.log(row);
-      this.row = row;
-      this.settingTemplateName = this.row.controlName;
-      this.settingTemplateStatus = this.row.controlState;
-      this.settingArrangement = this.row.displayOrder;
+    showSettingTemplate() {
       this.settingTemplateShow = true;
     },
     cancelSettingTemplate() {
@@ -178,16 +223,18 @@ export default {
       this.settingTemplateShow = false;
       this.$Loading.show();
       let para = {
-        pageId: this.row.pageId,
-        siteId: this.$route.query.siteId,
         controlName: this.settingTemplateName,
-        firstType: this.typeValue,
-        secondType: this.typeValue,
-        controlState: this.statusValue,
+        firstType: this.settingFirstTypeSelect,
+        secondType: this.settingSecondTypeSelect,
+        controlState: this.settingTemplateStatus,
         displayOrder: this.settingArrangement,
-        controlImg: "12"
+        rowShowNumber: this.rowNum,
+        controlImg: "12",
+        controlType: this.settingType,
+        controlStyle: this.settingStyle,
+        controlHtml: this.settingHtml
       };
-      let { data } = await templateApi.saveCombinedControl(para);
+      let { data } = await templateApi.saveNormalControl(para);
       this.$Loading.hide();
     },
     blurTemplateName() {
@@ -265,6 +312,7 @@ export default {
   }
   .dialogContent {
     height: calc(100% - 119px);
+    overflow: auto;
     .contentItem {
       margin-top: 16px;
       width: 100%;
@@ -290,6 +338,19 @@ export default {
         height: 1px;
         background: $--border-color-base;
         margin: auto 8px;
+      }
+      .arrangement {
+        width: 90px;
+      }
+      .rowNum-wrap {
+        margin-left: 30px;
+        display: inline-block;
+        .rowNum-text {
+          font-size: $--font-size-small;
+          font-weight: $--font-weight-base;
+          color: $--color-text-primary;
+          margin-right: 16px;
+        }
       }
       /deep/ .el-input-number {
         line-height: 31px;
@@ -321,7 +382,7 @@ export default {
           text-align: center;
           position: relative;
           width: 250px;
-          height: 142px;
+          height: 140px;
           &:hover {
             .upload-btn {
               display: inline-block;
@@ -329,7 +390,7 @@ export default {
           }
           .avatar {
             width: 250px;
-            height: 142px;
+            height: 140px;
             display: block;
             object-fit: cover;
           }

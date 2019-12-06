@@ -13,7 +13,14 @@
       <!-- :style="{height:dialogHeight+'px'}" -->
       <div class="dialogContent">
         <div class="contentItem">
-          <div class="contentItem-title">控件名称</div>
+          <div class="contentItem-title">分类级别</div>
+          <el-radio-group v-model="rowNum">
+            <el-radio label="1">一级分类</el-radio>
+            <el-radio label="2">二级分类</el-radio>
+          </el-radio-group>
+        </div>
+        <div class="contentItem">
+          <div class="contentItem-title">分类名称</div>
           <el-input
             v-model="settingTemplateName"
             placeholder="请输入模版名称"
@@ -23,38 +30,7 @@
           <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
         </div>
         <div class="contentItem">
-          <div class="contentItem-title">控件类型</div>
-          <el-select
-            v-model="settingFirstTypeSelect"
-            placeholder="一级分类"
-            @change="choseSettingFirstType"
-            class="typeSelect"
-          >
-            <el-option
-              v-for="item in settingFirstTypeOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <span class="settingLine"></span>
-          <el-select
-            v-model="settingSecondTypeSelect"
-            placeholder="二级分类"
-            @change="choseSettingSecondType"
-            class="typeSelect"
-          >
-            <el-option
-              v-for="item in settingSecondTypeOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择控件类型</div>
-        </div>
-        <div class="contentItem">
-          <div class="contentItem-title">控件状态</div>
+          <div class="contentItem-title">上级分类</div>
           <el-select v-model="settingTemplateStatus" placeholder="模版状态" class="contentItem-input">
             <el-option
               v-for="item in settingTemplateStatusOptions"
@@ -68,28 +44,30 @@
           <div class="contentItem-title">排列</div>
           <el-input-number
             v-model="settingArrangement"
-            class="typeSelect"
+            class="arrangement"
             controls-position="right"
             :min="1"
           ></el-input-number>
         </div>
         <div class="contentItem">
-          <div class="contentItem-title">缩略图</div>
-          <div class="upload-wrap">
-            <el-upload
-              class="avatar-uploader"
-              :action="uploadPicAction"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              :headers="headers"
-            >
-              <img v-if="picUrl" :src="picUrl" class="avatar" />
-              <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
-              <button class="upload-btn cl-button cl-button--primary">上传图片</button>
-            </el-upload>
-            <div class="tipInfoText">推荐尺寸250×140px</div>
-          </div>
+          <div class="contentItem-title">常态图标</div>
+          <el-input
+            v-model="settingTemplateName"
+            placeholder="请输入模版名称"
+            class="contentItem-input"
+            @blur="blurTemplateName"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
+        </div>
+        <div class="contentItem">
+          <div class="contentItem-title">悬停图标</div>
+          <el-input
+            v-model="settingTemplateName"
+            placeholder="请输入模版名称"
+            class="contentItem-input"
+            @blur="blurTemplateName"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
         </div>
       </div>
       <div class="confirm">
@@ -112,8 +90,8 @@ import environment from "@/environment/index.js";
 export default {
   data() {
     return {
-      row: {},
       settingTemplateShow: false,
+      rowNum: "",
       settingTemplateName: "",
       errorTemplateNameTips: false,
       errorTemplateName: "",
@@ -163,12 +141,7 @@ export default {
   components: {},
   mounted() {},
   methods: {
-    showSettingTemplate(row) {
-      console.log(row);
-      this.row = row;
-      this.settingTemplateName = this.row.controlName;
-      this.settingTemplateStatus = this.row.controlState;
-      this.settingArrangement = this.row.displayOrder;
+    showSettingTemplate() {
       this.settingTemplateShow = true;
     },
     cancelSettingTemplate() {
@@ -284,6 +257,9 @@ export default {
       .typeSelect {
         width: 130px;
       }
+      .arrangement {
+        width: 90px;
+      }
       .settingLine {
         display: inline-block;
         width: 8px;
@@ -362,5 +338,3 @@ export default {
   }
 }
 </style>
-
-

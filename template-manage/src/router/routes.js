@@ -45,6 +45,26 @@ export const defaultRoutes = [
                     isSub: true
                 },
             },
+            {
+                path: "normalcontrol",
+                name: "normalcontrol",
+                component: () => import('@/views/template-manage/normalControl.vue'),
+                meta: {
+                    requiresAuth: true,
+                    title: "普通控件",
+                    isSub: true
+                },
+            },
+            {
+                path: "controlcategory",
+                name: "controlcategory",
+                component: () => import('@/views/template-manage/controlCategory.vue'),
+                meta: {
+                    requiresAuth: true,
+                    title: "控件分类",
+                    isSub: true
+                },
+            },
             // {
             //     path: "product",
             //     name: "product",
