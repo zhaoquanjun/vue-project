@@ -75,8 +75,8 @@
           <div class="rowNum-wrap">
             <span class="rowNum-text">排列</span>
             <el-radio-group v-model="rowNum">
-              <el-radio label="1">1列</el-radio>
-              <el-radio label="2">2列</el-radio>
+              <el-radio :label="1">1列</el-radio>
+              <el-radio :label="2">2列</el-radio>
             </el-radio-group>
           </div>
         </div>
@@ -164,7 +164,7 @@ export default {
         }
       ],
       settingArrangement: 0,
-      rowNum: "1",
+      rowNum: 1,
       picUrl: "",
       uploadPicAction: `${environment.uploadComposeUrl}`,
       headers: {
@@ -192,7 +192,7 @@ export default {
       let para = {
         controlName: this.settingTemplateName,
         firstType: this.settingFirstTypeSelect,
-        secondType: this.settingSecondTypeSelect,
+        secondType: Number(this.settingSecondTypeSelect),
         controlState: this.settingTemplateStatus,
         displayOrder: this.settingArrangement,
         rowShowNumber: this.rowNum,
