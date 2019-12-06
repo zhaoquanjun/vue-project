@@ -153,7 +153,7 @@ export default {
       settingTemplateName: "",
       errorTemplateNameTips: false,
       errorTemplateName: "",
-      settingFirstTypeSelect: 0,
+      settingFirstTypeSelect: 1,
       settingFirstTypeOptions: [
         {
           value: 0,
@@ -164,7 +164,7 @@ export default {
           label: "下架"
         }
       ],
-      settingSecondTypeSelect: 0,
+      settingSecondTypeSelect: 1,
       settingSecondTypeOptions: [
         {
           value: 0,
@@ -188,7 +188,7 @@ export default {
         }
       ],
       settingArrangement: 0,
-      rowNum: 1,
+      rowNum: "1",
       picUrl: "",
       uploadPicAction: `${environment.uploadComposeUrl}`,
       headers: {
@@ -234,7 +234,7 @@ export default {
         controlStyle: this.settingStyle,
         controlHtml: this.settingHtml
       };
-      let { data } = await templateApi.saveNormalControl(para);
+      let { data } = await templateApi.createNormalControl(para);
       this.$Loading.hide();
     },
     blurTemplateName() {

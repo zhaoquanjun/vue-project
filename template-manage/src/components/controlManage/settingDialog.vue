@@ -23,7 +23,7 @@
           <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
         </div>
         <div class="contentItem">
-          <div class="contentItem-title">控件类型</div>
+          <div class="contentItem-title">控件分类</div>
           <el-select
             v-model="settingFirstTypeSelect"
             placeholder="一级分类"
@@ -117,7 +117,7 @@ export default {
       settingTemplateName: "",
       errorTemplateNameTips: false,
       errorTemplateName: "",
-      settingFirstTypeSelect: 0,
+      settingFirstTypeSelect: 1,
       settingFirstTypeOptions: [
         {
           value: 0,
@@ -128,7 +128,7 @@ export default {
           label: "下架"
         }
       ],
-      settingSecondTypeSelect: 0,
+      settingSecondTypeSelect: 1,
       settingSecondTypeOptions: [
         {
           value: 0,
@@ -181,12 +181,13 @@ export default {
         pageId: this.row.pageId,
         siteId: this.$route.query.siteId,
         controlName: this.settingTemplateName,
-        firstType: this.typeValue,
-        secondType: this.typeValue,
-        controlState: this.statusValue,
+        firstType: this.settingFirstTypeSelect,
+        secondType: this.settingSecondTypeSelect,
+        controlState: this.settingTemplateStatus,
         displayOrder: this.settingArrangement,
         controlImg: "12"
       };
+      console.log(para)
       let { data } = await templateApi.saveCombinedControl(para);
       this.$Loading.hide();
     },
