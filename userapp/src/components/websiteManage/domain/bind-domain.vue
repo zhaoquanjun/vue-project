@@ -68,6 +68,7 @@ export default {
                 domain: this.domainValue
             });
             if (status === 200 && !data.isSuccess) {
+                this.$Loading.hide();
                 this.onerrorTip = true;
                 this.onerrorText = data.msg;
                 this.disabled = false;
@@ -110,6 +111,8 @@ export default {
                         } 
                     }
                 });
+            }else{
+                this.$Loading.hide();
             }
         },
         changeInput() {

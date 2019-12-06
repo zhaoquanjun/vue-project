@@ -75,8 +75,8 @@
           <div class="rowNum-wrap">
             <span class="rowNum-text">排列</span>
             <el-radio-group v-model="rowNum">
-              <el-radio label="1">1列</el-radio>
-              <el-radio label="2">2列</el-radio>
+              <el-radio :label="1">1列</el-radio>
+              <el-radio :label="2">2列</el-radio>
             </el-radio-group>
           </div>
         </div>
@@ -106,14 +106,7 @@
           </div>
           <div class="contentItem">
             <div class="contentItem-title">样式</div>
-            <el-select v-model="settingStyle" placeholder="模版状态" class="contentItem-input">
-              <el-option
-                v-for="item in settingStyleOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+            <el-input v-model="settingStyle" placeholder="请输入模版名称" class="contentItem-input"></el-input>
           </div>
           <div class="contentItem">
             <div class="contentItem-title">Html</div>
@@ -143,6 +136,7 @@
 </template>
 <script>
 import * as templateApi from "@/api/request/normalControlApi";
+import * as categoryApi from "@/api/request/controlCategoryApi";
 import securityService from "@/services/authentication/securityService";
 import environment from "@/environment/index.js";
 export default {
@@ -153,28 +147,10 @@ export default {
       settingTemplateName: "",
       errorTemplateNameTips: false,
       errorTemplateName: "",
-      settingFirstTypeSelect: 1,
-      settingFirstTypeOptions: [
-        {
-          value: 0,
-          label: "上架"
-        },
-        {
-          value: 3,
-          label: "下架"
-        }
-      ],
-      settingSecondTypeSelect: 1,
-      settingSecondTypeOptions: [
-        {
-          value: 0,
-          label: "上架"
-        },
-        {
-          value: 3,
-          label: "下架"
-        }
-      ],
+      settingFirstTypeSelect: "",
+      settingFirstTypeOptions: [],
+      settingSecondTypeSelect: "",
+      settingSecondTypeOptions: [],
       errorTemplateIndustryShow: false,
       settingTemplateStatus: 2,
       settingTemplateStatusOptions: [
@@ -188,7 +164,7 @@ export default {
         }
       ],
       settingArrangement: 0,
-      rowNum: "1",
+      rowNum: 1,
       picUrl: "",
       uploadPicAction: `${environment.uploadComposeUrl}`,
       headers: {
@@ -196,46 +172,37 @@ export default {
         Authorization: ""
       },
       settingType: "",
-      settingStyle: "",
-      settingStyleOptions: [
-        {
-          value: 1,
-          label: "上架"
-        },
-        {
-          value: 2,
-          label: "下架"
-        }
-      ],
+      settingStyle: "style1",
       settingHtml: ""
     };
   },
   components: {},
   mounted() {},
   methods: {
-    showSettingTemplate() {
+    async showSettingTemplate() {
       this.settingTemplateShow = true;
+      let { data } = await categoryApi.getDropDownList();
+      this.settingFirstTypeOptions = data;
     },
     cancelSettingTemplate() {
       this.settingTemplateShow = false;
     },
     async saveSettingTemplate() {
       this.settingTemplateShow = false;
-      this.$Loading.show();
       let para = {
         controlName: this.settingTemplateName,
         firstType: this.settingFirstTypeSelect,
-        secondType: this.settingSecondTypeSelect,
+        secondType: Number(this.settingSecondTypeSelect),
         controlState: this.settingTemplateStatus,
         displayOrder: this.settingArrangement,
         rowShowNumber: this.rowNum,
-        controlImg: "12",
+        controlImg: this.picUrl,
         controlType: this.settingType,
         controlStyle: this.settingStyle,
         controlHtml: this.settingHtml
       };
       let { data } = await templateApi.createNormalControl(para);
-      this.$Loading.hide();
+      this.$emit("getList");
     },
     blurTemplateName() {
       if (this.settingTemplateName == "") {
@@ -246,7 +213,13 @@ export default {
         this.errorTemplateName = "";
       }
     },
-    choseSettingFirstType() {},
+    async choseSettingFirstType() {
+      let { data } = await categoryApi.getDropDownList(
+        this.settingFirstTypeSelect
+      );
+      this.settingSecondTypeSelect = "";
+      this.settingSecondTypeOptions = data;
+    },
     choseSettingSecondType() {},
     async beforeAvatarUpload(file) {
       let data = await securityService.getUser();

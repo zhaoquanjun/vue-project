@@ -15,5 +15,5 @@ export const saveNormalControl = (para) => {
 }
 // 删除普通控件
 export const deleteNormalControl = (id) => {
-    return ajaxRequest._delete(`${environment.templateApi}/api/v1/NormalControl/DeleteNormalControl${id}`);
+    return ajaxRequest._delete(`${environment.templateApi}/api/v1/NormalControl/DeleteNormalControl/${id}`);
 }
