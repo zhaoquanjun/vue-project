@@ -15,8 +15,7 @@ export const update = (para) => {
 }
 // 删除分类
 export const deleteCategory = (IdList) => {
-    console.log(IdList)
-    return ajaxRequest._delete(`${environment.templateApi}/api/v1/ControlCategory/Delete`, IdList);
+    return ajaxRequest._delete(`${environment.templateApi}/api/v1/ControlCategory/Delete`, { data: IdList });
 }
 // 获取分类
 export const getDropDownList = (parentId) => {

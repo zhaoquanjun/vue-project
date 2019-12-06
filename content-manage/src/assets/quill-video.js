@@ -6,22 +6,22 @@ let Link = Quill.import('formats/link')
 export default class Video extends BlockEmbed {
   static create(value) {
     let node = super.create();
-    node.setAttribute("style","width:100%;height:100%");
+    node.setAttribute("style"," width:100%; height:100%;max-height:700px;");
     let video= document.createElement('video');
     video.setAttribute('class','ql-video-content');
     video.setAttribute('vsrc', this.sanitize(value.url));
     video.setAttribute('controls', 'controls');
-    video.setAttribute('style',`width:${value.width};height:${value.height};`)
+    video.setAttribute('style',`width:${value.width};height:${value.height};max-height:700px;`)
     video.setAttribute('webkit-playsinline', true);
     video.setAttribute('playsinline', true);
     video.setAttribute('x5-playsinline', true);
     video.setAttribute('poster',value.poster)
-    let dragP = document.createElement('p');
-    let dragPStyle=" ";
-    dragP.setAttribute('class', 'ql-dragHandler');
-    dragP.setAttribute('style', dragPStyle);
+    //let dragP = document.createElement('p');
+    //let dragPStyle=" ";
+    //dragP.setAttribute('class', 'ql-dragHandler');
+    //dragP.setAttribute('style', dragPStyle);
     node.append(video);
-    node.append(dragP);
+    //node.append(dragP);
     //document.getElementsByClassName("ql-editor")[0].append(dragP);
     return node;
   }
@@ -32,6 +32,14 @@ export default class Video extends BlockEmbed {
 
   static value(domNode) {
     return domNode.getAttribute('src');
+  }
+
+  static click(){
+      
+  }
+
+  static blur(){
+
   }
 }
 
