@@ -92,18 +92,20 @@
                     <p v-if="item.msgType == 3" class="list-columns__1 ellipsis">
                         {{magTypeFn(item.msgType)}}
                     </p>
-                    <el-tooltip placement="top-start">
-                        <div slot="content" style="max-width:400px;">
-                             <span v-if="keywordListFn(item.keywordList,2)" class="keyword">全匹配：{{keywordListFn(item.keywordList,2)}}；</span>
-                             <span v-if="keywordListFn(item.keywordList,1)" >半匹配：{{keywordListFn(item.keywordList,1)}}</span>
-                        </div>
-                        <p class="list-columns__2 ellipsis pointer">
-                            <i v-if="keywordListFn(item.keywordList,2)" class="icon iconfont iconicon-quanpipei"></i>
-                            <span v-if="keywordListFn(item.keywordList,2)" class="keyword">{{keywordListFn(item.keywordList,2)}}</span>
-                            <i v-if="keywordListFn(item.keywordList,1)" class="icon iconfont iconicon-banpipei"></i>
-                            <span>{{keywordListFn(item.keywordList,1)}}</span>
-                        </p>
-                    </el-tooltip>
+                    <div class="list-columns__2">
+                        <el-tooltip placement="top">
+                            <div slot="content" style="max-width:400px;">
+                                <span v-if="keywordListFn(item.keywordList,2)" class="keyword">全匹配：{{keywordListFn(item.keywordList,2)}}；</span>
+                                <span v-if="keywordListFn(item.keywordList,1)" >半匹配：{{keywordListFn(item.keywordList,1)}}</span>
+                            </div>
+                            <p class="list-columns__2-p ellipsis pointer">
+                                <i v-if="keywordListFn(item.keywordList,2)" class="icon iconfont iconicon-quanpipei"></i>
+                                <span v-if="keywordListFn(item.keywordList,2)" class="keyword">{{keywordListFn(item.keywordList,2)}}</span>
+                                <i v-if="keywordListFn(item.keywordList,1)" class="icon iconfont iconicon-banpipei"></i>
+                                <span>{{keywordListFn(item.keywordList,1)}}</span>
+                            </p>
+                        </el-tooltip>
+                    </div>
                     <div class="list-columns__3 handler-btn">
                         <el-tooltip class="item" effect="dark" content="编辑" placement="top">
                             <button>
@@ -413,7 +415,7 @@ button {
                         height: 40px;
                     }
                 }
-                p.list-columns__2 {
+                .list-columns__2 {
                     width: 46%;
                     i {
                         color: #A1A8B1;
