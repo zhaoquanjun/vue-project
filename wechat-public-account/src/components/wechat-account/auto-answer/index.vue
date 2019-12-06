@@ -606,7 +606,7 @@ export default {
 <style lang="scss" scoped>
 
 .auto-answer {
-    padding: 16px 32px 0;
+    padding: 0 32px;
     .answer-tabs {
         margin-top: 24px;
         background: #ffffff;
