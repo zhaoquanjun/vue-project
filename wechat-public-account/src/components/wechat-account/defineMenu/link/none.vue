@@ -3,10 +3,10 @@
     <div class="content-none__area">
       <div class="none-area__icon">
         <span></span>
-        <p>暂无数据</p>
+        <!-- <p>暂无数据</p> -->
       </div>
       <p>
-        <slot></slot>  
+        <slot class="test"></slot>  
       </p>
     </div>
   </div>
@@ -26,11 +26,15 @@ export default {
   .popup-content__none {
     width: 100%;
     height: 100%;
+    margin-top: -44px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: auto;
     .content-none__area {
+      a {
+        color: $--color-primary !important;
+      }
       .none-area__icon {
         margin: 0 auto;
         width: 80px;
@@ -45,7 +49,7 @@ export default {
         }
         p {
           font-size: 12px;
-          margin-top: 18px;
+          margin-top: 50px;
           color: #8c8c8c;
         }
       }

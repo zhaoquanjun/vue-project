@@ -73,7 +73,7 @@ export default {
 <style lang="scss" scoped>
 
 .define-menu__section {
-  padding: 16px 32px 0;
+  padding: 0 32px;
   height: 100%;
   background: #F4F5F6;
   .define-menu__content {
