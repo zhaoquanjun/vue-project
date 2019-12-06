@@ -202,7 +202,7 @@ export default {
         title: this.newsTitle,
         categoryIdList: id,
         newsOrderColumns: "createtime",
-        topStatus: null,
+        topStatus: true,
         publishStatus: null,
         pageSize: this.pageSize, //11
         pageIndex: this.pageIndex, //1
