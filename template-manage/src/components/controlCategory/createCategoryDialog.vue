@@ -110,7 +110,7 @@ export default {
     async showSettingTemplate() {
       this.isEdit = false;
       this.settingTemplateShow = true;
-      let { data } = await templateApi.getDropDownList(1);
+      let { data } = await templateApi.getDropDownList();
       this.settingParentOptions = data;
     },
     async showEditTemplate(row) {
@@ -167,9 +167,7 @@ export default {
         };
       }
       this.settingTemplateShow = false;
-      this.$Loading.show();
       let { data } = await templateApi.add(para);
-      this.$Loading.hide();
       this.clearInfo();
     },
     clearInfo() {
