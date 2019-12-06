@@ -170,7 +170,7 @@ export default {
       }
       this.settingTemplateShow = false;
       if (this.isEdit) {
-        para.id = row.id;
+        para.id = this.row.id;
         let { data } = await templateApi.update(para);
       } else {
         let { data } = await templateApi.add(para);
