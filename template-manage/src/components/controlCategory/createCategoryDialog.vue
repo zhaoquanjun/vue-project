@@ -91,6 +91,7 @@ export default {
   data() {
     return {
       isEdit: false,
+      row: {},
       settingTemplateShow: false,
       rowNum: "first",
       settingTemplateName: "",
@@ -115,6 +116,7 @@ export default {
     },
     async showEditTemplate(row) {
       this.isEdit = true;
+      this.row = row;
       let { data } = await templateApi.getDropDownList();
       this.settingParentOptions = data;
       if (row.parentId) {
@@ -167,7 +169,13 @@ export default {
         };
       }
       this.settingTemplateShow = false;
-      let { data } = await templateApi.add(para);
+      if (this.isEdit) {
+        para.id = row.id;
+        let { data } = await templateApi.update(para);
+      } else {
+        let { data } = await templateApi.add(para);
+      }
+      this.$emit("getList");
       this.clearInfo();
     },
     clearInfo() {
