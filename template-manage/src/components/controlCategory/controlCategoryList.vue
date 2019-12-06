@@ -1,12 +1,6 @@
 <template>
   <div class="table-list" id="table-list">
-    <el-table
-      ref="multipleTable"
-      :data="listData"
-      tooltip-effect="dark"
-      :row-style="{height:'108px'}"
-      class="content-table"
-    >
+    <el-table ref="multipleTable" :data="listData" tooltip-effect="dark" class="content-table">
       <template slot="empty">
         <div class="empty-table">
           <img src="~img/table-empty.png" />
@@ -15,30 +9,37 @@
       </template>
       <el-table-column prop="templateName" label="一级分类" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
-          <div class="overflow">{{scope.row.templateName}}</div>
+          <div class="overflow">{{scope.row.parentId?"":scope.row.name}}</div>
         </template>
       </el-table-column>
       <el-table-column prop="pagePath" label="二级分类" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
-          <div class="overflow">{{scope.row.controlName}}</div>
+          <div class="overflow">{{scope.row.parentId?scope.row.name:""}}</div>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="控件模板数量" min-width="100">
         <template slot-scope="scope">
-          <div>{{ scope.row.firstTypeName }}</div>
-          <div>{{ scope.row.secondTypeName }}</div>
+          <div>
+            {{ scope.row.combinedControlPublishCount+scope.row.normalControlPublishCount }}
+            /
+            {{scope.row.combinedControlTotalCount+scope.row.normalControlTotalCount}}
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" min-width="150">
         <template slot-scope="scope">
-          <div>{{ _formatDateTime(scope.row.creaetTime, "yyyy/MM/dd hh:mm") }}</div>
+          <div>{{ _formatDateTime(scope.row.createTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="150">
         <template slot-scope="scope">
           <div>
-            <i class="iconfont iconbianji cl-iconfont" style="margin-right:16px"></i>
-            <i class="iconfont iconshanchu cl-iconfont"></i>
+            <i
+              class="iconfont iconbianji cl-iconfont"
+              @click="editItem(scope.row)"
+              style="margin-right:16px"
+            ></i>
+            <i class="iconfont iconshanchu cl-iconfont" @click="deleteItem(scope.row)"></i>
           </div>
         </template>
       </el-table-column>
@@ -58,40 +59,14 @@ export default {
     return {};
   },
   methods: {
-    // 更多操作下拉菜单
-    handleMore(command, row) {
-      console.log(command, row);
-      if (command == "setting") {
-        this.$emit("setting", row);
-      } else if (command == "update") {
-        this.$emit("update", [row.pageId]);
-      }
+    deleteItem(row) {
+      this.$emit("deleteItem", [row.id]);
     },
-    handleSelectionChange(list) {
-      console.log(list);
-      let idList = [];
-      list.forEach((item, index) => {
-        idList.push(item.pageId);
-      });
-      this.$emit("selectBatchUpdate", idList);
-    },
-    selectable(row) {
-      if (row.controlState == 1) {
-        return true;
-      } else if (row.controlState == 3) {
-        return false;
-      }
+    editItem(row) {
+      this.$emit("editItem", row);
     },
     _formatDateTime(date, fmt) {
       return formatDateTime(date, fmt);
-    },
-    statusValue(status) {
-      switch (status) {
-        case 1:
-          return "上架";
-        case 2:
-          return "下架";
-      }
     }
   }
 };
