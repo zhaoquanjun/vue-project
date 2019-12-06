@@ -338,7 +338,6 @@ export default {
             document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML = this.articleDetail.contentDetail;
             this.articleDetail.NewId = data.id;
             this.$emit("changePreviewId", id, this.articleDetail.defaultSiteId);
-            this.videoAddDragEvent();
         },
         //选择移动分类时的节点
         chooseNode(node) {
