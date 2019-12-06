@@ -19,20 +19,20 @@
                                 v-for="(item,index) in newFileList"
                                 :key="index"
                             >
-                                <img width="100%" :src="item" alt />
+                                <img-size-auto :item="item" :newFileList="newFileList"></img-size-auto>
                                 <span class="el-upload-list__item-actions">
                                     <!--  @click="handlePreview(item)" -->
                                     <span
                                         class="el-upload-list__item-preview"
                                        @click="handlerAddPicture('singular',index)"
                                     >
-                                        <i class="iconfont iconqiehuanxingshier"></i>
+                                        <i class="iconfont iconqiehuanxingshier icon-hover"></i>
                                     </span>
                                     <span
                                         class="el-upload-list__item-delete"
                                         @click="handleRemove(index)"
                                     >
-                                        <i class="iconfont iconshanchu"></i>
+                                        <i class="iconfont iconshanchu icon-hover"></i>
                                     </span>
                                 </span>
                             </li>
@@ -76,8 +76,8 @@
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="true" :isPopup="true" :isSecond="true">
                 <div slot="modal-footer" class="modal-footer">
-                    <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
-                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
+                    <button type="button" @click="getEditorImg" class="cl-button cl-button--small cl-button--primary">确定</button>
+                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
                 </div>
             </modal-content>
         </div>
@@ -88,11 +88,13 @@ import environment from "@/environment/index.js";
 import ModalContent from "@/components/ImgManage/index.vue";
 import draggable from "vuedraggable";
 import securityService from "@/services/authentication/securityService";
+import ImgSizeAuto from "@/base/ImgSizeAuto"
 export default {
     props: ["fileList"],
     components: {
         ModalContent,
-        draggable
+        draggable,
+        ImgSizeAuto
     },
     provide: {
       popper:true
@@ -115,7 +117,8 @@ export default {
             dialogVisible: false,
             dialogImageUrl: "",
             limit: 9,
-            isModalShow: false
+            isModalShow: false,
+            imgsViewWay:[]
         };
     },
 
@@ -308,7 +311,7 @@ export default {
 }
 .avatar-uploader /deep/ .el-upload-list > li:not(:first-child) {
     width: 96px;
-    height: 96px;
+    height: 97px;
 }
 .avatar-uploader /deep/ .el-upload-list > li:not(:first-child) img {
     object-fit: contain;
@@ -373,5 +376,8 @@ export default {
     z-index: 100;
     text-align: right;
     padding-top: 0;
+}
+.icon-hover:hover{
+    color: $--color-primary !important;
 }
 </style>

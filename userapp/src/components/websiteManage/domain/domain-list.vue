@@ -731,12 +731,19 @@ export default {
             }
         }
     }
-    .explain-islink {
-        float: right;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        color: $--color-text-orange;
+    .explain-islink{
+        float:right;
+        margin-right:10px;
+        margin-bottom:10px;
         line-height: 20px;
+        a.explain-islink-manual{
+            color:$--color-text-orange;
+            &:hover{
+            text-decoration: none;
+            color:$--color-text-orange;
+            }
+        }
+        
     }
     .status-switch {
         float: left;

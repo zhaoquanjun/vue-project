@@ -222,7 +222,7 @@ export default {
         isDescending: true, // 倒叙 或 正序
         keyword: this.productTitle, //1
         isDelete: false, //1
-        isOnSell: null, //is 上架
+        isOnSell: true, //is 上架
         categoryIdList: idArray //1,
       };
       this.loading = true;

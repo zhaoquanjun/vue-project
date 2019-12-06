@@ -42,7 +42,10 @@ import {
     Popover,
     Notification,
     Scrollbar,
-    Loading
+    Loading,
+    InputNumber,
+    Radio,
+    RadioGroup
   
 } from 'element-ui';
 Vue.use(Container)
@@ -84,7 +87,9 @@ Vue.use(Container)
     .use(Image)
     .use(Popover)
     .use(Scrollbar)
-    
+    .use(InputNumber)
+    .use(Radio)
+    .use(RadioGroup)
 ;
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

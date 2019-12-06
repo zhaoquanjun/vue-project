@@ -216,7 +216,7 @@ export default {
     background: red;
 } */
 .el-select {
-    width: 80%;
+    width: 100%;
 }
 .el-scrollbar .el-scrollbar__view .el-select-dropdown__item {
     height: auto;
@@ -224,6 +224,8 @@ export default {
     padding: 0;
     overflow: hidden;
     overflow-y: auto;
+    line-height: 26px;
+    font-size: $--font-size-small;
 }
 .el-select-dropdown__item.selected {
     font-weight: normal;
@@ -232,7 +234,8 @@ ul li /deep/ .el-tree .el-tree-node__content {
     height: auto;
     padding: 0 20px;
     display: block;
-    width: 150px;
+    width: 280px;
+    box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

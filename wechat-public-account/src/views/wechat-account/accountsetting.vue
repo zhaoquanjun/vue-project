@@ -24,7 +24,7 @@
           <span>推广域名</span>
           <p>{{accountInfo.promotionUrl}}</p>
         </div>
-        <button class="cl-button cl-button--primary" @click="changeShow">修改</button>
+        <button class="cl-button cl-button--small cl-button--primary" @click="changeShow">修改</button>
       </div>
       <div class="account-explain__area">
         <h5>推广域名说明</h5>
@@ -65,8 +65,8 @@
         </ul>
         <div class="btn">
 
-          <button class="cl-button cl-button--primary" @click="_hasPromotionUrl">确定</button>
-          <button class="cl-button cl-button--primary_notbg" @click="closeDomain">取消</button>
+          <button class="cl-button cl-button--small cl-button--primary" @click="_hasPromotionUrl">确定</button>
+          <button class="cl-button cl-button--small cl-button--primary_notbg" @click="closeDomain">取消</button>
         </div>
       </div>
     </div>
@@ -239,6 +239,8 @@ export default {
       height: 116px;
       background: #fff;
       padding: 14px 24px;
+      border: $--border-base;
+      border-radius: $--border-radius-base;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -301,7 +303,8 @@ export default {
       height:32px;
       background:rgba(255,255,255,1);
       border-radius:$--border-radius-base;
-      border-top:$--border-base;
+      border:$--border-base;
+      border-top:none;
       display: flex;
       justify-content: space-between;
       padding: 24px;
@@ -351,6 +354,7 @@ export default {
       margin-top: 20px;
       padding: 24px;
       background: #fff;
+      border: $--border-base;
       border-radius: $--border-radius-base;
       h5 {
         height:20px;

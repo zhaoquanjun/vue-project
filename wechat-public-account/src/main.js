@@ -38,6 +38,24 @@ const el_scrollBar = (el) => {
     }
 };
 
+// Vue.directive('trag', (el, binding) => {
+//     el.style.position ='absolute';
+//     el.onmousedown = function(e) {
+//         var startX = e.clientX - el.offsetLeft;
+//         var startY = e.clientY - el.offsetTop;
+//         document.onmousemove = function(e) {
+//             var endX = e.clientX - startX;
+//             var endY = e.clientY- startY;
+//             el.style.left = endX  + 'px';
+//             el.style.top = endY  + 'px';
+//         }
+//         document.onmouseup = function() {
+//             document.onmousemove = null;
+//             document.onmouseup = null;
+//         }
+//     }
+// })
+
 //接着，自定义Vue指令,指令名你自己随便编一个，我们假定它叫scrollBar
 Vue.directive("scrollBar", {
     //使用inserted钩子函数（初次创建dom）获取使用自定义指令处的dom

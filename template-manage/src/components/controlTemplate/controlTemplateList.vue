@@ -1,6 +1,14 @@
 <template>
   <div class="table-list" id="table-list">
-    <el-table ref="multipleTable" :data="listData" tooltip-effect="dark" class="content-table">
+    <el-table
+      ref="multipleTable"
+      :data="listData"
+      tooltip-effect="dark"
+      @sort-change="sortChange"
+      class="content-table"
+      :row-style="{height:'70px'}"
+      :default-sort="{prop: 'createTime', order: 'descending'}"
+    >
       <template slot="empty">
         <div class="empty-table">
           <img src="~img/table-empty.png" />
@@ -17,34 +25,36 @@
           <div class="overflow">{{scope.row.onSaleCount}}/{{scope.row.composeCount}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="开通时间" min-width="100">
+      <el-table-column prop="createTime" label="开通时间" sortable="custom" min-width="200">
         <template slot-scope="scope">
           <div>{{ _formatDateTime(scope.row.createTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" min-width="200">
+      <el-table-column prop="updateTime" label="更新时间" sortable="custom" min-width="200">
         <template slot-scope="scope">
           <div>{{ _formatDateTime(scope.row.updateTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="模板状态" min-width="200">
+      <el-table-column label="模板状态" min-width="100">
         <template slot-scope="scope">
-          <div>{{scope.row.templateState}}</div>
+          <div>{{statusValue(scope.row.templateState)}}</div>
         </template>
       </el-table-column>
       <el-table-column label="管理员|备注" min-width="200">
         <template slot-scope="scope">
-          <p>{{scope.row.designerPhone}}</p>
-          <p>{{scope.row.remark}}</p>
+          <div>
+            <p>{{scope.row.designerPhone}}</p>
+            <p style="margin-top:8px">{{scope.row.remark}}</p>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="80">
         <template slot-scope="scope">
-          <div>
-            <button class="hoverBtn" style="margin-right:16px">
-              <i class="iconfont iconshanchu"></i>
-            </button>
-          </div>
+          <i
+            class="iconfont iconicon-des-setup cl-iconfont"
+            :class="{'disabled':scope.row.templateState != 3}"
+            @click="jumpToManage(scope.row)"
+          ></i>
         </template>
       </el-table-column>
     </el-table>
@@ -115,13 +125,49 @@ export default {
     // changeSize(size) {
     //   this.$emit("changeSize", size);
     // }
+    //改变排序
+    sortChange(row) {
+      this.$emit("orderList", row.prop, row.order);
+    },
+    jumpToManage(row) {
+      if (row.templateState != 3) {
+        return;
+      }
+      this.$router.push({
+        path: "/template/composemanage",
+        query: {
+          siteId: row.siteId,
+          templateName: row.templateName
+        }
+      });
+    },
     _formatDateTime(date, fmt) {
       return formatDateTime(date, fmt);
+    },
+    statusValue(status) {
+      switch (status) {
+        case 0:
+          return "开通中";
+        case 3:
+          return "开通成功";
+        case 2:
+          return "开通失败";
+      }
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+.table-list /deep/ .el-table .ascending .sort-caret.ascending {
+  border-bottom-color: $--color-primary;
+}
+.table-list /deep/ .el-table .descending .sort-caret.descending {
+  border-top-color: $--color-primary;
+}
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 </style>
 
 
