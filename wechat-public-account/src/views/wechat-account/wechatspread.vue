@@ -338,8 +338,8 @@ export default {
   height: 340px;
   overflow-y: auto;
 }
- .empty-table {
-  margin-top: 80px;
+.el-table /deep/ .el-table__empty-block {
+   height: 295px;
 }
 .el-table /deep/ .el-table__row td {
   padding: 5px 0;

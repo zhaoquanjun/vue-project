@@ -329,6 +329,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.el-table /deep/ .el-table__empty-block {
+   height: 295px;
+}
 button {
     border: none;
     background: transparent;
@@ -382,7 +385,7 @@ button {
             height: 340px;
             overflow-y: auto;
             .empty-table {
-                margin-top: 80px;
+                height: 195px;
             }
             .title {
                 padding: 0px 24px;
