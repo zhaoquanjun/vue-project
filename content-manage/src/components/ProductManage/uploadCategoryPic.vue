@@ -52,8 +52,8 @@
             </el-form-item>
         </el-form>
         <div class="pannel-footer">
-            <button class="cl-button cl-button--primary" @click="submitForm('ruleForm')">确定</button>
-            <button class="cl-button cl-button--primary_notbg" @click="cancel">取消</button>
+            <button class="cl-button cl-button--small cl-button--primary" @click="submitForm('ruleForm')">确定</button>
+            <button class="cl-button cl-button--small cl-button--primary_notbg" @click="cancel">取消</button>
         </div>
     </div>
 </template>
@@ -218,9 +218,6 @@ export default {
 }
 .uploadCategoryPic .category-name /deep/ .el-form-item__content {
     margin-left: 76px !important;
-}
-.uploadCategoryPic .upload-item /deep/ .el-form-item__label {
-    margin-left: 10px;
 }
 .uploadCategoryPic /deep/ .el-form .el-form-item {
     margin-bottom: 15px;

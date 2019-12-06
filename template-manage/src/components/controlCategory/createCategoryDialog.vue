@@ -12,55 +12,31 @@
       </div>
       <!-- :style="{height:dialogHeight+'px'}" -->
       <div class="dialogContent">
+        <div class="contentItem" v-show="!isEdit">
+          <div class="contentItem-title">分类级别</div>
+          <el-radio-group v-model="rowNum">
+            <el-radio label="first">一级分类</el-radio>
+            <el-radio label="second">二级分类</el-radio>
+          </el-radio-group>
+        </div>
         <div class="contentItem">
-          <div class="contentItem-title">控件名称</div>
+          <div class="contentItem-title">分类名称</div>
           <el-input
             v-model="settingTemplateName"
             placeholder="请输入模版名称"
             class="contentItem-input"
             @blur="blurTemplateName"
           ></el-input>
-          <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
+          <div class="ym-form-item__error" v-show="errorTemplateNameTips">请输入分类名称</div>
         </div>
-        <div class="contentItem">
-          <div class="contentItem-title">控件分类</div>
-          <el-select
-            v-model="settingFirstTypeSelect"
-            placeholder="一级分类"
-            @change="choseSettingFirstType"
-            class="typeSelect"
-          >
+        <div class="contentItem" v-show="rowNum == 'second'">
+          <div class="contentItem-title">上级分类</div>
+          <el-select v-model="settingParent" placeholder="模版状态" class="contentItem-input">
             <el-option
-              v-for="item in settingFirstTypeOptions"
+              v-for="item in settingParentOptions"
               :key="item.id"
               :label="item.name"
               :value="item.id"
-            ></el-option>
-          </el-select>
-          <span class="settingLine"></span>
-          <el-select
-            v-model="settingSecondTypeSelect"
-            placeholder="二级分类"
-            @change="choseSettingSecondType"
-            class="typeSelect"
-          >
-            <el-option
-              v-for="item in settingSecondTypeOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择控件类型</div>
-        </div>
-        <div class="contentItem">
-          <div class="contentItem-title">控件状态</div>
-          <el-select v-model="settingTemplateStatus" placeholder="模版状态" class="contentItem-input">
-            <el-option
-              v-for="item in settingTemplateStatusOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
             ></el-option>
           </el-select>
         </div>
@@ -68,28 +44,30 @@
           <div class="contentItem-title">排列</div>
           <el-input-number
             v-model="settingArrangement"
-            class="typeSelect"
+            class="arrangement"
             controls-position="right"
             :min="1"
           ></el-input-number>
         </div>
-        <div class="contentItem">
-          <div class="contentItem-title">缩略图</div>
-          <div class="upload-wrap">
-            <el-upload
-              class="avatar-uploader"
-              :action="uploadPicAction"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              :headers="headers"
-            >
-              <img v-if="picUrl" :src="picUrl" class="avatar" />
-              <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
-              <button class="upload-btn cl-button cl-button--primary">上传图片</button>
-            </el-upload>
-            <div class="tipInfoText">推荐尺寸250×140px</div>
-          </div>
+        <div class="contentItem" v-show="rowNum == 'first'">
+          <div class="contentItem-title">常态图标</div>
+          <el-input
+            v-model="settingNormalIcon"
+            placeholder="请输入模版名称"
+            class="contentItem-input"
+            @blur="blurNormalIcon"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorNormalIconTips">请输入常态图标SVG</div>
+        </div>
+        <div class="contentItem" v-show="rowNum == 'first'">
+          <div class="contentItem-title">悬停图标</div>
+          <el-input
+            v-model="settingHoverIcon"
+            placeholder="请输入模版名称"
+            class="contentItem-input"
+            @blur="blurHoverIcon"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorHoverIconTips">请输入悬停图标SVG</div>
         </div>
       </div>
       <div class="confirm">
@@ -106,133 +84,122 @@
   </el-dialog>
 </template>
 <script>
-import * as templateApi from "@/api/request/controlTemplateApi";
+import * as templateApi from "@/api/request/controlCategoryApi";
 import securityService from "@/services/authentication/securityService";
 import environment from "@/environment/index.js";
 export default {
   data() {
     return {
-      row: {},
+      isEdit: false,
       settingTemplateShow: false,
+      rowNum: "first",
       settingTemplateName: "",
       errorTemplateNameTips: false,
-      errorTemplateName: "",
-      settingFirstTypeSelect: 1,
-      settingFirstTypeOptions: [
-        {
-          value: 0,
-          label: "上架"
-        },
-        {
-          value: 3,
-          label: "下架"
-        }
-      ],
-      settingSecondTypeSelect: 1,
-      settingSecondTypeOptions: [
-        {
-          value: 0,
-          label: "上架"
-        },
-        {
-          value: 3,
-          label: "下架"
-        }
-      ],
-      errorTemplateIndustryShow: false,
-      settingTemplateStatus: 0,
-      settingTemplateStatusOptions: [
-        {
-          value: 1,
-          label: "上架"
-        },
-        {
-          value: 2,
-          label: "下架"
-        }
-      ],
+      settingParent: 1,
+      settingParentOptions: [],
       settingArrangement: 0,
-      picUrl: "",
-      uploadPicAction: `${environment.uploadComposeUrl}`,
-      headers: {
-        appId: "",
-        Authorization: ""
-      }
+      settingNormalIcon: "",
+      errorNormalIconTips: false,
+      settingHoverIcon: "",
+      errorHoverIconTips: false
     };
   },
   components: {},
   mounted() {},
   methods: {
-    showSettingTemplate(row) {
-      console.log(row);
-      this.row = row;
-      this.settingTemplateName = this.row.controlName;
-      this.settingTemplateStatus = this.row.controlState;
-      this.settingArrangement = this.row.displayOrder;
+    async showSettingTemplate() {
+      this.isEdit = false;
+      this.settingTemplateShow = true;
+      let { data } = await templateApi.getDropDownList();
+      this.settingParentOptions = data;
+    },
+    async showEditTemplate(row) {
+      this.isEdit = true;
+      let { data } = await templateApi.getDropDownList();
+      this.settingParentOptions = data;
+      if (row.parentId) {
+        this.rowNum = "second";
+        this.settingParent = row.parentId;
+      } else {
+        this.rowNum = "first";
+        this.settingNormalIcon = row.normalIcon;
+        this.settingHoverIcon = row.hoverIcon;
+      }
+      this.settingTemplateName = row.name;
+      this.settingArrangement = row.displayOrder;
       this.settingTemplateShow = true;
     },
     cancelSettingTemplate() {
       this.settingTemplateShow = false;
+      this.clearInfo();
     },
     async saveSettingTemplate() {
+      let para = {};
+      if (this.rowNum == "first") {
+        if (this.settingTemplateName == "") {
+          this.errorTemplateNameTips = true;
+          return;
+        }
+        if (this.settingNormalIcon == "") {
+          this.errorNormalIconTips = true;
+          return;
+        }
+        if (this.settingHoverIcon == "") {
+          this.errorHoverIconTips = true;
+          return;
+        }
+        para = {
+          parentId: "",
+          name: this.settingTemplateName,
+          displayOrder: this.settingArrangement,
+          normalIcon: this.settingNormalIcon,
+          hoverIcon: this.settingHoverIcon
+        };
+      } else {
+        if (this.settingTemplateName == "") {
+          this.errorTemplateNameTips = true;
+          return;
+        }
+        para = {
+          parentId: this.settingParent,
+          name: this.settingTemplateName,
+          displayOrder: this.settingArrangement
+        };
+      }
       this.settingTemplateShow = false;
-      this.$Loading.show();
-      let para = {
-        pageId: this.row.pageId,
-        siteId: this.$route.query.siteId,
-        controlName: this.settingTemplateName,
-        firstType: this.settingFirstTypeSelect,
-        secondType: this.settingSecondTypeSelect,
-        controlState: this.settingTemplateStatus,
-        displayOrder: this.settingArrangement,
-        controlImg: "12"
-      };
-      console.log(para)
-      let { data } = await templateApi.saveCombinedControl(para);
-      this.$Loading.hide();
+      let { data } = await templateApi.add(para);
+      this.clearInfo();
+    },
+    clearInfo() {
+      this.settingTemplateName = "";
+      this.errorTemplateNameTips = false;
+      this.settingArrangement = 0;
+      this.settingNormalIcon = "";
+      this.errorNormalIconTips = false;
+      this.settingHoverIcon = "";
+      this.errorHoverIconTips = false;
+      this.settingParent = "";
     },
     blurTemplateName() {
       if (this.settingTemplateName == "") {
         this.errorTemplateNameTips = true;
-        this.errorTemplateName = "请输入控件名称";
       } else {
         this.errorTemplateNameTips = false;
-        this.errorTemplateName = "";
       }
     },
-    choseSettingFirstType() {},
-    choseSettingSecondType() {},
-    async beforeAvatarUpload(file) {
-      let data = await securityService.getUser();
-      this.headers.Authorization = "Bearer " + data.access_token;
-      this.headers.appId = this.$store.state.dashboard.appId;
-      const isPic =
-        ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !== -1;
-      const maxMb = 10;
-      const isSizeOk = file.size / 1024 / 1024 < maxMb;
-
-      if (!isPic) {
-        this.$notify({
-          customClass: "notify-error",
-          message: `格式错误`,
-          duration: 2000,
-          showClose: false
-        });
-        return false;
+    blurNormalIcon() {
+      if (this.settingNormalIcon == "") {
+        this.errorNormalIconTips = true;
+      } else {
+        this.errorNormalIconTips = false;
       }
-      if (!isSizeOk) {
-        this.$notify({
-          customClass: "notify-error",
-          message: `请上传小于${maxMb}M的图片!`,
-          duration: 2000,
-          showClose: false
-        });
-        return false;
-      }
-      return isPic && isSizeOk;
     },
-    handleAvatarSuccess(res, file) {
-      this.picUrl = file.response;
+    blurHoverIcon() {
+      if (this.settingHoverIcon == "") {
+        this.errorHoverIconTips = true;
+      } else {
+        this.errorHoverIconTips = false;
+      }
     }
   }
 };
@@ -284,6 +251,9 @@ export default {
       }
       .typeSelect {
         width: 130px;
+      }
+      .arrangement {
+        width: 90px;
       }
       .settingLine {
         display: inline-block;
@@ -363,5 +333,3 @@ export default {
   }
 }
 </style>
-
-

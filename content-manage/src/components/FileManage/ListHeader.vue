@@ -83,7 +83,7 @@
             </div>
             <div class="head-item head-right">
                 <button
-                    class="cl-button cl-button--primary"
+                    class="cl-button cl-button--small cl-button--primary"
                     @click="switchUploadBoxShowStatus"
                 >上传{{displayName}}</button>
             </div>

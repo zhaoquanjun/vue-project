@@ -21,9 +21,9 @@
                     >{{isEditor==1?'编辑产品':'新增产品'}}</el-col>
                     <el-col :span="6" >
                         <div class="article-btn">
-                            <button class="cl-button cl-button--primary_notbg" @click="()=>$router.go(-1)">返回</button>
-                            <button class="cl-button cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
-                            <button class="cl-button cl-button--primary" :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
+                            <button class="cl-button cl-button--small cl-button--primary_notbg" @click="()=>$router.go(-1)">返回</button>
+                            <button class="cl-button cl-button--small cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
+                            <button class="cl-button cl-button--small cl-button--primary" :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
                         </div>
                     </el-col>
                 </el-row>

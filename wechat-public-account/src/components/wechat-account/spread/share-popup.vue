@@ -75,8 +75,8 @@
         </div>
       </div>
       <div class="btn">
-        <button class="cl-button cl-button--primary" @click="closeShare(true)">保存</button>
-        <button class="cl-button cl-button--primary_notbg" @click="closeShare(false)">取消</button>
+        <button class="cl-button cl-button--small cl-button--primary" @click="closeShare(true)">保存</button>
+        <button class="cl-button cl-button--small cl-button--primary_notbg" @click="closeShare(false)">取消</button>
       </div>
     </div>
     <image-manage

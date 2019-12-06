@@ -24,7 +24,7 @@
                         分类图片用于分类控件带图片样式的展示，
                         <br />建议上传尺寸为400✕400像素的图片
                     </div>
-                    <span style="position: absolute;left: -13px;">
+                    <span style="position: absolute;left: -24px;">
                         <i class="iconfont iconyiwen"></i>
                     </span>
                 </el-tooltip>
@@ -56,8 +56,8 @@
             </el-form-item>
         </el-form>
         <div class="pannel-footer">
-            <button class="cl-button cl-button--primary" @click="submitForm('ruleForm')">确定</button>
-            <button class="cl-button cl-button--primary_notbg" @click="cancel">取消</button>
+            <button class="cl-button cl-button--small cl-button--primary" @click="submitForm('ruleForm')">确定</button>
+            <button class="cl-button cl-button--small cl-button--primary_notbg" @click="cancel">取消</button>
         </div>
         <div class="mask" v-show="isModalShow"></div>
         <div id="content" class="contentDialog" v-show="isModalShow">
@@ -67,8 +67,8 @@
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">
-                    <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
-                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
+                    <button type="button" @click="getEditorImg" class="cl-button cl-button--small cl-button--primary">确定</button>
+                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
                 </div>
             </modal-content>
         </div>
@@ -260,9 +260,6 @@ export default {
 .uploadCategoryPic .category-name /deep/ .el-form-item__content {
     margin-left: 76px !important;
 }
-.uploadCategoryPic .upload-item /deep/ .el-form-item__label {
-    margin-left: 10px;
-}
 .uploadCategoryPic /deep/ .el-form .el-form-item {
     margin-bottom: 15px;
 }
@@ -274,11 +271,11 @@ export default {
 .pannel-footer {
     top: 154px;
     box-sizing: border-box;
+    text-align: right;
 }
 .avatar-uploader {
     width: 70px;
     height: 70px;
-    margin-left: 16px;
 }
 .avatar-uploader .el-upload {
     border: 1px dashed $--color-primary;

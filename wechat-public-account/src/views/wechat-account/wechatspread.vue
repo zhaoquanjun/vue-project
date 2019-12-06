@@ -338,8 +338,8 @@ export default {
   height: 340px;
   overflow-y: auto;
 }
- .empty-table {
-  margin-top: 80px;
+.el-table /deep/ .el-table__empty-block {
+   height: 295px;
 }
 .el-table /deep/ .el-table__row td {
   padding: 5px 0;
@@ -420,7 +420,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .spread-setting__section {
-    padding: 16px 32px 0;
+    padding: 0 32px;
     min-width: 1100px;
     overflow-y: auto;
     .iconfont {

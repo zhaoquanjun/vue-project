@@ -2,7 +2,7 @@
   <div class="statistics">
     <div class="title">
       <span>{{sticsTitle}}</span>
-      <button class="cl-button cl-button--primary_notbg" @click="closeStatistics">返回</button>
+      <button class="cl-button cl-button--small cl-button--primary_notbg" @click="closeStatistics">返回</button>
     </div>
     <div class="body">
       <h4>{{shareInfo.shareTitle}}</h4>

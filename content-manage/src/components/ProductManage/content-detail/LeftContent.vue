@@ -103,49 +103,24 @@
                 </el-row>
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
-                    <quill-editor
-                        ref="myQuillEditor"
-                        themes="bubble"
-                        :options="editorOption"
-                        @change="onEditorChange($event)"
-                    ></quill-editor>
-                    <div class="mask" v-show="isModalShow"></div>
-                    <div id="content" class="contentDialog" v-show="isModalShow">
-                        <el-header class="modal-header">
-                            <span style="font-size: 16px;">我的图片</span>
-                            <button @click="cancelEditorImg">X</button>
-                        </el-header>
-                        <modal-content
-                            ref="imgList"
-                            :isGrid="true"
-                            :multiple="true"
-                            @getImgInfo="getImgInfo"
-                            :isPopup="true"
-                        >
-                            <div slot="modal-footer" class="modal-footer" style>
-                                <button type="button" @click="getEditorImg" class="cl-button cl-button--primary_notbg">确定</button>
-                                <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary">取消</button>
-                            </div>
-                        </modal-content>
-                    </div>
-                    <div class="image-select--upload__area" v-show="videoShow">
-                        <div class="mask"></div>
-                        <div id="videoContent" class="contentDialog">
-                            <el-header class="modal-header" style="height:65px">
-                                <span class="title" style="font-size: 16px;">我的视频</span>
-                                <span class="close-icon" @click="cancelgetVideo">
-                                    <i class="iconfont iconguanbi"></i>
-                                </span>
-                            </el-header>
-                            <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
-                                <div slot="modal-footer" class="modal-footer">
-                                    <button @click="cancelgetVideo" class="cl-button cl-button--primary_notbg">取消</button>
-                                    <button @click="getVideoOssUrl" class="cl-button cl-button--primary" style="margin-right: 24px">确定</button>
-                                </div>
-                            </videoManage>
-                        </div>
-                    </div>
+                    <quill-detail
+                    :quillId="quillContentId"
+                    :detailContent="detailData.contentDetail"
+                    @detailContentChange='detailContentChange1'></quill-detail>                              
                 </el-form-item>
+            </div>
+            <div class="content-item set-article">
+                <el-collapse v-model="activeName0" accordion>
+                    <el-collapse-item title="规格详情" name="1">
+                        <el-form-item label prop="specificationContent">
+                            <!-- quill-editor 编辑一-->
+                            <quill-detail
+                            :quillId="quillDetailId"
+                            :detailContent="detailData.specificationContent"
+                            @detailContentChange='detailContentChange'></quill-detail>                           
+                        </el-form-item>
+                    </el-collapse-item>
+                </el-collapse>
             </div>
             <div class="content-item set-article">
                 <el-collapse v-model="activeName" accordion>
@@ -189,36 +164,9 @@
                             </div>
                         </el-form-item>
 
-                        <!-- <el-form-item label="搜索关键词" prop="searchKeyword">
-                            <el-tooltip class="item" effect="dark" placement="right">
-                                <div slot="content">
-                                    网站使用了搜索控件时，将使该网站的搜索
-                                    <br />结果更加准确，一篇产品最多可以设置5个关键词
-                                </div>
-                                <i class="iconfont iconyiwen"></i>
-                            </el-tooltip>
-                            <ul class="keyword-list" ref="keywordList">
-                                <li v-for="(item,index) in detailData.searchKeyword" :key="index">
-                                    {{item}}
-                                    <i class="el-icon-close"
-                                       @click.stop="removeCurKeyWord(index)"></i>
-                                </li>
-                                <el-input maxlength="10"
-                                          ref="keywordInput"
-                                          placeholder="每个关键词之间用回车键分离"
-                                          v-model="keywordValue"
-                                          @keyup.enter.native="keywords(keywordValue)"
-                                          @blur="keywords(keywordValue)"></el-input>
-                            </ul>
-                            <div class="el-form-item__error" v-if="isOutSearch">每篇文章最多填写5个关键词！</div>
-                        </el-form-item>-->
                         <el-form-item></el-form-item>
                         <el-form-item label="置頂" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
-                            <!-- <span style=" font-size: 14px; color: #606266;
-    vertical-align: middle;
-    padding:0  16px 0 32px ;">仅登录用户可访问</span>
-                            <el-switch v-model="detailData.isLoggedInCanView"></el-switch>-->
                         </el-form-item>
                     </el-collapse-item>
                 </el-collapse>
@@ -285,63 +233,17 @@ const viewAuth = [
     { name: "登录用户", id: 1 },
     { name: "未登录用户", id: 2 }
 ];
-// 引入编辑器
-import * as Quill from "quill";
-import { addQuillTitle } from "@/assets/quill-title.js";
-import LineHeight from "@/assets/lineheight.js";
-import LetterSpacing from "@/assets/letterspacing.js";
-// require styles这里是富文本编辑器的样式引用
-import "quill/dist/quill.snow.css";
-// 自定义quill编辑器的字体
-var fonts = [
-    false,
-    "SimSun",
-    "SimHei",
-    "Microsoft-YaHei",
-    "KaiTi",
-    "FangSong",
-    "Arial",
-    "Times-New-Roman"
-];
-var Font = Quill.import("formats/font");
-Font.whitelist = fonts;
-Quill.register(Font, true);
 
-// 自定义quill编辑器的字体大小
-let Size = Quill.import("attributors/style/size");
-let sizes = [false, "10px", "12px", "14px", "16px", "18px", "20px"];
-Size.whitelist = sizes;
-Quill.register(Size, true);
-
-//自定义quill编辑器行间距
-let lineheights = [false, "10px", "18px", "20px", "32px"];
-Quill.register("formats/lineheight", LineHeight);
-
-//自定义quill编辑器字间距
-let letterspacings = [false, "5px", "8px", "10px", "15px"];
-Quill.register("formats/letterspacing", LetterSpacing);
-
-// 调整大小组件。
-import ImageResize from "quill-image-resize-module";
-Quill.register("modules/imageResize", ImageResize);
-import { ImageDrop } from "quill-image-drop-module";
-Quill.register("modules/imageDrop", ImageDrop);
 import ModalContent from "@/components/ImgManage/index.vue";
-
-//全屏
-import Fullscreen from "@/assets/Fullscreen";
-Quill.register("modules/fullscreen", Fullscreen);
-
-import Video from "@/assets/quill-video"
-Quill.register(Video, true)
-
-import videoManage from "@/components/VideoManage/popupIndex.vue";
+import QuillDetail from "@/components/ProductManage/QuillDetail.vue";
+import QuillContentDetail from "@/components/ProductManage/QuillDetail.vue";
 
 export default {
     components: {
         ModalContent,
         DetailCheckTree,
-        videoManage,
+        QuillDetail,
+        QuillContentDetail
     },
     provide: {
         popper: true
@@ -380,6 +282,7 @@ export default {
 
             siteOptions: null,
             activeName: "",
+            activeName0: "",
             activeName1: "",
             categoryName: [],
             categoryId: [],
@@ -420,7 +323,8 @@ export default {
                 isSkuSwitchOn: false, //
                 isNeedShipping: false, //
                 isAllowComment: true,
-                defaultSiteId: 0
+                defaultSiteId: 0,
+                specificationContent:""
             },
             rules: {
                 name: [
@@ -447,62 +351,14 @@ export default {
             checkedList: [],
             ratio:[],
             origin: [],
+            quillDetailId:"quill-specificationContent",
+            quillContentId:"quill-contentDetail"
         };
     },
     created() {
-        this.getTree();
-        this.editorOption = {
-            placeholder: "请输入文本",
-            modules: {
-                fullscreen: {},
-                toolbar: {
-                    container: [
-                        ["bold", "italic", "underline", "strike"],
-                        ["blockquote", "code-block"],
-                        // [{ header: 1 }, { header: 2 }],
-                        [{ list: "ordered" }, { list: "bullet" }],
-                        [{ script: "sub" }, { script: "super" }],
-                        [{ indent: "-1" }, { indent: "+1" }],
-                        //[{ direction: "rtl" }],
-                        [{ size: sizes }],
-                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                        [{ color: [] }],
-                        [{ background: [] }],
-                        [{ font: fonts }],
-                        [{ align: [] }],
-                        ["clean"],
-                        ["image"], //["image", "video"],
-                        ["video"],
-                        [{ lineheight: lineheights }],
-                        [{ letterspacing: letterspacings }],
-                        ["fullscreen"]
-                    ],
-                    handlers: {
-                        fullscreen() {
-                            this.quill.getModule("fullscreen").handle();
-                        }
-                    }
-                },
-                imageDrop: true,
-                imageResize: {
-                    displayStyles: {
-                        backgroundColor: "black",
-                        border: "none",
-                        color: "white"
-                    },
-                    modules: ["Resize", "DisplaySize", "Toolbar"]
-                }
-            }
-        };
+        this.getTree();        
     },
     mounted() {
-        // 为图片ICON绑定事件  getModule 为编辑器的内部属性
-        this.$refs.myQuillEditor.quill
-            .getModule("toolbar")
-            .addHandler("image", this.imageHandler);
-        // 为视频ICON绑定事件
-        this.$refs.myQuillEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
-        addQuillTitle();
         document.addEventListener("click", e => {
             e.stopPropagation();
             if (this.isCheckTreeShow) {
@@ -560,7 +416,6 @@ export default {
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
-
             this.categoryId = [];
 
             if (Object.keys(data.seoKeyword).length < 1) {
@@ -575,17 +430,10 @@ export default {
             }
             this.detailData = data;
             this.detailData.NewId = data.id;
-
-            //  let categoryList22 = JSON.stringify(this.detailData.productCategoryList);
-            //  JSON.parse(categoryList22).forEach(item=>{
-            //       this.categoryId.push(item.id);
-            //  })
-            document.getElementsByClassName(
-                "ql-editor"
-            )[0].innerHTML = this.detailData.detailContent;
+            document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML = this.detailData.detailContent;
+            document.getElementById(this.quillDetailId).querySelector(".ql-editor").innerHTML = this.detailData.specificationContent;
             this.categoryIdList(this.detailData.productCategoryList);
             this.$emit("changePreviewId", id, this.detailData.defaultSiteId);
-            this.videoAddDragEvent();
         },
         categoryIdList(list) {
             this.categoryId = [];
@@ -612,8 +460,7 @@ export default {
         //新建产品
         async insertArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
-            var html = document.getElementsByClassName("ql-editor")[0]
-                .innerHTML;
+            var html = document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
@@ -664,9 +511,9 @@ export default {
         //编辑保存产品
         async saveArticle(disableRefObj) {
             disableRefObj.inSaveProcess = true;
-            var html = document.getElementsByClassName("ql-editor")[0]
-                .innerHTML;
+            var html = document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
+            console.log('this.detailData',this.detailData);
             let { status, data } = await productManageApi.update(
                 this.curProduct,
                 this.detailData
@@ -762,44 +609,8 @@ export default {
         onEditorChange({ editor, html, text }) {
             this.detailData.detailContent = html;
         },
-        imageHandler() {
-            this.isModalShow = !this.isModalShow;
-            this.imgRange = this.$refs.myQuillEditor.quill.getSelection();
-            this.selectRangeIndex =
-                this.imgRange !== null ? this.imgRange.index : 0;
-        },
         fullScreenHandler() {
             //console.log('fullScreenHandler');
-        },
-        getImgInfo(info) {
-            this.imgData = info;
-        },
-        getEditorImg() {
-            // 获取选中的图片信息 有两种方式
-            this.isModalShow = false;
-            this.$refs.imgList.clearSelectedList();
-            this.insertEditorImg(this.imgData);
-        },
-        insertEditorImg(imgFiles) {
-            if (imgFiles && imgFiles.length > 0) {
-                for (var i = 0; i < imgFiles.length; i++) {
-                    this.addRange = this.$refs.myQuillEditor.quill.getSelection();
-                    var value = imgFiles[i].fullOssUrl;
-                    // 调用编辑器的 insertEmbed 方法，插入URL
-                    this.$refs.myQuillEditor.quill.insertEmbed(
-                        this.addRange !== null
-                            ? this.addRange.index
-                            : this.selectRangeIndex,
-                        "image",
-                        value,
-                        Quill.sources.USER
-                    );
-                }
-            }
-        },
-        // 关闭图片选择弹窗
-        cancelEditorImg() {
-            this.isModalShow = false;
         },
         resetDetail() {
             let detailData = {
@@ -835,7 +646,7 @@ export default {
                 defaultSiteId: 0
             };
             this.detailData = { ...this.detailData, ...detailData };
-            document.getElementsByClassName("ql-editor")[0].innerHTML = "";
+            document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML="";
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
@@ -857,134 +668,11 @@ export default {
         changeSiteId(siteId) {
             this.detailData.defaultSiteId = siteId;
         },
-        videoHandler(){
-            this.videoShow = true;
-            this.videoRange = this.$refs.myQuillEditor.quill.getSelection();
-            this.selectVideoRangeIndex = this.videoRange !== null ? this.videoRange.index : 0;
+        detailContentChange(html){
+            this.detailData.specificationContent = html;
         },
-        getCheckedList(info) {
-            this.checkedList = info;
-        },
-        getVideoOssUrl() {
-            if (this.checkedList.length > 0) {
-                this.videoShow = false;
-                this.insertQuillVideo(this.checkedList);
-            } else {
-                this.$notify({
-                    customClass: "notify-error", //  notify-success ||  notify-error
-                    message: `请选择视频`,
-                    showClose: false,
-                    duration: 1000
-                });
-            }
-        },
-        // 注册 鼠标拖动 事件 
-        _bindDragEvents(dragEle, container, ele, i) {
-            var dragging = false;
-            var start = 0;
-            var moveDis = 0;
-            let thisDom= this;
-            dragEle.addEventListener('mousedown', (e)=> {
-                e.stopPropagation();
-                dragging = true;
-                this.origin[i] = {
-                width: ele.offsetWidth,
-                height: ele.offsetHeight
-                };
-                this._setHandlerPos(dragEle, ele);
-                start = e.pageX;
-                this.ratio[i] = ele.offsetHeight / ele.offsetWidth;
-            })
-            container.addEventListener('mousemove', (e)=> {
-                e.stopPropagation();
-                if (dragging) {
-                moveDis = e.pageX - start;
-                thisDom._setElementSize(ele, moveDis, i);
-                thisDom._setHandlerPos(dragEle, ele);
-                }
-            })
-            container.addEventListener('mouseup', (e)=> {
-                e.stopPropagation();
-                if (dragging) {
-                moveDis = e.pageX - start;
-                thisDom._setElementSize(ele, moveDis, i)
-                thisDom._setHandlerPos(dragEle, ele);
-                dragging = false;
-                }
-            })
-            container.addEventListener('mouseleave', (e)=> {
-                e.stopPropagation();
-                if (dragging) {
-                moveDis = e.pageX - start;
-                thisDom._setElementSize(ele, moveDis, i)
-                thisDom._setHandlerPos(dragEle, ele);
-                dragging = false;
-                }
-            })
-            dragEle.addEventListener('mouseup', (e)=> {
-                e.stopPropagation();
-                moveDis = e.pageX - start;
-                thisDom._setElementSize(ele, moveDis, i);
-                thisDom._setHandlerPos(dragEle, ele);
-                dragging = false;
-            })
-            ele.addEventListener('mouseup', (e)=> {
-                e.stopPropagation();
-                thisDom._setElementSize(ele, moveDis, i);
-                thisDom._setHandlerPos(dragEle, ele);
-                dragging = false;
-            })
-        },
-        // resize 元素大小
-        _setElementSize(ele, dis, i) {
-            if (this.origin[i]) {
-                var newWidth = this.origin[i].width + dis
-                ele.style.width = newWidth + 'px';
-                ele.style.height = newWidth * this.ratio[i] + 'px';
-            }
-        },
-        // repos 拖动  位置
-        _setHandlerPos(handlerEle, clickEle) {
-            handlerEle.style.display = 'block';
-            handlerEle.style.left = clickEle.offsetLeft + clickEle.offsetWidth - 4 + 'px';
-            handlerEle.style.top = clickEle.offsetTop + clickEle.offsetHeight - 4 + 'px';
-        },
-        insertQuillVideo(videoList) {
-            if (videoList && videoList.length > 0) {
-                for (var i = 0; i < videoList.length; i++) {
-                    this.addRange = this.$refs.myQuillEditor.quill.getSelection();
-                    var videoUrl = videoList[i].contentQueryDownloadApiUrl;
-                    var poster = videoList[i].coverUrl;
-                    // 调用编辑器的 insertEmbed 方法，插入URL
-                    this.$refs.myQuillEditor.quill.insertEmbed(
-                        this.addRange !== null ? this.addRange.index :this.selectVideoRangeIndex,
-                        "video",
-                        {
-                            url: `${environment.contentQueryApi}/`+videoUrl,
-                            width: '100%',
-                            height: '100%',
-                            poster: poster
-                        }
-                    );
-                    this.videoAddDragEvent();
-                }
-                
-            }
-        },
-        // 关闭视频选择弹窗
-        cancelgetVideo() {
-            this.videoShow = false;
-        },
-        //视频增加拖动事件
-        videoAddDragEvent(){
-            let dragEles = document.getElementsByClassName("ql-dragHandler");
-            let videoEles = document.getElementsByClassName("ql-video-content");
-            let container = document.getElementsByClassName("ql-editor")[0];
-            if(videoEles){
-                for(var i=0; i<videoEles.length; i++){
-                    this._bindDragEvents(dragEles[i], container, videoEles[i], i);
-                } 
-            }
+        detailContentChange1(html){
+            this.detailData.contentDetail = html;
         }
     },
 
@@ -995,9 +683,6 @@ export default {
             } else {
                 this.isOutSearch = false;
             }
-            // let width = this.detailData.searchKeyword.length * 52 ;
-            // let ele = this.$refs.keywordInput.$el.children[0];
-            // this.textIndent(ele, width);
         },
         "detailData.seoKeyword"() {
             if (this.detailData.seoKeyword.length >= 5) {
@@ -1005,9 +690,6 @@ export default {
             } else {
                 this.isOutSeo = false;
             }
-            // let width = this.detailData.seoKeyword.length * 52;
-            // let ele = this.$refs.metaKeywordsInput.$el.children[0];
-            // this.textIndent(ele, width);
         },
         deep: true
     }
@@ -1089,106 +771,9 @@ export default {
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
-.quill-editor /deep/ .ql-container {
-    height: 400px;
-    overflow: hidden;
-}
-/* 字体大小 */
-.ql-snow .ql-picker.ql-size .ql-picker-label::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item::before {
-    content: "字体大小";
-}
-/* 标题 */
-.ql-snow .ql-picker.ql-header .ql-picker-label::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item::before {
-    content: "标题";
-}
-/* 字体 */
-.ql-snow .ql-picker.ql-font .ql-picker-label::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item::before {
-    content: "字体";
-}
-
-.editor-fullscreen {
-    background: white;
-    margin: 0 !important;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2000;
-    .ql-editor {
-        height: 100%;
-    }
-    .fullscreen-editor {
-        border-radius: 0;
-        border: none;
-    }
-    .ql-container {
-        height: calc(100vh - 3rem - 24px) !important;
-        margin: 0 auto;
-        overflow-y: auto;
-    }
-}
 .flexSpace {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-</style>
-
-<style lang="scss" scoped>
-#videoContent {
-    position: fixed;
-    width: 1170px;
-    // height: 840px;
-    margin: auto;
-    z-index: 1020;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    overflow: hidden;
-    box-shadow: 0px 2px 32px 4px rgba(0,0,0,0.13);
-    border: $--border-base;
-    border-radius: 3px;
-}
-#videoContent .modal-header {
-    background: rgb(255, 255, 255);
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: $--border-base;
-    .title{
-        font-size: $--font-size-medium;
-        font-weight: 500;
-        color: rgba(38,38,38,1);
-    }
-    .close-icon {
-        display: block;
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-    }
-
-}
-#videoContent .el-container {
-    background: #fff;
-    height: 773px;
-}
-#videoContent .el-dialog {
-    margin-top: 5vh !important;
-    width: 80%;
-    overflow: hidden;
-}
-#videoContent .el-dialog__body {
-    padding-top: 0;
-}
-// #videoContent /deep/ .el-footer {
-//     border-top: 1px solid #EEEEEE;
-// }
-.modal-footer {
-    float: right;
 }
 </style>
