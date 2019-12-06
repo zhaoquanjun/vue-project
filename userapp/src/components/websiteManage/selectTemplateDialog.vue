@@ -90,7 +90,15 @@
               <span class="templateHeader-text">选择您喜欢的网站模板</span>
               <i class="iconfont iconguanbi cl-iconfont is-circle" @click="closeDialog"></i>
             </div>
+            <el-main 
+              v-if="showWaterFall"
+              class="templateContent"
+              style="position:relative;padding:0 50px;width:100%"
+            >
+                
+            </el-main>
             <el-main
+              v-else
               class="templateContent"
               style="position:relative;padding:0 50px;width:100%"
               v-scrollBar
@@ -103,30 +111,44 @@
                   :key="index"
                 >
                   <div class="itemSiteImage">
-                    <img src="~img/siteManage/siteHeader.png" class="itemSiteImageHeader" />
                     <div
                       class="itemSiteImageBackground"
                       :style="{background: 'url(' + (item.imageUrl ) + ') no-repeat center/cover'}"
                     ></div>
                     <div class="modal" v-if="item.id != templateId">
-                      <button class="cl-button cl-button--primary" @click="choseSite(item)">选择</button>
-                      <a @click="goPrevTemplate(item)" style="margin-top:12px">
-                        <button class="cl-button cl-button--primary_notbg">预览</button>
+                      <button class="cl-button cl-button--primary" @click="choseSite(item)">选择网站</button>
+                      <a @click="goPrevTemplate(item)" style="margin-left:24px;">
+                        <button class="cl-button cl-button--primary_notbg">预览网站</button>
                       </a>
                     </div>
                     <div class="curModal" v-show="item.id == templateId">当前选择</div>
                   </div>
-                  <div style="text-align:center">
-                    <div
-                      class="itemSiteName"
-                    >{{item.templateName && item.templateName.trim().length > 10 ? item.templateName.slice(0, 10) + '...' : item.templateName}}</div>
+                  <div class="itemSiteInfo">
+                    <div class="itemSiteInfoLeft">
+                      <div class="itemSiteName">
+                        {{item.templateName && item.templateName.trim().length > 10 ? item.templateName.slice(0, 10) + '...' : item.templateName}}
+                      </div>
+                      <div class="itemSiteName">编号：{{item.siteId}}</div>
+                    </div>
+                    <div class="itemSiteInfoRight">
+                      <i class="iconfont iconicon-diannao icon-link"></i>
+                      <i class="iconfont iconicon-des-dianhua icon-link"></i>
+                    </div>
+                    
                   </div>
                 </el-col>
               </el-row>
             </el-main>
             <div>
               <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
-              <div
+              <el-switch
+                v-model="showWaterFall"
+                active-color="#ff6b00"
+                inactive-color="#40494E"
+                active-text="瀑布流"
+                inactive-text="平铺"
+              ></el-switch>
+              <!-- <div
                 class="cl-pagination pageing"
                 id="pageing"
                 style="margin-bottom:20px"
@@ -146,7 +168,7 @@
                   <div class="sizes-title">，每页显示</div>
                   <button v-if="templatePage.totalPages > 10" class="paging-confirm">跳转</button>
                 </el-pagination>
-              </div>
+              </div> -->
             </div>
             <el-dialog
               width="0"
@@ -308,8 +330,14 @@ export default {
       errorIndustry: false,
       errorIndustryName: "",
       errorReference: false,
-      errorSite: ""
+      errorSite: "",
+      showWaterFall:false
     };
+  },
+  created(){
+    window.addEventListener("scroll",this.scroll,true)
+    this.loadMore();
+    
   },
   computed: {},
   mounted() {},
@@ -566,6 +594,21 @@ export default {
       this.pageSize = page;
       this.searchTemplate();
     },
+    loadMore(){
+      this.pageSize+=1;
+      this.searchTemplate();
+    },
+     scroll(){
+        var scrollTop = document.documentElement.scrollTop||document.body.scrollTop||window.pageYOffset;
+        var windowHeight = document.body.clientHeight || document.body.clientHeight;
+        var scrollHeight = document.body.scrollHeight;
+        console.log(scrollTop,windowHeight,scrollHeight)
+        if(scrollTop+windowHeight>=scrollHeight){　
+            if(this.pageSize <= this.templateInfo.length) {
+                this.loadMore();
+            }
+        }
+    },
     // 关闭弹窗
     closeDialog() {
       this.pageIndex = 1;
@@ -714,7 +757,11 @@ export default {
         }
      });
       window.open(routeData.href, '_blank')
-    }
+    },
+   
+  },
+  destroyed(){
+    window.removeEventListener('scroll', this.scroll,true)
   }
 };
 </script>
@@ -861,6 +908,7 @@ export default {
     // display: flex;
     // justify-content: space-between;
     padding-top: 40px;
+    margin-bottom: 32px;
     text-align: center;
     position: relative;
     .templateHeaderLine{
@@ -887,6 +935,10 @@ export default {
       font-size: $--font-size-large;
       margin-right: 30px;
       color: $--color-white;
+      &:hover{
+        color:$--color-primary;
+        background:#40474C;
+      }
     }
     ·
     .colorType {
@@ -935,7 +987,7 @@ export default {
 
   .templateItem {
     // padding: 5px;
-    padding-top: 32px;
+    padding-bottom: 32px;
     .itemSiteImage {
       position: relative;
       width: 100%;
@@ -958,7 +1010,6 @@ export default {
       }
       .modal {
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
         position: absolute;
@@ -967,10 +1018,8 @@ export default {
         width: 100%;
         height: 100%;
         opacity: 0;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: $--border-radius-base;
+        background: rgba(0, 0, 0, 0.8);
         transition: all 0.2s linear;
-        // border: 1px solid rgba(185, 203, 207, 1);
       }
       .curModal {
         display: flex;
@@ -989,21 +1038,46 @@ export default {
         line-height: 22px;
       }
     }
-    .itemSiteName {
-      font-size: 16px;
-      font-weight: 400;
-      color: rgba(38, 38, 38, 1);
-      line-height: 24px;
-      margin-bottom: 14px;
-      margin-top: 14px;
-
-      display: -webkit-box;
+  }
+  .templateContent{
+    .itemSiteInfo{
+      display: flex;
+      justify-content: space-between;
+      font-size: $--font-size-base;;
+      font-weight: $--font-weight-base;
+      color: $--color-white;       
       word-break: break-all;
       text-overflow: ellipsis;
       -webkit-text-overflow: ellipsis;
       overflow: hidden;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
+      height:60px;
+      width: 100%;
+      background: $--color-black-light;
+      .itemSiteInfoLeft{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .itemSiteName {
+          padding-left:16px; 
+          line-height: 24px;
+        }
+      }
+      .itemSiteInfoRight{
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        .icon-link{
+          display: inline-block;
+          padding:5px;
+          color:$--color-white;
+          &:hover{
+            color:$--color-primary;
+            background: #40474C;
+          }
+        }
+      }
     }
   }
   .notFindTemplate {

@@ -2,41 +2,36 @@
     <div class="imgsLi">
         <img 
             :src="item" 
-            ref="imgs"
-            :class="imgsViewWay[index]?'heightLong':'widthLong'"
+            ref="img"
+            :class="imgsViewWay[0]?'heightLong':'widthLong'"
         />
     </div>
 </template>
 <script>
 export default {
-    props:["item","newFileList"],
+    props:["item"],
     data(){
         return {
             imgsViewWay:[]
         }
     },
     methods:{
-        handleImgsSize(imgs){
-            let imgEl=this.$refs.imgs;
-            let imgsViewWay=[];
+        handleImgsSize(){
+            let imgEl=this.$refs.img;
             if(imgEl){
                 imgEl.map(item=>{
                     if(item.offsetHeight>=item.offsetWidth){
-                        imgsViewWay.push(true)
+                        this.imgsViewWay.push(true);
                     }else{
-                        imgsViewWay.push(false);
+                        this.imgsViewWay.push(false);
                     }
                 })
             }
-            return imgsViewWay
-        },
-        _handleImgsSize(imgs){
-            this.imgsViewWay=handleImgsSize(imgs);
         }
     },
     watch:{
-        newFileList(){
-            this._handleImgsSize(imgs);
+        item(){
+            this.handleImgsSize();
         }
     }
 }

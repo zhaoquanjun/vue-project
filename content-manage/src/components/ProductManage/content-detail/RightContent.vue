@@ -19,7 +19,7 @@
                                 v-for="(item,index) in newFileList"
                                 :key="index"
                             >
-                                <img-size-auto :item="item" :newFileList="newFileList"></img-size-auto>
+                                <img-size-auto :item="item"></img-size-auto>
                                 <span class="el-upload-list__item-actions">
                                     <!--  @click="handlePreview(item)" -->
                                     <span
