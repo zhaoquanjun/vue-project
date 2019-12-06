@@ -90,19 +90,19 @@
             </el-table-column>
         </el-table>
         <div class="cl-pagination pageing"
-            :class="{'noJumper':memberInfo.totalPage <= 10}"
+            :class="{'noJumper':memberInfo.totalPages <= 10}"
              v-if="memberInfo.totalCount > 0">
             <el-pagination
                 v-if="memberInfo.totalCount > 0"
                 background
-                :layout="memberInfo.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
+                :layout="memberInfo.totalPages > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
                 :total="memberInfo.totalCount"
                 :page-sizes="[10,20,50]"
                 @current-change="changePageNum"
                 @size-change="changePageSize"
             >
                 <div class="sizes-title">，每页显示</div>
-                <button v-if="memberInfo.totalPage > 10" class="paging-confirm">跳转</button>
+                <button v-if="memberInfo.totalPages > 10" class="paging-confirm">跳转</button>
             </el-pagination>
         </div>
     </div>

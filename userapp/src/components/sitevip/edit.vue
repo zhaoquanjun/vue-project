@@ -28,8 +28,8 @@
                           resize="none"></el-input>
             </div>
             <div class="btn">
-                <span class="sure" @click="save">保存</span>
-                <span @click="close">取消</span>
+                <button class="cl-button cl-button--primary cl-button--small" @click="save">保存</button>
+                <button class="cl-button cl-button--primary_notbg cl-button--small" @click="close">取消</button>
             </div>
         </div>
     </div>
@@ -202,28 +202,6 @@
         margin: 0 24px;
         border-top: 1px solid #e5e5e5;
         text-align: left;
-        span
-
-    {
-        display: inline-block;
-        width: 76px;
-        height: 40px;
-        border-radius: 2px;
-        border: 1px solid rgba(9,204,235,1);
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(9,204,235,1);
-        line-height: 40px;
-        text-align: center;
-        cursor: pointer;
-    }
-
-    .sure {
-        background: rgba(9,204,235,1);
-        color: #ffffff;
-        margin-right: 16px;
-    }
-
     }
     }
     }
