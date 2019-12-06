@@ -202,8 +202,8 @@ export default {
         title: this.newsTitle,
         categoryIdList: id,
         newsOrderColumns: "createtime",
-        topStatus: true,
-        publishStatus: null,
+        topStatus: null,
+        publishStatus: true,
         pageSize: this.pageSize, //11
         pageIndex: this.pageIndex, //1
         isDescending: true
