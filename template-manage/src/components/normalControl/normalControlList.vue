@@ -6,6 +6,8 @@
       tooltip-effect="dark"
       :row-style="{height:'108px'}"
       class="content-table"
+      @sort-change="sortChange"
+      :default-sort="{prop: 'createTime', order: 'descending'}"
     >
       <template slot="empty">
         <div class="empty-table">
@@ -13,7 +15,7 @@
           <p>无数据</p>
         </div>
       </template>
-      <el-table-column prop="templateName" label="缩略图" show-overflow-tooltip min-width="150">
+      <el-table-column label="缩略图" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
           <div class="siteImg">
             <div class="recommend" v-show="scope.row.isRecommend">推荐</div>
@@ -21,20 +23,20 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="pagePath" label="控件名称" show-overflow-tooltip min-width="150">
+      <el-table-column label="控件名称" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
           <div class="overflow">{{scope.row.controlName}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="控件分类" min-width="100">
+      <el-table-column label="控件分类" min-width="100">
         <template slot-scope="scope">
           <div>
             <p>{{ scope.row.firstTypeName }}</p>
-            <p>{{ scope.row.secondTypeName }}</p>
+            <p style="margin-top:8px">{{ scope.row.secondTypeName }}</p>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="排序" min-width="100">
+      <el-table-column label="排序" prop="displayOrder" sortable="custom" min-width="100">
         <template slot-scope="scope">
           <div>{{scope.row.displayOrder}}</div>
         </template>
@@ -49,7 +51,7 @@
           <div>{{scope.row.useCount}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="150">
+      <el-table-column label="创建时间" prop="createTime" sortable="custom" min-width="150">
         <template slot-scope="scope">
           <div>{{ _formatDateTime(scope.row.createTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
@@ -62,7 +64,11 @@
       <el-table-column label="操作" min-width="150">
         <template slot-scope="scope">
           <div>
-            <i class="iconfont iconicon-des-setup cl-iconfont" style="margin-right:16px"></i>
+            <i
+              class="iconfont iconicon-des-setup cl-iconfont"
+              @click="editItem(scope.row)"
+              style="margin-right:16px"
+            ></i>
             <i class="iconfont iconshanchu cl-iconfont" @click="deleteItem(scope.row)"></i>
           </div>
         </template>
@@ -83,6 +89,13 @@ export default {
     return {};
   },
   methods: {
+    editItem(row) {
+      this.$emit("editItem", row);
+    },
+    //改变排序
+    sortChange(row) {
+      this.$emit("orderList", row.prop, row.order);
+    },
     deleteItem(row) {
       this.$emit("deleteItem", row.id);
     },
@@ -101,6 +114,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.table-list /deep/ .el-table .ascending .sort-caret.ascending {
+  border-bottom-color: $--color-primary;
+}
+.table-list /deep/ .el-table .descending .sort-caret.descending {
+  border-top-color: $--color-primary;
+}
 .siteImg {
   width: 150px;
   height: 82px;

@@ -11,7 +11,7 @@
         <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelSettingTemplate"></i>
       </div>
       <!-- :style="{height:dialogHeight+'px'}" -->
-      <div class="dialogContent">
+      <div class="dialogContent" v-scrollBar>
         <div class="contentItem">
           <div class="contentItem-title">控件名称</div>
           <el-input
@@ -31,7 +31,7 @@
             class="typeSelect"
           >
             <el-option
-              v-for="item in settingFirstTypeOptions"
+              v-for="item in firstTypeOptions"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -140,15 +140,20 @@ import * as categoryApi from "@/api/request/controlCategoryApi";
 import securityService from "@/services/authentication/securityService";
 import environment from "@/environment/index.js";
 export default {
+  props: {
+    firstTypeOptions: {
+      type: Array
+    }
+  },
   data() {
     return {
+      isEdit: false,
       row: {},
       settingTemplateShow: false,
       settingTemplateName: "",
       errorTemplateNameTips: false,
       errorTemplateName: "",
       settingFirstTypeSelect: "",
-      settingFirstTypeOptions: [],
       settingSecondTypeSelect: "",
       settingSecondTypeOptions: [],
       errorTemplateIndustryShow: false,
@@ -163,7 +168,7 @@ export default {
           label: "下架"
         }
       ],
-      settingArrangement: 0,
+      settingArrangement: 1,
       rowNum: 1,
       picUrl: "",
       uploadPicAction: `${environment.uploadComposeUrl}`,
@@ -180,9 +185,27 @@ export default {
   mounted() {},
   methods: {
     async showSettingTemplate() {
+      this.isEdit = false;
       this.settingTemplateShow = true;
-      let { data } = await categoryApi.getDropDownList();
-      this.settingFirstTypeOptions = data;
+    },
+    async showEditTemplate(row) {
+      this.isEdit = true;
+      this.row = row;
+      this.settingTemplateName = row.controlName;
+      if (row.firstTypeId) {
+        this.settingFirstTypeSelect = row.firstTypeId;
+        let { data } = await categoryApi.getDropDownList(row.firstTypeId);
+        this.settingSecondTypeOptions = data;
+        this.settingSecondTypeSelect = row.secondTypeId ? row.secondTypeId : "";
+      }
+      this.settingTemplateStatus = row.controlState;
+      this.settingArrangement = row.displayOrder;
+      this.rowNum = row.rowShowNumber;
+      this.picUrl = row.controlImg;
+      this.settingType = row.controlType;
+      this.settingStyle = row.controlStyle;
+      this.settingHtml = row.controlHtml;
+      this.settingTemplateShow = true;
     },
     cancelSettingTemplate() {
       this.settingTemplateShow = false;
@@ -201,7 +224,12 @@ export default {
         controlStyle: this.settingStyle,
         controlHtml: this.settingHtml
       };
-      let { data } = await templateApi.createNormalControl(para);
+      if (this.isEdit) {
+        para.id = this.row.id;
+        let { data } = await templateApi.saveNormalControl(para);
+      } else {
+        let { data } = await templateApi.createNormalControl(para);
+      }
       this.$emit("getList");
     },
     blurTemplateName() {
@@ -284,8 +312,9 @@ export default {
     }
   }
   .dialogContent {
+    position: relative;
     height: calc(100% - 119px);
-    overflow: auto;
+    // overflow: auto;
     .contentItem {
       margin-top: 16px;
       width: 100%;
