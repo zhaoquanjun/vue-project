@@ -2,7 +2,7 @@
     <div>
         <el-row class="upload-head" type="flex" justify="space-between">
             <el-col :span="12">
-                <span style="padding-right:16px">上传至</span>
+                <span style="padding-right:16px">上传至:</span>
                 <SelectTree
                     class="chunkUpload-select-tree"
                     ref="treeX"
@@ -148,6 +148,7 @@ export default {
                 },
                 checkChunkUploadedByResponse: (chunk, message) => {
                     let data = JSON.parse(message);
+                    console.log('data.fileStatus',data.fileStatus)
                     switch (data.fileStatus) {
                         case 0: {
                             return (
@@ -258,7 +259,7 @@ export default {
                                     duration: 1500,
                                     showClose: false
                                 });
-                                chunk.file.cancel(chunk.file);
+                                //chunk.file.cancel(chunk.file);
                                 this.updatePageData();
                             }
                             return true;

@@ -1,31 +1,27 @@
 <template>
-    <div class="imgsLi">
+    <div class="imgsLi" ref="imgParEl">
         <img 
             :src="item" 
-            ref="img"
-            :class="imgsViewWay[0]?'heightLong':'widthLong'"
+            ref="imgs"
+            :class="imgsViewWay?'heightLong':'widthLong'"
         />
     </div>
 </template>
 <script>
 export default {
-    props:["item"],
+    props:["item","itemContent"],
     data(){
         return {
-            imgsViewWay:[]
+            imgsViewWay:false
         }
     },
     methods:{
         handleImgsSize(){
-            let imgEl=this.$refs.img;
+            let imgEl=this.$refs.imgs;
+            let imgParEl=this.$refs.imgs;
+            let itemContent=itemContent || 1;
             if(imgEl){
-                imgEl.map(item=>{
-                    if(item.offsetHeight>=item.offsetWidth){
-                        this.imgsViewWay.push(true);
-                    }else{
-                        this.imgsViewWay.push(false);
-                    }
-                })
+                this.imgsViewWay = itemContent > imgEl.offsetHeight/imgParEl.offsetWidth ? true:false
             }
         }
     },
@@ -41,6 +37,7 @@ export default {
      position: relative;
      width:100%;
      height:100%;
+     overflow: hidden;
     .heightLong{
         position: absolute;
         width:100%;

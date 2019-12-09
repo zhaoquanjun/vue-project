@@ -115,8 +115,9 @@ export default {
             videoShow: false,
             editorOption: {},
             checkedList: [],
-            ratio:[],
-            origin: [],
+            maxHeight:0,
+            maxWidth:0,
+            dragVideoNode:null
         }
     },
     created() {
@@ -229,86 +230,81 @@ export default {
         },
         //视频增加拖动事件
         videoAddDragEvent(){
-            let dragEles = document.getElementById(this.quillId).querySelectorAll(".ql-dragHandler");
+           // let dragEles = document.getElementById(this.quillId).querySelectorAll(".ql-dragHandler");
             let videoEles = document.getElementById(this.quillId).querySelectorAll(".ql-video-content");
-            let container = document.getElementById(this.quillId).querySelector(".ql-editor");
+            let container = document.getElementById(this.quillId).querySelector(".ql-container");
             if(videoEles){
                 for(var i=0; i<videoEles.length; i++){
-                    this._bindDragEvents(dragEles[i], container, videoEles[i], i);
+                    this._bindDragEvents(container,videoEles[i],i);
                 } 
             }
         },
          // 注册 鼠标拖动 事件 
-        _bindDragEvents(dragEle, container, ele, i) {
-            var dragging = false;
-            var start = 0;
-            var moveDis = 0;
-            let thisDom= this;
-            dragEle.addEventListener('mousedown', (e)=> {
-                e.stopPropagation();
-                dragging = true;
-                this.origin[i] = {
-                width: ele.offsetWidth,
-                height: ele.offsetHeight
-                };
-                this._setHandlerPos(dragEle, ele);
-                start = e.pageX;
-                this.ratio[i] = ele.offsetHeight / ele.offsetWidth;
-            })
-            container.addEventListener('mousemove', (e)=> {
-                e.stopPropagation();
-                if (dragging) {
-                moveDis = e.pageX - start;
-                thisDom._setElementSize(ele, moveDis, i);
-                thisDom._setHandlerPos(dragEle, ele);
+        _bindDragEvents(containerNode, videoNode, i) {
+            var thisDom = this;
+            videoNode.addEventListener('click',(e)=>{
+                var dragNode;
+                if(containerNode.querySelector('.ql-dragHandler'))
+                {
+                    dragNode= containerNode.querySelector('.ql-dragHandler');
+                }else{
+                    dragNode = document.createElement("div");
+                    dragNode.setAttribute('class', 'ql-dragHandler');
+                    dragNode.setAttribute('style', " ");
+                    containerNode.append(dragNode);
                 }
+                thisDom.maxHeight = containerNode.offsetHeight - 30;
+                thisDom.maxWidth = containerNode.offsetWidth - 30;
+                if(thisDom.maxHeight > 700) thisDom.maxHeight = 700;
+                thisDom._setDragOffset(dragNode,videoNode);
+                thisDom._setDragHandler(dragNode,videoNode);
             })
-            container.addEventListener('mouseup', (e)=> {
-                e.stopPropagation();
-                if (dragging) {
-                moveDis = e.pageX - start;
-                thisDom._setElementSize(ele, moveDis, i)
-                thisDom._setHandlerPos(dragEle, ele);
-                dragging = false;
-                }
-            })
-            container.addEventListener('mouseleave', (e)=> {
-                e.stopPropagation();
-                if (dragging) {
-                moveDis = e.pageX - start;
-                thisDom._setElementSize(ele, moveDis, i)
-                thisDom._setHandlerPos(dragEle, ele);
-                dragging = false;
-                }
-            })
-            dragEle.addEventListener('mouseup', (e)=> {
-                e.stopPropagation();
-                moveDis = e.pageX - start;
-                thisDom._setElementSize(ele, moveDis, i);
-                thisDom._setHandlerPos(dragEle, ele);
-                dragging = false;
-            })
-            ele.addEventListener('mouseup', (e)=> {
-                e.stopPropagation();
-                thisDom._setElementSize(ele, moveDis, i);
-                thisDom._setHandlerPos(dragEle, ele);
-                dragging = false;
-            })
+        },        
+        //设置拖拽的事件
+        _setDragHandler(dragNode,videoNode){
+            this.dragVideoNode = videoNode;
+            dragNode.addEventListener('mousedown',this._handleMousedown,false);
         },
-        // resize 元素大小
-        _setElementSize(ele, dis, i) {
-            if (this.origin[i]) {
-                var newWidth = this.origin[i].width + dis
-                ele.style.width = newWidth + 'px';
-                ele.style.height = newWidth * this.ratio[i] + 'px';
-            }
-        },
-        // repos 拖动  位置
-        _setHandlerPos(handlerEle, clickEle) {
+        // 设置拖拽按钮的位置(根据视频的位置)
+        _setDragOffset(handlerEle, videoNode) {            
             handlerEle.style.display = 'block';
-            handlerEle.style.left = clickEle.offsetLeft + clickEle.offsetWidth - 4 + 'px';
-            handlerEle.style.top = clickEle.offsetTop + clickEle.offsetHeight - 4 + 'px';
+            handlerEle.style.left = videoNode.offsetLeft + videoNode.offsetWidth - 6 + 'px';
+            handlerEle.style.top = videoNode.offsetTop + videoNode.offsetHeight - 6 + 'px';
         },
+        _handleMousedown(evt){
+            var target = evt.target;
+            var ev = ev || window.event;
+            var disX = ev.clientX; // 获取鼠标按下时光标x的值
+            var disY = ev.clientY; // 获取鼠标按下时光标Y的值
+            var disW = this.dragVideoNode.offsetWidth; // 获取拖拽前的宽
+            var disH = this.dragVideoNode.offsetHeight; // 获取拖拽前的高
+            // listen for movement and mouseup
+            var thisDom = this;
+            document.onmousemove = function (ev) {
+                var ev = ev || window.event;
+                //拖拽时为了对宽和高 限制一下范围，定义两个变量
+                var W = ev.clientX - disX + disW;
+                var H = ev.clientY - disY + disH;
+                //if(W < 100)  W = 100;
+                if(W > thisDom.maxWidth) W = thisDom.maxWidth;
+                //if(H < 100) H = 100;
+                if(H > thisDom.maxHeight) H = thisDom.maxHeight;
+                thisDom.dragVideoNode.style.width = W +'px';// 拖拽后物体的宽
+                thisDom.dragVideoNode.style.height = H +'px';// 拖拽后物体的高
+                thisDom.dragVideoNode.parentNode.style.width = W + 4 +'px';// 拖拽后物体的宽
+                thisDom.dragVideoNode.parentNode.style.height = H + 4 +'px';// 拖拽后物体的高
+                thisDom._setDragOffset(target,thisDom.dragVideoNode)
+            }
+            document.onmouseup = function () {
+                document.onmousemove = null;
+                document.onmouseup = null;
+                let container = document.getElementById(thisDom.quillId).querySelector(".ql-container");
+                var dragNode=container.querySelector('.ql-dragHandler');
+                if(dragNode){
+                    container.removeChild(dragNode);
+                }
+            }
+        },    
         insertQuillVideo(videoList) {
             if (videoList && videoList.length > 0) {
                 for (var i = 0; i < videoList.length; i++) {
@@ -326,13 +322,11 @@ export default {
                             poster: poster
                         }
                     );
-                    this.videoAddDragEvent();
                 }
-                
+                this.videoAddDragEvent();
             }
         },
         _setQuillContent(content){
-            console.log(content);
             document.getElementById(this.quillId).querySelector(".ql-editor").innerHTML=content;
             this.videoAddDragEvent();
         }

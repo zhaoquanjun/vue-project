@@ -61,9 +61,9 @@
         <button class="cl-button cl-button--primary_notbg cl-button--small" @click="searchReset">重置</button>
       </div>
       <div>
-        <List :listData="templateInfo" @orderList="orderList" ref="list"></List>
+        <List :listData="templateInfo" @deleteItem="deleteItem" @orderList="orderList" ref="list"></List>
       </div>
-      <createControlDialog ref="createControlDialog"></createControlDialog>
+      <createControlDialog @getList="getList" ref="createControlDialog"></createControlDialog>
     </el-main>
   </el-container>
 </template>
@@ -145,6 +145,32 @@ export default {
       this.$Loading.hide();
       this.templateInfo = data;
       console.log(data);
+    },
+    deleteItem(id) {
+      this.$confirm(`确定要删除分类吗？`, "提示", {
+        iconClass: "icon-warning",
+        callback: async action => {
+          if (action === "confirm") {
+            let { data, status } = await templateApi.deleteNormalControl(id);
+            if (status === 200) {
+              this.getList();
+              this.$notify({
+                customClass: "notify-success",
+                message: `删除成功`,
+                duration: 2000,
+                showClose: false
+              });
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 2000,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
     },
     searchList() {
       this.getList();

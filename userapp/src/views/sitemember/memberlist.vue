@@ -303,6 +303,11 @@
     }
 </style>
 <style lang="scss" scoped>
+.b-content .icon {
+ margin-right: 24px;
+ padding: 2px 8px;
+ border-radius: 2px;
+}
     .member-content {
         font-family: "PingFangSC-Regular,PingFangSC";
         min-width: 1150px;
@@ -321,14 +326,14 @@
     {
         float: right;
         width: 76px;
-        height: 32px;
+        height: 30px;
         margin-top: -14px;
         border-radius: 2px;
         border: 1px solid $--color-primary;
         font-size: 14px;
         font-weight: 400;
         color: $--color-primary;
-        line-height: 32px;
+        line-height: 30px;
         text-align: center;
         cursor: pointer;
     }
@@ -347,7 +352,7 @@
         .iconbianzu
 
     {
-        padding: 10px 8px;
+        padding: 7px;
         cursor: pointer;
     }
 

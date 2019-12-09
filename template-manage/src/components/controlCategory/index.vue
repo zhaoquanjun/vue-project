@@ -11,7 +11,7 @@
       <div>
         <List :listData="templateInfo" @deleteItem="deleteItem" @editItem="editItem" ref="list"></List>
       </div>
-      <createCategoryDialog ref="createCategoryDialog"></createCategoryDialog>
+      <createCategoryDialog ref="createCategoryDialog" @getList="getList" ></createCategoryDialog>
     </el-main>
   </el-container>
 </template>
@@ -38,7 +38,6 @@ export default {
       let { data } = await templateApi.getList();
       this.$Loading.hide();
       this.templateInfo = data;
-      console.log(data);
     },
     editItem(row) {
       this.$refs.createCategoryDialog.showEditTemplate(row);

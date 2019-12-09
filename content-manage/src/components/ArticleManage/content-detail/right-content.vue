@@ -9,7 +9,7 @@
                 <div class="avatar-uploader" :class="{'border-line':!imageUrl1}">
                     <div v-if="imageUrl1" class="imgWrap">
                         <!-- <img :src="imageUrl1" class="avatar" /> -->
-                        <img-size-auto :item="imageUrl1" :newFileList="fileList"></img-size-auto>
+                        <img-size-auto :item="imageUrl1"></img-size-auto>
                          <span class="el-upload-list__item-actions">
                             <i @click="handlerAddPicture" class="icon-change"></i>
                             <i @click.stop="handleRemove" class="el-icon-delete"></i>
