@@ -17,7 +17,7 @@
         </div>
       </template>
       <el-table-column type="selection" :selectable="selectable"></el-table-column>
-      <el-table-column prop="templateName" label="缩略图" show-overflow-tooltip min-width="150">
+      <el-table-column label="缩略图" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
           <div class="siteImg">
             <div class="enabled" v-show="!scope.row.isEnabled">已失效</div>
@@ -25,12 +25,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="pagePath" label="控件名称" show-overflow-tooltip min-width="150">
+      <el-table-column label="控件名称" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
           <div class="overflow">{{scope.row.controlName}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="控件类型" min-width="100">
+      <el-table-column label="控件类型" min-width="100">
         <template slot-scope="scope">
           <div>
             <div>{{ scope.row.firstTypeName }}</div>
@@ -38,22 +38,22 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="排序" min-width="100">
+      <el-table-column prop="displayOrder" label="排序" sortable="custom" min-width="100">
         <template slot-scope="scope">
           <div>{{scope.row.displayOrder}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="使用量" min-width="100">
+      <el-table-column prop="useCount" label="使用量" sortable="custom" min-width="100">
         <template slot-scope="scope">
           <div>{{scope.row.useCount}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="150">
+      <el-table-column prop="createTime" label="创建时间" sortable="custom" min-width="150">
         <template slot-scope="scope">
-          <div>{{ _formatDateTime(scope.row.creaetTime, "yyyy/MM/dd hh:mm") }}</div>
+          <div>{{ _formatDateTime(scope.row.createTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" min-width="150">
+      <el-table-column prop="updateTime" label="更新时间" sortable="custom" min-width="150">
         <template slot-scope="scope">
           <div>{{ _formatDateTime(scope.row.updateTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
@@ -66,7 +66,13 @@
       <el-table-column label="操作" min-width="150">
         <template slot-scope="scope">
           <div v-show="scope.row.isEnabled">
-            <i class="iconfont iconchakan cl-iconfont" style="margin-right:16px"></i>
+            <a
+              style="vertical-align: middle;"
+              :href="`http://${scope.row.prevUrl}`"
+              target="_blank"
+            >
+              <i class="iconfont iconchakan cl-iconfont" style="margin-right:16px"></i>
+            </a>
             <el-dropdown trigger="click" @command="handleMore($event,scope.row)" placement="bottom">
               <i class="iconfont iconsangedian cl-iconfont"></i>
               <el-dropdown-menu slot="dropdown" class="moreList">
@@ -166,6 +172,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.table-list /deep/ .el-table .ascending .sort-caret.ascending {
+  border-bottom-color: $--color-primary;
+}
+.table-list /deep/ .el-table .descending .sort-caret.descending {
+  border-top-color: $--color-primary;
+}
 .moreList {
   width: 76px;
   .moreListItem {

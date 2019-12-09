@@ -23,5 +23,5 @@ export const saveCombinedControl = (para) => {
 }
 // 删除组合控件
 export const deleteCombinedControl = (para) => {
-    return ajaxRequest._delete(`${environment.templateApi}/api/v1/CombinedControl/DeleteCombinedControl`, para);
+    return ajaxRequest._delete(`${environment.templateApi}/api/v1/CombinedControl/DeleteCombinedControl`, { data: para });
 }

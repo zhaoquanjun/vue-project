@@ -42,12 +42,7 @@
             :value="item.id"
           ></el-option>
         </el-select>
-        <el-select
-          v-model="statusValue"
-          placeholder="请选择"
-          class="selectTypeValue"
-          @change="changeSearchType"
-        >
+        <el-select v-model="statusValue" placeholder="请选择" class="selectTypeValue">
           <el-option
             v-for="item in statusOptions"
             :key="item.value"
@@ -77,6 +72,7 @@
           @update="update"
           @deleteControl="deleteControl"
           @selectBatchUpdate="selectBatchUpdate"
+          @orderList="orderList"
         ></List>
       </div>
       <settingDialog @getList="getList" ref="settingDialog"></settingDialog>
@@ -91,6 +87,8 @@ import * as categoryApi from "@/api/request/controlCategoryApi";
 export default {
   data() {
     return {
+      prop: "createTime",
+      order: "descending",
       templateName: this.$route.query.templateName,
       isBatch: false,
       idList: [],
@@ -127,14 +125,38 @@ export default {
   },
   methods: {
     async getList() {
-      this.$Loading.show();
+      let orderByDisplayOrder = false;
+      let orderByUseCount = false;
+      let orderByCreateTime = false;
+      let orderByUpdateTime = false;
+      if (this.prop == "displayOrder") {
+        orderByDisplayOrder = true;
+      } else if (this.prop == "useCount") {
+        orderByUseCount = true;
+      } else if (this.prop == "createTime") {
+        orderByCreateTime = true;
+      } else if (this.prop == "updateTime") {
+        orderByUpdateTime = true;
+      }
+      let isOrderByDesc = true;
+      if (this.order == "descending") {
+        isOrderByDesc = true;
+      } else if (this.order == "ascending") {
+        isOrderByDesc = false;
+      }
       let para = {
         siteId: this.$route.query.siteId,
         controlName: this.searchValue,
         firstType: this.firstTypeValue,
         secondType: this.secondTypeValue,
-        controlState: this.statusValue
+        controlState: this.statusValue,
+        orderByDisplayOrder: orderByDisplayOrder,
+        orderByUseCount: orderByUseCount,
+        orderByCreateTime: orderByCreateTime,
+        orderByUpdateTime: orderByUpdateTime,
+        isOrderByDesc: isOrderByDesc
       };
+      this.$Loading.show();
       let { data } = await templateApi.getCombinedControls(para);
       this.$Loading.hide();
       this.templateInfo = data;
@@ -191,6 +213,7 @@ export default {
               para
             );
             if (status === 200) {
+              this.getList();
               this.$notify({
                 customClass: "notify-success",
                 message: `模版更新成功`,
@@ -218,11 +241,11 @@ export default {
               siteId: this.$route.query.siteId,
               pageId: pageId
             };
-            console.log(para);
             let { data, status } = await templateApi.deleteCombinedControl(
               para
             );
             if (status === 200) {
+              this.getList();
               this.$notify({
                 customClass: "notify-success",
                 message: `控件删除成功`,
@@ -241,9 +264,11 @@ export default {
         }
       });
     },
-    changeSearchType() {},
-    cancelCreateTemplate() {},
-    async createTemplate() {}
+    async orderList(prop, order) {
+      this.prop = prop;
+      this.order = order;
+      this.getList();
+    }
   }
 };
 </script>
