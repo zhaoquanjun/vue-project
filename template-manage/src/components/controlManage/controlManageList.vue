@@ -7,6 +7,8 @@
       :row-style="{height:'130px'}"
       class="content-table"
       @selection-change="handleSelectionChange"
+      @sort-change="sortChange"
+      :default-sort="{prop: 'createTime', order: 'descending'}"
     >
       <template slot="empty">
         <div class="empty-table">
@@ -17,7 +19,10 @@
       <el-table-column type="selection" :selectable="selectable"></el-table-column>
       <el-table-column prop="templateName" label="缩略图" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
-          <div class="overflow">{{scope.row.templateName}}</div>
+          <div class="siteImg">
+            <div class="enabled" v-show="!scope.row.isEnabled">已失效</div>
+            <img :src="scope.row.controlImg" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
         </template>
       </el-table-column>
       <el-table-column prop="pagePath" label="控件名称" show-overflow-tooltip min-width="150">
@@ -27,8 +32,10 @@
       </el-table-column>
       <el-table-column prop="createTime" label="控件类型" min-width="100">
         <template slot-scope="scope">
-          <div>{{ scope.row.firstTypeName }}</div>
-          <div>{{ scope.row.secondTypeName }}</div>
+          <div>
+            <div>{{ scope.row.firstTypeName }}</div>
+            <div style="margin-top:8px">{{ scope.row.secondTypeName }}</div>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="排序" min-width="100">
@@ -58,15 +65,22 @@
       </el-table-column>
       <el-table-column label="操作" min-width="150">
         <template slot-scope="scope">
-          <div>
+          <div v-show="scope.row.isEnabled">
             <i class="iconfont iconchakan cl-iconfont" style="margin-right:16px"></i>
             <el-dropdown trigger="click" @command="handleMore($event,scope.row)" placement="bottom">
               <i class="iconfont iconsangedian cl-iconfont"></i>
               <el-dropdown-menu slot="dropdown" class="moreList">
                 <el-dropdown-item class="moreListItem" command="setting">设置</el-dropdown-item>
-                <el-dropdown-item class="moreListItem" command="update">更新</el-dropdown-item>
+                <el-dropdown-item
+                  class="moreListItem"
+                  v-show="scope.row.controlState == 1"
+                  command="update"
+                >更新</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
+          </div>
+          <div v-show="!scope.row.isEnabled">
+            <i class="iconfont iconshanchu cl-iconfont" @click="deleteControl(scope.row)"></i>
           </div>
         </template>
       </el-table-column>
@@ -110,15 +124,20 @@ export default {
   methods: {
     // 更多操作下拉菜单
     handleMore(command, row) {
-      console.log(command, row);
       if (command == "setting") {
         this.$emit("setting", row);
       } else if (command == "update") {
         this.$emit("update", [row.pageId]);
       }
     },
+    //改变排序
+    sortChange(row) {
+      this.$emit("orderList", row.prop, row.order);
+    },
+    deleteControl(row) {
+      this.$emit("deleteControl", row.pageId);
+    },
     handleSelectionChange(list) {
-      console.log(list);
       let idList = [];
       list.forEach((item, index) => {
         idList.push(item.pageId);
@@ -126,9 +145,9 @@ export default {
       this.$emit("selectBatchUpdate", idList);
     },
     selectable(row) {
-      if (row.controlState == 1) {
+      if (row.controlState == 1 && row.isEnabled) {
         return true;
-      } else if (row.controlState == 3) {
+      } else if (row.controlState == 3 && row.isEnabled) {
         return false;
       }
     },
@@ -143,36 +162,6 @@ export default {
           return "下架";
       }
     }
-    // 单选或全选操作
-    // handleSelectionChange(list) {
-    //   this.$emit("handleSelectionChange", list);
-    // },
-    // cancelSelect() {
-    //   this.$refs.multipleTable.clearSelection();
-    // },
-    // chosePriority(row) {
-    //   let para = {
-    //     idList: [row.id],
-    //     priority: row.priority
-    //   };
-    //   this.$emit("update", para);
-    // },
-    // chosefrequency(row) {
-    //   let para = {
-    //     idList: [row.id],
-    //     frequency: row.frequencyStr
-    //   };
-    //   this.$emit("update", para);
-    // },
-    // remove(row) {
-    //   this.$emit("remove", [row.id]);
-    // },
-    // changePage(page) {
-    //   this.$emit("chagePage", page);
-    // },
-    // changeSize(size) {
-    //   this.$emit("changeSize", size);
-    // }
   }
 };
 </script>
@@ -190,6 +179,25 @@ export default {
     &:hover {
       background: $--background-color-hover;
     }
+  }
+}
+.siteImg {
+  width: 150px;
+  height: 82px;
+  position: relative;
+  .enabled {
+    display: inline-block;
+    width: 44px;
+    height: 20px;
+    background: $--color-primary;
+    font-size: $--font-size-small;
+    font-weight: $--font-weight-primary;
+    color: $--color-white;
+    line-height: 20px;
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    left: 0px;
   }
 }
 </style>
