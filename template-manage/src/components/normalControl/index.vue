@@ -126,7 +126,7 @@ export default {
       let orderByDisplayOrder = false;
       let orderByCreateTime = false;
       if (this.prop == "displayOrder") {
-        orderByUpdateTime = true;
+        orderByDisplayOrder = true;
       } else if (this.prop == "createTime") {
         orderByCreateTime = true;
       }

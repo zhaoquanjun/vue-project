@@ -20,7 +20,7 @@
             class="contentItem-input"
             @blur="blurTemplateName"
           ></el-input>
-          <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
+          <div class="ym-form-item__error" v-show="errorTemplateNameTips">请输入控件名称</div>
         </div>
         <div class="contentItem">
           <div class="contentItem-title">控件分类</div>
@@ -51,7 +51,7 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择控件类型</div>
+          <div class="ym-form-item__error" v-show="errorFirstTypeTips">请选择控件分类</div>
         </div>
         <div class="contentItem">
           <div class="contentItem-title">控件状态</div>
@@ -97,12 +97,19 @@
             </el-upload>
             <div class="tipInfoText">推荐尺寸250×140px</div>
           </div>
+          <div class="ym-form-item__error" v-show="errorPicTips">请上传缩略图</div>
         </div>
         <div>
           <div>控件参数</div>
           <div class="contentItem">
             <div class="contentItem-title">类型</div>
-            <el-input v-model="settingType" placeholder="请输入模版名称" class="contentItem-input"></el-input>
+            <el-input
+              v-model="settingType"
+              @blur="blurSettingType"
+              placeholder="请输入模版名称"
+              class="contentItem-input"
+            ></el-input>
+            <div class="ym-form-item__error" v-show="errorSettingTypeTips">请输入控件类型</div>
           </div>
           <div class="contentItem">
             <div class="contentItem-title">样式</div>
@@ -152,11 +159,10 @@ export default {
       settingTemplateShow: false,
       settingTemplateName: "",
       errorTemplateNameTips: false,
-      errorTemplateName: "",
       settingFirstTypeSelect: "",
       settingSecondTypeSelect: "",
+      errorFirstTypeTips: false,
       settingSecondTypeOptions: [],
-      errorTemplateIndustryShow: false,
       settingTemplateStatus: 2,
       settingTemplateStatusOptions: [
         {
@@ -171,12 +177,14 @@ export default {
       settingArrangement: 1,
       rowNum: 1,
       picUrl: "",
+      errorPicTips: false,
       uploadPicAction: `${environment.uploadComposeUrl}`,
       headers: {
         appId: "",
         Authorization: ""
       },
       settingType: "",
+      errorSettingTypeTips: false,
       settingStyle: "style1",
       settingHtml: ""
     };
@@ -209,9 +217,25 @@ export default {
     },
     cancelSettingTemplate() {
       this.settingTemplateShow = false;
+      this.clearInfo();
     },
     async saveSettingTemplate() {
-      this.settingTemplateShow = false;
+      if (this.settingTemplateName == "") {
+        this.errorTemplateNameTips = true;
+        return;
+      }
+      if (!this.settingFirstTypeSelect) {
+        this.errorFirstTypeTips = true;
+        return;
+      }
+      if (!this.picUrl) {
+        this.errorPicTips = true;
+        return;
+      }
+      if (this.settingType == "") {
+        this.errorSettingTypeTips = true;
+        return;
+      }
       let para = {
         controlName: this.settingTemplateName,
         firstType: this.settingFirstTypeSelect,
@@ -224,6 +248,7 @@ export default {
         controlStyle: this.settingStyle,
         controlHtml: this.settingHtml
       };
+      this.settingTemplateShow = false;
       if (this.isEdit) {
         para.id = this.row.id;
         let { data } = await templateApi.saveNormalControl(para);
@@ -231,17 +256,40 @@ export default {
         let { data } = await templateApi.createNormalControl(para);
       }
       this.$emit("getList");
+      this.clearInfo();
+    },
+    clearInfo() {
+      this.settingTemplateName = "";
+      this.errorTemplateNameTips = false;
+      this.settingFirstTypeSelect = "";
+      this.settingSecondTypeSelect = "";
+      this.errorFirstTypeTips = false;
+      this.settingTemplateStatus = 2;
+      this.settingArrangement = 1;
+      this.rowNum = 1;
+      this.picUrl = "";
+      this.errorPicTips = false;
+      this.settingType = "";
+      this.errorSettingTypeTips = false;
+      this.settingStyle = "style1";
+      this.settingHtml = "";
     },
     blurTemplateName() {
       if (this.settingTemplateName == "") {
         this.errorTemplateNameTips = true;
-        this.errorTemplateName = "请输入控件名称";
       } else {
         this.errorTemplateNameTips = false;
-        this.errorTemplateName = "";
+      }
+    },
+    blurSettingType() {
+      if (this.settingType == "") {
+        this.errorSettingTypeTips = true;
+      } else {
+        this.errorSettingTypeTips = false;
       }
     },
     async choseSettingFirstType() {
+      this.errorFirstTypeTips = false;
       let { data } = await categoryApi.getDropDownList(
         this.settingFirstTypeSelect
       );
@@ -279,6 +327,7 @@ export default {
       return isPic && isSizeOk;
     },
     handleAvatarSuccess(res, file) {
+      this.errorPicTips = false;
       this.picUrl = file.response;
     }
   }
