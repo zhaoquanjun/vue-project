@@ -6,12 +6,7 @@
     </el-header>
     <el-main class="contentWrap">
       <div class="contentHeader">
-        <el-select
-          v-model="searchValue"
-          placeholder="请选择"
-          class="selectSearchValue"
-          @change="changeSearchType"
-        >
+        <el-select v-model="searchValue" placeholder="请选择" class="selectSearchValue">
           <el-option
             v-for="item in searchOptions"
             :key="item.value"
@@ -20,12 +15,7 @@
           ></el-option>
         </el-select>
         <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput inputHeight"></el-input>
-        <el-select
-          v-model="sortValue"
-          placeholder="请选择"
-          class="selectSortValue"
-          @change="changeSearchType"
-        >
+        <el-select v-model="sortValue" placeholder="请选择" class="selectSortValue">
           <el-option
             v-for="item in sortOptions"
             :key="item.value"
@@ -199,7 +189,6 @@ export default {
       let { data } = await templateApi.getComposeTemplates(para);
       this.$Loading.hide();
       this.templateInfo = data;
-      console.log(data);
     },
     searchList() {
       this.getList();
@@ -208,6 +197,7 @@ export default {
       this.search = "";
       this.sortValue = -1;
       this.searchValue = "templateName";
+      this.getList();
     },
     blurPhone() {
       if (this.createPhone == "") {
@@ -224,11 +214,19 @@ export default {
     createTemplatedialogShow() {
       this.createTemplateShow = true;
     },
-    changeSearchType() {},
     cancelCreateTemplate() {
       this.createTemplateShow = false;
     },
     async createTemplate() {
+      if (this.createPhone == "") {
+        this.errorTip = true;
+        this.errorPhone = "请输入手机号";
+        return;
+      } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.createPhone)) {
+        this.errorTip = true;
+        this.errorPhone = "您输入的手机号格式有误，请重新输入";
+        return;
+      }
       this.createTemplateShow = false;
       let para = {
         designerPhone: this.createPhone,

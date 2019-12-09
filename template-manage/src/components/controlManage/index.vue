@@ -22,22 +22,30 @@
           ></i>
         </el-input>
         <el-select
-          v-model="typeValue"
+          v-model="firstTypeValue"
           placeholder="请选择"
           class="selectTypeValue"
-          @change="changeSearchType"
+          @change="changeFirstType"
         >
           <el-option
-            v-for="item in typeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in firstTypeOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <el-select v-model="secondTypeValue" placeholder="请选择" class="selectTypeValue">
+          <el-option
+            v-for="item in secondTypeOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           ></el-option>
         </el-select>
         <el-select
           v-model="statusValue"
           placeholder="请选择"
-          class="selectStatusValue"
+          class="selectTypeValue"
           @change="changeSearchType"
         >
           <el-option
@@ -67,10 +75,11 @@
           ref="list"
           @setting="setting"
           @update="update"
+          @deleteControl="deleteControl"
           @selectBatchUpdate="selectBatchUpdate"
         ></List>
       </div>
-      <settingDialog ref="settingDialog"></settingDialog>
+      <settingDialog @getList="getList" ref="settingDialog"></settingDialog>
     </el-main>
   </el-container>
 </template>
@@ -78,6 +87,7 @@
 import List from "./controlManageList";
 import SettingDialog from "./settingDialog";
 import * as templateApi from "@/api/request/controlTemplateApi";
+import * as categoryApi from "@/api/request/controlCategoryApi";
 export default {
   data() {
     return {
@@ -85,21 +95,10 @@ export default {
       isBatch: false,
       idList: [],
       searchValue: "",
-      typeValue: 0,
-      typeOptions: [
-        {
-          value: 0,
-          label: "控件类型"
-        },
-        {
-          value: 1,
-          label: "按钮"
-        },
-        {
-          value: 2,
-          label: "图片"
-        }
-      ],
+      firstTypeValue: "",
+      firstTypeOptions: [],
+      secondTypeValue: "",
+      secondTypeOptions: [],
       statusValue: 0,
       statusOptions: [
         {
@@ -124,6 +123,7 @@ export default {
   },
   mounted() {
     this.getList();
+    this.getFirstType();
   },
   methods: {
     async getList() {
@@ -131,21 +131,32 @@ export default {
       let para = {
         siteId: this.$route.query.siteId,
         controlName: this.searchValue,
-        firstType: this.typeValue,
-        secondType: this.typeValue,
+        firstType: this.firstTypeValue,
+        secondType: this.secondTypeValue,
         controlState: this.statusValue
       };
       let { data } = await templateApi.getCombinedControls(para);
       this.$Loading.hide();
       this.templateInfo = data;
     },
+    async getFirstType() {
+      let { data } = await categoryApi.getDropDownList();
+      this.firstTypeOptions = data;
+    },
+    async changeFirstType() {
+      let { data } = await categoryApi.getDropDownList(this.firstTypeValue);
+      this.secondTypeValue = "";
+      this.secondTypeOptions = data;
+    },
     searchList() {
       this.getList();
     },
     searchReset() {
       this.searchValue = "";
-      this.typeValue = 0;
+      this.firstTypeValue = "";
+      this.secondTypeValue = "";
       this.statusValue = 0;
+      this.getList();
     },
     blurPhone() {},
     createTemplatedialogShow() {
@@ -168,7 +179,7 @@ export default {
       this.update(this.idList);
     },
     async update(idList) {
-      this.$confirm(`确定要更新该模版吗？`, "提示", {
+      this.$confirm(`确定要更新该控件吗？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
@@ -183,6 +194,38 @@ export default {
               this.$notify({
                 customClass: "notify-success",
                 message: `模版更新成功`,
+                duration: 2000,
+                showClose: false
+              });
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 2000,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
+    },
+    async deleteControl(pageId) {
+      this.$confirm(`确定要删除该控件吗？`, "提示", {
+        iconClass: "icon-warning",
+        callback: async action => {
+          if (action === "confirm") {
+            let para = {
+              siteId: this.$route.query.siteId,
+              pageId: pageId
+            };
+            console.log(para);
+            let { data, status } = await templateApi.deleteCombinedControl(
+              para
+            );
+            if (status === 200) {
+              this.$notify({
+                customClass: "notify-success",
+                message: `控件删除成功`,
                 duration: 2000,
                 showClose: false
               });
@@ -262,10 +305,6 @@ export default {
       width: 200px;
     }
     .selectTypeValue {
-      margin-left: 16px;
-      width: 100px;
-    }
-    .selectStatusValue {
       margin-left: 16px;
       width: 100px;
     }

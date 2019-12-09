@@ -31,8 +31,8 @@
       <el-table-column label="控件分类" min-width="100">
         <template slot-scope="scope">
           <div>
-            <p>{{ scope.row.firstTypeName }}</p>
-            <p style="margin-top:8px">{{ scope.row.secondTypeName }}</p>
+            <div>{{ scope.row.firstTypeName }}</div>
+            <div style="margin-top:8px">{{ scope.row.secondTypeName }}</div>
           </div>
         </template>
       </el-table-column>

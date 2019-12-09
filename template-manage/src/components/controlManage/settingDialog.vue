@@ -20,7 +20,7 @@
             class="contentItem-input"
             @blur="blurTemplateName"
           ></el-input>
-          <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
+          <div class="ym-form-item__error" v-show="errorTemplateNameTips">请输入控件名称</div>
         </div>
         <div class="contentItem">
           <div class="contentItem-title">控件分类</div>
@@ -51,7 +51,7 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择控件类型</div>
+          <div class="ym-form-item__error" v-show="errorFirstTypeTips">请选择控件分类</div>
         </div>
         <div class="contentItem">
           <div class="contentItem-title">控件状态</div>
@@ -90,6 +90,7 @@
             </el-upload>
             <div class="tipInfoText">推荐尺寸250×140px</div>
           </div>
+          <div class="ym-form-item__error" v-show="errorPicTips">请上传缩略图</div>
         </div>
       </div>
       <div class="confirm">
@@ -107,6 +108,7 @@
 </template>
 <script>
 import * as templateApi from "@/api/request/controlTemplateApi";
+import * as categoryApi from "@/api/request/controlCategoryApi";
 import securityService from "@/services/authentication/securityService";
 import environment from "@/environment/index.js";
 export default {
@@ -116,30 +118,11 @@ export default {
       settingTemplateShow: false,
       settingTemplateName: "",
       errorTemplateNameTips: false,
-      errorTemplateName: "",
-      settingFirstTypeSelect: 1,
-      settingFirstTypeOptions: [
-        {
-          value: 0,
-          label: "上架"
-        },
-        {
-          value: 3,
-          label: "下架"
-        }
-      ],
-      settingSecondTypeSelect: 1,
-      settingSecondTypeOptions: [
-        {
-          value: 0,
-          label: "上架"
-        },
-        {
-          value: 3,
-          label: "下架"
-        }
-      ],
-      errorTemplateIndustryShow: false,
+      settingFirstTypeSelect: "",
+      settingFirstTypeOptions: [],
+      settingSecondTypeSelect: "",
+      settingSecondTypeOptions: [],
+      errorFirstTypeTips: false,
       settingTemplateStatus: 0,
       settingTemplateStatusOptions: [
         {
@@ -151,8 +134,9 @@ export default {
           label: "下架"
         }
       ],
-      settingArrangement: 0,
+      settingArrangement: 1,
       picUrl: "",
+      errorPicTips: false,
       uploadPicAction: `${environment.uploadComposeUrl}`,
       headers: {
         appId: "",
@@ -163,44 +147,86 @@ export default {
   components: {},
   mounted() {},
   methods: {
-    showSettingTemplate(row) {
-      console.log(row);
+    async showSettingTemplate(row) {
+      let { data } = await categoryApi.getDropDownList();
+      this.settingFirstTypeOptions = data;
       this.row = row;
       this.settingTemplateName = this.row.controlName;
+      if (row.firstTypeId) {
+        this.settingFirstTypeSelect = row.firstTypeId;
+        let { data } = await categoryApi.getDropDownList(row.firstTypeId);
+        this.settingSecondTypeOptions = data;
+        this.settingSecondTypeSelect = row.secondTypeId ? row.secondTypeId : "";
+      }
       this.settingTemplateStatus = this.row.controlState;
       this.settingArrangement = this.row.displayOrder;
+      this.picUrl = this.row.controlImg;
       this.settingTemplateShow = true;
     },
     cancelSettingTemplate() {
       this.settingTemplateShow = false;
+      this.clearInfo();
     },
     async saveSettingTemplate() {
+      if (this.settingTemplateName == "") {
+        this.errorTemplateNameTips = true;
+        return;
+      }
+      if (!this.settingFirstTypeSelect) {
+        this.errorFirstTypeTips = true;
+        return;
+      }
+      if (!this.picUrl) {
+        this.errorPicTips = true;
+        return;
+      }
       this.settingTemplateShow = false;
-      this.$Loading.show();
       let para = {
         pageId: this.row.pageId,
         siteId: this.$route.query.siteId,
         controlName: this.settingTemplateName,
         firstType: this.settingFirstTypeSelect,
-        secondType: this.settingSecondTypeSelect,
+        secondType: Number(this.settingSecondTypeSelect),
         controlState: this.settingTemplateStatus,
         displayOrder: this.settingArrangement,
-        controlImg: "12"
+        controlImg: this.picUrl
       };
-      console.log(para)
       let { data } = await templateApi.saveCombinedControl(para);
-      this.$Loading.hide();
+      this.$notify({
+        customClass: "notify-success",
+        message: `设置成功`,
+        duration: 2000,
+        showClose: false
+      });
+      this.clearInfo();
+      this.$emit("getList");
+    },
+    clearInfo() {
+      this.settingTemplateName = "";
+      this.errorTemplateNameTips = false;
+      this.settingFirstTypeSelect = "";
+      this.settingSecondTypeSelect = "";
+      this.errorFirstTypeTips = false;
+      this.settingTemplateStatus = 2;
+      this.settingArrangement = 1;
+      this.picUrl = "";
+      this.errorPicTips = false;
     },
     blurTemplateName() {
       if (this.settingTemplateName == "") {
         this.errorTemplateNameTips = true;
-        this.errorTemplateName = "请输入控件名称";
       } else {
         this.errorTemplateNameTips = false;
-        this.errorTemplateName = "";
       }
     },
-    choseSettingFirstType() {},
+    async choseSettingFirstType() {
+      this.errorFirstTypeTips = false;
+      let { data } = await categoryApi.getDropDownList(
+        this.settingFirstTypeSelect
+      );
+      this.settingSecondTypeSelect = "";
+      this.settingSecondTypeOptions = data;
+    },
     choseSettingSecondType() {},
     async beforeAvatarUpload(file) {
       let data = await securityService.getUser();
@@ -232,6 +258,7 @@ export default {
       return isPic && isSizeOk;
     },
     handleAvatarSuccess(res, file) {
+      this.errorPicTips = false;
       this.picUrl = file.response;
     }
   }

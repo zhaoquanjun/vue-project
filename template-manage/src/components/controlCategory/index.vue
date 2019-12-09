@@ -47,7 +47,6 @@ export default {
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
-            console.log(idList);
             let { data, status } = await templateApi.deleteCategory(idList);
             if (status === 200) {
               this.getList();
