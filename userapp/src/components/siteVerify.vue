@@ -138,35 +138,35 @@ export default {
       rules: {
         baiduTag: [
           {
-            pattern: /^<(S*?)[^>]*>.*?|<.*?\/>$/,
+            pattern: /^<meta name='([a-zA-Z0-9]+)-site-verification' content='([a-zA-Z0-9]+)'\/>$/,
             message: "请输入正确的html标签验证代码",
             trigger: "blur"
           }
         ],
         qihuTag: [
           {
-            pattern: /^<(S*?)[^>]*>.*?|<.*?\/>$/,
+            pattern: /^<meta name='([a-zA-Z0-9]+)-site-verification' content='([a-zA-Z0-9]+)'\/>$/,
             message: "请输入正确的html标签验证代码",
             trigger: "blur"
           }
         ],
         sougouTag: [
           {
-            pattern: /^<(S*?)[^>]*>.*?|<.*?\/>$/,
+            pattern: /^<meta name='([a-zA-Z0-9]+)-site-verification' content='([a-zA-Z0-9]+)'\/>$/,
             message: "请输入正确的html标签验证代码",
             trigger: "blur"
           }
         ],
         googleTag: [
           {
-            pattern: /^<(S*?)[^>]*>.*?|<.*?\/>$/,
+            pattern: /^<meta name='([a-zA-Z0-9]+)-site-verification' content='([a-zA-Z0-9]+)'\/>$/,
             message: "请输入正确的html标签验证代码",
             trigger: "blur"
           }
         ],
-        frombingTagAlias: [
+        bingTag: [
           {
-            pattern: /^<(S*?)[^>]*>.*?|<.*?\/>$/,
+            pattern: /^<meta name='([a-zA-Z0-9]+)-site-verification' content='([a-zA-Z0-9]+)'\/>$/,
             message: "请输入正确的html标签验证代码",
             trigger: "blur"
           }

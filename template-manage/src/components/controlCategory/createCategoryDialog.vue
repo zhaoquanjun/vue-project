@@ -41,7 +41,7 @@
           </el-select>
         </div>
         <div class="contentItem">
-          <div class="contentItem-title">排列</div>
+          <div class="contentItem-title">排序</div>
           <el-input-number
             v-model="settingArrangement"
             class="arrangement"
@@ -98,15 +98,13 @@ export default {
       errorTemplateNameTips: false,
       settingParent: 1,
       settingParentOptions: [],
-      settingArrangement: 0,
+      settingArrangement: 1,
       settingNormalIcon: "",
       errorNormalIconTips: false,
       settingHoverIcon: "",
       errorHoverIconTips: false
     };
   },
-  components: {},
-  mounted() {},
   methods: {
     async showSettingTemplate() {
       this.isEdit = false;
@@ -181,7 +179,7 @@ export default {
     clearInfo() {
       this.settingTemplateName = "";
       this.errorTemplateNameTips = false;
-      this.settingArrangement = 0;
+      this.settingArrangement = 1;
       this.settingNormalIcon = "";
       this.errorNormalIconTips = false;
       this.settingHoverIcon = "";

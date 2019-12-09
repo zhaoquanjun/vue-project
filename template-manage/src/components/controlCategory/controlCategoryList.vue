@@ -39,7 +39,11 @@
               @click="editItem(scope.row)"
               style="margin-right:16px"
             ></i>
-            <i class="iconfont iconshanchu cl-iconfont" @click="deleteItem(scope.row)"></i>
+            <i
+              class="iconfont iconshanchu cl-iconfont"
+              v-show="!(scope.row.combinedControlTotalCount+scope.row.normalControlTotalCount)"
+              @click="deleteItem(scope.row)"
+            ></i>
           </div>
         </template>
       </el-table-column>
