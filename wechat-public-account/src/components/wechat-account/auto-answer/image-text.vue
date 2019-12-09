@@ -468,14 +468,14 @@ export default {
                 margin-right: 16px;
             }
             .cover {
-                width: 140px;
+                width: 70px;
                 height: 70px;
                 border-radius: $--border-radius-base;
                 overflow: hidden;
                 position: relative;
                 img {
-                    width: 100%;
-                    height: 100%;
+                    width: 70px;
+                    height: 70px;
                 }
                 &:hover .mask1 {
                     opacity: 1;

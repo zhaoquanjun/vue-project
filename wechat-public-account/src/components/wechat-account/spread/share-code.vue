@@ -33,6 +33,7 @@
 import VueQr from 'vue-qr';
 import { notify } from "@/utlis/index.js";
 import Clipboard from 'clipboard'
+
 export default {
   props: {
     shareId: {

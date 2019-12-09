@@ -832,6 +832,7 @@ export default {
   // overflow: hidden;
   .aside {
     width:240px;
+    overflow: hidden;
     height: 100%;
     background: $--color-black-light;
     text-align: center;

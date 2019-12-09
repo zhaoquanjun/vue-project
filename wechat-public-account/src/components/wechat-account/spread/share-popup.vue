@@ -11,7 +11,11 @@
             <div class="arr"></div>
             <h5 class="ellipsis">{{initData.shareTitle}}</h5>
             <p class="ow-h3">{{initData.description}}</p>
-            <img :src="initData.coverUrl" alt="">
+            <div class="img-item">
+              
+              <img-size-auto :item="initData.coverUrl"></img-size-auto>
+            </div>
+            <!-- <img :src="initData.coverUrl" alt=""> -->
             <img class="img-arr" src="~img/head-icon.png" alt="">
           </div>
         </div>
@@ -49,7 +53,8 @@
               </el-tooltip>
             </div>
             <div class="mask">
-              <img :src="initData.coverUrl" alt="">
+              <img-size-auto :item="initData.coverUrl"></img-size-auto>
+              <!-- //<img :src="initData.coverUrl" alt=""> -->
               <span @click="handlerUpload">{{shareUrl ? '更换封面':'设置封面'}}</span>
             </div>
           </div>
@@ -93,7 +98,8 @@ import { stringify } from 'querystring';
 import VueQr from 'vue-qr';
 import { notify } from "@/utlis/index.js";
 import { getPageInfoList, addShare, updataShare } from "@/api/request/account.js";
-import Clipboard from 'clipboard'
+import Clipboard from 'clipboard';
+import ImgSizeAuto from "@/base/ImgSizeAuto"
 export default {
   props: {
     type: {
@@ -132,6 +138,7 @@ export default {
   },
   components: {
     ImageManage,
+    ImgSizeAuto,
     VueQr
   },
   created(){
@@ -344,7 +351,7 @@ export default {
             color:rgba(136,136,136,1);
             line-height: 20px;
           }
-          img {
+          .img-item {
             float: right;
             width: 54px;
             height: 54px;
@@ -401,13 +408,10 @@ export default {
             position: relative;
             width: 160px;
             height: 160px;
+            overflow: hidden;
             background: url("~img/cover.jpg") no-repeat center;
             background-size: contain;
             opacity: 1;
-            img {
-              width: 160px;
-              height: 160px;
-            }
             span {
               position: absolute;
               bottom: 0;
