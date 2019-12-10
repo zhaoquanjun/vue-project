@@ -4,21 +4,24 @@
       width="0"
       :show-close="false"
       :close-on-click-modal="false"
-      :append-to-body="false"
+      :append-to-body="true"
       :modal="false"
+      ref="templateDialog"
       :visible.sync="templateShow"
     >
       <div class="right-pannel">
         <el-container style="height:100%">
-          <el-aside class="aside">
+          <i class="iconfont iconicon-des-Arrowleft1 isShow" @click="isShowAsideList" style="position:fixed;top:50%;left:240px;z-index:2000;color:red;"></i>
+          <el-aside class="aside" v-show="isShowAside">
             <div class="title">筛选</div>
-            <!-- <el-input
+            <el-input
               size="medium"
               v-model="search"
               placeholder="输入关键词搜索"
               @keyup.enter.native="searchTemplate"
               clearable
-              style="width:248px"
+              style="width:225px" 
+              class="searchTemplate"
             >
               <i
                 class="el-icon-search el-input__icon"
@@ -26,7 +29,7 @@
                 slot="prefix"
                 @click="searchTemplate"
               ></i>
-            </el-input> -->
+            </el-input>
             <div class="order">
               <span
                 v-for="(item, index) in orderType"
@@ -57,7 +60,7 @@
             </div>
             </el-tree>
           </el-aside>
-          <el-main style="overflow:hidden">
+          <el-main>
             <!-- <div class="colorType" v-show="isAllTab">
                 <span class="colorTheme">主题</span>
                 <span class="color">
@@ -91,30 +94,23 @@
               <i class="iconfont iconguanbi cl-iconfont is-circle" @click="closeDialog"></i>
             </div>
             <el-main 
-              v-if="showWaterFall"
-              class="templateContent"
-              style="position:relative;padding:0 50px;width:100%"
-            >
-                
-            </el-main>
-            <el-main
-              v-else
-              class="templateContent"
-              style="position:relative;padding:0 50px;width:100%"
+              style="position:relative;padding:0 42px;"
               v-scrollBar
+              class="templateContent"
             >
-              <el-row :gutter="80">
-                <el-col
-                  class="templateItem"
-                  :span="8"
+              <Waterfall v-if="showWaterFall" id="waterfall" style="margin:0 auto;" :minCol="3" :maxCol="4" :gutterWidth="20" :resizable="true" :percent="percent">
+                <WaterfallItem
+                  class="waterFallTemplateItem"
                   v-for="(item, index) in templateInfo"
                   :key="index"
                 >
-                  <div class="itemSiteImage">
+                  <div ref="imgs" style="padding-bottom:30px;">
+                    <div class="itemSiteImage">
                     <div
                       class="itemSiteImageBackground"
-                      :style="{background: 'url(' + (item.imageUrl ) + ') no-repeat center/cover'}"
-                    ></div>
+                    >
+                      <img :src="item.imageUrl" class="itemSiteImg"> 
+                    </div>
                     <div class="modal" v-if="item.id != templateId">
                       <button class="cl-button cl-button--primary" @click="choseSite(item)">选择网站</button>
                       <a @click="goPrevTemplate(item)" style="margin-left:24px;">
@@ -122,23 +118,64 @@
                       </a>
                     </div>
                     <div class="curModal" v-show="item.id == templateId">当前选择</div>
+                    <div class="itemSiteNumber">编号：{{item.siteId}}</div>
                   </div>
                   <div class="itemSiteInfo">
                     <div class="itemSiteInfoLeft">
                       <div class="itemSiteName">
                         {{item.templateName && item.templateName.trim().length > 10 ? item.templateName.slice(0, 10) + '...' : item.templateName}}
                       </div>
-                      <div class="itemSiteName">编号：{{item.siteId}}</div>
+                      
                     </div>
                     <div class="itemSiteInfoRight">
-                      <i class="iconfont iconicon-diannao icon-link"></i>
-                      <i class="iconfont iconicon-des-dianhua icon-link"></i>
+                      <i class="iconfont iconicon-diannao icon-link" @click="prevPC(item.domain)"></i>
+                      <i class="iconfont iconicon-des-dianhua icon-link" @click="prevMB(item.domain)"></i>
                     </div>
-                    
                   </div>
-                </el-col>
-              </el-row>
+                  </div>
+                </WaterfallItem>
+              </Waterfall>
+              <div v-else
+              >
+                  <el-row :gutter="80">
+                  <el-col
+                    :span="8"
+                    class="templateItem"
+                    v-for="(item, index) in templateInfo"
+                    :key="index"
+                  >
+                    <div class="itemSiteImage">
+                      <div
+                        class="itemSiteImageBackground"
+                      >
+                        <img :src="item.imageUrl" class="itemSiteImg"> 
+                      </div>
+                      <div class="modal" v-if="item.id != templateId">
+                        <button class="cl-button cl-button--primary" @click="choseSite(item)">选择网站</button>
+                        <a @click="goPrevTemplate(item)" style="margin-left:24px;">
+                          <button class="cl-button cl-button--primary_notbg">预览网站</button>
+                        </a>
+                      </div>
+                      <div class="curModal" v-show="item.id == templateId">当前选择</div>
+                    </div>
+                    <div class="itemSiteInfo">
+                      <div class="itemSiteInfoLeft">
+                        <div class="itemSiteName">
+                          {{item.templateName && item.templateName.trim().length > 10 ? item.templateName.slice(0, 10) + '...' : item.templateName}}
+                        </div>
+                        <div class="itemSiteName">编号：{{item.siteId}}</div>
+                      </div>
+                      <div class="itemSiteInfoRight">
+                        <i class="iconfont iconicon-diannao icon-link" @click="prevPC(item.domain)"></i>
+                        <i class="iconfont iconicon-des-dianhua icon-link" @click="prevMB(item.domain)"></i>
+                      </div>
+                      
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
             </el-main>
+            
             <div>
               <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
               <el-switch
@@ -244,11 +281,19 @@
 import * as templateApi from "@/api/request/templateApi";
 import { designerUrl } from "@/environment/index";
 import { getMemberList } from "@/api/request/siteMemberApi";
+import { nextTick } from 'q';
+
+import { Waterfall, WaterfallItem } from "vue2-waterfall"
 
 export default {
   props: ["siteId", "siteName", "templateId", "isChangeTemplate"],
+  components: {
+    Waterfall,
+    WaterfallItem
+  },
   data() {
     return {
+      percent:[1,1,1],
       templateShow: false,
       templatePage: {},
       isAllTab: true,
@@ -322,7 +367,7 @@ export default {
       firstIndustryId: 0,
       secondIndustryId: 0,
       pageIndex: 1,
-      pageSize: 9,
+      pageSize: 9 ,
       notFindTemplateShow: false,
       notFindName: "",
       notFindSite: "",
@@ -331,17 +376,56 @@ export default {
       errorIndustryName: "",
       errorReference: false,
       errorSite: "",
-      showWaterFall:false
+      showWaterFall:true,
+      isShowAside:true
     };
   },
   created(){
     window.addEventListener("scroll",this.scroll,true)
-    this.loadMore();
-    
+    this.getWaterfallItemPercent();
   },
   computed: {},
-  mounted() {},
+  mounted() {
+  },
+  watch:{
+  },
+  updated(){
+    
+  },
   methods: {
+    isShowAsideList(){
+      this.$nextTick(()=>{
+        let icon=document.getElementsByClassName("isShow")[0];
+        if(this.isShowAside){
+          icon.style.left=0;
+        }else{
+          icon.style.left=240+"px";
+        }
+        this.isShowAside=!this.isShowAside;
+      })
+    },
+    prevPC(domain){
+      window.open(`http://${domain}/prev/showtemplate/?flag=pc`,"_blank");
+    },
+    prevMB(domain){
+      window.open(`http://${domain}/prev/showtemplate/?flag=mb`,"_blank");
+    },
+    getWaterfallItemPercent(){
+      if(document.body.clientWidth>=1920){
+        this.percent=[1,1,1,1]
+      }else{
+        this.percent=[1,1,1]
+      }
+    },
+    resetScrollTop(){
+      this.$nextTick(()=>{
+        let scroll=document.getElementsByClassName("ps")[1];
+        scroll.scrollTop=0;
+        this.pageIndex=1;
+        this.pageSize=9;
+      })
+       
+    },
     async changeIndustry(item) {
       this.firstIndustryId = 0;
       this.secondIndustryId = 0;
@@ -423,6 +507,7 @@ export default {
     },
     // 选择最新/最热/推荐
     async changeOrder(item) {
+      this.resetScrollTop();
       if (this.isAllTab == true) {
         this.orderType.forEach((item, index) => {
           item.isOrder = false;
@@ -431,6 +516,7 @@ export default {
         this.isOrderByUpdateTime = false;
         this.isMostPopular = false;
         this.isRecommend = false;
+        this.pageIndex=1;
         if (item.type == "updataTime") {
           this.isOrderByUpdateTime = true;
         } else if (item.type == "mostPopular") {
@@ -453,6 +539,7 @@ export default {
         let { data, status } = await templateApi.getSiteTemplates(para);
         this.templatePage = data;
         this.templateInfo = data.items;
+        
       }
     },
 
@@ -584,7 +671,7 @@ export default {
         var { data, status } = await templateApi.getSiteTemplates(para);
       }
       this.templatePage = data;
-      this.templateInfo = data.items;
+      this.templateInfo =[...this.templateInfo,...data.items];
     },
     async changePage(page) {
       this.pageIndex = page;
@@ -595,19 +682,20 @@ export default {
       this.searchTemplate();
     },
     loadMore(){
-      this.pageSize+=1;
-      this.searchTemplate();
+      if( this.pageIndex<=this.templateInfo.length/this.pageSize){
+          this.pageIndex+=1;
+          this.searchTemplate();
+      }
     },
      scroll(){
-        var scrollTop = document.documentElement.scrollTop||document.body.scrollTop||window.pageYOffset;
-        var windowHeight = document.body.clientHeight || document.body.clientHeight;
-        var scrollHeight = document.body.scrollHeight;
-        console.log(scrollTop,windowHeight,scrollHeight)
-        if(scrollTop+windowHeight>=scrollHeight){　
-            if(this.pageSize <= this.templateInfo.length) {
-                this.loadMore();
-            }
-        }
+       this.$nextTick(()=>{
+          let scrollTop=document.getElementsByClassName("ps")[1].scrollTop;
+          let scrollHeight=document.getElementsByClassName("ps")[1].scrollHeight;
+          let innerHeight=window.innerHeight;
+          if(scrollTop+innerHeight>=scrollHeight){
+            this.loadMore();
+          }
+       })
     },
     // 关闭弹窗
     closeDialog() {
@@ -740,6 +828,7 @@ export default {
         window.addEventListener("resize", () => {
           document.getElementsByClassName("templateContent")[0].style.height =
             window.innerHeight - 160 + "px";
+            this.getWaterfallItemPercent();
         });
         document.getElementsByClassName("templateContent")[0].style.height =
           window.innerHeight - 160 + "px";
@@ -762,6 +851,7 @@ export default {
   },
   destroyed(){
     window.removeEventListener('scroll', this.scroll,true)
+    // window.removeEventListener("resize",this.windowResize,true);
   }
 };
 </script>
@@ -791,8 +881,24 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.waterfall /deep/ .waterfall-box{
+  padding-right: 20px;
+  box-sizing: border-box
+}
 .languageSelect /deep/ .el-input__inner {
   border: none;
+  
+}
+.searchTemplate /deep/ .el-input__inner:focus{
+  border:1px solid rgba(89,99,104,1);
+  background:#40494E;
+  border-radius: 4px;
+}
+.searchTemplate /deep/ .el-input__inner{
+  border:1px solid rgba(89,99,104,1);
+  background:#40494E;
+  border-radius: 4px;
+  color: $--color-white;
 }
 .right-pannel /deep/ .el-tree{
   background: $--color-black-light;
@@ -831,7 +937,7 @@ export default {
   color: $--color-white;
   // overflow: hidden;
   .aside {
-    width:240px;
+    width:240px !important;
     overflow: hidden;
     height: 100%;
     background: $--color-black-light;
@@ -870,7 +976,7 @@ export default {
     .firstIndustryTitle{
       height:44px;
       display: block;
-      width: 300px;
+      width: 240px;
       background: #40494E;
       font-size: $--font-size-small;
       font-weight: 400;
@@ -881,7 +987,7 @@ export default {
     }
     .secondIndustryTitle{
       display: block;
-      width: 300px;
+      width: 240px;
       font-size: $--font-size-small;
       background: $--color-black-light;
       font-weight: 400;
@@ -892,7 +998,7 @@ export default {
     }
     .thirdIndustryTitle{
       display: block;
-      width: 300px;
+      width: 240px;
       font-size: $--font-size-small;
        background: $--color-black-light;
       font-weight: 400;
@@ -909,7 +1015,7 @@ export default {
     // display: flex;
     // justify-content: space-between;
     padding-top: 40px;
-    margin-bottom: 32px;
+    margin-bottom: 30px;
     text-align: center;
     position: relative;
     .templateHeaderLine{
@@ -987,11 +1093,12 @@ export default {
   }
 
   .templateItem {
-    // padding: 5px;
-    padding-bottom: 32px;
+    padding: 0 30px 30px 0;
+    width:370px;
+    position: relative;
     .itemSiteImage {
       position: relative;
-      width: 100%;
+      width: 340px;
       transition: all 0.3s ease-in;
       &:hover {
         // transform: translateY(-15px);
@@ -1001,13 +1108,16 @@ export default {
         }
       }
       .itemSiteImageHeader {
-        width: 100%;
+        width: 30px;
       }
       .itemSiteImageBackground {
-        margin-top: -2px;
         width: 100%;
         padding-bottom: 62%;
         position: relative;
+        .itemSiteImg{
+          width:340px;
+          height: 340px;
+        }
       }
       .modal {
         display: flex;
@@ -1040,6 +1150,80 @@ export default {
       }
     }
   }
+  .waterFallTemplateItem {
+    padding: 0 30px 30px 0;
+    // width:370px;
+    // float: left;
+    width: 100%;
+    .itemSiteImage {
+      position: relative;
+      // width: 340px;
+      width: 100%;
+      transition: all 0.3s ease-in;
+      &:hover {
+        // transform: translateY(-15px);
+        // box-shadow: 0px 15px 15px -15px #b9cbcf;
+        .modal {
+          opacity: 1;
+        }
+      }
+      .itemSiteImageHeader {
+        width: 30px;
+      }
+      .itemSiteImageBackground {
+        // width:340px;
+        width:100%;
+        position: relative;
+        .itemSiteImg{
+          // width:340px;
+          width:100%;
+          height: auto;
+          display: block;
+        }
+      }
+      .modal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        // width: 340px;
+        width:100%;
+        height: 100%;
+        opacity: 0;
+        background: rgba(0, 0, 0, 0.8);
+        transition: all 0.2s linear;
+      }
+      .curModal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        // width: 340px;
+        width:100%;
+        height: 100%;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.5);
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 1);
+        line-height: 22px;
+      }
+      .itemSiteNumber{
+        position: absolute;
+        display: block;
+        width:100%;
+        background: red;
+        right: 0;
+        bottom: 0;
+        text-align: right;
+      }
+    }
+    .itemSiteInfo{width:33.3%}
+  }
   .templateContent{
     .itemSiteInfo{
       display: flex;
@@ -1054,6 +1238,7 @@ export default {
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       height:60px;
+      // width: 340px;
       width: 100%;
       background: $--color-black-light;
       .itemSiteInfoLeft{
