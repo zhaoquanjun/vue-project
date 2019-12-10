@@ -16,7 +16,7 @@
           <div class="contentItem-title">控件名称</div>
           <el-input
             v-model="settingTemplateName"
-            placeholder="请输入模版名称"
+            placeholder="请输入控件名称"
             class="contentItem-input"
             @blur="blurTemplateName"
           ></el-input>
@@ -55,7 +55,7 @@
         </div>
         <div class="contentItem">
           <div class="contentItem-title">控件状态</div>
-          <el-select v-model="settingTemplateStatus" placeholder="模版状态" class="contentItem-input">
+          <el-select v-model="settingTemplateStatus" placeholder="控件状态" class="contentItem-input">
             <el-option
               v-for="item in settingTemplateStatusOptions"
               :key="item.value"
@@ -106,14 +106,20 @@
             <el-input
               v-model="settingType"
               @blur="blurSettingType"
-              placeholder="请输入模版名称"
+              placeholder="请输入控件类型"
               class="contentItem-input"
             ></el-input>
             <div class="ym-form-item__error" v-show="errorSettingTypeTips">请输入控件类型</div>
           </div>
           <div class="contentItem">
             <div class="contentItem-title">样式</div>
-            <el-input v-model="settingStyle" placeholder="请输入模版名称" class="contentItem-input"></el-input>
+            <el-input
+              v-model="settingStyle"
+              @blur="blurSettingStyle"
+              placeholder="请输入控件样式"
+              class="contentItem-input"
+            ></el-input>
+            <div class="ym-form-item__error" v-show="errorSettingStyleTips">请输入控件样式</div>
           </div>
           <div class="contentItem">
             <div class="contentItem-title">Html</div>
@@ -121,7 +127,7 @@
               v-model="settingHtml"
               type="textarea"
               :rows="3"
-              placeholder="请输入内容"
+              placeholder="请输入html（选填）"
               style="vertical-align: text-top;"
               class="contentItem-input"
             ></el-input>
@@ -186,6 +192,7 @@ export default {
       settingType: "",
       errorSettingTypeTips: false,
       settingStyle: "style1",
+      errorSettingStyleTips: false,
       settingHtml: ""
     };
   },
@@ -234,6 +241,10 @@ export default {
       }
       if (this.settingType == "") {
         this.errorSettingTypeTips = true;
+        return;
+      }
+      if (this.settingStyle == "") {
+        this.errorSettingStyleTips = true;
         return;
       }
       let para = {
@@ -286,6 +297,13 @@ export default {
         this.errorSettingTypeTips = true;
       } else {
         this.errorSettingTypeTips = false;
+      }
+    },
+    blurSettingStyle() {
+      if (this.settingStyle == "") {
+        this.errorSettingStyleTips = true;
+      } else {
+        this.errorSettingStyleTips = false;
       }
     },
     async choseSettingFirstType() {

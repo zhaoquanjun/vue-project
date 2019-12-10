@@ -23,7 +23,7 @@
           <div class="contentItem-title">分类名称</div>
           <el-input
             v-model="settingTemplateName"
-            placeholder="请输入模版名称"
+            placeholder="请输入分类名称"
             class="contentItem-input"
             @blur="blurTemplateName"
           ></el-input>
@@ -31,7 +31,7 @@
         </div>
         <div class="contentItem" v-show="rowNum == 'second'">
           <div class="contentItem-title">上级分类</div>
-          <el-select v-model="settingParent" placeholder="模版状态" class="contentItem-input">
+          <el-select v-model="settingParent" placeholder="上级分类" class="contentItem-input">
             <el-option
               v-for="item in settingParentOptions"
               :key="item.id"
@@ -53,7 +53,7 @@
           <div class="contentItem-title">常态图标</div>
           <el-input
             v-model="settingNormalIcon"
-            placeholder="请输入模版名称"
+            placeholder="请输入常态图标SVG"
             class="contentItem-input"
             @blur="blurNormalIcon"
           ></el-input>
@@ -63,7 +63,7 @@
           <div class="contentItem-title">悬停图标</div>
           <el-input
             v-model="settingHoverIcon"
-            placeholder="请输入模版名称"
+            placeholder="请输入悬停图标SVG"
             class="contentItem-input"
             @blur="blurHoverIcon"
           ></el-input>

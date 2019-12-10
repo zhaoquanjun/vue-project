@@ -16,7 +16,7 @@
           <div class="contentItem-title">控件名称</div>
           <el-input
             v-model="settingTemplateName"
-            placeholder="请输入模版名称"
+            placeholder="请输入控件名称"
             class="contentItem-input"
             @blur="blurTemplateName"
           ></el-input>
@@ -55,7 +55,7 @@
         </div>
         <div class="contentItem">
           <div class="contentItem-title">控件状态</div>
-          <el-select v-model="settingTemplateStatus" placeholder="模版状态" class="contentItem-input">
+          <el-select v-model="settingTemplateStatus" placeholder="控件状态" class="contentItem-input">
             <el-option
               v-for="item in settingTemplateStatusOptions"
               :key="item.value"

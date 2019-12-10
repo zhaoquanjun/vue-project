@@ -60,7 +60,7 @@
               <div class="inputTitle">管理员</div>
               <el-input
                 v-model="createPhone"
-                placeholder="请输入手机号"
+                placeholder="请输入管理员手机号"
                 style="width:275px"
                 @blur="blurPhone"
                 :maxlength="11"
