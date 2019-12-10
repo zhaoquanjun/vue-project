@@ -44,7 +44,41 @@
         <template slot-scope="scope">
           <div>
             <p>{{scope.row.designerPhone}}</p>
-            <p style="margin-top:8px">{{scope.row.remark}}</p>
+            <p style="margin-top:8px">
+              {{scope.row.remark}}
+              <el-popover
+                :ref="`popover-${scope.row.siteId}`"
+                placement="bottom"
+                width="200"
+                trigger="click"
+                style="padding:0;display:inline-block;overflow:visible;"
+                @show="showRemark(scope.row)"
+              >
+                <i v-show="scope.row.siteId" slot="reference" class="iconfont iconicon-dash-edit"></i>
+                <div class="textareaWrap">
+                  <el-input
+                    type="textarea"
+                    :autosize="{ minRows: 3, maxRows: 3}"
+                    placeholder="请输入内容"
+                    v-model="remarkText"
+                    maxlength="40"
+                    show-word-limit
+                    resize="none"
+                  ></el-input>
+                  <div class="btn-wrap">
+                    <button
+                      class="cl-button cl-button--primary_notbg cl-button--small"
+                      slot="refenrence"
+                      @click="cancelInput(scope.row.siteId)"
+                    >取消</button>
+                    <button
+                      class="cl-button cl-button--primary cl-button--small"
+                      @click="saveInputValue(scope.row, scope.row.siteId)"
+                    >保存</button>
+                  </div>
+                </div>
+              </el-popover>
+            </p>
           </div>
         </template>
       </el-table-column>
@@ -85,6 +119,7 @@
 
 <script>
 import { formatDateTime } from "@/utlis/index";
+import * as templateApi from "@/api/request/templateApi";
 export default {
   props: {
     listData: {
@@ -92,7 +127,10 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      isRemarkShowId: "",
+      remarkText: ""
+    };
   },
   methods: {
     // 单选或全选操作
@@ -125,6 +163,39 @@ export default {
     // changeSize(size) {
     //   this.$emit("changeSize", size);
     // }
+    // 修改备注 弹窗
+    showRemark(row) {
+      this.remarkText = row.remark;
+    },
+    // 备注弹窗取消
+    cancelInput(siteId) {
+      this.$refs[`popover-${siteId}`].doClose();
+      this.remarkText = "";
+    },
+    //备注弹窗确认
+    async saveInputValue(row, siteId) {
+      this.$refs[`popover-${siteId}`].doClose();
+      let { status } = await templateApi.updateTemplateRemark(
+        row.siteId,
+        this.remarkText
+      );
+      if (status == 200) {
+        row.remark = this.remarkText;
+        this.$notify({
+          customClass: "notify-success",
+          message: `保存成功`,
+          duration: 1500,
+          showClose: false
+        });
+      } else {
+        this.$notify({
+          customClass: "notify-error",
+          message: `保存失败`,
+          duration: 1500,
+          showClose: false
+        });
+      }
+    },
     //改变排序
     sortChange(row) {
       this.$emit("orderList", row.prop, row.order);
@@ -167,6 +238,16 @@ export default {
 .disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+// popover 弹框样式
+.textareaWrap {
+  background: $--color-white;
+  margin: 0;
+  position: relative;
+  .btn-wrap {
+    text-align: right;
+    padding-top: 16px;
+  }
 }
 </style>
 

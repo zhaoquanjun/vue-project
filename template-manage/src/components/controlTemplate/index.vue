@@ -48,36 +48,39 @@
               <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
             </span>
           </div>
-          <div class="tips">开通【控件模板应用】服务，填写的手机号将是模板的管理员</div>
-          <div class="inputWrap">
-            <div class="inputTitle">管理员</div>
-            <el-input
-              v-model="createPhone"
-              placeholder="请输入手机号"
-              style="width:275px"
-              @blur="blurPhone"
-              :maxlength="11"
-            ></el-input>
-            <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
+          <div class="dialogContent">
+            <div class="tips">开通【控件模板应用】服务，填写的手机号将是模板的管理员</div>
+            <div class="inputWrap">
+              <div class="inputTitle">管理员</div>
+              <el-input
+                v-model="createPhone"
+                placeholder="请输入手机号"
+                style="width:275px"
+                @blur="blurPhone"
+                :maxlength="11"
+              ></el-input>
+              <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
+            </div>
+            <div class="inputWrap">
+              <div class="inputTitle">模板名称</div>
+              <el-input
+                v-model="createTemplateName"
+                placeholder="请输入模板名称"
+                style="width:275px"
+                maxlength="20"
+              ></el-input>
+            </div>
+            <div class="inputWrap">
+              <span class="inputTitle">备注</span>
+              <el-input
+                v-model="createRemark"
+                placeholder="请输入备注信息"
+                style="width:275px"
+                maxlength="40"
+              ></el-input>
+            </div>
           </div>
-          <div class="inputWrap">
-            <div class="inputTitle">模板名称</div>
-            <el-input
-              v-model="createTemplateName"
-              placeholder="请输入模板名称"
-              style="width:275px"
-              maxlength="20"
-            ></el-input>
-          </div>
-          <div class="inputWrap">
-            <span class="inputTitle">备注</span>
-            <el-input
-              v-model="createRemark"
-              placeholder="请输入备注信息"
-              style="width:275px"
-              maxlength="40"
-            ></el-input>
-          </div>
+
           <div class="confirm">
             <button
               class="confirmBtn cl-button cl-button--primary cl-button--small"
@@ -211,11 +214,19 @@ export default {
         this.errorPhone = "";
       }
     },
+    clearInfo() {
+      this.createPhone = "";
+      this.errorTip = false;
+      this.errorPhone = "";
+      this.createTemplateName = "";
+      this.createRemark = "";
+    },
     createTemplatedialogShow() {
       this.createTemplateShow = true;
     },
     cancelCreateTemplate() {
       this.createTemplateShow = false;
+      this.clearInfo();
     },
     async createTemplate() {
       if (this.createPhone == "") {
@@ -241,6 +252,7 @@ export default {
         showClose: false
       });
       this.getList();
+      this.clearInfo();
     },
     async orderList(prop, order) {
       this.prop = prop;
@@ -299,61 +311,60 @@ export default {
   bottom: 0;
   transition: width 0.2s linear;
   overflow: hidden;
+  padding: 16px 24px 0;
+  box-sizing: border-box;
   .pannel-head {
-    height: 70px;
-    line-height: 70px;
-    overflow: hidden;
     border-bottom: $--border-base;
-    span {
-      font-size: $--font-size-medium;
-      font-weight: $--font-weight-primary;
-      padding: 0 10px;
-    }
-    .close-pannel {
-      float: right;
-      cursor: pointer;
-    }
-  }
-  .tips {
-    width: calc(100% - 48px);
-    height: 32px;
-    background: rgba(242, 255, 234, 1);
-    border: 1px solid rgba(199, 221, 185, 1);
-    font-size: $--font-size-small;
-    font-weight: $--font-weight-primary;
-    color: rgba(0, 182, 57, 1);
-    line-height: 32px;
-    text-align: center;
-    margin: 24px;
-  }
-  .inputWrap {
-    margin-top: 16px;
-    width: 100%;
-    .inputTitle {
-      width: 100px;
-      display: inline-block;
-      font-size: $--font-size-small;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    .headText {
+      font-size: $--font-size-base;
       font-weight: $--font-weight-base;
-      line-height: 32px;
-      text-align: right;
-      padding-right: 16px;
-      box-sizing: border-box;
+      color: $--color-text-primary;
     }
-    .ym-form-item__error {
-      margin-left: 100px;
+  }
+  .dialogContent {
+    height: calc(100% - 119px);
+    .tips {
+      width: 100%;
+      height: 32px;
+      background: rgba(243, 255, 247, 1);
+      border: 1px solid rgba(35, 205, 93, 0.3);
+      font-size: $--font-size-small;
+      font-weight: $--font-weight-primary;
+      color: #23cd5d;
+      line-height: 32px;
+      text-align: center;
+      margin: 24px 0;
+    }
+    .inputWrap {
+      margin-top: 16px;
+      width: 100%;
+      .inputTitle {
+        display: inline-block;
+        width: 75px;
+        text-align: right;
+        padding-right: 16px;
+        box-sizing: border-box;
+        font-size: $--font-size-small;
+        font-weight: $--font-weight-base;
+        color: $--color-text-primary;
+      }
+      .ym-form-item__error {
+        margin-left: 75px;
+      }
     }
   }
   .confirm {
     position: absolute;
-    width: 470px;
+    width: calc(100% - 48px);
     height: 80px;
     bottom: 0px;
     border-top: $--border-base;
-    display: flex;
-    align-items: center;
-    .confirmBtn {
-      margin-left: 16px;
-    }
+    padding: 16px 0 32px;
+    box-sizing: border-box;
   }
 }
 </style>
