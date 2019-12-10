@@ -26,18 +26,18 @@ export const defaultRoutes = [
                 },
             },
             {
-                path: "composetemplate",
-                name: "composetemplate",
+                path: "controlmanege/combinedcontrol",
+                name: "controlmanege/combinedcontrol",
                 component: () => import('@/views/template-manage/controlTemplate.vue'),
                 meta: {
                     requiresAuth: true,
-                    title: "控件模板",
+                    title: "组合控件",
                     isSub: true
                 },
             },
             {
-                path: "composeManage",
-                name: "composeManage",
+                path: "controlmanege/composeManage",
+                name: "controlmanege/composeManage",
                 component: () => import('@/views/template-manage/controlManage.vue'),
                 meta: {
                     requiresAuth: false,
@@ -46,8 +46,8 @@ export const defaultRoutes = [
                 },
             },
             {
-                path: "normalcontrol",
-                name: "normalcontrol",
+                path: "controlmanege/normalcontrol",
+                name: "controlmanege/normalcontrol",
                 component: () => import('@/views/template-manage/normalControl.vue'),
                 meta: {
                     requiresAuth: true,
@@ -56,8 +56,8 @@ export const defaultRoutes = [
                 },
             },
             {
-                path: "controlcategory",
-                name: "controlcategory",
+                path: "controlmanege/controlcategory",
+                name: "controlmanege/controlcategory",
                 component: () => import('@/views/template-manage/controlCategory.vue'),
                 meta: {
                     requiresAuth: true,

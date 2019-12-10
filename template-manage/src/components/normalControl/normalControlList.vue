@@ -2,7 +2,7 @@
   <div class="table-list" id="table-list">
     <el-table
       ref="multipleTable"
-      :data="listData"
+      :data="listData.curData"
       tooltip-effect="dark"
       :row-style="{height:'108px'}"
       class="content-table"
@@ -50,7 +50,7 @@
         <template slot-scope="scope">
           <div>{{scope.row.useCount}}</div>
         </template>
-      </el-table-column> -->
+      </el-table-column>-->
       <el-table-column label="创建时间" prop="createTime" sortable="custom" min-width="150">
         <template slot-scope="scope">
           <div>{{ _formatDateTime(scope.row.createTime, "yyyy/MM/dd hh:mm") }}</div>
@@ -74,6 +74,20 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="cl-pagination pageing" id="pageing" style="margin-bottom:20px">
+      <el-pagination
+        v-if="listData.totalCount > 0"
+        background
+        layout="total, slot, sizes, prev, pager, next"
+        :current-page="listData.pageIndex"
+        :total="listData.totalCount"
+        :page-count="listData.totalPages"
+        :page-size="listData.pageSize"
+        :page-sizes="[10,20,50]"
+        @current-change="changePage"
+        @size-change="changeSize"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -82,7 +96,7 @@ import { formatDateTime } from "@/utlis/index";
 export default {
   props: {
     listData: {
-      type: Array
+      type: Object
     }
   },
   data() {
@@ -91,6 +105,12 @@ export default {
   methods: {
     editItem(row) {
       this.$emit("editItem", row);
+    },
+    changePage(page) {
+      this.$emit("changePage", page);
+    },
+    changeSize(size) {
+      this.$emit("changeSize", size);
     },
     //改变排序
     sortChange(row) {

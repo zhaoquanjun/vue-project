@@ -66,13 +66,15 @@
       </div>
       <div>
         <List
-          :listData="templateInfo"
+          :listData="templateData"
           ref="list"
           @setting="setting"
           @update="update"
           @deleteControl="deleteControl"
           @selectBatchUpdate="selectBatchUpdate"
           @orderList="orderList"
+          @changePage="changePage"
+          @changeSize="changeSize"
         ></List>
       </div>
       <settingDialog @getList="getList" ref="settingDialog"></settingDialog>
@@ -112,7 +114,10 @@ export default {
           label: "下架"
         }
       ],
-      templateInfo: []
+      templateInfo: [],
+      templateData: {},
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   components: {
@@ -120,7 +125,6 @@ export default {
     SettingDialog
   },
   mounted() {
-    this.getList();
     this.getFirstType();
   },
   methods: {
@@ -160,6 +164,43 @@ export default {
       let { data } = await templateApi.getCombinedControls(para);
       this.$Loading.hide();
       this.templateInfo = data;
+      this.templateData = this.pagination(data, this.pageIndex, this.pageSize);
+    },
+    pagination(data, pageIndex, pageSize) {
+      let templateData = {};
+      templateData.pageIndex = pageIndex;
+      templateData.totalCount = data.length;
+      templateData.totalPages = 10;
+      templateData.pageSize = pageSize;
+      let newData = this.slicePageData(data, pageSize);
+      templateData.curData = newData[pageIndex - 1];
+      return templateData;
+    },
+    changePage(page) {
+      this.pageIndex = page;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    changeSize(size) {
+      this.pageSize = size;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    slicePageData(array, size) {
+      let length = array.length;
+      let index = 0;
+      let resIndex = 0;
+      let result = new Array(Math.ceil(length / size));
+      while (index < length) {
+        result[resIndex++] = array.slice(index, (index += size));
+      }
+      return result;
     },
     async getFirstType() {
       let { data } = await categoryApi.getDropDownList();
@@ -183,7 +224,7 @@ export default {
     blurPhone() {},
     createTemplatedialogShow() {
       this.$router.push({
-        path: "/template/composetemplate"
+        path: "/template/controlmanege/combinedcontrol"
       });
     },
     setting(row) {

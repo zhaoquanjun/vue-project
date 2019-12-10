@@ -31,7 +31,13 @@
         <button class="cl-button cl-button--primary_notbg cl-button--small" @click="searchReset">重置</button>
       </div>
       <div>
-        <List :listData="templateInfo" @orderList="orderList" ref="list"></List>
+        <List
+          :listData="templateData"
+          @orderList="orderList"
+          @changePage="changePage"
+          @changeSize="changeSize"
+          ref="list"
+        ></List>
       </div>
       <el-dialog
         width="0"
@@ -145,14 +151,14 @@ export default {
       errorPhone: "",
       createTemplateName: "",
       createRemark: "",
-      templateInfo: []
+      templateInfo: [],
+      templateData: {},
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   components: {
     List
-  },
-  mounted() {
-    this.getList();
   },
   methods: {
     async getList() {
@@ -192,6 +198,43 @@ export default {
       let { data } = await templateApi.getComposeTemplates(para);
       this.$Loading.hide();
       this.templateInfo = data;
+      this.templateData = this.pagination(data, this.pageIndex, this.pageSize);
+    },
+    pagination(data, pageIndex, pageSize) {
+      let templateData = {};
+      templateData.pageIndex = pageIndex;
+      templateData.totalCount = data.length;
+      templateData.totalPages = 10;
+      templateData.pageSize = pageSize;
+      let newData = this.slicePageData(data, pageSize);
+      templateData.curData = newData[pageIndex - 1];
+      return templateData;
+    },
+    changePage(page) {
+      this.pageIndex = page;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    changeSize(size) {
+      this.pageSize = size;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    slicePageData(array, size) {
+      let length = array.length;
+      let index = 0;
+      let resIndex = 0;
+      let result = new Array(Math.ceil(length / size));
+      while (index < length) {
+        result[resIndex++] = array.slice(index, (index += size));
+      }
+      return result;
     },
     searchList() {
       this.getList();
