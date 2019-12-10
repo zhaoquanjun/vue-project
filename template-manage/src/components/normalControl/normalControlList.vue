@@ -46,11 +46,11 @@
           <div>{{scope.row.rowShowNumber}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="使用量" min-width="100">
+      <!-- <el-table-column label="使用量" min-width="100">
         <template slot-scope="scope">
           <div>{{scope.row.useCount}}</div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="创建时间" prop="createTime" sortable="custom" min-width="150">
         <template slot-scope="scope">
           <div>{{ _formatDateTime(scope.row.createTime, "yyyy/MM/dd hh:mm") }}</div>
