@@ -2,13 +2,16 @@
   <el-container>
     <div class="breadcrumbWrap">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/template/composetemplate' }">控件模板</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/template/controlmanege/combinedcontrol' }">控件模板</el-breadcrumb-item>
         <el-breadcrumb-item>控件管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <el-header class="templateTitle" style="height:50px">
       <span class="titleText">控件模板</span>
-      <button class="cl-button cl-button--primary" @click="createTemplatedialogShow">返回</button>
+      <div>
+        <button class="cl-button cl-button--primary" @click="refresh">菜单更新</button>
+        <button class="cl-button cl-button--primary_notbg" @click="createTemplatedialogShow">返回</button>
+      </div>
     </el-header>
     <el-main class="contentWrap">
       <div class="templateName">模板名称：{{templateName}}</div>
@@ -210,6 +213,31 @@ export default {
       let { data } = await categoryApi.getDropDownList(this.firstTypeValue);
       this.secondTypeValue = "";
       this.secondTypeOptions = data;
+    },
+    async refresh() {
+      this.$confirm(`确定要更新菜单吗？`, "提示", {
+        iconClass: "icon-warning",
+        callback: async action => {
+          if (action === "confirm") {
+            let { data, status } = await categoryApi.refresh();
+            if (status === 200) {
+              this.$notify({
+                customClass: "notify-success",
+                message: `更新成功`,
+                duration: 2000,
+                showClose: false
+              });
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 2000,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
     },
     searchList() {
       this.getList();

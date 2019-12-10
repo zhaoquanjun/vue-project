@@ -283,6 +283,7 @@ export default {
       this.settingType = "";
       this.errorSettingTypeTips = false;
       this.settingStyle = "style1";
+      this.errorSettingStyleTips = false;
       this.settingHtml = "";
     },
     blurTemplateName() {

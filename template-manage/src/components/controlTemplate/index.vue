@@ -73,8 +73,10 @@
                 v-model="createTemplateName"
                 placeholder="请输入模板名称"
                 style="width:275px"
+                @blur="blurName"
                 maxlength="20"
               ></el-input>
+              <div class="ym-form-item__error" v-show="errorNameTip">请输入模板名称</div>
             </div>
             <div class="inputWrap">
               <span class="inputTitle">备注</span>
@@ -150,6 +152,7 @@ export default {
       errorTip: false,
       errorPhone: "",
       createTemplateName: "",
+      errorNameTip: false,
       createRemark: "",
       templateInfo: [],
       templateData: {},
@@ -257,6 +260,13 @@ export default {
         this.errorPhone = "";
       }
     },
+    blurName() {
+      if (this.createTemplateName == "") {
+        this.errorNameTip = true;
+      } else {
+        this.errorNameTip = false;
+      }
+    },
     clearInfo() {
       this.createPhone = "";
       this.errorTip = false;
@@ -279,6 +289,10 @@ export default {
       } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.createPhone)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
+        return;
+      }
+      if (this.createTemplateName == "") {
+        this.errorNameTip = true;
         return;
       }
       this.createTemplateShow = false;
