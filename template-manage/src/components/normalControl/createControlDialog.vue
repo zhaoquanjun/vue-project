@@ -7,7 +7,7 @@
   >
     <div class="right-pannel" :style="{width:'400px'}">
       <div class="pannel-head">
-        <span class="headText">新增控件</span>
+        <span class="headText">{{isEdit?"编辑控件":"新增控件"}}</span>
         <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelSettingTemplate"></i>
       </div>
       <!-- :style="{height:dialogHeight+'px'}" -->
@@ -16,7 +16,7 @@
           <div class="contentItem-title">控件名称</div>
           <el-input
             v-model="settingTemplateName"
-            placeholder="请输入模版名称"
+            placeholder="请输入控件名称"
             class="contentItem-input"
             @blur="blurTemplateName"
           ></el-input>
@@ -55,7 +55,7 @@
         </div>
         <div class="contentItem">
           <div class="contentItem-title">控件状态</div>
-          <el-select v-model="settingTemplateStatus" placeholder="模版状态" class="contentItem-input">
+          <el-select v-model="settingTemplateStatus" placeholder="控件状态" class="contentItem-input">
             <el-option
               v-for="item in settingTemplateStatusOptions"
               :key="item.value"
@@ -106,14 +106,20 @@
             <el-input
               v-model="settingType"
               @blur="blurSettingType"
-              placeholder="请输入模版名称"
+              placeholder="请输入控件类型"
               class="contentItem-input"
             ></el-input>
             <div class="ym-form-item__error" v-show="errorSettingTypeTips">请输入控件类型</div>
           </div>
           <div class="contentItem">
             <div class="contentItem-title">样式</div>
-            <el-input v-model="settingStyle" placeholder="请输入模版名称" class="contentItem-input"></el-input>
+            <el-input
+              v-model="settingStyle"
+              @blur="blurSettingStyle"
+              placeholder="请输入控件样式"
+              class="contentItem-input"
+            ></el-input>
+            <div class="ym-form-item__error" v-show="errorSettingStyleTips">请输入控件样式</div>
           </div>
           <div class="contentItem">
             <div class="contentItem-title">Html</div>
@@ -121,7 +127,7 @@
               v-model="settingHtml"
               type="textarea"
               :rows="3"
-              placeholder="请输入内容"
+              placeholder="请输入html（选填）"
               style="vertical-align: text-top;"
               class="contentItem-input"
             ></el-input>
@@ -163,7 +169,7 @@ export default {
       settingSecondTypeSelect: "",
       errorFirstTypeTips: false,
       settingSecondTypeOptions: [],
-      settingTemplateStatus: 2,
+      settingTemplateStatus: 1,
       settingTemplateStatusOptions: [
         {
           value: 1,
@@ -178,7 +184,7 @@ export default {
       rowNum: 1,
       picUrl: "",
       errorPicTips: false,
-      uploadPicAction: `${environment.uploadComposeUrl}`,
+      uploadPicAction: `${environment.uploadNormalUrl}`,
       headers: {
         appId: "",
         Authorization: ""
@@ -186,6 +192,7 @@ export default {
       settingType: "",
       errorSettingTypeTips: false,
       settingStyle: "style1",
+      errorSettingStyleTips: false,
       settingHtml: ""
     };
   },
@@ -236,6 +243,10 @@ export default {
         this.errorSettingTypeTips = true;
         return;
       }
+      if (this.settingStyle == "") {
+        this.errorSettingStyleTips = true;
+        return;
+      }
       let para = {
         controlName: this.settingTemplateName,
         firstType: this.settingFirstTypeSelect,
@@ -272,6 +283,7 @@ export default {
       this.settingType = "";
       this.errorSettingTypeTips = false;
       this.settingStyle = "style1";
+      this.errorSettingStyleTips = false;
       this.settingHtml = "";
     },
     blurTemplateName() {
@@ -286,6 +298,13 @@ export default {
         this.errorSettingTypeTips = true;
       } else {
         this.errorSettingTypeTips = false;
+      }
+    },
+    blurSettingStyle() {
+      if (this.settingStyle == "") {
+        this.errorSettingStyleTips = true;
+      } else {
+        this.errorSettingStyleTips = false;
       }
     },
     async choseSettingFirstType() {
@@ -443,7 +462,7 @@ export default {
             width: 250px;
             height: 140px;
             display: block;
-            object-fit: cover;
+            object-fit: contain;
           }
           .upload-btn {
             display: none;

@@ -2,13 +2,16 @@
   <el-container>
     <div class="breadcrumbWrap">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/template/composetemplate' }">控件模板</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/template/controlmanege/combinedcontrol' }">控件模板</el-breadcrumb-item>
         <el-breadcrumb-item>控件管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <el-header class="templateTitle" style="height:50px">
       <span class="titleText">控件模板</span>
-      <button class="cl-button cl-button--primary" @click="createTemplatedialogShow">返回</button>
+      <div>
+        <button class="cl-button cl-button--primary" @click="refresh">菜单更新</button>
+        <button class="cl-button cl-button--primary_notbg" @click="createTemplatedialogShow">返回</button>
+      </div>
     </el-header>
     <el-main class="contentWrap">
       <div class="templateName">模板名称：{{templateName}}</div>
@@ -66,13 +69,15 @@
       </div>
       <div>
         <List
-          :listData="templateInfo"
+          :listData="templateData"
           ref="list"
           @setting="setting"
           @update="update"
           @deleteControl="deleteControl"
           @selectBatchUpdate="selectBatchUpdate"
           @orderList="orderList"
+          @changePage="changePage"
+          @changeSize="changeSize"
         ></List>
       </div>
       <settingDialog @getList="getList" ref="settingDialog"></settingDialog>
@@ -112,7 +117,10 @@ export default {
           label: "下架"
         }
       ],
-      templateInfo: []
+      templateInfo: [],
+      templateData: {},
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   components: {
@@ -120,7 +128,6 @@ export default {
     SettingDialog
   },
   mounted() {
-    this.getList();
     this.getFirstType();
   },
   methods: {
@@ -160,6 +167,43 @@ export default {
       let { data } = await templateApi.getCombinedControls(para);
       this.$Loading.hide();
       this.templateInfo = data;
+      this.templateData = this.pagination(data, this.pageIndex, this.pageSize);
+    },
+    pagination(data, pageIndex, pageSize) {
+      let templateData = {};
+      templateData.pageIndex = pageIndex;
+      templateData.totalCount = data.length;
+      templateData.totalPages = 10;
+      templateData.pageSize = pageSize;
+      let newData = this.slicePageData(data, pageSize);
+      templateData.curData = newData[pageIndex - 1];
+      return templateData;
+    },
+    changePage(page) {
+      this.pageIndex = page;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    changeSize(size) {
+      this.pageSize = size;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    slicePageData(array, size) {
+      let length = array.length;
+      let index = 0;
+      let resIndex = 0;
+      let result = new Array(Math.ceil(length / size));
+      while (index < length) {
+        result[resIndex++] = array.slice(index, (index += size));
+      }
+      return result;
     },
     async getFirstType() {
       let { data } = await categoryApi.getDropDownList();
@@ -169,6 +213,31 @@ export default {
       let { data } = await categoryApi.getDropDownList(this.firstTypeValue);
       this.secondTypeValue = "";
       this.secondTypeOptions = data;
+    },
+    async refresh() {
+      this.$confirm(`确定要更新菜单吗？`, "提示", {
+        iconClass: "icon-warning",
+        callback: async action => {
+          if (action === "confirm") {
+            let { data, status } = await categoryApi.refresh();
+            if (status === 200) {
+              this.$notify({
+                customClass: "notify-success",
+                message: `更新成功`,
+                duration: 2000,
+                showClose: false
+              });
+            } else {
+              this.$notify({
+                customClass: "notify-error",
+                message: "系统正忙，请稍后再试！",
+                duration: 2000,
+                showClose: false
+              });
+            }
+          }
+        }
+      });
     },
     searchList() {
       this.getList();
@@ -183,7 +252,7 @@ export default {
     blurPhone() {},
     createTemplatedialogShow() {
       this.$router.push({
-        path: "/template/composetemplate"
+        path: "/template/controlmanege/combinedcontrol"
       });
     },
     setting(row) {

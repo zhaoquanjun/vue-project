@@ -5,6 +5,10 @@ import environment from "@/environment/index";
 export const getComposeTemplates = (para) => {
     return ajaxRequest.get(`${environment.templateApi}/api/v1/CombinedControl/GetComposeTemplates`, para);
 }
+// 修改控件模板名称
+export const updateTemplateName = (para) => {
+    return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/UpdateTemplateName`, para);
+}
 // 开通控件模板
 export const createComposeTemplate = (para) => {
     return ajaxRequest.post(`${environment.templateApi}/api/v1/CombinedControl/CreateComposeTemplate`, para);

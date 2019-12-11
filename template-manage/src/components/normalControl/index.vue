@@ -65,10 +65,12 @@
       </div>
       <div>
         <List
-          :listData="templateInfo"
+          :listData="templateData"
           @editItem="editItem"
           @deleteItem="deleteItem"
           @orderList="orderList"
+          @changePage="changePage"
+          @changeSize="changeSize"
           ref="list"
         ></List>
       </div>
@@ -110,7 +112,10 @@ export default {
           label: "下架"
         }
       ],
-      templateInfo: []
+      templateInfo: [],
+      templateData: {},
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   components: {
@@ -118,7 +123,6 @@ export default {
     CreateControlDialog
   },
   mounted() {
-    this.getList();
     this.getFirstType();
   },
   methods: {
@@ -149,6 +153,44 @@ export default {
       let { data } = await templateApi.getNormalControls(para);
       this.$Loading.hide();
       this.templateInfo = data;
+      this.templateData = this.pagination(data, this.pageIndex, this.pageSize);
+      console.log(this.templateData);
+    },
+    pagination(data, pageIndex, pageSize) {
+      let templateData = {};
+      templateData.pageIndex = pageIndex;
+      templateData.totalCount = data.length;
+      templateData.totalPages = 10;
+      templateData.pageSize = pageSize;
+      let newData = this.slicePageData(data, pageSize);
+      templateData.curData = newData[pageIndex - 1];
+      return templateData;
+    },
+    changePage(page) {
+      this.pageIndex = page;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    changeSize(size) {
+      this.pageSize = size;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    slicePageData(array, size) {
+      let length = array.length;
+      let index = 0;
+      let resIndex = 0;
+      let result = new Array(Math.ceil(length / size));
+      while (index < length) {
+        result[resIndex++] = array.slice(index, (index += size));
+      }
+      return result;
     },
     async getFirstType() {
       let { data } = await categoryApi.getDropDownList();

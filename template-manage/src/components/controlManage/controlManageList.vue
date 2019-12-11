@@ -2,7 +2,7 @@
   <div class="table-list" id="table-list">
     <el-table
       ref="multipleTable"
-      :data="listData"
+      :data="listData.curData"
       tooltip-effect="dark"
       :row-style="{height:'130px'}"
       class="content-table"
@@ -21,7 +21,7 @@
         <template slot-scope="scope">
           <div class="siteImg">
             <div class="enabled" v-show="!scope.row.isEnabled">已失效</div>
-            <img :src="scope.row.controlImg" style="width:100%;height:100%;object-fit:cover;" />
+            <img :src="scope.row.controlImg" style="width:100%;height:100%;object-fit:contain;" />
           </div>
         </template>
       </el-table-column>
@@ -91,28 +91,20 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div class="list-footer" v-show="listData.totalRecord > 0">
-      <div
-        class="cl-pagination pageing"
-        id="pageing"
-        :class="{'noJumper':listData.totalPage <= 10}"
-      >
-        <slot name="paging"></slot>
-        <el-pagination
-          v-if="listData.totalRecord > 0"
-          background
-          :layout="listData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
-          :total="listData.totalRecord"
-          :page-size="listData.pageSize"
-          :page-sizes="[10,20,50]"
-          @current-change="changePage"
-          @size-change="changeSize"
-        >
-          <div class="sizes-title">，每页显示</div>
-          <button v-if="listData.totalPage > 10" class="paging-confirm">跳转</button>
-        </el-pagination>
-      </div>
-    </div>-->
+    <div class="cl-pagination pageing" id="pageing" style="margin-bottom:20px">
+      <el-pagination
+        v-if="listData.totalCount > 0"
+        background
+        layout="total, slot, sizes, prev, pager, next"
+        :current-page="listData.pageIndex"
+        :total="listData.totalCount"
+        :page-count="listData.totalPages"
+        :page-size="listData.pageSize"
+        :page-sizes="[10,20,50]"
+        @current-change="changePage"
+        @size-change="changeSize"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -121,13 +113,19 @@ import { formatDateTime } from "@/utlis/index";
 export default {
   props: {
     listData: {
-      type: Array
+      type: Object
     }
   },
   data() {
     return {};
   },
   methods: {
+    changePage(page) {
+      this.$emit("changePage", page);
+    },
+    changeSize(size) {
+      this.$emit("changeSize", size);
+    },
     // 更多操作下拉菜单
     handleMore(command, row) {
       if (command == "setting") {

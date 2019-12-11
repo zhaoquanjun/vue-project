@@ -2,7 +2,7 @@
   <div class="table-list" id="table-list">
     <el-table
       ref="multipleTable"
-      :data="listData"
+      :data="listData.curData"
       tooltip-effect="dark"
       @sort-change="sortChange"
       class="content-table"
@@ -17,7 +17,41 @@
       </template>
       <el-table-column prop="templateName" label="模板名称" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
-          <div class="overflow">{{scope.row.templateName}}</div>
+          <div class="overflow">
+            {{scope.row.templateName}}
+            <el-popover
+              :ref="`popoverName-${scope.row.siteId}`"
+              placement="bottom"
+              width="200"
+              trigger="click"
+              style="padding:0;display:inline-block;overflow:visible;"
+              @show="showName(scope.row)"
+            >
+              <i v-show="scope.row.siteId" slot="reference" class="iconfont iconicon-dash-edit"></i>
+              <div class="textareaWrap">
+                <el-input
+                  type="textarea"
+                  :autosize="{ minRows: 3, maxRows: 3}"
+                  placeholder="请输入内容"
+                  v-model="nameText"
+                  maxlength="20"
+                  show-word-limit
+                  resize="none"
+                ></el-input>
+                <div class="btn-wrap">
+                  <button
+                    class="cl-button cl-button--primary_notbg cl-button--small"
+                    slot="refenrence"
+                    @click="cancelName(scope.row.siteId)"
+                  >取消</button>
+                  <button
+                    class="cl-button cl-button--primary cl-button--small"
+                    @click="saveNameValue(scope.row, scope.row.siteId)"
+                  >保存</button>
+                </div>
+              </div>
+            </el-popover>
+          </div>
         </template>
       </el-table-column>
       <el-table-column prop="pagePath" label="模板数量（上架/全部）" show-overflow-tooltip min-width="150">
@@ -28,11 +62,6 @@
       <el-table-column prop="createTime" label="开通时间" sortable="custom" min-width="200">
         <template slot-scope="scope">
           <div>{{ _formatDateTime(scope.row.createTime, "yyyy/MM/dd hh:mm") }}</div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" sortable="custom" min-width="200">
-        <template slot-scope="scope">
-          <div>{{ _formatDateTime(scope.row.updateTime, "yyyy/MM/dd hh:mm") }}</div>
         </template>
       </el-table-column>
       <el-table-column label="模板状态" min-width="100">
@@ -92,77 +121,81 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div class="list-footer" v-show="listData.totalRecord > 0">
-      <div
-        class="cl-pagination pageing"
-        id="pageing"
-        :class="{'noJumper':listData.totalPage <= 10}"
-      >
-        <slot name="paging"></slot>
-        <el-pagination
-          v-if="listData.totalRecord > 0"
-          background
-          :layout="listData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
-          :total="listData.totalRecord"
-          :page-size="listData.pageSize"
-          :page-sizes="[10,20,50]"
-          @current-change="changePage"
-          @size-change="changeSize"
-        >
-          <div class="sizes-title">，每页显示</div>
-          <button v-if="listData.totalPage > 10" class="paging-confirm">跳转</button>
-        </el-pagination>
-      </div>
-    </div>-->
+    <div class="cl-pagination pageing" id="pageing" style="margin-bottom:20px">
+      <el-pagination
+        v-if="listData.totalCount > 0"
+        background
+        layout="total, slot, sizes, prev, pager, next"
+        :current-page="listData.pageIndex"
+        :total="listData.totalCount"
+        :page-count="listData.totalPages"
+        :page-size="listData.pageSize"
+        :page-sizes="[10,20,50]"
+        @current-change="changePage"
+        @size-change="changeSize"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
 import { formatDateTime } from "@/utlis/index";
 import * as templateApi from "@/api/request/templateApi";
+import * as controlApi from "@/api/request/controlTemplateApi";
 export default {
   props: {
     listData: {
-      type: Array
+      type: Object
     }
   },
   data() {
     return {
       isRemarkShowId: "",
+      nameText: "",
       remarkText: ""
     };
   },
   methods: {
-    // 单选或全选操作
-    // handleSelectionChange(list) {
-    //   this.$emit("handleSelectionChange", list);
-    // },
-    // cancelSelect() {
-    //   this.$refs.multipleTable.clearSelection();
-    // },
-    // chosePriority(row) {
-    //   let para = {
-    //     idList: [row.id],
-    //     priority: row.priority
-    //   };
-    //   this.$emit("update", para);
-    // },
-    // chosefrequency(row) {
-    //   let para = {
-    //     idList: [row.id],
-    //     frequency: row.frequencyStr
-    //   };
-    //   this.$emit("update", para);
-    // },
-    // remove(row) {
-    //   this.$emit("remove", [row.id]);
-    // },
-    // changePage(page) {
-    //   this.$emit("chagePage", page);
-    // },
-    // changeSize(size) {
-    //   this.$emit("changeSize", size);
-    // }
+    changePage(page) {
+      this.$emit("changePage", page);
+    },
+    changeSize(size) {
+      this.$emit("changeSize", size);
+    },
+    // 修改名称
+    showName(row) {
+      this.nameText = row.templateName;
+    },
+    // 取消修改名称
+    cancelName(siteId) {
+      this.$refs[`popoverName-${siteId}`].doClose();
+      this.nameText = "";
+    },
+    //修改名称确认
+    async saveNameValue(row, siteId) {
+      this.$refs[`popoverName-${siteId}`].doClose();
+      let para = {
+        id: row.siteId,
+        templateName: this.nameText
+      };
+      let { status } = await controlApi.updateTemplateName(para);
+      if (status == 200) {
+        row.templateName = this.nameText;
+        this.$notify({
+          customClass: "notify-success",
+          message: `保存成功`,
+          duration: 1500,
+          showClose: false
+        });
+      } else {
+        this.$notify({
+          customClass: "notify-error",
+          message: `保存失败`,
+          duration: 1500,
+          showClose: false
+        });
+      }
+    },
     // 修改备注 弹窗
     showRemark(row) {
       this.remarkText = row.remark;
@@ -205,7 +238,7 @@ export default {
         return;
       }
       this.$router.push({
-        path: "/template/composemanage",
+        path: "/template/controlmanege/composemanage",
         query: {
           siteId: row.siteId,
           templateName: row.templateName
@@ -247,6 +280,11 @@ export default {
   .btn-wrap {
     text-align: right;
     padding-top: 16px;
+  }
+}
+.iconicon-dash-edit {
+  &:hover {
+    color: $--color-primary;
   }
 }
 </style>

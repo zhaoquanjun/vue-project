@@ -31,7 +31,13 @@
         <button class="cl-button cl-button--primary_notbg cl-button--small" @click="searchReset">重置</button>
       </div>
       <div>
-        <List :listData="templateInfo" @orderList="orderList" ref="list"></List>
+        <List
+          :listData="templateData"
+          @orderList="orderList"
+          @changePage="changePage"
+          @changeSize="changeSize"
+          ref="list"
+        ></List>
       </div>
       <el-dialog
         width="0"
@@ -51,10 +57,12 @@
           <div class="dialogContent">
             <div class="tips">开通【控件模板应用】服务，填写的手机号将是模板的管理员</div>
             <div class="inputWrap">
-              <div class="inputTitle">管理员</div>
+              <div class="inputTitle">
+                <span style="color:#FB4D68;margin-right:4px">*</span>管理员
+              </div>
               <el-input
                 v-model="createPhone"
-                placeholder="请输入手机号"
+                placeholder="请输入管理员手机号"
                 style="width:275px"
                 @blur="blurPhone"
                 :maxlength="11"
@@ -62,13 +70,17 @@
               <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
             </div>
             <div class="inputWrap">
-              <div class="inputTitle">模板名称</div>
+              <div class="inputTitle">
+                <span style="color:#FB4D68;margin-right:4px">*</span>模板名称
+              </div>
               <el-input
                 v-model="createTemplateName"
                 placeholder="请输入模板名称"
                 style="width:275px"
+                @blur="blurName"
                 maxlength="20"
               ></el-input>
+              <div class="ym-form-item__error" v-show="errorNameTip">请输入模板名称</div>
             </div>
             <div class="inputWrap">
               <span class="inputTitle">备注</span>
@@ -144,15 +156,16 @@ export default {
       errorTip: false,
       errorPhone: "",
       createTemplateName: "",
+      errorNameTip: false,
       createRemark: "",
-      templateInfo: []
+      templateInfo: [],
+      templateData: {},
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   components: {
     List
-  },
-  mounted() {
-    this.getList();
   },
   methods: {
     async getList() {
@@ -192,6 +205,43 @@ export default {
       let { data } = await templateApi.getComposeTemplates(para);
       this.$Loading.hide();
       this.templateInfo = data;
+      this.templateData = this.pagination(data, this.pageIndex, this.pageSize);
+    },
+    pagination(data, pageIndex, pageSize) {
+      let templateData = {};
+      templateData.pageIndex = pageIndex;
+      templateData.totalCount = data.length;
+      templateData.totalPages = 10;
+      templateData.pageSize = pageSize;
+      let newData = this.slicePageData(data, pageSize);
+      templateData.curData = newData[pageIndex - 1];
+      return templateData;
+    },
+    changePage(page) {
+      this.pageIndex = page;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    changeSize(size) {
+      this.pageSize = size;
+      this.templateData = this.pagination(
+        this.templateInfo,
+        this.pageIndex,
+        this.pageSize
+      );
+    },
+    slicePageData(array, size) {
+      let length = array.length;
+      let index = 0;
+      let resIndex = 0;
+      let result = new Array(Math.ceil(length / size));
+      while (index < length) {
+        result[resIndex++] = array.slice(index, (index += size));
+      }
+      return result;
     },
     searchList() {
       this.getList();
@@ -212,6 +262,13 @@ export default {
       } else {
         this.errorTip = false;
         this.errorPhone = "";
+      }
+    },
+    blurName() {
+      if (this.createTemplateName == "") {
+        this.errorNameTip = true;
+      } else {
+        this.errorNameTip = false;
       }
     },
     clearInfo() {
@@ -236,6 +293,10 @@ export default {
       } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.createPhone)) {
         this.errorTip = true;
         this.errorPhone = "您输入的手机号格式有误，请重新输入";
+        return;
+      }
+      if (this.createTemplateName == "") {
+        this.errorNameTip = true;
         return;
       }
       this.createTemplateShow = false;
