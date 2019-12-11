@@ -275,7 +275,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.el-tree /deep/ .is-current > .el-tree-node__content {
+    background: $--background-color-selected;
+    border-left: 3px solid $--color-primary;
+}
 .popup-content__area {
   width: 590px;
   height: 92%;

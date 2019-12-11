@@ -12,7 +12,7 @@
       <div class="content-main__slider">
         <el-tree
           :data="treeArray"
-          node-key="id"
+          node-key="id" 
           :default-expanded-keys="defaultExpandedKeys"
           @node-click="_handleNodeClick"
         ></el-tree>
@@ -94,6 +94,7 @@
           <li 
             v-for="(item,index) in productPageList" 
             :key="index"
+            node-key="id"
             :class="{active: pageActiveIndex == index}"
             @click="selectPage(index)"
           >
@@ -280,6 +281,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-tree /deep/ .is-current > .el-tree-node__content {
+    background: $--background-color-selected;
+    border-left: 3px solid $--color-primary;
+}
 .popup-content__area {
   width: 590px;
   height: 100%;

@@ -3,7 +3,7 @@
     <div class="link-popup__section">
       <div class="popup-header__area">
         <span>{{linkTitle}}</span>
-        <span @click.stop="_handleCancle"></span>
+        <span class="cl-iconfont is-circle" @click.stop="_handleCancle"></span>
       </div>
       <div class="popup-content__box">
         <ul class="popup-content__slider">
@@ -290,12 +290,16 @@ export default {
         font-size: $--font-size-small;
       }
       span:last-of-type {
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
         background: url("~img/link/close.png") no-repeat center
           center;
-        background-size: 100% 100%;
+        background-size: 40% 40%;
         cursor: pointer;
+        &:hover {
+            background-color: $--icon-hover-color;
+            border-radius: $--border-radius-circle;
+        }
       }
     }
     .popup-content__box {
