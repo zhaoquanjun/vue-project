@@ -63,7 +63,7 @@
               <el-input
                 v-model="createPhone"
                 placeholder="请输入管理员手机号"
-                style="width:275px"
+                class="input"
                 @blur="blurPhone"
                 :maxlength="11"
               ></el-input>
@@ -76,7 +76,7 @@
               <el-input
                 v-model="createTemplateName"
                 placeholder="请输入模板名称"
-                style="width:275px"
+                class="input"
                 @blur="blurName"
                 maxlength="20"
               ></el-input>
@@ -84,12 +84,7 @@
             </div>
             <div class="inputWrap">
               <span class="inputTitle">备注</span>
-              <el-input
-                v-model="createRemark"
-                placeholder="请输入备注信息"
-                style="width:275px"
-                maxlength="40"
-              ></el-input>
+              <el-input v-model="createRemark" placeholder="请输入备注信息" class="input" maxlength="40"></el-input>
             </div>
           </div>
 
@@ -405,7 +400,7 @@ export default {
       width: 100%;
       .inputTitle {
         display: inline-block;
-        width: 75px;
+        width: 82px;
         text-align: right;
         padding-right: 16px;
         box-sizing: border-box;
@@ -413,8 +408,11 @@ export default {
         font-weight: $--font-weight-base;
         color: $--color-text-primary;
       }
+      .input {
+        width: 268px;
+      }
       .ym-form-item__error {
-        margin-left: 75px;
+        margin-left: 82px;
       }
     }
   }
