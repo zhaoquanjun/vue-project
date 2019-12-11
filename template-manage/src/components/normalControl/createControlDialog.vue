@@ -7,7 +7,7 @@
   >
     <div class="right-pannel" :style="{width:'400px'}">
       <div class="pannel-head">
-        <span class="headText">新增控件</span>
+        <span class="headText">{{isEdit?"编辑控件":"新增控件"}}</span>
         <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelSettingTemplate"></i>
       </div>
       <!-- :style="{height:dialogHeight+'px'}" -->
@@ -169,7 +169,7 @@ export default {
       settingSecondTypeSelect: "",
       errorFirstTypeTips: false,
       settingSecondTypeOptions: [],
-      settingTemplateStatus: 2,
+      settingTemplateStatus: 1,
       settingTemplateStatusOptions: [
         {
           value: 1,
@@ -184,7 +184,7 @@ export default {
       rowNum: 1,
       picUrl: "",
       errorPicTips: false,
-      uploadPicAction: `${environment.uploadComposeUrl}`,
+      uploadPicAction: `${environment.uploadNormalUrl}`,
       headers: {
         appId: "",
         Authorization: ""

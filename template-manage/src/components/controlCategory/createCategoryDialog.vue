@@ -7,7 +7,7 @@
   >
     <div class="right-pannel" :style="{width:'400px'}">
       <div class="pannel-head">
-        <span class="headText">控件设置</span>
+        <span class="headText">{{isEdit?"编辑分类":"新增分类"}}</span>
         <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelSettingTemplate"></i>
       </div>
       <!-- :style="{height:dialogHeight+'px'}" -->
@@ -51,23 +51,22 @@
         </div>
         <div class="contentItem" v-show="rowNum == 'first'">
           <div class="contentItem-title">常态图标</div>
-          <el-input
-            v-model="settingNormalIcon"
-            placeholder="请输入常态图标SVG"
-            class="contentItem-input"
-            @blur="blurNormalIcon"
-          ></el-input>
-          <div class="ym-form-item__error" v-show="errorNormalIconTips">请输入常态图标SVG</div>
-        </div>
-        <div class="contentItem" v-show="rowNum == 'first'">
-          <div class="contentItem-title">悬停图标</div>
-          <el-input
-            v-model="settingHoverIcon"
-            placeholder="请输入悬停图标SVG"
-            class="contentItem-input"
-            @blur="blurHoverIcon"
-          ></el-input>
-          <div class="ym-form-item__error" v-show="errorHoverIconTips">请输入悬停图标SVG</div>
+          <div class="upload-wrap">
+            <el-upload
+              class="avatar-uploader"
+              :action="uploadPicAction"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+              :headers="headers"
+            >
+              <img v-if="picUrl" :src="picUrl" class="avatar" />
+              <img v-else src="~img/siteTemplate/defaultImg.png" class="avatar" />
+              <button class="upload-btn cl-button cl-button--primary">上传图片</button>
+            </el-upload>
+            <!-- <div class="tipInfoText">推荐尺寸250×140px</div> -->
+          </div>
+          <div class="ym-form-item__error" v-show="errorPicTips">请上传常态图标</div>
         </div>
       </div>
       <div class="confirm">
@@ -99,10 +98,13 @@ export default {
       settingParent: 1,
       settingParentOptions: [],
       settingArrangement: 1,
-      settingNormalIcon: "",
-      errorNormalIconTips: false,
-      settingHoverIcon: "",
-      errorHoverIconTips: false
+      picUrl: "",
+      errorPicTips: false,
+      uploadPicAction: `${environment.uploadCategoryUrl}`,
+      headers: {
+        appId: "",
+        Authorization: ""
+      }
     };
   },
   methods: {
@@ -122,8 +124,7 @@ export default {
         this.settingParent = row.parentId;
       } else {
         this.rowNum = "first";
-        this.settingNormalIcon = row.normalIcon;
-        this.settingHoverIcon = row.hoverIcon;
+        this.picUrl = row.normalIcon;
       }
       this.settingTemplateName = row.name;
       this.settingArrangement = row.displayOrder;
@@ -140,20 +141,15 @@ export default {
           this.errorTemplateNameTips = true;
           return;
         }
-        if (this.settingNormalIcon == "") {
-          this.errorNormalIconTips = true;
-          return;
-        }
-        if (this.settingHoverIcon == "") {
-          this.errorHoverIconTips = true;
+        if (this.picUrl == "") {
+          this.errorPicTips = true;
           return;
         }
         para = {
           parentId: "",
           name: this.settingTemplateName,
           displayOrder: this.settingArrangement,
-          normalIcon: this.settingNormalIcon,
-          hoverIcon: this.settingHoverIcon
+          normalIcon: this.picUrl
         };
       } else {
         if (this.settingTemplateName == "") {
@@ -180,10 +176,8 @@ export default {
       this.settingTemplateName = "";
       this.errorTemplateNameTips = false;
       this.settingArrangement = 1;
-      this.settingNormalIcon = "";
-      this.errorNormalIconTips = false;
-      this.settingHoverIcon = "";
-      this.errorHoverIconTips = false;
+      this.picUrl = "";
+      this.errorPicTips = false;
       this.settingParent = "";
     },
     blurTemplateName() {
@@ -193,19 +187,38 @@ export default {
         this.errorTemplateNameTips = false;
       }
     },
-    blurNormalIcon() {
-      if (this.settingNormalIcon == "") {
-        this.errorNormalIconTips = true;
-      } else {
-        this.errorNormalIconTips = false;
+    async beforeAvatarUpload(file) {
+      let data = await securityService.getUser();
+      this.headers.Authorization = "Bearer " + data.access_token;
+      this.headers.appId = this.$store.state.dashboard.appId;
+      const isPic =
+        ["image/png", "image/jpeg", "image/gif"].indexOf(file.type) !== -1;
+      const maxMb = 10;
+      const isSizeOk = file.size / 1024 / 1024 < maxMb;
+
+      if (!isPic) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `格式错误`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
       }
+      if (!isSizeOk) {
+        this.$notify({
+          customClass: "notify-error",
+          message: `请上传小于${maxMb}M的图片!`,
+          duration: 2000,
+          showClose: false
+        });
+        return false;
+      }
+      return isPic && isSizeOk;
     },
-    blurHoverIcon() {
-      if (this.settingHoverIcon == "") {
-        this.errorHoverIconTips = true;
-      } else {
-        this.errorHoverIconTips = false;
-      }
+    handleAvatarSuccess(res, file) {
+      this.errorPicTips = false;
+      this.picUrl = file.response;
     }
   }
 };

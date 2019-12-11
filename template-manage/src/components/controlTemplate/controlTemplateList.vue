@@ -212,6 +212,11 @@ export default {
     padding-top: 16px;
   }
 }
+.iconicon-dash-edit {
+  &:hover {
+    color: $--color-primary;
+  }
+}
 </style>
 
 

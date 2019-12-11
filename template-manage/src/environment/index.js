@@ -2,8 +2,8 @@
  *系统配置管理
  *
  */
-const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
-const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn' : 'clouddream.net';
+const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://' : 'https://';
 
 /**生产环境-- */
 let memberManageApi = `${httpSchema}api.content.${baseServerUrl}`;
@@ -11,6 +11,8 @@ let dashboardApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
 let templateApi = `${httpSchema}api.wezhanproduce.${baseServerUrl}`;
 let uploadPicUrl = `${httpSchema}api.content.${baseServerUrl}/api/v1/picture`;
 let uploadComposeUrl = `${httpSchema}api.content.${baseServerUrl}/api/v1/picture/UploadControlPic/compose`;
+let uploadNormalUrl = `${httpSchema}api.content.${baseServerUrl}/api/v1/picture/UploadControlPic/normal`;
+let uploadCategoryUrl = `${httpSchema}api.content.${baseServerUrl}/api/v1/picture/UploadControlPic/category`;
 let authorityUrl = `${httpSchema}login.${baseServerUrl}`;
 let redirectUrl = `${httpSchema}template.${baseServerUrl}/callback`;
 let logoutRedirectUri = `${httpSchema}template.${baseServerUrl}/index.html`;
@@ -35,6 +37,8 @@ if (process.env.NODE_ENV === `development`) {
     templateApi = `${httpSchema}api.wezhanproduce.console.wezhan.cn`
     uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture`;
     uploadComposeUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture/UploadControlPic/compose`;
+    uploadNormalUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture/UploadControlPic/normal`;
+    uploadCategoryUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture/UploadControlPic/category`;
     authorityUrl = `${httpSchema}login.console.wezhan.cn`;
     redirectUrl = `${httpSchema}localhost:8083/callback`;
     logoutRedirectUri = `${httpSchema}localhost:8083/index.html`;
@@ -51,6 +55,8 @@ const enbironmemy = {
     templateApi,
     uploadPicUrl,
     uploadComposeUrl,
+    uploadNormalUrl,
+    uploadCategoryUrl,
     silentRedirectUri,
     clientId,
     scope,
