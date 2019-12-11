@@ -432,6 +432,7 @@ export default {
         }
         .el-input-number__increase {
           line-height: 14px;
+          top: 2px;
           &:hover {
             color: $--color-primary;
           }
