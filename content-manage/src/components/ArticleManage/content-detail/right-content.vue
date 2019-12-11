@@ -16,7 +16,7 @@
                         </span>
                     </div>
                     <template v-else>
-                        <button @click="handlerAddPicture">
+                        <button style="width: 100%;" @click="handlerAddPicture">
                             <div class="el-upload">
                                 <i class="el-icon-plus avatar-uploader-icon"></i>
                                 <i class="avatar-text" style=" display: block;">添加图片</i>

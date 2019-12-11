@@ -20,8 +20,8 @@
             >
                 <div class="headline ellipsis">{{item.title}}</div>
                 <div class="imgwrap">
-                    <img :src="item.picUrl"
-                    />
+                    <img-size-auto :item="item.picUrl"></img-size-auto>
+                    <!-- <img :src="item.picUrl"/> -->
                 </div>
                 <div class="mask">
                     <button @click="upward(item,index)" v-if="index!==0">
@@ -44,7 +44,8 @@
                         class="headline ellipsis"
                     >{{curEditorItem.title?curEditorItem.title:defualtTitle}}</div>
                     <div class="imgwrap">
-                        <img :src="curEditorItem.picUrl"/>
+                        <img-size-auto :item="curEditorItem.picUrl"></img-size-auto>
+                        <!-- <img :src="curEditorItem.picUrl"/> -->
                     </div>
                 </div>
                 <div class="seting-info">
@@ -60,8 +61,8 @@
                             <div class="upload-icon" @click="setCover" v-if="!curEditorItem.picUrl">
                                 <span class="el-icon-plus"></span>
                             </div>
-                            <div  v-else>
-                                <img :src="curEditorItem.picUrl" />
+                            <div class="cover-img"  v-else>
+                                <img-size-auto :item="curEditorItem.picUrl"></img-size-auto>
                                 <div class="mask1">
                                     <button>
                                         <i class="iconfont iconqiehuanxingshiyi"></i>
@@ -116,11 +117,13 @@ import { trim, notify, transformationUrl } from "@/utlis/index.js";
 import PopUp from "@/components/wechat-account/defineMenu/link/popup.vue";
 import ImageManage from "_c/wechat-account/uploadChooseImage/selectUpload";
 import { uploadImg } from "@/api/request/account.js";
+import ImgSizeAuto from "@/base/ImgSizeAuto"
 export default {
     props: ["newsMsg","replyType"],
     components: {
         PopUp,
-        ImageManage
+        ImageManage,
+        ImgSizeAuto
     },
     data() {
         return {
@@ -342,10 +345,6 @@ export default {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            img {
-                width: 100%;
-                height: 100%;
-            }
         }
         .headline {
             position: absolute;
@@ -355,6 +354,8 @@ export default {
             padding: 8px 16px;
             background: rgba(38, 38, 38, 0.5);
             color: #fff;
+            box-sizing: border-box;
+            z-index: 10;
         }
     }
     li.list-item {
@@ -373,10 +374,6 @@ export default {
             width: 50px;
             height: 50px;
             overflow: hidden;
-            img {
-                width: 100%;
-                height: 100%;
-            }
         }
     }
     .mask {
@@ -473,7 +470,7 @@ export default {
                 border-radius: $--border-radius-base;
                 overflow: hidden;
                 position: relative;
-                img {
+                .cover-img {
                     width: 70px;
                     height: 70px;
                 }
