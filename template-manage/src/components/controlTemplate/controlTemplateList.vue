@@ -257,7 +257,8 @@ export default {
         path: "/template/controlmanege/composemanage",
         query: {
           siteId: row.siteId,
-          templateName: row.templateName
+          templateName: row.templateName,
+          secondDomain: row.domain
         }
       });
     },

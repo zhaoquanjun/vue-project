@@ -153,6 +153,7 @@ export default {
       }
       let para = {
         siteId: this.$route.query.siteId,
+        secondDomain: this.$route.query.secondDomain,
         controlName: this.searchValue,
         firstType: this.firstTypeValue,
         secondType: this.secondTypeValue,
