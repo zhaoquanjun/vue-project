@@ -174,20 +174,22 @@ export default {
                   name:'阅读数',
                   type:'line',
                   stack: '阅读数',
-                  symbolSize:10,
-                  symbol:'circle',  
+                  symbolSize:5,
+                  symbol:'circle', 
+                  smooth: true, 
                   data: this.interval == 1 ? this.pvList:this.pvLast
               },
               {
                   name:'访问数',
                   type:'line',
                   stack: '访问数',
-                  symbolSize:10,
-                  symbol:'circle', 
+                  symbolSize:5,
+                  symbol:'circle',
+                  smooth: true, 
                   data: this.interval == 1 ? this.uvList:this.uvLast
               }
           ],
-          color: ['#09CCEB', '#FF6B00']
+          color: ['#0595E6', '#FF6A00']
         });
     }
   }

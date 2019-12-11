@@ -392,7 +392,7 @@ export default {
             .iconfont {
                 color: #fff;
                 &:hover {
-                    color: #09cceb;
+                    color: $--color-primary;
                 }
             }
         }

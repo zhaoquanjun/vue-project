@@ -303,7 +303,7 @@ export default {
     border: $--border-base;
 }
 .el-input /deep/ .el-input__inner:focus {
-    border: $--border-base;
+    border: 1px solid $--color-primary;
 }
 .el-input /deep/ .el-input__inner {
     border: $--border-base;
@@ -349,7 +349,7 @@ button {
             z-index: 1;
             top: 50px;
             left: 0;
-            width: 100%;
+            width: 90%;
             padding-bottom: 24px;
             margin-left: 24px;
             padding: 5px;

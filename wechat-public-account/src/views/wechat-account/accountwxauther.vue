@@ -571,11 +571,21 @@ export default {
         color: #303133;
       }
       i {
-        font-size: 18px;
-        line-height: 20px;
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        font-size: 14px;
+        padding: 8px;
+        border-radius: $--border-radius-circle;
+        line-height: 14px;
         font-weight: 500;
-        padding-right: 16px;
+        margin-right: 16px;
+        margin-top: -4px;
         color: #909399;
+        &:hover{
+          background: $--background-color-hover;
+          color: $--color-primary;
+        }
       }
     }
     .auther-body {
@@ -613,13 +623,13 @@ export default {
         border-radius: $--border-radius-base;
         text-align: center;
         line-height: 32px;
-        border: 1px solid #09cceb;
+        border: 1px solid $--color-primary;
         margin-left: 24px;
-        color: #09cceb;
+        color: $--color-primary;
       }
       .sure {
-        border: 1px solid #09cceb;
-        background: #09cceb;
+        border: 1px solid $--color-primary;
+        background: $--color-primary;
         color: #ffffff;
       }
     }

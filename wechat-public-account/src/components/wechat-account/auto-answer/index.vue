@@ -635,7 +635,8 @@ export default {
         margin-top: 12px;
         background: #ffffff;
         position: relative;
-        //  overflow-y: auto;
+        max-height: 540px;
+        overflow-y: auto;
     }
 }
 </style>
