@@ -21,7 +21,7 @@
         <template slot-scope="scope">
           <div class="siteImg">
             <div class="enabled" v-show="!scope.row.isEnabled">已失效</div>
-            <img :src="scope.row.controlImg" style="width:100%;height:100%;object-fit:cover;" />
+            <img :src="scope.row.controlImg" style="width:100%;height:100%;object-fit:contain;" />
           </div>
         </template>
       </el-table-column>

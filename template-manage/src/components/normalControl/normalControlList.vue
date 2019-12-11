@@ -19,7 +19,7 @@
         <template slot-scope="scope">
           <div class="siteImg">
             <div class="recommend" v-show="scope.row.isRecommend">推荐</div>
-            <img :src="scope.row.controlImg" style="width:100%;height:100%;object-fit:cover;" />
+            <img :src="scope.row.controlImg" style="width:100%;height:100%;object-fit:contain;" />
           </div>
         </template>
       </el-table-column>

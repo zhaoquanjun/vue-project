@@ -462,7 +462,7 @@ export default {
             width: 250px;
             height: 140px;
             display: block;
-            object-fit: cover;
+            object-fit: contain;
           }
           .upload-btn {
             display: none;
