@@ -11,21 +11,23 @@
     >
       <div class="right-pannel">
         <el-container style="height:100%">
-          <i class="iconfont iconicon-des-Arrowleft1 isShow" @click="isShowAsideList" style="position:fixed;top:50%;left:240px;z-index:2000;color:red;"></i>
+          <div class="foldAside isShow" @click="isShowAsideList">
+            <div class="foldTrangle"></div>
+          </div>
           <el-aside class="aside" v-show="isShowAside">
             <div class="title">筛选</div>
             <el-input
               size="medium"
               v-model="search"
-              placeholder="输入关键词搜索"
+              placeholder="输入模版名称"
               @keyup.enter.native="searchTemplate"
               clearable
-              style="width:225px" 
+              style="width:190px" 
               class="searchTemplate"
             >
               <i
                 class="el-icon-search el-input__icon"
-                style="cursor: pointer;color:#D7D8D9"
+                style="cursor: pointer;color:#D7D8D9;position:absolute;right:0;"
                 slot="prefix"
                 @click="searchTemplate"
               ></i>
@@ -40,8 +42,38 @@
               >{{item.text}}</span>
             </div>
             <div class="splitLine"></div>
-            
-            <el-tree
+            <ul class="order">
+              <!-- <div
+                v-for="(item, index) in firstIndustry" 
+                :key="index"
+              >
+                <li  class="orderText"
+                :class="{activeTree:isTree===item.id}"
+                @click="changeIndustry(item)">
+                  <el-tooltip content="Top center" placement="right-end">
+                  <div class="listTitle">{{item.label}}</div>
+               </el-tooltip>
+
+                </li>
+              </div> -->
+              <li 
+                v-for="(item, index) in firstIndustry" 
+                :key="index"
+                class="orderText"
+                :class="{activeTree:isTree===item.id}"
+                @click="changeIndustry(item)"
+              >
+                <el-tooltip 
+                  v-if="item.children&&item.children.length>=1" class="item" effect="light" 
+                  :content="(item.children&&item.children.length>=1)?item.children[0].label:''" 
+                  placement="top-start"
+                >
+                  <div class="listTitle">{{item.label}}</div>
+                </el-tooltip>
+                <div v-else class="listTitle">{{item.label}}</div>
+              </li>
+            </ul>
+            <!-- <el-tree
               :data="firstIndustry"
               node-key="id"
               ref="tree"
@@ -51,14 +83,15 @@
               @node-click="changeIndustry"
             >
               <div slot-scope="{ node, data }">
-               <template v-if="data.parentId !==0">
-                    <div class="thirdIndustryTitle">· {{data.label}}</div>
-               </template>
-               <template v-else>
-                    <div :class="data.id==0?'firstIndustryTitle':(data.parentId==0?'secondIndustryTitle':'thirdIndustryTitle')">{{data.label}}</div>
+               <template>
+                    <div :class="data.id==0?'firstIndustryTitle':(data.parentId==0?'secondIndustryTitle':'thirdIndustryTitle')">{{data.label}}
+                      <template v-if="data.parentId !==0">
+                         <div class="thirdIndustryTitle">· {{data.label}}</div>
+                     </template>
+                    </div>
                </template>
             </div>
-            </el-tree>
+            </el-tree> -->
           </el-aside>
           <el-main>
             <!-- <div class="colorType" v-show="isAllTab">
@@ -98,13 +131,13 @@
               v-scrollBar
               class="templateContent"
             >
-              <Waterfall v-if="showWaterFall" id="waterfall" style="margin:0 auto;" :minCol="3" :maxCol="4" :gutterWidth="20" :resizable="true" :percent="percent">
+              <Waterfall v-if="showWaterFall" id="waterfall" :resizable="true" :percent="percent">
                 <WaterfallItem
                   class="waterFallTemplateItem"
                   v-for="(item, index) in templateInfo"
                   :key="index"
                 >
-                  <div ref="imgs" style="padding-bottom:30px;">
+                  <div ref="imgs" style="padding-bottom:30px;margin-left:5%;">
                     <div class="itemSiteImage">
                     <div
                       class="itemSiteImageBackground"
@@ -118,7 +151,7 @@
                       </a>
                     </div>
                     <div class="curModal" v-show="item.id == templateId">当前选择</div>
-                    <div class="itemSiteNumber">编号：{{item.siteId}}</div>
+                    <div class="itemSiteNumber">编号：{{item.id}}</div>
                   </div>
                   <div class="itemSiteInfo">
                     <div class="itemSiteInfoLeft">
@@ -178,13 +211,16 @@
             
             <div>
               <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
-              <el-switch
-                v-model="showWaterFall"
-                active-color="#ff6b00"
-                inactive-color="#40494E"
-                active-text="瀑布流"
-                inactive-text="平铺"
-              ></el-switch>
+              <div style="display:none">
+                <el-switch
+                  v-model="showWaterFall"
+                  active-color="#ff6b00"
+                  inactive-color="#41494E"
+                  active-text="瀑布流"
+                  inactive-text="平铺"
+                ></el-switch>
+              </div>
+              
               <!-- <div
                 class="cl-pagination pageing"
                 id="pageing"
@@ -377,7 +413,8 @@ export default {
       errorReference: false,
       errorSite: "",
       showWaterFall:true,
-      isShowAside:true
+      isShowAside:true,
+      isTree:0
     };
   },
   created(){
@@ -427,6 +464,11 @@ export default {
        
     },
     async changeIndustry(item) {
+      // for(let i of this.firstIndustry){
+      //   i.isTree=false;
+      // }
+
+      this.isTree=item.id;
       this.firstIndustryId = 0;
       this.secondIndustryId = 0;
       if (item.parentId == 0) {
@@ -671,7 +713,8 @@ export default {
         var { data, status } = await templateApi.getSiteTemplates(para);
       }
       this.templatePage = data;
-      this.templateInfo =[...this.templateInfo,...data.items];
+      this.templateInfo=data.items
+      // this.templateInfo =[...this.templateInfo,...data.items];
     },
     async changePage(page) {
       this.pageIndex = page;
@@ -681,10 +724,24 @@ export default {
       this.pageSize = page;
       this.searchTemplate();
     },
-    loadMore(){
+    async loadMore(){
       if( this.pageIndex<=this.templateInfo.length/this.pageSize){
-          this.pageIndex+=1;
-          this.searchTemplate();
+        this.pageIndex+=1;
+        let para = {
+          TemplateName: this.search,
+          FirstIndustry: this.firstIndustryId,
+          SecondIndustry: this.secondIndustryId,
+          Theme: this.themeSelect,
+          Language: this.languageSelect,
+          IsRecommend: this.isRecommend,
+          PageIndex: this.pageIndex,
+          PageSize: this.pageSize,
+          IsOrderByUpdateTime: this.isOrderByUpdateTime,
+          IsMostPopular: this.isMostPopular
+        };
+        var { data, status } = await templateApi.getSiteTemplates(para);
+        this.templatePage = data;
+        this.templateInfo =[...this.templateInfo,...data.items];
       }
     },
      scroll(){
@@ -692,7 +749,7 @@ export default {
           let scrollTop=document.getElementsByClassName("ps")[1].scrollTop;
           let scrollHeight=document.getElementsByClassName("ps")[1].scrollHeight;
           let innerHeight=window.innerHeight;
-          if(scrollTop+innerHeight>=scrollHeight){
+          if( parseFloat(scrollTop+innerHeight)>=parseFloat(scrollHeight)*2/3 ){
             this.loadMore();
           }
        })
@@ -890,13 +947,17 @@ export default {
   
 }
 .searchTemplate /deep/ .el-input__inner:focus{
-  border:1px solid rgba(89,99,104,1);
-  background:#40494E;
+  border:1px solid $--color-primary;
+  background:transparent;
   border-radius: 4px;
+}
+.searchTemplate /deep/ .el-input__prefix{
+  position: relative;
+  left: 0;
 }
 .searchTemplate /deep/ .el-input__inner{
   border:1px solid rgba(89,99,104,1);
-  background:#40494E;
+  background:#41494E;
   border-radius: 4px;
   color: $--color-white;
 }
@@ -936,6 +997,30 @@ export default {
   transition: width 0.2s linear;
   color: $--color-white;
   // overflow: hidden;
+  .foldAside{
+    position:fixed;
+    top:50%;
+    left:240px;
+    z-index:2000;
+    width: 12px;
+    height:50px;
+    margin-top:-25px;
+    background:$--color-black-light;
+    cursor: pointer;
+    &:hover{
+      .foldTrangle{
+        border-right-color: $--color-primary;
+      }
+    }
+    .foldTrangle{
+      width: 0;
+      margin: 21px auto;
+      border:4px solid #fff;
+      border-top:4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: none;
+    }
+  }
   .aside {
     width:240px !important;
     overflow: hidden;
@@ -961,9 +1046,13 @@ export default {
         padding-left: 24px;
         box-sizing: border-box;
         text-align: left;
+        &:hover{
+          background: #41494E;
+        }
       }
       .active {
-        background: #40494E;
+        background: #41494E;
+        color:$--color-primary;
       }
     }
     .splitLine {
@@ -971,13 +1060,13 @@ export default {
       box-sizing: border-box;
       width: calc(100% - 48px);
       height: 2px;
-      background-color:#40494E;
+      background-color:#41494E;
     }
     .firstIndustryTitle{
       height:44px;
       display: block;
       width: 240px;
-      background: #40494E;
+      background: #41494E;
       font-size: $--font-size-small;
       font-weight: 400;
       color: $--color-white;
@@ -995,6 +1084,12 @@ export default {
       line-height: 44px;
       padding-left: 30px;
       text-align: left;
+      position: relative;
+      &:hover{
+        .thirdIndustryTitle{
+          display: block;
+        }
+      }
     }
     .thirdIndustryTitle{
       display: block;
@@ -1091,6 +1186,24 @@ export default {
       }
     }
   }
+  .activeTree {
+    background: #41494E;
+    color: $--color-primary;
+  }
+  .listTitle{
+      position: relative;
+       .listDescribe{
+          display: none;
+          position: absolute;
+          top:-15px;
+          left: 70px;
+          width: 140px;
+          box-sizing: border-box;
+          line-height: 20px;
+          height: 20px;
+        } 
+    }
+    
 
   .templateItem {
     padding: 0 30px 30px 0;
@@ -1215,8 +1328,8 @@ export default {
       .itemSiteNumber{
         position: absolute;
         display: block;
-        width:100%;
-        background: red;
+        padding: 4px 12px;
+        background: #1F2325;
         right: 0;
         bottom: 0;
         text-align: right;
@@ -1237,7 +1350,7 @@ export default {
       overflow: hidden;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
-      height:60px;
+      height:40px;
       // width: 340px;
       width: 100%;
       background: $--color-black-light;
