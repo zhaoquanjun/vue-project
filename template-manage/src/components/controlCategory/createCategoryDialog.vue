@@ -236,7 +236,7 @@ export default {
   padding: 16px 24px 0;
   box-sizing: border-box;
   .ym-form-item__error {
-    margin-left: 56px;
+    margin-left: 75px;
   }
   .pannel-head {
     border-bottom: $--border-base;
@@ -257,7 +257,7 @@ export default {
       width: 100%;
       .contentItem-title {
         display: inline-block;
-        width: 65px;
+        width: 75px;
         text-align: right;
         padding-right: 16px;
         box-sizing: border-box;
@@ -266,10 +266,10 @@ export default {
         color: $--color-text-primary;
       }
       .contentItem-input {
-        width: 287px;
+        width: 275px;
       }
       .typeSelect {
-        width: 130px;
+        width: 125px;
       }
       .arrangement {
         width: 90px;

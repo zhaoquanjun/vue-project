@@ -275,7 +275,7 @@ export default {
       this.settingFirstTypeSelect = "";
       this.settingSecondTypeSelect = "";
       this.errorFirstTypeTips = false;
-      this.settingTemplateStatus = 2;
+      this.settingTemplateStatus = 1;
       this.settingArrangement = 1;
       this.rowNum = 1;
       this.picUrl = "";
@@ -365,7 +365,7 @@ export default {
   padding: 16px 24px 0;
   box-sizing: border-box;
   .ym-form-item__error {
-    margin-left: 56px;
+    margin-left: 75px;
   }
   .pannel-head {
     border-bottom: $--border-base;
@@ -388,7 +388,7 @@ export default {
       width: 100%;
       .contentItem-title {
         display: inline-block;
-        width: 65px;
+        width: 75px;
         text-align: right;
         padding-right: 16px;
         box-sizing: border-box;
@@ -397,10 +397,10 @@ export default {
         color: $--color-text-primary;
       }
       .contentItem-input {
-        width: 287px;
+        width: 275px;
       }
       .typeSelect {
-        width: 130px;
+        width: 125px;
       }
       .settingLine {
         display: inline-block;
@@ -413,7 +413,7 @@ export default {
         width: 90px;
       }
       .rowNum-wrap {
-        margin-left: 30px;
+        margin-left: 20px;
         display: inline-block;
         .rowNum-text {
           font-size: $--font-size-small;
