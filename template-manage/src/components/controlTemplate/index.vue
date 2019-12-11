@@ -351,7 +351,7 @@ export default {
     align-items: center;
   }
   .selectSearchValue {
-    width: 95px;
+    width: 100px;
   }
   .searchInput {
     margin-left: -2px;

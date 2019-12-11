@@ -34,10 +34,12 @@
                   :autosize="{ minRows: 3, maxRows: 3}"
                   placeholder="请输入内容"
                   v-model="nameText"
+                  @blur="blurName"
                   maxlength="20"
                   show-word-limit
                   resize="none"
                 ></el-input>
+                <div class="ym-form-item__error" v-show="errorTemplateNameTips">请输入模板名称</div>
                 <div class="btn-wrap">
                   <button
                     class="cl-button cl-button--primary_notbg cl-button--small"
@@ -152,6 +154,7 @@ export default {
     return {
       isRemarkShowId: "",
       nameText: "",
+      errorTemplateNameTips: false,
       remarkText: ""
     };
   },
@@ -170,10 +173,23 @@ export default {
     cancelName(siteId) {
       this.$refs[`popoverName-${siteId}`].doClose();
       this.nameText = "";
+      this.errorTemplateNameTips = false;
+    },
+    blurName() {
+      if (this.nameText == "") {
+        this.errorTemplateNameTips = true;
+      } else {
+        this.errorTemplateNameTips = false;
+      }
     },
     //修改名称确认
     async saveNameValue(row, siteId) {
+      if (this.nameText == "") {
+        this.errorTemplateNameTips = true;
+        return;
+      }
       this.$refs[`popoverName-${siteId}`].doClose();
+      this.errorTemplateNameTips = false;
       let para = {
         id: row.siteId,
         templateName: this.nameText
