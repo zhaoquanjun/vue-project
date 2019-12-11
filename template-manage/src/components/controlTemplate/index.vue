@@ -57,7 +57,9 @@
           <div class="dialogContent">
             <div class="tips">开通【控件模板应用】服务，填写的手机号将是模板的管理员</div>
             <div class="inputWrap">
-              <div class="inputTitle">管理员</div>
+              <div class="inputTitle">
+                <span style="color:#FB4D68;margin-right:4px">*</span>管理员
+              </div>
               <el-input
                 v-model="createPhone"
                 placeholder="请输入管理员手机号"
@@ -68,7 +70,9 @@
               <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
             </div>
             <div class="inputWrap">
-              <div class="inputTitle">模板名称</div>
+              <div class="inputTitle">
+                <span style="color:#FB4D68;margin-right:4px">*</span>模板名称
+              </div>
               <el-input
                 v-model="createTemplateName"
                 placeholder="请输入模板名称"
