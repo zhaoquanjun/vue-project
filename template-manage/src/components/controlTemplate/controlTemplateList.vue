@@ -17,7 +17,41 @@
       </template>
       <el-table-column prop="templateName" label="模板名称" show-overflow-tooltip min-width="150">
         <template slot-scope="scope">
-          <div class="overflow">{{scope.row.templateName}}</div>
+          <div class="overflow">
+            {{scope.row.templateName}}
+            <el-popover
+              :ref="`popoverName-${scope.row.siteId}`"
+              placement="bottom"
+              width="200"
+              trigger="click"
+              style="padding:0;display:inline-block;overflow:visible;"
+              @show="showName(scope.row)"
+            >
+              <i v-show="scope.row.siteId" slot="reference" class="iconfont iconicon-dash-edit"></i>
+              <div class="textareaWrap">
+                <el-input
+                  type="textarea"
+                  :autosize="{ minRows: 3, maxRows: 3}"
+                  placeholder="请输入内容"
+                  v-model="nameText"
+                  maxlength="20"
+                  show-word-limit
+                  resize="none"
+                ></el-input>
+                <div class="btn-wrap">
+                  <button
+                    class="cl-button cl-button--primary_notbg cl-button--small"
+                    slot="refenrence"
+                    @click="cancelName(scope.row.siteId)"
+                  >取消</button>
+                  <button
+                    class="cl-button cl-button--primary cl-button--small"
+                    @click="saveNameValue(scope.row, scope.row.siteId)"
+                  >保存</button>
+                </div>
+              </div>
+            </el-popover>
+          </div>
         </template>
       </el-table-column>
       <el-table-column prop="pagePath" label="模板数量（上架/全部）" show-overflow-tooltip min-width="150">
@@ -107,6 +141,7 @@
 <script>
 import { formatDateTime } from "@/utlis/index";
 import * as templateApi from "@/api/request/templateApi";
+import * as controlApi from "@/api/request/controlTemplateApi";
 export default {
   props: {
     listData: {
@@ -116,6 +151,7 @@ export default {
   data() {
     return {
       isRemarkShowId: "",
+      nameText: "",
       remarkText: ""
     };
   },
@@ -125,6 +161,40 @@ export default {
     },
     changeSize(size) {
       this.$emit("changeSize", size);
+    },
+    // 修改名称
+    showName(row) {
+      this.nameText = row.templateName;
+    },
+    // 取消修改名称
+    cancelName(siteId) {
+      this.$refs[`popoverName-${siteId}`].doClose();
+      this.nameText = "";
+    },
+    //修改名称确认
+    async saveNameValue(row, siteId) {
+      this.$refs[`popoverName-${siteId}`].doClose();
+      let para = {
+        id: row.siteId,
+        templateName: this.nameText
+      };
+      let { status } = await controlApi.updateTemplateName(para);
+      if (status == 200) {
+        row.templateName = this.nameText;
+        this.$notify({
+          customClass: "notify-success",
+          message: `保存成功`,
+          duration: 1500,
+          showClose: false
+        });
+      } else {
+        this.$notify({
+          customClass: "notify-error",
+          message: `保存失败`,
+          duration: 1500,
+          showClose: false
+        });
+      }
     },
     // 修改备注 弹窗
     showRemark(row) {
