@@ -3,7 +3,7 @@
     <div class="code">
       <div class="share-title">
         <span>分享设置</span>
-        <i @click="closeShareCode(false)" class="icon iconfont iconguanbi"></i>
+        <i @click="closeShareCode(false)" class="icon iconfont iconguanbi cl-iconfont is-circle"></i>
       </div>
       <div class="share-body">
         <h6>设置成功</h6>
@@ -136,7 +136,6 @@ export default {
       }
       i {
         font-size: 16px;
-        line-height: 40px;
         cursor: pointer;
       }
     }

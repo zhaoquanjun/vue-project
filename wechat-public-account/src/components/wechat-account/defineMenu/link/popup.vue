@@ -2,7 +2,7 @@
   <div class="link-popup__container" id="popup" @click="_handleClosePopup($event)">
     <div class="link-popup__section">
       <div class="popup-header__area">
-        <span>设置链接</span>
+        <span>{{linkTitle}}</span>
         <span @click.stop="_handleCancle"></span>
       </div>
       <div class="popup-content__box">
@@ -90,6 +90,7 @@ export default {
   },
   data() {
     return {
+      linkTitle: '设置链接',
       sliderList: [
         { name: "网址", label: "url" },
         { name: "页面", label: "page" },
@@ -109,6 +110,7 @@ export default {
   },
   created(){
     if(this.AddType) {
+      this.linkTitle = '选择推广内容'
       this.slider = this.AddType
       this.sliderList= [
           { name: "页面", label: "page" },
@@ -116,6 +118,7 @@ export default {
           { name: "产品", label: "product" },
         ]
     } else {
+      this.linkTitle = '设置链接'
       this.slider = this.sliderList[0].label;
     }
   },
@@ -149,12 +152,6 @@ export default {
     type: {
       get: function() {
         return this.model["Type"];
-      },
-      set: function() {}
-    },
-    linkTitle: {
-      get: function() {
-        return this.model["Title"];
       },
       set: function() {}
     }

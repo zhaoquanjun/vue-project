@@ -206,7 +206,16 @@ export default {
             list.insertBefore(editor, listItems[index]);
         },
         remove(item, index) {
-            this.list = this.list.splice(index, 1);
+            this.$confirm("提示", {
+                title: "提示",
+                iconClass: "icon-warning",
+                message:  `删除后，该图文无法恢复，是否确认删除？`,
+                callback: async action => {
+                    if (action === "confirm") {
+                        this.list = this.list.splice(index, 1);
+                    }
+                }
+            });
         },
         //确定
         handlerConfirm() {

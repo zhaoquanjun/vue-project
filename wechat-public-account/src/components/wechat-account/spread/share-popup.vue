@@ -3,7 +3,7 @@
     <div class="conteiner">
       <div class="share-title">
         <span>分享设置</span>
-        <i @click="closeShare(false)" class="icon iconfont iconguanbi"></i>
+        <i @click="closeShare(false)" class="icon iconfont iconguanbi cl-iconfont is-circle"></i>
       </div>
       <div class="shaper">
         <div class="shaper-content">
@@ -308,7 +308,6 @@ export default {
       }
       i {
         font-size: 16px;
-        line-height: 40px;
         cursor: pointer;
       }
     }

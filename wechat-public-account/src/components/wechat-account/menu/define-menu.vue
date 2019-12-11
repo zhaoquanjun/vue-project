@@ -1106,7 +1106,7 @@ export default {
   color: $--color-primary;
 }
 .selectUrl div p {
-  line-height: 40px;
+  line-height: 32px;
 }
 .btn {
   display: flex;

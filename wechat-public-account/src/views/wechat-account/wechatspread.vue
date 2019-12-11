@@ -411,7 +411,7 @@ export default {
     border: $--border-base;
 }
 .el-input /deep/ .el-input__inner:focus {
-    border: $--border-base;
+    border: 1px solid $--color-primary;
 }
 .el-input /deep/ .el-input__inner {
     border: $--border-base;
