@@ -8,7 +8,7 @@
       </div>
     </el-header>
     <el-main class="contentWrap">
-      <div>
+      <div style="margin-bottom:24px;">
         <List :listData="templateInfo" @deleteItem="deleteItem" @editItem="editItem" ref="list"></List>
       </div>
       <createCategoryDialog ref="createCategoryDialog" @getList="getList" ></createCategoryDialog>
