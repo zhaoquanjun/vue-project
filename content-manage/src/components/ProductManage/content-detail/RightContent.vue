@@ -43,7 +43,7 @@
                             class="el-upload el-upload el-upload--picture-card"
                             v-if="newFileList.length<9"
                         >
-                            <button @click="handlerAddPicture">
+                            <button style="width: 100%;" @click="handlerAddPicture">
                                 <i class="el-icon-plus avatar-uploader-icon"></i>
                                 <i
                                     class="avatar-text"

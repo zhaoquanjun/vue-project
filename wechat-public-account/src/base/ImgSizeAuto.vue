@@ -1,15 +1,15 @@
 <template>
-    <div class="imgsLi" ref="imgParEl">
+    <div class="imgsLi" ref="imgsLi">
         <img 
-            :src="item" 
-            ref="imgs"
+            :src="item"
             :class="imgsViewWay?'heightLong':'widthLong'"
         />
+        <img id="galleryImg" class="imgHide" :src="item"  ref="imgHide" @load="handleImgsSize">
     </div>
 </template>
 <script>
 export default {
-    props:["item","itemContent"],
+    props:["item"],
     data(){
         return {
             imgsViewWay:false
@@ -17,17 +17,15 @@ export default {
     },
     methods:{
         handleImgsSize(){
-            let imgEl=this.$refs.imgs;
-            let imgParEl=this.$refs.imgs;
-            let itemContent=itemContent || 1;
-            if(imgEl){
-                this.imgsViewWay = itemContent > imgEl.offsetHeight/imgParEl.offsetWidth ? true:false
-            }
-        }
-    },
-    watch:{
-        item(){
-            this.handleImgsSize();
+            this.$nextTick(() => {
+                let imgsLi=this.$refs.imgsLi;
+                let imgHide=this.$refs.imgHide;
+                if (imgHide.offsetHeight > imgsLi.offsetHeight) {
+                    this.imgsViewWay = true
+                } else {
+                    this.imgsViewWay = false
+                }
+            })
         }
     }
 }
@@ -38,6 +36,14 @@ export default {
      width:100%;
      height:100%;
      overflow: hidden;
+     .imgHide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width:100%;
+        height:auto;
+     }
     .heightLong{
         position: absolute;
         width:100%;
