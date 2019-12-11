@@ -19,7 +19,7 @@
         </el-input>
         <el-select
           v-model="firstTypeValue"
-          placeholder="请选择"
+          placeholder="一级分类"
           class="selectValue"
           @change="changeFirstType"
         >
@@ -32,7 +32,7 @@
         </el-select>
         <el-select
           v-model="secondTypeValue"
-          placeholder="请选择"
+          placeholder="二级分类"
           class="selectValue"
           @change="changeSearchType"
         >
