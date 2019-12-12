@@ -154,7 +154,7 @@ export default {
                 vertical-align: middle;
             }
             .link-btn {
-                background: #00c1de;
+                background: $--color-primary;
                 border: none;
                 width: 70px;
                 height: 32px;
@@ -162,7 +162,7 @@ export default {
                 margin-left: 10px;
             }
             .link-btn-green {
-                background: #00b539;
+                background: $--color-success;
             }
         }
     }

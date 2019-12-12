@@ -3,7 +3,7 @@
         <div class="code">
             <div class="title">
                 <span>会员详情</span>
-                <i @click="close(flase)" class="icon iconfont iconguanbi"></i>
+                <i @click="close(flase)" class="icon iconfont iconguanbi cl-iconfont is-circle"></i>
             </div>
             <div class="header">
                 <img :src="memberDetail.headImg" alt="">
@@ -94,7 +94,7 @@
         background: rgba(38,38,38,0.8);
         text-align: right;
         font-family: "PingFangSC-Regular,PingFangSC";
-        z-index: 2000;
+        z-index: 3000;
         .code
 
     {
@@ -126,7 +126,7 @@
     .header {
         margin: 24px;
         height: 270px;
-        background: rgba(248,250,252,1);
+        background: $--background-color-selected;
         border-radius: 2px;
         padding: 28px 18px;
         img

@@ -14,7 +14,7 @@
                 >
                     <span class="item-left auth-name ellipsis">{{item}}</span>
                     <button class="item-right auth-icon" @click.stop="removeAuth(item,index)">
-                        <i class="icon-size clear-icon"></i>
+                        <i class="icon iconfont iconcuowu cl-iconfont"></i>
                     </button>
                 </li>
             </template>
@@ -94,6 +94,7 @@ export default {
     min-height: 274px;
 }
 .auth-list .list-item {
+    float: left;
     cursor: pointer;
     height: 40px;
     line-height: 40px;
@@ -114,18 +115,29 @@ export default {
 }
 
 .item-right {
-    width: 20%;
-    padding-left: 10px;
+    float: left;
+    width: 40px;
+    margin-left: 10px;
     height: 40px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     box-sizing: border-box;
     color: #8c8c8c;
+    .iconcuowu {
+        color: $--color-danger;
+        font-weight: 400;
+        padding: 6px;
+        &:hover {
+            background-color: $--color-white;
+            border-radius:$--border-radius-base;
+        }
+    }
 }
 .empty {
     cursor: pointer;
     width: 20%;
+    height: 40px;
     color: $--color-primary;
     text-align: right;
     float: right;
