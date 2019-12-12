@@ -86,7 +86,7 @@
                 <div class="use-title">
                     <span class="title">已用空间</span>
                     <span class="storage-content">
-                        {{storageUsage.currentUsage}} /3 {{storageUsage.maxSize}}
+                        {{storageUsage.currentUsage}} / {{storageUsage.maxSize}}
                     </span>
                 </div>
                 <div class="use-storage">
