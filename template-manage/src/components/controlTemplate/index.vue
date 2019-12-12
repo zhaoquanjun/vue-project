@@ -14,7 +14,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput inputHeight"></el-input>
+        <el-input v-model="search" placeholder="请输入搜索内容" class="searchInput"></el-input>
         <el-select v-model="sortValue" placeholder="请选择" class="selectSortValue">
           <el-option
             v-for="item in sortOptions"
@@ -349,10 +349,14 @@ export default {
   }
   .selectSearchValue {
     width: 100px;
+    /deep/ .is-focus {
+      z-index: 2;
+    }
   }
   .searchInput {
     margin-left: -2px;
     width: 200px;
+    z-index: 1;
   }
   .selectSortValue {
     margin-left: 45px;
