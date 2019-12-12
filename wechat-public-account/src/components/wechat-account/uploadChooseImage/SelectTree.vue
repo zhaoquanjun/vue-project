@@ -216,7 +216,7 @@ export default {
     background: red;
 } */
 .el-select {
-    width: 80%;
+    width: 100%;
 }
 .el-scrollbar .el-scrollbar__view .el-select-dropdown__item {
     height: auto;

@@ -355,7 +355,7 @@ export default {
         return
       }
       let flag = this.testParameters();
-      if (!flag) {
+      if (!flag && !this.isOrder) {
         notify(this, '请完善菜单信息', "error");
         return
       }
