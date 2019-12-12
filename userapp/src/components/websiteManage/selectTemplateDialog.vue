@@ -27,7 +27,7 @@
             >
               <i
                 class="el-icon-search el-input__icon"
-                style="cursor: pointer;color:#D7D8D9;position:absolute;right:0;"
+                style="cursor: pointer;color:#D7D8D9;position:absolute;right:20px;"
                 slot="prefix"
                 @click="searchTemplate"
               ></i>
@@ -155,10 +155,18 @@
                   </div>
                   <div class="itemSiteInfo">
                     <div class="itemSiteInfoLeft">
-                      <div class="itemSiteName">
-                        {{item.templateName && item.templateName.trim().length > 10 ? item.templateName.slice(0, 10) + '...' : item.templateName}}
+                      <el-tooltip 
+                        v-if="item.templateName && item.templateName.trim().length > 10" effect="light" 
+                        :content="item.templateName" 
+                        placement="bottom-start"
+                      >
+                        <div class="itemSiteName">
+                          {{item.templateName.slice(0, 10) + '...'}}
+                        </div>
+                      </el-tooltip>
+                      <div v-else class="itemSiteName">
+                        {{item.templateName}}
                       </div>
-                      
                     </div>
                     <div class="itemSiteInfoRight">
                       <i class="iconfont iconicon-diannao icon-link" @click="prevPC(item.domain)"></i>
@@ -756,6 +764,8 @@ export default {
     },
     // 关闭弹窗
     closeDialog() {
+      this.changeIndustry(this.firstIndustry[0].id);
+      this.isTree=0;
       this.pageIndex = 1;
       this.pageSize = 9;
       this.templateShow = false;
@@ -765,6 +775,8 @@ export default {
         item.isOrder = false;
       });
       this.orderType[0].isOrder = true;
+
+      
     },
     // // 选择全部模版
     // async choseAllTab() {
