@@ -237,7 +237,9 @@
             @click="closeCreateDialog"
             class="cl-button cl-button--primary_notbg cl-button--small"
           >取消</button>
-          <button @click="createSite" class="cl-button cl-button--primary cl-button--small">确定</button>
+          <Debounce :time="1000" !isDebounce>
+            <button @click="createSite" class="cl-button cl-button--primary cl-button--small">确定</button>
+          </Debounce>
         </div>
       </div>
     </el-dialog>
@@ -280,7 +282,9 @@
             @click="closeChangeDialog"
             class="cl-button cl-button--primary_notbg cl-button--small"
           >取消</button>
-          <button @click="changeSiteInfo" class="cl-button cl-button--primary cl-button--small">确定</button>
+          <Debounce :time="1000" !isDebounce>
+            <button @click="changeSiteInfo" class="cl-button cl-button--primary cl-button--small">确定</button>
+          </Debounce>
         </div>
       </div>
     </el-dialog>
@@ -326,7 +330,9 @@
             @click="closeCopyDialog"
             class="cl-button cl-button--primary_notbg cl-button--small"
           >取消</button>
-          <button @click="copySiteCreate" class="cl-button cl-button--primary cl-button--small">确定</button>
+          <Debounce :time="1000" !isDebounce>
+            <button @click="copySiteCreate" class="cl-button cl-button--primary cl-button--small">确定</button>
+          </Debounce>
         </div>
       </div>
     </el-dialog>
