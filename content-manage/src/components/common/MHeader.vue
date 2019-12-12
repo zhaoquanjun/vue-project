@@ -123,7 +123,10 @@
                   @show="showRemark(item)"
                 >
                   <button style="margin-left:8px" slot="reference">
-                    <i class="iconfont iconbianji cl-iconfont is-square" v-show="item.isSystem"></i>
+                    <i
+                      class="iconfont iconbianji cl-iconfont is-square"
+                      v-show="item.isSystem&&!isExpiredWeek(item)"
+                    ></i>
                   </button>
                   <div class="textareaWrap">
                     <el-input
@@ -157,7 +160,7 @@
                 <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
                 <a
                   class="renewal cl-button cl-button--primary_notbg"
-                  v-show="item.isSystem"
+                  v-show="item.isSystem&&!isExpiredWeek(item)"
                   :href="aliMarketUrl"
                   target="_blank"
                 >续费</a>
@@ -314,6 +317,18 @@ export default {
       if (
         new Date(item.expiredTime) - new Date() < 1000 * 60 * 60 * 24 * 30 &&
         new Date(item.expiredTime) > new Date()
+      ) {
+        return true;
+      }
+    },
+    // 判断是否过期7天
+    isExpiredWeek(item) {
+      if (new Date() - new Date(item.expiredTime) > 1000 * 60 * 60 * 24 * 7) {
+        return true;
+      }
+      if (
+        item.releaseTime &&
+        new Date() - new Date(item.releaseTime) > 1000 * 60 * 60 * 24 * 7
       ) {
         return true;
       }
