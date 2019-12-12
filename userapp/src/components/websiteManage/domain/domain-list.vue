@@ -104,7 +104,7 @@
             <el-table-column width="150" label="操作">
                 <template slot-scope="props">
                     <button
-                        v-if="props.row.isInAliDns && props.row.cdnDomainResolveStatus===0 &&props.row.cdnStatus!==1 && props.row.cdnStatus!==2 && props.row.cdnStatus!==3"
+                        v-if="props.row.isInAliDns &&props.row.cdnStatus!==1 && props.row.cdnStatus!==2 && props.row.cdnStatus!==3"
                         class="handle-btn"
                         @click="resolveCdnByAliYunToken(props.row)"
                         style="color: #ff6b00;font-size:12px"
@@ -147,7 +147,7 @@
                         <div class="explain-islink">
                             <a
                                 class="renewal cl-button cl-button--primary_notbg"
-                                :href="aliMarketUrl"
+                                :href="aliyunDomainResolve"
                                 target="_blank"
                             >如何进行手动解析?</a>
                         </div>
@@ -168,7 +168,7 @@
                                     >
                                         <i
                                             class="iconfont iconicon-exclamationmark status"
-                                            style="color:#cdcaca;margin-left:10px;"
+                                            style="color:#e5e5e5;margin-left:10px;"
                                         ></i>
                                     </el-tooltip>
 
@@ -221,7 +221,7 @@
                                     >
                                         <i
                                             class="iconfont iconicon-exclamationmark status"
-                                            style="color:#cdcaca;margin-left:10px;"
+                                            style="color:#e5e5e5;margin-left:10px;"
                                         ></i>
                                     </el-tooltip>
                                     <el-switch
@@ -262,7 +262,7 @@
                                 class="handle-btn delete-btn"
                                 @click="handleDelete(scope.row,scope.$index)"
                             >
-                                <i class="iconfont iconshanchu" style="color:#262626"></i>
+                                <i class="iconfont iconshanchu cl-iconfont is-square" style="color:#262626"></i>
                             </button>
                         </el-tooltip>
                     </div>
@@ -562,12 +562,11 @@ export default {
 
                 for (let i = 0; i < eles.length; i++) {
                     let ele = eles[i];
-                    console.log(this.notResolveList[i], "---");
                     if (this.notResolveList[i] == 3) {
                         ele.innerHTML =
-                            '<button disabled="disabled" style="color:#262626;height: 24px;">-</button>';
+                            '<button disabled="disabled" style="color:#262626;height: 24px;cursor:default;padding:10px;">-</button>';
                     } else {
-                        ele.innerHTML = `<i class=" iconfont iconicon-des-setup" style="color:#262626;" title="域名详情" id="iconfont-setup"></i>`;
+                        ele.innerHTML = `<i class=" iconfont iconicon-des-setup cl-iconfont is-square" style="color:#262626;" title="域名详情" id="iconfont-setup"></i>`;
                     }
                 }
             });
@@ -611,6 +610,7 @@ export default {
 }
 </style>
 <style scoped>
+
 .el-table /deep/ thead :first-child > .cell {
     padding-left: 62px;
 }
@@ -618,9 +618,6 @@ export default {
 .el-table /deep/ .el-table__expand-icon {
     height: auto;
     transform: rotate(0deg);
-}
-#table-list /deep/ .el-table__expand-icon:hover {
-    background: rgba(211, 181, 160, 0.1) !important;
 }
 .el-table /deep/ .el-table__expanded-cell:hover {
     background: #eee !important;
@@ -656,14 +653,6 @@ export default {
     width: 70%;
     display: flex;
     justify-content: flex-start;
-    .delete-btn {
-        padding: 8px;
-        margin-left: 10px;
-        background: transparent;
-        &:hover {
-            background: rgba(240, 243, 247, 1);
-        }
-    }
 }
 .domainStatus0 {
     color: #fb4d68;
@@ -757,6 +746,9 @@ export default {
         }
     }
 }
+.iconicon-exclamationmark:hover{
+    background: transparent !important;
+} 
 .iconfont.iconhuifu {
     font-size: 12px;
     margin-left: 10px;

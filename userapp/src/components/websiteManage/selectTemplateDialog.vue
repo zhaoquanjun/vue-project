@@ -20,7 +20,7 @@
               size="medium"
               v-model="search"
               placeholder="输入模版名称"
-              @keyup.enter.native="searchTemplate"
+              @keyup.enter.native="searchTemplateAll"
               clearable
               style="width:190px" 
               class="searchTemplate"
@@ -29,7 +29,7 @@
                 class="el-icon-search el-input__icon"
                 style="cursor: pointer;color:#D7D8D9;position:absolute;right:20px;"
                 slot="prefix"
-                @click="searchTemplate"
+                @click="searchTemplateAll"
               ></i>
             </el-input>
             <div class="order">
@@ -411,7 +411,7 @@ export default {
       firstIndustryId: 0,
       secondIndustryId: 0,
       pageIndex: 1,
-      pageSize: 9 ,
+      pageSize: 9,
       notFindTemplateShow: false,
       notFindName: "",
       notFindSite: "",
@@ -472,10 +472,8 @@ export default {
        
     },
     async changeIndustry(item) {
-      // for(let i of this.firstIndustry){
-      //   i.isTree=false;
-      // }
-
+      this.resetScrollTop();
+      this.pageIndex=1;
       this.isTree=item.id;
       this.firstIndustryId = 0;
       this.secondIndustryId = 0;
@@ -500,6 +498,7 @@ export default {
       let { data, status } = await templateApi.getSiteTemplates(para);
       this.templatePage = data;
       this.templateInfo = data.items;
+      this.loadMore();
     },
     // 获取行业树
     async getIndustryTree() {
@@ -558,6 +557,7 @@ export default {
     // 选择最新/最热/推荐
     async changeOrder(item) {
       this.resetScrollTop();
+      this.pageIndex=1;
       if (this.isAllTab == true) {
         this.orderType.forEach((item, index) => {
           item.isOrder = false;
@@ -589,7 +589,7 @@ export default {
         let { data, status } = await templateApi.getSiteTemplates(para);
         this.templatePage = data;
         this.templateInfo = data.items;
-        
+        this.loadMore();
       }
     },
 
@@ -680,6 +680,7 @@ export default {
     },
     //   获取模版列表
     async getTemplateList() {
+      this.pageIndex=1;
       let para = {
         TemplateName: "",
         FirstIndustry: 0,
@@ -695,9 +696,26 @@ export default {
       let { data, status } = await templateApi.getSiteTemplates(para);
       this.templatePage = data;
       this.templateInfo = data.items;
+      this.loadMore();
     },
-    // 查询
+    //按搜索内容进行全部查询
+    searchTemplateAll(){
+      this.isAllTab = true;
+      this.changeIndustry(this.firstIndustry[0].id);
+      this.isTree=0;
+      this.pageIndex = 1;
+      this.pageSize = 9;
+      
+      this.orderType.forEach((item, index) => {
+        item.isOrder = false;
+      });
+      this.orderType[0].isOrder = true;
+      
+      this.searchTemplate();
+    },
+    // 按筛选条件查询
     async searchTemplate() {
+      this.pageIndex=1;
       if (this.isAllTab == false) {
         let para = {
           siteName: this.search,

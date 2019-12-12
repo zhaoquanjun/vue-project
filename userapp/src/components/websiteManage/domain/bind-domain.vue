@@ -107,7 +107,7 @@ export default {
                         if (action === "confirm") {
                             this.handleCancel();
                             this.$emit("getCdnDomainList"); //添加成功后刷新域名列表
-
+                           
                         } 
                     }
                 });
