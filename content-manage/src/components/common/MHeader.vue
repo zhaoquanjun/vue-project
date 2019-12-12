@@ -8,7 +8,7 @@
           </span>
           <span @click="changeApp" class="headAppName">
             <span class="headAppNameInfo">已购买服务</span>
-            <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;vertical-align:middle"></i>
+            <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;"></i>
           </span>
         </div>
       </div>
@@ -405,14 +405,12 @@ export default {
     }
     .headAppName {
       cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin-left: 32px;
       padding: 0;
-      margin-left: 16px;
-      height: 40px;
-      line-height: 40px;
-      width: 250px;
+      .headAppNameInfo {
+        padding: 0;
+        margin-right: 12px;
+      }
       &:hover {
         .headAppNameInfo {
           color: $--color-primary;
