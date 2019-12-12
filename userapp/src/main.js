@@ -9,7 +9,10 @@ import "@/styles/custom.scss"
 import "@/styles/theme-chalk/index.scss"
 import "@/styles/elementui-reset/index.scss"
 
-    
+// 防抖 节流函数
+import Debounce from '@/globalComponents/debounce'
+Vue.component('Debounce', Debounce)
+
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 import uploader from 'vue-simple-uploader'
