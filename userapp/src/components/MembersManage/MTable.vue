@@ -81,10 +81,10 @@
                         class="handle-btn handle-btn-item"
                         @click="handleEdit(scope.$index, scope.row)"
                     >
-                        <i class="iconfont iconbianji"></i>
+                        <i class="iconfont iconbianji cl-iconfont is-square"></i>
                     </button>
                     <button class="handle-btn" @click="handleDelete(scope.$index, scope.row)">
-                        <i class="iconfont iconshanchu"></i>
+                        <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                     </button>
                 </template>
             </el-table-column>
@@ -272,9 +272,9 @@ export default {
     margin-right: 54px;
 }
 .table-list {
-    .iconfont {
+    .iconicon-dash-edit {
         &:hover {
-            color: #00c1de;
+            color: $--color-primary;
         }
     }
 }

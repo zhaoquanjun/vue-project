@@ -252,7 +252,7 @@ export default {
                 width: 100%;
                 border: 1px solid #e5e5e5;
                 &:hover {
-                    border: 1px solid #00c1de;
+                    border: 1px solid $--color-primary;
                 }
             }
             .auth-btn {
@@ -263,7 +263,7 @@ export default {
                 font-size: 16px;
                 color: #E5E5E5;
                 i:hover{
-                    color: #00c1de
+                    color: $--color-primary
                 }
             }
         }
