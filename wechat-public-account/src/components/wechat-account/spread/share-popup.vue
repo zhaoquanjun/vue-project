@@ -61,7 +61,7 @@
         </div>
         <div v-if="shareUrl" class="share-url">
           <div class="left">
-            <h6>设置成功</h6>
+            <h6>分享地址</h6>
             <vue-qr  
               :margin='0' 
               :text="shareUrl"

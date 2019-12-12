@@ -319,6 +319,7 @@ export default {
 .image-text {
     padding-top: 16px;
     height: 100%;
+    box-sizing: border-box;
 }
 .add-img {
     width: 100%;

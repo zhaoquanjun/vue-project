@@ -22,7 +22,7 @@
       <el-input
         size="medium"
         v-model="serchTitle"
-        placeholder="请输入内容"
+        :placeholder="listTitle3"
         @keyup.enter.native="getInfo"
         class="input-with-select"
       >
@@ -96,7 +96,7 @@
         </el-table>
       </template>
       <div class="cl-paganation paging" :class="{'noJumper':TotalPage <= 10}">
-        <a href="">如何进行页面推广？</a>
+        <a href="">如何进行{{listTitle2}}？</a>
         <el-pagination
           v-if="TotalRecord > 0"
           background
@@ -163,6 +163,8 @@ export default {
       shareId: '',
       isShow: false,
       listTitle: '页面标题',
+      listTitle2: '页面推广',
+      listTitle3: '搜索页面标题',
       type: '',
       isShowPopup: false,
       isShowCode: false,
@@ -211,12 +213,18 @@ export default {
     async getInfo(){
       let EntityTyp = 'Page';
       this.listTitle = '页面标题'
+      this.listTitle2= '页面推广'
+      this.listTitle3= '请输入搜索页面标题'
       if (this.replyType == 'news') {
         EntityTyp = 'News';
         this.listTitle = '文章标题'
+        this.listTitle2= '文章推广'
+        this.listTitle3= '请输入搜索文章标题'
       } else if (this.replyType == 'product') {
         EntityTyp = 'Product';
         this.listTitle = '产品标题'
+        this.listTitle2= '产品推广'
+        this.listTitle3= '请输入搜索产品标题'
       }
       let option= {
         PageSize: this.PageSize,

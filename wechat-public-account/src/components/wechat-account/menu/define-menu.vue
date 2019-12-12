@@ -795,7 +795,7 @@ export default {
       .phone-menu__divider {
         width: 1px;
         height: 32px;
-        background: #c9d9dc;
+        background: $--background-color-selected;
       }
       .no-menu__area {
         width: 100%;
@@ -820,13 +820,13 @@ export default {
         }
         li {
           position: relative;
-          margin: 8px 0;
+          padding: 8px 0;
           width: 106px;
           height: 32px;
           list-style: none;
           line-height: 32px;
           text-align: center;
-          color: #262626;
+          color: $--color-text-primary;
           border-right: $--border-base;
           cursor: pointer;
           .menu-child__area {
@@ -873,6 +873,7 @@ export default {
         }
         .selected {
           color: $--color-primary !important;
+          background: $--background-color-selected;
         }
       }
     }
