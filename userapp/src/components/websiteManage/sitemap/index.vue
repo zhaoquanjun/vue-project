@@ -214,15 +214,13 @@
                   <el-pagination
                     v-if="addListData.totalRecord > 0"
                     background
-                    :layout="addListData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
+                    layout="total, slot, prev, pager, next"
                     :total="addListData.totalRecord"
                     :page-size="addListData.pageSize"
                     :page-sizes="[10,20,50]"
                     @current-change="changeAddPage"
                     @size-change="changeAddSize"
                   >
-                    <div class="sizes-title">，每页显示</div>
-                    <button v-if="addListData.totalPage > 10" class="paging-confirm">跳转</button>
                   </el-pagination>
                 </div>
               </div>

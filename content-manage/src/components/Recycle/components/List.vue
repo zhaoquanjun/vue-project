@@ -64,6 +64,7 @@
                     <span
                         v-else
                         class="img-name"
+                        style="cursor:auto"
                     >{{ recycleTempData.type == 'product' ? scope.row.name : scope.row.title}}</span>
                 </template>
             </el-table-column>
