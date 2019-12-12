@@ -343,7 +343,7 @@ export default {
 }
 .verification-code {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 .verification-text {
     position: absolute;
