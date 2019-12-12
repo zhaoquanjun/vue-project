@@ -10,7 +10,11 @@ import "@/styles/theme-chalk/index.scss"
 import "@/styles/elementui-reset/index.scss"
 //  public end
 
-import Loading from './globalComponents/loading.js' 
+// 防抖 节流函数
+import Debounce from '@/globalComponents/debounce'
+Vue.component('Debounce', Debounce)
+
+import Loading from './globalComponents/loading.js'
 Vue.use(Loading)
 Vue.config.productionTip = false;
 //插件的包

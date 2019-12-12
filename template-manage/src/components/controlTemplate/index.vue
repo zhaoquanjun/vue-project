@@ -89,10 +89,12 @@
           </div>
 
           <div class="confirm">
-            <button
-              class="confirmBtn cl-button cl-button--primary cl-button--small"
-              @click="createTemplate"
-            >开通</button>
+            <Debounce :time="1000" !isDebounce>
+              <button
+                class="confirmBtn cl-button cl-button--primary cl-button--small"
+                @click="createTemplate"
+              >开通</button>
+            </Debounce>
             <button
               class="cl-button cl-button--primary_notbg cl-button--small"
               @click="cancelCreateTemplate"
