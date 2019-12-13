@@ -145,3 +145,8 @@ export const CreateSite = (language, siteName) => {
 export const copySite = (para) => {
     return ajaxRequest.post(`${environment.memberManageApi}/api/v1/siteInfo/CopySite`, para);
 }
+
+//  获取pv uv
+export const getPvUvIp = (appId) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/DomainManage/GetPvUvIp/${appId}`);
+}

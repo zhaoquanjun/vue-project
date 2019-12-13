@@ -78,7 +78,7 @@ export default {
     position: relative;
 }
 .choose-bg {
-    background: #e8f8fb;
+    background:rgba(255,107,0,0.2) !important;
 }
 
 .auth-name-title {
@@ -116,7 +116,7 @@ export default {
 
 .item-right {
     float: left;
-    width: 40px;
+    width: 36px;
     margin-left: 10px;
     height: 40px;
     overflow: hidden;
