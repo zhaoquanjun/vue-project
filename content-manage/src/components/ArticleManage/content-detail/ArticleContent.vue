@@ -522,6 +522,9 @@ export default {
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
 }
+.select-sort /deep/ .el-select{
+    width: 200px;
+}
 
 </style>
 
