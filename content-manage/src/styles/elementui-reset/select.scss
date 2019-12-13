@@ -18,7 +18,7 @@
         }
         .selected {
             background-color: $--background-color-selected;
-            span {
+            >span {
                 color: $--color-primary;
                 font-weight: $--font-weight-base;
             }
