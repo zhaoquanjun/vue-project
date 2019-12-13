@@ -72,7 +72,7 @@ export default {
 .memenber-auth {
     font-size: 12px;
     .choose-bg {
-        background: #e8f8fb;
+        background:rgba(255,107,0,0.2) !important;
         position: relative;
         &::before{
             position: absolute;
