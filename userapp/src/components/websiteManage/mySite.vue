@@ -77,7 +77,27 @@
         </el-tabs>
       </div>
       <div class="siteDetailinfo-wrap">
-        <div class="siteDetailinfo" v-show="siteInfoType == 'setting'">
+        <div v-show="siteInfoType === 'flow'" class="flowDetai">
+          <div class="flowHeader">
+            <el-select
+              v-model="flowDay"
+              @change="choseFlowDay"
+            >
+              <el-option
+                v-for="item in flowDayList"
+                :key="item.id"
+                :label="item.label"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+            <p>数据来源友盟+
+              <a href="">查看更多</a>
+            </p>
+          </div>
+          <div id="myChart" :style="{width: '100%', height: '100%'}"></div>
+        </div>
+        <div class="siteDetailinfo" v-show="siteInfoType === 'setting'">
+          
           <div class="siteType-wrap">
             <div class="siteType">
               <span>网站类型：</span>
@@ -261,6 +281,12 @@ import { getLanguage } from "@/configure/appCommon";
 import { formatDateTime } from "@/api/index";
 import environment from "@/environment/index.js";
 import { designerUrl } from "@/environment/index";
+let echarts = require('echarts/lib/echarts')
+// 引入柱状图组件
+require('echarts/lib/chart/line')
+// 引入提示框和title组件
+//require('echarts/lib/component/tooltip')
+require('echarts/lib/component/legend')
 export default {
   components: {
     PageSubmenu,
@@ -281,6 +307,11 @@ export default {
       chosedSiteType: "",
       siteFirstIndustryValue: "",
       siteFirstIndustry: [],
+      flowDay: '近7天',
+      flowDayList: [{id:7,label: '近7天'},{id:30,label: '近30天'}],
+      pvList: [1,2,3,4,8,3,9],
+      uvList: [4,5,2,7,0,2,5],
+      yList: [1,2,3,4,5,6,7],
       firstIndustryId: 0,
       siteSecondIndustryValue: "",
       siteSecondIndustry: [],
@@ -298,8 +329,11 @@ export default {
         Authorization: ""
       },
       uploadPicUrl: environment.uploadPicUrl + "/0",
-      siteInfoType: "setting"
+      siteInfoType: "flow"
     };
+  },
+  mounted(){
+    this.getPvUvIp()
   },
   methods: {
     handleClick() {},
@@ -308,6 +342,12 @@ export default {
       this.changeSiteName = this.siteName;
       this.changeRadio = this.language;
       this.changeSiteShow = true;
+    },
+    async getPvUvIp() {
+      let {data} = await dashboardApi.getPvUvIp(this.siteId)
+      if(data) {
+        this.initCode()
+      }
     },
     // 关闭修改site弹窗
     closeChangeDialog() {
@@ -572,6 +612,79 @@ export default {
     },
     bindDomain() {
       this.$router.push("/website/mysite/sitedomain");
+    },
+    choseFlowDay(){
+
+    },
+    //生成图表
+    initCode(){
+      // 基于准备好的dom，初始化echarts实例
+
+        let myChart = echarts.init(document.getElementById('myChart'))
+        // 绘制图表
+        myChart.setOption({
+          backgroundColor: '#fff',
+          legend: {
+            // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+            x: 'right',
+            // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+            y: '36px',
+            color: 'red',
+            data:['uv','pv']
+          },
+          grid: {
+              left: '0%',
+              right: '6px',
+              bottom: '0%',
+              top: '80px',
+              containLabel: true
+          },
+          xAxis: {
+              type: 'category',
+              boundaryGap: false,
+              //data: this.interval == 1 ? this.yList:this.yLast,
+              data: this.yList,
+              axisLabel: {
+                interval: this.interval  //设置X轴数据间隔几个显示一个，为0表示都显示
+              },
+              axisLine: {
+                lineStyle: {
+                  color: '#A1A8B1'
+                }
+              }
+          },
+          yAxis: {
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  color: '#A1A8B1'
+                }
+              }
+            },
+          series: [
+              {
+                  name:'pv',
+                  type:'line',
+                  stack: 'pv',
+                  symbolSize:5,
+                  symbol:'circle', 
+                  smooth: true, 
+                  //data: this.interval == 1 ? this.pvList:this.pvLast
+                  data: this.pvList
+              },
+              {
+                  name:'uv',
+                  type:'line',
+                  stack: 'uv',
+                  symbolSize:5,
+                  symbol:'circle',
+                  smooth: true, 
+                  //data: this.interval == 1 ? this.uvList:this.uvLast
+                  data: this.uvList
+              }
+          ],
+          color: ['#23CD5D', '#FF6A00']
+        });
     }
   }
 };
@@ -727,6 +840,36 @@ export default {
   background: $--color-white;
   border-radius: $--border-radius-base;
   border: $--border-base;
+  .flowDetai {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 16px 32px;
+    box-sizing: border-box;
+    .flowHeader {
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      top: 16px;
+      left: 0;
+      z-index: 2;
+      width: 100%;
+      height: 32px;
+      padding: 0 32px;
+      box-sizing: border-box;
+      p {
+        width:140px;
+        font-size:12px;
+        font-weight:400;
+        color:rgba(159,159,159,1);
+        line-height:32px;
+        text-align: right;
+        a {
+          color: $--color-primary;
+        }
+      }
+    }
+  }
   .siteDetailinfo {
     width: calc(100% - 48px);
     margin: 0 24px;
