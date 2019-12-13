@@ -20,16 +20,18 @@
               size="medium"
               v-model="search"
               placeholder="输入模版名称"
+              @focus="showSearchIcon=true"
+              @clear="showSearchIcon=true"
               @keyup.enter.native="searchTemplateAll"
               clearable
               style="width:190px" 
               class="searchTemplate"
             >
               <i
-                class="el-icon-search el-input__icon"
-                style="cursor: pointer;color:#D7D8D9;position:absolute;right:20px;"
-                slot="prefix"
-                @click="searchTemplateAll"
+                class="iconfont iconbianzu"
+                :class="{showSearchIcon:(showSearchIcon==false||search!='')}"
+                style="color:#D7D8D9;position:relative;right:5px;width:8px;height:8px;right:10px;top:9px;"
+                slot="suffix"
               ></i>
             </el-input>
             <div class="order">
@@ -127,7 +129,7 @@
               <i class="iconfont iconguanbi cl-iconfont is-circle" @click="closeDialog"></i>
             </div>
             <el-main 
-              style="position:relative;padding:0 42px;"
+              style="position:relative;padding:0 42px;text-align:center;"
               v-scrollBar
               class="templateContent"
             >
@@ -152,6 +154,9 @@
                     </div>
                     <div class="curModal" v-show="item.id == templateId">当前选择</div>
                     <div class="itemSiteNumber">编号：{{item.id}}</div>
+                    <!-- <div class="itemSiteNumber" v-if="item.id<10">编号：T00{{item.id}}</div>
+                    <div class="itemSiteNumber" v-else-if="item.id<100">编号：T0{{item.id}}</div>
+                    <div class="itemSiteNumber" v-else-if="item.id>=100">编号：T{{item.id}}</div> -->
                   </div>
                   <div class="itemSiteInfo">
                     <div class="itemSiteInfoLeft">
@@ -422,12 +427,19 @@ export default {
       errorSite: "",
       showWaterFall:true,
       isShowAside:true,
-      isTree:0
+      isTree:0,
+      showSearchIcon:true
     };
   },
   created(){
     window.addEventListener("scroll",this.scroll,true)
-    this.getWaterfallItemPercent();
+     this.$nextTick(()=>{
+        if(document.body.clientWidth<1680){
+          this.percent=[1,1,1]
+        }else{
+          this.percent=[1,1,1,1]
+        }
+      })
   },
   computed: {},
   mounted() {
@@ -443,11 +455,25 @@ export default {
         let icon=document.getElementsByClassName("isShow")[0];
         if(this.isShowAside){
           icon.style.left=0;
+          if(document.body.clientWidth<1680){
+            this.percent=[1,1,1]
+          }else{
+            this.percent=[1,1,1,1]
+         }
         }else{
           icon.style.left=240+"px";
+          this.$nextTick(()=>{
+          if(document.body.clientWidth<1680){
+            this.percent=[1,1,1]
+          }else{
+            this.percent=[1,1,1,1]
+         }
+        })
         }
         this.isShowAside=!this.isShowAside;
+        
       })
+      
     },
     prevPC(domain){
       window.open(`http://${domain}/prev/showtemplate/?flag=pc`,"_blank");
@@ -456,11 +482,13 @@ export default {
       window.open(`http://${domain}/prev/showtemplate/?flag=mb`,"_blank");
     },
     getWaterfallItemPercent(){
-      if(document.body.clientWidth>=1920){
-        this.percent=[1,1,1,1]
-      }else{
-        this.percent=[1,1,1]
-      }
+      this.$nextTick(()=>{
+        if(document.getElementById("waterfall").clientWidth>=1920){
+          this.percent=[1,1,1,1]
+        }else{
+          this.percent=[1,1,1]
+        }
+      })
     },
     resetScrollTop(){
       this.$nextTick(()=>{
@@ -783,17 +811,20 @@ export default {
     // 关闭弹窗
     closeDialog() {
       this.changeIndustry(this.firstIndustry[0].id);
+      this.showSearchIcon=true;
       this.isTree=0;
       this.pageIndex = 1;
       this.pageSize = 9;
       this.templateShow = false;
       this.languageSelect = "";
       this.search = "";
+      this.isShowAside=false;
+      this.isShowAsideList();
       this.orderType.forEach((item, index) => {
         item.isOrder = false;
       });
       this.orderType[0].isOrder = true;
-
+      this.getWaterfallItemPercent();
       
     },
     // // 选择全部模版
@@ -981,10 +1012,11 @@ export default {
   background:transparent;
   border-radius: 4px;
 }
-.searchTemplate /deep/ .el-input__prefix{
-  position: relative;
-  left: 0;
-}
+
+// .searchTemplate /deep/ .el-input__prefix{
+//   position: relative;
+//   left: 0;
+// }
 .searchTemplate /deep/ .el-input__inner{
   border:1px solid rgba(89,99,104,1);
   background:#41494E;
@@ -1015,7 +1047,9 @@ export default {
 .industryTree /deep/ .expanded {
   transform: rotate(90deg);
 }
-
+.showSearchIcon{
+  display: none;
+}
 .right-pannel {
   background: $--color-black-dark;
   position: fixed;
