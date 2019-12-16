@@ -725,9 +725,10 @@ export default {
             margin-bottom: 5px;
             font-size: $--font-size-small;
             margin-right: 5px;
-            background: #609ee9;
+            background: $--color-primary;
             .el-icon-close {
                 cursor: pointer;
+                color: #fff;
             }
         }
     }
