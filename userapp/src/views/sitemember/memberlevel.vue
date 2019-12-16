@@ -74,7 +74,7 @@
         font-family: "PingFangSC-Regular,PingFangSC";
         .member-title{
             font-size: 14px;
-            font-weight: 400;
+            font-weight: 700;
             color: rgba(38,38,38,1);
             margin: 5px 0 17px;
             padding-left: 10px;
