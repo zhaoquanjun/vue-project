@@ -71,6 +71,7 @@
             async save() {
                 let { status, data } = await memberManageApi.editMemberDetail(this.memberDetail);
                 if (status === 200) {
+                    this.close()
                     this.$notify({
                         customClass: "notify-success", //  notify-success ||  notify-error
                         message: `保存成功!`,

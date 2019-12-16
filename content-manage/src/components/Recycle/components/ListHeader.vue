@@ -58,7 +58,7 @@
                         {{recycleTempData.batchText}}
                     </span>
                     <div>
-                        <button class="btn-small btn-lightblue-notboard" @click="batchRecovery">恢复</button>
+                        <button class="cl-button cl-button--text_primary" @click="batchRecovery">恢复</button>
                     </div>
                 </div>
             </template>
@@ -143,5 +143,8 @@ export default {
     font-weight:600;
     padding-bottom: 24px;
 }
-
+.handle-batch button {
+    margin: 0;
+    min-width: 60px;
+}
 </style>

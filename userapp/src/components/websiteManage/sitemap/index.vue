@@ -160,7 +160,10 @@
             <span class="title">{{addType}}</span>
             <span class="tips" v-show="type == '文章'">仅显示已上线文章</span>
             <span class="tips" v-show="type == '产品'">仅显示已上架产品</span>
-            <i class="iconfont iconguanbi cl-iconfont is-circle close-pannel" @click="closeAddDialog"></i>
+            <i
+              class="iconfont iconguanbi cl-iconfont is-circle close-pannel"
+              @click="closeAddDialog"
+            ></i>
           </div>
           <div style="padding:24px">
             <el-input
@@ -205,11 +208,7 @@
                 </el-table-column>
               </el-table>
               <div class="list-footer" v-show="addListData.totalRecord > 0">
-                <div 
-                  class="cl-pagination pageing" 
-                  id="pageing" 
-                  :class="{'noJumper':addListData.totalPage <= 10}"
-                >
+                <div class="cl-pagination pageing noJumper" id="pageing">
                   <slot name="paging"></slot>
                   <el-pagination
                     v-if="addListData.totalRecord > 0"
@@ -220,8 +219,7 @@
                     :page-sizes="[10,20,50]"
                     @current-change="changeAddPage"
                     @size-change="changeAddSize"
-                  >
-                  </el-pagination>
+                  ></el-pagination>
                 </div>
               </div>
             </div>

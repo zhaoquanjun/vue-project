@@ -349,14 +349,17 @@ export default {
   }
   .selectSearchValue {
     width: 100px;
-    /deep/ .is-focus {
-      z-index: 2;
-    }
+    z-index: 2;
   }
   .searchInput {
     margin-left: -2px;
     width: 200px;
-    z-index: 1;
+    /deep/ .el-input__inner {
+      &:focus {
+        z-index: 3;
+        position: relative;
+      }
+    }
   }
   .selectSortValue {
     margin-left: 45px;

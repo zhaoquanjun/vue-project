@@ -403,6 +403,16 @@ export default {
 .el-dialog__wrapper /deep/ .el-dialog {
     margin-top: 70px !important;
 }
+.el-dialog__wrapper /deep/ .el-dialog .el-dialog__headerbtn .el-dialog__close {
+    font-size: 14px;
+    color: $--color-text-primary;
+    padding: 8px;
+    margin-top: -12px;
+     &:hover {
+        background-color: $--icon-hover-color;
+        border-radius: $--border-radius-circle;
+    }
+}
 </style>
 
 

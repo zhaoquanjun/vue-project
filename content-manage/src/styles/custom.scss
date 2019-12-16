@@ -143,6 +143,17 @@ body {
     font-size: 14px
 }
 
+.el-dialog__wrapper /deep/ .el-dialog .el-dialog__headerbtn .el-dialog__close {
+    font-size: 14px;
+    color: $--color-text-primary;
+    padding: 8px;
+    margin-top: -12px;
+     &:hover {
+        background-color: $--icon-hover-color;
+        border-radius: $--border-radius-circle;
+    }
+}
+
 
 .icon-size {
     display: inline-block;

@@ -402,7 +402,7 @@ export default {
     padding: 0 26px 0 10px;
     font-size: $--font-size-small;
     vertical-align: top;
-    background-color: #609ee9;
+    background-color: $--color-primary;
     border-radius: 16px;
     // border: 1px #609ee9 solid;
     color: #fff;

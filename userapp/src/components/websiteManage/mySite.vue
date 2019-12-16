@@ -94,7 +94,7 @@
               <a href="">查看更多</a>
             </p>
           </div>
-          <div id="myChart" :style="{width: '100%', height: '100%'}"></div>
+          <div id="myChart" class="myChat"></div>
         </div>
         <div class="siteDetailinfo" v-show="siteInfoType === 'setting'">
           
@@ -329,10 +329,19 @@ export default {
         Authorization: ""
       },
       uploadPicUrl: environment.uploadPicUrl + "/0",
-      siteInfoType: "flow"
+      siteInfoType: "flow",
+      screenWidth: document.body.clientWidth, // 屏幕宽度
+      timer: true,
+      myChart:null
     };
   },
-  mounted(){
+  mounted () {
+    // 监听窗口大小
+    window.onresize = () => {
+      return (() => {
+        this.screenWidth = document.body.clientWidth
+      })()
+    },
     this.getPvUvIp()
   },
   methods: {
@@ -618,10 +627,9 @@ export default {
     //生成图表
     initCode(){
       // 基于准备好的dom，初始化echarts实例
-
-        let myChart = echarts.init(document.getElementById('myChart'))
+        this.myChart = echarts.init(document.getElementById('myChart'))
         // 绘制图表
-        myChart.setOption({
+        this.myChart.setOption({
           backgroundColor: '#fff',
           legend: {
             // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
@@ -685,7 +693,18 @@ export default {
           color: ['#23CD5D', '#FF6A00']
         });
     }
-  }
+  },
+  watch: {
+        screenWidth(val) {
+          if (this.timer) {
+            this.timer = false
+            setTimeout(()=> {
+              this.myChart.resize();
+              this.timer = true
+            },500)
+          }
+        }
+    }
 };
 </script>
 <style lang="scss" scoped>
@@ -867,6 +886,10 @@ export default {
           color: $--color-primary;
         }
       }
+    }
+    .myChat {
+      width: 100%;
+      height: 460px;
     }
   }
   .siteDetailinfo {

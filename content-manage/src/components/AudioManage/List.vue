@@ -32,7 +32,6 @@
                         placeholder="请输入内容"
                         v-model="scope.row.title"
                         maxlength="30"
-                        show-word-limit
                         @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
 
