@@ -75,7 +75,6 @@
                         <i
                           v-if="active == scope.row.id"
                           class="iconfont iconicon-dash-edit cl-iconfont"
-                          style="color:#09CCEB;vertical-align:text-bottom;margin-left:5px"
                           :data-type="'remarkIcon'+ scope.$index"
                           :ref="'remarkIcon'+ scope.$index"
                         ></i>
@@ -557,6 +556,14 @@ export default {
   white-space: nowrap;
   max-width: calc(100% - 32px);
   vertical-align: text-bottom;
+}
+.iconicon-dash-edit {
+  color: #262626;
+  vertical-align: text-bottom;
+  margin-left: 5px;
+  &:hover {
+    color: $--color-primary;
+  }
 }
 .backupTip {
   margin-top: 16px;
