@@ -36,7 +36,7 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          <span class="line"></span>
+          <!-- <span class="line"></span>
           <el-select
             v-model="secondIndustrySelect"
             placeholder="二级行业"
@@ -48,7 +48,7 @@
               :label="item.name"
               :value="item.id"
             ></el-option>
-          </el-select>
+          </el-select> -->
           <el-select v-model="languageSelect" placeholder="语言" class="languageSelect inputHeight">
             <el-option
               v-for="item in languageOptions"
@@ -114,7 +114,9 @@
             <el-table-column label="模板名称|语言" min-width="120">
               <template slot-scope="scope">
                 <div>
-                  <p class="templateName overflow">{{scope.row.templateName}}</p>
+                  <el-tooltip :content="scope.row.templateName" placement="bottom" :disabled="scope.row.templateName.trim().length < 20">
+                    <p class="templateName overflow">{{scope.row.templateName}}</p>
+                  </el-tooltip>
                   <p
                     class="templateName"
                     style="margin-top:8px;"
@@ -1009,6 +1011,9 @@ export default {
           return true;
         }
       );
+      if (id != 0) {
+        this.errorTemplateIndustryShow = false;
+      }
     },
     choseSettingSecondIndustry(id) {
       if (id != 0) {
@@ -1026,7 +1031,6 @@ export default {
         this.settingChecked = data.isRecommend;
         this.picUrl = data.imageUrl;
         this.picUrlMobile = data.mobileImageUrl;
-        this.settingTemplateShow = true;
         this.settingFirstIndustrySelect = data.firstIndustry;
         if (this.settingFirstIndustrySelect != 0) {
           let { data, status } = await templateApi.getSecondIndustries(
@@ -1043,6 +1047,7 @@ export default {
         } else {
           this.settingSecondIndustrySelect = data.secondIndustry;
         }
+        this.settingTemplateShow = true;
       }
     },
     // 保存设置模版
@@ -1053,7 +1058,7 @@ export default {
       } else if (!/^.{1,100}$/.test(this.settingTemplateName)) {
         this.errorTemplateNameTips = true;
         this.errorTemplateName = "模版名称最大长度为100个字符";
-      } else if (this.settingSecondIndustrySelect == 0) {
+      } else if (this.settingFirstIndustrySelect == 0) {
         this.errorTemplateIndustryShow = true;
       } else {
         this.errorTemplateIndustryShow = false;
@@ -1068,8 +1073,8 @@ export default {
           templateType: "SiteTemplate",
           isRecommend: this.settingChecked,
           status: this.settingTemplateStatus,
-          firstIndustryId: this.settingFirstIndustrySelect,
-          secondIndustryId: this.settingSecondIndustrySelect
+          firstIndustryId: Number(this.settingFirstIndustrySelect),
+          secondIndustryId: Number(this.settingSecondIndustrySelect)
         };
         let { data, status } = await templateApi.saveSiteTemplate(para);
         this.settingTemplateShow = false;
@@ -1466,6 +1471,7 @@ export default {
     width: 140px;
     height: 32px;
     margin-left: 32px;
+    margin-right: 24px;
   }
   .line {
     margin: 0 9px;

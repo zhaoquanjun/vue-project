@@ -49,7 +49,10 @@
                   >选择网站</button>
                 </div>
                 <div class="siteLanguageWrap">
-                  <div class="curSite" v-show="item.siteId == curSiteId">当前选择</div>
+                  <div class="curSite" v-show="item.siteId == curSiteId">
+                    <div class="curSiteImg"></div>
+                    <span class="curSiteText">当前选择</span>
+                  </div>
                   <div class="siteLanguage">{{_getLanguage(item.language)}}</div>
                 </div>
               </div>
@@ -293,6 +296,7 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
+        display: flex;
         .curSite {
           display: inline-block;
           margin-left: 8px;
@@ -301,10 +305,23 @@ export default {
           height: 32px;
           background: $--color-black-light;
           text-align: center;
-          font-size: $--font-size-small;
-          font-weight: $--font-weight-base;
-          color: $--color-white;
-          line-height: 32px;
+          vertical-align: top;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .curSiteImg {
+            background: url("~img/siteManage/cursiteImg.png") no-repeat center;
+            background-size: contain;
+            display: inline-block;
+            width: 15px;
+            height: 12px;
+          }
+          .curSiteText {
+            margin-left: 4px;
+            font-size: $--font-size-small;
+            font-weight: $--font-weight-base;
+            color: $--color-white;
+          }
         }
         .siteLanguage {
           display: inline-block;
@@ -341,6 +358,7 @@ export default {
         height: 100%;
         opacity: 0;
         background: rgba(0, 0, 0, 0.5);
+        z-index: 2;
       }
       &:hover {
         transform: translateY(-10px);

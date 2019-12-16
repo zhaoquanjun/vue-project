@@ -75,7 +75,6 @@
                         <i
                           v-if="active == scope.row.id"
                           class="iconfont iconicon-dash-edit cl-iconfont"
-                          style="color:#09CCEB;vertical-align:text-bottom;margin-left:5px"
                           :data-type="'remarkIcon'+ scope.$index"
                           :ref="'remarkIcon'+ scope.$index"
                         ></i>
@@ -111,18 +110,18 @@
                 <template slot-scope="scope">
                   <div class="handle-btn-wrap">
                     <el-tooltip content="还原备份包" placement="top" :disabled="disabled">
-                      <button class="handle-btn" @click="recovery( scope )">
-                        <i class="iconfont iconhuifu" style="color:#262626"></i>
+                      <button @click="recovery( scope )">
+                        <i class="iconfont iconhuifu cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
                     <el-tooltip content="下载备份包" placement="top" :disabled="disabled">
-                      <button class="handle-btn" @click="downloadBackup( scope )">
-                        <i class="iconfont iconxiazai" style="color:#262626"></i>
+                      <button @click="downloadBackup( scope )">
+                        <i class="iconfont iconxiazai cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
                     <el-tooltip content="删除备份包" placement="top" :disabled="disabled">
-                      <button class="handle-btn" @click="deleteBackup( scope )">
-                        <i class="iconfont iconshanchu" style="color:#262626"></i>
+                      <button @click="deleteBackup( scope )">
+                        <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
                   </div>
@@ -131,8 +130,8 @@
             </el-table>
           </div>
           <div class="backupTip">
-            <div>· 系统将在您更换网站模版与还原备份包时自动备份当前站点设计</div>
-            <div>· 手动与自动备份包最多可分别保留20个，自动备份包数量已满时，最早的自动备份包会被删除</div>
+            <div>1、系统将在您更换网站模版与还原备份包时自动备份当前站点设计</div>
+            <div>2、手动与自动备份包最多可分别保留20个，自动备份包数量已满时，最早的自动备份包会被删除</div>
           </div>
           <el-dialog
             width="0"
@@ -294,24 +293,22 @@ export default {
       this.disabled = true;
       let message = [];
       message.push(
-        this.$createElement("p", null, "确定要将网站还原至该备份版本吗？")
+        this.$createElement(
+          "p",
+          { style: "color: #262626" },
+          "确定要将网站还原至该备份版本吗？"
+        )
       );
       message.push(
         this.$createElement(
           "p",
-          null,
+          { style: "color: #8C8C8C;width:350px" },
           "还原后系统会自动备份当前站点设计，可在自动备份列表中查看。"
         )
       );
       this.$confirm("提示", {
         title: "提示",
-        message: this.$createElement(
-          "div",
-          {
-            style: "font-size:14px;font-weight:400;color:rgba(38,38,38,1);"
-          },
-          message
-        ),
+        message: this.$createElement("div", null, message),
         iconClass: "icon-warning",
         type: "warning",
         callback: async action => {
@@ -407,7 +404,17 @@ export default {
      */
     async downloadBackup(scope) {
       this.disabled = true;
-      this.$confirm(`确定下载该备份包？`, "提示", {
+      let message = [];
+      message.push(
+        this.$createElement(
+          "p",
+          { style: "color: #262626" },
+          "确定下载该备份包？"
+        )
+      );
+      this.$confirm("提示", {
+        title: "提示",
+        message: this.$createElement("div", null, message),
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
@@ -443,7 +450,17 @@ export default {
      */
     async deleteBackup(scope) {
       this.disabled = true;
-      this.$confirm(`备份包删除后不可恢复，确定要删除吗？`, "提示", {
+      let message = [];
+      message.push(
+        this.$createElement(
+          "p",
+          { style: "color: #262626" },
+          "备份包删除后不可恢复，确定要删除吗？"
+        )
+      );
+      this.$confirm("提示", {
+        title: "提示",
+        message: this.$createElement("div", null, message),
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
@@ -540,6 +557,14 @@ export default {
   max-width: calc(100% - 32px);
   vertical-align: text-bottom;
 }
+.iconicon-dash-edit {
+  color: #262626;
+  vertical-align: text-bottom;
+  margin-left: 5px;
+  &:hover {
+    color: $--color-primary;
+  }
+}
 .backupTip {
   margin-top: 16px;
   margin-bottom: 32px;
@@ -599,13 +624,6 @@ export default {
   width: 70%;
   display: flex;
   justify-content: space-between;
-  .handle-btn {
-    padding: 8px;
-    background: transparent;
-    &:hover {
-      background: rgba(240, 243, 247, 1);
-    }
-  }
 }
 // 右侧弹框
 .right-pannel {

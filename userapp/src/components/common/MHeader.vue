@@ -113,7 +113,7 @@
             </div>
             <div class="appInfo">
               <div class="version">
-                <span class="versionText">{{item.name}}</span>
+                <span class="versionText">{{item.name?item.name:"备注"}}</span>
                 <el-popover
                   :ref="`popover-${index}`"
                   placement="bottom"
@@ -233,7 +233,7 @@ export default {
     },
     // 显示修改appName弹框
     showRemark(item) {
-      this.appName = item.name ? item.name : "";
+      this.appName = item.name == "备注" ? "" : item.name;
     },
     // 取消修改
     cancelInput(index) {
