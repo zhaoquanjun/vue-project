@@ -172,12 +172,6 @@ export default {
                 console.log("send")
                 let { status } = await sendSourcePhoneCode();
                 if (status === 200) {
-                    this.$notify({
-                        customClass: "notify-success",
-                        message: "发送成功",
-                        duration: 1500,
-                        showClose: false
-                    });
                     if (!this.timer) {
                         this.count = TIME_COUNT;
                         this.show = false;
@@ -212,12 +206,6 @@ export default {
             } else {
                 let { status } = await sendTargetPhoneCode(targetPhone);
                 if (status === 200) {
-                    this.$notify({
-                        customClass: "notify-success",
-                        message: "发送成功",
-                        duration: 1500,
-                        showClose: false
-                    });
                     if (!this.timer) {
                         this.count = TIME_COUNT;
                         this.show = false;

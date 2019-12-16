@@ -56,8 +56,8 @@
       <el-table-column label="操作" min-width="80">
         <template slot-scope="scope">
           <div>
-            <button class="hoverBtn" style="margin-right:16px" @click="remove(scope.row)">
-              <i class="iconfont iconshanchu"></i>
+            <button style="margin-right:16px" @click="remove(scope.row)">
+              <i class="iconfont iconshanchu cl-iconfont is-square"></i>
             </button>
           </div>
         </template>
@@ -226,13 +226,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-}
-.hoverBtn {
-  padding: 8px;
-  background: transparent;
-  &:hover {
-    background: rgba(240, 243, 247, 1);
-  }
 }
 </style>
 
