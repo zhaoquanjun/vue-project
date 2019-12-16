@@ -447,6 +447,7 @@ export default {
             width:450px;
             height:40px;
             padding-left: 10px;
+            box-sizing: border-box;
             border-radius:$--border-radius-base;;
             border:$--border-base;
             font-size:$--font-size-small;

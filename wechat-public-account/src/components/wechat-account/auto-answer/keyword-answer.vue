@@ -205,15 +205,25 @@ export default {
         },
         //校验关键词
         checkKeyword(index) {
+            let allKeywordList = true
             if (!trim(this.keywordList[index].keyword)) {
                 this.error[index].onerrorTip = true;
                 this.error[index].onerrorText = "关键词不能为空";
-                return false;
+                allKeywordList = false
             } else {
-                this.error[index].onerrorTip = false;
-                this.error[index].onerrorText = "";
-                return true;
+                for (let i = 0; i < this.keywordList.length; i++) {
+                    if(!trim(this.keywordList[i].keyword)){
+                        this.error[i].onerrorTip = true;
+                        this.error[i].onerrorText = "关键词不能为空";
+                        allKeywordList = false
+                        break;
+                    } else {
+                        this.error[i].onerrorTip = false;
+                        this.error[i].onerrorText = "";
+                    }
+                }
             }
+            return allKeywordList
         },
         // 回车搜索
         searchEnterFun() {
