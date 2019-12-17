@@ -9,6 +9,7 @@
                     placeholder="请输入权限名称"
                     @input="changeInput"
                     :clearable="true"
+                    @keyup.enter='searchAuth'
                 />
                 <button class="auth-btn" @click="searchAuth">
                     <i class="el-icon-search el-input__icon"></i>
@@ -71,8 +72,6 @@ export default {
                 this.oldUserPermission = JSON.stringify(this.userPermission);
                 this.flag = true;
             }
-
-            console.log(this.oldUserPermission, "this.oldUserPermission");
             let ary = [];
             this.userPermission.forEach(item => {
                 if (item.name.includes(this.input)) {

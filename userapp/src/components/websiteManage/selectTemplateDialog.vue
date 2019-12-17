@@ -21,7 +21,7 @@
               v-model="search"
               placeholder="输入模版名称"
               @focus="showSearchIcon=true"
-              @clear="showSearchIcon=true"
+              @clear="clearSearchText"
               @keyup.enter.native="searchTemplateAll"
               clearable
               style="width:190px" 
@@ -66,10 +66,20 @@
                 @click="changeIndustry(item)"
               >
                 <el-tooltip 
-                  v-if="item.children&&item.children.length>=1" class="item" effect="light" 
-                  :content="(item.children&&item.children.length>=1)?item.children[0].label:''" 
-                  placement="top-start"
+                  v-if="item.childernName"
+                  :content="item.childernName" 
+                  placement="right-start"
+                  :open-delay="600"
+                  popper-class="popper-bg"
                 >
+                  <div slot="content" v-if="item.childernName.length <=25" class="popper">
+                    {{item.childernName}}
+                  </div>
+                  <div slot="content" v-else-if="item.childernName.length>25" class="popper">
+                    {{item.childernName.slice(0, 25)}}
+                    <br/>{{item.childernName.slice(25,50)}}
+                    <br/>{{item.childernName.slice(50)}}
+                  </div>
                   <div class="listTitle">{{item.label}}</div>
                 </el-tooltip>
                 <div v-else class="listTitle">{{item.label}}</div>
@@ -132,14 +142,16 @@
               style="position:relative;padding:0 42px;text-align:center;"
               v-scrollBar
               class="templateContent"
+              id="templateContent"
             >
-              <Waterfall v-if="showWaterFall" id="waterfall" :resizable="true" :percent="percent">
-                <WaterfallItem
+              <div id="waterfall" style="height: 100%;text-align: center;position: relative;">
+                <div
                   class="waterFallTemplateItem"
                   v-for="(item, index) in templateInfo"
                   :key="index"
+                  ref="imgs"
                 >
-                  <div ref="imgs" style="padding-bottom:30px;margin-left:5%;">
+                  <div style="padding-bottom:30px;margin-left:10px;">
                     <div class="itemSiteImage">
                     <div
                       class="itemSiteImageBackground"
@@ -163,7 +175,7 @@
                       <el-tooltip 
                         v-if="item.templateName && item.templateName.trim().length > 10" effect="light" 
                         :content="item.templateName" 
-                        placement="bottom-start"
+                        placement="right"
                       >
                         <div class="itemSiteName">
                           {{item.templateName.slice(0, 10) + '...'}}
@@ -174,14 +186,14 @@
                       </div>
                     </div>
                     <div class="itemSiteInfoRight">
-                      <i class="iconfont iconicon-diannao icon-link" @click="prevPC(item.domain)"></i>
-                      <i class="iconfont iconicon-des-dianhua icon-link" @click="prevMB(item.domain)"></i>
+                      <i class="iconfont iconicon-diannao icon-link" @click="goPrevTemplate(item,'pc')"></i>
+                      <i class="iconfont iconicon-des-dianhua icon-link" @click="goPrevTemplate(item,'mb')"></i>
                     </div>
                   </div>
                   </div>
-                </WaterfallItem>
-              </Waterfall>
-              <div v-else
+                </div>
+              </div>
+              <!-- <div v-else
               >
                   <el-row :gutter="80">
                   <el-col
@@ -219,9 +231,9 @@
                     </div>
                   </el-col>
                 </el-row>
-              </div>
+              </div> -->
             </el-main>
-            
+            <div v-show="showNoMore" style="text-align:center;color:#9F9F9F;">已经到底啦</div>
             <div>
               <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
               <div style="display:none">
@@ -332,14 +344,8 @@ import { designerUrl } from "@/environment/index";
 import { getMemberList } from "@/api/request/siteMemberApi";
 import { nextTick } from 'q';
 
-import { Waterfall, WaterfallItem } from "vue2-waterfall"
-
 export default {
   props: ["siteId", "siteName", "templateId", "isChangeTemplate"],
-  components: {
-    Waterfall,
-    WaterfallItem
-  },
   data() {
     return {
       percent:[1,1,1],
@@ -428,68 +434,110 @@ export default {
       showWaterFall:true,
       isShowAside:true,
       isTree:0,
-      showSearchIcon:true
+      showSearchIcon:true,
+      showNoMore:false
     };
   },
   created(){
     window.addEventListener("scroll",this.scroll,true)
-     this.$nextTick(()=>{
-        if(document.body.clientWidth<1680){
-          this.percent=[1,1,1]
-        }else{
-          this.percent=[1,1,1,1]
-        }
-      })
   },
   computed: {},
   mounted() {
   },
   watch:{
+    search(){
+      if(this.search==""){
+        this.changeIndustry(this.firstIndustry[0].id);
+        this.showSearchIcon=true;
+        this.isTree=0;
+        this.pageIndex = 1;
+        this.pageSize = 9;
+        this.orderType.forEach((item, index) => {
+          item.isOrder = false;
+        });
+        this.orderType[0].isOrder = true;
+        this.getTemplateList();
+        this.changeOrder(this.orderType[0]);
+      }
+    }
   },
   updated(){
     
   },
   methods: {
+    // 搜索内容为空，获取模版列表
+    clearSearchText(){
+      this.changeIndustry(this.firstIndustry[0].id);
+      this.showSearchIcon=true;
+      this.isTree=0;
+      this.pageIndex = 1;
+      this.pageSize = 9;
+      this.orderType.forEach((item, index) => {
+        item.isOrder = false;
+      });
+      this.orderType[0].isOrder = true;
+      this.getTemplateList();
+      this.changeOrder(this.orderType[0]);
+    },
+    // 左侧分类栏放开 收起
     isShowAsideList(){
       this.$nextTick(()=>{
         let icon=document.getElementsByClassName("isShow")[0];
         if(this.isShowAside){
           icon.style.left=0;
-          if(document.body.clientWidth<1680){
-            this.percent=[1,1,1]
-          }else{
-            this.percent=[1,1,1,1]
-         }
         }else{
           icon.style.left=240+"px";
-          this.$nextTick(()=>{
-          if(document.body.clientWidth<1680){
-            this.percent=[1,1,1]
-          }else{
-            this.percent=[1,1,1,1]
-         }
-        })
         }
+        this.waterFall();
         this.isShowAside=!this.isShowAside;
-        
       })
       
     },
-    prevPC(domain){
-      window.open(`http://${domain}/prev/showtemplate/?flag=pc`,"_blank");
-    },
-    prevMB(domain){
-      window.open(`http://${domain}/prev/showtemplate/?flag=mb`,"_blank");
-    },
-    getWaterfallItemPercent(){
-      this.$nextTick(()=>{
-        if(document.getElementById("waterfall").clientWidth>=1920){
-          this.percent=[1,1,1,1]
-        }else{
-          this.percent=[1,1,1]
+    // 获得数组中数值最小的下标
+    getMinHeightIndex(arr,val){
+      for(let i in arr){
+        if(arr[i]===val){
+          return i;
         }
-      })
+      }
     },
+    // 瀑布流图片的位置计算
+    waterFall(){
+      setTimeout(()=>{
+        this.$nextTick(()=>{
+          let imgs=this.$refs.imgs;
+          let div=document.getElementById("waterfall");
+          let pageWidth=div.offsetWidth;
+          let cols;
+          let imgWidth;
+          let hArr=[];
+          if(pageWidth>=1920-84){
+            cols=4;
+          }else{
+            cols=3;
+          }
+          for(let img of imgs){
+            img.style.width=pageWidth/cols+"px";
+          }
+          for(let i=0;i<imgs.length;i++){
+            imgs[i].style.position="absolute";
+            imgs[i].style.width=pageWidth/cols;
+            if(i<cols){
+              hArr.push(imgs[i].offsetHeight);
+              imgs[i].style.top=0;
+              imgs[i].style.left=imgs[i].offsetWidth*i+"px";
+            }else{
+              let minH=Math.min.apply(null,hArr);
+              let index=this.getMinHeightIndex(hArr,minH);
+              imgs[i].style.top=minH+"px";
+              imgs[i].style.left=imgs[index].offsetLeft+"px";
+              hArr[index]+=imgs[i].offsetHeight;
+            }
+          }  
+      },0)
+     })
+    },
+    // 浏览器滚轮位置清零
     resetScrollTop(){
       this.$nextTick(()=>{
         let scroll=document.getElementsByClassName("ps")[1];
@@ -501,6 +549,7 @@ export default {
     },
     async changeIndustry(item) {
       this.resetScrollTop();
+      this.showNoMore=false;
       this.pageIndex=1;
       this.isTree=item.id;
       this.firstIndustryId = 0;
@@ -585,6 +634,7 @@ export default {
     // 选择最新/最热/推荐
     async changeOrder(item) {
       this.resetScrollTop();
+      this.showNoMore=false;
       this.pageIndex=1;
       if (this.isAllTab == true) {
         this.orderType.forEach((item, index) => {
@@ -708,6 +758,7 @@ export default {
     },
     //   获取模版列表
     async getTemplateList() {
+      this.showNoMore=false;
       this.pageIndex=1;
       let para = {
         TemplateName: "",
@@ -728,6 +779,7 @@ export default {
     },
     //按搜索内容进行全部查询
     searchTemplateAll(){
+      this.showNoMore=false;
       this.isAllTab = true;
       this.changeIndustry(this.firstIndustry[0].id);
       this.isTree=0;
@@ -743,6 +795,7 @@ export default {
     },
     // 按筛选条件查询
     async searchTemplate() {
+      this.showNoMore=false;
       this.pageIndex=1;
       if (this.isAllTab == false) {
         let para = {
@@ -767,8 +820,7 @@ export default {
         var { data, status } = await templateApi.getSiteTemplates(para);
       }
       this.templatePage = data;
-      this.templateInfo=data.items
-      // this.templateInfo =[...this.templateInfo,...data.items];
+      this.templateInfo=data.items;
     },
     async changePage(page) {
       this.pageIndex = page;
@@ -797,14 +849,20 @@ export default {
         this.templatePage = data;
         this.templateInfo =[...this.templateInfo,...data.items];
       }
+      this.waterFall();
     },
      scroll(){
        this.$nextTick(()=>{
-          let scrollTop=document.getElementsByClassName("ps")[1].scrollTop;
-          let scrollHeight=document.getElementsByClassName("ps")[1].scrollHeight;
+          let scrollTop=document.getElementById("templateContent").scrollTop;
+          let scrollHeight=document.getElementById("templateContent").scrollHeight;
           let innerHeight=window.innerHeight;
-          if( parseFloat(scrollTop+innerHeight)>=parseFloat(scrollHeight)*2/3 ){
+          if( scrollTop+innerHeight>=scrollHeight*2/3 ){
             this.loadMore();
+            if(scrollTop+innerHeight>=scrollHeight){
+              this.showNoMore=true;
+            }else{
+              this.showNoMore=false;
+            }
           }
        })
     },
@@ -824,8 +882,7 @@ export default {
         item.isOrder = false;
       });
       this.orderType[0].isOrder = true;
-      this.getWaterfallItemPercent();
-      
+      this.showNoMore=false;
     },
     // // 选择全部模版
     // async choseAllTab() {
@@ -946,13 +1003,13 @@ export default {
         window.addEventListener("resize", () => {
           document.getElementsByClassName("templateContent")[0].style.height =
             window.innerHeight - 160 + "px";
-            this.getWaterfallItemPercent();
+            this.waterFall();
         });
         document.getElementsByClassName("templateContent")[0].style.height =
           window.innerHeight - 160 + "px";
       });
     },
-    goPrevTemplate(item){
+    goPrevTemplate(item,p,isChangeTemplate){
       let routeData = this.$router.resolve({
         name: "prevtemplate",
         query: {
@@ -960,7 +1017,10 @@ export default {
           SiteName: this.siteName,
           Domain: item.domain,
           TemplateId: item.id,
-          TemplateSiteId: item.siteId
+          TemplateSiteId: item.siteId,
+          templateName:item.templateName,
+          flag:p,
+          isChangeTemplate:this.isChangeTemplate
         }
      });
       window.open(routeData.href, '_blank')
@@ -969,7 +1029,6 @@ export default {
   },
   destroyed(){
     window.removeEventListener('scroll', this.scroll,true)
-    // window.removeEventListener("resize",this.windowResize,true);
   }
 };
 </script>
@@ -997,8 +1056,20 @@ export default {
   color: rgba(38, 38, 38, 1);
   line-height: 20px;
 }
+.popper-bg.el-tooltip__popper.is-dark{
+  background: #596368 !important;
+}
+.popper-bg .popper__arrow, .popper-bg .popper__arrow.popper__arrow::after{
+   border-right-color: #596368
+}
 </style>
 <style lang="scss" scoped>
+.popper{
+  background: #596368;
+  color: $--color-white;
+  min-height: 24px;
+  line-height: 24px;
+}
 .waterfall /deep/ .waterfall-box{
   padding-right: 20px;
   box-sizing: border-box
@@ -1012,11 +1083,6 @@ export default {
   background:transparent;
   border-radius: 4px;
 }
-
-// .searchTemplate /deep/ .el-input__prefix{
-//   position: relative;
-//   left: 0;
-// }
 .searchTemplate /deep/ .el-input__inner{
   border:1px solid rgba(89,99,104,1);
   background:#41494E;
@@ -1060,7 +1126,6 @@ export default {
   bottom: 0;
   transition: width 0.2s linear;
   color: $--color-white;
-  // overflow: hidden;
   .foldAside{
     position:fixed;
     top:50%;
@@ -1171,8 +1236,6 @@ export default {
     }
   }
   .templateHeader {
-    // display: flex;
-    // justify-content: space-between;
     padding-top: 40px;
     margin-bottom: 30px;
     text-align: center;
@@ -1256,6 +1319,7 @@ export default {
   }
   .listTitle{
       position: relative;
+      display: inline-block;
        .listDescribe{
           display: none;
           position: absolute;
@@ -1329,17 +1393,15 @@ export default {
   }
   .waterFallTemplateItem {
     padding: 0 30px 30px 0;
-    // width:370px;
-    // float: left;
-    width: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
     .itemSiteImage {
       position: relative;
       // width: 340px;
       width: 100%;
       transition: all 0.3s ease-in;
       &:hover {
-        // transform: translateY(-15px);
-        // box-shadow: 0px 15px 15px -15px #b9cbcf;
         .modal {
           opacity: 1;
         }
@@ -1348,11 +1410,9 @@ export default {
         width: 30px;
       }
       .itemSiteImageBackground {
-        // width:340px;
         width:100%;
         position: relative;
         .itemSiteImg{
-          // width:340px;
           width:100%;
           height: auto;
           display: block;
@@ -1365,7 +1425,6 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
-        // width: 340px;
         width:100%;
         height: 100%;
         opacity: 0;
@@ -1379,7 +1438,6 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
-        // width: 340px;
         width:100%;
         height: 100%;
         opacity: 1;
@@ -1415,7 +1473,6 @@ export default {
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       height:40px;
-      // width: 340px;
       width: 100%;
       background: $--color-black-light;
       .itemSiteInfoLeft{

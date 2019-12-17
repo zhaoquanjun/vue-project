@@ -15,6 +15,7 @@
                         v-model="input"
                         placeholder="请输入权限名称"
                         @input="changeInput"
+                        @keyup.enter='searchAuth'
                     />
 
                     <button class="auth-btn" @click="searchAuth">

@@ -546,7 +546,6 @@ export default {
     },
     // 更换模板
     changeTemplate() {
-      console.log(333)
       this.$refs.selectTemplateDialog.showTemplate();
     },
     // 获取站点信息
