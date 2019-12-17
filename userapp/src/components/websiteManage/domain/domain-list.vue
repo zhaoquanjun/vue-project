@@ -113,6 +113,7 @@
         </template>
       </el-table-column>
       <el-table-column type="expand">
+        <el-tooltip effect="dark" content="解析详情" placement="top">11</el-tooltip>
         <template slot-scope="props">
           <div class="domain-detail">
             <el-row class="domain-detail-row">
@@ -242,13 +243,14 @@
             </el-row>
           </div>
         </template>
+        
       </el-table-column>
       <el-table-column width="100">
         <template slot-scope="scope">
           <div class="handle-btn-wrap">
-            <el-tooltip class="item" effect="dark" content="123" placement="top-start">
-              <button style>按钮</button>
-            </el-tooltip>
+           
+              <button style> <el-tooltip class="item" effect="dark" content="解析详情" placement="top"><i>123</i></el-tooltip></button>
+          
             <el-tooltip class="item" effect="dark" content="删除域名" placement="top">
               <button class="handle-btn delete-btn" @click="handleDelete(scope.row,scope.$index)">
                 <i class="iconfont iconshanchu cl-iconfont is-square" style="color:#262626"></i>
@@ -529,14 +531,27 @@ export default {
     resetExpandText(index) {
       this.$nextTick(() => {
         let eles = document.getElementsByClassName("el-table__expand-icon");
-
         for (let i = 0; i < eles.length; i++) {
           let ele = eles[i];
           if (this.notResolveList[i] == 3) {
-            ele.innerHTML =
-              '<button disabled="disabled" style="color:#262626;height: 24px;cursor:default;padding:10px;">-</button>';
+            eles[i].innerHTML ='<button disabled="disabled" style="color:#262626;height: 24px;cursor:default;padding:10px;">-</button>';
           } else {
-            ele.innerHTML = `<i class=" iconfont iconicon-des-setup cl-iconfont is-square" style="color:#262626;" title="域名详情" id="iconfont-setup"></i>`;
+            ele.innerHTML = `<i class=" iconfont iconicon-des-setup cl-iconfont is-square" style="color:#262626;" id="iconfont-setup"></i>`;
+            // ele.style.position="relative";
+            //   let tooltipBox = document.createElement('div');
+            //   tooltipBox.style.display="none";
+            //   tooltipBox.innerHTML="<i>解析详情</i>"
+            //   let tooltipArrow = document.createElement('div');
+            //   tooltipBox.className="tooltip-box";
+            //   tooltipArrow.className="tooltip-arrow";
+            //   tooltipBox.appendChild(tooltipArrow);
+            //   ele.appendChild(tooltipBox);
+            // ele.onmouseover=function(){
+            //   tooltipBox.style.display="block";
+            // }
+            // ele.onmouseleave=function(){
+            //   tooltipBox.style.display="none";
+            // }
           }
         }
       });
@@ -629,9 +644,14 @@ export default {
   & > :first-child {
     position: absolute;
     z-index: 1;
-    background: red;
-    right: 70px;
-    padding: 10px;
+    background: transparent;
+    color: transparent;
+    top: 3px;
+    right: 77px;
+    height: 4px;
+    overflow: hidden;
+    padding: 2px;
+    // pointer-events: none
   }
 }
 .domainStatus0 {
@@ -734,6 +754,30 @@ export default {
   font-weight: 400;
   &:hover {
     color: $--color-text-orange;
+  }
+}
+.tooltip-box{
+  transform-origin: center bottom;
+  z-index: 2005;
+  display: none;
+  background: #303133;
+  color: #FFF;
+  position: absolute;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  min-width: 10px;
+  word-wrap: break-word;
+  .tooltip-arrow{
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 6px;
+    left: 8px;
   }
 }
 </style>
