@@ -1,0 +1,10 @@
+.el-date-table td.current:not(.disabled) span {
+  background-color: $--color-primary;
+}
+.el-date-table td.today span {
+  color: $--color-primary;
+  
+}
+.el-date-table td:hover span {
+  color: $--color-primary;
+}
