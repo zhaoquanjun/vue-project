@@ -11,7 +11,6 @@
         :treeResult="treeResult"
         :list-options="picSearchOptions"
         :isPopup="isPopup"
-        :isSecond="isSecond"
         @getList="getList"
         @chooseCategoryNode="chooseNode"
         @create="newCategory"
@@ -131,10 +130,6 @@ export default {
       default: false
     },
     isPopup: {
-      type: Boolean,
-      default: false
-    },
-    isSecond: {
       type: Boolean,
       default: false
     }

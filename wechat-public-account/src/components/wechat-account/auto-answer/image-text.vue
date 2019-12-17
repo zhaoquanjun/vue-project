@@ -178,8 +178,6 @@ export default {
                 if (data.PicUrl) {
                     this.picUrl = data.PicUrl
                     this.curEditorItem.picUrl = data.PicUrl
-                } else {
-                    this.picUrl = ''
                 }
             }
         },
@@ -257,6 +255,17 @@ export default {
         },
         //取消
         handlerCancel(){
+            // 添加完成后重置一下
+            this.curEditorItem = {
+                title: "",
+                description: "",
+                picUrl: require('img/picCover.png'),
+                urlType: "",
+                urlData: "",
+                contentPageId: ''
+            };
+            this.picUrl = ''
+            this.curEditorTitle = ''
             this.isEditorShow = false
         },
         handlerAddNewsImg() {
