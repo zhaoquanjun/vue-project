@@ -26,7 +26,7 @@
                                         class="el-upload-list__item-preview"
                                        @click="handlerAddPicture('singular',index)"
                                     >
-                                        <i class="iconfont iconqiehuanxingshier icon-hover"></i>
+                                        <i class="iconfont iconqiehuanxingshiyi icon-hover"></i>
                                     </span>
                                     <span
                                         class="el-upload-list__item-delete"
@@ -377,7 +377,7 @@ export default {
     text-align: right;
     padding-top: 0;
 }
-.icon-hover:hover{
-    color: $--color-primary !important;
+.icon-hover{
+    color: $--color-white;
 }
 </style>
