@@ -856,15 +856,16 @@ export default {
 .siteDetailinfo-wrap {
   width: 100%;
   height: calc(100% - 389px);
-  background: $--color-white;
-  border-radius: $--border-radius-base;
-  border: $--border-base;
+  
   .flowDetai {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 460px;
     padding: 16px 32px;
     box-sizing: border-box;
+    background: $--color-white;
+    border-radius: $--border-radius-base;
+    border: $--border-base;
     .flowHeader {
       display: flex;
       justify-content: space-between;
@@ -890,12 +891,16 @@ export default {
     }
     .myChat {
       width: 100%;
-      height: 460px;
+      height: 428px;
     }
   }
   .siteDetailinfo {
     width: calc(100% - 48px);
-    margin: 0 24px;
+    height: 100%;
+    padding: 0 24px;
+    background: $--color-white;
+    border-radius: $--border-radius-base;
+    border: $--border-base;
     .siteType-wrap {
       width: 100%;
       border-bottom: $--border-base;
