@@ -84,6 +84,16 @@ export const defaultRoutes = [
         }
       },
       {
+        path: "sitemanage/messagesetting",
+        name: "messagesetting",
+        component: () => import("@/views/website-manage/messageSetting.vue"),
+        meta: {
+          title: "短信配置",
+          requiresAuth: true,
+          isSub: true
+        }
+      },
+      {
         path: "mysite/siteinfo",
         name: "mySite",
         component: () => import("@/views/website-manage/mySite.vue"),
