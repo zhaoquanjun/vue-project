@@ -176,6 +176,23 @@ export const defaultRoutes = [
     }
   },
   {
+    path: "/systemsetting",
+    name: "systemsetting",
+    component: () => import('@/views/systemsetting/index.vue'),
+    children: [
+      {
+        path: "aliaksk",
+        name: "aliaksk",
+        component: () => import("@/views/systemsetting/aliaksk.vue"),
+        meta: {
+          title: "阿里云AK/SK",
+          requiresAuth: true,
+          isSub: true
+        }
+      }
+    ]
+  },
+  {
     path: "/form",
     name: "form",
     component: () => import('@/views/form/index.vue'),
