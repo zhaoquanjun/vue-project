@@ -16,8 +16,8 @@
           <span class="member-list-title fs14">短信配置</span>
           <a class="backupBtn">如何配置网站短信？</a>
         </el-row>
-        <div class="tips" :class="tipSuccess ? 'tip-success':'tip-danger'" v-if="true">
-          <i class="icon iconfont iconguanbi"></i>
+        <div v-if="isShowTips == '1'" class="tips" :class="tipSuccess ? 'tip-success':'tip-danger'">
+          <i class="icon iconfont iconguanbi" @click="noShowTips"></i>
           <p v-if="tipSuccess">提示：网站用户使用手机号注册您的网站会员或找回会员账号密码时，网站会向用户发送验证码短信</p>
           <p v-else>提示：免费短信剩余条数为0，为不影响您的网站功能，请及时开通并配置阿里云短信服务
             <a>去配置</a>
@@ -214,6 +214,7 @@ import AddTemplate from "@/components/websiteManage/addCode/add-template";
 import AddAutograph from "@/components/websiteManage/addCode/add-autograph";
 import { formatDateTime } from "@/api/index";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
+import { setLocal,getLocal } from "@/libs/local"
 export default {
   components: {
     RightPannel,
@@ -226,6 +227,7 @@ export default {
     return {
       siteName: "",
       siteId: 0,
+      isShowTips: '1',
       messageView: false,
       isEdit: false,
       isAddTemplate: false,
@@ -263,6 +265,9 @@ export default {
       backupType: "free",
       tipSuccess: false
     };
+  },
+  created(){
+    this.isShowTips = getLocal('isShowTips') || '1'
   },
   methods: {
     // 获取siteId
@@ -321,6 +326,11 @@ export default {
     saveAddAutograph(val){
       this.isAddAutograph = false
       console.log(val)
+    },
+    //关闭提示语 
+    noShowTips(){
+      setLocal('isShowTips','2')
+      this.isShowTips = '2'
     }
   }
 };
