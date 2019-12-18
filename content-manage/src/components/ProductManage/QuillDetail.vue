@@ -7,8 +7,8 @@
             :options="editorOption"
             @change="onEditorChange($event)"
         ></quill-editor>    
-        <div class="mask" v-show="isModalShow"></div>
-            <div id="content" class="contentDialog" v-show="isModalShow">
+        <div class="mask" v-if="isModalShow"></div>
+            <div id="content" class="contentDialog" v-if="isModalShow">
                 <el-header class="modal-header">
                     <span style="font-size: 16px;">我的图片</span>
                     <button @click="cancelEditorImg">X</button>
@@ -20,14 +20,14 @@
                     </div>
                 </modal-content>
             </div>
-            <div class="image-select--upload__area" v-show="videoShow">
+            <div class="image-select--upload__area" v-if="videoShow">
                 <div class="mask"></div>
                 <div id="videoContent" class="contentDialog">
                     <el-header class="modal-header" style="height:65px">
                         <span class="title" style="font-size: 16px;">我的视频</span>
                         <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelgetVideo"></i>
                     </el-header>
-                    <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true" :isSecond="true">
+                    <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true">
                         <div slot="modal-footer" class="modal-footer">
                             <button @click="cancelgetVideo" class="cl-button cl-button--primary_notbg">取消</button>
                             <button @click="getVideoOssUrl" class="cl-button cl-button--primary">确定</button>

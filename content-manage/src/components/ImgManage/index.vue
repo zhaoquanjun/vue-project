@@ -11,8 +11,6 @@
                 :list-options="picSearchOptions"
                 :isexpand="true"
                 :isPopup="isPopup"
-                :isSecond="isSecond"
-                :isThird="isThird"
                 @getList="getList"
                 @create="newCategory"
                 @batchRemove="batchRemoveCategory"
@@ -138,14 +136,6 @@ export default {
             }
         },
         isPopup: {
-            type: Boolean,
-            default: false
-        },
-        isSecond: {
-            type: Boolean,
-            default: false
-        },
-        isThird: {
             type: Boolean,
             default: false
         }
