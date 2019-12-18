@@ -134,7 +134,7 @@
                   <div v-show="!isEdit" class="handle-btn-wrap">
                     <el-tooltip content="编辑" placement="top">
                       <button @click="hasEdit( scope )">
-                        <i class="iconfont iconicon-des-Import cl-iconfont is-square"></i>
+                        <i class="iconfont iconbianji cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
                     <el-tooltip content="预览" placement="top">
