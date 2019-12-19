@@ -6,7 +6,7 @@ import securityService from "@/services/authentication/securityService";
 import { getLocal } from '@/libs/local'
 import { getCookie } from "@/libs/cookie"
 import {errorUrl} from "@/environment/index";
-import {environment} from "@/environment/index";
+import environment from "@/environment/index";
 
 Vue.use(VueRouter);
 let router = new VueRouter({
@@ -15,7 +15,6 @@ let router = new VueRouter({
   routes: defaultRoutes
 });
 export default router;
-
 
 let appId = store.state.dashboard.appId;
 let siteId = getCookie("tjufje") || store.state.dashboard.siteId;
