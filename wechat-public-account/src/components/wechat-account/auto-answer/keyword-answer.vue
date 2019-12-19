@@ -16,10 +16,11 @@
                                 <i class = 'icon iconfont prefixIcon' :class="item.matchType=='1'?'iconicon-banpipei':'iconicon-quanpipei'" />
                             </template>
                             <el-option
-                                v-for="item in matchOption"
-                                :key="item.matchType"
-                                :label="item.matchLabel"
-                                :value="item.matchType"
+                                v-for="items in matchOption"
+                                :class="item.matchType==items.matchType?'has-selected':''"
+                                :key="items.matchType"
+                                :label="items.matchLabel"
+                                :value="items.matchType"
                             ></el-option>
                         </el-select>
                     </span>
@@ -492,5 +493,8 @@ button {
         color: $--color-primary;
         vertical-align: middle;
     }
+}
+.has-selected {
+    color: $--color-primary !important;
 }
 </style>
