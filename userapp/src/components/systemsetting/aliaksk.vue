@@ -78,11 +78,13 @@
               <template slot-scope="scope">
                 <button class="operatingBtn" v-if="scope.row.status == 1">去查看</button>
                 <button class="operatingBtn" v-if="scope.row.status == 2">去管理</button>
+                <router-link :to="{name:'setcode'}"> 
                 <button
                   class="operatingBtn"
                   style="margin-left:24px"
                   v-if="scope.row.status == 2&&scope.row.features == '短信服务'"
                 >设置签名/模板</button>
+                </router-link>
               </template>
             </el-table-column>
           </el-table>

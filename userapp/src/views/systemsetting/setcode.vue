@@ -9,7 +9,7 @@
       <el-row>
         <el-row class="user-list">
           <span class="member-list-title fs14">阿里云AK/SK>设置签名/模板</span>
-          <a class="backupBtn">返回</a>
+          <button @click="$router.go(-1)" class="backupBtn cl-button cl-button--small cl-button--primary_notbg">返回</button>
         </el-row>
        
         <el-main>
@@ -18,6 +18,8 @@
               <el-tab-pane label="签名管理" name="autograph"></el-tab-pane>
               <el-tab-pane label="模版管理" name="template"></el-tab-pane>
             </el-tabs>
+            <button v-show="backupType == 'autograph'" class="cl-button btn-code cl-button--primary" @click="isAddAutograph = true">添加签名</button>
+            <button v-show="backupType == 'template'" class="cl-button btn-code cl-button--primary" @click="isAddTemplate =true">添加模版</button>
           </div>
 
           <!-- 免费短信 -->
@@ -29,9 +31,9 @@
             >
               <el-table-column prop="messageinfo2" label="签名名称"></el-table-column>
               <el-table-column prop="messageinfo2" label="创建时间"></el-table-column>
-              <el-table-column label="操作" min-width="170">
+              <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-tooltip content="删除备份包" placement="top">
+                    <el-tooltip content="删除" placement="top">
                       <button @click="chakan( scope )">
                         <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                       </button>
@@ -43,19 +45,35 @@
         </el-main>
       </el-row>
     </el-main>
+    <add-template
+      v-if="isAddTemplate"
+      @closeAddTemplate="closeAddTemplate"
+      @saveAddTemplate="saveAddTemplate"
+    ></add-template>
+    <add-autograph
+      v-if="isAddAutograph"
+      @closeAddAutograph="closeAddAutograph"
+      @saveAddAutograph="saveAddAutograph"
+    ></add-autograph>
 </el-container>
 </template>
 
 <script>
 import PageSubmenu from "@/components/common/PageSubmenu";
+import AddTemplate from "@/components/websiteManage/addCode/add-template";
+import AddAutograph from "@/components/websiteManage/addCode/add-autograph";
 import * as siteBackupApi from "@/api/request/siteBackupApi";
 export default {
   components: {
+    AddTemplate,
+    AddAutograph,
     PageSubmenu
   },
   data() {
     return {
-        backupType:'autograph',
+      backupType:'autograph',
+      isAddTemplate: false,
+      isAddAutograph: false,
       messagelist: [
         {
           messageinfo1: '注册网站验证码',
@@ -80,6 +98,28 @@ export default {
      */
     async chakan(siteId) {
       
+    },
+    //table
+    handleClick(){
+
+    },
+    //关闭添加模版
+    closeAddTemplate(){
+      this.isAddTemplate = false
+    },
+    //保存添加模版
+    saveAddTemplate(val){
+      this.isAddTemplate = false
+      console.log(val)
+    },
+    //关闭添加签名
+    closeAddAutograph(){
+      this.isAddAutograph = false
+    },
+    //保存添加签名
+    saveAddAutograph(val){
+      this.isAddAutograph = false
+      console.log(val)
     }
   }
 };
@@ -93,11 +133,9 @@ export default {
 }
 .backupBtn {
   position: absolute;
-  right: 0;
+  right: 16px;
   top: 0;
   font-size: $--font-size-small;
-  line-height: 14px;
-  color: $--color-primary;
 }
 .content-table {
   width: 100%;
@@ -132,7 +170,7 @@ export default {
   .member-content {
     padding: 0 16px;
     .user-list {
-      margin: 16px 0;
+      margin: 24px 0;
       position: relative;
       .member-list-title {
         border-left: 2px solid $--color-primary;
@@ -151,6 +189,11 @@ export default {
   border-radius: $--border-radius-base;
   border: $--border-base;
   margin-bottom: 12px;
+  .btn-code {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+  }
 }
 .domain-menu /deep/ .el-tabs__nav-wrap::after {
   height: 0;
