@@ -44,7 +44,7 @@
         @closePopup="cancelCreateTemplate"
         @confirm="createTemplate"
       >
-        <template v-slot:titleName>标题</template>
+        <template v-slot:titleName>开通控件模板</template>
         <template v-slot:content>
           <div class="tips">开通【控件模板应用】服务，填写的手机号将是模板的管理员</div>
           <div class="inputWrap">
