@@ -189,6 +189,16 @@ export const defaultRoutes = [
           requiresAuth: true,
           isSub: true
         }
+      },
+      {
+        path: "setcode",
+        name: "setcode",
+        component: () => import("@/views/systemsetting/setcode.vue"),
+        meta: {
+          title: "设置签名/模板",
+          requiresAuth: false,
+          isSub: true
+        }
       }
     ]
   },
