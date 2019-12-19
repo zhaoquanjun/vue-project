@@ -20,6 +20,7 @@
                     @mouseover="handlerOver(data)"
                     @mouseleave="handlerMouseLeave"
                     slot-scope="{ node, data }"
+                    style="cursor: pointer;"
                 >
                     <img
                         class="categoryPic"
@@ -389,6 +390,5 @@ export default {
 </style>
 <style lang="scss" scoped>
 // 侧边分类树节点
-
 
 </style>
