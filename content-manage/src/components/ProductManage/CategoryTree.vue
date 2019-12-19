@@ -20,6 +20,7 @@
                     @mouseover="handlerOver(data)"
                     @mouseleave="handlerMouseLeave"
                     slot-scope="{ node, data }"
+                    style="cursor: pointer;"
                 >
                     <img
                         class="categoryPic"

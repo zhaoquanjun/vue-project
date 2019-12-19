@@ -4,6 +4,8 @@
       ref="multipleTable"
       :data="listData.list"
       tooltip-effect="dark"
+      :height="tableHeight"
+      max-height="612"
       class="content-table"
       @selection-change="handleSelectionChange"
     >
@@ -99,6 +101,7 @@ export default {
   },
   data() {
     return {
+      tableHeight:300,
       type: "页面",
       priorityList: [
         {
@@ -173,6 +176,14 @@ export default {
         }
       ]
     };
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.tableHeight = window.innerHeight - 450;
+      });
+      this.tableHeight = window.innerHeight - 450;
+    });
   },
   methods: {
     // 单选或全选操作

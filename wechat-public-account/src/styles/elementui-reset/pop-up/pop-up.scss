@@ -155,3 +155,7 @@
 .notify-error {
     background: $--color-danger;
 }
+// 打开弹框给body加的样式覆盖掉
+.el-popup-parent--hidden {
+    padding-right: 0px !important;
+}

@@ -39,75 +39,54 @@
           ref="list"
         ></List>
       </div>
-      <el-dialog
-        width="0"
-        :visible.sync="createTemplateShow"
-        :show-close="false"
-        :close-on-click-modal="false"
+      <popUp
+        :popupShow="createTemplateShow"
+        @closePopup="cancelCreateTemplate"
+        @confirm="createTemplate"
       >
-        <div class="right-pannel" :style="{width:'400px'}">
-          <div class="pannel-head">
-            <span>
-              <span>开通控件模板</span>
-            </span>
-            <span class="close-pannel" @click="cancelCreateTemplate">
-              <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
-            </span>
-          </div>
-          <div class="dialogContent">
-            <div class="tips">开通【控件模板应用】服务，填写的手机号将是模板的管理员</div>
-            <div class="inputWrap">
-              <div class="inputTitle">
-                <span style="color:#FB4D68;margin-right:4px">*</span>管理员
-              </div>
-              <el-input
-                v-model="createPhone"
-                placeholder="请输入管理员手机号"
-                class="input"
-                @blur="blurPhone"
-                :maxlength="11"
-              ></el-input>
-              <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
+        <template v-slot:titleName>开通控件模板</template>
+        <template v-slot:content>
+          <div class="tips">开通【控件模板应用】服务，填写的手机号将是模板的管理员</div>
+          <div class="inputWrap">
+            <div class="inputTitle">
+              <span style="color:#FB4D68;margin-right:4px">*</span>管理员
             </div>
-            <div class="inputWrap">
-              <div class="inputTitle">
-                <span style="color:#FB4D68;margin-right:4px">*</span>模板名称
-              </div>
-              <el-input
-                v-model="createTemplateName"
-                placeholder="请输入模板名称"
-                class="input"
-                @blur="blurName"
-                maxlength="20"
-              ></el-input>
-              <div class="ym-form-item__error" v-show="errorNameTip">请输入模板名称</div>
-            </div>
-            <div class="inputWrap">
-              <span class="inputTitle">备注</span>
-              <el-input v-model="createRemark" placeholder="请输入备注信息" class="input" maxlength="40"></el-input>
-            </div>
+            <el-input
+              v-model="createPhone"
+              placeholder="请输入管理员手机号"
+              class="input"
+              @blur="blurPhone"
+              :maxlength="11"
+            ></el-input>
+            <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
           </div>
-
-          <div class="confirm">
-            <Debounce :time="1000" !isDebounce>
-              <button
-                class="confirmBtn cl-button cl-button--primary cl-button--small"
-                @click="createTemplate"
-              >开通</button>
-            </Debounce>
-            <button
-              class="cl-button cl-button--primary_notbg cl-button--small"
-              @click="cancelCreateTemplate"
-            >取消</button>
+          <div class="inputWrap">
+            <div class="inputTitle">
+              <span style="color:#FB4D68;margin-right:4px">*</span>模板名称
+            </div>
+            <el-input
+              v-model="createTemplateName"
+              placeholder="请输入模板名称"
+              class="input"
+              @blur="blurName"
+              maxlength="20"
+            ></el-input>
+            <div class="ym-form-item__error" v-show="errorNameTip">请输入模板名称</div>
           </div>
-        </div>
-      </el-dialog>
+          <div class="inputWrap">
+            <span class="inputTitle">备注</span>
+            <el-input v-model="createRemark" placeholder="请输入备注信息" class="input" maxlength="40"></el-input>
+          </div>
+        </template>
+        <template v-slot:confirmName>开通</template>
+      </popUp>
     </el-main>
   </el-container>
 </template>
 <script>
 import * as templateApi from "@/api/request/controlTemplateApi";
 import List from "./controlTemplateList";
+import PopUp from "@/components/common/rightPopup";
 export default {
   data() {
     return {
@@ -162,7 +141,8 @@ export default {
     };
   },
   components: {
-    List
+    List,
+    PopUp
   },
   methods: {
     async getList() {
@@ -367,72 +347,36 @@ export default {
   }
 }
 // 右侧弹框
-.right-pannel {
-  background: $--color-white;
-  position: fixed;
-  z-index: 2200;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  transition: width 0.2s linear;
-  overflow: hidden;
-  padding: 16px 24px 0;
-  box-sizing: border-box;
-  .pannel-head {
-    border-bottom: $--border-base;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 8px;
-    .headText {
-      font-size: $--font-size-base;
-      font-weight: $--font-weight-base;
-      color: $--color-text-primary;
-    }
-  }
-  .dialogContent {
-    height: calc(100% - 119px);
-    .tips {
-      width: 100%;
-      height: 32px;
-      background: rgba(243, 255, 247, 1);
-      border: 1px solid rgba(35, 205, 93, 0.3);
-      font-size: $--font-size-small;
-      font-weight: $--font-weight-primary;
-      color: #23cd5d;
-      line-height: 32px;
-      text-align: center;
-      margin: 24px 0;
-    }
-    .inputWrap {
-      margin-top: 16px;
-      width: 100%;
-      .inputTitle {
-        display: inline-block;
-        width: 82px;
-        text-align: right;
-        padding-right: 16px;
-        box-sizing: border-box;
-        font-size: $--font-size-small;
-        font-weight: $--font-weight-base;
-        color: $--color-text-primary;
-      }
-      .input {
-        width: 268px;
-      }
-      .ym-form-item__error {
-        margin-left: 82px;
-      }
-    }
-  }
-  .confirm {
-    position: absolute;
-    width: calc(100% - 48px);
-    height: 80px;
-    bottom: 0px;
-    border-top: $--border-base;
-    padding: 16px 0 32px;
+.tips {
+  width: 100%;
+  height: 32px;
+  background: rgba(243, 255, 247, 1);
+  border: 1px solid rgba(35, 205, 93, 0.3);
+  font-size: $--font-size-small;
+  font-weight: $--font-weight-primary;
+  color: #23cd5d;
+  line-height: 32px;
+  text-align: center;
+  margin: 24px 0;
+}
+.inputWrap {
+  margin-top: 16px;
+  width: 100%;
+  .inputTitle {
+    display: inline-block;
+    width: 82px;
+    text-align: right;
+    padding-right: 16px;
     box-sizing: border-box;
+    font-size: $--font-size-small;
+    font-weight: $--font-weight-base;
+    color: $--color-text-primary;
+  }
+  .input {
+    width: 268px;
+  }
+  .ym-form-item__error {
+    margin-left: 82px;
   }
 }
 </style>
