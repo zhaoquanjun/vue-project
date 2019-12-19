@@ -10,16 +10,20 @@
         <div>+86</div>
         </div>-->
         <div class="phone">
-          <span class="phoneTip">+86</span>
-          <el-input class="phoneInput" placeholder="请输入手机号" v-model="phone"></el-input>
+          <el-input class="phoneInput" placeholder="请输入手机号" v-model="phone">
+            <span slot="prefix" class="phoneTip">+86</span>
+          </el-input>
         </div>
         <!-- <div class="slider"></div> -->
         <div class="smsCode">
-          <el-input class="smsCodeInput" placeholder="短信验证码" v-model="smsCode"></el-input>
-          <button class="smsText" v-show="!smsShow" @click="sendSms">{{smsText}}</button>
-          <button class="smsText" v-show="smsShow">{{count}} s</button>
+          <el-input class="smsCodeInput" placeholder="短信验证码" v-model="smsCode">
+            <div slot="suffix" style="padding:0 8px">
+              <button class="smsText" v-show="!smsShow" @click="sendSms">{{smsText}}</button>
+              <button class="smsText" v-show="smsShow">{{count}} s</button>
+            </div>
+          </el-input>
         </div>
-        <button class="createBtn" @click="create">创建</button>
+        <button class="createBtn cl-button cl-button--primary" @click="create">创建</button>
       </div>
       <div class="hasPhone" v-show="creating&&hasPhone">
         <div v-show="!useNewPhone">
@@ -30,7 +34,7 @@
             <div style="margin-top:6px">的管理员账号</div>
           </div>
           <div class="useOtherPhone" @click="showNewPhone">使用其它手机号码</div>
-          <button class="createBtn" @click="create">创建</button>
+          <button class="createBtn cl-button cl-button--primary" @click="create">创建</button>
         </div>
         <div v-show="useNewPhone">
           <div class="headTitle">
@@ -39,16 +43,20 @@
           </div>
           <div class="tips">您已购买的服务还未创建系统管理员，请使用管理员手机号创建一个系统管理员</div>
           <div class="phone">
-            <span class="phoneTip">+86</span>
-            <el-input class="phoneInput" placeholder="请输入手机号" v-model="newPhone"></el-input>
+            <el-input class="phoneInput" placeholder="请输入手机号" v-model="newPhone">
+              <span slot="prefix" class="phoneTip">+86</span>
+            </el-input>
           </div>
           <!-- <div class="slider"></div> -->
           <div class="smsCode">
-            <el-input class="smsCodeInput" placeholder="短信验证码" v-model="newSmsCode"></el-input>
-            <button class="smsText" v-show="!smsShow" @click="sendNewSms">{{smsText}}</button>
-            <button class="smsText" v-show="smsShow">{{count}} s</button>
+            <el-input class="smsCodeInput" placeholder="短信验证码" v-model="newSmsCode">
+              <div slot="suffix" style="padding:0 8px">
+                <button class="smsText" v-show="!smsShow" @click="sendNewSms">{{smsText}}</button>
+                <button class="smsText" v-show="smsShow">{{count}} s</button>
+              </div>
+            </el-input>
           </div>
-          <button class="createBtn" @click="create">创建</button>
+          <button class="createBtn cl-button cl-button--primary" @click="create">创建</button>
         </div>
       </div>
       <div class="gongzhonghao" v-show="gongzhonghao">
@@ -75,7 +83,7 @@
         <div style="margin-top:32px">
           <span class="domain">login.clouddream.net</span>
         </div>
-        <button class="complete" @click="complete">完成</button>
+        <button class="complete cl-button cl-button--primary" @click="complete">完成</button>
       </div>
     </div>
   </div>
@@ -318,11 +326,11 @@ export default {
 };
 </script>
 <style scoped>
-.smsCodeInput /deep/ .el-input__inner {
+.wrap /deep/ .el-input__inner {
   border: none;
-}
-.phoneInput /deep/ .el-input__inner {
-  border: none;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
 }
 .phone /deep/ .el-input-group__prepend {
   background: #fff;
@@ -395,7 +403,7 @@ export default {
       position: absolute;
       left: 0px;
       line-height: 14px;
-      color: #a1a8b1;
+      color: $--color-text-regular;
       transform: rotate(180deg);
       cursor: pointer;
       padding: 8px;
@@ -407,13 +415,13 @@ export default {
   }
   .noPhone {
     .tips {
-      background: rgba(231, 252, 255, 0.5);
+      background: rgba(255, 251, 248, 1);
       border-radius: 2px;
-      border: 1px solid rgba(93, 220, 240, 1);
+      border: 1px solid rgba(255, 202, 163, 1);
       padding: 8px 16px;
       font-size: 14px;
       font-weight: 300;
-      color: rgba(9, 204, 235, 1);
+      color: $--color-primary;
       line-height: 20px;
       margin-top: 22px;
     }
@@ -422,19 +430,16 @@ export default {
       width: 100%;
       height: 40px;
       border-radius: 2px;
-      border: 1px solid rgba(229, 229, 229, 1);
-      .phoneInput {
-        width: calc(100% - 50px);
-        height: 40px;
-        border: none;
+      border: $--border-base;
+      /deep/ .el-input__inner {
+        padding-left: 56px;
       }
       .phoneTip {
         width: 50px;
-        background: #fff;
         font-size: 14px;
         font-weight: 400;
         color: rgba(38, 38, 38, 1);
-        line-height: 20px;
+        line-height: 40px;
         display: inline-block;
         text-align: center;
       }
@@ -453,16 +458,14 @@ export default {
       width: 100%;
       height: 40px;
       border-radius: 2px;
-      border: 1px solid rgba(229, 229, 229, 1);
-      .smsCodeInput {
-        width: calc(100% - 94px);
-        height: 40px;
-        border: none;
+      border: $--border-base;
+      /deep/ .el-input__inner {
+        padding-right: 90px;
       }
       .smsText {
         font-size: 14px;
         font-weight: 400;
-        color: rgba(9, 204, 235, 1);
+        color: $--color-primary;
         line-height: 40px;
       }
     }
@@ -471,10 +474,10 @@ export default {
     .tips {
       margin-top: 22px;
       padding: 8px 16px;
-      background: rgba(231, 252, 255, 0.5);
+      background: rgba(255, 251, 248, 1);
       border-radius: 2px;
-      border: 1px solid rgba(93, 220, 240, 1);
-      color: rgba(9, 204, 235, 1);
+      border: 1px solid rgba(255, 202, 163, 1);
+      color: $--color-primary;
       font-size: 14px;
       font-weight: 300;
       line-height: 20px;
@@ -482,7 +485,7 @@ export default {
         padding-left: 8px;
         font-size: 20px;
         font-weight: 400;
-        color: rgba(9, 204, 235, 1);
+        color: $--color-primary;
         line-height: 28px;
       }
     }
@@ -491,35 +494,28 @@ export default {
       margin-top: 16px;
       font-size: 14px;
       font-weight: 400;
-      color: rgba(5, 149, 230, 1);
+      color: $--color-info;
       line-height: 20px;
       padding: 8px;
       cursor: pointer;
-      &:hover {
-        background: rgba(5, 149, 230, 0.09);
-        border-radius: 2px;
-      }
     }
     .phone {
       margin-top: 16px;
       width: 100%;
       height: 40px;
       border-radius: 2px;
-      border: 1px solid rgba(229, 229, 229, 1);
+      border: $--border-base;
+      /deep/ .el-input__inner {
+        padding-left: 56px;
+      }
       .phoneTip {
         width: 50px;
-        background: #fff;
         font-size: 14px;
         font-weight: 400;
         color: rgba(38, 38, 38, 1);
-        line-height: 20px;
+        line-height: 40px;
         display: inline-block;
         text-align: center;
-      }
-      .phoneInput {
-        width: calc(100% - 50px);
-        height: 40px;
-        border: none;
       }
     }
     .slider {
@@ -535,16 +531,14 @@ export default {
       width: 100%;
       height: 40px;
       border-radius: 2px;
-      border: 1px solid rgba(229, 229, 229, 1);
-      .smsCodeInput {
-        width: calc(100% - 94px);
-        height: 40px;
-        border: none;
+      border: $--border-base;
+      /deep/ .el-input__inner {
+        padding-right: 90px;
       }
       .smsText {
         font-size: 14px;
         font-weight: 400;
-        color: rgba(9, 204, 235, 1);
+        color: $--color-primary;
         line-height: 40px;
       }
     }
@@ -553,12 +547,7 @@ export default {
     margin-top: 32px;
     width: 100%;
     height: 40px;
-    background: rgba(9, 204, 235, 1);
-    border-radius: 2px;
     font-size: 14px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-    line-height: 40px;
   }
   .gongzhonghao {
     position: relative;
@@ -575,7 +564,7 @@ export default {
       margin-top: 16px;
       font-size: 14px;
       font-weight: 400;
-      color: rgba(161, 168, 177, 1);
+      color: $--color-text-regular;
       line-height: 20px;
     }
     .textWrap {
@@ -584,7 +573,7 @@ export default {
       .text {
         font-size: 14px;
         font-weight: 400;
-        color: rgba(9, 204, 235, 1);
+        color: $--color-primary;
         line-height: 30px;
       }
     }
@@ -594,7 +583,7 @@ export default {
       right: 0;
       font-size: 14px;
       font-weight: 400;
-      color: rgba(161, 168, 177, 1);
+      color: $--color-text-regular;
       line-height: 20px;
       cursor: pointer;
     }
@@ -614,7 +603,7 @@ export default {
       margin-top: 20px;
       font-size: 16px;
       font-weight: 400;
-      color: rgba(161, 168, 177, 1);
+      color: $--color-text-regular;
       line-height: 22px;
     }
     .createComplete {
@@ -630,7 +619,7 @@ export default {
       width: 266px;
       font-size: 14px;
       font-weight: 400;
-      color: rgba(161, 168, 177, 1);
+      color: $--color-text-regular;
       line-height: 25px;
     }
     .domain {
@@ -643,12 +632,7 @@ export default {
       margin-top: 32px;
       width: 100%;
       height: 40px;
-      background: rgba(9, 204, 235, 1);
-      border-radius: 2px;
       font-size: 14px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      line-height: 40px;
     }
   }
 }
