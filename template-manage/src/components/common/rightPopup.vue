@@ -60,11 +60,6 @@ export default {
   }
 };
 </script>
-<style>
-.el-popup-parent--hidden {
-  padding-right: 0px !important;
-}
-</style>
 <style lang="scss" scoped>
 .popup-wrap {
   /deep/ .el-drawer__header {
