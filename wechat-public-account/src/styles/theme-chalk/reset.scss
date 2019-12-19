@@ -160,6 +160,9 @@ button:-moz-focusring, [type="button"]:-moz-focusring, [type="reset"]:-moz-focus
   outline: 1px dotted ButtonText
 }
 
+:focus {
+  outline: none;
+}
 [type="checkbox"], [type="radio"] {
   box-sizing: border-box;
   padding: 0
