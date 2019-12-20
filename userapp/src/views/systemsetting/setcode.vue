@@ -34,7 +34,7 @@
               <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-tooltip content="删除" placement="top">
-                      <button @click="chakan( scope )">
+                      <button @click="deleteCode(scope)">
                         <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
@@ -96,8 +96,26 @@ export default {
     /**
      * 查看短信信息
      */
-    async chakan(siteId) {
-      
+    async deleteCode(val) {
+        this.$confirm(
+                "删除后,成员将不再管理您的站点, 确定要删除吗?",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                    callback: async action => {
+                        if (action === "confirm") {
+                            this.$notify({
+                              customClass: "notify-success", // error success
+                              message: `删除成功`,
+                              duration: 1500,
+                              showClose: false
+                            });
+                        }
+                    }
+                }
+            );
     },
     //table
     handleClick(){
@@ -134,7 +152,7 @@ export default {
 .backupBtn {
   position: absolute;
   right: 16px;
-  top: 0;
+  top: -8px;
   font-size: $--font-size-small;
 }
 .content-table {

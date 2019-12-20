@@ -12,7 +12,7 @@
             font-size: 16px;
             line-height: 1;
             color: $--color-text-primary;
-            font-weight: $--font-weight-primary;
+            font-weight: 500;
         }
 
         .el-message-box__headerbtn {
@@ -33,7 +33,7 @@
 
     .el-message-box__content {
         padding: 40px;
-        color: #A1A8B1;
+        color: $--color-text-primary;
         font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
         .icon-warning {
@@ -66,7 +66,7 @@
             font-size: 14px;
             border-radius: 2px;
             font-weight: 400;
-            color: $--button-primary-background-color;
+            color:$--button-primary-background-color;
             border-color: $--button-primary-background-color;
 
         }

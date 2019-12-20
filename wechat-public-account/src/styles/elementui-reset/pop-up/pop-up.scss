@@ -33,7 +33,7 @@
 
     .el-message-box__content {
         padding: 40px;
-        color: #A1A8B1;
+        color: $--color-text-primary;
         font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
         .icon-warning {
@@ -68,6 +68,7 @@
             font-weight: 400;
             color:$--button-primary-background-color;
             border-color: $--button-primary-background-color;
+
         }
 
         .el-button:hover {
