@@ -630,8 +630,8 @@ export default {
   },
   components: {},
   mounted() {
-    this.getTemplateList();
     this.getFirstIndustry();
+    this.getTemplateList();
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
         if (window.innerWidth < 1430) {

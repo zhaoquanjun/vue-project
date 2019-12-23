@@ -25,6 +25,7 @@ export let articleManageUrl = `${httpSchema}content.${baseServerUrl}/content/new
 export let productManageUrl = `${httpSchema}content.${baseServerUrl}/content/product`;
 export let imgManageUrl = `${httpSchema}content.${baseServerUrl}/content/picture`;
 export let fileManageUrl = `${httpSchema}content.${baseServerUrl}/content/file`;
+export let videoManageUrl = `${httpSchema}content.${baseServerUrl}/content/video`;
 export let designerUrl = `${httpSchema}designer.${baseServerUrl}`;
 export let mySiteUrl = `${httpSchema}dashboard.${baseServerUrl}/website/mysite`;
 export let wechatSpreadUrl = `${httpSchema}wechat.${baseServerUrl}/wechat/wechatspread`;

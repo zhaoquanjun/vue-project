@@ -9,7 +9,25 @@
       <div class="user-list">
         <span class="member-list-title">阿里云AK/Sk</span>
         <div class="editBtn">
-          <button class="cl-button cl-button--primary">保存</button>
+          <div v-show="isFirst">
+            <button class="cl-button cl-button--primary cl-button--small" @click="saveAksk">保存</button>
+          </div>
+          <div v-show="!isFirst">
+            <div v-show="!canEdit">
+              <button
+                class="cl-button cl-button--primary_notbg cl-button--small"
+                @click="deleteAksk"
+              >删除</button>
+              <button class="cl-button cl-button--primary cl-button--small" @click="resetAksk">重新配置</button>
+            </div>
+            <div v-show="canEdit">
+              <button
+                class="cl-button cl-button--primary_notbg cl-button--small"
+                @click="cancelAksk"
+              >取消</button>
+              <button class="cl-button cl-button--primary cl-button--small" @click="saveAksk">保存</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="configuration-wrap">
@@ -22,17 +40,24 @@
                 size="medium"
                 style="width:250px"
                 v-model="akId"
+                @blur="blurAkId"
+                :disabled="!canEdit"
                 placeholder="请输入Access Key ID"
               ></el-input>
+              <div class="ym-form-item__error" v-show="errorAkIdShow">{{errorAkIdText}}</div>
             </div>
             <div class="akSecret">
               <div class="ak-title">Access Key Secret</div>
               <el-input
                 size="medium"
                 style="width:250px"
+                type="password"
                 v-model="akSecret"
+                @blur="blurAkSecret"
+                :disabled="!canEdit"
                 placeholder="请输入Access Key Secret"
               ></el-input>
+              <div class="ym-form-item__error" v-show="errorAkSecretShow">{{errorAkSecretText}}</div>
             </div>
             <div class="akLink">
               <div class="ak-title"></div>
@@ -57,34 +82,42 @@
             :data="listData"
             tooltip-effect="dark"
             class="content-table"
-            :highlight-current-row="true"
           >
             <el-table-column prop="features" label="功能" min-width="200"></el-table-column>
             <el-table-column prop="authority" label="权限" min-width="200"></el-table-column>
-            <el-table-column prop="status" label="权限状态" min-width="300">
+            <el-table-column prop="status" label="权限状态" :min-width="isFirst?50:300">
               <template slot-scope="scope">
-                <div v-if="scope.row.status == 0" class="waitAuthor">待授权</div>
-                <div v-if="scope.row.status == 1">
-                  <div class="notAuthor" style="display:inline-block">未授权</div>
-                  <div
-                    class="waitAuthor"
-                    style="display:inline-block"
-                  >（AK/SK账号下无“SMS”权限，请开通并授权后重新配置）</div>
+                <div v-if="isFirst" class="waitAuthor">待授权</div>
+                <div v-if="!isFirst">
+                  <div v-if="!scope.row.status">
+                    <div class="notAuthor" style="display:inline-block">未授权</div>
+                    <div
+                      class="waitAuthor"
+                      style="display:inline-block"
+                    >（AK/SK账号下无“SMS”权限，请开通并授权后重新配置）</div>
+                  </div>
+                  <div v-if="scope.row.status" class="successAuthor">授权成功</div>
                 </div>
-                <div v-if="scope.row.status == 2" class="successAuthor">授权成功</div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" v-if="true" min-width="200">
+            <el-table-column label="操作" v-if="!isFirst" min-width="200">
               <template slot-scope="scope">
-                <button class="operatingBtn" v-if="scope.row.status == 1">去查看</button>
-                <button class="operatingBtn" v-if="scope.row.status == 2">去管理</button>
-                <router-link :to="{name:'setcode'}"> 
+                <button
+                  class="operatingBtn"
+                  @click="manage"
+                  v-if="scope.row.features == '短信服务'"
+                >{{scope.row.status?"去管理":"去查看"}}</button>
+                <a
+                  :href="`${videoUrl}`"
+                  class="operatingBtn"
+                  v-if="scope.row.features == '视频点播'"
+                >{{scope.row.status?"去管理":"去查看"}}</a>
                 <button
                   class="operatingBtn"
                   style="margin-left:24px"
-                  v-if="scope.row.status == 2&&scope.row.features == '短信服务'"
+                  v-if="scope.row.status&&scope.row.features == '短信服务'"
+                  @click="setTemplate"
                 >设置签名/模板</button>
-                </router-link>
               </template>
             </el-table-column>
           </el-table>
@@ -96,81 +129,181 @@
 
 <script>
 import PageSubmenu from "@/components/common/PageSubmenu";
+import * as akskApi from "@/api/request/akskApi";
+import { videoManageUrl } from "@/environment/index.js";
 export default {
   components: {
     PageSubmenu
   },
   data() {
     return {
+      canEdit: true,
+      isFirst: true,
       akId: "",
+      errorAkIdShow: false,
+      errorAkIdText: "",
       akSecret: "",
+      errorAkSecretShow: false,
+      errorAkSecretText: "",
+      oldAkId: "",
+      oldAkSecret: "",
       listData: [
         {
           features: "短信服务",
           authority: "管理短信服务（SMS）的权限",
-          status: 0
+          status: false
         },
         {
           features: "视频点播",
           authority: "管理视频点播服务（VOD）的权限",
-          status: 1
-        },
-        {
-          features: "视频点播",
-          authority: "管理视频点播服务（VOD）的权限",
-          status: 2
-        },
-        {
-          features: "短信服务",
-          authority: "管理短信服务（SMS）的权限",
-          status: 2
+          status: false
         }
-      ]
+      ],
+      videoUrl: videoManageUrl
     };
   },
-  created() {},
+  mounted() {
+    this.getAksk();
+  },
   methods: {
-      hasClass(ele, cls) {
-          console.log(ele)
-        return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'))
-      },
-      removeClass(ele, cls) {
-          console
-  if (this.hasClass(ele, cls)) {
-    const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)')
-    ele.className = ele.className.replace(reg, ' ')
-  }
-},
-      click(row, col, e){
-          console.log(arguments)
-          let tr = e.path && e.path[2];
-
-          let trList = document.getElementsByClassName("customClass")[0];
-
-          if(this.hasClass(tr,"customClass")){
-             this.removeClass(tr,'customClass')
-          }else{
-
-               trList && this.removeClass(trList,'customClass')
-               tr.className = tr.className + " customClass"
-          } 
-          
+    async getAksk() {
+      this.$Loading.show();
+      let { data, status } = await akskApi.get();
+      this.akId = data.ak;
+      this.akSecret = data.sk;
+      this.oldAkId = data.ak;
+      this.oldAkSecret = data.sk;
+      this.listData[0].status = data.smsAuthorization;
+      this.listData[1].status = data.vodAuthorization;
+      if (data.ak) {
+        this.isFirst = false;
+        this.canEdit = false;
+      } else {
+        this.isFirst = true;
+        this.canEdit = true;
       }
+      this.$Loading.hide();
+    },
+    async saveAksk() {
+      if (this.akId == "") {
+        this.errorAkIdShow = true;
+        this.errorAkIdText = "请输入Access Key ID";
+        return;
+      } else if (this.akId.length > 50) {
+        this.errorAkIdShow = true;
+        this.errorAkIdText = "Access Key ID 长度不可超过50个字符";
+        return;
+      }
+      if (this.akSecret == "") {
+        this.errorAkSecretShow = true;
+        this.errorAkSecretText = "请输入Access Key Secret";
+        return;
+      } else if (this.akSecret.length > 50) {
+        this.errorAkSecretShow = true;
+        this.errorAkSecretText = "Access Key Secret 长度不可超过50个字符";
+        return;
+      }
+      let para = {
+        ak: this.akId,
+        sk: this.akSecret
+      };
+      let { data, status } = await akskApi.set(para);
+      this.isFirst = false;
+      this.canEdit = false;
+      if (status === 200) {
+        this.$notify({
+          customClass: "notify-success",
+          message: `配置成功`,
+          duration: 2000,
+          showClose: false
+        });
+      } else {
+        this.$notify({
+          customClass: "notify-error",
+          message: `系统正忙，请稍后再试！`,
+          duration: 2000,
+          showClose: false
+        });
+      }
+      this.getAksk();
+    },
+    resetAksk() {
+      this.canEdit = true;
+    },
+    cancelAksk() {
+      this.akId = this.oldAkId;
+      this.akSecret = this.oldAkSecret;
+      this.canEdit = false;
+      this.errorAkIdShow = false;
+      this.errorAkSecretShow = false;
+    },
+    deleteAksk() {
+      this.$confirm(
+        `删除AK/Sk后，阿里云短信与视频功能将不可使用，确认要删除吗？`,
+        "提示",
+        {
+          iconClass: "icon-warning",
+          callback: async action => {
+            if (action === "confirm") {
+              let { status } = await akskApi.remove();
+              if (status === 200) {
+                this.$notify({
+                  customClass: "notify-success",
+                  message: `删除成功`,
+                  duration: 2000,
+                  showClose: false
+                });
+                this.getAksk();
+              } else {
+                this.$notify({
+                  customClass: "notify-error",
+                  message: `系统正忙，请稍后再试！`,
+                  duration: 2000,
+                  showClose: false
+                });
+              }
+            }
+          }
+        }
+      );
+    },
+    blurAkId() {
+      if (this.akId == "") {
+        this.errorAkIdShow = true;
+        this.errorAkIdText = "请输入Access Key ID";
+      } else if (this.akId.length > 50) {
+        this.errorAkIdShow = true;
+        this.errorAkIdText = "Access Key ID 长度不可超过50个字符";
+      } else {
+        this.errorAkIdShow = false;
+        this.errorAkIdText = "";
+      }
+    },
+    blurAkSecret() {
+      if (this.akSecret == "") {
+        this.errorAkSecretShow = true;
+        this.errorAkSecretText = "请输入Access Key Secret";
+      } else if (this.akSecret.length > 50) {
+        this.errorAkSecretShow = true;
+        this.errorAkSecretText = "Access Key Secret 长度不可超过50个字符";
+      } else {
+        this.errorAkSecretShow = false;
+        this.errorAkSecretText = "";
+      }
+    },
+    setTemplate() {
+      this.$router.push({
+        path: "/systemsetting/setcode"
+      });
+    },
+    manage() {
+      this.$router.push({
+        path: "/website/sitemanage/messagesetting"
+      });
+    }
   }
 };
 </script>
-<style>
-.customClass{
-    background: red !important;
-}
-.current-row {
-    border: 1px solid red;
-    border-collapse: collapse;
-}
-.current-row td {
-    border-bottom:none;    
-    }
-</style>
 <style lang="scss" scoped>
 .member-container {
   position: relative;
@@ -224,7 +357,11 @@ export default {
       height: 56px;
     }
     .akSecret {
-      height: 48px;
+      height: 56px;
+    }
+    .ym-form-item__error {
+      margin-left: 150px;
+      padding-top: 6px;
     }
     .akLink {
       .link {
@@ -273,5 +410,4 @@ export default {
 .operatingBtn {
   color: $--color-primary;
 }
-
 </style>
