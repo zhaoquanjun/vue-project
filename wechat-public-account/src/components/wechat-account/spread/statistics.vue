@@ -65,7 +65,10 @@ export default {
       pvLast:[],
       uvLast:[],
       sticsTitle: '',
-      interval: 0 //设置X轴数据间隔几个显示一个，为0表示都显示
+      interval: 0, //设置X轴数据间隔几个显示一个，为0表示都显示
+      screenWidth: document.body.clientWidth, // 屏幕宽度
+      timer: true,
+      myChart:null
     }
   },
   created (){
@@ -80,10 +83,24 @@ export default {
     
   },
   mounted(){
+    // 监听窗口大小
+    window.onresize = () => {
+      return (() => {
+        this.screenWidth = document.body.clientWidth
+      })()
+    },
     this.getInfo()
   },
   watch: {
-    
+    screenWidth(val) {
+      if (this.timer) {
+        this.timer = false
+        setTimeout(()=> {
+          this.myChart.resize();
+          this.timer = true
+        },500)
+      }
+    }
   },
   methods: {
     async getInfo(){
@@ -131,9 +148,9 @@ export default {
     initCode(){
       // 基于准备好的dom，初始化echarts实例
 
-        let myChart = echarts.init(document.getElementById('myChart'))
+        this.myChart = echarts.init(document.getElementById('myChart'))
         // 绘制图表
-        myChart.setOption({
+        this.myChart.setOption({
           backgroundColor: '#fff',
           legend: {
             // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
@@ -174,20 +191,22 @@ export default {
                   name:'阅读数',
                   type:'line',
                   stack: '阅读数',
-                  symbolSize:10,
-                  symbol:'circle',  
+                  symbolSize:5,
+                  symbol:'circle', 
+                  smooth: true, 
                   data: this.interval == 1 ? this.pvList:this.pvLast
               },
               {
                   name:'访问数',
                   type:'line',
                   stack: '访问数',
-                  symbolSize:10,
-                  symbol:'circle', 
+                  symbolSize:5,
+                  symbol:'circle',
+                  smooth: true, 
                   data: this.interval == 1 ? this.uvList:this.uvLast
               }
           ],
-          color: ['#09CCEB', '#FF6B00']
+          color: ['#23CD5D', '#FF6A00']
         });
     }
   }

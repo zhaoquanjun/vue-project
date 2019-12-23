@@ -178,8 +178,6 @@ export default {
                 if (data.PicUrl) {
                     this.picUrl = data.PicUrl
                     this.curEditorItem.picUrl = data.PicUrl
-                } else {
-                    this.picUrl = ''
                 }
             }
         },
@@ -206,7 +204,16 @@ export default {
             list.insertBefore(editor, listItems[index]);
         },
         remove(item, index) {
-            this.list = this.list.splice(index, 1);
+            this.$confirm("提示", {
+                title: "提示",
+                iconClass: "icon-warning",
+                message:  `删除后，该图文无法恢复，是否确认删除？`,
+                callback: async action => {
+                    if (action === "confirm") {
+                        this.list = this.list.splice(index, 1);
+                    }
+                }
+            });
         },
         //确定
         handlerConfirm() {
@@ -248,6 +255,17 @@ export default {
         },
         //取消
         handlerCancel(){
+            // 添加完成后重置一下
+            this.curEditorItem = {
+                title: "",
+                description: "",
+                picUrl: require('img/picCover.png'),
+                urlType: "",
+                urlData: "",
+                contentPageId: ''
+            };
+            this.picUrl = ''
+            this.curEditorTitle = ''
             this.isEditorShow = false
         },
         handlerAddNewsImg() {
@@ -310,6 +328,7 @@ export default {
 .image-text {
     padding-top: 16px;
     height: 100%;
+    box-sizing: border-box;
 }
 .add-img {
     width: 100%;
@@ -392,7 +411,7 @@ export default {
             .iconfont {
                 color: #fff;
                 &:hover {
-                    color: #09cceb;
+                    color: $--color-primary;
                 }
             }
         }

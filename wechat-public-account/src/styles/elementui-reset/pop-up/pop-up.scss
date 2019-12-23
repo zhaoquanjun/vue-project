@@ -26,14 +26,14 @@
             }
             .el-icon-close:hover {
                 background: $--icon-hover-color;
-                color: $--color-primary;
+                color: $--color-text-primary;
             }
         }
     }
 
     .el-message-box__content {
         padding: 40px;
-        color: #A1A8B1;
+        color: $--color-text-primary;
         font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
         .icon-warning {
@@ -68,6 +68,7 @@
             font-weight: 400;
             color:$--button-primary-background-color;
             border-color: $--button-primary-background-color;
+
         }
 
         .el-button:hover {
@@ -154,4 +155,8 @@
 
 .notify-error {
     background: $--color-danger;
+}
+// 打开弹框给body加的样式覆盖掉
+.el-popup-parent--hidden {
+    padding-right: 0px !important;
 }

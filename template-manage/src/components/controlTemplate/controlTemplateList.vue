@@ -27,7 +27,7 @@
               style="padding:0;display:inline-block;overflow:visible;"
               @show="showName(scope.row)"
             >
-              <i v-show="scope.row.siteId" slot="reference" class="iconfont iconicon-dash-edit"></i>
+              <i v-show="scope.row.siteId" slot="reference" class="iconfont iconbianji"></i>
               <div class="textareaWrap">
                 <el-input
                   type="textarea"
@@ -85,7 +85,7 @@
                 style="padding:0;display:inline-block;overflow:visible;"
                 @show="showRemark(scope.row)"
               >
-                <i v-show="scope.row.siteId" slot="reference" class="iconfont iconicon-dash-edit"></i>
+                <i v-show="scope.row.siteId" slot="reference" class="iconfont iconbianji"></i>
                 <div class="textareaWrap">
                   <el-input
                     type="textarea"
@@ -257,7 +257,8 @@ export default {
         path: "/template/controlmanege/composemanage",
         query: {
           siteId: row.siteId,
-          templateName: row.templateName
+          templateName: row.templateName,
+          secondDomain: row.domain
         }
       });
     },
@@ -298,7 +299,7 @@ export default {
     padding-top: 16px;
   }
 }
-.iconicon-dash-edit {
+.iconbianji {
   &:hover {
     color: $--color-primary;
   }

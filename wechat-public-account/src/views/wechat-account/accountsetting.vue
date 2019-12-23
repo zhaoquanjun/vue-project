@@ -275,25 +275,26 @@ export default {
           }
           p {
             position: relative;
-            padding-left: 36px;
-            width: 90px;
+            border-left: 36px solid #63DC8C;
+            width: 82px;
             height: 32px;
             line-height: 32px;
-            color:#FFFFFF;
-            background: $--color-primary;
-            box-shadow: 0px 5px 8px 0px rgba(9, 204, 235, 0.1);
+            color:#63DC8C;
+            background: rgba(99,220,140,0.2);;
+            text-align: center;
+            font-weight: 600;
             border-radius: $--border-radius-base;
             &::after {
               position: absolute;
-              top: 8px;
-              left: 8px;
+              top: 0px;
+              left: -32px;
               display: block;
               content: "";
-              width: 16px;
-              height: 16px;
+              width: 32px;
+              height: 32px;
               background: url("~img/account/v.png") no-repeat
                 center center;
-              background-size: 100% 100%;
+              background-size: 50% 50%;
             }
           }
         }

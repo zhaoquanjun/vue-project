@@ -8,7 +8,7 @@
           </span>
           <span @click="changeApp" class="headAppName">
             <span class="headAppNameInfo">已购买服务</span>
-            <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;vertical-align:middle"></i>
+            <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;"></i>
           </span>
         </div>
       </div>
@@ -113,7 +113,7 @@
             </div>
             <div class="appInfo">
               <div class="version">
-                <span class="versionText">{{item.name}}</span>
+                <span class="versionText">{{item.name?item.name:"备注"}}</span>
                 <el-popover
                   :ref="`popover-${index}`"
                   placement="bottom"
@@ -123,7 +123,10 @@
                   @show="showRemark(item)"
                 >
                   <button style="margin-left:8px" slot="reference">
-                    <i class="iconfont iconbianji cl-iconfont is-square" v-show="item.isSystem"></i>
+                    <i
+                      class="iconfont iconbianji cl-iconfont is-square"
+                      v-show="item.isSystem&&!isExpiredWeek(item)"
+                    ></i>
                   </button>
                   <div class="textareaWrap">
                     <el-input
@@ -157,7 +160,7 @@
                 <div class="isExpired" v-show="item.releaseTime&&isreleased(item)">已释放</div>
                 <a
                   class="renewal cl-button cl-button--primary_notbg"
-                  v-show="item.isSystem"
+                  v-show="item.isSystem&&!isExpiredWeek(item)"
                   :href="aliMarketUrl"
                   target="_blank"
                 >续费</a>
@@ -202,6 +205,8 @@ export default {
   },
   methods: {
     signOut() {
+      //是非显示短信配置提示语
+      setLocal('isShowTips','1')
       securityService.signOut(location.href);
     },
     pannelShow() {
@@ -230,7 +235,7 @@ export default {
     },
     // 显示修改appName弹框
     showRemark(item) {
-      this.appName = item.name ? item.name : "";
+      this.appName = item.name == "备注" ? "" : item.name;
     },
     // 取消修改
     cancelInput(index) {
@@ -316,6 +321,18 @@ export default {
         return true;
       }
     },
+    // 判断是否过期7天
+    isExpiredWeek(item) {
+      if (new Date() - new Date(item.expiredTime) > 1000 * 60 * 60 * 24 * 7) {
+        return true;
+      }
+      if (
+        item.releaseTime &&
+        new Date() - new Date(item.releaseTime) > 1000 * 60 * 60 * 24 * 7
+      ) {
+        return true;
+      }
+    },
     // 是否被释放
     isreleased(item) {
       if (new Date(item.releaseTime) < new Date()) {
@@ -388,14 +405,12 @@ export default {
     }
     .headAppName {
       cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin-left: 32px;
       padding: 0;
-      margin-left: 16px;
-      height: 40px;
-      line-height: 40px;
-      width: 250px;
+      .headAppNameInfo {
+        padding: 0;
+        margin-right: 12px;
+      }
       &:hover {
         .headAppNameInfo {
           color: $--color-primary;

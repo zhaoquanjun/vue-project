@@ -19,10 +19,12 @@
                         placeholder="短信验证码"
                         maxlength="6"
                     ></el-input>
-                    <button class="verification-text" @click="send" :disabled="disabled=!show">
-                        <span v-show="show">发送验证码</span>
-                        <span v-show="!show" class="count">{{count}}秒后可重新获取</span>
-                    </button>
+                    <Debounce :time="1000" !isDebounce>
+                        <button class="verification-text" @click="send" :disabled="disabled=!show">
+                            <span v-show="show">发送验证码</span>
+                            <span v-show="!show" class="count">{{count}}秒后可重新获取</span>
+                        </button>
+                    </Debounce>
                 </el-form-item>
             </div>
             <div v-else>
@@ -160,49 +162,35 @@ export default {
                     label: "+39"
                 }
             ],
-            value: "中国大陆",
-            canSendClick:true
+            value: "中国大陆"
         };
     },
     mounted() {},
     methods: {
         async send() {
-            if(this.canSendClick){
-                this.canSendClick=false;
-                console.log("send")
-                let { status } = await sendSourcePhoneCode();
-                if (status === 200) {
-                    this.$notify({
-                        customClass: "notify-success",
-                        message: "发送成功",
-                        duration: 1500,
-                        showClose: false
-                    });
-                    if (!this.timer) {
-                        this.count = TIME_COUNT;
-                        this.show = false;
-                        this.timer = setInterval(() => {
-                            if (this.count > 0 && this.count <= TIME_COUNT) {
-                                this.count--;
-                            } else {
-                                this.show = true;
-                                clearInterval(this.timer); // 清除定时器
-                                this.timer = null;
-                                this.count = "";
-                            }
-                        }, 1000);
-                    }
-                } else {
-                    this.$notify({
-                        customClass: "notify-error",
-                        message: "发送失败",
-                        duration: 1500,
-                        showClose: false
-                    });
+            let { status } = await sendSourcePhoneCode();
+            if (status === 200) {
+                if (!this.timer) {
+                    this.count = TIME_COUNT;
+                    this.show = false;
+                    this.timer = setInterval(() => {
+                        if (this.count > 0 && this.count <= TIME_COUNT) {
+                            this.count--;
+                        } else {
+                            this.show = true;
+                            clearInterval(this.timer); // 清除定时器
+                            this.timer = null;
+                            this.count = "";
+                        }
+                    }, 1000);
                 }
-                setTimeout(()=>{
-                    this.canSendClick=true;
-                },150)
+            } else {
+                this.$notify({
+                    customClass: "notify-error",
+                    message: "发送失败",
+                    duration: 1500,
+                    showClose: false
+                });
             }
         },
         async sendChangePhoneCode() {
@@ -212,12 +200,6 @@ export default {
             } else {
                 let { status } = await sendTargetPhoneCode(targetPhone);
                 if (status === 200) {
-                    this.$notify({
-                        customClass: "notify-success",
-                        message: "发送成功",
-                        duration: 1500,
-                        showClose: false
-                    });
                     if (!this.timer) {
                         this.count = TIME_COUNT;
                         this.show = false;

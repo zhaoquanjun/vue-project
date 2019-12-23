@@ -16,10 +16,11 @@
                                 <i class = 'icon iconfont prefixIcon' :class="item.matchType=='1'?'iconicon-banpipei':'iconicon-quanpipei'" />
                             </template>
                             <el-option
-                                v-for="item in matchOption"
-                                :key="item.matchType"
-                                :label="item.matchLabel"
-                                :value="item.matchType"
+                                v-for="items in matchOption"
+                                :class="item.matchType==items.matchType?'has-selected':''"
+                                :key="items.matchType"
+                                :label="items.matchLabel"
+                                :value="items.matchType"
                             ></el-option>
                         </el-select>
                     </span>
@@ -205,15 +206,25 @@ export default {
         },
         //校验关键词
         checkKeyword(index) {
+            let allKeywordList = true
             if (!trim(this.keywordList[index].keyword)) {
                 this.error[index].onerrorTip = true;
                 this.error[index].onerrorText = "关键词不能为空";
-                return false;
+                allKeywordList = false
             } else {
-                this.error[index].onerrorTip = false;
-                this.error[index].onerrorText = "";
-                return true;
+                for (let i = 0; i < this.keywordList.length; i++) {
+                    if(!trim(this.keywordList[i].keyword)){
+                        this.error[i].onerrorTip = true;
+                        this.error[i].onerrorText = "关键词不能为空";
+                        allKeywordList = false
+                        break;
+                    } else {
+                        this.error[i].onerrorTip = false;
+                        this.error[i].onerrorText = "";
+                    }
+                }
             }
+            return allKeywordList
         },
         // 回车搜索
         searchEnterFun() {
@@ -303,7 +314,7 @@ export default {
     border: $--border-base;
 }
 .el-input /deep/ .el-input__inner:focus {
-    border: $--border-base;
+    border: 1px solid $--color-primary;
 }
 .el-input /deep/ .el-input__inner {
     border: $--border-base;
@@ -349,7 +360,7 @@ button {
             z-index: 1;
             top: 50px;
             left: 0;
-            width: 100%;
+            width: 90%;
             padding-bottom: 24px;
             margin-left: 24px;
             padding: 5px;
@@ -482,5 +493,8 @@ button {
         color: $--color-primary;
         vertical-align: middle;
     }
+}
+.has-selected {
+    color: $--color-primary !important;
 }
 </style>

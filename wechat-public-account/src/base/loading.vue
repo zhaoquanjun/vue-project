@@ -53,7 +53,7 @@ export default {
   width: 70px;
   height: 70px;
   border-radius: $--border-radius-circle;
-  border-top: 2px solid $--color-success;
+  border-top: 2px solid $--color-white;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 4s infinite linear reverse;
@@ -74,7 +74,7 @@ export default {
   border-right: initial;
   animation: cw 1s infinite;
   content: "";
-  background: #BFF6FF;
+  background: #FFD7BA;
 }
 
 h1 {

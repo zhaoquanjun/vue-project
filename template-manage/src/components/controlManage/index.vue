@@ -26,7 +26,7 @@
         </el-input>
         <el-select
           v-model="firstTypeValue"
-          placeholder="请选择"
+          placeholder="一级分类"
           class="selectTypeValue"
           @change="changeFirstType"
         >
@@ -37,7 +37,7 @@
             :value="item.id"
           ></el-option>
         </el-select>
-        <el-select v-model="secondTypeValue" placeholder="请选择" class="selectTypeValue">
+        <el-select v-model="secondTypeValue" placeholder="二级分类" class="selectTypeValue">
           <el-option
             v-for="item in secondTypeOptions"
             :key="item.id"
@@ -153,6 +153,7 @@ export default {
       }
       let para = {
         siteId: this.$route.query.siteId,
+        secondDomain: this.$route.query.secondDomain,
         controlName: this.searchValue,
         firstType: this.firstTypeValue,
         secondType: this.secondTypeValue,

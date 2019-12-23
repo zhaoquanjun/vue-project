@@ -81,10 +81,10 @@
                         class="handle-btn handle-btn-item"
                         @click="handleEdit(scope.$index, scope.row)"
                     >
-                        <i class="iconfont iconbianji"></i>
+                        <i class="iconfont iconbianji cl-iconfont is-square"></i>
                     </button>
                     <button class="handle-btn" @click="handleDelete(scope.$index, scope.row)">
-                        <i class="iconfont iconshanchu"></i>
+                        <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                     </button>
                 </template>
             </el-table-column>
@@ -121,7 +121,6 @@ export default {
     },
 
     created() {
-        console.log(this);
     },
     data() {
         return {
@@ -140,7 +139,6 @@ export default {
     methods: {
         checkbox(row) {
             if (row.row.isSystem === true && row.columnIndex === 0) {
-                console.log(row);
                 return "mycell";
             }
         },
@@ -163,7 +161,6 @@ export default {
          * 删除操作
          */
         handleDelete(index, row) {
-            console.log(index, row);
             this.$emit("deleteCurMember", row);
         },
         toggleSelection(rows) {
@@ -176,11 +173,9 @@ export default {
             }
         },
         handleSelectionChange(val) {
-            console.log(val);
             this.$emit("tabSelection", val);
         },
         changePageNum(page) {
-            console.log(page, "当前页码");
             this.$emit("changePageNum", page);
         },
         changePageSize(size) {
@@ -202,7 +197,6 @@ export default {
         },
 
         remarkBlur(e) {
-            console.log(e.target.className);
         },
         showRemark(row) {
             this.remarkValue = row.remark ? row.remark : "";
@@ -272,9 +266,9 @@ export default {
     margin-right: 54px;
 }
 .table-list {
-    .iconfont {
+    .iconicon-dash-edit {
         &:hover {
-            color: #00c1de;
+            color: $--color-primary;
         }
     }
 }

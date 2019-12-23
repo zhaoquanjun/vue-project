@@ -88,10 +88,10 @@
                             <div>
                                 <div style="float:left">
                                     <el-col>
-                                        <el-form-item prop="createTime">
+                                        <el-form-item prop="publishTime">
                                             <el-date-picker
                                                 type="datetime"
-                                                v-model="articleDetail.createTime"
+                                                v-model="articleDetail.publishTime"
                                                 placeholder="选择日期时间"
                                                 style="width: 100%;"
                                             ></el-date-picker>
@@ -228,7 +228,7 @@ export default {
                 searchKeywords: [],
                 isPublish: false,
                 isLoggedInCanView: false,
-                createTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
+                publishTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
                 metaTitle: "",
                 metaKeywords: [],
@@ -461,7 +461,7 @@ export default {
                 contentDetail: "",
                 searchKeywords: [],
                 isPublish: false,
-                createTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
+                publishTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
                 metaTitle: "",
                 metaKeywords: [],
@@ -521,6 +521,9 @@ export default {
 }
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
+}
+.select-sort /deep/ .el-select{
+    width: 200px;
 }
 
 </style>

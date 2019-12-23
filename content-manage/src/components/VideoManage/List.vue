@@ -86,7 +86,7 @@
                 <div class="use-title">
                     <span class="title">已用空间</span>
                     <span class="storage-content">
-                        {{storageUsage.currentUsage}} /3 {{storageUsage.maxSize}}
+                        {{storageUsage.currentUsage}} / {{storageUsage.maxSize}}
                     </span>
                 </div>
                 <div class="use-storage">
@@ -129,7 +129,7 @@
             
             <div class="mask" v-if="imgVisible" style="text-align:center;">
                 <button class="closeBtn">
-                    <i class="el-icon-close icon-close" @click="imgVisible=false"></i>
+                    <i class="el-icon-close icon-close" @click="_getCurrentUsageTraffic()"></i>
                 </button>
                 <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
             </div>
@@ -201,8 +201,9 @@ export default {
         },
         // 获取使用的流量
         async _getCurrentUsageTraffic() {
+            
             let { data, status } = await getCurrentUsageTraffic("Video");
-
+            this.imgVisible=false
             this.usageTraffic = {
                 maxSize: this.bytesToSize(data.maxSize),
                 currentUsage: this.bytesToSize(data.currentUsage, 1),
@@ -400,8 +401,13 @@ export default {
     top:20px;
     right:57px;
     .icon-close{
-        font-size:30px;
-        color: #fff; 
+        font-size:24px;
+        color: #fff;
+        padding: 4px;
+        &:hover {
+            background:rgba(0, 0, 0, 1);
+            border-radius: $--border-radius-circle;
+        }
     }
 }
 .video {

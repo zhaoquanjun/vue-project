@@ -11,7 +11,6 @@
         :treeResult="treeResult"
         :list-options="picSearchOptions"
         :isPopup="isPopup"
-        :isSecond="isSecond"
         @getList="getList"
         @chooseCategoryNode="chooseNode"
         @create="newCategory"
@@ -131,10 +130,6 @@ export default {
       default: false
     },
     isPopup: {
-      type: Boolean,
-      default: false
-    },
-    isSecond: {
       type: Boolean,
       default: false
     }
@@ -402,7 +397,7 @@ export default {
     padding: 0 26px 0 10px;
     font-size: $--font-size-small;
     vertical-align: top;
-    background-color: #609ee9;
+    background-color: $--color-primary;
     border-radius: 16px;
     // border: 1px #609ee9 solid;
     color: #fff;

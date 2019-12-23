@@ -9,6 +9,7 @@
                     placeholder="请输入权限名称"
                     @input="changeInput"
                     :clearable="true"
+                    @keyup.enter='searchAuth'
                 />
                 <button class="auth-btn" @click="searchAuth">
                     <i class="el-icon-search el-input__icon"></i>
@@ -71,8 +72,6 @@ export default {
                 this.oldUserPermission = JSON.stringify(this.userPermission);
                 this.flag = true;
             }
-
-            console.log(this.oldUserPermission, "this.oldUserPermission");
             let ary = [];
             this.userPermission.forEach(item => {
                 if (item.name.includes(this.input)) {
@@ -130,6 +129,9 @@ export default {
             border: none;
             background: #fff;
         }
+        &:hover {
+                border: 1px solid $--color-primary;
+            }
         input::-ms-clear { display: none; }
         input::-ms-reveal { display: none; }
         .auth-input {
@@ -138,14 +140,14 @@ export default {
             text-indent: 10px;
         }
         .auth-btn {
-            width: 58px;
+            width: 40px;
             background: transparent;
             position: absolute;
             right: 0;
             font-size: 16px;
             color: #e5e5e5;
             i:hover {
-                color: #00c1de;
+                color: $--color-primary;
             }
         }
     }

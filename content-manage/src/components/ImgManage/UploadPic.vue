@@ -231,6 +231,9 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+.upload-img /deep/ .el-progress-circle__path{
+    stroke: $--color-primary;
+}
 .upload-pic /deep/ .el-upload-dragger {
     position: static;
     display: flex;

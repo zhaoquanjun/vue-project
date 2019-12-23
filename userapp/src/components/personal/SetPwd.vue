@@ -176,10 +176,6 @@ export default {
         async send() {
             let { status } = await sendSourcePhoneCode();
             if (status === 200) {
-                this.$message({
-                    type: "success",
-                    message: "发送成功!"
-                });
                 if (!this.timer) {
                     this.count = TIME_COUNT;
                     this.show = false;
@@ -343,7 +339,7 @@ export default {
 }
 .verification-code {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 .verification-text {
     position: absolute;

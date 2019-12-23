@@ -107,7 +107,7 @@ export default {
                             this._get301List();
                             this.$notify({
                                 customClass: "notify-success",
-                                message: `域名删除成功`,
+                                message: `删除成功`,
                                 duration: 1500,
                                 showClose: false
                             });

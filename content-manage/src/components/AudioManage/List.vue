@@ -32,7 +32,6 @@
                         placeholder="请输入内容"
                         v-model="scope.row.title"
                         maxlength="30"
-                        show-word-limit
                         @blur="rename(scope.row.id,scope.row)"
                     ></el-input>
 
@@ -282,12 +281,12 @@ export default {
 <style lang="scss" scoped>
 @import "../../styles/content-manage/manege-table.scss";
 /* 音频弹窗居中播放 */
-#img-list-dialog /deep/ .el-dialog__body {
+.table-wrap /deep/ .el-dialog__body {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-#table-list /deep/ .el-table--scrollable-x .el-table__body-wrapper{
+.table-wrap /deep/ .el-table--scrollable-x .el-table__body-wrapper{
     overflow-x: hidden;
 }
 .cover {

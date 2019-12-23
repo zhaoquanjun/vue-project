@@ -4,6 +4,8 @@
       ref="multipleTable"
       :data="listData.list"
       tooltip-effect="dark"
+      :height="tableHeight"
+      max-height="612"
       class="content-table"
       @selection-change="handleSelectionChange"
     >
@@ -56,8 +58,8 @@
       <el-table-column label="操作" min-width="80">
         <template slot-scope="scope">
           <div>
-            <button class="hoverBtn" style="margin-right:16px" @click="remove(scope.row)">
-              <i class="iconfont iconshanchu"></i>
+            <button style="margin-right:16px" @click="remove(scope.row)">
+              <i class="iconfont iconshanchu cl-iconfont is-square"></i>
             </button>
           </div>
         </template>
@@ -99,6 +101,7 @@ export default {
   },
   data() {
     return {
+      tableHeight:300,
       type: "页面",
       priorityList: [
         {
@@ -174,6 +177,14 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.tableHeight = window.innerHeight - 450;
+      });
+      this.tableHeight = window.innerHeight - 450;
+    });
+  },
   methods: {
     // 单选或全选操作
     handleSelectionChange(list) {
@@ -226,13 +237,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-}
-.hoverBtn {
-  padding: 8px;
-  background: transparent;
-  &:hover {
-    background: rgba(240, 243, 247, 1);
-  }
 }
 </style>
 

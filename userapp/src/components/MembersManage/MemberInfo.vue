@@ -18,9 +18,8 @@
                 <template v-if="isRemarkShow">
                     <span  class="remark-text">
                         <i>{{ !!remarkValue?remarkValue:"暂无备注"}}</i>&nbsp;
-                        <i class="iconWrap" @click="handleRemark">
-                        <svg-icon  icon-class="remark"></svg-icon>
-
+                        <i class="iconWrap iconfont iconicon-dash-edit" @click="handleRemark">
+                        
                         </i>
                     </span>
                 </template>

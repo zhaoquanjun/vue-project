@@ -21,24 +21,24 @@
           class="uploader-example"
         >
           <uploader-unsupport></uploader-unsupport>
-          <uploader-list uploadType="File" class="uploadList">
-            <div class="fileImg" v-show="isUpload">
-              <div class="fileRemove" @click="fileRemove">
-                <i class="iconfont iconshanchu"></i>
-              </div>
-            </div>
-            <div v-show="isUpload" class="fileName">robots.txt</div>
-            <div v-show="isUpload" class="fileName" style="margin-top:5px">{{date?date:""}}</div>
-            <div v-show="isUpload" v-if="progressFlag" class="progress">
-              <el-progress :percentage="progressPercent" style="width:150px"></el-progress>
-            </div>
-          </uploader-list>
           <uploader-drop>
-            <uploader-btn :attrs="attrs" class="uploadIcon" v-show="!isUpload"></uploader-btn>
-            <div class="uploadtip" v-show="!isUpload">将Robots文件拖拽到此处或点击上传按钮</div>
-            <div class="uploadText" v-show="isUpload">拖拽替换文件或点击上传按钮</div>
-            <div class="uploadTextRemark">请上传文件名为“robots”的txt文件</div>
-            <uploader-btn class="uploadBtn" :attrs="attrs">上传</uploader-btn>
+            <div>
+              <uploader-btn :attrs="attrs" class="uploadIcon" v-show="!isUpload"></uploader-btn>
+              <div class="fileImg" v-show="isUpload">
+                <div class="fileRemove" @click="fileRemove">
+                  <i class="iconfont iconshanchu"></i>
+                </div>
+              </div>
+              <div v-show="isUpload" class="fileName">robots.txt</div>
+              <div v-show="isUpload" class="fileName" style="margin-top:5px">{{date?date:""}}</div>
+              <div v-show="isUpload" v-if="progressFlag" class="progress">
+                <el-progress :percentage="progressPercent" style="width:150px;margin:auto"></el-progress>
+              </div>
+              <div class="uploadtip" v-show="!isUpload">将Robots文件拖拽到此处或点击上传按钮</div>
+              <div class="uploadtip" v-show="isUpload">拖拽替换文件或点击上传按钮</div>
+              <div class="uploadTextRemark">请上传文件名为“robots”的txt文件</div>
+              <uploader-btn class="uploadBtn" :attrs="attrs">上传</uploader-btn>
+            </div>
           </uploader-drop>
         </uploader>
         <div class="tip">Robots文件写法？</div>
@@ -259,84 +259,20 @@ export default {
     background: $--color-white;
     border-radius: $--border-radius-base;
     border: 1px dashed $--border-color-base;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
     text-align: center;
     .uploadIcon {
       display: block;
-      margin: 110px auto 0;
+      margin: auto;
       width: 44px;
       height: 32px;
       padding: 0;
       border: none;
       background: url("~img/upload/uploadfile.png") no-repeat center;
       background-size: cover;
-    }
-    .uploadBtn {
-      width: 72px;
-      height: 32px;
-      line-height: 32px;
-      margin-top: 12px;
-      padding: 0;
-      background: $--color-primary;
-      border-radius: $--border-radius-base;
-      color: $--color-white;
-      background-color: $--button-primary-background-color;
-      border-color: $--button-primary-background-color;
-      &:hover {
-        background-color: $--button-hover-primary-background-color;
-      }
-    }
-    .uploadtip {
-      width: 230px;
-      font-size: $--font-size-small;
-      color: $--color-primary;
-      font-weight: $--font-weight-base;
-      margin: auto;
-      margin-top: 12px;
-    }
-    .uploadText {
-      font-size: $--font-size-small;
-      color: $--color-primary;
-      font-weight: $--font-weight-base;
-      margin: auto;
-      margin-top: 190px;
-      width: 184px;
-    }
-    .uploadTextRemark {
-      font-size: $--font-size-small;
-      color: #a1a8b1;
-      font-weight: $--font-weight-base;
-      margin: auto;
-      margin-top: 8px;
-      width: 200px;
-    }
-  }
-  .uploader-dragover {
-    border: 1px dashed $--color-primary !important;
-    background: $--color-white !important;
-    .uploadIcon {
-      display: block;
-      margin: 110px auto 0;
-      width: 44px;
-      height: 32px;
-      padding: 0;
-      border: none;
-      background: url("~img/upload/uploadfileHover.png") no-repeat center;
-      background-size: cover;
-    }
-  }
-  .uploadList {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -40px;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    text-align: center;
-    .fileName {
-      font-size: $--font-size-small;
-      color: #a1a8b1;
-      font-weight: $--font-weight-base;
-      margin-top: 8px;
     }
     .fileImg {
       margin: auto;
@@ -367,6 +303,53 @@ export default {
           line-height: 30px;
         }
       }
+    }
+    .fileName {
+      font-size: $--font-size-small;
+      color: #a1a8b1;
+      font-weight: $--font-weight-base;
+      margin-top: 8px;
+    }
+    .uploadBtn {
+      width: 72px;
+      height: 32px;
+      line-height: 32px;
+      margin-top: 12px;
+      padding: 0;
+      background: $--color-primary;
+      border-radius: $--border-radius-base;
+      color: $--color-white;
+      background-color: $--button-primary-background-color;
+      border-color: $--button-primary-background-color;
+      &:hover {
+        background-color: $--button-hover-primary-background-color;
+      }
+    }
+    .uploadtip {
+      font-size: $--font-size-small;
+      color: $--color-primary;
+      font-weight: $--font-weight-base;
+      margin-top: 8px;
+    }
+    .uploadTextRemark {
+      font-size: $--font-size-small;
+      color: #a1a8b1;
+      font-weight: $--font-weight-base;
+      margin-top: 8px;
+    }
+  }
+  .uploader-dragover {
+    border: 1px dashed $--color-primary !important;
+    background: $--color-white !important;
+    .uploadIcon {
+      display: block;
+      margin: auto;
+      width: 44px;
+      height: 32px;
+      padding: 0;
+      border: none;
+      background: url("~img/upload/uploadfileHover.png") no-repeat center;
+      background-size: cover;
     }
   }
 }

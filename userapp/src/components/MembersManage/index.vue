@@ -8,6 +8,7 @@
         <el-main class="member-content" style="padding:32px">
             <el-row class="user-list">
                 <span class="member-list-title fs14">成员列表</span>
+                <button class="cl-button cl-button--primary invite-member" @click="invitation">邀请成员</button>
             </el-row>
             <div class="user-set">
                 <el-col :span="15">
@@ -39,9 +40,6 @@
                             ></i>
                         </el-input>
                     </div>
-                </el-col>
-                <el-col :span="3" :offset="6">
-                    <button class="cl-button cl-button--primary invite-member" @click="invitation">邀请成员</button>
                 </el-col>
             </div>
             <m-table
@@ -366,6 +364,10 @@ export default {
       font-weight: 500;
     }
   }
+  .invite-member {
+        margin: 0;
+        float: right;
+    }
 }
 .user-count {
     font-family: PingFangSC-Medium;
@@ -391,10 +393,6 @@ export default {
         line-height: 32px;
         background: $--color-text-secondary;
         color: $--color-white;
-    }
-    .invite-member {
-        margin: 0;
-        float: right;
     }
 }
 .seachInput {

@@ -460,7 +460,6 @@ export default {
             this.editorOrMove = true;
             this.isInvitationPanelShow = b;
             this.curRowData = data;
-            console.log(data, "data");
             this.ruleForm = {
                 name: data.title,
                 pass: data.pwd || "",
@@ -527,6 +526,8 @@ export default {
         },
         // 验证编辑面板
         fileNameBlur() {
+            this.watchPwd.secondRule = false;
+            this.watchPwd.firstRule = false;
             this.pwdRuleShow = false;
             if (!trim(this.ruleForm.name)) {
                 this.error.errorTip = true;
@@ -561,13 +562,14 @@ export default {
                 this.watchPwd.firstRule = true;
             } else {
                 this.watchPwd.firstRule = false;
+                this.watchPwd.secondRule = false;
             }
             if (trim(this.ruleForm.pass) && !pwdReg.test(this.ruleForm.pass)) {
                 this.watchPwd.secondRule = false;
                 this.error.pwdTip = true;
                 this.error.pwdErrorText = "密码设置不符合要求";
                 return false;
-            } else {
+            } else if(trim(this.ruleForm.pass)){
                 this.watchPwd.secondRule = true;
                 this.error.pwdTip = false;
                 this.error.pwdErrorText = "";

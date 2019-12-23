@@ -62,6 +62,7 @@ export default {
   color: #262626;
   box-shadow: 0 0 3px #ccc;
   transition: width 0.2s linear;
+  text-align: left;
   overflow: hidden;
   .pannel-head {
     height: 40px;

@@ -3,7 +3,7 @@
     <div class="conteiner">
       <div class="share-title">
         <span>分享设置</span>
-        <i @click="closeShare(false)" class="icon iconfont iconguanbi"></i>
+        <i @click="closeShare(false)" class="icon iconfont iconguanbi cl-iconfont is-circle"></i>
       </div>
       <div class="shaper">
         <div class="shaper-content">
@@ -61,7 +61,7 @@
         </div>
         <div v-if="shareUrl" class="share-url">
           <div class="left">
-            <h6>设置成功</h6>
+            <h6>分享地址</h6>
             <vue-qr  
               :margin='0' 
               :text="shareUrl"
@@ -308,7 +308,6 @@ export default {
       }
       i {
         font-size: 16px;
-        line-height: 40px;
         cursor: pointer;
       }
     }
@@ -448,6 +447,7 @@ export default {
             width:450px;
             height:40px;
             padding-left: 10px;
+            box-sizing: border-box;
             border-radius:$--border-radius-base;;
             border:$--border-base;
             font-size:$--font-size-small;

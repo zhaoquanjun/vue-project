@@ -57,6 +57,10 @@ export default {
                     return "iconicon-dash-seo";
                 case "sitemanage":
                     return "iconicon-dash-Webmanagement";
+                case "controlmanege":
+                    return "iconicon-huishou";
+                case "sitetemplate":
+                    return "iconicon-huishou";
                 case "sitemember":
                     return "iconicon-dash-membermanagement"    
             }

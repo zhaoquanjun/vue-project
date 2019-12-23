@@ -20,7 +20,7 @@ let pageApi = `${httpSchema}api.designer.${baseServerUrl}`;
 let pageApiUri = `${httpSchema}api.designer.${baseServerUrl}`;
 let newsApi = `${httpSchema}api.content.${baseServerUrl}`;
 let imageApi = `${httpSchema}api.content.${baseServerUrl}`;
-let errorUrl = `${httpSchema}login.${baseServerUrl}/404`;
+export let errorUrl = `${httpSchema}login.${baseServerUrl}/404`;
 let wechatApi = window.location.hostname.indexOf('clouddream.net') == -1 ? `${httpSchema}open.weixin.${baseServerUrl}`:'https://api.wechat.clouddream.net';
 export let siteDomain = `wechat.${baseServerUrl}`;
 // 个人中心

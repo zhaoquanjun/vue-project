@@ -352,7 +352,8 @@ export default {
                         duration: 1000
                     });
                 } else {
-                    this.$confirm("复制成功是否前往编辑文章", "提示", {
+                    this.$confirm(`<p style="line-height:16px;color:#262626;font-size: 14px;" class="ellipsis">复制成功</p> <p style="line-height:16px;">是否前往编辑文章</p>`, "提示", {
+                        dangerouslyUseHTMLString: true,
                         confirmButtonText: "立即前往",
                         cancelButtonText: "暂不前往",
                         iconClass: "icon-success",

@@ -84,6 +84,16 @@ export const defaultRoutes = [
         }
       },
       {
+        path: "sitemanage/messagesetting",
+        name: "messagesetting",
+        component: () => import("@/views/website-manage/messageSetting.vue"),
+        meta: {
+          title: "短信配置",
+          requiresAuth: true,
+          isSub: true
+        }
+      },
+      {
         path: "mysite/siteinfo",
         name: "mySite",
         component: () => import("@/views/website-manage/mySite.vue"),
@@ -164,6 +174,33 @@ export const defaultRoutes = [
       requiresAuth: true,
       requiresRole: {},
     }
+  },
+  {
+    path: "/systemsetting",
+    name: "systemsetting",
+    component: () => import('@/views/systemsetting/index.vue'),
+    children: [
+      {
+        path: "aliaksk",
+        name: "aliaksk",
+        component: () => import("@/views/systemsetting/aliaksk.vue"),
+        meta: {
+          title: "阿里云AK/SK",
+          requiresAuth: true,
+          isSub: true
+        }
+      },
+      {
+        path: "setcode",
+        name: "setcode",
+        component: () => import("@/views/systemsetting/setcode.vue"),
+        meta: {
+          title: "设置签名/模板",
+          requiresAuth: false,
+          isSub: true
+        }
+      }
+    ]
   },
   {
     path: "/form",

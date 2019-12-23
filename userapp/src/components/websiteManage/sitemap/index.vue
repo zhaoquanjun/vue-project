@@ -160,7 +160,10 @@
             <span class="title">{{addType}}</span>
             <span class="tips" v-show="type == '文章'">仅显示已上线文章</span>
             <span class="tips" v-show="type == '产品'">仅显示已上架产品</span>
-            <i class="iconfont iconguanbi cl-iconfont is-circle close-pannel" @click="closeAddDialog"></i>
+            <i
+              class="iconfont iconguanbi cl-iconfont is-circle close-pannel"
+              @click="closeAddDialog"
+            ></i>
           </div>
           <div style="padding:24px">
             <el-input
@@ -182,7 +185,8 @@
                 ref="multipleTable"
                 :data="addListData.list"
                 tooltip-effect="dark"
-                :height="300"
+                :height="tableHeight"
+                max-height="487"
                 class="content-table"
                 @selection-change="handleAddSelectionChange"
               >
@@ -193,7 +197,7 @@
                   </div>
                 </template>
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="title" label="页面标题" show-overflow-tooltip>
+                <el-table-column prop="title" :label="`${this.type}标题`" show-overflow-tooltip>
                   <template slot-scope="scope">
                     <div class="overflow">{{scope.row.title}}</div>
                   </template>
@@ -205,25 +209,18 @@
                 </el-table-column>
               </el-table>
               <div class="list-footer" v-show="addListData.totalRecord > 0">
-                <div 
-                  class="cl-pagination pageing" 
-                  id="pageing" 
-                  :class="{'noJumper':addListData.totalPage <= 10}"
-                >
+                <div class="cl-pagination pageing noJumper" id="pageing">
                   <slot name="paging"></slot>
                   <el-pagination
                     v-if="addListData.totalRecord > 0"
                     background
-                    :layout="addListData.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
+                    layout="total, slot, prev, pager, next"
                     :total="addListData.totalRecord"
                     :page-size="addListData.pageSize"
                     :page-sizes="[10,20,50]"
                     @current-change="changeAddPage"
                     @size-change="changeAddSize"
-                  >
-                    <div class="sizes-title">，每页显示</div>
-                    <button v-if="addListData.totalPage > 10" class="paging-confirm">跳转</button>
-                  </el-pagination>
+                  ></el-pagination>
                 </div>
               </div>
             </div>
@@ -265,6 +262,7 @@ export default {
       listType: "page",
       type: "页面",
       previewSitemapUrl: previewSitemapUrl,
+      tableHeight: 300,
       addType: "添加页面",
       addShow: false,
       addKeyword: "",
@@ -356,6 +354,14 @@ export default {
         list: []
       }
     };
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.tableHeight = window.innerHeight - 300;
+      });
+      this.tableHeight = window.innerHeight - 300;
+    });
   },
   methods: {
     // 获取siteId
@@ -656,7 +662,7 @@ export default {
 .tip {
   display: inline-block;
   position: absolute;
-  margin-top: 32px;
+  margin-top: 24px;
   font-size: $--font-size-base;
   color: $--color-primary;
   cursor: pointer;

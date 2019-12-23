@@ -2,8 +2,8 @@
   <div class="link-popup__container" id="popup" @click="_handleClosePopup($event)">
     <div class="link-popup__section">
       <div class="popup-header__area">
-        <span>设置链接</span>
-        <span @click.stop="_handleCancle"></span>
+        <span>{{linkTitle}}</span>
+        <span class="cl-iconfont is-circle" @click.stop="_handleCancle"></span>
       </div>
       <div class="popup-content__box">
         <ul class="popup-content__slider">
@@ -90,6 +90,7 @@ export default {
   },
   data() {
     return {
+      linkTitle: '设置链接',
       sliderList: [
         { name: "网址", label: "url" },
         { name: "页面", label: "page" },
@@ -109,6 +110,7 @@ export default {
   },
   created(){
     if(this.AddType) {
+      this.linkTitle = '选择推广内容'
       this.slider = this.AddType
       this.sliderList= [
           { name: "页面", label: "page" },
@@ -116,6 +118,7 @@ export default {
           { name: "产品", label: "product" },
         ]
     } else {
+      this.linkTitle = '设置链接'
       this.slider = this.sliderList[0].label;
     }
   },
@@ -149,12 +152,6 @@ export default {
     type: {
       get: function() {
         return this.model["Type"];
-      },
-      set: function() {}
-    },
-    linkTitle: {
-      get: function() {
-        return this.model["Title"];
       },
       set: function() {}
     }
@@ -293,12 +290,16 @@ export default {
         font-size: $--font-size-small;
       }
       span:last-of-type {
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
         background: url("~img/link/close.png") no-repeat center
           center;
-        background-size: 100% 100%;
+        background-size: 40% 40%;
         cursor: pointer;
+        &:hover {
+            background-color: $--icon-hover-color;
+            border-radius: $--border-radius-circle;
+        }
       }
     }
     .popup-content__box {

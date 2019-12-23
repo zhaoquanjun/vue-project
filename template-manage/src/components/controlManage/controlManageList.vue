@@ -30,7 +30,7 @@
           <div class="overflow">{{scope.row.controlName}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="控件类型" min-width="100">
+      <el-table-column label="控件分类" min-width="100">
         <template slot-scope="scope">
           <div>
             <div>{{ scope.row.firstTypeName }}</div>

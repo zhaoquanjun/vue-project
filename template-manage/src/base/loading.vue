@@ -45,7 +45,7 @@ export default {
   height: 100px;
   border-radius: 50%;
    z-index: 100000;
-  border-top: 2px solid #09CCEB;
+  border-top: 2px solid $--color-primary;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 2s infinite linear;
@@ -60,7 +60,7 @@ export default {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  border-top: 2px solid #63DC8C;
+  border-top: 2px solid $--color-white;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   animation: rt 4s infinite linear reverse;
@@ -81,7 +81,7 @@ export default {
   border-right: initial;
   animation: cw 1s infinite;
   content: "";
-  background: #BFF6FF;
+  background: #FFD7BA;
 }
 
 h1 {
