@@ -29,12 +29,12 @@
               tooltip-effect="dark"
               class="content-table"
             >
-              <el-table-column prop="messageinfo2" label="签名名称"></el-table-column>
-              <el-table-column prop="messageinfo2" label="创建时间"></el-table-column>
+              <el-table-column prop="signName" label="签名名称"></el-table-column>
+              <el-table-column prop="createTime" label="创建时间"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-tooltip content="删除" placement="top">
-                      <button @click="deleteCode(scope)">
+                      <button @click="deleteCode(scope.row.id)">
                         <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
@@ -62,7 +62,8 @@
 import PageSubmenu from "@/components/common/PageSubmenu";
 import AddTemplate from "@/components/websiteManage/addCode/add-template";
 import AddAutograph from "@/components/websiteManage/addCode/add-autograph";
-import * as siteBackupApi from "@/api/request/siteBackupApi";
+import * as dashboardApi from "@/api/request/dashboardApi";
+import { formatDateTime } from "@/api/index";
 export default {
   components: {
     AddTemplate,
@@ -74,6 +75,7 @@ export default {
       backupType:'autograph',
       isAddTemplate: false,
       isAddAutograph: false,
+      siteId: this.$store.state.dashboard.siteId,
       messagelist: [
         {
           messageinfo1: '注册网站验证码',
@@ -89,14 +91,34 @@ export default {
     };
   },
   created(){
-   
+   this.init()
   },
   methods: {
     
+    async init() {
+      if(this.backupType === 'template'){
+        //获取当前模版列表
+        let { data } = await dashboardApi.getCustomTemplateList(this.siteId);
+        this.messagelist = data
+        console.log('getCustomTemplateList',this.messagelist)
+      } else {
+        //获取当前模版列表
+        let { data } = await dashboardApi.getSiteSMSSignList(this.siteId);
+        this.messagelist = data
+        console.log('getSiteSMSSignList',this.messagelist)
+      }
+      for (var i = 0; i < this.messagelist.length; i++) {
+        this.messagelist[i].createTime = formatDateTime(
+          this.messagelist[i].createTime,
+          "yyyy-MM-dd hh:mm:ss"
+        );
+      }
+    },
     /**
      * 查看短信信息
      */
-    async deleteCode(val) {
+    async deleteCode(id) {
+      console.log('val',id)
         this.$confirm(
                 "删除后,成员将不再管理您的站点, 确定要删除吗?",
                 "提示",
@@ -106,6 +128,14 @@ export default {
                     type: "warning",
                     callback: async action => {
                         if (action === "confirm") {
+                          if(this.backupType === 'template'){
+                            //获取当前模版列表
+                            let { data } = await dashboardApi.removeCustomTemplate(id);
+                          } else {
+                            //获取当前模版列表
+                            let { data } = await dashboardApi.deleteSiteSMSSignById(id);
+                          }
+
                             this.$notify({
                               customClass: "notify-success", // error success
                               message: `删除成功`,
@@ -119,7 +149,7 @@ export default {
     },
     //table
     handleClick(){
-
+      this.init()
     },
     //关闭添加模版
     closeAddTemplate(){
