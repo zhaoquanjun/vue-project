@@ -8,7 +8,7 @@
             <div class="content">
                 <div class="input">
                     <span>短信签名</span>
-                    <el-input v-model="codeValue" placeholder="请输入内容"></el-input>
+                    <el-input v-model="codeValue" maxlength="20" placeholder="请输入内容"></el-input>
                 </div>
                 <a href="">申请签名</a>
             </div>
@@ -21,11 +21,12 @@
 </template>
 
 <script>
-    import * as memberManageApi from "@/api/request/siteMemberApi";
+    import * as dashboardApi from "@/api/request/dashboardApi";
     export default {
         props: {},
         data() {
             return {
+                siteId: this.$store.state.dashboard.siteId,
                 codeValue: ''
             }
         },
@@ -34,10 +35,14 @@
         },
         methods: {
             closeAddAutograph() {
+                this.codeValue= ''
                 this.$emit('closeAddAutograph')
             },
-            saveAddAutograph() {
-                this.$emit('saveAddAutograph')
+            async saveAddAutograph() {
+                let { data } = await dashboardApi.createSiteSMSSign(this.siteId,this.codeValue);
+                if(data) {
+                    this.$emit('saveAddAutograph')
+                }
             }
         }
     };

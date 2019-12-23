@@ -29,6 +29,7 @@
               <el-tab-pane label="免费短信" name="free"></el-tab-pane>
               <el-tab-pane label="阿里云短信" name="aLiCloud"></el-tab-pane>
             </el-tabs>
+            
           </div>
 
           <!-- 免费短信 -->
@@ -212,8 +213,7 @@ import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import AddTemplate from "@/components/websiteManage/addCode/add-template";
 import AddAutograph from "@/components/websiteManage/addCode/add-autograph";
-import { formatDateTime } from "@/api/index";
-import * as siteBackupApi from "@/api/request/siteBackupApi";
+import * as dashboardApi from "@/api/request/dashboardApi";
 import { setLocal,getLocal } from "@/libs/local"
 export default {
   components: {
@@ -226,7 +226,7 @@ export default {
   data() {
     return {
       siteName: "",
-      siteId: 0,
+      siteId: this.$store.state.dashboard.siteId,
       isShowTips: '1',
       messageView: false,
       isEdit: false,
@@ -268,6 +268,7 @@ export default {
   },
   created(){
     this.isShowTips = getLocal('isShowTips') || '1'
+    this.getIsPreUseFreeSMS()
   },
   methods: {
     // 获取siteId
@@ -291,6 +292,12 @@ export default {
       console.log('this.backupType',this.backupType)
       
     },
+    async getIsPreUseFreeSMS(){
+      let { data,status } = await dashboardApi.getIsPreUseFreeSMS(this.siteId);
+      if(status == 200){
+        this.messageSwitch = data
+      }
+    },
     //编辑签名和模版
     hasEdit(){
       this.isEdit = !this.isEdit
@@ -306,8 +313,8 @@ export default {
       console.log('row',row)
     },
     // 是否开启免费短信
-    changeMessageSwitch(val){
-      console.log('Switchval',val)
+    async changeMessageSwitch(val){
+      let { data } = await dashboardApi.setIsPreUseFreeSMS(this.siteId,this.messageSwitch);
     },
     //关闭添加模版
     closeAddTemplate(){
@@ -391,6 +398,9 @@ export default {
         font-size: $--font-size-base;
         font-weight: 700;
       }
+      a {
+        cursor: pointer;
+      }
     }
     .tips {
       width: 100%;
@@ -423,6 +433,7 @@ export default {
       color:$--color-danger;
       a {
         color: $--color-info;
+        cursor: pointer;
         margin-left: 4px;
       }
       i {
@@ -475,6 +486,7 @@ export default {
     line-height:32px;
     a {
       color: $--color-primary;
+      cursor: pointer;
     }
   }
 }
