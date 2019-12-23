@@ -8,7 +8,7 @@
             <div id="weixinTip" class="wechatTip" v-if="bindResultMessage">{{bindResultMessage}}</div>
         </div>
         <div class="footer pannel-footer">
-            <button class="confirm footer-btn" @click="refqroce">刷新</button>
+            <button class="confirm footer-btn" @click="refqroce2">刷新</button>
             <button class="cancel footer-btn" @click="close">取消</button>
         </div>
     </div>
@@ -46,6 +46,10 @@ export default {
         },
         refqroce() {
             this.$emit("updateWeiXinHtml");
+        },
+        refqroce2() {
+            this.$emit("updateWeiXinHtml");
+            this.bindResultMessage = "";
         },
         _bindResult(data) {
             if (data.result == "True") {
