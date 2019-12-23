@@ -46,13 +46,14 @@
 </template>
 
 <script>
-    import * as memberManageApi from "@/api/request/siteMemberApi";
+    import * as dashboardApi from "@/api/request/dashboardApi";
     export default {
         props: {},
         data() {
             return {
                 description: '',
                 step1: false,
+                siteId: this.$store.state.dashboard.siteId,
                 codeValue: ''
             }
         },
@@ -63,11 +64,20 @@
             closeAddTemplate() {
                 this.$emit('closeAddTemplate')
             },
-            saveAddTemplate() {
-                this.$emit('saveAddTemplate')
+            async saveAddTemplate() {
+                let { data } = await dashboardApi.addCustomTemplate(this.siteId,this.codeValue);
+                if(data) {
+                    this.$emit('saveAddTemplate')
+                }
             },
-            goSave(val){
+            async goSave(val){
                 this.step1 = val == 1 ? false:true
+                if(val === 2) {
+                    let { data } = await dashboardApi.getTemplateDetail(this.siteId,this.codeValue);
+                    if(data) {
+                        this.$emit('saveAddAutograph')
+                    }
+                }
             }
         }
     };
@@ -118,6 +128,7 @@
                 }
             }
             a {
+                cursor: pointer;
                 display: inline-block;
                 margin: 12px 0 0 80px;
                 color: $--color-primary;
