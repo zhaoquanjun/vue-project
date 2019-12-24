@@ -926,7 +926,7 @@ export default {
             height: 6px;
             background: $--color-primary;
             border-radius: 50%;
-            margin: -4px 6px 0;
+            margin: 0px 6px 1px;
           }
         }
         span:nth-child(2){
