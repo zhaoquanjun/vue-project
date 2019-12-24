@@ -90,7 +90,16 @@
                 :value="item.id"
               ></el-option>
             </el-select>
-            <p>数据来源友盟+
+            <p>
+              <span>
+                <i></i>
+                PV
+              </span>
+              <span>
+                <i></i>
+                UV
+              </span>
+              数据来源友盟+
               <a href="">查看更多</a>
             </p>
           </div>
@@ -308,10 +317,14 @@ export default {
       siteFirstIndustryValue: "",
       siteFirstIndustry: [],
       flowDay: '近7天',
-      flowDayList: [{id:7,label: '近7天'},{id:30,label: '近30天'}],
-      pvList: [1,2,3,4,8,3,9],
-      uvList: [4,5,2,7,0,2,5],
-      yList: [1,2,3,4,5,6,7],
+      flowDayList: [{id:0,label: '近7天'},{id:1,label: '近30天'}],
+      interval: 0,
+      pvList: [],
+      uvList: [],
+      yList: [],
+      yLast: [],
+      pvLast: [],
+      uvLast: [],
       firstIndustryId: 0,
       siteSecondIndustryValue: "",
       siteSecondIndustry: [],
@@ -353,8 +366,30 @@ export default {
       this.changeSiteShow = true;
     },
     async getPvUvIp() {
-      let {data} = await dashboardApi.getPvUvIp(this.siteId)
-      if(data) {
+      let data = await dashboardApi.getPvUvIp(this.siteId)
+      if (data && data.status == 200) {
+        this.pvList = [];
+        this.uvList = [];
+        this.yList=[];
+        this.yLast= [];
+        this.pvLast=[];
+        this.uvLast=[];
+        if(data.data.length > 0) {
+          data.data.map((item, index)=>{
+            this.pvList.push(item.pv);
+            this.yList.push(item.dateTime.slice(5,10))
+            if(index > 23) {
+              this.pvLast.push(item.pv);
+              this.yLast.push(item.dateTime.slice(5,10))
+            }
+          })
+          data.data.map((item, index)=>{
+            this.uvList.push(item.uv)
+            if(index > 23) {
+              this.uvLast.push(item.uv);
+            }
+          })
+        }
         this.initCode()
       }
     },
@@ -621,8 +656,9 @@ export default {
     bindDomain() {
       this.$router.push("/website/mysite/sitedomain");
     },
-    choseFlowDay(){
-
+    choseFlowDay(val){
+      this.interval = val
+      this.initCode();
     },
     //生成图表
     initCode(){
@@ -631,17 +667,17 @@ export default {
         // 绘制图表
         this.myChart.setOption({
           backgroundColor: '#fff',
-          legend: {
-            // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
-            x: 'right',
-            // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
-            y: '36px',
-            color: 'red',
-            data:['uv','pv']
-          },
+          // legend: {
+          //   // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+          //   x: 'right',
+          //   // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+          //   y: '36px',
+          //   color: 'red',
+          //   data:['uv','pv']
+          // },
           grid: {
               left: '0%',
-              right: '6px',
+              right: '32px',
               bottom: '0%',
               top: '80px',
               containLabel: true
@@ -649,8 +685,7 @@ export default {
           xAxis: {
               type: 'category',
               boundaryGap: false,
-              //data: this.interval == 1 ? this.yList:this.yLast,
-              data: this.yList,
+              data: this.interval == 1 ? this.yList:this.yLast,
               axisLabel: {
                 interval: this.interval  //设置X轴数据间隔几个显示一个，为0表示都显示
               },
@@ -676,8 +711,7 @@ export default {
                   symbolSize:5,
                   symbol:'circle', 
                   smooth: true, 
-                  //data: this.interval == 1 ? this.pvList:this.pvLast
-                  data: this.pvList
+                  data: this.interval == 1 ? this.pvList:this.pvLast
               },
               {
                   name:'uv',
@@ -686,8 +720,7 @@ export default {
                   symbolSize:5,
                   symbol:'circle',
                   smooth: true, 
-                  //data: this.interval == 1 ? this.uvList:this.uvLast
-                  data: this.uvList
+                  data: this.interval == 1 ? this.uvList:this.uvLast
               }
           ],
           color: ['#23CD5D', '#FF6A00']
@@ -860,7 +893,7 @@ export default {
     position: relative;
     width: 100%;
     height: 460px;
-    padding: 16px 32px;
+    padding: 16px 0px 16px 32px;
     box-sizing: border-box;
     background: $--color-white;
     border-radius: $--border-radius-base;
@@ -877,7 +910,7 @@ export default {
       padding: 0 32px;
       box-sizing: border-box;
       p {
-        width:140px;
+        width:340px;
         font-size:12px;
         font-weight:400;
         color:rgba(159,159,159,1);
@@ -885,6 +918,23 @@ export default {
         text-align: right;
         a {
           color: $--color-primary;
+        }
+        span {
+          i {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: $--color-primary;
+            border-radius: 50%;
+            margin: -4px 6px 0;
+          }
+        }
+        span:nth-child(2){
+          margin: 0 40px 0 10px; 
+          i{
+            background: #23CD5D;
+          }
+           
         }
       }
     }
