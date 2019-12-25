@@ -144,6 +144,9 @@ export default {
     List,
     PopUp
   },
+  mounted() {
+    this.getList();
+  },
   methods: {
     async getList() {
       this.$Loading.show();
