@@ -148,6 +148,7 @@ export default {
             //console.log(this.$refs.imgList.selectedImg, "selectedImg");
             // this.imageUrl1 = this.imgData[0].fullOssUrl;
             // this.isModalShow = false;
+            
             if(this.isReplace=="singular"){
                 this.$set(this.newFileList,this.curRepalceIndex,this.imgData[0].fullOssUrl)
                 
@@ -161,9 +162,9 @@ export default {
         },
         handlerAddPicture(flag,index) {
             this.isModalShow = true;
-            this.$refs.imgList.clearSelectedList()
             this.isReplace = flag;
-            this.curRepalceIndex = index
+            this.curRepalceIndex = index;
+            this.$refs.imgList.clearSelectedList()
         },
         handleRemove(index) {
             this.newFileList.splice(index, 1);
