@@ -1054,7 +1054,7 @@ export default {
         this.settingChecked = data.isRecommend;
         this.picUrl = data.imageUrl;
         this.picUrlMobile = data.mobileImageUrl;
-        this.settingFirstIndustrySelect = data.firstIndustry;
+        this.settingFirstIndustrySelect = data.firstIndustryId;
         if (this.settingFirstIndustrySelect != 0) {
           let { data, status } = await templateApi.getSecondIndustries(
             this.settingFirstIndustrySelect
@@ -1065,10 +1065,10 @@ export default {
           this.settingSecondIndustrySelect = "";
         }
 
-        if (data.secondIndustry == 0) {
+        if (data.secondIndustryId == 0) {
           this.settingSecondIndustrySelect = "";
         } else {
-          this.settingSecondIndustrySelect = data.secondIndustry;
+          this.settingSecondIndustrySelect = data.secondIndustryId;
         }
         this.settingTemplateShow = true;
       }
