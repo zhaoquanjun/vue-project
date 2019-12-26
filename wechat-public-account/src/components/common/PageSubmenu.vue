@@ -114,7 +114,7 @@ created(){
 <style lang="scss" scoped>
 .submenu {
     width: 130px;
-    height: calc(100vh - 50px);
+    height: 100vh;
     background: $--color-black-light;
     border-right: $--border-base;
     .submenu-title {
