@@ -44,8 +44,7 @@ export default {
     },
     data() {
         return {
-            warmPromptText:
-                "",
+            warmPromptText:"",
             isWarmShow:false,    
             isEditor: true,
             dialogShow: false,
@@ -64,7 +63,7 @@ export default {
             let { data, status } = await domainRedirectApi.get301List();
             this.redirectDomainListData = data;
             if (status === 200) {
-                if (data.handleType ===2) {
+                if (data.handleType ===0) {
                   this.warmPromptText = "您解析成功的域名均已添加301，您可对列表301信息进行编辑或再进行域名解析";
                   this.isWarmShow=true;
                 }else if (data.handleType===1){

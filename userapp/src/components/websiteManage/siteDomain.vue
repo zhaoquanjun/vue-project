@@ -68,6 +68,7 @@
         :domain-list="activeAndNotInUseDomainList"
         @closeDialog="closeDialog"
         @get301List="_get301List"
+        @publishdata="_publishdata"
         @getActiveAndNotInUseDomainList="_getActiveAndNotInUseDomainList"
       />
     </el-dialog>
@@ -294,10 +295,10 @@ export default {
      * 开启https
      */
     async _oneKeyEnableHttps(domainId) {
+      this.$Loading.show();
       let { data, status } = await domainApi.oneKeyEnableHttps(domainId);
+      this.$Loading.hide();
       if (status === 200) {
-        //
-
         if (!data.isSuccess) {
           this.$confirm("提示", {
             title: "提示",

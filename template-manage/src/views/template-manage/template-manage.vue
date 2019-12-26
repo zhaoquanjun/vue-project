@@ -90,6 +90,7 @@
             :data="templateInfo"
             tooltip-effect="dark"
             :row-style="{height:'130px'}"
+            @sort-change="sortChange"
             :default-sort="{prop: 'myCreateTime', order: 'descending'}"
           >
             <template slot="empty">
@@ -132,9 +133,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="myCreateTime" label="开通时间" sortable min-width="140"></el-table-column>
-            <el-table-column prop="myUpdateTime" label="更新时间" sortable min-width="140"></el-table-column>
-            <el-table-column prop="useCount" label="使用量" sortable min-width="90"></el-table-column>
+            <el-table-column prop="myCreateTime" label="开通时间" sortable="custom" min-width="140"></el-table-column>
+            <el-table-column prop="myUpdateTime" label="更新时间" sortable="custom" min-width="140"></el-table-column>
+            <el-table-column prop="useCount" label="使用量" sortable="custom" min-width="90"></el-table-column>
             <el-table-column label="管理员|备注" min-width="120">
               <template slot-scope="scope" style="position:relative;">
                 <div>
@@ -621,6 +622,8 @@ export default {
       curSiteId: 0,
       pageIndex: 1,
       pageSize: 10,
+      prop:"myCreateTime",
+      order:"descending",
       //邀请成员 变量
       invitedMemberShow:false,
       deleteMemberShow:false,
@@ -880,6 +883,12 @@ export default {
     changeSearchType() {
       this.search = "";
     },
+    //改变排序
+    sortChange(row) {
+      this.prop = row.prop;
+      this.order = row.order;
+      this.searchTemplate();
+    },
     // 查询
     async searchTemplate() {
       this.$Loading.show();
@@ -893,25 +902,39 @@ export default {
       } else if (this.searchValue == "designer") {
         designerPhoneText = this.search;
       }
+      let orderByOpenTime = false;
+      let orderByUseCount = false;
+      let orderByUpdateTime = false;
+      if (this.prop == "myCreateTime") {
+        orderByOpenTime = true;
+      } else if (this.prop == "useCount") {
+        orderByUseCount = true;
+      } else if (this.prop == "myUpdateTime") {
+        orderByUpdateTime = true;
+      }
+      let isOrderByDesc = true;
+      if (this.order == "descending") {
+        isOrderByDesc = true;
+      } else if (this.order == "ascending") {
+        isOrderByDesc = false;
+      }
       let para = {
         TemplateName: templateNameText,
         Domain: domainText,
         DesignerPhone: designerPhoneText,
-        FirstIndustry: this.firstIndustrySelect ? this.firstIndustrySelect : 0,
-        SecondIndustry: this.secondIndustrySelect
-          ? this.secondIndustrySelect
-          : 0,
+        FirstIndustry: Number(this.firstIndustrySelect),
+        SecondIndustry: Number(this.secondIndustrySelect),
         Language: this.languageSelect,
         SiteTheme: this.themeSelect,
         IsOnlyRecommend: this.isRecommend,
-        Status: this.templateStatus ? this.templateStatus : 0,
+        Status: this.templateStatus,
         TemplateType: "SiteTemplate",
         PageIndex: this.pageIndex,
         PageSize: this.pageSize,
-        IsOrderByOpenTime: true,
-        IsOrderByUseCount: false,
-        IsOrderByUpdateTime: false,
-        IsOrderByDesc: true
+        IsOrderByOpenTime: orderByOpenTime,
+        IsOrderByUseCount: orderByUseCount,
+        IsOrderByUpdateTime: orderByUpdateTime,
+        IsOrderByDesc: isOrderByDesc
       };
       let { data, status } = await templateApi.getSiteTemplates(para);
       this.$Loading.hide();
@@ -1031,7 +1054,7 @@ export default {
         this.settingChecked = data.isRecommend;
         this.picUrl = data.imageUrl;
         this.picUrlMobile = data.mobileImageUrl;
-        this.settingFirstIndustrySelect = data.firstIndustry;
+        this.settingFirstIndustrySelect = data.firstIndustryId;
         if (this.settingFirstIndustrySelect != 0) {
           let { data, status } = await templateApi.getSecondIndustries(
             this.settingFirstIndustrySelect
@@ -1042,10 +1065,10 @@ export default {
           this.settingSecondIndustrySelect = "";
         }
 
-        if (data.secondIndustry == 0) {
+        if (data.secondIndustryId == 0) {
           this.settingSecondIndustrySelect = "";
         } else {
-          this.settingSecondIndustrySelect = data.secondIndustry;
+          this.settingSecondIndustrySelect = data.secondIndustryId;
         }
         this.settingTemplateShow = true;
       }

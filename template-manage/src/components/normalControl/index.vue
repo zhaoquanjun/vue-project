@@ -124,6 +124,7 @@ export default {
   },
   mounted() {
     this.getFirstType();
+    this.getList();
   },
   methods: {
     async getList() {

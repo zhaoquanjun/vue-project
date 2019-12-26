@@ -102,6 +102,9 @@ export default {
                     iconClass: "icon-success",
                     closeOnClickModal: false,
                     callback: async action => {
+                        if(action=="confirm"){
+                            this.$emit("publishdata", data)
+                        }
                         this.$emit("get301List");
                     }
                 });
