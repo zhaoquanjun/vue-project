@@ -83,6 +83,7 @@ import {
     sendSourcePhoneCode,
     sendTargetPhoneCode
 } from "@/api/index.js";
+import { validateTel } from "@/utlis/index.js";
 const TIME_COUNT = 60; //更改倒计时时间
 export default {
     props: ["sourcePhone", "isModifi"],
@@ -195,8 +196,8 @@ export default {
         },
         async sendChangePhoneCode() {
             let targetPhone = this.ruleForm.phone; //this.value + this.ruleForm.phone;
-            if (this.ruleForm.phone == "" || this.ruleForm.phone == null) {
-              
+            if (this.ruleForm.phone == "" || this.ruleForm.phone == null || !validateTel(targetPhone)) {
+              return
             } else {
                 let { status } = await sendTargetPhoneCode(targetPhone);
                 if (status === 200) {
