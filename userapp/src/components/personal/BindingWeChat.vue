@@ -18,7 +18,8 @@ export default {
     props: ["weixinHtml", "WeChatJsLoginParams"],
     data() {
         return {
-            bindResultMessage: null
+            bindResultMessage: null,
+            codeTimer: null
         };
     },
     mounted() {
@@ -33,6 +34,9 @@ export default {
             href:
                 "data:text/css;base64,LmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5Om5vbmV9Ci5pbXBvd2VyQm94IC5xcmNvZGUge3dpZHRoOiAyMjBweDt9Ci5pbXBvd2VyQm94IC5pbmZvIHt3aWR0aDogMjIwcHg7fQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9Ci5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9Ci5pbXBvd2VyQm94IC5pbmZvICN3eF9kZWZhdWx0X3RpcHtkaXNwbGF5Om5vbmU7fQouaW1wb3dlckJveCAuaW5mbyAuc3RhdHVzX3R4dCBwe2Rpc3BsYXk6bm9uZTt9"
         });
+        this.codeTimer=setInterval(() => {
+            this.refqroce2()
+        },300000)
     },
     created() {
         window.addEventListener("message", e => {
@@ -93,6 +97,10 @@ export default {
         pannelShow() {
             this.bindResultMessage = null;
         }
+    },
+    beforeDestroy() {
+        clearInterval(this.codeTimer);        
+        this.codeTimer = null;
     }
 };
 </script>
