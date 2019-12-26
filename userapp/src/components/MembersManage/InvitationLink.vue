@@ -148,7 +148,7 @@ export default {
             box-sizing: border-box;
             .link {
                 display: inline-block;
-                background: #e8f8fb;
+                background: rgba(244, 245, 246, 1);
                 width: 300px;
                 padding-left: 15px;
                 vertical-align: middle;

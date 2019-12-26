@@ -7,7 +7,7 @@
                 </template>
             </page-submenu>
         </el-aside>
-        <el-main class="member-content" style="padding:32px">
+        <el-main class="member-content" style="padding:32px 16px 0 0">
             <el-row class="user-list">
                 <h4 class="member-title">
                     会员等级
