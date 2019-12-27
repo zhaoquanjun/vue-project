@@ -6,6 +6,19 @@
         </div>
     </div>
 </template>
+<script>
+import {errorUrl} from "@/environment/index.js";
+export default {
+    data() {
+        return {
+            test: ""
+        };
+    },
+    created(){
+        window.location.href = errorUrl
+    }
+}
+</script>
 <style scoped lang="scss">
 .container404 .main {
     position: absolute;

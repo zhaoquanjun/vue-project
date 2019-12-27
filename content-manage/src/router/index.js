@@ -4,7 +4,7 @@ import { defaultRoutes } from "./routes"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
 import { getCookie } from "@/libs/cookie";
-import environment from "@/environment/index.js"
+import {errorUrl} from "@/environment/index.js";
 
 Vue.use(VueRouter);
 let router = new VueRouter({
@@ -46,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
       if (r) {
         next()
       } else {
-        window.location.href = environment.errorUrl
+        window.location.href = errorUrl
       }
     } else {
       next()

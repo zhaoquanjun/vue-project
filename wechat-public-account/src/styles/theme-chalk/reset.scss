@@ -160,6 +160,9 @@ button:-moz-focusring, [type="button"]:-moz-focusring, [type="reset"]:-moz-focus
   outline: 1px dotted ButtonText
 }
 
+:focus {
+  outline: none;
+}
 [type="checkbox"], [type="radio"] {
   box-sizing: border-box;
   padding: 0
@@ -193,5 +196,23 @@ button:-moz-focusring, [type="button"]:-moz-focusring, [type="reset"]:-moz-focus
   height: 0;
   content: "";
   clear: both
+}
+
+/* 滚动条的滑动块 */
+.ps__rail-y {
+  width: 6px !important;
+  color: #D2D3D5 !important;
+  background-color: #fff !important;
+}
+.ps__thumb-y {
+  width: 6px !important;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb{
+	border-radius: 8px;
+	background-color: #D2D3D5 !important;
 }
 

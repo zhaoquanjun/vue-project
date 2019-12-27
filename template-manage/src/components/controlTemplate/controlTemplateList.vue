@@ -191,7 +191,7 @@ export default {
       this.$refs[`popoverName-${siteId}`].doClose();
       this.errorTemplateNameTips = false;
       let para = {
-        id: row.siteId,
+        id: row.id,
         templateName: this.nameText
       };
       let { status } = await controlApi.updateTemplateName(para);

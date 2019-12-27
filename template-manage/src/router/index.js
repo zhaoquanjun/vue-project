@@ -5,7 +5,7 @@ import { getLocal } from "@/libs/local"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
 import { getCookie } from "@/libs/cookie";
-import environment from "@/environment/index";
+import {errorUrl} from "@/environment/index";
 Vue.use(VueRouter);
 let router = new VueRouter({
   mode: "history",
@@ -41,7 +41,7 @@ router.beforeEach(async (to, from, next) => {
       if (r) {
         next()
       } else {
-        window.location.href = environment.errorUrl
+        window.location.href = errorUrl
       }
     } else {
       next()

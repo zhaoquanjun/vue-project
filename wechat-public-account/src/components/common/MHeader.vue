@@ -209,6 +209,8 @@ export default {
   },
   methods: {
     signOut() {
+      //是非显示短信配置提示语
+      setLocal('isShowTips','1')
       securityService.signOut(location.href);
     },
     pannelShow() {

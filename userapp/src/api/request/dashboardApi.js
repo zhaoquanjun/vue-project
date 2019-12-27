@@ -150,3 +150,75 @@ export const copySite = (para) => {
 export const getPvUvIp = (appId) => {
     return ajaxRequest.get(`${environment.designerManageApi}/api/v1/DomainManage/GetPvUvIp/${appId}`);
 }
+
+/**
+ * 获取签名列表
+ */
+export const getAkSk = () => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/AkSk/get`);
+};
+/**
+ * 获取模版列表
+ */
+export const getCustomTemplateList = (siteId) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetCustomTemplateList/${siteId}`);
+};
+/**
+ * 获取签名列表
+ */
+export const getSiteSMSSignList = (siteId) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetSiteSMSSignList`,{siteId:siteId});
+};
+/**
+ * 删除模版
+ */
+export const removeCustomTemplate = (tempId) => {
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/Sms/GetCustomTemplateList/RemoveCustomTemplate/${tempId}`);
+};
+/**
+ * 删除短信签名
+ */
+export const deleteSiteSMSSignById = (id) => {
+    return ajaxRequest.delete(`${environment.designerManageApi}/api/v1/sms/DeleteSiteSMSSignById`,{id: id});
+};
+
+//创建签名 post
+export const createSiteSMSSign = (siteId,signName) => {
+    return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/CreateSiteSMSSign`,{
+        siteId: siteId,
+        signName: signName
+    });
+};
+
+//查询模板详情
+export const getTemplateDetail = (siteId,templateCode) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetTemplateDetail`,{
+        siteId: siteId,
+        templateCode: templateCode
+    });
+};
+
+
+//保存模板
+export const addCustomTemplate = (siteId,tempCode) => {
+    return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/AddCustomTemplate`,{
+        siteId: siteId,
+        tempCode: tempCode
+    });
+};
+
+//设置优先使用免费短信
+export const setIsPreUseFreeSMS = (siteId,isPreUseFreeSMS) => {
+    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/SiteInfo/SetIsPreUseFreeSMS`,{
+        siteId: siteId,
+        isPreUseFreeSMS: isPreUseFreeSMS
+    });
+};
+
+//获取短信优先级状态
+export const getIsPreUseFreeSMS = (siteId) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/SiteInfo/GetIsPreUseFreeSMS`,{
+        siteId: siteId
+    });
+};
+

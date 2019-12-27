@@ -7,6 +7,7 @@
       :append-to-body="true"
       :modal="false"
       ref="templateDialog"
+      @opened="waterFall"
       :visible.sync="templateShow"
     >
       <div class="right-pannel">
@@ -488,7 +489,7 @@ export default {
         }else{
           icon.style.left=240+"px";
         }
-        this.waterFall();
+        this.imgPosition();
         this.isShowAside=!this.isShowAside;
       })
       
@@ -504,6 +505,11 @@ export default {
     // 瀑布流图片的位置计算
     waterFall(){
       setTimeout(()=>{
+        this.imgPosition();
+      },100)
+    },
+    // 瀑布流图片位置计算
+    imgPosition(){
         this.$nextTick(()=>{
           let imgs=this.$refs.imgs;
           let div=document.getElementById("waterfall");
@@ -534,8 +540,7 @@ export default {
               hArr[index]+=imgs[i].offsetHeight;
             }
           }  
-      },0)
-     })
+         })
     },
     // 浏览器滚轮位置清零
     resetScrollTop(){
@@ -821,6 +826,7 @@ export default {
       }
       this.templatePage = data;
       this.templateInfo=data.items;
+      this.imgPosition();
     },
     async changePage(page) {
       this.pageIndex = page;
@@ -1003,7 +1009,7 @@ export default {
         window.addEventListener("resize", () => {
           document.getElementsByClassName("templateContent")[0].style.height =
             window.innerHeight - 160 + "px";
-            this.waterFall();
+            this.imgPosition();
         });
         document.getElementsByClassName("templateContent")[0].style.height =
           window.innerHeight - 160 + "px";

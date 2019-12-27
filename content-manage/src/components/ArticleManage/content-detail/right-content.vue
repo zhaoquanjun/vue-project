@@ -11,8 +11,12 @@
                         <!-- <img :src="imageUrl1" class="avatar" /> -->
                         <img-size-auto :item="imageUrl1"></img-size-auto>
                          <span class="el-upload-list__item-actions">
-                            <i @click="handlerAddPicture" class="icon-change"></i>
-                            <i @click.stop="handleRemove" class="el-icon-delete"></i>
+                            <i @click="handlerAddPicture" class="icon-change">
+                                <i class="iconfont iconqiehuanxingshiyi"></i>
+                            </i>
+                            <i @click.stop="handleRemove" class="icon-delete">
+                                <i class="iconfont iconshanchu"></i>
+                            </i>
                         </span>
                     </div>
                     <template v-else>
@@ -37,13 +41,13 @@
                 </el-collapse-item>
             </el-collapse>
         </el-col>
-        <div class="mask" v-show="isModalShow"></div>
-        <div id="content" class="contentDialog" v-show="isModalShow">
+        <div class="mask" v-if="isModalShow"></div>
+        <div id="content" class="contentDialog" v-if="isModalShow">
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
                 <button @click="cancelEditorImg">X</button>
             </el-header>
-            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true" :isThird="true">
+            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">
                     <button type="button" @click="getEditorImg" class="cl-button cl-button--small cl-button--primary">确定</button>
                     <button type="button" @click="cancelEditorImg" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
@@ -246,8 +250,9 @@ export default {
 }
 .avatar-uploader .el-upload-list__item-actions i {
     color: #fff;
-    font-size: 21px;
+    font-size: 16px;
     margin-bottom: 15px;
+    line-height: 27px;
     cursor: pointer;
 }
 .imgWrap:hover .el-upload-list__item-actions {
@@ -260,9 +265,6 @@ export default {
     font-weight: 600;
 }
 
-.avatar-uploader /deep/ .el-upload-list__item-actions .el-icon-delete:before {
-    content: "";
-}
 </style>
 <style lang="scss" scoped>
 .article-cover {
@@ -276,10 +278,8 @@ export default {
     height: 27px;
     border: 1px solid #fff;
     border-radius: $--border-radius-circle;
-    background: url("~img/pic-icon/switch.png") no-repeat center;
-    background-size: 50%;
 }
-.el-icon-delete {
+.icon-delete {
     right: 17px;
     bottom: 20px;
     display: inline-block;
@@ -287,8 +287,6 @@ export default {
     height: 27px;
     border: 1px solid #fff;
     border-radius: $--border-radius-circle;
-    background: url("~img/pic-icon/delete-1.png") no-repeat center;
-    background-size: 50%;
 }
 .modal-footer {
     height: 60px;

@@ -132,7 +132,9 @@ export default {
                 case "recycle":
                     return "iconicon-huishou";
                 case "template":
-                    return "iconicon-mobanguanli1"    
+                    return "iconicon-mobanguanli1";
+                case "systemsetting":
+                    return "iconicon-des-setup";
             }
         },
         menuHasChild(index){

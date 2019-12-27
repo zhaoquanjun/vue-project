@@ -33,7 +33,7 @@
 
     .el-message-box__content {
         padding: 40px;
-        color: #A1A8B1;
+        color: $--color-text-primary;
         font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
         .icon-warning {
@@ -62,7 +62,7 @@
     .el-message-box__btns {
         .el-button {
             min-width: 76px;
-            height: 40px;
+            height: 32px;
             font-size: 14px;
             border-radius: 2px;
             font-weight: 400;
@@ -155,4 +155,8 @@
 
 .notify-error {
     background: $--color-danger;
+}
+// 打开弹框给body加的样式覆盖掉
+.el-popup-parent--hidden {
+    padding-right: 0px !important;
 }

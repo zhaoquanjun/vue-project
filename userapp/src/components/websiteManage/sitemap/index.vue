@@ -185,7 +185,8 @@
                 ref="multipleTable"
                 :data="addListData.list"
                 tooltip-effect="dark"
-                :height="300"
+                :height="tableHeight"
+                max-height="487"
                 class="content-table"
                 @selection-change="handleAddSelectionChange"
               >
@@ -196,7 +197,7 @@
                   </div>
                 </template>
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="title" label="页面标题" show-overflow-tooltip>
+                <el-table-column prop="title" :label="`${this.type}标题`" show-overflow-tooltip>
                   <template slot-scope="scope">
                     <div class="overflow">{{scope.row.title}}</div>
                   </template>
@@ -261,6 +262,7 @@ export default {
       listType: "page",
       type: "页面",
       previewSitemapUrl: previewSitemapUrl,
+      tableHeight: 300,
       addType: "添加页面",
       addShow: false,
       addKeyword: "",
@@ -352,6 +354,14 @@ export default {
         list: []
       }
     };
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.tableHeight = window.innerHeight - 300;
+      });
+      this.tableHeight = window.innerHeight - 300;
+    });
   },
   methods: {
     // 获取siteId
@@ -652,7 +662,7 @@ export default {
 .tip {
   display: inline-block;
   position: absolute;
-  margin-top: 32px;
+  margin-top: 24px;
   font-size: $--font-size-base;
   color: $--color-primary;
   cursor: pointer;

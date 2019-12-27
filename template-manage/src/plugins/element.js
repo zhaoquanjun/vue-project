@@ -45,7 +45,8 @@ import {
     Loading,
     InputNumber,
     Radio,
-    RadioGroup
+    RadioGroup,
+    Drawer
   
 } from 'element-ui';
 Vue.use(Container)
@@ -90,6 +91,7 @@ Vue.use(Container)
     .use(InputNumber)
     .use(Radio)
     .use(RadioGroup)
+    .use(Drawer)
 ;
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

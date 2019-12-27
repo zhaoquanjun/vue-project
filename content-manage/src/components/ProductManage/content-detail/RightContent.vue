@@ -26,7 +26,7 @@
                                         class="el-upload-list__item-preview"
                                        @click="handlerAddPicture('singular',index)"
                                     >
-                                        <i class="iconfont iconqiehuanxingshier icon-hover"></i>
+                                        <i class="iconfont iconqiehuanxingshiyi icon-hover"></i>
                                     </span>
                                     <span
                                         class="el-upload-list__item-delete"
@@ -68,13 +68,13 @@
             <img width="100%" :src="dialogImageUrl" alt />
         </el-dialog>
         <!-- 图片预览 end -->
-        <div class="mask" v-show="isModalShow"></div>
-        <div id="content" class="contentDialog" v-show="isModalShow">
+        <div class="mask" v-if="isModalShow"></div>
+        <div id="content" class="contentDialog" v-if="isModalShow">
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
                 <button @click="cancelEditorImg">X</button>
             </el-header>
-            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="true" :isPopup="true" :isSecond="true">
+            <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="true" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">
                     <button type="button" @click="getEditorImg" class="cl-button cl-button--small cl-button--primary">确定</button>
                     <button type="button" @click="cancelEditorImg" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
@@ -377,7 +377,7 @@ export default {
     text-align: right;
     padding-top: 0;
 }
-.icon-hover:hover{
-    color: $--color-primary !important;
+.icon-hover{
+    color: $--color-white;
 }
 </style>
