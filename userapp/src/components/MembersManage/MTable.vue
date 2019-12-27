@@ -243,7 +243,7 @@ export default {
             margin-right: 10px;
         }
         .save {
-            background: #00c1de;
+            background: $--color-primary;
             color: #fff;
         }
     }

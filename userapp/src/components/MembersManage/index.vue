@@ -5,7 +5,7 @@
                 <template v-slot:title>系统设置</template>
             </page-submenu>
         </el-aside> -->
-        <el-main class="member-content" style="padding:32px">
+        <el-main class="member-content" style="padding:16px">
             <el-row class="user-list">
                 <span class="member-list-title fs14">成员列表</span>
                 <button class="cl-button cl-button--primary invite-member" @click="invitation">邀请成员</button>

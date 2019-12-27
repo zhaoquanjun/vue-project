@@ -67,19 +67,19 @@
                 @click="changeIndustry(item)"
               >
                 <el-tooltip 
-                  v-if="item.childernName"
-                  :content="item.childernName" 
+                  v-if="item.childrenName"
+                  :content="item.childrenName" 
                   placement="right-start"
                   :open-delay="600"
                   popper-class="popper-bg"
                 >
-                  <div slot="content" v-if="item.childernName.length <=25" class="popper">
-                    {{item.childernName}}
+                  <div slot="content" v-if="item.childrenName.length <=25" class="popper">
+                    {{item.childrenName}}
                   </div>
-                  <div slot="content" v-else-if="item.childernName.length>25" class="popper">
-                    {{item.childernName.slice(0, 25)}}
-                    <br/>{{item.childernName.slice(25,50)}}
-                    <br/>{{item.childernName.slice(50)}}
+                  <div slot="content" v-else-if="item.childrenName.length>25" class="popper">
+                    {{item.childrenName.slice(0, 25)}}
+                    <br/>{{item.childrenName.slice(25,50)}}
+                    <br/>{{item.childrenName.slice(50)}}
                   </div>
                   <div class="listTitle">{{item.label}}</div>
                 </el-tooltip>
