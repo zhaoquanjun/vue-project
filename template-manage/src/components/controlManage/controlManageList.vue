@@ -68,7 +68,7 @@
           <div v-show="scope.row.isEnabled">
             <a
               style="vertical-align: middle;"
-              :href="`http://${scope.row.prevUrl}`"
+              :href="`//${scope.row.prevUrl}`"
               target="_blank"
             >
               <i class="iconfont iconchakan cl-iconfont" style="margin-right:16px"></i>

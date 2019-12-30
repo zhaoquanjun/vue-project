@@ -45,7 +45,7 @@
           >选择模版</button>
           <a
             class="preview-btn"
-            :href="`http://${curSiteinfo.secondDomain}`"
+            :href="`//${curSiteinfo.secondDomain}`"
             target="_blank"
             v-show="curSiteTodoinfo.siteTemplate"
           >

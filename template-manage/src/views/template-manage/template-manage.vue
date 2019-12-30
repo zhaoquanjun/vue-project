@@ -107,7 +107,7 @@
                     :src="scope.row.imageUrl"
                     alt
                     style="width:100%;height:100%;object-fit:cover;"
-                    :href="`http://${scope.row.domain}`"
+                    :href="`//${scope.row.domain}`"
                   />
                 </div>
               </template>
