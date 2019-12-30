@@ -9,7 +9,7 @@
 <script>
     import * as memberManageApi from "@/api/request/siteMemberApi";
     import * as templateApi from "@/api/request/templateApi";
-    import { designerUrl } from "@/environment/index";
+    import { designerUrl, httpSchema } from "@/environment/index";
     export default {
         name: "members-site",
         data() {
@@ -19,7 +19,7 @@
             }
         },
         created(){
-            this.src = `http://${this.item.Domain}/prev/showtemplate/?flag=${this.item.flag}`
+            this.src = `${httpSchema}${this.item.Domain}/prev/showtemplate/?flag=${this.item.flag}`
         },
         methods: {
             async release(){
