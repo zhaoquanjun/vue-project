@@ -1054,7 +1054,7 @@ export default {
         this.settingChecked = data.isRecommend;
         this.picUrl = data.imageUrl;
         this.picUrlMobile = data.mobileImageUrl;
-        this.settingFirstIndustrySelect = data.firstIndustryId;
+        this.settingFirstIndustrySelect = Number(data.firstIndustryId);
         if (this.settingFirstIndustrySelect != 0) {
           let { data, status } = await templateApi.getSecondIndustries(
             this.settingFirstIndustrySelect
