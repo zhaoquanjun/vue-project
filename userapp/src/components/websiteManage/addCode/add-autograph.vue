@@ -40,9 +40,23 @@
             },
             async saveAddAutograph() {
                 let { data } = await dashboardApi.createSiteSMSSign(this.siteId,this.codeValue);
-                if(data) {
-                    this.$emit('saveAddAutograph')
-                }
+                    if(data){
+                        this.$notify({
+                            customClass: "notify-success", // error success
+                            message: `添加成功`,
+                            duration: 1500,
+                            showClose: false
+                        });
+                        this.$emit('saveAddAutograph')
+                    }else {
+                        this.$notify({
+                            customClass: "error", // error success
+                            message: `添加失败`,
+                            duration: 1500,
+                            showClose: false
+                        });
+                        this.$emit('saveAddAutograph')
+                    }
             }
         }
     };

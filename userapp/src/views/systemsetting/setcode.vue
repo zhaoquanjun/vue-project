@@ -29,7 +29,8 @@
               tooltip-effect="dark"
               class="content-table"
             >
-              <el-table-column prop="signName" label="签名名称"></el-table-column>
+              <el-table-column v-if="backupType == 'autograph'" prop="signName" label="签名名称"></el-table-column>
+              <el-table-column v-if="backupType == 'template'" prop="tempName" label="模版名称"></el-table-column>
               <el-table-column prop="createTime" label="创建时间"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -112,15 +113,16 @@ export default {
           this.messagelist[i].createTime,
           "yyyy-MM-dd hh:mm:ss"
         );
+        this.messagelist[i].tempName
       }
     },
     /**
      * 查看短信信息
      */
     async deleteCode(id) {
-      console.log('val',id)
+        let tips = this.backupType == 'autograph' ? '签名': '模版';
         this.$confirm(
-                "删除后,成员将不再管理您的站点, 确定要删除吗?",
+                `确定要删除该${tips}吗？`,
                 "提示",
                 {
                     confirmButtonText: "确定",
@@ -128,20 +130,28 @@ export default {
                     type: "warning",
                     callback: async action => {
                         if (action === "confirm") {
+                          let data = false
                           if(this.backupType === 'template'){
-                            //获取当前模版列表
-                            let { data } = await dashboardApi.removeCustomTemplate(id);
+                            data = await dashboardApi.removeCustomTemplate(id);
                           } else {
-                            //获取当前模版列表
-                            let { data } = await dashboardApi.deleteSiteSMSSignById(id);
+                            data  = await dashboardApi.deleteSiteSMSSignById(id);
                           }
-
+                          if(data.data){
                             this.$notify({
                               customClass: "notify-success", // error success
                               message: `删除成功`,
                               duration: 1500,
                               showClose: false
                             });
+                            this.init()
+                          }else {
+                            this.$notify({
+                              customClass: "error", // error success
+                              message: `删除失败`,
+                              duration: 1500,
+                              showClose: false
+                            });
+                          }
                         }
                     }
                 }
@@ -158,7 +168,7 @@ export default {
     //保存添加模版
     saveAddTemplate(val){
       this.isAddTemplate = false
-      console.log(val)
+      this.init()
     },
     //关闭添加签名
     closeAddAutograph(){
@@ -167,7 +177,7 @@ export default {
     //保存添加签名
     saveAddAutograph(val){
       this.isAddAutograph = false
-      console.log(val)
+      this.init()
     }
   }
 };

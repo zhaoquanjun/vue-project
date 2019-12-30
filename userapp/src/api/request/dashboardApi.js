@@ -173,13 +173,13 @@ export const getSiteSMSSignList = (siteId) => {
  * 删除模版
  */
 export const removeCustomTemplate = (tempId) => {
-    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/Sms/GetCustomTemplateList/RemoveCustomTemplate/${tempId}`);
+    return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/Sms/RemoveCustomTemplate/${tempId}`);
 };
 /**
  * 删除短信签名
  */
 export const deleteSiteSMSSignById = (id) => {
-    return ajaxRequest.delete(`${environment.designerManageApi}/api/v1/sms/DeleteSiteSMSSignById`,{id: id});
+    return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/sms/DeleteSiteSMSSignById?id=${id}`);
 };
 
 //创建签名 post
