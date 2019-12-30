@@ -226,9 +226,9 @@
                     v-else-if="props.row.httpsStatus===1"
                     class="status"
                   >{{props.row.httpsStatusDesc}}</span>
-                  <div v-else-if="props.row.httpsStatus===2 || props.row.httpsStatus===3">
+                  <div v-else-if="props.row.httpsStatus===2 || props.row.httpsStatus===3"  style="display:inline-block;">
                     <el-switch
-                      :value="props.row.httpsStatus!==0"
+                      :value="props.row.httpsStatus!==2 && props.row.httpsStatus!==3"
                       @change="swichChange(props.row.httpsStatus,props.row,props.$index)"
                     ></el-switch>
                     <span class="status">{{props.row.httpStatusDesc}}</span>
