@@ -112,7 +112,7 @@
                   <div v-if="!scope.row.isEdit" :class="{'noSignName': scope.row.signName == null}">{{scope.row.signName || '未设置'}}</div>
                   <div v-else>
                     <el-select
-                      v-model="scope.row.signName"
+                      v-model="scope.row.signId"
                       placeholder="请选择短信签名"
                       @change="onblur(scope.row, scope.$index,1)"
                     >
@@ -136,7 +136,7 @@
                   </div>
                   <div v-else>
                     <el-select
-                      v-model="scope.row.tempName"
+                      v-model="scope.row.tempId"
                       placeholder="请选择短信模版"
                       @change="onblur(scope.row, scope.$index,2)"
                     >
@@ -361,26 +361,26 @@ export default {
     async save(val,ind) {
       console.log(val,'val')
       this.onblur(val,ind,0)
-      if(!val.signName || !val.tempName ) {
+      if(!val.signId || !val.tempId ) {
           return
       }
-      let tempId = ''
-      let signId = ''
-      for (var i = 0; i < this.templateList.length; i++) {
-        if(this.templateList[i].tempName == val.tempName) {
-          tempId = this.templateList[i].id
-        }
-      }
-      for (var i = 0; i < this.signList.length; i++) {
-        if(this.signList[i].signName == val.signName) {
-          signId = this.signList[i].id
-        }
-      }
+      // let tempId = ''
+      // let signId = ''
+      // for (var i = 0; i < this.templateList.length; i++) {
+      //   if(this.templateList[i].tempName == val.tempName) {
+      //     tempId = this.templateList[i].id
+      //   }
+      // }
+      // for (var i = 0; i < this.signList.length; i++) {
+      //   if(this.signList[i].signName == val.signName) {
+      //     signId = this.signList[i].id
+      //   }
+      // }
       let  params= {
         id: val.id, 
         siteId: this.siteId,
-        signId: signId || val.signName,
-        tempId: tempId || val.tempName,
+        signId: val.signId,
+        tempId: val.tempId,
         sMSPurpose: val.smsPurpose,
       }
       let data 
@@ -406,15 +406,14 @@ export default {
         this.messagelist2 = []
         for (var i = 0; i < tampList.length; i++) {
             if(ind == i) {
-              console.log(val,val.signName,val.tempName,val.tempName != null, type)
-              if(val.signName == null && (type == 1 || type == 0)) {
+              if(val.signId == null && (type == 1 || type == 0)) {
                 tampList[i].nameTip = true
-              } else if(val.signName != null && (type == 1 || type == 0)) {
+              } else if(val.signId != null && (type == 1 || type == 0)) {
                 tampList[i].nameTip = false
               }
-              if(val.tempName == null && (type == 2 || type == 0)) {
+              if(val.tempId == null && (type == 2 || type == 0)) {
                 tampList[i].templateTip = true
-              } else if(val.tempName != null && (type == 2 || type == 0)){
+              } else if(val.tempId != null && (type == 2 || type == 0)){
                 tampList[i].templateTip = false
               }
             }
@@ -668,7 +667,7 @@ export default {
   .phone {
     position: relative;
     width: 300px;
-    height: 620px;
+    height: 520px;
     margin: 60px auto 0;
     padding: 45px 0;
     background: $--background-color-base;
