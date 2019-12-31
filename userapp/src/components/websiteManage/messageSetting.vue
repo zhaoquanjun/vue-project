@@ -34,6 +34,12 @@
             </router-link> 
           </div>
 
+          <div v-if="backupType === 'free' &&  !smsStatus" class="tips tip-danger ">
+            <p>为不影响您的网站功能，请在免费短信使用完之前，及时开通并配置阿里云短信服务
+              <a>立即配置</a>
+            </p>
+          </div>
+
           <!-- 免费短信 -->
           <div v-if="backupType === 'free'" class="table-list" id="table-list">
             <el-table
@@ -78,7 +84,7 @@
           <!-- 阿里云短信 -->
           <div v-else>
             <div 
-              v-show="messagelist2.length <=0"
+              v-show="!smsStatus"
               class="empty-message">
               <div class="no-message">
                 <img src="~img/empty.png" alt="">
@@ -90,7 +96,7 @@
               </router-link> 
             </div>
             <el-table
-              v-show="messagelist2.length >0 "
+              v-show="smsStatus"
               :data="messagelist2"
               tooltip-effect="dark"
               class="content-table"
@@ -259,6 +265,7 @@ export default {
       templateList: [],
       signList: [],
       backupType: "free",
+      smsStatus: false,
       tipSuccess: false
     };
   },
@@ -267,6 +274,7 @@ export default {
     this.getIsPreUseFreeSMS()
     this.getSurplusFreeSMSCount()
     this.getSmsList()
+    this.getAkSk()
   },
   methods: {
     // 获取siteId
@@ -289,6 +297,16 @@ export default {
      */
     handleClick() {
       this.getSmsList()
+    },
+    //获取ak和Sk情况
+    async getAkSk() {
+      let { data,status } = await dashboardApi.getAkSk();
+      if(!data.ak || !data.sk || !data.smsAuthorization) {
+        this.smsStatus = false
+      } else {
+        this.smsStatus = true
+      }
+      console.log(data,this.smsStatus)
     },
     //获取短信列表
     async getSmsList() {
@@ -341,27 +359,28 @@ export default {
     },
     //保存
     async save(val,ind) {
+      console.log(val,'val')
       this.onblur(val,ind,0)
       if(!val.signName || !val.tempName ) {
           return
       }
-      let tempId = val.tempName
-      let signId = val.signName
+      let tempId = ''
+      let signId = ''
       for (var i = 0; i < this.templateList.length; i++) {
-        if(this.templateList[i].tempName = val.tempName) {
+        if(this.templateList[i].tempName == val.tempName) {
           tempId = this.templateList[i].id
         }
       }
       for (var i = 0; i < this.signList.length; i++) {
-        if(this.signList[i].signName = val.signName) {
+        if(this.signList[i].signName == val.signName) {
           signId = this.signList[i].id
         }
       }
       let  params= {
         id: val.id, 
         siteId: this.siteId,
-        signId: signId,
-        tempId: tempId,
+        signId: signId || val.signName,
+        tempId: tempId || val.tempName,
         sMSPurpose: val.smsPurpose,
       }
       let data 

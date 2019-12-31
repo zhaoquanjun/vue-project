@@ -155,7 +155,7 @@ export const getPvUvIp = (appId) => {
  * 获取签名列表
  */
 export const getAkSk = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/AkSk/get`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/AkSk/get`);
 };
 /**
  * 获取模版列表
