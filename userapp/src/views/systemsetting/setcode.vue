@@ -30,8 +30,16 @@
               class="content-table"
             >
               <el-table-column v-if="backupType == 'autograph'" prop="signName" label="签名名称"></el-table-column>
+              <el-table-column v-if="backupType == 'autograph'" prop="createTime" label="创建时间"></el-table-column>
+
               <el-table-column v-if="backupType == 'template'" prop="tempName" label="模版名称"></el-table-column>
-              <el-table-column prop="createTime" label="创建时间"></el-table-column>
+
+              <el-table-column v-if="backupType == 'template'" prop="tempCode" label="模板CODE"></el-table-column>
+
+              <el-table-column v-if="backupType == 'template'" prop="tempContent" min-width='300'  label="模板内容"></el-table-column>
+
+              <el-table-column v-if="backupType == 'template'" prop="templateType" label="模板类型"></el-table-column>
+              
               <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-tooltip content="删除" placement="top">
