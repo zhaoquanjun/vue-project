@@ -30,7 +30,7 @@
               <el-tab-pane label="阿里云短信" name="aLiCloud"></el-tab-pane>
             </el-tabs>
             <router-link :to="{name:'aliaksk'}"> 
-              <button class="cl-button btn-code cl-button--primary">修改AK/SK</button>
+              <button v-if="backupType === 'aLiCloud' &&  smsStatus" class="cl-button btn-code cl-button--primary">修改AK/SK</button>
             </router-link> 
           </div>
 
@@ -91,9 +91,9 @@
                 <h5>阿里云短信</h5>
                 <p>自定义各场景下发送的短信内容</p>
               </div>
-              <router-link :to="{name:'aliaksk'}"> 
+              <!-- <router-link :to="{name:'aliaksk'}"> 
                 <button class="cl-button cl-button--primary">立即配置</button>
-              </router-link> 
+              </router-link>  -->
             </div>
             <el-table
               v-show="smsStatus"
