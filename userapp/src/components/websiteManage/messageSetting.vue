@@ -53,7 +53,14 @@
                 </template>
               </el-table-column>
               <el-table-column prop="signName" label="签名" min-width="160"></el-table-column>
-              <el-table-column prop="tempContent" label="模版" min-width="400"></el-table-column>
+              <el-table-column prop="tempContent" label="模版" min-width="400">
+                <template  slot-scope="scope">
+                  <div>
+                    <span >{{scope.row.tempName}}</span>
+                    <span class="noSignName">{{ scope.row.tempContent == null ? '未设置' : ` (${scope.row.tempContent})`}}</span>
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column label="操作" min-width="170">
                 <template slot-scope="scope">
                   <div class="handle-btn-wrap">
