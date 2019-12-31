@@ -78,7 +78,9 @@
                 <h5>阿里云短信</h5>
                 <p>自定义各场景下发送的短信内容</p>
               </div>
-              <button class="cl-button cl-button--primary">立即配置</button>
+              <router-link :to="{name:'aliaksk'}"> 
+                <button class="cl-button cl-button--primary">立即配置</button>
+              </router-link> 
             </div>
             <el-table
               v-show="messagelist2.length >0 "
@@ -405,7 +407,7 @@ export default {
     async saveAddTemplate(val){
       this.isAddTemplate = false
       //获取当前模版列表
-      let data1 = await dashboardApi.getCustomTemplateList(this.siteId);
+      let data1 = await dashboardApi.getCustomTemplateList();
       this.templateList = data1.data
     },
     //关闭添加签名
@@ -416,7 +418,7 @@ export default {
     async saveAddAutograph(val){
       this.isAddAutograph = false
       //获取当前签名列表
-      let  data2  = await dashboardApi.getSiteSMSSignList(this.siteId);
+      let  data2  = await dashboardApi.getSiteSMSSignList();
       this.signList = data2.data
     },
     //关闭提示语 

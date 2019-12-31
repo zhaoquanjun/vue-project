@@ -167,7 +167,7 @@ export const getCustomTemplateList = () => {
  * 获取签名列表
  */
 export const getSiteSMSSignList = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetSiteSMSSignList`);
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetSMSSignList`);
 };
 /**
  * 删除模版
@@ -179,12 +179,12 @@ export const removeCustomTemplate = (tempId) => {
  * 删除短信签名
  */
 export const deleteSiteSMSSignById = (id) => {
-    return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/sms/DeleteSiteSMSSignById?id=${id}`);
+    return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/sms/DeleteSMSSignById?id=${id}`);
 };
 
 //创建签名 post
 export const createSiteSMSSign = (signName) => {
-    return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/CreateSiteSMSSign`,{
+    return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/CreateSMSSign`,{
         signName: signName
     });
 };
