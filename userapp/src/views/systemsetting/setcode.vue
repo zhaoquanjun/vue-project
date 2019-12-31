@@ -77,18 +77,7 @@ export default {
       isAddTemplate: false,
       isAddAutograph: false,
       siteId: this.$store.state.dashboard.siteId,
-      messagelist: [
-        {
-          messageinfo1: '注册网站验证码',
-          messageinfo2: '云梦网络',
-          messageinfo3: '(您的验证码为${code}，该验证码5分钟内有效，请勿泄露于他人！)'
-        },
-        {
-          messageinfo1: '找回密码验证码',
-          messageinfo2: '为设置',
-          messageinfo3: '未设置'
-        }
-      ]
+      messagelist: []
     };
   },
   created(){
@@ -99,12 +88,11 @@ export default {
     async init() {
       if(this.backupType === 'template'){
         //获取当前模版列表
-        let { data } = await dashboardApi.getCustomTemplateList(this.siteId);
+        let { data } = await dashboardApi.getCustomTemplateList();
         this.messagelist = data
-        console.log('getCustomTemplateList',this.messagelist)
       } else {
         //获取当前模版列表
-        let { data } = await dashboardApi.getSiteSMSSignList(this.siteId);
+        let { data } = await dashboardApi.getSiteSMSSignList();
         this.messagelist = data
         console.log('getSiteSMSSignList',this.messagelist)
       }

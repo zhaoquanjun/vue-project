@@ -39,7 +39,7 @@
                 this.$emit('closeAddAutograph')
             },
             async saveAddAutograph() {
-                let { data } = await dashboardApi.createSiteSMSSign(this.siteId,this.codeValue);
+                let { data } = await dashboardApi.createSiteSMSSign(this.codeValue);
                     if(data){
                         this.$notify({
                             customClass: "notify-success", // error success

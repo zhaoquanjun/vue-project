@@ -71,7 +71,7 @@
                 this.$emit('closeAddTemplate')
             },
             async saveAddTemplate() {
-                let { data } = await dashboardApi.addCustomTemplate(this.siteId,this.codeValue);
+                let { data } = await dashboardApi.addCustomTemplate(this.codeValue);
                 if(data) {
                     this.$emit('saveAddTemplate')
                 }
@@ -79,7 +79,7 @@
             async goSave(val){
                 
                 if(val === 2) {
-                    let { data, status } = await dashboardApi.getTemplateDetail(this.siteId,this.codeValue);
+                    let { data, status } = await dashboardApi.getTemplateDetail(this.codeValue);
                     if(data) {
                         this.templateData = data
                         this.step1 = true

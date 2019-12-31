@@ -160,14 +160,14 @@ export const getAkSk = () => {
 /**
  * 获取模版列表
  */
-export const getCustomTemplateList = (siteId) => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetCustomTemplateList/${siteId}`);
+export const getCustomTemplateList = () => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetCustomTemplateList`);
 };
 /**
  * 获取签名列表
  */
-export const getSiteSMSSignList = (siteId) => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetSiteSMSSignList`,{siteId:siteId});
+export const getSiteSMSSignList = () => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetSiteSMSSignList`);
 };
 /**
  * 删除模版
@@ -183,26 +183,23 @@ export const deleteSiteSMSSignById = (id) => {
 };
 
 //创建签名 post
-export const createSiteSMSSign = (siteId,signName) => {
+export const createSiteSMSSign = (signName) => {
     return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/CreateSiteSMSSign`,{
-        siteId: siteId,
         signName: signName
     });
 };
 
 //查询模板详情
-export const getTemplateDetail = (siteId,templateCode) => {
+export const getTemplateDetail = (templateCode) => {
     return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetTemplateDetail`,{
-        siteId: siteId,
         templateCode: templateCode
     });
 };
 
 
 //保存模板
-export const addCustomTemplate = (siteId,tempCode) => {
+export const addCustomTemplate = (tempCode) => {
     return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/AddCustomTemplate`,{
-        siteId: siteId,
         tempCode: tempCode
     });
 };
