@@ -184,7 +184,7 @@
             <p>2.超出免费条数或需自定义短信签名和模板，请使用阿里云短信。</p>
           </div>
           <div 
-            v-show="backupType === 'aLiCloud' && messagelist2.length >0 "
+            v-show="backupType === 'aLiCloud' && smsStatus "
             class="message-switch"
           >
             <span>优先使用免费短信 </span>
@@ -195,7 +195,7 @@
               v-model="messageSwitch">
             </el-switch>
           </div>
-          <div v-show="backupType === 'aLiCloud' && messagelist2.length >0 " class="backupTip">
+          <div v-show="backupType === 'aLiCloud' && smsStatus" class="backupTip">
             <p class="title">阿里云短信说明</p>
             <p>1.请先在阿里云控制台申请短信签名与模板，<a>如何申请？</a></p>
             <p>2.将审核通过的短信签名与模板添加至系统后台；<a>去添加</a></p>
