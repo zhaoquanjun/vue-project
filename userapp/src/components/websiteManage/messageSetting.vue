@@ -336,11 +336,23 @@ export default {
       if(!val.signName || !val.tempName ) {
           return
       }
+      let tempId = val.tempName
+      let signId = val.signName
+      for (var i = 0; i < this.templateList.length; i++) {
+        if(this.templateList[i].tempName = val.tempName) {
+          tempId = this.templateList[i].id
+        }
+      }
+      for (var i = 0; i < this.signList.length; i++) {
+        if(this.signList[i].signName = val.signName) {
+          signId = this.signList[i].id
+        }
+      }
       let  params= {
         id: val.id, 
         siteId: this.siteId,
-        signId: val.signName,
-        tempId: val.tempName,
+        signId: signId,
+        tempId: tempId,
         sMSPurpose: val.smsPurpose,
       }
       let data 
@@ -350,6 +362,7 @@ export default {
         data = await dashboardApi.addCustomSms(params)
       }
       if(data.status == 200) {
+        this.getSmsList()
         this.$notify({
           customClass: "notify-success", // error success
           message: `保存成功`,
