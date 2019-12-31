@@ -23,7 +23,7 @@
                 </div>
                 <div>
                     <span>模板类型：</span>
-                    <p>{{templateData.siteId}}</p>
+                    <p>{{templateData.templateType}}</p>
                 </div>
                 <div>
                     <span>模板内容：</span>

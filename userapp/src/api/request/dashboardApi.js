@@ -221,4 +221,24 @@ export const getIsPreUseFreeSMS = (siteId) => {
         siteId: siteId
     });
 };
+//获取免费短信条数
+export const getSurplusFreeSMSCount = () => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/SMS/GetSurplusFreeSMSCount`);
+};
+
+//获取短信列表
+export const getSmsList = (siteId,isSystem) => {
+    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetSmsList`,{
+        siteId: siteId,
+        isSystem: isSystem
+    });
+};
+//新增短信
+export const addCustomSms = (data) => {
+    return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/AddCustomSms`,data);
+};
+//修改短信
+export const updateCustomSms = (data) => {
+    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/Sms/UpdateCustomSms`,data);
+};
 
