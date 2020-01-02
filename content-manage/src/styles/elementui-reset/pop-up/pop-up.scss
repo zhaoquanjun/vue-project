@@ -155,6 +155,9 @@
 
 .notify-error {
     background: $--color-danger;
+    .el-icon-error {
+        display: none !important;
+    }
 }
 // 打开弹框给body加的样式覆盖掉
 .el-popup-parent--hidden {
