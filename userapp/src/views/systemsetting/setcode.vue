@@ -29,6 +29,13 @@
               tooltip-effect="dark"
               class="content-table"
             >
+              <template slot="empty">
+                <div class="empty-table">
+                  <img src="~img/memberManage/table-empty.png" />
+                  <p>暂无数据</p>
+                </div>
+              </template>
+              
               <el-table-column v-if="backupType == 'autograph'" prop="signName" label="签名名称"></el-table-column>
               <el-table-column v-if="backupType == 'autograph'" prop="createTime" label="创建时间"></el-table-column>
 
