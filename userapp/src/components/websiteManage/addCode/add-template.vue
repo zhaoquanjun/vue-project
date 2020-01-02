@@ -8,7 +8,7 @@
             <div v-show="!step1" class="content">
                 <div class="input">
                     <span>模版CODE</span>
-                    <el-input v-model="codeValue" maxlength="20" placeholder="请输入内容"></el-input>
+                    <el-input v-model="codeValue" maxlength="15" placeholder="请输入内容"></el-input>
                 </div>
                 <a href="">申请模版</a>
             </div>
@@ -77,7 +77,6 @@
                 }
             },
             async goSave(val){
-                
                 if(val === 2) {
                     let { data, status } = await dashboardApi.getTemplateDetail(this.codeValue);
                     if(data) {

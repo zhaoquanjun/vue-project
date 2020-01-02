@@ -34,11 +34,11 @@
             </router-link> 
           </div>
 
-          <div v-if="backupType === 'free' &&  !smsStatus" class="tips tip-danger ">
+          <!-- <div v-if="backupType === 'free' &&  !smsStatus" class="tips tip-danger ">
             <p>为不影响您的网站功能，请在免费短信使用完之前，及时开通并配置阿里云短信服务
               <a>立即配置</a>
             </p>
-          </div>
+          </div> -->
 
           <!-- 免费短信 -->
           <div v-if="backupType === 'free'" class="table-list" id="table-list">
@@ -210,7 +210,6 @@
           <p>{{messageText}}
             <span class="arrow"></span>
           </p>
-          
         </div>
         <i class="icon iconfont iconguanbi" @click="messageView=false"></i>
       </div>
@@ -290,7 +289,7 @@ export default {
     chooseWebsite(siteId) {
       this.siteId = siteId;
       this.getSmsList()
-      //this.getBackupSite(siteId);
+      this.getIsPreUseFreeSMS()
     },
     /**
      * 切换免费和阿里云短信
@@ -319,7 +318,6 @@ export default {
         for (var i = 0; i < this.messagelist2.length; i++) {
           this.messagelist2[i].isEdit = this.messagelist2[i].nameTip = this.messagelist2[i].templateTip = false
         }
-        console.log('this.messagelist2',this.messagelist2)
       }
     },
     //获取免费短信条数
@@ -359,7 +357,6 @@ export default {
     },
     //保存
     async save(val,ind) {
-      console.log(val,'val')
       this.onblur(val,ind,0)
       if(!val.signId || !val.tempId ) {
           return
@@ -667,7 +664,7 @@ export default {
   .phone {
     position: relative;
     width: 300px;
-    height: 520px;
+    height: 450px;
     margin: 60px auto 0;
     padding: 45px 0;
     background: $--background-color-base;

@@ -107,7 +107,7 @@ export default {
       for (var i = 0; i < this.messagelist.length; i++) {
         this.messagelist[i].createTime = formatDateTime(
           this.messagelist[i].createTime,
-          "yyyy-MM-dd hh:mm:ss"
+          "yyyy-MM-dd hh:mm"
         );
         this.messagelist[i].tempName
       }
