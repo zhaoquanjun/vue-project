@@ -59,13 +59,13 @@
                 </template>
               </el-table-column>
               <el-table-column prop="signName" label="签名" min-width="160"></el-table-column>
-              <el-table-column prop="tempContent" label="模版" min-width="400">
-                <template  slot-scope="scope">
+              <el-table-column prop="tempContent" label="模版内容" min-width="400">
+                <!-- <template  slot-scope="scope">
                   <div>
                     <span >{{scope.row.tempName}}</span>
                     <span class="noSignName">{{ scope.row.tempContent == null ? '未设置' : ` (${scope.row.tempContent})`}}</span>
                   </div>
-                </template>
+                </template> -->
               </el-table-column>
               <el-table-column label="操作" min-width="170">
                 <template slot-scope="scope">
@@ -353,7 +353,7 @@ export default {
      */
     async chakan(val) {
       this.messageView = true,
-      this.messageText = `【${val.tempName}】${val.tempContent}`
+      this.messageText = `【${val.signName}】${val.tempContent}`
     },
     //保存
     async save(val,ind) {
