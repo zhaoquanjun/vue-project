@@ -112,7 +112,7 @@
                   <div v-if="!scope.row.isEdit" :class="{'noSignName': scope.row.signName == null}">{{scope.row.signName || '未设置'}}</div>
                   <div v-else>
                     <el-select
-                      v-model="scope.row.signId"
+                      v-model="scope.row.signName"
                       placeholder="请选择短信签名"
                       @change="onblur(scope.row, scope.$index,1)"
                     >
@@ -136,7 +136,7 @@
                   </div>
                   <div v-else>
                     <el-select
-                      v-model="scope.row.tempId"
+                      v-model="scope.row.tempName"
                       placeholder="请选择短信模版"
                       @change="onblur(scope.row, scope.$index,2)"
                     >
@@ -357,8 +357,9 @@ export default {
     },
     //保存
     async save(val,ind) {
+      console.log(val,'888')
       this.onblur(val,ind,0)
-      if(!val.signId || !val.tempId ) {
+      if(!val.signName || !val.tempName ) {
           return
       }
       // let tempId = ''
@@ -376,8 +377,8 @@ export default {
       let  params= {
         id: val.id, 
         siteId: this.siteId,
-        signId: val.signId,
-        tempId: val.tempId,
+        signId: val.signId || val.signName,
+        tempId: val.tempId || val.tempName,
         sMSPurpose: val.smsPurpose,
       }
       let data 
@@ -403,14 +404,14 @@ export default {
         this.messagelist2 = []
         for (var i = 0; i < tampList.length; i++) {
             if(ind == i) {
-              if(val.signId == null && (type == 1 || type == 0)) {
+              if(val.signName == null && (type == 1 || type == 0)) {
                 tampList[i].nameTip = true
-              } else if(val.signId != null && (type == 1 || type == 0)) {
+              } else if(val.signName != null && (type == 1 || type == 0)) {
                 tampList[i].nameTip = false
               }
-              if(val.tempId == null && (type == 2 || type == 0)) {
+              if(val.tempName == null && (type == 2 || type == 0)) {
                 tampList[i].templateTip = true
-              } else if(val.tempId != null && (type == 2 || type == 0)){
+              } else if(val.tempName!= null && (type == 2 || type == 0)){
                 tampList[i].templateTip = false
               }
             }
