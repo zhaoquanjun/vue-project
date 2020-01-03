@@ -7,7 +7,7 @@
                     <el-tab-pane label="阿里云视频" name="aliyun"></el-tab-pane>
                 </el-tabs>
                 <a :href="akskUrl">
-                    <button class="cl-button cl-button--primary_notbg" @click="jumpToAksk" v-show="videoType == 'aliyun'">修改AK/SK</button>
+                    <button class="cl-button cl-button--primary_notbg" v-show="videoType == 'aliyun'">修改AK/SK</button>
                 </a>
             </div>
         </el-header>
@@ -156,7 +156,7 @@ export default {
     data() {
         return {
             videoType: "local",
-            akskUrl:akskUrl,
+            akskUrl: akskUrl,
             displayName: "视频",
             contentType: "Video",
             nodeData: {
@@ -188,18 +188,18 @@ export default {
         };
     },
     mounted() {
+        if(this.$route.query.aliyunVideo){
+            this.videoType = "aliyun";
+            this.$refs.aliyunVideo.init();
+        }
         this.getList();
         this.getTree();
     },
     methods: {
         tabClick(item) {
-            console.log(item)
             if(item.name == "aliyun"){
                 this.$refs.aliyunVideo.init();
             }
-        },
-        jumpToAksk(){
-
         },
         // 获取列表
         async getList(node) {

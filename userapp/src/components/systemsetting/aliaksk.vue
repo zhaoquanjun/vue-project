@@ -130,7 +130,7 @@
 <script>
 import PageSubmenu from "@/components/common/PageSubmenu";
 import * as akskApi from "@/api/request/akskApi";
-import { videoManageUrl } from "@/environment/index.js";
+import { aliyunVideoUrl } from "@/environment/index.js";
 export default {
   components: {
     PageSubmenu
@@ -159,7 +159,7 @@ export default {
           status: false
         }
       ],
-      videoUrl: videoManageUrl
+      videoUrl: aliyunVideoUrl
     };
   },
   mounted() {
