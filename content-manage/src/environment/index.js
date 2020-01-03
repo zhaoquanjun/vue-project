@@ -22,6 +22,7 @@ export let errorUrl = `${httpSchema}login.${baseServerUrl}/404`;
 // 个人中心
 export let personalUrl = `${httpSchema}dashboard.${baseServerUrl}/personal`;
 export let dashboardUrl = `${httpSchema}dashboard.${baseServerUrl}/board`;
+export let akskUrl = `${httpSchema}dashboard.${baseServerUrl}/systemsetting/aliaksk`;
 // 阿里云续费地址
 export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0';
 /**

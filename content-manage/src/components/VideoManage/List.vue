@@ -17,7 +17,7 @@
             </template>
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column label="视频名称" width="350">
+            <el-table-column label="视频名称" min-width="350">
                 <template slot-scope="scope">
                     <div class="cover">
                         <img width="100%" height="100%" :src="scope.row.coverUrl" />
@@ -38,7 +38,10 @@
                             show-word-limit
                             @blur="rename(scope.row.id,scope.row)"
                         ></el-input>
-                        <div class="format">格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
+                        <div class="format">
+                           <div>格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
+                           <div class="sizeStr">{{scope.row.sizeStr}}</div>
+                        </div>
                     </div>
                     <div v-else>
                         <el-tooltip
@@ -53,22 +56,25 @@
                             >{{scope.row.title}}</div>
                         </el-tooltip>
 
-                        <div class="format">格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
+                        <div class="format">
+                            <div>格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
+                            <div class="sizeStr">{{scope.row.sizeStr}}</div>
+                        </div>
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="durationStr" label="时长"></el-table-column>
-            <el-table-column prop="categoryName" label="分类" show-overflow-tooltip>
+            <!-- <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip></el-table-column> -->
+            <el-table-column prop="durationStr" label="时长" min-width="80"></el-table-column>
+            <el-table-column prop="categoryName" label="分类" min-width="100" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <span>{{ scope.row.categoryName }}</span>
                 </template>
             </el-table-column>
 
             <!--<el-table-column prop="wideHigh" label="尺寸" show-overflow-tooltip></el-table-column>-->
-            <el-table-column prop="createTimeStr" sortable='custom' label="上传时间" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTimeStr" sortable='custom' label="上传时间" min-width="130" show-overflow-tooltip></el-table-column>
 
-            <el-table-column label="操作" width="150" v-if="$store.state.dashboard.isContentwrite">
+            <el-table-column label="操作" min-width="100" v-if="$store.state.dashboard.isContentwrite">
                 <template slot-scope="scope">
                     <div class="handle-btn-wrap">
                         <button class="more-operate" @click="handleMove(scope.row)" style="margin-right:16px">
@@ -170,9 +176,9 @@ export default {
     mounted() {
         this.$nextTick(() => {
             window.addEventListener("resize", () => {
-                this.tableHeight = window.innerHeight - 290;
+                this.tableHeight = window.innerHeight - 330;
             });
-            this.tableHeight = window.innerHeight - 290;
+            this.tableHeight = window.innerHeight - 330;
         });
         this._getStorageUsage();
         this._getCurrentUsageTraffic();
@@ -369,6 +375,12 @@ export default {
 }
 .format {
     white-space: unset !important;
+    div{
+        display: inline-block;
+    }
+    .sizeStr{
+        margin-left: 8px;
+    }
 }
 .cover {
     position: relative;

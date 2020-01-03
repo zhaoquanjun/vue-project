@@ -1,5 +1,17 @@
 ﻿<template>
-    <el-container id="content-manage">
+    <div class="videoManage">
+        <el-header style="height:50px;">
+            <div class="domain-menu">
+                <el-tabs v-model="videoType" @tab-click="tabClick">
+                    <el-tab-pane label="本地视频" name="local"></el-tab-pane>
+                    <el-tab-pane label="阿里云视频" name="aliyun"></el-tab-pane>
+                </el-tabs>
+                <a :href="akskUrl">
+                    <button class="cl-button cl-button--primary_notbg" @click="jumpToAksk" v-show="videoType == 'aliyun'">修改AK/SK</button>
+                </a>
+            </div>
+        </el-header>
+        <el-container id="content-manage" style="margin-top:16px" v-show="videoType == 'local'">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
                 <span>{{displayName}}分类</span>
@@ -107,6 +119,10 @@
             <!-- :accept="'video/*'" -->
         </el-dialog>
     </el-container>
+    <div v-show="videoType == 'aliyun'">
+        <aliyunVideo ref="aliyunVideo"></aliyunVideo>
+    </div>
+    </div>
 </template>
 <script>
 import MTree from "@/components/common/MTree";
@@ -115,7 +131,9 @@ import ChunkUpload from "@/components/common/ChunkUpload";
 import SelectTree from "@/components/common/SelectTree";
 import RightPannel from "@/components/common/RightPannel";
 import List from "./List";
+import AliyunVideo from "./aliyunVideo";
 import environment from "@/environment/index.js";
+import { akskUrl } from "@/environment/index.js";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
 
@@ -132,10 +150,13 @@ export default {
         List,
         ChunkUpload,
         RightPannel,
-        SelectTree
+        SelectTree,
+        AliyunVideo
     },
     data() {
         return {
+            videoType: "local",
+            akskUrl:akskUrl,
             displayName: "视频",
             contentType: "Video",
             nodeData: {
@@ -171,6 +192,15 @@ export default {
         this.getTree();
     },
     methods: {
+        tabClick(item) {
+            console.log(item)
+            if(item.name == "aliyun"){
+                this.$refs.aliyunVideo.init();
+            }
+        },
+        jumpToAksk(){
+
+        },
         // 获取列表
         async getList(node) {
             this.$Loading.show();
@@ -427,6 +457,46 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/contentDetail";
+.videoManage {
+    /deep/ .tree-aside {
+        margin-left: 16px!important;
+    }
+    /deep/ .content-header {
+        margin-bottom: 16px;
+    }
+    /deep/ .el-scrollbar {
+        height: calc(100vh - 230px);
+    }
+}
+.domain-menu {
+  position: relative;
+  height: 50px;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  margin: 24px 16px 0;
+  .cl-button {
+    position: absolute;
+    right: 16px;
+    top: 9px;
+  }
+}
+.domain-menu /deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+.domain-menu /deep/ .el-tabs__active-bar.is-top {
+  width: 0 !important;
+}
+.el-tabs /deep/ .el-tabs__item {
+  height: 50px;
+  line-height: 50px;
+  margin: 0 24px;
+  padding: 0;
+  color: $--color-text-primary;
+}
+.el-tabs /deep/ .el-tabs__item.is-active {
+  border-bottom: 2px solid $--color-primary;
+}
 </style>
 
 

@@ -1,6 +1,6 @@
 ﻿<template>
     <div>
-        <el-row class="upload-head" type="flex" justify="space-between">
+        <el-row class="upload-head" type="flex" justify="space-between" v-show="!noCategory">
             <el-col :span="12">
                 <span style="padding-right:16px">上传至:</span>
                 <SelectTree
@@ -127,7 +127,8 @@ export default {
         "accept",
         "apiHost",
         "treeResult",
-        "nodeData"
+        "nodeData",
+        "noCategory"
     ],
     components: {
         SelectTree
@@ -369,6 +370,7 @@ export default {
             fileReader.onload = e => {
                 md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
                 file.uniqueIdentifier = md5;
+                file.isUserOwnStorage = Boolean(this.noCategory);
                 if(this.fileList.length < 100) {
                     this.fileList.push(file);
                 }
