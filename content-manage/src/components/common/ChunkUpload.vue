@@ -396,10 +396,10 @@ export default {
             if (this.uploadType === "File") {
                  this.checkFormat(file, forbidUpload);
                 if (this.fileList.length < 100) {
-                    if (file.size / 1024 / 1024 > 50) {
+                    if (file.size / 1024 / 1024 > 200) {
                         this.$notify({
                             customClass: "notify-error",
-                            message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
+                            message: `单个${this.displayName}不允许超过200M,一次最多上传100个文件`,
                             duration: 1500,
                             showClose: false
                         });
@@ -414,7 +414,7 @@ export default {
                 } else {
                     this.$notify({
                         customClass: "notify-error",
-                        message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
+                        message: `单个${this.displayName}不允许超过200M,一次最多上传100个文件`,
                         duration: 1500,
                         showClose: false
                     });
