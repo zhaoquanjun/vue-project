@@ -2,7 +2,7 @@
     <div>
         <div class="picture-content-mask"  v-if="picUrl">
             <div class="picture-wrap">
-                <img :src="picUrl" alt />
+                <img :src="picUrl" @error="test()" onload="test()" alt />
                 <span class="mask">
                     <button>
                         <i class="iconfont iconqiehuanxingshiyi" @click="handlerUpload"></i>
@@ -44,12 +44,16 @@ export default {
     },
     created(){
         this.picUrl = this.imageMsg
+        console.log('this.picUrl',this.picUrl)
     },
     methods: {
         handlerDelete() {
             this.isUploaded = false;
             this.picUrl = "";
             this.$emit("handlerPic",this.picUrl)
+        },
+        test(){
+            this.picUrl = "";
         },
         handlerUpload(){
             this.imageChooseAreaShowFlag=true

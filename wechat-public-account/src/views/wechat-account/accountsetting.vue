@@ -41,7 +41,7 @@
       <div class="content">
         <div class="title">
           <span>推广域名</span>
-          <i class='icon iconfont iconguanbi' @click="closeDomain"></i>
+          <i class='icon iconfont iconguanbi cl-iconfont is-circle' @click="closeDomain"></i>
         </div>
         <div class="tips-top">
           提示：修改推广域名，历史推广数据将被清除
@@ -398,8 +398,8 @@ export default {
         font-size:$--font-size-small;
         font-weight:400;
         color:rgba(38,38,38,1);
-        line-height:20px;
-        padding: 20px 0 12px;
+        line-height:32px;
+        padding: 12px 0 4px;
         display: flex;
         justify-content: space-between;
         border-bottom: $--border-base;
@@ -407,6 +407,9 @@ export default {
           color: #A1A8B1;
           font-size: 18px;
           cursor: pointer;
+          &:hover {
+
+          }
         }
       }
       .tips-top {
