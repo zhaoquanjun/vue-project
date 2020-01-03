@@ -211,9 +211,20 @@ export default {
       list.forEach(item => {
         this.deleteIdList.push(item.id);
       });
-      console.log(this.deleteIdList);
     },
-    sortChange() {},
+    sortChange(row) {
+      if (row.prop == "sizeStr") {
+        this.picSearchOptions.orderByType = "filesize";
+      } else if (row.prop == "createTimeStr") {
+        this.picSearchOptions.orderByType = "createtime";
+      }
+      if (row.order == "ascending") {
+        this.picSearchOptions.isDescending = false;
+      } else {
+        this.picSearchOptions.isDescending = true;
+      }
+      this.getListOfAli();
+    },
     batchRemove(row) {
       this.batchRemoveItem([row.id]);
     },
