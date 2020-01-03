@@ -39,7 +39,7 @@ export default {
             imageChooseAreaShowFlag: false,
         };
     },
-     components: {
+    components: {
         ImageManage
     },
     created(){
