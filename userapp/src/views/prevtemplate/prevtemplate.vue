@@ -19,10 +19,13 @@
             }
         },
         created(){
+            console.log("query",this.item.flag)
             this.src = `${httpSchema}${this.item.Domain}/prev/showtemplate/?flag=${this.item.flag}`
+            console.log(this.src)
         },
         methods: {
             async release(){
+                
                     if (this.item.isChangeTemplate) {
                         this.$confirm(
                         `更换模版会替换现有的设计界面，您确认要切换吗？`,
