@@ -79,6 +79,36 @@ const videoFormat = [
     ".swf",
     ".flv"
 ];
+const aliyunVideoFormat = [
+    ".3gp",
+    ".asf",
+    ".avi",
+    ".dat",
+    ".dv",
+    ".flv",
+    ".f4v",
+    ".gif",
+    ".m2t",
+    ".m4v",
+    ".mj2",
+    ".mjpeg",
+    ".mkv",
+    ".mov",
+    ".mp4",
+    ".mpe",
+    ".mpg",
+    ".mpeg",
+    ".mts",
+    ".ogg",
+    ".qt",
+    ".rm",
+    ".rmvb",
+    ".swf",
+    ".ts",
+    ".vob",
+    ".wmv",
+    ".webm"
+];
 const audioFormat = [
     ".mp3",
     ".cd",
@@ -389,7 +419,11 @@ export default {
         },
         limitCount(file) {
             if (this.uploadType === "Video"){
-                 this.checkFormat(file, videoFormat);
+                if (this.noCategory) {
+                    this.checkFormat(file, aliyunVideoFormat);
+                } else {
+                    this.checkFormat(file, videoFormat);
+                }
             }
             if (this.uploadType === "Audio"){
                  this.checkFormat(file, audioFormat);

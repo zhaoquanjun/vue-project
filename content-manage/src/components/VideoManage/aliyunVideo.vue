@@ -202,11 +202,12 @@ export default {
     },
     // 获取列表
     async getListOfAli() {
+      this.$Loading.show();
       let { data } = await videoManageApi.getListOfAli(this.picSearchOptions);
       this.aliyunVideoData = data;
+      this.$Loading.hide();
     },
     handleSelectionChange(list) {
-      console.log(list);
       this.deleteIdList = [];
       list.forEach(item => {
         this.deleteIdList.push(item.id);
@@ -248,7 +249,9 @@ export default {
                   showClose: false,
                   duration: 1500
                 });
-                this.getListOfAli();
+                setTimeout(() => {
+                  this.getListOfAli();
+                }, 800);
               }
             }
           }
@@ -316,6 +319,9 @@ export default {
   position: relative;
   width: 150px !important;
   height: 100px !important;
+  img {
+    object-fit: cover;
+  }
   .play {
     cursor: pointer;
     position: absolute;

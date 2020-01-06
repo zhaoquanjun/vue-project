@@ -386,6 +386,9 @@ export default {
     position: relative;
     width: 150px !important;
     height: 100px !important;
+    img{
+        object-fit: cover;
+    }
     .play {
         cursor: pointer;
         position: absolute;
