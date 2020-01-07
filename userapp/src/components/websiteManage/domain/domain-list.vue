@@ -362,6 +362,7 @@ export default {
             message: "授权成功"
           });
           this.$emit("resolveCdnByAliYunToken", params);
+          this.$emit("getCdnDomainList");
         })
         .catch(() => {});
     },
