@@ -141,9 +141,12 @@
       </div>
     </div>
     <div id="img-list-dialog">
-      <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false" @close="closeDialog">
+      <div class="mask" v-show="imgVisible" style="text-align:center;">
+        <button class="closeBtn">
+          <i class="el-icon-close icon-close" @click="closeDialog()"></i>
+        </button>
         <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
-      </el-dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -325,6 +328,7 @@ export default {
     },
     closeDialog() {
       this.$refs.video.pause();
+      this.imgVisible = false;
     },
     formatterFileExt(fileExt) {
       if (fileExt) {
@@ -507,8 +511,23 @@ export default {
 .video {
   cursor: pointer;
   outline: none;
+  height: 50%;
   width: 800px;
-  height: 700px;
+  margin-top: 150px;
+}
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 57px;
+  .icon-close {
+    font-size: 24px;
+    color: #fff;
+    padding: 4px;
+    &:hover {
+      background: rgba(0, 0, 0, 1);
+      border-radius: $--border-radius-circle;
+    }
+  }
 }
 .table-content {
   margin-right: 16px;

@@ -516,7 +516,7 @@ export default {
   height: 50px;
   line-height: 50px;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   border-bottom: 1px solid #e5e5e5;
 }
 #videoContent-manage {
