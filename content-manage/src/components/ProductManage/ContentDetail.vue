@@ -12,37 +12,38 @@
             </div>
         </header>
         <el-container class="article-container" style>
-            <el-header>
-                <el-row class="article-head">
-                    <el-col
-                        :span="13"
-                        :offset="3"
-                        style=" font-size: 22px;"
-                    >{{isEditor==1?'编辑产品':'新增产品'}}</el-col>
-                    <el-col :span="6" >
-                        <div class="article-btn">
-                            <button class="cl-button cl-button--small cl-button--primary_notbg" @click="()=>$router.go(-1)">返回</button>
-                            <button class="cl-button cl-button--small cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
-                            <button class="cl-button cl-button--small cl-button--primary" :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
-                        </div>
-                    </el-col>
-                </el-row>
+            <el-header style="height:32px">
+                <div class="article-head">
+                    <div class="article-headTitle">{{isEditor==1?'编辑产品':'新增产品'}}</div>
+                    <div class="article-btn">
+                        <button class="cl-button cl-button--small cl-button--primary_notbg" @click="()=>$router.go(-1)">返回</button>
+                        <button class="cl-button cl-button--small cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
+                        <button class="cl-button cl-button--small cl-button--primary" :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
+                    </div>
+                </div>
             </el-header>
+            <div class="domain-menu">
+                <el-tabs v-model="productType" @tab-click="tabClick">
+                    <el-tab-pane label="产品信息" name="product"></el-tab-pane>
+                    <el-tab-pane label="电商设置" name="store"></el-tab-pane>
+                </el-tabs>
+            </div>
             <el-main style="overflow:hidden">
-                <div>
-                    <el-row>
-                        <el-col :span="13" :offset="3">
-                            <leftContent
-                                ref="articleContent"
-                                @changeSaveWay="changeSaveWay"
-                                @handlerClickNewAdd="handlerClickNewAdd"
-                                @changePreviewId="changePreviewId"
-                            />
-                        </el-col>
-                        <el-col :span="6" style="margin-left: 16px;max-width:345px;min-width:345px">
-                            <RightContent :fileList="fileList" ref="articleRight" />
-                        </el-col>
-                    </el-row>
+                <div class="articleContent" v-show="productType == 'product'">
+                    <div class="articleContentLeft">
+                        <leftContent
+                            ref="articleContent"
+                            @changeSaveWay="changeSaveWay"
+                            @handlerClickNewAdd="handlerClickNewAdd"
+                            @changePreviewId="changePreviewId"
+                        />
+                    </div>
+                    <div class="articleContentRight">
+                        <RightContent :fileList="fileList" ref="articleRight" />
+                    </div>
+                </div>
+                <div class="storeContent" v-show="productType == 'store'">
+                    <storeContent ref="storeContent" :storeData="storeData" ></storeContent>
                 </div>
             </el-main>
         </el-container>
@@ -54,6 +55,7 @@ import * as productManageApi from "@/api/request/productManageApi";
 import environment from "@/environment/index.js";
 import RightContent from "./content-detail/RightContent";
 import leftContent from "./content-detail/LeftContent";
+import StoreContent from "./content-detail/storeContent";
 export default {
     props: {
         uploadPicUrl: {
@@ -68,46 +70,56 @@ export default {
             detailData: {},
             isEdit: false,
             previewId: "",
-            siteId: 0
+            siteId: 0,
+            productType: "product",
+            storeData: {}
         };
     },
 
     components: {
         RightContent,
-        leftContent
+        leftContent,
+        StoreContent
     },
     created() {},
     methods: {
+        tabClick() {
+
+        },
         submitForm() {
             // let flieUrls = [
             //     ...this.$refs.articleRight.fileList1,
             //     ...this.$refs.articleRight.fileList2
             // ];
             let flieUrls = this.$refs.articleRight.newFileList;
-            console.log(this.$refs.articleRight);
             // let fileList = flieUrls.map(item => {
             //     return item.response;
             // });
+            if(this.$refs.storeContent.errorOriginalPrice || this.$refs.storeContent.errorPrice) {
+                this.productType = "store";
+                return;
+            }
             let fileList = this.$refs.articleRight.newFileList;
+            let storeInfo = this.$refs.storeContent.storePrice;
             if (this.isEdit) {
-                this.$refs.articleContent.editArticle("contentForm", fileList, this.disableRefObj);
+                this.$refs.articleContent.editArticle("contentForm", fileList, this.disableRefObj, storeInfo);
                 return;
             }
             // editArticle
             let isEditor = this.$route.query.isEditor;
             if (!!isEditor) {
-                this.$refs.articleContent.editArticle("contentForm", fileList, this. disableRefObj);
+                this.$refs.articleContent.editArticle("contentForm", fileList, this. disableRefObj, storeInfo);
             } else {
-                this.$refs.articleContent.submitForm("contentForm", fileList, this. disableRefObj);
+                this.$refs.articleContent.submitForm("contentForm", fileList, this. disableRefObj, storeInfo);
             }
         },
         async getArticleDetail(id) {
             let { data } = await productManageApi.getProductDetail(id);
             let thumbnailPicUrlList = data.thumbnailPicUrlList;
+            this.storeData = data;
             thumbnailPicUrlList.forEach(item => {
                 this.fileList.push(item);
             });
-            console.log(this.fileList,'==]]]]')
           
         },
         changeSaveWay(isEdit) {
@@ -177,13 +189,70 @@ export default {
 }
 .article-container {
     width: 100%;
-    margin-top: -100px;
-    margin-left: -40px;
+    margin-top: -115px;
+    // margin-left: -40px;
 }
 .article-head {
-    .article-btn {
-       padding-left: 16px
+    margin: 0 10%;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .article-headTitle{
+        font-size: 16px;
+        font-weight: 500;
+        color: $--color-text-primary
     }
+}
+.articleContent{
+    margin: 0 10%;
+    width: 80%;
+    display: flex;
+    .articleContentLeft{
+        width: calc(100% - 361px);
+        display: inline-block;
+    }
+    .articleContentRight{
+        width: 345px;
+        display: inline-block;
+        padding-left: 16px;
+    }
+}
+.storeContent{
+    margin: 0 10%;
+    width: 80%;
+    border: $--border-base;
+    background: $--color-white;
+}
+.domain-menu {
+  position: relative;
+  height: 50px;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  width: 80%;
+  margin: 16px 10%;
+  .cl-button {
+    position: absolute;
+    right: 16px;
+    top: 9px;
+  }
+}
+.domain-menu /deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+.domain-menu /deep/ .el-tabs__active-bar.is-top {
+  width: 0 !important;
+}
+.el-tabs /deep/ .el-tabs__item {
+  height: 50px;
+  line-height: 50px;
+  margin: 0 24px;
+  padding: 0;
+  color: $--color-text-primary;
+}
+.el-tabs /deep/ .el-tabs__item.is-active {
+  border-bottom: 2px solid $--color-primary;
 }
 </style>
 

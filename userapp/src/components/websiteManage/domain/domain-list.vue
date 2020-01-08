@@ -215,30 +215,22 @@
                     <i class="iconfont iconicon-exclamationmark status"
                        style="color:#e5e5e5;margin-left:10px;"></i>
                   </el-tooltip>
-                  <el-switch v-if="props.row.httpsStatus === 0"
-                             :value="props.row.httpsStatus !== 0"
-                             @change="
-                      swichChange(
-                        props.row.httpsStatus,
-                        props.row,
-                        props.$index
-                      )
-                    "
-                             class="status"></el-switch>
-                  <span v-else-if="props.row.httpsStatus === 1"
-                        class="status">{{ props.row.httpsStatusDesc }}</span>
-                  <div v-else-if="
-                      props.row.httpsStatus === 2 || props.row.httpsStatus === 3
-                    ">
-                    <el-switch :value="props.row.httpsStatus !== 0"
-                               @change="
-                        swichChange(
-                          props.row.httpsStatus,
-                          props.row,
-                          props.$index
-                        )
-                      "></el-switch>
-                    <span class="status">{{ props.row.httpStatusDesc }}</span>
+                  <el-switch
+                    v-if="props.row.httpsStatus===0"
+                    :value="props.row.httpsStatus!==0"
+                    @change="swichChange(props.row.httpsStatus,props.row,props.$index)"
+                    class="status"
+                  ></el-switch>
+                  <span
+                    v-else-if="props.row.httpsStatus===1"
+                    class="status"
+                  >{{props.row.httpsStatusDesc}}</span>
+                  <div v-else-if="props.row.httpsStatus===2 || props.row.httpsStatus===3"  style="display:inline-block;">
+                    <el-switch
+                      :value="props.row.httpsStatus!==2 && props.row.httpsStatus!==3"
+                      @change="swichChange(props.row.httpsStatus,props.row,props.$index)"
+                    ></el-switch>
+                    <span class="status">{{props.row.httpStatusDesc}}</span>
                   </div>
                   <el-switch v-else-if="props.row.httpsStatus === 4"
                              :value="props.row.httpsStatus === 4"
@@ -376,6 +368,7 @@ export default {
             message: "授权成功"
           });
           this.$emit("resolveCdnByAliYunToken", params);
+          this.$emit("getCdnDomainList");
         })
         .catch(() => { });
     },

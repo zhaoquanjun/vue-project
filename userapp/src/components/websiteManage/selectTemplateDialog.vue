@@ -161,7 +161,7 @@
                     </div>
                     <div class="modal" v-if="item.id != templateId">
                       <button class="cl-button cl-button--primary" @click="choseSite(item)">选择网站</button>
-                      <a @click="goPrevTemplate(item)" style="margin-left:24px;">
+                      <a @click="goPrevTemplate(item,'pc')" style="margin-left:24px;">
                         <button class="cl-button cl-button--primary_notbg">预览网站</button>
                       </a>
                     </div>
@@ -741,13 +741,14 @@ export default {
             .catch(action => {
               if (action == "cancel") {
                 this.templateShow = false;
+                this.$emit("getSiteInfo", this.siteId);
+                this.$emit("getTodoInfo", this.siteId);
+                this.$emit("changeTemplateId", item.id);
                 if (this.$route.path == "/website/selectTemplate") {
                   this.$router.push({
                     path: "/website/mysite/siteinfo"
                   });
                 }
-                this.$emit("getSiteInfo", this.siteId);
-                this.$emit("getTodoInfo", this.siteId);
               }
             });
         }

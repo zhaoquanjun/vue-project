@@ -1,5 +1,5 @@
 import * as ajaxRequest from "../ajaxRequest";
-
+import environment from "@/environment/index";
 // case
 //GET   ajaxRequest.get(`url`,params);
 //POST  ajaxRequest.post(`url`,params);
@@ -24,6 +24,20 @@ export const changeCategory = (categoryId, idList) => {
 export const rename = (id, newName) => {
     return ajaxRequest.put(`/api/v1/Video/${id}`, JSON.stringify(newName));
 }
-
-
+// 获取阿里云视频列表
+export const getListOfAli = options => {
+    return ajaxRequest.get(`/api/v1/Video/GetListOfAli`, options);
+}
+// 删除阿里云视频
+export const deleteVideo = idList => {
+    return ajaxRequest._delete(`/api/v1/Video/DeleteVideo`, { data: idList });
+}
+// 获取阿里云视频播放地址
+export const getVideoPlayUrl = id => {
+    return ajaxRequest.get(`/api/v1/Video/GetVideoPlayUrl`, { videoId: id });
+}
+// 获取当前app的aksk
+export const getAksk = () => {
+    return ajaxRequest.get(`${environment.dashboardApi}/api/v1/AkSk/get`);
+}
 ///api/Download/{type}/{appId}/{id}

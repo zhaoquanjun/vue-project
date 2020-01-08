@@ -9,7 +9,7 @@
 <script>
     import * as memberManageApi from "@/api/request/siteMemberApi";
     import * as templateApi from "@/api/request/templateApi";
-    import { designerUrl } from "@/environment/index";
+    import { designerUrl, httpSchema } from "@/environment/index";
     export default {
         name: "members-site",
         data() {
@@ -19,10 +19,13 @@
             }
         },
         created(){
-            this.src = `http://${this.item.Domain}/prev/showtemplate/?flag=${this.item.flag}`
+            console.log("query",this.item.flag)
+            this.src = `${httpSchema}${this.item.Domain}/prev/showtemplate/?flag=${this.item.flag}`
+            console.log(this.src)
         },
         methods: {
             async release(){
+                
                     if (this.item.isChangeTemplate) {
                         this.$confirm(
                         `更换模版会替换现有的设计界面，您确认要切换吗？`,

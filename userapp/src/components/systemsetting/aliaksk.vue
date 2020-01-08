@@ -18,15 +18,15 @@
                 class="cl-button cl-button--primary_notbg cl-button--small"
                 @click="deleteAksk"
               >删除</button>
-              <button class="cl-button cl-button--primary cl-button--small" @click="resetAksk">重新配置</button>
+              <button class="cl-button cl-button--primary cl-button--small" @click="resetAksk">刷新</button>
             </div>
-            <div v-show="canEdit">
+            <!-- <div v-show="canEdit">
               <button
                 class="cl-button cl-button--primary_notbg cl-button--small"
                 @click="cancelAksk"
               >取消</button>
               <button class="cl-button cl-button--primary cl-button--small" @click="saveAksk">保存</button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -130,7 +130,7 @@
 <script>
 import PageSubmenu from "@/components/common/PageSubmenu";
 import * as akskApi from "@/api/request/akskApi";
-import { videoManageUrl } from "@/environment/index.js";
+import { aliyunVideoUrl } from "@/environment/index.js";
 export default {
   components: {
     PageSubmenu
@@ -159,7 +159,7 @@ export default {
           status: false
         }
       ],
-      videoUrl: videoManageUrl
+      videoUrl: aliyunVideoUrl
     };
   },
   mounted() {
@@ -227,16 +227,22 @@ export default {
       }
       this.getAksk();
     },
-    resetAksk() {
-      this.canEdit = true;
+    async resetAksk() {
+      // this.canEdit = true;
+      let para = {
+        ak: this.akId,
+        sk: this.akSecret
+      };
+      let { data, status } = await akskApi.set(para);
+      this.getAksk();
     },
-    cancelAksk() {
-      this.akId = this.oldAkId;
-      this.akSecret = this.oldAkSecret;
-      this.canEdit = false;
-      this.errorAkIdShow = false;
-      this.errorAkSecretShow = false;
-    },
+    // cancelAksk() {
+    //   this.akId = this.oldAkId;
+    //   this.akSecret = this.oldAkSecret;
+    //   this.canEdit = false;
+    //   this.errorAkIdShow = false;
+    //   this.errorAkSecretShow = false;
+    // },
     deleteAksk() {
       this.$confirm(
         `删除AK/Sk后，阿里云短信与视频功能将不可使用，确认要删除吗？`,
@@ -254,6 +260,7 @@ export default {
                   showClose: false
                 });
                 this.getAksk();
+                this.deleteTemplate();
               } else {
                 this.$notify({
                   customClass: "notify-error",
@@ -266,6 +273,9 @@ export default {
           }
         }
       );
+    },
+    async deleteTemplate() {
+      await akskApi.removeTemplate();
     },
     blurAkId() {
       if (this.akId == "") {

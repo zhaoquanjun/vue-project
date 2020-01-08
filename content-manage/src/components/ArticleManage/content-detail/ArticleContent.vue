@@ -99,7 +99,7 @@
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="padding: 0 12px 0 0;color: #606266;">预览网站</span>
+                                    <span style="padding: 0 12px 0 0;color: #606266;font-size:12px;">预览网站</span>
                                     <el-tooltip class="item" effect="dark" placement="top">
                                         <div slot="content">将在所选网站的二级域名下打开预览页面</div>
                                         <i class="iconfont iconyiwen"></i>
@@ -107,7 +107,7 @@
                                     <span class="select-sort">
                                         <el-select
                                             size="small"
-                                            :value="articleDetail.defaultSiteId == 0 ? null : articleDetail.defaultSiteId"
+                                            :value="articleDetail.defaultSiteId == 0 ? (siteOptions[0] && siteOptions[0].siteId) : articleDetail.defaultSiteId"
                                             placeholder="请选择"
                                             @change="changeSiteId"
                                         >
@@ -214,7 +214,7 @@ export default {
                     label: "下线"
                 }
             ],
-            siteOptions: null,
+            siteOptions: [],
             value: true,
             activeName: "",
             activeName1: "",
@@ -226,7 +226,7 @@ export default {
                 summary: "",
                 contentDetail: "",
                 searchKeywords: [],
-                isPublish: false,
+                isPublish: true,
                 isLoggedInCanView: false,
                 publishTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
@@ -460,7 +460,7 @@ export default {
                 summary: "",
                 contentDetail: "",
                 searchKeywords: [],
-                isPublish: false,
+                isPublish: true,
                 publishTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
                 isTop: false,
                 metaTitle: "",
@@ -523,9 +523,15 @@ export default {
     padding-bottom: 50px;
 }
 .select-sort /deep/ .el-select{
-    width: 200px;
+    width: 220px;
 }
-
+.article-content /deep/ .el-collapse-item__header{
+    font-size: $--font-size-base;
+    font-weight: 600;
+}
+.article-content /deep/ .el-form-item__label{
+    font-size: $--font-size-small;
+}
 </style>
 
 <style lang="scss">
@@ -570,6 +576,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+
 #content{
     overflow: hidden;
 }

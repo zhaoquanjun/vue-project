@@ -45,7 +45,7 @@
           >选择模版</button>
           <a
             class="preview-btn"
-            :href="`http://${curSiteinfo.secondDomain}`"
+            :href="`//${curSiteinfo.secondDomain}`"
             target="_blank"
             v-show="curSiteTodoinfo.siteTemplate"
           >
@@ -124,7 +124,7 @@
                 <!-- <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.seo, 'siteInfo-icon-green':curSiteTodoinfo.seo}"
                 ></span>-->
-                <span class="siteInfo-title">SEO</span>
+                <span class="siteInfo-title">网站地图</span>
               </div>
               <div class="siteInfo-right">
                 <span class="siteInfo-btn">管理</span>
@@ -343,6 +343,7 @@
       :templateId="curSiteinfo.templateId"
       :isChangeTemplate="curSiteTodoinfo.siteTemplate"
       @getTodoInfo="getTodoInfo"
+      @changeTemplateId="changeTemplateId"
     ></SelectTemplateDialog>
   </div>
 </template>
@@ -403,6 +404,9 @@ export default {
           this.getTodoInfo(this.siteId);
         });
       }
+    },
+    changeTemplateId(id){
+      this.curSiteinfo.templateId = id
     },
     async changeSite(item) {
       if (item.siteId != this.siteId) {

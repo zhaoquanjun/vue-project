@@ -29,8 +29,16 @@
               <el-tab-pane label="免费短信" name="free"></el-tab-pane>
               <el-tab-pane label="阿里云短信" name="aLiCloud"></el-tab-pane>
             </el-tabs>
-            
+            <router-link :to="{name:'aliaksk'}"> 
+              <button v-if="backupType === 'aLiCloud' &&  smsStatus" class="cl-button btn-code cl-button--primary">修改AK/SK</button>
+            </router-link> 
           </div>
+
+          <!-- <div v-if="backupType === 'free' &&  !smsStatus" class="tips tip-danger ">
+            <p>为不影响您的网站功能，请在免费短信使用完之前，及时开通并配置阿里云短信服务
+              <a>立即配置</a>
+            </p>
+          </div> -->
 
           <!-- 免费短信 -->
           <div v-if="backupType === 'free'" class="table-list" id="table-list">
@@ -47,16 +55,23 @@
               </template>
               <el-table-column label="短信用途" show-overflow-tooltip min-width="160">
                 <template slot-scope="scope">
-                  <div class="overflow">{{scope.row.messageinfo1}}</div>
+                  <div class="overflow">{{scope.row.smsPurposePrt}}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="messageinfo2" label="签名" min-width="160"></el-table-column>
-              <el-table-column prop="messageinfo3" label="模版" min-width="400"></el-table-column>
+              <el-table-column prop="signName" label="签名" min-width="160"></el-table-column>
+              <el-table-column prop="tempContent" label="模版内容" min-width="400">
+                <!-- <template  slot-scope="scope">
+                  <div>
+                    <span >{{scope.row.tempName}}</span>
+                    <span class="noSignName">{{ scope.row.tempContent == null ? '未设置' : ` (${scope.row.tempContent})`}}</span>
+                  </div>
+                </template> -->
+              </el-table-column>
               <el-table-column label="操作" min-width="170">
                 <template slot-scope="scope">
                   <div class="handle-btn-wrap">
                     <el-tooltip content="删除备份包" placement="top">
-                      <button @click="chakan( scope )">
+                      <button @click="chakan(scope.row)">
                         <i class="iconfont iconchakan cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
@@ -64,91 +79,98 @@
                 </template>
               </el-table-column>
             </el-table>
-            <div class="all-total">免费短信条数剩余<span>2000</span>条</div>
+            <div class="all-total">免费短信条数剩余<span>{{freeSMSCount}}</span>条</div>
           </div>
           <!-- 阿里云短信 -->
           <div v-else>
             <div 
-              v-show="messagelist2.length <=0"
+              v-show="!smsStatus"
               class="empty-message">
               <div class="no-message">
                 <img src="~img/empty.png" alt="">
                 <h5>阿里云短信</h5>
                 <p>自定义各场景下发送的短信内容</p>
               </div>
-              <button class="cl-button cl-button--primary">立即配置</button>
+              <!-- <router-link :to="{name:'aliaksk'}"> 
+                <button class="cl-button cl-button--primary">立即配置</button>
+              </router-link>  -->
             </div>
             <el-table
-              v-show="messagelist2.length >0 "
+              v-show="smsStatus"
               :data="messagelist2"
               tooltip-effect="dark"
               class="content-table"
             >
               
-              <el-table-column prop="messageinfo1" label="短信用途" min-width="160">
+              <el-table-column prop="smsPurposePrt" label="短信用途" min-width="160">
                 <template slot-scope="scope">
-                    <div>{{scope.row.messageinfo1}}</div>
+                    <div>{{scope.row.smsPurposePrt}}</div>
                 </template>
               </el-table-column>
-              <el-table-column label="签名" min-width="160">
+              <el-table-column label="签名" valign="top" min-width="200">
                 <template  slot-scope="scope">
-                  <div v-show="!isEdit">{{scope.row.messageinfo2}}</div>
-                  <div v-show="isEdit">
+                  <div v-if="!scope.row.isEdit" :class="{'noSignName': scope.row.signName == null}">{{scope.row.signName || '未设置'}}</div>
+                  <div v-else>
                     <el-select
-                      v-model="scope.row.messageinfo2"
-                      @change="choseCode(row)"
+                      v-model="scope.row.signName"
+                      placeholder="请选择短信签名"
+                      @change="onblur(scope.row, scope.$index,1)"
                     >
                       <el-option
-                        v-for="item in codeList"
+                        v-for="item in signList"
                         :key="item.id"
-                        :label="item.label"
+                        :label="item.signName"
                         :value="item.id"
                       ></el-option>
                     </el-select>
-                    <p class="tips-select"><img src="~img/jian-icon.png"/>请选择短信签名</p>
+                    <p v-show="scope.row.nameTip" class="tips-select"><img src="~img/jian-icon.png"/>请选择短信签名</p>
                     <a class="add-code" @click="isAddAutograph = true">添加签名</a>
                   </div>
                 </template>   
               </el-table-column>
-              <el-table-column prop="messageinfo3" label="模版" min-width="400">
+              <el-table-column prop="tempContent" label="模版" valign="top" min-width="360">
                  <template  slot-scope="scope">
-                  <div v-show="!isEdit">{{scope.row.messageinfo3}}</div>
-                  <div v-show="isEdit">
+                  <div v-if="!scope.row.isEdit">
+                    <span >{{scope.row.tempName}}</span>
+                    <span class="noSignName">{{ scope.row.tempContent == null ? '未设置' : ` (${scope.row.tempContent})`}}</span>
+                  </div>
+                  <div v-else>
                     <el-select
-                      v-model="scope.row.messageinfo2"
-                      @change="choseCode(row)"
+                      v-model="scope.row.tempName"
+                      placeholder="请选择短信模版"
+                      @change="onblur(scope.row, scope.$index,2)"
                     >
                       <el-option
-                        v-for="item in codeList"
+                        v-for="item in templateList"
                         :key="item.id"
-                        :label="item.label"
+                        :label="item.tempName"
                         :value="item.id"
                       ></el-option>
                     </el-select>
-                    <p class="tips-select"><img src="~img/jian-icon.png"/>请选择短信模版</p>
+                    <p v-show="scope.row.templateTip" class="tips-select"><img src="~img/jian-icon.png"/>请选择短信模版</p>
                     <a class="add-code" @click="isAddTemplate =true">添加模版</a>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column label="操作" min-width="170">
                 <template slot-scope="scope">
-                  <div v-show="!isEdit" class="handle-btn-wrap">
+                  <div v-if="!scope.row.isEdit" class="handle-btn-wrap">
                     <el-tooltip content="编辑" placement="top">
-                      <button @click="hasEdit( scope )">
+                      <button  @click="hasEdit( scope.$index )">
                         <i class="iconfont iconbianji cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
                     <el-tooltip content="预览" placement="top">
-                      <button @click="chakan( scope )">
+                      <button v-if="scope.row.tempContent != null" @click="chakan( scope.row )">
                         <i class="iconfont iconchakan cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
                   </div>
-                  <div v-show="isEdit" class="handle-btn-wrap text-btn">
-                      <button @click="hasEdit( scope )">
+                  <div v-else class="handle-btn-wrap text-btn">
+                      <button @click="getSmsList( scope.$index )">
                         取消
                       </button>
-                      <button @click="chakan( scope )">
+                      <button @click="save( scope.row, scope.$index )">
                         保存
                       </button>
                   </div>
@@ -162,7 +184,7 @@
             <p>2.超出免费条数或需自定义短信签名和模板，请使用阿里云短信。</p>
           </div>
           <div 
-            v-show="backupType === 'aLiCloud'" 
+            v-show="backupType === 'aLiCloud' && smsStatus "
             class="message-switch"
           >
             <span>优先使用免费短信 </span>
@@ -173,7 +195,7 @@
               v-model="messageSwitch">
             </el-switch>
           </div>
-          <div v-show="backupType === 'aLiCloud' && messagelist2.length >0 " class="backupTip">
+          <div v-show="backupType === 'aLiCloud' && smsStatus" class="backupTip">
             <p class="title">阿里云短信说明</p>
             <p>1.请先在阿里云控制台申请短信签名与模板，<a>如何申请？</a></p>
             <p>2.将审核通过的短信签名与模板添加至系统后台；<a>去添加</a></p>
@@ -185,11 +207,9 @@
       <div class="phone">
         <span class="line"></span>
         <div>
-          <p>【云企业官网】您的验证码为${code}
- 该验证码5分钟内有效，请勿泄露于他人！
+          <p>{{messageText}}
             <span class="arrow"></span>
           </p>
-          
         </div>
         <i class="icon iconfont iconguanbi" @click="messageView=false"></i>
       </div>
@@ -229,46 +249,31 @@ export default {
       siteId: this.$store.state.dashboard.siteId,
       isShowTips: '1',
       messageView: false,
+      messageText: '',
       isEdit: false,
+      editSMS: false,
+      editCode: false,
+      smsPurpose1: 0,
+      smsPurpose2: 0,
       isAddTemplate: false,
       isAddAutograph: false,
       messageSwitch: true,
-      messagelist: [
-        {
-          messageinfo1: '注册网站验证码',
-          messageinfo2: '云梦网络',
-          messageinfo3: '(您的验证码为${code}，该验证码5分钟内有效，请勿泄露于他人！)'
-        },
-        {
-          messageinfo1: '找回密码验证码',
-          messageinfo2: '为设置',
-          messageinfo3: '未设置'
-        }
-      ],
-      messagelist2: [
-        {
-          messageinfo1: '注册网站验证码',
-          messageinfo2: '云梦网络222',
-          messageinfo3: '(您的验证码为${code}，该验证码5分钟内有效，请勿泄露于他人！)'
-        },
-        {
-          messageinfo1: '找回密码验证码',
-          messageinfo2: '为设置',
-          messageinfo3: '未设置'
-        }
-      ],
-      codeList: [
-        {label: '签名01',id: 1},
-        {label: '签名02',id: 2},
-        {label: '签名03',id: 3}
-      ],
+      freeSMSCount:0,
+      messagelist: [],
+      messagelist2: [],
+      templateList: [],
+      signList: [],
       backupType: "free",
+      smsStatus: false,
       tipSuccess: false
     };
   },
   created(){
     this.isShowTips = getLocal('isShowTips') || '1'
     this.getIsPreUseFreeSMS()
+    this.getSurplusFreeSMSCount()
+    this.getSmsList()
+    this.getAkSk()
   },
   methods: {
     // 获取siteId
@@ -283,14 +288,45 @@ export default {
     // 选择切换网站
     chooseWebsite(siteId) {
       this.siteId = siteId;
-      //this.getBackupSite(siteId);
+      this.getSmsList()
+      this.getIsPreUseFreeSMS()
     },
     /**
-     * 切换手动备份和自动备份
+     * 切换免费和阿里云短信
      */
     handleClick() {
-      console.log('this.backupType',this.backupType)
-      
+      this.getSmsList()
+    },
+    //获取ak和Sk情况
+    async getAkSk() {
+      let { data,status } = await dashboardApi.getAkSk();
+      if(!data.ak || !data.sk || !data.smsAuthorization) {
+        this.smsStatus = false
+      } else {
+        this.smsStatus = true
+      }
+      console.log(data,this.smsStatus)
+    },
+    //获取短信列表
+    async getSmsList() {
+      let isSystem = this.backupType === 'free' ? true: false
+      let { data,status } = await dashboardApi.getSmsList(this.siteId,isSystem);
+      if(isSystem) {
+        this.messagelist = data
+      }else {
+        this.messagelist2 = data
+        for (var i = 0; i < this.messagelist2.length; i++) {
+          this.messagelist2[i].isEdit = this.messagelist2[i].nameTip = this.messagelist2[i].templateTip = false
+        }
+      }
+    },
+    //获取免费短信条数
+    async getSurplusFreeSMSCount(){
+      let { data,status } = await dashboardApi.getSurplusFreeSMSCount();
+      if(status == 200){
+        this.freeSMSCount = data
+        this.tipSuccess = data > 0 ? true:false;
+      }
     },
     async getIsPreUseFreeSMS(){
       let { data,status } = await dashboardApi.getIsPreUseFreeSMS(this.siteId);
@@ -298,19 +334,89 @@ export default {
         this.messageSwitch = data
       }
     },
+
     //编辑签名和模版
-    hasEdit(){
-      this.isEdit = !this.isEdit
+    async hasEdit(ind){
+      let tampList = this.messagelist2
+      this.messagelist2 = []
+      for (var i = 0; i < tampList.length; i++) {
+          if(ind == i) {
+            tampList[i].isEdit = !tampList[i].isEdit
+          }
+          this.messagelist2.push(tampList[i])
+        }
+      this.saveAddAutograph()
+      this.saveAddTemplate()
     },
     /**
      * 查看短信信息
      */
-    async chakan(siteId) {
-      this.messageView = true
+    async chakan(val) {
+      this.messageView = true,
+      this.messageText = `【${val.signName}】${val.tempContent}`
     },
+    //保存
+    async save(val,ind) {
+      console.log(val,'888')
+      this.onblur(val,ind,0)
+      if(!val.signName || !val.tempName ) {
+          return
+      }
+      // let tempId = ''
+      // let signId = ''
+      // for (var i = 0; i < this.templateList.length; i++) {
+      //   if(this.templateList[i].tempName == val.tempName) {
+      //     tempId = this.templateList[i].id
+      //   }
+      // }
+      // for (var i = 0; i < this.signList.length; i++) {
+      //   if(this.signList[i].signName == val.signName) {
+      //     signId = this.signList[i].id
+      //   }
+      // }
+      let  params= {
+        id: val.id, 
+        siteId: this.siteId,
+        signId: val.signId || val.signName,
+        tempId: val.tempId || val.tempName,
+        sMSPurpose: val.smsPurpose,
+      }
+      let data 
+      if(params.id) {
+        data = await dashboardApi.updateCustomSms(params)
+      } else {
+        data = await dashboardApi.addCustomSms(params)
+      }
+      if(data.status == 200) {
+        this.getSmsList()
+        this.$notify({
+          customClass: "notify-success", // error success
+          message: `保存成功`,
+          duration: 1500,
+          showClose: false
+        });
+      }
+    },
+    
     //  修改签名或者模版
-    choseCode(row){
-      console.log('row',row)
+    onblur(val,ind,type){
+        let tampList = this.messagelist2
+        this.messagelist2 = []
+        for (var i = 0; i < tampList.length; i++) {
+            if(ind == i) {
+              if(val.signName == null && (type == 1 || type == 0)) {
+                tampList[i].nameTip = true
+              } else if(val.signName != null && (type == 1 || type == 0)) {
+                tampList[i].nameTip = false
+              }
+              if(val.tempName == null && (type == 2 || type == 0)) {
+                tampList[i].templateTip = true
+              } else if(val.tempName!= null && (type == 2 || type == 0)){
+                tampList[i].templateTip = false
+              }
+            }
+            this.messagelist2.push(tampList[i])
+          }
     },
     // 是否开启免费短信
     async changeMessageSwitch(val){
@@ -321,18 +427,22 @@ export default {
       this.isAddTemplate = false
     },
     //保存添加模版
-    saveAddTemplate(val){
+    async saveAddTemplate(val){
       this.isAddTemplate = false
-      console.log(val)
+      //获取当前模版列表
+      let data1 = await dashboardApi.getCustomTemplateList();
+      this.templateList = data1.data
     },
     //关闭添加签名
     closeAddAutograph(){
       this.isAddAutograph = false
     },
     //保存添加签名
-    saveAddAutograph(val){
+    async saveAddAutograph(val){
       this.isAddAutograph = false
-      console.log(val)
+      //获取当前签名列表
+      let  data2  = await dashboardApi.getSiteSMSSignList();
+      this.signList = data2.data
     },
     //关闭提示语 
     noShowTips(){
@@ -346,8 +456,22 @@ export default {
 .el-dialog {
   right: 0;
 }
+.noSignName {
+  color: $--color-text-regular;
+}
+.empty-table {
+    padding: 20px;
+    text-align: center;
+    height: 200px;
+}
 .content-table /deep/ .el-tooltip .el-popover__reference {
   width: 100%;
+}
+.el-table /deep/ td {
+  vertical-align: top;
+}
+.el-table /deep/ .el-table__body-wrapper .el-table__row .cell span {
+  display: inline-block;
 }
 .backupBtn {
   position: absolute;
@@ -497,6 +621,11 @@ export default {
   border-radius: $--border-radius-base;
   border: $--border-base;
   margin-bottom: 12px;
+  .btn-code {
+    position: absolute;
+    top: 9px;
+    right: 12px;
+  }
 }
 .domain-menu /deep/ .el-tabs__nav-wrap::after {
   height: 0;
@@ -536,7 +665,7 @@ export default {
   .phone {
     position: relative;
     width: 300px;
-    height: 620px;
+    height: 450px;
     margin: 60px auto 0;
     padding: 45px 0;
     background: $--background-color-base;
@@ -647,6 +776,7 @@ export default {
 .add-code {
   display: inline-block;
   margin-top: 8px;
+  width: 100%;
   font-size:$--font-size-small;
   color:$--color-primary;
   line-height:16px;

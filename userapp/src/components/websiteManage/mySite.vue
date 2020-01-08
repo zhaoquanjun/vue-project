@@ -43,7 +43,7 @@
                 <span>网站地址：</span>
                 <a
                   class="siteinfoDomain"
-                  :href="`http://${secondDomain}`"
+                  :href="`//${secondDomain}`"
                   target="_blank"
                 >{{secondDomain}}</a>
               </div>
@@ -64,7 +64,7 @@
               style="margin-top:8px"
               @click="toDesign"
             >设计</button>
-            <a :href="`http://${secondDomain}`" target="_blank" style="margin-top:16px">
+            <a :href="`//${secondDomain}`" target="_blank" style="margin-top:16px">
               <button class="cl-button cl-button--primary_notbg cl-button--small">预览</button>
             </a>
           </div>

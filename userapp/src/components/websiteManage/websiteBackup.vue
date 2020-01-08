@@ -47,7 +47,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="backupTime" label="备份时间" min-width="200"></el-table-column>
-              <el-table-column prop="dataSize" label="备份包大小" min-width="150"></el-table-column>
+              <!-- <el-table-column prop="dataSize" label="备份包大小" min-width="150"></el-table-column> -->
               <el-table-column label="备份人" show-overflow-tooltip min-width="200">
                 <template slot-scope="scope">
                   <div class="overflow">{{scope.row.userName}}</div>
@@ -114,11 +114,11 @@
                         <i class="iconfont iconhuifu cl-iconfont is-square"></i>
                       </button>
                     </el-tooltip>
-                    <el-tooltip content="下载备份包" placement="top" :disabled="disabled">
+                    <!-- <el-tooltip content="下载备份包" placement="top" :disabled="disabled">
                       <button @click="downloadBackup( scope )">
                         <i class="iconfont iconxiazai cl-iconfont is-square"></i>
                       </button>
-                    </el-tooltip>
+                    </el-tooltip> -->
                     <el-tooltip content="删除备份包" placement="top" :disabled="disabled">
                       <button @click="deleteBackup( scope )">
                         <i class="iconfont iconshanchu cl-iconfont is-square"></i>
@@ -146,7 +146,7 @@
                   <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
                 </span>
               </div>
-              <div class="tips">温馨提示：备份当前站点设计页面，包括电脑版、手机版和Pad版</div>
+              <div class="tips">温馨提示：备份当前站点设计页面，包括电脑版、手机版</div>
               <div class="remark">
                 <span class="remarkTitle">备注</span>
                 <el-input

@@ -35,7 +35,7 @@
                 <el-form-item>
                     <div class="flexSpace">
                         <div>
-                            <span style="font-size:12px">分类:</span>
+                            <span style="font-size:12px">分类</span>
                             <span class="select-sort category">
                                 <div class="product-category" @click.stop="multipleCatagory">
                                     <ul class="category-list">
@@ -140,7 +140,7 @@
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="padding: 0 12px 0 0;color: #606266;">预览网站</span>
+                                    <span style="padding: 0 12px 0 0;color: #606266;font-size:12px;">预览网站</span>
                                     <el-tooltip class="item" effect="dark" placement="top">
                                         <div slot="content">将在所选网站的二级域名下打开预览页面</div>
                                         <i class="iconfont iconyiwen"></i>
@@ -148,7 +148,7 @@
                                     <span class="select-sort">
                                         <el-select
                                             size="small"
-                                            :value="detailData.defaultSiteId == 0 ? null : detailData.defaultSiteId"
+                                            :value="detailData.defaultSiteId == 0 ? siteOptions[0].siteId: detailData.defaultSiteId"
                                             placeholder="请选择"
                                             @change="changeSiteId"
                                         >
@@ -165,7 +165,7 @@
                         </el-form-item>
 
                         <el-form-item></el-form-item>
-                        <el-form-item label="置頂" prop="delivery">
+                        <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
                         </el-form-item>
                     </el-collapse-item>
@@ -356,7 +356,7 @@ export default {
         };
     },
     created() {
-        this.getTree();        
+        this.getTree();
     },
     mounted() {
         document.addEventListener("click", e => {
@@ -442,8 +442,11 @@ export default {
             });
         },
         // 新建保存
-        submitForm(formName, fileList, disableRefObj) {
+        submitForm(formName, fileList, disableRefObj, storeInfo) {
             this.detailData.thumbnailPicUrlList = fileList;
+            this.detailData.currencyType = storeInfo.storeTypeValue;
+            this.detailData.originalPrice = storeInfo.originalPrice;
+            this.detailData.price = storeInfo.price;
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.insertArticle(disableRefObj);
@@ -495,10 +498,13 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, fileList, disableRefObj) {
+        editArticle(formName, fileList, disableRefObj, storeInfo) {
             if (fileList && fileList.length > 0) {
                 this.detailData.thumbnailPicUrlList = fileList;
             }
+            this.detailData.currencyType = storeInfo.storeTypeValue;
+            this.detailData.originalPrice = storeInfo.originalPrice;
+            this.detailData.price = storeInfo.price;
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle(disableRefObj);
@@ -771,6 +777,19 @@ export default {
 }
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
+}
+.article-content /deep/ .el-collapse-item__content{
+    font-size: $--font-size-base;
+}
+.article-content /deep/ .el-collapse-item__header{
+    font-size: $--font-size-base;
+    font-weight: 600;
+}
+.article-content /deep/ .el-form-item__label{
+    font-size: $--font-size-small;
+}
+.set-article /deep/ .el-select{
+    width: 220px;
 }
 .flexSpace {
     display: flex;

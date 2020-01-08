@@ -172,7 +172,7 @@ export default {
         },
         handlerAddPicture() {
             this.isModalShow = true;
-            this.$refs.imgList.clearSelectedList()
+             this.$refs.imgList && this.$refs.imgList.clearSelectedList()
         }
     }
 };

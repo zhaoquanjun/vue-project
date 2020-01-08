@@ -8,26 +8,26 @@
             <div v-show="!step1" class="content">
                 <div class="input">
                     <span>模版CODE</span>
-                    <el-input v-model="codeValue" placeholder="请输入内容"></el-input>
+                    <el-input v-model="codeValue" maxlength="15" placeholder="请输入在阿里云申请通过的短信模板CODE"></el-input>
                 </div>
                 <a href="">申请模版</a>
             </div>
             <div v-show="step1" class="save">
                 <div>
                     <span>模板CODE：</span>
-                    <p>SMS_179290135</p>
+                    <p>{{templateData.tempCode}}</p>
                 </div>
                 <div>
                     <span>模板名称：</span>
-                    <p>找回密码</p>
+                    <p>{{templateData.tempName}}</p>
                 </div>
                 <div>
                     <span>模板类型：</span>
-                    <p>验证码</p>
+                    <p>{{templateData.templateType}}</p>
                 </div>
                 <div>
                     <span>模板内容：</span>
-                    <p>您的验证码为${code}，该验证码5分钟内有效请勿泄露于他人！</p>
+                    <p>{{templateData.tempContent}}</p>
                 </div>
             </div>
             <div class="footer">
@@ -54,7 +54,13 @@
                 description: '',
                 step1: false,
                 siteId: this.$store.state.dashboard.siteId,
-                codeValue: ''
+                codeValue: '',
+                templateData: {
+                    tempCode: '',
+                    tempName:'',
+                    siteId: '',
+                    tempContent: ''
+                }
             }
         },
         created() {
@@ -65,18 +71,20 @@
                 this.$emit('closeAddTemplate')
             },
             async saveAddTemplate() {
-                let { data } = await dashboardApi.addCustomTemplate(this.siteId,this.codeValue);
+                let { data } = await dashboardApi.addCustomTemplate(this.codeValue);
                 if(data) {
                     this.$emit('saveAddTemplate')
                 }
             },
             async goSave(val){
-                this.step1 = val == 1 ? false:true
                 if(val === 2) {
-                    let { data } = await dashboardApi.getTemplateDetail(this.siteId,this.codeValue);
+                    let { data, status } = await dashboardApi.getTemplateDetail(this.codeValue);
                     if(data) {
-                        this.$emit('saveAddAutograph')
+                        this.templateData = data
+                        this.step1 = true
                     }
+                } else {
+                    this.step1 = false 
                 }
             }
         }

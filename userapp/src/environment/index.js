@@ -1,6 +1,6 @@
 
 const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
-const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+export const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
 
 let siteManageApi =`${httpSchema}api.designer.${baseServerUrl}`;
 let memberManageApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
@@ -31,7 +31,8 @@ export let mySiteUrl = `${httpSchema}dashboard.${baseServerUrl}/website/mysite`;
 export let wechatSpreadUrl = `${httpSchema}wechat.${baseServerUrl}/wechat/wechatspread`;
 export let dashboardUrl = `${httpSchema}dashboard.${baseServerUrl}/board`;
 export let errorUrl = `${httpSchema}login.${baseServerUrl}/404`;
-
+// 视频管理aliyun视频
+export let aliyunVideoUrl = `${httpSchema}content.${baseServerUrl}/content/video?aliyunVideo=true`;
 // 阿里云续费地址
 export let aliMarketUrl = "https://market.console.aliyun.com/imageconsole/index.htm?#/?_k=dd45g0";
 // 预览网站地图文件地址
