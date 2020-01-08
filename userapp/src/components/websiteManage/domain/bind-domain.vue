@@ -79,6 +79,7 @@ export default {
             if (status === 200 && data.isSuccess) {
                 this.clickConfirmBtnSet();
                 this.$Loading.hide();
+                this.$emit("closeDialog");
                 // this.onerrorTip = false;
                 let message = [];
                 message.push(

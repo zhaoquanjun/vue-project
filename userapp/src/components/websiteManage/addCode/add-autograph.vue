@@ -8,7 +8,7 @@
             <div class="content">
                 <div class="input">
                     <span>短信签名</span>
-                    <el-input v-model="codeValue" maxlength="20" placeholder="请输入内容"></el-input>
+                    <el-input v-model="codeValue" maxlength="20" placeholder="请输入在阿里云申请通过的通用场景短信签名"></el-input>
                 </div>
                 <a href="">申请签名</a>
             </div>

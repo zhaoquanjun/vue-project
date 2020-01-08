@@ -34,6 +34,12 @@
     .el-table__body tr .iconfont:hover {
         background: $--color-white;
     }
+    .ascending .sort-caret.ascending {
+        border-bottom-color: $--color-primary;
+    }
+    .descending .sort-caret.descending {
+        border-top-color: $--color-primary;
+    }
 }
 
 .el-table--enable-row-hover .el-table__body tr:hover>td {

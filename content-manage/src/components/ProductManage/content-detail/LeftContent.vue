@@ -442,8 +442,11 @@ export default {
             });
         },
         // 新建保存
-        submitForm(formName, fileList, disableRefObj) {
+        submitForm(formName, fileList, disableRefObj, storeInfo) {
             this.detailData.thumbnailPicUrlList = fileList;
+            this.detailData.currencyType = storeInfo.storeTypeValue;
+            this.detailData.originalPrice = storeInfo.originalPrice;
+            this.detailData.price = storeInfo.price;
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.insertArticle(disableRefObj);
@@ -495,10 +498,13 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, fileList, disableRefObj) {
+        editArticle(formName, fileList, disableRefObj, storeInfo) {
             if (fileList && fileList.length > 0) {
                 this.detailData.thumbnailPicUrlList = fileList;
             }
+            this.detailData.currencyType = storeInfo.storeTypeValue;
+            this.detailData.originalPrice = storeInfo.originalPrice;
+            this.detailData.price = storeInfo.price;
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.saveArticle(disableRefObj);

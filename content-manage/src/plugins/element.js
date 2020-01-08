@@ -43,6 +43,8 @@ import {
     Notification,
     Scrollbar,
     Loading,
+    Tabs,
+    TabPane,
   
   
 } from 'element-ui';
@@ -85,7 +87,8 @@ Vue.use(Container)
     .use(Image)
     .use(Popover)
     .use(Scrollbar)
-   
+    .use(Tabs)
+    .use(TabPane)
     
 ;
 Vue.prototype.$message = Message;

@@ -1,6 +1,6 @@
 ﻿<template>
     <div>
-        <el-row class="upload-head" type="flex" justify="space-between">
+        <el-row class="upload-head" type="flex" justify="space-between" v-show="!noCategory">
             <el-col :span="12">
                 <span style="padding-right:16px">上传至:</span>
                 <SelectTree
@@ -79,6 +79,36 @@ const videoFormat = [
     ".swf",
     ".flv"
 ];
+const aliyunVideoFormat = [
+    ".3gp",
+    ".asf",
+    ".avi",
+    ".dat",
+    ".dv",
+    ".flv",
+    ".f4v",
+    ".gif",
+    ".m2t",
+    ".m4v",
+    ".mj2",
+    ".mjpeg",
+    ".mkv",
+    ".mov",
+    ".mp4",
+    ".mpe",
+    ".mpg",
+    ".mpeg",
+    ".mts",
+    ".ogg",
+    ".qt",
+    ".rm",
+    ".rmvb",
+    ".swf",
+    ".ts",
+    ".vob",
+    ".wmv",
+    ".webm"
+];
 const audioFormat = [
     ".mp3",
     ".cd",
@@ -127,7 +157,8 @@ export default {
         "accept",
         "apiHost",
         "treeResult",
-        "nodeData"
+        "nodeData",
+        "noCategory"
     ],
     components: {
         SelectTree
@@ -369,6 +400,7 @@ export default {
             fileReader.onload = e => {
                 md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
                 file.uniqueIdentifier = md5;
+                file.isUserOwnStorage = Boolean(this.noCategory);
                 if(this.fileList.length < 100) {
                     this.fileList.push(file);
                 }
@@ -387,7 +419,11 @@ export default {
         },
         limitCount(file) {
             if (this.uploadType === "Video"){
-                 this.checkFormat(file, videoFormat);
+                if (this.noCategory) {
+                    this.checkFormat(file, aliyunVideoFormat);
+                } else {
+                    this.checkFormat(file, videoFormat);
+                }
             }
             if (this.uploadType === "Audio"){
                  this.checkFormat(file, audioFormat);
@@ -396,10 +432,10 @@ export default {
             if (this.uploadType === "File") {
                  this.checkFormat(file, forbidUpload);
                 if (this.fileList.length < 100) {
-                    if (file.size / 1024 / 1024 > 50) {
+                    if (file.size / 1024 / 1024 > 200) {
                         this.$notify({
                             customClass: "notify-error",
-                            message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
+                            message: `单个${this.displayName}不允许超过200M,一次最多上传100个文件`,
                             duration: 1500,
                             showClose: false
                         });
@@ -414,7 +450,7 @@ export default {
                 } else {
                     this.$notify({
                         customClass: "notify-error",
-                        message: `单个${this.displayName}不允许超过50M,一次最多上传100个文件`,
+                        message: `单个${this.displayName}不允许超过200M,一次最多上传100个文件`,
                         duration: 1500,
                         showClose: false
                     });

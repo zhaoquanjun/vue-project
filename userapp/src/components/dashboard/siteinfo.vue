@@ -343,6 +343,7 @@
       :templateId="curSiteinfo.templateId"
       :isChangeTemplate="curSiteTodoinfo.siteTemplate"
       @getTodoInfo="getTodoInfo"
+      @changeTemplateId="changeTemplateId"
     ></SelectTemplateDialog>
   </div>
 </template>
@@ -403,6 +404,9 @@ export default {
           this.getTodoInfo(this.siteId);
         });
       }
+    },
+    changeTemplateId(id){
+      this.curSiteinfo.templateId = id
     },
     async changeSite(item) {
       if (item.siteId != this.siteId) {

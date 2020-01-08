@@ -30,9 +30,15 @@
               <el-tab-pane label="阿里云短信" name="aLiCloud"></el-tab-pane>
             </el-tabs>
             <router-link :to="{name:'aliaksk'}"> 
-              <button class="cl-button btn-code cl-button--primary">修改AK/SK</button>
+              <button v-if="backupType === 'aLiCloud' &&  smsStatus" class="cl-button btn-code cl-button--primary">修改AK/SK</button>
             </router-link> 
           </div>
+
+          <!-- <div v-if="backupType === 'free' &&  !smsStatus" class="tips tip-danger ">
+            <p>为不影响您的网站功能，请在免费短信使用完之前，及时开通并配置阿里云短信服务
+              <a>立即配置</a>
+            </p>
+          </div> -->
 
           <!-- 免费短信 -->
           <div v-if="backupType === 'free'" class="table-list" id="table-list">
@@ -53,13 +59,13 @@
                 </template>
               </el-table-column>
               <el-table-column prop="signName" label="签名" min-width="160"></el-table-column>
-              <el-table-column prop="tempContent" label="模版" min-width="400">
-                <template  slot-scope="scope">
+              <el-table-column prop="tempContent" label="模版内容" min-width="400">
+                <!-- <template  slot-scope="scope">
                   <div>
                     <span >{{scope.row.tempName}}</span>
                     <span class="noSignName">{{ scope.row.tempContent == null ? '未设置' : ` (${scope.row.tempContent})`}}</span>
                   </div>
-                </template>
+                </template> -->
               </el-table-column>
               <el-table-column label="操作" min-width="170">
                 <template slot-scope="scope">
@@ -78,19 +84,19 @@
           <!-- 阿里云短信 -->
           <div v-else>
             <div 
-              v-show="messagelist2.length <=0"
+              v-show="!smsStatus"
               class="empty-message">
               <div class="no-message">
                 <img src="~img/empty.png" alt="">
                 <h5>阿里云短信</h5>
                 <p>自定义各场景下发送的短信内容</p>
               </div>
-              <router-link :to="{name:'aliaksk'}"> 
+              <!-- <router-link :to="{name:'aliaksk'}"> 
                 <button class="cl-button cl-button--primary">立即配置</button>
-              </router-link> 
+              </router-link>  -->
             </div>
             <el-table
-              v-show="messagelist2.length >0 "
+              v-show="smsStatus"
               :data="messagelist2"
               tooltip-effect="dark"
               class="content-table"
@@ -178,7 +184,7 @@
             <p>2.超出免费条数或需自定义短信签名和模板，请使用阿里云短信。</p>
           </div>
           <div 
-            v-show="backupType === 'aLiCloud' && messagelist2.length >0 "
+            v-show="backupType === 'aLiCloud' && smsStatus "
             class="message-switch"
           >
             <span>优先使用免费短信 </span>
@@ -189,7 +195,7 @@
               v-model="messageSwitch">
             </el-switch>
           </div>
-          <div v-show="backupType === 'aLiCloud' && messagelist2.length >0 " class="backupTip">
+          <div v-show="backupType === 'aLiCloud' && smsStatus" class="backupTip">
             <p class="title">阿里云短信说明</p>
             <p>1.请先在阿里云控制台申请短信签名与模板，<a>如何申请？</a></p>
             <p>2.将审核通过的短信签名与模板添加至系统后台；<a>去添加</a></p>
@@ -204,7 +210,6 @@
           <p>{{messageText}}
             <span class="arrow"></span>
           </p>
-          
         </div>
         <i class="icon iconfont iconguanbi" @click="messageView=false"></i>
       </div>
@@ -259,6 +264,7 @@ export default {
       templateList: [],
       signList: [],
       backupType: "free",
+      smsStatus: false,
       tipSuccess: false
     };
   },
@@ -267,6 +273,7 @@ export default {
     this.getIsPreUseFreeSMS()
     this.getSurplusFreeSMSCount()
     this.getSmsList()
+    this.getAkSk()
   },
   methods: {
     // 获取siteId
@@ -282,13 +289,23 @@ export default {
     chooseWebsite(siteId) {
       this.siteId = siteId;
       this.getSmsList()
-      //this.getBackupSite(siteId);
+      this.getIsPreUseFreeSMS()
     },
     /**
      * 切换免费和阿里云短信
      */
     handleClick() {
       this.getSmsList()
+    },
+    //获取ak和Sk情况
+    async getAkSk() {
+      let { data,status } = await dashboardApi.getAkSk();
+      if(!data.ak || !data.sk || !data.smsAuthorization) {
+        this.smsStatus = false
+      } else {
+        this.smsStatus = true
+      }
+      console.log(data,this.smsStatus)
     },
     //获取短信列表
     async getSmsList() {
@@ -301,7 +318,6 @@ export default {
         for (var i = 0; i < this.messagelist2.length; i++) {
           this.messagelist2[i].isEdit = this.messagelist2[i].nameTip = this.messagelist2[i].templateTip = false
         }
-        console.log('this.messagelist2',this.messagelist2)
       }
     },
     //获取免费短信条数
@@ -337,31 +353,32 @@ export default {
      */
     async chakan(val) {
       this.messageView = true,
-      this.messageText = `【${val.tempName}】${val.tempContent}`
+      this.messageText = `【${val.signName}】${val.tempContent}`
     },
     //保存
     async save(val,ind) {
+      console.log(val,'888')
       this.onblur(val,ind,0)
       if(!val.signName || !val.tempName ) {
           return
       }
-      let tempId = val.tempName
-      let signId = val.signName
-      for (var i = 0; i < this.templateList.length; i++) {
-        if(this.templateList[i].tempName = val.tempName) {
-          tempId = this.templateList[i].id
-        }
-      }
-      for (var i = 0; i < this.signList.length; i++) {
-        if(this.signList[i].signName = val.signName) {
-          signId = this.signList[i].id
-        }
-      }
+      // let tempId = ''
+      // let signId = ''
+      // for (var i = 0; i < this.templateList.length; i++) {
+      //   if(this.templateList[i].tempName == val.tempName) {
+      //     tempId = this.templateList[i].id
+      //   }
+      // }
+      // for (var i = 0; i < this.signList.length; i++) {
+      //   if(this.signList[i].signName == val.signName) {
+      //     signId = this.signList[i].id
+      //   }
+      // }
       let  params= {
         id: val.id, 
         siteId: this.siteId,
-        signId: signId,
-        tempId: tempId,
+        signId: val.signId || val.signName,
+        tempId: val.tempId || val.tempName,
         sMSPurpose: val.smsPurpose,
       }
       let data 
@@ -387,7 +404,6 @@ export default {
         this.messagelist2 = []
         for (var i = 0; i < tampList.length; i++) {
             if(ind == i) {
-              console.log(val,val.signName,val.tempName,val.tempName != null, type)
               if(val.signName == null && (type == 1 || type == 0)) {
                 tampList[i].nameTip = true
               } else if(val.signName != null && (type == 1 || type == 0)) {
@@ -395,7 +411,7 @@ export default {
               }
               if(val.tempName == null && (type == 2 || type == 0)) {
                 tampList[i].templateTip = true
-              } else if(val.tempName != null && (type == 2 || type == 0)){
+              } else if(val.tempName!= null && (type == 2 || type == 0)){
                 tampList[i].templateTip = false
               }
             }
@@ -649,7 +665,7 @@ export default {
   .phone {
     position: relative;
     width: 300px;
-    height: 620px;
+    height: 450px;
     margin: 60px auto 0;
     padding: 45px 0;
     background: $--background-color-base;

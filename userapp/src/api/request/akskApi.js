@@ -13,3 +13,7 @@ export const get = () => {
 export const remove = () => {
     return ajaxRequest._delete(`${environment.memberManageApi}/api/v1/AkSk/delete`);
 }
+// 删除签名和模板
+export const removeTemplate = () => {
+    return ajaxRequest._delete(`${environment.siteManageApi}/api/v1/SMS/DeleteAllSignAndTemplate`);
+}
