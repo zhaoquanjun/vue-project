@@ -107,7 +107,7 @@
                                     <span class="select-sort">
                                         <el-select
                                             size="small"
-                                            :value="articleDetail.defaultSiteId == 0 ? (siteOptions[0] && siteOptions[0].siteId) : articleDetail.defaultSiteId"
+                                            :value="articleDetail.defaultSiteId == 0 ? ( siteOptions[0] && siteOptions[0].siteId) : articleDetail.defaultSiteId"
                                             placeholder="请选择"
                                             @change="changeSiteId"
                                         >

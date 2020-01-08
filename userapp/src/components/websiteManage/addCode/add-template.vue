@@ -77,6 +77,9 @@
                 }
             },
             async goSave(val){
+                if(!this.codeValue){
+                    return
+                }
                 if(val === 2) {
                     let { data, status } = await dashboardApi.getTemplateDetail(this.codeValue);
                     if(data) {

@@ -39,6 +39,9 @@
                 this.$emit('closeAddAutograph')
             },
             async saveAddAutograph() {
+                if(!this.codeValue){
+                    return
+                }
                 let { data } = await dashboardApi.createSiteSMSSign(this.codeValue);
                     if(data){
                         this.$notify({

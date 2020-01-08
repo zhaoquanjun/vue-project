@@ -148,7 +148,7 @@
                                     <span class="select-sort">
                                         <el-select
                                             size="small"
-                                            :value="detailData.defaultSiteId == 0 ? siteOptions[0].siteId: detailData.defaultSiteId"
+                                            :value="detailData.defaultSiteId == 0 ? ( siteOptions[0] && siteOptions[0].siteId): detailData.defaultSiteId"
                                             placeholder="请选择"
                                             @change="changeSiteId"
                                         >
@@ -280,7 +280,7 @@ export default {
             ],
             value2: ["全部分类1", "全部分类2"],
 
-            siteOptions: null,
+            siteOptions: [],
             activeName: "",
             activeName0: "",
             activeName1: "",

@@ -166,7 +166,7 @@ export default {
     },
     async getAksk() {
       let { data } = await videoManageApi.getAksk();
-      if (data.ak) {
+      if (data.vodAuthorization) {
         this.configured = true;
         this.getListOfAli();
       } else {
@@ -325,7 +325,7 @@ export default {
   cursor: pointer;
   outline: none;
   height: 50%;
-  width: 800px;
+  width: 780px;
   margin-top: 150px;
 }
 .notConfigured-wrap {

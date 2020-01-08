@@ -181,7 +181,7 @@ export default {
         },
         getEditorImg() {
             this.isModalShow = false;
-             this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList &&  this.$refs.imgList.clearSelectedList()
             this.insertEditorImg(this.imgData);
         },
         insertEditorImg(imgFiles) {
@@ -467,7 +467,7 @@ export default {
     bottom: -11px;
     right: 16px;
     width: 100%;
-    z-index: 100;
+    z-index: 99;
     text-align: right;
     padding-top: 0;
     button {
