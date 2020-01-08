@@ -240,6 +240,7 @@ export default {
                                     duration: 1500
                                 });
                                 this.getList();
+                                this.countPic=0;
                             }
                         }
                     }
