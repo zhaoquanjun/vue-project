@@ -250,7 +250,7 @@ export default {
        
         // 清空选中的列表
         clearSelectedList() {
-            this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList && this.$refs.imgList.clearSelectedList()
         },
         async changeCategoryPic(categoryId, idList) {
             let { data, status } = await imgManageApi.changeCategory(

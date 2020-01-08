@@ -181,7 +181,7 @@ export default {
         },
         getEditorImg() {
             this.isModalShow = false;
-             this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList &&  this.$refs.imgList.clearSelectedList()
             this.insertEditorImg(this.imgData);
         },
         insertEditorImg(imgFiles) {
