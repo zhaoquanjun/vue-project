@@ -2,20 +2,22 @@
     <el-header class="content-header">
         <template v-if="!isBatchHeaderShow">
             <div class="seachInput head-item">
-                <el-input
-                    size="medium"
-                    v-model="picSearchOptions.keyword"
-                    placeholder="输入名称搜索"
-                    @keyup.enter.native="searchEnterFun"
-                    class="input-with-select"
-                >
+               <el-form @submit.native.prevent>
+                    <el-input
+                        size="medium"
+                        v-model="picSearchOptions.keyword"
+                        placeholder="输入名称搜索"
+                        @keyup.enter.native.prevent="searchEnterFun"
+                        class="input-with-select"
+                    >
                     <i
                         class="el-icon-search el-input__icon"
                         style="cursor: pointer;"
                         slot="suffix"
-                        @click="getPicList"
+                        @click.stop="getPicList"
                     ></i>
                 </el-input>
+               </el-form>
             </div>
             <div class="head-item head-middle">
                 <template v-if="contentType==='File'">
