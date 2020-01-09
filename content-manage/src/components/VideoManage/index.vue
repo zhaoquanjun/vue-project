@@ -464,7 +464,7 @@ export default {
     /deep/ .content-header {
         margin-bottom: 16px;
     }
-    /deep/ .el-scrollbar {
+    /deep/ .aside-tree .el-scrollbar {
         height: calc(100vh - 230px);
     }
 }

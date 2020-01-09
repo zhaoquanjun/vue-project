@@ -187,7 +187,7 @@ export default {
     },
     async getAksk() {
       let { data } = await videoManageApi.getAksk();
-      if (data.ak) {
+      if (data.vodAuthorization) {
         this.configured = true;
         this.getListOfAli();
         this.$nextTick(() => {
