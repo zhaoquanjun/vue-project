@@ -7,7 +7,7 @@
       :append-to-body="true"
       :modal="false"
       ref="templateDialog"
-      @opened="waterFall"
+      @opened="loadImg"
       :visible.sync="templateShow"
     >
       <div class="right-pannel">
@@ -151,13 +151,14 @@
                   v-for="(item, index) in templateInfo"
                   :key="index"
                   ref="imgs"
+                  v-show="isLoadImg"
                 >
                   <div style="padding-bottom:30px;margin-left:10px;">
                     <div class="itemSiteImage">
                     <div
                       class="itemSiteImageBackground"
                     >
-                      <img :src="item.imageUrl" class="itemSiteImg"> 
+                      <img :src="item.imageUrl" class="itemSiteImg" @load="loadImg"> 
                     </div>
                     <div class="modal" v-if="item.id != templateId">
                       <button class="cl-button cl-button--primary" @click="choseSite(item)">选择网站</button>
@@ -174,12 +175,12 @@
                   <div class="itemSiteInfo">
                     <div class="itemSiteInfoLeft">
                       <el-tooltip 
-                        v-if="item.templateName && item.templateName.trim().length > 10" effect="light" 
+                        v-if="item.templateName && item.templateName.trim().length > 20" effect="light" 
                         :content="item.templateName" 
                         placement="right"
                       >
                         <div class="itemSiteName">
-                          {{item.templateName.slice(0, 10) + '...'}}
+                          {{item.templateName.slice(0, 20) + '...'}}
                         </div>
                       </el-tooltip>
                       <div v-else class="itemSiteName">
@@ -436,7 +437,8 @@ export default {
       isShowAside:true,
       isTree:0,
       showSearchIcon:true,
-      showNoMore:false
+      showNoMore:false,
+      isLoadImg:false
     };
   },
   created(){
@@ -489,7 +491,7 @@ export default {
         }else{
           icon.style.left=240+"px";
         }
-        this.imgPosition();
+        this.loadImg();
         this.isShowAside=!this.isShowAside;
       })
       
@@ -502,14 +504,15 @@ export default {
         }
       }
     },
-    // 瀑布流图片的位置计算
-    waterFall(){
-      setTimeout(()=>{
-        this.imgPosition();
-      },100)
+    // 图片加载完成后，计算位置
+    loadImg(){
+      this.isLoadImg=true;
+      if(this.isLoadImg){
+        this.imgWaterfall();
+      }
     },
     // 瀑布流图片位置计算
-    imgPosition(){
+    imgWaterfall(){
         this.$nextTick(()=>{
           let imgs=this.$refs.imgs;
           let div=document.getElementById("waterfall");
@@ -827,7 +830,7 @@ export default {
       }
       this.templatePage = data;
       this.templateInfo=data.items;
-      this.imgPosition();
+      this.loadImg();
     },
     async changePage(page) {
       this.pageIndex = page;
@@ -856,7 +859,7 @@ export default {
         this.templatePage = data;
         this.templateInfo =[...this.templateInfo,...data.items];
       }
-      this.waterFall();
+      this.loadImg();
     },
      scroll(){
        this.$nextTick(()=>{
@@ -1010,7 +1013,7 @@ export default {
         window.addEventListener("resize", () => {
           document.getElementsByClassName("templateContent")[0].style.height =
             window.innerHeight - 160 + "px";
-            this.imgPosition();
+            this.loadImg();
         });
         document.getElementsByClassName("templateContent")[0].style.height =
           window.innerHeight - 160 + "px";
