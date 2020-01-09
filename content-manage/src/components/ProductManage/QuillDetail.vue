@@ -8,33 +8,29 @@
             @change="onEditorChange($event)"
         ></quill-editor>    
         <div class="mask" v-if="isModalShow"></div>
-            <div id="content" class="contentDialog" v-if="isModalShow">
-                <el-header class="modal-header">
-                    <span style="font-size: 16px;">我的图片</span>
-                    <button @click="cancelEditorImg">X</button>
-                </el-header>
-                <modal-content ref="imgList" :isGrid="true" :multiple="true" @getImgInfo="getImgInfo" :isPopup="true">
-                    <div slot="modal-footer" class="modal-footer" style=" ">
-                        <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
-                        <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
-                    </div>
-                </modal-content>
-            </div>
-            <div class="image-select--upload__area" v-if="videoShow">
-                <div class="mask"></div>
-                <div id="videoContent" class="contentDialog">
-                    <el-header class="modal-header" style="height:65px">
-                        <span class="title" style="font-size: 16px;">我的视频</span>
-                        <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelgetVideo"></i>
-                    </el-header>
-                    <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true">
-                        <div slot="modal-footer" class="modal-footer">
-                            <button @click="cancelgetVideo" class="cl-button cl-button--primary_notbg">取消</button>
-                            <button @click="getVideoOssUrl" class="cl-button cl-button--primary">确定</button>
-                        </div>
-                    </videoManage>
+        <div id="content" class="contentDialog" v-if="isModalShow">
+            <el-header class="modal-header">
+                <span style="font-size: 16px;">我的图片</span>
+                <button @click="cancelEditorImg">X</button>
+            </el-header>
+            <modal-content ref="imgList" :isGrid="true" :multiple="true" @getImgInfo="getImgInfo" :isPopup="true">
+                <div slot="modal-footer" class="modal-footer" style=" ">
+                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
+                    <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
                 </div>
+            </modal-content>
+        </div>
+        <div class="image-select--upload__area" v-if="videoShow">
+            <div class="mask"></div>
+            <div id="videoContent" class="contentDialog">
+                <videoManage  :multiple="false" @cancelgetVideo="cancelgetVideo" @getCheckedList="getCheckedList" :isPopup="true">
+                    <div slot="modal-footer" class="modal-footer">
+                        <button @click="cancelgetVideo" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
+                        <button @click="getVideoOssUrl" class="cl-button cl-button--small cl-button--primary">确定</button>
+                    </div>
+                </videoManage>
             </div>
+        </div>
     </div>
 </template>
 
@@ -186,7 +182,7 @@ export default {
         },
         getEditorImg() {
             this.isModalShow = false;
-             this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList &&  this.$refs.imgList.clearSelectedList()
             this.insertEditorImg(this.imgData);
         },
         insertEditorImg(imgFiles) {
@@ -467,7 +463,7 @@ export default {
 }
 #videoContent {
     position: fixed;
-    width: 1170px;
+    // width: 1000px;
     // height: 840px;
     margin: auto;
     z-index: 1020;
@@ -476,7 +472,6 @@ export default {
     transform: translate(-50%, -50%);
     overflow: hidden;
     box-shadow: 0px 2px 32px 4px rgba(0,0,0,0.13);
-    border: $--border-base;
     border-radius: $--border-radius-base;
 }
 #videoContent .modal-header {
@@ -514,7 +509,7 @@ export default {
     bottom: -11px;
     right: 16px;
     width: 100%;
-    z-index: 100;
+    z-index: 99;
     text-align: right;
     padding-top: 0;
     button {

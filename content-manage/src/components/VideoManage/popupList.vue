@@ -1,6 +1,6 @@
 <template>
   <div class="table-wrap" id="table-list">
-    <div class="table">
+    <!-- <div class="table">
       <div class="tableTitle">
         <div>视频名称</div>
         <div>大小</div>
@@ -54,9 +54,59 @@
         <img src="~img/table-empty.png" />
         <p>无数据</p>
       </div>
-    </div>
+    </div>-->
+    <el-table
+      ref="multipleTable"
+      :data="imgPageResult.list"
+      tooltip-effect="dark"
+      class="content-table table-content"
+      :height="tableHeight"
+      :highlight-current-row="true"
+      row-key="id"
+      @selection-change="handleSelectionChange"
+      @sort-change="sortChange"
+      @current-change="currentChange"
+    >
+      <template slot="empty">
+        <div class="empty-table">
+          <img src="~img/table-empty.png" />
+          <p>无数据</p>
+        </div>
+      </template>
+      <el-table-column label="视频名称" min-width="350">
+        <template slot-scope="scope">
+          <div class="cover">
+            <img width="100%" height="100%" :src="scope.row.coverUrl" />
+            <span class="play" @click="viewPic(scope.row,scope.$index)">
+              <div class="play-btn">
+                <span></span>
+              </div>
+            </span>
+          </div>
+          <div>
+            <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top">
+              <div class="file-title cursor-p">{{scope.row.title}}</div>
+            </el-tooltip>
+            <div class="format">
+              <div>格式： {{formatterFileExt(scope.row.fileExtension)}}</div>
+              <div class="sizeStr">{{scope.row.sizeStr}}</div>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column prop="sizeStr" sortable='custom' label="大小" show-overflow-tooltip></el-table-column> -->
+      <el-table-column prop="durationStr" label="时长" min-width="80"></el-table-column>
+      <el-table-column
+        prop="createTimeStr"
+        sortable="custom"
+        label="上传时间"
+        min-width="130"
+        show-overflow-tooltip
+      ></el-table-column>
+    </el-table>
     <div class="list-footer">
-      <div class="storage-wrap">
+      <div class="list-footerLeft">
+        <div class="storage-wrap">
         <div style="display:flex;justify-content: space-between;">
           <span class="title">已用空间</span>
           <span class="storage-content">{{storageUsage.currentUsage}} / {{storageUsage.maxSize}}</span>
@@ -74,42 +124,44 @@
           <div class="progress-bar" :style="{'width':usageTraffic.prograss+'%'}"></div>
         </div>
       </div>
-      <div class="cl-paganation pageing" id="pageing" :class="{'noJumper':imgPageResult.totalPage <= 10}">
+      </div>
+      <div class="cl-paganation pageing noJumper" id="pageing">
         <slot name="paging"></slot>
         <el-pagination
-          v-if="imgPageResult.totalRecord > 0"
+          v-show="imgPageResult.totalRecord > 0"
           background
-          :layout="imgPageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
+          layout="prev, pager, next"
           :total="imgPageResult.totalRecord"
           :page-count="imgPageResult.totalPage"
+          :pager-count="5"
           :page-size="picSearchOptions.pageSize"
           @current-change="changePage"
           @size-change="changeSize"
-        >
-          <button v-if="imgPageResult.totalPage > 10" class="paging-confirm">跳转</button>
-        </el-pagination>
+        ></el-pagination>
       </div>
     </div>
     <div id="img-list-dialog">
-      <el-dialog :visible.sync="imgVisible" :modal-append-to-body="false" @close="closeDialog">
+      <div class="mask" v-show="imgVisible" style="text-align:center;">
+        <button class="closeBtn">
+          <i class="el-icon-close icon-close" @click="closeDialog()"></i>
+        </button>
         <video ref="video" class="video" :src="fullOssUrl" controls="controls" />
-      </el-dialog>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import {
-    adminDownload,
-    getStorageUsage,
-    getCurrentUsageTraffic
+  adminDownload,
+  getStorageUsage,
+  getCurrentUsageTraffic
 } from "@/api/request/contentCommonApi.js";
 export default {
   props: ["imgPageResult", "picSearchOptions", "treeResult"],
   data() {
     return {
       picInfo: {},
-      index: -1, //
       isRename: true, // 重命名图片名称
       initial: 0,
       imgVisible: false,
@@ -121,7 +173,7 @@ export default {
       imgList: "",
       fullOssUrl: "",
       loadingShow: true,
-      tableHeight: 500,
+      tableHeight: 350,
       storageUsage: {},
       usageTraffic: {},
       checkedList: []
@@ -129,15 +181,16 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
-      window.addEventListener("resize", () => {
-        this.tableHeight = window.innerHeight - 290;
-      });
-      this.tableHeight = window.innerHeight - 290;
-    });
     this._getStorageUsage();
     this._getCurrentUsageTraffic();
   },
+  // watch: {
+  //   imgPageResult() {
+  //     this.$refs.multipleTable.setCurrentRow({
+  //       id: "d86afc6deebd4a829dc62e02efab5600"
+  //     });
+  //   }
+  // },
   methods: {
     check(item) {
       if (this.checkedList.length > 0) {
@@ -150,7 +203,6 @@ export default {
       } else {
         this.checkedList.push(item);
       }
-        console.log(this.checkedList)
       this.$emit("getChecked", this.checkedList);
     },
     isChecked(item) {
@@ -160,6 +212,28 @@ export default {
         }
       }
       return false;
+    },
+    currentChange(currentRow, oldCurrentRow) {
+      this.checkedList = [currentRow];
+      this.$emit("getChecked", this.checkedList);
+    },
+    //改变排序
+    sortChange(row) {
+      // value: "CreateTime",
+      // label: "创建时间"
+      // value: "FileSize",
+      // label: "文件大小"
+      if (row.prop == "sizeStr") {
+        this.picSearchOptions.orderByType = "FileSize";
+      } else {
+        this.picSearchOptions.orderByType = "CreateTime";
+      }
+      if (row.order == "ascending") {
+        this.picSearchOptions.isDescending = false;
+      } else {
+        this.picSearchOptions.isDescending = true;
+      }
+      this.$emit("getList");
     },
     bytesToSize(bytes, flag) {
       if (bytes === 0) return "0 B";
@@ -217,30 +291,6 @@ export default {
     trim(s) {
       return s.replace(/(^\s*)|(\s*$)/g, "");
     },
-    // 重命名图片名称
-    rename(id, row, index) {
-      //   debugger;
-      if (row.title) this.newName = row.title;
-      if (!this.trim(row.title)) {
-        row.title = this.newName;
-        this.$notify({
-          customClass: "notify-error",
-          message: `视频名称不能为空`,
-          showClose: false,
-          duration: 2000
-        });
-        return false;
-      }
-      if (isNaN(index)) {
-        this.index = -1;
-        this.$emit("rename", id, row.title);
-        return;
-      }
-      this.index = index;
-      this.$nextTick(() => {
-        this.$refs.renameInput[0].focus();
-      });
-    },
     /**
      *
      */
@@ -278,6 +328,7 @@ export default {
     },
     closeDialog() {
       this.$refs.video.pause();
+      this.imgVisible = false;
     },
     formatterFileExt(fileExt) {
       if (fileExt) {
@@ -290,6 +341,16 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+.table-content /deep/ {
+  .el-table--striped .el-table__body tr.el-table__row--striped.current-row td,
+  .el-table__body tr.current-row > td,
+  .el-table__body tr.hover-row.current-row > td,
+  .el-table__body tr.hover-row.el-table__row--striped.current-row > td,
+  .el-table__body tr.hover-row.el-table__row--striped > td,
+  .el-table__body tr.hover-row > td {
+    background-color: #f4f5f6;
+  }
+}
 .el-input /deep/ .el-input__inner {
   padding-right: 50px;
 }
@@ -314,9 +375,9 @@ export default {
   background: #fff !important;
 }
 #table-list /deep/ .el-table thead th .cell {
-    color: #a1a8b1;
-    font-weight: 400;
-    font-size: $--font-size-small;
+  color: #a1a8b1;
+  font-weight: 400;
+  font-size: $--font-size-small;
 }
 </style>
 <style lang="scss" scoped>
@@ -389,30 +450,38 @@ export default {
   line-height: 20px;
   white-space: unset !important;
   margin-top: 24px;
+  div {
+    display: inline-block;
+  }
+  .sizeStr {
+    margin-left: 8px;
+  }
 }
 .cover {
-  display: inline-block;
   position: relative;
-  width: 190px;
-  height: 130px;
-  margin-right: 16px;
-  vertical-align: top;
+  width: 150px !important;
+  height: 100px !important;
+  img {
+    object-fit: cover;
+  }
   .play {
     cursor: pointer;
     position: absolute;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
     top: 0;
-    left: 0;
     border-radius: 2px;
+    background: rgba(0, 0, 0, 0.5);
     text-align: center;
-    img {
-      width: 30px;
+    .play-btn {
+      width: 34px;
+      height: 34px;
       position: absolute;
       top: 50%;
       left: 50%;
+      border-radius: 50%;
       transform: translate(-50%, -50%);
+      background: url("~img/cover.png") no-repeat center;
     }
   }
 }
@@ -442,8 +511,23 @@ export default {
 .video {
   cursor: pointer;
   outline: none;
+  height: 50%;
   width: 800px;
-  height: 700px;
+  margin-top: 150px;
+}
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 57px;
+  .icon-close {
+    font-size: 24px;
+    color: #fff;
+    padding: 4px;
+    &:hover {
+      background: rgba(0, 0, 0, 1);
+      border-radius: $--border-radius-circle;
+    }
+  }
 }
 .table-content {
   margin-right: 16px;
@@ -488,22 +572,6 @@ export default {
     }
   }
 }
-.operate-section {
-  display: none;
-  position: absolute;
-  z-index: 19;
-  background: #fff;
-  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.07);
-  li {
-    cursor: pointer;
-    padding: 8px 16px;
-    line-height: 17px;
-    &:hover {
-      color: #00c1de;
-      background: rgba(0, 193, 222, 0.2);
-    }
-  }
-}
 .img-name {
   cursor: pointer;
   width: 80%;
@@ -524,7 +592,6 @@ export default {
       width: 100%;
       border-radius: 30px;
       background: $--color-primary;
-      box-shadow: 0px 0px 4px 0px $--color-primary;
     }
   }
   .title {
@@ -536,10 +603,13 @@ export default {
   }
 }
 .list-footer {
-  padding: 24px 0 24px 0;
-  overflow: hidden;
+  height: 78px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  .list-footerLeft {
+    display: flex;
+  }
 }
 
 #table-list {

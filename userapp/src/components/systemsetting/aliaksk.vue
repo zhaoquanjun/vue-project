@@ -26,7 +26,7 @@
                 @click="cancelAksk"
               >取消</button>
               <button class="cl-button cl-button--primary cl-button--small" @click="saveAksk">保存</button>
-            </div> -->
+            </div>-->
           </div>
         </div>
       </div>
@@ -169,8 +169,8 @@ export default {
     async getAksk() {
       this.$Loading.show();
       let { data, status } = await akskApi.get();
-      this.akId = data.ak;
-      this.akSecret = data.sk;
+      this.akId = data.ak ? data.ak : "";
+      this.akSecret = data.sk ? data.sk : "";
       this.oldAkId = data.ak;
       this.oldAkSecret = data.sk;
       this.listData[0].status = data.smsAuthorization;

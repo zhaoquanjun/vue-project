@@ -124,7 +124,7 @@
                 <!-- <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.seo, 'siteInfo-icon-green':curSiteTodoinfo.seo}"
                 ></span>-->
-                <span class="siteInfo-title">SEO</span>
+                <span class="siteInfo-title">网站地图</span>
               </div>
               <div class="siteInfo-right">
                 <span class="siteInfo-btn">管理</span>

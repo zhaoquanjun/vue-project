@@ -164,7 +164,7 @@ export default {
             this.isModalShow = true;
             this.isReplace = flag;
             this.curRepalceIndex = index;
-            this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList && this.$refs.imgList.clearSelectedList()
         },
         handleRemove(index) {
             this.newFileList.splice(index, 1);

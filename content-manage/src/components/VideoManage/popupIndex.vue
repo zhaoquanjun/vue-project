@@ -1,10 +1,20 @@
 <template>
-  <el-container id="videoContent-manage">
+  <div class="popupVideo-wrap">
+    <el-header style="height:60px;">
+        <div class="domain-menu">
+            <el-tabs v-model="videoType" @tab-click="tabClick">
+                <el-tab-pane label="本地视频" name="local"></el-tab-pane>
+                <el-tab-pane label="阿里云视频" name="aliyun"></el-tab-pane>
+            </el-tabs>
+            <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelgetVideo"></i>
+        </div>
+    </el-header>
+  <el-container id="videoContent-manage" v-show="videoType == 'local'" style="width:1000px">
     <el-aside
       class="tree-aside"
-      style="width:250px;height:686px;border-right:1px solid rgb(229, 229, 229);border-bottom:1px solid rgb(229, 229, 229);"
+      style="width:250px;height:500px;border-right:1px solid rgb(229, 229, 229);border-bottom:1px solid rgb(229, 229, 229);"
     >
-      <h4 class="pic-type-title"><span>视频分类</span></h4>
+      <h4 class="pic-type-title">视频分类</h4>
       <m-tree
         style="height:calc(100% - 59px);padding-top:8px"
         ref="myTree"
@@ -20,7 +30,7 @@
       ></m-tree>
     </el-aside>
 
-    <el-main style="padding:0">
+    <el-main style="padding:0;border-bottom: 1px solid rgb(229, 229, 229);">
       <list-header
         v-if="$store.state.dashboard.isContentwrite"
         :count-pic="countPic"
@@ -47,43 +57,10 @@
           @moveClassify="moveClassify"
           @handleSelectionChange="handleSelectionChange"
         ></List>
-        <el-dialog
-          width="0"
-          style="z-index:10"
-          :close-on-click-modal="false"
-          :show-close="false"
-          :visible.sync="isInvitationPanelShow"
-          :modal-append-to-body="false"
-        ></el-dialog>
-        <right-pannel
-          :style="{width:isInvitationlWidth+'px'}"
-          @closeRightPanel="closeRightPanel"
-          :tree-result="treeResult"
-        >
-          <span slot="title-text">移动视频</span>
-          <div class="category-content">
-            <span name="cur-tip">移动至</span>
-          </div>
-          <SelectTree
-            v-if="isInvitationPanelShow"
-            :categoryName="curImgInfo.categoryName"
-            :categoryId="curImgInfo.categoryId"
-            :tree-result="treeResult"
-            @chooseNode="chooseNode"
-          ></SelectTree>
-
-          <div slot="footer" class="pannel-footer">
-            <button @click="updateCategoryPic" class="cl-button cl-button--small cl-button--primary">确定</button>
-            <button @click="cancelUpdateCategor" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
-          </div>
-        </right-pannel>
       </el-main>
-      <el-footer>
-        <slot name="modal-footer"></slot>
-      </el-footer>
     </el-main>
 
-    <el-dialog title="上传" :visible.sync="dialogTableVisible" :modal-append-to-body="false">
+    <el-dialog title="上传" class="dialog-wrap" :visible.sync="dialogTableVisible" :modal-append-to-body="false">
       <span slot="title">
         <span class="fs14">
           上传{{displayName}}
@@ -111,6 +88,13 @@
       <!-- :accept="'video/*'" -->
     </el-dialog>
   </el-container>
+  <div v-show="videoType == 'aliyun'" style="width:800px">
+      <aliyunVideo ref="aliyunVideo" @getChecked="getChecked" ></aliyunVideo>
+  </div>
+  <el-footer style="height:70px">
+    <slot name="modal-footer"></slot>
+  </el-footer>
+  </div>
 </template>
 <script>
 import MTree from "@/components/common/MTree";
@@ -119,6 +103,7 @@ import ChunkUpload from "@/components/common/ChunkUpload";
 import SelectTree from "@/components/common/SelectTree";
 import RightPannel from "@/components/common/RightPannel";
 import List from "./popupList";
+import AliyunVideo from "./popupAliyun";
 import environment from "@/environment/index.js";
 import * as videoManageApi from "@/api/request/videoManageApi";
 import * as videoCategoryManageApi from "@/api/request/videoCategoryManageApi";
@@ -140,10 +125,12 @@ export default {
     List,
     ChunkUpload,
     RightPannel,
-    SelectTree
+    SelectTree,
+    AliyunVideo
   },
   data() {
     return {
+      videoType: "local",
       displayName: "视频",
       contentType: "Video",
       nodeData: {
@@ -178,8 +165,17 @@ export default {
   mounted() {
     this.getList();
     this.getTree();
+    this.$refs.aliyunVideo.init();
   },
   methods: {
+    tabClick(item) {
+      if(item.name == "aliyun") {
+          
+      }
+    },
+    cancelgetVideo() {
+      this.$emit("cancelgetVideo")
+    },
     getChecked(checkedList) {
       this.checkedList = checkedList;
       this.$emit("getCheckedList", this.checkedList);
@@ -360,12 +356,23 @@ export default {
   }
 };
 </script>
-<style scoped>
-.el-dialog__wrapper /deep/ .el-dialog {
-  width: 900px;
-}
-</style>
 <style lang="scss" scoped>
+.el-dialog__wrapper {
+    /deep/ .el-dialog {
+    width: 700px;
+    position: absolute;
+    margin: 0!important;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /deep/ .el-dialog__body{
+    padding-top: 0;
+  }
+}
+.popupVideo-wrap /deep/ .el-scrollbar {
+  height: 100%;
+}
 // 文章 产品详情
 // 设置的关键词
 .keyword-list {
@@ -469,8 +476,48 @@ export default {
 .ql-container {
   height: 400px;
 }
+.popupVideo-wrap{
+  background: #fff;
+}
+.domain-menu {
+  position: relative;
+  height: 60px;
+  background: $--color-white;
+  border-radius: $--border-radius-base;
+  border-bottom: $--border-base;
+  .iconguanbi {
+    position: absolute;
+    right: 16px;
+    top: 15px;
+  }
+}
+.domain-menu /deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+.domain-menu /deep/ .el-tabs__active-bar.is-top {
+  width: 0 !important;
+}
+.el-tabs /deep/ .el-tabs__item {
+  height: 60px;
+  line-height: 60px;
+  margin: 0 24px;
+  padding: 0;
+  color: $--color-text-primary;
+}
+.el-tabs /deep/ .el-tabs__item.is-active {
+  border-bottom: 2px solid $--color-primary;
+}
 #videoContent-manage .tree-aside {
   height: auto;
+}
+#videoContent-manage .pic-type-title {
+  box-sizing: border-box;
+  padding-left: 16px;
+  height: 50px;
+  line-height: 50px;
+  width: 100%;
+  font-size: 14px;
+  border-bottom: 1px solid #e5e5e5;
 }
 #videoContent-manage {
   margin-top: 0;
