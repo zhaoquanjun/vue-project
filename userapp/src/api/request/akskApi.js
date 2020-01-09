@@ -1,9 +1,13 @@
 import environment from "@/environment/index";
 import * as ajaxRequest from "../ajaxRequest";
 
-// 创建aksk 设置aksk
+// 创建aksk
 export const set = (para) => {
     return ajaxRequest.post(`${environment.memberManageApi}/api/v1/AkSk/set`, para);
+}
+// 刷新aksk
+export const update = (para) => {
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/AkSk/update`, para);
 }
 // 获取当前app的aksk
 export const get = () => {

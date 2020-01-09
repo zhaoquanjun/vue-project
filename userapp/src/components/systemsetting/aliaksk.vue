@@ -235,7 +235,7 @@ export default {
         ak: this.akId,
         sk: this.akSecret
       };
-      let { data, status } = await akskApi.set(para);
+      let { data, status } = await akskApi.update(para);
       this.getAksk();
     },
     // cancelAksk() {
