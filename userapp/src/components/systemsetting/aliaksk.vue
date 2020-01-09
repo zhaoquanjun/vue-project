@@ -94,7 +94,7 @@
                     <div
                       class="waitAuthor"
                       style="display:inline-block"
-                    >（AK/SK账号下无“SMS”权限，请开通并授权后重新配置）</div>
+                    >（AK/SK账号下无“{{scope.row.type}}”权限，请开通并授权后重新配置）</div>
                   </div>
                   <div v-if="scope.row.status" class="successAuthor">授权成功</div>
                 </div>
@@ -105,17 +105,17 @@
                 <button
                   class="operatingBtn"
                   @click="manage"
-                  v-if="scope.row.features == '短信服务'"
+                  v-if="scope.row.type == 'SMS'"
                 >{{scope.row.status?"去管理":"去查看"}}</button>
                 <a
                   :href="`${videoUrl}`"
                   class="operatingBtn"
-                  v-if="scope.row.features == '视频点播'"
+                  v-if="scope.row.type == 'VOD'"
                 >{{scope.row.status?"去管理":"去查看"}}</a>
                 <button
                   class="operatingBtn"
                   style="margin-left:24px"
-                  v-if="scope.row.status&&scope.row.features == '短信服务'"
+                  v-if="scope.row.status&&scope.row.type == 'SMS'"
                   @click="setTemplate"
                 >设置签名/模板</button>
               </template>
@@ -149,11 +149,13 @@ export default {
       oldAkSecret: "",
       listData: [
         {
+          type: "SMS",
           features: "短信服务",
           authority: "管理短信服务（SMS）的权限",
           status: false
         },
         {
+          type: "VOD",
           features: "视频点播",
           authority: "管理视频点播服务（VOD）的权限",
           status: false
