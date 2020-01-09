@@ -145,7 +145,8 @@ export default {
                         ["video"],
                         [{ lineheight: lineheights }],
                         [{ letterspacing: letterspacings }],
-                        ['fullscreen']
+                        ['link'], 
+                        ['fullscreen']                    
                     ],
                     handlers: {
                         fullscreen() {
@@ -329,16 +330,24 @@ export default {
         _setQuillContent(content){
             document.getElementById(this.quillId).querySelector(".ql-editor").innerHTML=content;
             this.videoAddDragEvent();
+        },
+        linkHandler(){
+            this.url="http://www.baidu.com";
+            this.insertLink(this.url);  
+        },
+        insertLink(linkUrl){
+            //插入a link
+            this.$refs.quillDetailEditor.quill.format('link',linkUrl, Quill.sources.USER);
         }
     },
     mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
-        this.$refs.quillDetailEditor.quill
-            .getModule("toolbar")
-            .addHandler("image", this.imageHandler);
+        this.$refs.quillDetailEditor.quill.getModule("toolbar").addHandler("image", this.imageHandler);
         // 为视频ICON绑定事件
         this.$refs.quillDetailEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         //this.$refs.quillDetailEditor.quill.root.addEventListener("dblclick",this.imgChangeSizeHandler,!1);
+        // 为link绑定事件  getModule 为编辑器的内部属性
+        this.$refs.quillDetailEditor.quill.getModule("toolbar").addHandler("link", this.linkHandler);
         addQuillTitle();
         this._setQuillContent(this.detailContent);
     },
@@ -379,6 +388,39 @@ export default {
 </style>
 
 <style lang="scss">
+.ql-snow .ql-tooltip {
+  text-align: center;
+}
+.ql-snow .ql-tooltip::before {
+  content: "链接地址:";
+  text-align: center;
+}
+.ql-snow .ql-tooltip[data-mode=link]::before {
+  content: "请输入链接地址:";
+}
+.ql-snow .ql-tooltip a.ql-action {
+    display: none;
+}
+.ql-snow .ql-tooltip a.ql-action::after {
+    border-right: 0px;
+    content: '编辑';
+    padding-right: 0px;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+    border-right: 0px;
+    content: '保存';
+    padding-right: 0px;
+}
+.ql-snow .ql-tooltip a.ql-remove::before {
+    border-right: 0px;
+    content: '移除';
+    padding-right: 0px;
+}
+.ql-snow .ql-tooltip a.ql-preview{
+    line-height: 26px;
+    margin: 0px;
+    padding: 6px 5px;
+}
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
