@@ -11,7 +11,7 @@
         <div id="content" class="contentDialog" v-if="isModalShow">
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
-                <button @click="cancelEditorImg">X</button>
+                <button @click="cancelEditorImg"><i class="iconfont iconguanbi cl-iconfont is-circle"></i></button>
             </el-header>
             <modal-content ref="imgList" :isGrid="true" :multiple="true" @getImgInfo="getImgInfo" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer" style=" ">
@@ -31,10 +31,13 @@
                 </videoManage>
             </div>
         </div>
+        <popup v-if="popupShow" @handleClosePopup="handleClosePopup" @insertLink="insertLink">
+        </Popup>
     </div>
 </template>
 
 <script>
+import Popup from '@/components/link/popup.vue'
 // 引入编辑器
 import Quill from "quill";
 import { addQuillTitle } from "@/assets/quill-title.js";
@@ -100,7 +103,8 @@ export default {
      },
     components: {
         ModalContent,
-        videoManage
+        videoManage,
+        Popup
     },
     provide: {
         popper: true
@@ -113,7 +117,8 @@ export default {
             checkedList: [],
             maxHeight:0,
             maxWidth:0,
-            dragVideoNode:null
+            dragVideoNode:null,
+            popupShow:false
         }
     },
     created() {
@@ -328,12 +333,16 @@ export default {
             this.videoAddDragEvent();
         },
         linkHandler(){
-            this.url="http://www.baidu.com";
-            this.insertLink(this.url);  
+            this.popupShow = true;
+        },
+        handleClosePopup(val) {
+            this.popupShow = val
+            return false
         },
         insertLink(linkUrl){
+            console.log(linkUrl)
             //插入a link
-            this.$refs.quillDetailEditor.quill.format('link',linkUrl, Quill.sources.USER);
+            this.$refs.quillDetailEditor.quill.format('link',linkUrl.Href, Quill.sources.USER);
         }
     },
     mounted() {

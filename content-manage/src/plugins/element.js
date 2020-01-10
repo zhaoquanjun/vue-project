@@ -45,7 +45,7 @@ import {
     Loading,
     Tabs,
     TabPane,
-  
+    Radio
   
 } from 'element-ui';
 Vue.use(Container)
@@ -89,7 +89,7 @@ Vue.use(Container)
     .use(Scrollbar)
     .use(Tabs)
     .use(TabPane)
-    
+    .use(Radio)
 ;
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
