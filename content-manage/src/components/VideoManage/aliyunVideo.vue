@@ -159,7 +159,7 @@ export default {
       tableHeight: 500,
       aliyunVideoData: {},
       picSearchOptions: {
-        pageSize: 10,
+        pageSize: 50,
         pageIndex: 1,
         orderByType: "createtime",
         isDescending: true,
