@@ -131,7 +131,6 @@ export default {
             this.isModalShow = false;
         },
         getImgInfo(info) {
-            console.log(info, "0000000");
              let result = [];
                 let obj = {};
                 for (let i = 0; i < info.length; i++) {

@@ -8,7 +8,6 @@
               
                 <div class="avatar-uploader" :class="{'border-line':!imageUrl1}">
                     <div v-if="imageUrl1" class="imgWrap">
-                        <!-- <img :src="imageUrl1" class="avatar" /> -->
                         <img-size-auto :item="imageUrl1"></img-size-auto>
                          <span class="el-upload-list__item-actions">
                             <i @click="handlerAddPicture" class="icon-change">
@@ -102,7 +101,6 @@ export default {
             this.isModalShow = false;
         },
         getImgInfo(info) {
-            //console.log(info, "0000000");
             this.imgData = info;
         },
         getEditorImg() {
@@ -223,12 +221,6 @@ export default {
 }
 .avatar-text {
     padding-bottom: 19px;
-}
-.avatar {
-    width: 200px;
-    height: 200px;
-    display: block;
-    object-fit: scale-down;
 }
 .el-upload-list__item-actions {
     display: flex;

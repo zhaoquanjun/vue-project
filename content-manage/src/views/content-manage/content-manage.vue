@@ -48,7 +48,6 @@ export default {
     },
     methods: {
         getImgInfo(info) {
-            console.log(info, "0000000");
             this.imgData = info;
         },
         getImg() {
