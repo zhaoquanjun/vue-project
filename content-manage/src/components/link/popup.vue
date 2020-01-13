@@ -21,6 +21,7 @@
         <none-area v-show="slider == 'none'" :tips="tips" :none-words="noneWords" />
         <page-area
           v-if="slider == 'page'"
+          :siteId="siteId"
           :model="model"
           :way="way"
           :slider="slider"
@@ -31,6 +32,7 @@
         <news-area
           v-if="slider == 'news'"
           ref="news"
+          :siteId="siteId"
           :model="model"
           :way="way"
           :slider="slider"
@@ -42,6 +44,7 @@
         <product-area
           v-if="slider == 'product'"
           ref="product"
+          :siteId="siteId"
           :model="model"
           :way="way"
           :slider="slider"
@@ -142,6 +145,9 @@ export default {
       default: () => {
         return "";
       }
+    },
+    siteId: {
+        type: Number
     }
   },
   data() {
@@ -196,7 +202,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.model);
     this.id = this.model["Id"];
   },
   methods: {
@@ -205,7 +210,6 @@ export default {
     },
     _handleChangeSlider(val) {
       this.slider = val;
-      console.log(this.slider, val);
       if (val === "none") {
         this.title = "请设置链接";
         this.selectedUrl = "javascript:;";

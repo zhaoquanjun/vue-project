@@ -6,6 +6,7 @@
       placeholder="请选择详情页"
       :style="{ maxWidth: '200px' }"
       size="small"
+      @change="selectDetailPage"
     >
       <el-option
         v-for="item in detailList"
@@ -34,6 +35,9 @@ export default {
     },
     pageIndex: {
       type: Number
+    },
+    siteId: {
+        type: Number
     }
   },
   data() {
@@ -47,9 +51,8 @@ export default {
       this._getDetailPageList()
     },
     async _getDetailPageList() {
-      const siteId = this.getUrlParam('siteId')
       const options = {
-        siteId: siteId,
+        siteId: this.siteId,
         IsDescending: true,
         OrderColumns: 'createtime',
         pageType: this.pageType,
@@ -63,6 +66,7 @@ export default {
       for (var i = 0; i < data.list.length; i++) {
         if (data.list[i].isSystemPage) {
           homePageId = data.list[i].id
+          this.$emit("selectDetailPage", data.list[i].id);
           break
         }
         if (this.model['DetailPageId'] === data.list[i].id) {
@@ -72,6 +76,9 @@ export default {
       if (this.selectValue === '' && homePageId !== '') {
         this.selectValue = homePageId
       }
+    },
+    selectDetailPage(val) {
+        this.$emit("selectDetailPage", val);
     },
     getUrlParam(name) {
       var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
