@@ -361,15 +361,20 @@ export default {
             else{
                 //this.$refs.quillDetailEditor.quill.format('link',linkData.Href, Quill.sources.USER);               
                 this.$refs.quillDetailEditor.quill.format('link',linkData.Href, Quill.sources.USER);
-                if(this.linkSelection!=null && linkData.Target!="_blank"){
+                if(this.linkSelection!=null && (linkData.Target!="_blank" || linkData.Ctype=="file")){
                     let lines = this.$refs.quillDetailEditor.quill.getLines(this.linkSelection.index, this.linkSelection.length);
                     if(lines!=null&&lines.length>0){
                         if(lines[0].children&&lines[0].children.length>0){
                             lines[0].children.forEach(element => {
                                 var linkText = this.$refs.quillDetailEditor.quill.getContents(this.linkSelection.index,this.linkSelection.length).ops[0].insert;
                                 var elementText = element.text==undefined?element.domNode.text:element.text;
-                                if(element.domNode.nodeName=="A" && linkText== elementText){
-                                    element.domNode.target = "_self";
+                                if(element.domNode.nodeName=="A" && linkText== elementText){                                    
+                                    if(linkData.Ctype=="file"){
+                                        element.domNode.setAttribute("data-type","file");
+                                        element.domNode.target = linkData.Target;
+                                    }else{
+                                        element.domNode.target = "_self";
+                                    }
                                 }
                             });
                         }
