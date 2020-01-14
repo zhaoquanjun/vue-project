@@ -104,6 +104,7 @@
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
                     <quill-detail
+                    :siteId="siteId"
                     :quillId="quillContentId"
                     :detailContent="detailData.contentDetail"
                     @detailContentChange='detailContentChange1'></quill-detail>                              
@@ -115,6 +116,7 @@
                         <el-form-item label prop="specificationContent">
                             <!-- quill-editor 编辑一-->
                             <quill-detail
+                            :siteId="siteId"
                             :quillId="quillDetailId"
                             :detailContent="detailData.specificationContent"
                             @detailContentChange='detailContentChange'></quill-detail>                           
@@ -352,7 +354,8 @@ export default {
             ratio:[],
             origin: [],
             quillDetailId:"quill-specificationContent",
-            quillContentId:"quill-contentDetail"
+            quillContentId:"quill-contentDetail",
+            siteId:0
         };
     },
     created() {
@@ -670,8 +673,10 @@ export default {
         async getSiteList() {
             let { data } = await productManageApi.getSiteList();
             this.siteOptions = data;
+            this.siteId = this.siteOptions[0].siteId;
         },
         changeSiteId(siteId) {
+            this.siteId = siteId
             this.detailData.defaultSiteId = siteId;
         },
         detailContentChange(html){

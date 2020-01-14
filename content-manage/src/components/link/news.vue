@@ -62,14 +62,13 @@
               </p>
             </li>
           </ul>
-          <div class="cl-paganation pageing noJumper" id="pageing">
+          <div class="cl-paganation pageing noJumper" id="pageing" style="margin:0;padding:0">
             <el-pagination
               background
               layout="prev, pager, next"
               :page-size="pageSize"
               :total="total"
               :current-page="pageIndex"
-              style="margin-top: 12px"
               @current-change="_handleChangeCurrent"
             ></el-pagination>
           </div>
@@ -89,6 +88,7 @@
     <detail
       ref="detailPageContent"
       :page-type="'newsDetail'"
+      :siteId="siteId"
       :model="model"
       :page-size="pageSize"
       :page-index="pageIndex"
@@ -120,6 +120,9 @@ export default {
     },
     slider: {
       type: String
+    },
+    siteId: {
+        type: Number
     }
   },
   data() {
@@ -260,7 +263,7 @@ export default {
     },
     _handleSelectPage(i) {
       this.dataIndex = i;
-      this.model["Id"] = this.newsList[i].id;
+      this.$set(this.model, "Id", this.newsList[i].id);
       this.$emit("handleChangeUrl", {
         url: this.newsList[i].url,
         title: this.newsList[i].title,
@@ -299,6 +302,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.single-line__overflow--hide {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .popup-content__area {
   width: 582px;
   border-left: $--border-base;
@@ -336,11 +344,13 @@ export default {
       width: 172px;
       max-height: 362px;
       overflow-y: auto;
+      box-sizing: border-box;
     }
     .content-main__list {
       position: relative;
       width: 100%;
       border-left: $--border-base;
+      box-sizing: border-box;
       .content-main__search {
         display: flex;
         align-items: flex-end;
@@ -361,7 +371,8 @@ export default {
       }
       .content-main__list--outer {
         overflow: hidden;
-        padding-bottom: 16px;
+        // padding-bottom: 16px;
+        box-sizing: border-box;
         .content-main__list--item {
           padding: 10px 0 0 12px;
           width: 100%;

@@ -31,7 +31,7 @@
                 </videoManage>
             </div>
         </div>
-        <popup v-if="popupShow" @handleClosePopup="handleClosePopup" @insertLink="insertLink">
+        <popup v-if="popupShow" :siteId="siteId" @handleClosePopup="handleClosePopup" @insertLink="insertLink">
         </Popup>
     </div>
 </template>
@@ -104,6 +104,9 @@ export default {
             type: String,
             default: ""
         },
+        siteId: {
+            type: Number
+        }
      },
     components: {
         ModalContent,

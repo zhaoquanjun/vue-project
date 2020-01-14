@@ -486,12 +486,15 @@ export default {
     isShowAsideList(){
       this.$nextTick(()=>{
         let icon=document.getElementsByClassName("isShow")[0];
+        let div=document.getElementById("waterfall");
+        let pageWidth=div.offsetWidth;
         if(this.isShowAside){
           icon.style.left=0;
+          this.imgWaterfall(pageWidth+240)
         }else{
           icon.style.left=240+"px";
+          this.imgWaterfall(pageWidth-240);
         }
-        this.loadImg();
         this.isShowAside=!this.isShowAside;
       })
       
@@ -512,11 +515,11 @@ export default {
       }
     },
     // 瀑布流图片位置计算
-    imgWaterfall(){
+    imgWaterfall(pageWidth){
         this.$nextTick(()=>{
           let imgs=this.$refs.imgs;
           let div=document.getElementById("waterfall");
-          let pageWidth=div.offsetWidth;
+          pageWidth=pageWidth || div.offsetWidth;
           let cols;
           let imgWidth;
           let hArr=[];
@@ -527,6 +530,7 @@ export default {
           }
           for(let img of imgs){
             img.style.width=pageWidth/cols+"px";
+            console.log(img.style.width)
           }
           for(let i=0;i<imgs.length;i++){
             imgs[i].style.position="absolute";

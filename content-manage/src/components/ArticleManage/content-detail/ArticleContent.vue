@@ -76,6 +76,7 @@
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
                     <quill-detail
+                    :siteId="siteId"
                     :quillId="quillContentId"
                     :detailContent="articleDetail.contentDetail"
                     @detailContentChange='detailContentChange'></quill-detail>  
@@ -256,7 +257,8 @@ export default {
             checkedList: [],
             ratio:[],
             origin: [],
-            quillContentId:"quill-contentDetail"
+            quillContentId:"quill-contentDetail",
+            siteId:0
         };
     },
     created() {
@@ -475,8 +477,10 @@ export default {
         async getSiteList() {
             let { data } = await articleManageApi.getSiteList();
             this.siteOptions = data;
+            this.siteId = this.siteOptions[0].siteId;
         },
         changeSiteId(siteId) {
+            this.siteId = siteId
             this.articleDetail.defaultSiteId = siteId;
         },
         detailContentChange(html){

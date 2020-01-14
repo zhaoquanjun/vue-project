@@ -59,6 +59,9 @@ export default {
     },
     slider: {
       type: String
+    },
+    siteId: {
+        type: Number
     }
   },
   data() {
@@ -81,9 +84,8 @@ export default {
   },
   methods: {
     async getPagesList() {
-    //   const siteId = this._getUrlParam('siteId')
-    //   const { data } = await linkApi.getPagesList({ siteId: siteId })
-    //   this.pageList = data
+      const { data } = await linkApi.getPagesList({ siteId: this.siteId })
+      this.pageList = data
     },
     _getUrlParam(name) {
       var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
@@ -95,7 +97,7 @@ export default {
       }
     },
     _handleSelectPage(i) {
-      this.model['Id'] = this.pageList[i].pageId
+    this.$set(this.model, "Id", this.pageList[i].pageId);
       this.$emit('handleChangeUrl', {
         url: this.pageList[i].url,
         title: this.pageList[i].title,
@@ -112,6 +114,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.single-line__overflow--hide {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .popup-content__area {
   width: 582px;
   height: 454px;
