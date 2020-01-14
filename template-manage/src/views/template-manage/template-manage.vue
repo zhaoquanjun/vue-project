@@ -112,7 +112,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="模板名称|语言" min-width="120">
+            <el-table-column label="模板名称|语言|模板编号" min-width="160">
               <template slot-scope="scope">
                 <div>
                   <el-tooltip :content="scope.row.templateName" placement="bottom" :disabled="scope.row.templateName.trim().length < 20">
@@ -122,10 +122,10 @@
                     class="templateName"
                     style="margin-top:8px;"
                   >{{_getLanguage(scope.row.language)}}</p>
+                  <p class="templateName" style="margin-top:8px;">{{scope.row.id}}</p>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="id" label="模板编号" min-width="80"></el-table-column>
             <el-table-column label="模版行业" min-width="110">
               <template slot-scope="scope">
                 <div>
