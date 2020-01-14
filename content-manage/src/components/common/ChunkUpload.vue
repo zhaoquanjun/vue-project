@@ -518,9 +518,8 @@ export default {
             this.uploadBtnText = "开始上传";
             this.fileList.forEach(item => {
                 item.resume();
-                this.$emit("getList")
             });
-            
+            this.$emit("getList")
         },
         fileRemove(file) {
             if (!!file.error) this.errorCount -= 1;
