@@ -93,9 +93,9 @@
     <div class="popup-content__open">
       <p>页面打开方式</p>
       <div class="way-list__box">
-        <el-radio v-model="way" label="_self" @change="_handleChageLinkTarget('_self')">当前窗口打开</el-radio>
+        <el-radio v-model="targetWay" label="_self" @change="_handleChageLinkTarget('_self')">当前窗口打开</el-radio>
         <el-radio
-          v-model="way"
+          v-model="targetWay"
           label="_blank"
           style="margin-left: 24px;"
           @change="_handleChageLinkTarget('_blank')"
@@ -167,6 +167,12 @@ export default {
         return categoryId;
       },
       set: function() {}
+    },
+    targetWay: {
+      get: function () {
+        return this.way;
+      },
+      set: function () { }
     }
   },
   watch: {
@@ -213,7 +219,6 @@ export default {
       const { data } = await linkApi.getFileList(options);
       this.total = data.totalRecord;
       this.fileList = data.list;
-      console.log(this.fileList);
       this.pageIndex = data.pageIndex;
       this.$Loading.hide();
       if (!this.dataIndexFlag) {
