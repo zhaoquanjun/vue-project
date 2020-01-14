@@ -442,10 +442,11 @@ export default {
     };
   },
   created(){
-    window.addEventListener("scroll",this.scroll,true)
+    
   },
   computed: {},
   mounted() {
+    window.addEventListener("scroll",this.scroll,true)
   },
   watch:{
     search(){
@@ -530,7 +531,6 @@ export default {
           }
           for(let img of imgs){
             img.style.width=pageWidth/cols+"px";
-            console.log(img.style.width)
           }
           for(let i=0;i<imgs.length;i++){
             imgs[i].style.position="absolute";
@@ -867,15 +867,17 @@ export default {
     },
      scroll(){
        this.$nextTick(()=>{
-          let scrollTop=document.getElementById("templateContent").scrollTop;
-          let scrollHeight=document.getElementById("templateContent").scrollHeight;
-          let innerHeight=window.innerHeight;
-          if( scrollTop+innerHeight>=scrollHeight*2/3 ){
-            this.loadMore();
-            if(scrollTop+innerHeight>=scrollHeight){
-              this.showNoMore=true;
-            }else{
-              this.showNoMore=false;
+          if(this.templateShow){
+            let scrollTop=document.getElementById("templateContent").scrollTop;
+            let scrollHeight=document.getElementById("templateContent").scrollHeight;
+            let innerHeight=window.innerHeight;
+            if( scrollTop+innerHeight>=scrollHeight*2/3 ){
+              this.loadMore();
+              if(scrollTop+innerHeight>=scrollHeight){
+                this.showNoMore=true;
+              }else{
+                this.showNoMore=false;
+              }
             }
           }
        })
