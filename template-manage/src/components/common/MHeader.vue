@@ -100,7 +100,7 @@
             <div class="appTitle">
               <div class="appNameWrap">
                 <div :class="{'templateApp':item.isTemplateApp,'normalApp':!item.isTemplateApp}"></div>
-                <span class="appName">{{item.productName}}</span>
+                <span class="appName">{{item.productName}}{{item.isTemplateApp?"_"+item.appId:""}}</span>
               </div>
               <span>
                 <i

@@ -125,7 +125,8 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="模版行业" min-width="150">
+            <el-table-column prop="id" label="模板编号" min-width="80"></el-table-column>
+            <el-table-column label="模版行业" min-width="110">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.firstIndustry}}</p>
@@ -133,9 +134,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="myCreateTime" label="开通时间" sortable="custom" min-width="140"></el-table-column>
-            <el-table-column prop="myUpdateTime" label="更新时间" sortable="custom" min-width="140"></el-table-column>
-            <el-table-column prop="useCount" label="使用量" sortable="custom" min-width="90"></el-table-column>
+            <el-table-column prop="myCreateTime" label="开通时间" sortable="custom" min-width="130"></el-table-column>
+            <el-table-column prop="myUpdateTime" label="更新时间" sortable="custom" min-width="130"></el-table-column>
+            <el-table-column prop="useCount" label="使用量" sortable="custom" min-width="80"></el-table-column>
             <el-table-column label="管理员|备注" min-width="120">
               <template slot-scope="scope" style="position:relative;">
                 <div>
@@ -177,14 +178,14 @@
               </template>
              
             </el-table-column>
-            <el-table-column label="模板状态">
+            <el-table-column label="模板状态" min-width="70">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{getTemplateStatus(scope.row.status)}}</p>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" min-width="120">
+            <el-table-column label="操作" min-width="100">
               <template slot-scope="scope">
                 <div class="handle-btn-wrap">
                   <a
