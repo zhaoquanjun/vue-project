@@ -19,12 +19,12 @@
       <p>页面打开方式</p>
       <div class="way-list__box">
         <el-radio
-          v-model="way"
+          v-model="target"
           label="_self"
           @change="_handleChageLinkTarget('_self')"
         >当前窗口打开</el-radio>
         <el-radio
-          v-model="way"
+          v-model="target"
           label="_blank"
           style="margin-left: 24px;"
           @change="_handleChageLinkTarget('_blank')"
@@ -53,13 +53,19 @@ export default {
       isLinkEmail: true
     }
   },
-  compted: {
+  computed: {
     selectedUrl: {
       get: function() {
         console.log(this.model['Href'])
         return this.curType === 'email' ? this.model['Href'].slice(7) : ''
       },
       set: function() {}
+    },
+    target: {
+      get: function () {
+        return this.way;
+      },
+      set: function () { }
     }
   },
   mounted() {
