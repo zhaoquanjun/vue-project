@@ -13,7 +13,7 @@
       <button class="changeSite" @click="changeSite" v-show="siteInfoList.length != 0">
         <i
           class="iconfont iconqiehuanxingshier"
-          style="color:#ff6b00;font-size:12px;margin-right:5px;"
+          style="color:#ff6a00;font-size:12px;margin-right:5px;"
         ></i>
         切换站点
       </button>
@@ -203,7 +203,7 @@ export default {
       height: 0;
       border: 5px solid transparent;
       border-right: 0;
-      border-left: 5px solid #ff6b00;
+      border-left: 5px solid $--color-primary;
     }
     .siteName {
       font-size: 12px;
@@ -214,7 +214,7 @@ export default {
     .secondDomain {
       font-size: 12px;
       font-weight: 400;
-      color: #ff6b00;
+      color: $--color-primary;
       margin-left: 6px;
       line-height: 40px;
       &:hover {
@@ -224,7 +224,7 @@ export default {
     .language {
       font-size: 12px;
       font-weight: 400;
-      color: #ff6b00;
+      color: $--color-primary;
       padding: 2px 4px;
       margin-left: 16px;
       background: rgba(255, 200, 161, 1);
@@ -238,7 +238,7 @@ export default {
       right: 16px;
       line-height: 40px;
       &:hover {
-        color: #ff6b00;
+        color: $--color-primary;
       }
     }
   }

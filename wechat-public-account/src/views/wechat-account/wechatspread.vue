@@ -382,7 +382,7 @@ export default {
     border-bottom: $--icon-color-base;
 } 
 .el-tabs /deep/ .is-active {
-    border-bottom: 2px solid #FF6B00 !important;
+    border-bottom: 2px solid $--color-primary !important;
 }
 .el-table /deep/ .cell {
   padding-left: 24px;
