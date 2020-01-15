@@ -20,7 +20,9 @@
                         <div class="article-btn">
                             <button class="cl-button cl-button--small cl-button--primary_notbg"  @click="()=>$router.go(-1)">返回</button>
                             <button class="cl-button cl-button--small cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
-                            <button class="cl-button cl-button--small cl-button--primary" :disabled="disableRefObj.inSaveProcess"  @click="submitForm">保存</button>
+                            <Debounce :time="1000" !isDebounce>
+                                <button class="cl-button cl-button--small cl-button--primary"  @click="submitForm">保存</button>
+                            </Debounce>
                         </div>
                     </el-col>
                 </el-row>
@@ -60,7 +62,6 @@ export default {
     },
     data() {
         return {
-            disableRefObj: { inSaveProcess: false },
             imageUrl: "",
             detailData: {},
             operateName: "新增",
@@ -80,19 +81,13 @@ export default {
         submitForm() {
             let imageUrl = this.$refs.articleRight.imageUrl1;
             if(this.isEdit){
-                 this.$refs.articleContent.editArticle(
-                    "articleDetail",
-                     imageUrl, this.disableRefObj
-                );
+                 this.$refs.articleContent.editArticle("articleDetail", imageUrl);
                 return
             }
             if (this.$route.query.id) {
-                this.$refs.articleContent.editArticle(
-                    "articleDetail",
-                    imageUrl, this.disableRefObj
-                );
+                this.$refs.articleContent.editArticle("articleDetail", imageUrl);
             } else {
-                this.$refs.articleContent.submitForm("articleDetail", imageUrl, this.disableRefObj);
+                this.$refs.articleContent.submitForm("articleDetail", imageUrl);
             }
         },
         async getArticleDetail(id) {

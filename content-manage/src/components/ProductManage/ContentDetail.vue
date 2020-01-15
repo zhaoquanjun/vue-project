@@ -18,7 +18,9 @@
                     <div class="article-btn">
                         <button class="cl-button cl-button--small cl-button--primary_notbg" @click="()=>$router.go(-1)">返回</button>
                         <button class="cl-button cl-button--small cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
-                        <button class="cl-button cl-button--small cl-button--primary" :disabled="disableRefObj.inSaveProcess" @click="submitForm">保存</button>
+                        <Debounce :time="1000" !isDebounce>
+                            <button class="cl-button cl-button--small cl-button--primary" @click="submitForm">保存</button>
+                        </Debounce>
                     </div>
                 </div>
             </el-header>
@@ -102,15 +104,15 @@ export default {
             let fileList = this.$refs.articleRight.newFileList;
             let storeInfo = this.$refs.storeContent.storePrice;
             if (this.isEdit) {
-                this.$refs.articleContent.editArticle("contentForm", fileList, this.disableRefObj, storeInfo);
+                this.$refs.articleContent.editArticle("contentForm", fileList, storeInfo);
                 return;
             }
             // editArticle
             let isEditor = this.$route.query.isEditor;
             if (!!isEditor) {
-                this.$refs.articleContent.editArticle("contentForm", fileList, this. disableRefObj, storeInfo);
+                this.$refs.articleContent.editArticle("contentForm", fileList, storeInfo);
             } else {
-                this.$refs.articleContent.submitForm("contentForm", fileList, this. disableRefObj, storeInfo);
+                this.$refs.articleContent.submitForm("contentForm", fileList, storeInfo);
             }
         },
         async getArticleDetail(id) {
