@@ -675,7 +675,7 @@ export default {
       color: $--color-text-secondary;
       border-radius: $--border-radius-circle;
       &:hover {
-        background: $--color-primary;
+        color: $--color-primary;
       }
     }
     div {
