@@ -17,7 +17,7 @@
                     <el-input
                         class="contentDetail-title"
                         placeholder="请输入产品标题（必填）"
-                        v-model="detailData.name"
+                        v-model.trim="detailData.name"
                         maxlength="100"
                         show-word-limit
                     ></el-input>
@@ -445,14 +445,14 @@ export default {
             });
         },
         // 新建保存
-        submitForm(formName, fileList, disableRefObj, storeInfo) {
+        submitForm(formName, fileList, storeInfo) {
             this.detailData.thumbnailPicUrlList = fileList;
             this.detailData.currencyType = storeInfo.storeTypeValue;
             this.detailData.originalPrice = storeInfo.originalPrice;
             this.detailData.price = storeInfo.price;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.insertArticle(disableRefObj);
+                    this.insertArticle();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -464,14 +464,12 @@ export default {
             this.$refs[formName].resetFields();
         },
         //新建产品
-        async insertArticle(disableRefObj) {
-            disableRefObj.inSaveProcess = true;
+        async insertArticle() {
             var html = document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
             );
-            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
@@ -501,7 +499,7 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, fileList, disableRefObj, storeInfo) {
+        editArticle(formName, fileList, storeInfo) {
             if (fileList && fileList.length > 0) {
                 this.detailData.thumbnailPicUrlList = fileList;
             }
@@ -510,7 +508,7 @@ export default {
             this.detailData.price = storeInfo.price;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.saveArticle(disableRefObj);
+                    this.saveArticle();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -518,8 +516,7 @@ export default {
             });
         },
         //编辑保存产品
-        async saveArticle(disableRefObj) {
-            disableRefObj.inSaveProcess = true;
+        async saveArticle() {
             var html = document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
             console.log('this.detailData',this.detailData);
@@ -527,7 +524,6 @@ export default {
                 this.curProduct,
                 this.detailData
             );
-            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",

@@ -511,7 +511,7 @@ export default {
                 > span {
                     cursor: pointer;
                     flex: none;
-                    color: #0070cc;
+                    color: $--color-primary;
                     padding-left: 16px;
                 }
             }

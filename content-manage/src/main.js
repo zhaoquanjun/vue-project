@@ -18,6 +18,12 @@ import "@/directive/index.js"
 import VueQuillEditor from 'vue-quill-editor'
 import uploader from 'vue-simple-uploader'
 import VueClipboard from 'vue-clipboard2'
+
+// 防抖 节流函数
+import Debounce from '@/components/globalComponents/debounce'
+Vue.component('Debounce', Debounce)
+
+
 import Loading from './components/globalComponents/loading.js' 
 Vue.use(Loading)
 Vue.use(VueClipboard)

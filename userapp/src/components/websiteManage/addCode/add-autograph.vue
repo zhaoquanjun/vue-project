@@ -13,7 +13,9 @@
                 <a href="">申请签名</a>
             </div>
             <div class="footer">
-                <button class="cl-button cl-button--primary" @click="saveAddAutograph" :class="{'is-disabled':!(codeValue)}">保存</button>
+                <Debounce :time="1000" !isDebounce>
+                    <button class="cl-button cl-button--primary" @click="saveAddAutograph" :class="{'is-disabled':!(codeValue)}">保存</button>
+                </Debounce>
                 <button class="cl-button cl-button--primary_notbg" @click="closeAddAutograph">取消</button>
             </div>
         </div>

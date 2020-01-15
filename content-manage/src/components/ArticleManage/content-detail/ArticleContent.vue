@@ -17,7 +17,7 @@
                     <el-input
                         class="contentDetail-title"
                         placeholder="请输入文章标题（必填）"
-                        v-model="articleDetail.title"
+                        v-model.trim="articleDetail.title"
                         maxlength="100"
                         show-word-limit
                     ></el-input>
@@ -347,11 +347,11 @@ export default {
             this.categoryName = node.label;
         },
         // 新建保存
-        submitForm(formName, imageUrl, disableRefObj) {
+        submitForm(formName, imageUrl) {
             this.articleDetail.pictureUrl = imageUrl;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.insertArticle(disableRefObj);
+                    this.insertArticle();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -363,14 +363,12 @@ export default {
             this.$refs[formName].resetFields();
         },
         //插入文章
-        async insertArticle(disableRefObj) {
-            disableRefObj.inSaveProcess = true;
+        async insertArticle() {
             var html=document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.articleDetail.contentDetail = html;
             let { status, data } = await articleManageApi.createArticle(
                 this.articleDetail
             );
-            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
@@ -397,11 +395,11 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, imageUrl, disableRefObj) {
+        editArticle(formName, imageUrl) {
             this.articleDetail.pictureUrl = imageUrl;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.saveArticle(disableRefObj);
+                    this.saveArticle();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -409,14 +407,12 @@ export default {
             });
         },
         //编辑保存文章
-        async saveArticle(disableRefObj) {
-            disableRefObj.inSaveProcess = true;
+        async saveArticle() {
             var html=document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.articleDetail.contentDetail = html;
             let { status, data } = await articleManageApi.editArticle(
                 this.articleDetail
             );
-            disableRefObj.inSaveProcess = false;
             this.$confirm("保存成功!", "提示", {
                 confirmButtonText: "新增下一篇",
                 customClass: "medium",
