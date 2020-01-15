@@ -68,10 +68,10 @@
             display: block;
             padding: 8px 14px;
             text-align: left;
-            font-size: 14px;
+            font-size: 12px;
 
             &:hover {
-                background: #e0fcff;
+                background: $--background-color-hover;
             }
         }
     }

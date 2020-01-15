@@ -17,16 +17,17 @@
 
         .el-message-box__headerbtn {
             top: 0;
-
+            right:4px;
             .el-icon-close {
                 padding: 8px;
                 margin-top: -8px;
-                font-size: 20px;
+                font-size: 14px;
                 border-radius: 50%;
+                color: $--color-text-regular;
             }
             .el-icon-close:hover {
                 background: $--icon-hover-color;
-                color: $--color-text-primary;
+                color: $--color-text-regular;;
             }
         }
     }
