@@ -153,7 +153,7 @@ export default {
     }
     .handler-btn {
         margin-left: 32px;
-        color:#ff6b00;
+        color:$--color-primary;
     }
     .close-tip{
         float: right;

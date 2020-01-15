@@ -107,7 +107,7 @@
             "
                   class="handle-btn"
                   @click="resolveCdnByAliYunToken(props.row)"
-                  style="color: #ff6b00;font-size:12px">
+                  style="color: #ff6a00;font-size:12px">
             一键解析
           </button>
           <span v-else>-</span>

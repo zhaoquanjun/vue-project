@@ -241,7 +241,7 @@
               <div style="display:none">
                 <el-switch
                   v-model="showWaterFall"
-                  active-color="#ff6b00"
+                  active-color="#ff6a00"
                   inactive-color="#41494E"
                   active-text="瀑布流"
                   inactive-text="平铺"
