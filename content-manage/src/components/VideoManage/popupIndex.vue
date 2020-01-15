@@ -6,7 +6,7 @@
                 <el-tab-pane label="本地视频" name="local"></el-tab-pane>
                 <el-tab-pane label="阿里云视频" name="aliyun"></el-tab-pane>
             </el-tabs>
-            <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelgetVideo"></i>
+            <i class="el-icon el-icon-close cl-iconfont is-circle" @click="cancelgetVideo"></i>
         </div>
     </el-header>
   <el-container id="videoContent-manage" v-show="videoType == 'local'" style="width:1000px">

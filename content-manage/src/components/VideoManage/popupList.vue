@@ -524,8 +524,7 @@ export default {
     color: #fff;
     padding: 4px;
     &:hover {
-      background: rgba(0, 0, 0, 1);
-      border-radius: $--border-radius-circle;
+      color: $--color-primary;
     }
   }
 }

@@ -145,11 +145,10 @@ body {
 
 .el-dialog__wrapper /deep/ .el-dialog .el-dialog__headerbtn .el-dialog__close {
     font-size: 14px;
-    color: $--color-text-primary;
+    color: $--color-text-regular;
     padding: 8px;
-    margin-top: -12px;
      &:hover {
-        background-color: $--icon-hover-color;
+        background: $--background-color-hover;
         border-radius: $--border-radius-circle;
     }
 }

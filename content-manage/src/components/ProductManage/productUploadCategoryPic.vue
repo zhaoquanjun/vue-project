@@ -63,7 +63,9 @@
         <div id="content" class="contentDialog" v-show="isModalShow">
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
-                <button @click="cancelEditorImg">X</button>
+                <button @click="cancelEditorImg" >
+                    <i class="el-icon el-icon-close cl-iconfont is-circle"></i>
+                </button>
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">

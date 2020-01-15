@@ -13,7 +13,7 @@
           <slot name="icon-tip"></slot>
         </el-tooltip>
       </span>
-      <span class="close-pannel cl-iconfont is-circle" @click="closePanel">X</span>
+      <i class="close-pannel cl-iconfont is-circle el-icon el-icon-close" @click="closePanel"></i>
     </div>
     <div style="padding:0 17px">
       <slot slot="cur-tip"></slot>

@@ -23,8 +23,10 @@
     font-size: $--font-size-base;
     padding: 8px;
     line-height: 1;
+    color:$--color-text-regular;
     &.is-circle {
         &:hover {
+            color:$--color-text-regular;
             background-color: $--icon-hover-color;
             border-radius: $--border-radius-circle;
         }

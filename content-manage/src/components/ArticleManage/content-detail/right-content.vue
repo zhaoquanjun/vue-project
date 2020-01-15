@@ -44,7 +44,9 @@
         <div id="content" class="contentDialog" v-if="isModalShow">
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
-                <button @click="cancelEditorImg">X</button>
+                <button @click="cancelEditorImg">
+                    <i class="el-icon el-icon-close cl-iconfont is-circle"></i>
+                </button>
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">
@@ -90,6 +92,9 @@ export default {
     watch: {
         imageUrl() {
             this.imageUrl1 = this.imageUrl;
+        },
+        imgData(){
+            this.imgData=this.imgData;
         }
     },
     mounted() {
@@ -107,7 +112,7 @@ export default {
             // 获取选中的图片信息 有两种方式
             //console.log(this.imgData, "imgData");
             //console.log(this.$refs.imgList.selectedImg, "selectedImg");
-            this.imageUrl1 = this.imgData[0].fullOssUrl;
+            this.imgData && (this.imageUrl1 = this.imgData[0].fullOssUrl);
             this.isModalShow = false;
         },
         handleSucess(response, file, fileList) {

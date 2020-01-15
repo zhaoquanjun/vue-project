@@ -532,6 +532,18 @@ export default {
             this.isfromat = true
             let fileName = this.isMac() ? file.file.name : file.name;
             let fileNameIndex = fileName.lastIndexOf(".");
+            if(fileNameIndex === -1){
+                file.cancel(file);
+                this.errorCount -= 1;
+                this.isfromat = false
+                this.$notify({
+                    customClass: "notify-error",
+                    message: `不支持该类型的文件上传`,
+                    duration: 1500,
+                    showClose: false
+                });
+                return false;
+            }
             let fileNameSuffix = fileName.slice(fileNameIndex);
             if (this.uploadType === "File") {
                 if (format.indexOf(fileNameSuffix.toLowerCase()) !== -1) {
@@ -560,8 +572,8 @@ export default {
                     });
                     return false;
                 }
-                 return true
-            }
+                return true
+            } 
         }
     },
     watch: {

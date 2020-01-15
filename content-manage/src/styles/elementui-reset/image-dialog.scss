@@ -36,7 +36,12 @@
      }
     .el-dialog__headerbtn .el-dialog__close {
          color: $--color-white;
-         font-size: 30px;
+         font-size: 24px;
+         padding: 4px;
+         &:hover{
+             color:$--color-primary;
+             background: none;
+         }
      }
     .el-carousel__arrow--right, .el-carousel__arrow--left {
          background: none;

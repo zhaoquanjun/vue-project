@@ -4,7 +4,7 @@
       <div class="popup-header__area">
         <span>设置链接</span>
         <span @click.stop="_handleCancle">
-          <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
+          <i class="el-icon el-icon-close cl-iconfont is-circle"></i>
         </span>
       </div>
       <div class="popup-content__box">
