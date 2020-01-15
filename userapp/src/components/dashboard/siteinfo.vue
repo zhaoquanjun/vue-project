@@ -124,7 +124,7 @@
                 <!-- <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.seo, 'siteInfo-icon-green':curSiteTodoinfo.seo}"
                 ></span>-->
-                <span class="siteInfo-title">SEO</span>
+                <span class="siteInfo-title">网站地图</span>
               </div>
               <div class="siteInfo-right">
                 <span class="siteInfo-btn">管理</span>
@@ -161,6 +161,17 @@
         <el-col :span="8" class="site-item">
           <div class="site-title">管理</div>
           <div class="siteInfo-wrap">
+            <div class="siteInfo-item" @click="jumpTo('siteInfo')">
+              <div class="siteInfo-left">
+                <!-- <span
+                  :class="{'siteInfo-icon-gray':!curSiteTodoinfo.emailServices, 'siteInfo-icon-green':curSiteTodoinfo.emailServices}"
+                ></span>-->
+                <span class="siteInfo-title">我的站点</span>
+              </div>
+              <div class="siteInfo-right">
+                <span class="siteInfo-btn">管理</span>
+              </div>
+            </div>
             <div class="siteInfo-item" @click="jumpTo('backup')">
               <div class="siteInfo-left">
                 <!-- <span
@@ -172,17 +183,6 @@
                 <span class="siteInfo-btn">管理</span>
               </div>
             </div>
-            <!-- <div class="siteInfo-item">
-              <div class="siteInfo-left">
-                <span
-                  :class="{'siteInfo-icon-gray':!curSiteTodoinfo.emailServices, 'siteInfo-icon-green':curSiteTodoinfo.emailServices}"
-                ></span>
-                <span class="siteInfo-title">邮件服务</span>
-              </div>
-              <div class="siteInfo-right">
-                <span class="siteInfo-btn">管理</span>
-              </div>
-            </div>-->
             <!-- <div class="siteInfo-item">
               <div class="siteInfo-left">
                 <span
@@ -405,8 +405,8 @@ export default {
         });
       }
     },
-    changeTemplateId(id){
-      this.curSiteinfo.templateId = id
+    changeTemplateId(id) {
+      this.curSiteinfo.templateId = id;
     },
     async changeSite(item) {
       if (item.siteId != this.siteId) {
@@ -431,6 +431,10 @@ export default {
       } else if (type == "seo") {
         this.$router.push({
           path: "/website/seo/sitemap"
+        });
+      } else if (type == "siteInfo") {
+        this.$router.push({
+          path: "/website/mysite/siteinfo"
         });
       } else if (type == "backup") {
         this.$router.push({

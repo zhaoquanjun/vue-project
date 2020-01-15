@@ -215,7 +215,7 @@ export default {
         // 批量删除列表
         async batchRemoveItem(idlist) {
             this.$confirm(
-                `删除后，${this.displayName}将被移动到回收站，可在回收站中恢复，是否确定删除？`,
+                `删除后，网站中引用的${this.displayName}将被同步删除，同时${this.displayName}将被移动到回收站，是否确定删除？`,
                 "提示",
                 {
                     iconClass: "icon-warning",
@@ -464,7 +464,7 @@ export default {
     /deep/ .content-header {
         margin-bottom: 16px;
     }
-    /deep/ .el-scrollbar {
+    /deep/ .aside-tree .el-scrollbar {
         height: calc(100vh - 230px);
     }
 }

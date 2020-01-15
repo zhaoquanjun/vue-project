@@ -61,7 +61,7 @@
               type="circle" 
               :percentage="percentage"
               :width="100"
-              color="#FF6B00"
+              color="#FF6A00"
               :stroke-width='2'
             >
             </el-progress>
@@ -70,7 +70,7 @@
               type="circle" 
               :width="100"
               :percentage="percentage"
-              color="#FF6B00"
+              color="#FF6A00"
               :status="percenStatus"
               :stroke-width='2'
             >

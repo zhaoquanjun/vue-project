@@ -100,7 +100,7 @@
             <div class="appTitle">
               <div class="appNameWrap">
                 <div :class="{'templateApp':item.isTemplateApp,'normalApp':!item.isTemplateApp}"></div>
-                <span class="appName">{{item.productName}}</span>
+                <span class="appName">{{item.productName}}{{item.isTemplateApp?"_"+item.appId:""}}</span>
               </div>
               <span>
                 <i
@@ -454,7 +454,7 @@ export default {
     cursor: pointer;
     text-align: left;
     background: #fff;
-    color: #a1a8b1;
+    color: $--color-text-primary;
     position: absolute;
     z-index: 10000;
     right: 0;
@@ -511,6 +511,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  .iconguanbi{
+    color:$--color-text-primary;
+    &:hover{
+      background: $--background-color-selected;
+    }
+  }
 }
 .appBackground {
   position: relative;

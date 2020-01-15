@@ -1,9 +1,10 @@
 <template>
     <div class="imgsLi">
         <img 
+            @load="handleImgSize"
             :src="item" 
             ref="img"
-            :class="imgsViewWay[0]?'heightLong':'widthLong'"
+            :class="imgsViewWay?'heightLong':'widthLong'"
         />
     </div>
 </template>
@@ -12,26 +13,24 @@ export default {
     props:["item"],
     data(){
         return {
-            imgsViewWay:[]
-        }
-    },
-    methods:{
-        handleImgsSize(){
-            let imgEl=this.$refs.img;
-            if(imgEl){
-                imgEl.map(item=>{
-                    if(item.offsetHeight>=item.offsetWidth){
-                        this.imgsViewWay.push(true);
-                    }else{
-                        this.imgsViewWay.push(false);
-                    }
-                })
-            }
+            imgsViewWay:Boolean
         }
     },
     watch:{
         item(){
-            this.handleImgsSize();
+            this.handleImgSize();
+        }
+    },
+    methods:{
+        handleImgSize(){
+            this.$nextTick(()=>{
+                let imgEl=this.$refs.img;
+                if(imgEl.offsetHeight >= imgEl.offsetWidth){
+                    this.imgsViewWay=true;
+                }else{
+                    this.imgsViewWay=false;
+                }
+            })
         }
     }
 }
@@ -46,6 +45,7 @@ export default {
         width:100%;
         height:auto;
         top:50%;
+        left: 0;
         transform: translateY(-50%);
     }
     .widthLong{

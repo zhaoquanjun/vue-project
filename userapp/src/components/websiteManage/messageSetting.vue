@@ -70,11 +70,11 @@
               <el-table-column label="操作" min-width="170">
                 <template slot-scope="scope">
                   <div class="handle-btn-wrap">
-                    <el-tooltip content="删除备份包" placement="top">
+                    <!-- <el-tooltip content="删除备份包" placement="top"> -->
                       <button @click="chakan(scope.row)">
                         <i class="iconfont iconchakan cl-iconfont is-square"></i>
                       </button>
-                    </el-tooltip>
+                    <!-- </el-tooltip> -->
                   </div>
                 </template>
               </el-table-column>
@@ -188,7 +188,9 @@
             class="message-switch"
           >
             <span>优先使用免费短信 </span>
-            <i>!</i>
+            <el-tooltip content="开启后，网站短信将优先使用免费短信发送" placement="top">
+              <i class="iconfont iconicon-exclamationmark" style="color:#e5e5e5;margin: 0 16px 0 6px;"></i>
+            </el-tooltip>
             <el-switch
               class="switch"
               @change="changeMessageSwitch"
@@ -572,25 +574,8 @@ export default {
   margin-top: 16px;
   background: $--color-white;
   border: $--border-base;
-  span {
-    line-height: 40px;
-  }
-  i {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin: 0 16px 0 6px;
-    font-size: 12px;
-    text-align: center;
-    line-height: 16px;
-    font-weight: 900;
-    border-radius: 50%;
-    background: #e5e5e5;
-    color: #8C8C8C;
-  }
-  .switch {
-    margin-top: -2px;
-  }
+  display: flex;
+  align-items: center;
 }
 .backupTip {
   height: 128px;
@@ -690,7 +675,7 @@ export default {
       color: $--color-text-secondary;
       border-radius: $--border-radius-circle;
       &:hover {
-        background: $--color-primary;
+        color: $--color-primary;
       }
     }
     div {

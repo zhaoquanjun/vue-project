@@ -5,6 +5,10 @@
 }
 .el-select-dropdown__item.selected{
     color: $--color-primary;
+
+}
+.el-select-dropdown__item{
+    font-size: $--font-size-small;
 }
 .el-form {
     .el-select {

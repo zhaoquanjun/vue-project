@@ -28,8 +28,8 @@
           <div class="storePrice-originalPrice">
             <el-input
               placeholder="现价"
-              v-model="storePrice.originalPrice"
-              @blur="blurOriginalPrice"
+              v-model="storePrice.price"
+              @blur="blurPrice"
               style="width:170px"
             >
               <i slot="prefix" class="storePrice-type">{{storeType(storePrice.storeTypeValue)}}</i>
@@ -39,8 +39,8 @@
           <div class="storePrice-price">
             <el-input
               placeholder="原价"
-              v-model="storePrice.price"
-              @blur="blurPrice"
+              v-model="storePrice.originalPrice"
+              @blur="blurOriginalPrice"
               style="width:170px"
             >
               <i slot="prefix" class="storePrice-type">{{storeType(storePrice.storeTypeValue)}}</i>

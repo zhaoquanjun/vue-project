@@ -8,37 +8,36 @@
             @change="onEditorChange($event)"
         ></quill-editor>    
         <div class="mask" v-if="isModalShow"></div>
-            <div id="content" class="contentDialog" v-if="isModalShow">
-                <el-header class="modal-header">
-                    <span style="font-size: 16px;">我的图片</span>
-                    <button @click="cancelEditorImg">X</button>
-                </el-header>
-                <modal-content ref="imgList" :isGrid="true" :multiple="true" @getImgInfo="getImgInfo" :isPopup="true">
-                    <div slot="modal-footer" class="modal-footer" style=" ">
-                        <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
-                        <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
-                    </div>
-                </modal-content>
-            </div>
-            <div class="image-select--upload__area" v-if="videoShow">
-                <div class="mask"></div>
-                <div id="videoContent" class="contentDialog">
-                    <el-header class="modal-header" style="height:65px">
-                        <span class="title" style="font-size: 16px;">我的视频</span>
-                        <i class="iconfont iconguanbi cl-iconfont is-circle" @click="cancelgetVideo"></i>
-                    </el-header>
-                    <videoManage  :multiple="false" @getCheckedList="getCheckedList" :isPopup="true">
-                        <div slot="modal-footer" class="modal-footer">
-                            <button @click="cancelgetVideo" class="cl-button cl-button--primary_notbg">取消</button>
-                            <button @click="getVideoOssUrl" class="cl-button cl-button--primary">确定</button>
-                        </div>
-                    </videoManage>
+        <div id="content" class="contentDialog" v-if="isModalShow">
+            <el-header class="modal-header">
+                <span style="font-size: 16px;">我的图片</span>
+                <button @click="cancelEditorImg"><i class="el-icon el-icon-close cl-iconfont is-circle"></i></button>
+            </el-header>
+            <modal-content ref="imgList" :isGrid="true" :multiple="true" @getImgInfo="getImgInfo" :isPopup="true">
+                <div slot="modal-footer" class="modal-footer" style=" ">
+                    <button type="button" @click="cancelEditorImg" class="cl-button cl-button--primary_notbg">取消</button>
+                    <button type="button" @click="getEditorImg" class="cl-button cl-button--primary">确定</button>
                 </div>
+            </modal-content>
+        </div>
+        <div class="image-select--upload__area" v-if="videoShow">
+            <div class="mask"></div>
+            <div id="videoContent" class="contentDialog">
+                <videoManage  :multiple="false" @cancelgetVideo="cancelgetVideo" @getCheckedList="getCheckedList" :isPopup="true">
+                    <div slot="modal-footer" class="modal-footer">
+                        <button @click="cancelgetVideo" class="cl-button cl-button--small cl-button--primary_notbg">取消</button>
+                        <button @click="getVideoOssUrl" class="cl-button cl-button--small cl-button--primary">确定</button>
+                    </div>
+                </videoManage>
             </div>
+        </div>
+        <popup v-if="popupShow" :siteId="siteId" @handleClosePopup="handleClosePopup" @insertLink="insertLink">
+        </Popup>
     </div>
 </template>
 
 <script>
+import Popup from '@/components/link/popup.vue'
 // 引入编辑器
 import Quill from "quill";
 import { addQuillTitle } from "@/assets/quill-title.js";
@@ -89,6 +88,10 @@ Quill.register("modules/fullscreen", Fullscreen)
 import Video from "@/assets/quill-video"
 Quill.register(Video, true)
 
+//import Link from "@/assets/quill-link"
+//Quill.register(Link, true)
+var LinkBlot= Quill.import("formats/link");
+
 import environment from "@/environment/index";
 import videoManage from "@/components/VideoManage/popupIndex.vue";
 export default {
@@ -101,10 +104,14 @@ export default {
             type: String,
             default: ""
         },
+        siteId: {
+            type: Number
+        }
      },
     components: {
         ModalContent,
-        videoManage
+        videoManage,
+        Popup
     },
     provide: {
         popper: true
@@ -117,7 +124,9 @@ export default {
             checkedList: [],
             maxHeight:0,
             maxWidth:0,
-            dragVideoNode:null
+            dragVideoNode:null,
+            popupShow:false,
+            linkSelection:null
         }
     },
     created() {
@@ -145,7 +154,8 @@ export default {
                         ["video"],
                         [{ lineheight: lineheights }],
                         [{ letterspacing: letterspacings }],
-                        ['fullscreen']
+                        ['link'], 
+                        ['fullscreen']                    
                     ],
                     handlers: {
                         fullscreen() {
@@ -185,7 +195,7 @@ export default {
         },
         getEditorImg() {
             this.isModalShow = false;
-             this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList &&  this.$refs.imgList.clearSelectedList()
             this.insertEditorImg(this.imgData);
         },
         insertEditorImg(imgFiles) {
@@ -329,16 +339,58 @@ export default {
         _setQuillContent(content){
             document.getElementById(this.quillId).querySelector(".ql-editor").innerHTML=content;
             this.videoAddDragEvent();
+        },
+        linkHandler(){
+            var range = this.$refs.quillDetailEditor.quill.getSelection();
+            if(range && range.length>0){
+                this.linkSelection = range;
+                this.popupShow = true;
+            }else{
+                this.linkSelection = null;
+            }
+        },
+        handleClosePopup(val) {
+            this.popupShow = val;
+            return false;
+        },
+        insertLink(linkData){
+            //插入a link
+            if(linkData.Ctype=="none"){
+                //无链接 不处理                
+            }
+            else{
+                //this.$refs.quillDetailEditor.quill.format('link',linkData.Href, Quill.sources.USER);               
+                this.$refs.quillDetailEditor.quill.format('link',linkData.Href, Quill.sources.USER);
+                if(this.linkSelection!=null && (linkData.Target!="_blank" || linkData.Ctype=="file")){
+                    let lines = this.$refs.quillDetailEditor.quill.getLines(this.linkSelection.index, this.linkSelection.length);
+                    if(lines!=null&&lines.length>0){
+                        if(lines[0].children&&lines[0].children.length>0){
+                            lines[0].children.forEach(element => {
+                                var linkText = this.$refs.quillDetailEditor.quill.getContents(this.linkSelection.index,this.linkSelection.length).ops[0].insert;
+                                var elementText = element.text==undefined?element.domNode.text:element.text;
+                                if(element.domNode.nodeName=="A" && linkText== elementText){                                    
+                                    if(linkData.Ctype=="file"){
+                                        element.domNode.setAttribute("data-type","file");
+                                        element.domNode.target = linkData.Target;
+                                    }else{
+                                        element.domNode.target = "_self";
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
         }
     },
     mounted() {
         // 为图片ICON绑定事件  getModule 为编辑器的内部属性
-        this.$refs.quillDetailEditor.quill
-            .getModule("toolbar")
-            .addHandler("image", this.imageHandler);
+        this.$refs.quillDetailEditor.quill.getModule("toolbar").addHandler("image", this.imageHandler);
         // 为视频ICON绑定事件
         this.$refs.quillDetailEditor.quill.getModule('toolbar').addHandler('video', this.videoHandler)
         //this.$refs.quillDetailEditor.quill.root.addEventListener("dblclick",this.imgChangeSizeHandler,!1);
+        // 为link绑定事件  getModule 为编辑器的内部属性
+        this.$refs.quillDetailEditor.quill.getModule("toolbar").addHandler("link", this.linkHandler);
         addQuillTitle();
         this._setQuillContent(this.detailContent);
     },
@@ -379,6 +431,39 @@ export default {
 </style>
 
 <style lang="scss">
+.ql-snow .ql-tooltip {
+  text-align: center;
+}
+.ql-snow .ql-tooltip::before {
+  content: "链接地址:";
+  text-align: center;
+}
+.ql-snow .ql-tooltip[data-mode=link]::before {
+  content: "请输入链接地址:";
+}
+.ql-snow .ql-tooltip a.ql-action {
+    display: none;
+}
+.ql-snow .ql-tooltip a.ql-action::after {
+    border-right: 0px;
+    content: '编辑';
+    padding-right: 0px;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+    border-right: 0px;
+    content: '保存';
+    padding-right: 0px;
+}
+.ql-snow .ql-tooltip a.ql-remove::before {
+    border-right: 0px;
+    content: '移除';
+    padding-right: 0px;
+}
+.ql-snow .ql-tooltip a.ql-preview{
+    line-height: 26px;
+    margin: 0px;
+    padding: 6px 5px;
+}
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
@@ -425,7 +510,7 @@ export default {
 }
 #videoContent {
     position: fixed;
-    width: 1170px;
+    // width: 1000px;
     // height: 840px;
     margin: auto;
     z-index: 1020;
@@ -434,7 +519,6 @@ export default {
     transform: translate(-50%, -50%);
     overflow: hidden;
     box-shadow: 0px 2px 32px 4px rgba(0,0,0,0.13);
-    border: $--border-base;
     border-radius: $--border-radius-base;
 }
 #videoContent .modal-header {
@@ -472,7 +556,7 @@ export default {
     bottom: -11px;
     right: 16px;
     width: 100%;
-    z-index: 100;
+    z-index: 99;
     text-align: right;
     padding-top: 0;
     button {

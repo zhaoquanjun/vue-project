@@ -17,7 +17,7 @@
                     <el-input
                         class="contentDetail-title"
                         placeholder="请输入产品标题（必填）"
-                        v-model="detailData.name"
+                        v-model.trim="detailData.name"
                         maxlength="100"
                         show-word-limit
                     ></el-input>
@@ -35,7 +35,7 @@
                 <el-form-item>
                     <div class="flexSpace">
                         <div>
-                            <span style="font-size:12px">分类:</span>
+                            <span style="font-size:12px">分类</span>
                             <span class="select-sort category">
                                 <div class="product-category" @click.stop="multipleCatagory">
                                     <ul class="category-list">
@@ -104,6 +104,7 @@
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
                     <quill-detail
+                    :siteId="siteId"
                     :quillId="quillContentId"
                     :detailContent="detailData.contentDetail"
                     @detailContentChange='detailContentChange1'></quill-detail>                              
@@ -115,6 +116,7 @@
                         <el-form-item label prop="specificationContent">
                             <!-- quill-editor 编辑一-->
                             <quill-detail
+                            :siteId="siteId"
                             :quillId="quillDetailId"
                             :detailContent="detailData.specificationContent"
                             @detailContentChange='detailContentChange'></quill-detail>                           
@@ -140,7 +142,7 @@
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="padding: 0 12px 0 0;color: #606266;">预览网站</span>
+                                    <span style="padding: 0 12px 0 0;color: #606266;font-size:12px;">预览网站</span>
                                     <el-tooltip class="item" effect="dark" placement="top">
                                         <div slot="content">将在所选网站的二级域名下打开预览页面</div>
                                         <i class="iconfont iconyiwen"></i>
@@ -148,7 +150,7 @@
                                     <span class="select-sort">
                                         <el-select
                                             size="small"
-                                            :value="detailData.defaultSiteId == 0 ? null : detailData.defaultSiteId"
+                                            :value="detailData.defaultSiteId == 0 ? ( siteOptions[0] && siteOptions[0].siteId): detailData.defaultSiteId"
                                             placeholder="请选择"
                                             @change="changeSiteId"
                                         >
@@ -165,7 +167,7 @@
                         </el-form-item>
 
                         <el-form-item></el-form-item>
-                        <el-form-item label="置頂" prop="delivery">
+                        <el-form-item label="置顶" prop="delivery">
                             <el-switch v-model="detailData.isTop"></el-switch>
                         </el-form-item>
                     </el-collapse-item>
@@ -280,7 +282,7 @@ export default {
             ],
             value2: ["全部分类1", "全部分类2"],
 
-            siteOptions: null,
+            siteOptions: [],
             activeName: "",
             activeName0: "",
             activeName1: "",
@@ -352,11 +354,12 @@ export default {
             ratio:[],
             origin: [],
             quillDetailId:"quill-specificationContent",
-            quillContentId:"quill-contentDetail"
+            quillContentId:"quill-contentDetail",
+            siteId:0
         };
     },
     created() {
-        this.getTree();        
+        this.getTree();
     },
     mounted() {
         document.addEventListener("click", e => {
@@ -442,14 +445,14 @@ export default {
             });
         },
         // 新建保存
-        submitForm(formName, fileList, disableRefObj, storeInfo) {
+        submitForm(formName, fileList, storeInfo) {
             this.detailData.thumbnailPicUrlList = fileList;
             this.detailData.currencyType = storeInfo.storeTypeValue;
             this.detailData.originalPrice = storeInfo.originalPrice;
             this.detailData.price = storeInfo.price;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.insertArticle(disableRefObj);
+                    this.insertArticle();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -461,14 +464,12 @@ export default {
             this.$refs[formName].resetFields();
         },
         //新建产品
-        async insertArticle(disableRefObj) {
-            disableRefObj.inSaveProcess = true;
+        async insertArticle() {
             var html = document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
             );
-            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
@@ -498,7 +499,7 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, fileList, disableRefObj, storeInfo) {
+        editArticle(formName, fileList, storeInfo) {
             if (fileList && fileList.length > 0) {
                 this.detailData.thumbnailPicUrlList = fileList;
             }
@@ -507,7 +508,7 @@ export default {
             this.detailData.price = storeInfo.price;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.saveArticle(disableRefObj);
+                    this.saveArticle();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -515,8 +516,7 @@ export default {
             });
         },
         //编辑保存产品
-        async saveArticle(disableRefObj) {
-            disableRefObj.inSaveProcess = true;
+        async saveArticle() {
             var html = document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
             console.log('this.detailData',this.detailData);
@@ -524,7 +524,6 @@ export default {
                 this.curProduct,
                 this.detailData
             );
-            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
@@ -670,8 +669,10 @@ export default {
         async getSiteList() {
             let { data } = await productManageApi.getSiteList();
             this.siteOptions = data;
+            this.siteId = this.siteOptions[0].siteId;
         },
         changeSiteId(siteId) {
+            this.siteId = siteId
             this.detailData.defaultSiteId = siteId;
         },
         detailContentChange(html){
@@ -777,6 +778,19 @@ export default {
 }
 .desc-textarea /deep/ .el-form-item__content .el-textarea .el-textarea__inner {
     padding-bottom: 50px;
+}
+.article-content /deep/ .el-collapse-item__content{
+    font-size: $--font-size-base;
+}
+.article-content /deep/ .el-collapse-item__header{
+    font-size: $--font-size-base;
+    font-weight: 600;
+}
+.article-content /deep/ .el-form-item__label{
+    font-size: $--font-size-small;
+}
+.set-article /deep/ .el-select{
+    width: 220px;
 }
 .flexSpace {
     display: flex;

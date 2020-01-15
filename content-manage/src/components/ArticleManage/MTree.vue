@@ -236,7 +236,7 @@ export default {
                 this.setCss(allCategoryEle, {
                     background: "#e0faff",
                     color: "#262626",
-                    borderLeft: "2px solid #ff6b00"
+                    borderLeft: "2px solid #ff6a00"
                 });
             } else {
                 this.setCss(allCategoryEle, {

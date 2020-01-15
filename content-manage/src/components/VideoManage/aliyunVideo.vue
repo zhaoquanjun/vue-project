@@ -159,7 +159,7 @@ export default {
       tableHeight: 500,
       aliyunVideoData: {},
       picSearchOptions: {
-        pageSize: 10,
+        pageSize: 50,
         pageIndex: 1,
         orderByType: "createtime",
         isDescending: true,
@@ -187,7 +187,7 @@ export default {
     },
     async getAksk() {
       let { data } = await videoManageApi.getAksk();
-      if (data.ak) {
+      if (data.vodAuthorization) {
         this.configured = true;
         this.getListOfAli();
         this.$nextTick(() => {
@@ -352,8 +352,7 @@ export default {
     color: #fff;
     padding: 4px;
     &:hover {
-      background: rgba(0, 0, 0, 1);
-      border-radius: $--border-radius-circle;
+      color: $--color-primary;
     }
   }
 }

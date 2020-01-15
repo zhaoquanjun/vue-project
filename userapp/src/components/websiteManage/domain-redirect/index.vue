@@ -67,7 +67,7 @@ export default {
                 if (data.handleType ===2) {
                   this.warmPromptText = "您解析成功的域名均已添加301，您可对列表301信息进行编辑或再进行域名解析";
                   this.isWarmShow=true;
-                }else if (data.handleType===0){
+                }else if (data.handleType===1){
                       this.warmPromptText =
                         "您还没有解析成功的域名，请进行域名解析";
                         this.isWarmShow=true;
@@ -153,7 +153,7 @@ export default {
     }
     .handler-btn {
         margin-left: 32px;
-        color:#ff6b00;
+        color:$--color-primary;
     }
     .close-tip{
         float: right;

@@ -72,7 +72,9 @@
         <div id="content" class="contentDialog" v-if="isModalShow">
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
-                <button @click="cancelEditorImg">X</button>
+                <button @click="cancelEditorImg">
+                    <i class="el-icon el-icon-close cl-iconfont is-circle"></i>
+                </button>
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="true" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">
@@ -117,8 +119,7 @@ export default {
             dialogVisible: false,
             dialogImageUrl: "",
             limit: 9,
-            isModalShow: false,
-            imgsViewWay:[]
+            isModalShow: false
         };
     },
 
@@ -131,7 +132,6 @@ export default {
             this.isModalShow = false;
         },
         getImgInfo(info) {
-            console.log(info, "0000000");
              let result = [];
                 let obj = {};
                 for (let i = 0; i < info.length; i++) {
@@ -148,15 +148,18 @@ export default {
             //console.log(this.$refs.imgList.selectedImg, "selectedImg");
             // this.imageUrl1 = this.imgData[0].fullOssUrl;
             // this.isModalShow = false;
-            
+            this.$refs.imgList && this.$refs.imgList.clearSelectedList()
             if(this.isReplace=="singular"){
-                this.$set(this.newFileList,this.curRepalceIndex,this.imgData[0].fullOssUrl)
+                this.imgData[0] && this.$set(this.newFileList,this.curRepalceIndex,this.imgData[0].fullOssUrl)
                 
             }else{
-                this.imgData.forEach((item, index) => {
-                    if(this.newFileList.length<9) this.newFileList.push(item.fullOssUrl);
-                 });
-                this.newFileList =  Array.from(new Set(this.newFileList))
+                if(this.imgData){
+                    this.imgData.forEach((item, index) => {
+                        if(this.newFileList.length<9) this.newFileList.push(item.fullOssUrl);
+                    });
+                    this.newFileList =  Array.from(new Set(this.newFileList))
+                }
+                
             }
             this.isModalShow = false;
         },
@@ -164,7 +167,7 @@ export default {
             this.isModalShow = true;
             this.isReplace = flag;
             this.curRepalceIndex = index;
-            this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList && this.$refs.imgList.clearSelectedList()
         },
         handleRemove(index) {
             this.newFileList.splice(index, 1);

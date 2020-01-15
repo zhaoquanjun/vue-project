@@ -31,15 +31,21 @@
                 </div>
             </div>
             <div class="footer">
-                <button 
-                    v-if="!step1" 
-                    class="cl-button cl-button--primary" 
-                    :class="{'is-disabled':!(codeValue)}"
-                    @click="goSave(2)"
-                >下一步</button>
+                <Debounce :time="1000" !isDebounce>
+                    <button
+                        v-if="!step1"
+                        class="cl-button cl-button--primary"
+                        :class="{'is-disabled':!(codeValue)}"
+                        @click="goSave(2)"
+                    >下一步</button>
+                </Debounce>
                 <button v-if="!step1" class="cl-button cl-button--primary_notbg" @click="closeAddTemplate">取消</button>
-                <button v-if="step1" class="cl-button cl-button--primary" @click="saveAddTemplate">保存</button>
-                <button v-if="step1" class="cl-button cl-button--primary_notbg" @click="goSave(1)">上一步</button>
+                <Debounce :time="1000" !isDebounce>
+                    <button v-if="step1" class="cl-button cl-button--primary" @click="saveAddTemplate">保存</button>
+                </Debounce>
+                <Debounce :time="1000" !isDebounce>
+                    <button v-if="step1" class="cl-button cl-button--primary_notbg" @click="goSave(1)">上一步</button>
+                </Debounce>
             </div>
         </div>
     </div>
@@ -77,6 +83,9 @@
                 }
             },
             async goSave(val){
+                if(!this.codeValue){
+                    return
+                }
                 if(val === 2) {
                     let { data, status } = await dashboardApi.getTemplateDetail(this.codeValue);
                     if(data) {

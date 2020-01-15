@@ -227,6 +227,14 @@ export default {
                     closeOnClickModal: false,
                     callback: async action => {
                         if (action === "confirm") {
+                            console.log(idlist)
+                            idlist.forEach(item=>{
+                                console.log("item",item)
+                                if(item.id==this.curImgInfo.id){
+                                    this.curImgInfo=""
+                                    this.$emit("getImgInfo", "")
+                                }
+                            })
                             let {
                                 status,
                                 data
@@ -239,7 +247,10 @@ export default {
                                     showClose: false,
                                     duration: 1500
                                 });
+                                this.clearSelectedList()
+                                this.$emit("getImgInfo", "")
                                 this.getList();
+                                
                             }
                         }
                     }
@@ -249,7 +260,7 @@ export default {
        
         // 清空选中的列表
         clearSelectedList() {
-            this.$refs.imgList.clearSelectedList()
+            this.$refs.imgList && this.$refs.imgList.clearSelectedList()
         },
         async changeCategoryPic(categoryId, idList) {
             let { data, status } = await imgManageApi.changeCategory(

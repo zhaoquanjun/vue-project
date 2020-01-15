@@ -24,7 +24,7 @@
         <div id="content" class="contentDialog" v-show="isModalShow">
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
-                <span @click="cancelgetImg">X</span>
+                <i @click="cancelgetImg" class="el-icon el-icon-close cl-iconfont is-circle"></i>
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :isPopup="true">
                 <div slot="modal-footer" class="modal-footer">
@@ -48,7 +48,6 @@ export default {
     },
     methods: {
         getImgInfo(info) {
-            console.log(info, "0000000");
             this.imgData = info;
         },
         getImg() {

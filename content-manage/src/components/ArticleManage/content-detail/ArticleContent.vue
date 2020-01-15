@@ -17,7 +17,7 @@
                     <el-input
                         class="contentDetail-title"
                         placeholder="请输入文章标题（必填）"
-                        v-model="articleDetail.title"
+                        v-model.trim="articleDetail.title"
                         maxlength="100"
                         show-word-limit
                     ></el-input>
@@ -76,6 +76,7 @@
                 <el-form-item label prop="contentDetail">
                     <!-- quill-editor 编辑一-->
                     <quill-detail
+                    :siteId="siteId"
                     :quillId="quillContentId"
                     :detailContent="articleDetail.contentDetail"
                     @detailContentChange='detailContentChange'></quill-detail>  
@@ -99,7 +100,7 @@
                                     </el-col>
                                 </div>
                                 <div style="float:left;margin-left: 35px;">
-                                    <span style="padding: 0 12px 0 0;color: #606266;">预览网站</span>
+                                    <span style="padding: 0 12px 0 0;color: #606266;font-size:12px;">预览网站</span>
                                     <el-tooltip class="item" effect="dark" placement="top">
                                         <div slot="content">将在所选网站的二级域名下打开预览页面</div>
                                         <i class="iconfont iconyiwen"></i>
@@ -107,7 +108,7 @@
                                     <span class="select-sort">
                                         <el-select
                                             size="small"
-                                            :value="articleDetail.defaultSiteId == 0 ? null : articleDetail.defaultSiteId"
+                                            :value="articleDetail.defaultSiteId == 0 ? ( siteOptions[0] && siteOptions[0].siteId) : articleDetail.defaultSiteId"
                                             placeholder="请选择"
                                             @change="changeSiteId"
                                         >
@@ -214,7 +215,7 @@ export default {
                     label: "下线"
                 }
             ],
-            siteOptions: null,
+            siteOptions: [],
             value: true,
             activeName: "",
             activeName1: "",
@@ -256,7 +257,8 @@ export default {
             checkedList: [],
             ratio:[],
             origin: [],
-            quillContentId:"quill-contentDetail"
+            quillContentId:"quill-contentDetail",
+            siteId:0
         };
     },
     created() {
@@ -345,11 +347,11 @@ export default {
             this.categoryName = node.label;
         },
         // 新建保存
-        submitForm(formName, imageUrl, disableRefObj) {
+        submitForm(formName, imageUrl) {
             this.articleDetail.pictureUrl = imageUrl;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.insertArticle(disableRefObj);
+                    this.insertArticle();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -361,14 +363,12 @@ export default {
             this.$refs[formName].resetFields();
         },
         //插入文章
-        async insertArticle(disableRefObj) {
-            disableRefObj.inSaveProcess = true;
+        async insertArticle() {
             var html=document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.articleDetail.contentDetail = html;
             let { status, data } = await articleManageApi.createArticle(
                 this.articleDetail
             );
-            disableRefObj.inSaveProcess = false;
             if (status === 200) {
                 this.$confirm("保存成功!", "提示", {
                     confirmButtonText: "新增下一篇",
@@ -395,11 +395,11 @@ export default {
             }
         },
         // 编辑提交
-        editArticle(formName, imageUrl, disableRefObj) {
+        editArticle(formName, imageUrl) {
             this.articleDetail.pictureUrl = imageUrl;
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.saveArticle(disableRefObj);
+                    this.saveArticle();
                 } else {
                     console.log("error submit!!");
                     return false;
@@ -407,14 +407,12 @@ export default {
             });
         },
         //编辑保存文章
-        async saveArticle(disableRefObj) {
-            disableRefObj.inSaveProcess = true;
+        async saveArticle() {
             var html=document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
             this.articleDetail.contentDetail = html;
             let { status, data } = await articleManageApi.editArticle(
                 this.articleDetail
             );
-            disableRefObj.inSaveProcess = false;
             this.$confirm("保存成功!", "提示", {
                 confirmButtonText: "新增下一篇",
                 customClass: "medium",
@@ -475,8 +473,10 @@ export default {
         async getSiteList() {
             let { data } = await articleManageApi.getSiteList();
             this.siteOptions = data;
+            this.siteId = this.siteOptions[0].siteId;
         },
         changeSiteId(siteId) {
+            this.siteId = siteId
             this.articleDetail.defaultSiteId = siteId;
         },
         detailContentChange(html){
@@ -523,9 +523,15 @@ export default {
     padding-bottom: 50px;
 }
 .select-sort /deep/ .el-select{
-    width: 200px;
+    width: 220px;
 }
-
+.article-content /deep/ .el-collapse-item__header{
+    font-size: $--font-size-base;
+    font-weight: 600;
+}
+.article-content /deep/ .el-form-item__label{
+    font-size: $--font-size-small;
+}
 </style>
 
 <style lang="scss">
@@ -570,6 +576,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+
 #content{
     overflow: hidden;
 }
