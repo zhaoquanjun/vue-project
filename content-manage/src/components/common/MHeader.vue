@@ -59,7 +59,7 @@
           <div class="myAppTitle">
             已购买的服务
             <span style="cursor:pointer;" @click="closeChangeApp">
-              <i class="el-icon el-icon-close is-circle cl-iconfont" style="font-size:17px;"></i>
+              <i class="iconfont iconguanbi is-circle cl-iconfont" style="font-size:17px;"></i>
             </span>
           </div>
         </div>
@@ -511,6 +511,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  .iconguanbi{
+    color:$--color-text-primary;
+    &:hover{
+      background: $--background-color-selected;
+    }
+  }
 }
 .appBackground {
   position: relative;
