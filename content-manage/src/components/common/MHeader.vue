@@ -454,7 +454,7 @@ export default {
     cursor: pointer;
     text-align: left;
     background: #fff;
-    color: #a1a8b1;
+    color: $--color-text-primary;
     position: absolute;
     z-index: 10000;
     right: 0;
