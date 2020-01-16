@@ -10,9 +10,9 @@
             @sort-change='sortChange'
         >
             <template slot="empty">
-                <div class="empty-table">
+                <div class="empty-table" @click="switchUploadBoxShowStatus">
                     <img src="~img/table-empty.png" />
-                    <p>无数据</p>
+                    <p>添加数据</p>
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
@@ -206,7 +206,10 @@ export default {
             this.changeCategoryPicId = row.id;
             this.$emit("moveClassify", true, row);
         },
-      
+        // 上传图片
+        switchUploadBoxShowStatus(){
+            this.$emit("switchUploadBoxShowStatus")
+        },
         // 重命名图片名称
         rename(id, row, index) {
            if(row.title)this.newName = row.title;
@@ -317,6 +320,8 @@ export default {
 .el-table /deep/ .descending .sort-caret.descending{
     border-top-color: $--color-primary ;
 }
-
+.table-wrap /deep/ .el-table__empty-text{
+    width: 0;
+}
 </style>
 

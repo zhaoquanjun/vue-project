@@ -9,7 +9,7 @@
             @selection-change="handleSelectionChange"
         >
             <template slot="empty">
-                <div class="empty-table">
+                <div class="empty-table" style="cursor:default">
                     <img src="~img/table-empty.png" />
                     <p>无数据</p>
                 </div>
@@ -290,7 +290,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@/styles/content-manage/manege-table.scss";
-
+.table-content /deep/ .el-table__empty-text{
+    width: 0;
+}
 .video-img-name {
     overflow: hidden;
     text-overflow: ellipsis;

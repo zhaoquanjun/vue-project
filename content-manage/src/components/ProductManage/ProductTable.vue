@@ -10,9 +10,9 @@
             @sort-change='sortChange'
         >
             <template slot="empty">
-                <div class="empty-table">
+                <div class="empty-table" @click="addArticle">
                     <img src="~img/table-empty.png" />
-                    <p>无数据</p>
+                    <p>添加数据</p>
                 </div>
             </template>
             <el-table-column type="selection"></el-table-column>
@@ -191,6 +191,10 @@ export default {
             });
             return params;
         },
+        // 新增产品
+        addArticle(){
+            this.$emit("addArticle")
+        },
         /**
          * 编辑文章
          */
@@ -309,6 +313,9 @@ export default {
 }
 .el-table /deep/ .descending .sort-caret.descending{
     border-top-color: $--color-primary ;
+}
+.table-content /deep/ .el-table__empty-text{
+    width: 0;
 }
 </style>
 

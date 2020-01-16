@@ -39,6 +39,7 @@
                     :article-search-options="articleSearchOptions"
                     :tree-result="treeResult"
                     @getArticleList="getArticleList"
+                    @addArticle="addArticle"
                     @batchMove="batchMoveNews"
                     @batchCopy="batchCopyNews"
                     @batchRemove="batchRemoveNews"
@@ -127,6 +128,9 @@ export default {
         this.getArticleList();
         this.getTreeAsync();
     },
+    created(){
+        this.keyupEnter();
+    }, 
     computed: {
         isInvitationlWidth() {
             return this.isInvitationPanelShow === true ? 331 : 0;
@@ -136,6 +140,13 @@ export default {
         }
     },
     methods: {
+        keyupEnter(){
+            document.onkeydown = e =>{
+                if (e.keyCode === 13) {
+                this.isInvitationPanelShow && this.handOperateArticle()
+                }
+            }
+        },
         // 移动分类 或是 复制到分类
         changeOperateName(operate) {
             this.operateName = operate;

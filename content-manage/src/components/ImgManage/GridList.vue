@@ -15,7 +15,7 @@
             </li>
         </ul>
         <div v-if="imgPageResult && imgPageResult.list && imgPageResult.list.length<1">
-                <div class="empty-table">
+                <div class="empty-table" style="cursor:default">
                     <img src="~img/table-empty.png" />
                     <p>无数据</p>
                 </div>

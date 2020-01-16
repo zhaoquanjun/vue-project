@@ -85,7 +85,7 @@
               ></i>
             </el-input>
           </div>
-          <div class="empty-table" v-show="!appList.length">
+          <div class="empty-table" v-show="!appList.length" style="cursor:default">
             <img src="~img/table-empty.png" />
             <p>无数据</p>
           </div>
@@ -514,7 +514,8 @@ export default {
   .iconguanbi{
     color:$--color-text-primary;
     &:hover{
-      background: $--background-color-selected;
+      color:$--color-text-primary;
+      background: $--icon-hover-color;
     }
   }
 }

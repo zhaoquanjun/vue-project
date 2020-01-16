@@ -49,6 +49,7 @@
                     :img-page-result="imgPageResult"
                     :pic-search-options="picSearchOptions"
                     :tree-result="treeResult"
+                    @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                     @getList="getList"
                     @changeCategory="changeCategoryPic"
                     @rename="renamePic"
@@ -195,7 +196,17 @@ export default {
         this.getList();
         this.getTree();
     },
+    created(){
+        this.keyupEnter();
+    }, 
     methods: {
+        keyupEnter(){
+            document.onkeydown = e =>{
+                if (e.keyCode === 13) {
+                this.isInvitationPanelShow && this.updateCategoryPic();
+                }
+            }
+        },
         tabClick(item) {
             if(item.name == "aliyun"){
                 this.$refs.aliyunVideo.init();

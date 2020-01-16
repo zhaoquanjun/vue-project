@@ -36,6 +36,7 @@
                     :article-page-result="articlePageResult"
                     :article-search-options="productSearchOptions"
                     :tree-result="treeResult"
+                    @addArticle="addArticle"
                     @contentTableList="contentTableList"
                     @batchMove="batchMoveNews"
                     @batchSwitchStatus="batchSwitchStatus"
@@ -140,6 +141,9 @@ export default {
         this.getTree();
         this.contentTableList();
     },
+    created(){
+        this.keyupEnter();
+    }, 
     computed: {
         isInvitationlWidth() {
             return this.isInvitationPanelShow === true ? 331 : 0;
@@ -149,6 +153,13 @@ export default {
         }
     },
     methods: {
+        keyupEnter(){
+            document.onkeydown = e =>{
+                if (e.keyCode === 13) {
+                this.isInvitationPanelShow && this.updateCategoryArticle();
+                }
+            }
+        },
         // zxb 获取table列表
         async contentTableList(options) {
             this.$Loading.show();

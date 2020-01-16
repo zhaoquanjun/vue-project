@@ -39,6 +39,7 @@
                     :tree-result="treeResult"
                     :use-storage="useStorage"
                     @getList="getList"
+                    @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                     @changeCategory="changeCategoryPic"
                     @rename="renameItemTitle"
                     @batchRemove="batchRemovePic"
@@ -179,7 +180,17 @@ export default {
         this.getTree();
         this.getStorageUsage();
     },
+    created(){
+        this.keyupEnter();
+    }, 
     methods: {
+        keyupEnter(){
+            document.onkeydown = e =>{
+                if (e.keyCode === 13) {
+                this.isInvitationPanelShow && this.updateCategoryPic();
+                }
+            }
+        },
         // 获取使用的内容
         async getStorageUsage() {
             let { data, status } = await getStorageUsage("Audio");

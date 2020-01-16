@@ -41,6 +41,7 @@
                     :tree-result="treeResult"
                     :use-storage="useStorage"
                     @getPicList="getPicList"
+                    @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                     @changeCategory="changeCategory"
                     @rename="rename"
                     @batchRemove="batchRemove"
@@ -267,7 +268,17 @@ export default {
         this.getTree();
         this.getStorageUsage();
     },
+    created(){
+        this.keyupEnter();
+    }, 
     methods: {
+        keyupEnter(){
+            document.onkeydown = e =>{
+                if (e.keyCode === 13) {
+                this.isInvitationPanelShow && this.updateCategoryPic();
+                }
+            }
+        },
         // 获取使用的内存
         async getStorageUsage() {
             let { data, status } = await getStorageUsage("File");

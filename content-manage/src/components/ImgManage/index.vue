@@ -41,6 +41,7 @@
                     :tree-result="treeResult"
                     :multiple="multiple"
                     @getList="getList"
+                    @switchUploadBoxShowStatus="switchUploadBoxShowStatus"
                     @rename="renamePic"
                     @batchRemove="batchRemovePic"
                     @moveClassify="moveClassify"
@@ -185,7 +186,17 @@ export default {
         this.getList();
         
     },
+    created(){
+        this.keyupEnter();
+    }, 
     methods: {
+        keyupEnter(){
+            document.onkeydown = e =>{
+                if (e.keyCode === 13) {
+                this.isInvitationPanelShow && this.updateCategoryPic();
+                }
+            }
+        },
         // 获取列表
         async getList(node) {
           

@@ -10,9 +10,9 @@
             @sort-change='sortChange'
         >
             <template slot="empty">
-                <div class="empty-table">
-                    <img src="~img/table-empty.png" />
-                    <p>无数据</p>
+                <div class="empty-table" @click="addArticle">
+                    <img src="~img/table-empty.png" @click="addArticle"/>
+                    <p>添加数据</p>
                 </div>
             </template>
             <el-table-column type="selection" ></el-table-column>
@@ -182,7 +182,12 @@ export default {
                 this.$refs.operateSection.style.display = "block";
             }
         },
-
+        /**
+         * 显示无数据icon时的添加数据操作
+         */
+        addArticle(){
+          this.$emit("addArticle")
+        },
         /**
          * 删除操作
          */
@@ -276,6 +281,9 @@ export default {
 }
 .table-content /deep/ .el-tooltip.ellipsis.cursor-p.item{
     outline: none;
+}
+.table-content /deep/ .el-table__empty-text{
+    width: 0;
 }
 </style>
 

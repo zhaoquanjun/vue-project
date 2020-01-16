@@ -114,8 +114,17 @@ export default {
     mounted() {
         this.getPageList();
     },
+    created(){
+        this.keyupEnter();
+    },  
     methods: {
-     
+        keyupEnter(){
+            document.onkeydown = e =>{
+                if (e.keyCode === 13) {
+                this.isInvitationPanelShow && this.recovery()
+                }
+            }
+        },
         // 获取列表
         async getPageList(node) {
             this.$Loading.show();            
@@ -149,7 +158,6 @@ export default {
                 status,
                 data
             } = await recycleManageApi.pageRecovery(this.reconveryData);
-            console.log(status, data)
             if (status === 200) {
                 this.isInvitationPanelShow = false;
                 this.$notify({

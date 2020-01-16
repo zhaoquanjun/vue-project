@@ -52,7 +52,7 @@
           @sort-change="sortChange"
         >
           <template slot="empty">
-            <div class="empty-table">
+            <div class="empty-table" style="cursor:default">
               <img src="~img/table-empty.png" />
               <p>无数据</p>
             </div>
