@@ -2,9 +2,9 @@
   <div class="table-list" id="table-list">
     <el-table ref="multipleTable" :data="listData" tooltip-effect="dark" class="content-table">
       <template slot="empty">
-        <div class="empty-table">
+        <div class="empty-table" style="cursor:default">
           <img src="~img/table-empty.png" />
-          <p style="cursor:default">无数据</p>
+          <p>无数据</p>
         </div>
       </template>
       <el-table-column prop="templateName" label="一级分类" show-overflow-tooltip min-width="150">
@@ -76,6 +76,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.table-list /deep/ .el-table__empty-text{
+    width: 0;
+}
 .moreList {
   width: 76px;
   .moreListItem {

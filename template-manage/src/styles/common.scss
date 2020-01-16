@@ -54,22 +54,21 @@ body {
 
 // 暂无数据
 .empty-table {
-    padding: 50px;
     text-align: center;
-    height: 251px;
-
+    height: 90px;
+    width: 90px;
+    cursor: pointer;
+    
     img {
         vertical-align: middle;
         padding: 18px 28px;
         display: inline-block;
         width: 38px;
         height: 32px;
-        margin-top: 50px;
     }
 
     p {
         color: #262626;
-        cursor: pointer;
     }
 }
 

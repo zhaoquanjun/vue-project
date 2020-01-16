@@ -85,9 +85,9 @@
               ></i>
             </el-input>
           </div>
-          <div class="empty-table" v-show="!appList.length">
+          <div class="empty-table" v-show="!appList.length" style="cursor:default">
             <img src="~img/table-empty.png" />
-            <p style="cursor:default">无数据</p>
+            <p>无数据</p>
           </div>
           <el-col
             :span="24"
@@ -359,6 +359,9 @@ export default {
 };
 </script>
 <style scoped>
+.header /deep/ .el-table__empty-text{
+    width: 0;
+}
 .myApp /deep/ .el-dialog {
   overflow: hidden;
 }

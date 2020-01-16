@@ -10,9 +10,9 @@
       :default-sort="{prop: 'createTime', order: 'descending'}"
     >
       <template slot="empty">
-        <div class="empty-table">
+        <div class="empty-table" @click="createTemplatedialogShow">
           <img src="~img/table-empty.png" />
-          <p @click="createTemplatedialogShow">添加数据</p>
+          <p>添加数据</p>
         </div>
       </template>
       <el-table-column prop="templateName" label="模板名称" show-overflow-tooltip min-width="150">
@@ -282,6 +282,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.table-list /deep/ .el-table__empty-text{
+    width: 0;
+}
 .table-list /deep/ .el-table .ascending .sort-caret.ascending {
   border-bottom-color: $--color-primary;
 }

@@ -11,9 +11,9 @@
       :default-sort="{prop: 'createTime', order: 'descending'}"
     >
       <template slot="empty">
-        <div class="empty-table">
+        <div class="empty-table" style="cursor:default">
           <img src="~img/table-empty.png" />
-          <p style="cursor:default">无数据</p>
+          <p>无数据</p>
         </div>
       </template>
       <el-table-column type="selection" :selectable="selectable"></el-table-column>
@@ -175,6 +175,9 @@ export default {
 }
 .table-list /deep/ .el-table .descending .sort-caret.descending {
   border-top-color: $--color-primary;
+}
+.table-list /deep/ .el-table__empty-text{
+    width: 0;
 }
 .moreList {
   width: 76px;
