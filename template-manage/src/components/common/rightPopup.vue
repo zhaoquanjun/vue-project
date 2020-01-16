@@ -45,12 +45,22 @@ export default {
       myPopupShow: this.popupShow
     };
   },
+  created(){
+    this.keyupEnter();
+  },  
   watch: {
     popupShow() {
       this.myPopupShow = this.popupShow;
     }
   },
   methods: {
+    keyupEnter(){
+      document.onkeydown = e =>{
+        if (e.keyCode === 13) {
+          this.myPopupShow && this.confirm()
+        }
+      }
+    },
     closePopup() {
       this.$emit("closePopup");
     },
@@ -73,6 +83,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding-bottom: 8px;
+  .iconfont{
+    color: $--color-text-regular;
+    &:hover{
+      color:$--color-text-regular;
+    }
+  }
   .popupTitle-text {
     font-size: $--font-size-base;
     font-weight: $--font-weight-base;

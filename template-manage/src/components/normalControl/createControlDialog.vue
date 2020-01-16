@@ -116,6 +116,16 @@
           <div class="ym-form-item__error" v-show="errorSettingStyleTips">请输入控件样式</div>
         </div>
         <div class="contentItem">
+          <div class="contentItem-title">别名</div>
+          <el-input
+            v-model="settingRemark"
+            @blur="blurSettingRemark"
+            placeholder="请输入控件别名"
+            class="contentItem-input"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorSettingRemarkTips">请输入控件别名</div>
+        </div>
+        <div class="contentItem">
           <div class="contentItem-title">Html</div>
           <el-input
             v-model="settingHtml"
@@ -178,6 +188,8 @@ export default {
       errorSettingTypeTips: false,
       settingStyle: "style1",
       errorSettingStyleTips: false,
+      settingRemark:"",
+      errorSettingRemarkTips:false,
       settingHtml: ""
     };
   },
@@ -206,6 +218,7 @@ export default {
       this.picUrl = row.controlImg;
       this.settingType = row.controlType;
       this.settingStyle = row.controlStyle;
+      this.settingRemark=row.remark;
       this.settingHtml = row.controlHtml;
       this.settingTemplateShow = true;
     },
@@ -234,6 +247,10 @@ export default {
         this.errorSettingStyleTips = true;
         return;
       }
+      if (this.settingRemark == "") {
+        this.errorSettingRemarkTips = true;
+        return;
+      }
       let para = {
         controlName: this.settingTemplateName,
         firstType: this.settingFirstTypeSelect,
@@ -244,6 +261,7 @@ export default {
         controlImg: this.picUrl,
         controlType: this.settingType,
         controlStyle: this.settingStyle,
+        remark:this.settingRemark,
         controlHtml: this.settingHtml
       };
       this.settingTemplateShow = false;
@@ -271,6 +289,8 @@ export default {
       this.errorSettingTypeTips = false;
       this.settingStyle = "style1";
       this.errorSettingStyleTips = false;
+      this.settingRemark="";
+      this.errorSettingRemarkTips=false;
       this.settingHtml = "";
     },
     blurTemplateName() {
@@ -292,6 +312,13 @@ export default {
         this.errorSettingStyleTips = true;
       } else {
         this.errorSettingStyleTips = false;
+      }
+    },
+    blurSettingRemark() {
+      if (this.settingRemark == "") {
+        this.errorSettingRemarkTips = true;
+      } else {
+        this.errorSettingRemarkTips = false;
       }
     },
     async choseSettingFirstType() {

@@ -95,8 +95,8 @@
           >
             <template slot="empty">
               <div class="empty-table">
-                <img src="~img/table-empty.png"  style="width:50px;"/>
-                <p>无数据</p>
+                <img src="~img/table-empty.png"/>
+                <p @click="createTemplatedialogShow">添加数据</p>
               </div>
             </template>
             <el-table-column prop="siteName" label="缩略图" width="230">
@@ -247,7 +247,7 @@
               <span>开通整站模版</span>
             </span>
             <span class="close-pannel" @click="cancelCreateTemplate">
-              <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
+              <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
             </span>
           </div>
           <div class="tips">开通【模板应用】服务，填写的手机号将是该模板的管理员</div>
@@ -420,7 +420,7 @@
               <span>邀请成员</span>
             </span>
             <span class="close-pannel" @click="cancelInvitedMember">
-              <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:16px"></i>
+              <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
             </span>
           </div>
           <div class="tips">输入成员手机号，可邀请成员协同管理模板</div>
@@ -633,6 +633,9 @@ export default {
     };
   },
   components: {},
+  created(){
+    this.keyupEnter();
+  },
   mounted() {
     this.getFirstIndustry();
     this.getTemplateList();
@@ -659,6 +662,15 @@ export default {
     });
   },
   methods: {
+    keyupEnter(){
+      document.onkeydown = e =>{
+        if (e.keyCode === 13) {
+          this.createTemplateShow && this.createTemplate();
+          this.invitedMemberShow && this.confirmInvitedMember();
+          this.settingTemplateShow && this.saveSettingTemplate();
+        }
+      }
+    }, 
     getTemplateStatus(status) {
       switch (status) {
         case 0:
@@ -1616,6 +1628,13 @@ export default {
     .close-pannel {
       float: right;
       cursor: pointer;
+      .iconfont{
+        color:$--color-text-regular;
+        font-size: 14px;
+        &:hover{
+          color:$--color-text-regular;
+        }
+      }
     }
   }
   .tips {

@@ -87,7 +87,7 @@
           </div>
           <div class="empty-table" v-show="!appList.length">
             <img src="~img/table-empty.png" />
-            <p>无数据</p>
+            <p style="cursor:default">无数据</p>
           </div>
           <el-col
             :span="24"

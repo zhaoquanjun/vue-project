@@ -23,6 +23,16 @@
           <div class="ym-form-item__error" v-show="errorTemplateNameTips">请输入控件名称</div>
         </div>
         <div class="contentItem">
+          <div class="contentItem-title">别名</div>
+          <el-input
+            v-model="settingTemplateRemark"
+            placeholder="请输入控件别名"
+            class="contentItem-input"
+            @blur="blurTemplateRemark"
+          ></el-input>
+          <div class="ym-form-item__error" v-show="errorTemplateRemarkTips">请输入控件别名</div>
+        </div>
+        <div class="contentItem">
           <div class="contentItem-title">控件分类</div>
           <el-select
             v-model="settingFirstTypeSelect"
@@ -118,6 +128,8 @@ export default {
       settingTemplateShow: false,
       settingTemplateName: "",
       errorTemplateNameTips: false,
+      settingTemplateRemark: "",
+      errorTemplateRemarkTips: false,
       settingFirstTypeSelect: "",
       settingFirstTypeOptions: [],
       settingSecondTypeSelect: "",
@@ -152,6 +164,7 @@ export default {
       this.settingFirstTypeOptions = data;
       this.row = row;
       this.settingTemplateName = this.row.controlName;
+      this.settingTemplateRemark = this.row.remark;
       if (row.firstTypeId) {
         this.settingFirstTypeSelect = row.firstTypeId;
         let { data } = await categoryApi.getDropDownList(row.firstTypeId);
@@ -172,6 +185,10 @@ export default {
         this.errorTemplateNameTips = true;
         return;
       }
+      if (this.settingTemplateRemark == "") {
+        this.errorTemplateRemarkTips = true;
+        return;
+      }
       if (!this.settingFirstTypeSelect) {
         this.errorFirstTypeTips = true;
         return;
@@ -185,6 +202,7 @@ export default {
         pageId: this.row.pageId,
         siteId: this.$route.query.siteId,
         controlName: this.settingTemplateName,
+        remark:this.settingTemplateRemark,
         firstType: this.settingFirstTypeSelect,
         secondType: Number(this.settingSecondTypeSelect),
         controlState: this.settingTemplateStatus,
@@ -204,6 +222,8 @@ export default {
     clearInfo() {
       this.settingTemplateName = "";
       this.errorTemplateNameTips = false;
+      this.settingTemplateRemark = "";
+      this.errorTemplateRemarkTips=false;
       this.settingFirstTypeSelect = "";
       this.settingSecondTypeSelect = "";
       this.errorFirstTypeTips = false;
@@ -217,6 +237,13 @@ export default {
         this.errorTemplateNameTips = true;
       } else {
         this.errorTemplateNameTips = false;
+      }
+    },
+    blurTemplateRemark() {
+      if (!this.settingTemplateRemark) {
+        this.errorTemplateRemarkTips = true;
+      } else {
+        this.errorTemplateRemarkTips = false;
       }
     },
     async choseSettingFirstType() {
@@ -285,6 +312,12 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding-bottom: 8px;
+      .iconfont{
+      color: $--color-text-regular;
+      &:hover{
+        color:$--color-text-regular;
+      }
+    }
     .headText {
       font-size: $--font-size-base;
       font-weight: $--font-weight-base;

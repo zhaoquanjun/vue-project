@@ -36,6 +36,7 @@
           @orderList="orderList"
           @changePage="changePage"
           @changeSize="changeSize"
+          @createTemplatedialogShow="createTemplatedialogShow"
           ref="list"
         ></List>
       </div>

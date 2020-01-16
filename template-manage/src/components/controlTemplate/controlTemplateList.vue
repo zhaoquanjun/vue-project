@@ -12,7 +12,7 @@
       <template slot="empty">
         <div class="empty-table">
           <img src="~img/table-empty.png" />
-          <p>无数据</p>
+          <p @click="createTemplatedialogShow">添加数据</p>
         </div>
       </template>
       <el-table-column prop="templateName" label="模板名称" show-overflow-tooltip min-width="150">
@@ -159,6 +159,9 @@ export default {
     };
   },
   methods: {
+    createTemplatedialogShow(){
+      this.$emit("createTemplatedialogShow");
+    },
     changePage(page) {
       this.$emit("changePage", page);
     },

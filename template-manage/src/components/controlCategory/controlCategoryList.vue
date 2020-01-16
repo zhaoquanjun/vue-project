@@ -4,7 +4,7 @@
       <template slot="empty">
         <div class="empty-table">
           <img src="~img/table-empty.png" />
-          <p>无数据</p>
+          <p style="cursor:default">无数据</p>
         </div>
       </template>
       <el-table-column prop="templateName" label="一级分类" show-overflow-tooltip min-width="150">

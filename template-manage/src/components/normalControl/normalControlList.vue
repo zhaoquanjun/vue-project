@@ -12,7 +12,7 @@
       <template slot="empty">
         <div class="empty-table">
           <img src="~img/table-empty.png" />
-          <p>无数据</p>
+          <p @click="createTemplatedialogShow">添加数据</p>
         </div>
       </template>
       <el-table-column label="缩略图" show-overflow-tooltip min-width="150">
@@ -102,7 +102,10 @@ export default {
   data() {
     return {};
   },
-  methods: {
+  methods: { 
+    createTemplatedialogShow(){
+      this.$emit("createTemplatedialogShow")
+    },
     editItem(row) {
       this.$emit("editItem", row);
     },
