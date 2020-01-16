@@ -187,3 +187,7 @@ body {
         padding-top: 16px;
     }
 }
+// tab选项默认outline
+.el-tabs__item{
+    outline: none!important;
+}

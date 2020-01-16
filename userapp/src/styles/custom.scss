@@ -256,3 +256,7 @@ body {
         line-height: 32px;
     }
 }
+// tab选项默认outline
+.el-tabs__item{
+    outline: none!important;
+}
