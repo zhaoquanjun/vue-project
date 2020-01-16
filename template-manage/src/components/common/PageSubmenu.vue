@@ -65,11 +65,9 @@ export default {
           case "sitemanage":
               return "iconicon-dash-Webmanagement";
           case "controlmanege":
-              return "iconicon-huishou";
-          case "sitetemplate":
-              return "iconicon-huishou";
+              return "iconicon-dash-zhujian";
           case "sitemember":
-              return "iconicon-dash-membermanagement"    
+              return "iconicon-dash-membermanagement";
       }
     }
   },

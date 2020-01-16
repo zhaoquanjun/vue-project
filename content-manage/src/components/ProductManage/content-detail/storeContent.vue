@@ -34,7 +34,7 @@
             >
               <i slot="prefix" class="storePrice-type">{{storeType(storePrice.storeTypeValue)}}</i>
             </el-input>
-            <div class="ym-form-item__error" v-show="errorOriginalPrice">请输入有效金额</div>
+            <div class="ym-form-item__error" v-show="errorPrice">请输入有效金额</div>
           </div>
           <div class="storePrice-price">
             <el-input
@@ -45,7 +45,7 @@
             >
               <i slot="prefix" class="storePrice-type">{{storeType(storePrice.storeTypeValue)}}</i>
             </el-input>
-            <div class="ym-form-item__error" v-show="errorPrice">请输入有效金额</div>
+            <div class="ym-form-item__error" v-show="errorOriginalPrice">请输入有效金额</div>
           </div>
         </div>
       </div>
@@ -102,10 +102,25 @@ export default {
         this.storePrice.originalPrice = "0.00";
       }
       if (this.isNumber(this.storePrice.originalPrice)) {
-        this.storePrice.originalPrice = this.storePrice.originalPrice.substr(
-          0,
-          this.storePrice.originalPrice.indexOf(".") + 3
-        );
+        if (this.storePrice.originalPrice.indexOf(".") != -1) {
+          this.storePrice.originalPrice = this.storePrice.originalPrice.substr(
+            0,
+            this.storePrice.originalPrice.indexOf(".") + 3
+          );
+          if (this.storePrice.originalPrice.length > 15) {
+            this.storePrice.originalPrice = this.storePrice.originalPrice.substr(
+              0,
+              15
+            );
+          }
+        } else {
+          if (this.storePrice.originalPrice.length > 14) {
+            this.storePrice.originalPrice = this.storePrice.originalPrice.substr(
+              0,
+              14
+            );
+          }
+        }
         this.errorOriginalPrice = false;
       } else {
         this.errorOriginalPrice = true;
@@ -116,10 +131,19 @@ export default {
         this.storePrice.price = "0.00";
       }
       if (this.isNumber(this.storePrice.price)) {
-        this.storePrice.price = this.storePrice.price.substr(
-          0,
-          this.storePrice.price.indexOf(".") + 3
-        );
+        if (this.storePrice.price.indexOf(".") != -1) {
+          this.storePrice.price = this.storePrice.price.substr(
+            0,
+            this.storePrice.price.indexOf(".") + 3
+          );
+          if (this.storePrice.price.length > 15) {
+            this.storePrice.price = this.storePrice.price.substr(0, 15);
+          }
+        } else {
+          if (this.storePrice.price.length > 14) {
+            this.storePrice.price = this.storePrice.price.substr(0, 14);
+          }
+        }
         this.errorPrice = false;
       } else {
         this.errorPrice = true;

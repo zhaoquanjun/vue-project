@@ -65,7 +65,9 @@ export default {
           case "sitemanage":
               return "iconicon-dash-Webmanagement";
           case "sitemember":
-              return "iconicon-dash-membermanagement"    
+              return "iconicon-dash-membermanagement";
+          case "controlmanege":
+              return "iconicon-dash-zhujian";
       }
     }
     
