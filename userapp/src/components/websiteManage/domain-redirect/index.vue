@@ -10,7 +10,7 @@
             :tableData="redirectDomainListData"
             @deleteCurDomain="_deleteCurDomain"
             @editor="editor"
-           
+            @handleBtn="handleBtn"
         />
         <el-dialog
             width="0"
@@ -21,6 +21,7 @@
             <AddRedirectDomain
                 v-if="dialogShow"
                 title="编辑"
+                :dialogShow="dialogShow"
                 :source-domain="sourceDomain"
                 :_targetDomain="targetDomain"
                 :domain-list="activeAndNotInUseDomainList"
@@ -59,6 +60,9 @@ export default {
         this._get301List();
     },
     methods: {
+        handleBtn() {
+            this.$emit("handleBtn", "301Redirect");
+        },
         async _get301List() {
             let { data, status } = await domainRedirectApi.get301List();
             console.log(data.handleType)

@@ -136,6 +136,7 @@
               :listData="listData"
               :listType="listType"
               ref="list"
+              @showAddDialog="showAddDialog"
               @remove="remove"
               @handleSelectionChange="handleSelectionChange"
               @update="update"

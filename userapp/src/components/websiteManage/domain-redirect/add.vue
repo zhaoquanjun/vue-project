@@ -51,7 +51,7 @@ import {
     modifyDomainRedirection
 } from "@/api/request/domainRedirectApi";
 export default {
-    props: ["domainList", "sourceDomain", "_targetDomain", "isEditor", "id",],
+    props: ["domainList", "sourceDomain", "_targetDomain", "isEditor", "id","dialogShow"],
     data() {
         return {
             disabled: false,
@@ -78,7 +78,17 @@ export default {
             }
           
     },
+    created(){
+        this.keyupEnter();
+    }, 
     methods: {
+        keyupEnter(){
+            document.onkeydown = e =>{
+                if (e.keyCode === 13) {
+                  this.dialogShow && this.handleConfirm()
+                }
+            }
+        },
         async handleConfirm() {
             if (!this.changeInput()) return;
 

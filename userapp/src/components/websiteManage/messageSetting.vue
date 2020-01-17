@@ -628,7 +628,9 @@ export default {
 .el-tabs /deep/ .el-tabs__item.is-active {
   border-bottom: 2px solid $--color-primary;
 }
-
+.table-list /deep/ .el-table__empty-text{
+    width: auto;
+}
 .handle-btn-wrap {
   button:nth-child(1) {
     margin-right: 32px;

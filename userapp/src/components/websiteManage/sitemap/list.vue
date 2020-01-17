@@ -10,9 +10,9 @@
       @selection-change="handleSelectionChange"
     >
       <template slot="empty">
-        <div class="empty-table">
+        <div class="empty-table" @click="showAddDialog">
           <img src="~img/memberManage/table-empty.png" />
-          <p>无数据</p>
+          <p>添加数据</p>
         </div>
       </template>
       <el-table-column type="selection"></el-table-column>
@@ -186,6 +186,9 @@ export default {
     });
   },
   methods: {
+    showAddDialog(){
+      this.$emit("showAddDialog")
+    },
     // 单选或全选操作
     handleSelectionChange(list) {
       this.$emit("handleSelectionChange", list);
@@ -237,6 +240,9 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
+}
+.table-list /deep/ .el-table__empty-text{
+    width: auto;
 }
 </style>
 

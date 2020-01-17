@@ -17,6 +17,7 @@
           <DomainList
             v-if="showType"
             :tableData="domainListData"
+            @handleBtn="righPanelShow"
             @publishdata="_publishdata"
             @_deleteCdnDomain="_deleteCdnDomain"
             @oneKeyEnableHttps="_oneKeyEnableHttps"
@@ -26,7 +27,7 @@
             @pauseCdn="_pauseCdn"
             @getCdnDomainList="_getCdnDomainList"
           ></DomainList>
-          <RedirectDomainList v-else ref="redirectDomainList" @toSet="toSet"></RedirectDomainList>
+          <RedirectDomainList v-else ref="redirectDomainList" @toSet="toSet" @handleBtn="righPanelShow"></RedirectDomainList>
         </el-main>
         <div class="handle-guide">
           <template v-if="showType">

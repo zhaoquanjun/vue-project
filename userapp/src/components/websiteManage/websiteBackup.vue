@@ -36,9 +36,9 @@
               :default-sort="{prop: 'backupTime', order: 'descending'}"
             >
               <template slot="empty">
-                <div class="empty-table">
+                <div class="empty-table" style="cursor:default">
                   <img src="~img/memberManage/table-empty.png" />
-                  <p>暂无数据</p>
+                  <p>无数据</p>
                 </div>
               </template>
               <el-table-column label="站点名称" show-overflow-tooltip min-width="200">
@@ -619,7 +619,9 @@ export default {
 .el-tabs /deep/ .el-tabs__item.is-active {
   border-bottom: 2px solid $--color-primary;
 }
-
+.table-list /deep/ .el-table__empty-text{
+    width: auto;
+}
 .handle-btn-wrap {
   width: 70%;
   display: flex;

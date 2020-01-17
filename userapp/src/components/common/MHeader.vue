@@ -85,7 +85,7 @@
               ></i>
             </el-input>
           </div>
-          <div class="empty-table" v-show="!appList.length">
+          <div class="empty-table" v-show="!appList.length" style="cursor:default">
             <img src="~img/memberManage/table-empty.png" />
             <p>无数据</p>
           </div>
@@ -365,6 +365,9 @@ export default {
 }
 .myApp /deep/ .el-dialog__header {
   padding: 0;
+}
+.header /deep/ .el-table__empty-text{
+    width: 0;
 }
 </style>
 <style lang="scss" scoped>

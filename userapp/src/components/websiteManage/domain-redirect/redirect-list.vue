@@ -7,9 +7,9 @@
             class="content-table"
         >
             <template slot="empty">
-                <div class="empty-table" style="height:251px;">
-                    <img src="~img/memberManage/table-empty.png" style="display:inline-block;width:50px;height:35px;margin-top:50px;"/>
-                    <p>暂无数据</p>
+                <div class="empty-table" @click="handleBtn">
+                    <img src="~img/memberManage/table-empty.png"/>
+                    <p>添加数据</p>
                 </div>
             </template>
             <el-table-column prop="domain" label="源域名" class="domain-name">
@@ -54,6 +54,9 @@ export default {
     },
     mounted() {},
     methods: {
+        handleBtn() {
+            this.$emit("handleBtn", "301Redirect");
+        },
         handleDelete(row){
             this.$emit("deleteCurDomain",row.id)
         },
@@ -88,6 +91,9 @@ export default {
 
 .el-table /deep/ th > .cell {
     text-align: left;
+}
+.table-list /deep/ .el-table__empty-text{
+    width: auto;
 }
 </style>
 <style lang="scss" scoped>

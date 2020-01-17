@@ -9,9 +9,9 @@
               :row-key="getRowKeys"
               :expand-row-keys="expands">
       <template slot="empty">
-        <div class="empty-table">
+        <div class="empty-table" @click="handleBtn">
           <img src="~img/memberManage/table-empty.png" />
-          <p>暂无数据</p>
+          <p>添加数据</p>
         </div>
       </template>
       <el-table-column prop="domain"
@@ -336,6 +336,12 @@ export default {
     this.resetExplainStatus();
   },
   methods: {
+    /**
+     * 点击无数据 添加数据
+     */
+    handleBtn() {
+      this.$emit("handleBtn", "domainList");
+    },
     //一键解析域名
     resolveCdnByAliYunToken (row) {
       let params = {
@@ -630,6 +636,9 @@ export default {
   width: 13px;
   height: 13px;
   line-height: 18px;
+}
+.table-list /deep/ .el-table__empty-text{
+    width: auto;
 }
 </style>
 <style lang="scss" scoped>
