@@ -155,6 +155,7 @@ export default {
         overflow: hidden;
         background: url("~img/imgBackground.png") no-repeat center;
         background-size: cover;
+        z-index: -1;
     }
 }
 .show {
