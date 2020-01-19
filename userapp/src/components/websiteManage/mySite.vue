@@ -316,7 +316,7 @@ export default {
       chosedSiteType: "",
       siteFirstIndustryValue: "",
       siteFirstIndustry: [],
-      flowDay: '近7天',
+      flowDay: 0,
       flowDayList: [{id:0,label: '近7天'},{id:1,label: '近30天'}],
       interval: 0,
       pvList: [],

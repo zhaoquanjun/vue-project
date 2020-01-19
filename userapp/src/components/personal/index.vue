@@ -425,6 +425,7 @@ export default {
                     showClose: false,
                     duration: 1500
                 });
+                this.oldUserName = this.input;
                 this.$store.dispatch("_getAppHeadInfo");
             } else {
                  this.$notify({
