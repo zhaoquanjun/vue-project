@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="img-itemWrap">
+        <div class="img-item-background"></div>
         <div
             @click="handleClick"
             @mousemove="handleMouseMove"
@@ -141,6 +142,21 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.img-itemWrap{
+    position: relative;
+    .img-item-background{
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: inline-block;
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        overflow: hidden;
+        background: url("~img/imgBackground.png") no-repeat center;
+        background-size: cover;
+    }
+}
 .show {
     display: block;
 }
