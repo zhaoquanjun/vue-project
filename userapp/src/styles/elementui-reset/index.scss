@@ -21,3 +21,8 @@
     outline: none !important;
 }
 
+// tab选项默认outline
+.el-tabs__item:focus.is-active.is-focus:not(:active){
+    box-shadow: none!important;
+    border-radius: 0;
+}
