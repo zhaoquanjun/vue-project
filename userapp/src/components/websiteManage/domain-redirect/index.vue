@@ -64,7 +64,6 @@ export default {
         },
         async _get301List() {
             let { data, status } = await domainRedirectApi.get301List();
-            console.log(data.handleType)
             this.redirectDomainListData = data;
             if (status === 200) {
                 if (data.handleType ===2) {

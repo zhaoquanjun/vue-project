@@ -10,7 +10,7 @@
         >
             <template slot="empty">
                 <div class="empty-table" style="cursor:default">
-                    <img src="~img/memberManage/table-empty.png" />
+                    <img src="~img/memberManage/table-empty-default.png" />
                     <p>无搜索结果</p>
                 </div>
             </template>

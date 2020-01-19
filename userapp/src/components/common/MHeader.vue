@@ -86,7 +86,7 @@
             </el-input>
           </div>
           <div class="empty-table" v-show="!appList.length" style="cursor:default">
-            <img src="~img/memberManage/table-empty.png" />
+            <img src="~img/memberManage/table-empty-default.png" />
             <p>无数据</p>
           </div>
           <el-col
