@@ -234,13 +234,11 @@ export default {
                     message: this.$createElement("div", null, message),
                     iconClass: "icon-warning",
                     customClass: "large",
-                    showCancelButton:false,
+                    showCancelButton:true,
                     closeOnClickModal: false,
                     callback: async action => {
                         if (action === "confirm") {
-                            console.log(idlist)
                             idlist.forEach(item=>{
-                                console.log("item",item)
                                 if(item.id==this.curImgInfo.id){
                                     this.curImgInfo=""
                                     this.$emit("getImgInfo", "")

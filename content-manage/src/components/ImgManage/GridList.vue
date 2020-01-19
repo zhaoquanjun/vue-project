@@ -1,6 +1,6 @@
 <template>
     <div class="table-wrap" id="img-list">
-        <ul v-show="imgPageResult && imgPageResult.list && imgPageResult.list.length>0" class="img-list">
+        <ul v-show="imgPageResult && imgPageResult.list && imgPageResult.list.length>0" class="img-list" ref="imgList">
             <li class="item" v-for="(item,index) in imgPageResult.list" :key="item.id">
                 <grid-list-item
                     :isSelected="isSelected(item)"
@@ -15,9 +15,9 @@
             </li>
         </ul>
         <div v-if="imgPageResult && imgPageResult.list && imgPageResult.list.length<1">
-                <div class="empty-table" style="cursor:default">
+                <div class="empty-table" @click="switchUploadBoxShowStatus">
                     <img src="~img/table-empty.png" />
-                    <p>无数据</p>
+                    <p>添加数据</p>
                 </div>
         </div>
         <div
@@ -110,13 +110,38 @@ export default {
             picInfo: {},
             initial: -1,
             changeIndex: -1,
+            clientHeight:''
         };
     },
     components: {
         GridListItem
     },
-   
+    mounted(){
+        this.clientHeight = `${document.documentElement.clientHeight}`;
+        let that = this;
+        window.onresize = function(){
+            this.clientHeight =  `${document.documentElement.clientHeight}`;
+            if(that.$refs.imgList){
+                let imgList = that.$refs.imgList;
+                imgList.style.height = clientHeight - 255 + "px";
+                imgList.style.overflow = "scroll"
+            }
+        }
+    },
+    watch:{
+        clientHeight(){
+            this.setImglistHeight(this.clientHeight)
+        }
+    },
     methods: {
+        // 设置图片列表的高度 滚动查看图片
+        setImglistHeight(clientHeight){
+            if(this.$refs.imgList){
+                let imgList = this.$refs.imgList;
+                imgList.style.height = clientHeight - 255 + "px";
+                imgList.style.overflow = "scroll"
+            }
+        },
         handleSelected(item) {
             if (this.multiple) {
                 let flag = true;
@@ -199,11 +224,13 @@ export default {
         closeDialog() {
             this.fullOssUrl = "";
         },
+        switchUploadBoxShowStatus(){
+            this.$emit("switchUploadBoxShowStatus")
+        },
         /**
          * 移动分类
          */
         handleMove(item) {
-            console.log(item);
             this.$emit("moveClassify", true, item);
         },
         batchRemovePic(item) {
@@ -223,6 +250,9 @@ export default {
 // .el-pagination /deep/ .sizes-title {
 //     float: left;
 // }
+.empty-table{
+    margin:15% auto;
+}
 .img-list {
     width: 100%;
     box-sizing: border-box;

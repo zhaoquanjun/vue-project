@@ -53,7 +53,7 @@
         >
           <template slot="empty">
             <div class="empty-table" style="cursor:default">
-              <img src="~img/table-empty.png" />
+              <img src="~img/table-empty-default.png" />
               <p>无数据</p>
             </div>
           </template>

@@ -11,7 +11,7 @@
         >
             <template slot="empty">
                 <div class="empty-table" @click="addArticle">
-                    <img src="~img/table-empty.png" @click="addArticle"/>
+                    <img src="~img/table-empty.png"/>
                     <p>添加数据</p>
                 </div>
             </template>
@@ -25,7 +25,7 @@
             >
                 <template slot-scope="scope">
                     <span class="isTop" v-show="scope.row.isTop">置顶</span>
-                    <div style="display: flex; align-items: center;" @click="preview(scope.row.id, scope.row.defaultSiteId)">
+                    <div class="title" @click="preview(scope.row.id, scope.row.defaultSiteId)">
                         <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" onerror="onImgError(this)" class="cover" />
                         <img v-else :src="defaultImg" class="cover" alt />
                         <el-tooltip class="item outline" effect="dark" :content="scope.row.title" placement="top">
@@ -272,6 +272,13 @@ export default {
 @import "@/styles/content-manage/manege-table.scss";
 .title-color{
     color: #262626;
+}
+.title{
+    display: flex; 
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .el-table /deep/ .ascending .sort-caret.ascending{
     border-bottom-color: $--color-primary ;
