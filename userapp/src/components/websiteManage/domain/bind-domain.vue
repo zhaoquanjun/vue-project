@@ -37,7 +37,7 @@
 import { bindDomainAndEnableCdn } from "@/api/request/domainApi";
 import { shiftToAliyun, whyOpenCdn } from "@/environment/index";
 export default {
-    props: ["domainAmount"],
+    props: ["domainAmount","backupShow"],
     data() {
         return {
             domainValue: "",
@@ -49,7 +49,17 @@ export default {
             whyOpenCdn: whyOpenCdn
         };
     },
+    created() {
+        this.keyupEnter();
+    },
     methods: {
+        keyupEnter() {
+            document.onkeydown = e => {
+                if (e.keyCode === 13) {
+                this.backupShow && this.handleConfirm();
+                }
+            };
+        },
         async handleConfirm() {
             if (this.domainAmount == 10) {
                 this.$notify({

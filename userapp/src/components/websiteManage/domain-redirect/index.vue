@@ -21,7 +21,6 @@
             <AddRedirectDomain
                 v-if="dialogShow"
                 title="编辑"
-                :dialogShow="dialogShow"
                 :source-domain="sourceDomain"
                 :_targetDomain="targetDomain"
                 :domain-list="activeAndNotInUseDomainList"

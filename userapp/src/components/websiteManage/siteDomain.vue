@@ -60,6 +60,7 @@
       <BindDomain
         v-if="showType"
         :domain-amount="domainAmount"
+        :backup-show="backupShow"
         @closeDialog="closeDialog"
         @getCdnDomainList="_getCdnDomainList"
         @resolveCdnByAliYunToken="_resolveCdnByAliYunToken"
@@ -67,6 +68,7 @@
       <AddRedirectDomain
         v-else
         :domain-list="activeAndNotInUseDomainList"
+        :backup-show="backupShow"
         @closeDialog="closeDialog"
         @get301List="_get301List"
         @publishdata="_publishdata"
