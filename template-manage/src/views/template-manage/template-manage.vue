@@ -267,7 +267,7 @@
           </div>
           <div class="newTemplateNameWrap">
             <span class="newTemplateName">模版名称</span>
-            <el-input v-model="newTemplateName" placeholder="请输入模版名称" maxlength="20" class="inputNewTemplateName"></el-input>
+            <el-input v-model="newTemplateName" placeholder="请输入模版名称" maxlength="30" show-word-limit class="inputNewTemplateName"></el-input>
           </div>
           <div class="remarkWrap">
             <span class="remarkTitle">备注</span>
@@ -1342,6 +1342,9 @@ export default {
 <style lang="scss" scoped>
 .templateManage /deep/ .el-table__empty-text{
     width: 0;
+}
+.inputNewTemplateName /deep/ .el-input__inner{
+  padding-right: 60px;
 }
 .table-list /deep/ .el-table .ascending .sort-caret.ascending {
   border-bottom-color: $--color-primary;

@@ -25,6 +25,8 @@
             v-model="settingTemplateName"
             placeholder="请输入分类名称"
             class="contentItem-input"
+            maxlength="10"
+            show-word-limit
             @blur="blurTemplateName"
           ></el-input>
           <div class="ym-form-item__error" v-show="errorTemplateNameTips">请输入分类名称</div>

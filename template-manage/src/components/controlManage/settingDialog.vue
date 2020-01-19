@@ -19,6 +19,8 @@
             placeholder="请输入控件名称"
             class="contentItem-input"
             @blur="blurTemplateName"
+            maxlength="20"
+            show-word-limit
           ></el-input>
           <div class="ym-form-item__error" v-show="errorTemplateNameTips">请输入控件名称</div>
         </div>
@@ -29,6 +31,8 @@
             placeholder="请输入控件别名"
             class="contentItem-input"
             @blur="blurTemplateRemark"
+            maxlength="50"
+            show-word-limit
           ></el-input>
           <div class="ym-form-item__error" v-show="errorTemplateRemarkTips">请输入控件别名</div>
         </div>

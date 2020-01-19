@@ -13,6 +13,8 @@
           placeholder="请输入控件名称"
           class="contentItem-input"
           @blur="blurTemplateName"
+          maxlength="20"
+          show-word-limit
         ></el-input>
         <div class="ym-form-item__error" v-show="errorTemplateNameTips">请输入控件名称</div>
       </div>
@@ -101,6 +103,8 @@
             v-model="settingType"
             @blur="blurSettingType"
             placeholder="请输入控件类型"
+            maxlength="20"
+            show-word-limit
             class="contentItem-input"
           ></el-input>
           <div class="ym-form-item__error" v-show="errorSettingTypeTips">请输入控件类型</div>
@@ -111,6 +115,8 @@
             v-model="settingStyle"
             @blur="blurSettingStyle"
             placeholder="请输入控件样式"
+            maxlength="20"
+            show-word-limit
             class="contentItem-input"
           ></el-input>
           <div class="ym-form-item__error" v-show="errorSettingStyleTips">请输入控件样式</div>
@@ -121,6 +127,8 @@
             v-model="settingRemark"
             @blur="blurSettingRemark"
             placeholder="请输入控件别名"
+            maxlength="50"
+            show-word-limit
             class="contentItem-input"
           ></el-input>
           <div class="ym-form-item__error" v-show="errorSettingRemarkTips">请输入控件别名</div>
@@ -134,6 +142,8 @@
             placeholder="请输入html（选填）"
             style="vertical-align: text-top;"
             class="contentItem-input"
+            maxlength="500"
+            show-word-limit
           ></el-input>
         </div>
       </div>
