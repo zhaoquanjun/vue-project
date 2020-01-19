@@ -337,6 +337,7 @@ export default {
 }
 .progress /deep/ .el-progress__text .el-icon-check {
   font-size: 30px !important;
+  color: #67C23A;
 }
 .progress /deep/ .el-progress-circle {
   width: 55px !important;

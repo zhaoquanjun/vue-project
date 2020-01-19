@@ -1,6 +1,6 @@
 <template>
     <div class="personal">
-        <h3 class="personal-title">个人账号管理</h3>
+        <div class="personal-title">个人账号管理</div>
         <dl class="user-account clear">
             <dt class="avatar">
                 <img :src="userInfo.userHeadUrl" />
@@ -34,42 +34,48 @@
             </dd>
         </dl>
         <ul class="social-list">
-            <li class="mobilePhone clear">
-                <div class="fleft">
+            <li class="mobilePhone">
+                <div class="left-wrap">
+                    <i class="iconfont iconshouji1"></i>
                     <span class="set-name">手机号码</span>
                     <span class="social-desc">手机号同时也是您的平台账号，可直接使用手机号登录管理平台，登录地址：login.clouddream.net</span>
                 </div>
-                <div class="fright">
+                <div class="right-wrap">
                     <span class="user-value">{{userInfo.phoneNumber | geTel }}</span>
 
                     <span class="pd-left">
-                        <button class="bind isbind">已绑定</button>|
+                        <i class="iconfont iconxingzhuangjiehe isbind"></i>
+                        <div class="bind isbind">已绑定</div>|
                         <button @click="modifiPhoneNum">修改</button>
                     </span>
                 </div>
             </li>
-            <li class="password clear">
-                <div class="fleft">
+            <li class="password">
+                <div class="left-wrap">
+                    <i class="iconfont iconmima"></i>
                     <span class="set-name">登录密码</span>
                     <span class="social-desc">设置登录密码，可使用手机号+密码登录管理平台，为保证帐号更加安全，建议您定期修改密码</span>
                 </div>
-                <div class="fright">
+                <div class="right-wrap">
                     <span class="user-value" v-if="pwdTitle != '0'">******</span>
                     <span class="pd-left">
-                        <button
+                        <i v-show="pwdTitle=='1'" class="iconfont iconxingzhuangjiehe isbind"></i>
+                        <i v-show="pwdTitle!='1'" class="iconfont iconicon-exclamationmark notbind"></i>
+                        <div
                             class="bind"
                             :class="pwdTitle=='1'?'isbind':'notbind'"
-                        >{{pwdTitle=="0"?"未设置":"已设置"}}</button>|
+                        >{{pwdTitle=="0"?"未设置":"已设置"}}</div>|
                         <button @click="modifiPwd">{{pwdBtn}}</button>
                     </span>
                 </div>
             </li>
-            <li class="wechat clear">
-                <div class="fleft">
+            <li class="wechat">
+                <div class="left-wrap">
+                    <i class="iconfont iconweixin"></i>
                     <span class="set-name">绑定微信</span>
                     <span class="social-desc">绑定微信，可使用微信登录管理平台</span>
                 </div>
-                <div class="fright">
+                <div class="right-wrap">
                     <span class="user-value" v-if="WeChatUser">
                         <img v-if="WeChatUser.externalHeadImgUrl" :src="WeChatUser.externalHeadImgUrl" />
                         <img
@@ -79,21 +85,23 @@
                         <b>{{WeChatUser.externalName}}</b>
                     </span>
                     <span class="pd-left">
-                        <button
+                        <i v-show="WeChatUser" class="iconfont iconxingzhuangjiehe isbind"></i>
+                        <i v-show="!WeChatUser" class="iconfont iconicon-exclamationmark notbind"></i>
+                        <div
                             class="bind"
                             :class="WeChatUser?'isbind':'notbind'"
-                        >{{WeChatUser?"已绑定":"未绑定"}}</button>|
+                        >{{WeChatUser?"已绑定":"未绑定"}}</div>|
                         <button v-if="WeChatUser" @click="_untyingWeixin(WeChatUser.provider)">解绑</button>
                         <button v-else @click="_bindingWeixin()">绑定</button>
                     </span>
                 </div>
             </li>
-            <!-- <li class="dingtalk clear">
-                <div class="fleft">
+            <!-- <li class="dingtalk">
+                <div>
                     <span class="set-name">绑定钉钉</span>
                     <span class="social-desc">绑定钉钉，可使用钉钉登录管理平台</span>
                 </div>
-                <div class="fright">
+                <div>
                     <span class="user-value" v-if="DingDingUser">
                         <img v-if="DingDingUser.headImgUrl" :src="DingDingUser.headImgUrl" />
                         <img
@@ -112,12 +120,13 @@
                     </span>
                 </div>
             </li> -->
-            <li class="alipay clear">
-                <div class="fleft">
+            <li class="alipay">
+                <div class="left-wrap">
+                    <i class="iconfont iconzhifubao"></i>
                     <span class="set-name">绑定支付宝</span>
                     <span class="social-desc">绑定支付宝，可使用支付宝登录管理平台</span>
                 </div>
-                <div class="fright">
+                <div class="right-wrap">
                     <span class="user-value" v-if="AlipayUser">
                         <img v-if="AlipayUser.externalHeadImgUrl" :src="AlipayUser.externalHeadImgUrl" />
                         <img
@@ -127,10 +136,12 @@
                         <b>{{AlipayUser.externalName}}</b>
                     </span>
                     <span class="pd-left">
-                        <button
+                        <i v-show="AlipayUser" class="iconfont iconxingzhuangjiehe isbind"></i>
+                        <i v-show="!AlipayUser" class="iconfont iconicon-exclamationmark notbind"></i>
+                        <div
                             class="bind"
                             :class="AlipayUser?'isbind':'notbind'"
-                        >{{AlipayUser?'已绑定':'未绑定'}}</button>|
+                        >{{AlipayUser?'已绑定':'未绑定'}}</div>|
                         <button v-if="AlipayUser" @click="_untyingAlipay(AlipayUser.provider)">解绑</button>
                         <button v-else @click="_bindingAlipay()">绑定</button>
                     </span>
@@ -454,24 +465,31 @@ export default {
 
 <style lang="scss" scoped>
 .personal {
-    padding: 32px 16px;
-    background: #fff;
+    padding: 24px 16px;
     .personal-title {
-        color: #2e2e2e;
-        font-weight: 500;
+        border-left: 2px solid $--color-primary;
+        padding-left: 8px;
+        font-size: $--font-size-base;
+        font-weight: 700;
     }
     .user-account {
+        background: #fff;
         display: flex;
         align-items: center;
-        padding: 32px 0;
-        margin: 0 16px;
-        border-bottom: 1px solid #eee;
+        padding: 32px;
+        margin: 24px 0 16px;
+        border: $--border-base;
+        background-image: url("~img/personal/background.png");
+        background-repeat: no-repeat;
+        background-position: right;
+        background-size: 750px;
         .avatar {
             float: left;
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             position: relative;
             overflow: hidden;
+            border-radius: 50%;
             img {
                 width: 100%;
                 height: 100%;
@@ -488,6 +506,7 @@ export default {
                 padding: 5px;
                 width: 100%;
                 text-align: center;
+                box-sizing: border-box;
             }
             &:hover .modify-avatar {
                 display: block;
@@ -495,7 +514,7 @@ export default {
         }
         .account-info {
             float: left;
-            padding-left: 20px;
+            padding-left: 40px;
             p {
                 font-size: 14px;
                 line-height: 22px;
@@ -526,115 +545,67 @@ export default {
         }
     }
     .social-list {
+        background: #fff;
+        border: $--border-base;
+        height: 460px;
+        padding-top: 8px;
         li {
-            padding: 16px;
-            border-bottom: 1px dashed #eee;
-            line-height: 20px;
-            .user-value {
-                color: #8c8c8c;
-                img {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    vertical-align: top;
-                    margin-right: 8px;
+            padding: 0 32px;
+            height: 50px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #EBECED;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .left-wrap{
+                display: flex;
+                align-items: center;
+                .iconfont{
+                    font-size: 20px;
+                }
+            }
+            .right-wrap{
+                display: flex;
+                align-items: center;
+                .user-value {
+                    color: #8c8c8c;
+                    display: flex;
+                    align-items: center;
+                    img {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50%;
+                        vertical-align: top;
+                        margin-right: 8px;
+                    }
                 }
             }
             .set-name {
                 display: inline-block;
-                width: 111px;
-                &::before {
-                    content: "";
-                    width: 13px;
-                    height: 13px;
-                    display: inline-block;
-                    vertical-align: -2px;
-                    margin-right: 8px;
-                }
-            }
-        }
-        .mobilePhone {
-            .set-name {
-                &::before {
-                    background: url("~img/personal/phone.png") no-repeat center;
-                    background-size: contain;
-                }
+                width: 105px;
+                font-size: $--font-size-small;
+                color: $--color-text-primary;
+                margin-left: 14px;
             }
         }
 
-        .password {
-            .set-name {
-                &::before {
-                    background: url("~img/personal/pwd.png") no-repeat center;
-                    background-size: contain;
-                }
-            }
-        }
-        .wechat {
-            .set-name {
-                &::before {
-                    background: url("~img/personal/wechat.png") no-repeat center;
-                    background-size: contain;
-                }
-            }
-        }
-        .dingtalk {
-            .set-name {
-                &::before {
-                    background: url("~img/personal/dingtalk.png") no-repeat
-                        center;
-                    background-size: contain;
-                }
-            }
-        }
-        .alipay {
-            .set-name {
-                &::before {
-                    background: url("~img/personal/alipay.png") no-repeat center;
-                    background-size: contain;
-                }
-            }
-        }
-
-        .fleft {
-            float: left;
-        }
-        .fright {
-            float: right;
-        }
         .pd-left {
-            padding-left: 30px;
+            padding-left: 40px;
             color: #eee;
             & :last-child {
-                padding-left: 8px;
-                color: #0070cc;
+                padding-left: 15px;
+                color: #0895E6;
             }
             .bind {
-                padding-right: 8px;
-                &::before {
-                    display: inline-block;
-                    content: "";
-                    width: 12px;
-                    height: 12px;
-                    margin-right: 8px;
-                    vertical-align: -1px;
-                }
+                padding-right: 15px;
+                padding-left: 10px;
+                display: inline-block;
             }
             .notbind {
-                color: #f54743;
-                &::before {
-                    background: url("~img/personal/wraning.png") no-repeat
-                        center;
-                    background-size: contain;
-                }
+                color: $--color-danger;
             }
             .isbind {
-                display: inline-block;
-                color: #35b24b;
-                &::before {
-                    background: url("~img/personal/sucess.png") no-repeat center;
-                    background-size: contain;
-                }
+                color: $--color-success;
             }
         }
         .social-desc {
