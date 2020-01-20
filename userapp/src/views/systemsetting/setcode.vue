@@ -30,7 +30,7 @@
               class="content-table"
             >
               <template slot="empty">
-                <div class="empty-table">
+                <div class="empty-table" style="cursor:default">
                   <img src="~img/memberManage/table-empty-default.png" />
                   <p>暂无数据</p>
                 </div>

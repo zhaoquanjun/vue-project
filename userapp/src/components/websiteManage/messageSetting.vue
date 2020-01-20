@@ -462,9 +462,7 @@ export default {
   color: $--color-text-regular;
 }
 .empty-table {
-    padding: 20px;
-    text-align: center;
-    height: 200px;
+    cursor: default;
 }
 .content-table /deep/ .el-tooltip .el-popover__reference {
   width: 100%;
