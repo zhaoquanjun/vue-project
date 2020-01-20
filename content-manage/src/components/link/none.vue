@@ -33,14 +33,14 @@ export default {
     .content-none__area {
       .none-area__icon {
         margin: 0 auto;
-        width: 61px;
-        height: 47px;
+        width: 38px;
+        height: 32px;
         border-radius: 50%;
         span {
           display: block;
           width: 100%;
           height: 100%;
-          background: url('~img/table-empty.png') no-repeat center center;
+          background: url('~img/table-empty-default.png') no-repeat center center;
           background-size: 100% 100%;
         }
       }
