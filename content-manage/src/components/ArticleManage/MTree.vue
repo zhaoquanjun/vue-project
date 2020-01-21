@@ -306,6 +306,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/manageAsideTree";
+.aside-tree /deep/ .el-tree .el-tree-node__expand-icon.expanded {
+    color: #A1A8B1;
+}
+.aside-tree /deep/ .el-tree .el-tree-node__expand-icon{
+    color: #A1A8B1;
+}
+.aside-tree /deep/ .el-tree .is-leaf{
+    color:transparent;
+}
 .category-name-pic {
     width: 282px;
     height: 140px;

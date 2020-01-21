@@ -391,4 +391,13 @@ export default {
 <style lang="scss" scoped>
 // 侧边分类树节点
 
+.aside-tree /deep/ .el-tree .el-tree-node__expand-icon.expanded {
+    color: #A1A8B1;
+}
+.aside-tree /deep/ .el-tree .el-tree-node__expand-icon{
+    color: #A1A8B1;
+}
+.aside-tree /deep/ .el-tree .is-leaf{
+    color:transparent;
+}
 </style>

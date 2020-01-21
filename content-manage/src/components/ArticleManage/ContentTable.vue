@@ -5,7 +5,7 @@
             :data="articlePageResult.list"
             tooltip-effect="dark"
             class="content-table"
-            :height="tableHeight"
+            :height="tableHeight + 20"
             @selection-change="handleSelectionChange"
             @sort-change='sortChange'
         >
