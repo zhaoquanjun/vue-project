@@ -100,7 +100,7 @@
                 UV
               </span>
               数据来源友盟+
-              <a href="">查看更多</a>
+              <a :href="UmengMoreDate">查看更多</a>
             </p>
           </div>
           <div id="myChart" class="myChat"></div>
@@ -289,7 +289,7 @@ import * as dashboardApi from "@/api/request/dashboardApi";
 import { getLanguage } from "@/configure/appCommon";
 import { formatDateTime } from "@/api/index";
 import environment from "@/environment/index.js";
-import { designerUrl } from "@/environment/index";
+import { designerUrl , designerManageApi} from "@/environment/index";
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/line')
@@ -304,6 +304,7 @@ export default {
   },
   data() {
     return {
+      UmengMoreDate:`${designerManageApi}/api/v1/domanage/jump2umeng`,
       isChangeTemplate: true,
       siteName: "",
       siteImage: "",

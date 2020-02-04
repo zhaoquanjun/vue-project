@@ -575,18 +575,18 @@ export default {
     },
     // 定时刷新解析状态
     resetExplainStatus () {
-      let flag = false;
+      // let flag = false;
       this.tableData.forEach(elem => {
         if (elem.cdnDomainResolveStatus !== 2) {
           flag = true;
         }
       });
-      if (flag) {
-        let timer = setInterval(() => {
-          this.$emit("getCdnDomainList");
-          clearInterval(timer);
-        }, 180000);
-      }
+      // if (flag) {
+      //   let timer = setInterval(() => {
+      //     this.$emit("getCdnDomainList");
+      //     clearInterval(timer);
+      //   }, 180000);
+      // }
     }
   },
   watch: {

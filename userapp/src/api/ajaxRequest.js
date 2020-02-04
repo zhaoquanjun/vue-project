@@ -13,7 +13,7 @@ import securityService from "@/services/authentication/securityService";
 axios.defaults.baseURL = environment.memberManageApi;
 
 // 请求超时时间
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 15000;
 //设置put请求传输内容的格式
 axios.defaults.headers.put['Content-Type'] = 'application/json-patch+json;charset=UTF-8';
 // post请求头

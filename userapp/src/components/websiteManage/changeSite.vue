@@ -164,6 +164,7 @@ export default {
     changeSite() {
       this.changeSiteShow = true;
       this.getSites();
+
     },
     // 选择新的site
     async choseSite(item) {
@@ -173,6 +174,8 @@ export default {
       this.$emit("chooseWebsite", item.siteId);
       this.getSiteInfo(item.siteId);
       this.curSiteId = item.siteId;
+      this.$router.go(0)
+
     },
     /**
      * 关闭弹框
