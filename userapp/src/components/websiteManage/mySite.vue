@@ -100,7 +100,7 @@
                 UV
               </span>
               数据来源友盟+
-              <a :href="UmengMoreDate">查看更多</a>
+              <a :href="UmengMoreData">查看更多</a>
             </p>
           </div>
           <div id="myChart" class="myChat"></div>
@@ -304,7 +304,7 @@ export default {
   },
   data() {
     return {
-      UmengMoreDate:`${designerManageApi}/api/v1/domanage/jump2umeng`,
+      UmengMoreData:`${designerManageApi}/api/v1/domanage/jump2umeng`,
       isChangeTemplate: true,
       siteName: "",
       siteImage: "",
