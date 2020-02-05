@@ -239,3 +239,6 @@ export const updateCustomSms = (data) => {
     return ajaxRequest.put(`${environment.designerManageApi}/api/v1/Sms/UpdateCustomSms`,data);
 };
 
+export const viewUmengData = () => {
+  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/domainmanage/jump2umeng`);
+} 

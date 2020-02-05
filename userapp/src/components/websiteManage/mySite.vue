@@ -100,7 +100,7 @@
                 UV
               </span>
               数据来源友盟+
-              <a :href="UmengMoreData">查看更多</a>
+              <button @click="_viewUmengData">查看更多</button>
             </p>
           </div>
           <div id="myChart" class="myChat"></div>
@@ -304,7 +304,7 @@ export default {
   },
   data() {
     return {
-      UmengMoreData:`${designerManageApi}/api/v1/domanage/jump2umeng`,
+      UmengMoreData:`${designerManageApi}/api/v1/domainmanage/jump2umeng`,
       isChangeTemplate: true,
       siteName: "",
       siteImage: "",
@@ -359,6 +359,11 @@ export default {
     this.getPvUvIp()
   },
   methods: {
+    async _viewUmengData(){
+      let {data} = await dashboardApi.viewUmengData()
+      let newWindow = window.open();
+      newWindow.location.href = data;
+    },
     handleClick() {},
     // 展示修改site信息弹框
     changeSiteInfoShow() {
@@ -917,7 +922,7 @@ export default {
         color:rgba(159,159,159,1);
         line-height:32px;
         text-align: right;
-        a {
+        button {
           color: $--color-primary;
         }
         span {
