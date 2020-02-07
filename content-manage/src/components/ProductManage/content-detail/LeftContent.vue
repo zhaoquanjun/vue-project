@@ -466,7 +466,9 @@ export default {
         //新建产品
         async insertArticle() {
             var html = document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
+            var specification = document.getElementById(this.quillDetailId).querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
+            this.detailData.specificationContent=specification;
             let { status, data } = await productManageApi.createProduct(
                 this.detailData
             );
@@ -518,8 +520,9 @@ export default {
         //编辑保存产品
         async saveArticle() {
             var html = document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML;
+            var specification = document.getElementById(this.quillDetailId).querySelector(".ql-editor").innerHTML;
             this.detailData.detailContent = html;
-            console.log('this.detailData',this.detailData);
+            this.detailData.specificationContent= specification;
             let { status, data } = await productManageApi.update(
                 this.curProduct,
                 this.detailData
@@ -652,6 +655,7 @@ export default {
             };
             this.detailData = { ...this.detailData, ...detailData };
             document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML="";
+            document.getElementById(this.quillDetailId).querySelector(".ql-editor").innerHTML="";
         },
         multipleCatagory() {
             this.isCheckTreeShow = !this.isCheckTreeShow;
