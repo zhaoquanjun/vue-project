@@ -2,12 +2,12 @@
     <div class="article-box" style="overflow: auto;
     height: calc(100vh - 60px);">
         <header class="article-bg">
-            <div class="article-crumbs" style="width:80%;margin:0 auto;padding-top:15px">
+            <div class="article-crumbs">
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path:'/content/product' }">内容管理</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path:'/content/product' }">产品管理</el-breadcrumb-item>
-                    <el-breadcrumb-item>{{isEditor==1?'编辑产品':'新增产品'}}</el-breadcrumb-item>
+                    <el-breadcrumb-item class="text-regular" :to="{ path:'/content/product' }">内容管理</el-breadcrumb-item>
+                    <el-breadcrumb-item class="text-regular" :to="{ path:'/content/product' }">产品管理</el-breadcrumb-item>
+                    <el-breadcrumb-item class="text-regular" >{{isEditor==1?'编辑产品':'新增产品'}}</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
         </header>
@@ -167,10 +167,20 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner {
-    font-weight: 400;
-    color: #262626;
-    font-size: $--font-size-small;
+.article-crumbs /deep/ .el-breadcrumb__item{
+    .el-breadcrumb__inner {
+        font-weight: 400;
+        color: #262626;
+        font-size: $--font-size-small;
+    }
+    .el-breadcrumb__separator{
+        color: $--color-text-regular;
+    }
+}
+.article-crumbs /deep/ .text-regular{
+    .el-breadcrumb__inner {
+        color: $--color-text-regular;
+    }
 }
 </style>
 <style lang="scss" scoped>
@@ -185,7 +195,7 @@ export default {
     background-size: cover;
     .article-crumbs {
         width: 80%;
-        margin: 0 auto;
+        margin: 0 32px;
         padding-top: 15px;
     }
 }
