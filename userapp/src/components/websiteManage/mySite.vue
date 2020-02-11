@@ -100,7 +100,7 @@
                 UV
               </span>
               数据来源友盟+
-              <button @click="_viewUmengData">查看更多</button>
+              <button style="margin-left:16px" @click="_viewUmengData">查看更多</button>
             </p>
           </div>
           <div id="myChart" class="myChat"></div>

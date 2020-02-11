@@ -87,7 +87,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="list-footer">
+        <div class="list-footer" style="margin-right:16px">
             <div class="storage-wrap">
                 <div class="use-title">
                     <span class="title">已用空间</span>

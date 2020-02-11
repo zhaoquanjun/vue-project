@@ -358,8 +358,7 @@ export default {
             if(linkData.Ctype=="none"){
                 //无链接 不处理                
             }
-            else{
-                //this.$refs.quillDetailEditor.quill.format('link',linkData.Href, Quill.sources.USER);               
+            else{       
                 this.$refs.quillDetailEditor.quill.format('link',linkData.Href, Quill.sources.USER);
                 if(this.linkSelection!=null && (linkData.Target!="_blank" || linkData.Ctype=="file")){
                     let lines = this.$refs.quillDetailEditor.quill.getLines(this.linkSelection.index, this.linkSelection.length);

@@ -24,7 +24,7 @@
               placement="bottom"
               width="200"
               trigger="click"
-              style="padding:0;display:inline-block;overflow:visible;"
+              style="padding:0;display:inline-block;overflow:visible;margin-left:8px"
               @show="showName(scope.row)"
             >
               <i v-show="scope.row.siteId" slot="reference" class="iconfont iconbianji"></i>
@@ -82,7 +82,7 @@
                 placement="bottom"
                 width="200"
                 trigger="click"
-                style="padding:0;display:inline-block;overflow:visible;"
+                style="padding:0;display:inline-block;overflow:visible;margin-left:8px"
                 @show="showRemark(scope.row)"
               >
                 <i v-show="scope.row.siteId" slot="reference" class="iconfont iconbianji"></i>

@@ -2,46 +2,44 @@
     <div class="article-box" style="overflow: auto;
     height: calc(100vh - 60px);">
         <header class="article-bg">
-            <div class="article-crumbs" style="width:80%;margin:0 auto;padding-top:15px">
+            <div class="article-crumbs">
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item :to="{ path: '/' }">系统设置</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path:'/content/news' }">内容管理</el-breadcrumb-item>
+                    <el-breadcrumb-item class="text-regular" :to="{ path:'/content/news' }">内容管理</el-breadcrumb-item>
                     <!-- :to="{ path: '/content/createarticle' }" -->
-                    <el-breadcrumb-item :to="{ path:'/content/news' }">文章管理</el-breadcrumb-item>
-                    <el-breadcrumb-item style="font-weight:700">{{operateName}}文章</el-breadcrumb-item>
+                    <el-breadcrumb-item class="text-regular" :to="{ path:'/content/news' }">文章管理</el-breadcrumb-item>
+                    <el-breadcrumb-item class="text-regular">{{operateName}}文章</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
         </header>
         <el-container class="article-container" style>
-            <el-header>
-                <el-row class="article-head">
-                    <el-col :span="14" :offset="3" style=" font-size: 22px;">{{operateName}}文章</el-col>
-                    <el-col :span="6">
-                        <div class="article-btn">
-                            <button class="cl-button cl-button--small cl-button--primary_notbg"  @click="()=>$router.go(-1)">返回</button>
-                            <button class="cl-button cl-button--small cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
-                            <Debounce :time="1000" !isDebounce>
-                                <button class="cl-button cl-button--small cl-button--primary"  @click="submitForm">保存</button>
-                            </Debounce>
-                        </div>
-                    </el-col>
-                </el-row>
+            <el-header style="height:32px;margin-bottom:16px">
+                <div class="article-head">
+                    <div class="article-headTitle">{{operateName}}文章</div>
+                    <div class="article-btn">
+                        <button class="cl-button cl-button--small cl-button--primary_notbg" @click="()=>$router.go(-1)">返回</button>
+                        <button class="cl-button cl-button--small cl-button--primary_notbg" v-if="isEdit" @click="preview">预览</button>
+                        <Debounce :time="1000" !isDebounce>
+                            <button class="cl-button cl-button--small cl-button--primary" @click="submitForm">保存</button>
+                        </Debounce>
+                    </div>
+                </div>
             </el-header>
             <el-main>
                 <div style="overflow:hidden">
-                    <el-row style="overflow:hidden" :gutter="16">
-                        <el-col :span="14" :offset="3">
+                    <div class="articleContent">
+                        <div class="articleContentLeft">
                             <ArticleContent
                                 @changeOperateName="changeOperateName"
                                 @changeSaveWay="changeSaveWay"
                                 @changePreviewId="changePreviewId"
                                 ref="articleContent"
                             />
-                        </el-col>
-                        <el-col :span="6"  style="max-width:345px;min-width:345px">
+                        </div>
+                        <div class="articleContentRight">
                             <RightContent :imageUrl="imageUrl" ref="articleRight" />
-                        </el-col>
-                    </el-row>
+                        </div>
+                    </div>
                 </div>
             </el-main>
         </el-container>
@@ -127,10 +125,20 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.article-crumbs /deep/ .el-breadcrumb__item .el-breadcrumb__inner {
-    font-weight: 400;
-    color: #262626;
-    font-size: $--font-size-small;
+.article-crumbs /deep/ .el-breadcrumb__item{
+    .el-breadcrumb__inner {
+        font-weight: 400;
+        color: #262626;
+        font-size: $--font-size-small;
+    }
+    .el-breadcrumb__separator{
+        color: $--color-text-regular;
+    }
+}
+.article-crumbs /deep/ .text-regular{
+    .el-breadcrumb__inner {
+        color: $--color-text-regular;
+    }
 }
 </style>
 
@@ -146,20 +154,39 @@ export default {
     background-size: cover;
     .article-crumbs {
         width: 80%;
-        margin: 0 auto;
+        margin: 0 32px;
         padding-top: 15px;
     }
 }
 .article-container {
     width: 100%;
-    margin-top: -100px;
-    margin-left: -40px;
+    margin-top: -115px;
+    // margin-left: -40px;
 }
 .article-head {
-    .article-btn {
-        // float: right;
-        padding-left: 16px
-        
+    margin: 0 10%;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .article-headTitle{
+        font-size: 16px;
+        font-weight: 500;
+        color: $--color-text-primary
+    }
+}
+.articleContent{
+    margin: 0 10%;
+    width: 80%;
+    display: flex;
+    .articleContentLeft{
+        width: calc(100% - 361px);
+        display: inline-block;
+    }
+    .articleContentRight{
+        width: 345px;
+        display: inline-block;
+        padding-left: 16px;
     }
 }
 </style>
