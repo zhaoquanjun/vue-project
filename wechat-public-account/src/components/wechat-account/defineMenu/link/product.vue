@@ -14,6 +14,7 @@
           :data="treeArray"
           node-key="id" 
           :default-expanded-keys="defaultExpandedKeys"
+          :current-node-key="curNodeId"
           @node-click="_handleNodeClick"
         ></el-tree>
       </div>
@@ -175,6 +176,15 @@ export default {
   components: {
     noneArea,
     Loading
+  },
+  computed: {
+    curNodeId: {
+      get: function() {
+        let categoryId = 0;
+        return categoryId;
+      },
+      set: function() {}
+    }
   },
   created() {
     this.getProductList(this.nodeIdArr);

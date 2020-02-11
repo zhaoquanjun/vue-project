@@ -91,9 +91,7 @@
                 <h5>阿里云短信</h5>
                 <p>自定义各场景下发送的短信内容</p>
               </div>
-              <!-- <router-link :to="{name:'aliaksk'}"> 
-                <button class="cl-button cl-button--primary">立即配置</button>
-              </router-link>  -->
+              <button @click="jumpToAksk" class="cl-button cl-button--primary">立即配置</button>
             </div>
             <el-table
               v-show="smsStatus"
@@ -450,6 +448,11 @@ export default {
     noShowTips(){
       setLocal('isShowTips','2')
       this.isShowTips = '2'
+    },
+    jumpToAksk(){
+      this.$router.push({
+        path: "/systemsetting/aliaksk"
+      });
     }
   }
 };
