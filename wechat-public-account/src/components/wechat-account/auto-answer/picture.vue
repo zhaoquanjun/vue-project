@@ -15,7 +15,7 @@
         </div>
         <div class="upload-wrap" v-else>
             <div>
-                <div class="upload-icon"></div>
+                <div class="upload-icon" @click="handlerUpload"></div>
                 <p>请点击此处上传您要上传的图片</p>
                 <button class="cl-button cl-button--primary" @click="handlerUpload">点击上传</button>
             </div>
@@ -132,6 +132,7 @@ export default {
         height: 60px;
         background: url("~img/upload-icon.png") no-repeat center;
         background-size: contain;
+        cursor: pointer;
     }
     p {
         font-size:$--font-size-small;

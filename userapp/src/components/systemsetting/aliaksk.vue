@@ -35,7 +35,7 @@
         <div class="configuration-content">
           <div>
             <div class="akId">
-              <div class="ak-title">Access Key ID</div>
+              <div class="ak-title"><span class="ak-titleIcon">*</span>Access Key ID</div>
               <el-input
                 size="medium"
                 style="width:250px"
@@ -47,7 +47,7 @@
               <div class="ym-form-item__error" v-show="errorAkIdShow">{{errorAkIdText}}</div>
             </div>
             <div class="akSecret">
-              <div class="ak-title">Access Key Secret</div>
+              <div class="ak-title"><span class="ak-titleIcon">*</span>Access Key Secret</div>
               <el-input
                 size="medium"
                 style="width:250px"
@@ -363,6 +363,12 @@ export default {
       text-align: right;
       padding-right: 12px;
       box-sizing: border-box;
+      .ak-titleIcon{
+        color: $--color-danger;
+        font-size: 16px;
+        vertical-align: middle;
+        margin-right: 8px;
+      }
     }
     .akId {
       margin-top: 32px;

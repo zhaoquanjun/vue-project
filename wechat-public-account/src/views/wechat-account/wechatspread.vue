@@ -214,17 +214,17 @@ export default {
       let EntityTyp = 'Page';
       this.listTitle = '页面标题'
       this.listTitle2= '页面推广'
-      this.listTitle3= '请输入搜索页面标题'
+      this.listTitle3= '搜索页面标题'
       if (this.replyType == 'news') {
         EntityTyp = 'News';
         this.listTitle = '文章标题'
         this.listTitle2= '文章推广'
-        this.listTitle3= '请输入搜索文章标题'
+        this.listTitle3= '搜索文章标题'
       } else if (this.replyType == 'product') {
         EntityTyp = 'Product';
         this.listTitle = '产品标题'
         this.listTitle2= '产品推广'
-        this.listTitle3= '请输入搜索产品标题'
+        this.listTitle3= '搜索产品标题'
       }
       let option= {
         PageSize: this.PageSize,
