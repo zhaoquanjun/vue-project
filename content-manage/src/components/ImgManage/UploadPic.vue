@@ -275,10 +275,11 @@ export default {
     right: 17px;
     bottom: 19px;
     top: auto;
-    width: 27px;
+    width: 32px;
     border: 1px solid #fff;
-    height: 27px;
+    height: 32px;
     border-radius: 50%;
+    box-sizing: border-box
 }
 
 .upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
@@ -288,7 +289,8 @@ export default {
 }
 
 .upload-pic /deep/ .el-upload-list__item-actions .el-icon-delete {
-    font-size: 15px;
+    color: #fff;
+    font-size: 18px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -304,12 +306,12 @@ export default {
     left: 17px;
     bottom: 20px;
     border: none;
-    width: 27px;
-    height: 27px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     border: 1px solid #fff;
     background: url("~img/pic-icon/eye.png") no-repeat center;
-    background-size: 60%;
+    background-size: 70%;
     box-sizing: border-box;
 }
 .upload-pic

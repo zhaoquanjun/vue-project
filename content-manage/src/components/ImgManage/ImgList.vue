@@ -1,11 +1,11 @@
 <template>
-    <div class="table-wrap" id="table-list">
+    <div class="table-wrap table-content" id="table-list">
         <el-table
             :height="tableHeight"
             ref="multipleTable"
             :data="imgPageResult.list"
             tooltip-effect="dark"
-            class="content-table table-content"
+            class="content-table "
             @selection-change="handleSelectionChange"
             @sort-change='sortChange'
         >

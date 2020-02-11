@@ -312,7 +312,6 @@
  border-radius: 2px;
 }
     .member-content {
-        font-family: "PingFangSC-Regular,PingFangSC";
         min-width: 1150px;
         height: 100%;
         .member-title

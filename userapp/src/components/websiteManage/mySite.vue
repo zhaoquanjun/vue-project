@@ -923,6 +923,7 @@ export default {
         line-height:32px;
         text-align: right;
         button {
+          margin-left: 16px;
           color: $--color-primary;
         }
         span {

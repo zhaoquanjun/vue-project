@@ -71,7 +71,6 @@
 </script>
 <style lang="scss" scoped>
     .member-content {
-        font-family: "PingFangSC-Regular,PingFangSC";
         .member-title{
             font-size: 14px;
             font-weight: 700;

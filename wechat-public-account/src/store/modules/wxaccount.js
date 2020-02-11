@@ -8,8 +8,8 @@ const user = {
   state: {
     wx_status: {
       isAuth: false,
-      isResolveSuccess: false,
-      isCertification: false
+      isResolveSuccess: true,
+      isCertification: true
     },
     account_info: {}
   },

@@ -45,7 +45,7 @@
             <el-header class="modal-header">
                 <span style="font-size: 16px;">我的图片</span>
                 <button @click="cancelEditorImg">
-                    <i class="el-icon el-icon-close cl-iconfont is-circle"></i>
+                    <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
                 </button>
             </el-header>
             <modal-content ref="imgList" :isGrid="true" @getImgInfo="getImgInfo" :multiple="false" :isPopup="true">
@@ -286,9 +286,9 @@ export default {
     border-radius: $--border-radius-circle;
 }
 .modal-footer {
-    height: 60px;
+    // height: 60px;
     position: absolute;
-    bottom: -11px;
+   bottom: 20px;
     right: 16px;
     width: 100%;
     z-index: 100;

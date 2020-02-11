@@ -904,12 +904,14 @@ export default {
         margin-top: 240px;
         width: 160px;
         height: 130px;
+        text-align: center;
         .empty-icon {
-          width: 160px;
-          height: 106px;
+          display: inline-block;
+          width: 77px;
+          height: 48px;
           background: url("~img/account/accout_no_menu.png") no-repeat center
             center;
-          background: cover;
+          background-size: contain;
         }
         p {
           margin-top: 3px;

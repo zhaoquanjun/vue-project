@@ -94,7 +94,6 @@
         overflow-y: auto;
         background: rgba(38,38,38,0.8);
         text-align: right;
-        font-family: "PingFangSC-Regular,PingFangSC";
         z-index: 3000;
         .code
 

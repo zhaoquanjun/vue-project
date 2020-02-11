@@ -65,10 +65,10 @@ export default {
             span {
                 position: relative;
                 display: inline-block;
-                width:32px;
-                height:32px;
+                width:20px;
+                height:20px;
                 margin-bottom: 20px;
-                line-height: 32px;
+                line-height: 20px;
                 z-index: 10;
                 background: #E5E5E5;
                 color: #FFFFFF;
@@ -79,8 +79,8 @@ export default {
                 i {
                     font-size: 14px;
                     font-weight: 700;
-                    line-height: 32px;
-                    color: $--color-text-secondary;
+                    line-height: 20px;
+                    color: #FFFFFF;
                 }
             }
             p {
@@ -94,7 +94,7 @@ export default {
                 border: $--border-base;
                 width: 300px;
                 position: absolute;
-                top: 16px;
+                top: 12px;
                 left: 50%;
                 z-index: 1;
             }

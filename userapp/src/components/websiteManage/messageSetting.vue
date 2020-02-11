@@ -629,6 +629,9 @@ export default {
 .table-list /deep/ .el-table__empty-text{
     width: auto;
 }
+.table-list /deep/ table thead tr:first-child .cell,.table-list /deep/ table tbody tr:first-child .cell{
+  padding-left: 25px
+}
 .handle-btn-wrap {
   button:nth-child(1) {
     margin-right: 32px;
