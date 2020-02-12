@@ -116,9 +116,9 @@
                     >
                       <el-option
                         v-for="item in signList"
-                        :key="item.id"
+                        :key="item.signName"
                         :label="item.signName"
-                        :value="item.id"
+                        :value="item.signName"
                       ></el-option>
                     </el-select>
                     <p v-show="scope.row.nameTip" class="tips-select"><img src="~img/jian-icon.png"/>请选择短信签名</p>
@@ -140,9 +140,9 @@
                     >
                       <el-option
                         v-for="item in templateList"
-                        :key="item.id"
+                        :key="item.tempName"
                         :label="item.tempName"
-                        :value="item.id"
+                        :value="item.tempName"
                       ></el-option>
                     </el-select>
                     <p v-show="scope.row.templateTip" class="tips-select"><img src="~img/jian-icon.png"/>请选择短信模版</p>
@@ -274,6 +274,10 @@ export default {
     this.getSurplusFreeSMSCount()
     this.getSmsList()
     this.getAkSk()
+    if(this.$route.query.aliyun){
+      this.backupType = "aLiCloud";
+      this.getSmsList()
+    }
   },
   methods: {
     // 获取siteId
@@ -659,7 +663,7 @@ export default {
     height: 450px;
     margin: 60px auto 0;
     padding: 45px 0;
-    background: $--background-color-base;
+    background: $--color-white;
     border-radius: 45px;
     .line {
       position: absolute;
@@ -687,15 +691,15 @@ export default {
     div {
       width: 100%;
       height: 100%;
-      border-top: $--border-base;
-      border-bottom: $--border-base;
+      border-top: 1px solid #e5e5e5;
+      border-bottom: 1px solid #e5e5e5;
       p {
         position: relative;
         width:240px;
         min-height:70px;
         margin: 40px 0 0 20px;
         padding: 10px 6px;
-        background: rgba(38, 38, 38, 0.1);
+        background: $--background-color-base;
         border-radius:2px 2px 2px 0px;
         border-radius: $--border-radius-base;
         font-size: $--font-size-small;
@@ -708,7 +712,7 @@ export default {
           bottom: 0;
           width: 0;
           height: 0;
-          border-bottom: 10px solid rgba(38, 38, 38, 0.1);
+          border-bottom: 10px solid $--background-color-base;
           border-left: 12px solid transparent;
         }
       }

@@ -489,7 +489,7 @@ export default {
             text-align: left;
             font-size: $--font-size-small;
             &:hover {
-                background: #e0fcff;
+                background: $--background-color-hover;
             }
         }
     }

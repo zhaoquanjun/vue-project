@@ -51,9 +51,9 @@
                 </el-upload>
             </el-form-item>
         </el-form>
-        <div class="pannle-footer">
-            <button class="confrim" @click="submitForm('ruleForm')">确定</button>
-            <button class="cancel" @click="cancel">取消</button>
+        <div class="pannel-footer">
+            <button class="cl-button cl-button--small cl-button--primary_notbg" @click="cancel">取消</button>
+            <button class="cl-button cl-button--small cl-button--primary" @click="submitForm('ruleForm')">确定</button>
         </div>
     </div>
 </template>
@@ -304,18 +304,10 @@ export default {
     font-size: $--font-size-small;
 }
 #content-manage .uploadCategoryPic {
-    .pannle-footer {
+    .pannel-footer {
         text-align: right;
-        padding: 5px 8px 0 0;
+        padding: 8;
         box-sizing: border-box;
-        button {
-            width: 58px;
-        }
-        .cancel {
-            border: 1px solid #00c1de;
-            color: #00c1de;
-            background: #fff;
-        }
     }
 }
 </style>

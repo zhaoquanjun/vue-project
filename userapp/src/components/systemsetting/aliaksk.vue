@@ -310,7 +310,10 @@ export default {
     },
     manage() {
       this.$router.push({
-        path: "/website/sitemanage/messagesetting"
+        path: "/website/sitemanage/messagesetting",
+        query: {
+          aliyun: true
+        }
       });
     }
   }
