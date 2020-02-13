@@ -11,7 +11,16 @@
         </div>-->
         <div class="phone">
           <el-input class="phoneInput" placeholder="请输入手机号" v-model="phone">
-            <span slot="prefix" class="phoneTip">+86</span>
+            <span slot="prefix" class="phoneTip">
+              <el-select v-model="codeValue" class="codeInput" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.code"
+                  :label="item.code"
+                  :value="item.code">
+                </el-option>
+              </el-select>
+            </span>
           </el-input>
         </div>
         <!-- <div class="slider"></div> -->
@@ -44,7 +53,16 @@
           <div class="tips">您已购买的服务还未创建系统管理员，请使用管理员手机号创建一个系统管理员</div>
           <div class="phone">
             <el-input class="phoneInput" placeholder="请输入手机号" v-model="newPhone">
-              <span slot="prefix" class="phoneTip">+86</span>
+              <span slot="prefix" class="phoneTip">
+                <el-select v-model="codeValue" class="codeInput" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.code"
+                    :label="item.code"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
+              </span>
             </el-input>
           </div>
           <!-- <div class="slider"></div> -->
@@ -96,6 +114,33 @@ export default {
   data() {
     return {
       hasPhone: false,
+      codeValue: "+86",
+      options:[
+        {
+          code: "+86"
+        },
+        {
+          code: "+852"
+        },
+        {
+          code: "+886"
+        },
+        {
+          code: "+1"
+        },
+        {
+          code: "+44"
+        },
+        {
+          code: "+81"
+        },
+        {
+          code: "+7"
+        },
+        {
+          code: "+39"
+        }
+      ],
       phone: "",
       newPhone: "",
       oldPhone: "",
@@ -433,10 +478,13 @@ export default {
       border-radius: 2px;
       border: $--border-base;
       /deep/ .el-input__inner {
-        padding-left: 56px;
+        padding-left: 81px;
+      }
+      .codeInput /deep/ .el-input__inner {
+        padding-left: 8px;
       }
       .phoneTip {
-        width: 50px;
+        width: 75px;
         font-size: 14px;
         font-weight: 400;
         color: rgba(38, 38, 38, 1);
@@ -507,10 +555,13 @@ export default {
       border-radius: 2px;
       border: $--border-base;
       /deep/ .el-input__inner {
-        padding-left: 56px;
+        padding-left: 81px;
+      }
+      .codeInput /deep/ .el-input__inner {
+        padding-left: 8px;
       }
       .phoneTip {
-        width: 50px;
+        width: 75px;
         font-size: 14px;
         font-weight: 400;
         color: rgba(38, 38, 38, 1);
