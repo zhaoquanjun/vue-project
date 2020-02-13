@@ -115,7 +115,8 @@ export default {
       this.parentPath = firstRoute;
     },
     unReadCount() {
-      this.curUnReadCount = this.unReadCount - 1;
+      this.unReadCount >0 && (this.curUnReadCount = this.unReadCount)
+      // this.curUnReadCount = this.unReadCount - 1;
       if(this.curUnReadCount < 0) {
         this.curUnReadCount = 0;
       }
