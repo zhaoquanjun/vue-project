@@ -66,9 +66,7 @@ export default {
       }
     },
     async getUnReadCount() {
-      console.log(33333)
       let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
-      console.log(data,"33")
       this.curUnReadCount = data;
     },
     iconfonts(code) {

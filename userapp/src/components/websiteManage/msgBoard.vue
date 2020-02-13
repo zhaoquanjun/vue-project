@@ -351,7 +351,6 @@ export default {
     getSiteId(siteId) {
       this._getMsgboardList(siteId);
       this.curSiteId = siteId;
-      console.log(siteId)
     },
     /**
      * 选择切换网站
@@ -368,23 +367,21 @@ export default {
       let { data, status } = await msgBoardApi.getMsgboardList(siteId, pageIndex, pageSize, queryKeywords, Status, DescSort);
       this.$Loading.hide();
       this.msgBoardData = data; 
-      console.log(data)
     },
     /**
      * 获取未读信息数量
      */
     async getUnReadCount() {
-      console.log(33333)
       let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
-      console.log(data,"33")
       this.unReadCount = data;
     },
     /**
      * 筛选留言状态
      */
     changeStatus(val) {
-      console.log(val)
       this.getMsgboardListParas.Status = val;
+      this.getMsgboardListParas.pageIndex = 1;
+      this.getMsgboardListParas.pageSize = 10;
       this._getMsgboardList(this.getMsgboardListParas)
     },
     /**
@@ -392,6 +389,8 @@ export default {
      */
     searchEnterFun() {
       this.getMsgboardListParas.queryKeywords = this.search;
+      this.getMsgboardListParas.Status = -1;
+      this.statusValue = -1;
       this._getMsgboardList(this.getMsgboardListParas)
     },
     /**
@@ -406,10 +405,8 @@ export default {
     sortChange(val){
       if (val.order == 'ascending') {
         this.getMsgboardListParas.DescSort = true;
-        console.log("ascending")
       } else {
         this.getMsgboardListParas.DescSort = false;
-        console.log("descending")
       }
       this._getMsgboardList(this.getMsgboardListParas);
     },
@@ -453,7 +450,6 @@ export default {
      * 查看留言详情
      */
     async viewDetail(row) {
-      console.log(row,"row")
       this.dialogVisibleId = row.id;
       if(row.status === 0) {
         this.getUnReadCount();
@@ -508,7 +504,6 @@ export default {
      * 删除留言
      */
     remove(row) {
-      console.log(row.id)
       this.$confirm(
         "留言删除后将不可恢复，确认要删除吗？",
         "提示",
@@ -652,6 +647,7 @@ export default {
     box-sizing: border-box;
     width: 400px;
     padding: 10px;
+    color: #4E4E4E;
     border-radius: $--border-radius-base;
   }
   .replyRemark {
