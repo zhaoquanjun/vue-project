@@ -124,6 +124,16 @@ export const defaultRoutes = [
         }
       },
       {
+        path: "mysite/leaveword",
+        name: "leaveword",
+        component: () => import("@/views/website-manage/msgBoard.vue"),
+        meta: {
+          title: "留言管理",
+          requiresAuth: true,
+          isSub: true
+        }
+      },
+      {
         path: "email",
         name: "email",
         component: () => import("@/views/website-manage/mailServer.vue"),

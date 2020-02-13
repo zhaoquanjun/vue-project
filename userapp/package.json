@@ -47,5 +47,12 @@
     "svg-sprite-loader": "^4.1.6",
     "vue-clipboard2": "^0.3.0",
     "vue-template-compiler": "^2.5.21"
-  }
+  },
+  "description": "## Project setup ``` npm install ```",
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "tests"
+  },
+  "author": "",
+  "license": "ISC"
 }
