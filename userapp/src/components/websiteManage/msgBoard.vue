@@ -216,6 +216,7 @@
               <i class="reply-time">{{getReply.replyTime && getReply.replyTime.slice(0,10)}} {{getReply.replyTime && getReply.replyTime.slice(11,16)}}</i>
             </p>
             <textarea 
+              v-if="scope.row.status!==2"
               name="reply" 
               :id="scope.row.id" 
               placeholder="回复意见"
@@ -224,7 +225,7 @@
               :show-limit="true"
               class="view-item setReplyContent"
             ></textarea>
-            <p class="view-item replyRemark">
+            <p v-if="scope.row.status!==2" class="view-item replyRemark">
               * 回复意见将以短信或邮件形式发送给用户
             </p>
             <span slot="footer" class="dialog-footer">
@@ -233,10 +234,13 @@
                 slot="refenrence"
                 @click="closeViewDetail"
               >取消</button>
-              <button
-                class="cl-button cl-button--primary cl-button--small"
-                @click="reply(scope.row)"
-              >回复</button>
+              <Debounce :time="1000" !isDebounce>
+                <button
+                  class="cl-button cl-button--primary cl-button--small"
+                  :class="{'is-disabled':scope.row.status===2}"
+                  @click="reply(scope.row)"
+                >回复</button>
+              </Debounce>
             </span>
           </el-dialog>
             <el-tooltip
