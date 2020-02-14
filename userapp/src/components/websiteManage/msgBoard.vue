@@ -439,11 +439,10 @@ export default {
       if(this.setReplyContent !== ""){
         let { data, status } = await msgBoardApi.setReplyContent(row.id, this.setReplyContent)
         if(status === 200) {
-          this._upadateStatus(row.id,2)
-          this.setReplyContent = "";
-          this.dialogVisibleId = "";
+          this._upadateStatus(row.id,2);
+          this.closeViewDetail();
         }
-        this._getMsgboardList(this.getMsgboardListParas)
+        
       }
       
     },
