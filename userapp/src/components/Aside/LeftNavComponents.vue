@@ -35,7 +35,7 @@
 import { siteDomain } from "@/environment/index";
 import * as msgBoardApi from "@/api/request/msgBoardApi";
 export default {
-    props: ["menuList", "lastRoute", "subTitle"],
+    props: ["menuList", "lastRoute", "subTitle","isLeftNavComponentsShow"],
     data() {
         return {
             unreadCount: 0,
@@ -79,7 +79,12 @@ export default {
                     return "iconicon-dash-zhujian";
             }
         }
-    }
+    },
+    watch: {
+        isLeftNavComponentsShow() {
+            this.getUnReadCount()
+        }
+    },
 };
 </script>
 <style scoped lang="scss">

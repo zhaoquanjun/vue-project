@@ -53,7 +53,7 @@
               条留言
             </span>
             <div class="batch-header">
-              <button  class="cl-button cl-button--text_primary" @click="batchRemove">删除</button>
+              <button  class="cl-button cl-button--text_primary" @click="_batchRemove">删除</button>
             </div>
           </div>
         </template>
@@ -222,7 +222,6 @@
               placeholder="回复意见"
               v-model="setReplyContent"
               maxlength="200"
-              :show-limit="true"
               class="view-item setReplyContent"
             ></textarea>
             <p v-if="scope.row.status!==2" class="view-item replyRemark">
@@ -238,7 +237,7 @@
                 <button
                   class="cl-button cl-button--primary cl-button--small"
                   :class="{'is-disabled':scope.row.status===2}"
-                  @click="reply(scope.row)"
+                  @click="_reply(scope.row)"
                 >回复</button>
               </Debounce>
             </span>
@@ -249,7 +248,7 @@
               content="查看" 
               placement="top"
             >
-              <i class="cl-icon iconfont iconchakan" @click="viewDetail(scope.row)"></i>
+              <i class="cl-icon iconfont iconchakan" @click="_viewDetail(scope.row)"></i>
             </el-tooltip>
              <el-tooltip
               class="item" 
@@ -257,7 +256,7 @@
               content="删除" 
               placement="top"
             >
-              <i class="cl-icon iconfont iconicon-huishou" @click="remove(scope.row)"></i>
+              <i class="cl-icon iconfont iconicon-huishou" @click="_remove(scope.row)"></i>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -337,6 +336,7 @@ export default {
     this.statusValue = -1;
     this.getMsgboardListParas.Status = -1;
     this.getMsgboardListParas.DescSort = true;this._getMsgboardList();
+    this._getUnReadCount();
   },
   watch: {
     multipleSelection(){
@@ -378,7 +378,7 @@ export default {
     /**
      * 获取未读信息数量
      */
-    async getUnReadCount() {
+    async _getUnReadCount() {
       let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
       this.unReadCount = data;
     },
@@ -435,7 +435,7 @@ export default {
     /**
      * 回复留言
      */
-    async reply(row) {
+    async _reply(row) {
       if(this.setReplyContent !== ""){
         let { data, status } = await msgBoardApi.setReplyContent(row.id, this.setReplyContent)
         if(status === 200) {
@@ -455,10 +455,10 @@ export default {
     /**
      * 查看留言详情
      */
-    async viewDetail(row) {
+    async _viewDetail(row) {
       this.dialogVisibleId = row.id;
       if(row.status === 0) {
-        this.getUnReadCount();
+        this.unReadCount -= 1;
         this._upadateStatus(row.id,1);
       }
       if(row.status === 2) {
@@ -479,7 +479,7 @@ export default {
     /**
      * 批量删除
      */
-    batchRemove() {
+    _batchRemove() {
       if(this.selectedCount !== 0){
         let leavewordIds=[];
         this.multipleSelection.forEach(item => {
@@ -511,7 +511,7 @@ export default {
     /**
      * 删除留言
      */
-    remove(row) {
+    _remove(row) {
       this.$confirm(
         "留言删除后将不可恢复，确认要删除吗？",
         "提示",
@@ -521,6 +521,9 @@ export default {
             if(action === "confirm") {
               let { status } = await msgBoardApi.removeMsg(row.id);
               if(status === 200) {
+                if(row.status==0){
+                  this.unReadCount -= 1;
+                }
                 this.$notify({
                   customClass: "notify-success",
                   message: `删除成功!`,
