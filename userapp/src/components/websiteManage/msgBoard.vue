@@ -442,6 +442,12 @@ export default {
       if(this.setReplyContent !== ""){
         let { data, status } = await msgBoardApi.setReplyContent(row.id, this.setReplyContent)
         if(status === 200) {
+          this.$notify({
+            customClass: "notify-success",
+            message: `回复成功`,
+            showClose: false,
+            duration: 1000
+          });
           this._upadateStatus(row.id,2);
           this.closeViewDetail();
         }
