@@ -66,7 +66,7 @@
         :height="tableHeight - 41"
         @selection-change="handleSelectionChange"
         @sort-change='sortChange'
-        :default-sort = "{prop: 'date', order: 'ascending'}"
+        :default-sort = "{prop: 'date', order: 'descending'}"
       >
         <template slot="empty">
           <div class="empty-table" style="cursor: default">
@@ -411,9 +411,9 @@ export default {
      */
     sortChange(val){
       if (val.order == 'ascending') {
-        this.getMsgboardListParas.DescSort = true;
-      } else {
         this.getMsgboardListParas.DescSort = false;
+      } else {
+        this.getMsgboardListParas.DescSort = true;
       }
       this._getMsgboardList(this.getMsgboardListParas);
     },
