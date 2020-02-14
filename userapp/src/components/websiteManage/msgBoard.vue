@@ -199,8 +199,11 @@
             <p class="view-item">
               留言标题：{{scope.row.leavewordTitle}}
             </p>
-            <p class="view-item">
+            <p class="view-item" v-if="scope.row.contactEmail && scope.row.contactEmail !==''">
               联系邮箱：{{scope.row.contactEmail}}
+            </p>
+            <p class="view-item" v-else>
+              联系电话： {{scope.row.contactNumber}}
             </p>
             <p class="view-item">
               <i style="vertical-align: top;">留言内容：</i>
