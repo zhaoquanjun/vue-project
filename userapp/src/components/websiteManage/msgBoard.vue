@@ -16,6 +16,7 @@
             <el-input
               size="medium"
               v-model="search"
+              maxlength="50"
               placeholder="输入留言标题或内容搜索"
               @keyup.enter.native="searchEnterFun"
             >
@@ -211,14 +212,16 @@
               v-if="scope.row.status === 2" 
               class="view-item getReplyContent"
             >
-              回复：{{getReplyContent}}
+              <i class="reply-content"> 回复：{{getReply.replyContent}}</i>
+              <i class="reply-time">{{getReply.replyTime && getReply.replyTime.slice(0,10)}} {{getReply.replyTime && getReply.replyTime.slice(11,16)}}</i>
             </p>
             <textarea 
               name="reply" 
               :id="scope.row.id" 
               placeholder="回复意见"
               v-model="setReplyContent"
-              maxlength="1000"
+              maxlength="200"
+              :show-limit="true"
               class="view-item setReplyContent"
             ></textarea>
             <p class="view-item replyRemark">
@@ -298,7 +301,7 @@ export default {
       tableHeight: 500,
       msgBoardData: [],
       setReplyContent: "",
-      getReplyContent: "",
+      getReply: "",
       statusValue: -1,
       statusOptions: [
         {
@@ -456,8 +459,10 @@ export default {
         this._upadateStatus(row.id,1);
       }
       if(row.status === 2) {
-        let getReplyContent = await msgBoardApi.getReplyContent(row.id);
-        this.getReplyContent = getReplyContent.data.replyContent;
+        let { data, status } = await msgBoardApi.getReplyContent(row.id);
+        if(status === 200) {
+          this.getReply = data;
+        }
       }
     },
     /**
@@ -649,6 +654,14 @@ export default {
     padding: 10px;
     color: #4E4E4E;
     border-radius: $--border-radius-base;
+    .reply-content {
+      display: block;
+      margin-bottom: 32px;
+    }
+    .reply-time {
+      display: block;
+      text-align: right;
+    }
   }
   .replyRemark {
     color: $--color-danger;
