@@ -165,7 +165,7 @@
         </el-table-column>
         <el-table-column
           prop="date"
-          sortable
+          sortable="custom"
           label="留言时间"
           min-width="120"
           height="50"
