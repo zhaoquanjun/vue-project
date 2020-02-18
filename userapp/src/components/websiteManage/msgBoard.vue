@@ -233,6 +233,12 @@
               <p class="view-item">
               联系电话： {{scope.row.contactNumber}}
               </p>
+              <p class="view-item">
+                <i style="vertical-align: top;">留言内容：</i>
+                <i style="display: inline-block;width:336px;">
+                  {{scope.row.leavewordContent}}
+                </i>
+              </p>
             </template>
             <span slot="footer" class="dialog-footer">
               <button
