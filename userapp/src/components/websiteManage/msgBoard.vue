@@ -199,44 +199,48 @@
             <p class="view-item">
               留言标题：{{scope.row.leavewordTitle}}
             </p>
-            <p class="view-item" v-if="scope.row.contactEmail && scope.row.contactEmail !==''">
+            <template v-if="scope.row.contactEmail && scope.row.contactEmail !==''">
+              <p class="view-item">
               联系邮箱：{{scope.row.contactEmail}}
-            </p>
-            <p class="view-item" v-else>
+              </p>
+              <p class="view-item">
+                <i style="vertical-align: top;">留言内容：</i>
+                <i style="display: inline-block;width:336px;">
+                  {{scope.row.leavewordContent}}
+                </i>
+              </p>
+              <p 
+                v-if="scope.row.status === 2" 
+                class="view-item getReplyContent"
+              >
+                <i class="reply-content"> 回复：{{getReply.replyContent}}</i>
+                <i class="reply-time">{{getReply.replyTime && getReply.replyTime.slice(0,10)}} {{getReply.replyTime && getReply.replyTime.slice(11,16)}}</i>
+              </p>
+              <textarea 
+                v-if="scope.row.status!==2"
+                name="reply" 
+                :id="scope.row.id" 
+                placeholder="回复意见"
+                v-model="setReplyContent"
+                maxlength="200"
+                class="view-item setReplyContent"
+              ></textarea>
+              <p v-if="scope.row.status!==2" class="view-item replyRemark">
+                * 回复意见将以邮件形式发送给用户
+              </p>
+            </template>
+            <template v-else>
+              <p class="view-item">
               联系电话： {{scope.row.contactNumber}}
-            </p>
-            <p class="view-item">
-              <i style="vertical-align: top;">留言内容：</i>
-              <i style="display: inline-block;width:336px;">
-                {{scope.row.leavewordContent}}
-              </i>
-            </p>
-            <p 
-              v-if="scope.row.status === 2" 
-              class="view-item getReplyContent"
-            >
-              <i class="reply-content"> 回复：{{getReply.replyContent}}</i>
-              <i class="reply-time">{{getReply.replyTime && getReply.replyTime.slice(0,10)}} {{getReply.replyTime && getReply.replyTime.slice(11,16)}}</i>
-            </p>
-            <textarea 
-              v-if="scope.row.status!==2"
-              name="reply" 
-              :id="scope.row.id" 
-              placeholder="回复意见"
-              v-model="setReplyContent"
-              maxlength="200"
-              class="view-item setReplyContent"
-            ></textarea>
-            <p v-if="scope.row.status!==2" class="view-item replyRemark">
-              * 回复意见将以短信或邮件形式发送给用户
-            </p>
+              </p>
+            </template>
             <span slot="footer" class="dialog-footer">
               <button
                 class="cl-button cl-button--primary_notbg cl-button--small"
                 slot="refenrence"
                 @click="closeViewDetail"
               >取消</button>
-              <Debounce :time="1000" !isDebounce>
+              <Debounce :time="1000" !isDebounce v-if="scope.row.contactEmail && scope.row.contactEmail !==''">
                 <button
                   class="cl-button cl-button--primary cl-button--small"
                   :class="{'is-disabled':scope.row.status===2}"
