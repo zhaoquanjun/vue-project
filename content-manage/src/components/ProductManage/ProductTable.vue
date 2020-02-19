@@ -212,7 +212,7 @@ export default {
                 { name: "删除", flag: "delete" }
             ];
             this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + "px";
 
             // if (this.$refs.operateSection.style.display == "block") {
             //     this.$refs.operateSection.style.display = "none";

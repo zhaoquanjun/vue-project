@@ -110,6 +110,7 @@ export default {
             operateList: [
                 { name: "移动", flag: "move" },
                 { name: "复制", flag: "copy" },
+                { name: "翻译", flag: "translate" },
                 { name: "下线", flag: "isOnsell" },
                 { name: "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
@@ -168,13 +169,14 @@ export default {
             (this.operateList = [
                 { name: "移动", flag: "move" },
                 { name: "复制", flag: "copy" },
+                { name: "翻译", flag: "translate" },
                 { name: row.isPublish ? "下线" : "上线", flag: "isOnSell" },
                 { name: row.isTop ? "取消置顶" : "置顶", flag: "stick" },
                 { name: "删除", flag: "delete" }
             ]),
                 (this.row = row);
             this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + "px";
 
             if (this.$refs.operateSection.style.display == "block") {
                 this.$refs.operateSection.style.display = "none";
@@ -193,6 +195,12 @@ export default {
          */
         batchRemove(row) {
             this.$emit("batchRemove", [row.id]);
+        },
+        /**
+         * 翻译操作
+         */
+        batchTranslate() {
+            this.$emit("batchTranslate")
         },
         /**
          * 置顶操作
@@ -250,6 +258,8 @@ export default {
                 case "delete":
                     this.batchRemove(row);
                     break;
+                case "translate":
+                    this.batchTranslate();
             }
         },
         /**

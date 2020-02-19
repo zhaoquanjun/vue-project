@@ -1,5 +1,5 @@
 <template>
-    <el-container id="content-manage">
+    <el-container id="content-manage" class="content-manage">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
                 <span>文章分类</span>
@@ -25,6 +25,7 @@
                 :article-search-options="articleSearchOptions"
                 @getArticleList="getArticleList"
                 @addArticle="addArticle"
+                @batchTranslate="batchTranslate"
                 @batchMove="batchMoveNews"
                 @batchCopy="batchCopyNews"
                 @batchRemove="batchRemoveNews"
@@ -40,6 +41,7 @@
                     :tree-result="treeResult"
                     @getArticleList="getArticleList"
                     @addArticle="addArticle"
+                    @batchTranslate="batchTranslate"
                     @batchMove="batchMoveNews"
                     @batchCopy="batchCopyNews"
                     @batchRemove="batchRemoveNews"
@@ -62,17 +64,54 @@
                     :style="{width:isInvitationlWidth+'px'}"
                     @closeRightPanel="cancelUpdateCategory"
                 >
-                    <span slot="title-text">{{operateName}}文章分类</span>
-                    <div class="category-content">
-                        <span name="cur-tip">{{operateName}}至</span>
-                    </div>
-                    <SelectTree
-                        v-if="isInvitationPanelShow"
-                        :categoryName="curArticleInfo.categoryName"
-                        :categoryId="curArticleInfo.categoryId"
-                        :tree-result="treeResult"
-                        @chooseNode="chooseNode"
-                    />
+                   <template v-if="operateName === '移动' || operateName === '复制'">
+                        <span slot="title-text">{{operateName}}文章分类</span>
+                        <div class="category-content">
+                            <span name="cur-tip">{{operateName}}至</span>
+                        </div>
+                        <SelectTree
+                            v-if="isInvitationPanelShow"
+                            :categoryName="curArticleInfo.categoryName"
+                            :categoryId="curArticleInfo.categoryId"
+                            :tree-result="treeResult"
+                            @chooseNode="chooseNode"
+                        />
+                   </template>
+                   <template v-else> 
+                       <span slot="title-text">翻译文章</span>
+                       <div class="translateDialog">
+                            <p>翻译详情：
+                               <span v-if="count>1"> <i class="checkedNum">{{count}}</i> 篇文章， </span>
+                               共 <i class="checkedNum">{{contentLength}}</i> 字符
+                            </p>
+                            <div style="position:relative;">翻译语言：
+                                <el-select
+                                    size="small"
+                                    v-model="languageValue"
+                                    placeholder="请选择"
+                                    popper-class="languageSelect"
+                                >
+                                    <el-option
+                                        v-for="item in languageOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    ></el-option>
+                                </el-select>
+                            </div>
+                            
+                       </div>
+                       <div class="category-content">
+                            <span name="cur-tip">另存为至</span>
+                        </div>
+                        <SelectTree
+                            :categoryName="curArticleInfo.categoryName"
+                            :categoryId="curArticleInfo.categoryId"
+                            :tree-result="treeResult"
+                            @chooseNode="chooseNode"
+                        />
+                       
+                   </template>
 
                     <div slot="footer" class="pannel-footer">
                         <button @click="handOperateArticle" class="cl-button cl-button--small cl-button--primary">确定</button>
@@ -106,6 +145,7 @@ export default {
             moveToClassiFy: "",
             newsIdList: "",
             count: 0,
+            contentLength: 0,
             idsList: [],
             rightPanelType: 1, // 1 移动文章 2 复制文章
             selectCategory: "",
@@ -121,7 +161,24 @@ export default {
                 pageIndex: 1,
                 pageSize: 10,
                 isDescending: true
-            }
+            },
+            languageOptions: [{
+                value: 1,
+                label: "中文"
+            },{
+                value: 2,
+                label: "英文"
+            },{
+                value: 3,
+                label: "日文"
+            },{
+                value: 4,
+                label: "西班牙语"
+            },{
+                value: 5,
+                label: "韩文"
+            }],
+            languageValue: 1
         };
     },
     mounted() {
@@ -175,6 +232,29 @@ export default {
                     index
                 ].createTimePrt.split(" ")[0];
             });
+        },
+        // 批量翻译
+        async batchTranslate(idlist,isHeader) {
+            idlist = idlist == null ? this.idsList : idlist;
+            console.log(idlist)
+            console.log("batchTranslate", idlist)
+            this.operateName = "";
+            this.contentLength = 0;
+            this.isInvitationPanelShow = true;
+            idlist.forEach(item => {
+                this.articlePageResult.list.forEach(i => {
+                    if(i.id === item) {
+                        this.contentLength += i.contentLength;
+                    }
+                })
+            })
+            if (isHeader) {
+                this.moveToClassiFy = "";
+                this.curArticleInfo = {
+                    categoryName: "全部分类",
+                    categoryId: 0
+                };
+            }
         },
         // 批量删除
         async batchRemoveNews(idlist) {
@@ -319,7 +399,6 @@ export default {
                     break;
                 case 2:
                     this.copyArticle();
-
                     break;
             }
         },
@@ -484,6 +563,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../style/contentDetail.scss";
+.checkedNum {
+    color: $--color-primary;
+}
+.translateDialog {
+    position: relative;
+}
+.languageSelect {
+    z-index: 3000;
+}
+.content-manage .translateDialog /deep/ .el-select-dropdown{
+    z-index: 3000 !important;
+}
 </style>
 
 
