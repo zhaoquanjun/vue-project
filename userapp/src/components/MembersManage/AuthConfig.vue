@@ -14,7 +14,7 @@
                         class="auth-input input-hover"
                         v-model="input"
                         placeholder="请输入权限名称"
-                        @input="changeInput"
+                        @input="searchAuth"
                         @keyup.enter='searchAuth'
                     />
 
@@ -176,7 +176,7 @@ export default {
                 this.flag = true;
             }
             let ary = [];
-            this.userPermission.forEach(item => {
+            JSON.parse(this.oldUserPermission).forEach(item => {
                 if (item.name.includes(this.input)) ary.push(item);
             });
             this.$store.commit("USERPERMISSION", ary);
@@ -188,10 +188,17 @@ export default {
                     "USERPERMISSION",
                     JSON.parse(this.oldUserPermission)
                 );
+                return;
             }
         }
     },
     mounted() {},
+    watch: {
+        input() {
+            this.changeInput()
+            this.searchAuth();
+        }
+    },
     computed: {
         ...mapState({
             invitationValue: state => state.invitationValue,

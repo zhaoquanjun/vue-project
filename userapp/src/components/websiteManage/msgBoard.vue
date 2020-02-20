@@ -1,7 +1,9 @@
 <template>
   <el-container class="member-container">
     <el-aside class="submenu-aside">
-      <page-submenu :unReadCount="unReadCount">
+      <page-submenu      
+        :unReadCount="unReadCount"
+      >
         <template v-slot:title>网站管理</template>
       </page-submenu>
     </el-aside>
@@ -20,7 +22,7 @@
               placeholder="输入留言标题或内容搜索"
               @keyup.enter.native="searchEnterFun"
             >
-              <i class="el-icon-search el-input__icon" style="cursor: pointer;color:#D7D8D9" slot="suffix" @click="searchEnterFun"></i>
+              <i class="el-icon-search el-input__icon searchIcon" slot="suffix" @click="searchEnterFun"></i>
             </el-input>
           </div>
           <div class="head-item">
@@ -592,6 +594,11 @@ export default {
     width: 200px;
     box-sizing: border-box;
     overflow: hidden;
+
+    .searchIcon {
+      cursor: pointer;
+      color:$--color-text-secondary;
+    }
   }
 }
 

@@ -7,7 +7,7 @@
                     class="auth-input"
                     v-model="input"
                     placeholder="请输入权限名称"
-                    @input="changeInput"
+                    @input="searchAuth"
                     :clearable="true"
                     @keyup.enter='searchAuth'
                 />
@@ -73,7 +73,7 @@ export default {
                 this.flag = true;
             }
             let ary = [];
-            this.userPermission.forEach(item => {
+            JSON.parse(this.oldUserPermission).forEach(item => {
                 if (item.name.includes(this.input)) {
                     ary.push(item);
                 }
@@ -88,6 +88,12 @@ export default {
                     JSON.parse(this.oldUserPermission)
                 );
             }
+        }
+    },
+    watch: {
+        input() {
+            this.changeInput()
+            this.searchAuth();
         }
     },
     computed: {
