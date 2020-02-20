@@ -21,6 +21,7 @@
               maxlength="50"
               placeholder="输入留言标题或内容搜索"
               @keyup.enter.native="searchEnterFun"
+              :clearable="true"
             >
               <i class="el-icon-search el-input__icon searchIcon" slot="suffix" @click="searchEnterFun"></i>
             </el-input>
@@ -354,6 +355,11 @@ export default {
     this._getUnReadCount();
   },
   watch: {
+    search() {
+      if(this.search === "") {
+        this.searchEnterFun()
+      }
+    },
     multipleSelection(){
       if(this.multipleSelection !== []){
         this.isBatchHeaderShow = true;
