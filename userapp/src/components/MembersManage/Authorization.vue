@@ -80,20 +80,18 @@ export default {
             });
 
             this.$store.commit("USERPERMISSION", ary);
-        },
-        changeInput() {
+        }
+    },
+    watch: {
+        input() {
             if (this.input == "" && this.oldUserPermission) {
                 this.$store.commit(
                     "USERPERMISSION",
                     JSON.parse(this.oldUserPermission)
                 );
+            }else{
+               this.searchAuth(); 
             }
-        }
-    },
-    watch: {
-        input() {
-            this.changeInput()
-            this.searchAuth();
         }
     },
     computed: {

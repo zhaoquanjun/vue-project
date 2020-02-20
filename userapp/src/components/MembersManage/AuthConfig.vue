@@ -180,23 +180,19 @@ export default {
                 if (item.name.includes(this.input)) ary.push(item);
             });
             this.$store.commit("USERPERMISSION", ary);
-        },
-        changeInput() {
-            
-            if (this.input === "" && this.oldUserPermission) {
-                this.$store.commit(
-                    "USERPERMISSION",
-                    JSON.parse(this.oldUserPermission)
-                );
-                return;
-            }
         }
     },
     mounted() {},
     watch: {
         input() {
-            this.changeInput()
-            this.searchAuth();
+            if (this.input == "" && this.oldUserPermission) {
+            this.$store.commit(
+                "USERPERMISSION",
+                JSON.parse(this.oldUserPermission)
+                );
+            }else{
+                this.searchAuth(); 
+            }
         }
     },
     computed: {
