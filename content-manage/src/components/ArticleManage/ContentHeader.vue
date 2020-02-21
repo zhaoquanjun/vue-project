@@ -91,6 +91,7 @@
                     <button class="cl-button cl-button--text_primary"  @click="handleCommand('move')">移动</button>
                     <button class="cl-button cl-button--text_primary"  @click="handleCommand('top')">置顶</button>
                     <button class="cl-button cl-button--text_primary"  @click="handleCommand('cancelTop')">取消置顶</button>
+                    <button class="cl-button cl-button--text_primary" @click="batchTranslate">翻译</button>
                     <button class="cl-button cl-button--text_danger"  @click="batchRemove">删除</button>
 
                     <!-- <el-dropdown trigger="click" @command="handleCommand">
@@ -203,6 +204,10 @@ export default {
         // 批量 上下架
         batchPublish(flag) {
             this.$emit("batchPublish", null, flag);
+        },
+        // 批量翻译
+        batchTranslate() {
+          this.$emit("batchTranslate")  
         },
         //批量删除
         batchRemove() {

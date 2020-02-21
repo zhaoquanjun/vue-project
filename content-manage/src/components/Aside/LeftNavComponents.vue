@@ -23,6 +23,9 @@
                         :class="{'active':lastRoute==item.code}"
                         >
                         {{item.name}}
+                        <i  
+                            style="line-height:16px;position: absolute;margin-top: 4px;margin-left: 2px;background: #FB4D68;color: #fff !important;width: 18px;height: 18px;border-radius: 50%;text-align: center;" 
+                            v-if="item.path === '/website/mysite/leaveword' && curUnReadCount !== 0">{{curUnReadCount}}</i>
                     </p>
                 </div>
             </li>
@@ -31,8 +34,18 @@
 </template>
 <script>
 import { siteDomain } from "@/environment/index";
+import * as msgBoardApi from "@/api/request/msgBoardApi";
 export default {
     props: ["menuList", "lastRoute", "subTitle"],
+    data() {
+        return {
+            curUnReadCount:"",
+            curSiteId: this.$store.state.dashboard.siteId
+        }
+    },
+    mounted() {
+        this.getUnReadCount()
+    },
     methods: {
         handlerRoute(item, index) {
             //有三级路由时，二级路由不跳转
@@ -46,6 +59,10 @@ export default {
             } else {
                 window.location.href = "//" + item.menuUrl;
             }
+        },
+        async getUnReadCount() {
+            let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
+            this.curUnReadCount = data;
         },
         iconfonts(code) {
             switch (code) {
@@ -71,6 +88,7 @@ export default {
     width: 100%;
     background: $--color-black-light !important;
 }
+
 .submenu-title {
     height: 50px;
     line-height: 50px;
@@ -110,6 +128,7 @@ export default {
               color: $--color-white;
             }
           }
+          
           p {
             cursor: pointer;
             padding-left: 40px;

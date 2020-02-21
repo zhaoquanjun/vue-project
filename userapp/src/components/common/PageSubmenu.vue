@@ -13,6 +13,7 @@
       <span :class="[item.children && item.children.length > 0==1?'haschildren':'nochildren']">
           <i v-show="item.children && item.children.length>0" class="icon iconfont" :class="[iconfonts(item.code)]"></i>
           {{item.name}}
+          
       </span>
         <div v-show="item.children && item.children.length>0">
           <p 
@@ -22,6 +23,7 @@
             :class="{'active':lastRoute== item2.code}"
           >
             {{item2.name}}
+            <i class="unReadCount" v-if="item2.path === '/website/mysite/leaveword' && curUnReadCount !== 0">{{curUnReadCount}}</i>
           </p>
         </div>
       </li>
@@ -30,13 +32,22 @@
 </template>
 <script>
 import { siteDomain } from "@/environment/index";
+import * as msgBoardApi from "@/api/request/msgBoardApi";
 export default {
+  props: {
+    unReadCount: {
+      default: 0,
+      type: Number
+    }
+  },
   data() {
     return {
       children: [],
       lastRoute: "",
       parentPath: "",
-      subTitle: ""
+      subTitle: "",
+      curUnReadCount: this.unReadCount,
+      curSiteId: this.$store.state.dashboard.siteId
     };
   },
 
@@ -53,6 +64,10 @@ export default {
       } else {
         window.location.href = "//" + item.menuUrl;
       }
+    },
+    async getUnReadCount() {
+      let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
+      this.curUnReadCount = data;
     },
     iconfonts(code) {
       switch (code) {
@@ -77,6 +92,7 @@ export default {
     let [, firstRoute, lastRoute] = this.$route.path.split("/");
     this.lastRoute = routerList[routerList.length-1];
     this.parentPath = firstRoute;
+    this.getUnReadCount();
   },
   computed: {
     menuList() {
@@ -97,6 +113,12 @@ export default {
       let [, firstRoute, lastRoute] = this.$route.path.split("/");
       this.lastRoute = routerList[routerList.length-1];
       this.parentPath = firstRoute;
+    },
+    unReadCount() {
+      this.unReadCount >=0 && (this.curUnReadCount = this.unReadCount);
+      if(this.curUnReadCount < 0) {
+        this.curUnReadCount = 0;
+      }
     }
   }
 };
@@ -159,6 +181,18 @@ export default {
           }
         }
     }
+}
+.unReadCount {
+  line-height: 16px;
+  position: absolute;
+  margin-top: 4px;
+  margin-left: 2px;
+  background: $--color-danger;
+  color: $--color-white !important;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  text-align: center;
 }
 .active {
     color: $--color-primary !important;

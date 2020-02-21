@@ -35,6 +35,7 @@
             <LeftNavComponents
                 :subTitle="subTitle"
                 :lastRoute="lastRoute"
+                :isLeftNavComponentsShow="isLeftNavComponentsShow"
                 v-if="isLeftNavComponentsShow"
                 :style="{width: 130 + 'px !important',height: '100%' }"
                 class="m-asideright"

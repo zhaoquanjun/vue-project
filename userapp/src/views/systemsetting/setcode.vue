@@ -49,7 +49,7 @@
               
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-tooltip content="删除" placement="top">
+                    <el-tooltip content="删除" placement="top" :disabled="disabled">
                       <button @click="deleteCode(scope.row.id)">
                         <i class="iconfont iconshanchu cl-iconfont is-square"></i>
                       </button>
@@ -92,7 +92,8 @@ export default {
       isAddTemplate: false,
       isAddAutograph: false,
       siteId: this.$store.state.dashboard.siteId,
-      messagelist: []
+      messagelist: [],
+      disabled: false
     };
   },
   created(){
@@ -123,6 +124,7 @@ export default {
      * 查看短信信息
      */
     async deleteCode(id) {
+        this.disabled = true;
         let tips = this.backupType == 'autograph' ? '签名': '模版';
         this.$confirm(
                 `确定要删除该${tips}吗？`,
@@ -156,6 +158,11 @@ export default {
                             });
                           }
                         }
+                        let timer = setTimeout(() => {
+                          this.disabled = false;
+                          clearTimeout(timer);
+                          timer = null;
+                        }, 5);
                     }
                 }
             );

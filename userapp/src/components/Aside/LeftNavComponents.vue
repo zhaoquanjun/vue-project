@@ -23,6 +23,8 @@
                         :class="{'active':lastRoute==item.code}"
                         >
                         {{item.name}}
+                        <i class="unReadcount"
+                        v-if="item.path === '/website/mysite/leaveword' && unreadCount !== 0">{{unreadCount}}</i>
                     </p>
                 </div>
             </li>
@@ -31,9 +33,23 @@
 </template>
 <script>
 import { siteDomain } from "@/environment/index";
+import * as msgBoardApi from "@/api/request/msgBoardApi";
 export default {
-    props: ["menuList", "lastRoute", "subTitle"],
+    props: ["menuList", "lastRoute", "subTitle","isLeftNavComponentsShow"],
+    data() {
+        return {
+            unreadCount: 0,
+            curSiteId: this.$store.state.dashboard.siteId
+        }
+    },
+    mounted() {
+        this.getUnReadCount();
+    },
     methods: {
+        async getUnReadCount() {
+            let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
+            data && (this.unreadCount = data);
+        },
         handlerRoute(item, index) {
             //有三级路由时，二级路由不跳转
             if (item.children && item.children.length > 0) {
@@ -63,13 +79,30 @@ export default {
                     return "iconicon-dash-zhujian";
             }
         }
-    }
+    },
+    watch: {
+        isLeftNavComponentsShow() {
+            this.getUnReadCount()
+        }
+    },
 };
 </script>
 <style scoped lang="scss">
 .leftNavAside {
     width: 100%;
     background: $--color-black-light !important;
+}
+.unReadcount {
+  line-height: 16px;
+  position: absolute;
+  margin-top: 4px;
+  margin-left: 2px;
+  background: $--color-danger;
+  color: $--color-white !important;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  text-align: center;
 }
 .submenu-title {
     height: 50px;

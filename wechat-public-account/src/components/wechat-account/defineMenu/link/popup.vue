@@ -162,6 +162,10 @@ export default {
       this.title = null;
       this.selectedUrl = null;
       this.id = null;
+      if(this.slider == 'url'){
+        this.$refs.text._handleChangeUrl()
+        return
+      }
       return false;
     },
     _handleConfirm() {
