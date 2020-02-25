@@ -407,6 +407,7 @@ export default {
     overflow: hidden;
     font-family:   Helvetica, Arial, sans-serif;
     font-size: 13px;
+    font-weight: 400;
 }
 .el-textarea /deep/ .el-input__count {
     background: #fff;
@@ -491,6 +492,7 @@ export default {
     .ql-editor{
         position: relative;
         height: 100%;
+        font-weight: 400;
     }
     .fullscreen-editor {
         border-radius: 0;
