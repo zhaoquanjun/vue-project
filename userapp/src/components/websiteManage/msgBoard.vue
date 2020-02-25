@@ -86,15 +86,18 @@
           height="50"
         >
           <template slot-scope="scope">
-            <span class="isReply" v-show="scope.row.status === 2">已回复</span>
-            <el-tooltip
-              class="item" 
-              effect="dark" 
-              :content="scope.row.leavewordTitle" 
-              placement="top"
-            >
-              <span class="ellipsis">{{scope.row.leavewordTitle}}</span>
-            </el-tooltip>
+            <div :class="{GreyFont:scope.row.status!==0}">
+              <span class="isReply" v-show="scope.row.status === 2">已回复</span>
+              <el-tooltip
+                class="item" 
+                effect="dark" 
+                :content="scope.row.leavewordTitle" 
+                placement="top"
+              >
+                <span class="ellipsis">{{scope.row.leavewordTitle}}</span>
+              </el-tooltip>
+            </div>
+           
           </template>
         </el-table-column>
         <el-table-column
@@ -104,14 +107,16 @@
           height="50"
         >
           <template slot-scope="scope">
-            <el-tooltip
-              class="item" 
-              effect="dark" 
-              :content="scope.row.contactNumber" 
-              placement="top"
-            >
-              <span class="ellipsis">{{scope.row.contactNumber}}</span>
-            </el-tooltip>
+            <div :class="{GreyFont:scope.row.status!==0}">
+               <el-tooltip
+                class="item" 
+                effect="dark" 
+                :content="scope.row.contactNumber" 
+                placement="top"
+              >
+                <span class="ellipsis">{{scope.row.contactNumber}}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -121,14 +126,16 @@
           height="50"
         >
           <template slot-scope="scope">
-            <el-tooltip
-              class="item" 
-              effect="dark" 
-              :content="scope.row.contactEmail" 
-              placement="top"
-            >
-              <span class="ellipsis">{{scope.row.contactEmail}}</span>
-            </el-tooltip>
+            <div :class="{GreyFont:scope.row.status!==0}">
+              <el-tooltip
+                class="item" 
+                effect="dark" 
+                :content="scope.row.contactEmail" 
+                placement="top"
+              >
+                <span class="ellipsis">{{scope.row.contactEmail}}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -138,31 +145,37 @@
           height="50"
         >
           <template slot-scope="scope">
-            <el-tooltip
-              class="item" 
-              effect="dark" 
-              :content="scope.row.pageTitle" 
-              placement="top"
-            >
-              <span class="ellipsis">{{scope.row.pageTitle}}</span>
-            </el-tooltip>
+            <div :class="{GreyFont:scope.row.status!==0}">
+              <el-tooltip
+                class="item" 
+                effect="dark" 
+                :content="scope.row.pageTitle" 
+                placement="top"
+              >
+                <span class="ellipsis">{{scope.row.pageTitle}}</span>
+              </el-tooltip>  
+            </div>
           </template>
         </el-table-column>
         <el-table-column
           prop="msgStatus"
-          label="状态"
           min-width="80"
           height="50"
         >
+          <template slot="header">
+            <div>
+              <span>状态</span>
+            </div>
+          </template>
           <template slot-scope="scope">
-            <span class="circleIcon" v-if="scope.row.status==0"></span>
+            <span class="circleIcon" v-if="scope.row.status===0"></span>
             <el-tooltip
               class="item" 
               effect="dark" 
-              :content="scope.row.status==0 ?'未读':'已读'"
+              :content="scope.row.status===0 ?'未读':'已读'"
               placement="top"
             >
-              <span class="ellipsis" :class="{redFont:scope.row.status==0}">{{scope.row.status==0 ?'未读':'已读'}}</span>
+              <span class="ellipsis" :class="{redFont:scope.row.status===0, textIndent:scope.row.status!==0, GreyFont:scope.row.status!==0}">{{scope.row.status===0 ?'未读':'已读'}}</span>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -174,14 +187,16 @@
           height="50"
         >
           <template slot-scope="scope">
-            <el-tooltip
-              class="item" 
-              effect="dark" 
-              :content="scope.row.createTime" 
-              placement="top"
-            >
-              <span class="ellipsis">{{scope.row.createTime.slice(0,10)}} {{scope.row.createTime.slice(11,16)}}</span>
-            </el-tooltip>
+            <div :class="{GreyFont:scope.row.status!==0}">
+              <el-tooltip
+                class="item" 
+                effect="dark" 
+                :content="scope.row.createTime.slice(0,10)+' '+scope.row.createTime.slice(11,16)" 
+                placement="top" 
+              >
+                <span class="ellipsis">{{scope.row.createTime.slice(0,10)}} {{scope.row.createTime.slice(11,16)}}</span>
+              </el-tooltip>  
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -198,7 +213,10 @@
             class="viewDetail"
             :show-close="false"
           >
-            <i class="iconfont iconguanbi is-circle cl-iconfont" style="position: absolute;right:0px;top:20px;" @click="closeViewDetail"></i>
+            <i 
+              class="el-icon el-icon-close cl-iconfont is-circle" 
+              style="position: absolute;right:0px;top:20px;font-size: 14px;color: #9f9f9f;" @click="closeViewDetail"
+            ></i>
             <p class="view-item">
               留言标题：{{scope.row.leavewordTitle}}
             </p>
@@ -264,7 +282,7 @@
               content="查看" 
               placement="top"
             >
-              <i class="cl-icon iconfont iconchakan" @click="_viewDetail(scope.row)"></i>
+              <i class="cl-icon iconfont iconchakan cl-iconfont is-square" @click="_viewDetail(scope.row)"></i>
             </el-tooltip>
              <el-tooltip
               class="item" 
@@ -272,7 +290,7 @@
               content="删除" 
               placement="top"
             >
-              <i class="cl-icon iconfont iconicon-huishou" @click="_remove(scope.row)"></i>
+              <i class="cl-icon iconfont iconicon-huishou cl-iconfont is-square" @click="_remove(scope.row)"></i>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -586,6 +604,9 @@ export default {
 .redFont {
   color: $--color-danger;
 }
+.GreyFont {
+  color: #A09FA2;
+}
 .content-header {
   display: flex;
   align-items: center;
@@ -665,7 +686,9 @@ export default {
   background: $--color-danger;
   margin-right:6px;
 }
-
+.textIndent {
+  text-indent: 12px;
+}
 .viewDetail {
   .view-item {
     font-size: $--font-size-small;
@@ -727,7 +750,9 @@ export default {
   margin-right: 24px;
 }
 
-
+.viewDetail /deep/ .el-table thead th:nth-child(7)>.cell {
+  margin-left: 12px !important;
+}
 .viewDetail /deep/ .el-dialog {
   width: 448px !important;
   box-shadow: $--box-shadow-light;
