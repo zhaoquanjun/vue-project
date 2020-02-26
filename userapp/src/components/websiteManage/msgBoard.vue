@@ -412,7 +412,17 @@ export default {
       this.$Loading.show();
       let { data, status } = await msgBoardApi.getMsgboardList(siteId, pageIndex, pageSize, queryKeywords, Status, DescSort);
       this.$Loading.hide();
-      this.msgBoardData = data; 
+      if(data.list.length !==0) {
+        this.msgBoardData = data; 
+      }else {
+        if(this.getMsgboardListParas.pageIndex > 1) {
+          this.getMsgboardListParas.pageIndex -= 1;
+        }else {
+          this.getMsgboardListParas.pageIndex = 1;
+        }
+        let { data } = await msgBoardApi.getMsgboardList(siteId, this.getMsgboardListParas.pageIndex, pageSize, queryKeywords, Status, DescSort);
+        this.msgBoardData = data; 
+      }
     },
     /**
      * 获取未读信息数量
@@ -476,7 +486,7 @@ export default {
      */
     async _reply(row) {
       if(this.setReplyContent !== ""){
-        let { data, status } = await msgBoardApi.setReplyContent(row.id, this.setReplyContent)
+        let { data, status } = await msgBoardApi.setReplyContent(this.curSiteId, row.id, this.setReplyContent)
         if(status === 200) {
           this.$notify({
             customClass: "notify-success",
@@ -495,7 +505,7 @@ export default {
      * 更改状态
      */
     async _upadateStatus(id,code) {
-      let { status } = await msgBoardApi.updateStatus(id, true, code)
+      let { status } = await msgBoardApi.updateStatus(this.curSiteId, id, true, code)
     },
     /**
      * 查看留言详情
@@ -507,7 +517,7 @@ export default {
         this._upadateStatus(row.id,1);
       }
       if(row.status === 2) {
-        let { data, status } = await msgBoardApi.getReplyContent(row.id);
+        let { data, status } = await msgBoardApi.getReplyContent(this.curSiteId,row.id);
         if(status === 200) {
           this.getReply = data;
         }
@@ -537,7 +547,7 @@ export default {
             iconClass: "icon-warning",
             callback: async action => {
               if(action === "confirm") {
-                let { status } = await msgBoardApi.removeMsg(leavewordIds);
+                let { status } = await msgBoardApi.removeMsg(this.curSiteId, leavewordIds);
                 if(status === 200) {
                   this.$notify({
                     customClass: "notify-success",
@@ -545,6 +555,11 @@ export default {
                     showClose: false,
                     duration: 1000
                   });
+                  this.multipleSelection.forEach(item => {
+                    if(item.status==0){
+                      this.unReadCount -= 1;
+                    }
+                  })
                   this._getMsgboardList(this.getMsgboardListParas);
                 }
               }
@@ -564,7 +579,7 @@ export default {
           iconClass: "icon-warning",
           callback: async action => {
             if(action === "confirm") {
-              let { status } = await msgBoardApi.removeMsg(row.id);
+              let { status } = await msgBoardApi.removeMsg(this.curSiteId, row.id);
               if(status === 200) {
                 if(row.status==0){
                   this.unReadCount -= 1;
