@@ -118,7 +118,7 @@
                         v-for="item in signList"
                         :key="item.signName"
                         :label="item.signName"
-                        :value="item.signName"
+                        :value="item.id"
                       ></el-option>
                     </el-select>
                     <p v-show="scope.row.nameTip" class="tips-select"><img src="~img/jian-icon.png"/>请选择短信签名</p>
@@ -142,7 +142,7 @@
                         v-for="item in templateList"
                         :key="item.tempName"
                         :label="item.tempName"
-                        :value="item.tempName"
+                        :value="item.id"
                       ></el-option>
                     </el-select>
                     <p v-show="scope.row.templateTip" class="tips-select"><img src="~img/jian-icon.png"/>请选择短信模版</p>
