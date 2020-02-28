@@ -640,6 +640,7 @@ export default {
     .searchIcon {
       cursor: pointer;
       color:$--color-text-secondary;
+      float: right;
     }
   }
 }

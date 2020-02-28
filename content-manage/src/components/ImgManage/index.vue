@@ -86,6 +86,7 @@
             width="886px"
             :visible.sync="dialogTableVisible"
             :modal-append-to-body="false"
+            class="uploadImgDialog"
         >
             <span slot="title">
                 <span class="fs14">
@@ -430,6 +431,17 @@ export default {
 @import "../style/contentDetail";
 .el-dialog__wrapper /deep/ .el-dialog {
     margin-top: 70px !important;
+}
+.uploadImgDialog /deep/ .el-dialog__header{
+    padding: 0 20px;
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .el-dialog__headerbtn{
+        top: 7px;
+    }
 }
 </style>
 

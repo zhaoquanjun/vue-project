@@ -14,18 +14,18 @@
             <div class="img-handle-btn" :class="[isHandleBtnShow?'show':'hide']">
                 <button @click.stop="handleMove">
                     <el-tooltip class="item" effect="dark" content="移动" placement="bottom">
-                        <i class="iconfont iconyidong"></i>
+                        <i class="iconfont iconyidong editIcon"></i>
                     </el-tooltip>
                 </button>
                 <button @click.stop="handleLook">
                     <el-tooltip class="item" effect="dark" content="预览" placement="bottom">
                         
-                         <i class="iconfont iconchakan"></i>
+                         <i class="iconfont iconchakan editIcon"></i>
                     </el-tooltip>
                 </button>
                 <button @click.stop="handleDelete">
                     <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-                        <i class="iconfont iconshanchu"></i>
+                        <i class="iconfont iconshanchu editIcon"></i>
                     </el-tooltip>
                 </button>
             </div>
@@ -221,6 +221,11 @@ export default {
             width: 33%;
             i{
                 color: #fff;
+            }
+        }
+        .editIcon{
+            &:hover{
+                color: $--color-primary;
             }
         }
     }
