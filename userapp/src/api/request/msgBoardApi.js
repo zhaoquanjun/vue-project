@@ -20,30 +20,30 @@ export const getUnReadCount = (SiteId) => {
 /**
  * 获取留言回复信息
  */
-export const getReplyContent = (leavewordId) => {
-  let para = { leavewordId: leavewordId }
+export const getReplyContent = (SiteId, leavewordId) => {
+  let para = { SiteId: SiteId, leavewordId: leavewordId }
   return ajaxRequest.get(`${environment.designerManageApi}/api/v1/leaveword/getReply`, para)
 }
 
 /**
  * 回复留言列表
  */
-export const setReplyContent = (leavewordId, ReplyContent) => {
-  let paras = { leavewordId: leavewordId, ReplyContent: ReplyContent }
+export const setReplyContent = (SiteId, leavewordId, ReplyContent) => {
+  let paras = { SiteId: SiteId, leavewordId: leavewordId, ReplyContent: ReplyContent }
   return ajaxRequest.post(`${environment.designerManageApi}/api/v1/leaveword/reply`, paras)
 }
 
 /**
  * 更改留言状态
  */
-export const updateStatus = (leavewordId, IsUpdateStatus, Status) => {
-  let paras = { leavewordIds: leavewordId, IsUpdateStatus: IsUpdateStatus, Status: Status }
+export const updateStatus = (SiteId, leavewordId, IsUpdateStatus, Status) => {
+  let paras = { SiteId: SiteId, leavewordIds: leavewordId, IsUpdateStatus: IsUpdateStatus, Status: Status }
   return ajaxRequest.put(`${environment.designerManageApi}/api/v1/leaveword/update`, paras)
 }
 
 /**
  * 删除留言
  */
-export const removeMsg = (leavewordIds) => {
-  return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/leaveword/delete?leavewordIds=${leavewordIds}`)
+export const removeMsg = (SiteId, leavewordIds) => {
+  return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/leaveword/delete?leavewordIds=${leavewordIds}&SiteId=${SiteId}`)
 }

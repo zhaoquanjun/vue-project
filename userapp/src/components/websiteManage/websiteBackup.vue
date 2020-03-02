@@ -713,15 +713,15 @@ export default {
     border-radius: 50%;
     background-image: -webkit-linear-gradient(
       to top left,
-      #45a9fe 0%,
-      #00c1de 90%
+      #FFD7BA 0%,
+      $--color-primary 90%
     );
     background-image: -moz-linear-gradient(
       to top left,
-      #45a9fe 0%,
-      #00c1de 90%
+      #FFD7BA 0%,
+      $--color-primary 90%
     );
-    background-image: linear-gradient(to top left, #45a9fe 0%, #00c1de 90%);
+    background-image: linear-gradient(to top left, #FFD7BA 0%, $--color-primary 90%);
     .circleBox {
       width: 100%;
       height: 100%;

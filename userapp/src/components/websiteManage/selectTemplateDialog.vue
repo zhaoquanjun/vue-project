@@ -13,7 +13,7 @@
       <div class="right-pannel">
         <el-container style="height:100%">
           <div class="foldAside isShow" @click="isShowAsideList">
-            <div class="foldTrangle"></div>
+            <div class="foldTrangle" :class="{foldRotate:!isShowAside}"></div>
           </div>
           <el-aside class="aside" v-show="isShowAside">
             <div class="title">筛选</div>
@@ -1049,6 +1049,9 @@ export default {
 };
 </script>
 <style>
+.foldRotate {
+  transform: rotate(180deg);
+}
 .copy-icon {
   margin-top: 17px;
   display: inline-block;

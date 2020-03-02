@@ -273,7 +273,7 @@ export default {
 .upload-pic /deep/ .el-upload-list__item-actions > span {
     position: absolute;
     right: 17px;
-    bottom: 19px;
+    bottom: 20px;
     top: auto;
     width: 32px;
     border: 1px solid #fff;
@@ -286,8 +286,24 @@ export default {
     left: 17px;
     bottom: 20px;
     border: none;
+    &:hover{
+        background: url("~img/pic-icon/eye-yellow.png") no-repeat center;
+        background-size: 70%;
+        border-color: $--color-primary;
+        color: $--color-primary;
+        .el-icon-zoom-in{
+            color: $--color-primary;
+        }
+    }
 }
-
+.upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-delete {
+    &:hover{
+        border-color: $--color-primary;
+        .el-icon-delete{
+            color: $--color-primary;
+        }
+    }
+}
 .upload-pic /deep/ .el-upload-list__item-actions .el-icon-delete {
     color: #fff;
     font-size: 18px;
@@ -314,13 +330,13 @@ export default {
     background-size: 70%;
     box-sizing: border-box;
 }
-.upload-pic
-    /deep/
-    .el-upload-list__item-actions
-    .el-upload-list__item-delete:hover {
-    background: $--color-primary;
-    border: 1px solid $--color-primary;
-}
+// .upload-pic
+//     /deep/
+//     .el-upload-list__item-actions
+//     .el-upload-list__item-delete:hover {
+//     background: $--color-primary;
+//     border: 1px solid $--color-primary;
+// }
 
 .upload-pic
     /deep/
