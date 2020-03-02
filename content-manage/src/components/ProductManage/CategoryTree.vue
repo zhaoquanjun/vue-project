@@ -113,18 +113,20 @@ export default {
         this.draggable = this.isContentwrite;
     },
     methods: {
-        createCategory(displayName, thumbnailPicUrl) {
+        createCategory(displayName, thumbnailPicUrl,Language) {
             if (this.isAdd) {
                 if (this.isArticle) {
                     this.$emit("create", {
                         CategoryName: trim(displayName),
-                        ParentId: this.createCategoryData.id
+                        ParentId: this.createCategoryData.id,
+                        Language
                     });
                 } else {
                     this.$emit("create", {
                         DisplayName: trim(displayName),
                         ParentId: this.createCategoryData.id,
-                        thumbnailPicUrl: thumbnailPicUrl
+                        thumbnailPicUrl: thumbnailPicUrl,
+                        Language
                     });
                 }
             } else {
