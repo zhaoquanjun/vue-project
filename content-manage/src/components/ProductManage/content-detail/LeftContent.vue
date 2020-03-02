@@ -326,7 +326,8 @@ export default {
                 isNeedShipping: false, //
                 isAllowComment: true,
                 defaultSiteId: 0,
-                specificationContent:""
+                specificationContent:"",
+                 Language:"zh-CN"
             },
             rules: {
                 name: [
@@ -631,7 +632,6 @@ export default {
                 seoKeyword: [],
                 searchKeyword: [],
                 seoDescription: "",
-
                 skuId: "", //
                 publishTime: new Date(),
                 customUrl: "",
@@ -651,7 +651,8 @@ export default {
                 isSkuSwitchOn: false, //
                 isNeedShipping: false, //
                 isAllowComment: true,
-                defaultSiteId: 0
+                defaultSiteId: 0,
+                 Language:"zh-CN"
             };
             this.detailData = { ...this.detailData, ...detailData };
             document.getElementById(this.quillContentId).querySelector(".ql-editor").innerHTML="";

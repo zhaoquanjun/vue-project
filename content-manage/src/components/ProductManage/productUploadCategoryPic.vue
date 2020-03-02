@@ -233,7 +233,8 @@ export default {
         // 确定按钮
         confrim() {
             let displayName = this.ruleForm.name;
-            this.$emit("createCategory", displayName, this.imageUrl1);
+              alert(11111)
+            this.$emit("createCategory", displayName, this.imageUrl1,'zh-CN');
             this.ruleForm.name = "";
             this.imageUrl1 = "";
         },

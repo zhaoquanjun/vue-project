@@ -235,7 +235,8 @@ export default {
                 metaKeywords: [],
                 metaDescription: "",
                 pictureUrl: "",
-                defaultSiteId: 0
+                defaultSiteId: 0,
+                Language:"zh-CN"
             },
             rules: {
                 title: [
@@ -465,7 +466,8 @@ export default {
                 metaKeywords: [],
                 metaDescription: "",
                 pictureUrl: "",
-                defaultSiteId: 0
+                defaultSiteId: 0,
+                 Language:"zh-CN"
             };
             document.getElementsByClassName("ql-editor")[0].innerHTML = "";
         },
