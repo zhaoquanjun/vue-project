@@ -35,16 +35,22 @@
 <script>
 import { siteDomain } from "@/environment/index";
 import * as msgBoardApi from "@/api/request/msgBoardApi";
+import * as articleManageApi from "@/api/request/articleManageApi";
 export default {
     props: ["menuList", "lastRoute", "subTitle"],
     data() {
         return {
-            curUnReadCount:"",
-            curSiteId: this.$store.state.dashboard.siteId
+            curUnReadCount:0,
+            // curSiteId: this.$store.state.dashboard.siteId
+            curSiteId: 0
         }
     },
-    mounted() {
-        this.getUnReadCount()
+    async mounted() {
+        let { data,status } = await articleManageApi.getSiteList();
+        if(status === 200) {
+            this.curSiteId = data[0].siteId
+            this.getUnReadCount() 
+        }
     },
     methods: {
         handlerRoute(item, index) {
@@ -63,6 +69,7 @@ export default {
         async getUnReadCount() {
             let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
             this.curUnReadCount = data;
+            
         },
         iconfonts(code) {
             switch (code) {
