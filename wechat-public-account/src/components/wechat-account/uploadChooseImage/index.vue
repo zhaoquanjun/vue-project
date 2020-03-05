@@ -1,5 +1,5 @@
 <template>
-    <el-container id="content-manage">
+    <el-container id="content-manage" style="text-align:left">
         <el-aside class="tree-aside">
             <h4 class="pic-type-title">
                 <span>图片分类</span>
@@ -216,6 +216,12 @@ export default {
 
                     callback: async action => {
                         if (action === "confirm") {
+                            idlist.forEach(item=>{
+                                if(item.id==this.curImgInfo.id){
+                                    this.curImgInfo=""
+                                    this.$emit("getImgInfo", "")
+                                }
+                            })
                             let {
                                 status,
                                 data
@@ -228,6 +234,8 @@ export default {
                                     showClose: false,
                                     duration: 1500
                                 });
+                                this.clearSelectedList()
+                                this.$emit("getImgInfo", "")
                                 this.getList();
                             }
                         }

@@ -404,6 +404,8 @@ export default {
                 callback: async action => {
                     if (action === "confirm") {
                         this._getExternalUserAsync();
+                    } else {
+                        this._getExternalUserAsync();
                     }
                 }
             });

@@ -223,6 +223,9 @@ export default {
 .textareaWrap /deep/ .el-textarea .el-input__count{
     right: 22px;
 }
+.table-list /deep/ .el-table__empty-text{
+    width: auto;
+}
 </style>
 <style lang="scss" scoped>
 .textareaWrap {

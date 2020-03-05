@@ -142,9 +142,10 @@ export default {
     .share-body {
       text-align: center;
       h6 {
-        font-size:$--font-size-small;
+        font-size:16px;
+        font-weight:600;
         color:rgba(38,38,38,1);
-        line-height:20px;
+        line-height:22px;
         margin-bottom: 24px;
       }
       p {
