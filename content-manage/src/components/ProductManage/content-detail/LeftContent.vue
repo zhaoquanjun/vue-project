@@ -645,7 +645,7 @@ export default {
                 ],
 
                 params: { name: 1 }, //
-                isTop: true,
+                isTop: false,
                 isOnSell: true,
                 isTemplate: false, //
                 isSkuSwitchOn: false, //
