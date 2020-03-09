@@ -287,6 +287,7 @@ export default {
         },
         //新增或者覆盖回复信息
         async _addOrOverrideReply(option) {
+            this.replyDetail = option.publicPlatformReplyInput
             let { data, status } = await autoAnswerApi.addOrOverrideReply(option);
             if (status === 200) {
                 this.canHandlerSave = true
@@ -406,7 +407,7 @@ export default {
                 if (this.msgType == 1) {
                     let picUrl = this.replycontentData.imageMsg.picUrl;
                     if (!trim(picUrl)) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        // notify(this, "无法保存，请完善页面信息!", "error");
                         this.canHandlerSave = true
                         return;
                     }
@@ -417,7 +418,7 @@ export default {
                 } else if (this.msgType == 2) {
                     let text = this.replycontentData.textMsg.text;
                     if (!trim(text)) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        // notify(this, "无法保存，请完善页面信息!", "error");
                         this.canHandlerSave = true
                         return;
                     }
@@ -428,7 +429,7 @@ export default {
                 } else if (this.msgType == 3) {
                     let newsMsg = this.replycontentData.newsMsg;
                     if (newsMsg.length === 0) {
-                        notify(this, "无法保存，请完善页面信息!", "error");
+                        // notify(this, "无法保存，请完善页面信息!", "error");
                         this.canHandlerSave = true
                         return;
                     }
@@ -524,15 +525,30 @@ export default {
         // 改变回复方式
         changeAnswerMode(value) {
             this.msgType = value;
-            if (
-                this.replyDetail &&
-                this.replyType == this.replyDetail.replyType &&
-                this.msgType == this.replyDetail.msgType
-            ) {
-                this.isSet = this.replyDetail.isSet;
-            } else {
-                this.isSet = false;
+            for(let item in this.replyDetail){
+                if(item == "imageMsg"){
+                    if(value == 1){
+                        this.isSet = this.replyDetail.imageMsg.picUrl;
+                    }
+                }else if(item == "textMsg"){
+                    if(value == 2){
+                        this.isSet = this.replyDetail.textMsg.text;
+                    }
+                }else if(item == "newsMsg"){
+                    if(value == 3){
+                        this.isSet = this.replyDetail.newsMsg.length;
+                    }
+                }
             }
+            // if (
+            //     this.replyDetail &&
+            //     this.replyType == this.replyDetail.replyType &&
+            //     this.msgType == this.replyDetail.msgType
+            // ) {
+            //     this.isSet = this.replyDetail.isSet;
+            // } else {
+            //     this.isSet = false;
+            // }
         },
         // 添加关键词回复
         handlerAddAnswer(value, item) {
