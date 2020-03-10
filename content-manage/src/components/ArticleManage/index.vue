@@ -23,9 +23,9 @@
         :count="count"
         :is-batch-header-show="isBatchHeaderShow"
         :article-search-options="articleSearchOptions"
+        @handleGetMoreTranslateSource="handleGetMoreTranslateSource"
         @getArticleList="getArticleList"
         @addArticle="addArticle"
-        @batchTranslate="batchTranslate"
         @batchMove="batchMoveNews"
         @batchCopy="batchCopyNews"
         @batchRemove="batchRemoveNews"
@@ -41,7 +41,6 @@
           :tree-result="treeResult"
           @getArticleList="getArticleList"
           @addArticle="addArticle"
-          @batchTranslate="batchTranslate"
           @batchMove="batchMoveNews"
           @batchCopy="batchCopyNews"
           @batchRemove="batchRemoveNews"
@@ -51,6 +50,8 @@
           @moveClassify="moveClassify"
           @handleSelectionChange="handleSelectionChange"
           @changeOperateName="changeOperateName"
+          @handleGetSignalTranslateSource="handleGetSignalTranslateSource"
+          @handleGetMoreTranslateSource="handleGetMoreTranslateSource"
         ></content-table>
 
         <el-dialog
@@ -77,43 +78,6 @@
               @chooseNode="chooseNode"
             />
           </template>
-          <template v-else>
-            <span slot="title-text">翻译文章</span>
-            <div class="translateDialog">
-              <p>
-                翻译详情：
-                <span v-if="count > 1">
-                  <i class="checkedNum">{{ count }}</i> 篇文章，
-                </span>
-                共 <i class="checkedNum">{{ contentLength }}</i> 字符
-              </p>
-              <div style="position:relative;">
-                翻译语言：
-                <el-select
-                  size="small"
-                  v-model="languageValue"
-                  placeholder="请选择"
-                  popper-class="languageSelect"
-                >
-                  <el-option
-                    v-for="item in languageOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
-              </div>
-            </div>
-            <div class="category-content">
-              <span name="cur-tip">另存为至</span>
-            </div>
-            <SelectTree
-              :categoryName="curArticleInfo.categoryName"
-              :categoryId="curArticleInfo.categoryId"
-              :tree-result="treeResult"
-              @chooseNode="chooseNode"
-            />
-          </template>
 
           <div slot="footer" class="pannel-footer">
             <button
@@ -130,24 +94,47 @@
             </button>
           </div>
         </right-pannel>
+
+        <!-- 翻译部分 -->
+        <dialog-info-modal
+          :infoModal="infoModal"
+          @confirm="infoConfirm"
+          @cancle="infoCancle"
+          ref="infoModal"
+        ></dialog-info-modal>
+        <!-- <dialog-translate-checked-modal
+      :checkModal="checkModal"
+    ></dialog-translate-checked-modal> -->
+        <dialog-translate-language-modal
+          :languageModal="languageModal"
+          ref="languageModal"
+          @languageConfirm="languageConfirm"
+        ></dialog-translate-language-modal>
       </el-main>
     </el-main>
   </el-container>
 </template>
 <script>
+import * as articleManageApi from "@/api/request/articleManageApi";
+import * as dashboardApi from "@/api/request/dashboardApi";
 import MTree from "@/components/common/MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
 import RightPannel from "@/components/common/RightPannel";
 import SelectTree from "@/components/common/SelectTree";
-import * as articleManageApi from "@/api/request/articleManageApi";
+import DialogInfoModal from "@/components/translate/dialog-info-modal";
+import DialogTranslateCheckedModal from "@/components/translate/dialog-translate-checked-modal";
+import DialogTranslateLanguageModal from "@/components/translate/dialog-translate-language-modal";
 export default {
   components: {
     MTree,
     ContentHeader,
     ContentTable,
     RightPannel,
-    SelectTree
+    SelectTree,
+    DialogInfoModal,
+    DialogTranslateCheckedModal,
+    DialogTranslateLanguageModal
   },
   data() {
     return {
@@ -158,6 +145,7 @@ export default {
       newsIdList: "",
       count: 0,
       contentLength: 0,
+      list: [],
       idsList: [],
       rightPanelType: 1, // 1 移动文章 2 复制文章
       selectCategory: "",
@@ -174,29 +162,34 @@ export default {
         pageSize: 10,
         isDescending: true
       },
-      languageOptions: [
-        {
-          value: 1,
-          label: "中文"
+      curRow: null,
+      infoModal: {
+        title: "提示",
+        type: "fail",
+        content: `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前文章字符已超限，请重新选择或删减文章后重试。</p>`,
+        btn: {
+          btn1Text: "关闭",
+          btn2Text: "去修改"
         },
-        {
-          value: 2,
-          label: "英文"
+        additional: { words: "", operate: "" }
+      },
+      languageModalSource: {
+        signal: {
+          tree: [],
+          languages: [],
+          list: []
         },
-        {
-          value: 3,
-          label: "日文"
-        },
-        {
-          value: 4,
-          label: "西班牙语"
-        },
-        {
-          value: 5,
-          label: "韩文"
+        more: {
+          total: 5,
+          enable: 4,
+          list: [],
+          languages: []
         }
-      ],
-      languageValue: 1
+      },
+      languageModal: null,
+      source: null,
+      type: 0,
+      foreignLanguages: []
     };
   },
   mounted() {
@@ -212,9 +205,164 @@ export default {
     },
     isBatchHeaderShow() {
       return this.idsList.length > 0 ? true : false;
+    },
+    translateTree: {
+      get: function() {
+        let arr = JSON.parse(JSON.stringify(this.treeResult));
+        if (arr.length > 0) {
+          for (var i = 0; i < arr[0].children.length; i++) {
+            const item = arr[0].children[i];
+            if (item.language === "en-US") {
+              arr[0].children.splice(i, 1);
+            }
+          }
+        }
+        return arr[0].children;
+      },
+      set: function() {}
     }
   },
   methods: {
+    // 翻译 start
+    /**
+     * 单篇翻译
+     */
+    async _handleTranslateSingnalNews(options) {
+      let { data } = await articleManageApi.translateSignalNews(options);
+      this._getTranslateProcess(data);
+    },
+    /**
+     * 批量翻译
+     */
+    async _handleTranslateMoreNews(options) {
+      let { data } = await articleManageApi.translateMoreNews(options);
+      this._getTranslateProcess(data);
+    },
+    /**
+     * 获取翻译进度
+     */
+    _getTranslateProcess(id) {
+      let { data } = articleManageApi.getNewsTranslateProcess(id);
+      console.log(data);
+    },
+    /**
+     * 获取单个翻译信息
+     */
+    handleGetSignalTranslateSource(row) {
+      if (!this._checkIsHasTranslateProcess) return;
+      if (row.contentLength > 4000) {
+        this.$refs.infoModal.showSelf();
+        this.curRow = row;
+      } else {
+        this.type = 0;
+        this.source = [row];
+        this._getForeigns();
+      }
+    },
+    /**
+     * 获取批量翻译信息
+     */
+    handleGetMoreTranslateSource() {
+      if (!this._checkIsHasTranslateProcess) return;
+      this.type = 1;
+      this.source = this.list;
+      this._getForeigns();
+    },
+    /**
+     * 获取所有外文（去重）
+     */
+    async _getForeigns() {
+      let { data } = await articleManageApi.getSiteList();
+      let item = {};
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].language != "zh-CN") {
+          if (this.foreignLanguages.length > 0) {
+            let flag = true;
+            for (var k = 0; k < this.foreignLanguages.length; k++) {
+              if (this.foreignLanguages[k].languages === data[i].language) {
+                flag = false;
+              }
+            }
+            if (flag) {
+              item.languages = data[i].language;
+              this.foreignLanguages.push(item);
+            }
+          } else {
+            item.languages = data[i].language;
+            this.foreignLanguages.push(item);
+          }
+        }
+      }
+      if (this.foreignLanguages.length > 1) {
+        this.languageModalSource.more.languages = this.foreignLanguages;
+        this.languageModalSource.more.list = this.type === 0 ? [] : this.source;
+        this.languageModal = this.languageModalSource.more;
+        this.$refs.languageModal.showSelf();
+      } else {
+        this.languageModalSource.signal.languages = this.foreignLanguages;
+        this.languageModalSource.signal.list =
+          this.type === 0 ? [] : this.source;
+        this.languageModalSource.signal.tree = this.translateTree;
+        this.languageModal = this.languageModalSource.signal;
+        this.$refs.languageModal.showSelf();
+      }
+    },
+    /**
+     * 获取要翻译到的外文站点
+     */
+    _getTranslateIds(data) {
+      let ids = [];
+      for (var i = 0; i < data.length; i++) {
+        ids.push(data[i].id);
+      }
+      return ids;
+    },
+    /**
+     * 检验是否存在翻译进程
+     */
+    _checkIsHasTranslateProcess() {
+      let { data } = articleManageApi.isHasTranslateProcess();
+      return data;
+    },
+    /**
+     * 信息弹框确认操作
+     */
+    infoConfirm() {
+      this.handleEditArticle(this.curRow);
+    },
+    /**
+     * 信息弹框取消操作
+     */
+    infoCancle() {
+      this.$refs.infoModal.hideSelf();
+    },
+    /**
+     * 语言弹框确认操作
+     */
+    async languageConfirm(obj) {
+      const ids = this._getTranslateIds(this.source);
+      let { data } = await dashboardApi.getCurSiteId();
+      let options = {};
+      if (this.type === 0) {
+        options = {
+          FromIdList: ids,
+          TargetLanguage: obj.languagesList,
+          SiteId: data,
+          CategoryId: obj.id
+        };
+      } else {
+        options = {
+          FromIdList: ids,
+          LanguageList: obj.languagesList,
+          SiteId: data
+        };
+      }
+      this.type === 0
+        ? this._handleTranslateSingnalNews(options)
+        : this._handleTranslateMoreNews(options);
+    },
+    // 翻译 end
+
     keyupEnter() {
       document.onkeydown = e => {
         if (e.keyCode === 13) {
@@ -230,8 +378,8 @@ export default {
      * 获取多选的列表
      */
     handleSelectionChange(list) {
-      console.log(list);
       this.idsList = [];
+      this.list = list;
       this.count = list.length;
       if (list.length < 1) return;
       list.forEach(item => {
@@ -245,29 +393,6 @@ export default {
       );
       this.$Loading.hide();
       this.articlePageResult = data;
-    },
-    // 批量翻译
-    async batchTranslate(idlist, isHeader) {
-      idlist = idlist == null ? this.idsList : idlist;
-      console.log(idlist);
-      console.log("batchTranslate", idlist);
-      this.operateName = "";
-      this.contentLength = 0;
-      this.isInvitationPanelShow = true;
-      idlist.forEach(item => {
-        this.articlePageResult.list.forEach(i => {
-          if (i.id === item) {
-            this.contentLength += i.contentLength;
-          }
-        });
-      });
-      if (isHeader) {
-        this.moveToClassiFy = "";
-        this.curArticleInfo = {
-          categoryName: "全部分类",
-          categoryId: 0
-        };
-      }
     },
     // 批量删除
     async batchRemoveNews(idlist) {

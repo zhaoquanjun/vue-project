@@ -99,6 +99,12 @@
           <span
             class="translate-icon"
             :class="{ disabled: scope.row.language != 'zh-CN' }"
+            @click="
+              _handleGetSignalTranslateSource(
+                scope.row,
+                scope.row.language != 'zh-CN'
+              )
+            "
           ></span>
         </template>
       </el-table-column>
@@ -168,21 +174,12 @@
         {{ it.name }}
       </li>
     </ul>
-    <dialog-info-modal :dialogInfo="dialogInfo"></dialog-info-modal>
-    <dialog-translate-checked-modal
-      :dialogInfo="dialogInfo"
-    ></dialog-translate-checked-modal>
-    <dialog-translate-language-modal
-      :dialogInfo="dialogInfo1"
-    ></dialog-translate-language-modal>
   </div>
 </template>
 
 <script>
 import * as articleManageApi from "@/api/request/articleManageApi";
-import DialogInfoModal from "@/components/translate/dialog-info-modal";
-import DialogTranslateCheckedModal from "@/components/translate/dialog-translate-checked-modal";
-import DialogTranslateLanguageModal from "@/components/translate/dialog-translate-language-modal";
+
 export default {
   props: ["articlePageResult", "articleSearchOptions", "treeResult"],
 
@@ -201,44 +198,8 @@ export default {
       row: "",
       tableHeight: 500,
       loadingShow: true,
-      tableData: "",
-      dialogInfo: {
-        title: "提示",
-        type: "fail",
-        content:
-          '<p style="line-height: 26px;">外文站点初始化成功！</p><p style="line-height: 26px;">已开启<span style="color: #FF6A00;">自动翻译</span></p>',
-        btn: { confirmText: "确定", cancleText: "取消" },
-        confirm: "",
-        cancle: "",
-        additional: { words: "", operate: "" }
-      },
-      dialogInfo1: {
-        signal: {},
-        more: {
-          total: 5,
-          enable: 4,
-          list: [
-            { title: "1221323", wordsNum: 4000 },
-            { title: "1221323", wordsNum: 4000 },
-            { title: "1221323", wordsNum: 4000 },
-            { title: "1221323阿福法赫卡里分阿福了咖啡壶阿", wordsNum: 5000 },
-            { title: "1221323", wordsNum: 4000 },
-            { title: "1221323", wordsNum: 4000 },
-            { title: "1221323", wordsNum: 4000 }
-          ],
-          languages: [
-            { name: "英文", site: ["12321", "asdasdasd"] },
-            { name: "德文", site: ["12321", "asdasdasd"] },
-            { name: "韩文", site: ["12321", "asdasdasd"] }
-          ]
-        }
-      }
+      tableData: ""
     };
-  },
-  components: {
-    DialogInfoModal,
-    DialogTranslateCheckedModal,
-    DialogTranslateLanguageModal
   },
   mounted() {
     this.tableData = this.articlePageResult;
@@ -260,6 +221,13 @@ export default {
     };
   },
   methods: {
+    _handleGetSignalTranslateSource(row, type) {
+      // if (type) return;
+      this.$emit("handleGetSignalTranslateSource", row);
+    },
+    _handleGetMoreTranslateSource() {
+      this.$emit("handleGetMoreTranslateSource");
+    },
     changePageNum(page) {
       this.articleSearchOptions.pageIndex = page;
       this.$emit("getArticleList");
@@ -310,12 +278,6 @@ export default {
      */
     batchRemove(row) {
       this.$emit("batchRemove", [row.id]);
-    },
-    /**
-     * 翻译操作
-     */
-    batchTranslate() {
-      this.$emit("batchTranslate");
     },
     /**
      * 置顶操作
@@ -371,7 +333,7 @@ export default {
           this.batchRemove(row);
           break;
         case "translate":
-          this.batchTranslate();
+          this._handleGetMoreTranslateSource();
       }
     },
     /**

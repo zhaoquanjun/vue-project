@@ -38,11 +38,14 @@ export default {
     isSub() {
       return this.$route.meta.isSub;
     }
+  },
+  mounted() {
+    this.$store.commit("SETSITEIDTOCOOKIE");
   }
 };
 </script>
 
-<style >
+<style>
 @import url("./assets/quill.css");
 
 .common-header {
@@ -64,4 +67,3 @@ export default {
   overflow: visible !important;
 }
 </style>
-

@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      dialogShow: true,
+      dialogShow: false,
       interval: 5,
       tips: ""
     };
