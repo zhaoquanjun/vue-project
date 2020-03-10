@@ -14,6 +14,18 @@ export const sendAliyunMobileVerifyCode = (phone) => {
 export const createAliyunSsoLoginUser = (para) => {
     return ajaxRequest.post(`${environment.memberManageApi}/api/v1/ssologin/CreateAliyunSsoLoginUser`, para);
 };
+// 
+export const getChineseSiteInfo = () => {
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/siteInfo/GetChineseSiteInfo`);
+};
+// 整站翻译
+export const translate = (para) => {
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/siteInfo/Translate`, para);
+};
+// 获取翻译进度
+export const getTranslateProgress = (translateId) => {
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/siteInfo/GetTranslateProgress/${translateId}`);
+};
 // 获取dashboard站点信息
 export const getTodoInfo = (siteId) => {
     return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Dashboard/GetTodoInfo/${siteId}`);
@@ -137,8 +149,8 @@ export const updateSiteIndustry = (para) => {
  * author:xuzhuan
  * time:2019.08.08
  **/
-export const CreateSite = (language, siteName) => {
-    let para = { language: language, siteName: siteName };
+export const createSite = (siteName) => {
+    let para = { siteName: siteName };
     return ajaxRequest.post(`${environment.memberManageApi}/api/v1/siteInfo/CreateSite`, para);
 }
 // 复制当前站点
