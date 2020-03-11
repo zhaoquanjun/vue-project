@@ -43,7 +43,7 @@ export default {
         }
     },
     mounted() {
-        this.getUnReadCount();
+        this.curSiteId && this.getUnReadCount();
     },
     methods: {
         async getUnReadCount() {
@@ -82,7 +82,7 @@ export default {
     },
     watch: {
         isLeftNavComponentsShow() {
-            this.getUnReadCount()
+            this.curSiteId && this.getUnReadCount()
         }
     },
 };
