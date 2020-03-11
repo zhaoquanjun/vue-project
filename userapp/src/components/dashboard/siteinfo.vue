@@ -11,20 +11,18 @@
             :class="{'sitelist-curitem':item.siteId == siteId}"
             @click="changeSite(item)"
           >{{item.siteName}}</li>
+          <div
+            class="sitelist-addSite"
+            @click="createUninitializedSite"
+            v-show="isSystem&&siteInfo.length < siteCount"
+          ></div>
         </ul>
-        <div class="sitelist-add">
+        <!-- <div class="sitelist-add">
           <div class="site-num-wrap">
             <div class="site-num">{{siteInfo.length}}</div>
             <div class="site-total">/ {{siteCount}}</div>
           </div>
-          <el-dropdown @command="handleCreateSite" :hide-timeout="500">
-            <div class="sitelist-addSite" v-show="isSystem&&siteInfo.length < siteCount"></div>
-            <el-dropdown-menu slot="dropdown" class="createSiteDrop">
-              <el-dropdown-item class="createSiteDropText" command="copy">复制当前站点</el-dropdown-item>
-              <el-dropdown-item class="createSiteDropText" command="addNew">新建站点</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
+        </div>-->
       </div>
       <div class="site-operating">
         <div class="site-edit">
@@ -38,11 +36,29 @@
           ></i>
         </div>
         <div class="site-btn">
-          <button
-            class="cl-button cl-button--primary"
-            @click="jumpTo('template')"
-            v-show="!curSiteTodoinfo.siteTemplate"
-          >选择模版</button>
+          <div v-if="curSiteinfo.language=='zh-CN'">
+            <button
+              class="cl-button cl-button--primary"
+              @click="jumpTo('template')"
+              v-show="!curSiteTodoinfo.siteTemplate"
+            >选择模版</button>
+          </div>
+          <div v-else>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              placement="top"
+              :content="curSiteinfo.anyChineseSiteHasBeenInitialized?'建议先完成中文站的搭建再整体进行外文站点初始化':'请先完成中文站点的模板选择'"
+            >
+              <button
+                class="cl-button cl-button--primary"
+                :class="{'disabled':!curSiteinfo.anyChineseSiteHasBeenInitialized}"
+                :disabled="!curSiteinfo.anyChineseSiteHasBeenInitialized"
+                @click="showInitializedDialog"
+                v-show="!curSiteinfo.hasBeenInitialized"
+              >初始化站点</button>
+            </el-tooltip>
+          </div>
           <a
             class="preview-btn"
             :href="`//${curSiteinfo.secondDomain}`"
@@ -200,46 +216,133 @@
     </el-row>
     <el-dialog
       width="0"
-      :visible.sync="createShow"
+      :visible.sync="initializedDialog"
       :show-close="false"
       :close-on-click-modal="false"
     >
-      <div class="right-pannel" :style="{width:'520px'}">
-        <div class="pannel-head">
-          <span class="headTitle">新建站点</span>
-          <span class="close-pannel" @click="closeCreateDialog">
-            <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
-          </span>
+      <div class="initializedDialog" :style="{width:'430px'}">
+        <div v-show="initializedStep == 'before'">
+          <div class="dialog-head">
+            <span class="dialog-headTitle">初始化外文站点</span>
+            <span class="dialog-close" @click="closeInitializedDialog">
+              <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
+            </span>
+          </div>
+          <div v-show="initializedSourceSiteList.length > 1" class="dialog-site">
+            <div class="dialog-siteTitle">请选择参考网站</div>
+            <el-select v-model="initializedSourceSiteId" style="width:180px" placeholder="请选择">
+              <el-option
+                v-for="item in initializedSourceSiteList"
+                :key="item.siteId"
+                :label="item.siteName"
+                :value="item.siteId"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="dialog-language">
+            <div
+              :class="{'dialog-noChineseSite': initializedSourceSiteList.length == 1}"
+              class="dialog-languageTitle"
+            >请选择语言</div>
+            <el-select v-model="initializedSiteLanguage" style="width:112px" placeholder="请选择">
+              <el-option
+                v-for="item in initializedSiteLanguageList"
+                :key="item.language"
+                :label="item.label"
+                :value="item.language"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="dialog-tips">* 建议完成【中文站】后，再进行外文站的初始化</div>
+          <div class="dialog-footer">
+            <button
+              @click="closeInitializedDialog"
+              class="cl-button cl-button--primary_notbg cl-button--small"
+            >取消</button>
+            <Debounce :time="1000" !isDebounce>
+              <button
+                @click="initializedSite"
+                class="cl-button cl-button--primary cl-button--small"
+              >确定</button>
+            </Debounce>
+          </div>
         </div>
-        <div class="createSiteName">
-          <span class="createSiteTitle">站点名称</span>
-          <el-input
-            v-model="createSiteName"
-            @blur="blurSiteName(createSiteName)"
-            placeholder="请输入内容"
-            class="createSiteNameInput"
-          ></el-input>
-          <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
+        <div v-show="initializedStep == 'start'">
+          <div class="dialog-head">
+            <span class="dialog-headTitle">初始化外文站点</span>
+            <span class="dialog-close" @click="closeInitializedDialog">
+              <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
+            </span>
+          </div>
+          <div class="translation-wrap" v-show="initializedType == 'translation'">
+            <div class="translation-img"></div>
+            <el-progress :percentage="translationPercentage"></el-progress>
+            <div class="translation-text">阿里智能AI正在为您翻译…</div>
+            <ul class="translation-tips">
+              <li>
+                <i class="iconfont iconicon-des-right1"></i>最先进的端到端深度学习框架，千万级多语学习库；
+              </li>
+              <li>
+                <i class="iconfont iconicon-des-right1"></i>多样化应用场景，单机单句百毫秒级解码，整站翻译只需几秒；
+              </li>
+              <li>
+                <i class="iconfont iconicon-des-right1"></i>智能纠错系统，翻译服务可靠性高达99.99%
+              </li>
+            </ul>
+          </div>
+          <div class="copy-wrap" v-show="initializedType == 'copy'">
+            <div class="copy-img"></div>
+            <el-progress :percentage="copyPercentage"></el-progress>
+            <div class="copy-text">正在创建站点，请稍后…</div>
+          </div>
         </div>
-        <div style="margin-top:16px">
-          <div class="createSiteTitle">站点语言</div>
-          <el-radio-group v-model="radio" @change="changeLanguage" class="radio">
-            <el-radio label="zh-CN">中文</el-radio>
-            <el-radio label="en-US">英文</el-radio>
-            <el-radio label="ja-JP">日文</el-radio>
-            <el-radio label="es-ES">西班牙语</el-radio>
-            <el-radio label="ko-KR">韩语</el-radio>
-          </el-radio-group>
-          <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
-        </div>
-        <div class="create">
-          <button
-            @click="closeCreateDialog"
-            class="cl-button cl-button--primary_notbg cl-button--small"
-          >取消</button>
-          <Debounce :time="1000" !isDebounce>
-            <button @click="createSite" class="cl-button cl-button--primary cl-button--small">确定</button>
-          </Debounce>
+        <div v-show="initializedStep == 'after'">
+          <div class="dialog-head">
+            <span class="dialog-headTitle">{{initializedStatus == "success"?"完成":"失败"}}</span>
+            <span class="dialog-close" @click="closeInitializedDialog">
+              <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
+            </span>
+          </div>
+          <div class="initializedAfter-wrap">
+            <div class="initializedAfter-left">
+              <i v-if="initializedStatus == 'success'" class="iconfont iconxingzhuangjiehe"></i>
+              <i v-else class="iconfont iconyiwen"></i>
+            </div>
+            <div class="initializedAfter-right">
+              <div v-show="initializedStatus == 'success'">
+                <div
+                  v-show="initializedType == 'copy'"
+                  class="initializedAfter-text copySite"
+                >站点初始化成功！</div>
+                <div v-show="initializedType == 'translation'" class="translationSite">
+                  <div class="initializedAfter-text">外文站点初始化成功！</div>
+                  <div>
+                    已开启
+                    <span class="primaryColor">自动翻译</span>
+                  </div>
+                  <div class="dialog-tips">*机器翻译结果存在误差，可能需要您手动订正。</div>
+                </div>
+              </div>
+              <div v-show="initializedStatus == 'fail'">
+                <div class="initializedAfter-text copySite">连接超时，网站初始化失败，请稍后再试！</div>
+              </div>
+              <div v-show="initializedStatus == 'error'">
+                <div class="initializedAfter-text translationSite">站点初始化成功！</div>
+                <div>单篇文章/产品最大可翻译字符为4000，以下超限内容本次翻译失败，已被忽略。您可缩减内容后手动操作翻译。</div>
+              </div>
+            </div>
+            <div class="dialog-footer">
+              <button
+                v-show="initializedStatus == 'success'"
+                @click="closeInitializedDialog"
+                class="cl-button cl-button--primary_notbg cl-button--small"
+              >预览</button>
+              <button
+                @click="closeInitializedDialog"
+                class="cl-button cl-button--primary cl-button--small"
+              >关闭</button>
+            </div>
+          </div>
         </div>
       </div>
     </el-dialog>
@@ -249,7 +352,7 @@
       :show-close="false"
       :close-on-click-modal="false"
     >
-      <div class="right-pannel" :style="{width:'520px'}">
+      <div class="right-pannel" :style="{width:'430px'}">
         <div class="pannel-head">
           <span class="headTitle">设置站点</span>
           <span class="close-pannel" @click="closeChangeDialog">
@@ -266,7 +369,7 @@
           ></el-input>
           <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
         </div>
-        <div style="margin-top:16px">
+        <div v-show="siteInfo.length == 1" style="margin-top:16px">
           <div class="createSiteTitle">站点语言</div>
           <el-radio-group v-model="changeRadio" @change="changeLanguage" class="radio">
             <el-radio label="zh-CN">中文</el-radio>
@@ -284,54 +387,6 @@
           >取消</button>
           <Debounce :time="1000" !isDebounce>
             <button @click="changeSiteInfo" class="cl-button cl-button--primary cl-button--small">确定</button>
-          </Debounce>
-        </div>
-      </div>
-    </el-dialog>
-    <el-dialog
-      width="0"
-      :visible.sync="copySiteShow"
-      :show-close="false"
-      :close-on-click-modal="false"
-    >
-      <div class="right-pannel" :style="{width:'520px'}">
-        <div class="pannel-head">
-          <span class="headTitle">复制当前站点</span>
-          <span class="close-pannel" @click="closeCopyDialog">
-            <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
-          </span>
-        </div>
-        <div class="tip-wrap-primary" style="margin-top:16px">
-          <span class="tip-text">使用当前站点空间作为模板创建新站点</span>
-        </div>
-        <div class="createSiteName">
-          <span class="createSiteTitle">站点名称</span>
-          <el-input
-            v-model="copySiteName"
-            @blur="blurSiteName(copySiteName)"
-            placeholder="请输入内容"
-            class="createSiteNameInput"
-          ></el-input>
-          <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
-        </div>
-        <div style="margin-top:16px">
-          <div class="createSiteTitle">站点语言</div>
-          <el-radio-group v-model="copyRadio" @change="changeLanguage" class="radio">
-            <el-radio label="zh-CN">中文</el-radio>
-            <el-radio label="en-US">英文</el-radio>
-            <el-radio label="ja-JP">日文</el-radio>
-            <el-radio label="es-ES">西班牙语</el-radio>
-            <el-radio label="ko-KR">韩语</el-radio>
-          </el-radio-group>
-          <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
-        </div>
-        <div class="create">
-          <button
-            @click="closeCopyDialog"
-            class="cl-button cl-button--primary_notbg cl-button--small"
-          >取消</button>
-          <Debounce :time="1000" !isDebounce>
-            <button @click="copySiteCreate" class="cl-button cl-button--primary cl-button--small">确定</button>
           </Debounce>
         </div>
       </div>
@@ -377,13 +432,52 @@ export default {
       changeRadio: "",
       copySiteShow: false,
       copySiteName: "",
-      copyRadio: ""
+      copyRadio: "",
+      initializedDialog: false,
+      initializedStep: "before",
+      initializedType: "translation",
+      initializedSourceSiteId: 0,
+      initializedSourceSiteList: [],
+      initializedSiteLanguage: "en-US",
+      initializedSiteLanguageList: [
+        {
+          language: "zh-CN",
+          label: "中文"
+        },
+        {
+          language: "en-US",
+          label: "英文"
+        },
+        {
+          language: "ja-JP",
+          label: "日文"
+        },
+        {
+          language: "es-ES",
+          label: "西班牙语"
+        },
+        {
+          language: "ko-KR",
+          label: "韩语"
+        }
+      ],
+      initializedStatus: "success",
+      translationPercentage: 0,
+      copyPercentage: 0
     };
   },
   components: {
     SelectTemplateDialog
   },
+  mounted() {
+    this.getChineseSiteInfo();
+  },
   methods: {
+    async getChineseSiteInfo() {
+      let { data } = await dashboardApi.getChineseSiteInfo();
+      this.initializedSourceSiteList = data.chineseSiteList;
+      this.initializedSourceSiteId = data.chineseSiteList[0].siteId;
+    },
     getSiteInfo(info) {
       this.siteInfo = info;
       if (this.$store.state.dashboard.siteId) {
@@ -448,47 +542,12 @@ export default {
       let { data } = await dashboardApi.getTodoInfo(siteId);
       this.curSiteTodoinfo = data;
     },
-    // 点击创建站点下拉菜单
-    handleCreateSite(command) {
-      if (command == "copy") {
-        this.copySite();
-      } else if (command == "addNew") {
-        this.addSite();
-      }
-    },
-    copySite() {
-      this.copySiteName = this.curSiteinfo.siteName + "-副本";
-      this.copyRadio = this.curSiteinfo.language;
-      this.copySiteShow = true;
-    },
-    closeCopyDialog() {
-      this.copySiteShow = false;
-      this.radio = "";
-      this.createSiteName = "";
-      this.errorSiteName = false;
-      this.errorSiteNameText = "";
-      this.errorSiteLanguage = false;
-    },
-    // 确定复制站点创建
-    async copySiteCreate() {
-      if (this.copySiteName == "") {
-        this.errorSiteName = true;
-        this.errorSiteNameText = "站点名称不能为空";
-        return;
-      }
-      if (this.copySiteName.length > 20) {
-        this.errorSiteName = true;
-        this.errorSiteNameText = "站点名称不能超过20个字符，请重新输入";
-        return;
-      }
-      let para = {
-        siteId: this.siteId,
-        siteName: this.copySiteName,
-        language: this.copyRadio
-      };
-      let { data, status } = await dashboardApi.copySite(para);
+    // 创建未初始化站点
+    async createUninitializedSite() {
+      let { data, status } = await dashboardApi.createSite(
+        "「未设置」网站名称"
+      );
       if (status == 200) {
-        this.copySiteShow = false;
         this.$notify({
           customClass: "notify-success",
           message: `创建成功`,
@@ -498,19 +557,49 @@ export default {
         this.$store.commit("SETSITEID", data);
         await dashboardApi.updateUserLastSiteId(data);
         this.$emit("getSites");
-        this.$refs.selectTemplateDialog.showTemplate();
       }
     },
-    closeCreateDialog() {
-      this.createShow = false;
-      this.radio = "";
-      this.createSiteName = "";
-      this.errorSiteName = false;
-      this.errorSiteNameText = "";
-      this.errorSiteLanguage = false;
+    showInitializedDialog() {
+      this.initializedDialog = true;
+      this.initializedStep = "before";
     },
-    addSite() {
-      this.createShow = true;
+    closeInitializedDialog() {
+      this.initializedDialog = false;
+    },
+    async initializedSite() {
+      if (this.initializedSiteLanguage == "zh-CN") {
+        this.initializedType = "copy";
+      } else {
+        this.initializedType = "translation";
+      }
+      let para = {
+        language: this.initializedSiteLanguage,
+        needTranslateProduct: true,
+        needTranslateNews: true,
+        sourceSiteId: this.initializedSourceSiteId,
+        translateTargetSiteId: this.siteId
+      };
+      let { data, status } = await dashboardApi.translate(para);
+      this.initializedStep = "start";
+      if (this.initializedSiteLanguage == "zh-CN") {
+        let timer = setTimeout(() => {
+          this.copyPercentage = 100;
+          this.initializedStep = "after";
+        }, 1000);
+      } else {
+        this.getTranslateProgress(data.translateId);
+      }
+    },
+    // 获取翻译进度
+    async getTranslateProgress(translateId) {
+      let timer = setInterval(async () => {
+        let { data } = await dashboardApi.getTranslateProgress(translateId);
+        this.translationPercentage = data.progressPercent * 100;
+        if (data.isTranslateIdExist == true && data.progressPercent == 1) {
+          clearInterval(timer);
+          this.initializedStep = "after";
+        }
+      }, 2000);
     },
     // 点击语言radio
     changeLanguage() {
@@ -533,42 +622,6 @@ export default {
       } else {
         this.errorSiteName = false;
         this.errorSiteNameText = "";
-      }
-    },
-    // 创建site
-    async createSite() {
-      if (this.createSiteName == "") {
-        this.errorSiteName = true;
-        this.errorSiteNameText = "站点名称不能为空";
-        return;
-      }
-      if (this.createSiteName.length > 20) {
-        this.errorSiteName = true;
-        this.errorSiteNameText = "站点名称不能超过20个字符，请重新输入";
-        return;
-      }
-      if (this.radio == "") {
-        this.errorSiteLanguage = true;
-        return;
-      }
-      let { data, status } = await dashboardApi.CreateSite(
-        this.radio,
-        this.createSiteName
-      );
-      if (status == 200) {
-        this.radio = "";
-        this.createSiteName = "";
-        this.createShow = false;
-        this.$notify({
-          customClass: "notify-success",
-          message: `创建成功`,
-          duration: 2000,
-          showClose: false
-        });
-        this.$store.commit("SETSITEID", data);
-        await dashboardApi.updateUserLastSiteId(data);
-        this.$emit("getSites");
-        this.$refs.selectTemplateDialog.showTemplate();
       }
     },
     // 展示修改site信息弹框
@@ -713,7 +766,7 @@ export default {
       display: flex;
       justify-content: space-between;
       .sitelist {
-        width: calc(100% - 100px);
+        width: calc(100% - 40px);
         margin-top: 21px;
         display: inline-block;
         .sitelist-item:first-child {
@@ -746,6 +799,20 @@ export default {
           border-bottom: 1px solid transparent;
           color: $--color-primary;
         }
+        .sitelist-addSite {
+          display: inline-block;
+          width: 26px;
+          height: 26px;
+          background: url("~img/dashboard/board-add.png") no-repeat center;
+          background-size: contain;
+          vertical-align: top;
+          margin-top: 3px;
+          margin-left: 8px;
+          cursor: pointer;
+          &:hover {
+            opacity: 0.8;
+          }
+        }
       }
       .sitelist-add {
         display: inline-block;
@@ -769,20 +836,6 @@ export default {
             color: rgba(161, 168, 177, 1);
             line-height: 17px;
             margin-top: 20px;
-          }
-        }
-        .sitelist-addSite {
-          display: inline-block;
-          width: 26px;
-          height: 26px;
-          background: url("~img/dashboard/board-add.png") no-repeat center;
-          background-size: contain;
-          vertical-align: top;
-          margin-top: 14px;
-          margin-left: 12px;
-          cursor: pointer;
-          &:hover {
-            opacity: 0.8;
           }
         }
       }
@@ -836,6 +889,11 @@ export default {
         }
       }
       .site-btn {
+        .disabled {
+          cursor: not-allowed;
+          background-color: $--border-color-base;
+          border-color: $--border-color-base;
+        }
         .preview-btn {
           margin-right: 16px;
         }
@@ -959,12 +1017,11 @@ export default {
     background-color: "#fff";
     color: #262626;
     overflow: hidden;
-    padding: 30px 24px 40px;
+    padding: 28px 24px 40px;
     .pannel-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-
       .headTitle {
         font-size: 16px;
         font-weight: 600;
@@ -974,27 +1031,7 @@ export default {
       .close-pannel {
         line-height: 22px;
         cursor: pointer;
-        // .iconguanbi {
-        //   padding: 8px;
-        //   background: transparent;
-        //   &:hover {
-        //     background: rgba(240, 243, 247, 1);
-        //     border-radius: 4px;
-        //   }
-        // }
       }
-    }
-    .tips {
-      height: 32px;
-      background: rgba(231, 252, 255, 0.5);
-      border-radius: 2px;
-      border: 1px solid rgba(93, 220, 240, 1);
-      font-size: 14px;
-      font-weight: 300;
-      color: rgba(9, 204, 235, 1);
-      line-height: 32px;
-      padding-left: 16px;
-      margin-top: 16px;
     }
     .createSiteName {
       margin-top: 16px;
@@ -1013,6 +1050,180 @@ export default {
       margin-top: 30px;
       width: 100%;
       text-align: right;
+    }
+  }
+  .initializedDialog {
+    background: #ffffff;
+    position: fixed;
+    z-index: 2200;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    transition: width 0.2s linear;
+    background-color: "#fff";
+    color: #262626;
+    overflow: hidden;
+    padding: 24px 24px 32px;
+    box-sizing: border-box;
+    .dialog-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .dialog-headTitle {
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(38, 38, 38, 1);
+        line-height: 22px;
+      }
+      .dialog-close {
+        cursor: pointer;
+      }
+    }
+    .dialog-site {
+      margin-top: 16px;
+      .dialog-siteTitle {
+        display: inline-block;
+        font-size: $--font-size-base;
+        color: $--color-text-primary;
+        line-height: 20px;
+        width: 98px;
+        text-align: right;
+        margin-right: 12px;
+      }
+    }
+    .dialog-language {
+      margin-top: 16px;
+      .dialog-languageTitle {
+        display: inline-block;
+        font-size: $--font-size-base;
+        color: $--color-text-primary;
+        line-height: 20px;
+        width: 98px;
+        text-align: right;
+        margin-right: 12px;
+      }
+      .dialog-noChineseSite {
+        width: 70px;
+      }
+    }
+    .dialog-tips {
+      font-size: $--font-size-small;
+      color: $--color-text-regular;
+      margin-top: 16px;
+    }
+    .dialog-footer {
+      margin-top: 36px;
+      text-align: right;
+      width: 100%;
+    }
+    .translation-wrap {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .translation-img {
+        display: inline-block;
+        width: 93px;
+        height: 73px;
+        background: url("~img/dashboard/translationImg.png") no-repeat center;
+        background-size: contain;
+        margin-top: 24px;
+        margin-bottom: 16px;
+      }
+      .translation-text {
+        margin-top: 8px;
+        font-size: $--font-size-small;
+        color: $--color-primary;
+      }
+      .translation-tips {
+        margin-top: 22px;
+        li {
+          font-size: $--font-size-small;
+          color: $--color-text-primary;
+          line-height: 24px;
+          i {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+    .copy-wrap {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .copy-img {
+        display: inline-block;
+        width: 76px;
+        height: 73px;
+        background: url("~img/dashboard/copyImg.png") no-repeat center;
+        background-size: contain;
+        margin-top: 24px;
+        margin-bottom: 16px;
+      }
+      .copy-text {
+        margin-top: 8px;
+        margin-bottom: 36px;
+        font-size: $--font-size-small;
+        color: $--color-primary;
+      }
+    }
+    .initializedAfter-wrap {
+      width: 100%;
+      display: flex;
+      // align-items: center;
+      .initializedAfter-left {
+        margin-left: 24px;
+        margin-right: 12px;
+        margin-top: 40px;
+        .iconxingzhuangjiehe {
+          font-size: 32px;
+          color: $--color-success;
+        }
+        .iconyiwen {
+          font-size: 32px;
+          color: $--color-primary;
+        }
+      }
+      .initializedAfter-right {
+        .initializedAfter-text {
+          font-size: 14px;
+          font-weight: $--font-weight-primary;
+          color: $--color-text-primary;
+        }
+        .copySite {
+          margin-top: 48px;
+        }
+        .translationSite {
+          margin-top: 40px;
+        }
+        .primaryColor {
+          line-height: 26px;
+          color: $--color-primary;
+        }
+        .dialog-tips {
+          margin-top: 8px;
+        }
+      }
+    }
+    /deep/ .el-progress {
+      .el-progress-bar {
+        width: 303px;
+      }
+      .el-progress-bar__outer {
+        width: 257px;
+        background-color: #f0f3f7;
+        .el-progress-bar__inner {
+          background-color: $--color-primary;
+        }
+      }
+      .el-progress__text {
+        font-size: $--font-size-base;
+        color: $--color-text-regular;
+        margin-left: 25px;
+      }
     }
   }
 }

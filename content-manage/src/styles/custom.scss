@@ -187,3 +187,16 @@ body {
         padding-top: 16px;
     }
 }
+
+// vhtml 片段 突出样式
+.attention {
+  color: $--color-primary;
+}
+
+.lineheight26 {
+  line-height: 26px;
+}
+
+.fontsize14 {
+  font-size: $--font-size-base;
+}

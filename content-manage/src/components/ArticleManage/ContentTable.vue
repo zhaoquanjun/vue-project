@@ -1,308 +1,434 @@
 <template>
-    <div class="table-content" id="table-list">
-        <el-table
-            ref="multipleTable"
-            :data="articlePageResult.list"
-            tooltip-effect="dark"
-            class="content-table"
-            :height="tableHeight + 20"
-            @selection-change="handleSelectionChange"
-            @sort-change='sortChange'
-        >
-            <template slot="empty">
-                <div class="empty-table" @click="addArticle">
-                    <img src="~img/table-empty.png"/>
-                    <p>添加数据</p>
-                </div>
-            </template>
-            <el-table-column type="selection" ></el-table-column>
-
-            <el-table-column
-                prop="title"
-                label="文章标题"
-                min-width="200"
-                height="50"
-            >
-                <template slot-scope="scope">
-                    <span class="isTop" v-show="scope.row.isTop">置顶</span>
-                    <div class="title" @click="preview(scope.row.id, scope.row.defaultSiteId)">
-                        <img v-if="scope.row.pictureUrl" :src="scope.row.pictureUrl" onerror="onImgError(this)" class="cover" />
-                        <img v-else :src="defaultImg" class="cover" alt />
-                        <el-tooltip class="item outline" effect="dark" :content="scope.row.title" placement="top">
-                            <span class="ellipsis cursor-p">{{ scope.row.title }}</span>
-                        </el-tooltip>
-                    </div>
-                </template>
-            </el-table-column>
-
-            <el-table-column prop="categoryName" label="分类" min-width="100" height="50">
-                <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" :content="scope.row.categoryName" placement="top">
-                        <span style="width:80px" class="ellipsis">{{ scope.row.categoryName }}</span>
-                    </el-tooltip>
-                </template>
-            </el-table-column>
-
-            <el-table-column  prop="isPublishPrt" label="状态" min-width="100"></el-table-column>
-
-            <el-table-column prop="createUser" label="作者" min-width="100">
-                <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" :content="scope.row.createUser" placement="top">
-                        <span style="width:100px" class="ellipsis">{{ scope.row.createUser }}</span>
-                    </el-tooltip>
-                </template>
-            </el-table-column>
-
-            <el-table-column prop="createTimePrt" sortable='custom' label="创建时间" min-width="80">
-                <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" :content="scope.row.createTimePrt" placement="top">
-                        <span>{{ scope.row.createTimePrt }}</span>
-                    </el-tooltip>
-                </template>
-            </el-table-column>
-
-            <el-table-column  label="操作"  v-if="$store.state.dashboard.isContentwrite" min-width="100">
-                <template slot-scope="scope">
-                    <div class="handle-btn-wrap">
-                            <i class="cl-iconfont iconfont iconbianji is-square" @click="handleEdit(scope.row)"></i>
-                            <i class="cl-iconfont iconfont iconsangedian is-square"  @click.stop="_handleShowMoreOperate($event,scope.row)"></i>
-                    </div>
-                </template>
-            </el-table-column>
-        </el-table>
-        <div class="cl-paganation pageing" :class="{'noJumper':articlePageResult.totalPage <= 10}">
-            <el-pagination
-                v-if="articlePageResult.totalRecord > 0"
-                background
-                :layout="articlePageResult.totalPage > 10 ? 'total, slot, sizes, prev, pager, next,jumper': 'total, slot, sizes, prev, pager, next'"
-                :total="articlePageResult.totalRecord"
-                :page-size="articlePageResult.pageSize"
-                :page-sizes="[10,20,50]"
-                @current-change="changePageNum"
-                @size-change="changePageSize"
-            >
-                <div class="sizes-title">，每页显示</div>
-                <button v-if="articlePageResult.totalPage > 10" class="paging-confirm">跳转</button>
-            </el-pagination>
+  <div class="table-content" id="table-list">
+    <el-table
+      ref="multipleTable"
+      :data="articlePageResult.list"
+      tooltip-effect="dark"
+      class="content-table"
+      :height="tableHeight + 20"
+      @selection-change="handleSelectionChange"
+      @sort-change="sortChange"
+    >
+      <template slot="empty">
+        <div class="empty-table" @click="addArticle">
+          <img src="~img/table-empty.png" />
+          <p>添加数据</p>
         </div>
-        <ul class="operate-section" ref="operateSection">
-            <li
-                class="operate-item"
-                v-for="(it, index) in operateList"
-                :key="index"
-                @click="handleMoreOperate(it.flag)"
-            >{{it.name}}</li>
-        </ul>
-       
+      </template>
+      <el-table-column type="selection"></el-table-column>
+
+      <el-table-column
+        prop="title"
+        label="文章标题"
+        min-width="200"
+        height="50"
+      >
+        <template slot-scope="scope">
+          <span class="isTop" v-show="scope.row.isTop">置顶</span>
+          <div
+            class="title"
+            @click="preview(scope.row.id, scope.row.defaultSiteId)"
+          >
+            <el-tooltip
+              class="item outline"
+              effect="dark"
+              :content="scope.row.title"
+              placement="top"
+            >
+              <span class="ellipsis cursor-p">{{ scope.row.title }}</span>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop="categoryName"
+        label="分类"
+        min-width="100"
+        height="50"
+      >
+        <template slot-scope="scope">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.categoryName"
+            placement="top"
+          >
+            <span style="width:80px" class="ellipsis">{{
+              scope.row.categoryName
+            }}</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop="updateTimePrt"
+        label="最后编辑时间"
+        min-width="150"
+      >
+        <template slot-scope="scope">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.createTimePrt"
+            placement="top"
+          >
+            <span>{{ scope.row.createTimePrt }}</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column min-width="100" prop="isOnSell" label="状态">
+        <template slot-scope="scope">
+          <span style="padding-right: 8px;">{{
+            scope.row.isPublish ? "已上线" : "未上线"
+          }}</span>
+          <div
+            class="el-switch"
+            :class="{ 'is-checked': scope.row.isPublish }"
+            @click="batchPublish(scope.row, scope.row.isPublish)"
+          ></div>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="isPublishPrt" label="翻译" min-width="80">
+        <template slot-scope="scope">
+          <span class="ellipsis">{{
+            scope.row.language ? scope.row.language : ""
+          }}</span>
+          <span
+            class="translate-icon"
+            :class="{ disabled: scope.row.language != 'zh-CN' }"
+            @click="
+              _handleGetSignalTranslateSource(
+                scope.row,
+                scope.row.language != 'zh-CN'
+              )
+            "
+          ></span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="置顶" min-width="50">
+        <template slot-scope="scope">
+          <i
+            class="iconfont iconzd1"
+            :class="{ 'is-active': scope.row.isTop }"
+            @click="batchTop(scope.row)"
+          ></i>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="编辑" min-width="50">
+        <template slot-scope="scope">
+          <i class="iconfont iconbianji" @click="handleEdit(scope.row)"></i>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        label=""
+        v-if="$store.state.dashboard.isContentwrite"
+        min-width="50"
+      >
+        <template slot-scope="scope">
+          <div class="handle-btn-wrap">
+            <i
+              class="cl-iconfont iconfont iconsangedian is-square"
+              @click.stop="_handleShowMoreOperate($event, scope.row)"
+            ></i>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div
+      class="cl-paganation pageing"
+      :class="{ noJumper: articlePageResult.totalPage <= 10 }"
+    >
+      <el-pagination
+        v-if="articlePageResult.totalRecord > 0"
+        background
+        :layout="
+          articlePageResult.totalPage > 10
+            ? 'total, slot, sizes, prev, pager, next,jumper'
+            : 'total, slot, sizes, prev, pager, next'
+        "
+        :total="articlePageResult.totalRecord"
+        :page-size="articlePageResult.pageSize"
+        :page-sizes="[10, 20, 50]"
+        @current-change="changePageNum"
+        @size-change="changePageSize"
+      >
+        <div class="sizes-title">，每页显示</div>
+        <button v-if="articlePageResult.totalPage > 10" class="paging-confirm">
+          跳转
+        </button>
+      </el-pagination>
     </div>
+    <ul class="operate-section" ref="operateSection">
+      <li
+        class="operate-item"
+        v-for="(it, index) in operateList"
+        :key="index"
+        @click="handleMoreOperate(it.flag)"
+      >
+        {{ it.name }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-
 import * as articleManageApi from "@/api/request/articleManageApi";
+
 export default {
-    props: ["articlePageResult", "articleSearchOptions", "treeResult"],
+  props: ["articlePageResult", "articleSearchOptions", "treeResult"],
 
-    data() {
-        return {
-            defaultImg: require("img/content-default-pic.png"),
-            multipleSelection: [],
-            operateList: [
-                { name: "移动", flag: "move" },
-                { name: "复制", flag: "copy" },
-                { name: "翻译", flag: "translate" },
-                { name: "下线", flag: "isOnsell" },
-                { name: "置顶", flag: "stick" },
-                { name: "删除", flag: "delete" }
-            ],
-            row: "",
-            tableHeight: 500,
-            loadingShow: true,
-            tableData: "",
-        };
+  data() {
+    return {
+      defaultImg: require("img/content-default-pic.png"),
+      multipleSelection: [],
+      operateList: [
+        { name: "移动", flag: "move" },
+        { name: "复制", flag: "copy" },
+        { name: "翻译", flag: "translate" },
+        { name: "下线", flag: "isOnsell" },
+        { name: "置顶", flag: "stick" },
+        { name: "删除", flag: "delete" }
+      ],
+      row: "",
+      tableHeight: 500,
+      loadingShow: true,
+      tableData: ""
+    };
+  },
+  mounted() {
+    this.tableData = this.articlePageResult;
+    document.addEventListener("click", () => {
+      this.$nextTick(() => {
+        if (this.$refs.operateSection)
+          this.$refs.operateSection.style.display = "none";
+      });
+    });
+
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.tableHeight = window.innerHeight - 260;
+      });
+      this.tableHeight = window.innerHeight - 260;
+    });
+    window.onImgError = ele => {
+      ele.src = ele.attributes["src"] = this.defaultImg;
+    };
+  },
+  methods: {
+    _handleGetSignalTranslateSource(row, type) {
+      // if (type) return;
+      this.$emit("handleGetSignalTranslateSource", row);
     },
-    mounted() {
-        this.tableData = this.articlePageResult;
-        document.addEventListener("click", () => {
-            this.$nextTick(() => {
-                if (this.$refs.operateSection)
-                    this.$refs.operateSection.style.display = "none";
-            });
-        });
-
-        this.$nextTick(() => {
-            window.addEventListener("resize", () => {
-                this.tableHeight = window.innerHeight - 260;
-            });
-            this.tableHeight = window.innerHeight - 260;
-        });
-         window.onImgError = (ele)=> {
-            ele.src = ele.attributes["src"]=this.defaultImg
-        };
-
+    _handleGetMoreTranslateSource() {
+      this.$emit("handleGetMoreTranslateSource");
     },
-    methods: {
-        changePageNum(page) {
-            this.articleSearchOptions.pageIndex = page;
-            this.$emit("getArticleList");
-        },
-        changePageSize(size) {
-            this.articleSearchOptions.pageSize = size;
-            this.$emit("getArticleList");
-        },
-        /**
-         * 单选或全选操作
-         */
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
-            this.$emit("handleSelectionChange", val);
-        },
-        /**
-         * 编辑文章
-         */
-        handleEdit(row) {
-            console.log(row);
-            this.$emit("handleEditArticle", row);
-        },
-        _handleShowMoreOperate(ev, row) {
+    changePageNum(page) {
+      this.articleSearchOptions.pageIndex = page;
+      this.$emit("getArticleList");
+    },
+    changePageSize(size) {
+      this.articleSearchOptions.pageSize = size;
+      this.$emit("getArticleList");
+    },
+    /**
+     * 单选或全选操作
+     */
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      this.$emit("handleSelectionChange", val);
+    },
+    /**
+     * 编辑文章
+     */
+    handleEdit(row) {
+      this.$emit("handleEditArticle", row);
+    },
+    _handleShowMoreOperate(ev, row) {
+      (this.operateList = [
+        { name: "移动", flag: "move" },
+        { name: "复制", flag: "copy" },
+        { name: row.isPublish ? "下线" : "上线", flag: "isOnSell" },
+        { name: "删除", flag: "delete" }
+      ]),
+        (this.row = row);
+      this.$refs.operateSection.style.right =
+        document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
+      this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + "px";
 
-            (this.operateList = [
-                { name: "移动", flag: "move" },
-                { name: "复制", flag: "copy" },
-                { name: "翻译", flag: "translate" },
-                { name: row.isPublish ? "下线" : "上线", flag: "isOnSell" },
-                { name: row.isTop ? "取消置顶" : "置顶", flag: "stick" },
-                { name: "删除", flag: "delete" }
-            ]),
-                (this.row = row);
-            this.$refs.operateSection.style.right = document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
-            this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + "px";
-
-            if (this.$refs.operateSection.style.display == "block") {
-                this.$refs.operateSection.style.display = "none";
-            } else {
-                this.$refs.operateSection.style.display = "block";
-            }
-        },
-        /**
-         * 显示无数据icon时的添加数据操作
-         */
-        addArticle(){
-          this.$emit("addArticle")
-        },
-        /**
-         * 删除操作
-         */
-        batchRemove(row) {
-            this.$emit("batchRemove", [row.id]);
-        },
-        /**
-         * 翻译操作
-         */
-        batchTranslate() {
-            this.$emit("batchTranslate")
-        },
-        /**
-         * 置顶操作
-         */
-        batchTop(row, isTop) {
-            this.$emit("batchTop", [row.id], row.isTop);
-        },
-        /**
-         * 上下线操作
-         */
-        batchPublish(row, isPublish) {
-            this.$emit("batchPublish", [row.id], row.isPublish);
-        },
-        /**
-         * 移动分类操作
-         */
-        batchMove(row) {
-            this.$emit("changeOperateName", "移动");
-            this.$emit("batchMove", [row.id]);
-        },
-        /**
-         * 复制操作
-         */
-        batchCopy(row) {
-            this.$emit("changeOperateName", "复制");
-            this.$emit("batchCopy", [row.id]);
-        },
-        //创建时间排序
-        sortChange(row){
-            if (row.order == 'ascending') {
-                this.articleSearchOptions.isDescending  = false;
-            } else {
-                this.articleSearchOptions.isDescending = true;
-            }
-            this.$emit("getArticleList");
-        },
-
-        handleMoreOperate(flag) {
-            let row = this.row;
-            switch (flag) {
-                case "move":
-                    this.$emit("moveClassify", true, row);
-                    this.batchMove(row);
-                    break;
-                case "copy":
-                    this.$emit("moveClassify", true, row);
-                    this.batchCopy(row);
-                    break;
-                case "isOnSell":
-                    this.batchPublish(row, row.isPublish);
-                    break;
-                case "stick":
-                    this.batchTop(row);
-                    break;
-                case "delete":
-                    this.batchRemove(row);
-                    break;
-                case "translate":
-                    this.batchTranslate();
-            }
-        },
-        /**
-         * 预览
-         */
-        async preview(previewId, siteId) {
-            let { data } = await articleManageApi.GetContentPrevAddress('NewsDetail', siteId);
-            var prevAddress = data;
-            if(prevAddress){
-                let newWindow = window.open();
-                newWindow.location.href = prevAddress + previewId + '.html';
-            }
-        }
+      if (this.$refs.operateSection.style.display == "block") {
+        this.$refs.operateSection.style.display = "none";
+      } else {
+        this.$refs.operateSection.style.display = "block";
+      }
+    },
+    /**
+     * 显示无数据icon时的添加数据操作
+     */
+    addArticle() {
+      this.$emit("addArticle");
+    },
+    /**
+     * 删除操作
+     */
+    batchRemove(row) {
+      this.$emit("batchRemove", [row.id]);
+    },
+    /**
+     * 置顶操作
+     */
+    batchTop(row, isTop) {
+      this.$emit("batchTop", [row.id], row.isTop);
+    },
+    /**
+     * 上下线操作
+     */
+    batchPublish(row, isPublish) {
+      this.$emit("batchPublish", [row.id], row.isPublish);
+    },
+    /**
+     * 移动分类操作
+     */
+    batchMove(row) {
+      this.$emit("changeOperateName", "移动");
+      this.$emit("batchMove", [row.id]);
+    },
+    /**
+     * 复制操作
+     */
+    batchCopy(row) {
+      this.$emit("changeOperateName", "复制");
+      this.$emit("batchCopy", [row.id]);
+    },
+    //创建时间排序
+    sortChange(row) {
+      if (row.order == "ascending") {
+        this.articleSearchOptions.isDescending = false;
+      } else {
+        this.articleSearchOptions.isDescending = true;
+      }
+      this.$emit("getArticleList");
     },
 
+    handleMoreOperate(flag) {
+      let row = this.row;
+      switch (flag) {
+        case "move":
+          this.$emit("moveClassify", true, row);
+          this.batchMove(row);
+          break;
+        case "copy":
+          this.$emit("moveClassify", true, row);
+          this.batchCopy(row);
+          break;
+        case "isOnSell":
+          this.batchPublish(row, row.isPublish);
+          break;
+        case "delete":
+          this.batchRemove(row);
+          break;
+        case "translate":
+          this._handleGetMoreTranslateSource();
+      }
+    },
+    /**
+     * 预览
+     */
+    async preview(previewId, siteId) {
+      let { data } = await articleManageApi.GetContentPrevAddress(
+        "NewsDetail",
+        siteId
+      );
+      var prevAddress = data;
+      if (prevAddress) {
+        let newWindow = window.open();
+        newWindow.location.href = prevAddress + previewId + ".html";
+      }
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/styles/content-manage/manege-table.scss";
-.title-color{
-    color: #262626;
+.title-color {
+  color: #262626;
 }
-.title{
-    display: flex; 
-    align-items: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.title {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.el-table /deep/ .ascending .sort-caret.ascending{
-    border-bottom-color: $--color-primary ;
+.translate-icon {
+  margin-top: -2px;
+  margin-left: 8px;
+  display: inline-block;
+  width: 25px;
+  min-width: 25px;
+  height: 20px;
+  cursor: pointer;
+  background: url("~img/content-icon/translate_icon.png") no-repeat center
+    center;
+  background-size: 100% 100%;
 }
-.el-table /deep/ .descending .sort-caret.descending{
-    border-top-color: $--color-primary ;
+
+.el-switch {
+  position: relative;
+  width: 27px;
+  height: 16px;
+  border-radius: 10px;
+  background-color: #dcdfe6;
+  cursor: pointer;
+
+  &::after {
+    position: absolute;
+    left: 60%;
+    display: block;
+    content: "";
+    margin-left: -15px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s linear;
+  }
 }
-.table-content /deep/ .el-tooltip.ellipsis.cursor-p.item{
-    outline: none;
+
+.el-switch.is-checked {
+  background-color: $--color-primary;
+
+  &::after {
+    left: 100%;
+  }
 }
-.table-content /deep/ .el-table__empty-text{
-    width: 0;
+
+.is-active {
+  color: $--color-primary;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  filter: Alpha(opacity=70);
+}
+.el-table /deep/ .ascending .sort-caret.ascending {
+  border-bottom-color: $--color-primary;
+}
+.el-table /deep/ .descending .sort-caret.descending {
+  border-top-color: $--color-primary;
+}
+.table-content /deep/ .el-tooltip.ellipsis.cursor-p.item {
+  outline: none;
+}
+.table-content /deep/ .el-table__empty-text {
+  width: 0;
 }
 </style>
-
-
-
