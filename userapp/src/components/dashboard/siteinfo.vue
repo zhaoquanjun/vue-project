@@ -298,7 +298,7 @@
         </div>
         <div v-show="initializedStep == 'after'">
           <div class="dialog-head">
-            <span class="dialog-headTitle">{{initializedStatus == "success"?"完成":"失败"}}</span>
+            <span class="dialog-headTitle">{{getDialogTitle()}}</span>
             <span class="dialog-close" @click="closeInitializedDialog">
               <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
             </span>
@@ -326,22 +326,34 @@
               <div v-show="initializedStatus == 'fail'">
                 <div class="initializedAfter-text copySite">连接超时，网站初始化失败，请稍后再试！</div>
               </div>
-              <div v-show="initializedStatus == 'error'">
+              <div style="width:300px" v-show="initializedStatus == 'error'">
                 <div class="initializedAfter-text translationSite">站点初始化成功！</div>
-                <div>单篇文章/产品最大可翻译字符为4000，以下超限内容本次翻译失败，已被忽略。您可缩减内容后手动操作翻译。</div>
+                <div
+                  class="initializedAfter-errorInfo"
+                >单篇文章/产品最大可翻译字符为4000，以下超限内容本次翻译失败，已被忽略。您可缩减内容后手动操作翻译。</div>
+                <ul class="initializedFailList-wrap">
+                  <li v-for="(item, index) in initializedErrorList" :key="index">
+                    <span class="initializedFailList-type">{{getPageType(item.type)}}</span>
+                    <span class="initializedFailList-symbol">//</span>
+                    <span class="initializedFailList-name">{{item.name}}</span>
+                  </li>
+                </ul>
               </div>
             </div>
-            <div class="dialog-footer">
-              <button
-                v-show="initializedStatus == 'success'"
-                @click="closeInitializedDialog"
-                class="cl-button cl-button--primary_notbg cl-button--small"
-              >预览</button>
-              <button
-                @click="closeInitializedDialog"
-                class="cl-button cl-button--primary cl-button--small"
-              >关闭</button>
-            </div>
+          </div>
+          <div class="dialog-footer">
+            <a
+              class="preview-btn"
+              :href="`//${curSiteinfo.secondDomain}`"
+              target="_blank"
+              v-show="initializedStatus == 'success'"
+            >
+              <button class="cl-button cl-button--primary_notbg cl-button--small">预览</button>
+            </a>
+            <button
+              @click="closeInitializedDialog"
+              class="cl-button cl-button--primary cl-button--small"
+            >关闭</button>
           </div>
         </div>
       </div>
@@ -462,6 +474,7 @@ export default {
         }
       ],
       initializedStatus: "success",
+      initializedErrorList: [],
       translationPercentage: 0,
       copyPercentage: 0
     };
@@ -572,6 +585,7 @@ export default {
       } else {
         this.initializedType = "translation";
       }
+      this.initializedStep = "start";
       let para = {
         language: this.initializedSiteLanguage,
         needTranslateProduct: true,
@@ -579,15 +593,20 @@ export default {
         sourceSiteId: this.initializedSourceSiteId,
         translateTargetSiteId: this.siteId
       };
-      let { data, status } = await dashboardApi.translate(para);
-      this.initializedStep = "start";
+      let data;
+      try {
+        data = await dashboardApi.translate(para);
+      } catch (e) {
+        this.initializedStatus = "fail";
+      }
       if (this.initializedSiteLanguage == "zh-CN") {
         let timer = setTimeout(() => {
           this.copyPercentage = 100;
+          this.initializedStatus = "success";
           this.initializedStep = "after";
         }, 1000);
       } else {
-        this.getTranslateProgress(data.translateId);
+        this.getTranslateProgress(data.data.translateId);
       }
     },
     // 获取翻译进度
@@ -598,8 +617,64 @@ export default {
         if (data.isTranslateIdExist == true && data.progressPercent == 1) {
           clearInterval(timer);
           this.initializedStep = "after";
+          if (data.pageProgress || data.productProgress || data.newsProgress) {
+            this.initializedErrorList = [];
+            this.initializedStatus = "error";
+            if (data.pageProgress) {
+              this.pushAttrToObj(
+                "page",
+                data.pageProgress.failedList,
+                this.initializedErrorList
+              );
+            }
+            if (data.productProgress) {
+              this.pushAttrToObj(
+                "product",
+                data.productProgress.failedList,
+                this.initializedErrorList
+              );
+            }
+            if (data.newsProgress) {
+              this.pushAttrToObj(
+                "news",
+                data.newsProgress.failedList,
+                this.initializedErrorList
+              );
+            }
+          } else {
+            this.initializedStatus = "success";
+          }
         }
       }, 2000);
+    },
+    // type转化为文字
+    getPageType(type) {
+      if (type == "page") {
+        return "页面";
+      } else if (type == "product") {
+        return "产品";
+      } else if (type == "news") {
+        return "文章";
+      }
+    },
+    // 根据状态转换标题
+    getDialogTitle() {
+      if (this.initializedStatus == "success") {
+        return "完成";
+      } else if (this.initializedStatus == "error") {
+        return "提示";
+      } else if (this.initializedStatus == "fail") {
+        return "失败";
+      }
+    },
+    // 将翻译失败的push到数组中
+    pushAttrToList(attrOne, attrSec, list) {
+      attrSec.forEach(item => {
+        list.push({
+          type: attrOne,
+          name: item.sourceEntityDesc
+        });
+      });
     },
     // 点击语言radio
     changeLanguage() {
@@ -766,7 +841,7 @@ export default {
       display: flex;
       justify-content: space-between;
       .sitelist {
-        width: calc(100% - 40px);
+        width: 100%;
         margin-top: 21px;
         display: inline-block;
         .sitelist-item:first-child {
@@ -1117,6 +1192,9 @@ export default {
       margin-top: 36px;
       text-align: right;
       width: 100%;
+      .preview-btn {
+        margin-right: 16px;
+      }
     }
     .translation-wrap {
       display: flex;
@@ -1205,6 +1283,34 @@ export default {
         }
         .dialog-tips {
           margin-top: 8px;
+        }
+        .initializedAfter-errorInfo {
+          margin-top: 8px;
+          font-size: $--font-size-small;
+          line-height: 16px;
+        }
+        .initializedFailList-wrap {
+          margin-top: 16px;
+          width: 100%;
+          padding: 10px 16px;
+          border: $--border-base;
+          box-sizing: border-box;
+          li span {
+            line-height: 16px;
+          }
+          .initializedFailList-type {
+            color: $--color-primary;
+            font-size: $--font-size-small;
+          }
+          .initializedFailList-symbol {
+            color: $--color-text-secondary;
+            font-size: $--font-size-small;
+          }
+          .initializedFailList-name {
+            color: $--color-text-regular;
+            font-size: $--font-size-small;
+            margin-left: 6px;
+          }
         }
       }
     }
