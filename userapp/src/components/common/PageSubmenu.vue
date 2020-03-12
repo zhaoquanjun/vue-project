@@ -92,7 +92,7 @@ export default {
     let [, firstRoute, lastRoute] = this.$route.path.split("/");
     this.lastRoute = routerList[routerList.length-1];
     this.parentPath = firstRoute;
-    this.getUnReadCount();
+    this.curSiteId && this.getUnReadCount();
   },
   computed: {
     menuList() {
