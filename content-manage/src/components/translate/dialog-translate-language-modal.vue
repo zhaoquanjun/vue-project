@@ -2,7 +2,9 @@
   <div class="dialog-mask--area" v-if="dialogShow">
     <div class="dialog-translate--modal">
       <div class="modal-header--area">
-        <div class="model-title ellipsis">自动翻译</div>
+        <div class="model-title ellipsis" v-if="modalData && modalData.title">
+          {{ modalData.title }}
+        </div>
         <div class="close-btn" @click="hideSelf">
           <i class="iconfont iconguanbi"></i>
         </div>
@@ -10,9 +12,7 @@
       <div class="modal-content--area">
         <p
           class="translate-list--desc"
-          v-if="
-            (modalData && modalData.total) || (modalData && modalData.enable)
-          "
+          v-if="modalData && modalData.type && modalData.type === 'more'"
         >
           已选
           <span class="is-active">{{
@@ -22,20 +22,24 @@
           <span class="is-active">{{
             modalData.enable && modalData.enable
           }}</span>
-          篇符合批量翻译条件
+          篇符合批量翻译条件<span class="attention"
+            >（*已筛选中文类型文章/产品）</span
+          >
         </p>
         <!--  v-scrollBar -->
         <ul
+          v-scrollBar
           class="translate-list el-scrollbar"
-          v-if="modalData && modalData.list && modalData.list.length > 0"
+          v-if="modalData && modalData.list && modalData.list.length > 1"
         >
           <li v-for="(item, index) in modalData.list" :key="index">
             <span
               class="check-box"
               :class="{
                 'is-checked': item.isChecked,
-                'is-disabled': !item.isChecked
+                'is-disabled': item.contentLength > 4000
               }"
+              @click="_handleChooseNewsItem(item)"
             >
               <i class="iconfont iconduihao"></i>
             </span>
@@ -78,14 +82,13 @@
               <span
                 class="check-box"
                 :class="{
-                  'is-checked': item.isChecked,
-                  'is-disabled': !item.isChecked
+                  'is-checked': item.isChecked
                 }"
                 @click="_handleChooseLanguagesItem(item)"
               >
                 <i class="iconfont iconduihao"></i>
               </span>
-              <p class="language-name">{{ item.name }}</p>
+              <p class="language-name">{{ item.languages }}</p>
               <!-- <span class="site-name" v-for="(it, ind) in item.site" :key="ind"
                 >【{{ it }}】</span
               > -->
@@ -162,7 +165,7 @@ export default {
     showSelf() {
       this.dialogShow = true;
       this.$nextTick(() => {
-        this.initModalData();
+        this._initModalData();
         this._initSelectboxValue();
       });
     },
@@ -171,11 +174,9 @@ export default {
     },
     _handleConfirm() {
       let obj = {};
-      obj.languagesList =
-        this.modalData.languages.length > 1
-          ? this.languagesSelectedArr
-          : this.modalData.languages[0].languages;
+      obj.languagesList = this._getLastTranslateLanguages();
       obj.id = this.value.value;
+      obj.list = this._getLastTranslateList();
       this.$emit("languageConfirm", obj);
       this.hideSelf();
     },
@@ -198,12 +199,16 @@ export default {
       document.getElementsByClassName("translate-id--area")[0].remove();
     },
     _initSelectboxValue() {
-      if (this.modalData && this.modalData.languages.length === 1) {
+      if (
+        this.modalData &&
+        this.modalData.languages.length === 1 &&
+        this.modalData.tree.length > 0
+      ) {
         this.value.label = this.modalData.tree[0].label;
         this.value.value = this.modalData.tree[0].id;
       }
     },
-    initModalData() {
+    _initModalData() {
       let data = JSON.parse(JSON.stringify(this.languageModal));
       if (data && data.list && data.list.length) {
         data.list.map(item => {
@@ -221,7 +226,26 @@ export default {
         });
       }
       this.modalData = data;
-      console.log(data);
+    },
+    _getLastTranslateList() {
+      let arr = [];
+      for (var i = 0; i < this.modalData.list.length; i++) {
+        const item = this.modalData.list[i];
+        if (item.isChecked) {
+          arr.push(item.id);
+        }
+      }
+      return arr;
+    },
+    _getLastTranslateLanguages() {
+      let arr = [];
+      for (var i = 0; i < this.modalData.languages.length; i++) {
+        const item = this.modalData.languages[i];
+        if (item.isChecked) {
+          arr.push(item.languages);
+        }
+      }
+      return arr;
     }
   }
 };
@@ -242,7 +266,7 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 30px 25px 32px;
-    width: 450px;
+    width: 480px;
     max-height: 600px;
     background-color: $--color-white;
     box-shadow: $--box-shadow-dark-small;
@@ -418,6 +442,8 @@ export default {
         }
 
         .error-tips {
+          margin: 16px;
+          margin-left: 16px;
           font-size: $--font-size-small;
           color: $--color-warning;
         }

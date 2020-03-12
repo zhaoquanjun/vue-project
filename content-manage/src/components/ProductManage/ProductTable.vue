@@ -95,18 +95,39 @@
           }}</span>
           <span
             class="translate-icon"
-            :class="{ disabled: scope.row.language != 'zh-CN' }"
+            @mouseenter.stop="
+              _handleMouseenterTranslate(
+                $event,
+                scope.row,
+                scope.row.language != 'zh-CN'
+              )
+            "
+            @mouseleave.stop="_handleMouseleaveTranslate"
+            @click.stop="
+              _handleTranslateItem(
+                $event,
+                scope.row,
+                scope.row.language != 'zh-CN'
+              )
+            "
           ></span>
         </template>
       </el-table-column>
 
       <el-table-column label="置顶" min-width="50">
         <template slot-scope="scope">
-          <i
-            class="iconfont iconzd1"
-            :class="{ 'is-active': scope.row.isTop }"
-            @click="batchSwitchStatus(scope.row, 2, scope.row.isTop)"
-          ></i>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.isTop ? '置顶' : '未置顶'"
+            placement="top"
+          >
+            <i
+              class="iconfont iconzd1"
+              :class="{ 'is-active': scope.row.isTop }"
+              @click="batchSwitchStatus(scope.row, 2, scope.row.isTop)"
+            ></i>
+          </el-tooltip>
         </template>
       </el-table-column>
 
@@ -171,13 +192,27 @@
         {{ it.name }}
       </li>
     </ul>
+    <ul class="more-operate" ref="translateModal" v-show="moreTranslateShow">
+      <li class="view-title">查看已翻译的文章</li>
+      <li
+        class="view-item"
+        v-for="(item, index) in view"
+        :key="index"
+        @click="_handleViewTranslatedProduct(item)"
+      >
+        {{ item.label }}
+      </li>
+      <li class="translate-tomore" @click="_handleTranslateToMore">
+        翻译为更多语言
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 import * as productManageApi from "@/api/request/productManageApi";
 export default {
-  props: ["articlePageResult", "articleSearchOptions"],
+  props: ["articlePageResult", "articleSearchOptions", "languagesList"],
 
   data() {
     return {
@@ -188,13 +223,17 @@ export default {
         { name: "复制", flag: "copy" },
         { name: "下线", flag: "isOnSell" },
         { name: "置顶", flag: "stick" },
+        { name: "翻译", flag: "translate" },
         { name: "删除", flag: "delete" }
       ],
       row: "",
       tableHeight: 500,
       loadingShow: true,
       tableData: "",
-      isOperateSectionShow: false
+      isOperateSectionShow: false,
+      view: [],
+      curRow: null,
+      moreTranslateShow: false
     };
   },
   mounted() {
@@ -217,6 +256,68 @@ export default {
     };
   },
   methods: {
+    _handleViewTranslatedProduct(o) {
+      this.$emit("handleEditArticle", o);
+    },
+    _handleTranslateToMore() {
+      this.$emit(
+        "handleGetSignalTranslateSource",
+        this.curRow,
+        this.hasTranslateList
+      );
+    },
+    _handleTranslateItem(e, row, type) {
+      if (this.hasTranslateList.length > 0) {
+        if (this.hasTranslateList.length === 1) {
+          this._handleViewTranslatedNews(this.hasTranslateList[0]);
+        }
+      } else {
+        if (type) return;
+        this.curRow = row;
+        this.$emit("handleGetSignalTranslateSource", row);
+      }
+    },
+    async _handleMouseenterTranslate(e, row, type) {
+      let { data } = await productManageApi.newsTranslateStatus(row.id);
+      const right =
+        document.documentElement.clientWidth - e.pageX - e.offsetX + "px";
+      const top = e.pageY - e.offsetY - 120 + "px";
+      this.$refs.translateModal.style.right = right;
+      this.$refs.translateModal.style.top = top;
+      if (data.length === 0) {
+        if (type) {
+          this.articlePageResult.list[row.index].translateToolTip = "";
+        } else {
+          this.articlePageResult.list[row.index].translateToolTip =
+            "点击翻译文章";
+        }
+      }
+      if (data.length === 1) {
+        if (this.languagesList.length === 1) {
+          this.articlePageResult.list[row.index].translateToolTip =
+            "查看已翻译的文章";
+        }
+        if (this.languagesList.length > 1) {
+          this.articlePageResult.list[row.index].translateToolTip = "";
+          this.hasTranslateList = data;
+          this.moreTranslateShow = true;
+        }
+      }
+      if (data.length > 1) {
+        if (data.length === this.languagesList.length) {
+          this.articlePageResult.list[row.index].translateToolTip = "";
+          this.hasTranslateList = data;
+          this.moreTranslateShow = true;
+        }
+      }
+    },
+    _handleMouseleaveTranslate() {
+      this.moreTranslateShow = false;
+      this.hasTranslateList = [];
+    },
+    _handleGetMoreTranslateSource() {
+      this.$emit("handleGetMoreTranslateSource");
+    },
     changePageNum(page) {
       this.articleSearchOptions.pageIndex = page;
       this.$emit("contentTableList");
@@ -321,6 +422,9 @@ export default {
         case "stick":
           this.batchSwitchStatus(row, 2, row.isTop);
           break;
+        case "translate":
+          this._handleGetMoreTranslateSource();
+          break;
         case "delete":
           this.batchSwitchStatus(row, 1, !row.isDelete);
           break;
@@ -380,6 +484,51 @@ export default {
   background: url("~img/content-icon/translate_icon.png") no-repeat center
     center;
   background-size: 100% 100%;
+}
+
+.more-operate {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  transform: translateX(50%);
+  background: $--color-white;
+  color: $--color-text-primary;
+  box-shadow: $--box-shadow-base;
+
+  li {
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      color: $--color-primary;
+      background-color: $--background-color-hover;
+    }
+  }
+
+  .view-title,
+  .translate-tomore {
+    font-size: $--font-size-small;
+    padding: 8px 16px;
+  }
+
+  .view-item {
+    font-size: $--font-size-small;
+    padding: 6px 16px;
+  }
+
+  &::after {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: block;
+    content: "";
+    width: 0;
+    height: 0;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-bottom: 5px solid $--color-white;
+  }
 }
 
 .is-active {

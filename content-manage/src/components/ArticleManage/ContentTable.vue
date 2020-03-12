@@ -6,6 +6,7 @@
       tooltip-effect="dark"
       class="content-table"
       :height="tableHeight + 20"
+      :row-class-name="tableRowClassName"
       @selection-change="handleSelectionChange"
       @sort-change="sortChange"
     >
@@ -29,14 +30,15 @@
             class="title"
             @click="preview(scope.row.id, scope.row.defaultSiteId)"
           >
-            <el-tooltip
+            <!-- <el-tooltip
               class="item outline"
               effect="dark"
               :content="scope.row.title"
               placement="top"
             >
               <span class="ellipsis cursor-p">{{ scope.row.title }}</span>
-            </el-tooltip>
+            </el-tooltip> -->
+            <span class="ellipsis cursor-p">{{ scope.row.title }}</span>
           </div>
         </template>
       </el-table-column>
@@ -48,7 +50,7 @@
         height="50"
       >
         <template slot-scope="scope">
-          <el-tooltip
+          <!-- <el-tooltip
             class="item"
             effect="dark"
             :content="scope.row.categoryName"
@@ -57,7 +59,10 @@
             <span style="width:80px" class="ellipsis">{{
               scope.row.categoryName
             }}</span>
-          </el-tooltip>
+          </el-tooltip> -->
+          <span style="width:80px" class="ellipsis">{{
+            scope.row.categoryName
+          }}</span>
         </template>
       </el-table-column>
 
@@ -91,31 +96,89 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="isPublishPrt" label="翻译" min-width="80">
+      <el-table-column
+        prop="isPublishPrt"
+        label="多语言"
+        min-width="80"
+        v-show="languagesList.length > 0"
+      >
         <template slot-scope="scope">
           <span class="ellipsis">{{
             scope.row.language ? scope.row.language : ""
           }}</span>
-          <span
-            class="translate-icon"
-            :class="{ disabled: scope.row.language != 'zh-CN' }"
-            @click="
-              _handleGetSignalTranslateSource(
-                scope.row,
-                scope.row.language != 'zh-CN'
-              )
-            "
-          ></span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :open-delay="200"
+            :disabled="scope.row.translateToolTip.length == 0"
+            :content="scope.row.translateToolTip"
+            placement="top"
+          >
+            <span
+              class="translate-icon"
+              :data-language="scope.row.language"
+              @mouseenter.stop="
+                _handleMouseenterTranslate(
+                  $event,
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
+              @mouseleave.stop="
+                _handleMouseleaveTranslte(
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
+              @click.stop="
+                _handleTranslateItem(
+                  $event,
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
+            >
+              <ul
+                v-if="scope.row.translateToolTip === ''"
+                class="more-operate"
+                :ref="'translateModal' + scope.row.index"
+              >
+                <li class="view-title">查看已翻译的文章</li>
+                <li
+                  class="view-item"
+                  v-for="(item, index) in hasTranslateList"
+                  :key="index"
+                  @click="_handleViewTranslatedNews(item)"
+                >
+                  {{ item.languageStr }}
+                </li>
+                <li
+                  class="translate-tomore"
+                  @click="_handleTranslateToMore(scope.row)"
+                  v-show="hasTranslateList.length < languagesList.length"
+                >
+                  翻译为更多语言
+                </li>
+              </ul>
+            </span>
+          </el-tooltip>
         </template>
       </el-table-column>
 
       <el-table-column label="置顶" min-width="50">
         <template slot-scope="scope">
-          <i
-            class="iconfont iconzd1"
-            :class="{ 'is-active': scope.row.isTop }"
-            @click="batchTop(scope.row)"
-          ></i>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.isTop ? '置顶' : '未置顶'"
+            placement="top"
+          >
+            <i
+              class="iconfont iconzd1"
+              :class="{ 'is-active': scope.row.isTop }"
+              @click="batchTop(scope.row)"
+            ></i>
+          </el-tooltip>
         </template>
       </el-table-column>
 
@@ -181,7 +244,7 @@
 import * as articleManageApi from "@/api/request/articleManageApi";
 
 export default {
-  props: ["articlePageResult", "articleSearchOptions", "treeResult"],
+  props: ["articlePageResult", "articleSearchOptions", "languagesList"],
 
   data() {
     return {
@@ -198,7 +261,10 @@ export default {
       row: "",
       tableHeight: 500,
       loadingShow: true,
-      tableData: ""
+      tableData: "",
+      hasTranslateList: [],
+      timer: null,
+      leaveTimer: null
     };
   },
   mounted() {
@@ -221,9 +287,73 @@ export default {
     };
   },
   methods: {
-    _handleGetSignalTranslateSource(row, type) {
-      // if (type) return;
-      this.$emit("handleGetSignalTranslateSource", row);
+    // 给行添加索引
+    tableRowClassName({ row, rowIndex }) {
+      row.index = rowIndex;
+    },
+    _handleViewTranslatedNews(o) {
+      this.$emit("handleEditArticle", o);
+    },
+    _handleTranslateToMore(row) {
+      this.$emit("handleGetSignalTranslateSource", row, this.hasTranslateList);
+    },
+    _handleTranslateItem(e, row, type) {
+      if (this.hasTranslateList.length > 0) {
+        this.hasTranslateList.length === this.languagesList.length &&
+          this._handleViewTranslatedNews(this.hasTranslateList[0]);
+      } else {
+        if (type) return;
+        this.$emit("handleGetSignalTranslateSource", row);
+      }
+    },
+    // 鼠标进入翻译icon
+    _handleMouseenterTranslate(e, row, type) {
+      this.timer && clearTimeout(this.timer);
+      if (type) return false;
+      this.timer = setTimeout(async () => {
+        let { data } = await articleManageApi.newsTranslateStatus(row.id);
+
+        if (data.length === 0) {
+          this.articlePageResult.list[row.index].translateToolTip =
+            "点击翻译文章";
+        }
+        if (data.length === 1) {
+          if (this.languagesList.length === 1) {
+            this.articlePageResult.list[row.index].translateToolTip =
+              "查看已翻译的文章";
+          }
+          if (this.languagesList.length > 1) {
+            this.articlePageResult.list[row.index].translateToolTip = "";
+            this.hasTranslateList = data;
+            if (this.$refs["translateModal" + row.index]) {
+              const left = e.clientX + "px";
+              const top = e.clientY + "px";
+              this.$refs["translateModal" + row.index].style.left = left;
+              this.$refs["translateModal" + row.index].style.top = top;
+            }
+          }
+        }
+        if (data.length > 1) {
+          if (data.length === this.languagesList.length) {
+            this.articlePageResult.list[row.index].translateToolTip = "";
+            this.hasTranslateList = data;
+            if (this.$refs["translateModal" + row.index]) {
+              const left = e.clientX + "px";
+              const top = e.clientY + "px";
+              this.$refs["translateModal" + row.index].style.left = left;
+              this.$refs["translateModal" + row.index].style.top = top;
+            }
+          }
+        }
+      }, 200);
+    },
+    _handleMouseleaveTranslte(row, type) {
+      if (type) return false;
+      this.hasTranslateList = [];
+      if (this.$refs["translateModal" + row.index]) {
+        this.$refs["translateModal" + row.index].style.left = "-300%";
+        this.$refs["translateModal" + row.index].style.top = "-300%";
+      }
     },
     _handleGetMoreTranslateSource() {
       this.$emit("handleGetMoreTranslateSource");
@@ -258,7 +388,7 @@ export default {
       ]),
         (this.row = row);
       this.$refs.operateSection.style.right =
-        document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
+        document.documentElement.clientWidth - ev.pageX - ev.offsetX + "px";
       this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + "px";
 
       if (this.$refs.operateSection.style.display == "block") {
@@ -377,6 +507,70 @@ export default {
   background: url("~img/content-icon/translate_icon.png") no-repeat center
     center;
   background-size: 100% 100%;
+
+  .more-operate {
+    position: fixed;
+    left: -300%;
+    top: -300%;
+    transform: translateX(-50%);
+    display: none;
+    width: 140px;
+    background: $--color-white;
+    color: $--color-text-primary;
+    box-shadow: $--box-shadow-base;
+    z-index: 1999;
+
+    li {
+      text-align: center;
+      cursor: pointer;
+
+      &:hover {
+        color: $--color-primary;
+        background-color: $--background-color-hover;
+      }
+    }
+
+    li:first-of-type {
+      cursor: default;
+      font-size: $--font-size-small;
+
+      &:hover {
+        color: $--color-text-primary;
+        background-color: $--color-white;
+      }
+    }
+
+    .view-title,
+    .translate-tomore {
+      font-size: $--font-size-small;
+      padding: 8px 16px;
+    }
+
+    .view-item {
+      font-size: $--font-size-small;
+      padding: 6px 16px;
+    }
+
+    &::after {
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: block;
+      content: "";
+      width: 0;
+      height: 0;
+      border-right: 5px solid transparent;
+      border-left: 5px solid transparent;
+      border-bottom: 5px solid $--color-white;
+    }
+  }
+}
+
+.translate-icon[data-language="zh-CN"]:hover {
+  .more-operate {
+    display: block;
+  }
 }
 
 .el-switch {

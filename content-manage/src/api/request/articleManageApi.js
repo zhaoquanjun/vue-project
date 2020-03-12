@@ -140,7 +140,6 @@ export const translateMoreNews = options => {
  * @param {*} translateId 翻译id
  */
 export const getNewsTranslateProcess = translateId => {
-  console.log(translateId);
   return ajaxRequest.get(`/api/v1/News/GetTranslateProgress/${translateId}`);
 };
 
@@ -149,4 +148,13 @@ export const getNewsTranslateProcess = translateId => {
  */
 export const isHasTranslateProcess = () => {
   return ajaxRequest.get(`/api/v1/news/IsExistTranslateProcess`);
+};
+
+/**
+ *
+ * @name 获取文章是否翻译过
+ * @param {*} id 文章id
+ */
+export const newsTranslateStatus = id => {
+  return ajaxRequest.get(`/api/v1/News/GetTranslatedList/${id}`);
 };

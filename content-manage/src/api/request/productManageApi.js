@@ -117,3 +117,12 @@ export const getNewsTranslateProcess = translateId => {
 export const isHasTranslateProcess = () => {
   return ajaxRequest.get(`/api/v1/product/IsExistTranslateProcess`);
 };
+
+/**
+ *
+ * @name 获取产品是否翻译过
+ * @param {*} id 产品id
+ */
+export const isNewsHasTranslated = id => {
+  return ajaxRequest.get(`/api/v1/Product/GetTranslatedList/${id}`);
+};

@@ -38,7 +38,7 @@
           v-if="articlePageResult !== null"
           :article-page-result="articlePageResult"
           :article-search-options="articleSearchOptions"
-          :tree-result="treeResult"
+          :languages-list="languagesList"
           @getArticleList="getArticleList"
           @addArticle="addArticle"
           @batchMove="batchMoveNews"
@@ -95,11 +95,11 @@
           </div>
         </right-pannel>
 
-        <!-- 翻译部分 -->
+        <!-- 翻译部分 start -->
         <dialog-info-modal
           :infoModal="infoModal"
-          @confirm="infoConfirm"
-          @cancle="infoCancle"
+          @goEdit="goEdit"
+          @close="close"
           ref="infoModal"
         ></dialog-info-modal>
         <!-- <dialog-translate-checked-modal
@@ -110,13 +110,17 @@
           ref="languageModal"
           @languageConfirm="languageConfirm"
         ></dialog-translate-language-modal>
+        <dialog-translate-progress-modal
+          ref="progressModal"
+          :progressInfo="progressInfo"
+        ></dialog-translate-progress-modal>
+        <!-- 翻译部分 end -->
       </el-main>
     </el-main>
   </el-container>
 </template>
 <script>
 import * as articleManageApi from "@/api/request/articleManageApi";
-import * as dashboardApi from "@/api/request/dashboardApi";
 import MTree from "@/components/common/MTree";
 import ContentHeader from "./ContentHeader";
 import ContentTable from "./ContentTable";
@@ -125,6 +129,7 @@ import SelectTree from "@/components/common/SelectTree";
 import DialogInfoModal from "@/components/translate/dialog-info-modal";
 import DialogTranslateCheckedModal from "@/components/translate/dialog-translate-checked-modal";
 import DialogTranslateLanguageModal from "@/components/translate/dialog-translate-language-modal";
+import DialogTranslateProgressModal from "@/components/translate/dialog-translate-progress-modal";
 export default {
   components: {
     MTree,
@@ -134,7 +139,8 @@ export default {
     SelectTree,
     DialogInfoModal,
     DialogTranslateCheckedModal,
-    DialogTranslateLanguageModal
+    DialogTranslateLanguageModal,
+    DialogTranslateProgressModal
   },
   data() {
     return {
@@ -173,22 +179,28 @@ export default {
         },
         additional: { words: "", operate: "" }
       },
+      progressInfo: {
+        title: "翻译中",
+        progress: 0
+      },
       languageModalSource: {
         signal: {
           tree: [],
           languages: [],
-          list: []
+          list: [],
+          type: "signal"
         },
         more: {
           total: 5,
           enable: 4,
           list: [],
-          languages: []
+          languages: [],
+          type: "more"
         }
       },
       languageModal: null,
       source: null,
-      type: 0,
+      type: "signal",
       foreignLanguages: []
     };
   },
@@ -212,7 +224,7 @@ export default {
         if (arr.length > 0) {
           for (var i = 0; i < arr[0].children.length; i++) {
             const item = arr[0].children[i];
-            if (item.language === "en-US") {
+            if (item.language === "zh-CN") {
               arr[0].children.splice(i, 1);
             }
           }
@@ -220,146 +232,318 @@ export default {
         return arr[0].children;
       },
       set: function() {}
+    },
+    languagesList: {
+      get: function() {
+        let arr = [];
+        if (
+          this.treeResult &&
+          this.treeResult[0] &&
+          this.treeResult[0].children.length > 0
+        ) {
+          for (var i = 0; i < this.treeResult[0].children.length; i++) {
+            const item = this.treeResult[0].children[i];
+            if (item.language != "zh-CN") {
+              const obj = {};
+              obj.languages = item.language;
+              arr.push(obj);
+            }
+          }
+        }
+        return arr;
+      },
+      set: function() {}
     }
   },
   methods: {
     // 翻译 start
     /**
-     * 单篇翻译
+     * 编辑/修改
      */
-    async _handleTranslateSingnalNews(options) {
-      let { data } = await articleManageApi.translateSignalNews(options);
-      this._getTranslateProcess(data);
+    goEdit() {
+      this.handleEditArticle(this.curRow);
     },
     /**
-     * 批量翻译
+     * 获取可以翻译的文章列表
      */
-    async _handleTranslateMoreNews(options) {
+    _checkEnableTranslateItem(data) {
+      const o = {};
+      let arr = [];
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].contentLength < 4000) {
+          arr.push(data[i]);
+        }
+      }
+      o.total = data.length;
+      o.enable = arr.length;
+      return o;
+    },
+    /**
+     * 单语言翻译
+     */
+    async _handleTranslateSingnalLanguages(options, obj) {
+      let { data } = await articleManageApi.translateSignalNews(options);
+      this._getTranslateProcess(data, 1, obj.languagesList.length);
+    },
+    /**
+     * 多语言翻译
+     */
+    async _handleTranslateMoreLanguages(options, obj) {
       let { data } = await articleManageApi.translateMoreNews(options);
-      this._getTranslateProcess(data);
+      this._getTranslateProcess(data, 1, obj.languagesList.length);
     },
     /**
      * 获取翻译进度
      */
-    _getTranslateProcess(id) {
-      let { data } = articleManageApi.getNewsTranslateProcess(id);
-      console.log(data);
+    async _getTranslateProcess(id, count, num) {
+      this.$refs.progressModal.showSelf();
+      let { data } = await articleManageApi.getNewsTranslateProcess(id);
+      if (data.isExist) {
+        // 弹出翻译进度弹窗
+        const res = data.cacheInfo;
+        if (res.progressPercent < 1) {
+          count++;
+          setTimeout(() => {
+            this.progressInfo.progress = Number(res.progressPercent) * 100;
+            this._getTranslateProcess(id, count, num);
+          }, 2000);
+        }
+        if (res.progressPercent === 1 && count > 1) {
+          this.progressInfo.progress = Number(res.progressPercent) * 100;
+          setTimeout(() => {
+            // 隐藏弹窗
+            this.curRow.id = res.lastTranslatedEntityId;
+            this.curRow.categoryId = res.categoryId;
+            this.curRow.categoryName = res.categoryName;
+            this.$refs.progressModal.hideSelf();
+            this.infoModal.title = "成功";
+            this.infoModal.type = "success";
+            this.infoModal.content =
+              "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
+            this.infoModal.btn.btn2Text = "关闭";
+            this.infoModal.btn.btn2Operate = "close";
+            if (num === 1) {
+              this.infoModal.btn.btn1Text = "编辑";
+              this.infoModal.btn.btn1Operate = "goEdit";
+              this.infoModal.additional.words = "进入编辑";
+              this.infoModal.additional.operate = "goEdit";
+            }
+            if (num > 1) {
+              this.infoModal.btn.btn1Text = "";
+              this.infoModal.btn.btn1Opetate = "";
+              this.infoModal.additional.words = "关闭弹窗";
+              this.infoModal.additional.operate = "close";
+            }
+            this.$refs.infoModal.showSelf();
+          }, 1000);
+        }
+        if (res.progressPercent === 1 && count === 1) {
+          this.progressInfo.progress = 100;
+          setTimeout(() => {
+            // 隐藏弹窗
+            this.curRow.id = res.lastTranslatedEntityId;
+            this.curRow.categoryId = res.categoryId;
+            this.curRow.categoryName = res.categoryName;
+            this.$refs.progressModal.hideSelf();
+            this.infoModal.title = "成功";
+            this.infoModal.type = "success";
+            this.infoModal.content =
+              "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
+            this.infoModal.btn.btn2Text = "关闭";
+            this.infoModal.btn.btn2Operate = "close";
+            if (num === 1) {
+              this.infoModal.btn.btn1Text = "编辑";
+              this.infoModal.btn.btn1Operate = "goEdit";
+              this.infoModal.additional.words = "进入编辑";
+              this.infoModal.additional.operate = "goEdit";
+            }
+            if (num > 1) {
+              this.infoModal.btn.btn1Text = "";
+              this.infoModal.btn.btn1Opetate = "";
+              this.infoModal.additional.words = "关闭弹窗";
+              this.infoModal.additional.operate = "close";
+            }
+            this.$refs.infoModal.showSelf();
+          }, 1000);
+        }
+      } else {
+        if (count < 8) {
+          count++;
+          setTimeout(() => {
+            this._getTranslateProcess(id, count, num);
+          }, 2000);
+        } else {
+          this.$refs.progressModal.hideSelf();
+          this.infoModal.title = "失败";
+          this.infoModal.type = "fail";
+          this.infoModal.content = "连接超时，翻译失败，请稍后再试";
+          this.infoModal.btn.btn1Text = "";
+          this.infoModal.btn.btn2Text = "关闭";
+          this.infoModal.additional.words = "关闭弹窗";
+          this.infoModal.additional.operate = "close";
+          this.$refs.infoModal.showSelf();
+        }
+      }
     },
     /**
      * 获取单个翻译信息
      */
-    handleGetSignalTranslateSource(row) {
-      if (!this._checkIsHasTranslateProcess) return;
+    handleGetSignalTranslateSource(row, translatedIds) {
+      if (!this._checkIsHasTranslateProcess()) {
+        this.infoModal.title = "失败";
+        this.infoModal.type = "fail";
+        this.infoModal.content =
+          "当前存在翻译任务，请完成已经存在的任务后再进行翻译";
+        this.infoModal.btn.btn1Text = "";
+        this.infoModal.btn.btn2Text = "关闭";
+        return false;
+      }
+      this.curRow = row;
       if (row.contentLength > 4000) {
+        this.infoModal.title = "提示";
+        this.infoModal.type = "fail";
+        this.infoModal.content = `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前文章字符已超限，请重新选择或删减文章后重试。</p>`;
+        this.infoModal.btn.btn1Text = "关闭";
+        this.infoModal.btn.btn1Operate = "close";
+        this.infoModal.btn.btn2Text = "修改";
+        this.infoModal.btn.btn2Operate = "goEdit";
+        this.infoModal.additional.words = "关闭弹窗";
+        this.infoModal.additional.operate = "close";
         this.$refs.infoModal.showSelf();
-        this.curRow = row;
       } else {
-        this.type = 0;
+        this.type = "signal";
         this.source = [row];
-        this._getForeigns();
+        this.languageModalSource.more.title = "单篇翻译";
+        this._getForeigns(translatedIds);
       }
     },
     /**
      * 获取批量翻译信息
      */
     handleGetMoreTranslateSource() {
-      if (!this._checkIsHasTranslateProcess) return;
-      this.type = 1;
-      this.source = this.list;
+      if (!this._checkIsHasTranslateProcess()) {
+        this.infoModal.title = "失败";
+        this.infoModal.type = "fail";
+        this.infoModal.content =
+          "当前存在翻译任务，请完成已经存在的任务后再进行翻译";
+        this.infoModal.btn.btn1Text = "";
+        this.infoModal.btn.btn2Text = "关闭";
+        return false;
+      }
+      this.type = "more";
+      this.source = this._getChineseList();
+      let obj = this._checkEnableTranslateItem(this.source);
+      this.languageModalSource.more.title = "批量翻译";
+      this.languageModalSource.more.total = obj.total;
+      this.languageModalSource.more.enable = obj.enable;
       this._getForeigns();
     },
     /**
-     * 获取所有外文（去重）
+     * 获取可翻译外文（与已经翻译过的去重）
      */
-    async _getForeigns() {
-      let { data } = await articleManageApi.getSiteList();
-      let item = {};
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].language != "zh-CN") {
-          if (this.foreignLanguages.length > 0) {
-            let flag = true;
-            for (var k = 0; k < this.foreignLanguages.length; k++) {
-              if (this.foreignLanguages[k].languages === data[i].language) {
-                flag = false;
-              }
-            }
-            if (flag) {
-              item.languages = data[i].language;
-              this.foreignLanguages.push(item);
-            }
-          } else {
-            item.languages = data[i].language;
-            this.foreignLanguages.push(item);
-          }
-        }
-      }
+    _getForeigns(ids) {
+      this._getTranslateIds(this.languagesList, ids);
       if (this.foreignLanguages.length > 1) {
         this.languageModalSource.more.languages = this.foreignLanguages;
-        this.languageModalSource.more.list = this.type === 0 ? [] : this.source;
+        this.languageModalSource.more.list = this.source;
+        this.languageModalSource.more.type = this.type;
         this.languageModal = this.languageModalSource.more;
         this.$refs.languageModal.showSelf();
       } else {
         this.languageModalSource.signal.languages = this.foreignLanguages;
-        this.languageModalSource.signal.list =
-          this.type === 0 ? [] : this.source;
+        this.languageModalSource.signal.list = this.source;
+        this.languageModalSource.signal.type = this.type;
         this.languageModalSource.signal.tree = this.translateTree;
         this.languageModal = this.languageModalSource.signal;
         this.$refs.languageModal.showSelf();
       }
     },
     /**
+     * 获取所有可以翻译的中文数据
+     */
+    _getChineseList() {
+      let arr = [];
+      for (var i = 0; i < this.list.length; i++) {
+        if (this.list[i].language === "zh-CN") {
+          arr.push(this.list[i]);
+        }
+      }
+      return arr;
+    },
+    /**
      * 获取要翻译到的外文站点
      */
-    _getTranslateIds(data) {
-      let ids = [];
+    _getTranslateIds(data, ids) {
+      this.foreignLanguages = [];
+      let item = {};
+      let flag = true;
       for (var i = 0; i < data.length; i++) {
-        ids.push(data[i].id);
+        if (ids && ids.length > 0) {
+          for (var k = 0; k < ids.length; k++) {
+            if (ids[k].language === data[i].languages) {
+              flag = false;
+            }
+          }
+          if (flag) {
+            item.languages = data[i].languages;
+            this.foreignLanguages.push(item);
+          }
+        } else {
+          item.languages = data[i].languages;
+          this.foreignLanguages.push(item);
+        }
+        item = {};
+        flag = true;
       }
-      return ids;
     },
     /**
      * 检验是否存在翻译进程
      */
-    _checkIsHasTranslateProcess() {
-      let { data } = articleManageApi.isHasTranslateProcess();
+    async _checkIsHasTranslateProcess() {
+      let { data } = await articleManageApi.isHasTranslateProcess();
       return data;
     },
     /**
-     * 信息弹框确认操作
+     * 信息弹框关闭操作
      */
-    infoConfirm() {
-      this.handleEditArticle(this.curRow);
-    },
-    /**
-     * 信息弹框取消操作
-     */
-    infoCancle() {
+    close() {
+      this.$refs.infoModal.stopIntervalEvent();
       this.$refs.infoModal.hideSelf();
     },
     /**
      * 语言弹框确认操作
      */
     async languageConfirm(obj) {
-      const ids = this._getTranslateIds(this.source);
-      let { data } = await dashboardApi.getCurSiteId();
       let options = {};
-      if (this.type === 0) {
+      if (obj.languagesList.length === 1) {
+        if (this.foreignLanguages.length === 1) {
+          options.CategoryId = obj.id;
+        }
         options = {
-          FromIdList: ids,
-          TargetLanguage: obj.languagesList,
-          SiteId: data,
-          CategoryId: obj.id
-        };
-      } else {
-        options = {
-          FromIdList: ids,
-          LanguageList: obj.languagesList,
-          SiteId: data
+          FromIdList: obj.list,
+          TargetLanguage: obj.languagesList[0],
+          SiteId: this.$store.state.dashboard.siteId
         };
       }
-      this.type === 0
-        ? this._handleTranslateSingnalNews(options)
-        : this._handleTranslateMoreNews(options);
+      if (obj.languagesList.length > 1) {
+        if (this.foreignLanguages.length === 1) {
+          options.CategoryId = obj.id;
+        }
+        options = {
+          FromIdList: obj.list,
+          LanguageList: obj.languagesList,
+          SiteId: this.$store.state.dashboard.siteId
+        };
+      }
+      obj.languagesList.length > 1
+        ? this._handleTranslateMoreLanguages(options, obj)
+        : this._handleTranslateSingnalLanguages(options, obj);
+    },
+    // 列表增加设置项
+    _setDataListAttribute(data) {
+      for (var i = 0; i < data.length; i++) {
+        this.$set(data[i], "translateToolTip", "");
+      }
     },
     // 翻译 end
 
@@ -393,6 +577,7 @@ export default {
       );
       this.$Loading.hide();
       this.articlePageResult = data;
+      this._setDataListAttribute(this.articlePageResult.list);
     },
     // 批量删除
     async batchRemoveNews(idlist) {
@@ -681,7 +866,12 @@ export default {
     addArticle() {
       if (!this.selectCategory) {
         this.$router.push({
-          path: "/news/create"
+          path: "/news/create",
+          query: {
+            categoryName: this.treeResult[0].label || "全部分类",
+            categoryId: this.treeResult[0].id || 0,
+            language: this.treeResult[0].language || "zn-CN"
+          }
         });
       } else {
         this.$router.push({

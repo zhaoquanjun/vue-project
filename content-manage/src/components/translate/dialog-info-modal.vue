@@ -27,6 +27,7 @@
       <div class="modal-btn--area">
         <p>{{ infoModal.additional.words }}</p>
         <div
+          v-show="infoModal.btn.btn1Text"
           class="cl-button cl-button--primary_notbg confirm"
           style="min-width: 76px; width: 76px; box-sizing: border-box;"
           @click="_handleConfirm"
@@ -34,6 +35,7 @@
           {{ infoModal.btn.btn1Text }}
         </div>
         <div
+          v-show="infoModal.btn.btn1Text"
           class="cl-button cl-button--primary cancle"
           style="min-width: 76px; width: 76px; box-sizing: border-box;"
           @click="_handleCancle"
@@ -56,8 +58,10 @@ export default {
           type: "success",
           content: "这是一段实例文字",
           btn: {
-            btn1Text: "确定",
-            btn2Text: "取消"
+            btn1Text: "",
+            btn2Text: "",
+            btn1Operate: "",
+            btn2Operate: ""
           },
           additional: { words: "", operate: "" }
         };
@@ -68,36 +72,42 @@ export default {
     return {
       dialogShow: false,
       interval: 5,
-      tips: ""
+      tips: "",
+      timer: null
     };
-  },
-  created() {
-    if (this.infoModal.additional.words) {
-      this._setIntervalEvent();
-    }
   },
   methods: {
     showSelf() {
       this.dialogShow = true;
+      this.interval = 5;
+      this._setIntervalEvent();
     },
     hideSelf() {
       this.dialogShow = false;
     },
+    stopIntervalEvent() {
+      this.timer && clearInterval(this.timer);
+    },
     _handleConfirm() {
-      this.$emit("infoConfirm");
+      if (this.infoModal.btn.btn1Operate) {
+        this.$emit(this.infoModal.btn.btn1Operate);
+      }
     },
     _handleCancle() {
-      this.$emit("infoCancle");
+      if (this.infoModal.btn.btn2Operate) {
+        this.$emit(this.infoModal.btn.btn2Operate);
+      }
     },
     _setIntervalEvent() {
       this.tips = this.infoModal.additional.words;
       this.infoModal.additional.words = this.interval + "s" + this.tips;
-      const timer = setInterval(() => {
+      this.timer && clearInterval(this.timer);
+      this.timer = setInterval(() => {
         if (this.interval > 1) {
           --this.interval;
           this.infoModal.additional.words = this.interval + "s" + this.tips;
         } else {
-          clearInterval(timer);
+          clearInterval(this.timer);
           this.hideSelf();
           this.$emit(this.infoModal.additional.operate);
         }
