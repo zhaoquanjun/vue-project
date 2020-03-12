@@ -264,6 +264,18 @@ export default {
       this.handleEditArticle(this.curRow);
     },
     /**
+     * 获取翻译失败的列表
+     */
+    _getFailedList(data) {
+      var str = "";
+      if (data && data.length > 0) {
+        for (var i = 0; i < data.length; i++) {
+          str += `<li><span style="display: inline-block;width: 17%;" class="lineheight26 attention ellipsis">（失败）</span><span class="lineheight26 ellipsis" style="display: inline-block;max-width: calc(35% - 16px);">${data[i].sourceEntityDesc}</span><span class="lineheight26 attention ellipsis" style="display: inline-block;margin-left: 16px; max-width: 48%;">${data[i].errorMsg}</span></li>`;
+        }
+      }
+      return str;
+    },
+    /**
      * 获取可以翻译的文章列表
      */
     _checkEnableTranslateItem(data) {
@@ -283,19 +295,21 @@ export default {
      */
     async _handleTranslateSingnalLanguages(options, obj) {
       let { data } = await articleManageApi.translateSignalNews(options);
-      this._getTranslateProcess(data, 1, obj.languagesList.length);
+      this._getTranslateProcess(data, 1, obj);
     },
     /**
      * 多语言翻译
      */
     async _handleTranslateMoreLanguages(options, obj) {
       let { data } = await articleManageApi.translateMoreNews(options);
-      this._getTranslateProcess(data, 1, obj.languagesList.length);
+      this._getTranslateProcess(data, 1, obj);
     },
     /**
      * 获取翻译进度
      */
-    async _getTranslateProcess(id, count, num) {
+    async _getTranslateProcess(id, count, obj) {
+      const num = obj.list.length;
+      this.progressInfo.progress = 0;
       this.$refs.progressModal.showSelf();
       let { data } = await articleManageApi.getNewsTranslateProcess(id);
       if (data.isExist) {
@@ -305,35 +319,63 @@ export default {
           count++;
           setTimeout(() => {
             this.progressInfo.progress = Number(res.progressPercent) * 100;
-            this._getTranslateProcess(id, count, num);
+            this._getTranslateProcess(id, count, obj);
           }, 2000);
         }
         if (res.progressPercent === 1 && count > 1) {
           this.progressInfo.progress = Number(res.progressPercent) * 100;
           setTimeout(() => {
             // 隐藏弹窗
-            this.curRow.id = res.lastTranslatedEntityId;
-            this.curRow.categoryId = res.categoryId;
-            this.curRow.categoryName = res.categoryName;
+            if (res.failedList.length > 0) {
+              if (
+                parseInt(obj.languagesList.length) * parseInt(num) >
+                res.failedList.length
+              ) {
+                this.infoModal.title = "成功";
+                this.infoModal.type = "success";
+                this.infoModal.content = `<p class='lineheight26'>部分产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; width: 300px;">${this._getFailedList(
+                  res.failedList
+                )}</ul>`;
+              } else {
+                this.infoModal.title = "失败";
+                this.infoModal.type = "fail";
+                this.infoModal.content = `<p class='lineheight26'>产品翻译失败！</p><ul style="width: 300px; margin-left: -7px;">${this._getFailedList(
+                  res.failedList
+                )}</ul>`;
+              }
+            } else {
+              this.infoModal.title = "成功";
+              this.infoModal.type = "success";
+              this.infoModal.content =
+                "<p class='lineheight26'>产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
+            }
             this.$refs.progressModal.hideSelf();
-            this.infoModal.title = "成功";
-            this.infoModal.type = "success";
-            this.infoModal.content =
-              "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
             this.infoModal.btn.btn2Text = "关闭";
             this.infoModal.btn.btn2Operate = "close";
-            if (num === 1) {
+            if (
+              obj.languagesList.length === 1 &&
+              num === 1 &&
+              res.failedList.length === 0
+            ) {
               this.infoModal.btn.btn1Text = "编辑";
               this.infoModal.btn.btn1Operate = "goEdit";
               this.infoModal.additional.words = "进入编辑";
               this.infoModal.additional.operate = "goEdit";
-            }
-            if (num > 1) {
+              if (res.lastTranslatedEntityInfo) {
+                this.curRow.id = res.lastTranslatedEntityInfo.Id;
+                this.curRow.categoryId =
+                  res.lastTranslatedEntityInfo.CategoryId;
+                this.curRow.categoryName =
+                  res.lastTranslatedEntityInfo.CategoryName;
+              }
+              this.curRow.language = obj.languagesList[0];
+            } else {
               this.infoModal.btn.btn1Text = "";
-              this.infoModal.btn.btn1Opetate = "";
-              this.infoModal.additional.words = "关闭弹窗";
-              this.infoModal.additional.operate = "close";
+              this.infoModal.btn.btn1Operate = "";
+              this.infoModal.additional.words = "";
+              this.infoModal.additional.operate = "";
             }
+            console.log(this.infoModal, "1++++++");
             this.$refs.infoModal.showSelf();
           }, 1000);
         }
@@ -341,9 +383,6 @@ export default {
           this.progressInfo.progress = 100;
           setTimeout(() => {
             // 隐藏弹窗
-            this.curRow.id = res.lastTranslatedEntityId;
-            this.curRow.categoryId = res.categoryId;
-            this.curRow.categoryName = res.categoryName;
             this.$refs.progressModal.hideSelf();
             this.infoModal.title = "成功";
             this.infoModal.type = "success";
@@ -356,6 +395,14 @@ export default {
               this.infoModal.btn.btn1Operate = "goEdit";
               this.infoModal.additional.words = "进入编辑";
               this.infoModal.additional.operate = "goEdit";
+              if (res.lastTranslatedEntityInfo) {
+                this.curRow.id = res.lastTranslatedEntityInfo.Id;
+                this.curRow.categoryId =
+                  res.lastTranslatedEntityInfo.CategoryId;
+                this.curRow.categoryName =
+                  res.lastTranslatedEntityInfo.CategoryName;
+              }
+              this.curRow.language = obj.languagesList[0];
             }
             if (num > 1) {
               this.infoModal.btn.btn1Text = "";
@@ -363,6 +410,7 @@ export default {
               this.infoModal.additional.words = "关闭弹窗";
               this.infoModal.additional.operate = "close";
             }
+            console.log(this.infoModal, "1=====");
             this.$refs.infoModal.showSelf();
           }, 1000);
         }
@@ -370,7 +418,7 @@ export default {
         if (count < 8) {
           count++;
           setTimeout(() => {
-            this._getTranslateProcess(id, count, num);
+            this._getTranslateProcess(id, count, obj);
           }, 2000);
         } else {
           this.$refs.progressModal.hideSelf();

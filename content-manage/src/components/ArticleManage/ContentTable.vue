@@ -139,7 +139,7 @@
               "
             >
               <ul
-                v-if="scope.row.translateToolTip === ''"
+                v-show="scope.row.translateToolTip === ''"
                 class="more-operate"
                 :ref="'translateModal' + scope.row.index"
               >
@@ -263,8 +263,7 @@ export default {
       loadingShow: true,
       tableData: "",
       hasTranslateList: [],
-      timer: null,
-      leaveTimer: null
+      timer: null
     };
   },
   mounted() {
@@ -334,15 +333,13 @@ export default {
           }
         }
         if (data.length > 1) {
-          if (data.length === this.languagesList.length) {
-            this.articlePageResult.list[row.index].translateToolTip = "";
-            this.hasTranslateList = data;
-            if (this.$refs["translateModal" + row.index]) {
-              const left = e.clientX + "px";
-              const top = e.clientY + "px";
-              this.$refs["translateModal" + row.index].style.left = left;
-              this.$refs["translateModal" + row.index].style.top = top;
-            }
+          this.articlePageResult.list[row.index].translateToolTip = "";
+          this.hasTranslateList = data;
+          if (this.$refs["translateModal" + row.index]) {
+            const left = e.clientX + "px";
+            const top = e.clientY + "px";
+            this.$refs["translateModal" + row.index].style.left = left;
+            this.$refs["translateModal" + row.index].style.top = top;
           }
         }
       }, 200);
@@ -513,12 +510,12 @@ export default {
     left: -300%;
     top: -300%;
     transform: translateX(-50%);
-    display: none;
+    visibility: hidden;
+    z-index: -1;
     width: 140px;
     background: $--color-white;
     color: $--color-text-primary;
     box-shadow: $--box-shadow-base;
-    z-index: 1999;
 
     li {
       text-align: center;
@@ -569,7 +566,8 @@ export default {
 
 .translate-icon[data-language="zh-CN"]:hover {
   .more-operate {
-    display: block;
+    visibility: visible;
+    z-index: 1999;
   }
 }
 
