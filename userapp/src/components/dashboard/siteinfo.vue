@@ -351,7 +351,7 @@
               <button class="cl-button cl-button--primary_notbg cl-button--small">预览</button>
             </a>
             <button
-              @click="closeInitializedDialog"
+              @click="completeInitialized"
               class="cl-button cl-button--primary cl-button--small"
             >关闭</button>
           </div>
@@ -512,8 +512,10 @@ export default {
         });
       }
     },
+    // 选择模板后的回调
     changeTemplateId(id) {
       this.curSiteinfo.templateId = id;
+      this.$emit("getSites");
     },
     async changeSite(item) {
       if (item.siteId != this.siteId) {
@@ -579,6 +581,10 @@ export default {
     closeInitializedDialog() {
       this.initializedDialog = false;
     },
+    completeInitialized() {
+      this.initializedDialog = false;
+      this.$emit("getSites");
+    },
     async initializedSite() {
       if (this.initializedSiteLanguage == "zh-CN") {
         this.initializedType = "copy";
@@ -617,25 +623,25 @@ export default {
         if (data.isTranslateIdExist == true && data.progressPercent == 1) {
           clearInterval(timer);
           this.initializedStep = "after";
-          if (data.pageProgress || data.productProgress || data.newsProgress) {
+          if (data.failedCount > 0) {
             this.initializedErrorList = [];
             this.initializedStatus = "error";
             if (data.pageProgress) {
-              this.pushAttrToObj(
+              this.pushAttrToList(
                 "page",
                 data.pageProgress.failedList,
                 this.initializedErrorList
               );
             }
             if (data.productProgress) {
-              this.pushAttrToObj(
+              this.pushAttrToList(
                 "product",
                 data.productProgress.failedList,
                 this.initializedErrorList
               );
             }
             if (data.newsProgress) {
-              this.pushAttrToObj(
+              this.pushAttrToList(
                 "news",
                 data.newsProgress.failedList,
                 this.initializedErrorList
