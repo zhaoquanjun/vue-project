@@ -101,25 +101,6 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="sourceSite"
-          label="联系电话"
-          min-width="100"
-          height="50"
-        >
-          <template slot-scope="scope">
-            <div :class="{GreyFont:scope.row.status!==0}">
-               <el-tooltip
-                class="item" 
-                effect="dark" 
-                :content="scope.row.contactNumber" 
-                placement="top"
-              >
-                <span class="ellipsis">{{scope.row.contactNumber}}</span>
-              </el-tooltip>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
           prop="email"
           label="联系邮箱"
           min-width="100"
