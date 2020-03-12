@@ -85,7 +85,7 @@
         添加子分类
       </button>
       <button
-        v-if="curClickNode.data.level > 0"
+        v-if="curClickNode.data.level > 0 && !curClickNode.data.isSystem"
         type="text"
         size="mini"
         @click="rename"
@@ -94,7 +94,7 @@
       </button>
 
       <button
-        v-if="curClickNode.data.level > 0"
+        v-if="curClickNode.data.level > 0 && !curClickNode.data.isSystem"
         type="text"
         size="mini"
         @click="batchRemove"
@@ -339,6 +339,7 @@ export default {
       }
       this.curClickData = data;
       this.curClickNode = node;
+      console.log(this.curClickNode);
       this._handleShowMoreOperate1(ev, node);
     },
     // 分类上传图片
