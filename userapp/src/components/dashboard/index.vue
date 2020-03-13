@@ -5,7 +5,7 @@
       :siteCount="siteCount"
       :isSystem="isSystem"
       @getSites="getSites"
-      v-show="isSiteInfoShow&&siteInfoList.length"
+      v-if="isSiteInfoShow&&siteInfoList.length"
     />
     <content-num :contentNumber="contentNumber" />
     <memberManage :contentNumber="contentNumber" />

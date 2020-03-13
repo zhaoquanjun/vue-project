@@ -34,6 +34,16 @@
             v-show="isSystem"
             @click="changeSiteInfoShow"
           ></i>
+          <div
+            v-if="siteCount == 2"
+            v-show="curSiteinfo.language != 'zh-CN'"
+            class="autoTranslation"
+            :class="{'openAutoTranslation': autoTranslation,'closeAutoTranslation':!autoTranslation}"
+          >
+            <i v-show="autoTranslation" class="iconfont iconduihao"></i>
+            <i v-show="!autoTranslation" class="iconfont iconguanbi"></i>
+            <span class="autoTranslation-text">自动翻译</span>
+          </div>
         </div>
         <div class="site-btn">
           <div v-if="curSiteinfo.language=='zh-CN'">
@@ -476,7 +486,8 @@ export default {
       initializedStatus: "success",
       initializedErrorList: [],
       translationPercentage: 0,
-      copyPercentage: 0
+      copyPercentage: 0,
+      autoTranslation: true
     };
   },
   components: {
@@ -592,27 +603,33 @@ export default {
         this.initializedType = "translation";
       }
       this.initializedStep = "start";
-      let para = {
-        language: this.initializedSiteLanguage,
-        needTranslateProduct: true,
-        needTranslateNews: true,
-        sourceSiteId: this.initializedSourceSiteId,
-        translateTargetSiteId: this.siteId
-      };
-      let data;
       try {
-        data = await dashboardApi.translate(para);
-      } catch (e) {
-        this.initializedStatus = "fail";
-      }
-      if (this.initializedSiteLanguage == "zh-CN") {
-        let timer = setTimeout(() => {
-          this.copyPercentage = 100;
+        let para = {
+          language: this.initializedSiteLanguage,
+          needTranslateProduct: true,
+          needTranslateNews: true,
+          sourceSiteId: this.initializedSourceSiteId,
+          translateTargetSiteId: this.siteId
+        };
+        let { data, status } = await dashboardApi.translate(para);
+        if (status == 200) {
           this.initializedStatus = "success";
-          this.initializedStep = "after";
-        }, 1000);
-      } else {
-        this.getTranslateProgress(data.data.translateId);
+        } else {
+          this.initializedStatus = "fail";
+        }
+        if (this.initializedSiteLanguage == "zh-CN") {
+          this.copyPercentage = 100;
+          let timer = setTimeout(() => {
+            this.initializedStep = "after";
+            this.copyPercentage = 0;
+          }, 1000);
+        } else {
+          this.getTranslateProgress(data.translateId);
+        }
+      } catch (e) {
+        console.log(e);
+        this.initializedStatus = "fail";
+        this.initializedStep = "after";
       }
     },
     // 获取翻译进度
@@ -622,7 +639,6 @@ export default {
         this.translationPercentage = data.progressPercent * 100;
         if (data.isTranslateIdExist == true && data.progressPercent == 1) {
           clearInterval(timer);
-          this.initializedStep = "after";
           if (data.failedCount > 0) {
             this.initializedErrorList = [];
             this.initializedStatus = "error";
@@ -650,6 +666,10 @@ export default {
           } else {
             this.initializedStatus = "success";
           }
+          setTimeout(() => {
+            this.initializedStep = "after";
+            this.translationPercentage = 0;
+          }, 1000);
         }
       }, 2000);
     },
@@ -966,6 +986,39 @@ export default {
           &:hover {
             background-color: rgba(9, 204, 235, 0.09);
             border-radius: 2px;
+          }
+        }
+        .autoTranslation {
+          width: 80px;
+          height: 23px;
+          text-align: center;
+          margin-left: 16px;
+          .autoTranslation-text {
+            font-size: $--font-size-small;
+            font-weight: 400;
+            line-height: 23px;
+          }
+          i {
+            font-size: $--font-size-small;
+            line-height: 23px;
+          }
+        }
+        .openAutoTranslation {
+          border: 1px solid $--color-warning;
+          i {
+            color: $--color-warning;
+          }
+          span {
+            color: $--color-warning;
+          }
+        }
+        .closeAutoTranslation {
+          border: 1px solid $--border-color-base;
+          i {
+            color: $--border-color-base;
+          }
+          span {
+            color: $--border-color-base;
           }
         }
       }
