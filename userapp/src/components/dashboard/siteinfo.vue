@@ -493,8 +493,15 @@ export default {
   components: {
     SelectTemplateDialog
   },
+  computed: {
+    isSiteInfoShow() {
+      return this.$store.state.dashboard.isSiteInfoShow;
+    }
+  },
   mounted() {
-    this.getChineseSiteInfo();
+    if (this.isSiteInfoShow) {
+      this.getChineseSiteInfo();
+    }
   },
   methods: {
     async getChineseSiteInfo() {
