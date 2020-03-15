@@ -446,7 +446,8 @@ export default {
     async goCloseAutoTranslate() {
       this.close();
       let newWindow = window.open();
-      newWindow.location.href = window.location.origin + "/board";
+      newWindow.location.href =
+        window.location.origin.replace(/content/, "dashboard") + "/board";
     },
     /**
      * 英文 - 弹窗选择仍然保存
