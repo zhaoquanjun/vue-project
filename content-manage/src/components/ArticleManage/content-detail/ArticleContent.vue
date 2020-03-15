@@ -190,6 +190,15 @@
         </el-collapse>
       </div>
     </el-form>
+    <dialog-translate-checked-modal
+      ref="checkModal"
+      :checkInfo="checkInfo"
+      @close="close"
+      @stillSave="stillSave"
+      @saveAndNotranslate="saveAndNotranslate"
+      @goCloseAutoTranslate="goCloseAutoTranslate"
+      @holdonSavevAndTranslate="holdonSavevAndTranslate"
+    ></dialog-translate-checked-modal>
   </div>
 </template>
 <script>
@@ -200,11 +209,13 @@ import { formatDate } from "@/utlis/date.js";
 
 import ModalContent from "@/components/ImgManage/index.vue";
 import QuillDetail from "@/components/ProductManage/QuillDetail.vue";
+import DialogTranslateCheckedModal from "@/components/translate/dialog-translate-checked-modal";
 export default {
   components: {
     SelectTree,
     ModalContent,
-    QuillDetail
+    QuillDetail,
+    DialogTranslateCheckedModal
   },
   provide: {
     popper: true
@@ -277,7 +288,23 @@ export default {
       ratio: [],
       origin: [],
       quillContentId: "quill-contentDetail",
-      siteId: 0
+      siteId: 0,
+      language: this.$route.query.language,
+      type: "", // 保存/编辑
+      checkInfo: {
+        title: "自动翻译",
+        content: "这是一段实例文字",
+        btn: {
+          btn1Text: "确定",
+          btn1Operate: "",
+          btn2Text: "取消",
+          btn2Operate: ""
+        },
+        additional: {
+          operate: "",
+          status: false
+        }
+      }
     };
   },
   created() {
@@ -368,77 +395,140 @@ export default {
       this.articleDetail.categoryId = node.id;
       this.categoryName = node.label;
     },
-    // 新建保存
-    submitForm(formName, imageUrl) {
-      this.articleDetail.pictureUrl = imageUrl;
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.insertArticle();
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
     // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    //插入文章
+    //插入文章 -- 新建
     async insertArticle() {
       var html = document
         .getElementById(this.quillContentId)
         .querySelector(".ql-editor").innerHTML;
       this.articleDetail.contentDetail = html;
-      let { status, data } = await articleManageApi.createArticle(
-        this.articleDetail
-      );
-      if (status === 200) {
-        this.$confirm("保存成功!", "提示", {
-          confirmButtonText: "新增下一篇",
-          iconClass: "icon-success",
-          cancelButtonText: "关闭",
-          callback: async action => {
-            if (action === "confirm") {
-              this.resetForm("articleDetail");
-              this.resetDetail();
-              this.$emit("changeSaveWay", false);
-              this.$emit("changePreviewId", "", 0);
-            } else {
-              this.NewId = data;
-              this.articleDetail.NewId = data;
-              this.$emit("changeSaveWay", true);
-              this.$emit(
-                "changePreviewId",
-                data,
-                this.articleDetail.defaultSiteId
-              );
-            }
-          }
-        });
+      // 外文
+      if (this.language != "zh-CN") {
+        this.save(null);
+      } else {
+        // 中文
+        this.save(null, this._getStatusBeforeTranslate);
       }
     },
-    // 编辑提交
-    editArticle(formName, imageUrl) {
-      this.articleDetail.pictureUrl = imageUrl;
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.saveArticle();
-        } else {
-          console.log("error submit!!");
-          return false;
+    /**
+     * 保存 flag 是否记住状态
+     */
+    async save(flag, callback) {
+      if (this.type === "create") {
+        let { status, data } = await articleManageApi.createArticle(
+          this.articleDetail
+        );
+        if (status === 200) {
+          this.$refs.checkModal.hideSelf();
+          typeof callback === "function" && callback(data, flag);
+          this.NewId = data;
+          this.articleDetail.NewId = data;
+          if (this.language != "zh-CN") {
+            this._complateCreate();
+          }
         }
-      });
+      }
+      if (this.type === "edit") {
+        let { status } = await articleManageApi.editArticle(this.articleDetail);
+        if (status === 200) {
+          this.$refs.checkModal.hideSelf();
+          typeof callback === "function" &&
+            callback(this.$route.query.id || this.NewId, flag);
+        }
+      }
     },
-    //编辑保存文章
-    async saveArticle() {
-      var html = document
-        .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML;
-      this.articleDetail.contentDetail = html;
-      let { status, data } = await articleManageApi.editArticle(
-        this.articleDetail
+    /**
+     * 关闭自动翻译  **********
+     */
+    async goCloseAutoTranslate() {
+      this.close();
+      let newWindow = window.open();
+      newWindow.location.href = window.location.origin + "/board";
+    },
+    /**
+     * 英文 - 弹窗选择仍然保存
+     */
+    stillSave() {
+      this.save(null);
+    },
+    /**
+     * 中文 - 保存但放弃翻译
+     */
+    saveAndNotranslate(status) {
+      this.$refs.checkModal.hideSelf();
+      this._completeEdit();
+      if (status) {
+        this._switchTipsModalShowStatus();
+        this._switchOverwriteTranslateStatus();
+      }
+    },
+    /**
+     * 中文 - 保存并且翻译
+     */
+    holdonSavevAndTranslate(status) {
+      this.$refs.checkModal.hideSelf();
+      this._autoTranslate(
+        { id: this.$route.query.id || this.NewId, type: 1 },
+        "translate"
       );
+      if (status) {
+        this._switchTipsModalShowStatus();
+        this._switchOverwriteTranslateStatus();
+      }
+    },
+    /**
+     * 翻译之前获取状态并操作
+     */
+    async _getStatusBeforeTranslate(id, flag) {
+      let { data, status } = await articleManageApi.checkAutoTranslateStatus(
+        id
+      );
+      if (status === 200) {
+        if (this.type === "create") {
+          this._createTranslate(data, id, flag);
+        }
+        if (this.type === "edit") {
+          this._editTranslate(data, id, flag);
+        }
+      }
+    },
+    async _editTranslate(data, id, status) {
+      if (data.isAutoTranslateSwitchOn) {
+        if (data.showTips) {
+          if (
+            data.autoTranslateBehavior === 1 ||
+            data.autoTranslateBehavior === 2
+          ) {
+            this.checkInfo.content =
+              '<p class="lineheight26">检测到对应的英文页面有编辑保存记录，同步翻译本次 中文的修改将会完全覆盖对应英文页面且不可找回，是 否同步翻译本次修改？</p>';
+            this.checkInfo.btn.btn1Text = "否，本次不同步";
+            this.checkInfo.btn.btn1Operate = "saveAndNotranslate";
+            this.checkInfo.btn.btn2Text = "是，同步翻译";
+            this.checkInfo.btn.btn2Operate = "holdonSavevAndTranslate";
+            this.checkInfo.additional.operate = true;
+            this.checkInfo.additional.status = false;
+            this.$refs.checkModal.showSelf();
+          } else {
+            this._autoTranslate({ id: id, type: 3 }, status);
+          }
+        } else {
+          // 直接翻译，不需要读取配置，后台处理
+          this._autoTranslate({ id: id, type: 3 }, status);
+        }
+      }
+    },
+    async _createTranslate(data, id, status) {
+      if (data.isAutoTranslateSwitchOn) {
+        this._autoTranslate({ id: id, type: 2 }, status);
+      }
+    },
+    /**
+     * 完成编辑
+     */
+    _completeEdit() {
       this.$confirm("保存成功!", "提示", {
         confirmButtonText: "新增下一篇",
         customClass: "medium",
@@ -463,12 +553,197 @@ export default {
         }
       });
     },
+    /**
+     * 完成新建
+     */
+    _complateCreate() {
+      this.$confirm("保存成功!", "提示", {
+        confirmButtonText: "新增下一篇",
+        iconClass: "icon-success",
+        cancelButtonText: "关闭",
+        callback: async action => {
+          if (action === "confirm") {
+            this.resetForm("articleDetail");
+            this.resetDetail();
+            this.$emit("changeSaveWay", false);
+            this.$emit("changePreviewId", "", 0);
+          } else {
+            this.$emit("changeSaveWay", true);
+            this.$emit(
+              "changePreviewId",
+              this.NewId,
+              this.articleDetail.defaultSiteId
+            );
+          }
+        }
+      });
+    },
+    /**
+     * 校验自动翻译是否开启
+     */
+    async _checkAutoTranslateStatus() {
+      let { data } = articleManageApi.getAutoTranslateStatus();
+      return data;
+    },
+    /**
+     * 切换覆盖翻译的状态
+     */
+    async _switchOverwriteTranslateStatus() {
+      let { data, status } = articleManageApi.switchCoverTranslateConfig();
+      console.log(data, status);
+    },
+    /**
+     * 切换提示弹窗开启关闭状态
+     */
+    async _switchTipsModalShowStatus() {
+      let { data, status } = articleManageApi.switchTipsModalStatus();
+      console.log(data, status);
+    },
+    /**
+     * 自动翻译
+     * options - id: 文章/产品id - type: 1-覆盖2-不覆盖3-默认配置  flag: 记住操作状态
+     */
+    async _autoTranslate(options, flag) {
+      let { data } = await articleManageApi.autoTranslate(options);
+      this._getTranslateProgress(data, 1, 0);
+      if (flag != "") {
+        this.checkInfo.btn.btn1Text = "查看自动翻译设置";
+        this.checkInfo.btn.btn1Operate = "goCloseAutoTranslate";
+        this.checkInfo.btn.btn2Text = "关闭";
+        this.checkInfo.btn.btn2Operate = "close";
+        this.checkInfo.additional.operate = false;
+        if (flag === "noTranslate") {
+          this.checkInfo.content =
+            '<p class="lineheight26">已记住中文站最新保存标准，不执行自动翻译。下次不再提醒。</p>';
+          this.$refs.checkModal.showSelf();
+        }
+        if (flag === "translate") {
+          this.checkInfo.content =
+            '<p class="lineheight26">已记住中文站最新保存标准，覆盖英文站修改。下次不再提醒。</p>';
+          this.$refs.checkModal.showSelf();
+        }
+      } else {
+        this.type === "edit" && this._completeEdit();
+        this.type === "create" && this._complateCreate();
+      }
+    },
+    /**
+     * 关闭弹窗
+     */
+    close() {
+      this.$refs.checkModal.hideSelf();
+      this.type === "edit" && this._completeEdit();
+      this.type === "create" && this._complateCreate();
+    },
+    /**
+     * 获取翻译进度
+     */
+    async _getTranslateProgress(id, count, isTranslating) {
+      let { data } = await articleManageApi.getNewsTranslateProcess(id);
+      if (data.isExist) {
+        const res = data.cacheInfo;
+        ++isTranslating;
+        if (res.progressPercent < 1) {
+          if (count < 8) {
+            count++;
+            if (isTranslating === 1) {
+              this.$notify({
+                customClass: "notify-success", //  notify-success ||  notify-error
+                message: `阿里云智能AI翻译同步翻译中～`,
+                showClose: false,
+                duration: 1000
+              });
+            }
+            setTimeout(() => {
+              this._getTranslateProgress(id, count, isTranslating);
+            }, 2000);
+          } else {
+            this.$notify({
+              customClass: "notify-error", //  notify-success ||  notify-error
+              message: `网络连接错误，本次翻译失败！`,
+              showClose: false,
+              duration: 1000
+            });
+          }
+        } else {
+          this.$notify({
+            customClass: "notify-success", //  notify-success ||  notify-error
+            message: `自动翻译成功！`,
+            showClose: false,
+            duration: 1000
+          });
+        }
+      } else {
+        if (count < 8) {
+          count++;
+          setTimeout(() => {
+            this._getTranslateProgress(id, count, isTranslating);
+          }, 2000);
+        } else {
+          this.$notify({
+            customClass: "notify-error", //  notify-success ||  notify-error
+            message: `网络连接错误，本次翻译失败！`,
+            showClose: false,
+            duration: 1000
+          });
+        }
+      }
+    },
+    // 新建保存
+    submitForm(formName, imageUrl) {
+      this.articleDetail.pictureUrl = imageUrl;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.type = "create";
+          this.insertArticle();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    // 编辑保存
+    editArticle(formName, imageUrl) {
+      this.articleDetail.pictureUrl = imageUrl;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.type = "edit";
+          this.saveArticle();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    //编辑保存文章
+    async saveArticle() {
+      var html = document
+        .getElementById(this.quillContentId)
+        .querySelector(".ql-editor").innerHTML;
+      this.articleDetail.contentDetail = html;
+      // 外文
+      if (this.language != "zh-CN") {
+        const autoTranslateIsOpen = this._checkAutoTranslateStatus();
+        if (autoTranslateIsOpen) {
+          this.checkInfo.content =
+            '<p class="lineheight26">自动翻译已开启，修改<span class="lineheight26 attention">英文页面</span>后，再次更新源<span class="lineheight26 attention">中文页面</span>，可能覆盖当前修改。关闭自动翻译可避免英文站保存数据的丢失。</p>';
+          this.checkInfo.btn.btn1Text = "去关闭自动翻译";
+          this.checkInfo.btn.btn1Operate = "goCloseAutoTranslate";
+          this.checkInfo.btn.btn2Text = "依然保存，待原中文站更新再处理";
+          this.checkInfo.btn.btn2Operate = "stillSave";
+          this.$refs.checkModal.showSelf();
+        }
+      } else {
+        // 中文
+        this.save(null, this._getStatusBeforeTranslate);
+      }
+    },
 
     imgChangeSizeHandler(img) {
       img.width = "100";
       img.height = "100";
     },
-    //重置表单
+    // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },

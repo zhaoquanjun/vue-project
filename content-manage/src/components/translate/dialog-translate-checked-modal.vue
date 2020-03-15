@@ -2,30 +2,43 @@
   <div class="dialog-mask--area" v-show="dialogShow">
     <div class="dialog-translate--modal">
       <div class="modal-header--area">
-        <div class="model-title ellipsis">{{ dialogInfo.title }}</div>
+        <div class="model-title ellipsis" v-show="checkInfo && checkInfo.title">
+          {{ checkInfo.title }}
+        </div>
         <div class="close-btn" @click="hideSelf">
           <i class="iconfont iconguanbi"></i>
         </div>
       </div>
-      <div class="modal-content--area">
+      <div class="modal-content--area" v-show="checkInfo && checkInfo.content">
         <div class="content-attribute--icon"></div>
-        <div class="content-desc--word" v-html="dialogInfo.content"></div>
+        <div class="content-desc--word" v-html="checkInfo.content"></div>
       </div>
       <div class="modal-btn--area">
-        <p>{{ dialogInfo.additional.words }}</p>
+        <p
+          v-show="
+            checkInfo && checkInfo.additional && checkInfo.additional.operate
+          "
+        >
+          <span
+            @click.stop="_handleChangeCheckStatus"
+            class="check-icon"
+            :class="{ 'is-checked': checkInfo.additional.status }"
+          ></span>
+          记住操作，不再提示我
+        </p>
         <div
+          v-show="checkInfo && checkInfo.btn && checkInfo.btn.btn1Text"
           class="cl-button cl-button--primary_notbg confirm"
-          style="min-width: 76px; width: 76px; box-sizing: border-box;"
           @click="_handleConfirm"
         >
-          {{ dialogInfo.btn.confirmText }}
+          {{ checkInfo.btn.btn1Text }}
         </div>
         <div
+          v-show="checkInfo && checkInfo.btn && checkInfo.btn.btn2Text"
           class="cl-button cl-button--primary cancle"
-          style="min-width: 76px; width: 76px; box-sizing: border-box;"
           @click="_handleCancle"
         >
-          {{ dialogInfo.btn.cancleText }}
+          {{ checkInfo.btn.btn2Text }}
         </div>
       </div>
     </div>
@@ -35,17 +48,22 @@
 <script>
 export default {
   props: {
-    dialogInfo: {
+    checkInfo: {
       type: Object,
       dafault: () => {
         return {
-          title: "提示",
-          type: "success",
+          title: "自动翻译",
           content: "这是一段实例文字",
-          btn: { confirmText: "确定", cancleText: "取消" },
-          confirm: "",
-          cancle: "",
-          additional: { words: "", operate: "" }
+          btn: {
+            btn1Text: "确定",
+            btn1Operate: "",
+            btn2Text: "取消",
+            btn2Operate: ""
+          },
+          additional: {
+            operate: "",
+            status: false
+          }
         };
       }
     }
@@ -57,11 +75,6 @@ export default {
       tips: ""
     };
   },
-  created() {
-    if (this.dialogInfo.additional.words) {
-      this._setIntervalEvent();
-    }
-  },
   methods: {
     showSelf() {
       this.dialogShow = true;
@@ -70,32 +83,24 @@ export default {
       this.dialogShow = false;
     },
     _handleConfirm() {
-      if (this.confirm) {
-        this.$emit(this.confirm);
-      } else {
-        this.hideSelf();
+      if (this.checkInfo.btn.btn1Operate) {
+        this.$emit(
+          this.checkInfo.btn.btn1Operate,
+          this.checkInfo.additional.status
+        );
       }
     },
     _handleCancle() {
-      if (this.cancle) {
-        this.$emit(this.cancle);
-      } else {
-        this.hideSelf();
+      if (this.checkInfo.btn.btn2Operate) {
+        this.$emit(this.checkInfo.btn.btn2Operate);
       }
     },
-    _setIntervalEvent() {
-      this.tips = this.dialogInfo.additional.words;
-      this.dialogInfo.additional.words = this.interval + "s" + this.tips;
-      const timer = setInterval(() => {
-        if (this.interval > 1) {
-          --this.interval;
-          this.dialogInfo.additional.words = this.interval + "s" + this.tips;
-        } else {
-          clearInterval(timer);
-          this.hideSelf();
-          this.$emit(this.dialogInfo.additional.operate);
-        }
-      }, 1000);
+    _handleChangeCheckStatus() {
+      this.$set(
+        this.checkInfo.additional,
+        "status",
+        !this.checkInfo.additional.status
+      );
     }
   }
 };
@@ -108,7 +113,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 1999;
+  z-index: 2999;
   background-color: rgba(0, 0, 0, 0.75);
   .dialog-translate--modal {
     position: absolute;
@@ -145,6 +150,7 @@ export default {
       .content-attribute--icon {
         margin-left: 20px;
         width: 51px;
+        min-width: 51px;
         height: 40px;
         background: url("~img/content-icon/translate_icon.png") no-repeat center
           center;
@@ -166,8 +172,50 @@ export default {
 
       p {
         margin-right: 16px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
         font-size: $--font-size-small;
         color: $--color-warning;
+
+        .check-icon {
+          position: relative;
+          margin-right: 8px;
+          display: block;
+          width: 12px;
+          height: 12px;
+          border: 1px solid $--border-color-base;
+          border-radius: 50%;
+          cursor: pointer;
+
+          &::after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            content: "";
+            width: 8px;
+            height: 8px;
+            background-color: $--color-primary;
+            border-radius: 50%;
+            cursor: pointer;
+          }
+        }
+
+        .is-checked {
+          border-color: $--color-primary;
+          &::after {
+            display: block;
+          }
+        }
+      }
+
+      .confirm,
+      .cancle {
+        box-sizing: border-box;
+        min-width: 76px;
+        width: auto;
       }
     }
   }

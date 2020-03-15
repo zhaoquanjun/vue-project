@@ -1,7 +1,6 @@
 import Vue from "vue";
 import {
   Container,
-  Aside,
   Main,
   Tree,
   Header,
@@ -46,7 +45,8 @@ import {
   Tabs,
   TabPane,
   Radio,
-  Progress
+  Progress,
+  Aside
 } from "element-ui";
 Vue.use(Container)
   .use(Aside)

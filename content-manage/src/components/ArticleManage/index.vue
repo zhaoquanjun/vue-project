@@ -127,7 +127,6 @@ import ContentTable from "./ContentTable";
 import RightPannel from "@/components/common/RightPannel";
 import SelectTree from "@/components/common/SelectTree";
 import DialogInfoModal from "@/components/translate/dialog-info-modal";
-import DialogTranslateCheckedModal from "@/components/translate/dialog-translate-checked-modal";
 import DialogTranslateLanguageModal from "@/components/translate/dialog-translate-language-modal";
 import DialogTranslateProgressModal from "@/components/translate/dialog-translate-progress-modal";
 export default {
@@ -138,7 +137,6 @@ export default {
     RightPannel,
     SelectTree,
     DialogInfoModal,
-    DialogTranslateCheckedModal,
     DialogTranslateLanguageModal,
     DialogTranslateProgressModal
   },

@@ -126,3 +126,59 @@ export const isHasTranslateProcess = () => {
 export const productTranslateStatus = id => {
   return ajaxRequest.get(`/api/v1/Product/GetTranslatedList/${id}`);
 };
+
+/**
+ * @name 翻译前检查状态
+ * @param {*} id 文章的id
+ */
+export const checkAutoTranslateStatus = id => {
+  return ajaxRequest.get(`/api/v1/Product/TranslatePreCheck/${id}`);
+};
+
+/**
+ * @name 获取自动翻译是否开启的状态
+ */
+export const getAutoTranslateStatus = () => {
+  return ajaxRequest.get(`/api/v1/Product/GetAutoTranslateConfig`);
+};
+
+/**
+ * @name 切换自动翻译状态
+ */
+export const switchAutoTranslateStatus = () => {
+  return ajaxRequest.put(`/api/v1/Product/SwitchAutoTranslateStatus`);
+};
+
+/**
+ * @name 切换弹窗开启/关闭状态
+ */
+export const switchTipsModalStatus = () => {
+  return ajaxRequest.put(`/api/v1/Product/SwitchTipsStatus`);
+};
+
+/**
+ * @name 切换覆盖翻译配置
+ */
+export const switchCoverTranslateConfig = () => {
+  return ajaxRequest.get(`/api/v1/News/SwitchOverwriteStatus`);
+};
+
+/**
+ * @name 自动翻译
+ * @param {*} options 翻译参数 - id：翻译文章id - overwrite：是否覆盖翻译
+ */
+export const autoTranslate = options => {
+  if (options.type === 1) {
+    return ajaxRequest.put(
+      `/api/v1/Product/AutoTranslate/${options.id}?overwrite=true`
+    );
+  }
+  if (options.type === 2) {
+    return ajaxRequest.put(
+      `/api/v1/Product/AutoTranslate/${options.id}?overwrite=false`
+    );
+  }
+  if (options.type === 3) {
+    return ajaxRequest.put(`/api/v1/Product/AutoTranslate/${options.id}`);
+  }
+};

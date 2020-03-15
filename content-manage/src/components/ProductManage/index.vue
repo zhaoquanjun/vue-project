@@ -939,7 +939,8 @@ export default {
           path: "/product/create",
           query: {
             categoryName: this.selectCategory.label || "全部分类",
-            categoryId: this.selectCategory.id || 0
+            categoryId: this.selectCategory.id || 0,
+            language: this.selectCategory.language
           }
         });
       }
@@ -947,7 +948,7 @@ export default {
     handleEditArticle(row) {
       this.$router.push({
         path: "/product/create",
-        query: { id: row.id, isEditor: 1 }
+        query: { id: row.id, isEditor: 1, language: row.language }
       });
     },
     /**

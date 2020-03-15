@@ -25,6 +25,8 @@ export default store;
 
 if (getCookie("tjufje")) {
   store.commit("SETSITEID", getCookie("tjufje"));
+} else {
+  store.dispatch("getNowSiteId");
 }
 
 if (getCookie("bqqje")) {
