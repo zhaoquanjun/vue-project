@@ -289,6 +289,7 @@ export default {
       origin: [],
       quillContentId: "quill-contentDetail",
       siteId: 0,
+      overWrite: true,
       language: this.$route.query.language,
       type: "", // 保存/编辑
       checkInfo: {
@@ -463,7 +464,7 @@ export default {
       this._completeEdit();
       if (status) {
         this._switchTipsModalShowStatus();
-        this._switchOverwriteTranslateStatus();
+        this.overWrite && this._switchOverwriteTranslateStatus();
       }
     },
     /**
@@ -477,7 +478,7 @@ export default {
       );
       if (status) {
         this._switchTipsModalShowStatus();
-        this._switchOverwriteTranslateStatus();
+        !this.overWrite && this._switchOverwriteTranslateStatus();
       }
     },
     /**
@@ -584,6 +585,7 @@ export default {
      */
     async _checkAutoTranslateStatus() {
       let { data } = articleManageApi.getAutoTranslateStatus();
+      this.overWrite = data.overwriteDataSwitchOn;
       return data;
     },
     /**

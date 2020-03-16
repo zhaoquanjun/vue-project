@@ -168,7 +168,7 @@ export const checkAutoTranslateStatus = id => {
 };
 
 /**
- * @name 获取自动翻译是否开启的状态
+ * @name 获取自动翻译/覆盖翻译是否开启的状态
  */
 export const getAutoTranslateStatus = () => {
   return ajaxRequest.get(`/api/v1/News/GetAutoTranslateConfig`);
