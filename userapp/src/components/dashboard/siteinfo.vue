@@ -413,6 +413,30 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog
+      width="0"
+      :visible.sync="autoTranslationShow"
+      :show-close="false"
+      :close-on-click-modal="false"
+    >
+      <div class="autoTranslation-dialog" :style="{width:'450px'}">
+        <div class="dialog-head">
+          <span class="dialog-headTitle">自动翻译</span>
+          <span class="dialog-close" @click="closeInitializedDialog">
+            <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
+          </span>
+        </div>
+        <div class="dialog-content"></div>
+        <div class="dialog-footer">
+          <Debounce :time="1000" !isDebounce>
+            <button
+              @click="completeInitialized"
+              class="cl-button cl-button--primary cl-button--small"
+            >确认</button>
+          </Debounce>
+        </div>
+      </div>
+    </el-dialog>
     <SelectTemplateDialog
       ref="selectTemplateDialog"
       :siteId="curSiteinfo.siteId"
@@ -487,7 +511,8 @@ export default {
       initializedErrorList: [],
       translationPercentage: 0,
       copyPercentage: 0,
-      autoTranslation: true
+      autoTranslation: true,
+      autoTranslationShow: false
     };
   },
   components: {
@@ -629,6 +654,7 @@ export default {
           let timer = setTimeout(() => {
             this.initializedStep = "after";
             this.copyPercentage = 0;
+            this.getChineseSiteInfo();
           }, 1000);
         } else {
           this.getTranslateProgress(data.translateId);
@@ -643,7 +669,12 @@ export default {
     async getTranslateProgress(translateId) {
       let timer = setInterval(async () => {
         let { data } = await dashboardApi.getTranslateProgress(translateId);
-        this.translationPercentage = data.progressPercent * 100;
+        this.translationPercentage = Number(
+          data.progressPercentStr.substring(
+            0,
+            data.progressPercentStr.length - 1
+          )
+        );
         if (data.isTranslateIdExist == true && data.progressPercent == 1) {
           clearInterval(timer);
           if (data.failedCount > 0) {
@@ -1208,20 +1239,6 @@ export default {
     overflow: hidden;
     padding: 24px 24px 32px;
     box-sizing: border-box;
-    .dialog-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .dialog-headTitle {
-        font-size: 16px;
-        font-weight: 600;
-        color: rgba(38, 38, 38, 1);
-        line-height: 22px;
-      }
-      .dialog-close {
-        cursor: pointer;
-      }
-    }
     .dialog-site {
       margin-top: 16px;
       .dialog-siteTitle {
@@ -1253,14 +1270,6 @@ export default {
       font-size: $--font-size-small;
       color: $--color-text-regular;
       margin-top: 16px;
-    }
-    .dialog-footer {
-      margin-top: 36px;
-      text-align: right;
-      width: 100%;
-      .preview-btn {
-        margin-right: 16px;
-      }
     }
     .translation-wrap {
       display: flex;
@@ -1397,6 +1406,44 @@ export default {
         margin-left: 25px;
       }
     }
+  }
+  .dialog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .dialog-headTitle {
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(38, 38, 38, 1);
+      line-height: 22px;
+    }
+    .dialog-close {
+      cursor: pointer;
+    }
+  }
+  .dialog-footer {
+    margin-top: 36px;
+    text-align: right;
+    width: 100%;
+    .preview-btn {
+      margin-right: 16px;
+    }
+  }
+  .autoTranslation-dialog {
+    background: #ffffff;
+    position: fixed;
+    z-index: 2200;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    transition: width 0.2s linear;
+    background-color: "#fff";
+    color: #262626;
+    overflow: hidden;
+    padding: 24px 24px 32px;
+    box-sizing: border-box;
   }
 }
 </style>
