@@ -561,6 +561,16 @@ export default {
             if (res.status === 200) {
               if (res.data.isAutoTranslateSwitchOn) {
                 this._translateSignalLanguage(data);
+              } else {
+                this.checkInfo.content =
+                  "启动阿里云智能AI翻译，可将每次中文站的修改自动翻译同步至外文站中";
+                this.checkInfo.btn.btn1Text = "去设置自动翻译";
+                this.checkInfo.btn.btn1Operate = "goCloseAutoTranslate";
+                this.checkInfo.btn.btn2Text = "关闭";
+                this.checkInfo.btn.btn2Operate = "close";
+                this.checkInfo.additional.operate = false;
+                this.checkInfo.additional.status = false;
+                this.$refs.checkModal.showSelf();
               }
             }
           });
@@ -693,7 +703,7 @@ export default {
       if (data.autoTranslateBehavior === 1) {
         if (data.showTips) {
           this.checkInfo.content =
-            '<p class="lineheight26">检测到对应的英文页面有编辑保存记录，同步翻译本次 中文的修改将会完全覆盖对应英文页面且不可找回，是 否同步翻译本次修改？</p>';
+            '<p class="lineheight26">检测到对应的英文页面有编辑保存记录，同步翻译本次中文的修改将会完全覆盖对应英文页面且不可找回，是否同步翻译本次修改？</p>';
           this.checkInfo.btn.btn1Text = "否，本次不同步";
           this.checkInfo.btn.btn1Operate = "saveAndNotranslate";
           this.checkInfo.btn.btn2Text = "是，同步翻译";

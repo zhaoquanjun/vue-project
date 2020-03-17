@@ -408,10 +408,10 @@ export default {
               this.infoModal.additional.words = "关闭弹窗";
               this.infoModal.additional.operate = "close";
             }
-            console.log(this.infoModal, "1=====");
             this.$refs.infoModal.showSelf();
           }, 1000);
         }
+        this.getTreeAsync();
       } else {
         if (count < 8) {
           count++;
@@ -560,26 +560,21 @@ export default {
      * 语言弹框确认操作
      */
     async languageConfirm(obj) {
-      let options = {};
+      let options = {
+        FromIdList: obj.list,
+        SiteId: this.$store.state.dashboard.siteId
+      };
       if (obj.languagesList.length === 1) {
         if (this.foreignLanguages.length === 1) {
           options.CategoryId = obj.id;
         }
-        options = {
-          FromIdList: obj.list,
-          TargetLanguage: obj.languagesList[0],
-          SiteId: this.$store.state.dashboard.siteId
-        };
+        options.TargetLanguage = obj.languagesList[0];
       }
       if (obj.languagesList.length > 1) {
         if (this.foreignLanguages.length === 1) {
           options.CategoryId = obj.id;
         }
-        options = {
-          FromIdList: obj.list,
-          LanguageList: obj.languagesList,
-          SiteId: this.$store.state.dashboard.siteId
-        };
+        options.LanguageList = obj.languagesList;
       }
       obj.languagesList.length > 1
         ? this._handleTranslateMoreLanguages(options, obj)

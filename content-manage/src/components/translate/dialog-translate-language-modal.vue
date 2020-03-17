@@ -177,6 +177,7 @@ export default {
       obj.languagesList = this._getLastTranslateLanguages();
       obj.id = this.value.value;
       obj.list = this._getLastTranslateList();
+      console.log(obj);
       this.$emit("languageConfirm", obj);
       this.hideSelf();
     },

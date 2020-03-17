@@ -429,6 +429,7 @@ export default {
             this.$refs.infoModal.showSelf();
           }, 1000);
         }
+        this.getTree();
       } else {
         if (count < 8) {
           count++;
