@@ -31,7 +31,7 @@
           <span class="site-language">{{_getLanguage(curSiteinfo.language)}}</span>
           <i
             class="iconfont iconicon-dash-edit editIcon"
-            v-show="isSystem"
+            v-show="isSystem&&curSiteinfo.hasBeenInitialized"
             @click="changeSiteInfoShow"
           ></i>
           <div
