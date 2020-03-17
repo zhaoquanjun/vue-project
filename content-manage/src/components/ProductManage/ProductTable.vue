@@ -94,53 +94,66 @@
           <span class="ellipsis">{{
             scope.row.language ? scope.row.language : ""
           }}</span>
-          <span
-            class="translate-icon"
-            :data-language="scope.row.language"
-            @mouseenter.stop="
-              _handleMouseenterTranslate(
-                $event,
-                scope.row,
-                scope.row.language != 'zh-CN'
-              )
-            "
-            @mouseleave.stop="
-              _handleMouseleaveTranslte(
-                scope.row,
-                scope.row.language != 'zh-CN'
-              )
-            "
-            @click.stop="
-              _handleTranslateItem(
-                $event,
-                scope.row,
-                scope.row.language != 'zh-CN'
-              )
-            "
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :open-delay="200"
+            :disabled="scope.row.translateToolTip.length == 0"
+            :content="scope.row.translateToolTip"
+            placement="top"
           >
-            <ul
-              v-show="scope.row.translateToolTip === ''"
-              class="more-operate"
-              :ref="'translateModal' + scope.row.index"
+            <span
+              class="translate-icon"
+              :class="{
+                disabled:
+                  languagesList.length < 1 || scope.row.language != 'zh-CN'
+              }"
+              :data-language="scope.row.language"
+              @mouseenter.stop="
+                _handleMouseenterTranslate(
+                  $event,
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
+              @mouseleave.stop="
+                _handleMouseleaveTranslte(
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
+              @click.stop="
+                _handleTranslateItem(
+                  $event,
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
             >
-              <li class="view-title">查看已翻译的文章</li>
-              <li
-                class="view-item"
-                v-for="(item, index) in hasTranslateList"
-                :key="index"
-                @click="_handleViewTranslatedProduct(item)"
+              <ul
+                v-show="scope.row.translateToolTip === ''"
+                class="more-operate"
+                :ref="'translateModal' + scope.row.index"
               >
-                {{ item.languageStr }}
-              </li>
-              <li
-                class="translate-tomore"
-                @click="_handleTranslateToMore(scope.row)"
-                v-show="hasTranslateList.length < languagesList.length"
-              >
-                翻译为更多语言
-              </li>
-            </ul>
-          </span>
+                <li class="view-title">查看已翻译的文章</li>
+                <li
+                  class="view-item"
+                  v-for="(item, index) in hasTranslateList"
+                  :key="index"
+                  @click="_handleViewTranslatedProduct(item)"
+                >
+                  {{ item.languageStr }}
+                </li>
+                <li
+                  class="translate-tomore"
+                  @click="_handleTranslateToMore(scope.row)"
+                  v-show="hasTranslateList.length < languagesList.length"
+                >
+                  翻译为更多语言
+                </li>
+              </ul>
+            </span>
+          </el-tooltip>
         </template>
       </el-table-column>
 
@@ -269,6 +282,7 @@ export default {
     window.onImgError = ele => {
       ele.src = ele.attributes["src"] = this.defaultImg;
     };
+    console.log(this.articlePageResult);
   },
   methods: {
     // 给行添加索引
@@ -283,8 +297,12 @@ export default {
       this.$emit("handleGetSignalTranslateSource", row, this.hasTranslateList);
     },
     _handleTranslateItem(e, row, type) {
+      if (this.languagesList.length < 1) return false;
       if (this.hasTranslateList.length > 0) {
-        this.hasTranslateList.length === this.languagesList.length &&
+        if (
+          this.hasTranslateList.length === 1 &&
+          this.languagesList.length === 1
+        )
           this._handleViewTranslatedProduct(this.hasTranslateList[0]);
       } else {
         if (type) return;
@@ -295,19 +313,31 @@ export default {
     _handleMouseenterTranslate(e, row, type) {
       this.timer && clearTimeout(this.timer);
       if (type) return false;
-      this.timer = setTimeout(async () => {
-        let { data } = await productManageApi.productTranslateStatus(row.id);
-
-        if (data.length === 0) {
-          this.articlePageResult.list[row.index].translateToolTip =
-            "查看已翻译的产品";
-        }
-        if (data.length === 1) {
-          if (this.languagesList.length === 1) {
+      if (this.languagesList.length > 0) {
+        this.timer = setTimeout(async () => {
+          let { data } = await productManageApi.productTranslateStatus(row.id);
+          this.hasTranslateList = data;
+          if (data.length === 0) {
             this.articlePageResult.list[row.index].translateToolTip =
-              "查看已翻译的产品";
+              "点击翻译产品";
           }
-          if (this.languagesList.length > 1) {
+          if (data.length === 1) {
+            if (this.languagesList.length === 1) {
+              this.articlePageResult.list[row.index].translateToolTip =
+                "查看已翻译的产品";
+            }
+            if (this.languagesList.length > 1) {
+              this.articlePageResult.list[row.index].translateToolTip = "";
+              this.hasTranslateList = data;
+              if (this.$refs["translateModal" + row.index]) {
+                const left = e.clientX + "px";
+                const top = e.clientY + "px";
+                this.$refs["translateModal" + row.index].style.left = left;
+                this.$refs["translateModal" + row.index].style.top = top;
+              }
+            }
+          }
+          if (data.length > 1) {
             this.articlePageResult.list[row.index].translateToolTip = "";
             this.hasTranslateList = data;
             if (this.$refs["translateModal" + row.index]) {
@@ -317,18 +347,8 @@ export default {
               this.$refs["translateModal" + row.index].style.top = top;
             }
           }
-        }
-        if (data.length > 1) {
-          this.articlePageResult.list[row.index].translateToolTip = "";
-          this.hasTranslateList = data;
-          if (this.$refs["translateModal" + row.index]) {
-            const left = e.clientX + "px";
-            const top = e.clientY + "px";
-            this.$refs["translateModal" + row.index].style.left = left;
-            this.$refs["translateModal" + row.index].style.top = top;
-          }
-        }
-      }, 200);
+        }, 200);
+      }
     },
     _handleMouseleaveTranslte(row, type) {
       if (type) return false;
@@ -576,6 +596,12 @@ export default {
 
 .is-active {
   color: $--color-primary;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  filter: Alpha(opacity=70);
 }
 
 .el-switch {

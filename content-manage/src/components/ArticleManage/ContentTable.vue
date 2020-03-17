@@ -116,6 +116,10 @@
           >
             <span
               class="translate-icon"
+              :class="{
+                disabled:
+                  languagesList.length < 1 || scope.row.language != 'zh-CN'
+              }"
               :data-language="scope.row.language"
               @mouseenter.stop="
                 _handleMouseenterTranslate(
@@ -297,8 +301,12 @@ export default {
       this.$emit("handleGetSignalTranslateSource", row, this.hasTranslateList);
     },
     _handleTranslateItem(e, row, type) {
+      if (this.languagesList.length < 1) return false;
       if (this.hasTranslateList.length > 0) {
-        this.hasTranslateList.length === this.languagesList.length &&
+        if (
+          this.hasTranslateList.length === 1 &&
+          this.languagesList.length === 1
+        )
           this._handleViewTranslatedNews(this.hasTranslateList[0]);
       } else {
         if (type) return;
@@ -309,19 +317,31 @@ export default {
     _handleMouseenterTranslate(e, row, type) {
       this.timer && clearTimeout(this.timer);
       if (type) return false;
-      this.timer = setTimeout(async () => {
-        let { data } = await articleManageApi.newsTranslateStatus(row.id);
-
-        if (data.length === 0) {
-          this.articlePageResult.list[row.index].translateToolTip =
-            "点击翻译文章";
-        }
-        if (data.length === 1) {
-          if (this.languagesList.length === 1) {
+      if (this.languagesList.length > 0) {
+        this.timer = setTimeout(async () => {
+          let { data } = await articleManageApi.newsTranslateStatus(row.id);
+          this.hasTranslateList = data;
+          if (data.length === 0) {
             this.articlePageResult.list[row.index].translateToolTip =
-              "查看已翻译的文章";
+              "点击翻译文章";
           }
-          if (this.languagesList.length > 1) {
+          if (data.length === 1) {
+            if (this.languagesList.length === 1) {
+              this.articlePageResult.list[row.index].translateToolTip =
+                "查看已翻译的文章";
+            }
+            if (this.languagesList.length > 1) {
+              this.articlePageResult.list[row.index].translateToolTip = "";
+              this.hasTranslateList = data;
+              if (this.$refs["translateModal" + row.index]) {
+                const left = e.clientX + "px";
+                const top = e.clientY + "px";
+                this.$refs["translateModal" + row.index].style.left = left;
+                this.$refs["translateModal" + row.index].style.top = top;
+              }
+            }
+          }
+          if (data.length > 1) {
             this.articlePageResult.list[row.index].translateToolTip = "";
             this.hasTranslateList = data;
             if (this.$refs["translateModal" + row.index]) {
@@ -331,21 +351,12 @@ export default {
               this.$refs["translateModal" + row.index].style.top = top;
             }
           }
-        }
-        if (data.length > 1) {
-          this.articlePageResult.list[row.index].translateToolTip = "";
-          this.hasTranslateList = data;
-          if (this.$refs["translateModal" + row.index]) {
-            const left = e.clientX + "px";
-            const top = e.clientY + "px";
-            this.$refs["translateModal" + row.index].style.left = left;
-            this.$refs["translateModal" + row.index].style.top = top;
-          }
-        }
-      }, 200);
+        }, 200);
+      }
     },
     _handleMouseleaveTranslte(row, type) {
       if (type) return false;
+      if (this.languagesList.length < 1) return false;
       this.hasTranslateList = [];
       if (this.$refs["translateModal" + row.index]) {
         this.$refs["translateModal" + row.index].style.left = "-300%";

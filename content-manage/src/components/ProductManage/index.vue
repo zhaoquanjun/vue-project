@@ -630,6 +630,7 @@ export default {
           index
         ].createTimeStr.split(" ")[0];
       });
+      this._setDataListAttribute(this.articlePageResult.list);
     },
     // 批量删除 批量置顶 批量上下线
     async batchSwitchStatus(options) {

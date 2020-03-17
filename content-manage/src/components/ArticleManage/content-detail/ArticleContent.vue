@@ -289,7 +289,6 @@ export default {
       origin: [],
       quillContentId: "quill-contentDetail",
       siteId: 0,
-      overWrite: true,
       language: this.$route.query.language,
       type: "", // 保存/编辑
       checkInfo: {
@@ -310,6 +309,7 @@ export default {
   },
   created() {
     var id = this.$route.query.id;
+    this.NewId = id;
     this.articleDetail.categoryId = this.$route.query.categoryId;
     if (id != null || id != undefined) {
       this.getArticleDetail(id);
@@ -400,45 +400,101 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    //插入文章 -- 新建
-    async insertArticle() {
-      var html = document
-        .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML;
-      this.articleDetail.contentDetail = html;
-      // 外文
-      if (this.language != "zh-CN") {
-        this.save(null);
-      } else {
-        // 中文
-        this.save(null, this._getStatusBeforeTranslate);
+    // 新建保存
+    submitForm(formName, imageUrl) {
+      this.articleDetail.pictureUrl = imageUrl;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.type = "create";
+          var html = document
+            .getElementById(this.quillContentId)
+            .querySelector(".ql-editor").innerHTML;
+          this.articleDetail.contentDetail = html;
+          this._createSave();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    // 新建保存
+    async _createSave() {
+      let { status, data } = await articleManageApi.createArticle(
+        this.articleDetail
+      );
+      if (status === 200) {
+        this._complateCreate();
+        if (this.foreignLanguages.length === 1 && this.language === "zh-CN") {
+          this._getStatusBeforeTranslate(data, res => {
+            if (res.status === 200) {
+              if (res.data.isAutoTranslateSwitchOn) {
+                this._translateSignalLanguage(data);
+              }
+            }
+          });
+        }
       }
     },
-    /**
-     * 保存 flag 是否记住状态
-     */
-    async save(flag, callback) {
-      if (this.type === "create") {
-        let { status, data } = await articleManageApi.createArticle(
-          this.articleDetail
-        );
-        if (status === 200) {
-          this.$refs.checkModal.hideSelf();
-          typeof callback === "function" && callback(data, flag);
-          this.NewId = data;
-          this.articleDetail.NewId = data;
-          if (this.language != "zh-CN") {
-            this._complateCreate();
+    // 单语言翻译
+    async _translateSignalLanguage(id) {
+      const options = {
+        CategoryId: this.$route.categoryId || 0,
+        FromIdList: [id],
+        TargetLanguage: this.language,
+        SiteId: this.$store.state.dashboard.siteId
+      };
+      let { data } = await articleManageApi.translateSignalNews(options);
+      this._getTranslateProgress(data, 1, 1);
+    },
+    // 编辑保存
+    editArticle(formName, imageUrl) {
+      this.articleDetail.pictureUrl = imageUrl;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.type = "edit";
+          var html = document
+            .getElementById(this.quillContentId)
+            .querySelector(".ql-editor").innerHTML;
+          this.articleDetail.contentDetail = html;
+          if (this.foreignLanguages === 1) {
+            this._getStatusBeforeTranslate(this.NewId, res => {
+              if (res.status === 200) {
+                if (res.data.isAutoTranslateSwitchOn) {
+                  if (this.language != "zh-CN") {
+                    this.checkInfo.content =
+                      '<p class="lineheight26">自动翻译已开启，修改<span class="lineheight26 attention">英文页面</span>后，再次更新源<span class="lineheight26 attention">中文页面</span>，可能覆盖当前修改。关闭自动翻译可避免英文站保存数据的丢失。</p>';
+                    this.checkInfo.btn.btn1Text = "去关闭自动翻译";
+                    this.checkInfo.btn.btn1Operate = "goCloseAutoTranslate";
+                    this.checkInfo.btn.btn2Text =
+                      "依然保存，待原中文站更新再处理";
+                    this.checkInfo.btn.btn2Operate = "stillSave";
+                    this.$refs.checkModal.showSelf();
+                  } else {
+                    // 中文
+                    this.editSave(res.data, this._editTranslate);
+                  }
+                }
+              }
+            });
+          } else {
+            this.editSave();
           }
+        } else {
+          console.log("error submit!!");
+          return false;
         }
-      }
-      if (this.type === "edit") {
-        let { status } = await articleManageApi.editArticle(this.articleDetail);
-        if (status === 200) {
-          this.$refs.checkModal.hideSelf();
-          typeof callback === "function" &&
-            callback(this.$route.query.id || this.NewId, flag);
+      });
+    },
+    /**
+     * 保存
+     */
+    async editSave(res, callback) {
+      let { status } = await articleManageApi.editArticle(this.articleDetail);
+      if (status === 200) {
+        if (this.foreignLanguages.length > 1) {
+          this._completeEdit();
         }
+        typeof callback === "function" && callback(res);
       }
     },
     /**
@@ -454,7 +510,8 @@ export default {
      * 英文 - 弹窗选择仍然保存
      */
     stillSave() {
-      this.save(null);
+      this.close();
+      this.editSave();
     },
     /**
      * 中文 - 保存但放弃翻译
@@ -464,7 +521,7 @@ export default {
       this._completeEdit();
       if (status) {
         this._switchTipsModalShowStatus();
-        this.overWrite && this._switchOverwriteTranslateStatus();
+        this._switchOverwriteTranslateStatus();
       }
     },
     /**
@@ -472,59 +529,39 @@ export default {
      */
     holdonSavevAndTranslate(status) {
       this.$refs.checkModal.hideSelf();
-      this._autoTranslate(
-        { id: this.$route.query.id || this.NewId, type: 1 },
-        "translate"
-      );
+      this._autoTranslate({ id: this.NewId, type: 1 }, "translate");
       if (status) {
         this._switchTipsModalShowStatus();
-        !this.overWrite && this._switchOverwriteTranslateStatus();
       }
     },
     /**
      * 翻译之前获取状态并操作
      */
-    async _getStatusBeforeTranslate(id, flag) {
+    async _getStatusBeforeTranslate(id, callback) {
       let { data, status } = await articleManageApi.checkAutoTranslateStatus(
         id
       );
-      if (status === 200) {
-        if (this.type === "create") {
-          this._createTranslate(data, id, flag);
-        }
-        if (this.type === "edit") {
-          this._editTranslate(data, id, flag);
-        }
-      }
+      typeof callback === "function" && callback({ data, status });
     },
-    async _editTranslate(data, id, status) {
-      if (data.isAutoTranslateSwitchOn) {
+    async _editTranslate(data) {
+      if (
+        data.autoTranslateBehavior === 1 ||
+        data.autoTranslateBehavior === 2
+      ) {
         if (data.showTips) {
-          if (
-            data.autoTranslateBehavior === 1 ||
-            data.autoTranslateBehavior === 2
-          ) {
-            this.checkInfo.content =
-              '<p class="lineheight26">检测到对应的英文页面有编辑保存记录，同步翻译本次 中文的修改将会完全覆盖对应英文页面且不可找回，是 否同步翻译本次修改？</p>';
-            this.checkInfo.btn.btn1Text = "否，本次不同步";
-            this.checkInfo.btn.btn1Operate = "saveAndNotranslate";
-            this.checkInfo.btn.btn2Text = "是，同步翻译";
-            this.checkInfo.btn.btn2Operate = "holdonSavevAndTranslate";
-            this.checkInfo.additional.operate = true;
-            this.checkInfo.additional.status = false;
-            this.$refs.checkModal.showSelf();
-          } else {
-            this._autoTranslate({ id: id, type: 3 }, status);
-          }
+          this.checkInfo.content =
+            '<p class="lineheight26">检测到对应的英文页面有编辑保存记录，同步翻译本次 中文的修改将会完全覆盖对应英文页面且不可找回，是 否同步翻译本次修改？</p>';
+          this.checkInfo.btn.btn1Text = "否，本次不同步";
+          this.checkInfo.btn.btn1Operate = "saveAndNotranslate";
+          this.checkInfo.btn.btn2Text = "是，同步翻译";
+          this.checkInfo.btn.btn2Operate = "holdonSavevAndTranslate";
+          this.checkInfo.additional.operate = true;
+          this.checkInfo.additional.status = false;
+          this.$refs.checkModal.showSelf();
         } else {
           // 直接翻译，不需要读取配置，后台处理
-          this._autoTranslate({ id: id, type: 3 }, status);
+          this._autoTranslate({ id: this.NewId, type: 3 }, "");
         }
-      }
-    },
-    async _createTranslate(data, id, status) {
-      if (data.isAutoTranslateSwitchOn) {
-        this._autoTranslate({ id: id, type: 2 }, status);
       }
     },
     /**
@@ -581,14 +618,6 @@ export default {
       });
     },
     /**
-     * 校验自动翻译是否开启
-     */
-    async _checkAutoTranslateStatus() {
-      let { data } = articleManageApi.getAutoTranslateStatus();
-      this.overWrite = data.overwriteDataSwitchOn;
-      return data;
-    },
-    /**
      * 切换覆盖翻译的状态
      */
     async _switchOverwriteTranslateStatus() {
@@ -626,8 +655,7 @@ export default {
           this.$refs.checkModal.showSelf();
         }
       } else {
-        this.type === "edit" && this._completeEdit();
-        this.type === "create" && this._complateCreate();
+        this._completeEdit();
       }
     },
     /**
@@ -635,8 +663,7 @@ export default {
      */
     close() {
       this.$refs.checkModal.hideSelf();
-      this.type === "edit" && this._completeEdit();
-      this.type === "create" && this._complateCreate();
+      this._completeEdit();
     },
     /**
      * 获取翻译进度
@@ -692,56 +719,6 @@ export default {
         }
       }
     },
-    // 新建保存
-    submitForm(formName, imageUrl) {
-      this.articleDetail.pictureUrl = imageUrl;
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.type = "create";
-          this.insertArticle();
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    // 编辑保存
-    editArticle(formName, imageUrl) {
-      this.articleDetail.pictureUrl = imageUrl;
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.type = "edit";
-          this.saveArticle();
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    //编辑保存文章
-    async saveArticle() {
-      var html = document
-        .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML;
-      this.articleDetail.contentDetail = html;
-      // 外文
-      if (this.language != "zh-CN") {
-        const autoTranslateIsOpen = this._checkAutoTranslateStatus();
-        if (autoTranslateIsOpen) {
-          this.checkInfo.content =
-            '<p class="lineheight26">自动翻译已开启，修改<span class="lineheight26 attention">英文页面</span>后，再次更新源<span class="lineheight26 attention">中文页面</span>，可能覆盖当前修改。关闭自动翻译可避免英文站保存数据的丢失。</p>';
-          this.checkInfo.btn.btn1Text = "去关闭自动翻译";
-          this.checkInfo.btn.btn1Operate = "goCloseAutoTranslate";
-          this.checkInfo.btn.btn2Text = "依然保存，待原中文站更新再处理";
-          this.checkInfo.btn.btn2Operate = "stillSave";
-          this.$refs.checkModal.showSelf();
-        }
-      } else {
-        // 中文
-        this.save(null, this._getStatusBeforeTranslate);
-      }
-    },
-
     imgChangeSizeHandler(img) {
       img.width = "100";
       img.height = "100";
@@ -787,8 +764,29 @@ export default {
       this.articleDetail.contentDetail = html;
     }
   },
-  mounted() {},
-  computed: {},
+  computed: {
+    foreignLanguages: {
+      get: function() {
+        let arr = [];
+        if (this.treeResult) {
+          if (
+            this.treeResult[0].children &&
+            this.treeResult[0].children.length > 1
+          ) {
+            for (var i = 0; i < this.treeResult[0].children.length; i++) {
+              const item = this.treeResult[0].children[i];
+              if (item.language != this.language) {
+                arr.push(item.language);
+              }
+            }
+          }
+        }
+        console.log(arr);
+        return arr;
+      },
+      set: function() {}
+    }
+  },
   watch: {
     "articleDetail.searchKeywords"() {
       if (this.articleDetail.searchKeywords.length < 5) {
