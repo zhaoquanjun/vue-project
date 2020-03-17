@@ -52,13 +52,15 @@
             @click.stop="handleShow($event, node, data)"
             :data-id="data.id"
             :treeNodeId="treeNodeId"
+            :flag="(data.id === treeNodeId) != 0"
+            :data-list="foreignLen"
             v-show="
-              (data.id === reeNodeId &&
-                draggable &&
-                foreignList.length === 1) ||
-                ((data.id === reeNodeId) != 0 &&
+              (data.id === treeNodeId && draggable && foreignLen === 1) ||
+                (data.id != 0 &&
+                  treeNodeId != 0 &&
+                  data.id === treeNodeId &&
                   draggable &&
-                  foreignList.length === 1)
+                  foreignLen > 1)
             "
           >
             <i class="iconfont iconsangedian" style="font-size:24px"></i>
@@ -207,7 +209,6 @@ export default {
         }
         if (this.curlabelName != "") {
           data.label = this.curlabelName;
-          console.log(data.label);
         }
       } else {
         node.parent.childNodes.splice(0, 1);
@@ -419,7 +420,7 @@ export default {
     isContentwrite() {
       return this.$store.state.dashboard.isContentwrite;
     },
-    foreignList: {
+    foreignLen: {
       get: function() {
         let len = 1;
         if (
