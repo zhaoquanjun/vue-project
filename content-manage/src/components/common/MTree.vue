@@ -52,7 +52,9 @@
             @click.stop="handleShow($event, node, data)"
             :data-id="data.id"
             :treeNodeId="treeNodeId"
-            v-show="data.id === treeNodeId && draggable"
+            v-show="
+              data.id === treeNodeId && draggable && foreignList.length === 1
+            "
           >
             <i class="iconfont iconsangedian" style="font-size:24px"></i>
           </span>
@@ -410,6 +412,20 @@ export default {
   computed: {
     isContentwrite() {
       return this.$store.state.dashboard.isContentwrite;
+    },
+    foreignList: {
+      get: function() {
+        let len = 1;
+        if (
+          this.treeResult &&
+          this.treeResult[0] &&
+          this.treeResult[0].children.length > 0
+        ) {
+          len = this.treeResult[0].children.length;
+        }
+        return len;
+      },
+      set: function() {}
     }
   }
 };
