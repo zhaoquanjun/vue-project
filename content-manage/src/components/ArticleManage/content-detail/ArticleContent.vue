@@ -544,10 +544,7 @@ export default {
       typeof callback === "function" && callback({ data, status });
     },
     async _editTranslate(data) {
-      if (
-        data.autoTranslateBehavior === 1 ||
-        data.autoTranslateBehavior === 2
-      ) {
+      if (data.autoTranslateBehavior === 1) {
         if (data.showTips) {
           this.checkInfo.content =
             '<p class="lineheight26">检测到对应的英文页面有编辑保存记录，同步翻译本次 中文的修改将会完全覆盖对应英文页面且不可找回，是 否同步翻译本次修改？</p>';
@@ -558,9 +555,10 @@ export default {
           this.checkInfo.additional.operate = true;
           this.checkInfo.additional.status = false;
           this.$refs.checkModal.showSelf();
-        } else {
+        }
+        if (data.autoTranslateBehavior === 2) {
           // 直接翻译，不需要读取配置，后台处理
-          this._autoTranslate({ id: this.NewId, type: 3 }, "");
+          this._autoTranslate({ id: this.NewId, type: 2 }, "");
         }
       }
     },
