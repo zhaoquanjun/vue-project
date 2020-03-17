@@ -50,7 +50,9 @@
           <span
             class="set-tree-type"
             @click.stop="handleShow($event, node, data)"
-            v-show="data.id === treeNodeId && draggable && data.id != 0"
+            :data-id="data.id"
+            :treeNodeId="treeNodeId"
+            v-show="data.id === treeNodeId && draggable"
           >
             <i class="iconfont iconsangedian" style="font-size:24px"></i>
           </span>
