@@ -53,7 +53,12 @@
             :data-id="data.id"
             :treeNodeId="treeNodeId"
             v-show="
-              data.id === treeNodeId && draggable && foreignList.length === 1
+              (data.id === reeNodeId &&
+                draggable &&
+                foreignList.length === 1) ||
+                ((data.id === reeNodeId) != 0 &&
+                  draggable &&
+                  foreignList.length === 1)
             "
           >
             <i class="iconfont iconsangedian" style="font-size:24px"></i>
@@ -202,6 +207,7 @@ export default {
         }
         if (this.curlabelName != "") {
           data.label = this.curlabelName;
+          console.log(data.label);
         }
       } else {
         node.parent.childNodes.splice(0, 1);
