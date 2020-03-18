@@ -244,15 +244,6 @@
       </div>
       <div class="content-item seo-key"></div>
     </el-form>
-    <dialog-translate-checked-modal
-      ref="checkModal"
-      :checkInfo="checkInfo"
-      @close="close"
-      @stillSave="stillSave"
-      @saveAndNotranslate="saveAndNotranslate"
-      @goCloseAutoTranslate="goCloseAutoTranslate"
-      @holdonSavevAndTranslate="holdonSavevAndTranslate"
-    ></dialog-translate-checked-modal>
   </div>
 </template>
 <script>
@@ -269,15 +260,13 @@ const viewAuth = [
 import ModalContent from "@/components/ImgManage/index.vue";
 import QuillDetail from "@/components/ProductManage/QuillDetail.vue";
 import QuillContentDetail from "@/components/ProductManage/QuillDetail.vue";
-import DialogTranslateCheckedModal from "@/components/translate/dialog-translate-checked-modal";
 
 export default {
   components: {
     ModalContent,
     DetailCheckTree,
     QuillDetail,
-    QuillContentDetail,
-    DialogTranslateCheckedModal
+    QuillContentDetail
   },
   provide: {
     popper: true
@@ -388,23 +377,7 @@ export default {
       origin: [],
       quillDetailId: "quill-specificationContent",
       quillContentId: "quill-contentDetail",
-      siteId: 0,
-      language: this.$route.query.language,
-      type: "", // 保存/编辑
-      checkInfo: {
-        title: "自动翻译",
-        content: "这是一段实例文字",
-        btn: {
-          btn1Text: "确定",
-          btn1Operate: "",
-          btn2Text: "取消",
-          btn2Operate: ""
-        },
-        additional: {
-          operate: "",
-          status: false
-        }
-      }
+      siteId: 0
     };
   },
   created() {
@@ -437,29 +410,6 @@ export default {
       this.$emit("changeSaveWay", true);
     }
     this.getSiteList();
-  },
-  computed: {
-    foreignLanguages: {
-      get: function() {
-        let arr = [];
-        if (this.treeResult) {
-          if (
-            this.treeResult[0].children &&
-            this.treeResult[0].children.length > 1
-          ) {
-            for (var i = 0; i < this.treeResult[0].children.length; i++) {
-              const item = this.treeResult[0].children[i];
-              if (item.language != this.language) {
-                arr.push(item.language);
-              }
-            }
-          }
-        }
-        console.log(arr);
-        return arr;
-      },
-      set: function() {}
-    }
   },
   methods: {
     textIndent(ele, width) {
@@ -551,42 +501,8 @@ export default {
     },
     // 新建保存
     async _createSave() {
-      let { status, data } = await productManageApi.createArticle(
-        this.detailData
-      );
-      if (status === 200) {
-        this._complateCreate();
-        if (this.foreignLanguages.length === 1 && this.language === "zh-CN") {
-          this._getStatusBeforeTranslate(data, res => {
-            if (res.status === 200) {
-              if (res.data.isAutoTranslateSwitchOn) {
-                this._translateSignalLanguage(data);
-              } else {
-                this.checkInfo.content =
-                  "启动阿里云智能AI翻译，可将每次中文站的修改自动翻译同步至外文站中";
-                this.checkInfo.btn.btn1Text = "去设置自动翻译";
-                this.checkInfo.btn.btn1Operate = "goCloseAutoTranslate";
-                this.checkInfo.btn.btn2Text = "关闭";
-                this.checkInfo.btn.btn2Operate = "close";
-                this.checkInfo.additional.operate = false;
-                this.checkInfo.additional.status = false;
-                this.$refs.checkModal.showSelf();
-              }
-            }
-          });
-        }
-      }
-    },
-    // 单语言翻译
-    async _translateSignalLanguage(id) {
-      const options = {
-        CategoryId: this.$route.categoryId || 0,
-        FromIdList: [id],
-        TargetLanguage: this.language,
-        SiteId: this.$store.state.dashboard.siteId
-      };
-      let { data } = await productManageApi.translateSignalProduct(options);
-      this._getTranslateProgress(data, 1, 1);
+      let { status } = await productManageApi.createProduct(this.detailData);
+      status === 200 && this._complateCreate();
     },
     // 编辑提交
     editArticle(formName, fileList, storeInfo) {
@@ -615,108 +531,17 @@ export default {
         .querySelector(".ql-editor").innerHTML;
       this.detailData.detailContent = html;
       this.detailData.specificationContent = specification;
-      if (this.foreignLanguages.length === 1) {
-        this._getStatusBeforeTranslate(this.curProduct, res => {
-          if (res.status === 200) {
-            if (res.data.isAutoTranslateSwitchOn) {
-              if (this.language != "zh-CN") {
-                this.checkInfo.content =
-                  '<p class="lineheight26">自动翻译已开启，修改<span class="lineheight26 attention">英文页面</span>后，再次更新源<span class="lineheight26 attention">中文页面</span>，可能覆盖当前修改。关闭自动翻译可避免英文站保存数据的丢失。</p>';
-                this.checkInfo.btn.btn1Text = "去关闭自动翻译";
-                this.checkInfo.btn.btn1Operate = "goCloseAutoTranslate";
-                this.checkInfo.btn.btn2Text = "依然保存，待原中文站更新再处理";
-                this.checkInfo.btn.btn2Operate = "stillSave";
-                this.$refs.checkModal.showSelf();
-              } else {
-                // 中文
-                this.editSave(res.data, this._editTranslate);
-              }
-            }
-          }
-        });
-      } else {
-        this.editSave();
-      }
+      this.editSave();
     },
     /**
      * 保存
      */
-    async editSave(res, callback) {
+    async editSave() {
       let { status } = await productManageApi.update(
         this.curProduct,
         this.detailData
       );
-      if (status === 200) {
-        if (this.foreignLanguages.length > 1) {
-          this._completeEdit();
-        }
-        typeof callback === "function" && callback(res);
-      }
-    },
-    /**
-     * 关闭自动翻译  **********
-     */
-    async goCloseAutoTranslate() {
-      this.close();
-      let newWindow = window.open();
-      newWindow.location.href =
-        window.location.origin.replace(/content/, "dashboard") + "/board";
-    },
-    /**
-     * 英文 - 弹窗选择仍然保存
-     */
-    stillSave() {
-      this.close();
-      this.editSave();
-    },
-    /**
-     * 中文 - 保存但放弃翻译
-     */
-    saveAndNotranslate(status) {
-      this.$refs.checkModal.hideSelf();
-      this._completeEdit();
-      if (status) {
-        this._switchTipsModalShowStatus();
-        this._switchOverwriteTranslateStatus();
-      }
-    },
-    /**
-     * 中文 - 保存并且翻译
-     */
-    holdonSavevAndTranslate(status) {
-      this.$refs.checkModal.hideSelf();
-      this._autoTranslate({ id: this.curProduct, type: 1 }, "translate");
-      if (status) {
-        this._switchTipsModalShowStatus();
-      }
-    },
-    /**
-     * 翻译之前获取状态并操作
-     */
-    async _getStatusBeforeTranslate(id, callback) {
-      let { data, status } = await productManageApi.checkAutoTranslateStatus(
-        id
-      );
-      typeof callback === "function" && callback({ data, status });
-    },
-    async _editTranslate(data) {
-      if (data.autoTranslateBehavior === 1) {
-        if (data.showTips) {
-          this.checkInfo.content =
-            '<p class="lineheight26">检测到对应的英文页面有编辑保存记录，同步翻译本次中文的修改将会完全覆盖对应英文页面且不可找回，是否同步翻译本次修改？</p>';
-          this.checkInfo.btn.btn1Text = "否，本次不同步";
-          this.checkInfo.btn.btn1Operate = "saveAndNotranslate";
-          this.checkInfo.btn.btn2Text = "是，同步翻译";
-          this.checkInfo.btn.btn2Operate = "holdonSavevAndTranslate";
-          this.checkInfo.additional.operate = true;
-          this.checkInfo.additional.status = false;
-          this.$refs.checkModal.showSelf();
-        }
-        if (data.autoTranslateBehavior === 2) {
-          // 直接翻译，不需要读取配置，后台处理
-          this._autoTranslate({ id: this.curProduct, type: 2 }, "");
-        }
-      }
+      status === 200 && this._completeEdit();
     },
     /**
      * 完成编辑
@@ -773,117 +598,6 @@ export default {
           }
         }
       });
-    },
-    /**
-     * 切换覆盖翻译的状态
-     */
-    async _switchOverwriteTranslateStatus() {
-      let { data, status } = productManageApi.switchCoverTranslateConfig();
-      console.log(data, status);
-    },
-    /**
-     * 切换提示弹窗开启关闭状态
-     */
-    async _switchTipsModalShowStatus() {
-      let { data, status } = productManageApi.switchTipsModalStatus();
-      console.log(data, status);
-    },
-    /**
-     * 自动翻译
-     * options - id: 文章/产品id - type: 1-覆盖2-不覆盖3-默认配置  flag: 记住操作状态
-     */
-    async _autoTranslate(options, flag) {
-      let { data } = await productManageApi.autoTranslate(options);
-      this._getTranslateProgress(data, 1, 0);
-      if (flag != "") {
-        this.checkInfo.btn.btn1Text = "查看自动翻译设置";
-        this.checkInfo.btn.btn1Operate = "goCloseAutoTranslate";
-        this.checkInfo.btn.btn2Text = "关闭";
-        this.checkInfo.btn.btn2Operate = "close";
-        this.checkInfo.additional.operate = false;
-        if (flag === "noTranslate") {
-          this.checkInfo.content =
-            '<p class="lineheight26">已记住中文站最新保存标准，不执行自动翻译。下次不再提醒。</p>';
-          this.$refs.checkModal.showSelf();
-        }
-        if (flag === "translate") {
-          this.checkInfo.content =
-            '<p class="lineheight26">已记住中文站最新保存标准，覆盖英文站修改。下次不再提醒。</p>';
-          this.$refs.checkModal.showSelf();
-        }
-      } else {
-        this._completeEdit();
-      }
-    },
-    /**
-     * 关闭弹窗
-     */
-    close() {
-      this.$refs.checkModal.hideSelf();
-      this._completeEdit();
-    },
-    /**
-     * 获取翻译进度
-     */
-    async _getTranslateProgress(id, count, isTranslating) {
-      let { data } = await productManageApi.getProductTranslateProcess(id);
-      if (data.isExist) {
-        const res = data.cacheInfo;
-        ++isTranslating;
-        if (res.progressPercent < 1) {
-          if (count < 8) {
-            count++;
-            if (isTranslating === 1) {
-              this.$notify({
-                customClass: "notify-success", //  notify-success ||  notify-error
-                message: `阿里云智能AI翻译同步翻译中～`,
-                showClose: false,
-                duration: 1000
-              });
-            }
-            setTimeout(() => {
-              this._getTranslateProgress(id, count, isTranslating);
-            }, 2000);
-          } else {
-            this.$notify({
-              customClass: "notify-error", //  notify-success ||  notify-error
-              message: `网络连接错误，本次翻译失败！`,
-              showClose: false,
-              duration: 1000
-            });
-          }
-        } else {
-          this.$notify({
-            customClass: "notify-success", //  notify-success ||  notify-error
-            message: `自动翻译成功！`,
-            showClose: false,
-            duration: 1000
-          });
-        }
-      } else {
-        ++isTranslating;
-        if (isTranslating === 1) {
-          this.$notify({
-            customClass: "notify-success", //  notify-success ||  notify-error
-            message: `阿里云智能AI翻译同步翻译中～`,
-            showClose: false,
-            duration: 1000
-          });
-        }
-        if (count < 8) {
-          count++;
-          setTimeout(() => {
-            this._getTranslateProgress(id, count, isTranslating);
-          }, 2000);
-        } else {
-          this.$notify({
-            customClass: "notify-error", //  notify-success ||  notify-error
-            message: `网络连接错误，本次翻译失败！`,
-            showClose: false,
-            duration: 1000
-          });
-        }
-      }
     },
     /**
      * 获取 tree 结构

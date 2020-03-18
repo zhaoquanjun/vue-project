@@ -435,15 +435,6 @@ export default {
      * 获取单个翻译信息
      */
     handleGetSignalTranslateSource(row, translatedIds) {
-      if (!this._checkIsHasTranslateProcess()) {
-        this.infoModal.title = "失败";
-        this.infoModal.type = "fail";
-        this.infoModal.content =
-          "当前存在翻译任务，请完成已经存在的任务后再进行翻译";
-        this.infoModal.btn.btn1Text = "";
-        this.infoModal.btn.btn2Text = "关闭";
-        return false;
-      }
       this.curRow = row;
       if (row.contentLength > 4000) {
         this.infoModal.title = "提示";
@@ -467,22 +458,25 @@ export default {
      * 获取批量翻译信息
      */
     handleGetMoreTranslateSource() {
-      if (!this._checkIsHasTranslateProcess()) {
-        this.infoModal.title = "失败";
-        this.infoModal.type = "fail";
-        this.infoModal.content =
-          "当前存在翻译任务，请完成已经存在的任务后再进行翻译";
-        this.infoModal.btn.btn1Text = "";
-        this.infoModal.btn.btn2Text = "关闭";
-        return false;
-      }
-      this.type = "more";
-      this.source = this._getChineseList();
-      let obj = this._checkEnableTranslateItem(this.source);
-      this.languageModalSource.more.title = "批量翻译";
-      this.languageModalSource.more.total = obj.total;
-      this.languageModalSource.more.enable = obj.enable;
-      this._getForeigns();
+      this._checkIsHasTranslateProcess(data => {
+        if (!data) {
+          this.infoModal.title = "失败";
+          this.infoModal.type = "fail";
+          this.infoModal.content =
+            "当前存在翻译任务，请完成已经存在的任务后再进行翻译";
+          this.infoModal.btn.btn1Text = "";
+          this.infoModal.btn.btn2Text = "关闭";
+          return false;
+        } else {
+          this.type = "more";
+          this.source = this._getChineseList();
+          let obj = this._checkEnableTranslateItem(this.source);
+          this.languageModalSource.more.title = "批量翻译";
+          this.languageModalSource.more.total = obj.total;
+          this.languageModalSource.more.enable = obj.enable;
+          this._getForeigns();
+        }
+      });
     },
     /**
      * 获取可翻译外文（与已经翻译过的去重）
@@ -545,9 +539,11 @@ export default {
     /**
      * 检验是否存在翻译进程
      */
-    async _checkIsHasTranslateProcess() {
-      let { data } = await articleManageApi.isHasTranslateProcess();
-      return data;
+    async _checkIsHasTranslateProcess(callback) {
+      let { status, data } = await articleManageApi.isHasTranslateProcess();
+      if (status === 200) {
+        typeof callback === "function" && callback(data);
+      }
     },
     /**
      * 信息弹框关闭操作
