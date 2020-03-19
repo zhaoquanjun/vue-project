@@ -43,3 +43,11 @@ export const getCurSiteId = () => {
     `${environment.dashboardApi}/api/v1/userInfo/GetCurrentSiteId`
   );
 };
+// 切换自动翻译状态
+export const switchAutoTranslateStatus = () => {
+  return ajaxRequest.put(`${environment.designerManageApi}/api/v1/Page/SwitchAutoTranslateStatus`);
+};
+// 获取自动翻译状态
+export const getAutoTranslateConfig = () => {
+  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Page/GetAutoTranslateConfig`);
+};

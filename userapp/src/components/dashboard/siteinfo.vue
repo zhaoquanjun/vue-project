@@ -34,16 +34,6 @@
             v-show="isSystem&&curSiteinfo.hasBeenInitialized"
             @click="changeSiteInfoShow"
           ></i>
-          <div
-            v-if="siteCount == 2"
-            v-show="curSiteinfo.language != 'zh-CN'"
-            class="autoTranslation"
-            :class="{'openAutoTranslation': autoTranslation,'closeAutoTranslation':!autoTranslation}"
-          >
-            <i v-show="autoTranslation" class="iconfont iconduihao"></i>
-            <i v-show="!autoTranslation" class="iconfont iconguanbi"></i>
-            <span class="autoTranslation-text">自动翻译</span>
-          </div>
         </div>
         <div class="site-btn">
           <div v-if="curSiteinfo.language=='zh-CN'">
@@ -413,30 +403,6 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog
-      width="0"
-      :visible.sync="autoTranslationShow"
-      :show-close="false"
-      :close-on-click-modal="false"
-    >
-      <div class="autoTranslation-dialog" :style="{width:'450px'}">
-        <div class="dialog-head">
-          <span class="dialog-headTitle">自动翻译</span>
-          <span class="dialog-close" @click="closeInitializedDialog">
-            <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
-          </span>
-        </div>
-        <div class="dialog-content"></div>
-        <div class="dialog-footer">
-          <Debounce :time="1000" !isDebounce>
-            <button
-              @click="completeInitialized"
-              class="cl-button cl-button--primary cl-button--small"
-            >确认</button>
-          </Debounce>
-        </div>
-      </div>
-    </el-dialog>
     <SelectTemplateDialog
       ref="selectTemplateDialog"
       :siteId="curSiteinfo.siteId"
@@ -510,9 +476,7 @@ export default {
       initializedStatus: "success",
       initializedErrorList: [],
       translationPercentage: 0,
-      copyPercentage: 0,
-      autoTranslation: true,
-      autoTranslationShow: false
+      copyPercentage: 0
     };
   },
   components: {
@@ -1026,39 +990,6 @@ export default {
             border-radius: 2px;
           }
         }
-        .autoTranslation {
-          width: 80px;
-          height: 23px;
-          text-align: center;
-          margin-left: 16px;
-          .autoTranslation-text {
-            font-size: $--font-size-small;
-            font-weight: 400;
-            line-height: 23px;
-          }
-          i {
-            font-size: $--font-size-small;
-            line-height: 23px;
-          }
-        }
-        .openAutoTranslation {
-          border: 1px solid $--color-warning;
-          i {
-            color: $--color-warning;
-          }
-          span {
-            color: $--color-warning;
-          }
-        }
-        .closeAutoTranslation {
-          border: 1px solid $--border-color-base;
-          i {
-            color: $--border-color-base;
-          }
-          span {
-            color: $--border-color-base;
-          }
-        }
       }
       .site-btn {
         .disabled {
@@ -1428,22 +1359,6 @@ export default {
     .preview-btn {
       margin-right: 16px;
     }
-  }
-  .autoTranslation-dialog {
-    background: #ffffff;
-    position: fixed;
-    z-index: 2200;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-    transition: width 0.2s linear;
-    background-color: "#fff";
-    color: #262626;
-    overflow: hidden;
-    padding: 24px 24px 32px;
-    box-sizing: border-box;
   }
 }
 </style>
