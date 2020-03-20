@@ -1,6 +1,6 @@
 import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index";
 import { getSiteInfoBySite } from "@/api/request/siteBackupApi";
-import { getCurSiteId } from "@/api/request/dashboardApi";
+import { getCurSiteId, getAutoTranslateConfig } from "@/api/request/dashboardApi";
 import { setLocal } from "@/libs/local"
 import { setCookie } from "@/libs/cookie"
 
@@ -34,6 +34,7 @@ const dashboard = {
         hasRules: false,
         isSiteInfoShow: false,
         isWechataccountShow: false,
+        autoTranslateSwitch: false
     },
     mutations: {
 
@@ -60,7 +61,10 @@ const dashboard = {
         reset_store(state) {
             state.appId = "";
             state.siteId = "";
-        }
+        },
+        set_autoTranslateSwitch(state, status) {
+          state.autoTranslateSwitch = status;
+        },
     },
     actions: {
         async _haveTemplate({ commit, state }) {
@@ -84,10 +88,12 @@ const dashboard = {
             let { result1, pathArr } = filterMenuListData(data.menus);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
-            data.menus.forEach(item => {
+            data.menus.forEach(async item => {
                 // 判断是否有设计器权限
                 if (item.code === "design") {
                     state.isSiteInfoShow = true
+                    let { data } = await getAutoTranslateConfig();
+                    commit("set_autoTranslateSwitch", data)
                 }
                 // 判断是否有微信公众号权限
                 if (item.code == "wechataccount") {
