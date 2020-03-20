@@ -1,5 +1,5 @@
 import { updateAppIdToCookie, getSliderMenuList } from "@/api/request/user";
-import { getCurSiteId } from "@/api/request/dashboardApi";
+import { getCurSiteId, getAutoTranslateConfig } from "@/api/request/dashboardApi";
 
 import { setLocal } from "@/libs/local";
 import { setCookie } from "@/libs/cookie";
@@ -31,7 +31,8 @@ const dashboard = {
     buttonAuth: {},
     hasRules: false,
     curCode: "",
-    isContentwrite: false
+    isContentwrite: false,
+    autoTranslateSwitch: false
   },
   mutations: {
     SETSITEID(state, siteId) {
@@ -50,7 +51,10 @@ const dashboard = {
     set_authList(state, a) {
       state.authList = a;
       state.hasRules = true;
-    }
+    },
+    set_autoTranslateSwitch(state, status) {
+      state.autoTranslateSwitch = status;
+    },
   },
   actions: {
     async _updateAppIdAndSiteIdToCookie({ commit }) {
@@ -68,6 +72,13 @@ const dashboard = {
             state.isContentwrite = true;
           }
         });
+      data.menus.forEach(async item => {
+        // 判断是否有设计器权限
+        if (item.code === "design") {
+            let { data } = await getAutoTranslateConfig();
+            commit("set_autoTranslateSwitch", data)
+        }
+      })
       return data;
     },
 
