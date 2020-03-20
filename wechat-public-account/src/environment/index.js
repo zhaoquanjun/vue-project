@@ -6,6 +6,7 @@ const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ?
 const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
 
 /**生产环境-- */
+let designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
 let contentApi = `${httpSchema}api.content.${baseServerUrl}`;
 let contentApiUri = `${httpSchema}api.content.${baseServerUrl}`;
 let dashboardApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
@@ -42,6 +43,7 @@ let redirectUrl = {
  */
 
 if (process.env.NODE_ENV === 'development') {
+    designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
     contentApi = 'http://api.content.console.wezhan.cn';
     contentApiUri = 'http://api.content.console.wezhan.cn';
     dashboardApi = 'http://api.dashboard.console.wezhan.cn';
@@ -63,6 +65,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const enbironmemy = {
+    designerManageApi,
     authorityUrl,
     redirectUrl,
     logoutRedirectUri,

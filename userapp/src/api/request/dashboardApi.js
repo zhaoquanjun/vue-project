@@ -14,7 +14,15 @@ export const sendAliyunMobileVerifyCode = (phone) => {
 export const createAliyunSsoLoginUser = (para) => {
     return ajaxRequest.post(`${environment.memberManageApi}/api/v1/ssologin/CreateAliyunSsoLoginUser`, para);
 };
-// 
+// 切换自动翻译状态
+export const switchAutoTranslateStatus = () => {
+  return ajaxRequest.put(`${environment.designerManageApi}/api/v1/Page/SwitchAutoTranslateStatus`);
+};
+// 获取自动翻译状态
+export const getAutoTranslateConfig = () => {
+  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Page/GetAutoTranslateConfig`);
+};
+// 获取中文站点的信息
 export const getChineseSiteInfo = () => {
     return ajaxRequest.get(`${environment.memberManageApi}/api/v1/siteInfo/GetChineseSiteInfo`);
 };

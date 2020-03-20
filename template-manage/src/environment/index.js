@@ -6,6 +6,7 @@ const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ?
 const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://' : 'https://';
 
 /**生产环境-- */
+let designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
 let memberManageApi = `${httpSchema}api.content.${baseServerUrl}`;
 let dashboardApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
 let templateApi = `${httpSchema}api.wezhanproduce.${baseServerUrl}`;
@@ -32,6 +33,7 @@ export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.
  */
 
 if (process.env.NODE_ENV === `development`) {
+    designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
     memberManageApi = `${httpSchema}api.content.console.wezhan.cn`;
     dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
     templateApi = `${httpSchema}api.wezhanproduce.console.wezhan.cn`
@@ -47,6 +49,7 @@ if (process.env.NODE_ENV === `development`) {
     scope = "openid profile dashboard.api content.api designer.api produce.api";
 };
 const enbironmemy = {
+    designerManageApi,
     authorityUrl,
     redirectUrl,
     logoutRedirectUri,

@@ -476,7 +476,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    // 新建保存
+    // 新建提交
     submitForm(formName, fileList, storeInfo) {
       this.detailData.thumbnailPicUrlList = fileList;
       this.detailData.currencyType = storeInfo.storeTypeValue;
@@ -499,7 +499,7 @@ export default {
         }
       });
     },
-    // 新建保存
+    // 新建确认保存
     async _createSave() {
       let { status } = await productManageApi.createProduct(this.detailData);
       status === 200 && this._complateCreate();
@@ -521,7 +521,7 @@ export default {
         }
       });
     },
-    //编辑保存产品
+    //编辑确认保存
     async saveArticle() {
       var html = document
         .getElementById(this.quillContentId)

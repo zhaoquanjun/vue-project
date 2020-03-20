@@ -537,7 +537,7 @@ export default {
       }
     },
     /**
-     * 检验是否存在翻译进程
+     * 检验是否存在翻译进程 -
      */
     async _checkIsHasTranslateProcess(callback) {
       let { status, data } = await articleManageApi.isHasTranslateProcess();
