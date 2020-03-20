@@ -551,7 +551,7 @@ export default {
     },
     // 新建保存
     async _createSave() {
-      let { status, data } = await productManageApi.createArticle(
+      let { status, data } = await productManageApi.createProduct(
         this.detailData
       );
       if (status === 200) {
