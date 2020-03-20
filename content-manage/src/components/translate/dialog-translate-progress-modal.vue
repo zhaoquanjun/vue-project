@@ -73,7 +73,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.75);
   .translate-progress--content {
     position: absolute;
-    top: 55%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     box-sizing: border-box;
