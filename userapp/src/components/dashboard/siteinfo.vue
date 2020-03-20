@@ -523,6 +523,7 @@ export default {
     changeTemplateId(id) {
       this.curSiteinfo.templateId = id;
       this.$emit("getSites");
+      this.getChineseSiteInfo();
     },
     async changeSite(item) {
       if (item.siteId != this.siteId) {
