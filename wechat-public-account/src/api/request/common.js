@@ -43,6 +43,12 @@ export const updateAppIdToCookie = () => {
 export const updateUserLastAppIdAndCookie = (appId) => {    
     return ajaxRequest.post(`${environment.dashboardApi}/api/v1/userInfo/UpdateUserLastAppIdAndCookie/${appId}`);
 }
+/**
+ * 获取site列表
+ */
+export const getSites = () => {
+  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/siteInfo/GetSites`);
+}
 // 切换自动翻译状态
 export const switchAutoTranslateStatus = () => {
   return ajaxRequest.put(`${environment.designerManageApi}/api/v1/Page/SwitchAutoTranslateStatus`);
