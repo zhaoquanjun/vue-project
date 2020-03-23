@@ -268,7 +268,7 @@ export default {
       var str = "";
       if (data && data.length > 0) {
         for (var i = 0; i < data.length; i++) {
-          str += `<li><span style="display: inline-block;width: 17%;" class="lineheight26 attention ellipsis">（失败）</span><span class="lineheight26 ellipsis" style="display: inline-block;max-width: calc(35% - 16px);">${data[i].sourceEntityDesc}</span><span class="lineheight26 attention ellipsis" style="display: inline-block;margin-left: 16px; max-width: 48%;">${data[i].errorMsg}</span></li>`;
+          str += `<li><span style="display: inline-block;width: 17%;" class="lineheight26 attention ellipsis">（失败）</span><span class="lineheight26 ellipsis" style="display: inline-block;max-width: calc(35% - 16px);">${data[i].sourceEntityDesc}</span><span class="lineheight26 attention ellipsis" style="display: inline-block;margin-left: 16px; max-width: 61%;">${data[i].errorMsg}</span></li>`;
         }
       }
       return str;
@@ -459,7 +459,8 @@ export default {
      */
     handleGetMoreTranslateSource() {
       this._checkIsHasTranslateProcess(data => {
-        if (!data) {
+        console.log(data);
+        if (data) {
           this.infoModal.title = "失败";
           this.infoModal.type = "fail";
           this.infoModal.content =
