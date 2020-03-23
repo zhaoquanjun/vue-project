@@ -39,9 +39,9 @@ export default {
   },
   mounted() {
     this.$Loading.show();
-    if (this.isSiteInfoShow) {
-      this.getSites();
-    }
+    // if (this.isSiteInfoShow) {
+    //   this.getSites();
+    // }
     this.getContentInfo();
     this.amIAdmin();
     this.$Loading.hide();
@@ -56,6 +56,7 @@ export default {
     async getSites() {
       let { data } = await dashboardApi.getSites();
       this.siteInfoList = data;
+      this.$store.commit("set_siteList", data);
       this.$refs.siteInfo.getSiteInfo(this.siteInfoList);
     },
     async getContentInfo() {
@@ -76,13 +77,16 @@ export default {
     isSiteInfoShow() {
       return this.$store.state.dashboard.isSiteInfoShow;
     },
-    appId() {
-      return this.$store.state.dashboard.appId;
+    siteList() {
+      return this.$store.state.dashboard.siteList;
     }
   },
 
   watch: {
-    appId() {}
+    siteList() {
+      this.siteInfoList = this.$store.state.dashboard.siteList;
+      this.$refs.siteInfo.getSiteInfo(this.$store.state.dashboard.siteList);
+    }
   },
   beforeDestroy(){
     window.removeEventListener("resize",this.resizeWindow)

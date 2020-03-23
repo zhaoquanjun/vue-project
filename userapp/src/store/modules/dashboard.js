@@ -66,6 +66,9 @@ const dashboard = {
         set_autoTranslateSwitch(state, status) {
           state.autoTranslateSwitch = status;
         },
+        set_siteList(state, status) {
+          state.siteList = status;
+        }
     },
     actions: {
         async _haveTemplate({ commit, state }) {
