@@ -3,7 +3,8 @@
  *
  */
 const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
-const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+//const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+const httpSchema ='https://';//2020-3-23演示环境也改为了https
 
 /**生产环境-- */
 let contentApi = `${httpSchema}api.content.${baseServerUrl}`;

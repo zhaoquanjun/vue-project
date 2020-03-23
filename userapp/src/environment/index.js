@@ -1,6 +1,7 @@
 
 const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
-export const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+//const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+const httpSchema ='https://';//2020-3-23演示环境也改为了https
 
 let siteManageApi =`${httpSchema}api.designer.${baseServerUrl}`;
 let memberManageApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
