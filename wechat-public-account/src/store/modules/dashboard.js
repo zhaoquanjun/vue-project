@@ -1,5 +1,5 @@
 import { updateAppIdToCookie, getSliderMenuList} from "@/api/request/common.js"
-import { getCurSiteId } from "@/api/request/dashboardApi.js"
+import { getCurSiteId, getAutoTranslateConfig } from "@/api/request/dashboardApi.js"
 import { getSiteInfo } from "@/api/request/siteBackupApi";
 import {setLocal} from '@/libs/local'
 import { setCookie } from "@/libs/cookie"
@@ -29,6 +29,7 @@ const dashboard = {
         menuList:[],
         authList:[],
         isContentwrite: false,
+        autoTranslateSwitch: false
     },
     mutations: {
         SETAPPID(state, appId) {
@@ -49,6 +50,9 @@ const dashboard = {
             state.authList = a;
             state.hasRules = true;
             // setLocal("authList", a)
+        },
+        set_autoTranslateSwitch(state, status) {
+          state.autoTranslateSwitch = status;
         },
     },
     actions: {
@@ -83,6 +87,13 @@ const dashboard = {
                 if (item === "ContentWrite") {
                     state.isContentwrite = true;
                 }
+            })
+            data.menus.forEach(async item => {
+              // 判断是否有设计器权限
+              if (item.code === "design") {
+                  let { data } = await getAutoTranslateConfig();
+                  commit("set_autoTranslateSwitch", data)
+              }
             })
             return data
         },

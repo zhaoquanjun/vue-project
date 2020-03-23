@@ -14,7 +14,7 @@
             <div class="autoTranslate-text">自动翻译</div>
             <el-tooltip effect="dark" placement="bottom">
               <div slot="content">中文站的文章/产品/页面保存成功后，执行自动翻译<br/>（*对有修订记录的文章/产品/页面，不做操作）</div>
-              <el-switch v-model="autoTranslate" :width="20" @change="changeAutoTranslate" class="autoTranslate-switch"></el-switch>
+              <el-switch v-model="$store.state.dashboard.autoTranslateSwitch" :width="20" @change="changeAutoTranslate" class="autoTranslate-switch"></el-switch>
             </el-tooltip>
           </div>
         </div>
@@ -207,12 +207,8 @@ export default {
       appList: [],
       changeAppShow: false,
       appName: "",
-      keyword: "",
-      autoTranslate: false
+      keyword: ""
     };
-  },
-  mounted() {
-    this.getAutoTranslateConfig();
   },
   methods: {
     signOut() {
@@ -234,12 +230,9 @@ export default {
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
     },
-    async getAutoTranslateConfig(){
-      let { data } = await dashboardApi.getAutoTranslateConfig();
-      this.autoTranslate = data;
-    },
     async changeAutoTranslate(){
       let { data } = await dashboardApi.switchAutoTranslateStatus();
+      this.$store.commit("set_autoTranslateSwitch", data);
     },
     async search() {
       let { data } = await dashboardApi.getApplicationsByUserId(this.keyword);
