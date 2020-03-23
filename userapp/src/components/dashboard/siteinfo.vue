@@ -36,40 +36,36 @@
           ></i>
         </div>
         <div class="site-btn">
-          <div v-if="curSiteinfo.language=='zh-CN'">
+          <button
+            class="cl-button cl-button--primary"
+            @click="jumpTo('template')"
+            v-show="!curSiteinfo.hasBeenInitialized&&curSiteinfo.language=='zh-CN'"
+          >选择模版</button>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="top"
+            :content="curSiteinfo.anyChineseSiteHasBeenInitialized?'建议先完成中文站的搭建再整体进行外文站点初始化':'请先完成中文站点的模板选择'"
+          >
             <button
               class="cl-button cl-button--primary"
-              @click="jumpTo('template')"
-              v-show="!curSiteTodoinfo.siteTemplate"
-            >选择模版</button>
-          </div>
-          <div v-else>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              placement="top"
-              :content="curSiteinfo.anyChineseSiteHasBeenInitialized?'建议先完成中文站的搭建再整体进行外文站点初始化':'请先完成中文站点的模板选择'"
-            >
-              <button
-                class="cl-button cl-button--primary"
-                :class="{'disabled':!curSiteinfo.anyChineseSiteHasBeenInitialized}"
-                :disabled="!curSiteinfo.anyChineseSiteHasBeenInitialized"
-                @click="showInitializedDialog"
-                v-show="!curSiteinfo.hasBeenInitialized"
-              >初始化站点</button>
-            </el-tooltip>
-          </div>
+              :class="{'disabled':!curSiteinfo.anyChineseSiteHasBeenInitialized}"
+              :disabled="!curSiteinfo.anyChineseSiteHasBeenInitialized"
+              @click="showInitializedDialog"
+              v-show="!curSiteinfo.hasBeenInitialized&&curSiteinfo.language!='zh-CN'"
+            >初始化站点</button>
+          </el-tooltip>
           <a
             class="preview-btn"
             :href="`//${curSiteinfo.secondDomain}`"
             target="_blank"
-            v-show="curSiteTodoinfo.siteTemplate"
+            v-show="curSiteinfo.hasBeenInitialized"
           >
             <button class="cl-button cl-button--primary_notbg">预览</button>
           </a>
           <a
             :href="`${designerUrl}?siteId=${curSiteinfo.siteId}`"
-            v-show="curSiteTodoinfo.siteTemplate"
+            v-show="curSiteinfo.hasBeenInitialized"
           >
             <button class="cl-button cl-button--primary">设计站点</button>
           </a>
