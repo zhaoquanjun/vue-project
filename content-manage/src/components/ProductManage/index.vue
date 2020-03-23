@@ -187,7 +187,7 @@ export default {
       infoModal: {
         title: "提示",
         type: "fail",
-        content: `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前文章字符已超限，请重新选择或删减文章后重试。</p>`,
+        content: `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前产品字符已超限，请重新选择或删减产品后重试。</p>`,
         btn: {
           btn1Text: "关闭",
           btn2Text: "去修改"
@@ -291,7 +291,7 @@ export default {
       return str;
     },
     /**
-     * 获取可以翻译的文章列表
+     * 获取可以翻译的产品列表
      */
     _checkEnableTranslateItem(data) {
       const o = {};
@@ -402,7 +402,7 @@ export default {
             this.infoModal.title = "成功";
             this.infoModal.type = "success";
             this.infoModal.content =
-              "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
+              "<p class='lineheight26'>产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
             this.infoModal.btn.btn2Text = "关闭";
             this.infoModal.btn.btn2Operate = "close";
             if (num === 1) {
@@ -457,7 +457,7 @@ export default {
       if (row.contentLength > 4000) {
         this.infoModal.title = "提示";
         this.infoModal.type = "fail";
-        this.infoModal.content = `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前文章字符已超限，请重新选择或删减文章后重试。</p>`;
+        this.infoModal.content = `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前产品字符已超限，请重新选择或删减产品后重试。</p>`;
         this.infoModal.btn.btn1Text = "关闭";
         this.infoModal.btn.btn1Operate = "close";
         this.infoModal.btn.btn2Text = "修改";
@@ -638,7 +638,7 @@ export default {
       } else if (options.switchType === 2) {
         message = options.flag ? "取消置顶" : "置顶";
 
-        stateTip = "您确定要" + message + "文章吗？";
+        stateTip = "您确定要" + message + "产品吗？";
         options.flag = !options.flag;
       } else if (options.switchType === 3) {
         message = options.flag ? "下架" : "上架";
@@ -715,7 +715,7 @@ export default {
         this.$refs.checkTree.setCheckedKeys(ids);
       });
     },
-    // 点击确定按钮 移动 复制 更新文章分类
+    // 点击确定按钮 移动 复制 更新产品分类
     async updateCategoryArticle(params) {
       //批量设置访问权限
       if (this.clickType === "permission") {

@@ -331,13 +331,13 @@ export default {
               ) {
                 this.infoModal.title = "成功";
                 this.infoModal.type = "success";
-                this.infoModal.content = `<p class='lineheight26'>部分产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; width: 300px;">${this._getFailedList(
+                this.infoModal.content = `<p class='lineheight26'>部分文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; width: 300px;">${this._getFailedList(
                   res.failedList
                 )}</ul>`;
               } else {
                 this.infoModal.title = "失败";
                 this.infoModal.type = "fail";
-                this.infoModal.content = `<p class='lineheight26'>产品翻译失败！</p><ul style="width: 300px; margin-left: -7px;">${this._getFailedList(
+                this.infoModal.content = `<p class='lineheight26'>文章翻译失败！</p><ul style="width: 300px; margin-left: -7px;">${this._getFailedList(
                   res.failedList
                 )}</ul>`;
               }
@@ -345,7 +345,7 @@ export default {
               this.infoModal.title = "成功";
               this.infoModal.type = "success";
               this.infoModal.content =
-                "<p class='lineheight26'>产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
+                "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
             }
             this.$refs.progressModal.hideSelf();
             this.infoModal.btn.btn2Text = "关闭";
