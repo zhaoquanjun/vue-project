@@ -181,22 +181,15 @@ export default {
         title: "翻译中",
         progress: 0
       },
-      languageModalSource: {
-        signal: {
-          tree: [],
-          languages: [],
-          list: [],
-          type: "signal"
-        },
-        more: {
-          total: 5,
-          enable: 4,
-          list: [],
-          languages: [],
-          type: "more"
-        }
+      languageModal: {
+        title: "",
+        tree: [],
+        languages: [],
+        list: [],
+        type: "signal",
+        total: 5,
+        enable: 4
       },
-      languageModal: null,
       source: null,
       type: "signal",
       foreignLanguages: []
@@ -373,7 +366,6 @@ export default {
               this.infoModal.additional.words = "";
               this.infoModal.additional.operate = "";
             }
-            console.log(this.infoModal, "1++++++");
             this.$refs.infoModal.showSelf();
           }, 1000);
         }
@@ -450,7 +442,7 @@ export default {
       } else {
         this.type = "signal";
         this.source = [row];
-        this.languageModalSource.more.title = "单篇翻译";
+        this.languageModal.title = "单篇翻译";
         this._getForeigns(translatedIds);
       }
     },
@@ -459,7 +451,6 @@ export default {
      */
     handleGetMoreTranslateSource() {
       this._checkIsHasTranslateProcess(data => {
-        console.log(data);
         if (data) {
           this.infoModal.title = "失败";
           this.infoModal.type = "fail";
@@ -472,9 +463,9 @@ export default {
           this.type = "more";
           this.source = this._getChineseList();
           let obj = this._checkEnableTranslateItem(this.source);
-          this.languageModalSource.more.title = "批量翻译";
-          this.languageModalSource.more.total = obj.total;
-          this.languageModalSource.more.enable = obj.enable;
+          this.languageModal.title = "批量翻译";
+          this.languageModal.total = obj.total;
+          this.languageModal.enable = obj.enable;
           this._getForeigns();
         }
       });
@@ -484,20 +475,11 @@ export default {
      */
     _getForeigns(ids) {
       this._getTranslateIds(this.languagesList, ids);
-      if (this.foreignLanguages.length > 1) {
-        this.languageModalSource.more.languages = this.foreignLanguages;
-        this.languageModalSource.more.list = this.source;
-        this.languageModalSource.more.type = this.type;
-        this.languageModal = this.languageModalSource.more;
-        this.$refs.languageModal.showSelf();
-      } else {
-        this.languageModalSource.signal.languages = this.foreignLanguages;
-        this.languageModalSource.signal.list = this.source;
-        this.languageModalSource.signal.type = this.type;
-        this.languageModalSource.signal.tree = this.translateTree;
-        this.languageModal = this.languageModalSource.signal;
-        this.$refs.languageModal.showSelf();
-      }
+      this.languageModal.languages = this.foreignLanguages;
+      this.languageModal.list = this.source;
+      this.languageModal.tree = this.translateTree;
+      this.languageModal.type = this.type;
+      this.$refs.languageModal.showSelf();
     },
     /**
      * 获取所有可以翻译的中文数据
