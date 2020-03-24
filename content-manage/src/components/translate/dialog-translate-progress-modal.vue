@@ -63,96 +63,96 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dialog-mask--area {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1999;
-  background-color: rgba(0, 0, 0, 0.75);
-  .translate-progress--content {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    padding: 30px 25px 32px;
-    width: 430px;
-    height: 343px;
-    background-color: $--color-white;
-    box-shadow: $--box-shadow-dark-small;
-    border-radius: $--border-radius-base;
-    transition: transform 0.3s linear;
+// .dialog-mask--area {
+//   position: fixed;
+//   left: 0;
+//   top: 0;
+//   width: 100%;
+//   height: 100%;
+//   z-index: 1999;
+//   background-color: rgba(0, 0, 0, 0.75);
+//   .translate-progress--content {
+//     position: absolute;
+//     top: 45%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     box-sizing: border-box;
+//     padding: 30px 25px 32px;
+//     width: 430px;
+//     height: 343px;
+//     background-color: $--color-white;
+//     box-shadow: $--box-shadow-dark-small;
+//     border-radius: $--border-radius-base;
+//     transition: transform 0.3s linear;
 
-    .modal-header--area {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+//     .modal-header--area {
+//       display: flex;
+//       justify-content: space-between;
+//       align-items: center;
 
-      .model-title {
-        max-width: 380px;
-        font-size: $--font-size-medium;
-        color: $--color-text-primary;
-        line-height: 22px;
-      }
-    }
+//       .model-title {
+//         max-width: 380px;
+//         font-size: $--font-size-medium;
+//         color: $--color-text-primary;
+//         line-height: 22px;
+//       }
+//     }
 
-    .modal-content--area {
-      margin-top: 30px;
+//     .modal-content--area {
+//       margin-top: 30px;
 
-      .modal-content__icon {
-        margin: 0 auto;
-        width: 93px;
-        height: 73px;
-        background: url("~img/content-icon/translate_progress.png") no-repeat
-          center center;
-        background-size: 100% 100%;
-      }
+//       .modal-content__icon {
+//         margin: 0 auto;
+//         width: 93px;
+//         height: 73px;
+//         background: url("~img/content-icon/translate_progress.png") no-repeat
+//           center center;
+//         background-size: 100% 100%;
+//       }
 
-      .modal-content__progress {
-        margin-top: 24px;
-      }
+//       .modal-content__progress {
+//         margin-top: 24px;
+//       }
 
-      .modal-content__progress--tips {
-        margin-top: 14px;
-        text-align: center;
-      }
+//       .modal-content__progress--tips {
+//         margin-top: 14px;
+//         text-align: center;
+//       }
 
-      .modal-content__advantage {
-        margin-top: 22px;
-        margin-left: 15px;
+//       .modal-content__advantage {
+//         margin-top: 22px;
+//         margin-left: 15px;
 
-        li {
-          font-size: $--font-size-small;
-          line-height: 24px;
-          color: $--color-text-primary;
+//         li {
+//           font-size: $--font-size-small;
+//           line-height: 24px;
+//           color: $--color-text-primary;
 
-          i.iconfont {
-            margin-right: 8px;
-          }
-        }
-      }
-    }
-  }
-}
+//           i.iconfont {
+//             margin-right: 8px;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 
-.dialog-mask--area /deep/ .el-progress {
-  text-align: center;
+// .dialog-mask--area /deep/ .el-progress {
+//   text-align: center;
 
-  .el-progress-bar {
-    width: 312px;
-    height: 6px;
+//   .el-progress-bar {
+//     width: 312px;
+//     height: 6px;
 
-    .el-progress-bar__outer {
-      background-color: #f0f3f7;
-    }
-  }
+//     .el-progress-bar__outer {
+//       background-color: #f0f3f7;
+//     }
+//   }
 
-  .el-progress__text {
-    margin-left: 15px;
-    font-size: $--font-size-base;
-    color: $--color-text-regular;
-  }
-}
+//   .el-progress__text {
+//     margin-left: 15px;
+//     font-size: $--font-size-base;
+//     color: $--color-text-regular;
+//   }
+// }
 </style>

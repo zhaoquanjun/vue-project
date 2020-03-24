@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'development') {
     dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
     uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture`;
     authorityUrl = `${httpSchema}login.console.wezhan.cn`;
-    redirectUrl = `${httpSchema}localhost:8081/callback`;
+    redirectUrl = `http://localhost:8081/callback`;//本地是http
     logoutRedirectUri = `${httpSchema}content.console.wezhan.cn/index.html`;
     silentRedirectUri = `${httpSchema}localhost:8081/static/silent-renew.html`;
     designerManageApi = `${httpSchema}api.designer.console.wezhan.cn`;

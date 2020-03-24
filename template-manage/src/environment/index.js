@@ -43,8 +43,8 @@ if (process.env.NODE_ENV === `development`) {
     uploadNormalUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture/UploadControlPic/normal`;
     uploadCategoryUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture/UploadControlPic/category`;
     authorityUrl = `${httpSchema}login.console.wezhan.cn`;
-    redirectUrl = `${httpSchema}localhost:8083/callback`;
-    logoutRedirectUri = `${httpSchema}localhost:8083/index.html`;
+    redirectUrl = `http://localhost:8083/callback`;//本地是http
+    logoutRedirectUri = `${httpSchema}localhost:8083/index.html`;http://
     silentRedirectUri = `${httpSchema}localhost:8083/static/silent-renew.html`;
     clientId = "dev.produce.api";
     scope = "openid profile dashboard.api content.api designer.api produce.api";
