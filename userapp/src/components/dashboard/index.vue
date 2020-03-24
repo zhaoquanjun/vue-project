@@ -39,9 +39,10 @@ export default {
   },
   mounted() {
     this.$Loading.show();
-    // if (this.isSiteInfoShow) {
-    //   this.getSites();
-    // }
+    if(this.siteList.length > 0){
+      this.siteInfoList = this.$store.state.dashboard.siteList;
+      this.$refs.siteInfo.getSiteInfo(this.$store.state.dashboard.siteList);
+    }
     this.getContentInfo();
     this.amIAdmin();
     this.$Loading.hide();
@@ -84,8 +85,10 @@ export default {
 
   watch: {
     siteList() {
-      this.siteInfoList = this.$store.state.dashboard.siteList;
-      this.$refs.siteInfo.getSiteInfo(this.$store.state.dashboard.siteList);
+      if(this.siteList.length > 0){
+        this.siteInfoList = this.$store.state.dashboard.siteList;
+        this.$refs.siteInfo.getSiteInfo(this.$store.state.dashboard.siteList);
+      }
     }
   },
   beforeDestroy(){
