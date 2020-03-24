@@ -370,7 +370,7 @@
         <div class="createSiteName">
           <span class="createSiteTitle">站点名称</span>
           <el-input
-            v-model="changeSiteName"
+            v-model.trim="changeSiteName"
             @blur="blurSiteName(changeSiteName)"
             placeholder="请输入内容"
             class="createSiteNameInput"
