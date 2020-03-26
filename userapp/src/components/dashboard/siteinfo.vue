@@ -50,7 +50,6 @@
             <button
               class="cl-button cl-button--primary"
               :class="{'disabled':!curSiteinfo.anyChineseSiteHasBeenInitialized}"
-              :disabled="!curSiteinfo.anyChineseSiteHasBeenInitialized"
               @click="showInitializedDialog"
               v-show="!curSiteinfo.hasBeenInitialized&&curSiteinfo.language!='zh-CN'"
             >初始化站点</button>
@@ -75,7 +74,7 @@
         <el-col :span="8" class="site-item">
           <div class="site-title">上线</div>
           <div class="siteInfo-wrap">
-            <div class="siteInfo-item" @click="jumpTo('template')">
+            <div class="siteInfo-item" :class="{'disabled':!curSiteinfo.hasBeenInitialized&&curSiteinfo.language!='zh-CN'}" @click="jumpTo('template')">
               <div class="siteInfo-left">
                 <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.siteTemplate, 'siteInfo-icon-green':curSiteTodoinfo.siteTemplate}"
@@ -338,6 +337,9 @@
             </div>
           </div>
           <div class="dialog-footer">
+            <div class="countdownTime" v-show="initializedStatus == 'success'">
+              {{countdownTimeNum}}s进入预览
+            </div>
             <a
               class="preview-btn"
               :href="`//${curSiteinfo.secondDomain}`"
@@ -472,7 +474,8 @@ export default {
       initializedStatus: "success",
       initializedErrorList: [],
       translationPercentage: 0,
-      copyPercentage: 0
+      copyPercentage: 0,
+      countdownTimeNum: 5
     };
   },
   components: {
@@ -531,7 +534,7 @@ export default {
       }
     },
     jumpTo(type) {
-      if (!this.curSiteTodoinfo.siteTemplate) {
+      if (!this.curSiteinfo.hasBeenInitialized&&this.curSiteinfo.language=='zh-CN') {
         this.$refs.selectTemplateDialog.showTemplate();
         return;
       }
@@ -540,6 +543,9 @@ export default {
           path: "/website/mysite/sitedomain"
         });
       } else if (type == "template") {
+        if (!this.curSiteinfo.hasBeenInitialized&&this.curSiteinfo.language!='zh-CN') {
+          return;
+        }
         this.$refs.selectTemplateDialog.showTemplate();
       } else if (type == "seo") {
         this.$router.push({
@@ -579,8 +585,10 @@ export default {
       }
     },
     showInitializedDialog() {
-      this.initializedDialog = true;
-      this.initializedStep = "before";
+      if(this.curSiteinfo.anyChineseSiteHasBeenInitialized){
+        this.initializedDialog = true;
+        this.initializedStep = "before";
+      }
     },
     closeInitializedDialog() {
       this.initializedDialog = false;
@@ -613,9 +621,19 @@ export default {
         if (this.initializedSiteLanguage == "zh-CN") {
           this.copyPercentage = 100;
           let timer = setTimeout(() => {
+            this.countdownTimeNum = 5;
             this.initializedStep = "after";
+            let previewTimer = setInterval(()=>{
+              this.countdownTimeNum--;
+              if(this.countdownTimeNum == 0){
+                clearInterval(previewTimer);
+                let newWindow = window.open();
+                newWindow.location.href = `//${this.curSiteinfo.secondDomain}`;
+              }
+            }, 1000)
             this.copyPercentage = 0;
             this.getChineseSiteInfo();
+            clearTimeout(timer)
           }, 1000);
         } else {
           this.getTranslateProgress(data.translateId);
@@ -666,7 +684,19 @@ export default {
             this.initializedStatus = "success";
           }
           setTimeout(() => {
+            this.countdownTimeNum = 5;
             this.initializedStep = "after";
+            let previewTimer = setInterval(()=>{
+              this.countdownTimeNum--;
+              if(this.countdownTimeNum == 0){
+                clearInterval(previewTimer)
+                console.log(`//${this.curSiteinfo.secondDomain}`)
+                let newWindow = window.open();
+                newWindow.location.href = `//${this.curSiteinfo.secondDomain}`
+                // let a = document.getElementsByClassName("preview-btn")[0]
+                // a.click();
+              }
+            }, 1000)
             this.translationPercentage = 0;
           }, 1000);
         }
@@ -983,7 +1013,7 @@ export default {
           padding: 8px;
           background: transparent;
           &:hover {
-            background-color: rgba(9, 204, 235, 0.09);
+            background-color: $--background-color-hover;
             border-radius: 2px;
           }
         }
@@ -1098,6 +1128,9 @@ export default {
                 line-height: 20px;
               }
             }
+          }
+          .disabled{
+            cursor: not-allowed;
           }
         }
       }
@@ -1354,6 +1387,12 @@ export default {
     text-align: right;
     width: 100%;
     .preview-btn {
+      margin-right: 16px;
+    }
+    .countdownTime{
+      display: inline-block;
+      color: $--color-warning;
+      font-size: $--font-size-small;
       margin-right: 16px;
     }
   }
