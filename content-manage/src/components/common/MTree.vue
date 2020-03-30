@@ -12,7 +12,6 @@
         ref="tree"
         :draggable="draggable"
         :allow-drop="allowDrop"
-        :allow-drag="allowDrag"
         :highlight-current="true"
       >
         <div
@@ -55,12 +54,16 @@
             :flag="(data.id === treeNodeId) != 0"
             :data-list="foreignLen"
             v-show="
-              (data.id === treeNodeId && draggable && foreignLen === 1) ||
-                (data.id != 0 &&
-                  treeNodeId != 0 &&
+              (type === 'news' &&
+                data.id === treeNodeId &&
+                data.id === 0 &&
+                treeNodeId === 0 &&
+                siteCount === 1) ||
+                (type === 'news' &&
                   data.id === treeNodeId &&
-                  draggable &&
-                  foreignLen > 1)
+                  data.id !== 0 &&
+                  treeNodeId !== 0) ||
+                (type !== 'news' && data.id === treeNodeId)
             "
           >
             <i class="iconfont iconsangedian" style="font-size:24px"></i>
@@ -116,11 +119,19 @@
   </div>
 </template>
 <script>
+import * as productManageApi from "@/api/request/productManageApi";
 import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
 import { trim } from "@/utlis/index";
 export default {
   // picSearchOptions
-  props: ["treeResult", "listOptions", "isArticle", "isProduct", "isPopup"], // 与产品分类不一致的地方 picSearchOptions isPopup是否为图片弹框
+  props: [
+    "treeResult",
+    "listOptions",
+    "isArticle",
+    "isProduct",
+    "isPopup",
+    "type"
+  ], // 与产品分类不一致的地方 picSearchOptions isPopup是否为图片弹框
   components: {
     UploadCategoryPic
   },
@@ -142,10 +153,12 @@ export default {
       curClickNode: { data: { level: "" } },
       isHandlerCategoryMenuShow: false,
       isChangeCategoryShow: false,
-      categoryId: 0
+      categoryId: 0,
+      siteCount: 2
     };
   },
   mounted() {
+    this._getSiteCount();
     document.addEventListener("click", () => {
       this.$nextTick(() => {
         if (this.$refs.operateSection1)
@@ -155,6 +168,16 @@ export default {
     this.draggable = this.isContentwrite;
   },
   methods: {
+    async _getSiteCount() {
+      let { data, status } = await productManageApi.getSiteCount();
+      if (status === 200) {
+        if (data.IsSingleSite) {
+          this.siteCount = 1;
+        } else {
+          this.siteCount = data.SiteCount;
+        }
+      }
+    },
     createCategory(displayName, thumbnailPicUrl, Language) {
       console.log(displayName, thumbnailPicUrl, Language);
       if (this.isAdd) {
@@ -182,7 +205,6 @@ export default {
       }
       this.closeUploadCategoryPic();
     },
-
     handlerOver(data) {
       if (!isNaN(data.id)) this.treeNodeId = data.id;
       if (this.isNewAdd) this.treeNodeId = null;
@@ -419,25 +441,10 @@ export default {
   computed: {
     isContentwrite() {
       return this.$store.state.dashboard.isContentwrite;
-    },
-    foreignLen: {
-      get: function() {
-        let len = 1;
-        if (
-          this.treeResult &&
-          this.treeResult[0] &&
-          this.treeResult[0].children.length > 0
-        ) {
-          len = this.treeResult[0].children.length;
-        }
-        return len;
-      },
-      set: function() {}
     }
   }
 };
 </script>
-<style lang="scss"></style>
 <style lang="scss" scoped>
 // 侧边分类树节点
 

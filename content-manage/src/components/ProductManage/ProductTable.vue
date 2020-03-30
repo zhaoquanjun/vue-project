@@ -18,7 +18,7 @@
       </template>
       <el-table-column type="selection"></el-table-column>
 
-      <el-table-column min-width="120" prop="name" label="产品标题">
+      <el-table-column min-width="200" prop="name" label="产品标题">
         <template slot-scope="scope">
           <span class="isTop" v-show="scope.row.isTop">置顶</span>
           <el-tooltip
@@ -79,7 +79,7 @@
       <el-table-column min-width="100" prop="isOnSell" label="状态">
         <template slot-scope="scope">
           <span style="padding-right: 8px;">{{
-            scope.row.isOnSell ? "已上线" : "未上线"
+            scope.row.isOnSell ? "上架" : "下架"
           }}</span>
           <div
             class="el-switch"
@@ -89,19 +89,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="isPublishPrt" label="多语言" min-width="100">
+      <el-table-column
+        prop="isPublishPrt"
+        label="多语言"
+        min-width="80"
+        v-if="languagesList.length > 0"
+      >
         <template slot-scope="scope">
-          <span class="ellipsis">{{
-            scope.row.language ? scope.row.language : ""
-          }}</span>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :open-delay="200"
-            :disabled="scope.row.translateToolTip.length == 0"
-            :content="scope.row.translateToolTip"
-            placement="top"
+          <div
+            style="width: 100%; text-align: right; display: flex; justify-content: flex-end; align-items: center;"
           >
+            <span class="ellipsis">{{
+              scope.row.language ? scope.row.language : ""
+            }}</span>
             <span
               class="translate-icon"
               :class="{
@@ -152,8 +152,16 @@
                   翻译为更多语言
                 </li>
               </ul>
+              <div
+                class="ym-tooltips"
+                :ref="'tooltip' + scope.row.index"
+                v-show="scope.row.translateToolTip"
+              >
+                {{ scope.row.translateToolTip }}
+                <div class="tooltips__arrow"></div>
+              </div>
             </span>
-          </el-tooltip>
+          </div>
         </template>
       </el-table-column>
 
@@ -166,7 +174,7 @@
             placement="top"
           >
             <i
-              class="iconfont iconzd1"
+              class="iconfont iconzd1 cl-iconfont is-square"
               :class="{ 'is-active': scope.row.isTop }"
               @click="batchSwitchStatus(scope.row, 2, scope.row.isTop)"
             ></i>
@@ -176,7 +184,10 @@
 
       <el-table-column label="编辑" min-width="50">
         <template slot-scope="scope">
-          <i class="iconfont iconbianji" @click="handleEdit(scope.row)"></i>
+          <i
+            class="iconfont iconbianji cl-iconfont is-square"
+            @click="handleEdit(scope.row)"
+          ></i>
         </template>
       </el-table-column>
 
@@ -320,20 +331,53 @@ export default {
           if (data.length === 0) {
             this.articlePageResult.list[row.index].translateToolTip =
               "点击翻译产品";
+            setTimeout(() => {
+              if (this.$refs["tooltip" + row.index]) {
+                this.$refs["tooltip" + row.index].style.left =
+                  e.target.getBoundingClientRect().left -
+                  this.$refs["tooltip" + row.index].clientWidth / 2 +
+                  10 +
+                  "px";
+                this.$refs["tooltip" + row.index].style.top =
+                  e.target.getBoundingClientRect().top +
+                  e.target.getBoundingClientRect().height -
+                  70 +
+                  "px";
+              }
+            });
           }
           if (data.length === 1) {
             if (this.languagesList.length === 1) {
               this.articlePageResult.list[row.index].translateToolTip =
                 "查看已翻译的产品";
+              setTimeout(() => {
+                if (this.$refs["tooltip" + row.index]) {
+                  this.$refs["tooltip" + row.index].style.left =
+                    e.target.getBoundingClientRect().left -
+                    this.$refs["tooltip" + row.index].clientWidth / 2 +
+                    10 +
+                    "px";
+                  this.$refs["tooltip" + row.index].style.top =
+                    e.target.getBoundingClientRect().top +
+                    e.target.getBoundingClientRect().height -
+                    70 +
+                    "px";
+                }
+              });
             }
             if (this.languagesList.length > 1) {
               this.articlePageResult.list[row.index].translateToolTip = "";
               this.hasTranslateList = data;
               if (this.$refs["translateModal" + row.index]) {
-                const left = e.clientX + "px";
-                const top = e.clientY + "px";
-                this.$refs["translateModal" + row.index].style.left = left;
-                this.$refs["translateModal" + row.index].style.top = top;
+                this.$refs["translateModal" + row.index].style.left =
+                  e.target.getBoundingClientRect().left +
+                  e.target.getBoundingClientRect().width / 2 +
+                  "px";
+                this.$refs["translateModal" + row.index].style.top =
+                  e.target.getBoundingClientRect().top +
+                  e.target.getBoundingClientRect().height +
+                  6 +
+                  "px";
               }
             }
           }
@@ -341,10 +385,15 @@ export default {
             this.articlePageResult.list[row.index].translateToolTip = "";
             this.hasTranslateList = data;
             if (this.$refs["translateModal" + row.index]) {
-              const left = e.clientX + "px";
-              const top = e.clientY + "px";
-              this.$refs["translateModal" + row.index].style.left = left;
-              this.$refs["translateModal" + row.index].style.top = top;
+              this.$refs["translateModal" + row.index].style.left =
+                e.target.getBoundingClientRect().left +
+                e.target.getBoundingClientRect().width / 2 +
+                "px";
+              this.$refs["translateModal" + row.index].style.top =
+                e.target.getBoundingClientRect().top +
+                e.target.getBoundingClientRect().height +
+                6 +
+                "px";
             }
           }
         }, 200);
@@ -353,6 +402,7 @@ export default {
     _handleMouseleaveTranslte(row, type) {
       if (type) return false;
       this.hasTranslateList = [];
+      this.$refs["translateModal" + row.index].translateToolTip = "";
       if (this.$refs["translateModal" + row.index]) {
         this.$refs["translateModal" + row.index].style.left = "-300%";
         this.$refs["translateModal" + row.index].style.top = "-300%";
@@ -583,6 +633,37 @@ export default {
       border-right: 5px solid transparent;
       border-left: 5px solid transparent;
       border-bottom: 5px solid $--color-white;
+    }
+  }
+
+  .ym-tooltips {
+    position: fixed;
+    left: -100%;
+    top: -100%;
+    margin-bottom: 12px;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.2;
+    min-width: 10px;
+    word-wrap: break-word;
+    background: #303133;
+    color: #fff;
+    transform-origin: center bottom;
+    z-index: 2060;
+    border-radius: 4px;
+
+    &::after {
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: block;
+      content: " ";
+      width: 0;
+      height: 0;
+      border-right: 5px solid transparent;
+      border-left: 5px solid transparent;
+      border-top: 5px solid #303133;
     }
   }
 }

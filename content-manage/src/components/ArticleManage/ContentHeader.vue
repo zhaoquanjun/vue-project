@@ -125,6 +125,7 @@
             取消置顶
           </button>
           <button
+            :class="{ disabled: languageCount === 2 }"
             class="cl-button cl-button--text_primary"
             @click="batchTranslate"
           >
@@ -153,12 +154,19 @@
 </template>
 <script>
 export default {
-  props: ["articleSearchOptions", "isBatchHeaderShow", "count"],
+  props: [
+    "articleSearchOptions",
+    "isBatchHeaderShow",
+    "count",
+    "selectCategory",
+    "languagesList",
+    "languageCount"
+  ],
   data() {
     return {
       ascSort: false,
       descSort: true,
-
+      isShowTranslate: true,
       statusOptions: [
         {
           statusValue: "",
@@ -337,9 +345,15 @@ export default {
     }
   }
 }
-.bach-hanlder button {
-  padding: 9px 16px;
-  margin: 0;
-  min-width: 60px;
+.bach-hanlder {
+  button {
+    padding: 9px 16px;
+    margin: 0;
+    min-width: 60px;
+  }
+  .disabled {
+    color: $--color-text-regular;
+    cursor: not-allowed;
+  }
 }
 </style>

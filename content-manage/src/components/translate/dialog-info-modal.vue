@@ -8,7 +8,7 @@
       <div class="modal-header--area">
         <div class="model-title ellipsis">{{ infoModal.title }}</div>
         <div class="close-btn" @click="hideSelf">
-          <i class="iconfont iconguanbi"></i>
+          <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
         </div>
       </div>
       <div class="modal-content--area">
@@ -140,7 +140,8 @@ export default {
     transform: translate(-50%, -50%);
     box-sizing: border-box;
     padding: 30px 25px 32px;
-    width: 450px;
+    min-width: 450px;
+    max-width: 500px;
     max-height: 600px;
     background-color: $--color-white;
     box-shadow: $--box-shadow-dark-small;
@@ -164,9 +165,10 @@ export default {
       margin-top: 30px;
       display: flex;
       justify-content: flex-start;
-      align-items: center;
+      align-items: flex-start;
 
       .content-attribute--icon {
+        margin-top: 12px;
         margin-left: 35px;
 
         i {
