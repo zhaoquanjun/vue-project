@@ -20,6 +20,8 @@
     <el-main>
       <content-header
         v-if="$store.state.dashboard.isContentwrite"
+        :selectCategory="selectCategory"
+        :languages-list="languagesList"
         :count="count"
         :article-search-options="productSearchOptions"
         :is-batch-header-show="isBatchHeaderShow"
@@ -168,6 +170,7 @@ export default {
       moveToClassiFy: "",
       selectCategory: "",
       count: 0,
+      list: [],
       idsList: [],
       isInvitationPanelShow: false,
       productSearchOptions: {
@@ -252,6 +255,7 @@ export default {
             if (item.language != "zh-CN") {
               const obj = {};
               obj.languages = item.language;
+              obj.label = item.label;
               arr.push(obj);
             }
           }
@@ -339,13 +343,13 @@ export default {
               ) {
                 this.infoModal.title = "成功";
                 this.infoModal.type = "success";
-                this.infoModal.content = `<p class='lineheight26'>部分产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; width: 300px;">${this._getFailedList(
+                this.infoModal.content = `<p class='lineheight26'>部分产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; min-width: 300px;">${this._getFailedList(
                   res.failedList
                 )}</ul>`;
               } else {
                 this.infoModal.title = "失败";
                 this.infoModal.type = "fail";
-                this.infoModal.content = `<p class='lineheight26'>产品翻译失败！</p><ul style="width: 300px; margin-left: -7px;">${this._getFailedList(
+                this.infoModal.content = `<p class='lineheight26'>产品翻译失败！</p><ul style="min-width: 300px; margin-left: -7px;">${this._getFailedList(
                   res.failedList
                 )}</ul>`;
               }
@@ -353,7 +357,7 @@ export default {
               this.infoModal.title = "成功";
               this.infoModal.type = "success";
               this.infoModal.content =
-                "<p class='lineheight26'>产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
+                "<p class='lineheight26'>产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p>";
             }
             this.$refs.progressModal.hideSelf();
             this.infoModal.btn.btn2Text = "关闭";
@@ -381,7 +385,8 @@ export default {
               this.infoModal.additional.words = "";
               this.infoModal.additional.operate = "";
             }
-            console.log(this.infoModal, "1++++++");
+            this.getTreeAsync();
+            this.getArticleList();
             this.$refs.infoModal.showSelf();
           }, 1000);
         }
@@ -393,7 +398,7 @@ export default {
             this.infoModal.title = "成功";
             this.infoModal.type = "success";
             this.infoModal.content =
-              "<p class='lineheight26'>产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
+              "<p class='lineheight26'>产品翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p>";
             this.infoModal.btn.btn2Text = "关闭";
             this.infoModal.btn.btn2Operate = "close";
             if (num === 1) {
@@ -416,11 +421,11 @@ export default {
               this.infoModal.additional.words = "关闭弹窗";
               this.infoModal.additional.operate = "close";
             }
-            console.log(this.infoModal, "1=====");
+            this.getTreeAsync();
+            this.getArticleList();
             this.$refs.infoModal.showSelf();
           }, 1000);
         }
-        this.getTree();
       } else {
         if (count < 8) {
           count++;
@@ -459,7 +464,6 @@ export default {
       } else {
         this.type = "signal";
         this.source = [row];
-        this.languageModal.title = "单篇翻译";
         this._getForeigns(translatedIds);
       }
     },
@@ -480,7 +484,6 @@ export default {
           this.type = "more";
           this.source = this._getChineseList();
           let obj = this._checkEnableTranslateItem(this.source);
-          this.languageModal.title = "批量翻译";
           this.languageModal.total = obj.total;
           this.languageModal.enable = obj.enable;
           this._getForeigns();
@@ -492,6 +495,11 @@ export default {
      */
     _getForeigns(ids) {
       this._getTranslateIds(this.languagesList, ids);
+      if (this.foreignLanguages.length > 1) {
+        this.languageModal.title = "翻译至语言";
+      } else {
+        this.languageModal.title = "保存至";
+      }
       this.languageModal.languages = this.foreignLanguages;
       this.languageModal.list = this.source;
       this.languageModal.tree = this.translateTree;
@@ -526,10 +534,12 @@ export default {
           }
           if (flag) {
             item.languages = data[i].languages;
+            item.label = data[i].label;
             this.foreignLanguages.push(item);
           }
         } else {
           item.languages = data[i].languages;
+          item.label = data[i].label;
           this.foreignLanguages.push(item);
         }
         item = {};
@@ -898,6 +908,7 @@ export default {
      */
     handleSelectionChange(list) {
       this.idsList = [];
+      this.list = list;
       this.count = list.length;
       if (list.length < 1) return;
       list.forEach(item => {

@@ -6,7 +6,7 @@
           {{ modalData.title }}
         </div>
         <div class="close-btn" @click="hideSelf">
-          <i class="iconfont iconguanbi"></i>
+          <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
         </div>
       </div>
       <div class="modal-content--area">
@@ -22,9 +22,7 @@
           <span class="is-active">{{
             modalData.enable && modalData.enable
           }}</span>
-          篇符合批量翻译条件<span class="attention"
-            >（*已筛选中文类型文章/产品）</span
-          >
+          篇符合批量翻译条件
         </p>
         <!--  v-scrollBar -->
         <ul
@@ -61,14 +59,17 @@
             class="select-tree"
             ref="selectTree"
             v-model="value.label"
-            popper-class="translate-id--area"
+            popper-class="aside-tree translate-id--area"
             placeholder="请选择节点"
           >
             <el-option :value="value.label">
               <el-tree
+                ref="tree"
+                node-key="id"
                 :data="modalData.tree"
                 :expand-on-click-node="false"
                 :default-expand-all="true"
+                :highlight-current="true"
                 accordion
                 @node-click="_handleTreeNodeClick"
               ></el-tree>
@@ -88,10 +89,7 @@
               >
                 <i class="iconfont iconduihao"></i>
               </span>
-              <p class="language-name">{{ item.languages }}</p>
-              <!-- <span class="site-name" v-for="(it, ind) in item.site" :key="ind"
-                >【{{ it }}】</span
-              > -->
+              <p class="language-name">{{ item.label }}</p>
             </li>
           </ul>
           <p
@@ -119,7 +117,7 @@
           style="min-width: 76px; width: 76px; box-sizing: border-box;"
           @click="_handleConfirm"
         >
-          翻译
+          确定
         </div>
       </div>
     </div>
@@ -165,6 +163,7 @@ export default {
     showSelf() {
       this.dialogShow = true;
       this.$nextTick(() => {
+        console.log(this.languageModal);
         this._initModalData();
         this._initSelectboxValue();
       });
@@ -199,6 +198,11 @@ export default {
       this.$refs.selectTree.blur();
       document.getElementsByClassName("translate-id--area")[0].remove();
     },
+    _setCurrentNode(nodeId) {
+      this.$nextTick(() => {
+        this.$refs.tree.setCurrentKey(nodeId);
+      });
+    },
     _initSelectboxValue() {
       if (
         this.modalData &&
@@ -207,6 +211,7 @@ export default {
       ) {
         this.value.label = this.modalData.tree[0].label;
         this.value.value = this.modalData.tree[0].id;
+        this._setCurrentNode(this.value.value);
       }
     },
     _initModalData() {
@@ -267,7 +272,7 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 30px 25px 32px;
-    width: 480px;
+    width: 450px;
     max-height: 600px;
     background-color: $--color-white;
     box-shadow: $--box-shadow-dark-small;
@@ -482,6 +487,7 @@ export default {
 }
 
 .translate-id--area {
+  padding-top: 0;
   .el-select-dropdown__item {
     max-width: 600px;
     background: #fff;
@@ -490,11 +496,16 @@ export default {
     cursor: default;
   }
 
+  .selected {
+    font-weight: 500;
+  }
+
   .el-select-dropdown__item /deep/ .el-tree {
     .el-tree-node {
       .el-tree-node__content {
         .el-tree-node__label {
           width: 100%;
+          font-size: 12px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

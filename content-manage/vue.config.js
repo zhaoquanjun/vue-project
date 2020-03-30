@@ -3,6 +3,8 @@ const webpack = require("webpack");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 const isProduction = process.env.NODE_ENV === "production";
+// const https = require("https");
+// const fs = require("fs");
 const cdn = {
   css: [],
   js: [
@@ -55,6 +57,14 @@ module.exports = {
     disableHostCheck: true,
     port: 8081,
     host: "0.0.0.0"
+    // https: {
+    //   key: fs.readFileSync(
+    //     path.resolve(__dirname, "./static/cert/privatekey.pem")
+    //   ),
+    //   cert: fs.readFileSync(
+    //     path.resolve(__dirname, "./static/cert/certificate.pem")
+    //   )
+    // }
   },
   configureWebpack: config => {
     // 生产环境配置

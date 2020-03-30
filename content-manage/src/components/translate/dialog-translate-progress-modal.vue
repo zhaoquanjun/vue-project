@@ -6,7 +6,7 @@
           {{ progressInfo && progressInfo.title && progressInfo.title }}
         </div>
         <div class="close-btn" @click="hideSelf">
-          <i class="iconfont iconguanbi"></i>
+          <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
         </div>
       </div>
       <div class="modal-content--area">

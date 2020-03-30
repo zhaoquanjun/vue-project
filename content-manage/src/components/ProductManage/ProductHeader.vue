@@ -137,6 +137,7 @@
             翻译
           </button>
           <button
+            v-show="isShowTranslate"
             class="cl-button cl-button--text_danger"
             @click="batchRemove(1, true)"
           >
@@ -162,11 +163,19 @@
 </template>
 <script>
 export default {
-  props: ["articleSearchOptions", "isBatchHeaderShow", "count", "idsList"],
+  props: [
+    "articleSearchOptions",
+    "isBatchHeaderShow",
+    "count",
+    "idsList",
+    "selectCategory",
+    "languageList"
+  ],
   data() {
     return {
       ascSort: false,
       descSort: true,
+      isShowTranslate: true,
       statusOptions: [
         {
           statusValue: "",
@@ -314,6 +323,20 @@ export default {
           break;
         case "translate":
           this.batchTranslate();
+      }
+    }
+  },
+  watch: {
+    selectCategory() {
+      if (
+        (this.selectCategory.id === 0 ||
+          this.selectCategory.language === "zh-CN") &&
+        this.languagesList &&
+        this.languagesList.length > 0
+      ) {
+        this.isShowTranslate = true;
+      } else {
+        this.isShowTranslate = false;
       }
     }
   }
