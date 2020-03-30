@@ -126,10 +126,3 @@ export const isHasTranslateProcess = () => {
 export const productTranslateStatus = id => {
   return ajaxRequest.get(`/api/v1/Product/GetTranslatedList/${id}`);
 };
-
-/**
- * @name 获取站点数量
- */
-export const getSiteCount = () => {
-  return ajaxRequest.get(`/api/v1/dashboard/GetSiteCountInfo`);
-};

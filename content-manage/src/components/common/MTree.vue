@@ -49,10 +49,6 @@
           <span
             class="set-tree-type"
             @click.stop="handleShow($event, node, data)"
-            :data-id="data.id"
-            :treeNodeId="treeNodeId"
-            :flag="(data.id === treeNodeId) != 0"
-            :data-list="foreignLen"
             v-show="
               (type === 'news' &&
                 data.id === treeNodeId &&
@@ -119,7 +115,7 @@
   </div>
 </template>
 <script>
-import * as productManageApi from "@/api/request/productManageApi";
+import * as dashboardApi from "@/api/request/dashboardApi";
 import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
 import { trim } from "@/utlis/index";
 export default {
@@ -169,13 +165,9 @@ export default {
   },
   methods: {
     async _getSiteCount() {
-      let { data, status } = await productManageApi.getSiteCount();
+      let { data, status } = await dashboardApi.getSiteCount();
       if (status === 200) {
-        if (data.IsSingleSite) {
-          this.siteCount = 1;
-        } else {
-          this.siteCount = data.SiteCount;
-        }
+        this.siteCount = data.SiteCount;
       }
     },
     createCategory(displayName, thumbnailPicUrl, Language) {

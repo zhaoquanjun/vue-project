@@ -47,13 +47,28 @@ export const getCurSiteId = () => {
  * 获取site列表
  */
 export const getSites = () => {
-  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/siteInfo/GetSites`);
-}
+  return ajaxRequest.get(
+    `${environment.designerManageApi}/api/v1/siteInfo/GetSites`
+  );
+};
 // 切换自动翻译状态
 export const switchAutoTranslateStatus = () => {
-  return ajaxRequest.put(`${environment.designerManageApi}/api/v1/Page/SwitchAutoTranslateStatus`);
+  return ajaxRequest.put(
+    `${environment.designerManageApi}/api/v1/Page/SwitchAutoTranslateStatus`
+  );
 };
 // 获取自动翻译状态
 export const getAutoTranslateConfig = () => {
-  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Page/GetAutoTranslateConfig`);
+  return ajaxRequest.get(
+    `${environment.designerManageApi}/api/v1/Page/GetAutoTranslateConfig`
+  );
+};
+
+/**
+ * @name 获取站点数量
+ */
+export const getSiteCount = () => {
+  return ajaxRequest.get(
+    `${environment.dashboardApi}/api/v1/dashboard/GetSiteCountInfo`
+  );
 };
