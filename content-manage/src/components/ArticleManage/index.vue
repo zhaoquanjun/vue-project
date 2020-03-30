@@ -6,7 +6,7 @@
       </h4>
       <m-tree
         ref="myTree"
-        :type="news"
+        :type="'news'"
         :treeResult="treeResult"
         :list-options="articleSearchOptions"
         :isArticle="true"

@@ -6,7 +6,7 @@
       </h4>
       <m-tree
         ref="myTree"
-        :type="news"
+        :type="'audio'"
         :tree-result="treeResult"
         :list-options="picSearchOptions"
         :isexpand="true"

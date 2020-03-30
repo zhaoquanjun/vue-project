@@ -7,7 +7,7 @@
 
       <m-tree
         ref="myTree"
-        :type="news"
+        :type="'image'"
         :tree-result="treeResult"
         :list-options="picSearchOptions"
         :isexpand="true"

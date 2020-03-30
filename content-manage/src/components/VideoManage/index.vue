@@ -28,7 +28,7 @@
 
         <m-tree
           ref="myTree"
-          :type="news"
+          :type="'video'"
           :treeResult="treeResult"
           :list-options="picSearchOptions"
           @getList="getList"
