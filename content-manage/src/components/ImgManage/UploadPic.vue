@@ -275,9 +275,9 @@ export default {
     right: 17px;
     bottom: 20px;
     top: auto;
-    width: 32px;
+    width: 28px;
     border: 1px solid #fff;
-    height: 32px;
+    height: 28px;
     border-radius: 50%;
     box-sizing: border-box
 }
@@ -322,8 +322,8 @@ export default {
     left: 17px;
     bottom: 20px;
     border: none;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     border: 1px solid #fff;
     background: url("~img/pic-icon/eye.png") no-repeat center;

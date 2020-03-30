@@ -107,7 +107,7 @@ export const translateMoreProduct = options => {
  * @name 获取产品翻译进度
  * @param {*} translateId 翻译id
  */
-export const getNewsTranslateProcess = translateId => {
+export const getProductTranslateProcess = translateId => {
   return ajaxRequest.get(`api/v1/product/GetTranslateProgress/${translateId}`);
 };
 
@@ -123,6 +123,6 @@ export const isHasTranslateProcess = () => {
  * @name 获取产品是否翻译过
  * @param {*} id 产品id
  */
-export const isNewsHasTranslated = id => {
+export const productTranslateStatus = id => {
   return ajaxRequest.get(`/api/v1/Product/GetTranslatedList/${id}`);
 };

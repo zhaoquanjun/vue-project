@@ -1,4 +1,5 @@
 import { updateAppIdToCookie, getSliderMenuList} from "@/api/request/user"
+import { getAutoTranslateConfig, getSites } from "@/api/request/dashboardApi";
 import { setLocal } from '@/libs/local'
 import { setCookie } from "@/libs/cookie"
 
@@ -24,14 +25,15 @@ let filterMenuListData = (source) => {
 const dashboard = {
   
     state: {
-      
         appId:"",
         validateMenu:"",
         menuList:[],
         authList:[], 
         buttonAuth:{},
         hasRules:false ,
-        curCode:""
+        curCode:"",
+        siteList: [],
+        autoTranslateSwitch: false
     },
     mutations: {
         SETSITEID(state, siteId) {
@@ -44,27 +46,41 @@ const dashboard = {
             // appid => bqqje  对应的下一个字母
             setCookie("bqqje", appId)
         },
-         set_menuList(state,m){
+        set_menuList(state,m){
             state.menuList = m;
             // setLocal("menulist", m)
 
-           },
-           set_authList(state, a){
-             state.authList = a;
-             state.hasRules = true;
+        },
+        set_authList(state, a){
+            state.authList = a;
+            state.hasRules = true;
             //  setLocal("authList", a)
-           },
+        },
+        set_autoTranslateSwitch(state, status) {
+            state.autoTranslateSwitch = status;
+        },
     },
     actions: {
         async _updateAppIdAndSiteIdToCookie({ commit }){
             let { data } = await updateAppIdToCookie();
             commit("SETAPPID", data)
         },
-        async _getMenuListData({ commit }) {
+        async _getMenuListData({ commit, state }) {
            let { data } = await getSliderMenuList();
              let { result1, pathArr } = filterMenuListData(data.menus);
             commit('set_menuList', result1);
             commit('set_authList', pathArr);
+            data.menus.forEach(async item => {
+              // 判断是否有设计器权限
+              if (item.code === "design") {
+                let { data } = await getSites();
+                state.siteList = data
+                if (data.length > 1) {
+                  let { data } = await getAutoTranslateConfig();
+                  commit("set_autoTranslateSwitch", data)
+                }
+              }
+          })
             return data
         },
      

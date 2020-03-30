@@ -3,9 +3,11 @@
  *
  */
 const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
-const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+//const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+const httpSchema ='https://';//2020-3-23演示环境也改为了https
 
 /**生产环境-- */
+let designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
 let contentApi = `${httpSchema}api.content.${baseServerUrl}`;
 let contentApiUri = `${httpSchema}api.content.${baseServerUrl}`;
 let dashboardApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
@@ -42,6 +44,7 @@ let redirectUrl = {
  */
 
 if (process.env.NODE_ENV === 'development') {
+    designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
     contentApi = 'http://api.content.console.wezhan.cn';
     contentApiUri = 'http://api.content.console.wezhan.cn';
     dashboardApi = 'http://api.dashboard.console.wezhan.cn';
@@ -63,6 +66,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const enbironmemy = {
+    designerManageApi,
     authorityUrl,
     redirectUrl,
     logoutRedirectUri,

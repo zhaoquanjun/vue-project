@@ -1,5 +1,5 @@
-import enbironmemy from "../../environment/index" 
-console.log(enbironmemy.dashboardApi)
+import enbironmemy from "../../environment/index";
+console.log(enbironmemy.dashboardApi);
 import * as ajaxRequest from "../ajaxRequest";
 
 /**
@@ -7,25 +7,36 @@ import * as ajaxRequest from "../ajaxRequest";
  * @method GET
  */
 export const getSliderMenuList = () => {
-    return ajaxRequest.get(`${enbironmemy.dashboardApi}/api/v1/appinfo/GetAppMenusByUserId`)
-}
-export const getUserDashboard = () => {  
-    let params = {
-        appId: ''
-    }
-    return ajaxRequest.get(`${enbironmemy.dashboardApi}/api/v1/userInfo/GetUserDashboard`, params);
-}
+  return ajaxRequest.get(
+    `${enbironmemy.dashboardApi}/api/v1/appinfo/GetAppMenusByUserId`
+  );
+};
+export const getUserDashboard = () => {
+  let params = {
+    appId: ""
+  };
+  return ajaxRequest.get(
+    `${enbironmemy.dashboardApi}/api/v1/userInfo/GetUserDashboard`,
+    params
+  );
+};
 export const updateAppIdToCookie = () => {
-    return ajaxRequest.get(`${enbironmemy.dashboardApi}/api/v1/userInfo/GetAppIdAndUpdateToCookie`);
-}
+  return ajaxRequest.get(
+    `${enbironmemy.dashboardApi}/api/v1/userInfo/GetAppIdAndUpdateToCookie`
+  );
+};
 
-
-export const updateUserLastAppIdAndCookie = (appId) => {
-    return ajaxRequest.put('/api/v1/userInfo/UpdateUserLastAppIdAndCookie', JSON.stringify(appId));
-}
+export const updateUserLastAppIdAndCookie = appId => {
+  return ajaxRequest.put(
+    "/api/v1/userInfo/UpdateUserLastAppIdAndCookie",
+    JSON.stringify(appId)
+  );
+};
 /**
- * 获取用户头像 
+ * 获取用户头像
  */
 export const getAppHeadInfo = () => {
-    return ajaxRequest.get(`${enbironmemy.dashboardApi}/api/v1/appInfo/GetAppHeadInfo`);
-}
+  return ajaxRequest.get(
+    `${enbironmemy.dashboardApi}/api/v1/appInfo/GetAppHeadInfo`
+  );
+};

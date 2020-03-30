@@ -50,7 +50,18 @@
           <span
             class="set-tree-type"
             @click.stop="handleShow($event, node, data)"
-            v-show="data.id === treeNodeId && draggable && data.id != 0"
+            :data-id="data.id"
+            :treeNodeId="treeNodeId"
+            :flag="(data.id === treeNodeId) != 0"
+            :data-list="foreignLen"
+            v-show="
+              (data.id === treeNodeId && draggable && foreignLen === 1) ||
+                (data.id != 0 &&
+                  treeNodeId != 0 &&
+                  data.id === treeNodeId &&
+                  draggable &&
+                  foreignLen > 1)
+            "
           >
             <i class="iconfont iconsangedian" style="font-size:24px"></i>
           </span>
@@ -85,7 +96,7 @@
         添加子分类
       </button>
       <button
-        v-if="curClickNode.data.level > 0"
+        v-if="curClickNode.data.level > 0 && !curClickNode.data.isSystem"
         type="text"
         size="mini"
         @click="rename"
@@ -94,7 +105,7 @@
       </button>
 
       <button
-        v-if="curClickNode.data.level > 0"
+        v-if="curClickNode.data.level > 0 && !curClickNode.data.isSystem"
         type="text"
         size="mini"
         @click="batchRemove"
@@ -339,6 +350,7 @@ export default {
       }
       this.curClickData = data;
       this.curClickNode = node;
+      console.log(this.curClickNode);
       this._handleShowMoreOperate1(ev, node);
     },
     // 分类上传图片
@@ -407,6 +419,20 @@ export default {
   computed: {
     isContentwrite() {
       return this.$store.state.dashboard.isContentwrite;
+    },
+    foreignLen: {
+      get: function() {
+        let len = 1;
+        if (
+          this.treeResult &&
+          this.treeResult[0] &&
+          this.treeResult[0].children.length > 0
+        ) {
+          len = this.treeResult[0].children.length;
+        }
+        return len;
+      },
+      set: function() {}
     }
   }
 };

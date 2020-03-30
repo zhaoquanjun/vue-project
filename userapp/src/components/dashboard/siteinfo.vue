@@ -31,45 +31,40 @@
           <span class="site-language">{{_getLanguage(curSiteinfo.language)}}</span>
           <i
             class="iconfont iconicon-dash-edit editIcon"
-            v-show="isSystem"
+            v-show="isSystem&&curSiteinfo.hasBeenInitialized"
             @click="changeSiteInfoShow"
           ></i>
         </div>
         <div class="site-btn">
-          <div v-if="curSiteinfo.language=='zh-CN'">
+          <button
+            class="cl-button cl-button--primary"
+            @click="jumpTo('template')"
+            v-show="!curSiteinfo.hasBeenInitialized&&curSiteinfo.language=='zh-CN'"
+          >选择模版</button>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="top"
+            :content="curSiteinfo.anyChineseSiteHasBeenInitialized?'建议先完成中文站的搭建再整体进行外文站点初始化':'请先完成中文站点的模板选择'"
+          >
             <button
               class="cl-button cl-button--primary"
-              @click="jumpTo('template')"
-              v-show="!curSiteTodoinfo.siteTemplate"
-            >选择模版</button>
-          </div>
-          <div v-else>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              placement="top"
-              :content="curSiteinfo.anyChineseSiteHasBeenInitialized?'建议先完成中文站的搭建再整体进行外文站点初始化':'请先完成中文站点的模板选择'"
-            >
-              <button
-                class="cl-button cl-button--primary"
-                :class="{'disabled':!curSiteinfo.anyChineseSiteHasBeenInitialized}"
-                :disabled="!curSiteinfo.anyChineseSiteHasBeenInitialized"
-                @click="showInitializedDialog"
-                v-show="!curSiteinfo.hasBeenInitialized"
-              >初始化站点</button>
-            </el-tooltip>
-          </div>
+              :class="{'disabled':!curSiteinfo.anyChineseSiteHasBeenInitialized}"
+              @click="showInitializedDialog"
+              v-show="!curSiteinfo.hasBeenInitialized&&curSiteinfo.language!='zh-CN'"
+            >初始化站点</button>
+          </el-tooltip>
           <a
             class="preview-btn"
             :href="`//${curSiteinfo.secondDomain}`"
             target="_blank"
-            v-show="curSiteTodoinfo.siteTemplate"
+            v-show="curSiteinfo.hasBeenInitialized"
           >
             <button class="cl-button cl-button--primary_notbg">预览</button>
           </a>
           <a
             :href="`${designerUrl}?siteId=${curSiteinfo.siteId}`"
-            v-show="curSiteTodoinfo.siteTemplate"
+            v-show="curSiteinfo.hasBeenInitialized"
           >
             <button class="cl-button cl-button--primary">设计站点</button>
           </a>
@@ -79,7 +74,7 @@
         <el-col :span="8" class="site-item">
           <div class="site-title">上线</div>
           <div class="siteInfo-wrap">
-            <div class="siteInfo-item" @click="jumpTo('template')">
+            <div class="siteInfo-item" :class="{'disabled':!curSiteinfo.hasBeenInitialized&&curSiteinfo.language!='zh-CN'}" @click="jumpTo('template')">
               <div class="siteInfo-left">
                 <span
                   :class="{'siteInfo-icon-gray':!curSiteTodoinfo.siteTemplate, 'siteInfo-icon-green':curSiteTodoinfo.siteTemplate}"
@@ -342,6 +337,9 @@
             </div>
           </div>
           <div class="dialog-footer">
+            <div class="countdownTime" v-show="initializedStatus == 'success'">
+              {{countdownTimeNum}}s进入预览
+            </div>
             <a
               class="preview-btn"
               :href="`//${curSiteinfo.secondDomain}`"
@@ -374,7 +372,7 @@
         <div class="createSiteName">
           <span class="createSiteTitle">站点名称</span>
           <el-input
-            v-model="changeSiteName"
+            v-model.trim="changeSiteName"
             @blur="blurSiteName(changeSiteName)"
             placeholder="请输入内容"
             class="createSiteNameInput"
@@ -476,14 +474,22 @@ export default {
       initializedStatus: "success",
       initializedErrorList: [],
       translationPercentage: 0,
-      copyPercentage: 0
+      copyPercentage: 0,
+      countdownTimeNum: 5
     };
   },
   components: {
     SelectTemplateDialog
   },
+  computed: {
+    isSiteInfoShow() {
+      return this.$store.state.dashboard.isSiteInfoShow;
+    }
+  },
   mounted() {
-    this.getChineseSiteInfo();
+    if (this.isSiteInfoShow) {
+      this.getChineseSiteInfo();
+    }
   },
   methods: {
     async getChineseSiteInfo() {
@@ -516,6 +522,7 @@ export default {
     changeTemplateId(id) {
       this.curSiteinfo.templateId = id;
       this.$emit("getSites");
+      this.getChineseSiteInfo();
     },
     async changeSite(item) {
       if (item.siteId != this.siteId) {
@@ -527,7 +534,7 @@ export default {
       }
     },
     jumpTo(type) {
-      if (!this.curSiteTodoinfo.siteTemplate) {
+      if (!this.curSiteinfo.hasBeenInitialized&&this.curSiteinfo.language=='zh-CN') {
         this.$refs.selectTemplateDialog.showTemplate();
         return;
       }
@@ -536,6 +543,9 @@ export default {
           path: "/website/mysite/sitedomain"
         });
       } else if (type == "template") {
+        if (!this.curSiteinfo.hasBeenInitialized&&this.curSiteinfo.language!='zh-CN') {
+          return;
+        }
         this.$refs.selectTemplateDialog.showTemplate();
       } else if (type == "seo") {
         this.$router.push({
@@ -575,8 +585,10 @@ export default {
       }
     },
     showInitializedDialog() {
-      this.initializedDialog = true;
-      this.initializedStep = "before";
+      if(this.curSiteinfo.anyChineseSiteHasBeenInitialized){
+        this.initializedDialog = true;
+        this.initializedStep = "before";
+      }
     },
     closeInitializedDialog() {
       this.initializedDialog = false;
@@ -592,37 +604,58 @@ export default {
         this.initializedType = "translation";
       }
       this.initializedStep = "start";
-      let para = {
-        language: this.initializedSiteLanguage,
-        needTranslateProduct: true,
-        needTranslateNews: true,
-        sourceSiteId: this.initializedSourceSiteId,
-        translateTargetSiteId: this.siteId
-      };
-      let data;
       try {
-        data = await dashboardApi.translate(para);
-      } catch (e) {
-        this.initializedStatus = "fail";
-      }
-      if (this.initializedSiteLanguage == "zh-CN") {
-        let timer = setTimeout(() => {
-          this.copyPercentage = 100;
+        let para = {
+          language: this.initializedSiteLanguage,
+          needTranslateProduct: true,
+          needTranslateNews: true,
+          sourceSiteId: this.initializedSourceSiteId,
+          translateTargetSiteId: this.siteId
+        };
+        let { data, status } = await dashboardApi.translate(para);
+        if (status == 200) {
           this.initializedStatus = "success";
-          this.initializedStep = "after";
-        }, 1000);
-      } else {
-        this.getTranslateProgress(data.data.translateId);
+        } else {
+          this.initializedStatus = "fail";
+        }
+        if (this.initializedSiteLanguage == "zh-CN") {
+          this.copyPercentage = 100;
+          let timer = setTimeout(() => {
+            this.countdownTimeNum = 5;
+            this.initializedStep = "after";
+            let previewTimer = setInterval(()=>{
+              this.countdownTimeNum--;
+              if(this.countdownTimeNum == 0){
+                clearInterval(previewTimer);
+                let newWindow = window.open();
+                newWindow.location.href = `//${this.curSiteinfo.secondDomain}`;
+              }
+            }, 1000)
+            this.copyPercentage = 0;
+            this.getChineseSiteInfo();
+            clearTimeout(timer)
+          }, 1000);
+        } else {
+          this.getTranslateProgress(data.translateId);
+        }
+      } catch (e) {
+        console.log(e);
+        this.initializedStatus = "fail";
+        this.initializedStep = "after";
       }
     },
     // 获取翻译进度
     async getTranslateProgress(translateId) {
       let timer = setInterval(async () => {
         let { data } = await dashboardApi.getTranslateProgress(translateId);
-        this.translationPercentage = data.progressPercent * 100;
+        this.translationPercentage = Number(
+          data.progressPercentStr.substring(
+            0,
+            data.progressPercentStr.length - 1
+          )
+        );
         if (data.isTranslateIdExist == true && data.progressPercent == 1) {
           clearInterval(timer);
-          this.initializedStep = "after";
           if (data.failedCount > 0) {
             this.initializedErrorList = [];
             this.initializedStatus = "error";
@@ -650,6 +683,22 @@ export default {
           } else {
             this.initializedStatus = "success";
           }
+          setTimeout(() => {
+            this.countdownTimeNum = 5;
+            this.initializedStep = "after";
+            let previewTimer = setInterval(()=>{
+              this.countdownTimeNum--;
+              if(this.countdownTimeNum == 0){
+                clearInterval(previewTimer)
+                console.log(`//${this.curSiteinfo.secondDomain}`)
+                let newWindow = window.open();
+                newWindow.location.href = `//${this.curSiteinfo.secondDomain}`
+                // let a = document.getElementsByClassName("preview-btn")[0]
+                // a.click();
+              }
+            }, 1000)
+            this.translationPercentage = 0;
+          }, 1000);
         }
       }, 2000);
     },
@@ -964,7 +1013,7 @@ export default {
           padding: 8px;
           background: transparent;
           &:hover {
-            background-color: rgba(9, 204, 235, 0.09);
+            background-color: $--background-color-hover;
             border-radius: 2px;
           }
         }
@@ -1080,6 +1129,9 @@ export default {
               }
             }
           }
+          .disabled{
+            cursor: not-allowed;
+          }
         }
       }
     }
@@ -1148,20 +1200,6 @@ export default {
     overflow: hidden;
     padding: 24px 24px 32px;
     box-sizing: border-box;
-    .dialog-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .dialog-headTitle {
-        font-size: 16px;
-        font-weight: 600;
-        color: rgba(38, 38, 38, 1);
-        line-height: 22px;
-      }
-      .dialog-close {
-        cursor: pointer;
-      }
-    }
     .dialog-site {
       margin-top: 16px;
       .dialog-siteTitle {
@@ -1193,14 +1231,6 @@ export default {
       font-size: $--font-size-small;
       color: $--color-text-regular;
       margin-top: 16px;
-    }
-    .dialog-footer {
-      margin-top: 36px;
-      text-align: right;
-      width: 100%;
-      .preview-btn {
-        margin-right: 16px;
-      }
     }
     .translation-wrap {
       display: flex;
@@ -1336,6 +1366,34 @@ export default {
         color: $--color-text-regular;
         margin-left: 25px;
       }
+    }
+  }
+  .dialog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .dialog-headTitle {
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(38, 38, 38, 1);
+      line-height: 22px;
+    }
+    .dialog-close {
+      cursor: pointer;
+    }
+  }
+  .dialog-footer {
+    margin-top: 36px;
+    text-align: right;
+    width: 100%;
+    .preview-btn {
+      margin-right: 16px;
+    }
+    .countdownTime{
+      display: inline-block;
+      color: $--color-warning;
+      font-size: $--font-size-small;
+      margin-right: 16px;
     }
   }
 }

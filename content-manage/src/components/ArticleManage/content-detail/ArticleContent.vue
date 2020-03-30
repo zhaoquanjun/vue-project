@@ -282,6 +282,7 @@ export default {
   },
   created() {
     var id = this.$route.query.id;
+    this.NewId = id;
     this.articleDetail.categoryId = this.$route.query.categoryId;
     if (id != null || id != undefined) {
       this.getArticleDetail(id);
@@ -368,77 +369,60 @@ export default {
       this.articleDetail.categoryId = node.id;
       this.categoryName = node.label;
     },
+    // 重置表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
     // 新建保存
     submitForm(formName, imageUrl) {
       this.articleDetail.pictureUrl = imageUrl;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.insertArticle();
+          this.type = "create";
+          var html = document
+            .getElementById(this.quillContentId)
+            .querySelector(".ql-editor").innerHTML;
+          this.articleDetail.contentDetail = html;
+          this._createSave();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    // 重置表单
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    // 新建确认保存
+    async _createSave() {
+      let { status } = await articleManageApi.createArticle(this.articleDetail);
+      status === 200 && this._complateCreate();
     },
-    //插入文章
-    async insertArticle() {
-      var html = document
-        .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML;
-      this.articleDetail.contentDetail = html;
-      let { status, data } = await articleManageApi.createArticle(
-        this.articleDetail
-      );
-      if (status === 200) {
-        this.$confirm("保存成功!", "提示", {
-          confirmButtonText: "新增下一篇",
-          iconClass: "icon-success",
-          cancelButtonText: "关闭",
-          callback: async action => {
-            if (action === "confirm") {
-              this.resetForm("articleDetail");
-              this.resetDetail();
-              this.$emit("changeSaveWay", false);
-              this.$emit("changePreviewId", "", 0);
-            } else {
-              this.NewId = data;
-              this.articleDetail.NewId = data;
-              this.$emit("changeSaveWay", true);
-              this.$emit(
-                "changePreviewId",
-                data,
-                this.articleDetail.defaultSiteId
-              );
-            }
-          }
-        });
-      }
-    },
-    // 编辑提交
+    // 编辑保存
     editArticle(formName, imageUrl) {
       this.articleDetail.pictureUrl = imageUrl;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.saveArticle();
+          this.type = "edit";
+          var html = document
+            .getElementById(this.quillContentId)
+            .querySelector(".ql-editor").innerHTML;
+          this.articleDetail.contentDetail = html;
+          this.editSave();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    //编辑保存文章
-    async saveArticle() {
-      var html = document
-        .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML;
-      this.articleDetail.contentDetail = html;
-      let { status, data } = await articleManageApi.editArticle(
-        this.articleDetail
-      );
+    /**
+     * 保存
+     */
+    async editSave() {
+      let { status } = await articleManageApi.editArticle(this.articleDetail);
+      status === 200 && this._completeEdit();
+    },
+    /**
+     * 完成编辑
+     */
+    _completeEdit() {
       this.$confirm("保存成功!", "提示", {
         confirmButtonText: "新增下一篇",
         customClass: "medium",
@@ -463,14 +447,30 @@ export default {
         }
       });
     },
-
-    imgChangeSizeHandler(img) {
-      img.width = "100";
-      img.height = "100";
-    },
-    //重置表单
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    /**
+     * 完成新建
+     */
+    _complateCreate() {
+      this.$confirm("保存成功!", "提示", {
+        confirmButtonText: "新增下一篇",
+        iconClass: "icon-success",
+        cancelButtonText: "关闭",
+        callback: async action => {
+          if (action === "confirm") {
+            this.resetForm("articleDetail");
+            this.resetDetail();
+            this.$emit("changeSaveWay", false);
+            this.$emit("changePreviewId", "", 0);
+          } else {
+            this.$emit("changeSaveWay", true);
+            this.$emit(
+              "changePreviewId",
+              this.NewId,
+              this.articleDetail.defaultSiteId
+            );
+          }
+        }
+      });
     },
     onEditorChange({ editor, html, text }) {
       this.articleDetail.contentDetail = html;
@@ -509,8 +509,6 @@ export default {
       this.articleDetail.contentDetail = html;
     }
   },
-  mounted() {},
-  computed: {},
   watch: {
     "articleDetail.searchKeywords"() {
       if (this.articleDetail.searchKeywords.length < 5) {

@@ -116,6 +116,10 @@
           >
             <span
               class="translate-icon"
+              :class="{
+                disabled:
+                  languagesList.length < 1 || scope.row.language != 'zh-CN'
+              }"
               :data-language="scope.row.language"
               @mouseenter.stop="
                 _handleMouseenterTranslate(
@@ -139,7 +143,7 @@
               "
             >
               <ul
-                v-if="scope.row.translateToolTip === ''"
+                v-show="scope.row.translateToolTip === ''"
                 class="more-operate"
                 :ref="'translateModal' + scope.row.index"
               >
@@ -263,8 +267,7 @@ export default {
       loadingShow: true,
       tableData: "",
       hasTranslateList: [],
-      timer: null,
-      leaveTimer: null
+      timer: null
     };
   },
   mounted() {
@@ -298,8 +301,12 @@ export default {
       this.$emit("handleGetSignalTranslateSource", row, this.hasTranslateList);
     },
     _handleTranslateItem(e, row, type) {
+      if (this.languagesList.length < 1) return false;
       if (this.hasTranslateList.length > 0) {
-        this.hasTranslateList.length === this.languagesList.length &&
+        if (
+          this.hasTranslateList.length === 1 &&
+          this.languagesList.length === 1
+        )
           this._handleViewTranslatedNews(this.hasTranslateList[0]);
       } else {
         if (type) return;
@@ -310,19 +317,31 @@ export default {
     _handleMouseenterTranslate(e, row, type) {
       this.timer && clearTimeout(this.timer);
       if (type) return false;
-      this.timer = setTimeout(async () => {
-        let { data } = await articleManageApi.newsTranslateStatus(row.id);
-
-        if (data.length === 0) {
-          this.articlePageResult.list[row.index].translateToolTip =
-            "点击翻译文章";
-        }
-        if (data.length === 1) {
-          if (this.languagesList.length === 1) {
+      if (this.languagesList.length > 0) {
+        this.timer = setTimeout(async () => {
+          let { data } = await articleManageApi.newsTranslateStatus(row.id);
+          this.hasTranslateList = data;
+          if (data.length === 0) {
             this.articlePageResult.list[row.index].translateToolTip =
-              "查看已翻译的文章";
+              "点击翻译文章";
           }
-          if (this.languagesList.length > 1) {
+          if (data.length === 1) {
+            if (this.languagesList.length === 1) {
+              this.articlePageResult.list[row.index].translateToolTip =
+                "查看已翻译的文章";
+            }
+            if (this.languagesList.length > 1) {
+              this.articlePageResult.list[row.index].translateToolTip = "";
+              this.hasTranslateList = data;
+              if (this.$refs["translateModal" + row.index]) {
+                const left = e.clientX + "px";
+                const top = e.clientY + "px";
+                this.$refs["translateModal" + row.index].style.left = left;
+                this.$refs["translateModal" + row.index].style.top = top;
+              }
+            }
+          }
+          if (data.length > 1) {
             this.articlePageResult.list[row.index].translateToolTip = "";
             this.hasTranslateList = data;
             if (this.$refs["translateModal" + row.index]) {
@@ -332,23 +351,12 @@ export default {
               this.$refs["translateModal" + row.index].style.top = top;
             }
           }
-        }
-        if (data.length > 1) {
-          if (data.length === this.languagesList.length) {
-            this.articlePageResult.list[row.index].translateToolTip = "";
-            this.hasTranslateList = data;
-            if (this.$refs["translateModal" + row.index]) {
-              const left = e.clientX + "px";
-              const top = e.clientY + "px";
-              this.$refs["translateModal" + row.index].style.left = left;
-              this.$refs["translateModal" + row.index].style.top = top;
-            }
-          }
-        }
-      }, 200);
+        }, 200);
+      }
     },
     _handleMouseleaveTranslte(row, type) {
       if (type) return false;
+      if (this.languagesList.length < 1) return false;
       this.hasTranslateList = [];
       if (this.$refs["translateModal" + row.index]) {
         this.$refs["translateModal" + row.index].style.left = "-300%";
@@ -513,12 +521,12 @@ export default {
     left: -300%;
     top: -300%;
     transform: translateX(-50%);
-    display: none;
+    visibility: hidden;
+    z-index: -1;
     width: 140px;
     background: $--color-white;
     color: $--color-text-primary;
     box-shadow: $--box-shadow-base;
-    z-index: 1999;
 
     li {
       text-align: center;
@@ -569,7 +577,8 @@ export default {
 
 .translate-icon[data-language="zh-CN"]:hover {
   .more-operate {
-    display: block;
+    visibility: visible;
+    z-index: 1999;
   }
 }
 

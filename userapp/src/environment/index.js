@@ -1,6 +1,7 @@
 
 const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
-export const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+//const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+const httpSchema ='https://';//2020-3-23演示环境也改为了https
 
 let siteManageApi =`${httpSchema}api.designer.${baseServerUrl}`;
 let memberManageApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
@@ -47,7 +48,7 @@ if (process.env.NODE_ENV === `development`) {
     uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture`;
     uploadRobotsUrl = `${httpSchema}api.designer.console.wezhan.cn/api/v1/Robots/AddOrOverride/`;
     authorityUrl = `${httpSchema}login.console.wezhan.cn`;
-    redirectUrl = `${httpSchema}localhost:8082/callback`;
+    redirectUrl = `http://localhost:8082/callback`;//本地是http
     logoutRedirectUri = `${httpSchema}dashboard.console.wezhan.cn/index.html`;
     silentRedirectUri = `${httpSchema}localhost:8082/static/silent-renew.html`;
     clientId = "dev.dashboard.api";

@@ -10,6 +10,13 @@
             <span class="headAppNameInfo">已购买服务</span>
             <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;"></i>
           </span>
+          <div v-show="$store.state.dashboard.siteList.length > 1" class="autoTranslate-wrap">
+            <div class="autoTranslate-text">自动翻译</div>
+            <el-tooltip effect="dark" placement="bottom">
+              <div slot="content">中文站的文章/产品/页面保存成功后，执行自动翻译<br/>（*对有修订记录的文章/产品/页面，不做操作）</div>
+              <el-switch v-model="$store.state.dashboard.autoTranslateSwitch" :width="20" @change="changeAutoTranslate" class="autoTranslate-switch"></el-switch>
+            </el-tooltip>
+          </div>
         </div>
       </div>
       <div>
@@ -223,6 +230,10 @@ export default {
     dropdownAvatarhide() {
       this.isdropdownAvatarShow = false;
     },
+    async changeAutoTranslate(){
+      let { data } = await dashboardApi.switchAutoTranslateStatus();
+      this.$store.commit("set_autoTranslateSwitch", data);
+    },
     async search() {
       let { data } = await dashboardApi.getApplicationsByUserId(this.keyword);
       this.appList = data;
@@ -420,6 +431,35 @@ export default {
         }
         i {
           color: $--color-primary;
+        }
+      }
+    }
+    .autoTranslate-wrap{
+      display: inline-block;
+      margin-left: 30px;
+      .autoTranslate-text{
+        display: inline-block;
+        font-size: $--font-size-small;
+      }
+      .autoTranslate-switch {
+        margin-left: 8px;
+      }
+      /deep/ .el-switch{
+        .el-switch__core{
+          width: 20px;
+          height: 12px;
+          &:after{
+            width: 10px;
+            height: 10px;
+            top: 0;
+          }
+        }
+      }
+      /deep/ .el-switch.is-checked{
+        .el-switch__core{
+          &:after{
+            margin-left: -11px;
+          }
         }
       }
     }

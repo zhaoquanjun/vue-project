@@ -3,7 +3,8 @@
  *
  */
 const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn':'clouddream.net';
-const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+//const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+const httpSchema ='https://';//2020-3-23演示环境也改为了https
 
 /**生产环境-- */
 let contentApi = `${httpSchema}api.content.${baseServerUrl}`;
@@ -34,7 +35,7 @@ if (process.env.NODE_ENV === 'development') {
     dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
     uploadPicUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture`;
     authorityUrl = `${httpSchema}login.console.wezhan.cn`;
-    redirectUrl = `${httpSchema}localhost:8081/callback`;
+    redirectUrl = `http://localhost:8081/callback`;//本地是http
     logoutRedirectUri = `${httpSchema}content.console.wezhan.cn/index.html`;
     silentRedirectUri = `${httpSchema}localhost:8081/static/silent-renew.html`;
     designerManageApi = `${httpSchema}api.designer.console.wezhan.cn`;

@@ -3,6 +3,7 @@
     <el-table
       ref="multipleTable"
       :data="articlePageResult.list"
+      :row-class-name="tableRowClassName"
       tooltip-effect="dark"
       class="content-table"
       :height="tableHeight"
@@ -88,29 +89,71 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="isPublishPrt" label="翻译" min-width="100">
+      <el-table-column prop="isPublishPrt" label="多语言" min-width="100">
         <template slot-scope="scope">
           <span class="ellipsis">{{
             scope.row.language ? scope.row.language : ""
           }}</span>
-          <span
-            class="translate-icon"
-            @mouseenter.stop="
-              _handleMouseenterTranslate(
-                $event,
-                scope.row,
-                scope.row.language != 'zh-CN'
-              )
-            "
-            @mouseleave.stop="_handleMouseleaveTranslate"
-            @click.stop="
-              _handleTranslateItem(
-                $event,
-                scope.row,
-                scope.row.language != 'zh-CN'
-              )
-            "
-          ></span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :open-delay="200"
+            :disabled="scope.row.translateToolTip.length == 0"
+            :content="scope.row.translateToolTip"
+            placement="top"
+          >
+            <span
+              class="translate-icon"
+              :class="{
+                disabled:
+                  languagesList.length < 1 || scope.row.language != 'zh-CN'
+              }"
+              :data-language="scope.row.language"
+              @mouseenter.stop="
+                _handleMouseenterTranslate(
+                  $event,
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
+              @mouseleave.stop="
+                _handleMouseleaveTranslte(
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
+              @click.stop="
+                _handleTranslateItem(
+                  $event,
+                  scope.row,
+                  scope.row.language != 'zh-CN'
+                )
+              "
+            >
+              <ul
+                v-show="scope.row.translateToolTip === ''"
+                class="more-operate"
+                :ref="'translateModal' + scope.row.index"
+              >
+                <li class="view-title">查看已翻译的文章</li>
+                <li
+                  class="view-item"
+                  v-for="(item, index) in hasTranslateList"
+                  :key="index"
+                  @click="_handleViewTranslatedProduct(item)"
+                >
+                  {{ item.languageStr }}
+                </li>
+                <li
+                  class="translate-tomore"
+                  @click="_handleTranslateToMore(scope.row)"
+                  v-show="hasTranslateList.length < languagesList.length"
+                >
+                  翻译为更多语言
+                </li>
+              </ul>
+            </span>
+          </el-tooltip>
         </template>
       </el-table-column>
 
@@ -192,20 +235,6 @@
         {{ it.name }}
       </li>
     </ul>
-    <ul class="more-operate" ref="translateModal" v-show="moreTranslateShow">
-      <li class="view-title">查看已翻译的文章</li>
-      <li
-        class="view-item"
-        v-for="(item, index) in view"
-        :key="index"
-        @click="_handleViewTranslatedProduct(item)"
-      >
-        {{ item.label }}
-      </li>
-      <li class="translate-tomore" @click="_handleTranslateToMore">
-        翻译为更多语言
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -231,9 +260,8 @@ export default {
       loadingShow: true,
       tableData: "",
       isOperateSectionShow: false,
-      view: [],
-      curRow: null,
-      moreTranslateShow: false
+      hasTranslateList: [],
+      timer: null
     };
   },
   mounted() {
@@ -254,66 +282,81 @@ export default {
     window.onImgError = ele => {
       ele.src = ele.attributes["src"] = this.defaultImg;
     };
+    console.log(this.articlePageResult);
   },
   methods: {
+    // 给行添加索引
+    tableRowClassName({ row, rowIndex }) {
+      row.index = rowIndex;
+    },
     _handleViewTranslatedProduct(o) {
+      console.log(o);
       this.$emit("handleEditArticle", o);
     },
-    _handleTranslateToMore() {
-      this.$emit(
-        "handleGetSignalTranslateSource",
-        this.curRow,
-        this.hasTranslateList
-      );
+    _handleTranslateToMore(row) {
+      this.$emit("handleGetSignalTranslateSource", row, this.hasTranslateList);
     },
     _handleTranslateItem(e, row, type) {
+      if (this.languagesList.length < 1) return false;
       if (this.hasTranslateList.length > 0) {
-        if (this.hasTranslateList.length === 1) {
-          this._handleViewTranslatedNews(this.hasTranslateList[0]);
-        }
+        if (
+          this.hasTranslateList.length === 1 &&
+          this.languagesList.length === 1
+        )
+          this._handleViewTranslatedProduct(this.hasTranslateList[0]);
       } else {
         if (type) return;
-        this.curRow = row;
         this.$emit("handleGetSignalTranslateSource", row);
       }
     },
-    async _handleMouseenterTranslate(e, row, type) {
-      let { data } = await productManageApi.newsTranslateStatus(row.id);
-      const right =
-        document.documentElement.clientWidth - e.pageX - e.offsetX + "px";
-      const top = e.pageY - e.offsetY - 120 + "px";
-      this.$refs.translateModal.style.right = right;
-      this.$refs.translateModal.style.top = top;
-      if (data.length === 0) {
-        if (type) {
-          this.articlePageResult.list[row.index].translateToolTip = "";
-        } else {
-          this.articlePageResult.list[row.index].translateToolTip =
-            "点击翻译文章";
-        }
-      }
-      if (data.length === 1) {
-        if (this.languagesList.length === 1) {
-          this.articlePageResult.list[row.index].translateToolTip =
-            "查看已翻译的文章";
-        }
-        if (this.languagesList.length > 1) {
-          this.articlePageResult.list[row.index].translateToolTip = "";
+    // 鼠标进入翻译icon
+    _handleMouseenterTranslate(e, row, type) {
+      this.timer && clearTimeout(this.timer);
+      if (type) return false;
+      if (this.languagesList.length > 0) {
+        this.timer = setTimeout(async () => {
+          let { data } = await productManageApi.productTranslateStatus(row.id);
           this.hasTranslateList = data;
-          this.moreTranslateShow = true;
-        }
-      }
-      if (data.length > 1) {
-        if (data.length === this.languagesList.length) {
-          this.articlePageResult.list[row.index].translateToolTip = "";
-          this.hasTranslateList = data;
-          this.moreTranslateShow = true;
-        }
+          if (data.length === 0) {
+            this.articlePageResult.list[row.index].translateToolTip =
+              "点击翻译产品";
+          }
+          if (data.length === 1) {
+            if (this.languagesList.length === 1) {
+              this.articlePageResult.list[row.index].translateToolTip =
+                "查看已翻译的产品";
+            }
+            if (this.languagesList.length > 1) {
+              this.articlePageResult.list[row.index].translateToolTip = "";
+              this.hasTranslateList = data;
+              if (this.$refs["translateModal" + row.index]) {
+                const left = e.clientX + "px";
+                const top = e.clientY + "px";
+                this.$refs["translateModal" + row.index].style.left = left;
+                this.$refs["translateModal" + row.index].style.top = top;
+              }
+            }
+          }
+          if (data.length > 1) {
+            this.articlePageResult.list[row.index].translateToolTip = "";
+            this.hasTranslateList = data;
+            if (this.$refs["translateModal" + row.index]) {
+              const left = e.clientX + "px";
+              const top = e.clientY + "px";
+              this.$refs["translateModal" + row.index].style.left = left;
+              this.$refs["translateModal" + row.index].style.top = top;
+            }
+          }
+        }, 200);
       }
     },
-    _handleMouseleaveTranslate() {
-      this.moreTranslateShow = false;
+    _handleMouseleaveTranslte(row, type) {
+      if (type) return false;
       this.hasTranslateList = [];
+      if (this.$refs["translateModal" + row.index]) {
+        this.$refs["translateModal" + row.index].style.left = "-300%";
+        this.$refs["translateModal" + row.index].style.top = "-300%";
+      }
     },
     _handleGetMoreTranslateSource() {
       this.$emit("handleGetMoreTranslateSource");
@@ -484,55 +527,81 @@ export default {
   background: url("~img/content-icon/translate_icon.png") no-repeat center
     center;
   background-size: 100% 100%;
-}
 
-.more-operate {
-  position: absolute;
-  top: 0;
-  right: 0px;
-  transform: translateX(50%);
-  background: $--color-white;
-  color: $--color-text-primary;
-  box-shadow: $--box-shadow-base;
+  .more-operate {
+    position: fixed;
+    left: -300%;
+    top: -300%;
+    transform: translateX(-50%);
+    visibility: hidden;
+    width: 140px;
+    background: $--color-white;
+    color: $--color-text-primary;
+    box-shadow: $--box-shadow-base;
+    z-index: -1;
 
-  li {
-    text-align: center;
-    cursor: pointer;
+    li {
+      text-align: center;
+      cursor: pointer;
 
-    &:hover {
-      color: $--color-primary;
-      background-color: $--background-color-hover;
+      &:hover {
+        color: $--color-primary;
+        background-color: $--background-color-hover;
+      }
+    }
+
+    li:first-of-type {
+      cursor: default;
+      font-size: $--font-size-small;
+
+      &:hover {
+        color: $--color-text-primary;
+        background-color: $--color-white;
+      }
+    }
+
+    .view-title,
+    .translate-tomore {
+      font-size: $--font-size-small;
+      padding: 8px 16px;
+    }
+
+    .view-item {
+      font-size: $--font-size-small;
+      padding: 6px 16px;
+    }
+
+    &::after {
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: block;
+      content: "";
+      width: 0;
+      height: 0;
+      border-right: 5px solid transparent;
+      border-left: 5px solid transparent;
+      border-bottom: 5px solid $--color-white;
     }
   }
+}
 
-  .view-title,
-  .translate-tomore {
-    font-size: $--font-size-small;
-    padding: 8px 16px;
-  }
-
-  .view-item {
-    font-size: $--font-size-small;
-    padding: 6px 16px;
-  }
-
-  &::after {
-    position: absolute;
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: block;
-    content: "";
-    width: 0;
-    height: 0;
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    border-bottom: 5px solid $--color-white;
+.translate-icon[data-language="zh-CN"]:hover {
+  .more-operate {
+    visibility: visible;
+    z-index: 1999;
   }
 }
 
 .is-active {
   color: $--color-primary;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  filter: Alpha(opacity=70);
 }
 
 .el-switch {

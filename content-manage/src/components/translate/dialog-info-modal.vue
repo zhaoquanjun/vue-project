@@ -25,7 +25,9 @@
         <div class="content-desc--word" v-html="infoModal.content"></div>
       </div>
       <div class="modal-btn--area">
-        <p>{{ infoModal.additional.words }}</p>
+        <p v-show="infoModal.additional.words">
+          {{ infoModal.additional.words }}
+        </p>
         <div
           v-show="infoModal.btn.btn1Text"
           class="cl-button cl-button--primary_notbg confirm"
@@ -35,7 +37,7 @@
           {{ infoModal.btn.btn1Text }}
         </div>
         <div
-          v-show="infoModal.btn.btn1Text"
+          v-show="infoModal.btn.btn2Text"
           class="cl-button cl-button--primary cancle"
           style="min-width: 76px; width: 76px; box-sizing: border-box;"
           @click="_handleCancle"
@@ -99,19 +101,24 @@ export default {
       }
     },
     _setIntervalEvent() {
-      this.tips = this.infoModal.additional.words;
-      this.infoModal.additional.words = this.interval + "s" + this.tips;
-      this.timer && clearInterval(this.timer);
-      this.timer = setInterval(() => {
-        if (this.interval > 1) {
-          --this.interval;
-          this.infoModal.additional.words = this.interval + "s" + this.tips;
-        } else {
-          clearInterval(this.timer);
-          this.hideSelf();
-          this.$emit(this.infoModal.additional.operate);
-        }
-      }, 1000);
+      if (
+        this.infoModal.additional.words &&
+        this.infoModal.additional.operate
+      ) {
+        this.tips = this.infoModal.additional.words;
+        this.infoModal.additional.words = this.interval + "s" + this.tips;
+        this.timer && clearInterval(this.timer);
+        this.timer = setInterval(() => {
+          if (this.interval > 1) {
+            --this.interval;
+            this.infoModal.additional.words = this.interval + "s" + this.tips;
+          } else {
+            clearInterval(this.timer);
+            this.hideSelf();
+            this.$emit(this.infoModal.additional.operate);
+          }
+        }, 1000);
+      }
     }
   }
 };
@@ -128,7 +135,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.75);
   .dialog-info--modal {
     position: absolute;
-    top: 55%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     box-sizing: border-box;

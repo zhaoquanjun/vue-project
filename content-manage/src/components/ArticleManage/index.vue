@@ -127,7 +127,6 @@ import ContentTable from "./ContentTable";
 import RightPannel from "@/components/common/RightPannel";
 import SelectTree from "@/components/common/SelectTree";
 import DialogInfoModal from "@/components/translate/dialog-info-modal";
-import DialogTranslateCheckedModal from "@/components/translate/dialog-translate-checked-modal";
 import DialogTranslateLanguageModal from "@/components/translate/dialog-translate-language-modal";
 import DialogTranslateProgressModal from "@/components/translate/dialog-translate-progress-modal";
 export default {
@@ -138,7 +137,6 @@ export default {
     RightPannel,
     SelectTree,
     DialogInfoModal,
-    DialogTranslateCheckedModal,
     DialogTranslateLanguageModal,
     DialogTranslateProgressModal
   },
@@ -183,22 +181,15 @@ export default {
         title: "翻译中",
         progress: 0
       },
-      languageModalSource: {
-        signal: {
-          tree: [],
-          languages: [],
-          list: [],
-          type: "signal"
-        },
-        more: {
-          total: 5,
-          enable: 4,
-          list: [],
-          languages: [],
-          type: "more"
-        }
+      languageModal: {
+        title: "",
+        tree: [],
+        languages: [],
+        list: [],
+        type: "signal",
+        total: 5,
+        enable: 4
       },
-      languageModal: null,
       source: null,
       type: "signal",
       foreignLanguages: []
@@ -264,6 +255,18 @@ export default {
       this.handleEditArticle(this.curRow);
     },
     /**
+     * 获取翻译失败的列表
+     */
+    _getFailedList(data) {
+      var str = "";
+      if (data && data.length > 0) {
+        for (var i = 0; i < data.length; i++) {
+          str += `<li><span style="display: inline-block;width: 17%;" class="lineheight26 attention ellipsis">（失败）</span><span class="lineheight26 ellipsis" style="display: inline-block;max-width: calc(35% - 16px);">${data[i].sourceEntityDesc}</span><span class="lineheight26 attention ellipsis" style="display: inline-block;margin-left: 16px; max-width: 61%;">${data[i].errorMsg}</span></li>`;
+        }
+      }
+      return str;
+    },
+    /**
      * 获取可以翻译的文章列表
      */
     _checkEnableTranslateItem(data) {
@@ -283,19 +286,21 @@ export default {
      */
     async _handleTranslateSingnalLanguages(options, obj) {
       let { data } = await articleManageApi.translateSignalNews(options);
-      this._getTranslateProcess(data, 1, obj.languagesList.length);
+      this._getTranslateProcess(data, 1, obj);
     },
     /**
      * 多语言翻译
      */
     async _handleTranslateMoreLanguages(options, obj) {
       let { data } = await articleManageApi.translateMoreNews(options);
-      this._getTranslateProcess(data, 1, obj.languagesList.length);
+      this._getTranslateProcess(data, 1, obj);
     },
     /**
      * 获取翻译进度
      */
-    async _getTranslateProcess(id, count, num) {
+    async _getTranslateProcess(id, count, obj) {
+      const num = obj.list.length;
+      this.progressInfo.progress = 0;
       this.$refs.progressModal.showSelf();
       let { data } = await articleManageApi.getNewsTranslateProcess(id);
       if (data.isExist) {
@@ -305,34 +310,61 @@ export default {
           count++;
           setTimeout(() => {
             this.progressInfo.progress = Number(res.progressPercent) * 100;
-            this._getTranslateProcess(id, count, num);
+            this._getTranslateProcess(id, count, obj);
           }, 2000);
         }
         if (res.progressPercent === 1 && count > 1) {
           this.progressInfo.progress = Number(res.progressPercent) * 100;
           setTimeout(() => {
             // 隐藏弹窗
-            this.curRow.id = res.lastTranslatedEntityId;
-            this.curRow.categoryId = res.categoryId;
-            this.curRow.categoryName = res.categoryName;
+            if (res.failedList.length > 0) {
+              if (
+                parseInt(obj.languagesList.length) * parseInt(num) >
+                res.failedList.length
+              ) {
+                this.infoModal.title = "成功";
+                this.infoModal.type = "success";
+                this.infoModal.content = `<p class='lineheight26'>部分文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; width: 300px;">${this._getFailedList(
+                  res.failedList
+                )}</ul>`;
+              } else {
+                this.infoModal.title = "失败";
+                this.infoModal.type = "fail";
+                this.infoModal.content = `<p class='lineheight26'>文章翻译失败！</p><ul style="width: 300px; margin-left: -7px;">${this._getFailedList(
+                  res.failedList
+                )}</ul>`;
+              }
+            } else {
+              this.infoModal.title = "成功";
+              this.infoModal.type = "success";
+              this.infoModal.content =
+                "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
+            }
             this.$refs.progressModal.hideSelf();
-            this.infoModal.title = "成功";
-            this.infoModal.type = "success";
-            this.infoModal.content =
-              "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存在误差，可能需要您手动订正。</p>";
             this.infoModal.btn.btn2Text = "关闭";
             this.infoModal.btn.btn2Operate = "close";
-            if (num === 1) {
+            if (
+              obj.languagesList.length === 1 &&
+              num === 1 &&
+              res.failedList.length === 0
+            ) {
               this.infoModal.btn.btn1Text = "编辑";
               this.infoModal.btn.btn1Operate = "goEdit";
               this.infoModal.additional.words = "进入编辑";
               this.infoModal.additional.operate = "goEdit";
-            }
-            if (num > 1) {
+              if (res.lastTranslatedEntityInfo) {
+                this.curRow.id = res.lastTranslatedEntityInfo.Id;
+                this.curRow.categoryId =
+                  res.lastTranslatedEntityInfo.CategoryId;
+                this.curRow.categoryName =
+                  res.lastTranslatedEntityInfo.CategoryName;
+              }
+              this.curRow.language = obj.languagesList[0];
+            } else {
               this.infoModal.btn.btn1Text = "";
-              this.infoModal.btn.btn1Opetate = "";
-              this.infoModal.additional.words = "关闭弹窗";
-              this.infoModal.additional.operate = "close";
+              this.infoModal.btn.btn1Operate = "";
+              this.infoModal.additional.words = "";
+              this.infoModal.additional.operate = "";
             }
             this.$refs.infoModal.showSelf();
           }, 1000);
@@ -341,9 +373,6 @@ export default {
           this.progressInfo.progress = 100;
           setTimeout(() => {
             // 隐藏弹窗
-            this.curRow.id = res.lastTranslatedEntityId;
-            this.curRow.categoryId = res.categoryId;
-            this.curRow.categoryName = res.categoryName;
             this.$refs.progressModal.hideSelf();
             this.infoModal.title = "成功";
             this.infoModal.type = "success";
@@ -356,6 +385,14 @@ export default {
               this.infoModal.btn.btn1Operate = "goEdit";
               this.infoModal.additional.words = "进入编辑";
               this.infoModal.additional.operate = "goEdit";
+              if (res.lastTranslatedEntityInfo) {
+                this.curRow.id = res.lastTranslatedEntityInfo.Id;
+                this.curRow.categoryId =
+                  res.lastTranslatedEntityInfo.CategoryId;
+                this.curRow.categoryName =
+                  res.lastTranslatedEntityInfo.CategoryName;
+              }
+              this.curRow.language = obj.languagesList[0];
             }
             if (num > 1) {
               this.infoModal.btn.btn1Text = "";
@@ -366,11 +403,12 @@ export default {
             this.$refs.infoModal.showSelf();
           }, 1000);
         }
+        this.getTreeAsync();
       } else {
         if (count < 8) {
           count++;
           setTimeout(() => {
-            this._getTranslateProcess(id, count, num);
+            this._getTranslateProcess(id, count, obj);
           }, 2000);
         } else {
           this.$refs.progressModal.hideSelf();
@@ -389,15 +427,6 @@ export default {
      * 获取单个翻译信息
      */
     handleGetSignalTranslateSource(row, translatedIds) {
-      if (!this._checkIsHasTranslateProcess()) {
-        this.infoModal.title = "失败";
-        this.infoModal.type = "fail";
-        this.infoModal.content =
-          "当前存在翻译任务，请完成已经存在的任务后再进行翻译";
-        this.infoModal.btn.btn1Text = "";
-        this.infoModal.btn.btn2Text = "关闭";
-        return false;
-      }
       this.curRow = row;
       if (row.contentLength > 4000) {
         this.infoModal.title = "提示";
@@ -413,7 +442,7 @@ export default {
       } else {
         this.type = "signal";
         this.source = [row];
-        this.languageModalSource.more.title = "单篇翻译";
+        this.languageModal.title = "单篇翻译";
         this._getForeigns(translatedIds);
       }
     },
@@ -421,42 +450,36 @@ export default {
      * 获取批量翻译信息
      */
     handleGetMoreTranslateSource() {
-      if (!this._checkIsHasTranslateProcess()) {
-        this.infoModal.title = "失败";
-        this.infoModal.type = "fail";
-        this.infoModal.content =
-          "当前存在翻译任务，请完成已经存在的任务后再进行翻译";
-        this.infoModal.btn.btn1Text = "";
-        this.infoModal.btn.btn2Text = "关闭";
-        return false;
-      }
-      this.type = "more";
-      this.source = this._getChineseList();
-      let obj = this._checkEnableTranslateItem(this.source);
-      this.languageModalSource.more.title = "批量翻译";
-      this.languageModalSource.more.total = obj.total;
-      this.languageModalSource.more.enable = obj.enable;
-      this._getForeigns();
+      this._checkIsHasTranslateProcess(data => {
+        if (data) {
+          this.infoModal.title = "失败";
+          this.infoModal.type = "fail";
+          this.infoModal.content =
+            "当前存在翻译任务，请完成已经存在的任务后再进行翻译";
+          this.infoModal.btn.btn1Text = "";
+          this.infoModal.btn.btn2Text = "关闭";
+          return false;
+        } else {
+          this.type = "more";
+          this.source = this._getChineseList();
+          let obj = this._checkEnableTranslateItem(this.source);
+          this.languageModal.title = "批量翻译";
+          this.languageModal.total = obj.total;
+          this.languageModal.enable = obj.enable;
+          this._getForeigns();
+        }
+      });
     },
     /**
      * 获取可翻译外文（与已经翻译过的去重）
      */
     _getForeigns(ids) {
       this._getTranslateIds(this.languagesList, ids);
-      if (this.foreignLanguages.length > 1) {
-        this.languageModalSource.more.languages = this.foreignLanguages;
-        this.languageModalSource.more.list = this.source;
-        this.languageModalSource.more.type = this.type;
-        this.languageModal = this.languageModalSource.more;
-        this.$refs.languageModal.showSelf();
-      } else {
-        this.languageModalSource.signal.languages = this.foreignLanguages;
-        this.languageModalSource.signal.list = this.source;
-        this.languageModalSource.signal.type = this.type;
-        this.languageModalSource.signal.tree = this.translateTree;
-        this.languageModal = this.languageModalSource.signal;
-        this.$refs.languageModal.showSelf();
-      }
+      this.languageModal.languages = this.foreignLanguages;
+      this.languageModal.list = this.source;
+      this.languageModal.tree = this.translateTree;
+      this.languageModal.type = this.type;
+      this.$refs.languageModal.showSelf();
     },
     /**
      * 获取所有可以翻译的中文数据
@@ -497,11 +520,13 @@ export default {
       }
     },
     /**
-     * 检验是否存在翻译进程
+     * 检验是否存在翻译进程 -
      */
-    async _checkIsHasTranslateProcess() {
-      let { data } = await articleManageApi.isHasTranslateProcess();
-      return data;
+    async _checkIsHasTranslateProcess(callback) {
+      let { status, data } = await articleManageApi.isHasTranslateProcess();
+      if (status === 200) {
+        typeof callback === "function" && callback(data);
+      }
     },
     /**
      * 信息弹框关闭操作
@@ -514,26 +539,21 @@ export default {
      * 语言弹框确认操作
      */
     async languageConfirm(obj) {
-      let options = {};
+      let options = {
+        FromIdList: obj.list,
+        SiteId: this.$store.state.dashboard.siteId
+      };
       if (obj.languagesList.length === 1) {
         if (this.foreignLanguages.length === 1) {
           options.CategoryId = obj.id;
         }
-        options = {
-          FromIdList: obj.list,
-          TargetLanguage: obj.languagesList[0],
-          SiteId: this.$store.state.dashboard.siteId
-        };
+        options.TargetLanguage = obj.languagesList[0];
       }
       if (obj.languagesList.length > 1) {
         if (this.foreignLanguages.length === 1) {
           options.CategoryId = obj.id;
         }
-        options = {
-          FromIdList: obj.list,
-          LanguageList: obj.languagesList,
-          SiteId: this.$store.state.dashboard.siteId
-        };
+        options.LanguageList = obj.languagesList;
       }
       obj.languagesList.length > 1
         ? this._handleTranslateMoreLanguages(options, obj)

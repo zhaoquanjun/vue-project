@@ -177,6 +177,7 @@ export default {
       obj.languagesList = this._getLastTranslateLanguages();
       obj.id = this.value.value;
       obj.list = this._getLastTranslateList();
+      console.log(obj);
       this.$emit("languageConfirm", obj);
       this.hideSelf();
     },
@@ -262,7 +263,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.75);
   .dialog-translate--modal {
     position: absolute;
-    top: 55%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 30px 25px 32px;

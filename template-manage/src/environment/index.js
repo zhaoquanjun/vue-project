@@ -3,9 +3,11 @@
  *
  */
 const baseServerUrl = window.location.hostname.indexOf('clouddream.net') == -1 ? 'console.wezhan.cn' : 'clouddream.net';
-const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://' : 'https://';
+//const httpSchema = window.location.hostname.indexOf('clouddream.net') == -1 ? 'http://':'https://';
+const httpSchema ='https://';//2020-3-23演示环境也改为了https
 
 /**生产环境-- */
+let designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
 let memberManageApi = `${httpSchema}api.content.${baseServerUrl}`;
 let dashboardApi = `${httpSchema}api.dashboard.${baseServerUrl}`;
 let templateApi = `${httpSchema}api.wezhanproduce.${baseServerUrl}`;
@@ -32,6 +34,7 @@ export let aliMarketUrl = 'https://market.console.aliyun.com/imageconsole/index.
  */
 
 if (process.env.NODE_ENV === `development`) {
+    designerManageApi = `${httpSchema}api.designer.${baseServerUrl}`;
     memberManageApi = `${httpSchema}api.content.console.wezhan.cn`;
     dashboardApi = `${httpSchema}api.dashboard.console.wezhan.cn`;
     templateApi = `${httpSchema}api.wezhanproduce.console.wezhan.cn`
@@ -40,13 +43,14 @@ if (process.env.NODE_ENV === `development`) {
     uploadNormalUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture/UploadControlPic/normal`;
     uploadCategoryUrl = `${httpSchema}api.content.console.wezhan.cn/api/v1/picture/UploadControlPic/category`;
     authorityUrl = `${httpSchema}login.console.wezhan.cn`;
-    redirectUrl = `${httpSchema}localhost:8083/callback`;
-    logoutRedirectUri = `${httpSchema}localhost:8083/index.html`;
+    redirectUrl = `http://localhost:8083/callback`;//本地是http
+    logoutRedirectUri = `${httpSchema}localhost:8083/index.html`;http://
     silentRedirectUri = `${httpSchema}localhost:8083/static/silent-renew.html`;
     clientId = "dev.produce.api";
     scope = "openid profile dashboard.api content.api designer.api produce.api";
 };
 const enbironmemy = {
+    designerManageApi,
     authorityUrl,
     redirectUrl,
     logoutRedirectUri,
