@@ -6,7 +6,7 @@ import * as ajaxRequest from "../ajaxRequest";
  */
 export const getMsgboardList = (SiteId, PageIndex, PageSize, QueryKeywords, Status, DescSort) => {
   let paras = { SiteId: SiteId, PageIndex: PageIndex, PageSize: PageSize, QueryKeywords: QueryKeywords, Status: Status, DescSort:DescSort }
-  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/leaveword/list`, paras)
+  return ajaxRequest.get(`${environment.memberManageApi}/api/v1/leaveword/list`, paras)
 }
 
 /**
@@ -14,7 +14,7 @@ export const getMsgboardList = (SiteId, PageIndex, PageSize, QueryKeywords, Stat
  */
 export const getUnReadCount = (SiteId) => {
   let para = { SiteId: SiteId }
-  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/leaveword/getUnReadCount`, para)
+  return ajaxRequest.get(`${environment.memberManageApi}/api/v1/leaveword/getUnReadCount`, para)
 }
 
 /**
@@ -22,7 +22,7 @@ export const getUnReadCount = (SiteId) => {
  */
 export const getReplyContent = (leavewordId) => {
   let para = { leavewordId: leavewordId }
-  return ajaxRequest.get(`${environment.designerManageApi}/api/v1/leaveword/getReply`, para)
+  return ajaxRequest.get(`${environment.memberManageApi}/api/v1/leaveword/getReply`, para)
 }
 
 /**
@@ -30,7 +30,7 @@ export const getReplyContent = (leavewordId) => {
  */
 export const setReplyContent = (leavewordId, ReplyContent) => {
   let paras = { leavewordId: leavewordId, ReplyContent: ReplyContent }
-  return ajaxRequest.post(`${environment.designerManageApi}/api/v1/leaveword/reply`, paras)
+  return ajaxRequest.post(`${environment.memberManageApi}/api/v1/leaveword/reply`, paras)
 }
 
 /**
@@ -38,12 +38,12 @@ export const setReplyContent = (leavewordId, ReplyContent) => {
  */
 export const updateStatus = (leavewordId, IsUpdateStatus, Status) => {
   let paras = { leavewordIds: leavewordId, IsUpdateStatus: IsUpdateStatus, Status: Status }
-  return ajaxRequest.put(`${environment.designerManageApi}/api/v1/leaveword/update`, paras)
+  return ajaxRequest.put(`${environment.memberManageApi}/api/v1/leaveword/update`, paras)
 }
 
 /**
  * 删除留言
  */
 export const removeMsg = (leavewordIds) => {
-  return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/leaveword/delete?leavewordIds=${leavewordIds}`)
+  return ajaxRequest._delete(`${environment.memberManageApi}/api/v1/leaveword/delete?leavewordIds=${leavewordIds}`)
 }
