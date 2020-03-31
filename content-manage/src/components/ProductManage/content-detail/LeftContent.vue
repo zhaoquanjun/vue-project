@@ -554,6 +554,7 @@ export default {
         cancelButtonText: "关闭",
         callback: async action => {
           if (action === "confirm") {
+            this.$emit("clearStoreInfo");
             this.resetForm("contentForm");
             this.resetDetail();
             this.$emit("changeSaveWay", false);
@@ -582,6 +583,7 @@ export default {
         cancelButtonText: "关闭",
         callback: async action => {
           if (action === "confirm") {
+            this.$emit("clearStoreInfo");
             this.resetForm("contentForm");
             this.resetDetail();
             this.$emit("changeSaveWay", false);

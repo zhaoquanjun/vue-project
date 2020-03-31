@@ -275,9 +275,9 @@ export default {
     right: 17px;
     bottom: 20px;
     top: auto;
-    width: 28px;
+    width: 26px;
     border: 1px solid #fff;
-    height: 28px;
+    height: 26px;
     border-radius: 50%;
     box-sizing: border-box
 }
@@ -306,7 +306,7 @@ export default {
 }
 .upload-pic /deep/ .el-upload-list__item-actions .el-icon-delete {
     color: #fff;
-    font-size: 18px;
+    font-size: 15px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -322,8 +322,8 @@ export default {
     left: 17px;
     bottom: 20px;
     border: none;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     border: 1px solid #fff;
     background: url("~img/pic-icon/eye.png") no-repeat center;
