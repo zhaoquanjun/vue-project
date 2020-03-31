@@ -486,11 +486,6 @@ export default {
       return this.$store.state.dashboard.isSiteInfoShow;
     }
   },
-  mounted() {
-    if (this.isSiteInfoShow) {
-      this.getChineseSiteInfo();
-    }
-  },
   methods: {
     async getChineseSiteInfo() {
       let { data } = await dashboardApi.getChineseSiteInfo();
@@ -586,6 +581,8 @@ export default {
     },
     showInitializedDialog() {
       if(this.curSiteinfo.anyChineseSiteHasBeenInitialized){
+        this.getChineseSiteInfo();
+        this.initializedSiteLanguage = "en-US";
         this.initializedDialog = true;
         this.initializedStep = "before";
       }
@@ -627,8 +624,9 @@ export default {
               this.countdownTimeNum--;
               if(this.countdownTimeNum == 0){
                 clearInterval(previewTimer);
-                let newWindow = window.open();
-                newWindow.location.href = `//${this.curSiteinfo.secondDomain}`;
+                let a = document.getElementsByClassName("preview-btn")[0]
+                a.click();
+                this.completeInitialized();
               }
             }, 1000)
             this.copyPercentage = 0;
@@ -686,17 +684,20 @@ export default {
           setTimeout(() => {
             this.countdownTimeNum = 5;
             this.initializedStep = "after";
-            let previewTimer = setInterval(()=>{
-              this.countdownTimeNum--;
-              if(this.countdownTimeNum == 0){
-                clearInterval(previewTimer)
-                console.log(`//${this.curSiteinfo.secondDomain}`)
-                let newWindow = window.open();
-                newWindow.location.href = `//${this.curSiteinfo.secondDomain}`
-                // let a = document.getElementsByClassName("preview-btn")[0]
-                // a.click();
-              }
-            }, 1000)
+            if(this.initializedStatus == "success") {
+              let previewTimer = setInterval(()=>{
+                this.countdownTimeNum--;
+                if(this.countdownTimeNum == 0){
+                  clearInterval(previewTimer)
+                  console.log(`//${this.curSiteinfo.secondDomain}`)
+                  // let newWindow = window.open();
+                  // newWindow.location.href = `//${this.curSiteinfo.secondDomain}`
+                  let a = document.getElementsByClassName("preview-btn")[0]
+                  a.click();
+                  this.completeInitialized();
+                }
+              }, 1000)
+            }
             this.translationPercentage = 0;
           }, 1000);
         }

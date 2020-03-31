@@ -112,7 +112,7 @@ export default {
             // 获取选中的图片信息 有两种方式
             //console.log(this.imgData, "imgData");
             //console.log(this.$refs.imgList.selectedImg, "selectedImg");
-            this.imgData && (this.imageUrl1 = this.imgData[0].fullOssUrl);
+            this.imgData && this.imgData.length && (this.imageUrl1 = this.imgData[0].fullOssUrl);
             this.isModalShow = false;
         },
         handleSucess(response, file, fileList) {

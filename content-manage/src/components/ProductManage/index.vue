@@ -89,12 +89,14 @@
               ></CheckTree>
             </template>
             <div slot="footer" class="pannel-footer">
-              <button
-                @click="updateCategoryArticle"
-                class="cl-button cl-button--small cl-button--primary"
-              >
-                确定
-              </button>
+              <Debounce :time="1000" !isDebounce>
+                <button
+                  @click="updateCategoryArticle"
+                  class="cl-button cl-button--small cl-button--primary"
+                >
+                  确定
+                </button>
+              </Debounce>
               <button
                 @click="cancelUpdateCategory"
                 class="cl-button cl-button--small cl-button--primary_notbg"

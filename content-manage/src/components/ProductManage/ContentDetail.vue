@@ -69,6 +69,7 @@
               @changeSaveWay="changeSaveWay"
               @handlerClickNewAdd="handlerClickNewAdd"
               @changePreviewId="changePreviewId"
+              @clearStoreInfo="clearStoreInfo"
             />
           </div>
           <div class="articleContentRight">
@@ -179,6 +180,11 @@ export default {
     changePreviewId(id, siteId) {
       this.previewId = id;
       this.siteId = siteId;
+    },
+    // 新增下一篇时清空价格信息
+    clearStoreInfo() {
+      this.productType = "product";
+      this.$refs.storeContent.clearStoreInfo();
     },
     /**
      * 预览
