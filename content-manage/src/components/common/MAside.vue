@@ -62,7 +62,7 @@ export default {
             lastRoute: "",
             enterTime: null,
             subTitle:"",
-            unreadCount: 2,
+            unreadCount: 0,
             curSiteId: 0
         };
     },
