@@ -30,7 +30,8 @@ const dashboard = {
         authList:[],
         isContentwrite: false,
         siteList: [],
-        autoTranslateSwitch: false
+        autoTranslateSwitch: false,
+        unreadCountStatus: false
     },
     mutations: {
         SETAPPID(state, appId) {
@@ -55,6 +56,9 @@ const dashboard = {
         set_autoTranslateSwitch(state, status) {
           state.autoTranslateSwitch = status;
         },
+        set_unreadCountStatus(state, status) {
+            state.unreadCountStatus = status;
+        }
     },
     actions: {
         async _setSiteId({ commit }) {
