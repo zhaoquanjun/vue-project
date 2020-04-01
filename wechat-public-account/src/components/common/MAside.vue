@@ -44,6 +44,7 @@
 </template>
 <script>
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
+import * as msgBoardApi from "@/api/request/msgBoardApi";
 export default {
     data() {
         return {
