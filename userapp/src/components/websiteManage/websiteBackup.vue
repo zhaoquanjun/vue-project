@@ -210,7 +210,8 @@ export default {
       backupShow: false,
       backuping: false,
       remarkInfo: "",
-      disabled: false
+      disabled: false,
+      _getRecoverySiteStatusTimer: null
     };
   },
   methods: {
@@ -322,14 +323,7 @@ export default {
               )
               .then(res => {
                 if (res.status === 200) {
-                  this.$notify({
-                    customClass: "notify-success",
-                    message: `网站还原成功`,
-                    duration: 2000,
-                    showClose: false
-                  });
-                  this.getBackupSite(this.siteId);
-                  this.backuping = false;
+                  this._getRecoverySiteStatus(scope.row.siteId);
                 } else {
                   this.$notify({
                     customClass: "notify-error",
@@ -349,6 +343,49 @@ export default {
         }
       });
     },
+
+    /**
+     * 获取站点还原状态信息
+     */
+    async _getRecoverySiteStatus(siteId) {
+      let data = await siteBackupApi.getRecoverySiteStatus(siteId);
+      if(data.status === 200) {
+        if(data.data.code === 1) {
+          if(this._getRecoverySiteStatusTimer) clearInterval(this._getRecoverySiteStatusTimer);
+          this.$notify({
+            customClass: "notify-success",
+            message: `网站还原成功`,
+            duration: 2000,
+            showClose: false
+          });
+          this.getBackupSite(this.siteId);
+          this.backuping = false;
+        } else if(data.data.code === -1){
+          if(this._getRecoverySiteStatusTimer) clearInterval(this._getRecoverySiteStatusTimer);
+          this.$notify({
+            customClass: "notify-error",
+            message: `网站还原失败`,
+            duration: 2000,
+            showClose: false
+          });
+          this.backuping = false;
+        } else if(data.data.code === 0) {
+          if(this._getRecoverySiteStatusTimer) return;
+          this._getRecoverySiteStatusTimer = setInterval(()=>{
+            this._getRecoverySiteStatus(siteId)
+          },3000)
+        }
+      }else {
+        this.$notify({
+          customClass: "notify-error",
+          message: `系统正忙，请稍后再试！`,
+          duration: 2000,
+          showClose: false
+        });
+        this.backuping = false;
+      }
+    },
+
     /**
      * 备份当前版本
      */

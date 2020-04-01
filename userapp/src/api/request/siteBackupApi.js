@@ -19,6 +19,17 @@ export const recoverySite = (siteId, siteName, fileName) => {
     { siteId: siteId, siteName: siteName, fileName: fileName }
   );
 };
+
+/**
+ * 获取站点还原状态信息
+ */
+export const getRecoverySiteStatus = (siteId) => {
+  return ajaxRequest.get(
+    `${enbironmemy.siteManageApi}/api/v1/backup/GetRecoverySiteStatus`,
+    { siteId: siteId }
+  );
+};
+
 /**
  * 获取备份信息
  */
