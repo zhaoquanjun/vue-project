@@ -275,15 +275,18 @@ export default {
     clearSelectedList() {
       this.$refs.imgList && this.$refs.imgList.clearSelectedList();
     },
-    async changeCategoryPic(categoryId, idList) {
+    async changeCategoryPic(categoryId, idList, flag) {
       let { status } = await imgManageApi.changeCategory(categoryId, idList);
       if (status == 200) {
-        this.$notify({
-          customClass: "notify-success", //  notify-success ||  notify-error
-          message: `移动成功!`,
-          showClose: false,
-          duration: 1500
-        });
+        if (flag) {
+          this.$notify({
+            customClass: "notify-success", //  notify-success ||  notify-error
+            message: `移动成功!`,
+            showClose: false,
+            duration: 1500
+          });
+        }
+
         this.isInvitationPanelShow = false;
         this.getList();
       }
@@ -372,6 +375,7 @@ export default {
     updateCategoryPic() {
       let categoryId = this.moveToClassiFy.id;
       let idList = [];
+      let flag = true;
       if (this.idsList.length > 0) {
         idList = this.idsList;
       } else {
@@ -381,15 +385,11 @@ export default {
         (categoryId === 0 || categoryId === undefined) &&
         idList.length === 1
       ) {
-        this.$notify({
-          customClass: "notify-error", //  notify-success ||  notify-error
-          message: `请切换分类!`,
-          showClose: false,
-          duration: 1500
-        });
+        flag = false;
       } else {
-        this.changeCategoryPic(categoryId || 0, idList);
+        flag = true;
       }
+      this.changeCategoryPic(categoryId || 0, idList, flag);
       return false;
     },
     // 取消移动分类 关闭panel

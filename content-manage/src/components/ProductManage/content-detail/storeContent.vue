@@ -126,6 +126,11 @@ export default {
         this.errorOriginalPrice = true;
       }
     },
+    clearStoreInfo(){
+      this.storePrice.storeTypeValue = 0;
+      this.storePrice.originalPrice = "0.00";
+      this.storePrice.price = "0.00";
+    },
     blurPrice() {
       if (this.storePrice.price == "") {
         this.storePrice.price = "0.00";

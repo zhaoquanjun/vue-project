@@ -115,7 +115,7 @@
   </div>
 </template>
 <script>
-import * as productManageApi from "@/api/request/productManageApi";
+import * as dashboardApi from "@/api/request/dashboardApi";
 import UploadCategoryPic from "@/components/ProductManage/productUploadCategoryPic";
 import { trim } from "@/utlis/index";
 export default {
@@ -158,13 +158,9 @@ export default {
   },
   methods: {
     async _getSiteCount() {
-      let { data, status } = await productManageApi.getSiteCount();
+      let { data, status } = await dashboardApi.getSiteCount();
       if (status === 200) {
-        if (data.IsSingleSite) {
-          this.siteCount = 1;
-        } else {
-          this.siteCount = data.SiteCount;
-        }
+        this.siteCount = data.SiteCount;
       }
     },
     createCategory(displayName, thumbnailPicUrl, Language) {

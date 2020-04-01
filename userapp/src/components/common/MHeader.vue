@@ -92,9 +92,11 @@
               ></i>
             </el-input>
           </div>
-          <div class="empty-table" v-show="!appList.length" style="cursor:default">
-            <img src="~img/memberManage/table-empty-default.png" />
-            <p>无数据</p>
+          <div class="search-empty" v-show="!appList.length">
+            <div class="empty-table" v-show="!appList.length" style="cursor:default">
+              <img src="~img/memberManage/table-empty-default.png" />
+              <p>无数据</p>
+            </div>
           </div>
           <el-col
             :span="24"
@@ -588,6 +590,13 @@ export default {
     .input-with-select {
       width: 260px;
     }
+  }
+  .search-empty{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 76px);
+    width: 100%;
   }
   .appitem {
     margin-left: 50%;
