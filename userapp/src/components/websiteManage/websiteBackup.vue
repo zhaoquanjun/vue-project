@@ -211,7 +211,8 @@ export default {
       backuping: false,
       remarkInfo: "",
       disabled: false,
-      _getRecoverySiteStatusTimer: null
+      _getRecoverySiteStatusTimer: null,
+      count: 0
     };
   },
   methods: {
@@ -348,10 +349,12 @@ export default {
      * 获取站点还原状态信息
      */
     async _getRecoverySiteStatus(siteId) {
+      this.count ++;
       let data = await siteBackupApi.getRecoverySiteStatus(siteId);
-      if(data.status === 200) {
+      if(this._getRecoverySiteStatusTimer) clearInterval(this._getRecoverySiteStatusTimer);
+      // 每隔5s请求一次，3分钟后停止请求，提示还原失败
+      if(data.status === 200 && this.count <= 36) {
         if(data.data.code === 1) {
-          if(this._getRecoverySiteStatusTimer) clearInterval(this._getRecoverySiteStatusTimer);
           this.$notify({
             customClass: "notify-success",
             message: `网站还原成功`,
@@ -359,29 +362,30 @@ export default {
             showClose: false
           });
           this.getBackupSite(this.siteId);
+          this.count = 0
           this.backuping = false;
         } else if(data.data.code === -1){
-          if(this._getRecoverySiteStatusTimer) clearInterval(this._getRecoverySiteStatusTimer);
           this.$notify({
             customClass: "notify-error",
             message: `网站还原失败`,
             duration: 2000,
             showClose: false
           });
+          this.count = 0
           this.backuping = false;
         } else if(data.data.code === 0) {
-          if(this._getRecoverySiteStatusTimer) return;
           this._getRecoverySiteStatusTimer = setInterval(()=>{
             this._getRecoverySiteStatus(siteId)
-          },3000)
+          },5000)
         }
       }else {
         this.$notify({
           customClass: "notify-error",
-          message: `系统正忙，请稍后再试！`,
+          message: `网站还原失败`,
           duration: 2000,
           showClose: false
         });
+        this.count = 0;
         this.backuping = false;
       }
     },
