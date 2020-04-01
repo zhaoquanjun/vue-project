@@ -23,6 +23,8 @@
                         :class="{'active':lastRoute==item.code}"
                         >
                         {{item.name}}
+                        <i class="unReadcount" 
+                            v-if="item.path === '/website/mysite/leaveword' && unreadCount !== 0">{{unreadCount}}</i>
                     </p>
                 </div>
             </li>
@@ -32,7 +34,7 @@
 <script>
 import { siteDomain } from "@/environment/index";
 export default {
-    props: ["menuList", "lastRoute", "subTitle"],
+    props: ["menuList", "lastRoute", "subTitle","unreadCount"],
     methods: {
         handlerRoute(item, index) {
             //有三级路由时，二级路由不跳转
@@ -71,6 +73,18 @@ export default {
 .leftNavAside {
     width: 100%;
     background: $--color-black-light !important;
+}
+.unReadcount {
+  line-height: 16px;
+  position: absolute;
+  margin-top: 4px;
+  margin-left: 2px;
+  background: $--color-danger;
+  color: $--color-white !important;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  text-align: center;
 }
 .submenu-title {
     height: 50px;
