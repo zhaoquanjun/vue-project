@@ -73,6 +73,7 @@ export default {
         async getUnReadCount() {
             let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
             this.unreadCount = data;
+            this.$store.commit('set_unreadCountStatus',true);
         },
         enterChange(){
             let times = (new Date()).getTime();
@@ -113,11 +114,12 @@ export default {
         },
         async collapseOpen(width, time) {
             this.width = 130;
-            
-            let { data,status } = await articleManageApi.getSiteList();
-            if(status === 200) {
-                data[0] && data[0].siteId &&(this.curSiteId = data[0].siteId);
-                this.curSiteId && this.getUnReadCount(); 
+            if(!this.$store.state.dashboard.unreadCountStatus) {
+                let { data,status } = await articleManageApi.getSiteList();
+                if(status === 200) {
+                    data[0] && data[0].siteId &&(this.curSiteId = data[0].siteId);
+                        this.curSiteId && this.getUnReadCount();
+                }
             }
         },
         collapseListClose() {
