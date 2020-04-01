@@ -35,7 +35,8 @@ const dashboard = {
         isSiteInfoShow: false,
         isWechataccountShow: false,
         siteList: [],
-        autoTranslateSwitch: false
+        autoTranslateSwitch: false,
+        unreadCountStatus: false
     },
     mutations: {
 
@@ -68,6 +69,9 @@ const dashboard = {
         },
         set_siteList(state, status) {
           state.siteList = status;
+        },
+        set_unreadCountStatus(state, status) {
+            state.unreadCountStatus = status;
         }
     },
     actions: {

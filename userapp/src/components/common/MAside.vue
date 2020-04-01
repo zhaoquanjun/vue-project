@@ -74,6 +74,7 @@ export default {
         async getUnReadCount() {
             let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
             data && (this.unreadCount = data);
+            this.$store.commit('set_unreadCountStatus',true)
         },
         enterChange(){
             let times = (new Date()).getTime();
@@ -114,7 +115,9 @@ export default {
         },
         collapseOpen(width, time) {
             this.width = 130;
-            this.curSiteId && this.getUnReadCount()
+            if(!this.$store.state.dashboard.unreadCountStatus) {
+                this.curSiteId && this.getUnReadCount()
+            }
         },
         collapseClose() {
             setTimeout(()=>{
