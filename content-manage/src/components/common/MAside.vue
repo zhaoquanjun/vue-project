@@ -33,6 +33,7 @@
             <LeftNavComponents
                 :subTitle="subTitle"
                 :lastRoute="lastRoute"
+                :unreadCount="unreadCount"
                 v-if="isLeftNavComponentsShow"
                 :style="{width: 130 + 'px !important',height: '100%'}"
                 class="m-asideright"
@@ -43,6 +44,8 @@
 </template>
 <script>
 import { getSliderMenuList } from "@/api/index";
+import * as msgBoardApi from "@/api/request/msgBoardApi";
+import * as articleManageApi from "@/api/request/articleManageApi";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
 export default {
     data() {
@@ -58,13 +61,19 @@ export default {
             curPath: "",
             lastRoute: "",
             enterTime: null,
-            subTitle:""
+            subTitle:"",
+            unreadCount: 2,
+            curSiteId: 0
         };
     },
     components: {
         LeftNavComponents
     },
     methods: {
+        async getUnReadCount() {
+            let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
+            this.unreadCount = data;
+        },
         enterChange(){
             let times = (new Date()).getTime();
             this.enterTime = times
@@ -102,8 +111,14 @@ export default {
             }
             window.location.href = "//" + item.menuUrl;
         },
-        collapseOpen(width, time) {
+        async collapseOpen(width, time) {
             this.width = 130;
+            
+            let { data,status } = await articleManageApi.getSiteList();
+            if(status === 200) {
+                data[0] && data[0].siteId &&(this.curSiteId = data[0].siteId);
+                this.curSiteId && this.getUnReadCount(); 
+            }
         },
         collapseListClose() {
             setTimeout(()=>{
