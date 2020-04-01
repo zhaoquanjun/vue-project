@@ -33,23 +33,9 @@
 </template>
 <script>
 import { siteDomain } from "@/environment/index";
-import * as msgBoardApi from "@/api/request/msgBoardApi";
 export default {
-    props: ["menuList", "lastRoute", "subTitle","isLeftNavComponentsShow"],
-    data() {
-        return {
-            unreadCount: 0,
-            curSiteId: this.$store.state.dashboard.siteId
-        }
-    },
-    mounted() {
-        this.curSiteId && this.getUnReadCount();
-    },
+    props: ["menuList", "lastRoute", "subTitle","unreadCount"],
     methods: {
-        async getUnReadCount() {
-            let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
-            data && (this.unreadCount = data);
-        },
         handlerRoute(item, index) {
             //有三级路由时，二级路由不跳转
             if (item.children && item.children.length > 0) {
@@ -79,12 +65,7 @@ export default {
                     return "iconicon-dash-zhujian";
             }
         }
-    },
-    watch: {
-        isLeftNavComponentsShow() {
-            this.curSiteId && this.getUnReadCount()
-        }
-    },
+    }
 };
 </script>
 <style scoped lang="scss">

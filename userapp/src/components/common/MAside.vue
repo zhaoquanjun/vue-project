@@ -35,7 +35,7 @@
             <LeftNavComponents
                 :subTitle="subTitle"
                 :lastRoute="lastRoute"
-                :isLeftNavComponentsShow="isLeftNavComponentsShow"
+                :unreadCount="unreadCount"
                 v-if="isLeftNavComponentsShow"
                 :style="{width: 130 + 'px !important',height: '100%' }"
                 class="m-asideright"
@@ -46,6 +46,7 @@
 </template>
 <script>
 import { getSliderMenuList } from "@/api/index";
+import * as msgBoardApi from "@/api/request/msgBoardApi";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
 export default {
     data() {
@@ -61,13 +62,19 @@ export default {
             curPath: "",
             lastRoute: "",
             enterTime: null,
-            subTitle:""
+            subTitle:"",
+            unreadCount: 0,
+            curSiteId: this.$store.state.dashboard.siteId
         };
     },
     components: {
         LeftNavComponents
     },
     methods: {
+        async getUnReadCount() {
+            let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
+            data && (this.unreadCount = data);
+        },
         enterChange(){
             let times = (new Date()).getTime();
             this.enterTime = times
@@ -107,6 +114,7 @@ export default {
         },
         collapseOpen(width, time) {
             this.width = 130;
+            this.curSiteId && this.getUnReadCount()
         },
         collapseClose() {
             setTimeout(()=>{
