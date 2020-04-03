@@ -181,37 +181,37 @@ export const getAkSk = () => {
  * 获取模版列表
  */
 export const getCustomTemplateList = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetCustomTemplateList`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Sms/GetCustomTemplateList`);
 };
 /**
  * 获取签名列表
  */
 export const getSiteSMSSignList = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetSMSSignList`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Sms/GetSMSSignList`);
 };
 /**
  * 删除模版
  */
 export const removeCustomTemplate = (tempId) => {
-    return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/Sms/RemoveCustomTemplate/${tempId}`);
+    return ajaxRequest._delete(`${environment.memberManageApi}/api/v1/Sms/RemoveCustomTemplate/${tempId}`);
 };
 /**
  * 删除短信签名
  */
 export const deleteSiteSMSSignById = (id) => {
-    return ajaxRequest._delete(`${environment.designerManageApi}/api/v1/sms/DeleteSMSSignById?id=${id}`);
+    return ajaxRequest._delete(`${environment.memberManageApi}/api/v1/sms/DeleteSMSSignById?id=${id}`);
 };
 
 //创建签名 post
 export const createSiteSMSSign = (signName) => {
-    return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/CreateSMSSign`,{
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/Sms/CreateSMSSign`,{
         signName: signName
     });
 };
 
 //查询模板详情
 export const getTemplateDetail = (templateCode) => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetTemplateDetail`,{
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Sms/GetTemplateDetail`,{
         templateCode: templateCode
     });
 };
@@ -219,7 +219,7 @@ export const getTemplateDetail = (templateCode) => {
 
 //保存模板
 export const addCustomTemplate = (tempCode) => {
-    return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/AddCustomTemplate`,{
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/Sms/AddCustomTemplate`,{
         tempCode: tempCode
     });
 };
@@ -240,23 +240,23 @@ export const getIsPreUseFreeSMS = (siteId) => {
 };
 //获取免费短信条数
 export const getSurplusFreeSMSCount = () => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/SMS/GetSurplusFreeSMSCount`);
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/SMS/GetSurplusFreeSMSCount`);
 };
 
 //获取短信列表
 export const getSmsList = (siteId,isSystem) => {
-    return ajaxRequest.get(`${environment.designerManageApi}/api/v1/Sms/GetSmsList`,{
+    return ajaxRequest.get(`${environment.memberManageApi}/api/v1/Sms/GetSmsList`,{
         siteId: siteId,
         isSystem: isSystem
     });
 };
 //新增短信
 export const addCustomSms = (data) => {
-    return ajaxRequest.post(`${environment.designerManageApi}/api/v1/Sms/AddCustomSms`,data);
+    return ajaxRequest.post(`${environment.memberManageApi}/api/v1/Sms/AddCustomSms`,data);
 };
 //修改短信
 export const updateCustomSms = (data) => {
-    return ajaxRequest.put(`${environment.designerManageApi}/api/v1/Sms/UpdateCustomSms`,data);
+    return ajaxRequest.put(`${environment.memberManageApi}/api/v1/Sms/UpdateCustomSms`,data);
 };
 
 export const viewUmengData = () => {
