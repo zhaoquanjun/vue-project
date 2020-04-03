@@ -236,6 +236,8 @@
               <el-input
                 placeholder="请输入自定义地址"
                 class="address"
+                maxlength="40"
+                show-word-limit
                 v-model="detailData.customUrl"
               ></el-input>
             </el-form-item>
