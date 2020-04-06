@@ -2,49 +2,45 @@
 
 // content :  内容管理  （文章管理 产品管理  图片管理 ）
 
+// dashboard : 网站管理 小程序  控制台首页 微信公众号  系统设置(角色管理)  回收站
 
-// dashboard : 网站管理 小程序  控制台首页 微信公众号  系统设置(角色管理)  回收站  
-
-// form 表单管理 
-
-
-
+// form 表单管理
 
 // 默认访问的路由
 export const defaultRoutes = [
   {
     path: "/",
-    redirect: { path: '/board' },
+    redirect: { path: "/board" },
     meta: {
       title: "控制台首页",
       requiresAuth: true,
-      requiresRole: {},
+      requiresRole: {}
     }
   },
   {
     path: "/board",
-    name: 'board',
-    component: () => import('@/views/board/index.vue'),
+    name: "board",
+    component: () => import("@/views/board/index.vue"),
     meta: {
       title: "控制台首页",
       requiresAuth: true,
-      requiresRole: {},
+      requiresRole: {}
     }
   },
   {
     path: "/news",
-    name: 'board',
-    component: () => import('@/views/board/index.vue'),
+    name: "board",
+    component: () => import("@/views/board/index.vue"),
     meta: {
       title: "控制台",
       requiresAuth: true,
-      requiresRole: {},
+      requiresRole: {}
     }
   },
   {
     path: "/website",
     name: "website",
-    component: () => import('@/views/website-manage/index.vue'),
+    component: () => import("@/views/website-manage/index.vue"),
     meta: {
       title: "网站管理",
       requiresAuth: true,
@@ -72,7 +68,16 @@ export const defaultRoutes = [
           isSub: true
         }
       },
-
+      {
+        path: "sitemanage/email",
+        name: "email",
+        component: () => import("@/views/website-manage/mailServer.vue"),
+        meta: {
+          title: "邮件服务器",
+          requiresAuth: true,
+          isSub: true
+        }
+      },
       {
         path: "sitemanage/backup",
         name: "backup",
@@ -134,16 +139,6 @@ export const defaultRoutes = [
         }
       },
       {
-        path: "email",
-        name: "email",
-        component: () => import("@/views/website-manage/mailServer.vue"),
-        meta: {
-          title: "邮件服务器",
-          requiresAuth: true,
-          isSub: true
-        }
-      },
-      {
         path: "seo/sitevalidation",
         name: "sitevalidation",
         component: () => import("@/views/siteVerify.vue"),
@@ -177,18 +172,18 @@ export const defaultRoutes = [
   },
   {
     path: "/wechat",
-    name: 'wechat',
-    component: () => import('@/views/wechat/wechat.vue'),
+    name: "wechat",
+    component: () => import("@/views/wechat/wechat.vue"),
     meta: {
       title: "微信公众号",
       requiresAuth: true,
-      requiresRole: {},
+      requiresRole: {}
     }
   },
   {
     path: "/systemsetting",
     name: "systemsetting",
-    component: () => import('@/views/systemsetting/index.vue'),
+    component: () => import("@/views/systemsetting/index.vue"),
     children: [
       {
         path: "aliaksk",
@@ -215,23 +210,22 @@ export const defaultRoutes = [
   {
     path: "/form",
     name: "form",
-    component: () => import('@/views/form/index.vue'),
+    component: () => import("@/views/form/index.vue"),
     meta: {
       title: "表单管理",
       requiresAuth: true,
-      requiresRole: {},
+      requiresRole: {}
     }
   },
   {
     path: "/role",
-    name: 'role',
+    name: "role",
     component: () => import("@/views/member-manage.vue"),
     meta: {
       title: "成员管理",
       requiresAuth: true,
-      requiresRole: {},
-
-    },
+      requiresRole: {}
+    }
     // children: [
     //   {
     //     path: "role",
@@ -248,13 +242,12 @@ export const defaultRoutes = [
   },
   {
     path: "/membercenter/sitemember",
-    name: 'sitemember',
+    name: "sitemember",
     component: () => import("@/views/sitemember/sitemember.vue"),
     meta: {
       title: "网站会员",
       requiresAuth: true,
-      requiresRole: {},
-
+      requiresRole: {}
     },
     children: [
       {
@@ -278,7 +271,7 @@ export const defaultRoutes = [
           requiresRole: {},
           isSub: true
         }
-      },
+      }
     ]
   },
   {
@@ -287,7 +280,7 @@ export const defaultRoutes = [
     component: () => import("@/views/ssoLogin/index"),
     meta: {
       title: "控制台",
-      requiresRole: {},
+      requiresRole: {}
     }
   },
   {
@@ -297,7 +290,7 @@ export const defaultRoutes = [
     meta: {
       title: "回收站",
       requiresAuth: true,
-      requiresRole: {},
+      requiresRole: {}
     }
   },
 
@@ -308,7 +301,7 @@ export const defaultRoutes = [
     meta: {
       title: "个人中心",
       requiresAuth: true,
-      requiresRole: {},
+      requiresRole: {}
     }
   },
   {
@@ -316,55 +309,50 @@ export const defaultRoutes = [
     name: "callback",
     component: () => import("@/views/login/signcallback.vue"),
     meta: {
-      title: "微站",
+      title: "微站"
       // requiresAuth: true,
     }
   },
   {
     path: "/signout-callback-oidc",
     name: "signout-callback-oidc",
-    component: () => import("@/views/login/signout-callback-oidc.vue"),
+    component: () => import("@/views/login/signout-callback-oidc.vue")
     // meta: {
     //     requiresAuth: true,
     // }
   },
   {
-    path: '/403',
-    name: '403',
-    component: () => import('@/views/error-page/403.vue'),
+    path: "/403",
+    name: "403",
+    component: () => import("@/views/error-page/403.vue"),
     meta: {
-      title: '无权限访问',
-      isSub: false,
+      title: "无权限访问",
+      isSub: false
     }
   },
   {
-    path: '/404',
-    component: () => import('@/views/error-page/404.vue'),
-    name: '404',
+    path: "/404",
+    component: () => import("@/views/error-page/404.vue"),
+    name: "404",
     meta: {
-      title: '页面找不到',
-      isSub: false,
+      title: "页面找不到",
+      isSub: false
     }
   },
   {
-    path: '/500',
-    component: () => import('@/views/error-page/500.vue'),
-    name: '500',
+    path: "/500",
+    component: () => import("@/views/error-page/500.vue"),
+    name: "500",
     meta: {
-      title: '服务器错误',
-      isSub: false,
+      title: "服务器错误",
+      isSub: false
     }
   },
   {
-    path: '*',
-    component: () => import('@/views/error-page/404.vue')
+    path: "*",
+    component: () => import("@/views/error-page/404.vue")
   }
-
-
 ];
-
 
 // 有权限才可访问的路由
-export const authRoutes = [
-
-];
+export const authRoutes = [];
