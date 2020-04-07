@@ -272,12 +272,11 @@ export default {
 
 .upload-pic /deep/ .el-upload-list__item-actions > span {
     position: absolute;
-    right: 17px;
     bottom: 20px;
     top: auto;
-    width: 26px;
-    border: 1px solid #fff;
-    height: 26px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 50%;
     box-sizing: border-box
 }
@@ -285,65 +284,39 @@ export default {
 .upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
     left: 17px;
     bottom: 20px;
-    border: none;
+    background: url("~img/pic-icon/eye.png") no-repeat center center;
+    background-size: 62%;
     &:hover{
-        background: url("~img/pic-icon/eye-yellow.png") no-repeat center;
-        background-size: 70%;
+        // background: url("~img/pic-icon/eye-yellow.png") no-repeat center;
+        // background-size: 70%;
         border-color: $--color-primary;
-        color: $--color-primary;
-        .el-icon-zoom-in{
-            color: $--color-primary;
-        }
+        background-color: $--color-primary;
     }
 }
 .upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-delete {
+    right: 17px;
     &:hover{
         border-color: $--color-primary;
-        .el-icon-delete{
-            color: $--color-primary;
-        }
+        background-color: $--color-primary;
+        // .el-icon-delete{
+            // color: $--color-primary;
+        // }
     }
-}
-.upload-pic /deep/ .el-upload-list__item-actions .el-icon-delete {
-    color: #fff;
-    font-size: 15px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: auto;
-    transform: translate(-50%, -50%);
+    .el-icon-delete{
+      color: #fff;
+      font-size: 16px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: auto;
+      transform: translate(-50%, -50%);
+    }
 }
 
 .upload-pic /deep/ .el-upload-list__item-actions .el-icon-zoom-in:before {
     content: "";
 }
 
-.upload-pic /deep/ .el-upload-list__item-actions .el-upload-list__item-preview {
-    left: 17px;
-    bottom: 20px;
-    border: none;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    border: 1px solid #fff;
-    background: url("~img/pic-icon/eye.png") no-repeat center;
-    background-size: 70%;
-    box-sizing: border-box;
-}
-// .upload-pic
-//     /deep/
-//     .el-upload-list__item-actions
-//     .el-upload-list__item-delete:hover {
-//     background: $--color-primary;
-//     border: 1px solid $--color-primary;
-// }
-
-.upload-pic
-    /deep/
-    .el-upload-list__item-actions
-    .el-upload-list__item-preview:hover {
-    color: $--color-primary;
-}
 
 .upload-pic
     /deep/
