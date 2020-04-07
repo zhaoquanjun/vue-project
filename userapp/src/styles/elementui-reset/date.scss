@@ -1,0 +1,21 @@
+.el-date-picker{
+   
+    .el-button--text{
+        color: $--color-primary;
+    }
+   
+    .el-date-table td.current span{
+        background-color: $--color-primary;
+    }
+    .el-date-table td.today span{
+        color: $--color-primary;
+    }
+    .el-date-table td.available:hover{
+        color: $--color-primary;
+    }
+
+    .el-button.is-plain:hover{
+        border-color:  $--color-primary;
+        color:  $--color-primary;
+    }
+}
