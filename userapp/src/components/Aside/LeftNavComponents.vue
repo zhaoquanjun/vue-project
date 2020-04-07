@@ -34,7 +34,12 @@
 <script>
 import { siteDomain } from "@/environment/index";
 export default {
-    props: ["menuList", "lastRoute", "subTitle","unreadCount"],
+    props: ["menuList", "lastRoute", "subTitle"],
+    computed: {
+      unreadCount() {
+        return this.$store.state.dashboard.unreadCount
+      }
+    },
     methods: {
         handlerRoute(item, index) {
             //有三级路由时，二级路由不跳转

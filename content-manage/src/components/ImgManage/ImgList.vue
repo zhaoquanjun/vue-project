@@ -321,7 +321,7 @@ export default {
     border-top-color: $--color-primary ;
 }
 .table-wrap /deep/ .el-table__empty-text{
-    width: 0;
+    width: 100%;
 }
 </style>
 

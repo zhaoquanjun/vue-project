@@ -526,6 +526,7 @@ export default {
         this.getTodoInfo(this.siteId);
         this.$store.commit("SETSITEID", this.siteId);
         await dashboardApi.updateUserLastSiteId(this.siteId);
+        this.$store.dispatch("getunreadCount")
       }
     },
     jumpTo(type) {

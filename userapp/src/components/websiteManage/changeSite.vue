@@ -60,7 +60,7 @@
             <div>
               <div class="itemSiteName">{{item.siteName}}</div>
               <a
-                class="itemSiteDomain"
+                class="itemSiteDomain ellipsis"
                 :href="`//${item.secondDomain}`"
                 target="_blank"
               >{{item.secondDomain}}</a>

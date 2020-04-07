@@ -291,7 +291,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/content-manage/manege-table.scss";
 .table-content /deep/ .el-table__empty-text{
-    width: 0;
+    width: 100%;
 }
 .video-img-name {
     overflow: hidden;
