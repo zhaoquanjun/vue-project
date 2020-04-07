@@ -566,7 +566,7 @@ export default {
     // 创建未初始化站点
     async createUninitializedSite() {
       let { data, status } = await dashboardApi.createSite(
-        "「未设置」网站名称"
+        "「未设置语言」网站名称"
       );
       if (status == 200) {
         this.$notify({
