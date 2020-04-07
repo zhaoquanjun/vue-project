@@ -236,6 +236,8 @@
               <el-input
                 placeholder="请输入自定义地址"
                 class="address"
+                maxlength="40"
+                show-word-limit
                 v-model="detailData.customUrl"
               ></el-input>
             </el-form-item>
@@ -501,7 +503,11 @@ export default {
     },
     // 新建确认保存
     async _createSave() {
-      let { status } = await productManageApi.createProduct(this.detailData);
+      let { status, data } = await productManageApi.createProduct(
+        this.detailData
+      );
+      this.curProduct = data;
+      this.detailData.id = data;
       status === 200 && this._complateCreate();
     },
     // 编辑提交
@@ -566,7 +572,7 @@ export default {
             this.$emit("changeSaveWay", true);
             this.$emit(
               "changePreviewId",
-              this.detailData.NewId,
+              this.detailData.id,
               this.detailData.defaultSiteId
             );
           }

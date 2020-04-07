@@ -1,6 +1,7 @@
 import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index";
 import { getSiteInfoBySite } from "@/api/request/siteBackupApi";
 import { getCurSiteId, getAutoTranslateConfig, getSites } from "@/api/request/dashboardApi";
+import { getUnReadCount } from "@/api/request/msgBoardApi";
 import { setLocal } from "@/libs/local"
 import { setCookie } from "@/libs/cookie"
 
@@ -35,7 +36,9 @@ const dashboard = {
         isSiteInfoShow: false,
         isWechataccountShow: false,
         siteList: [],
-        autoTranslateSwitch: false
+        autoTranslateSwitch: false,
+        unreadCountStatus: false,
+        unreadCount: 0
     },
     mutations: {
 
@@ -68,6 +71,12 @@ const dashboard = {
         },
         set_siteList(state, status) {
           state.siteList = status;
+        },
+        set_unreadCountStatus(state, status) {
+            state.unreadCountStatus = status;
+        },
+        set_unreadCount(state, unreadCount) {
+          state.unreadCount = unreadCount;
         }
     },
     actions: {
@@ -127,6 +136,11 @@ const dashboard = {
                 })
             })
 
+        },
+        async getunreadCount({ commit, state }) {
+          let { data } = await getUnReadCount(state.siteId);
+          commit("set_unreadCount", data),
+          commit('set_unreadCountStatus',true)
         }
     },
     getters: {

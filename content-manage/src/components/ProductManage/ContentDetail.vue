@@ -33,7 +33,7 @@
           <div class="article-btn">
             <button
               class="cl-button cl-button--small cl-button--primary_notbg"
-              @click="() => $router.go(-1)"
+              @click="_handleGoBack"
             >
               返回
             </button>
@@ -120,6 +120,9 @@ export default {
   },
   created() {},
   methods: {
+    _handleGoBack() {
+      this.$router.push("/content/product");
+    },
     tabClick() {},
     submitForm() {
       // let flieUrls = [
@@ -190,6 +193,7 @@ export default {
      * 预览
      */
     async preview() {
+      console.log(this.previewId);
       if (this.previewId) {
         let { data } = await productManageApi.GetContentPrevAddress(
           "ProductDetail",

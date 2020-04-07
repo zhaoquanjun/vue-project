@@ -33,7 +33,8 @@ const dashboard = {
     curCode: "",
     isContentwrite: false,
     siteList: [],
-    autoTranslateSwitch: false
+    autoTranslateSwitch: false,
+    unreadCountStatus: false
   },
   mutations: {
     SETSITEID(state, siteId) {
@@ -56,6 +57,9 @@ const dashboard = {
     set_autoTranslateSwitch(state, status) {
       state.autoTranslateSwitch = status;
     },
+    set_unreadCountStatus(state, status) {
+        state.unreadCountStatus = status;
+    }
   },
   actions: {
     async _updateAppIdAndSiteIdToCookie({ commit }) {

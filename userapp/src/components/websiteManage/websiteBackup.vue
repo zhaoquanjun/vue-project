@@ -210,7 +210,9 @@ export default {
       backupShow: false,
       backuping: false,
       remarkInfo: "",
-      disabled: false
+      disabled: false,
+      _getRecoverySiteStatusTimer: null,
+      count: 0
     };
   },
   methods: {
@@ -322,14 +324,7 @@ export default {
               )
               .then(res => {
                 if (res.status === 200) {
-                  this.$notify({
-                    customClass: "notify-success",
-                    message: `网站还原成功`,
-                    duration: 2000,
-                    showClose: false
-                  });
-                  this.getBackupSite(this.siteId);
-                  this.backuping = false;
+                  this._getRecoverySiteStatus(scope.row.siteId);
                 } else {
                   this.$notify({
                     customClass: "notify-error",
@@ -349,6 +344,52 @@ export default {
         }
       });
     },
+
+    /**
+     * 获取站点还原状态信息
+     */
+    async _getRecoverySiteStatus(siteId) {
+      this.count ++;
+      let data = await siteBackupApi.getRecoverySiteStatus(siteId);
+      if(this._getRecoverySiteStatusTimer) clearInterval(this._getRecoverySiteStatusTimer);
+      // 每隔5s请求一次，3分钟后停止请求，提示还原失败
+      if(data.status === 200 && this.count <= 36) {
+        if(data.data.code === 1) {
+          this.$notify({
+            customClass: "notify-success",
+            message: `网站还原成功`,
+            duration: 2000,
+            showClose: false
+          });
+          this.getBackupSite(this.siteId);
+          this.count = 0
+          this.backuping = false;
+        } else if(data.data.code === -1){
+          this.$notify({
+            customClass: "notify-error",
+            message: `网站还原失败`,
+            duration: 2000,
+            showClose: false
+          });
+          this.count = 0
+          this.backuping = false;
+        } else if(data.data.code === 0) {
+          this._getRecoverySiteStatusTimer = setInterval(()=>{
+            this._getRecoverySiteStatus(siteId)
+          },5000)
+        }
+      }else {
+        this.$notify({
+          customClass: "notify-error",
+          message: `网站还原失败`,
+          duration: 2000,
+          showClose: false
+        });
+        this.count = 0;
+        this.backuping = false;
+      }
+    },
+
     /**
      * 备份当前版本
      */

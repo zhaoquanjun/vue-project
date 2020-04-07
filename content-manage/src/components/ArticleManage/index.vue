@@ -158,13 +158,23 @@ export default {
       list: [],
       idsList: [],
       rightPanelType: 1, // 1 移动文章 2 复制文章
-      selectCategory: "",
+      selectCategory: { id: 0, language: "zh-CN" },
       operateName: "移动",
       isInvitationPanelShow: false,
-      articleSearchOptions: {
+      realNodeSearchOptions: {
         title: "",
         categoryIdList: [0],
         categoryId: 0,
+        newsOrderColumns: "createtime",
+        topStatus: null,
+        publishStatus: null,
+        pageIndex: 1,
+        pageSize: 10,
+        isDescending: true
+      },
+      virtualSearchOptions: {
+        title: "",
+        language: "zh-CN",
         newsOrderColumns: "createtime",
         topStatus: null,
         publishStatus: null,
@@ -250,6 +260,19 @@ export default {
           }
         }
         return arr;
+      },
+      set: function() {}
+    },
+    articleSearchOptions: {
+      get: function() {
+        let options;
+        if (this.selectCategory.id >= 0) {
+          options = this.realNodeSearchOptions;
+        } else {
+          options = this.virtualSearchOptions;
+        }
+        console.log(options, "0-==-=-=");
+        return options;
       },
       set: function() {}
     }
@@ -757,9 +780,25 @@ export default {
     chooseNode(node) {
       this.moveToClassiFy = node;
     },
+    //  获取所有分类id
+    getAllNodeIds(node, isChildNode) {
+      var idList = isChildNode ? [] : [node.id];
+      for (var i in node.children) {
+        let child = node.children[i];
+        idList.push(child.id);
+        idList = idList.concat(this.getAllNodeIds(child, true));
+      }
+      return idList;
+    },
     // 点击左侧分类树菜单时的节点
     chooseCategoryNode(data) {
       this.selectCategory = data;
+      if (data.id >= 0) {
+        this.realNodeSearchOptions.categoryIdList = this.getAllNodeIds(data);
+      } else {
+        this.virtualSearchOptions.language = data.language;
+      }
+      console.log(this.articleSearchOptions, "-=-=-=");
     },
     cancelUpdateCategory() {
       this.isInvitationPanelShow = false;

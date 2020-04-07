@@ -170,12 +170,12 @@ export default {
       treeResult: null,
       curArticleInfo: "",
       moveToClassiFy: "",
-      selectCategory: "",
+      selectCategory: { id: 0, language: "zh-CN" },
       count: 0,
       list: [],
       idsList: [],
       isInvitationPanelShow: false,
-      productSearchOptions: {
+      realSearchOptions: {
         pageSize: 10, //11
         pageIndex: 1, //1
         orderByType: 1, //1 创建时间 2:名字
@@ -184,6 +184,17 @@ export default {
         isDelete: false, //1
         isOnSell: null, //is 上架
         categoryIdList: [], //1,
+        isTop: null
+      },
+      virtualSearchOptions: {
+        pageSize: 10, //11
+        pageIndex: 1, //1
+        orderByType: 1, //1 创建时间 2:名字
+        isDescending: true, // 倒叙 或 正序
+        keyword: "", //1
+        isDelete: false, //1
+        isOnSell: null, //is 上架
+        language: "zh-CN",
         isTop: null
       },
       curRow: null,
@@ -263,6 +274,19 @@ export default {
           }
         }
         return arr;
+      },
+      set: function() {}
+    },
+    productSearchOptions: {
+      get: function() {
+        let options;
+        if (this.selectCategory.id >= 0) {
+          options = this.realSearchOptions;
+        } else {
+          options = this.virtualSearchOptions;
+        }
+        console.log(options, "[][][][]][");
+        return options;
       },
       set: function() {}
     }
@@ -689,10 +713,25 @@ export default {
     // 点击左侧分类树菜单时的节点
     chooseCategoryNode(data) {
       this.selectCategory = data;
+      if (data.id >= 0) {
+        this.realSearchOptions.categoryIdList = this.getAllNodeIds(data);
+      } else {
+        this.virtualSearchOptions.language = data.language;
+      }
     },
     cancelUpdateCategory() {
       // this.$refs.checkTree.resetChecked(); // 清空选中的 树结构
       this.isInvitationPanelShow = false;
+    },
+    // 获取所有选择节点
+    getAllNodeIds(node, isChildNode) {
+      var idList = isChildNode ? [] : [node.id];
+      for (var i in node.children) {
+        let child = node.children[i];
+        idList.push(child.id);
+        idList = idList.concat(this.getAllNodeIds(child, true));
+      }
+      return idList;
     },
     moveClassify(data, flag) {
       this.clickType = "";

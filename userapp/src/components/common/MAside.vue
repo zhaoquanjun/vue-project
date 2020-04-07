@@ -31,7 +31,6 @@
       <LeftNavComponents
         :subTitle="subTitle"
         :lastRoute="lastRoute"
-        :isLeftNavComponentsShow="isLeftNavComponentsShow"
         v-if="isLeftNavComponentsShow"
         :style="{ width: 130 + 'px !important', height: '100%' }"
         class="m-asideright"
@@ -80,7 +79,7 @@ export default {
           this.width = 130;
         }
       } else {
-        this.temer = setTimeout(() => {
+        this.timer = setTimeout(() => {
           let levtimes = new Date().getTime();
           if (!this.enterTime || levtimes - this.enterTime >= 200) {
             this.curIndex = i;
@@ -103,6 +102,9 @@ export default {
     },
     collapseOpen(width, time) {
       this.width = 130;
+      if (!this.$store.state.dashboard.unreadCountStatus) {
+        this.$store.dispatch("getunreadCount");
+      }
     },
     collapseClose() {
       setTimeout(() => {

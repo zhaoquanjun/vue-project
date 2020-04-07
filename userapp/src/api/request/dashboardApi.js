@@ -256,7 +256,7 @@ export const getAkSk = () => {
  */
 export const getCustomTemplateList = () => {
   return ajaxRequest.get(
-    `${environment.designerManageApi}/api/v1/Sms/GetCustomTemplateList`
+    `${environment.memberManageApi}/api/v1/Sms/GetCustomTemplateList`
   );
 };
 /**
@@ -264,7 +264,7 @@ export const getCustomTemplateList = () => {
  */
 export const getSiteSMSSignList = () => {
   return ajaxRequest.get(
-    `${environment.designerManageApi}/api/v1/Sms/GetSMSSignList`
+    `${environment.memberManageApi}/api/v1/Sms/GetSMSSignList`
   );
 };
 /**
@@ -272,7 +272,7 @@ export const getSiteSMSSignList = () => {
  */
 export const removeCustomTemplate = tempId => {
   return ajaxRequest._delete(
-    `${environment.designerManageApi}/api/v1/Sms/RemoveCustomTemplate/${tempId}`
+    `${environment.memberManageApi}/api/v1/Sms/RemoveCustomTemplate/${tempId}`
   );
 };
 /**
@@ -280,14 +280,14 @@ export const removeCustomTemplate = tempId => {
  */
 export const deleteSiteSMSSignById = id => {
   return ajaxRequest._delete(
-    `${environment.designerManageApi}/api/v1/sms/DeleteSMSSignById?id=${id}`
+    `${environment.memberManageApi}/api/v1/sms/DeleteSMSSignById?id=${id}`
   );
 };
 
 //创建签名 post
 export const createSiteSMSSign = signName => {
   return ajaxRequest.post(
-    `${environment.designerManageApi}/api/v1/Sms/CreateSMSSign`,
+    `${environment.memberManageApi}/api/v1/Sms/CreateSMSSign`,
     {
       signName: signName
     }
@@ -297,7 +297,7 @@ export const createSiteSMSSign = signName => {
 //查询模板详情
 export const getTemplateDetail = templateCode => {
   return ajaxRequest.get(
-    `${environment.designerManageApi}/api/v1/Sms/GetTemplateDetail`,
+    `${environment.memberManageApi}/api/v1/Sms/GetTemplateDetail`,
     {
       templateCode: templateCode
     }
@@ -307,7 +307,7 @@ export const getTemplateDetail = templateCode => {
 //保存模板
 export const addCustomTemplate = tempCode => {
   return ajaxRequest.post(
-    `${environment.designerManageApi}/api/v1/Sms/AddCustomTemplate`,
+    `${environment.memberManageApi}/api/v1/Sms/AddCustomTemplate`,
     {
       tempCode: tempCode
     }
@@ -337,14 +337,14 @@ export const getIsPreUseFreeSMS = siteId => {
 //获取免费短信条数
 export const getSurplusFreeSMSCount = () => {
   return ajaxRequest.get(
-    `${environment.designerManageApi}/api/v1/SMS/GetSurplusFreeSMSCount`
+    `${environment.memberManageApi}/api/v1/SMS/GetSurplusFreeSMSCount`
   );
 };
 
 //获取短信列表
 export const getSmsList = (siteId, isSystem) => {
   return ajaxRequest.get(
-    `${environment.designerManageApi}/api/v1/Sms/GetSmsList`,
+    `${environment.memberManageApi}/api/v1/Sms/GetSmsList`,
     {
       siteId: siteId,
       isSystem: isSystem
@@ -354,14 +354,14 @@ export const getSmsList = (siteId, isSystem) => {
 //新增短信
 export const addCustomSms = data => {
   return ajaxRequest.post(
-    `${environment.designerManageApi}/api/v1/Sms/AddCustomSms`,
+    `${environment.memberManageApi}/api/v1/Sms/AddCustomSms`,
     data
   );
 };
 //修改短信
 export const updateCustomSms = data => {
   return ajaxRequest.put(
-    `${environment.designerManageApi}/api/v1/Sms/UpdateCustomSms`,
+    `${environment.memberManageApi}/api/v1/Sms/UpdateCustomSms`,
     data
   );
 };

@@ -35,6 +35,7 @@
             <LeftNavComponents
                 :subTitle="subTitle"
                 :lastRoute="lastRoute"
+                :unreadCount="unreadCount"
                 v-if="isLeftNavComponentsShow"
                 :style="{width: 130 + 'px !important',height: '100%' }"
                 class="m-asideright"
@@ -46,6 +47,8 @@
 <script>
 import { getSliderMenuList } from "@/api/index";
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
+import * as msgBoardApi from "@/api/request/msgBoardApi";
+import * as dashboardApi from "@/api/request/dashboardApi";
 export default {
     data() {
         return {
@@ -60,13 +63,20 @@ export default {
             curPath: "",
             enterTime: null,
             lastRoute: "",
-            subTitle:""
+            subTitle:"",
+            unreadCount: 0,
+            curSiteId: 0
         };
     },
     components: {
         LeftNavComponents
     },
     methods: {
+        async getUnReadCount() {
+            let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
+            data && (this.unreadCount = data);
+            this.$store.commit('set_unreadCountStatus',true)
+        },
         enterChange(){
             let times = (new Date()).getTime();
             this.enterTime = times
@@ -104,8 +114,15 @@ export default {
             }
             window.location.href = "//" + item.menuUrl;
         },
-        collapseOpen(width, time) {
+        async collapseOpen(width, time) {
             this.width = 130;
+
+            if(!this.$store.state.dashboard.unreadCountStatus) {
+                let { data } = await dashboardApi.getCurSiteId();
+                data && (this.curSiteId = data);
+                this.curSiteId && this.getUnReadCount();
+                
+            }
         },
         collapseClose() {
             setTimeout(()=>{

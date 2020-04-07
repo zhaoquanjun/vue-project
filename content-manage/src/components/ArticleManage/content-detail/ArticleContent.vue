@@ -392,7 +392,12 @@ export default {
     },
     // 新建确认保存
     async _createSave() {
-      let { status } = await articleManageApi.createArticle(this.articleDetail);
+      let { status, data } = await articleManageApi.createArticle(
+        this.articleDetail
+      );
+      this.NewId = data;
+      this.articleDetail.NewId = data;
+      console.log(this.NewId, "-=-=-=");
       status === 200 && this._complateCreate();
     },
     // 编辑保存
@@ -436,6 +441,7 @@ export default {
             this.$emit("changePreviewId", "", 0);
             this.$route.query.id = false;
           } else {
+            console.log(this.NewId, "-=-=-=");
             this.articleDetail.NewId = this.$route.query.id || this.NewId;
             this.$emit("changeSaveWay", true);
             this.$emit(

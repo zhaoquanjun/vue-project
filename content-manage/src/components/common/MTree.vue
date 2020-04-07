@@ -95,7 +95,7 @@
         添加子分类
       </button>
       <button
-        v-if="curClickNode.data.level > 0 && !curClickNode.data.isSystem"
+        v-if="curClickNode.data.level > 0 && curClickNode.data.id > 0"
         type="text"
         size="mini"
         @click="rename"
@@ -104,7 +104,7 @@
       </button>
 
       <button
-        v-if="curClickNode.data.level > 0 && !curClickNode.data.isSystem"
+        v-if="curClickNode.data.level > 0 && !curClickNode.data.id > 0"
         type="text"
         size="mini"
         @click="batchRemove"
@@ -338,13 +338,14 @@ export default {
         return;
       }
       this.categoryId = data.id;
-
+      if (this.type !== "news") {
+        this.listOptions.categoryIdList = this.getAllNodeIds(data);
+      }
       this.closeUploadCategoryPic();
       this.closeUploadCategoryPic1();
-
-      this.listOptions.categoryIdList = this.getAllNodeIds(data);
-      this.listOptions.pageIndex = 1; // 与产品分类不一致的地方
+      this.listOptions.pageIndex = 1; // 与产品分类不一致的地
       this.$emit("chooseCategoryNode", data); // 与产品分类不一致的地方
+      console.log(this.listOptions);
       this.$emit("getList", data);
     },
     // 取消第一个全部分类默认选中的样式

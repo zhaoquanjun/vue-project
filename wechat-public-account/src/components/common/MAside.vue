@@ -33,6 +33,7 @@
             <LeftNavComponents
                 :subTitle="subTitle"
                 :lastRoute="lastRoute"
+                :unreadCount="unreadCount"
                 v-if="isLeftNavComponentsShow"
                 :style="{width: 130 + 'px !important',height: '100%',borderRight:'1px solid #e6e6e6' }"
                 class="m-asideright"
@@ -43,6 +44,7 @@
 </template>
 <script>
 import LeftNavComponents from "_c/Aside/LeftNavComponents";
+import * as msgBoardApi from "@/api/request/msgBoardApi";
 export default {
     data() {
         return {
@@ -57,7 +59,9 @@ export default {
             curPath: "",
             lastRoute: "",
             enterTime: null,
-            subTitle:""
+            subTitle:"",
+            unreadCount: 0,
+            curSiteId: this.$store.state.dashboard.siteId
         };
     },
     mounted() {
@@ -67,6 +71,11 @@ export default {
         LeftNavComponents
     },
     methods: {
+        async getUnReadCount() {
+            let { data } = await msgBoardApi.getUnReadCount(this.curSiteId);
+            data && (this.unreadCount = data);
+            this.$store.commit('set_unreadCountStatus',true)
+        },
         enterChange(){
             let times = (new Date()).getTime();
             this.enterTime = times
@@ -107,6 +116,9 @@ export default {
         collapseOpen(width, time) {
             this.$store.commit("SET_DIALOG",true)
             this.width = 130;
+            if(!this.$store.state.dashboard.unreadCountStatus) {
+                this.curSiteId && this.getUnReadCount()
+            }
         },
         collapseClose() {
             setTimeout(()=>{

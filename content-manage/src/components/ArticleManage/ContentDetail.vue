@@ -32,7 +32,7 @@
           <div class="article-btn">
             <button
               class="cl-button cl-button--small cl-button--primary_notbg"
-              @click="() => $router.go(-1)"
+              @click="_handleGoBack"
             >
               返回
             </button>
@@ -102,6 +102,9 @@ export default {
     ArticleContent
   },
   methods: {
+    _handleGoBack() {
+      this.$router.push("/content/news");
+    },
     changeOperateName(operate) {
       this.operateName = operate;
     },

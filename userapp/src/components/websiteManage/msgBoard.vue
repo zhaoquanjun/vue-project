@@ -9,9 +9,20 @@
     </el-aside>
     <el-main class="member-content page-scroll">
       <ChangeSite @chooseWebsite="chooseWebsite" @getSiteId="getSiteId" />
-      <el-row class="user-list">
+      <div class="user-list title-wrap">
         <span class="member-list-title fs14">留言管理</span>
-      </el-row>
+        <!-- 钉钉配置 -->
+        <!-- <div class="dingding-wrap">
+          <div 
+            class="dingding-icon" 
+            :class="dingdingConfig?'config':'noConfig'"
+          >
+            {{dingdingConfig ? "已配置" : "未配置"}}
+          </div>
+          <div class="dingding-text">钉钉消息推送</div>
+          <div class="dingding-btn" @click="showDingdingDialog">{{dingdingConfig ? "查看配置" : "立即配置"}}</div>
+        </div> -->
+      </div>
       <el-header class="content-header">
         <template v-if="!isBatchHeaderShow">
           <div class="searchInput head-item">
@@ -294,6 +305,41 @@
             </el-pagination>
         </div>
       </div>
+      <el-dialog
+        width="0"
+        :visible.sync="dingdingConfigDialog"
+        :show-close="false"
+        :close-on-click-modal="false"
+      >
+        <div class="dingding-dialog-wrap" :style="{width:'400px'}">
+          <div>
+            <div class="dialog-header">
+              <span>钉钉消息推送配置</span>
+              <span class="close-pannel" @click="closeDingdingDialog">
+                <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
+              </span>
+            </div>
+            <div class="tips">提示：配置后您的所有站点均可通过钉钉接收新留言提醒并可进行快捷回复</div>
+            <div class="input-wrap">
+              <span class="title-text"><span class="title-icon">*</span>Access Token</span>
+              <el-input class="dingdingInput" v-model="dingdingAT" @blur="blurDingAT" placeholder="请输入Access Token"></el-input>
+              <div class="ym-form-item__error" v-show="errorDingATShow">{{errorDingATText}}</div>
+            </div>
+            <div class="input-wrap key-input">
+              <span class="title-text"><span class="title-icon">*</span>Key</span>
+              <el-input class="dingdingInput" v-model="dingdingKey" @blur="blurDingKey" placeholder="请输入Key"></el-input>
+              <div class="ym-form-item__error" v-show="errorDingKeyShow">{{errorDingKeyText}}</div>
+            </div>
+            <a href="" class="dialog-link">如何获取Access Token 和 Key？</a>
+          </div>
+          <div class="dialog-confirm">
+            <Debounce :time="1000" !isDebounce>
+              <button class="confirmBtn cl-button cl-button--primary" @click="setDingding">{{dingdingConfig?"删除配置":"确定"}}</button>
+            </Debounce>
+            <button class="cl-button cl-button--primary_notbg" @click="closeDingdingDialog">取消</button>
+          </div>
+        </div>
+      </el-dialog>
       
     </el-main>
   </el-container>
@@ -343,7 +389,15 @@ export default {
         queryKeywords: "",
         Status: -1,
         DescSort: true
-      }
+      },
+      dingdingConfig: false,
+      dingdingConfigDialog: false,
+      dingdingAT: "",
+      dingdingKey: "",
+      errorDingATShow: false,
+      errorDingATText: "",
+      errorDingKeyShow: false,
+      errorDingKeyText: ""
     }
   },
   mounted(){
@@ -352,6 +406,8 @@ export default {
     this.getMsgboardListParas.Status = -1;
     this.getMsgboardListParas.DescSort = true;this._getMsgboardList();
     this._getUnReadCount();
+    // 获取钉钉配置
+    // this.getdingtalk();
   },
   watch: {
     search() {
@@ -577,7 +633,109 @@ export default {
           }
         }
       )
-    }
+    },
+    async getdingtalk(){
+      let { data } = await msgBoardApi.getdingtalk();
+      if (data.accessToken) {
+        this.dingdingConfig = true;
+        this.dingdingAT = data.accessToken
+        this.dingdingKey = data.key
+      } else {
+        this.dingdingAT = ""
+        this.dingdingKey = ""
+        this.dingdingConfig = false;
+      }
+    },
+    blurDingAT() {
+      if (this.dingdingAT == "") {
+        this.errorDingATShow = true;
+        this.errorDingATText = "Access Token不能为空";
+      } else if (this.dingdingAT.length > 100) {
+        this.errorDingATShow = true;
+        this.errorDingATText = "Access Token最长支持100个字符";
+      } else {
+        this.errorDingATShow = false;
+        this.errorDingATText = "";
+      }
+    },
+    blurDingKey() {
+      if (this.dingdingKey == "") {
+        this.errorDingKeyShow = true;
+        this.errorDingKeyText = "Key不能为空";
+      } else if (this.dingdingKey.length > 100) {
+        this.errorDingKeyShow = true;
+        this.errorDingKeyText = "Key最长支持100个字符";
+      } else {
+        this.errorDingKeyShow = false;
+        this.errorDingKeyText = "";
+      }
+    },
+    async setDingding(){
+      if (this.dingdingConfig) {
+        // 删除配置
+        this.$confirm(
+          "确认删除钉钉消息推送配置吗？",
+          "提示",
+          {
+            iconClass: "icon-warning",
+            callback: async action => {
+              if(action === "confirm") {
+                let { status } = await msgBoardApi.deletedingtalk();
+                if(status === 200) {
+                  this.dingdingConfigDialog = false;
+                  this.$notify({
+                    customClass: "notify-success",
+                    message: `删除成功!`,
+                    showClose: false,
+                    duration: 1000
+                  });
+                  this.getdingtalk();
+                }
+              }
+            }
+          }
+        )
+      } else {
+        if (this.dingdingAT == "") {
+          this.errorDingATShow = true;
+          this.errorDingATText = "Access Token不能为空";
+          return
+        } else if (this.dingdingAT.length > 100) {
+          this.errorDingATShow = true;
+          this.errorDingATText = "Access Token最长支持100个字符";
+          return
+        }
+        if (this.dingdingKey == "") {
+          this.errorDingKeyShow = true;
+          this.errorDingKeyText = "Key不能为空";
+          return
+        } else if (this.dingdingKey.length > 100) {
+          this.errorDingKeyShow = true;
+          this.errorDingKeyText = "Key最长支持100个字符";
+          return
+        }
+        this.dingdingConfigDialog = false;
+        let para = {
+          AccessToken: this.dingdingAT,
+          Key: this.dingdingKey
+        };
+        let { data, status } = await msgBoardApi.setdingtalk(para);
+        this.$notify({
+          customClass: "notify-success",
+          message: `配置成功!`,
+          showClose: false,
+          duration: 1000
+        });
+        this.getdingtalk();
+      }
+    },
+    showDingdingDialog() {
+      this.dingdingConfigDialog = true;
+    },
+    // 关闭钉钉配置弹框
+    closeDingdingDialog() {
+      this.dingdingConfigDialog = false;
+    },
   }
 }
 </script>
@@ -594,6 +752,42 @@ export default {
         font-size: $--font-size-base;
         font-weight: 700;
       }
+    }
+  }
+}
+.title-wrap{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .dingding-wrap{
+    display: flex;
+    align-items: center;
+    .dingding-icon{
+      width: 44px;
+      height: 20px;
+      color: $--color-white;
+      font-size: $--font-size-small;
+      line-height: 20px;
+      text-align: center;
+      margin-right: 8px;
+    }
+    .config{
+      background: $--color-success;
+    }
+    .noConfig{
+      background: $--color-danger;
+    }
+    .dingding-text{
+      font-size: $--font-size-small;
+    }
+    .dingding-btn{
+      margin-left: 16px;
+      font-size: $--font-size-small;
+      color: $--color-info;
+      text-decoration: underline;
+      cursor: pointer;
     }
   }
 }
@@ -826,5 +1020,83 @@ export default {
 }
 .content-table /deep/ .el-table__empty-text{
     width: auto;
+}
+.dingding-dialog-wrap{
+  background: #ffffff;
+  position: fixed;
+  z-index: 2200;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transition: width 0.2s linear;
+  background-color: "#fff";
+  overflow: hidden;
+  color: #262626;
+  padding: 0 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .dialog-header {
+    height: 53px;
+    border-bottom: $--border-base;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .iconguanbi{
+      margin: 0;
+    }
+  }
+  .tips {
+    width: 100%;
+    font-size: 12px;
+    color: $--color-success;
+    background:rgba(243,255,247,1);
+    border-radius:2px;
+    border: 1px solid rgba(35,205,93,0.3);
+    line-height: 17px;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-top: 24px;
+  }
+  .input-wrap{
+    margin-top: 24px;
+    .title-text{
+      display: inline-block;
+      width: 106px;
+      font-size: $--font-size-base;
+      text-align: right;
+      .title-icon{
+        color: $--color-danger;
+        font-size: 16px;
+        vertical-align: middle;
+        margin-right: 8px;
+      }
+    }
+    .dingdingInput{
+      margin-left: 16px;
+      width: 228px;
+    }
+    .ym-form-item__error{
+      margin-left: 122px;
+    }
+  }
+  .key-input{
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+  .dialog-link{
+    margin-left: 122px;
+    color: $--color-primary;
+  }
+  .dialog-confirm {
+    width: 100%;
+    height: 80px;
+    bottom: 0px;
+    border-top: $--border-base;
+    .confirmBtn {
+      margin-top: 16px;
+    }
+  }
 }
 </style>
