@@ -165,7 +165,7 @@ export default {
         title: "",
         categoryIdList: [0],
         categoryId: 0,
-        newsOrderColumns: "createtime",
+        newsOrderColumns: "language",
         topStatus: null,
         publishStatus: null,
         pageIndex: 1,
@@ -175,7 +175,7 @@ export default {
       virtualSearchOptions: {
         title: "",
         language: "zh-CN",
-        newsOrderColumns: "createtime",
+        newsOrderColumns: "language",
         topStatus: null,
         publishStatus: null,
         pageIndex: 1,
@@ -271,7 +271,6 @@ export default {
         } else {
           options = this.virtualSearchOptions;
         }
-        console.log(options, "0-==-=-=");
         return options;
       },
       set: function() {}
@@ -965,8 +964,14 @@ export default {
         this.$router.push({
           path: "/news/create",
           query: {
-            categoryName: this.selectCategory.label || "全部分类",
-            categoryId: this.selectCategory.id || 0,
+            categoryName:
+              this.selectCategory.id && this.selectCategory.id > 0
+                ? this.selectCategory.label || "全部分类"
+                : "全部分类",
+            categoryId:
+              this.selectCategory.id && this.selectCategory.id > 0
+                ? this.selectCategory.id
+                : 0,
             language: this.selectCategory.language || "zn-CN"
           }
         });

@@ -178,7 +178,7 @@ export default {
       realSearchOptions: {
         pageSize: 10, //11
         pageIndex: 1, //1
-        orderByType: 1, //1 创建时间 2:名字
+        orderByType: "language", //1 创建时间 2:名字
         isDescending: true, // 倒叙 或 正序
         keyword: "", //1
         isDelete: false, //1
@@ -189,7 +189,7 @@ export default {
       virtualSearchOptions: {
         pageSize: 10, //11
         pageIndex: 1, //1
-        orderByType: 1, //1 创建时间 2:名字
+        orderByType: "language", //1 创建时间 2:名字
         isDescending: true, // 倒叙 或 正序
         keyword: "", //1
         isDelete: false, //1
@@ -285,7 +285,6 @@ export default {
         } else {
           options = this.virtualSearchOptions;
         }
-        console.log(options, "[][][][]][");
         return options;
       },
       set: function() {}
@@ -970,8 +969,14 @@ export default {
         this.$router.push({
           path: "/product/create",
           query: {
-            categoryName: this.selectCategory.label || "全部分类",
-            categoryId: this.selectCategory.id || 0,
+            categoryName:
+              this.selectCategory.id && this.selectCategory.id > 0
+                ? this.selectCategory.label || "全部分类"
+                : "全部分类",
+            categoryId:
+              this.selectCategory.id && this.selectCategory.id > 0
+                ? this.selectCategory.id
+                : 0,
             language: this.selectCategory.language
           }
         });

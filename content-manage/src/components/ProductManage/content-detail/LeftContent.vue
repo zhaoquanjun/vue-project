@@ -350,7 +350,7 @@ export default {
         isAllowComment: true,
         defaultSiteId: 0,
         specificationContent: "",
-        Language: "zh-CN"
+        Language: this.$route.query.language || "zh-CN"
       },
       rules: {
         name: [
@@ -611,7 +611,10 @@ export default {
      * 获取 tree 结构
      */
     async getTree() {
-      let { data } = await productCategoryManageApi.get();
+      let { data } = await productCategoryManageApi.get({
+        language: this.detailData.Language
+      });
+      this._setRealTreeResult(data.treeArray);
       this.treeResult = data.treeArray;
     },
     chooseNode(data, boolean) {
@@ -644,7 +647,9 @@ export default {
         this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
           item => {
             if (item.id != data.id) {
-              this.categoryId.push(item.id);
+              if (item.id >= 0) {
+                this.categoryId.push(item.id);
+              }
               return true;
             }
           }

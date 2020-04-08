@@ -171,12 +171,12 @@ export default {
       }
     },
     createCategory(displayName, thumbnailPicUrl, Language) {
-      console.log(displayName, thumbnailPicUrl, Language);
       if (this.isAdd) {
         if (this.isArticle) {
           this.$emit("create", {
             CategoryName: trim(displayName),
-            ParentId: this.createCategoryData.id,
+            ParentId:
+              this.createCategoryData.id > 0 ? this.createCategoryData.id : 0,
             Language: Language
           });
         } else {

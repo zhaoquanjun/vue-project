@@ -168,7 +168,8 @@ export default {
         if (this.isArticle) {
           this.$emit("create", {
             CategoryName: trim(displayName),
-            ParentId: this.createCategoryData.id,
+            ParentId:
+              this.createCategoryData.id > 0 ? this.createCategoryData.id : 0,
             Language
           });
         } else {

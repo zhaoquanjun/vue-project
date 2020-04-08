@@ -254,7 +254,7 @@ export default {
         metaDescription: "",
         pictureUrl: "",
         defaultSiteId: 0,
-        Language: this.$route.query.language
+        Language: this.$route.query.language || "zh-CN"
       },
       rules: {
         title: [
@@ -331,9 +331,10 @@ export default {
       this.articleDetail.metaKeywords.splice(index, 1);
     },
     async getTreeAsync() {
-      let { data } = await articleManageApi.getArticleCategory();
+      let { data } = await articleManageApi.getArticleCategory({
+        langugage: this.articleDetail.Language
+      });
       this.treeResult = data;
-
       var categoryName = this.$route.query.categoryName;
       if (categoryName != null || categoryName != undefined) {
         this.categoryName = categoryName;
@@ -366,8 +367,10 @@ export default {
     },
     //选择移动分类时的节点
     chooseNode(node) {
-      this.articleDetail.categoryId = node.id;
-      this.categoryName = node.label;
+      if (node.id >= 0) {
+        this.articleDetail.categoryId = node.id;
+        this.categoryName = node.label;
+      }
     },
     // 重置表单
     resetForm(formName) {
