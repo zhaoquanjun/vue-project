@@ -67,7 +67,10 @@
                 </div>
                 <div
                   class="multipleCatagory"
-                  :style="{ height: isCheckTreeShow ? 'auto' : 0 }"
+                  :style="{
+                    height: isCheckTreeShow ? 'auto' : 0,
+                    padding: isCheckTreeShow ? '16px' : 0
+                  }"
                 >
                   <DetailCheckTree
                     ref="detailCheckTree"
@@ -249,19 +252,19 @@
   </div>
 </template>
 <script>
-import environment from "@/environment/index";
-import * as productManageApi from "@/api/request/productManageApi";
-import * as productCategoryManageApi from "@/api/request/productCategoryManageApi";
-import DetailCheckTree from "./DetailCheckTree";
+import environment from "@/environment/index"
+import * as productManageApi from "@/api/request/productManageApi"
+import * as productCategoryManageApi from "@/api/request/productCategoryManageApi"
+import DetailCheckTree from "./DetailCheckTree"
 const viewAuth = [
   { name: "全选", id: 0 },
   { name: "登录用户", id: 1 },
   { name: "未登录用户", id: 2 }
-];
+]
 
-import ModalContent from "@/components/ImgManage/index.vue";
-import QuillDetail from "@/components/ProductManage/QuillDetail.vue";
-import QuillContentDetail from "@/components/ProductManage/QuillDetail.vue";
+import ModalContent from "@/components/ImgManage/index.vue"
+import QuillDetail from "@/components/ProductManage/QuillDetail.vue"
+import QuillContentDetail from "@/components/ProductManage/QuillDetail.vue"
 
 export default {
   components: {
@@ -380,164 +383,162 @@ export default {
       quillDetailId: "quill-specificationContent",
       quillContentId: "quill-contentDetail",
       siteId: 0
-    };
+    }
   },
   created() {
-    this.getTree();
+    this.getTree()
   },
   mounted() {
-    document.addEventListener("click", e => {
-      e.stopPropagation();
+    document.addEventListener("click", (e) => {
+      e.stopPropagation()
       if (this.isCheckTreeShow) {
-        this.multipleCatagory();
+        this.multipleCatagory()
       }
-      return false;
-    });
-    let categoryId = this.$route.query.categoryId;
-    let categoryName = this.$route.query.categoryName;
+      return false
+    })
+    let categoryId = this.$route.query.categoryId
+    let categoryName = this.$route.query.categoryName
     if (categoryId) {
       this.detailData.productCategoryList = [
         { id: categoryId, displayName: categoryName }
-      ];
-      this.categoryId = [categoryId];
+      ]
+      this.categoryId = [categoryId]
     } else {
-      this.detailData.productCategoryList = [
-        { id: 0, displayName: "全部分类" }
-      ];
+      this.detailData.productCategoryList = [{ id: 0, displayName: "全部分类" }]
     }
-    var id = this.$route.query.id;
-    this.curProduct = id;
+    var id = this.$route.query.id
+    this.curProduct = id
     if (id != null || id != undefined) {
-      this.getArticleDetail(id);
-      this.$emit("changeSaveWay", true);
+      this.getArticleDetail(id)
+      this.$emit("changeSaveWay", true)
     }
-    this.getSiteList();
+    this.getSiteList()
   },
   methods: {
     textIndent(ele, width) {
       this.$nextTick(() => {
-        ele.style.textIndent = width + "px";
-      });
+        ele.style.textIndent = width + "px"
+      })
     },
     keywords(value, name) {
-      this.metaKeyword = this.keywordValue = "";
+      this.metaKeyword = this.keywordValue = ""
       if (name === "seoKeyword") {
         if (this.detailData.seoKeyword.length >= 5 || !value) {
-          return;
+          return
         }
-        this.metaKeyword = "";
-        this.detailData.seoKeyword.push(value);
+        this.metaKeyword = ""
+        this.detailData.seoKeyword.push(value)
       } else {
         if (this.detailData.searchKeyword.length >= 5 || !value) {
-          return;
+          return
         }
-        this.keywordValue = "";
-        this.detailData.searchKeyword.push(value);
+        this.keywordValue = ""
+        this.detailData.searchKeyword.push(value)
       }
     },
     removeCurKeyWord(index) {
-      this.detailData.searchKeyword.splice(index, 1);
+      this.detailData.searchKeyword.splice(index, 1)
     },
     removeCurmetaKeyWord(index) {
-      this.detailData.seoKeyword.splice(index, 1);
+      this.detailData.seoKeyword.splice(index, 1)
     },
     async getArticleDetail(id) {
-      let { data } = await productManageApi.getProductDetail(id);
-      this.categoryId = [];
+      let { data } = await productManageApi.getProductDetail(id)
+      this.categoryId = []
 
       if (Object.keys(data.seoKeyword).length < 1) {
-        data.seoKeyword = [];
+        data.seoKeyword = []
       } else {
-        data.seoKeyword = data.seoKeyword.split(",");
+        data.seoKeyword = data.seoKeyword.split(",")
       }
       if (Object.keys(data.searchKeyword).length < 1) {
-        data.searchKeyword = [];
+        data.searchKeyword = []
       } else {
-        data.searchKeyword = data.searchKeyword.split(",");
+        data.searchKeyword = data.searchKeyword.split(",")
       }
-      this.detailData = data;
-      this.detailData.NewId = data.id;
+      this.detailData = data
+      this.detailData.NewId = data.id
       document
         .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML = this.detailData.detailContent;
+        .querySelector(".ql-editor").innerHTML = this.detailData.detailContent
       document
         .getElementById(this.quillDetailId)
         .querySelector(
           ".ql-editor"
-        ).innerHTML = this.detailData.specificationContent;
-      this.categoryIdList(this.detailData.productCategoryList);
-      this.$emit("changePreviewId", id, this.detailData.defaultSiteId);
+        ).innerHTML = this.detailData.specificationContent
+      this.categoryIdList(this.detailData.productCategoryList)
+      this.$emit("changePreviewId", id, this.detailData.defaultSiteId)
     },
     categoryIdList(list) {
-      this.categoryId = [];
-      list.forEach(item => {
-        this.categoryId.push(item.id);
-      });
+      this.categoryId = []
+      list.forEach((item) => {
+        this.categoryId.push(item.id)
+      })
     },
     // 重置表单
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
     // 新建提交
     submitForm(formName, fileList, storeInfo) {
-      this.detailData.thumbnailPicUrlList = fileList;
-      this.detailData.currencyType = storeInfo.storeTypeValue;
-      this.detailData.originalPrice = storeInfo.originalPrice;
-      this.detailData.price = storeInfo.price;
-      this.$refs[formName].validate(valid => {
+      this.detailData.thumbnailPicUrlList = fileList
+      this.detailData.currencyType = storeInfo.storeTypeValue
+      this.detailData.originalPrice = storeInfo.originalPrice
+      this.detailData.price = storeInfo.price
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           var html = document
             .getElementById(this.quillContentId)
-            .querySelector(".ql-editor").innerHTML;
+            .querySelector(".ql-editor").innerHTML
           var specification = document
             .getElementById(this.quillDetailId)
-            .querySelector(".ql-editor").innerHTML;
-          this.detailData.detailContent = html;
-          this.detailData.specificationContent = specification;
-          this._createSave();
+            .querySelector(".ql-editor").innerHTML
+          this.detailData.detailContent = html
+          this.detailData.specificationContent = specification
+          this._createSave()
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log("error submit!!")
+          return false
         }
-      });
+      })
     },
     // 新建确认保存
     async _createSave() {
       let { status, data } = await productManageApi.createProduct(
         this.detailData
-      );
-      this.curProduct = data;
-      this.detailData.id = data;
-      status === 200 && this._complateCreate();
+      )
+      this.curProduct = data
+      this.detailData.id = data
+      status === 200 && this._complateCreate()
     },
     // 编辑提交
     editArticle(formName, fileList, storeInfo) {
       if (fileList && fileList.length > 0) {
-        this.detailData.thumbnailPicUrlList = fileList;
+        this.detailData.thumbnailPicUrlList = fileList
       }
-      this.detailData.currencyType = storeInfo.storeTypeValue;
-      this.detailData.originalPrice = storeInfo.originalPrice;
-      this.detailData.price = storeInfo.price;
-      this.$refs[formName].validate(valid => {
+      this.detailData.currencyType = storeInfo.storeTypeValue
+      this.detailData.originalPrice = storeInfo.originalPrice
+      this.detailData.price = storeInfo.price
+      this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.saveArticle();
+          this.saveArticle()
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log("error submit!!")
+          return false
         }
-      });
+      })
     },
     //编辑确认保存
     async saveArticle() {
       var html = document
         .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML;
+        .querySelector(".ql-editor").innerHTML
       var specification = document
         .getElementById(this.quillDetailId)
-        .querySelector(".ql-editor").innerHTML;
-      this.detailData.detailContent = html;
-      this.detailData.specificationContent = specification;
-      this.editSave();
+        .querySelector(".ql-editor").innerHTML
+      this.detailData.detailContent = html
+      this.detailData.specificationContent = specification
+      this.editSave()
     },
     /**
      * 保存
@@ -546,8 +547,8 @@ export default {
       let { status } = await productManageApi.update(
         this.curProduct,
         this.detailData
-      );
-      status === 200 && this._completeEdit();
+      )
+      status === 200 && this._completeEdit()
     },
     /**
      * 完成编辑
@@ -558,26 +559,26 @@ export default {
         customClass: "medium",
         iconClass: "icon-success",
         cancelButtonText: "关闭",
-        callback: async action => {
+        callback: async (action) => {
           if (action === "confirm") {
-            this.$emit("clearStoreInfo");
-            this.resetForm("contentForm");
-            this.resetDetail();
-            this.$emit("changeSaveWay", false);
-            this.$emit("changePreviewId", "", 0);
-            this.$emit("handlerClickNewAdd");
-            this.$route.query.isEditor = 0;
+            this.$emit("clearStoreInfo")
+            this.resetForm("contentForm")
+            this.resetDetail()
+            this.$emit("changeSaveWay", false)
+            this.$emit("changePreviewId", "", 0)
+            this.$emit("handlerClickNewAdd")
+            this.$route.query.isEditor = 0
           } else {
-            this.detailData.id = this.curProduct;
-            this.$emit("changeSaveWay", true);
+            this.detailData.id = this.curProduct
+            this.$emit("changeSaveWay", true)
             this.$emit(
               "changePreviewId",
               this.detailData.id,
               this.detailData.defaultSiteId
-            );
+            )
           }
         }
-      });
+      })
     },
     /**
      * 完成新建
@@ -587,25 +588,25 @@ export default {
         confirmButtonText: "新增下一篇",
         iconClass: "icon-success",
         cancelButtonText: "关闭",
-        callback: async action => {
+        callback: async (action) => {
           if (action === "confirm") {
-            this.$emit("clearStoreInfo");
-            this.resetForm("contentForm");
-            this.resetDetail();
-            this.$emit("changeSaveWay", false);
-            this.$emit("changePreviewId", "", 0);
-            this.$emit("handlerClickNewAdd");
+            this.$emit("clearStoreInfo")
+            this.resetForm("contentForm")
+            this.resetDetail()
+            this.$emit("changeSaveWay", false)
+            this.$emit("changePreviewId", "", 0)
+            this.$emit("handlerClickNewAdd")
             // this.$refs.detailCheckTree.resetChecked();
           } else {
-            this.$emit("changeSaveWay", true);
+            this.$emit("changeSaveWay", true)
             this.$emit(
               "changePreviewId",
               this.curProduct,
               this.detailData.defaultSiteId
-            );
+            )
           }
         }
-      });
+      })
     },
     /**
      * 获取 tree 结构
@@ -613,9 +614,8 @@ export default {
     async getTree() {
       let { data } = await productCategoryManageApi.get({
         language: this.detailData.Language
-      });
-      this._setRealTreeResult(data.treeArray);
-      this.treeResult = data.treeArray;
+      })
+      this.treeResult = data.treeArray
     },
     chooseNode(data, boolean) {
       if (boolean) {
@@ -626,51 +626,55 @@ export default {
               message: `一个产品最多设置五个分类!`,
               showClose: false,
               duration: 1500
-            });
-            return;
+            })
+            return
           }
           if (this.detailData.productCategoryList[0].id == 0) {
-            this.$refs.detailCheckTree.setChecked(0);
+            this.$refs.detailCheckTree.setChecked(0)
           }
-          this.detailData.productCategoryList.push({
-            displayName: data.label,
-            id: data.id,
-            thumbnailPicUrl: data.thumbnailPicUrl
-          });
+          if (data.id >= 0) {
+            this.detailData.productCategoryList.push({
+              displayName: data.label,
+              id: data.id,
+              thumbnailPicUrl: data.thumbnailPicUrl
+            })
+          }
         }
         if (this.detailData.productCategoryList[0].id == 0) {
           if (this.$route.query.isEditor != 1)
-            this.detailData.productCategoryList.splice(0, 1);
+            this.detailData.productCategoryList.splice(0, 1)
         }
       } else {
-        this.categoryId = [];
+        this.categoryId = []
         this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
-          item => {
+          (item) => {
             if (item.id != data.id) {
               if (item.id >= 0) {
-                this.categoryId.push(item.id);
+                this.categoryId.push(item.id)
               }
-              return true;
+              return true
             }
           }
-        );
+        )
 
         if (this.detailData.productCategoryList.length == 0) {
           this.detailData.productCategoryList = [
             { id: 0, displayName: "全部分类" }
-          ];
+          ]
         }
       }
     },
     //  移除已选择的分类
     removeSeletedCategory(cur) {
-      let productCategoryList = this.detailData.productCategoryList;
-      this.detailData.productCategoryList = productCategoryList.filter(item => {
-        return item.displayName != cur;
-      });
+      let productCategoryList = this.detailData.productCategoryList
+      this.detailData.productCategoryList = productCategoryList.filter(
+        (item) => {
+          return item.displayName != cur
+        }
+      )
     },
     onEditorChange({ editor, html, text }) {
-      this.detailData.detailContent = html;
+      this.detailData.detailContent = html
     },
     fullScreenHandler() {
       //console.log('fullScreenHandler');
@@ -707,63 +711,63 @@ export default {
         isAllowComment: true,
         defaultSiteId: 0,
         Language: "zh-CN"
-      };
-      this.detailData = { ...this.detailData, ...detailData };
+      }
+      this.detailData = { ...this.detailData, ...detailData }
       document
         .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML = "";
+        .querySelector(".ql-editor").innerHTML = ""
       document
         .getElementById(this.quillDetailId)
-        .querySelector(".ql-editor").innerHTML = "";
+        .querySelector(".ql-editor").innerHTML = ""
     },
     multipleCatagory() {
-      this.isCheckTreeShow = !this.isCheckTreeShow;
+      this.isCheckTreeShow = !this.isCheckTreeShow
     },
 
     removeCategory(id) {
-      this.$refs.detailCheckTree.setChecked(id);
+      this.$refs.detailCheckTree.setChecked(id)
       this.detailData.productCategoryList = this.detailData.productCategoryList.filter(
-        item => {
-          return item.id != id;
+        (item) => {
+          return item.id != id
         }
-      );
+      )
     },
     //获取app下所有站点
     async getSiteList() {
-      let { data } = await productManageApi.getSiteList();
-      this.siteOptions = data;
-      this.siteId = this.siteOptions[0].siteId;
+      let { data } = await productManageApi.getSiteList()
+      this.siteOptions = data
+      this.siteId = this.siteOptions[0].siteId
     },
     changeSiteId(siteId) {
-      this.siteId = siteId;
-      this.detailData.defaultSiteId = siteId;
+      this.siteId = siteId
+      this.detailData.defaultSiteId = siteId
     },
     detailContentChange(html) {
-      this.detailData.specificationContent = html;
+      this.detailData.specificationContent = html
     },
     detailContentChange1(html) {
-      this.detailData.contentDetail = html;
+      this.detailData.contentDetail = html
     }
   },
 
   watch: {
     "detailData.searchKeyword"() {
       if (this.detailData.searchKeyword.length >= 5) {
-        this.isOutSearch = true;
+        this.isOutSearch = true
       } else {
-        this.isOutSearch = false;
+        this.isOutSearch = false
       }
     },
     "detailData.seoKeyword"() {
       if (this.detailData.seoKeyword.length >= 5) {
-        this.isOutSeo = true;
+        this.isOutSeo = true
       } else {
-        this.isOutSeo = false;
+        this.isOutSeo = false
       }
     },
     deep: true
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -812,6 +816,7 @@ export default {
 .multipleCatagory {
   height: 0;
   margin-top: 12px;
+  margin-left: 40px;
   width: 238px;
   position: absolute;
   background: #fff;

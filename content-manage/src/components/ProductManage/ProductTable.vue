@@ -100,9 +100,11 @@
           <div
             style="width: 100%; display: flex; justify-content: center; align-items: center;"
           >
-            <span class="ellipsis" style="min-width: 50px; max-width: 100px; text-align: right;">{{
-              scope.row.languageStr ? scope.row.languageStr : ""
-            }}</span>
+            <span
+              class="ellipsis"
+              style="min-width: 50px; max-width: 100px; text-align: right;"
+              >{{ scope.row.languageStr ? scope.row.languageStr : "" }}</span
+            >
             <span
               class="translate-icon"
               :class="{
@@ -291,7 +293,7 @@ export default {
       });
       this.tableHeight = window.innerHeight - 260;
     });
-    window.onImgError = ele => {
+    window.onImgError = (ele) => {
       ele.src = ele.attributes["src"] = this.defaultImg;
     };
     console.log(this.articlePageResult);
