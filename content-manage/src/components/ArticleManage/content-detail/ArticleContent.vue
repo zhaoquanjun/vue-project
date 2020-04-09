@@ -332,7 +332,7 @@ export default {
     },
     async getTreeAsync() {
       let { data } = await articleManageApi.getArticleCategory({
-        langugage: this.articleDetail.Language
+        language: this.articleDetail.Language
       });
       this.treeResult = data;
       var categoryName = this.$route.query.categoryName;

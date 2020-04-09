@@ -79,7 +79,7 @@ export default {
     box-sizing: border-box;
     padding: 30px 25px 32px;
     width: 430px;
-    height: 343px;
+    height: 360px;
     background-color: $--color-white;
     box-shadow: $--box-shadow-dark-small;
     border-radius: $--border-radius-base;

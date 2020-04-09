@@ -104,7 +104,7 @@
       </button>
 
       <button
-        v-if="curClickNode.data.level > 0 && !curClickNode.data.id > 0"
+        v-if="curClickNode.data.level > 0 && curClickNode.data.id > 0"
         type="text"
         size="mini"
         @click="batchRemove"
