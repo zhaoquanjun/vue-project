@@ -93,14 +93,15 @@
         prop="isPublishPrt"
         label="多语言"
         min-width="80"
+        align="center"
         v-if="languagesList.length > 0"
       >
         <template slot-scope="scope">
           <div
-            style="width: 100%; text-align: right; display: flex; justify-content: flex-end; align-items: center;"
+            style="width: 100%; display: flex; justify-content: center; align-items: center;"
           >
-            <span class="ellipsis">{{
-              scope.row.language ? scope.row.language : ""
+            <span class="ellipsis" style="min-width: 50px; max-width: 100px; text-align: right;">{{
+              scope.row.languageStr ? scope.row.languageStr : ""
             }}</span>
             <span
               class="translate-icon"
