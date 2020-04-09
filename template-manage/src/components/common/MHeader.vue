@@ -10,7 +10,7 @@
             <span class="headAppNameInfo">已购买服务</span>
             <i class="iconfont iconqiehuanxingshiyi" style="font-size:16px;"></i>
           </span>
-          <div v-show="$store.state.dashboard.siteList.length > 1" class="autoTranslate-wrap">
+          <div v-show="$store.state.dashboard.autoTranslateShow" class="autoTranslate-wrap">
             <div class="autoTranslate-text">自动翻译</div>
             <el-tooltip effect="dark" placement="bottom">
               <div slot="content">中文站的文章/产品/页面保存成功后，执行自动翻译<br/>（*对有修订记录的文章/产品/页面，不做操作）</div>

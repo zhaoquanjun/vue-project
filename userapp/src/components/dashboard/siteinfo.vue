@@ -594,6 +594,7 @@ export default {
     completeInitialized() {
       this.initializedDialog = false;
       this.$emit("getSites");
+      this.$store.dispatch("getTranslateSwitch");
     },
     async initializedSite() {
       if (this.initializedSiteLanguage == "zh-CN") {

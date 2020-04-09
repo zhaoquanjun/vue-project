@@ -1,6 +1,6 @@
 import { getUserCurrentAppPolicy, updateAppIdAndSiteIdToCookie, getSliderMenuList } from "@/api/index";
 import { getSiteInfoBySite } from "@/api/request/siteBackupApi";
-import { getCurSiteId, getAutoTranslateConfig, getSites } from "@/api/request/dashboardApi";
+import { getCurSiteId, getAutoTranslateConfig, showTranslateSwitch } from "@/api/request/dashboardApi";
 import { getUnReadCount } from "@/api/request/msgBoardApi";
 import { setLocal } from "@/libs/local"
 import { setCookie } from "@/libs/cookie"
@@ -35,7 +35,7 @@ const dashboard = {
         hasRules: false,
         isSiteInfoShow: false,
         isWechataccountShow: false,
-        siteList: [],
+        autoTranslateShow: false,
         autoTranslateSwitch: false,
         unreadCountStatus: false,
         unreadCount: 0
@@ -66,11 +66,11 @@ const dashboard = {
             state.appId = "";
             state.siteId = "";
         },
+        set_autoTranslateShow(state, status) {
+          state.autoTranslateShow = status;
+        },
         set_autoTranslateSwitch(state, status) {
           state.autoTranslateSwitch = status;
-        },
-        set_siteList(state, status) {
-          state.siteList = status;
         },
         set_unreadCountStatus(state, status) {
             state.unreadCountStatus = status;
@@ -96,6 +96,16 @@ const dashboard = {
             let { data } = await updateAppIdAndSiteIdToCookie();
             commit("SETAPPID", data)
         },
+        async getTranslateSwitch() {
+          // 是否展示自动翻译开关
+          let { data } = await showTranslateSwitch();
+          commit("set_autoTranslateShow", data)
+          if (data) {
+            // 获取翻译开关状态
+            let { data } = await getAutoTranslateConfig();
+            commit("set_autoTranslateSwitch", data)
+          }
+        },
         async _getMenuListData({ commit, state }) {
             let { data } = await getSliderMenuList();
             let { result1, pathArr } = filterMenuListData(data.menus);
@@ -105,9 +115,11 @@ const dashboard = {
                 // 判断是否有设计器权限
                 if (item.code === "design") {
                     state.isSiteInfoShow = true
-                    let { data } = await getSites();
-                    state.siteList = data
-                    if (data.length > 1) {
+                    // 是否展示自动翻译开关
+                    let { data } = await showTranslateSwitch();
+                    commit("set_autoTranslateShow", data)
+                    if (data) {
+                      // 获取翻译开关状态
                       let { data } = await getAutoTranslateConfig();
                       commit("set_autoTranslateSwitch", data)
                     }

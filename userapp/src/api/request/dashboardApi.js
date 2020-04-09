@@ -22,6 +22,10 @@ export const createAliyunSsoLoginUser = para => {
     para
   );
 };
+// 获取自动翻译开关是否展示
+export const showTranslateSwitch = () => {
+  return ajaxRequest.get(`${environment.memberManageApi}/api/v1/SiteInfo/ShowTranslateSwitch`);
+};
 // 切换自动翻译状态
 export const switchAutoTranslateStatus = () => {
   return ajaxRequest.put(
