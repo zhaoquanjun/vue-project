@@ -34,37 +34,40 @@
             <li
               v-for="(it, i) in newsList"
               :key="i"
-              :class="{active: newId==i}"
+              :class="{ active: newId == i }"
               @click.stop="_handleSelectPage(i)"
             >
-              <p class="single-line__overflow--hide ellipsis">{{it.title}}</p>
+              <p class="single-line__overflow--hide ellipsis">{{ it.title }}</p>
               <p class="date single-line__overflow--hide">
                 <!-- <span>{{it.createTimePrt && it.createTimePrt.slice(0, 10)}}</span> -->
                 <i
                   class="icon iconfont iconduihao"
-                  :style="{visibility: newId == i ? 'visible' : 'hidden'}"
+                  :style="{ visibility: newId == i ? 'visible' : 'hidden' }"
                 ></i>
               </p>
             </li>
           </ul>
-         <div class="cl-paganation noJumper"> 
-           <el-pagination
-            v-if="total > 0"
-            background
-            layout="prev, pager, next"
-            :page-size="pageSize"
-            :total="total"
-            :pager-count="5"
-            :current-page="pageIndex"
-            @current-change="_handleChangeCurrent"
-            style="margin-top: 12px"
-          ></el-pagination></div>
+          <div class="cl-paganation noJumper">
+            <el-pagination
+              v-if="total > 0"
+              background
+              layout="prev, pager, next"
+              :page-size="pageSize"
+              :total="total"
+              :pager-count="5"
+              :current-page="pageIndex"
+              @current-change="_handleChangeCurrent"
+              style="margin-top: 12px"
+            ></el-pagination>
+          </div>
         </div>
         <none-area v-show="!newsList.length && !loading" :target="target">
           <span v-if="!search">
             暂无文章，请先
             <span style="color: #00C1DE;cursor: pointer;">
-              <a :href="redirectUrl" target="_blank" style="color: #00C1DE;">添加文章</a>
+              <a :href="redirectUrl" target="_blank" style="color: #00C1DE;"
+                >添加文章</a
+              >
             </span>
           </span>
           <span v-else>暂无搜索数据，请重新输入</span>
@@ -76,26 +79,23 @@
       <p>选择文章详情页</p>
       <div class="way-list__box">
         <div>
-          <span class="tips" @click="isChangeShow">{{productTips}}
-            <i 
+          <span class="tips" @click="isChangeShow"
+            >{{ productTips }}
+            <i
               class="icon iconfont iconicon-des-Arrow"
-              :class="{iconactive: isShow}"
+              :class="{ iconactive: isShow }"
             ></i>
           </span>
-          <a 
-            v-if="productHref"
-            :href="productHref"
-            target="_blank"
-          >预览</a>
+          <a v-if="productHref" :href="productHref" target="_blank">预览</a>
         </div>
         <ul v-if="isShow" class="product-page-list">
-          <li 
-            v-for="(item,index) in productPageList" 
+          <li
+            v-for="(item, index) in productPageList"
             :key="index"
-            :class="{active: pageActiveIndex == index}"
-             @click="selectPage(index)"
+            :class="{ active: pageActiveIndex == index }"
+            @click="selectPage(index)"
           >
-            {{item.title}}
+            {{ item.title }}
             <i class="icon iconfont iconduihao"></i>
           </li>
         </ul>
@@ -105,11 +105,11 @@
 </template>
 
 <script>
-import * as linkApi from "@/api/linkApi";
-import environment from "@/environment/index";
-import NoneArea from "./none";
-import Loading from "@/components/common/loading.vue";
-import { notify } from "@/utlis/index.js";
+import * as linkApi from "@/api/linkApi"
+import environment from "@/environment/index"
+import NoneArea from "./none"
+import Loading from "@/components/common/loading.vue"
+import { notify } from "@/utlis/index.js"
 export default {
   props: {
     model: {
@@ -140,12 +140,13 @@ export default {
       isShow: false,
       defaultExpandedKeys: [],
       treeArray: [],
+      nodeIdArr: [],
       newsList: [],
-      productPageList:[],
-      productTips: '全部分类',
+      productPageList: [],
+      productTips: "全部分类",
       newId: -1,
-      urlId: '',
-      productHref: '',
+      urlId: "",
+      productHref: "",
       pageIndex: 1,
       nodeId: 0,
       loading: false,
@@ -158,14 +159,14 @@ export default {
       redirectUrl: environment.redirectUrl.createArticle,
       pageListOption: {
         IsDescending: true,
-        OrderColumns: 'createtime',
-        PageType: 'NewsDetail', // 内容页Content 模板页Template 文章详情页NewsDetail 产品详情页 ProductDetail
+        OrderColumns: "createtime",
+        PageType: "NewsDetail", // 内容页Content 模板页Template 文章详情页NewsDetail 产品详情页 ProductDetail
         PageSize: 50,
         PageIndex: 1,
         Title: null,
         SiteId: this.$store.state.dashboard.siteId
       }
-    };
+    }
   },
   components: {
     NoneArea,
@@ -174,120 +175,156 @@ export default {
   computed: {
     curNodeId: {
       get: function() {
-        let categoryId = 0;
-        return categoryId;
+        let categoryId = 0
+        return categoryId
       },
       set: function() {}
     }
   },
   created() {
-    this.getNewsList(this.nodeId);
-    this.getCategorytree();
-    this.getContentList();
+    this.getCategorytree()
+    this.getContentList()
   },
   methods: {
     async getContentList() {
-      let { data } = await linkApi.getContentList(this.pageListOption);
-      if(data && data.list.length > 0) {
-        this.productPageList = data.list;
-        this.productTips = data.list[0].title;
+      let { data } = await linkApi.getContentList(this.pageListOption)
+      if (data && data.list.length > 0) {
+        this.productPageList = data.list
+        this.productTips = data.list[0].title
         this.pageActiveIndex = 0
       }
     },
-    selectPage(ind){
-      this.pageActiveIndex = ind;
+    selectPage(ind) {
+      this.pageActiveIndex = ind
       this.isShow = false
-      this.productTips = this.productPageList[ind].title;
+      this.productTips = this.productPageList[ind].title
     },
     //改变下啦状态
-    isChangeShow(){
+    isChangeShow() {
       this.isShow = !this.isShow
     },
-    _handleNodeClick(data) {
-      this.nodeId = data.id;
-      this.getNewsList(this.nodeId);
-    },
-    async getNewsList(id) {
-      let options = {
-        title: this.newsTitle,
-        categoryIdList: id,
-        newsOrderColumns: "createtime",
-        topStatus: null,
-        publishStatus: true,
-        pageSize: this.pageSize, //11
-        pageIndex: this.pageIndex, //1
-        isDescending: true
-      };
-      this.loading = true;
-      let { data } = await linkApi.getArticleList(options);
-      this.total = data.totalRecord;
-      this.newsList = data.list;
-      this.loading = false;
-    },
-    async getCategorytree() {
-      let { data } = await linkApi.getArticleCategory();
-      this.defaultExpandedKeys = this._handleRecursive(data, []);
-      this.treeArray = data;
-    },
-    _handleRecursive(data, arr) {
-      if (
-        Object.prototype.toString.call(data) == "[object Array]" &&
-        data.length > 0
-      ) {
-        data.forEach(p => {
-          arr.push(p.id);
-          this._handleRecursive(p.children, arr);
-        });
+    _cycleForCategoryIds(data, arr) {
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i]
+        arr.push(item.id)
+        if (item.children && item.children.length > 0) {
+          this._cycleForCategoryIds(data[i].children, arr)
+        }
       }
-      return arr;
+    },
+    _handleNodeClick(data) {
+      this.nodeIdArr = [data.id]
+      const id = this.cType === "news" ? this.id : ""
+      if (data.id >= 0) {
+        this._cycleForCategoryIds(data.children, this.nodeIdArr)
+        this.getNewsList(this.nodeIdArr, id, data.id >= 0)
+      } else {
+        this.getNewsList(data.language, id, data.id >= 0)
+      }
+    },
+    async getNewsList(param, id, flag) {
+      let options
+      if (flag) {
+        options = {
+          title: this.newsTitle,
+          categoryIdList: param,
+          newsOrderColumns: 'publishtime',
+          topStatus: null,
+          publishStatus: null,
+          pageSize: this.pageSize,
+          pageIndex: this.pageIndex,
+          isDescending: true,
+          id: id
+        }
+      } else {
+        options = {
+          title: this.newsTitle,
+          newsOrderColumns: 'publishtime',
+          topStatus: null,
+          publishStatus: null,
+          pageSize: this.pageSize,
+          pageIndex: this.pageIndex,
+          isDescending: true,
+          id: id,
+          language: param
+        }
+      }
+      this.loading = true
+      let { data } = await linkApi.getArticleList(options)
+      this.total = data.totalRecord
+      this.newsList = data.list
+      this.loading = false
+    },
+     async getCategorytree() {
+      const { data } = await linkApi.getArticleCategory()
+      this.treeArray = data
+      this.nodeIdArr = [0]
+      this._getCurrentIds(data)
+      this.getNewsList(this.nodeIdArr, this.id)
+    },
+    _getCurrentIds(arr) {
+      if (this.cType === 'news') {
+        if (
+          this.model['CategoryId'] === 0 ||
+          this.model['CategoryId'] == null
+        ) {
+          this.nodeIdArr = []
+          this._cycleForCategoryIds(arr, this.nodeIdArr)
+        } else {
+          this.nodeIdArr = [this.model['CategoryId']]
+        }
+      }
     },
     _handleSelectPage(i) {
       this.newId = i
       //this.newsTitle = this.newsList[i].title
       this.urlId = this.newsList[i].id
-      this.productHref = `http://${this.promotionUrl}/news/${this.productPageList[this.pageActiveIndex].id}/${this.urlId}.html`
+      this.productHref = `http://${this.promotionUrl}/news/${
+        this.productPageList[this.pageActiveIndex].id
+      }/${this.urlId}.html`
       this.$emit("handleChangeUrl", {
         url: this.newsList[i].id,
         title: this.newsList[i].title,
         cType: "News",
-        picUrl:this.newsList[i].pictureUrl,
+        picUrl: this.newsList[i].pictureUrl,
         id: this.productPageList[this.pageActiveIndex].id,
         pageIndex: this.pageIndex
-      });
+      })
     },
     _handleChageLinkTarget(val) {
-      this.$emit("handleChangeTarget", val);
+      this.$emit("handleChangeTarget", val)
     },
     _handleSearch(val) {
+      if (this.timer) clearTimeout(this.timer)
       this.timer = setTimeout(() => {
-        this.newsList = [];
-        this.newsTitle = val;
-        this.getNewsList(this.nodeId);
-      }, 500);
+        this.newsList = []
+        this.newsTitle = val
+        this.getNewsList(this.nodeIdArr, this.id)
+      }, 500)
     },
     _handleChangeCurrent(val) {
-      this.model["PageIndex"] = val;
+      this.model["PageIndex"] = val
       this.pageIndex = val
-      this.getNewsList(this.nodeId);
+      this.getNewsList(this.nodeIdArr, this.id)
     }
   },
   watch: {
     newsList() {
       if (!this.newsList.length && this.newsTitle !== "") {
-        this.search = true;
+        this.search = true
       }
       if (!this.newsList.length && this.newsTitle == "") {
-        this.search = false;
+        this.search = false
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
 .el-tree /deep/ .is-current > .el-tree-node__content {
-    background: $--background-color-selected;
-    border-left: 3px solid $--color-primary;
+  background: $--background-color-selected;
+  border-left: 3px solid $--color-primary;
 }
 .popup-content__area {
   width: 590px;
@@ -317,7 +354,7 @@ export default {
         color: #fff;
       }
     }
-  } 
+  }
   .popup-content__main {
     margin: 0 auto;
     display: flex;
@@ -350,7 +387,7 @@ export default {
         .el-icon-search {
           color: #b5b5b5;
         }
-      } 
+      }
       .content-main__search {
         .el-input__inner {
           border: none !important;
@@ -373,7 +410,7 @@ export default {
             padding: 0 8px;
             height: 26px;
             cursor: pointer;
-            overflow:hidden;
+            overflow: hidden;
             p {
               width: 300px;
               padding: 0;
@@ -423,12 +460,14 @@ export default {
     }
   }
   .popup-content__main {
-    .btn-prev,.btn-next,.el-pager li {
+    .btn-prev,
+    .btn-next,
+    .el-pager li {
       background: #fff;
       border: $--border-base;
     }
   }
-   .popup-content__open {
+  .popup-content__open {
     position: relative;
     margin-top: 16px;
     padding: 16px 16px 0;
@@ -436,56 +475,56 @@ export default {
     height: 78px;
     border-top: $--border-base;
     p {
-      font-size:$--font-size-small;
-      font-weight:400;
-      color:$--color-text-primary;
-      line-height:20px;
+      font-size: $--font-size-small;
+      font-weight: 400;
+      color: $--color-text-primary;
+      line-height: 20px;
       margin-bottom: 10px;
     }
     .tips {
       display: inline-block;
-      width:250px;
-      height:32px;
-      border-radius:$--border-radius-base;
-      border:$--border-base;
-      font-size:$--font-size-small;
-      font-weight:400;
-      line-height:32px;
+      width: 250px;
+      height: 32px;
+      border-radius: $--border-radius-base;
+      border: $--border-base;
+      font-size: $--font-size-small;
+      font-weight: 400;
+      line-height: 32px;
       padding: 0 10px;
       cursor: pointer;
       i {
         float: right;
         font-size: 12px;
-        font-weight:700;
-        transform:rotate(90deg);
+        font-weight: 700;
+        transform: rotate(90deg);
         cursor: pointer;
       }
       .iconactive {
-        transform:rotate(270deg);
+        transform: rotate(270deg);
       }
     }
     a {
-      font-size:$--font-size-small;
-      font-weight:400;
-      color:$--color-primary;
+      font-size: $--font-size-small;
+      font-weight: 400;
+      color: $--color-primary;
       margin-left: 10px;
     }
     .product-page-list {
       position: absolute;
       top: 86px;
       left: 20px;
-      width:260px;
+      width: 260px;
       height: 64px;
       overflow: hidden;
       overflow-y: auto;
       li {
         display: inline-block;
         margin-right: 0;
-        color:$--color-text-primary;
-        height:32px;
-        font-size:$--font-size-small;
-        font-weight:400;
-        line-height:32px;
+        color: $--color-text-primary;
+        height: 32px;
+        font-size: $--font-size-small;
+        font-weight: 400;
+        line-height: 32px;
         padding: 0 6px 0 10px;
         width: 246px;
         cursor: pointer;
@@ -495,11 +534,11 @@ export default {
         }
       }
       li:hover {
-        background:$--background-color-hover;
+        background: $--background-color-hover;
         color: $--color-text-primary;
       }
       .active {
-        background:$--background-color-selected !important;
+        background: $--background-color-selected !important;
         color: $--color-primary !important;
         i {
           display: inline-block !important;

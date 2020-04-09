@@ -147,6 +147,7 @@ export default {
       productTitle: "",
       defaultExpandedKeys: [],
       treeArray: [],
+      nodeIdArr: [],
       productList: [],
       pageId: '',
       urlId: '',
@@ -184,10 +185,15 @@ export default {
         return categoryId;
       },
       set: function() {}
-    }
+    },
+    id: {
+      get: function() {
+        return this.model['Id']
+      },
+      set: function() {}
+    },
   },
   created() {
-    this.getProductList(this.nodeIdArr);
     this.getProductTree();
     this.getContentList();
   },
@@ -210,32 +216,42 @@ export default {
       this.isShow = !this.isShow
     },
     _handleNodeClick(data) {
-      this.nodeIdArr = this._handleRecursive(data.children, [data.id]);
-      this.getProductList(this.nodeIdArr);
-    },
-    _handleRecursive(data, arr) {
-      if (
-        Object.prototype.toString.call(data) == "[object Array]" &&
-        data.length > 0
-      ) {
-        data.forEach(p => {
-          arr.push(p.id);
-          this._handleRecursive(p.children, arr);
-        });
+      this.nodeIdArr = [data.id]
+      const id = this.cType === 'product' ? this.id : ''
+      if (data.id >= 0) {
+        this._cycleForCategoryIds(data.children, this.nodeIdArr)
+        this.getProductList(this.nodeIdArr, id, id >= 0)
+      } else {
+        this.getProductList(data.language, id, id >= 0)
       }
-      return arr;
     },
-    async getProductList(idArray) {
-      let options = {
-        pageSize: this.pageSize, //11
-        pageIndex: this.pageIndex, //1
-        orderByType: 1, //1 创建时间 2:名字
-        isDescending: true, // 倒叙 或 正序
-        keyword: this.productTitle, //1
-        isDelete: false, //1
-        isOnSell: true, //is 上架
-        categoryIdList: idArray //1,
-      };
+    async getProductList(param, id, flag) {
+      let options
+      if (flag) {
+        options = {
+          pageSize: this.pageSize, // 11
+          pageIndex: this.pageIndex, // 1
+          orderByType: 'publishtime',
+          isDescending: true, // 倒叙 或 正序
+          keyword: this.productTitle, // 1
+          isDelete: false, // 1
+          isOnSell: null, // is 上架
+          categoryIdList: param, // 1,
+          id: id
+        }
+      } else {
+        options = {
+          pageSize: this.pageSize, // 11
+          pageIndex: this.pageIndex, // 1
+          orderByType: 'publishtime',
+          isDescending: true, // 倒叙 或 正序
+          keyword: this.productTitle, // 1
+          isDelete: false, // 1
+          isOnSell: null, // is 上架
+          language: param, // 1,
+          id: id
+        }
+      }
       this.loading = true;
       let { data } = await linkApi.getProductList(options);
       this.total = data.totalRecord;
@@ -243,9 +259,33 @@ export default {
       this.loading = false;
     },
     async getProductTree() {
-      let { data } = await linkApi.getProductCategory();
-      this.defaultExpandedKeys = this._handleRecursive(data.treeArray, []);
-      this.treeArray = data.treeArray;
+      const { data } = await linkApi.getProductCategory()
+      this.treeArray = data.treeArray
+      this.nodeIdArr = [0]
+      this._getCurrentIds(data.treeArray)
+      this.getProductList(this.nodeIdArr, this.id)
+    },
+    _getCurrentIds(arr) {
+      if (this.cType === 'product') {
+        if (
+          this.model['CategoryId'] === 0 ||
+          this.model['CategoryId'] == null
+        ) {
+          this.nodeIdArr = []
+          this._cycleForCategoryIds(arr, this.nodeIdArr)
+        } else {
+          this.nodeIdArr = [this.model['CategoryId']]
+        }
+      }
+    },
+    _cycleForCategoryIds(data, arr) {
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i]
+        arr.push(item.id)
+        if (item.children && item.children.length > 0) {
+          this._cycleForCategoryIds(data[i].children, arr)
+        }
+      }
     },
     _handleSelectPage(i) {
       this.productId = i
@@ -262,16 +302,17 @@ export default {
       });
     },
     _handleSearch(val) {
+     if (this.timer) clearTimeout(this.timer)
       this.timer = setTimeout(() => {
-        this.productList = [];
-        this.productTitle = val;
-        this.getProductList(this.nodeIdArr);
-      }, 500);
+        this.productList = []
+        this.productTitle = val
+        this.getProductList(this.nodeIdArr, this.id)
+      }, 500)
     },
     _handleChangeCurrent(val) {
       this.model["PageIndex"] = val;
       this.pageIndex = val;
-      this.getProductList(this.nodeIdArr);
+      this.getProductList(this.nodeIdArr, this.id);
     },
     _handleChageLinkTarget(val) {
       this.$emit("handleChangeTarget", val);
