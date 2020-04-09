@@ -67,6 +67,10 @@ export const updateUserLastAppIdAndCookie = (appId) => {
 export const updateUserLastSiteId = (siteId) => {
     return ajaxRequest.put(`${environment.dashboardApi}/api/v1/userInfo/UpdateUserLastSiteId`, siteId);
 }
+// 获取自动翻译开关是否展示
+export const showTranslateSwitch = () => {
+  return ajaxRequest.get(`${environment.dashboardApi}/api/v1/SiteInfo/ShowTranslateSwitch`);
+};
 // 切换自动翻译状态
 export const switchAutoTranslateStatus = () => {
   return ajaxRequest.put(`${environment.designerManageApi}/api/v1/Page/SwitchAutoTranslateStatus`);
