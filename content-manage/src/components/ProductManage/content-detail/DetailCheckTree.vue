@@ -5,6 +5,7 @@
     :default-expand-all="true"
     node-key="id"
     ref="tree"
+    style="overflow-y: hidden;"
     :check-strictly="true"
     @check-change="checkChange"
   ></el-tree>

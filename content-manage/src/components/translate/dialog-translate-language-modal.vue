@@ -40,7 +40,11 @@
             >
               <i class="iconfont iconduihao"></i>
             </span>
-            <span class="item-title ellipsis">{{ item.title }}</span>
+            <span
+              class="item-title ellipsis"
+              :class="{ 'max-width': item.contentLength > 4000 }"
+              >{{ item.title }}</span
+            >
             <span class="item-warning" v-show="item.contentLength > 4000"
               ><i class="iconfont iconicon-exclamationmark"></i>
               字数超过4000，请后续手工分段翻译【百度翻译】</span
@@ -382,8 +386,12 @@ export default {
 
           .item-title {
             margin-right: 12px;
-            max-width: 100px;
+            max-width: 100%;
             user-select: none;
+          }
+
+          .max-width {
+            max-width: 100px;
           }
 
           .item-warning {

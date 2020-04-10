@@ -252,19 +252,19 @@
   </div>
 </template>
 <script>
-import environment from "@/environment/index"
-import * as productManageApi from "@/api/request/productManageApi"
-import * as productCategoryManageApi from "@/api/request/productCategoryManageApi"
-import DetailCheckTree from "./DetailCheckTree"
+import environment from '@/environment/index'
+import * as productManageApi from '@/api/request/productManageApi'
+import * as productCategoryManageApi from '@/api/request/productCategoryManageApi'
+import DetailCheckTree from './DetailCheckTree'
 const viewAuth = [
-  { name: "全选", id: 0 },
-  { name: "登录用户", id: 1 },
-  { name: "未登录用户", id: 2 }
+  { name: '全选', id: 0 },
+  { name: '登录用户', id: 1 },
+  { name: '未登录用户', id: 2 }
 ]
 
-import ModalContent from "@/components/ImgManage/index.vue"
-import QuillDetail from "@/components/ProductManage/QuillDetail.vue"
-import QuillContentDetail from "@/components/ProductManage/QuillDetail.vue"
+import ModalContent from '@/components/ImgManage/index.vue'
+import QuillDetail from '@/components/ProductManage/QuillDetail.vue'
+import QuillContentDetail from '@/components/ProductManage/QuillDetail.vue'
 
 export default {
   components: {
@@ -282,58 +282,58 @@ export default {
       isOutSeo: false,
       isOutSearch: false,
       checkAll: false,
-      checkedviewAuth: [{ name: "登录用户", id: 1 }],
+      checkedviewAuth: [{ name: '登录用户', id: 1 }],
       viewAuth: viewAuth,
       isIndeterminate: true,
       options: [
         {
           value: true,
-          label: "上架"
+          label: '上架'
         },
         {
           value: false,
-          label: "下架"
+          label: '下架'
         }
       ],
-      value: "上架",
+      value: '上架',
       options1: [
         {
-          value: "选项1",
-          label: "全部分类1"
+          value: '选项1',
+          label: '全部分类1'
         },
         {
-          value: "选项2",
-          label: "全部分类2"
+          value: '选项2',
+          label: '全部分类2'
         }
       ],
-      value2: ["全部分类1", "全部分类2"],
+      value2: ['全部分类1', '全部分类2'],
 
       siteOptions: [],
-      activeName: "",
-      activeName0: "",
-      activeName1: "",
+      activeName: '',
+      activeName0: '',
+      activeName1: '',
       categoryName: [],
       categoryId: [],
       treeResult: null,
       detailData: {
-        name: "",
-        description: "",
-        detailContent: "",
+        name: '',
+        description: '',
+        detailContent: '',
         price: 1, //
         costPrice: 1, //
         originalPrice: 1, //
         seoKeyword: [],
         searchKeyword: [],
-        seoDescription: "",
-        skuId: "", //
+        seoDescription: '',
+        skuId: '', //
         publishTime: new Date(),
-        customUrl: "",
+        customUrl: '',
         accessRoleList: [1],
         thumbnailPicUrlList: [],
         relatedProductList: [
           {
-            id: "string",
-            name: "string"
+            id: 'string',
+            name: 'string'
           }
         ],
         productCategoryList: [
@@ -352,36 +352,36 @@ export default {
         isNeedShipping: false, //
         isAllowComment: true,
         defaultSiteId: 0,
-        specificationContent: "",
-        Language: this.$route.query.language || "zh-CN"
+        specificationContent: '',
+        Language: this.$route.query.language || 'zh-CN'
       },
       rules: {
         name: [
           {
             required: true,
-            message: "请输入产品标题",
-            trigger: "blur"
+            message: '请输入产品标题',
+            trigger: 'blur'
           },
           {
             min: 1,
             max: 100,
-            message: "长度在 1 到 100 个字符",
-            trigger: "blur"
+            message: '长度在 1 到 100 个字符',
+            trigger: 'blur'
           }
         ]
       },
       isModalShow: false,
       editorOption: {},
-      keywordValue: "",
-      metaKeyword: "",
+      keywordValue: '',
+      metaKeyword: '',
       selectRangeIndex: 0,
       selectVideoRangeIndex: 0,
       videoShow: false,
       checkedList: [],
       ratio: [],
       origin: [],
-      quillDetailId: "quill-specificationContent",
-      quillContentId: "quill-contentDetail",
+      quillDetailId: 'quill-specificationContent',
+      quillContentId: 'quill-contentDetail',
       siteId: 0
     }
   },
@@ -389,7 +389,7 @@ export default {
     this.getTree()
   },
   mounted() {
-    document.addEventListener("click", (e) => {
+    document.addEventListener('click', (e) => {
       e.stopPropagation()
       if (this.isCheckTreeShow) {
         this.multipleCatagory()
@@ -404,35 +404,35 @@ export default {
       ]
       this.categoryId = [categoryId]
     } else {
-      this.detailData.productCategoryList = [{ id: 0, displayName: "全部分类" }]
+      this.detailData.productCategoryList = [{ id: 0, displayName: '全部分类' }]
     }
     var id = this.$route.query.id
     this.curProduct = id
     if (id != null || id != undefined) {
       this.getArticleDetail(id)
-      this.$emit("changeSaveWay", true)
+      this.$emit('changeSaveWay', true)
     }
     this.getSiteList()
   },
   methods: {
     textIndent(ele, width) {
       this.$nextTick(() => {
-        ele.style.textIndent = width + "px"
+        ele.style.textIndent = width + 'px'
       })
     },
     keywords(value, name) {
-      this.metaKeyword = this.keywordValue = ""
-      if (name === "seoKeyword") {
+      this.metaKeyword = this.keywordValue = ''
+      if (name === 'seoKeyword') {
         if (this.detailData.seoKeyword.length >= 5 || !value) {
           return
         }
-        this.metaKeyword = ""
+        this.metaKeyword = ''
         this.detailData.seoKeyword.push(value)
       } else {
         if (this.detailData.searchKeyword.length >= 5 || !value) {
           return
         }
-        this.keywordValue = ""
+        this.keywordValue = ''
         this.detailData.searchKeyword.push(value)
       }
     },
@@ -449,25 +449,25 @@ export default {
       if (Object.keys(data.seoKeyword).length < 1) {
         data.seoKeyword = []
       } else {
-        data.seoKeyword = data.seoKeyword.split(",")
+        data.seoKeyword = data.seoKeyword.split(',')
       }
       if (Object.keys(data.searchKeyword).length < 1) {
         data.searchKeyword = []
       } else {
-        data.searchKeyword = data.searchKeyword.split(",")
+        data.searchKeyword = data.searchKeyword.split(',')
       }
       this.detailData = data
       this.detailData.NewId = data.id
       document
         .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML = this.detailData.detailContent
+        .querySelector('.ql-editor').innerHTML = this.detailData.detailContent
       document
         .getElementById(this.quillDetailId)
         .querySelector(
-          ".ql-editor"
+          '.ql-editor'
         ).innerHTML = this.detailData.specificationContent
       this.categoryIdList(this.detailData.productCategoryList)
-      this.$emit("changePreviewId", id, this.detailData.defaultSiteId)
+      this.$emit('changePreviewId', id, this.detailData.defaultSiteId)
     },
     categoryIdList(list) {
       this.categoryId = []
@@ -489,15 +489,15 @@ export default {
         if (valid) {
           var html = document
             .getElementById(this.quillContentId)
-            .querySelector(".ql-editor").innerHTML
+            .querySelector('.ql-editor').innerHTML
           var specification = document
             .getElementById(this.quillDetailId)
-            .querySelector(".ql-editor").innerHTML
+            .querySelector('.ql-editor').innerHTML
           this.detailData.detailContent = html
           this.detailData.specificationContent = specification
           this._createSave()
         } else {
-          console.log("error submit!!")
+          console.log('error submit!!')
           return false
         }
       })
@@ -523,7 +523,7 @@ export default {
         if (valid) {
           this.saveArticle()
         } else {
-          console.log("error submit!!")
+          console.log('error submit!!')
           return false
         }
       })
@@ -532,10 +532,10 @@ export default {
     async saveArticle() {
       var html = document
         .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML
+        .querySelector('.ql-editor').innerHTML
       var specification = document
         .getElementById(this.quillDetailId)
-        .querySelector(".ql-editor").innerHTML
+        .querySelector('.ql-editor').innerHTML
       this.detailData.detailContent = html
       this.detailData.specificationContent = specification
       this.editSave()
@@ -554,25 +554,25 @@ export default {
      * 完成编辑
      */
     _completeEdit() {
-      this.$confirm("保存成功!", "提示", {
-        confirmButtonText: "新增下一篇",
-        customClass: "medium",
-        iconClass: "icon-success",
-        cancelButtonText: "关闭",
+      this.$confirm('保存成功!', '提示', {
+        confirmButtonText: '新增下一篇',
+        customClass: 'medium',
+        iconClass: 'icon-success',
+        cancelButtonText: '关闭',
         callback: async (action) => {
-          if (action === "confirm") {
-            this.$emit("clearStoreInfo")
-            this.resetForm("contentForm")
+          if (action === 'confirm') {
+            this.$emit('clearStoreInfo')
+            this.resetForm('contentForm')
             this.resetDetail()
-            this.$emit("changeSaveWay", false)
-            this.$emit("changePreviewId", "", 0)
-            this.$emit("handlerClickNewAdd")
+            this.$emit('changeSaveWay', false)
+            this.$emit('changePreviewId', '', 0)
+            this.$emit('handlerClickNewAdd')
             this.$route.query.isEditor = 0
           } else {
             this.detailData.id = this.curProduct
-            this.$emit("changeSaveWay", true)
+            this.$emit('changeSaveWay', true)
             this.$emit(
-              "changePreviewId",
+              'changePreviewId',
               this.detailData.id,
               this.detailData.defaultSiteId
             )
@@ -584,23 +584,23 @@ export default {
      * 完成新建
      */
     _complateCreate() {
-      this.$confirm("保存成功!", "提示", {
-        confirmButtonText: "新增下一篇",
-        iconClass: "icon-success",
-        cancelButtonText: "关闭",
+      this.$confirm('保存成功!', '提示', {
+        confirmButtonText: '新增下一篇',
+        iconClass: 'icon-success',
+        cancelButtonText: '关闭',
         callback: async (action) => {
-          if (action === "confirm") {
-            this.$emit("clearStoreInfo")
-            this.resetForm("contentForm")
+          if (action === 'confirm') {
+            this.$emit('clearStoreInfo')
+            this.resetForm('contentForm')
             this.resetDetail()
-            this.$emit("changeSaveWay", false)
-            this.$emit("changePreviewId", "", 0)
-            this.$emit("handlerClickNewAdd")
+            this.$emit('changeSaveWay', false)
+            this.$emit('changePreviewId', '', 0)
+            this.$emit('handlerClickNewAdd')
             // this.$refs.detailCheckTree.resetChecked();
           } else {
-            this.$emit("changeSaveWay", true)
+            this.$emit('changeSaveWay', true)
             this.$emit(
-              "changePreviewId",
+              'changePreviewId',
               this.curProduct,
               this.detailData.defaultSiteId
             )
@@ -615,14 +615,25 @@ export default {
       let { data } = await productCategoryManageApi.get({
         language: this.detailData.Language
       })
+      this._setTreeNodeDisabled(data.treeArray)
       this.treeResult = data.treeArray
+    },
+    _setTreeNodeDisabled(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].id < 0) {
+          data[i].disabled = true
+        }
+        if (data[i].children && data[i].children.length > 0) {
+          this._setTreeNodeDisabled(data[i].children)
+        }
+      }
     },
     chooseNode(data, boolean) {
       if (boolean) {
         if (!this.categoryId.includes(data.id)) {
           if (this.detailData.productCategoryList.length >= 5) {
             this.$notify({
-              customClass: "notify-error",
+              customClass: 'notify-error',
               message: `一个产品最多设置五个分类!`,
               showClose: false,
               duration: 1500
@@ -659,7 +670,7 @@ export default {
 
         if (this.detailData.productCategoryList.length == 0) {
           this.detailData.productCategoryList = [
-            { id: 0, displayName: "全部分类" }
+            { id: 0, displayName: '全部分类' }
           ]
         }
       }
@@ -681,24 +692,24 @@ export default {
     },
     resetDetail() {
       let detailData = {
-        name: "",
-        description: "",
-        detailContent: "",
+        name: '',
+        description: '',
+        detailContent: '',
         price: 1, //
         costPrice: 1, //
         originalPrice: 1, //
         seoKeyword: [],
         searchKeyword: [],
-        seoDescription: "",
-        skuId: "", //
+        seoDescription: '',
+        skuId: '', //
         publishTime: new Date(),
-        customUrl: "",
+        customUrl: '',
         accessRoleList: [1],
         thumbnailPicUrlList: [],
         relatedProductList: [
           {
-            id: "string",
-            name: "string"
+            id: 'string',
+            name: 'string'
           }
         ],
 
@@ -710,15 +721,15 @@ export default {
         isNeedShipping: false, //
         isAllowComment: true,
         defaultSiteId: 0,
-        Language: "zh-CN"
+        Language: 'zh-CN'
       }
       this.detailData = { ...this.detailData, ...detailData }
       document
         .getElementById(this.quillContentId)
-        .querySelector(".ql-editor").innerHTML = ""
+        .querySelector('.ql-editor').innerHTML = ''
       document
         .getElementById(this.quillDetailId)
-        .querySelector(".ql-editor").innerHTML = ""
+        .querySelector('.ql-editor').innerHTML = ''
     },
     multipleCatagory() {
       this.isCheckTreeShow = !this.isCheckTreeShow
@@ -751,14 +762,14 @@ export default {
   },
 
   watch: {
-    "detailData.searchKeyword"() {
+    'detailData.searchKeyword'() {
       if (this.detailData.searchKeyword.length >= 5) {
         this.isOutSearch = true
       } else {
         this.isOutSearch = false
       }
     },
-    "detailData.seoKeyword"() {
+    'detailData.seoKeyword'() {
       if (this.detailData.seoKeyword.length >= 5) {
         this.isOutSeo = true
       } else {
@@ -771,7 +782,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../style/contentDetail";
+@import '../../style/contentDetail';
 .address /deep/ .el-input__inner {
   height: 35px;
   line-height: 35px;
@@ -825,6 +836,23 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   overflow: hidden;
+}
+
+.multipleCatagory
+  /deep/
+  .el-tree
+  .el-tree-node[aria-disabled='true']>
+  .el-tree-node__content {
+  cursor: not-allowed;
+}
+
+.multipleCatagory
+  /deep/
+  .el-tree
+  .el-tree-node[aria-disabled='true']
+  > .el-tree-node__content
+  .el-tree-node__label {
+  color: $--color-text-regular;
 }
 .modal-footer {
   height: 60px;

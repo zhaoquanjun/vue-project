@@ -115,18 +115,18 @@
   </div>
 </template>
 <script>
-import * as dashboardApi from "@/api/request/dashboardApi";
-import UploadCategoryPic from "@/components/ProductManage/uploadCategoryPic";
-import { trim } from "@/utlis/index";
+import * as dashboardApi from '@/api/request/dashboardApi'
+import UploadCategoryPic from '@/components/ProductManage/uploadCategoryPic'
+import { trim } from '@/utlis/index'
 export default {
   // picSearchOptions
   props: [
-    "treeResult",
-    "listOptions",
-    "isArticle",
-    "isProduct",
-    "isPopup",
-    "type"
+    'treeResult',
+    'listOptions',
+    'isArticle',
+    'isProduct',
+    'isPopup',
+    'type'
   ], // 与产品分类不一致的地方 picSearchOptions isPopup是否为图片弹框
   components: {
     UploadCategoryPic
@@ -139,304 +139,303 @@ export default {
       treeNodeId: null,
       renameShowId: null,
       isNewAdd: false, // false 允许创建子节点
-      curlabelName: "",
+      curlabelName: '',
       isRename: false,
-      newAddNode: "",
-      renameData: "",
-      createCategoryData: "", // 当前点击的创建分类节点
+      newAddNode: '',
+      renameData: '',
+      createCategoryData: '', // 当前点击的创建分类节点
       isAdd: false, // true 添加 false编辑
       modifyCategoryData: {}, // 编辑分类需要传当前节点的名称和imgurl,
-      curClickNode: { data: { level: "" } },
+      curClickNode: { data: { level: '' } },
       isHandlerCategoryMenuShow: false,
       isChangeCategoryShow: false,
       categoryId: 0,
       siteCount: 2
-    };
+    }
   },
   mounted() {
-    this._getSiteCount();
-    document.addEventListener("click", () => {
+    this._getSiteCount()
+    document.addEventListener('click', () => {
       this.$nextTick(() => {
         if (this.$refs.operateSection1)
-          this.$refs.operateSection1.style.display = "none";
-      });
-    });
-    this.draggable = this.isContentwrite;
+          this.$refs.operateSection1.style.display = 'none'
+      })
+    })
+    this.draggable = this.isContentwrite
   },
   methods: {
     async _getSiteCount() {
-      let { data, status } = await dashboardApi.getSiteCount();
+      let { data, status } = await dashboardApi.getSiteCount()
       if (status === 200) {
-        this.siteCount = data.SiteCount;
+        this.siteCount = data.siteCount
       }
     },
     createCategory(displayName, thumbnailPicUrl, Language) {
       if (this.isAdd) {
         if (this.isArticle) {
-          this.$emit("create", {
+          this.$emit('create', {
             CategoryName: trim(displayName),
             ParentId:
               this.createCategoryData.id > 0 ? this.createCategoryData.id : 0,
             Language: Language
-          });
+          })
         } else {
-          this.$emit("create", {
+          this.$emit('create', {
             DisplayName: trim(displayName),
             ParentId: this.createCategoryData.id,
             thumbnailPicUrl: thumbnailPicUrl,
             Language: Language
-          });
+          })
         }
       } else {
         this.$emit(
-          "rename", // 与产品分类不一致的地方
+          'rename', // 与产品分类不一致的地方
           this.createCategoryData.id,
           trim(displayName),
           thumbnailPicUrl
-        );
+        )
       }
-      this.closeUploadCategoryPic();
+      this.closeUploadCategoryPic()
     },
     handlerOver(data) {
-      if (!isNaN(data.id)) this.treeNodeId = data.id;
-      if (this.isNewAdd) this.treeNodeId = null;
+      if (!isNaN(data.id)) this.treeNodeId = data.id
+      if (this.isNewAdd) this.treeNodeId = null
     },
     selectCategoryByNodeId(nodeId) {
-      nodeId = nodeId || 0;
+      nodeId = nodeId || 0
       this.$nextTick(() => {
-        this.$refs.tree.setCurrentKey(nodeId);
-      });
+        this.$refs.tree.setCurrentKey(nodeId)
+      })
     },
     handlerMouseLeave() {
-      this.treeNodeId = this.curId = null;
+      this.treeNodeId = this.curId = null
     },
     cancelhadnleTreeInput(data, node) {
       if (this.isRename) {
-        if (data.label == "") {
+        if (data.label == '') {
           this.$notify({
-            customClass: "notify-warning", //  notify-success ||  notify-error
+            customClass: 'notify-warning', //  notify-success ||  notify-error
             message: `分类名称不能为空!`,
             showClose: false,
             duration: 1500
-          });
-          return;
+          })
+          return
         }
-        if (this.curlabelName != "") {
-          data.label = this.curlabelName;
+        if (this.curlabelName != '') {
+          data.label = this.curlabelName
         }
       } else {
-        node.parent.childNodes.splice(0, 1);
-        this.isRename = false;
-        this.isNewAdd = false;
+        node.parent.childNodes.splice(0, 1)
+        this.isRename = false
+        this.isNewAdd = false
       }
       // 点击取消按钮 关闭input框
-      this.renameShowId = this.curId = null;
+      this.renameShowId = this.curId = null
     },
     handleDragEnd(draggingNodeDom, targetNodeDom, dropType, ev) {
-      var draggingNode = draggingNodeDom.data;
-      var targetNode = targetNodeDom.data;
+      var draggingNode = draggingNodeDom.data
+      var targetNode = targetNodeDom.data
       // let level = this.getLevel(draggingNodeDom, 1) + targetNodeDom.level;
-      let eles = document.getElementsByClassName("el-tree-node__content");
+      let eles = document.getElementsByClassName('el-tree-node__content')
       for (let i = 0; i < eles.length; i++) {
-        let ele = eles[i];
-        ele.style.background = "";
+        let ele = eles[i]
+        ele.style.background = ''
       }
       switch (dropType) {
-        case "inner": {
-          draggingNode.parentId = targetNode.id;
-          break;
+        case 'inner': {
+          draggingNode.parentId = targetNode.id
+          break
         }
-        case "before":
-        case "after": {
-          draggingNode.parentId = targetNode.parentId ? targetNode.parentId : 0;
-          break;
+        case 'before':
+        case 'after': {
+          draggingNode.parentId = targetNode.parentId ? targetNode.parentId : 0
+          break
         }
-        case "none":
-          console.log("none");
-          return;
+        case 'none':
+          console.log('none')
+          return
         default: {
-          return;
+          return
         }
       }
 
-      var idOrderByArr = [];
+      var idOrderByArr = []
       for (var i = 0; i < targetNodeDom.parent.childNodes.length; i++) {
-        var childNode = targetNodeDom.parent.childNodes[i];
-        idOrderByArr.push(childNode.data.id);
+        var childNode = targetNodeDom.parent.childNodes[i]
+        idOrderByArr.push(childNode.data.id)
       }
-      this.modifyNode(draggingNode.id, draggingNode.parentId, idOrderByArr);
+      this.modifyNode(draggingNode.id, draggingNode.parentId, idOrderByArr)
     },
     allowDrop(draggingNode, targetNode, dropType) {
-      if (targetNode.data.level == 0) return;
-      draggingNode = draggingNode.data;
-      targetNode = targetNode.data;
+      if (targetNode.data.level == 0) return
+      draggingNode = draggingNode.data
+      targetNode = targetNode.data
       //判断是否大于三层
       if (
-        dropType === "inner" ||
+        dropType === 'inner' ||
         draggingNode.parentId !== targetNode.parentId
       ) {
-        let level = this.getLevel(draggingNode, 1) + targetNode.level;
-        return level <= 3;
+        let level = this.getLevel(draggingNode, 1) + targetNode.level
+        return level <= 3
       }
-      return true;
+      return true
     },
     allowDrag(draggingNode) {
-      return draggingNode.data.level !== 0;
+      return draggingNode.data.level !== 0
     },
     dragEnter(draggingNode, targetNode, ev) {
-      if (targetNode.data.level == 0) return;
+      if (targetNode.data.level == 0) return
       // document.querySelectorAll('.el-tree-node__content').style.background=""
-      let eles = document.getElementsByClassName("el-tree-node__content");
+      let eles = document.getElementsByClassName('el-tree-node__content')
       for (let i = 0; i < eles.length; i++) {
-        let ele = eles[i];
-        ele.style.background = "";
+        let ele = eles[i]
+        ele.style.background = ''
       }
 
-      ev.srcElement.style.background = "#F8FAFC";
+      ev.srcElement.style.background = '#F8FAFC'
     },
     // 添加分类  0720
     create(ev, node, data) {
-      this.modifyCategoryData = {}; //创建新分类 不需传
-      this._handleShowMoreOperate(ev, node, data);
-      this.isAdd = true;
+      this.modifyCategoryData = {} //创建新分类 不需传
+      this._handleShowMoreOperate(ev, node, data)
+      this.isAdd = true
     },
     getAllNodeIds(node, isChildNode) {
-      var idList = isChildNode ? [] : [node.id];
+      var idList = isChildNode ? [] : [node.id]
       for (var i in node.children) {
-        let child = node.children[i];
-        idList.push(child.id);
-        idList = idList.concat(this.getAllNodeIds(child, true));
+        let child = node.children[i]
+        idList.push(child.id)
+        idList = idList.concat(this.getAllNodeIds(child, true))
       }
-      return idList;
+      return idList
     },
     getLevel(node, level) {
-      var localLevel = level;
+      var localLevel = level
       for (var i in node.children) {
-        let child = node.children[i];
-        var childLevel = this.getLevel(child, localLevel + 1);
-        level = level < childLevel ? childLevel : level;
+        let child = node.children[i]
+        var childLevel = this.getLevel(child, localLevel + 1)
+        level = level < childLevel ? childLevel : level
       }
-      return level;
+      return level
     },
     // 编辑分类 0720
     rename(ev, node, data) {
-      this.isAdd = false;
-      this.modifyCategoryData = this.curClickData;
-      this._handleShowMoreOperate(ev, node, data);
+      this.isAdd = false
+      this.modifyCategoryData = this.curClickData
+      this._handleShowMoreOperate(ev, node, data)
     },
     modifyNode(id, parentId, idOrderByArr) {
-      this.$emit("modifyNode", id, parentId, idOrderByArr);
+      this.$emit('modifyNode', id, parentId, idOrderByArr)
     },
     // 描述： 删除分类
     batchRemove(node, data) {
-      data = this.curClickData;
-      this.$emit("batchRemove", this.getAllNodeIds(data));
+      data = this.curClickData
+      this.$emit('batchRemove', this.getAllNodeIds(data))
     },
     // 点击节点的时候
     changeCategory(data) {
       if (this.categoryId == data.id) {
-        return;
+        return
       }
-      this.categoryId = data.id;
-      if (this.type !== "news") {
-        this.listOptions.categoryIdList = this.getAllNodeIds(data);
+      this.categoryId = data.id
+      if (this.type !== 'news') {
+        this.listOptions.categoryIdList = this.getAllNodeIds(data)
       }
-      this.closeUploadCategoryPic();
-      this.closeUploadCategoryPic1();
-      this.listOptions.pageIndex = 1; // 与产品分类不一致的地
-      this.$emit("chooseCategoryNode", data); // 与产品分类不一致的地方
-      console.log(this.listOptions);
-      this.$emit("getList", data);
+      this.closeUploadCategoryPic()
+      this.closeUploadCategoryPic1()
+      this.listOptions.pageIndex = 1 // 与产品分类不一致的地
+      this.$emit('chooseCategoryNode', data) // 与产品分类不一致的地方
+      console.log(this.listOptions)
+      this.$emit('getList', data)
     },
     // 取消第一个全部分类默认选中的样式
     setCss(obj, css) {
       for (var attr in css) {
-        obj.style[attr] = css[attr];
+        obj.style[attr] = css[attr]
       }
     },
     // 操作按钮出现 || 消失
     handleShow(ev, node, data) {
       if (this.curId === node.data.id) {
-        node.checked = false;
-        this.curId = 1;
+        node.checked = false
+        this.curId = 1
       } else {
-        node.checked = true;
-        this.curId = node.data.id;
+        node.checked = true
+        this.curId = node.data.id
       }
-      this.curClickData = data;
-      this.curClickNode = node;
-      console.log(this.curClickNode);
-      this._handleShowMoreOperate1(ev, node);
+      this.curClickData = data
+      this.curClickNode = node
+      console.log(this.curClickNode)
+      this._handleShowMoreOperate1(ev, node)
     },
     // 分类上传图片
     _handleShowMoreOperate(ev, node, data) {
-      this.createCategoryData = this.curClickData;
+      this.createCategoryData = this.curClickData
       if (this.isPopup) {
-        let location = this.handlerClicklocation();
+        let location = this.handlerClicklocation()
         this.$refs.operateSection.style.left =
-          ev.pageX - location.clientWidth - ev.offsetX + 8 + "px";
+          ev.pageX - location.clientWidth - ev.offsetX + 8 + 'px'
         this.$refs.operateSection.style.top =
-          ev.pageY - location.clientHeight - ev.offsetY + "px";
+          ev.pageY - location.clientHeight - ev.offsetY + 'px'
       } else {
-        this.$refs.operateSection.style.left =
-          ev.pageX - ev.offsetX + 16 + "px";
-        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + "px";
+        this.$refs.operateSection.style.left = ev.pageX - ev.offsetX + 16 + 'px'
+        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + 'px'
       }
       // this.$refs.operateSection.style.display = "block";
-      this.isHandlerCategoryMenuShow = true;
+      this.isHandlerCategoryMenuShow = true
     },
     // 关闭 分类操作菜单显示
     closeUploadCategoryPic() {
       // this.$refs.operateSection.style.display = "none";
-      this.isHandlerCategoryMenuShow = false;
+      this.isHandlerCategoryMenuShow = false
     },
     // 新增 0730  关闭分类操作菜单
     closeUploadCategoryPic1() {
-      this.$refs.operateSection1.style.display = "none";
+      this.$refs.operateSection1.style.display = 'none'
     },
     handleCategory1() {
-      this.closeUploadCategoryPic1();
+      this.closeUploadCategoryPic1()
     },
     // 新增0730   分类操作菜单显示
     _handleShowMoreOperate1(ev, row) {
       if (this.isPopup) {
-        let location = this.handlerClicklocation();
+        let location = this.handlerClicklocation()
         this.$refs.operateSection1.style.left =
-          ev.pageX - location.clientWidth - ev.offsetX + 32 + "px";
+          ev.pageX - location.clientWidth - ev.offsetX + 32 + 'px'
         this.$refs.operateSection1.style.top =
-          ev.pageY - location.clientHeight - ev.offsetY + "px";
+          ev.pageY - location.clientHeight - ev.offsetY + 'px'
       } else {
         this.$refs.operateSection1.style.left =
-          ev.pageX - ev.offsetX + 32 + "px";
-        this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + "px";
+          ev.pageX - ev.offsetX + 32 + 'px'
+        this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + 'px'
       }
-      if (this.$refs.operateSection1.style.display === "block") {
-        this.$refs.operateSection1.style.display = "none";
+      if (this.$refs.operateSection1.style.display === 'block') {
+        this.$refs.operateSection1.style.display = 'none'
       } else {
-        this.$refs.operateSection1.style.display = "block";
+        this.$refs.operateSection1.style.display = 'block'
       }
     },
     handlerClicklocation() {
-      let content = document.getElementsByClassName("contentDialog")[0];
-      let contentW = parseFloat(getComputedStyle(content).width);
-      let contentH = parseFloat(getComputedStyle(content).height);
+      let content = document.getElementsByClassName('contentDialog')[0]
+      let contentW = parseFloat(getComputedStyle(content).width)
+      let contentH = parseFloat(getComputedStyle(content).height)
       let clientWidth =
         ((document.documentElement.clientWidth || document.body.clientWidth) -
           contentW) /
-        2;
+        2
       let clientHeight =
         ((document.documentElement.clientHeight || document.body.clientHeight) -
           contentH) /
-        2;
-      return { clientWidth, clientHeight };
+        2
+      return { clientWidth, clientHeight }
     }
   },
   computed: {
     isContentwrite() {
-      return this.$store.state.dashboard.isContentwrite;
+      return this.$store.state.dashboard.isContentwrite
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 // 侧边分类树节点
