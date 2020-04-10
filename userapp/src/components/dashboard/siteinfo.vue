@@ -260,6 +260,7 @@
       ref="initializedDialog"
       :curSiteinfo="curSiteinfo"
       :siteId="siteId"
+      :siteCount="siteCount"
       @getSites="getSites"
     ></InitializedDialog>
     <SelectTemplateDialog

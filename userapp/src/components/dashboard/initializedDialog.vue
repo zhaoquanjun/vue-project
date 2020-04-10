@@ -9,7 +9,7 @@
       <div class="initializedDialog" :style="{width:'430px'}">
         <div v-show="initializedStep == 'before'">
           <div class="dialog-head">
-            <span class="dialog-headTitle">初始化外文站点</span>
+            <span class="dialog-headTitle">初始化站点</span>
             <span class="dialog-close" @click="closeInitializedDialog">
               <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
             </span>
@@ -39,7 +39,7 @@
               ></el-option>
             </el-select>
           </div>
-          <div class="dialog-tips">* 建议完成【中文站】后，再进行外文站的初始化</div>
+          <div class="dialog-tips">* 建议完成【中文站】后，再进行站点初始化</div>
           <div class="dialog-footer">
             <button
               @click="closeInitializedDialog"
@@ -55,7 +55,7 @@
         </div>
         <div v-show="initializedStep == 'start'">
           <div class="dialog-head">
-            <span class="dialog-headTitle">初始化外文站点</span>
+            <span class="dialog-headTitle">站点初始化</span>
             <span class="dialog-close" @click="closeInitializedDialog">
               <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
             </span>
@@ -102,7 +102,7 @@
                 >站点初始化成功！</div>
                 <div v-show="initializedType == 'translation'" class="translationSite">
                   <div class="initializedAfter-text">外文站点初始化成功！</div>
-                  <div>
+                  <div v-show="siteCount == 2">
                     已开启
                     <span class="primaryColor">自动翻译</span>
                   </div>
@@ -155,7 +155,7 @@
 import * as dashboardApi from "@/api/request/dashboardApi";
 
 export default {
-  props: ["curSiteinfo", "siteId"],
+  props: ["curSiteinfo", "siteId", "siteCount"],
   data() {
     return {
       initializedDialog: false,
@@ -504,7 +504,7 @@ export default {
         .initializedAfter-errorInfo {
           margin-top: 8px;
           font-size: $--font-size-small;
-          line-height: 16px;
+          line-height: 20px;
         }
         .initializedFailList-wrap {
           margin-top: 16px;
