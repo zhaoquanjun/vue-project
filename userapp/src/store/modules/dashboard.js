@@ -96,7 +96,7 @@ const dashboard = {
             let { data } = await updateAppIdAndSiteIdToCookie();
             commit("SETAPPID", data)
         },
-        async getTranslateSwitch() {
+        async getTranslateSwitch({ commit }) {
           // 是否展示自动翻译开关
           let { data } = await showTranslateSwitch();
           commit("set_autoTranslateShow", data)
