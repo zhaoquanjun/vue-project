@@ -149,7 +149,7 @@
                   class="view-item"
                   v-for="(item, index) in hasTranslateList"
                   :key="index"
-                  @click="_handleViewTranslatedNews(item)"
+                  @click="_handleViewTranslatedNews(item, scope.row)"
                 >
                   {{ item.languageStr }}
                 </li>
@@ -307,8 +307,8 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       row.index = rowIndex
     },
-    _handleViewTranslatedNews(o) {
-      this.$emit('handleEditArticle', o)
+    _handleViewTranslatedNews(o, row) {
+      this.preview(o.id, row.defaultSiteId)
     },
     _handleTranslateToMore(row) {
       this.$emit('handleGetSignalTranslateSource', row, this.hasTranslateList)
@@ -320,7 +320,7 @@ export default {
           this.hasTranslateList.length === 1 &&
           this.languagesList.length === 1
         )
-          this._handleViewTranslatedNews(this.hasTranslateList[0])
+          this._handleViewTranslatedNews(this.hasTranslateList[0], row.defaultSiteId)
       } else {
         if (type) return
         this.$emit('handleGetSignalTranslateSource', row)

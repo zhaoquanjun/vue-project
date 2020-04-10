@@ -27,9 +27,12 @@
             :content="scope.row.name"
             placement="top"
           >
-            <span style="width:200px" class="ellipsis cursor-p">{{
-              scope.row.name
-            }}</span>
+            <span
+              style="width:200px"
+              class="ellipsis cursor-p"
+              @click="preview(scope.row.id, scope.row.defaultSiteId)"
+              >{{ scope.row.name }}</span
+            >
           </el-tooltip>
         </template>
       </el-table-column>
@@ -79,7 +82,7 @@
       <el-table-column min-width="100" prop="isOnSell" label="状态">
         <template slot-scope="scope">
           <span style="padding-right: 8px;">{{
-            scope.row.isOnSell ? "上架" : "下架"
+            scope.row.isOnSell ? '上架' : '下架'
           }}</span>
           <div
             class="el-switch"
@@ -94,7 +97,7 @@
         label="多语言"
         min-width="80"
         align="center"
-        v-if="languagesList.length > 0"
+        v-if="siteCount > 1"
       >
         <template slot-scope="scope">
           <div
@@ -103,7 +106,7 @@
             <span
               class="ellipsis"
               style="min-width: 50px; max-width: 100px; text-align: right;"
-              >{{ scope.row.languageStr ? scope.row.languageStr : "" }}</span
+              >{{ scope.row.languageStr ? scope.row.languageStr : '' }}</span
             >
             <span
               class="translate-icon"
@@ -253,152 +256,157 @@
 </template>
 
 <script>
-import * as productManageApi from "@/api/request/productManageApi";
+import * as productManageApi from '@/api/request/productManageApi'
 export default {
-  props: ["articlePageResult", "articleSearchOptions", "languagesList"],
+  props: [
+    'articlePageResult',
+    'articleSearchOptions',
+    'languagesList',
+    'siteCount'
+  ],
 
   data() {
     return {
-      defaultImg: require("img/content-default-pic.png"),
+      defaultImg: require('img/content-default-pic.png'),
       multipleSelection: [],
       operateList: [
-        { name: "移动", flag: "move" },
-        { name: "复制", flag: "copy" },
-        { name: "下线", flag: "isOnSell" },
-        { name: "置顶", flag: "stick" },
-        { name: "翻译", flag: "translate" },
-        { name: "删除", flag: "delete" }
+        { name: '移动', flag: 'move' },
+        { name: '复制', flag: 'copy' },
+        { name: '下线', flag: 'isOnSell' },
+        { name: '置顶', flag: 'stick' },
+        { name: '翻译', flag: 'translate' },
+        { name: '删除', flag: 'delete' }
       ],
-      row: "",
+      row: '',
       tableHeight: 500,
       loadingShow: true,
-      tableData: "",
+      tableData: '',
       isOperateSectionShow: false,
       hasTranslateList: [],
       timer: null
-    };
+    }
   },
   mounted() {
-    this.tableData = this.articlePageResult;
-    document.addEventListener("click", () => {
+    this.tableData = this.articlePageResult
+    document.addEventListener('click', () => {
       this.$nextTick(() => {
-        // if (this.$refs.operateSection)
-        //     this.$refs.operateSection.style.display = "none";
-        this.isOperateSectionShow = false;
-      });
-    });
+        this.isOperateSectionShow = false
+      })
+    })
     this.$nextTick(() => {
-      window.addEventListener("resize", () => {
-        this.tableHeight = window.innerHeight - 260;
-      });
-      this.tableHeight = window.innerHeight - 260;
-    });
+      window.addEventListener('resize', () => {
+        this.tableHeight = window.innerHeight - 260
+      })
+      this.tableHeight = window.innerHeight - 260
+    })
     window.onImgError = (ele) => {
-      ele.src = ele.attributes["src"] = this.defaultImg;
-    };
+      ele.src = ele.attributes['src'] = this.defaultImg
+    }
   },
   methods: {
     // 给行添加索引
     tableRowClassName({ row, rowIndex }) {
-      row.index = rowIndex;
+      row.index = rowIndex
     },
-    _handleViewTranslatedProduct(o) {
-      console.log(o);
-      this.$emit("handleEditArticle", o);
+    _handleViewTranslatedProduct(o, row) {
+      this.preview(o.id, row.defaultSiteId)
     },
     _handleTranslateToMore(row) {
-      this.$emit("handleGetSignalTranslateSource", row, this.hasTranslateList);
+      this.$emit('handleGetSignalTranslateSource', row, this.hasTranslateList)
     },
     _handleTranslateItem(e, row, type) {
-      if (this.languagesList.length < 1) return false;
+      if (this.languagesList.length < 1) return false
       if (this.hasTranslateList.length > 0) {
         if (
           this.hasTranslateList.length === 1 &&
           this.languagesList.length === 1
         )
-          this._handleViewTranslatedProduct(this.hasTranslateList[0]);
+          this._handleViewTranslatedProduct(
+            this.hasTranslateList[0],
+            row.defaultSiteId
+          )
       } else {
-        if (type) return;
-        this.$emit("handleGetSignalTranslateSource", row);
+        if (type) return
+        this.$emit('handleGetSignalTranslateSource', row)
       }
     },
     // 鼠标进入翻译icon
     _handleMouseenterTranslate(e, row, type) {
-      this.timer && clearTimeout(this.timer);
-      if (type) return false;
+      this.timer && clearTimeout(this.timer)
+      if (type) return false
       if (this.languagesList.length > 0) {
         this.timer = setTimeout(async () => {
-          let { data } = await productManageApi.productTranslateStatus(row.id);
-          this.hasTranslateList = data;
+          let { data } = await productManageApi.productTranslateStatus(row.id)
+          this.hasTranslateList = data
           if (data.length === 0) {
             this.articlePageResult.list[row.index].translateToolTip =
-              "点击翻译产品";
+              '点击翻译产品'
             setTimeout(() => {
-              if (this.$refs["tooltip" + row.index]) {
-                this.$refs["tooltip" + row.index].style.left =
+              if (this.$refs['tooltip' + row.index]) {
+                this.$refs['tooltip' + row.index].style.left =
                   e.target.getBoundingClientRect().left -
-                  this.$refs["tooltip" + row.index].clientWidth / 2 +
+                  this.$refs['tooltip' + row.index].clientWidth / 2 +
                   10 +
-                  "px";
-                this.$refs["tooltip" + row.index].style.top =
+                  'px'
+                this.$refs['tooltip' + row.index].style.top =
                   e.target.getBoundingClientRect().top +
                   e.target.getBoundingClientRect().height -
                   70 +
-                  "px";
+                  'px'
               }
-            });
+            })
           }
           if (data.length === 1) {
             if (this.languagesList.length === 1) {
               this.articlePageResult.list[row.index].translateToolTip =
-                "查看已翻译的产品";
+                '查看已翻译的产品'
               setTimeout(() => {
-                if (this.$refs["tooltip" + row.index]) {
-                  this.$refs["tooltip" + row.index].style.left =
+                if (this.$refs['tooltip' + row.index]) {
+                  this.$refs['tooltip' + row.index].style.left =
                     e.target.getBoundingClientRect().left -
-                    this.$refs["tooltip" + row.index].clientWidth / 2 +
+                    this.$refs['tooltip' + row.index].clientWidth / 2 +
                     10 +
-                    "px";
-                  this.$refs["tooltip" + row.index].style.top =
+                    'px'
+                  this.$refs['tooltip' + row.index].style.top =
                     e.target.getBoundingClientRect().top +
                     e.target.getBoundingClientRect().height -
                     70 +
-                    "px";
+                    'px'
                 }
-              });
+              })
             }
             if (this.languagesList.length > 1) {
-              this.articlePageResult.list[row.index].translateToolTip = "";
-              this.hasTranslateList = data;
-              if (this.$refs["translateModal" + row.index]) {
-                this.$refs["translateModal" + row.index].style.left =
+              this.articlePageResult.list[row.index].translateToolTip = ''
+              this.hasTranslateList = data
+              if (this.$refs['translateModal' + row.index]) {
+                this.$refs['translateModal' + row.index].style.left =
                   e.target.getBoundingClientRect().left +
                   e.target.getBoundingClientRect().width / 2 +
-                  "px";
-                this.$refs["translateModal" + row.index].style.top =
+                  'px'
+                this.$refs['translateModal' + row.index].style.top =
                   e.target.getBoundingClientRect().top +
                   e.target.getBoundingClientRect().height +
                   6 +
-                  "px";
+                  'px'
               }
             }
           }
           if (data.length > 1) {
-            this.articlePageResult.list[row.index].translateToolTip = "";
-            this.hasTranslateList = data;
-            if (this.$refs["translateModal" + row.index]) {
-              this.$refs["translateModal" + row.index].style.left =
+            this.articlePageResult.list[row.index].translateToolTip = ''
+            this.hasTranslateList = data
+            if (this.$refs['translateModal' + row.index]) {
+              this.$refs['translateModal' + row.index].style.left =
                 e.target.getBoundingClientRect().left +
                 e.target.getBoundingClientRect().width / 2 +
-                "px";
-              this.$refs["translateModal" + row.index].style.top =
+                'px'
+              this.$refs['translateModal' + row.index].style.top =
                 e.target.getBoundingClientRect().top +
                 e.target.getBoundingClientRect().height +
                 6 +
-                "px";
+                'px'
             }
           }
-        }, 200);
+        }, 200)
       }
     },
     _handleMouseleaveTranslte(row, type) {
@@ -416,69 +424,69 @@ export default {
       }
     },
     _handleGetMoreTranslateSource() {
-      this.$emit("handleGetMoreTranslateSource");
+      this.$emit('handleGetMoreTranslateSource')
     },
     changePageNum(page) {
-      this.articleSearchOptions.pageIndex = page;
-      this.$emit("contentTableList");
+      this.articleSearchOptions.pageIndex = page
+      this.$emit('contentTableList')
     },
     changePageSize(size) {
-      this.articleSearchOptions.pageSize = size;
-      this.$emit("contentTableList");
+      this.articleSearchOptions.pageSize = size
+      this.$emit('contentTableList')
     },
     sortByTopStatus: function(column) {
       // descending ascending
       this.articleSearchOptions.OrderByTopOrder =
-        column.order == "ascending"
+        column.order == 'ascending'
           ? true
-          : column.order == "descending"
+          : column.order == 'descending'
           ? false
-          : null;
-      this.$emit("contentTableList");
+          : null
+      this.$emit('contentTableList')
     },
     /**
      * 单选或全选操作
      */
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      this.$emit("handleSelectionChange", val);
+      this.multipleSelection = val
+      this.$emit('handleSelectionChange', val)
     },
     getCheckArr() {
-      let checkArr = this.multipleSelection; // multipleSelection存储了勾选到的数据
-      let params = [];
+      let checkArr = this.multipleSelection // multipleSelection存储了勾选到的数据
+      let params = []
       checkArr.forEach(function(item) {
-        params.push(item.id); // 添加所有需要删除数据的id到一个数组，post提交过去
-      });
-      return params;
+        params.push(item.id) // 添加所有需要删除数据的id到一个数组，post提交过去
+      })
+      return params
     },
     // 新增产品
     addArticle() {
-      this.$emit("addArticle");
+      this.$emit('addArticle')
     },
     /**
      * 编辑文章
      */
     handleEdit(row) {
-      console.log(row);
-      this.$emit("handleEditArticle", row);
+      console.log(row)
+      this.$emit('handleEditArticle', row)
     },
     _handleShowMoreOperate(ev, row) {
-      this.row = row;
+      this.row = row
       this.operateList = [
-        { name: "移动", flag: "move" },
-        { name: "复制", flag: "copy" },
-        { name: "删除", flag: "delete" }
-      ];
+        { name: '移动', flag: 'move' },
+        { name: '复制', flag: 'copy' },
+        { name: '删除', flag: 'delete' }
+      ]
       this.$refs.operateSection.style.right =
-        document.documentElement.clientWidth - ev.pageX + ev.offsetX + "px";
-      this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + "px";
+        document.documentElement.clientWidth - ev.pageX + ev.offsetX + 'px'
+      this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + 'px'
 
       // if (this.$refs.operateSection.style.display == "block") {
       //     this.$refs.operateSection.style.display = "none";
       // } else {
       //     this.$refs.operateSection.style.display = "block";
       // }
-      this.isOperateSectionShow = !this.isOperateSectionShow;
+      this.isOperateSectionShow = !this.isOperateSectionShow
     },
 
     /**
@@ -489,14 +497,14 @@ export default {
         switchType: type,
         flag: flag,
         idList: []
-      };
+      }
 
       if (row == null || row == undefined) {
-        options.idList = this.getCheckArr();
-        this.$emit("batchSwitchStatus", options);
+        options.idList = this.getCheckArr()
+        this.$emit('batchSwitchStatus', options)
       } else {
-        options.idList.push(row.id);
-        this.$emit("batchSwitchStatus", options);
+        options.idList.push(row.id)
+        this.$emit('batchSwitchStatus', options)
       }
     },
 
@@ -504,68 +512,68 @@ export default {
      * 复制 操作
      */
     batchCopy(row, type) {
-      this.$emit("batchMove", type);
+      this.$emit('batchMove', type)
     },
     handleMoreOperate(flag) {
-      this.clearSelection();
-      let row = this.row;
+      this.clearSelection()
+      let row = this.row
       switch (flag) {
-        case "move":
-          this.$emit("moveClassify", row, flag);
-          break;
-        case "copy":
-          this.$emit("moveClassify", row, flag);
-          break;
-        case "isOnSell":
-          this.batchSwitchStatus(row, 3, row.isOnSell);
-          break;
-        case "stick":
-          this.batchSwitchStatus(row, 2, row.isTop);
-          break;
-        case "translate":
-          this._handleGetMoreTranslateSource();
-          break;
-        case "delete":
-          this.batchSwitchStatus(row, 1, !row.isDelete);
-          break;
+        case 'move':
+          this.$emit('moveClassify', row, flag)
+          break
+        case 'copy':
+          this.$emit('moveClassify', row, flag)
+          break
+        case 'isOnSell':
+          this.batchSwitchStatus(row, 3, row.isOnSell)
+          break
+        case 'stick':
+          this.batchSwitchStatus(row, 2, row.isTop)
+          break
+        case 'translate':
+          this._handleGetMoreTranslateSource()
+          break
+        case 'delete':
+          this.batchSwitchStatus(row, 1, !row.isDelete)
+          break
       }
     },
     clearSelection() {
-      this.$refs.multipleTable.clearSelection();
+      this.$refs.multipleTable.clearSelection()
     },
     //创建时间排序
     sortChange(row) {
-      if (row.order == "ascending") {
-        this.articleSearchOptions.isDescending = false;
+      if (row.order == 'ascending') {
+        this.articleSearchOptions.isDescending = false
       } else {
-        this.articleSearchOptions.isDescending = true;
+        this.articleSearchOptions.isDescending = true
       }
-      this.$emit("contentTableList");
+      this.$emit('contentTableList')
     },
     /**
      * 预览
      */
     async preview(previewId, siteId) {
       let { data } = await productManageApi.GetContentPrevAddress(
-        "ProductDetail",
+        'ProductDetail',
         siteId
-      );
-      var prevAddress = data;
+      )
+      var prevAddress = data
       if (prevAddress) {
         //var a = document.createElement('a');
         //a.setAttribute('href', prevAddress + previewId + '.html');
         //a.setAttribute('target', '_blank');
         //a.click();
-        let newWindow = window.open();
-        newWindow.location.href = prevAddress + previewId + ".html";
+        let newWindow = window.open()
+        newWindow.location.href = prevAddress + previewId + '.html'
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/content-manage/manege-table.scss";
+@import '@/styles/content-manage/manege-table.scss';
 .operate-section {
   display: block;
 }
@@ -581,7 +589,7 @@ export default {
   min-width: 25px;
   height: 20px;
   cursor: pointer;
-  background: url("~img/content-icon/translate_icon.png") no-repeat center
+  background: url('~img/content-icon/translate_icon.png') no-repeat center
     center;
   background-size: 100% 100%;
 
@@ -634,7 +642,7 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       display: block;
-      content: "";
+      content: '';
       width: 0;
       height: 0;
       border-right: 5px solid transparent;
@@ -665,7 +673,7 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       display: block;
-      content: " ";
+      content: ' ';
       width: 0;
       height: 0;
       border-right: 5px solid transparent;
@@ -675,7 +683,7 @@ export default {
   }
 }
 
-.translate-icon[data-language="zh-CN"]:hover {
+.translate-icon[data-language='zh-CN']:hover {
   .more-operate {
     visibility: visible;
     z-index: 1999;
@@ -704,7 +712,7 @@ export default {
     position: absolute;
     left: 60%;
     display: block;
-    content: "";
+    content: '';
     margin-left: -15px;
     width: 14px;
     height: 14px;

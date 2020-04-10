@@ -126,7 +126,7 @@
           </button>
           <button
             v-show="siteCount === 2"
-            :class="{ disabled: languageCount === 2 }"
+            :class="{ disabled: languageCount > 2 }"
             class="cl-button cl-button--text_primary"
             @click="batchTranslate"
           >

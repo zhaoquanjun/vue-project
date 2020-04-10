@@ -202,6 +202,7 @@ export default {
       },
       languageModal: {
         title: "",
+        isNews: true,
         tree: [],
         languages: [],
         list: [],
@@ -814,7 +815,6 @@ export default {
       } else {
         this.virtualSearchOptions.language = data.language
       }
-      console.log(this.articleSearchOptions, "-=-=-=")
     },
     cancelUpdateCategory() {
       this.isInvitationPanelShow = false
