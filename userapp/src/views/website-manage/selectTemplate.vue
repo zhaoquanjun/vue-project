@@ -34,22 +34,19 @@
       ref="initializedDialog"
       :curSiteinfo="curSiteinfo"
       :siteId="siteId"
+      :siteCount="siteCount"
     ></InitializedDialog>
   </el-container>
 </template>
 
 <script>
-import PageSubmenu from "@/components/common/PageSubmenu";
 import ChangeSite from "@/components/websiteManage/changeSite";
 import SelectTemplateDialog from "@/components/websiteManage/selectTemplateDialog.vue";
 import InitializedDialog from "@/components/dashboard/initializedDialog.vue";
-import * as templateApi from "@/api/request/templateApi";
-import { getLanguage } from "@/configure/appCommon";
-import { designerUrl } from "@/environment/index";
+import * as dashboardApi from "@/api/request/dashboardApi";
 
 export default {
   components: {
-    PageSubmenu,
     ChangeSite,
     SelectTemplateDialog,
     InitializedDialog
@@ -58,7 +55,8 @@ export default {
     return {
       siteId: 0,
       siteName: "",
-      curSiteinfo: {}
+      curSiteinfo: {},
+      siteCount: 0
     };
   },
   methods: {
@@ -79,8 +77,13 @@ export default {
         this.$refs.selectTemplateDialog.showTemplate();
       } else {
         this.$refs.initializedDialog.showInitializedDialog();
+        this.getContentInfo();
       }
-    }
+    },
+    async getContentInfo () {
+      let { data } = await dashboardApi.getContentInfo();
+      this.siteCount = data.siteMaxCount;
+    },
   }
 };
 </script>
