@@ -296,7 +296,6 @@ export default {
     window.onImgError = (ele) => {
       ele.src = ele.attributes["src"] = this.defaultImg;
     };
-    console.log(this.articlePageResult);
   },
   methods: {
     // 给行添加索引
@@ -403,12 +402,17 @@ export default {
       }
     },
     _handleMouseleaveTranslte(row, type) {
-      if (type) return false;
-      this.hasTranslateList = [];
-      this.$refs["translateModal" + row.index].translateToolTip = "";
-      if (this.$refs["translateModal" + row.index]) {
-        this.$refs["translateModal" + row.index].style.left = "-300%";
-        this.$refs["translateModal" + row.index].style.top = "-300%";
+      if (type) return false
+      if (this.languagesList.length < 1) return false
+      this.hasTranslateList = []
+      this.$refs['translateModal' + row.index].translateToolTip = ''
+      if (this.$refs['translateModal' + row.index]) {
+        this.$refs['translateModal' + row.index].style.left = '-300%'
+        this.$refs['translateModal' + row.index].style.top = '-300%'
+      }
+      if (this.$refs['tooltip' + row.index]) {
+        this.$refs['tooltip' + row.index].style.left = '-300%'
+        this.$refs['tooltip' + row.index].style.top = '-300%'
       }
     },
     _handleGetMoreTranslateSource() {

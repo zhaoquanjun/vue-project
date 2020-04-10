@@ -40,6 +40,7 @@
                 <SelectTree
                   size="small"
                   placeholder="请选择"
+                  :type="'news'"
                   :categoryName="categoryName"
                   :categoryId="categoryId"
                   :tree-result="treeResult"
@@ -334,7 +335,6 @@ export default {
       let { data } = await articleManageApi.getArticleCategory({
         language: this.articleDetail.Language
       });
-      this._setTreeNodeDisabled(data);
       this.treeResult = data;
       var categoryName = this.$route.query.categoryName;
       if (categoryName != null || categoryName != undefined) {
@@ -343,16 +343,6 @@ export default {
         this.categoryId = parseFloat(this.$route.query.categoryId);
       } else {
         this.categoryId = 0;
-      }
-    },
-    _setTreeNodeDisabled(data) {
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].id < 0) {
-          data[i].disabled = true
-        }
-        if (data[i].children && data[i].children.length > 0) {
-          this._setTreeNodeDisabled(data[i].children)
-        }
       }
     },
     async getArticleDetail(id) {

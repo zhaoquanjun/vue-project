@@ -115,7 +115,6 @@
   </div>
 </template>
 <script>
-import * as dashboardApi from '@/api/request/dashboardApi'
 import UploadCategoryPic from '@/components/ProductManage/uploadCategoryPic'
 import { trim } from '@/utlis/index'
 export default {
@@ -126,7 +125,8 @@ export default {
     'isArticle',
     'isProduct',
     'isPopup',
-    'type'
+    'type',
+    'siteCount'
   ], // 与产品分类不一致的地方 picSearchOptions isPopup是否为图片弹框
   components: {
     UploadCategoryPic
@@ -150,11 +150,9 @@ export default {
       isHandlerCategoryMenuShow: false,
       isChangeCategoryShow: false,
       categoryId: 0,
-      siteCount: 2
     }
   },
   mounted() {
-    this._getSiteCount()
     document.addEventListener('click', () => {
       this.$nextTick(() => {
         if (this.$refs.operateSection1)
@@ -164,12 +162,6 @@ export default {
     this.draggable = this.isContentwrite
   },
   methods: {
-    async _getSiteCount() {
-      let { data, status } = await dashboardApi.getSiteCount()
-      if (status === 200) {
-        this.siteCount = data.siteCount
-      }
-    },
     createCategory(displayName, thumbnailPicUrl, Language) {
       if (this.isAdd) {
         if (this.isArticle) {

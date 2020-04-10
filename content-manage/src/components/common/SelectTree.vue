@@ -17,7 +17,7 @@
         :default-expand-all="true"
         :expand-on-click-node="false"
         :accordion="accordion"
-        :data="treeResult"
+        :data="treeData"
         :props="props"
         :node-key="props.value"
         :default-expanded-keys="defaultExpandedKey"
@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  name: "el-tree-select",
+  name: 'el-tree-select',
   inject: {
     popper: {
       default: false
@@ -43,17 +43,23 @@ export default {
       type: Object,
       default: () => {
         return {
-          value: "id", // ID字段名
-          label: "label", // 显示名称
-          children: "children" // 子级字段名
-        };
+          value: 'id', // ID字段名
+          label: 'label', // 显示名称
+          children: 'children' // 子级字段名
+        }
+      }
+    },
+    type: {
+      type: String,
+      default: () => {
+        return ''
       }
     },
     /* 选项列表数据(树形结构的对象数组) */
     treeResult: {
       type: Array,
       default: () => {
-        return [];
+        return []
       }
     },
     /**分类名称 */
@@ -70,33 +76,33 @@ export default {
     value: {
       type: Number,
       default: () => {
-        return null;
+        return null
       }
     },
     /* 可清空选项 */
     clearable: {
       type: Boolean,
       default: () => {
-        return true;
+        return true
       }
     },
     /* 自动收起 */
     accordion: {
       type: Boolean,
       default: () => {
-        return false;
+        return false
       }
     },
     isexpand: {
       type: Boolean,
       default: () => {
-        return false;
+        return false
       }
     },
     multiple: {
       type: Boolean,
       default: () => {
-        return false;
+        return false
       }
     },
     isSHowCheckBox: {
@@ -107,29 +113,55 @@ export default {
   data() {
     return {
       valueId: null, // 初始值
-      valueTitle: "",
+      valueTitle: '',
       defaultExpandedKey: []
-    };
+    }
+  },
+  computed: {
+    treeData: {
+      get: function() {
+        if (
+          this.type === 'news' &&
+          this.treeResult &&
+          this.treeResult.length > 0
+        ) {
+          this._setTreeNodeDisabled(this.treeResult)
+        }
+        let data = this.treeResult
+        return data
+      },
+      set: function() {}
+    }
   },
   mounted() {
-    this.initHandle();
-    this.valueTitle = this.categoryName;
-    this.setCheckedKeys();
+    this.initHandle()
+    this.valueTitle = this.categoryName
+    this.setCheckedKeys()
   },
   methods: {
+    _setTreeNodeDisabled(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].id < 0) {
+          data[i].disabled = true
+        }
+        if (data[i].children && data[i].children.length > 0) {
+          this._setTreeNodeDisabled(data[i].children)
+        }
+      }
+    },
     setCheckedKeys() {
-      this.valueTitle = this.categoryName;
+      this.valueTitle = this.categoryName
       this.$nextTick(() => {
-        this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
+        this.$refs.selectTree.setCurrentKey(this.categoryId) // 设置默认选中
         //   this.$refs.tree.setCheckedKeys(ids);
-      });
+      })
     },
     nodeExpand(data, node, slot) {},
     remove(cur) {
-      this.valueTitle = this.valueTitle.filter(item => {
-        return item != cur;
-      });
-      this.$emit("removeSeletedCategory", cur);
+      this.valueTitle = this.valueTitle.filter((item) => {
+        return item != cur
+      })
+      this.$emit('removeSeletedCategory', cur)
     },
     // 初始化值
     initHandle() {
@@ -137,79 +169,78 @@ export default {
       // this.defaultExpandedKey = [this.valueId]; // 设置默认展开
       this.$nextTick(() => {
         let scrollWrap = document.querySelectorAll(
-          ".el-scrollbar .el-select-dropdown__wrap"
-        )[0];
+          '.el-scrollbar .el-select-dropdown__wrap'
+        )[0]
         let scrollBar = document.querySelectorAll(
-          ".el-scrollbar .el-scrollbar__bar"
-        );
+          '.el-scrollbar .el-scrollbar__bar'
+        )
         scrollWrap.style.cssText =
-          "margin: 0px; max-height: none; overflow: hidden;";
-        scrollBar.forEach(ele => (ele.style.width = 0));
-        scrollBar[0].style.display = "none";
-      });
+          'margin: 0px; max-height: none; overflow: hidden;'
+        scrollBar.forEach((ele) => (ele.style.width = 0))
+        scrollBar[0].style.display = 'none'
+      })
     },
     // 切换选项
     handleNodeClick(node) {
-      this.$refs.elSelect.blur();
+      this.$refs.elSelect.blur()
       if (this.multiple) {
         if (this.valueTitle.indexOf(node[this.props.label]) > -1) {
-          return;
+          return
         }
-        this.valueTitle.push(node[this.props.label]);
-        this.$emit("chooseNode", node);
-        return;
+        this.valueTitle.push(node[this.props.label])
+        this.$emit('chooseNode', node)
+        return
       } else {
         if (node.id >= 0) {
-          this.valueTitle = node[this.props.label];
+          this.valueTitle = node[this.props.label]
         }
-        this.$emit("chooseNode", node);
+        this.$emit('chooseNode', node)
       }
       // this.valueId = node[this.props.value];
       // this.defaultExpandedKey = [];
-      this.clearSelected();
+      this.clearSelected()
     },
     check(node) {
       if (this.multiple) {
         if (this.valueTitle.indexOf(node[this.props.label]) > -1) {
-          return;
+          return
         }
-        this.valueTitle.push(node[this.props.label]);
-        this.$emit("chooseNode", node);
-        return;
+        this.valueTitle.push(node[this.props.label])
+        this.$emit('chooseNode', node)
+        return
       } else {
         if (node.id >= 0) {
-          this.valueTitle = node[this.props.label];
+          this.valueTitle = node[this.props.label]
         }
-        this.$emit("chooseNode", node);
+        this.$emit('chooseNode', node)
       }
     },
     // 清除选中
     clearHandle() {
-      this.valueTitle = "";
-      this.valueId = null;
-      this.defaultExpandedKey = [];
-      this.clearSelected();
-      this.$emit("chooseNode", null);
+      this.valueTitle = ''
+      this.valueId = null
+      this.defaultExpandedKey = []
+      this.clearSelected()
+      this.$emit('chooseNode', null)
     },
     /* 清空选中样式 */
     clearSelected() {
-      let allNode = document.querySelectorAll("#tree-option .el-tree-node");
-      allNode.forEach(element => element.classList.remove("is-current"));
+      let allNode = document.querySelectorAll('#tree-option .el-tree-node')
+      allNode.forEach((element) => element.classList.remove('is-current'))
     }
   },
-
   watch: {
     categoryName() {
-      this.valueTitle = this.categoryName;
+      this.valueTitle = this.categoryName
     },
     categoryId() {
       this.$nextTick(() => {
-        this.initHandle();
-        this.$refs.selectTree.setCurrentKey(this.categoryId); // 设置默认选中
-      });
+        this.initHandle()
+        this.$refs.selectTree.setCurrentKey(this.categoryId) // 设置默认选中
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -74,7 +74,11 @@ export default {
           if (item.children.length > 0) r(item.children);
           if (!that.chooseNode.includes(item)) {
             if (item.id != 0) {
-              that.$set(item, "disabled", flag);
+              if (item.id > 0) {
+                that.$set(item, "disabled", flag);
+              } else {
+                that.$set(item, "disabled", true);
+              }
             }
           }
         });

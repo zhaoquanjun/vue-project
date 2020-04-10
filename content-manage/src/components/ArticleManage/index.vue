@@ -10,6 +10,7 @@
         :treeResult="treeResult"
         :list-options="articleSearchOptions"
         :isArticle="true"
+        :siteCount="siteCount"
         @chooseCategoryNode="chooseCategoryNode"
         @create="newCategory"
         @batchRemove="batchRemoveCategory"
@@ -24,6 +25,7 @@
         :selectCategory="selectCategory"
         :languages-list="languagesList"
         :count="count"
+        :siteCount="siteCount"
         :is-batch-header-show="isBatchHeaderShow"
         :languageCount="languageCount"
         :article-search-options="articleSearchOptions"
@@ -43,6 +45,7 @@
           :article-page-result="articlePageResult"
           :article-search-options="articleSearchOptions"
           :languages-list="languagesList"
+          :siteCount="siteCount"
           @getArticleList="getArticleList"
           @addArticle="addArticle"
           @batchMove="batchMoveNews"
@@ -76,6 +79,7 @@
             </div>
             <SelectTree
               v-if="isInvitationPanelShow"
+              :type="'news'"
               :categoryName="curArticleInfo.categoryName"
               :categoryId="curArticleInfo.categoryId"
               :tree-result="treeResult"
@@ -108,9 +112,6 @@
           @close="close"
           ref="infoModal"
         ></dialog-info-modal>
-        <!-- <dialog-translate-checked-modal
-      :checkModal="checkModal"
-    ></dialog-translate-checked-modal> -->
         <dialog-translate-language-modal
           :languageModal="languageModal"
           ref="languageModal"
@@ -126,6 +127,7 @@
   </el-container>
 </template>
 <script>
+import * as dashboardApi from '@/api/request/dashboardApi'
 import * as articleManageApi from "@/api/request/articleManageApi"
 import MTree from "@/components/common/MTree"
 import ContentHeader from "./ContentHeader"
@@ -209,12 +211,14 @@ export default {
       },
       source: null,
       type: "signal",
-      foreignLanguages: []
+      foreignLanguages: [],
+      siteCount: 2
     }
   },
   mounted() {
     this.getArticleList()
     this.getTreeAsync()
+    this._getSiteCount()
   },
   created() {
     this.keyupEnter()
@@ -286,6 +290,13 @@ export default {
   },
   methods: {
     // 翻译 start
+
+    async _getSiteCount() {
+      let { data, status } = await dashboardApi.getSiteCount()
+      if (status === 200) {
+        this.siteCount = data.siteCount
+      }
+    },
     /**
      * 编辑/修改
      */
