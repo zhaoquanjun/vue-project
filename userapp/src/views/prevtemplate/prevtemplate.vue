@@ -20,7 +20,7 @@
         },
         created(){
             console.log("query",this.item.flag)
-            this.src = `${httpSchema}${this.item.Domain}/prev/showtemplate/?flag=${this.item.flag}`
+            this.src = `//${this.item.Domain}/prev/showtemplate/?flag=${this.item.flag}`
             console.log(this.src)
         },
         methods: {
