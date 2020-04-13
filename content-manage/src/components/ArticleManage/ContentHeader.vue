@@ -125,8 +125,8 @@
             取消置顶
           </button>
           <button
-            v-show="siteCount === 2"
-            :class="{ disabled: languageCount > 2 }"
+            v-show="siteCountInfo.siteCount > 1 && siteCountInfo.initTypeCount > 1"
+            :class="{ disabled: languageCount > 1 }"
             class="cl-button cl-button--text_primary"
             @click="batchTranslate"
           >
@@ -162,7 +162,7 @@ export default {
     'selectCategory',
     'languagesList',
     'languageCount',
-    'siteCount'
+    'siteCountInfo'
   ],
   data() {
     return {
@@ -207,6 +207,9 @@ export default {
       ],
       orderValue: 'createtime'
     }
+  },
+  created() {
+    console.log(this.siteCountInfo)
   },
   methods: {
     getArticleList() {

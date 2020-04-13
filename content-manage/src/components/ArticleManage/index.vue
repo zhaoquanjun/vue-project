@@ -10,7 +10,7 @@
         :treeResult="treeResult"
         :list-options="articleSearchOptions"
         :isArticle="true"
-        :siteCount="siteCount"
+        :siteCountInfo="siteCountInfo"
         @chooseCategoryNode="chooseCategoryNode"
         @create="newCategory"
         @batchRemove="batchRemoveCategory"
@@ -25,7 +25,7 @@
         :selectCategory="selectCategory"
         :languages-list="languagesList"
         :count="count"
-        :siteCount="siteCount"
+        :siteCountInfo="siteCountInfo"
         :is-batch-header-show="isBatchHeaderShow"
         :languageCount="languageCount"
         :article-search-options="articleSearchOptions"
@@ -45,7 +45,7 @@
           :article-page-result="articlePageResult"
           :article-search-options="articleSearchOptions"
           :languages-list="languagesList"
-          :siteCount="siteCount"
+          :siteCountInfo="siteCountInfo"
           @getArticleList="getArticleList"
           @addArticle="addArticle"
           @batchMove="batchMoveNews"
@@ -213,7 +213,7 @@ export default {
       source: null,
       type: "signal",
       foreignLanguages: [],
-      siteCount: 2
+      siteCountInfo: {}
     }
   },
   mounted() {
@@ -291,11 +291,11 @@ export default {
   },
   methods: {
     // 翻译 start
-
     async _getSiteCount() {
       let { data, status } = await dashboardApi.getSiteCount()
       if (status === 200) {
-        this.siteCount = data.siteCount
+        this.siteCountInfo.siteCount = data.siteCount
+        this.siteCountInfo.initTypeCount = data.HasInitializedSiteCount
       }
     },
     /**

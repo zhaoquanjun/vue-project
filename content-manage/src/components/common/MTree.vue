@@ -54,7 +54,7 @@
                 data.id === treeNodeId &&
                 data.id === 0 &&
                 treeNodeId === 0 &&
-                siteCount === 1) ||
+                siteCountInfo.siteCount === 1) ||
                 (type === 'news' &&
                   data.id === treeNodeId &&
                   data.id !== 0 &&
@@ -126,7 +126,7 @@ export default {
     'isProduct',
     'isPopup',
     'type',
-    'siteCount'
+    'siteCountInfo'
   ], // 与产品分类不一致的地方 picSearchOptions isPopup是否为图片弹框
   components: {
     UploadCategoryPic

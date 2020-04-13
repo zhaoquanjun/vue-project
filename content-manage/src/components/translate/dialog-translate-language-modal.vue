@@ -27,7 +27,7 @@
         <!--  v-scrollBar -->
         <ul
           class="translate-list"
-          v-if="modalData && modalData.list && modalData.list.length > 1"
+          v-if="modalData && modalData.list && modalData.list.length > 0"
         >
           <li v-for="(item, index) in modalData.list" :key="index">
             <span
@@ -162,9 +162,6 @@ export default {
       set: function() {}
     }
   },
-  created() {
-    console.log(this.languageModal)
-  },
   methods: {
     showSelf() {
       this.dialogShow = true
@@ -184,6 +181,13 @@ export default {
       if (obj.list.length > 0) {
         this.$emit('languageConfirm', obj)
         this.hideSelf()
+      } else {
+        this.$notify({
+          customClass: 'notify-error', //  notify-success ||  notify-error
+          message: `没有可以翻译的${this.modalData.isNews ? '文章' : '产品'}`,
+          showClose: false,
+          duration: 1000
+        })
       }
     },
     _handleCancle() {
@@ -234,7 +238,7 @@ export default {
     _initModalData() {
       let data = JSON.parse(JSON.stringify(this.languageModal))
       if (data && data.list && data.list.length) {
-        data.list.map((item) => {
+        data.list.map(item => {
           return this.$set(
             item,
             'isChecked',
@@ -244,7 +248,7 @@ export default {
       }
 
       if (data && data.languages && data.languages.length) {
-        data.languages.map((item) => {
+        data.languages.map(item => {
           return this.$set(item, 'isChecked', true)
         })
       }

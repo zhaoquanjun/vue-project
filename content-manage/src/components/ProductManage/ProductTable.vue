@@ -97,7 +97,7 @@
         label="多语言"
         min-width="80"
         align="center"
-        v-if="siteCount > 1"
+        v-if="siteCountInfo.siteCount > 1"
       >
         <template slot-scope="scope">
           <div
@@ -262,7 +262,7 @@ export default {
     'articlePageResult',
     'articleSearchOptions',
     'languagesList',
-    'siteCount'
+    'siteCountInfo'
   ],
 
   data() {
@@ -315,6 +315,7 @@ export default {
       this.$emit('handleGetSignalTranslateSource', row, this.hasTranslateList)
     },
     _handleTranslateItem(e, row, type) {
+      if (type) return
       if (this.languagesList.length < 1) return false
       if (this.hasTranslateList.length > 0) {
         if (
@@ -326,7 +327,6 @@ export default {
             row.defaultSiteId
           )
       } else {
-        if (type) return
         this.$emit('handleGetSignalTranslateSource', row)
       }
     },

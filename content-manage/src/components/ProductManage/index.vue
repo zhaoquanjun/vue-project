@@ -9,7 +9,7 @@
         :is-product="true"
         :tree-result="treeResult"
         :list-options="productSearchOptions"
-        :siteCount="siteCount"
+        :siteCountInfo="siteCountInfo"
         @create="newCategory"
         @batchRemove="batchRemoveCategory"
         @rename="updateCategory"
@@ -27,7 +27,7 @@
         :article-search-options="productSearchOptions"
         :is-batch-header-show="isBatchHeaderShow"
         :idsList="idsList"
-        :siteCount="siteCount"
+        :siteCountInfo="siteCountInfo"
         :languageCount="languageCount"
         @contentTableList="contentTableList"
         @addArticle="addArticle"
@@ -43,7 +43,7 @@
           :article-search-options="productSearchOptions"
           :tree-result="treeResult"
           :languages-list="languagesList"
-        :siteCount="siteCount"
+          :siteCountInfo="siteCountInfo"
           @addArticle="addArticle"
           @contentTableList="contentTableList"
           @batchMove="batchMoveNews"
@@ -230,7 +230,7 @@ export default {
       source: null,
       type: 'signal',
       foreignLanguages: [],
-      siteCount: 2,
+      siteCountInfo: {},
       languageCount: 1
     }
   },
@@ -255,7 +255,7 @@ export default {
         if (arr.length > 0) {
           for (var i = 0; i < arr[0].children.length; i++) {
             const item = arr[0].children[i]
-            if (item.language === 'en-US') {
+            if (item.language === "zh-CN") {
               arr[0].children.splice(i, 1)
             }
           }
@@ -304,7 +304,8 @@ export default {
     async _getSiteCount() {
       let { data, status } = await dashboardApi.getSiteCount()
       if (status === 200) {
-        this.siteCount = data.siteCount
+        this.siteCountInfo.siteCount = data.siteCount
+        this.siteCountInfo.initTypeCount = data.HasInitializedSiteCount
       }
     },
     /**
@@ -424,8 +425,8 @@ export default {
               this.infoModal.additional.words = ''
               this.infoModal.additional.operate = ''
             }
-            this.getTreeAsync()
-            this.getArticleList()
+            this.getTree()
+            this.getArticleListAsync()
             this.$refs.infoModal.showSelf()
           }, 1000)
         }
@@ -459,8 +460,8 @@ export default {
               this.infoModal.additional.words = '关闭弹窗'
               this.infoModal.additional.operate = 'close'
             }
-            this.getTreeAsync()
-            this.getArticleList()
+            this.getTree()
+            this.getArticleListAsync()
             this.$refs.infoModal.showSelf()
           }, 1000)
         }
@@ -538,7 +539,6 @@ export default {
         }
       }
       this.languageCount = flag ? 1 : 2
-      console.log(list, this.languageCount)
     },
     /**
      * 获取可翻译外文（与已经翻译过的去重）
@@ -554,6 +554,7 @@ export default {
       this.languageModal.list = this.source
       this.languageModal.tree = this.translateTree
       this.languageModal.type = this.type
+      console.log(this.languageModal)
       this.$refs.languageModal.showSelf()
     },
     /**
@@ -884,7 +885,7 @@ export default {
 
     async getArticleListAsync(options) {
       this.$Loading.show()
-      let { data } = await productManageApi.getArticleList(
+      let { data } = await productManageApi.getProductList(
         (options = this.productSearchOptions)
       )
       this.$Loading.hide()
