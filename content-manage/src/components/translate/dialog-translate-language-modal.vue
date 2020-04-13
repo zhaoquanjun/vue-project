@@ -40,7 +40,11 @@
             >
               <i class="iconfont iconduihao"></i>
             </span>
-            <span class="item-title ellipsis">{{ item.title }}</span>
+            <span
+              class="item-title ellipsis"
+              :class="{ 'max-width': item.contentLength > 4000 }"
+              >{{ modalData.isNews ? item.title : item.name }}</span
+            >
             <span class="item-warning" v-show="item.contentLength > 4000"
               ><i class="iconfont iconicon-exclamationmark"></i>
               字数超过4000，请后续手工分段翻译【百度翻译】</span
@@ -136,8 +140,8 @@ export default {
       errorTipsShow: false,
       modalData: null,
       value: {
-        value: "",
-        label: ""
+        value: '',
+        label: ''
       }
     }
   },
@@ -158,6 +162,9 @@ export default {
       set: function() {}
     }
   },
+  created() {
+    console.log(this.languageModal)
+  },
   methods: {
     showSelf() {
       this.dialogShow = true
@@ -174,12 +181,13 @@ export default {
       obj.languagesList = this._getLastTranslateLanguages()
       obj.id = this.value.value
       obj.list = this._getLastTranslateList()
-      console.log(obj)
-      this.$emit("languageConfirm", obj)
-      this.hideSelf()
+      if (obj.list.length > 0) {
+        this.$emit('languageConfirm', obj)
+        this.hideSelf()
+      }
     },
     _handleCancle() {
-      this.$emit("cancle")
+      this.$emit('cancle')
       this.hideSelf()
     },
     _handleChooseNewsItem(o) {
@@ -195,7 +203,7 @@ export default {
         this.value.label = v.label
         this.value.value = v.id
         this.$refs.selectTree.blur()
-        document.getElementsByClassName("translate-id--area")[0].remove()
+        document.getElementsByClassName('translate-id--area')[0].remove()
       }
     },
     _setCurrentNode(nodeId) {
@@ -217,7 +225,7 @@ export default {
           this.value.value = this.modalData.tree[0].children[0].id
           this._setCurrentNode(this.value.value)
         } else {
-          this.value.label = "全部分类"
+          this.value.label = '全部分类'
           this.value.value = 0
           this._setCurrentNode(this.value.value)
         }
@@ -229,7 +237,7 @@ export default {
         data.list.map((item) => {
           return this.$set(
             item,
-            "isChecked",
+            'isChecked',
             item.contentLength <= 4000 ? true : false
           )
         })
@@ -237,7 +245,7 @@ export default {
 
       if (data && data.languages && data.languages.length) {
         data.languages.map((item) => {
-          return this.$set(item, "isChecked", true)
+          return this.$set(item, 'isChecked', true)
         })
       }
 
@@ -382,8 +390,12 @@ export default {
 
           .item-title {
             margin-right: 12px;
-            max-width: 100px;
+            max-width: 100%;
             user-select: none;
+          }
+
+          .max-width {
+            max-width: 100px;
           }
 
           .item-warning {

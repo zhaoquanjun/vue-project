@@ -40,6 +40,7 @@
                 <SelectTree
                   size="small"
                   placeholder="请选择"
+                  :type="'news'"
                   :categoryName="categoryName"
                   :categoryId="categoryId"
                   :tree-result="treeResult"

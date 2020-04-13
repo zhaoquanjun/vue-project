@@ -160,7 +160,7 @@ export default {
     async _getSiteCount() {
       let { data, status } = await dashboardApi.getSiteCount();
       if (status === 200) {
-        this.siteCount = data.SiteCount;
+        this.siteCount = data.siteCount;
       }
     },
     createCategory(displayName, thumbnailPicUrl, Language) {
