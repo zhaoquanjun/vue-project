@@ -5,7 +5,7 @@ import * as ajaxRequest from "../ajaxRequest";
 // 获取阿里云免登信息
 export const getAliyunSsoLoginInfo = para => {
   return ajaxRequest.post(
-    `${environment.memberManageApi}/api/v1/ssologin/GetAliyunSsoLoginInfo`,
+    `${environment.authorityUrl}/api/v1/ssologin/GetAliyunSsoLoginInfo`,
     para
   );
 };
@@ -18,7 +18,7 @@ export const sendAliyunMobileVerifyCode = phone => {
 // 首次免登用户发送验证码
 export const createAliyunSsoLoginUser = para => {
   return ajaxRequest.post(
-    `${environment.memberManageApi}/api/v1/ssologin/CreateAliyunSsoLoginUser`,
+    `${environment.authorityUrl}/api/v1/ssologin/CreateAliyunSsoLoginUser`,
     para
   );
 };

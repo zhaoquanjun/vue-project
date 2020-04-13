@@ -86,23 +86,6 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "",size:10 }) => {
     };
     return ajaxRequest.get('/api/v1/userInfo/GetBeInvitedUsers', params);
 }
-/**
- * 修改备注
- */
-
-/**
- * InterfaceAuthor : 恒东
- * 获取权限所有权限
- */
-// export const getUserCurrentAppPolicy = () => {
-//     return ajaxRequest.request({
-//         params: {
-//             appId: "823EB3BD-93F4-4655-B833-D604A6EF2022"
-//         },
-//         url: '/api/v1/appInfo/GetUserCurrentAppPolicy',
-//         method: 'get'
-//     });
-// }
 
 /**
  * 更新备注
@@ -110,11 +93,6 @@ export const getBeInvitedUsers = (options = { page: 1, phone: "",size:10 }) => {
  */
 
 export const updateUserRemark = (targetUserId, remark) => {
- 
-    let params = {
-        targetUserId: targetUserId,
-        remark: remark
-    };
     return ajaxRequest.put(`/api/v1/userInfo/UpdateUserRemark/${targetUserId}/${remark}`, );
 
 }
@@ -192,7 +170,7 @@ export const updateUserPhone = (phone,code) => {
         phone: phone,
         code: code
     }
-    return ajaxRequest.put(`api/v1/userInfo/UpdateUserPhone/${phone}/${code}`, params);
+    return ajaxRequest.put(`${environment.authorityUrl}api/v1/userInfo/UpdateUserPhone/${phone}/${code}`, params);
 }
 /**
  * InterfaceAuthor : xuzhuan
@@ -235,7 +213,7 @@ export const removeExternalUser = (provider) => {
  * 获取微信JsLogin参数
  */
 export const getWeChatJsLoginParams = (provider) => {
-    return ajaxRequest.get('/api/v1/userInfo/GetWeChatJsLoginParams');
+    return ajaxRequest.get(`${environment.authorityUrl}/api/v1/userInfo/GetWeChatJsLoginParams`);
 }
 /**
  * InterfaceAuthor : xuzhuan
@@ -261,7 +239,7 @@ export const updateUserPicture = (pictureUrl) => {
 }
 //设置密码
 export const updateUserPwd = (options) => {
-    return ajaxRequest.put(`/api/v1/userInfo/UpdateUserPwd`,options);
+    return ajaxRequest.put(`${environment.authorityUrl}/api/v1/userInfo/UpdateUserPwd`,options);
 }
 
 
