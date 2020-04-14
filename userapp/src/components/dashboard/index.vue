@@ -1,16 +1,17 @@
 <template>
-  <div class="home-page"
-       :style="{height:homeHeight}"
-       v-scrollBar>
-    <siteInfo ref="siteInfo"
-              :siteCount="siteCount"
-              :isSystem="isSystem"
-              @getSites="getSites"
-              v-show="isSiteInfoShow&&siteInfoList.length" />
+  <div class="home-page" :style="{ height: homeHeight }" v-scrollBar>
+    <siteInfo
+      ref="siteInfo"
+      :siteCount="siteCount"
+      :isSystem="isSystem"
+      @getSites="getSites"
+      v-show="isSiteInfoShow && siteInfoList.length"
+    />
     <content-num :contentNumber="contentNumber" />
     <memberManage :contentNumber="contentNumber" />
     <settingCenter :contentNumber="contentNumber" />
-    <div style="margin-top:40px;width:100px;height:1px;"></div><!-- 兼容safari 底部不显示问题 -->
+    <div style="margin-top:40px;width:100px;height:1px;"></div>
+    <!-- 兼容safari 底部不显示问题 -->
   </div>
 </template>
 
@@ -22,7 +23,7 @@ import settingCenter from "@/components/dashboard/settingCenter";
 
 import * as dashboardApi from "@/api/request/dashboardApi";
 export default {
-  data () {
+  data() {
     return {
       homeHeight: 0,
       siteInfoList: [],
@@ -37,8 +38,7 @@ export default {
     memberManage,
     settingCenter
   },
-  mounted () {
-
+  mounted() {
     this.$nextTick(() => {
       window.addEventListener("resize", this.resizeWindow);
       document.getElementsByClassName("home-page")[0].style.height =
@@ -47,31 +47,31 @@ export default {
   },
   methods: {
     //  获取站点列表
-    async getSites () {
+    async getSites() {
       let { data } = await dashboardApi.getSites();
       this.siteInfoList = data;
       this.$refs.siteInfo.getSiteInfo(this.siteInfoList);
     },
-    async getContentInfo () {
+    async getContentInfo() {
       let { data } = await dashboardApi.getContentInfo();
       this.contentNumber = data;
       this.siteCount = this.contentNumber.siteMaxCount;
     },
-    async amIAdmin () {
+    async amIAdmin() {
       let { data } = await dashboardApi.amIAdmin();
       this.isSystem = data;
     },
-    resizeWindow () {
+    resizeWindow() {
       document.getElementsByClassName("home-page")[0].style.height =
         window.innerHeight - 50 + "px";
     }
   },
   computed: {
-    isSiteInfoShow () {
+    isSiteInfoShow() {
       return this.$store.state.dashboard.isSiteInfoShow;
     },
-    appId () {
-      let id = this.$store.state.dashboard.appId
+    appId() {
+      let id = this.$store.state.dashboard.appId;
       if (id.toString().length > 1) {
         this.$Loading.show();
         if (this.isSiteInfoShow) {
@@ -85,22 +85,18 @@ export default {
   },
 
   watch: {
-    appId () {
-
-    },
-    isSiteInfoShow () {
+    appId() {},
+    isSiteInfoShow() {
       if (this.isSiteInfoShow) {
         this.getSites();
       }
     }
   },
-  beforeDestroy () {
-    window.removeEventListener("resize", this.resizeWindow)
+  beforeDestroy() {
+    window.removeEventListener("resize", this.resizeWindow);
   }
 };
 </script>
-<style scoped>
-</style>
 <style lang="scss" scoped>
 .home-page {
   padding: 0 16px;
