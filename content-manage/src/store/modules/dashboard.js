@@ -1,5 +1,5 @@
 import { updateAppIdToCookie, getSliderMenuList } from "@/api/request/user";
-import { getCurSiteId, getAutoTranslateConfig, getSites } from "@/api/request/dashboardApi";
+import { getCurSiteId, getAutoTranslateConfig, showTranslateSwitch } from "@/api/request/dashboardApi";
 
 import { setLocal } from "@/libs/local";
 import { setCookie } from "@/libs/cookie";
@@ -32,7 +32,7 @@ const dashboard = {
     hasRules: false,
     curCode: "",
     isContentwrite: false,
-    siteList: [],
+    autoTranslateShow: false,
     autoTranslateSwitch: false,
     unreadCountStatus: false
   },
@@ -53,6 +53,9 @@ const dashboard = {
     set_authList(state, a) {
       state.authList = a;
       state.hasRules = true;
+    },
+    set_autoTranslateShow(state, status) {
+      state.autoTranslateShow = status;
     },
     set_autoTranslateSwitch(state, status) {
       state.autoTranslateSwitch = status;
@@ -80,9 +83,11 @@ const dashboard = {
       data.menus.forEach(async item => {
         // 判断是否有设计器权限
         if (item.code === "design") {
-          let { data } = await getSites();
-          state.siteList = data
-          if (data.length > 1) {
+          // 是否展示自动翻译开关
+          let { data } = await showTranslateSwitch();
+          commit("set_autoTranslateShow", data)
+          if (data) {
+            // 获取翻译开关状态
             let { data } = await getAutoTranslateConfig();
             commit("set_autoTranslateSwitch", data)
           }

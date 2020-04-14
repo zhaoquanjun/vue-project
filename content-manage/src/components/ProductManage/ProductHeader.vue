@@ -131,13 +131,16 @@
             取消置顶
           </button>
           <button
+            v-show="
+              siteCountInfo.siteCount > 1 && siteCountInfo.initTypeCount > 1
+            "
+            :class="{ disabled: languageCount > 1 }"
             class="cl-button cl-button--text_primary"
             @click="handleCommand('translate')"
           >
             翻译
           </button>
           <button
-            v-show="isShowTranslate"
             class="cl-button cl-button--text_danger"
             @click="batchRemove(1, true)"
           >
@@ -164,94 +167,95 @@
 <script>
 export default {
   props: [
-    "articleSearchOptions",
-    "isBatchHeaderShow",
-    "count",
-    "idsList",
-    "selectCategory",
-    "languageList"
+    'articleSearchOptions',
+    'isBatchHeaderShow',
+    'count',
+    'idsList',
+    'selectCategory',
+    'languageList',
+    'siteCountInfo',
+    'languageCount'
   ],
   data() {
     return {
       ascSort: false,
       descSort: true,
-      isShowTranslate: true,
       statusOptions: [
         {
-          statusValue: "",
-          statusLabel: "全部"
+          statusValue: '',
+          statusLabel: '全部'
         },
         {
-          statusValue: "true",
-          statusLabel: "上架"
+          statusValue: 'true',
+          statusLabel: '上架'
         },
         {
-          statusValue: "false",
-          statusLabel: "下架"
+          statusValue: 'false',
+          statusLabel: '下架'
         }
       ],
-      statusValue: "",
+      statusValue: '',
       orderOptions: [
         {
-          orderValue: "CreateTime",
-          orderLabel: "创建时间"
+          orderValue: 'CreateTime',
+          orderLabel: '创建时间'
         }
       ],
-      orderValue: "CreateTime",
+      orderValue: 'CreateTime',
       topOptions: [
         {
-          orderValue: "",
-          orderLabel: "全部"
+          orderValue: '',
+          orderLabel: '全部'
         },
         {
           orderValue: 1,
-          orderLabel: "是"
+          orderLabel: '是'
         },
         {
           orderValue: 0,
-          orderLabel: "否"
+          orderLabel: '否'
         }
       ],
-      topValue: ""
-    };
+      topValue: ''
+    }
   },
   methods: {
     getArticleList() {
-      this.$emit("contentTableList");
+      this.$emit('contentTableList')
     },
     searchEnterFun() {
-      this.getArticleList();
+      this.getArticleList()
     },
     changeStatus(value) {
-      this.articleSearchOptions.isOnSell = value;
-      this.getArticleList();
+      this.articleSearchOptions.isOnSell = value
+      this.getArticleList()
     },
     changeOrderCondition(value) {
-      this.articleSearchOptions.orderByType = value;
-      this.getArticleList();
+      this.articleSearchOptions.orderByType = value
+      this.getArticleList()
     },
     changeStickStatus(value) {
       if (isNaN(parseInt(value))) {
-        value = null;
+        value = null
       } else {
-        value = !!value;
+        value = !!value
       }
-      this.articleSearchOptions.isTop = value;
-      this.getArticleList();
+      this.articleSearchOptions.isTop = value
+      this.getArticleList()
     },
     switchIsDesc(flag) {
-      if (flag === "asc") {
-        this.ascSort = true;
-        this.descSort = !this.ascSort;
-        console.log(this.ascSort);
-        this.articleSearchOptions.isDescending = false;
+      if (flag === 'asc') {
+        this.ascSort = true
+        this.descSort = !this.ascSort
+        console.log(this.ascSort)
+        this.articleSearchOptions.isDescending = false
       } else {
-        this.descSort = true;
-        this.ascSort = !this.descSort;
-        this.articleSearchOptions.isDescending = true;
+        this.descSort = true
+        this.ascSort = !this.descSort
+        this.articleSearchOptions.isDescending = true
       }
 
-      this.getArticleList();
+      this.getArticleList()
     },
     importArticle() {
       // this.push({
@@ -259,7 +263,7 @@ export default {
       // })
     },
     addArticle() {
-      this.$emit("addArticle");
+      this.$emit('addArticle')
     },
     //////批量操作
     // 批量 上下架
@@ -268,8 +272,8 @@ export default {
         switchType: type,
         flag: flag,
         idList: this.idsList
-      };
-      this.$emit("batchSwitchStatus", options);
+      }
+      this.$emit('batchSwitchStatus', options)
     },
     //批量删除
     batchRemove(type, flag) {
@@ -277,8 +281,8 @@ export default {
         switchType: type,
         flag: flag,
         idList: this.idsList
-      };
-      this.$emit("batchSwitchStatus", options);
+      }
+      this.$emit('batchSwitchStatus', options)
     },
 
     // 批量置顶 or 取消置顶
@@ -287,64 +291,50 @@ export default {
         switchType: type,
         flag: flag,
         idList: this.idsList
-      };
-      this.$emit("batchSwitchStatus", options);
+      }
+      this.$emit('batchSwitchStatus', options)
     },
 
     // 批量分类设置 移动  ok
     batchclassifySet() {
-      this.$emit("batchMove", "batchmove");
+      this.$emit('batchMove', 'batchmove')
     },
     // 批量设置访问权限
     batchViewAuth() {
-      this.$emit("batchMove", "permission");
+      this.$emit('batchMove', 'permission')
     },
     // 批量复制
     batchCopy() {
-      this.$emit("batchMove", "batchCopy");
+      this.$emit('batchMove', 'batchCopy')
     },
     // 批量翻译
     batchTranslate() {
-      this.$emit("handleGetMoreTranslateSource");
+      this.$emit('handleGetMoreTranslateSource')
     },
     handleCommand(command) {
       switch (command) {
-        case "move":
-          this.batchclassifySet();
-          break;
-        case "top":
-          this.batchTop(2, false);
-          break;
-        case "cancelTop":
-          this.batchTop(2, true);
-          break;
-        case "permission":
-          this.batchViewAuth();
-          break;
-        case "translate":
-          this.batchTranslate();
-      }
-    }
-  },
-  watch: {
-    selectCategory() {
-      if (
-        (this.selectCategory.id === 0 ||
-          this.selectCategory.language === "zh-CN") &&
-        this.languagesList &&
-        this.languagesList.length > 0
-      ) {
-        this.isShowTranslate = true;
-      } else {
-        this.isShowTranslate = false;
+        case 'move':
+          this.batchclassifySet()
+          break
+        case 'top':
+          this.batchTop(2, false)
+          break
+        case 'cancelTop':
+          this.batchTop(2, true)
+          break
+        case 'permission':
+          this.batchViewAuth()
+          break
+        case 'translate':
+          this.batchTranslate()
       }
     }
   }
-};
+}
 </script>
 
 <style <style lang="scss" scoped>
-@import "@/styles/content-manage/manage-head.scss";
+@import '@/styles/content-manage/manage-head.scss';
 
 .btn-black-notboard {
   padding: 6px;
@@ -379,9 +369,16 @@ export default {
 .head-handle-btn {
   padding-left: 30px;
 }
-.bach-hanlder button {
-  padding: 9px 16px;
-  margin: 0;
-  min-width: 60px;
+.bach-hanlder {
+  button {
+    padding: 9px 16px;
+    margin: 0;
+    min-width: 60px;
+  }
+
+  .disabled {
+    color: $--color-text-regular;
+    cursor: not-allowed;
+  }
 }
 </style>

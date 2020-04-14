@@ -1,13 +1,13 @@
 <template>
-    <div>
-       <mailServer></mailServer>
-    </div>
+  <div>
+    <mailServer></mailServer>
+  </div>
 </template>
 <script>
-import MailServer from '@/components/websiteManage/mailServer.vue'
+import MailServer from "@/components/websiteManage/email/mailServer.vue";
 export default {
-    components:{
-        MailServer
-    }
-}
+  components: {
+    MailServer
+  }
+};
 </script>

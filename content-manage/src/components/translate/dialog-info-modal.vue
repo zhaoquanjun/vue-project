@@ -189,6 +189,7 @@ export default {
         padding-right: 30px;
         line-height: 26px;
         font-size: $--font-size-base;
+        overflow: hidden;
       }
     }
 

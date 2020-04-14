@@ -40,6 +40,7 @@
                 <SelectTree
                   size="small"
                   placeholder="请选择"
+                  :type="'news'"
                   :categoryName="categoryName"
                   :categoryId="categoryId"
                   :tree-result="treeResult"
@@ -254,7 +255,7 @@ export default {
         metaDescription: "",
         pictureUrl: "",
         defaultSiteId: 0,
-        Language: this.$route.query.language
+        Language: this.$route.query.language || "zh-CN"
       },
       rules: {
         title: [
@@ -331,9 +332,10 @@ export default {
       this.articleDetail.metaKeywords.splice(index, 1);
     },
     async getTreeAsync() {
-      let { data } = await articleManageApi.getArticleCategory();
+      let { data } = await articleManageApi.getArticleCategory({
+        language: this.articleDetail.Language
+      });
       this.treeResult = data;
-
       var categoryName = this.$route.query.categoryName;
       if (categoryName != null || categoryName != undefined) {
         this.categoryName = categoryName;
@@ -366,8 +368,10 @@ export default {
     },
     //选择移动分类时的节点
     chooseNode(node) {
-      this.articleDetail.categoryId = node.id;
-      this.categoryName = node.label;
+      if (node.id >= 0) {
+        this.articleDetail.categoryId = node.id;
+        this.categoryName = node.label;
+      }
     },
     // 重置表单
     resetForm(formName) {
@@ -392,7 +396,12 @@ export default {
     },
     // 新建确认保存
     async _createSave() {
-      let { status } = await articleManageApi.createArticle(this.articleDetail);
+      let { status, data } = await articleManageApi.createArticle(
+        this.articleDetail
+      );
+      this.NewId = data;
+      this.articleDetail.NewId = data;
+      console.log(this.NewId, "-=-=-=");
       status === 200 && this._complateCreate();
     },
     // 编辑保存
@@ -436,6 +445,7 @@ export default {
             this.$emit("changePreviewId", "", 0);
             this.$route.query.id = false;
           } else {
+            console.log(this.NewId, "-=-=-=");
             this.articleDetail.NewId = this.$route.query.id || this.NewId;
             this.$emit("changeSaveWay", true);
             this.$emit(

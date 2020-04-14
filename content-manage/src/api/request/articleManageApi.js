@@ -57,8 +57,8 @@ export const batchCopy = (targetCategoryId, idList) => {
 /**
  * 获取文章分类
  */
-export const getArticleCategory = () => {
-  return ajaxRequest.get(`/api/v1/NewsCategory/GetTree`);
+export const getArticleCategory = options => {
+  return ajaxRequest.get(`/api/v1/NewsCategory/GetTree`, options);
 };
 
 /**

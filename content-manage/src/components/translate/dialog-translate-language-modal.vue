@@ -26,9 +26,8 @@
         </p>
         <!--  v-scrollBar -->
         <ul
-          v-scrollBar
-          class="translate-list el-scrollbar"
-          v-if="modalData && modalData.list && modalData.list.length > 1"
+          class="translate-list"
+          v-if="modalData && modalData.list && modalData.list.length > 0"
         >
           <li v-for="(item, index) in modalData.list" :key="index">
             <span
@@ -41,7 +40,11 @@
             >
               <i class="iconfont iconduihao"></i>
             </span>
-            <span class="item-title ellipsis">{{ item.title }}</span>
+            <span
+              class="item-title ellipsis"
+              :class="{ 'max-width': item.contentLength > 4000 }"
+              >{{ modalData.isNews ? item.title : item.name }}</span
+            >
             <span class="item-warning" v-show="item.contentLength > 4000"
               ><i class="iconfont iconicon-exclamationmark"></i>
               字数超过4000，请后续手工分段翻译【百度翻译】</span
@@ -137,71 +140,80 @@ export default {
       errorTipsShow: false,
       modalData: null,
       value: {
-        value: "",
-        label: ""
+        value: '',
+        label: ''
       }
-    };
+    }
   },
   computed: {
     languagesSelectedArr: {
       get: function() {
-        let arr = [];
+        let arr = []
         if (this.modalData.languages.length > 0) {
           for (var i = 0; i < this.modalData.languages.length; i++) {
-            const item = this.modalData.languages[i];
+            const item = this.modalData.languages[i]
             if (item.isChecked) {
-              arr.push(item);
+              arr.push(item)
             }
           }
         }
-        return arr;
+        return arr
       },
       set: function() {}
     }
   },
   methods: {
     showSelf() {
-      this.dialogShow = true;
+      this.dialogShow = true
       this.$nextTick(() => {
-        console.log(this.languageModal);
-        this._initModalData();
-        this._initSelectboxValue();
-      });
+        this._initModalData()
+        this._initSelectboxValue()
+      })
     },
     hideSelf() {
-      this.dialogShow = false;
+      this.dialogShow = false
     },
     _handleConfirm() {
-      let obj = {};
-      obj.languagesList = this._getLastTranslateLanguages();
-      obj.id = this.value.value;
-      obj.list = this._getLastTranslateList();
-      console.log(obj);
-      this.$emit("languageConfirm", obj);
-      this.hideSelf();
+      let obj = {}
+      obj.languagesList = this._getLastTranslateLanguages()
+      obj.id = this.value.value
+      obj.list = this._getLastTranslateList()
+      if (obj.list.length > 0) {
+        this.$emit('languageConfirm', obj)
+        this.hideSelf()
+      } else {
+        this.$notify({
+          customClass: 'notify-error', //  notify-success ||  notify-error
+          message: `没有可以翻译的${this.modalData.isNews ? '文章' : '产品'}`,
+          showClose: false,
+          duration: 1000
+        })
+      }
     },
     _handleCancle() {
-      this.$emit("cancle");
-      this.hideSelf();
+      this.$emit('cancle')
+      this.hideSelf()
     },
     _handleChooseNewsItem(o) {
       if (o.contentLength <= 4000) {
-        o.isChecked = !o.isChecked;
+        o.isChecked = !o.isChecked
       }
     },
     _handleChooseLanguagesItem(o) {
-      o.isChecked = !o.isChecked;
+      o.isChecked = !o.isChecked
     },
     _handleTreeNodeClick(v) {
-      this.value.label = v.label;
-      this.value.value = v.id;
-      this.$refs.selectTree.blur();
-      document.getElementsByClassName("translate-id--area")[0].remove();
+      if (v.id >= 0) {
+        this.value.label = v.label
+        this.value.value = v.id
+        this.$refs.selectTree.blur()
+        document.getElementsByClassName('translate-id--area')[0].remove()
+      }
     },
     _setCurrentNode(nodeId) {
       this.$nextTick(() => {
-        this.$refs.tree.setCurrentKey(nodeId);
-      });
+        this.$refs.tree.setCurrentKey(nodeId)
+      })
     },
     _initSelectboxValue() {
       if (
@@ -209,52 +221,75 @@ export default {
         this.modalData.languages.length === 1 &&
         this.modalData.tree.length > 0
       ) {
-        this.value.label = this.modalData.tree[0].label;
-        this.value.value = this.modalData.tree[0].id;
-        this._setCurrentNode(this.value.value);
+        if (
+          this.modalData.tree[0].children &&
+          this.modalData.tree[0].children.length
+        ) {
+          this.value.label = this.modalData.tree[0].children[0].label
+          this.value.value = this.modalData.tree[0].children[0].id
+          this._setCurrentNode(this.value.value)
+        } else {
+          this.value.label = '全部分类'
+          this.value.value = 0
+          this._setCurrentNode(this.value.value)
+        }
       }
     },
     _initModalData() {
-      let data = JSON.parse(JSON.stringify(this.languageModal));
+      let data = JSON.parse(JSON.stringify(this.languageModal))
       if (data && data.list && data.list.length) {
         data.list.map(item => {
           return this.$set(
             item,
-            "isChecked",
+            'isChecked',
             item.contentLength <= 4000 ? true : false
-          );
-        });
+          )
+        })
       }
 
       if (data && data.languages && data.languages.length) {
         data.languages.map(item => {
-          return this.$set(item, "isChecked", true);
-        });
+          return this.$set(item, 'isChecked', true)
+        })
       }
-      this.modalData = data;
+
+      if (data && data.tree && data.tree.length) {
+        this._setTreeNodeDisabled(data.tree)
+      }
+      this.modalData = data
+    },
+    _setTreeNodeDisabled(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].id < 0) {
+          data[i].disabled = true
+        }
+        if (data[i].children && data[i].children.length > 0) {
+          this._setTreeNodeDisabled(data[i].children)
+        }
+      }
     },
     _getLastTranslateList() {
-      let arr = [];
+      let arr = []
       for (var i = 0; i < this.modalData.list.length; i++) {
-        const item = this.modalData.list[i];
+        const item = this.modalData.list[i]
         if (item.isChecked) {
-          arr.push(item.id);
+          arr.push(item.id)
         }
       }
-      return arr;
+      return arr
     },
     _getLastTranslateLanguages() {
-      let arr = [];
+      let arr = []
       for (var i = 0; i < this.modalData.languages.length; i++) {
-        const item = this.modalData.languages[i];
+        const item = this.modalData.languages[i]
         if (item.isChecked) {
-          arr.push(item.languages);
+          arr.push(item.languages)
         }
       }
-      return arr;
+      return arr
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -312,6 +347,7 @@ export default {
         min-height: 60px;
         border-radius: $--border-radius-base;
         border: 1px solid $--border-color-base;
+        overflow: auto;
 
         li {
           margin-bottom: 16px;
@@ -358,8 +394,12 @@ export default {
 
           .item-title {
             margin-right: 12px;
-            max-width: 100px;
+            max-width: 100%;
             user-select: none;
+          }
+
+          .max-width {
+            max-width: 100px;
           }
 
           .item-warning {

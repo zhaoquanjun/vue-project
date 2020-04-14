@@ -125,7 +125,8 @@
             取消置顶
           </button>
           <button
-            :class="{ disabled: languageCount === 2 }"
+            v-show="siteCountInfo.siteCount > 1 && siteCountInfo.initTypeCount > 1"
+            :class="{ disabled: languageCount > 1 }"
             class="cl-button cl-button--text_primary"
             @click="batchTranslate"
           >
@@ -155,12 +156,13 @@
 <script>
 export default {
   props: [
-    "articleSearchOptions",
-    "isBatchHeaderShow",
-    "count",
-    "selectCategory",
-    "languagesList",
-    "languageCount"
+    'articleSearchOptions',
+    'isBatchHeaderShow',
+    'count',
+    'selectCategory',
+    'languagesList',
+    'languageCount',
+    'siteCountInfo'
   ],
   data() {
     return {
@@ -169,75 +171,78 @@ export default {
       isShowTranslate: true,
       statusOptions: [
         {
-          statusValue: "",
-          statusLabel: "全部"
+          statusValue: '',
+          statusLabel: '全部'
         },
         {
-          statusValue: "true",
-          statusLabel: "上线"
+          statusValue: 'true',
+          statusLabel: '上线'
         },
         {
-          statusValue: "false",
-          statusLabel: "下线"
+          statusValue: 'false',
+          statusLabel: '下线'
         }
       ],
-      statusValue: "",
+      statusValue: '',
       topOptions: [
         {
-          topValue: "",
-          topLabel: "全部"
+          topValue: '',
+          topLabel: '全部'
         },
         {
-          topValue: "true",
-          topLabel: "是"
+          topValue: 'true',
+          topLabel: '是'
         },
         {
-          topValue: "false",
-          topLabel: "否"
+          topValue: 'false',
+          topLabel: '否'
         }
       ],
-      topValue: "",
+      topValue: '',
       orderOptions: [
         {
-          orderValue: "createtime",
-          orderLabel: "创建时间"
+          orderValue: 'createtime',
+          orderLabel: '创建时间'
         }
       ],
-      orderValue: "createtime"
-    };
+      orderValue: 'createtime'
+    }
+  },
+  created() {
+    console.log(this.siteCountInfo)
   },
   methods: {
     getArticleList() {
-      this.$emit("getArticleList");
+      this.$emit('getArticleList')
     },
     searchEnterFun() {
-      this.getArticleList();
+      this.getArticleList()
     },
     changeStatus(value) {
-      this.articleSearchOptions.publishStatus = value;
-      this.getArticleList();
+      this.articleSearchOptions.publishStatus = value
+      this.getArticleList()
     },
     changeOrderCondition(value) {
-      this.articleSearchOptions.newsOrderColumns = value;
-      this.getArticleList();
+      this.articleSearchOptions.newsOrderColumns = value
+      this.getArticleList()
     },
     changeStickStatus(value) {
-      this.articleSearchOptions.topStatus = value;
-      this.getArticleList();
+      this.articleSearchOptions.topStatus = value
+      this.getArticleList()
     },
 
     switchIsDesc(flag) {
-      if (flag === "asc") {
-        this.ascSort = true;
-        this.descSort = !this.ascSort;
-        this.articleSearchOptions.isDescending = false;
+      if (flag === 'asc') {
+        this.ascSort = true
+        this.descSort = !this.ascSort
+        this.articleSearchOptions.isDescending = false
       } else {
-        this.descSort = true;
-        this.ascSort = !this.descSort;
-        this.articleSearchOptions.isDescending = true;
+        this.descSort = true
+        this.ascSort = !this.descSort
+        this.articleSearchOptions.isDescending = true
       }
 
-      this.getArticleList();
+      this.getArticleList()
     },
     importArticle() {
       // this.push({
@@ -245,64 +250,64 @@ export default {
       // })
     },
     addArticle() {
-      this.$emit("addArticle");
+      this.$emit('addArticle')
     },
 
     //////批量操作
     // 批量 上下架
     batchPublish(flag) {
-      this.$emit("batchPublish", null, flag);
+      this.$emit('batchPublish', null, flag)
     },
     // 批量翻译
     batchTranslate() {
-      this.$emit("handleGetMoreTranslateSource");
+      this.$emit('handleGetMoreTranslateSource')
     },
     //批量删除
     batchRemove() {
-      this.$emit("batchRemove");
+      this.$emit('batchRemove')
     },
 
     // 批量置顶 or 取消置顶
     batchTop(flag) {
-      this.$emit("batchTop", null, flag);
+      this.$emit('batchTop', null, flag)
     },
 
     // 批量分类设置 移动  ok
     batchclassifySet() {
-      this.$emit("changeOperateName", "移动");
-      this.$emit("batchMove", null, true);
+      this.$emit('changeOperateName', '移动')
+      this.$emit('batchMove', null, true)
     },
     // 批量设置访问权限
     batchViewAuth() {
-      this.$emit("batchMove", "permission");
+      this.$emit('batchMove', 'permission')
     },
     // 批量复制
     batchCopy() {
-      this.$emit("changeOperateName", "复制");
-      this.$emit("batchCopy", null, true);
+      this.$emit('changeOperateName', '复制')
+      this.$emit('batchCopy', null, true)
     },
     handleCommand(command) {
       switch (command) {
-        case "move":
-          this.batchclassifySet();
-          break;
-        case "top":
-          this.batchTop(false);
-          break;
-        case "cancelTop":
-          this.batchTop(true);
-          break;
-        case "permission":
-          this.batchViewAuth();
-          break;
+        case 'move':
+          this.batchclassifySet()
+          break
+        case 'top':
+          this.batchTop(false)
+          break
+        case 'cancelTop':
+          this.batchTop(true)
+          break
+        case 'permission':
+          this.batchViewAuth()
+          break
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/content-manage/manage-head.scss";
+@import '@/styles/content-manage/manage-head.scss';
 
 .btn-black-notboard {
   padding: 6px;

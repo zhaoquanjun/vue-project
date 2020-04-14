@@ -60,7 +60,7 @@
             <div>
               <div class="itemSiteName">{{item.siteName}}</div>
               <a
-                class="itemSiteDomain"
+                class="itemSiteDomain ellipsis"
                 :href="`//${item.secondDomain}`"
                 target="_blank"
               >{{item.secondDomain}}</a>
@@ -89,7 +89,8 @@ export default {
       secondDomain: "",
       language: "",
       changeSiteShow: false,
-      siteInfoList: []
+      siteInfoList: [],
+      curSiteinfo: {}
     };
   },
   mounted() {
@@ -157,6 +158,12 @@ export default {
     async getSites() {
       let { data } = await dashboardApi.getSites();
       this.siteInfoList = data;
+      this.siteInfoList.forEach((item) => {
+        if(item.siteId == this.curSiteId){
+          this.curSiteinfo = item;
+          this.$emit("getCurSiteinfo", this.curSiteinfo);
+        }
+      });
     },
     /**
      * 显示切换弹框

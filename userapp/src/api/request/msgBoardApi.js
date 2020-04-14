@@ -47,3 +47,22 @@ export const updateStatus = (SiteId, leavewordId, IsUpdateStatus, Status) => {
 export const removeMsg = (SiteId, leavewordIds) => {
   return ajaxRequest._delete(`${environment.memberManageApi}/api/v1/leaveword/delete?leavewordIds=${leavewordIds}&SiteId=${SiteId}`)
 }
+
+/**
+ * 获取钉钉配置
+ */
+export const getdingtalk = () => {
+  return ajaxRequest.get(`${environment.memberManageApi}/api/v1/dingtalk/get`)
+}
+/**
+ * 删除留言
+ */
+export const deletedingtalk = () => {
+  return ajaxRequest._delete(`${environment.memberManageApi}/api/v1/dingtalk/delete`)
+}
+/**
+ * 配置钉钉
+ */
+export const setdingtalk = (para) => {
+  return ajaxRequest.post(`${environment.memberManageApi}/api/v1/dingtalk/set`, para)
+}

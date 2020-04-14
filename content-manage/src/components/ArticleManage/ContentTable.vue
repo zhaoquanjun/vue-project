@@ -85,7 +85,7 @@
       <el-table-column min-width="100" prop="isOnSell" label="状态">
         <template slot-scope="scope">
           <span style="padding-right: 8px;">{{
-            scope.row.isPublish ? "已上线" : "未上线"
+            scope.row.isPublish ? '已上线' : '未上线'
           }}</span>
           <div
             class="el-switch"
@@ -99,15 +99,18 @@
         prop="isPublishPrt"
         label="多语言"
         min-width="80"
-        v-if="languagesList.length > 0"
+        align="center"
+        v-if="siteCountInfo.siteCount > 1"
       >
         <template slot-scope="scope">
           <div
-            style="width: 100%; text-align: right; display: flex; justify-content: flex-end; align-items: center;"
+            style="width: 100%; display: flex; justify-content: center; align-items: center;"
           >
-            <span class="ellipsis">{{
-              scope.row.language ? scope.row.language : ""
-            }}</span>
+            <span
+              class="ellipsis"
+              style="min-width: 50px; max-width: 100px; text-align: right;"
+              >{{ scope.row.languageStr ? scope.row.languageStr : '' }}</span
+            >
             <span
               class="translate-icon"
               :class="{
@@ -146,7 +149,7 @@
                   class="view-item"
                   v-for="(item, index) in hasTranslateList"
                   :key="index"
-                  @click="_handleViewTranslatedNews(item)"
+                  @click="_handleViewTranslatedNews(item, scope.row)"
                 >
                   {{ item.languageStr }}
                 </li>
@@ -250,276 +253,281 @@
 </template>
 
 <script>
-import * as articleManageApi from "@/api/request/articleManageApi";
+import * as articleManageApi from '@/api/request/articleManageApi'
 
 export default {
-  props: ["articlePageResult", "articleSearchOptions", "languagesList"],
+  props: [
+    'articlePageResult',
+    'articleSearchOptions',
+    'languagesList',
+    'siteCountInfo'
+  ],
 
   data() {
     return {
-      defaultImg: require("img/content-default-pic.png"),
+      defaultImg: require('img/content-default-pic.png'),
       multipleSelection: [],
       operateList: [
-        { name: "移动", flag: "move" },
-        { name: "复制", flag: "copy" },
-        { name: "翻译", flag: "translate" },
-        { name: "下线", flag: "isOnsell" },
-        { name: "置顶", flag: "stick" },
-        { name: "删除", flag: "delete" }
+        { name: '移动', flag: 'move' },
+        { name: '复制', flag: 'copy' },
+        { name: '翻译', flag: 'translate' },
+        { name: '下线', flag: 'isOnsell' },
+        { name: '置顶', flag: 'stick' },
+        { name: '删除', flag: 'delete' }
       ],
-      row: "",
+      row: '',
       tableHeight: 500,
       loadingShow: true,
-      tableData: "",
+      tableData: '',
       hasTranslateList: [],
       timer: null
-    };
+    }
   },
   mounted() {
-    this.tableData = this.articlePageResult;
-    document.addEventListener("click", () => {
+    this.tableData = this.articlePageResult
+    document.addEventListener('click', () => {
       this.$nextTick(() => {
         if (this.$refs.operateSection)
-          this.$refs.operateSection.style.display = "none";
-      });
-    });
+          this.$refs.operateSection.style.display = 'none'
+      })
+    })
 
     this.$nextTick(() => {
-      window.addEventListener("resize", () => {
-        this.tableHeight = window.innerHeight - 260;
-      });
-      this.tableHeight = window.innerHeight - 260;
-    });
-    window.onImgError = ele => {
-      ele.src = ele.attributes["src"] = this.defaultImg;
-    };
+      window.addEventListener('resize', () => {
+        this.tableHeight = window.innerHeight - 260
+      })
+      this.tableHeight = window.innerHeight - 260
+    })
+    window.onImgError = (ele) => {
+      ele.src = ele.attributes['src'] = this.defaultImg
+    }
   },
   methods: {
     // 给行添加索引
     tableRowClassName({ row, rowIndex }) {
-      row.index = rowIndex;
+      row.index = rowIndex
     },
-    _handleViewTranslatedNews(o) {
-      this.$emit("handleEditArticle", o);
+    _handleViewTranslatedNews(o, row) {
+      this.preview(o.id, row.defaultSiteId)
     },
     _handleTranslateToMore(row) {
-      this.$emit("handleGetSignalTranslateSource", row, this.hasTranslateList);
+      this.$emit('handleGetSignalTranslateSource', row, this.hasTranslateList)
     },
     _handleTranslateItem(e, row, type) {
-      if (this.languagesList.length < 1) return false;
+       if (type) return
+      if (this.languagesList.length < 1) return
       if (this.hasTranslateList.length > 0) {
         if (
           this.hasTranslateList.length === 1 &&
           this.languagesList.length === 1
         )
-          this._handleViewTranslatedNews(this.hasTranslateList[0]);
+          this._handleViewTranslatedNews(this.hasTranslateList[0], row.defaultSiteId)
       } else {
-        if (type) return;
-        this.$emit("handleGetSignalTranslateSource", row);
+        this.$emit('handleGetSignalTranslateSource', row)
       }
     },
     // 鼠标进入翻译icon
     _handleMouseenterTranslate(e, row, type) {
-      this.timer && clearTimeout(this.timer);
-      if (type) return false;
+      this.timer && clearTimeout(this.timer)
+      if (type) return false
       if (this.languagesList.length > 0) {
         this.timer = setTimeout(async () => {
-          let { data } = await articleManageApi.newsTranslateStatus(row.id);
-          this.hasTranslateList = data;
+          let { data } = await articleManageApi.newsTranslateStatus(row.id)
+          this.hasTranslateList = data
           if (data.length === 0) {
             this.articlePageResult.list[row.index].translateToolTip =
-              "点击翻译文章";
+              '点击翻译文章'
             setTimeout(() => {
-              if (this.$refs["tooltip" + row.index]) {
-                this.$refs["tooltip" + row.index].style.left =
+              if (this.$refs['tooltip' + row.index]) {
+                this.$refs['tooltip' + row.index].style.left =
                   e.target.getBoundingClientRect().left -
-                  this.$refs["tooltip" + row.index].clientWidth / 2 +
+                  this.$refs['tooltip' + row.index].clientWidth / 2 +
                   10 +
-                  "px";
-                this.$refs["tooltip" + row.index].style.top =
+                  'px'
+                this.$refs['tooltip' + row.index].style.top =
                   e.target.getBoundingClientRect().top +
                   e.target.getBoundingClientRect().height -
                   70 +
-                  "px";
+                  'px'
               }
-            });
+            })
           }
           if (data.length === 1) {
             if (this.languagesList.length === 1) {
               this.articlePageResult.list[row.index].translateToolTip =
-                "查看已翻译的文章";
+                '查看已翻译的文章'
               setTimeout(() => {
-                if (this.$refs["tooltip" + row.index]) {
-                  this.$refs["tooltip" + row.index].style.left =
+                if (this.$refs['tooltip' + row.index]) {
+                  this.$refs['tooltip' + row.index].style.left =
                     e.target.getBoundingClientRect().left -
-                    this.$refs["tooltip" + row.index].clientWidth / 2 +
+                    this.$refs['tooltip' + row.index].clientWidth / 2 +
                     10 +
-                    "px";
-                  this.$refs["tooltip" + row.index].style.top =
+                    'px'
+                  this.$refs['tooltip' + row.index].style.top =
                     e.target.getBoundingClientRect().top +
                     e.target.getBoundingClientRect().height -
                     70 +
-                    "px";
+                    'px'
                 }
-              });
+              })
             }
             if (this.languagesList.length > 1) {
-              this.articlePageResult.list[row.index].translateToolTip = "";
-              this.hasTranslateList = data;
-              if (this.$refs["translateModal" + row.index]) {
-                this.$refs["translateModal" + row.index].style.left =
+              this.articlePageResult.list[row.index].translateToolTip = ''
+              this.hasTranslateList = data
+              if (this.$refs['translateModal' + row.index]) {
+                this.$refs['translateModal' + row.index].style.left =
                   e.target.getBoundingClientRect().left +
                   e.target.getBoundingClientRect().width / 2 +
-                  "px";
-                this.$refs["translateModal" + row.index].style.top =
+                  'px'
+                this.$refs['translateModal' + row.index].style.top =
                   e.target.getBoundingClientRect().top +
                   e.target.getBoundingClientRect().height +
                   6 +
-                  "px";
+                  'px'
               }
             }
           }
           if (data.length > 1) {
-            this.articlePageResult.list[row.index].translateToolTip = "";
-            this.hasTranslateList = data;
-            if (this.$refs["translateModal" + row.index]) {
-              this.$refs["translateModal" + row.index].style.left =
+            this.articlePageResult.list[row.index].translateToolTip = ''
+            this.hasTranslateList = data
+            if (this.$refs['translateModal' + row.index]) {
+              this.$refs['translateModal' + row.index].style.left =
                 e.target.getBoundingClientRect().left +
                 e.target.getBoundingClientRect().width / 2 +
-                "px";
-              this.$refs["translateModal" + row.index].style.top =
+                'px'
+              this.$refs['translateModal' + row.index].style.top =
                 e.target.getBoundingClientRect().top +
                 e.target.getBoundingClientRect().height +
                 6 +
-                "px";
+                'px'
             }
           }
-        }, 200);
+        }, 200)
       }
     },
     _handleMouseleaveTranslte(row, type) {
-      if (type) return false;
-      if (this.languagesList.length < 1) return false;
-      this.hasTranslateList = [];
-      this.$refs["translateModal" + row.index].translateToolTip = "";
-      if (this.$refs["translateModal" + row.index]) {
-        this.$refs["translateModal" + row.index].style.left = "-300%";
-        this.$refs["translateModal" + row.index].style.top = "-300%";
+      if (type) return false
+      if (this.languagesList.length < 1) return false
+      this.hasTranslateList = []
+      this.$refs['translateModal' + row.index].translateToolTip = ''
+      if (this.$refs['translateModal' + row.index]) {
+        this.$refs['translateModal' + row.index].style.left = '-300%'
+        this.$refs['translateModal' + row.index].style.top = '-300%'
       }
-      if (this.$refs["tooltip" + row.index]) {
-        this.$refs["tooltip" + row.index].style.left = "-300%";
-        this.$refs["tooltip" + row.index].style.top = "-300%";
+      if (this.$refs['tooltip' + row.index]) {
+        this.$refs['tooltip' + row.index].style.left = '-300%'
+        this.$refs['tooltip' + row.index].style.top = '-300%'
       }
     },
     _handleGetMoreTranslateSource() {
-      this.$emit("handleGetMoreTranslateSource");
+      this.$emit('handleGetMoreTranslateSource')
     },
     changePageNum(page) {
-      this.articleSearchOptions.pageIndex = page;
-      this.$emit("getArticleList");
+      this.articleSearchOptions.pageIndex = page
+      this.$emit('getArticleList')
     },
     changePageSize(size) {
-      this.articleSearchOptions.pageSize = size;
-      this.$emit("getArticleList");
+      this.articleSearchOptions.pageSize = size
+      this.$emit('getArticleList')
     },
     /**
      * 单选或全选操作
      */
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      this.$emit("handleSelectionChange", val);
+      this.multipleSelection = val
+      this.$emit('handleSelectionChange', val)
     },
     /**
      * 编辑文章
      */
     handleEdit(row) {
-      this.$emit("handleEditArticle", row);
+      this.$emit('handleEditArticle', row)
     },
     _handleShowMoreOperate(ev, row) {
-      (this.operateList = [
-        { name: "移动", flag: "move" },
-        { name: "复制", flag: "copy" },
-        { name: row.isPublish ? "下线" : "上线", flag: "isOnSell" },
-        { name: "删除", flag: "delete" }
+      ;(this.operateList = [
+        { name: '移动', flag: 'move' },
+        { name: '复制', flag: 'copy' },
+        { name: row.isPublish ? '下线' : '上线', flag: 'isOnSell' },
+        { name: '删除', flag: 'delete' }
       ]),
-        (this.row = row);
+        (this.row = row)
       this.$refs.operateSection.style.right =
-        document.documentElement.clientWidth - ev.pageX - ev.offsetX + "px";
-      this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + "px";
+        document.documentElement.clientWidth - ev.pageX - ev.offsetX + 'px'
+      this.$refs.operateSection.style.top = ev.pageY - ev.offsetY - 160 + 'px'
 
-      if (this.$refs.operateSection.style.display == "block") {
-        this.$refs.operateSection.style.display = "none";
+      if (this.$refs.operateSection.style.display == 'block') {
+        this.$refs.operateSection.style.display = 'none'
       } else {
-        this.$refs.operateSection.style.display = "block";
+        this.$refs.operateSection.style.display = 'block'
       }
     },
     /**
      * 显示无数据icon时的添加数据操作
      */
     addArticle() {
-      this.$emit("addArticle");
+      this.$emit('addArticle')
     },
     /**
      * 删除操作
      */
     batchRemove(row) {
-      this.$emit("batchRemove", [row.id]);
+      this.$emit('batchRemove', [row.id])
     },
     /**
      * 置顶操作
      */
     batchTop(row, isTop) {
-      this.$emit("batchTop", [row.id], row.isTop);
+      this.$emit('batchTop', [row.id], row.isTop)
     },
     /**
      * 上下线操作
      */
     batchPublish(row, isPublish) {
-      this.$emit("batchPublish", [row.id], row.isPublish);
+      this.$emit('batchPublish', [row.id], row.isPublish)
     },
     /**
      * 移动分类操作
      */
     batchMove(row) {
-      this.$emit("changeOperateName", "移动");
-      this.$emit("batchMove", [row.id]);
+      this.$emit('changeOperateName', '移动')
+      this.$emit('batchMove', [row.id])
     },
     /**
      * 复制操作
      */
     batchCopy(row) {
-      this.$emit("changeOperateName", "复制");
-      this.$emit("batchCopy", [row.id]);
+      this.$emit('changeOperateName', '复制')
+      this.$emit('batchCopy', [row.id])
     },
     //创建时间排序
     sortChange(row) {
-      if (row.order == "ascending") {
-        this.articleSearchOptions.isDescending = false;
+      if (row.order == 'ascending') {
+        this.articleSearchOptions.isDescending = false
       } else {
-        this.articleSearchOptions.isDescending = true;
+        this.articleSearchOptions.isDescending = true
       }
-      this.$emit("getArticleList");
+      this.$emit('getArticleList')
     },
 
     handleMoreOperate(flag) {
-      let row = this.row;
+      let row = this.row
       switch (flag) {
-        case "move":
-          this.$emit("moveClassify", true, row);
-          this.batchMove(row);
-          break;
-        case "copy":
-          this.$emit("moveClassify", true, row);
-          this.batchCopy(row);
-          break;
-        case "isOnSell":
-          this.batchPublish(row, row.isPublish);
-          break;
-        case "delete":
-          this.batchRemove(row);
-          break;
-        case "translate":
-          this._handleGetMoreTranslateSource();
+        case 'move':
+          this.$emit('moveClassify', true, row)
+          this.batchMove(row)
+          break
+        case 'copy':
+          this.$emit('moveClassify', true, row)
+          this.batchCopy(row)
+          break
+        case 'isOnSell':
+          this.batchPublish(row, row.isPublish)
+          break
+        case 'delete':
+          this.batchRemove(row)
+          break
+        case 'translate':
+          this._handleGetMoreTranslateSource()
       }
     },
     /**
@@ -527,21 +535,21 @@ export default {
      */
     async preview(previewId, siteId) {
       let { data } = await articleManageApi.GetContentPrevAddress(
-        "NewsDetail",
+        'NewsDetail',
         siteId
-      );
-      var prevAddress = data;
+      )
+      var prevAddress = data
       if (prevAddress) {
-        let newWindow = window.open();
-        newWindow.location.href = prevAddress + previewId + ".html";
+        let newWindow = window.open()
+        newWindow.location.href = prevAddress + previewId + '.html'
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/content-manage/manege-table.scss";
+@import '@/styles/content-manage/manege-table.scss';
 .title-color {
   color: #262626;
 }
@@ -560,7 +568,7 @@ export default {
   min-width: 25px;
   height: 20px;
   cursor: pointer;
-  background: url("~img/content-icon/translate_icon.png") no-repeat center
+  background: url('~img/content-icon/translate_icon.png') no-repeat center
     center;
   background-size: 100% 100%;
 
@@ -613,7 +621,7 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       display: block;
-      content: "";
+      content: '';
       width: 0;
       height: 0;
       border-right: 5px solid transparent;
@@ -644,7 +652,7 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       display: block;
-      content: " ";
+      content: ' ';
       width: 0;
       height: 0;
       border-right: 5px solid transparent;
@@ -654,7 +662,7 @@ export default {
   }
 }
 
-.translate-icon[data-language="zh-CN"]:hover {
+.translate-icon[data-language='zh-CN']:hover {
   .more-operate {
     visibility: visible;
     z-index: 1999;
@@ -673,7 +681,7 @@ export default {
     position: absolute;
     left: 60%;
     display: block;
-    content: "";
+    content: '';
     margin-left: -15px;
     width: 14px;
     height: 14px;
