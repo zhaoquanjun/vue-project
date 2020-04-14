@@ -120,7 +120,7 @@ export default {
             if(!this.$store.state.dashboard.unreadCountStatus) {
                 let { data } = await dashboardApi.getCurSiteId();
                 data && (this.curSiteId = data);
-                this.curSiteId && this.getUnReadCount();
+                (this.curSiteId > 1) && this.getUnReadCount();
                 
             }
         },

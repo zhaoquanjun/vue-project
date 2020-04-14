@@ -6,7 +6,7 @@
       </el-row>
       <el-row class="wrap">
         <div class="tempalte-selected__section">
-          <div class="text">选择网站模板，立即开启网站管理</div>
+          <div class="text">{{curSiteinfo.language=='zh-CN'?'选择网站模板，立即开启网站管理':'初始化站点，立即开启网站管理'}}</div>
           <img src="~img/siteManage/selectTemplate.png" alt class="backgroundImg" />
           <button
             class="cl-button cl-button--primary"

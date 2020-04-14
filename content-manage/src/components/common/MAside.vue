@@ -116,7 +116,7 @@ export default {
         let { data, status } = await articleManageApi.getSiteList();
         if (status === 200) {
           data[0] && data[0].siteId && (this.curSiteId = data[0].siteId);
-          this.curSiteId && this.getUnReadCount();
+          (this.curSiteId > 1) && this.getUnReadCount();
         }
       }
     },
