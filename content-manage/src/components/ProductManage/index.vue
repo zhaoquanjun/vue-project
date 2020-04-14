@@ -928,7 +928,7 @@ export default {
      */
     async batchRemoveCategory(idList) {
       this.$confirm(
-        '若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？',
+        '若该分类下存在数据，删除后数据将自动移动到语言分类中，是否确认删除该分类？',
         '提示',
         {
           confirmButtonText: '确定',

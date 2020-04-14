@@ -53,9 +53,7 @@
         </ul>
         <div
           class="translate-language--signal"
-          v-if="
-            modalData && modalData.languages && modalData.languages.length === 1
-          "
+          v-if="modalData && modalData.type === 'signal'"
         >
           <p class="signal-title">翻译至分类：</p>
           <el-select

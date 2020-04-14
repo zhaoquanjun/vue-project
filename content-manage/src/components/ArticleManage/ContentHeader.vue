@@ -208,9 +208,6 @@ export default {
       orderValue: 'createtime'
     }
   },
-  created() {
-    console.log(this.siteCountInfo)
-  },
   methods: {
     getArticleList() {
       this.$emit('getArticleList')

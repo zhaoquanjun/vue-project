@@ -940,7 +940,7 @@ export default {
     async batchRemoveCategory(idlist) {
       idlist = idlist == null ? this.idsList : idlist
       this.$confirm(
-        "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
+        "若该分类下存在数据，删除后数据将自动移动到语言分类中，是否确认删除该分类？",
         "提示",
         {
           iconClass: "icon-warning",
