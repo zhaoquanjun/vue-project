@@ -103,7 +103,7 @@ export default {
     collapseOpen(width, time) {
       this.width = 130;
       if (!this.$store.state.dashboard.unreadCountStatus && this.$store.state.dashboard.isSiteInfoShow) {
-        this.$store.dispatch("getunreadCount");
+        this.$store.state.dashboard.siteId && this.$store.dispatch("getunreadCount");
       }
     },
     collapseClose() {
