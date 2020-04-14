@@ -117,7 +117,7 @@ export default {
             this.$store.commit("SET_DIALOG",true)
             this.width = 130;
             if(!this.$store.state.dashboard.unreadCountStatus) {
-                this.curSiteId && this.getUnReadCount()
+                (this.curSiteId > 1) && this.getUnReadCount()
             }
         },
         collapseClose() {
