@@ -125,7 +125,7 @@
             取消置顶
           </button>
           <button
-            v-show="siteCountInfo.siteCount > 1 && siteCountInfo.initTypeCount > 1"
+            v-show="siteCountInfo.siteCount > 1"
             :class="{ disabled: languageCount > 1 }"
             class="cl-button cl-button--text_primary"
             @click="batchTranslate"

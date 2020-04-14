@@ -548,8 +548,10 @@ export default {
   .el-select-dropdown__item /deep/ .el-tree {
     .el-tree-node {
       .el-tree-node__content {
+        border-left: none;
         .el-tree-node__label {
           width: 100%;
+          padding-right: 18px;
           font-size: 12px;
           overflow: hidden;
           text-overflow: ellipsis;

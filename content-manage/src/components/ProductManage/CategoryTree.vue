@@ -75,6 +75,7 @@
         v-if="isHandlerCategoryMenuShow"
         :isUpload="isProduct ? true : false"
         :modifyCategoryData="modifyCategoryData"
+        :clickNode="curClickNode"
         @createCategory="createCategory"
         @closeUploadCategoryPic="closeUploadCategoryPic"
       />
@@ -356,6 +357,8 @@ export default {
     },
     // 分类上传图片
     _handleShowMoreOperate(ev, node, data) {
+      const winH = document.documentElement.clientHeight
+      const boxH = 150
       this.createCategoryData = this.curClickData
       if (this.isPopup) {
         let location = this.handlerClicklocation()
@@ -365,7 +368,10 @@ export default {
           ev.pageY - location.clientHeight - ev.offsetY + 'px'
       } else {
         this.$refs.operateSection.style.left = ev.pageX - ev.offsetX + 16 + 'px'
-        this.$refs.operateSection.style.top = ev.pageY - ev.offsetY + 'px'
+        this.$refs.operateSection.style.top =
+          ev.pageY + boxH + ev.offsetY > winH
+            ? winH - boxH + 'px'
+            : ev.pageY - ev.offsetY + 'px'
       }
       // this.$refs.operateSection.style.display = "block";
       this.isHandlerCategoryMenuShow = true
@@ -384,6 +390,8 @@ export default {
     },
     // 新增0730   分类操作菜单显示
     _handleShowMoreOperate1(ev, row) {
+      const winH = document.documentElement.clientHeight
+      const boxH = 100
       if (this.isPopup) {
         let location = this.handlerClicklocation()
         this.$refs.operateSection1.style.left =
@@ -393,7 +401,10 @@ export default {
       } else {
         this.$refs.operateSection1.style.left =
           ev.pageX - ev.offsetX + 32 + 'px'
-        this.$refs.operateSection1.style.top = ev.pageY - ev.offsetY + 'px'
+        this.$refs.operateSection1.style.top =
+          ev.pageY + boxH + ev.offsetY > winH
+            ? winH - boxH + 'px'
+            : ev.pageY - ev.offsetY + 'px'
       }
       if (this.$refs.operateSection1.style.display === 'block') {
         this.$refs.operateSection1.style.display = 'none'
