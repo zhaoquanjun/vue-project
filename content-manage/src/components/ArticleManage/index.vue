@@ -525,11 +525,12 @@ export default {
      */
     _getForeigns(ids) {
       this._getTranslateIds(this.languagesList, ids)
-      if (this.foreignLanguages.length > 1) {
+      if (this.siteCountInfo.siteCount > 2) {
         this.languageModal.title = "翻译至语言"
       } else {
         this.languageModal.title = "保存至"
       }
+      this.languageModal.siteCount = this.siteCountInfo.siteCount
       this.languageModal.languages = this.foreignLanguages
       this.languageModal.list = this.source
       this.languageModal.tree = this.translateTree

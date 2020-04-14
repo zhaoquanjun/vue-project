@@ -27,7 +27,13 @@
         <!--  v-scrollBar -->
         <ul
           class="translate-list"
-          v-if="modalData && modalData.list && modalData.list.length > 0"
+          v-if="
+            modalData &&
+              modalData.list &&
+              modalData.list.length > 0 &&
+              modalData.type &&
+              modalData.type === 'more'
+          "
         >
           <li v-for="(item, index) in modalData.list" :key="index">
             <span
@@ -45,7 +51,7 @@
               :class="{ 'max-width': item.contentLength > 4000 }"
               >{{ modalData.isNews ? item.title : item.name }}</span
             >
-            <span class="item-warning" v-show="item.contentLength > 4000"
+            <span class="item-warning ellipsis" v-show="item.contentLength > 4000"
               ><i class="iconfont iconicon-exclamationmark"></i>
               字数超过4000，请后续手工分段翻译【百度翻译】</span
             >
@@ -53,7 +59,7 @@
         </ul>
         <div
           class="translate-language--signal"
-          v-if="modalData && modalData.type === 'signal'"
+          v-if="modalData && modalData.siteCount === 2"
         >
           <p class="signal-title">翻译至分类：</p>
           <el-select
@@ -195,6 +201,7 @@ export default {
     _handleChooseNewsItem(o) {
       if (o.contentLength <= 4000) {
         o.isChecked = !o.isChecked
+        this.modalData.enable = this._getLastTranslateList().length
       }
     },
     _handleChooseLanguagesItem(o) {
@@ -216,7 +223,7 @@ export default {
     _initSelectboxValue() {
       if (
         this.modalData &&
-        this.modalData.languages.length === 1 &&
+        this.modalData.siteCount === 2 &&
         this.modalData.tree.length > 0
       ) {
         if (
