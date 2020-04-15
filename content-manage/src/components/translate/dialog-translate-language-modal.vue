@@ -368,6 +368,8 @@ export default {
             align-items: center;
             width: 14px;
             height: 14px;
+            min-width: 14px;
+            min-height: 14px;
             border-radius: $--border-radius-base;
             border: 1px solid $--border-color-base;
             box-sizing: border-box;
