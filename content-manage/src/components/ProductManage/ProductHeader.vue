@@ -113,6 +113,7 @@
             复制
           </button>
           <button
+            v-show="selectedListLanguageLen === 0"
             class="cl-button cl-button--text_primary"
             @click="handleCommand('move')"
           >
@@ -171,10 +172,9 @@ export default {
     'isBatchHeaderShow',
     'count',
     'idsList',
-    'selectCategory',
-    'languageList',
     'siteCountInfo',
-    'languageCount'
+    'languageCount',
+    'selectedListLanguageLen'
   ],
   data() {
     return {

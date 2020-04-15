@@ -491,6 +491,7 @@ export default {
     batchMove(row) {
       this.$emit('changeOperateName', '移动')
       this.$emit('batchMove', [row.id])
+      this.$emit('changeSelectedLanguage', row.language)
     },
     /**
      * 复制操作

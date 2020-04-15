@@ -108,6 +108,12 @@ export default {
     isSHowCheckBox: {
       type: Boolean,
       default: false
+    },
+    language: {
+      type: String,
+      default: () => {
+        return 'zh-CN'
+      }
     }
   },
   data() {
@@ -120,14 +126,21 @@ export default {
   computed: {
     treeData: {
       get: function() {
+        let data = JSON.parse(JSON.stringify(this.treeResult))
         if (
           this.type === 'news' &&
           this.treeResult &&
           this.treeResult.length > 0
         ) {
-          this._setTreeNodeDisabled(this.treeResult)
+          if (data[0].children && data[0].children.length > 0) {
+            let childs = data[0].children
+            for (var i = 0; i < childs.length; i++) {
+              if (childs[i].id < 0 && childs[i].language != this.language) {
+                childs.splice(i, 1)
+              }
+            }
+          }
         }
-        let data = this.treeResult
         return data
       },
       set: function() {}
@@ -139,16 +152,16 @@ export default {
     this.setCheckedKeys()
   },
   methods: {
-    _setTreeNodeDisabled(data) {
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].id < 0) {
-          data[i].disabled = true
-        }
-        if (data[i].children && data[i].children.length > 0) {
-          this._setTreeNodeDisabled(data[i].children)
-        }
-      }
-    },
+    // _setTreeNodeDisabled(data) {
+    //   for (var i = 0; i < data.length; i++) {
+    //     if (data[i].id < 0) {
+    //       data[i].disabled = true
+    //     }
+    //     if (data[i].children && data[i].children.length > 0) {
+    //       this._setTreeNodeDisabled(data[i].children)
+    //     }
+    //   }
+    // },
     setCheckedKeys() {
       this.valueTitle = this.categoryName
       this.$nextTick(() => {
@@ -158,7 +171,7 @@ export default {
     },
     nodeExpand(data, node, slot) {},
     remove(cur) {
-      this.valueTitle = this.valueTitle.filter((item) => {
+      this.valueTitle = this.valueTitle.filter(item => {
         return item != cur
       })
       this.$emit('removeSeletedCategory', cur)
@@ -176,7 +189,7 @@ export default {
         )
         scrollWrap.style.cssText =
           'margin: 0px; max-height: none; overflow: hidden;'
-        scrollBar.forEach((ele) => (ele.style.width = 0))
+        scrollBar.forEach(ele => (ele.style.width = 0))
         scrollBar[0].style.display = 'none'
       })
     },
@@ -226,7 +239,7 @@ export default {
     /* 清空选中样式 */
     clearSelected() {
       let allNode = document.querySelectorAll('#tree-option .el-tree-node')
-      allNode.forEach((element) => element.classList.remove('is-current'))
+      allNode.forEach(element => element.classList.remove('is-current'))
     }
   },
   watch: {

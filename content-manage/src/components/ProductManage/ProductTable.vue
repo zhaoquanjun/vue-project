@@ -520,6 +520,7 @@ export default {
       switch (flag) {
         case 'move':
           this.$emit('moveClassify', row, flag)
+          this.$emit('changeSelectedLanguage', row.language)
           break
         case 'copy':
           this.$emit('moveClassify', row, flag)

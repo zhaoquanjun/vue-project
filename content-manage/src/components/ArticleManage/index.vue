@@ -22,13 +22,13 @@
     <el-main>
       <content-header
         v-if="$store.state.dashboard.isContentwrite"
-        :selectCategory="selectCategory"
         :languages-list="languagesList"
         :count="count"
         :siteCountInfo="siteCountInfo"
         :is-batch-header-show="isBatchHeaderShow"
         :languageCount="languageCount"
         :article-search-options="articleSearchOptions"
+        :selectedListLanguageLen="selectedListLanguageLen"
         @handleGetMoreTranslateSource="handleGetMoreTranslateSource"
         @getArticleList="getArticleList"
         @addArticle="addArticle"
@@ -59,6 +59,7 @@
           @changeOperateName="changeOperateName"
           @handleGetSignalTranslateSource="handleGetSignalTranslateSource"
           @handleGetMoreTranslateSource="handleGetMoreTranslateSource"
+          @changeSelectedLanguage="changeSelectedLanguage"
         ></content-table>
 
         <el-dialog
@@ -83,6 +84,7 @@
               :categoryName="curArticleInfo.categoryName"
               :categoryId="curArticleInfo.categoryId"
               :tree-result="treeResult"
+              :language="selectedLanguage"
               @chooseNode="chooseNode"
             />
           </template>
@@ -128,15 +130,15 @@
 </template>
 <script>
 import * as dashboardApi from '@/api/request/dashboardApi'
-import * as articleManageApi from "@/api/request/articleManageApi"
-import MTree from "@/components/common/MTree"
-import ContentHeader from "./ContentHeader"
-import ContentTable from "./ContentTable"
-import RightPannel from "@/components/common/RightPannel"
-import SelectTree from "@/components/common/SelectTree"
-import DialogInfoModal from "@/components/translate/dialog-info-modal"
-import DialogTranslateLanguageModal from "@/components/translate/dialog-translate-language-modal"
-import DialogTranslateProgressModal from "@/components/translate/dialog-translate-progress-modal"
+import * as articleManageApi from '@/api/request/articleManageApi'
+import MTree from '@/components/common/MTree'
+import ContentHeader from './ContentHeader'
+import ContentTable from './ContentTable'
+import RightPannel from '@/components/common/RightPannel'
+import SelectTree from '@/components/common/SelectTree'
+import DialogInfoModal from '@/components/translate/dialog-info-modal'
+import DialogTranslateLanguageModal from '@/components/translate/dialog-translate-language-modal'
+import DialogTranslateProgressModal from '@/components/translate/dialog-translate-progress-modal'
 export default {
   components: {
     MTree,
@@ -152,22 +154,24 @@ export default {
     return {
       articlePageResult: null,
       treeResult: null,
-      curArticleInfo: {},
-      moveToClassiFy: "",
-      newsIdList: "",
+      curArticleInfo: {
+        language: 'zh-CN'
+      },
+      moveToClassiFy: '',
+      newsIdList: '',
       count: 0,
       contentLength: 0,
       list: [],
       idsList: [],
       rightPanelType: 1, // 1 移动文章 2 复制文章
-      selectCategory: { id: 0, language: "zh-CN" },
-      operateName: "移动",
+      selectCategory: { id: 0, language: 'zh-CN' },
+      operateName: '移动',
       isInvitationPanelShow: false,
       realNodeSearchOptions: {
-        title: "",
+        title: '',
         categoryIdList: [0],
         categoryId: 0,
-        newsOrderColumns: "language",
+        newsOrderColumns: 'language',
         topStatus: null,
         publishStatus: null,
         pageIndex: 1,
@@ -175,9 +179,9 @@ export default {
         isDescending: true
       },
       virtualSearchOptions: {
-        title: "",
-        language: "zh-CN",
-        newsOrderColumns: "language",
+        title: '',
+        language: 'zh-CN',
+        newsOrderColumns: 'language',
         topStatus: null,
         publishStatus: null,
         pageIndex: 1,
@@ -187,36 +191,37 @@ export default {
       curRow: null,
       languageCount: 1,
       infoModal: {
-        title: "提示",
-        type: "fail",
+        title: '提示',
+        type: 'fail',
         content: `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前文章字符已超限，请重新选择或删减文章后重试。</p>`,
         btn: {
-          btn1Text: "关闭",
-          btn2Text: "去修改"
+          btn1Text: '关闭',
+          btn2Text: '去修改'
         },
-        additional: { words: "", operate: "" }
+        additional: { words: '', operate: '' }
       },
       progressInfo: {
-        title: "翻译中",
+        title: '翻译中',
         progress: 0
       },
       languageModal: {
-        title: "",
+        title: '',
         isNews: true,
         tree: [],
         languages: [],
         list: [],
-        type: "signal",
+        type: 'signal',
         total: 5,
         enable: 4
       },
       source: null,
-      type: "signal",
+      type: 'signal',
       foreignLanguages: [],
       siteCountInfo: {
         siteCount: 2,
         initTypeCount: 2
-      }
+      },
+      signalSelectedLanguage: ''
     }
   },
   mounted() {
@@ -240,7 +245,7 @@ export default {
         if (arr.length > 0) {
           for (var i = 0; i < arr[0].children.length; i++) {
             const item = arr[0].children[i]
-            if (item.language === "zh-CN") {
+            if (item.language === 'zh-CN') {
               arr[0].children.splice(i, 1)
             }
           }
@@ -259,7 +264,7 @@ export default {
         ) {
           for (var i = 0; i < this.treeResult[0].children.length; i++) {
             const item = this.treeResult[0].children[i]
-            if (item.language != "zh-CN") {
+            if (item.language != 'zh-CN') {
               const obj = {}
               let flag = true
               for (var k = 0; k < arr.length; k++) {
@@ -290,6 +295,34 @@ export default {
         return options
       },
       set: function() {}
+    },
+    // 多选选中的语言数量
+    selectedListLanguageLen: {
+      get: function() {
+        let arr = []
+        if (this.list.length > 0) {
+          for (var i = 0; i < this.list.length; i++) {
+            if (
+              this.list[i].language != this.selectCategory.language &&
+              arr.indexOf(this.list[i].language) < 0
+            ) {
+              arr.push(this.list[i].language)
+            }
+          }
+        }
+        return arr.length
+      },
+      set: function() {}
+    },
+    selectedLanguage: {
+      get: function() {
+        let lan =
+          this.selectCategory.id === 0 && this.signalSelectedLanguage
+            ? this.signalSelectedLanguage
+            : this.selectCategory.language
+        return lan
+      },
+      set: function() {}
     }
   },
   methods: {
@@ -311,7 +344,7 @@ export default {
      * 获取翻译失败的列表
      */
     _getFailedList(data) {
-      var str = ""
+      var str = ''
       if (data && data.length > 0) {
         for (var i = 0; i < data.length; i++) {
           str += `<li><span style="display: inline-block;width: 17%;" class="lineheight26 attention ellipsis">（失败）</span><span class="lineheight26 ellipsis" style="display: inline-block;max-width: 30%;">${data[i].sourceEntityDesc}</span><span class="lineheight26 attention ellipsis" style="display: inline-block;box-sizing: border-box; padding-left: 16px; max-width: 53%;">${data[i].errorMsg}</span></li>`
@@ -375,36 +408,36 @@ export default {
                 parseInt(obj.languagesList.length) * parseInt(num) >
                 res.failedList.length
               ) {
-                this.infoModal.title = "成功"
-                this.infoModal.type = "success"
+                this.infoModal.title = '成功'
+                this.infoModal.type = 'success'
                 this.infoModal.content = `<p class='lineheight26'>部分文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; min-width: 300px;">${this._getFailedList(
                   res.failedList
                 )}</ul>`
               } else {
-                this.infoModal.title = "失败"
-                this.infoModal.type = "fail"
+                this.infoModal.title = '失败'
+                this.infoModal.type = 'fail'
                 this.infoModal.content = `<p class='lineheight26'>文章翻译失败！</p><ul style="min-width: 300px; margin-left: -7px;">${this._getFailedList(
                   res.failedList
                 )}</ul>`
               }
             } else {
-              this.infoModal.title = "成功"
-              this.infoModal.type = "success"
+              this.infoModal.title = '成功'
+              this.infoModal.type = 'success'
               this.infoModal.content =
                 "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p>"
             }
             this.$refs.progressModal.hideSelf()
-            this.infoModal.btn.btn2Text = "关闭"
-            this.infoModal.btn.btn2Operate = "close"
+            this.infoModal.btn.btn2Text = '关闭'
+            this.infoModal.btn.btn2Operate = 'close'
             if (
               obj.languagesList.length === 1 &&
               num === 1 &&
               res.failedList.length === 0
             ) {
-              this.infoModal.btn.btn1Text = "编辑"
-              this.infoModal.btn.btn1Operate = "goEdit"
-              this.infoModal.additional.words = "进入编辑"
-              this.infoModal.additional.operate = "goEdit"
+              this.infoModal.btn.btn1Text = '编辑'
+              this.infoModal.btn.btn1Operate = 'goEdit'
+              this.infoModal.additional.words = '进入编辑'
+              this.infoModal.additional.operate = 'goEdit'
               if (res.lastTranslatedEntityInfo) {
                 this.curRow.id = res.lastTranslatedEntityInfo.Id
                 this.curRow.categoryId = res.lastTranslatedEntityInfo.CategoryId
@@ -413,10 +446,10 @@ export default {
               }
               this.curRow.language = obj.languagesList[0]
             } else {
-              this.infoModal.btn.btn1Text = ""
-              this.infoModal.btn.btn1Operate = ""
-              this.infoModal.additional.words = ""
-              this.infoModal.additional.operate = ""
+              this.infoModal.btn.btn1Text = ''
+              this.infoModal.btn.btn1Operate = ''
+              this.infoModal.additional.words = ''
+              this.infoModal.additional.operate = ''
             }
             this.$refs.infoModal.showSelf()
             this.getTreeAsync()
@@ -428,17 +461,17 @@ export default {
           setTimeout(() => {
             // 隐藏弹窗
             this.$refs.progressModal.hideSelf()
-            this.infoModal.title = "成功"
-            this.infoModal.type = "success"
+            this.infoModal.title = '成功'
+            this.infoModal.type = 'success'
             this.infoModal.content =
               "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存结果在误差，可能需要您手动订正。</p>"
-            this.infoModal.btn.btn2Text = "关闭"
-            this.infoModal.btn.btn2Operate = "close"
+            this.infoModal.btn.btn2Text = '关闭'
+            this.infoModal.btn.btn2Operate = 'close'
             if (num === 1) {
-              this.infoModal.btn.btn1Text = "编辑"
-              this.infoModal.btn.btn1Operate = "goEdit"
-              this.infoModal.additional.words = "进入编辑"
-              this.infoModal.additional.operate = "goEdit"
+              this.infoModal.btn.btn1Text = '编辑'
+              this.infoModal.btn.btn1Operate = 'goEdit'
+              this.infoModal.additional.words = '进入编辑'
+              this.infoModal.additional.operate = 'goEdit'
               if (res.lastTranslatedEntityInfo) {
                 this.curRow.id = res.lastTranslatedEntityInfo.Id
                 this.curRow.categoryId = res.lastTranslatedEntityInfo.CategoryId
@@ -448,10 +481,10 @@ export default {
               this.curRow.language = obj.languagesList[0]
             }
             if (num > 1) {
-              this.infoModal.btn.btn1Text = ""
-              this.infoModal.btn.btn1Opetate = ""
-              this.infoModal.additional.words = "关闭弹窗"
-              this.infoModal.additional.operate = "close"
+              this.infoModal.btn.btn1Text = ''
+              this.infoModal.btn.btn1Opetate = ''
+              this.infoModal.additional.words = '关闭弹窗'
+              this.infoModal.additional.operate = 'close'
             }
             this.$refs.infoModal.showSelf()
             this.getTreeAsync()
@@ -466,13 +499,13 @@ export default {
           }, 2000)
         } else {
           this.$refs.progressModal.hideSelf()
-          this.infoModal.title = "失败"
-          this.infoModal.type = "fail"
-          this.infoModal.content = "连接超时，翻译失败，请稍后再试"
-          this.infoModal.btn.btn1Text = ""
-          this.infoModal.btn.btn2Text = "关闭"
-          this.infoModal.additional.words = "关闭弹窗"
-          this.infoModal.additional.operate = "close"
+          this.infoModal.title = '失败'
+          this.infoModal.type = 'fail'
+          this.infoModal.content = '连接超时，翻译失败，请稍后再试'
+          this.infoModal.btn.btn1Text = ''
+          this.infoModal.btn.btn2Text = '关闭'
+          this.infoModal.additional.words = '关闭弹窗'
+          this.infoModal.additional.operate = 'close'
           this.$refs.infoModal.showSelf()
         }
       }
@@ -483,18 +516,18 @@ export default {
     handleGetSignalTranslateSource(row, translatedIds) {
       this.curRow = row
       if (row.contentLength > 4000) {
-        this.infoModal.title = "提示"
-        this.infoModal.type = "fail"
+        this.infoModal.title = '提示'
+        this.infoModal.type = 'fail'
         this.infoModal.content = `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前文章字符已超限，请重新选择或删减文章后重试。</p>`
-        this.infoModal.btn.btn1Text = "关闭"
-        this.infoModal.btn.btn1Operate = "close"
-        this.infoModal.btn.btn2Text = "修改"
-        this.infoModal.btn.btn2Operate = "goEdit"
-        this.infoModal.additional.words = "关闭弹窗"
-        this.infoModal.additional.operate = "close"
+        this.infoModal.btn.btn1Text = '关闭'
+        this.infoModal.btn.btn1Operate = 'close'
+        this.infoModal.btn.btn2Text = '修改'
+        this.infoModal.btn.btn2Operate = 'goEdit'
+        this.infoModal.additional.words = '关闭弹窗'
+        this.infoModal.additional.operate = 'close'
         this.$refs.infoModal.showSelf()
       } else {
-        this.type = "signal"
+        this.type = 'signal'
         this.source = [row]
         this._getForeigns(translatedIds)
       }
@@ -504,17 +537,17 @@ export default {
      */
     handleGetMoreTranslateSource() {
       if (this.languageCount === 2) return
-      this._checkIsHasTranslateProcess((data) => {
+      this._checkIsHasTranslateProcess(data => {
         if (data) {
-          this.infoModal.title = "失败"
-          this.infoModal.type = "fail"
+          this.infoModal.title = '失败'
+          this.infoModal.type = 'fail'
           this.infoModal.content =
-            "当前存在翻译任务，请完成已经存在的任务后再进行翻译"
-          this.infoModal.btn.btn1Text = ""
-          this.infoModal.btn.btn2Text = "关闭"
+            '当前存在翻译任务，请完成已经存在的任务后再进行翻译'
+          this.infoModal.btn.btn1Text = ''
+          this.infoModal.btn.btn2Text = '关闭'
           return false
         } else {
-          this.type = "more"
+          this.type = 'more'
           this.source = this._getChineseList()
           let obj = this._checkEnableTranslateItem(this.source)
           this.languageModal.total = obj.total
@@ -529,9 +562,9 @@ export default {
     _getForeigns(ids) {
       this._getTranslateIds(this.languagesList, ids)
       if (this.siteCountInfo.siteCount > 2) {
-        this.languageModal.title = "翻译至语言"
+        this.languageModal.title = '翻译至语言'
       } else {
-        this.languageModal.title = "保存至"
+        this.languageModal.title = '保存至'
       }
       this.languageModal.siteCount = this.siteCountInfo.siteCount
       this.languageModal.languages = this.foreignLanguages
@@ -546,7 +579,7 @@ export default {
     _getChineseList() {
       let arr = []
       for (var i = 0; i < this.list.length; i++) {
-        if (this.list[i].language === "zh-CN") {
+        if (this.list[i].language === 'zh-CN') {
           arr.push(this.list[i])
         }
       }
@@ -586,7 +619,7 @@ export default {
     async _checkIsHasTranslateProcess(callback) {
       let { status, data } = await articleManageApi.isHasTranslateProcess()
       if (status === 200) {
-        typeof callback === "function" && callback(data)
+        typeof callback === 'function' && callback(data)
       }
     },
     /**
@@ -618,14 +651,14 @@ export default {
     // 列表增加设置项
     _setDataListAttribute(data) {
       for (var i = 0; i < data.length; i++) {
-        this.$set(data[i], "translateToolTip", "")
+        this.$set(data[i], 'translateToolTip', '')
       }
     },
     // 获取多选的语种类型数量
     _getSelectedListLanguageNum(list) {
       let flag = true
       for (var i = 0; i < list.length; i++) {
-        if (list[i].language !== "zh-CN") {
+        if (list[i].language != this.selectCategory.language) {
           flag = false
         }
       }
@@ -633,8 +666,13 @@ export default {
     },
     // 翻译 end
 
+    changeSelectedLanguage(language) {
+      if (this.selectCategory.id === 0) {
+        this.signalSelectedLanguage = language
+      }
+    },
     keyupEnter() {
-      document.onkeydown = (e) => {
+      document.onkeydown = e => {
         if (e.keyCode === 13) {
           this.isInvitationPanelShow && this.handOperateArticle()
         }
@@ -653,7 +691,7 @@ export default {
       this.count = list.length
       if (list.length < 1) return
       this._getSelectedListLanguageNum(list)
-      list.forEach((item) => {
+      list.forEach(item => {
         this.idsList.push(item.id)
       })
     },
@@ -670,20 +708,20 @@ export default {
     async batchRemoveNews(idlist) {
       idlist = idlist == null ? this.idsList : idlist
       this.$confirm(
-        "删除后，网站中引用的文章列表将不再显示该文章，是否确定删除？",
-        "提示",
+        '删除后，网站中引用的文章列表将不再显示该文章，是否确定删除？',
+        '提示',
         {
-          iconClass: "icon-warning",
-          callback: async (action) => {
+          iconClass: 'icon-warning',
+          callback: async action => {
             console.log(action)
-            if (action === "confirm") {
+            if (action === 'confirm') {
               let { status, data } = await articleManageApi.batchRemove(
                 true,
                 idlist
               )
               if (status === 200) {
                 this.$notify({
-                  customClass: "notify-success", //  notify-success ||  notify-error
+                  customClass: 'notify-success', //  notify-success ||  notify-error
                   message: `删除成功!`,
                   showClose: false,
                   duration: 1000
@@ -700,13 +738,13 @@ export default {
     // 批量置顶
     async batchTopNews(idlist, isTop) {
       idlist = idlist == null ? this.idsList : idlist
-      var message = "置顶"
-      if (isTop) message = "取消置顶"
-      this.$confirm("您确定要" + message + "文章吗？", "提示", {
-        iconClass: "icon-warning",
-        callback: async (action) => {
+      var message = '置顶'
+      if (isTop) message = '取消置顶'
+      this.$confirm('您确定要' + message + '文章吗？', '提示', {
+        iconClass: 'icon-warning',
+        callback: async action => {
           console.log(action)
-          if (action === "confirm") {
+          if (action === 'confirm') {
             let { status, data } = await articleManageApi.batchTop(
               !isTop,
               idlist
@@ -714,7 +752,7 @@ export default {
             if (status === 200) {
               // this.getTree();
               this.$notify({
-                customClass: "notify-success", //  notify-success ||  notify-error
+                customClass: 'notify-success', //  notify-success ||  notify-error
                 message: `${message}成功!`,
                 showClose: false,
                 duration: 1000
@@ -729,20 +767,20 @@ export default {
     // 批量上下线
     async batchPublishNews(idlist, isPublish) {
       idlist = idlist == null ? this.idsList : idlist
-      var message = "上线"
-      if (isPublish) message = "下线"
-      this.$confirm("您确认要" + message + "文章吗？", "提示", {
-        iconClass: "icon-warning",
-        callback: async (action) => {
+      var message = '上线'
+      if (isPublish) message = '下线'
+      this.$confirm('您确认要' + message + '文章吗？', '提示', {
+        iconClass: 'icon-warning',
+        callback: async action => {
           console.log(action)
-          if (action === "confirm") {
+          if (action === 'confirm') {
             let { status, data } = await articleManageApi.batchPublish(
               !isPublish,
               idlist
             )
             if (status === 200) {
               this.$notify({
-                customClass: "notify-success", //  notify-success ||  notify-error
+                customClass: 'notify-success', //  notify-success ||  notify-error
                 message: `${message}成功!`,
                 showClose: false,
                 duration: 1000
@@ -760,9 +798,9 @@ export default {
       this.rightPanelType = 1
       this.newsIdList = idlist
       if (isHeader) {
-        this.moveToClassiFy = ""
+        this.moveToClassiFy = ''
         this.curArticleInfo = {
-          categoryName: "全部分类",
+          categoryName: '全部分类',
           categoryId: 0
         }
       }
@@ -774,9 +812,9 @@ export default {
       this.rightPanelType = 2
       this.newsIdList = idlist
       if (isHeader) {
-        this.moveToClassiFy = ""
+        this.moveToClassiFy = ''
         this.curArticleInfo = {
-          categoryName: "全部分类",
+          categoryName: '全部分类',
           categoryId: 0
         }
       }
@@ -785,7 +823,7 @@ export default {
     async modifyNodeCategory(id, parentId, idOrderByArr) {
       await articleManageApi.modifyNode(id, parentId, idOrderByArr)
       this.$notify({
-        customClass: "notify-success", //  notify-success ||  notify-error
+        customClass: 'notify-success', //  notify-success ||  notify-error
         message: `移动成功!`,
         showClose: false,
         duration: 1000
@@ -809,6 +847,12 @@ export default {
     // 点击左侧分类树菜单时的节点
     chooseCategoryNode(data) {
       this.selectCategory = data
+      if (data.id === 0) {
+        this.signalSelectedLanguage = ''
+      }
+      if (data.id != 0) {
+        this.curArticleInfo.language = data.language
+      }
       if (data.id >= 0) {
         this.realNodeSearchOptions.categoryIdList = this.getAllNodeIds(data)
       } else {
@@ -845,7 +889,7 @@ export default {
       )
       if (status == 200) {
         this.$notify({
-          customClass: "notify-success", //  notify-success ||  notify-error
+          customClass: 'notify-success', //  notify-success ||  notify-error
           message: `移动成功!`,
           showClose: false,
           duration: 1000
@@ -867,7 +911,7 @@ export default {
       if (status == 200) {
         if (Array.isArray(this.newsIdList) && this.newsIdList.length > 1) {
           this.$notify({
-            customClass: "notify-success", //  notify-success ||  notify-error
+            customClass: 'notify-success', //  notify-success ||  notify-error
             message: `批量复制成功!`,
             showClose: false,
             duration: 1000
@@ -875,14 +919,14 @@ export default {
         } else {
           this.$confirm(
             `<p style="line-height:16px;font-size: 14px;" class="ellipsis">复制成功</p> <p style="line-height:16px;color:#9F9F9F;">是否前往编辑文章</p>`,
-            "提示",
+            '提示',
             {
               dangerouslyUseHTMLString: true,
-              confirmButtonText: "立即前往",
-              cancelButtonText: "暂不前往",
-              iconClass: "icon-success",
-              callback: async (action) => {
-                if (action === "confirm") {
+              confirmButtonText: '立即前往',
+              cancelButtonText: '暂不前往',
+              iconClass: 'icon-success',
+              callback: async action => {
+                if (action === 'confirm') {
                   let categoryId = this.moveToClassiFy
                     ? this.moveToClassiFy.id
                     : this.curArticleInfo.categoryId
@@ -890,7 +934,7 @@ export default {
                     ? this.moveToClassiFy.label
                     : this.curArticleInfo.categoryName
                   this.$router.push({
-                    path: "/news/create",
+                    path: '/news/create',
                     query: {
                       id: data,
                       categoryName: categoryName,
@@ -939,19 +983,19 @@ export default {
     async batchRemoveCategory(idlist) {
       idlist = idlist == null ? this.idsList : idlist
       this.$confirm(
-        "若该分类下存在数据，删除后数据将自动移动到语言分类中，是否确认删除该分类？",
-        "提示",
+        '若该分类下存在数据，删除后数据将自动移动到语言分类中，是否确认删除该分类？',
+        '提示',
         {
-          iconClass: "icon-warning",
-          callback: async (action) => {
+          iconClass: 'icon-warning',
+          callback: async action => {
             console.log(action)
-            if (action === "confirm") {
+            if (action === 'confirm') {
               let { status } = await articleManageApi.deleteNewsCategory(idlist)
               if (status === 200) {
                 this.getTreeAsync()
                 this.getArticleList()
                 this.$notify({
-                  customClass: "notify-success",
+                  customClass: 'notify-success',
                   message: `删除成功!`,
                   showClose: false,
                   duration: 1500
@@ -967,26 +1011,26 @@ export default {
     addArticle() {
       if (!this.selectCategory) {
         this.$router.push({
-          path: "/news/create",
+          path: '/news/create',
           query: {
-            categoryName: this.treeResult[0].label || "全部分类",
+            categoryName: this.treeResult[0].label || '全部分类',
             categoryId: this.treeResult[0].id || 0,
-            language: this.treeResult[0].language || "zn-CN"
+            language: this.treeResult[0].language || 'zn-CN'
           }
         })
       } else {
         this.$router.push({
-          path: "/news/create",
+          path: '/news/create',
           query: {
             categoryName:
               this.selectCategory.id && this.selectCategory.id > 0
-                ? this.selectCategory.label || "全部分类"
-                : "全部分类",
+                ? this.selectCategory.label || '全部分类'
+                : '全部分类',
             categoryId:
               this.selectCategory.id && this.selectCategory.id > 0
                 ? this.selectCategory.id
                 : 0,
-            language: this.selectCategory.language || "zn-CN"
+            language: this.selectCategory.language || 'zn-CN'
           }
         })
       }
@@ -994,7 +1038,7 @@ export default {
     // 编辑文章跳转到详情页
     handleEditArticle(row) {
       this.$router.push({
-        path: "/news/create",
+        path: '/news/create',
         query: {
           id: row.id,
           categoryName: row.categoryName,
@@ -1007,7 +1051,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "../style/contentDetail.scss";
+@import '../style/contentDetail.scss';
 .checkedNum {
   color: $--color-primary;
 }

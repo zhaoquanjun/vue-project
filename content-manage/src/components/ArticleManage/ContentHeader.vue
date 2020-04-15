@@ -107,6 +107,7 @@
             复制
           </button>
           <button
+            v-show="selectedListLanguageLen === 0"
             class="cl-button cl-button--text_primary"
             @click="handleCommand('move')"
           >
@@ -119,8 +120,6 @@
             置顶
           </button>
           <button
-            :count="siteCountInfo.siteCount"
-            :vcount="siteCountInfo.initTypeCount"
             class="cl-button cl-button--text_primary"
             @click="handleCommand('cancelTop')"
           >
@@ -163,10 +162,9 @@ export default {
     'articleSearchOptions',
     'isBatchHeaderShow',
     'count',
-    'selectCategory',
-    'languagesList',
     'languageCount',
-    'siteCountInfo'
+    'siteCountInfo',
+    'selectedListLanguageLen'
   ],
   data() {
     return {

@@ -21,8 +21,6 @@
     <el-main>
       <content-header
         v-if="$store.state.dashboard.isContentwrite"
-        :selectCategory="selectCategory"
-        :languages-list="languagesList"
         :count="count"
         :article-search-options="productSearchOptions"
         :is-batch-header-show="isBatchHeaderShow"
@@ -34,6 +32,7 @@
         @batchSwitchStatus="batchSwitchStatus"
         @batchMove="batchMoveNews"
         @handleGetMoreTranslateSource="handleGetMoreTranslateSource"
+        :selectedListLanguageLen="selectedListLanguageLen"
       ></content-header>
       <el-main>
         <content-table
@@ -53,6 +52,7 @@
           @handleSelectionChange="handleSelectionChange"
           @handleGetSignalTranslateSource="handleGetSignalTranslateSource"
           @handleGetMoreTranslateSource="handleGetMoreTranslateSource"
+          @changeSelectedLanguage="changeSelectedLanguage"
         ></content-table>
 
         <el-dialog
@@ -88,6 +88,7 @@
                 v-if="isInvitationPanelShow"
                 ref="checkTree"
                 :isright-pannel="true"
+                :language="selectedLanguage"
                 :tree-result="treeResult"
                 @chooseNode="chooseNode"
               ></CheckTree>
@@ -234,7 +235,8 @@ export default {
         siteCount: 2,
         initTypeCount: 2
       },
-      languageCount: 1
+      languageCount: 1,
+      signalSelectedLanguage: ''
     }
   },
   mounted() {
@@ -258,7 +260,7 @@ export default {
         if (arr.length > 0) {
           for (var i = 0; i < arr[0].children.length; i++) {
             const item = arr[0].children[i]
-            if (item.language === "zh-CN") {
+            if (item.language === 'zh-CN') {
               arr[0].children.splice(i, 1)
             }
           }
@@ -298,6 +300,34 @@ export default {
           options = this.virtualSearchOptions
         }
         return options
+      },
+      set: function() {}
+    },
+    // 多选选中的语言数量
+    selectedListLanguageLen: {
+      get: function() {
+        let arr = []
+        if (this.list.length > 0) {
+          for (var i = 0; i < this.list.length; i++) {
+            if (
+              this.list[i].language != this.selectCategory.language &&
+              arr.indexOf(this.list[i].language) < 0
+            ) {
+              arr.push(this.list[i].language)
+            }
+          }
+        }
+        return arr.length
+      },
+      set: function() {}
+    },
+    selectedLanguage: {
+      get: function() {
+        let lan =
+          this.selectCategory.id === 0 && this.signalSelectedLanguage
+            ? this.signalSelectedLanguage
+            : this.selectCategory.language
+        return lan
       },
       set: function() {}
     }
@@ -514,7 +544,7 @@ export default {
      */
     handleGetMoreTranslateSource() {
       if (this.languageCount === 2) return
-      this._checkIsHasTranslateProcess((data) => {
+      this._checkIsHasTranslateProcess(data => {
         if (data) {
           this.infoModal.title = '失败'
           this.infoModal.type = 'fail'
@@ -533,11 +563,11 @@ export default {
         }
       })
     },
-     // 获取多选的语种类型数量
+    // 获取多选的语种类型数量
     _getSelectedListLanguageNum(list) {
       let flag = true
       for (var i = 0; i < list.length; i++) {
-        if (list[i].language !== "zh-CN") {
+        if (list[i].language !== 'zh-CN') {
           flag = false
         }
       }
@@ -644,8 +674,14 @@ export default {
     },
     // 翻译部分 end
 
+    changeSelectedLanguage(language) {
+      if (this.selectCategory.id === 0) {
+        this.signalSelectedLanguage = language
+      }
+    },
+
     keyupEnter() {
-      document.onkeydown = (e) => {
+      document.onkeydown = e => {
         if (e.keyCode === 13) {
           this.isInvitationPanelShow && this.updateCategoryArticle()
         }
@@ -693,7 +729,7 @@ export default {
         type: 'warning',
         customClass: 'medium',
         iconClass: 'icon-warning',
-        callback: async (action) => {
+        callback: async action => {
           if (action === 'confirm') {
             let { status } = await productManageApi.batchSwitchStatus(options)
             if (status === 200) {
@@ -762,7 +798,7 @@ export default {
       this.isInvitationPanelShow = true
       this.curArticleInfo = data
       this.type = flag
-      let ids = data.productCategoryList.map((item) => item.id)
+      let ids = data.productCategoryList.map(item => item.id)
       this.$nextTick(() => {
         this.$refs.checkTree.setCheckedKeys(ids)
       })
@@ -804,7 +840,7 @@ export default {
         })
         return
       }
-      let categoryIdList = checkNodes.map((item) => {
+      let categoryIdList = checkNodes.map(item => {
         return item.id
       })
       let cateIdsAry = []
@@ -858,7 +894,7 @@ export default {
             type: 'success',
             customClass: 'medium',
             iconClass: 'icon-success',
-            callback: async (action) => {
+            callback: async action => {
               if (action === 'confirm') {
                 this.$router.push({
                   path: '/product/create',
@@ -930,7 +966,7 @@ export default {
           type: 'warning',
           customClass: 'medium',
           iconClass: 'icon-warning',
-          callback: async (action) => {
+          callback: async action => {
             if (action === 'confirm') {
               let { status } = await productCategoryManageApi.batchRemove(
                 idList
@@ -972,7 +1008,7 @@ export default {
       this.count = list.length
       if (list.length < 1) return
       this._getSelectedListLanguageNum(list)
-      list.forEach((item) => {
+      list.forEach(item => {
         this.idsList.push(item.id)
       })
     },
