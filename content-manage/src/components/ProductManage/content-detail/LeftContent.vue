@@ -838,22 +838,22 @@ export default {
   overflow: hidden;
 }
 
-.multipleCatagory
-  /deep/
-  .el-tree
-  .el-tree-node[aria-disabled='true']>
-  .el-tree-node__content {
-  cursor: not-allowed;
-}
+// .multipleCatagory
+//   /deep/
+//   .el-tree
+//   .el-tree-node[aria-disabled='true']>
+//   .el-tree-node__content {
+//   cursor: not-allowed;
+// }
 
-.multipleCatagory
-  /deep/
-  .el-tree
-  .el-tree-node[aria-disabled='true']
-  > .el-tree-node__content
-  .el-tree-node__label {
-  color: $--color-text-regular;
-}
+// .multipleCatagory
+//   /deep/
+//   .el-tree
+//   .el-tree-node[aria-disabled='true']
+//   > .el-tree-node__content
+//   .el-tree-node__label {
+//   color: $--color-text-regular;
+// }
 .modal-footer {
   height: 60px;
   position: absolute;

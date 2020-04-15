@@ -51,7 +51,9 @@
               :class="{ 'max-width': item.contentLength > 4000 }"
               >{{ modalData.isNews ? item.title : item.name }}</span
             >
-            <span class="item-warning ellipsis" v-show="item.contentLength > 4000"
+            <span
+              class="item-warning ellipsis"
+              v-show="item.contentLength > 4000"
               ><i class="iconfont iconicon-exclamationmark"></i>
               字数超过4000，请后续手工分段翻译【百度翻译】</span
             >
@@ -208,12 +210,10 @@ export default {
       o.isChecked = !o.isChecked
     },
     _handleTreeNodeClick(v) {
-      if (v.id >= 0) {
-        this.value.label = v.label
-        this.value.value = v.id
-        this.$refs.selectTree.blur()
-        document.getElementsByClassName('translate-id--area')[0].remove()
-      }
+      this.value.label = v.label
+      this.value.value = v.id >= 0 ? v.id : 0
+      this.$refs.selectTree.blur()
+      document.getElementsByClassName('translate-id--area')[0].remove()
     },
     _setCurrentNode(nodeId) {
       this.$nextTick(() => {

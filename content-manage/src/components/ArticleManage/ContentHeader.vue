@@ -119,13 +119,17 @@
             置顶
           </button>
           <button
+            :count="siteCountInfo.siteCount"
+            :vcount="siteCountInfo.initTypeCount"
             class="cl-button cl-button--text_primary"
             @click="handleCommand('cancelTop')"
           >
             取消置顶
           </button>
           <button
-            v-show="siteCountInfo.siteCount > 1"
+            v-show="
+              siteCountInfo.siteCount > 1 && siteCountInfo.initTypeCount > 1
+            "
             :class="{ disabled: languageCount > 1 }"
             class="cl-button cl-button--text_primary"
             @click="batchTranslate"

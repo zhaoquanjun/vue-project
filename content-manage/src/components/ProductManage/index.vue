@@ -308,7 +308,7 @@ export default {
       let { data, status } = await dashboardApi.getSiteCount()
       if (status === 200) {
         this.siteCountInfo.siteCount = data.siteCount
-        this.siteCountInfo.initTypeCount = data.HasInitializedSiteCount
+        this.siteCountInfo.initTypeCount = data.hasInitializedSiteCount
       }
     },
     /**
@@ -621,26 +621,16 @@ export default {
      * 语言弹框确认操作
      */
     async languageConfirm(obj) {
-      let options = {}
+      let options = {
+        FromIdList: obj.list,
+        SiteId: this.$store.state.dashboard.siteId,
+        CategoryId: obj.id
+      }
       if (obj.languagesList.length === 1) {
-        if (this.foreignLanguages.length === 1) {
-          options.CategoryId = obj.id
-        }
-        options = {
-          FromIdList: obj.list,
-          TargetLanguage: obj.languagesList[0],
-          SiteId: this.$store.state.dashboard.siteId
-        }
+        options.TargetLanguage = obj.languagesList[0]
       }
       if (obj.languagesList.length > 1) {
-        if (this.foreignLanguages.length === 1) {
-          options.CategoryId = obj.id
-        }
-        options = {
-          FromIdList: obj.list,
-          LanguageList: obj.languagesList,
-          SiteId: this.$store.state.dashboard.siteId
-        }
+        options.TargetLanguage = obj.languagesList
       }
       obj.languagesList.length > 1
         ? this._handleTranslateMoreLanguages(options, obj)

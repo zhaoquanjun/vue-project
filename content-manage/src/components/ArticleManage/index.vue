@@ -213,7 +213,10 @@ export default {
       source: null,
       type: "signal",
       foreignLanguages: [],
-      siteCountInfo: {}
+      siteCountInfo: {
+        siteCount: 2,
+        initTypeCount: 2
+      }
     }
   },
   mounted() {
@@ -295,7 +298,7 @@ export default {
       let { data, status } = await dashboardApi.getSiteCount()
       if (status === 200) {
         this.siteCountInfo.siteCount = data.siteCount
-        this.siteCountInfo.initTypeCount = data.HasInitializedSiteCount
+        this.siteCountInfo.initTypeCount = data.hasInitializedSiteCount
       }
     },
     /**
@@ -599,18 +602,13 @@ export default {
     async languageConfirm(obj) {
       let options = {
         FromIdList: obj.list,
-        SiteId: this.$store.state.dashboard.siteId
+        SiteId: this.$store.state.dashboard.siteId,
+        CategoryId: obj.id
       }
       if (obj.languagesList.length === 1) {
-        if (this.foreignLanguages.length === 1) {
-          options.CategoryId = obj.id
-        }
         options.TargetLanguage = obj.languagesList[0]
       }
       if (obj.languagesList.length > 1) {
-        if (this.foreignLanguages.length === 1) {
-          options.CategoryId = obj.id
-        }
         options.LanguageList = obj.languagesList
       }
       obj.languagesList.length > 1
