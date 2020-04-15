@@ -258,9 +258,9 @@ export default {
         })
       }
 
-      if (data && data.tree && data.tree.length) {
-        this._setTreeNodeDisabled(data.tree)
-      }
+      // if (data && data.tree && data.tree.length) {
+      //   this._setTreeNodeDisabled(data.tree)
+      // }
       this.modalData = data
     },
     _setTreeNodeDisabled(data) {
