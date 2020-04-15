@@ -201,7 +201,7 @@ export default {
         additional: { words: '', operate: '' }
       },
       progressInfo: {
-        title: '翻译中',
+        title: '自动翻译等待',
         progress: 0
       },
       languageModal: {
@@ -408,9 +408,9 @@ export default {
                 parseInt(obj.languagesList.length) * parseInt(num) >
                 res.failedList.length
               ) {
-                this.infoModal.title = '成功'
+                this.infoModal.title = '完成'
                 this.infoModal.type = 'success'
-                this.infoModal.content = `<p class='lineheight26'>部分文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; min-width: 300px;">${this._getFailedList(
+                this.infoModal.content = `<p class='lineheight26'>部分文章自动翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p><ul style="margin-top: 8px; margin-left: -7px; min-width: 300px;">${this._getFailedList(
                   res.failedList
                 )}</ul>`
               } else {
@@ -421,10 +421,10 @@ export default {
                 )}</ul>`
               }
             } else {
-              this.infoModal.title = '成功'
+              this.infoModal.title = '完成'
               this.infoModal.type = 'success'
               this.infoModal.content =
-                "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p>"
+                "<p class='lineheight26'>文章自动翻译成功！</p><p class='lessattention lineheight26'>机器翻译结果存在误差，可能需要您手动订正。</p>"
             }
             this.$refs.progressModal.hideSelf()
             this.infoModal.btn.btn2Text = '关闭'
@@ -461,10 +461,10 @@ export default {
           setTimeout(() => {
             // 隐藏弹窗
             this.$refs.progressModal.hideSelf()
-            this.infoModal.title = '成功'
+            this.infoModal.title = '完成'
             this.infoModal.type = 'success'
             this.infoModal.content =
-              "<p class='lineheight26'>文章翻译成功！</p><p class='lessattention lineheight26'>机器翻译存结果在误差，可能需要您手动订正。</p>"
+              "<p class='lineheight26'>文章自动翻译成功！</p><p class='lessattention lineheight26'>机器翻译存结果在误差，可能需要您手动订正。</p>"
             this.infoModal.btn.btn2Text = '关闭'
             this.infoModal.btn.btn2Operate = 'close'
             if (num === 1) {
@@ -521,7 +521,7 @@ export default {
         this.infoModal.content = `<p class="lineheight26 fontsize14" style="text-indent: -7px;">【阿里云AI翻译】单次最多支持约4000字符。当前文章字符已超限，请重新选择或删减文章后重试。</p>`
         this.infoModal.btn.btn1Text = '关闭'
         this.infoModal.btn.btn1Operate = 'close'
-        this.infoModal.btn.btn2Text = '修改'
+        this.infoModal.btn.btn2Text = '去修改'
         this.infoModal.btn.btn2Operate = 'goEdit'
         this.infoModal.additional.words = '关闭弹窗'
         this.infoModal.additional.operate = 'close'
