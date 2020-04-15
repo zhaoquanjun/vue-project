@@ -217,9 +217,9 @@ export default {
     }
   },
   mounted() {
+    this._getSiteCount()
     this.getArticleList()
     this.getTreeAsync()
-    this._getSiteCount()
   },
   created() {
     this.keyupEnter()

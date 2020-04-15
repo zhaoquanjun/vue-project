@@ -358,7 +358,7 @@ export default {
     // 分类上传图片
     _handleShowMoreOperate(ev, node, data) {
       const winH = document.documentElement.clientHeight
-      const boxH = 150
+      const boxH = 220
       this.createCategoryData = this.curClickData
       if (this.isPopup) {
         let location = this.handlerClicklocation()

@@ -230,14 +230,17 @@ export default {
       source: null,
       type: 'signal',
       foreignLanguages: [],
-      siteCountInfo: {},
+      siteCountInfo: {
+        siteCount: 2,
+        initTypeCount: 2
+      },
       languageCount: 1
     }
   },
   mounted() {
+    this._getSiteCount()
     this.getTree()
     this.contentTableList()
-    this._getSiteCount()
   },
   created() {
     this.keyupEnter()
