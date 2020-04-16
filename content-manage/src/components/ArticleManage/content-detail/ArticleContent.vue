@@ -194,13 +194,13 @@
   </div>
 </template>
 <script>
-import environment from "@/environment/index";
-import * as articleManageApi from "@/api/request/articleManageApi";
-import SelectTree from "@/components/common/SelectTree";
-import { formatDate } from "@/utlis/date.js";
+import environment from '@/environment/index'
+import * as articleManageApi from '@/api/request/articleManageApi'
+import SelectTree from '@/components/common/SelectTree'
+import { formatDate } from '@/utlis/date.js'
 
-import ModalContent from "@/components/ImgManage/index.vue";
-import QuillDetail from "@/components/ProductManage/QuillDetail.vue";
+import ModalContent from '@/components/ImgManage/index.vue'
+import QuillDetail from '@/components/ProductManage/QuillDetail.vue'
 export default {
   components: {
     SelectTree,
@@ -213,63 +213,63 @@ export default {
   data() {
     var checkWord = (rule, value, callback) => {
       if (value.length > 4) {
-        callback("每篇文章最多填写5个关键词！");
+        callback('每篇文章最多填写5个关键词！')
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       isOutSeo: false,
       isOutSearch: false,
       treeResult: null,
-      categoryName: "全部分类",
+      categoryName: '全部分类',
       categoryId: -1,
       options: [
         {
           value: true,
-          label: "上线"
+          label: '上线'
         },
         {
           value: false,
-          label: "下线"
+          label: '下线'
         }
       ],
       siteOptions: [],
       value: true,
-      activeName: "",
-      activeName1: "",
-      NewId: "",
+      activeName: '',
+      activeName1: '',
+      NewId: '',
       articleDetail: {
-        NewId: "",
-        title: "",
+        NewId: '',
+        title: '',
         categoryId: 0,
-        summary: "",
-        contentDetail: "",
+        summary: '',
+        contentDetail: '',
         searchKeywords: [],
         isPublish: true,
         isLoggedInCanView: false,
-        publishTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
+        publishTime: formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss'),
         isTop: false,
-        metaTitle: "",
+        metaTitle: '',
         metaKeywords: [],
-        metaDescription: "",
-        pictureUrl: "",
+        metaDescription: '',
+        pictureUrl: '',
         defaultSiteId: 0,
-        Language: this.$route.query.language || "zh-CN"
+        Language: this.$route.query.language || 'zh-CN'
       },
       rules: {
         title: [
           {
             required: true,
-            message: "请输入文章标题",
-            trigger: "blur"
+            message: '请输入文章标题',
+            trigger: 'blur'
           }
         ]
       },
       isModalShow: false,
       editorOption: {},
-      keywordValue: "",
-      metaKeyword: "",
+      keywordValue: '',
+      metaKeyword: '',
       isNewAdd: false,
       selectRangeIndex: 0,
       selectVideoRangeIndex: 0,
@@ -277,267 +277,321 @@ export default {
       checkedList: [],
       ratio: [],
       origin: [],
-      quillContentId: "quill-contentDetail",
+      quillContentId: 'quill-contentDetail',
       siteId: 0
-    };
+    }
   },
   created() {
-    var id = this.$route.query.id;
-    this.NewId = id;
-    this.articleDetail.categoryId = this.$route.query.categoryId;
+    var id = this.$route.query.id
+    this.NewId = id
+    this.articleDetail.categoryId = this.$route.query.categoryId
     if (id != null || id != undefined) {
-      this.getArticleDetail(id);
-      this.$emit("changeOperateName", "编辑");
-      this.$emit("changeSaveWay", true);
+      this.getArticleDetail(id)
+      this.$emit('changeOperateName', '编辑')
+      this.$emit('changeSaveWay', true)
     }
-    this.getTreeAsync();
-    this.getSiteList();
+    this.getTreeAsync()
+    this.getSiteList()
   },
   methods: {
     textIndent(ele, width) {
       this.$nextTick(() => {
-        ele.style.textIndent = width + "px";
-      });
+        ele.style.textIndent = width + 'px'
+      })
     },
     keywords(value, name) {
-      this.metaKeyword = this.keywordValue = "";
-      if (name === "metaKeywords") {
+      this.metaKeyword = this.keywordValue = ''
+      if (name === 'metaKeywords') {
         if (this.articleDetail.metaKeywords.length >= 5 || !value) {
-          this.isOutSeo = true;
-          return;
+          this.isOutSeo = true
+          return
         }
-        this.isOutSeo = false;
-        this.articleDetail.metaKeywords.push(value);
+        this.isOutSeo = false
+        this.articleDetail.metaKeywords.push(value)
       } else {
         if (this.articleDetail.searchKeywords.length >= 5 || !value) {
-          this.isOutSearch = true;
-          return;
+          this.isOutSearch = true
+          return
         }
-        this.isOutSearch = false;
-        this.articleDetail.searchKeywords.push(value);
+        this.isOutSearch = false
+        this.articleDetail.searchKeywords.push(value)
       }
     },
     keywordsBlur(value, name) {
-      this.metaKeyword = this.keywordValue = "";
-      if (name === "metaKeywords") {
-        this.isOutSeo = false;
+      this.metaKeyword = this.keywordValue = ''
+      if (name === 'metaKeywords') {
+        this.isOutSeo = false
       } else {
-        this.isOutSearch = false;
+        this.isOutSearch = false
       }
     },
     removeCurKeyWord(index) {
-      this.articleDetail.searchKeywords.splice(index, 1);
+      this.articleDetail.searchKeywords.splice(index, 1)
     },
     removeCurmetaKeyWord(index) {
-      this.articleDetail.metaKeywords.splice(index, 1);
+      this.articleDetail.metaKeywords.splice(index, 1)
     },
     async getTreeAsync() {
       let { data } = await articleManageApi.getArticleCategory({
         language: this.articleDetail.Language
-      });
-      this.treeResult = data;
-      var categoryName = this.$route.query.categoryName;
+      })
+      this.treeResult = data
+      var categoryName = this.$route.query.categoryName
       if (categoryName != null || categoryName != undefined) {
-        this.categoryName = categoryName;
+        this.categoryName = categoryName
 
-        this.categoryId = parseFloat(this.$route.query.categoryId);
+        this.categoryId = parseFloat(this.$route.query.categoryId)
       } else {
-        this.categoryId = 0;
+        this.categoryId = 0
       }
     },
     async getArticleDetail(id) {
-      let { data } = await articleManageApi.getArticleDetail(id);
+      let { data } = await articleManageApi.getArticleDetail(id)
       if (Object.keys(data.metaKeywords).length < 1) {
-        data.metaKeywords = [];
+        data.metaKeywords = []
       } else {
-        data.metaKeywords = data.metaKeywords.split(",");
+        data.metaKeywords = data.metaKeywords.split(',')
       }
       if (Object.keys(data.searchKeywords).length < 1) {
-        data.searchKeywords = [];
+        data.searchKeywords = []
       } else {
-        data.searchKeywords = data.searchKeywords.split(",");
+        data.searchKeywords = data.searchKeywords.split(',')
       }
-      this.articleDetail = data;
+      this.articleDetail = data
       document
         .getElementById(this.quillContentId)
         .querySelector(
-          ".ql-editor"
-        ).innerHTML = this.articleDetail.contentDetail;
-      this.articleDetail.NewId = data.id;
-      this.$emit("changePreviewId", id, this.articleDetail.defaultSiteId);
+          '.ql-editor'
+        ).innerHTML = this.articleDetail.contentDetail
+      this.articleDetail.NewId = data.id
+      this.$emit('changePreviewId', id, this.articleDetail.defaultSiteId)
     },
     //选择移动分类时的节点
     chooseNode(node) {
       if (node.id >= 0) {
-        this.articleDetail.categoryId = node.id;
-        this.categoryName = node.label;
+        this.articleDetail.categoryId = node.id
+        this.categoryName = node.label
       }
     },
     // 重置表单
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
     // 新建保存
     submitForm(formName, imageUrl) {
-      this.articleDetail.pictureUrl = imageUrl;
+      this.articleDetail.pictureUrl = imageUrl
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.type = "create";
+          this.type = 'create'
           var html = document
             .getElementById(this.quillContentId)
-            .querySelector(".ql-editor").innerHTML;
-          this.articleDetail.contentDetail = html;
-          this._createSave();
+            .querySelector('.ql-editor').innerHTML
+          this.articleDetail.contentDetail = html
+          this._createSave()
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     // 新建确认保存
     async _createSave() {
       let { status, data } = await articleManageApi.createArticle(
         this.articleDetail
-      );
-      this.NewId = data;
-      this.articleDetail.NewId = data;
-      console.log(this.NewId, "-=-=-=");
-      status === 200 && this._complateCreate();
+      )
+      this.NewId = data.id
+      this.articleDetail.NewId = data.id
+      status === 200 && this._complateCreate()
+      if (data.needTranslate && data.translateId) {
+        this.$notify({
+          customClass: 'notify-success', //  notify-success ||  notify-error
+          message: `阿里云智能翻译同步翻译中`,
+          showClose: false,
+          duration: 1000
+        })
+        this._getTranslateProcess(data.translateId, 1)
+      }
+    },
+    // 获取翻译进度
+    async _getTranslateProcess(id, count) {
+      let { status, data } = await articleManageApi.getNewsTranslateProcess(id)
+      if (status === 200) {
+        if (data.isExist) {
+          const res = data.cacheInfo
+          if (res.progressPercent < 1) {
+            count++
+            setTimeout(() => {
+              this._getTranslateProcess(id, count)
+            }, 2000)
+          }
+          if (res.progressPercent === 1) {
+            this.$notify({
+              customClass: 'notify-success', //  notify-success ||  notify-error
+              message: `自动翻译成功`,
+              showClose: false,
+              duration: 1000
+            })
+          }
+        } else {
+          if (count < 8) {
+            count++
+            setTimeout(() => {
+              this._getTranslateProcess(id, count)
+            }, 2000)
+          } else {
+            this.$notify({
+              customClass: 'notify-error', //  notify-success ||  notify-error
+              message: `网络链接错误，本次翻译失败`,
+              showClose: false,
+              duration: 1000
+            })
+          }
+        }
+      }
     },
     // 编辑保存
     editArticle(formName, imageUrl) {
-      this.articleDetail.pictureUrl = imageUrl;
+      this.articleDetail.pictureUrl = imageUrl
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.type = "edit";
+          this.type = 'edit'
           var html = document
             .getElementById(this.quillContentId)
-            .querySelector(".ql-editor").innerHTML;
-          this.articleDetail.contentDetail = html;
-          this.editSave();
+            .querySelector('.ql-editor').innerHTML
+          this.articleDetail.contentDetail = html
+          this.editSave()
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     /**
      * 保存
      */
     async editSave() {
-      let { status } = await articleManageApi.editArticle(this.articleDetail);
-      status === 200 && this._completeEdit();
+      let { status, data } = await articleManageApi.editArticle(this.articleDetail)
+      status === 200 && this._completeEdit()
+      if (data.needTranslate && data.translateId) {
+        this.$notify({
+          customClass: 'notify-success', //  notify-success ||  notify-error
+          message: `阿里云智能翻译同步翻译中`,
+          showClose: false,
+          duration: 1000
+        })
+        this._getTranslateProcess(data.translateId, 1)
+      }
     },
     /**
      * 完成编辑
      */
     _completeEdit() {
-      this.$confirm("保存成功!", "提示", {
-        confirmButtonText: "新增下一篇",
-        customClass: "medium",
-        iconClass: "icon-success",
-        cancelButtonText: "关闭",
+      this.$confirm('保存成功!', '提示', {
+        confirmButtonText: '新增下一篇',
+        customClass: 'medium',
+        iconClass: 'icon-success',
+        cancelButtonText: '关闭',
         callback: async action => {
-          if (action === "confirm") {
-            this.resetForm("articleDetail");
-            this.resetDetail();
-            this.$emit("changeSaveWay", false);
-            this.$emit("changePreviewId", "", 0);
-            this.$route.query.id = false;
+          if (action === 'confirm') {
+            this.resetForm('articleDetail')
+            this.resetDetail()
+            this.$emit('changeSaveWay', false)
+            this.$emit('changePreviewId', '', 0)
+            this.$route.query.id = false
           } else {
-            console.log(this.NewId, "-=-=-=");
-            this.articleDetail.NewId = this.$route.query.id || this.NewId;
-            this.$emit("changeSaveWay", true);
+            console.log(this.NewId, '-=-=-=')
+            this.articleDetail.NewId = this.$route.query.id || this.NewId
+            this.$emit('changeSaveWay', true)
             this.$emit(
-              "changePreviewId",
+              'changePreviewId',
               this.articleDetail.NewId,
               this.articleDetail.defaultSiteId
-            );
+            )
           }
         }
-      });
+      })
     },
     /**
      * 完成新建
      */
     _complateCreate() {
-      this.$confirm("保存成功!", "提示", {
-        confirmButtonText: "新增下一篇",
-        iconClass: "icon-success",
-        cancelButtonText: "关闭",
+      this.$confirm('保存成功!', '提示', {
+        confirmButtonText: '新增下一篇',
+        iconClass: 'icon-success',
+        cancelButtonText: '关闭',
         callback: async action => {
-          if (action === "confirm") {
-            this.resetForm("articleDetail");
-            this.resetDetail();
-            this.$emit("changeSaveWay", false);
-            this.$emit("changePreviewId", "", 0);
+          if (action === 'confirm') {
+            this.resetForm('articleDetail')
+            this.resetDetail()
+            this.$emit('changeSaveWay', false)
+            this.$emit('changePreviewId', '', 0)
           } else {
-            this.$emit("changeSaveWay", true);
+            this.$emit('changeSaveWay', true)
             this.$emit(
-              "changePreviewId",
+              'changePreviewId',
               this.NewId,
               this.articleDetail.defaultSiteId
-            );
+            )
           }
         }
-      });
+      })
     },
     onEditorChange({ editor, html, text }) {
-      this.articleDetail.contentDetail = html;
+      this.articleDetail.contentDetail = html
     },
     resetDetail() {
       this.articleDetail = {
-        NewId: "",
-        title: "",
+        NewId: '',
+        title: '',
         categoryId: this.articleDetail.categoryId,
-        summary: "",
-        contentDetail: "",
+        summary: '',
+        contentDetail: '',
         searchKeywords: [],
         isPublish: true,
-        publishTime: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
+        publishTime: formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss'),
         isTop: false,
-        metaTitle: "",
+        metaTitle: '',
         metaKeywords: [],
-        metaDescription: "",
-        pictureUrl: "",
+        metaDescription: '',
+        pictureUrl: '',
         defaultSiteId: 0,
-        Language: "zh-CN"
-      };
-      document.getElementsByClassName("ql-editor")[0].innerHTML = "";
+        Language: 'zh-CN'
+      }
+      document.getElementsByClassName('ql-editor')[0].innerHTML = ''
     },
     //获取app下所有站点
     async getSiteList() {
-      let { data } = await articleManageApi.getSiteList();
-      this.siteOptions = data;
-      this.siteId = this.siteOptions[0].siteId;
+      let { data } = await articleManageApi.getSiteList()
+      this.siteOptions = data
+      this.siteId = this.siteOptions[0].siteId
     },
     changeSiteId(siteId) {
-      this.siteId = siteId;
-      this.articleDetail.defaultSiteId = siteId;
+      this.siteId = siteId
+      this.articleDetail.defaultSiteId = siteId
     },
     detailContentChange(html) {
-      this.articleDetail.contentDetail = html;
+      this.articleDetail.contentDetail = html
     }
   },
   watch: {
-    "articleDetail.searchKeywords"() {
+    'articleDetail.searchKeywords'() {
       if (this.articleDetail.searchKeywords.length < 5) {
-        this.isOutSearch = false;
+        this.isOutSearch = false
       }
     },
-    "articleDetail.metaKeywords"() {
+    'articleDetail.metaKeywords'() {
       if (this.articleDetail.metaKeywords.length < 5) {
-        this.isOutSeo = false;
+        this.isOutSeo = false
       }
     },
     deep: true,
     immediate: true
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "@/components/style/contentDetail.scss";
+@import '@/components/style/contentDetail.scss';
 </style>
 <style scoped lang="scss">
 .quill-editor /deep/ .ql-container {
@@ -568,17 +622,17 @@ export default {
 /* 字体大小 */
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
-  content: "字体大小";
+  content: '字体大小';
 }
 /* 标题 */
 .ql-snow .ql-picker.ql-header .ql-picker-label::before,
 .ql-snow .ql-picker.ql-header .ql-picker-item::before {
-  content: "标题";
+  content: '标题';
 }
 /* 字体 */
 .ql-snow .ql-picker.ql-font .ql-picker-label::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item::before {
-  content: "字体";
+  content: '字体';
 }
 
 .editor-fullscreen {

@@ -507,9 +507,55 @@ export default {
       let { status, data } = await productManageApi.createProduct(
         this.detailData
       )
-      this.curProduct = data
-      this.detailData.id = data
+      this.curProduct = data.id
+      this.detailData.id = data.id
       status === 200 && this._complateCreate()
+      if (data.needTranslate && data.translateId) {
+        this.$notify({
+          customClass: 'notify-success', //  notify-success ||  notify-error
+          message: `阿里云智能翻译同步翻译中`,
+          showClose: false,
+          duration: 1000
+        })
+        this._getTranslateProcess(data.translateId, 1)
+      }
+    },
+     // 获取翻译进度
+    async _getTranslateProcess(id, count) {
+      let { status, data } = await productManageApi.getProductTranslateProcess(id)
+      if (status === 200) {
+        if (data.isExist) {
+          const res = data.cacheInfo
+          if (res.progressPercent < 1) {
+            count++
+            setTimeout(() => {
+              this._getTranslateProcess(id, count)
+            }, 2000)
+          }
+          if (res.progressPercent === 1) {
+            this.$notify({
+              customClass: 'notify-success', //  notify-success ||  notify-error
+              message: `自动翻译成功`,
+              showClose: false,
+              duration: 1000
+            })
+          }
+        } else {
+          if (count < 8) {
+            count++
+            setTimeout(() => {
+              this._getTranslateProcess(id, count)
+            }, 2000)
+          } else {
+            this.$notify({
+              customClass: 'notify-error', //  notify-success ||  notify-error
+              message: `网络链接错误，本次翻译失败`,
+              showClose: false,
+              duration: 1000
+            })
+          }
+        }
+      }
     },
     // 编辑提交
     editArticle(formName, fileList, storeInfo) {
@@ -544,11 +590,20 @@ export default {
      * 保存
      */
     async editSave() {
-      let { status } = await productManageApi.update(
+      let { status, data } = await productManageApi.update(
         this.curProduct,
         this.detailData
       )
       status === 200 && this._completeEdit()
+      if (data.needTranslate && data.translateId) {
+        this.$notify({
+          customClass: 'notify-success', //  notify-success ||  notify-error
+          message: `阿里云智能翻译同步翻译中`,
+          showClose: false,
+          duration: 1000
+        })
+        this._getTranslateProcess(data.translateId, 1)
+      }
     },
     /**
      * 完成编辑
