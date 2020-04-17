@@ -46,11 +46,16 @@
             >
               <i class="iconfont iconduihao"></i>
             </span>
-            <span
-              class="item-title ellipsis"
-              :class="{ 'max-width': item.contentLength > 4000 }"
-              >{{ modalData.isNews ? item.title : item.name }}</span
+            <el-tooltip
+              class="item"
+              effect="dark"
+              placement="top"
+              :content="modalData.isNews ? item.title : item.name"
             >
+              <span class="item-title ellipsis">{{
+                modalData.isNews ? item.title : item.name
+              }}</span>
+            </el-tooltip>
             <span
               class="item-warning ellipsis"
               v-show="item.contentLength > 4000"
@@ -185,8 +190,17 @@ export default {
       obj.id = this.value.value
       obj.list = this._getLastTranslateList()
       if (obj.list.length > 0) {
-        this.$emit('languageConfirm', obj)
-        this.hideSelf()
+        if (obj.languagesList.length > 0) {
+          this.$emit('languageConfirm', obj)
+          this.hideSelf()
+        } else {
+          this.$notify({
+            customClass: 'notify-error', //  notify-success ||  notify-error
+            message: `请选择要翻译的语言`,
+            showClose: false,
+            duration: 1000
+          })
+        }
       } else {
         this.$notify({
           customClass: 'notify-error', //  notify-success ||  notify-error
@@ -401,15 +415,12 @@ export default {
 
           .item-title {
             margin-right: 12px;
-            max-width: 100%;
             user-select: none;
-          }
-
-          .max-width {
-            max-width: 100px;
+            width: 20%;
           }
 
           .item-warning {
+            width: calc(80% - 32px);
             font-size: $--font-size-small;
             color: $--color-primary;
 
