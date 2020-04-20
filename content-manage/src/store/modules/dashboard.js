@@ -25,6 +25,7 @@ let filterMenuListData = source => {
 const dashboard = {
   state: {
     appId: "",
+    siteId:'',
     validateMenu: "",
     menuList: [],
     authList: [],
@@ -103,11 +104,9 @@ const dashboard = {
       });
     },
 
-    getNowSiteId({ commit }) {
-      setTimeout(async () => {
+    async getNowSiteId({ commit }) {
         let { data } = await getCurSiteId();
         commit("SETSITEID", data);
-      });
     }
   },
   getters: {
