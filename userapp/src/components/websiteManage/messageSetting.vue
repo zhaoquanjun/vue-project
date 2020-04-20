@@ -59,7 +59,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="signName" label="签名" min-width="160"></el-table-column>
-              <el-table-column prop="tempContent" label="模版内容" min-width="400">
+              <el-table-column prop="tempContent" label="模板内容" min-width="400">
                 <!-- <template  slot-scope="scope">
                   <div>
                     <span >{{scope.row.tempName}}</span>
@@ -126,7 +126,7 @@
                   </div>
                 </template>   
               </el-table-column>
-              <el-table-column prop="tempContent" label="模版" valign="top" min-width="360">
+              <el-table-column prop="tempContent" label="模板" valign="top" min-width="360">
                  <template  slot-scope="scope">
                   <div v-if="!scope.row.isEdit">
                     <span >{{scope.row.tempName}}</span>
@@ -135,7 +135,7 @@
                   <div v-else>
                     <el-select
                       v-model="scope.row.tempName"
-                      placeholder="请选择短信模版"
+                      placeholder="请选择短信模板"
                       @change="onblur(scope.row, scope.$index,2)"
                     >
                       <el-option
@@ -145,8 +145,8 @@
                         :value="item.id"
                       ></el-option>
                     </el-select>
-                    <p v-show="scope.row.templateTip" class="tips-select"><img src="~img/jian-icon.png"/>请选择短信模版</p>
-                    <a class="add-code" @click="isAddTemplate =true">添加模版</a>
+                    <p v-show="scope.row.templateTip" class="tips-select"><img src="~img/jian-icon.png"/>请选择短信模板</p>
+                    <a class="add-code" @click="isAddTemplate =true">添加模板</a>
                   </div>
                 </template>
               </el-table-column>
@@ -339,7 +339,7 @@ export default {
       }
     },
 
-    //编辑签名和模版
+    //编辑签名和模板
     async hasEdit(ind){
       let tampList = this.messagelist2
       this.messagelist2 = []
@@ -402,7 +402,7 @@ export default {
       }
     },
     
-    //  修改签名或者模版
+    //  修改签名或者模板
     onblur(val,ind,type){
         let tampList = this.messagelist2
         this.messagelist2 = []
@@ -426,14 +426,14 @@ export default {
     async changeMessageSwitch(val){
       let { data } = await dashboardApi.setIsPreUseFreeSMS(this.siteId,this.messageSwitch);
     },
-    //关闭添加模版
+    //关闭添加模板
     closeAddTemplate(){
       this.isAddTemplate = false
     },
-    //保存添加模版
+    //保存添加模板
     async saveAddTemplate(val){
       this.isAddTemplate = false
-      //获取当前模版列表
+      //获取当前模板列表
       let data1 = await dashboardApi.getCustomTemplateList();
       this.templateList = data1.data
     },

@@ -3,7 +3,7 @@
     <div class="prve-form">
         <iframe id="prve-iframe" name="myframe" class="prve-form" :src="src" ref="iframe"></iframe>
     </div>
-    <button class="release" @click="release">应用此模版</button>
+    <button class="release" @click="release">应用此模板</button>
 </div>
 </template>
 <script>
@@ -28,7 +28,7 @@
                 
                     if (this.item.isChangeTemplate) {
                         this.$confirm(
-                        `更换模版会替换现有的设计界面，您确认要切换吗？`,
+                        `更换模板会替换现有的设计界面，您确认要切换吗？`,
                         "提示",
                         {
                             iconClass: "icon-warning",
@@ -42,7 +42,7 @@
                         });
                     } 
             },
-            // 选择模版
+            // 选择模板
             async choseTemplate(item) {
                     let para ={
                         CurrentSiteId: this.item.CurrentSiteId,

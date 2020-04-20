@@ -12,7 +12,7 @@
             class="cl-button cl-button--primary"
             v-show="curSiteinfo.language=='zh-CN'"
             @click="showTemplate"
-          >选择模版</button>
+          >选择模板</button>
           <el-tooltip
             class="item"
             effect="dark"
@@ -71,18 +71,19 @@ export default {
     getCurSiteinfo(curSiteinfo) {
       this.curSiteinfo = curSiteinfo;
     },
-    // 显示选择模版弹框
+    // 显示选择模板弹框
     showTemplate() {
       if (this.curSiteinfo.language == "zh-CN") {
         this.$refs.selectTemplateDialog.showTemplate();
       } else {
         this.$refs.initializedDialog.showInitializedDialog();
-        this.getContentInfo();
+        this.getSiteContent();
       }
     },
-    async getContentInfo () {
-      let { data } = await dashboardApi.getContentInfo();
-      this.siteCount = data.siteMaxCount;
+    async getSiteContent () {
+      let { data } = await dashboardApi.getSiteCount();
+      console.log(data)
+      this.siteCount = data.siteCount;
     },
   }
 };

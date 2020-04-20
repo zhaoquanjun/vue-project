@@ -10,7 +10,7 @@ export const getSecondIndustries = (firstIndustryId) => {
     let para = { firstIndustryId: firstIndustryId };
     return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSecondIndustries`, para);
 }
-// 创建模版
+// 创建模板
 export const createTemplate = (designerPhone, newTemplateName,remark) => {
     let para = {
         designerPhone: designerPhone,
@@ -19,11 +19,11 @@ export const createTemplate = (designerPhone, newTemplateName,remark) => {
     }
     return ajaxRequest.post(`${environment.templateApi}/api/v1/Template/CreateTemplate`, para);
 }
-// 获取模版列表
+// 获取模板列表
 export const getSiteTemplates = (para) => {
     return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSiteTemplates`, para);
 }
-// 保存模版
+// 保存模板
 export const saveSiteTemplate = (para) => {
     return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/SaveSiteTemplate`, para);
 }
@@ -31,11 +31,11 @@ export const saveSiteTemplate = (para) => {
 export const getSiteTemplate = (templateId) => {
     return ajaxRequest.get(`${environment.templateApi}/api/v1/Template/GetSiteTemplate`, {templateId:templateId});
 }
-// 更新模版
+// 更新模板
 export const uploadSiteTemplate = (templateId) => {
     return ajaxRequest.put(`${environment.templateApi}/api/v1/Template/UploadSiteTemplate`, templateId);
 }
-// 删除模版
+// 删除模板
 export const deleteTemplate = (id) => {
     return ajaxRequest._delete(`${environment.templateApi}/api/v1/Template/DeleteTemplate/${id}`);
 }

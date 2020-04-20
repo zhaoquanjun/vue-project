@@ -287,7 +287,7 @@ export default {
               this.getList();
               this.$notify({
                 customClass: "notify-success",
-                message: `模版更新成功`,
+                message: `模板更新成功`,
                 duration: 2000,
                 showClose: false
               });

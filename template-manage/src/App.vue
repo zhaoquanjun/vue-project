@@ -12,7 +12,7 @@
           <el-container>
             <el-aside class="submenu-aside" v-show="isSub">
               <page-submenu>
-                <i slot="title">模版管理</i>
+                <i slot="title">模板管理</i>
               </page-submenu>
             </el-aside>
             <el-main class="page-scroll">

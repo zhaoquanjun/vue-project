@@ -20,7 +20,7 @@
             <el-input
               size="medium"
               v-model="search"
-              placeholder="输入模版名称"
+              placeholder="输入模板名称"
               @focus="showSearchIcon=true"
               @clear="clearSearchText"
               @keyup.enter.native="searchTemplateAll"
@@ -237,7 +237,7 @@
             </el-main>
             <div v-show="showNoMore" style="text-align:center;color:#9F9F9F;">已经到底啦</div>
             <div>
-              <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模版？</span>
+              <span class="notFindTemplate" @click="notFindTemplate">未找到想要的模板？</span>
               <div style="display:none">
                 <el-switch
                   v-model="showWaterFall"
@@ -279,13 +279,13 @@
             >
               <div class="notFindTemplate-pannel" :style="{width:'600px'}">
                 <div class="pannel-head">
-                  <span class="headTitle">未找到想要的模版</span>
+                  <span class="headTitle">未找到想要的模板</span>
                   <i
                     class="iconfont iconguanbi cl-iconfont is-circle"
                     @click="closeNotFindTemplateDialog"
                   ></i>
                 </div>
-                <div class="tips">请填写您的网站需求，帮助我们改进模版库</div>
+                <div class="tips">请填写您的网站需求，帮助我们改进模板库</div>
                 <div class="industry">
                   网站行业：
                   <el-input
@@ -469,7 +469,7 @@ export default {
     
   },
   methods: {
-    // 搜索内容为空，获取模版列表
+    // 搜索内容为空，获取模板列表
     clearSearchText(){
       this.changeIndustry(this.firstIndustry[0].id);
       this.showSearchIcon=true;
@@ -683,11 +683,11 @@ export default {
       }
     },
 
-    // 选择模版
+    // 选择模板
     async choseSite(item) {
       if (this.isChangeTemplate) {
         this.$confirm(
-          `更换模版会替换现有的设计界面，您确认要切换吗？`,
+          `更换模板会替换现有的设计界面，您确认要切换吗？`,
           "提示",
           {
             iconClass: "icon-warning",
@@ -707,7 +707,7 @@ export default {
     async choseTemplate(item) {
       const loading = this.$loading({
         lock: true,
-        text: "正在复制模版",
+        text: "正在复制模板",
         spinner: "copy-icon",
         customClass: "copyTemplateLoading",
         background: "rgba(0, 0, 0, 0.5)"
@@ -763,13 +763,13 @@ export default {
         loading.close();
         this.$notify({
           customClass: "notify-error",
-          message: `模版复制失败，请稍后重试`,
+          message: `模板复制失败，请稍后重试`,
           duration: 1500,
           showClose: false
         });
       }
     },
-    //   获取模版列表
+    //   获取模板列表
     async getTemplateList() {
       this.showNoMore=false;
       this.pageIndex=1;
@@ -900,7 +900,7 @@ export default {
       this.orderType[0].isOrder = true;
       this.showNoMore=false;
     },
-    // // 选择全部模版
+    // // 选择全部模板
     // async choseAllTab() {
     //   this.isAllTab = true;
     //   this.orderType.forEach((item, index) => {
@@ -1010,7 +1010,7 @@ export default {
         }
       }
     },
-    // 显示选择模版弹框
+    // 显示选择模板弹框
     showTemplate() {
       this.templateShow = true;
       this.getIndustryTree();

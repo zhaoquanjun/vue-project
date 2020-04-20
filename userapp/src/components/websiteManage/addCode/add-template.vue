@@ -2,15 +2,15 @@
     <div class="add-template">
         <div class="template">
             <div class="header">
-                <span class="title">添加模版</span>
+                <span class="title">添加模板</span>
                 <i @click="closeAddTemplate" class="icon iconfont iconguanbi cl-iconfont is-circle"></i>
             </div>
             <div v-show="!step1" class="content">
                 <div class="input">
-                    <span>模版CODE</span>
+                    <span>模板CODE</span>
                     <el-input v-model="codeValue" maxlength="15" placeholder="请输入在阿里云申请通过的短信模板CODE"></el-input>
                 </div>
-                <a href="">申请模版</a>
+                <a href="">申请模板</a>
             </div>
             <div v-show="step1" class="save">
                 <div>

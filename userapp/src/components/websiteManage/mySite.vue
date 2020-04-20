@@ -23,7 +23,7 @@
                 :style="{background: 'url(' + ( siteImage ) + ') no-repeat center/cover'}"
               >
                 <div class="modal" @click="changeTemplate()">
-                  <button class="choseSite">更换模版</button>
+                  <button class="choseSite">更换模板</button>
                 </div>
                 <dir class="changeTemplate">更换模板</dir>
               </div>
@@ -248,7 +248,7 @@
             ></el-input>
             <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
           </div>
-          <div style="margin-top:16px">
+          <div v-if="isSingleSite" style="margin-top:16px">
             <div class="createSiteTitle">站点语言</div>
             <el-radio-group v-model="changeRadio">
               <el-radio label="zh-CN">中文</el-radio>
@@ -346,7 +346,8 @@ export default {
       siteInfoType: "flow",
       screenWidth: document.body.clientWidth, // 屏幕宽度
       timer: true,
-      myChart:null
+      myChart:null,
+      isSingleSite: false
     };
   },
   mounted () {
@@ -356,7 +357,8 @@ export default {
         this.screenWidth = document.body.clientWidth
       })()
     },
-    this.getPvUvIp()
+    this.getPvUvIp();
+    this.getSiteContent();
   },
   methods: {
     async _viewUmengData(){
@@ -365,6 +367,10 @@ export default {
       newWindow.location.href = data;
     },
     handleClick() {},
+    async getSiteContent () {
+      let { data } = await dashboardApi.getSiteCount();
+      this.isSingleSite = data.isSingleSite;
+    },
     // 展示修改site信息弹框
     changeSiteInfoShow() {
       this.changeSiteName = this.siteName;

@@ -53,7 +53,7 @@ export const defaultRoutes = [
         name: "selectTemplate",
         component: () => import("@/views/website-manage/selectTemplate.vue"),
         meta: {
-          title: "选择模版",
+          title: "选择模板",
           requiresAuth: false,
           isSub: true
         }
@@ -63,7 +63,7 @@ export const defaultRoutes = [
         name: "prevtemplate",
         component: () => import("@/views/prevtemplate/prevtemplate.vue"),
         meta: {
-          title: "模版预览",
+          title: "模板预览",
           requiresAuth: false,
           isSub: true
         }
