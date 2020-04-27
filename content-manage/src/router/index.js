@@ -22,6 +22,7 @@ let router = new VueRouter({
 export default router;
 
 let appId = store.state.dashboard.appId;
+let siteId = store.state.dashboard.siteId;
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
 
@@ -42,6 +43,9 @@ router.beforeEach(async (to, from, next) => {
       }
       if (!appId) {
         await store.dispatch("_updateAppIdAndSiteIdToCookie");
+      }
+      if (!siteId) {
+        await store.dispatch("getNowSiteId");
       }
       if (store.getters.getMenuList.length < 1)
         await store.dispatch("_getMenuListData");

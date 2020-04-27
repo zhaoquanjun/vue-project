@@ -8,14 +8,23 @@
             class="sitelist-item"
             v-for="(item, index) in siteInfo"
             :key="index"
-            :class="{'sitelist-curitem':item.siteId == siteId}"
+            :class="{ 'sitelist-curitem': item.siteId == siteId }"
             @click="changeSite(item)"
-          >{{item.siteName}}</li>
+          >
+            <div class="sitelist-language">
+              {{
+                item.language == ""
+                  ? "无"
+                  : _getLanguage(item.language).slice(0, 1)
+              }}
+            </div>
+            <div class="sitelist-text">{{ item.siteName }}</div>
+          </li>
           <Debounce :time="1000" !isDebounce>
             <div
               class="sitelist-addSite"
               @click="createUninitializedSite"
-              v-show="isSystem&&siteInfo.length < siteCount"
+              v-show="isSystem && siteInfo.length < siteCount"
             ></div>
           </Debounce>
         </ul>
@@ -29,11 +38,13 @@
       <div class="site-operating">
         <div class="site-edit">
           <div class="site-img"></div>
-          <span class="site-name">{{curSiteinfo.siteName}}</span>
-          <span class="site-language">{{_getLanguage(curSiteinfo.language)}}</span>
+          <span class="site-name">{{ curSiteinfo.siteName }}</span>
+          <span class="site-language">{{
+            _getLanguage(curSiteinfo.language)
+          }}</span>
           <i
             class="iconfont iconicon-dash-edit editIcon"
-            v-show="isSystem&&curSiteinfo.hasBeenInitialized"
+            v-show="isSystem && curSiteinfo.hasBeenInitialized"
             @click="changeSiteInfoShow"
           ></i>
         </div>
@@ -41,20 +52,35 @@
           <button
             class="cl-button cl-button--primary"
             @click="jumpTo('template')"
-            v-show="!curSiteinfo.hasBeenInitialized&&curSiteinfo.language=='zh-CN'"
-          >选择模版</button>
+            v-show="
+              !curSiteinfo.hasBeenInitialized && curSiteinfo.language == 'zh-CN'
+            "
+          >
+            选择模板
+          </button>
           <el-tooltip
             class="item"
             effect="dark"
             placement="top"
-            :content="curSiteinfo.anyChineseSiteHasBeenInitialized?'建议先完成中文站的搭建再整体进行外文站点初始化':'请先完成中文站点的模板选择'"
+            :content="
+              curSiteinfo.anyChineseSiteHasBeenInitialized
+                ? '建议先完成中文站的搭建再整体进行外文站点初始化'
+                : '请先完成中文站点的模板选择'
+            "
           >
             <button
               class="cl-button cl-button--primary"
-              :class="{'disabled':!curSiteinfo.anyChineseSiteHasBeenInitialized}"
+              :class="{
+                disabled: !curSiteinfo.anyChineseSiteHasBeenInitialized
+              }"
               @click="showInitializedDialog"
-              v-show="!curSiteinfo.hasBeenInitialized&&curSiteinfo.language!='zh-CN'"
-            >初始化站点</button>
+              v-show="
+                !curSiteinfo.hasBeenInitialized &&
+                  curSiteinfo.language != 'zh-CN'
+              "
+            >
+              初始化站点
+            </button>
           </el-tooltip>
           <a
             class="preview-btn"
@@ -76,37 +102,60 @@
         <el-col :span="8" class="site-item">
           <div class="site-title">上线</div>
           <div class="siteInfo-wrap">
-            <div class="siteInfo-item" :class="{'disabled':!curSiteinfo.hasBeenInitialized&&curSiteinfo.language!='zh-CN'}" @click="jumpTo('template')">
+            <div
+              class="siteInfo-item"
+              :class="{
+                disabled:
+                  !curSiteinfo.hasBeenInitialized &&
+                  curSiteinfo.language != 'zh-CN'
+              }"
+              @click="jumpTo('template')"
+            >
               <div class="siteInfo-left">
                 <span
-                  :class="{'siteInfo-icon-gray':!curSiteTodoinfo.siteTemplate, 'siteInfo-icon-green':curSiteTodoinfo.siteTemplate}"
+                  :class="{
+                    'siteInfo-icon-gray': !curSiteTodoinfo.siteTemplate,
+                    'siteInfo-icon-green': curSiteTodoinfo.siteTemplate
+                  }"
                 ></span>
-                <span class="siteInfo-title">站点模版</span>
+                <span class="siteInfo-title">站点模板</span>
               </div>
               <div class="siteInfo-right">
-                <span class="siteInfo-btn">{{curSiteTodoinfo.siteTemplate?'更换模版':'选择模版'}}</span>
+                <span class="siteInfo-btn">{{
+                  curSiteTodoinfo.siteTemplate ? "更换模板" : "选择模板"
+                }}</span>
               </div>
             </div>
             <div class="siteInfo-item" @click="jumpTo('domain')">
               <div class="siteInfo-left">
                 <span
-                  :class="{'siteInfo-icon-gray':!curSiteTodoinfo.siteDomain, 'siteInfo-icon-green':curSiteTodoinfo.siteDomain}"
+                  :class="{
+                    'siteInfo-icon-gray': !curSiteTodoinfo.siteDomain,
+                    'siteInfo-icon-green': curSiteTodoinfo.siteDomain
+                  }"
                 ></span>
                 <span class="siteInfo-title">站点域名</span>
                 <el-dropdown :hide-timeout="500" placement="bottom-start">
-                  <span
-                    class="siteInfo-domain"
-                  >{{curSiteTodoinfo.resolvedDomainList?curSiteTodoinfo.resolvedDomainList[0]:""}}</span>
+                  <span class="siteInfo-domain">{{
+                    curSiteTodoinfo.resolvedDomainList
+                      ? curSiteTodoinfo.resolvedDomainList[0]
+                      : ""
+                  }}</span>
                   <el-dropdown-menu slot="dropdown" class="siteDomainDrop">
                     <!-- 域名默认为http 若域名为https的会自动跳到https -->
                     <a
                       class="siteDomainDropList"
-                      v-for="(item, index) in curSiteTodoinfo.resolvedDomainList"
+                      v-for="(item,
+                      index) in curSiteTodoinfo.resolvedDomainList"
                       :key="index"
-                      :href="`http://${curSiteTodoinfo.resolvedDomainList[index]}`"
+                      :href="
+                        `http://${curSiteTodoinfo.resolvedDomainList[index]}`
+                      "
                       target="_blank"
                     >
-                      <span class="siteDomainDropItem">{{curSiteTodoinfo.resolvedDomainList[index]}}</span>
+                      <span class="siteDomainDropItem">{{
+                        curSiteTodoinfo.resolvedDomainList[index]
+                      }}</span>
                       <i class="iconfont iconchakan"></i>
                     </a>
                   </el-dropdown-menu>
@@ -116,10 +165,17 @@
                 <span class="siteInfo-btn">管理</span>
               </div>
             </div>
-            <a class="siteInfo-item" :href="`https://beian.aliyun.com`" target="_blank">
+            <a
+              class="siteInfo-item"
+              :href="`https://beian.aliyun.com`"
+              target="_blank"
+            >
               <div class="siteInfo-left">
                 <span
-                  :class="{'siteInfo-icon-gray':!curSiteTodoinfo.domainHasBeenRecord, 'siteInfo-icon-green':curSiteTodoinfo.domainHasBeenRecord}"
+                  :class="{
+                    'siteInfo-icon-gray': !curSiteTodoinfo.domainHasBeenRecord,
+                    'siteInfo-icon-green': curSiteTodoinfo.domainHasBeenRecord
+                  }"
                 ></span>
                 <span class="siteInfo-title">网站备案</span>
               </div>
@@ -217,7 +273,7 @@
       :show-close="false"
       :close-on-click-modal="false"
     >
-      <div class="right-pannel" :style="{width:'430px'}">
+      <div class="right-pannel" :style="{ width: '430px' }">
         <div class="pannel-head">
           <span class="headTitle">设置站点</span>
           <span class="close-pannel" @click="closeChangeDialog">
@@ -232,26 +288,41 @@
             placeholder="请输入内容"
             class="createSiteNameInput"
           ></el-input>
-          <div class="ym-form-item__error" v-show="errorSiteName">{{errorSiteNameText}}</div>
+          <div class="ym-form-item__error" v-show="errorSiteName">
+            {{ errorSiteNameText }}
+          </div>
         </div>
         <div v-show="siteInfo.length == 1" style="margin-top:16px">
           <div class="createSiteTitle">站点语言</div>
-          <el-radio-group v-model="changeRadio" @change="changeLanguage" class="radio">
+          <el-radio-group
+            v-model="changeRadio"
+            @change="changeLanguage"
+            class="radio"
+          >
             <el-radio label="zh-CN">中文</el-radio>
             <el-radio label="en-US">英文</el-radio>
             <el-radio label="ja-JP">日文</el-radio>
             <el-radio label="es-ES">西班牙语</el-radio>
             <el-radio label="ko-KR">韩语</el-radio>
           </el-radio-group>
-          <div class="ym-form-item__error" v-show="errorSiteLanguage">{{errorSiteLanguageText}}</div>
+          <div class="ym-form-item__error" v-show="errorSiteLanguage">
+            {{ errorSiteLanguageText }}
+          </div>
         </div>
         <div class="create">
           <button
             @click="closeChangeDialog"
             class="cl-button cl-button--primary_notbg cl-button--small"
-          >取消</button>
+          >
+            取消
+          </button>
           <Debounce :time="1000" !isDebounce>
-            <button @click="changeSiteInfo" class="cl-button cl-button--primary cl-button--small">确定</button>
+            <button
+              @click="changeSiteInfo"
+              class="cl-button cl-button--primary cl-button--small"
+            >
+              确定
+            </button>
           </Debounce>
         </div>
       </div>
@@ -346,11 +417,14 @@ export default {
         this.getTodoInfo(this.siteId);
         this.$store.commit("SETSITEID", this.siteId);
         await dashboardApi.updateUserLastSiteId(this.siteId);
-        this.$store.dispatch("getunreadCount")
+        this.$store.dispatch("getunreadCount");
       }
     },
     jumpTo(type) {
-      if (!this.curSiteinfo.hasBeenInitialized&&this.curSiteinfo.language=='zh-CN') {
+      if (
+        !this.curSiteinfo.hasBeenInitialized &&
+        this.curSiteinfo.language == "zh-CN"
+      ) {
         this.$refs.selectTemplateDialog.showTemplate();
         return;
       }
@@ -359,7 +433,10 @@ export default {
           path: "/website/mysite/sitedomain"
         });
       } else if (type == "template") {
-        if (!this.curSiteinfo.hasBeenInitialized&&this.curSiteinfo.language!='zh-CN') {
+        if (
+          !this.curSiteinfo.hasBeenInitialized &&
+          this.curSiteinfo.language != "zh-CN"
+        ) {
           return;
         }
         this.$refs.selectTemplateDialog.showTemplate();
@@ -385,9 +462,7 @@ export default {
     },
     // 创建未初始化站点
     async createUninitializedSite() {
-      let { data, status } = await dashboardApi.createSite(
-        "「未设置语言」网站名称"
-      );
+      let { data, status } = await dashboardApi.createSite("网站名称");
       if (status == 200) {
         this.$notify({
           customClass: "notify-success",
@@ -401,7 +476,7 @@ export default {
       }
     },
     showInitializedDialog() {
-      if(this.curSiteinfo.anyChineseSiteHasBeenInitialized){
+      if (this.curSiteinfo.anyChineseSiteHasBeenInitialized) {
         this.$refs.initializedDialog.showInitializedDialog();
       }
     },
@@ -575,21 +650,16 @@ export default {
       .sitelist {
         width: 100%;
         margin-top: 21px;
-        display: inline-block;
+        display: flex;
         .sitelist-item:first-child {
           border-left: $--border-base;
         }
         .sitelist-item {
-          display: inline-block;
           height: 32px;
           width: 19%;
           padding: 0 16px;
           text-align: center;
           font-size: 12px;
-          line-height: 32px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
           box-sizing: border-box;
           border-top: $--border-base;
           border-bottom: $--border-base;
@@ -597,14 +667,42 @@ export default {
           background: #fff;
           z-index: 1;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           &:hover {
-            color: $--color-primary;
+            .sitelist-text {
+              color: $--color-primary;
+            }
+          }
+          .sitelist-language {
+            display: inline-block;
+            width: 18px;
+            height: 14px;
+            border: 1px solid $--color-text-primary;
+            border-radius: 1px;
+            line-height: 14px;
+            margin-right: 10px;
+          }
+          .sitelist-text {
+            display: inline-block;
+            max-width: calc(100% - 46px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
         .sitelist-curitem {
           border-top: 2px solid $--color-primary;
           border-bottom: 1px solid transparent;
-          color: $--color-primary;
+          .sitelist-language {
+            background: $--color-primary;
+            color: $--color-white;
+            border: 1px solid $--color-primary;
+          }
+          .sitelist-text {
+            color: $--color-primary;
+          }
         }
         .sitelist-addSite {
           display: inline-block;
@@ -806,7 +904,7 @@ export default {
               }
             }
           }
-          .disabled{
+          .disabled {
             cursor: not-allowed;
           }
         }
@@ -883,7 +981,7 @@ export default {
     .preview-btn {
       margin-right: 16px;
     }
-    .countdownTime{
+    .countdownTime {
       display: inline-block;
       color: $--color-warning;
       font-size: $--font-size-small;

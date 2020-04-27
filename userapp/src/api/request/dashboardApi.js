@@ -24,7 +24,9 @@ export const createAliyunSsoLoginUser = para => {
 };
 // 获取自动翻译开关是否展示
 export const showTranslateSwitch = () => {
-  return ajaxRequest.get(`${environment.memberManageApi}/api/v1/SiteInfo/ShowTranslateSwitch`);
+  return ajaxRequest.get(
+    `${environment.memberManageApi}/api/v1/SiteInfo/ShowTranslateSwitch`
+  );
 };
 // 切换自动翻译状态
 export const switchAutoTranslateStatus = () => {
@@ -256,7 +258,7 @@ export const getAkSk = () => {
   return ajaxRequest.get(`${environment.memberManageApi}/api/v1/AkSk/get`);
 };
 /**
- * 获取模版列表
+ * 获取模板列表
  */
 export const getCustomTemplateList = () => {
   return ajaxRequest.get(
@@ -272,7 +274,7 @@ export const getSiteSMSSignList = () => {
   );
 };
 /**
- * 删除模版
+ * 删除模板
  */
 export const removeCustomTemplate = tempId => {
   return ajaxRequest._delete(
@@ -373,5 +375,14 @@ export const updateCustomSms = data => {
 export const viewUmengData = () => {
   return ajaxRequest.get(
     `${environment.designerManageApi}/api/v1/domainmanage/jump2umeng`
+  );
+};
+
+/**
+ * @name 获取站点数量
+ */
+export const getSiteCount = () => {
+  return ajaxRequest.get(
+    `${environment.memberManageApi}/api/v1/dashboard/GetSiteCountInfo`
   );
 };

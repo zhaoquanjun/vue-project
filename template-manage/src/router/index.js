@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { defaultRoutes } from "./routes"
-import { getLocal } from "@/libs/local"
 import store from "@/store/index";
 import securityService from "@/services/authentication/securityService";
 import { getCookie } from "@/libs/cookie";

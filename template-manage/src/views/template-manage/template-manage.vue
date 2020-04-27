@@ -1,8 +1,8 @@
 <template>
   <el-container class="templateManage">
     <el-header class="templateTitle" style="height:50px">
-      <span class="titleText">整站模版</span>
-      <button class="cl-button cl-button--primary" @click="createTemplatedialogShow">开通整站模版</button>
+      <span class="titleText">整站模板</span>
+      <button class="cl-button cl-button--primary" @click="createTemplatedialogShow">开通整站模板</button>
     </el-header>
     <el-main class="contentWrap">
       <div class="contentHeader">
@@ -65,7 +65,7 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <el-select v-model="templateStatus" placeholder="模版状态" class="templateStatus inputHeight">
+          <el-select v-model="templateStatus" placeholder="模板状态" class="templateStatus inputHeight">
             <el-option
               v-for="item in templateStatusOptions"
               :key="item.value"
@@ -126,7 +126,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="模版行业" min-width="110">
+            <el-table-column label="模板行业" min-width="110">
               <template slot-scope="scope">
                 <div>
                   <p class="templateName">{{scope.row.firstIndustry}}</p>
@@ -244,7 +244,7 @@
         <div class="right-pannel" :style="{width:'470px'}">
           <div class="pannel-head">
             <span>
-              <span>开通整站模版</span>
+              <span>开通整站模板</span>
             </span>
             <span class="close-pannel" @click="cancelCreateTemplate">
               <i class="iconfont iconguanbi cl-iconfont is-circle"></i>
@@ -266,8 +266,8 @@
             <div class="ym-form-item__error" v-show="errorTip">{{errorPhone}}</div>
           </div>
           <div class="newTemplateNameWrap">
-            <span class="newTemplateName">模版名称</span>
-            <el-input v-model="newTemplateName" placeholder="请输入模版名称" maxlength="30" show-word-limit class="inputNewTemplateName"></el-input>
+            <span class="newTemplateName">模板名称</span>
+            <el-input v-model="newTemplateName" placeholder="请输入模板名称" maxlength="30" show-word-limit class="inputNewTemplateName"></el-input>
           </div>
           <div class="remarkWrap">
             <span class="remarkTitle">备注</span>
@@ -293,7 +293,7 @@
         <div class="right-pannel" :style="{width:'470px'}">
           <div class="pannel-head">
             <span>
-              <span>整站模版设置</span>
+              <span>整站模板设置</span>
             </span>
             <span class="close-pannel" @click="cancelSettingTemplate">
               <i class="iconfont iconguanbi cl-iconfont is-circle" style="font-size:14px"></i>
@@ -301,17 +301,17 @@
           </div>
           <div class="dialogContent" :style="{height:dialogHeight+'px'}">
             <div class="settingTemplateWrap">
-              <span class="templateName">模版名称</span>
+              <span class="templateName">模板名称</span>
               <el-input
                 v-model="settingTemplateName"
-                placeholder="请输入模版名称"
+                placeholder="请输入模板名称"
                 class="templateNameInput"
                 @blur="blurTemplateName"
               ></el-input>
               <div class="ym-form-item__error" v-show="errorTemplateNameTips">{{errorTemplateName}}</div>
             </div>
             <div class="templateindustryWrap">
-              <div class="templateindustryTitle">模版行业</div>
+              <div class="templateindustryTitle">模板行业</div>
               <el-select
                 v-model="settingFirstIndustrySelect"
                 placeholder="一级行业"
@@ -339,14 +339,14 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
-              <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择模版行业</div>
+              <div class="ym-form-item__error" v-show="errorTemplateIndustryShow">选择模板行业</div>
             </div>
             <div class="settingStatusWrap">
-              <div class="settingStatus">模版状态</div>
+              <div class="settingStatus">模板状态</div>
               <div style="display:inline-block;">
                 <el-select
                   v-model="settingTemplateStatus"
-                  placeholder="模版状态"
+                  placeholder="模板状态"
                   class="settingStatusSelect inputHeight"
                 >
                   <el-option
@@ -466,10 +466,10 @@ export default {
       dialogHeight: 500,
       operateList: [
         { name: "设置", flag: "setting" },
-        { name: "更新模版", flag: "update" },
+        { name: "更新模板", flag: "update" },
         { name: "邀请成员", flag: "invitedMember" },
         { name: "删除成员", flag: "deleteMember" },
-        { name: "删除模版", flag: "delete" }
+        { name: "删除模板", flag: "delete" }
       ],
       operateShow: false,
       row: "",
@@ -497,7 +497,7 @@ export default {
       searchOptions: [
         {
           value: "templateName",
-          label: "模版名称"
+          label: "模板名称"
         },
         {
           value: "secondDomaon",
@@ -757,7 +757,7 @@ export default {
       this.errorTip = false;
       this.errorPhone = "";
     },
-    //   获取模版列表
+    //   获取模板列表
     async getTemplateList() {
       this.$Loading.show();
       let para = {
@@ -805,7 +805,7 @@ export default {
       this.secondIndustryOptions = data;
       this.secondIndustrySelect = "";
     },
-    // 开通模版
+    // 开通模板
     createTemplatedialogShow() {
       this.clearOpenDialog();
       this.createTemplateShow = true;
@@ -830,7 +830,7 @@ export default {
         this.createTemplateShow = false;
         const loading = this.$loading({
           lock: true,
-          text: "正在创建模版",
+          text: "正在创建模板",
           spinner: "copy-icon",
           customClass: "createTemplateLoading",
           background: "rgba(38,38,38,0.7)"
@@ -883,16 +883,16 @@ export default {
     blurTemplateName() {
       if (this.settingTemplateName == "") {
         this.errorTemplateNameTips = true;
-        this.errorTemplateName = "请输入模版名称";
+        this.errorTemplateName = "请输入模板名称";
       } else if (!/^.{1,100}$/.test(this.settingTemplateName)) {
         this.errorTemplateNameTips = true;
-        this.errorTemplateName = "模版名称最大长度为100个字符";
+        this.errorTemplateName = "模板名称最大长度为100个字符";
       } else {
         this.errorTemplateNameTips = false;
         this.errorTemplateName = "";
       }
     },
-    // 切换搜索类型 模版/二级域名/设计师
+    // 切换搜索类型 模板/二级域名/设计师
     changeSearchType() {
       this.search = "";
     },
@@ -1002,8 +1002,8 @@ export default {
       }
       this.operateList = [
         { name: "设置", flag: "setting" },
-        { name: "更新模版", flag: "update" },
-        { name: "删除模版", flag: "delete" }
+        { name: "更新模板", flag: "update" },
+        { name: "删除模板", flag: "delete" }
       ];
       this.row = row;
       if (row.status == 2) {
@@ -1016,7 +1016,7 @@ export default {
           { name: "设置", flag: "setting" },
           { name: "邀请成员", flag: "invitedMember" },
           { name: "删除成员", flag: "deleteMember" },
-          { name: "删除模版", flag: "delete" }
+          { name: "删除模板", flag: "delete" }
         ];
         this.$refs.operateSection.style.left =
           ev.pageX - ev.offsetX + 32 + "px";
@@ -1024,10 +1024,10 @@ export default {
       } else if (row.status == 1) {
         this.operateList = [
           { name: "设置", flag: "setting" },
-          { name: "更新模版", flag: "update" },
+          { name: "更新模板", flag: "update" },
           { name: "邀请成员", flag: "invitedMember" },
           { name: "删除成员", flag: "deleteMember" },
-          { name: "删除模版", flag: "delete" }
+          { name: "删除模板", flag: "delete" }
         ];
         this.$refs.operateSection.style.left =
           ev.pageX - ev.offsetX + 32 + "px";
@@ -1056,7 +1056,7 @@ export default {
         this.errorTemplateIndustryShow = false;
       }
     },
-    // 设置模版弹窗
+    // 设置模板弹窗
     async settingTemplate(row) {
       this.curTemplateId = row.id;
       this.curSiteId = row.siteId;
@@ -1086,14 +1086,14 @@ export default {
         this.settingTemplateShow = true;
       }
     },
-    // 保存设置模版
+    // 保存设置模板
     async saveSettingTemplate() {
       if (this.settingTemplateName == "") {
         this.errorTemplateNameTips = true;
-        this.errorTemplateName = "请输入模版名称";
+        this.errorTemplateName = "请输入模板名称";
       } else if (!/^.{1,100}$/.test(this.settingTemplateName)) {
         this.errorTemplateNameTips = true;
-        this.errorTemplateName = "模版名称最大长度为100个字符";
+        this.errorTemplateName = "模板名称最大长度为100个字符";
       } else if (this.settingFirstIndustrySelect == 0) {
         this.errorTemplateIndustryShow = true;
       } else {
@@ -1136,9 +1136,9 @@ export default {
       this.settingTemplateStatus = "";
       this.settingTemplateShow = false;
     },
-    // 更新模版
+    // 更新模板
     updateTemplate(row) {
-      this.$confirm(`确定要更新模版吗？`, "提示", {
+      this.$confirm(`确定要更新模板吗？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
@@ -1146,7 +1146,7 @@ export default {
             if (status === 200) {
               this.$notify({
                 customClass: "notify-success",
-                message: `模版更新成功`,
+                message: `模板更新成功`,
                 duration: 2000,
                 showClose: false
               });
@@ -1163,9 +1163,9 @@ export default {
         }
       });
     },
-    // 删除模版
+    // 删除模板
     deleteTemplate(row) {
-      this.$confirm(`确定删除该模版吗？`, "提示", {
+      this.$confirm(`确定删除该模板吗？`, "提示", {
         iconClass: "icon-warning",
         callback: async action => {
           if (action === "confirm") {
@@ -1173,7 +1173,7 @@ export default {
             if (status === 200) {
               this.$notify({
                 customClass: "notify-success",
-                message: `模版删除成功`,
+                message: `模板删除成功`,
                 duration: 2000,
                 showClose: false
               });

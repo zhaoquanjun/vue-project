@@ -98,7 +98,7 @@ export default {
       searchOptions: [
         {
           value: "templateName",
-          label: "模版名称"
+          label: "模板名称"
         },
         {
           value: "secondDomaon",
@@ -113,7 +113,7 @@ export default {
       sortOptions: [
         {
           value: -1,
-          label: "模版状态"
+          label: "模板状态"
         },
         {
           value: 0,
@@ -289,7 +289,7 @@ export default {
       let { data } = await templateApi.createComposeTemplate(para);
       this.$notify({
         customClass: "notify-success",
-        message: `模版开通成功`,
+        message: `模板开通成功`,
         duration: 2000,
         showClose: false
       });

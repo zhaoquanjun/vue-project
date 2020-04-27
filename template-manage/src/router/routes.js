@@ -21,7 +21,7 @@ export const defaultRoutes = [
                 component: () => import('@/views/template-manage/template-manage.vue'),
                 meta: {
                     requiresAuth: true,
-                    title: "整站模版",
+                    title: "整站模板",
                     isSub: true
                 },
             },

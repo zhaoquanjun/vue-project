@@ -16,10 +16,10 @@
           <div class="domain-menu">
             <el-tabs v-model="backupType" @tab-click="handleClick">
               <el-tab-pane label="签名管理" name="autograph"></el-tab-pane>
-              <el-tab-pane label="模版管理" name="template"></el-tab-pane>
+              <el-tab-pane label="模板管理" name="template"></el-tab-pane>
             </el-tabs>
             <button v-show="backupType == 'autograph'" class="cl-button btn-code cl-button--primary" @click="isAddAutograph = true">添加签名</button>
-            <button v-show="backupType == 'template'" class="cl-button btn-code cl-button--primary" @click="isAddTemplate =true">添加模版</button>
+            <button v-show="backupType == 'template'" class="cl-button btn-code cl-button--primary" @click="isAddTemplate =true">添加模板</button>
           </div>
 
           <!-- 免费短信 -->
@@ -39,7 +39,7 @@
               <el-table-column v-if="backupType == 'autograph'" prop="signName" label="签名名称"></el-table-column>
               <el-table-column v-if="backupType == 'autograph'" prop="createTime" label="创建时间"></el-table-column>
 
-              <el-table-column v-if="backupType == 'template'" prop="tempName" label="模版名称"></el-table-column>
+              <el-table-column v-if="backupType == 'template'" prop="tempName" label="模板名称"></el-table-column>
 
               <el-table-column v-if="backupType == 'template'" prop="tempCode" label="模板CODE"></el-table-column>
 
@@ -103,11 +103,11 @@ export default {
     
     async init() {
       if(this.backupType === 'template'){
-        //获取当前模版列表
+        //获取当前模板列表
         let { data } = await dashboardApi.getCustomTemplateList();
         this.messagelist = data
       } else {
-        //获取当前模版列表
+        //获取当前模板列表
         let { data } = await dashboardApi.getSiteSMSSignList();
         this.messagelist = data
         console.log('getSiteSMSSignList',this.messagelist)
@@ -125,7 +125,7 @@ export default {
      */
     async deleteCode(id) {
         this.disabled = true;
-        let tips = this.backupType == 'autograph' ? '签名': '模版';
+        let tips = this.backupType == 'autograph' ? '签名': '模板';
         this.$confirm(
                 `确定要删除该${tips}吗？`,
                 "提示",
@@ -171,11 +171,11 @@ export default {
     handleClick(){
       this.init()
     },
-    //关闭添加模版
+    //关闭添加模板
     closeAddTemplate(){
       this.isAddTemplate = false
     },
-    //保存添加模版
+    //保存添加模板
     saveAddTemplate(val){
       this.isAddTemplate = false
       this.init()
