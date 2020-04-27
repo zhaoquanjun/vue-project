@@ -517,6 +517,14 @@ export default {
           showClose: false,
           duration: 1000
         })
+        if (data.contentTooLongSkipTranslate) {
+          this.$notify({
+            customClass: 'notify-success', //  notify-success ||  notify-error
+            message: `您的产品超过5000字部分将跳过翻译`,
+            showClose: false,
+            duration: 1000
+          })
+        }
         this._getTranslateProcess(data.translateId, 1)
       }
     },
@@ -602,6 +610,14 @@ export default {
           showClose: false,
           duration: 1000
         })
+        if (data.contentTooLongSkipTranslate) {
+          this.$notify({
+            customClass: 'notify-success', //  notify-success ||  notify-error
+            message: `您的产品超过5000字部分将跳过翻译`,
+            showClose: false,
+            duration: 1000
+          })
+        }
         this._getTranslateProcess(data.translateId, 1)
       }
     },

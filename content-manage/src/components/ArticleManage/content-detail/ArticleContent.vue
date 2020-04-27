@@ -380,7 +380,7 @@ export default {
     // 新建保存
     submitForm(formName, imageUrl) {
       this.articleDetail.pictureUrl = imageUrl
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.type = 'create'
           var html = document
@@ -409,6 +409,14 @@ export default {
           showClose: false,
           duration: 1000
         })
+        if (data.contentTooLongSkipTranslate) {
+          this.$notify({
+            customClass: 'notify-success', //  notify-success ||  notify-error
+            message: `您的文章超过5000字部分将跳过翻译`,
+            showClose: false,
+            duration: 1000
+          })
+        }
         this._getTranslateProcess(data.translateId, 1)
       }
     },
@@ -452,7 +460,7 @@ export default {
     // 编辑保存
     editArticle(formName, imageUrl) {
       this.articleDetail.pictureUrl = imageUrl
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.type = 'edit'
           var html = document
@@ -470,7 +478,9 @@ export default {
      * 保存
      */
     async editSave() {
-      let { status, data } = await articleManageApi.editArticle(this.articleDetail)
+      let { status, data } = await articleManageApi.editArticle(
+        this.articleDetail
+      )
       status === 200 && this._completeEdit()
       if (data.needTranslate && data.translateId) {
         this.$notify({
@@ -479,6 +489,14 @@ export default {
           showClose: false,
           duration: 1000
         })
+        if (data.contentTooLongSkipTranslate) {
+          this.$notify({
+            customClass: 'notify-success', //  notify-success ||  notify-error
+            message: `您的文章超过5000字部分将跳过翻译`,
+            showClose: false,
+            duration: 1000
+          })
+        }
         this._getTranslateProcess(data.translateId, 1)
       }
     },
@@ -491,7 +509,7 @@ export default {
         customClass: 'medium',
         iconClass: 'icon-success',
         cancelButtonText: '关闭',
-        callback: async action => {
+        callback: async (action) => {
           if (action === 'confirm') {
             this.resetForm('articleDetail')
             this.resetDetail()
@@ -519,7 +537,7 @@ export default {
         confirmButtonText: '新增下一篇',
         iconClass: 'icon-success',
         cancelButtonText: '关闭',
-        callback: async action => {
+        callback: async (action) => {
           if (action === 'confirm') {
             this.resetForm('articleDetail')
             this.resetDetail()

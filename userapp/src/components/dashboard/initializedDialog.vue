@@ -116,7 +116,7 @@
                 <div class="initializedAfter-text translationSite">站点初始化成功！</div>
                 <div
                   class="initializedAfter-errorInfo"
-                >单篇文章/产品最大可翻译字符为4000，以下超限内容本次翻译失败，已被忽略。您可缩减内容后手动操作翻译。</div>
+                >单篇文章/产品最大可翻译字符为5000，以下超限内容本次翻译失败，已被忽略。您可缩减内容后手动操作翻译。</div>
                 <ul class="initializedFailList-wrap">
                   <li v-for="(item, index) in initializedErrorList" :key="index">
                     <span class="initializedFailList-type">{{getPageType(item.type)}}</span>

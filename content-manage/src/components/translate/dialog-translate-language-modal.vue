@@ -60,7 +60,7 @@
               class="item-warning ellipsis"
               v-show="item.contentLength > 4000"
               ><i class="iconfont iconicon-exclamationmark"></i>
-              字数超过4000，请后续手工分段翻译【百度翻译】</span
+              字数超过5000，请后续手工分段翻译【百度翻译】</span
             >
           </li>
         </ul>
