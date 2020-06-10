@@ -140,9 +140,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .submenu {
-  position: absolute;
   width: 130px;
-  height: calc(100% - 50px);
+  height: calc(100vh - 50px);
   background: $--color-black-light;
   border-right: $--border-base;
   .submenu-title {

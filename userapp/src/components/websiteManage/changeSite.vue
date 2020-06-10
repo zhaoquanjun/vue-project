@@ -5,7 +5,9 @@
         <span class="siteName">
           <span class="siteIconTriangle"></span>
           <span class="siteIconTriangle" style="border-left-color:#ff964b;margin-left:-3px;"></span>
+         <span class="site-name--text">
           {{siteName && siteName.trim().length > 30 ? siteName.slice(0, 30) + '...' : siteName}}
+          </span>
         </span>
       </el-tooltip>
       <a class="secondDomain" :href="`//${secondDomain}`" target="_blank">{{secondDomain}}</a>
@@ -228,6 +230,9 @@ export default {
       border: 5px solid transparent;
       border-right: 0;
       border-left: 5px solid $--color-primary;
+    }
+    .site-name--text {
+      min-width: 130px;
     }
     .siteName {
       font-size: 12px;
