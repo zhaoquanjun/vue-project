@@ -46,7 +46,7 @@ cookies内  vtfsjogp 的值为 userInfo的appName和头像url
 ### 删除对话框
  ```
 this.$confirm(
-                "若该分类下存在数据，删除后数据将自动移动到“全部分类”中，是否确认删除该分类？",
+                "若该分类下存在数据，删除后数据将自动移动到上一级分类中，是否确认删除该分类？",
                 "提示",
                 {
                     confirmButtonText: "确定",
